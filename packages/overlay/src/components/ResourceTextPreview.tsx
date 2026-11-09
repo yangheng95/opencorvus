@@ -6,12 +6,16 @@ import {
   fetchResourceAsObjectUrl,
   type ApiAuthority,
 } from "../services/api"
+import { formatErrorDetails } from "../utils/error-details"
 import { t } from "../utils/i18n"
 import { CodeEditor } from "./ui/CodeEditor"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 
-async function loadText(source: { url: string; authority?: ApiAuthority }): Promise<string> {
+type TextSource = { url: string; authority?: ApiAuthority }
+type TextContent = { value: string; focusOrigin?: HTMLButtonElement }
+
+async function loadText(source: TextSource): Promise<string> {
   const objectUrl = await fetchResourceAsObjectUrl(source.url, { authority: source.authority })
   const response = await fetch(objectUrl)
   if (!response.ok) throw new Error(`Text preview failed with HTTP ${response.status}`)
@@ -21,12 +25,16 @@ async function loadText(source: { url: string; authority?: ApiAuthority }): Prom
 }
 
 export function ResourceTextPreview(props: { url: string; filename: string; label: string; authority?: ApiAuthority }) {
-  const [text, { refetch }] = createResource(
+  const [text, { refetch }] = createResource<TextContent, TextSource, HTMLButtonElement>(
     () => ({
       url: props.url,
       authority: props.url.startsWith("/") ? (props.authority ?? captureApiAuthority()) : undefined,
     }),
-    loadText,
+    async (source, { refetching }) => {
+      const value = await loadText(source)
+      const focusOrigin = typeof refetching !== "boolean" && document.activeElement === refetching ? refetching : undefined
+      return { value, focusOrigin }
+    },
   )
   const decodingError = () => (text.error instanceof TextDecodingError ? text.error : undefined)
   return (
@@ -35,20 +43,25 @@ export function ResourceTextPreview(props: { url: string; filename: string; labe
       fallback={
         <Feedback
           tone="error"
-          details={decodingError() ? undefined : String(text.error)}
-          actions={
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              tone="neutral"
-              disabled={text.loading}
-              aria-label={`${t("file.retry_preview")}: ${props.label}`}
-              onClick={() => void refetch()}
-            >
-              {t(text.loading ? "common.retrying" : "file.retry_preview")}
-            </Button>
-          }
+          details={decodingError() ? undefined : formatErrorDetails(text.error)}
+          actions={decodingError()
+            ? undefined
+            : (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                aria-disabled={text.loading || undefined}
+                aria-busy={text.loading || undefined}
+                aria-label={`${t("file.retry_preview")}: ${props.label}`}
+                onClick={(event) => {
+                  if (!text.loading) void refetch(event.currentTarget)
+                }}
+              >
+                {t(text.loading ? "common.retrying" : "file.retry_preview")}
+              </Button>
+            )}
         >
           {decodingError()
             ? t("file.text_encoding_failed", { name: props.label, encoding: decodingError()!.encoding.toUpperCase() })
@@ -57,17 +70,25 @@ export function ResourceTextPreview(props: { url: string; filename: string; labe
       }
     >
       <Show
-        when={text.state === "ready"}
-        fallback={<div class="msg-artifact-file__loading">{t("artifact.file.loading_text")}</div>}
+        when={text.state === "ready" && text()}
+        fallback={<div class="msg-artifact-file__loading" role="status">{t("artifact.file.loading_text")}</div>}
       >
-        <CodeEditor
-          class="msg-artifact-code"
-          value={text()!}
-          path={props.filename}
-          ariaLabel={props.label}
-          readOnly
-          onValueChange={() => undefined}
-        />
+        {(content) => (
+          <CodeEditor
+            class="msg-artifact-code resource-text-preview"
+            value={content().value}
+            path={props.filename}
+            ariaLabel={props.label}
+            readOnly
+            shouldFocusOnMount={() => {
+              const origin = content().focusOrigin
+              return !!origin && (
+                document.activeElement === origin || (!origin.isConnected && document.activeElement === document.body)
+              )
+            }}
+            onValueChange={() => undefined}
+          />
+        )}
       </Show>
     </Show>
   )

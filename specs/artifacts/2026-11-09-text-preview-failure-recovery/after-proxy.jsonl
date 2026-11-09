@@ -1,0 +1,16 @@
+{"listenPort":39246,"upstreamPort":39245,"pid":31952}
+{"time":"2026-11-09T15:02:29.403Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T15:02:39.799Z","receipt":1,"stage":"arrival","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/971ebdd7a6aeb0b1dc65054c866f5621c2a61332cd92ef023e256dd6c0a9cc30.txt","delay":0}
+{"time":"2026-11-09T15:02:39.808Z","receipt":1,"stage":"origin","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/971ebdd7a6aeb0b1dc65054c866f5621c2a61332cd92ef023e256dd6c0a9cc30.txt","status":200,"requestID":"f72843fc-ad39-4b77-a7c2-ebe36b4f91f3"}
+{"time":"2026-11-09T15:03:04.434Z","receipt":2,"stage":"arrival","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/436b86fcdadf92f4b2d6392d3bcff4c8354ccf5962d597d23281d6f53c827e8f.txt","delay":0}
+{"time":"2026-11-09T15:03:04.437Z","receipt":2,"stage":"origin","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/436b86fcdadf92f4b2d6392d3bcff4c8354ccf5962d597d23281d6f53c827e8f.txt","status":404,"requestID":"e45d4c53-d8d8-4a61-88cd-5603287c3fd4"}
+{"time":"2026-11-09T15:03:09.757Z","receipt":3,"stage":"arrival","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/436b86fcdadf92f4b2d6392d3bcff4c8354ccf5962d597d23281d6f53c827e8f.txt","delay":0}
+{"time":"2026-11-09T15:03:09.760Z","receipt":3,"stage":"origin","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/436b86fcdadf92f4b2d6392d3bcff4c8354ccf5962d597d23281d6f53c827e8f.txt","status":404,"requestID":"629dbc8e-fd95-415a-b02d-4d04d0e2d4f9"}
+{"time":"2026-11-09T15:03:18.868Z","receipt":4,"stage":"arrival","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/436b86fcdadf92f4b2d6392d3bcff4c8354ccf5962d597d23281d6f53c827e8f.txt","delay":11000}
+{"time":"2026-11-09T15:03:18.874Z","receipt":4,"stage":"origin","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/436b86fcdadf92f4b2d6392d3bcff4c8354ccf5962d597d23281d6f53c827e8f.txt","status":200,"requestID":"0c08acce-e50f-4df1-ac94-61bd6f57f5ab"}
+{"time":"2026-11-09T15:03:29.877Z","receipt":4,"stage":"released","bytes":66}
+{"time":"2026-11-09T15:04:09.137Z","receipt":5,"stage":"arrival","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/bf434be48758786b867c416242ab0cd0efe77c8706d4939321637a64b8c9c4db.txt","delay":0}
+{"time":"2026-11-09T15:04:09.139Z","receipt":5,"stage":"origin","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/bf434be48758786b867c416242ab0cd0efe77c8706d4939321637a64b8c9c4db.txt","status":404,"requestID":"4b27cce4-0c07-4e86-94df-892853c64005"}
+{"time":"2026-11-09T15:04:19.693Z","receipt":6,"stage":"arrival","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/bf434be48758786b867c416242ab0cd0efe77c8706d4939321637a64b8c9c4db.txt","delay":12000}
+{"time":"2026-11-09T15:04:19.698Z","receipt":6,"stage":"origin","path":"/attachment/prj_hKFTwZtMzEuU47DC6FT1/bf434be48758786b867c416242ab0cd0efe77c8706d4939321637a64b8c9c4db.txt","status":200,"requestID":"6fc9f3f1-794e-4fb1-babf-1b94b43ac8ec"}
+{"time":"2026-11-09T15:04:31.709Z","receipt":6,"stage":"released","bytes":63}

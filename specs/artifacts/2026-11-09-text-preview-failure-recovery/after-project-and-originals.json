@@ -1,0 +1,39 @@
+{
+  "phase": "after",
+  "project": "prj_hKFTwZtMzEuU47DC6FT1",
+  "checks": [
+    {
+      "status": 200,
+      "operationId": "project.current",
+      "requestID": "45634e5f-cb97-4f1b-94f4-5ef4d2e81bfd"
+    },
+    {
+      "status": 200,
+      "operationId": "project.list",
+      "requestID": "e71155ad-870a-4170-ab21-124ceb47efcd"
+    }
+  ],
+  "files": [
+    {
+      "name": "owned-readable-text.txt",
+      "url": "/attachment/prj_hKFTwZtMzEuU47DC6FT1/436b86fcdadf92f4b2d6392d3bcff4c8354ccf5962d597d23281d6f53c827e8f.txt",
+      "bytes": 66,
+      "status": 200,
+      "requestID": "2050b19d-0522-4202-9018-5c1877e48a97"
+    },
+    {
+      "name": "owned-invalid-utf8.txt",
+      "url": "/attachment/prj_hKFTwZtMzEuU47DC6FT1/971ebdd7a6aeb0b1dc65054c866f5621c2a61332cd92ef023e256dd6c0a9cc30.txt",
+      "bytes": 9,
+      "status": 200,
+      "requestID": "5b0d15d4-f66c-4a0e-919c-176a090e1b82"
+    },
+    {
+      "name": "owned-second-text.txt",
+      "url": "/attachment/prj_hKFTwZtMzEuU47DC6FT1/bf434be48758786b867c416242ab0cd0efe77c8706d4939321637a64b8c9c4db.txt",
+      "bytes": 63,
+      "status": 200,
+      "requestID": "61a2bf74-c724-4e7c-a42e-51f133c3751e"
+    }
+  ]
+}

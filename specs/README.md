@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [文本附件区分读取失败与编码错误](records/2026-11/2026-11-09-text-preview-failure-recovery.md)
 - [更新日志按发布日期查找](records/2026-11/2026-11-09-release-history-date-search.md)
 - [能力分配保存未确认时可原地核对](records/2026-11/2026-11-09-capability-assignment-confirmation.md)
 - [全局搜索的工作结果重试保持焦点](records/2026-11/2026-11-09-palette-ledger-retry-focus.md)

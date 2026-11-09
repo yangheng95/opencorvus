@@ -325,10 +325,12 @@ the reader; reopening uses the same canonical resource and authorized cache.
 Original-download errors remain within the attachment's Feedback rather than
 replacing the owning message card. OriginalFileDownload checks the current
 resource error before reading its value. Its explicit retry and the text reader's
-preview retry each refetch their existing source and captured authority, using
-the same shared Blob cache. Loading guards repeated retries; complete diagnostics
-and localized controls remain visible until that resource recovers. Restoring
-the original bytes requires neither a new attachment identity nor a page reload.
+preview retry for read failures each refetch their existing source and captured
+authority, using the same shared Blob cache. While a preview retry is pending,
+its localized action and complete read diagnostic remain visible; the action
+retains keyboard focus and guards repeated activation. Accepted text receives
+focus when the originating retry still owns it. Restoring the original bytes
+requires neither a new attachment identity nor a page reload.
 Short documents use their natural reading height; the editor's internal
 scroller bounds longer documents to the viewport. Other
 file presentations and unknown binary formats retain their current behavior.
@@ -357,7 +359,8 @@ bytes and filename; binary input retains its supplied type. Other file types and
 already stored references retain their existing metadata and capture behavior.
 The shared text reader decodes original bytes strictly: a UTF-16 BOM selects
 little or big endian, otherwise UTF-8 applies (including a UTF-8 BOM). Malformed
-input shows localized encoding feedback instead of replacement text. Pending
+input shows localized encoding feedback with the original download and guidance
+to save a UTF-8 copy, since repeating the preview would read the same bytes. Pending
 text review also offers the shared authorized original download in its footer;
 history and file artifacts retain their original download/export actions.
 This read-only decoding contract does not change storage, model read tools or

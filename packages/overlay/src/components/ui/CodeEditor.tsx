@@ -28,6 +28,7 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   ariaLabel: string
   onValueChange: (value: string) => void
   onSearchReady?: (search: (() => void) | undefined) => void
+  shouldFocusOnMount?: () => boolean
   lineRange?: SourceFileRange
   revealRevision?: number
   revealFocusOrigin?: Element | null
@@ -42,6 +43,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     "ariaLabel",
     "onValueChange",
     "onSearchReady",
+    "shouldFocusOnMount",
     "lineRange",
     "revealRevision",
     "revealFocusOrigin",
@@ -176,6 +178,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     local.onSearchReady?.(() => {
       if (view === editor) openSearchPanel(editor)
     })
+    if (host.isConnected && !host.closest("[inert], [hidden]") && local.shouldFocusOnMount?.()) editor.focus()
     revealObserver = new ResizeObserver(revealOnLayout.schedule)
     revealObserver.observe(host)
     revealOnLayout.schedule()

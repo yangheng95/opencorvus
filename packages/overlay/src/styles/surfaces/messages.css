@@ -1890,6 +1890,14 @@ button.msg-source-chip .msg-source-chip__filename {
   background: transparent;
 }
 
+.resource-text-preview {
+  border: var(--oc-border-width) solid transparent;
+}
+
+.resource-text-preview:has(.cm-content:focus-visible) {
+  border-color: var(--accent);
+}
+
 .msg-artifact-code .cm-gutters,
 .msg-artifact-diff .cm-gutters {
   color: var(--text-soft);
