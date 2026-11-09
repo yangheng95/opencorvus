@@ -1,0 +1,228 @@
+{
+  "before": {
+    "pairs": {
+      "missingAt": {
+        "interactionAt": "2026-11-09T11:34:32.405Z",
+        "proxyWaitMs": 7013,
+        "requestID": "a07a6963-c47e-4971-9c70-4b2cab01594f",
+        "server": {
+          "requestID": "a07a6963-c47e-4971-9c70-4b2cab01594f",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 2
+        },
+        "reason": "missing"
+      },
+      "chineseAt": {
+        "interactionAt": "2026-11-09T11:34:41.630Z",
+        "proxyWaitMs": 7011,
+        "requestID": "203136c1-5723-4375-9821-0d6bdf5b2295",
+        "server": {
+          "requestID": "203136c1-5723-4375-9821-0d6bdf5b2295",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 2
+        },
+        "reason": "missing"
+      },
+      "renameAt": {
+        "interactionAt": "2026-11-09T11:35:04.942Z",
+        "proxyWaitMs": 7007,
+        "requestID": "c31f950d-8e5d-4a3a-ac8c-abe756bba75f",
+        "server": {
+          "requestID": "c31f950d-8e5d-4a3a-ac8c-abe756bba75f",
+          "method": "PATCH",
+          "path": "/project/current",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 6
+        },
+        "reason": null
+      }
+    },
+    "checkerRequestIDs": [],
+    "projects": [
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\project-before",
+        "Directory review baseline"
+      ]
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\target-before",
+        "gitHead": "093aaca069baa224f87f446da4b34b8caf3889dd",
+        "text": "Owned pending feedback target-before\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\project-before",
+        "gitHead": "1485f21965cdf74b2100ee1b27b5a861b0bae474",
+        "text": "Owned pending feedback project-before\n"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b111-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39170",
+      "pid": 27284
+    },
+    "shutdown": {
+      "pid": 27284,
+      "port": 39170,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTVkSY00LUkYNdn7x"
+      },
+      "status": 200
+    },
+    "proxy": {
+      "listenPort": 39171,
+      "upstreamPort": 39170,
+      "pid": 24780,
+      "delayMs": 7000
+    },
+    "proxyShutdown": {
+      "port": 39171,
+      "source": "Observed response; process session exited with code 0.",
+      "pid": 24780,
+      "status": 200
+    }
+  },
+  "after": {
+    "pairs": {
+      "missingAt": {
+        "interactionAt": "2026-11-09T11:38:28.524Z",
+        "proxyWaitMs": 7006,
+        "requestID": "7311e42d-5fd6-4514-ba73-e076c4265ff2",
+        "server": {
+          "requestID": "7311e42d-5fd6-4514-ba73-e076c4265ff2",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1
+        },
+        "reason": "missing"
+      },
+      "chineseAt": {
+        "interactionAt": "2026-11-09T11:38:47.864Z",
+        "proxyWaitMs": 7009,
+        "requestID": "709f6e42-7a00-4905-b442-d41314169b19",
+        "server": {
+          "requestID": "709f6e42-7a00-4905-b442-d41314169b19",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 2
+        },
+        "reason": "missing"
+      },
+      "validAt": {
+        "interactionAt": "2026-11-09T11:38:55.025Z",
+        "proxyWaitMs": 7005,
+        "requestID": "0f9e9d1d-88a6-4964-9c7f-97aa4e6e0ee1",
+        "server": {
+          "requestID": "0f9e9d1d-88a6-4964-9c7f-97aa4e6e0ee1",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 0
+        },
+        "reason": null
+      },
+      "renameAt": {
+        "interactionAt": "2026-11-09T11:39:15.732Z",
+        "proxyWaitMs": 7006,
+        "requestID": "d9dd31b8-ba09-4051-9a4b-f6872f218cf9",
+        "server": {
+          "requestID": "d9dd31b8-ba09-4051-9a4b-f6872f218cf9",
+          "method": "PATCH",
+          "path": "/project/current",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5
+        },
+        "reason": null
+      }
+    },
+    "checkerRequestIDs": [
+      "bf3886d2-f656-470a-b365-338c63793540",
+      "e3795fa3-c791-4687-9140-961101761dbe",
+      "3d9cfb50-af60-4af1-a2bf-ff96eb27f478",
+      "213aa406-73d3-4848-b9a5-b7313eeabad2",
+      "db789532-eb39-4aee-b560-d49ba8e2bbd6",
+      "554d3e47-82d4-4ab2-8d86-2cfd6e9210fc",
+      "4612fcc2-edf7-4426-bcd7-62031f2f2eba"
+    ],
+    "projects": [
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\project-after",
+        null
+      ],
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\target-after",
+        "Directory review confirmed"
+      ]
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\target-after",
+        "gitHead": "40042ec0db2a8a4ebbad5366f0944b94cbb481ba",
+        "text": "Owned pending feedback target-after\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\project-after",
+        "gitHead": "e029c378f8c8ae33a2015c184b1c10d190bbaf21",
+        "text": "Owned pending feedback project-after\n"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b111-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39172",
+      "pid": 10496
+    },
+    "shutdown": {
+      "port": 39172,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTWdYR00pg4eBBU6i"
+      },
+      "pid": 10496
+    },
+    "proxy": {
+      "listenPort": 39173,
+      "upstreamPort": 39172,
+      "pid": 10608,
+      "delayMs": 7000
+    },
+    "proxyShutdown": {
+      "pid": 10608,
+      "body": "stopping",
+      "status": 200,
+      "port": 39173
+    }
+  }
+}

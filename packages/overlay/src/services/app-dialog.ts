@@ -13,6 +13,7 @@ export type AppDialogOptions = {
   details?: string
   kind?: string
   okLabel?: string
+  submittingLabel?: string
   okTone?: "accent" | "danger"
   cancelLabel?: string
   cancel?: boolean
@@ -155,6 +156,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           details: options.details || "",
           kind: options.kind || "",
           okLabel: options.okLabel || t("common.ok"),
+          submittingLabel: options.submittingLabel,
           okTone: options.okTone || "accent",
           cancelLabel: options.cancelLabel || t("common.cancel"),
           cancel: options.cancel === true,

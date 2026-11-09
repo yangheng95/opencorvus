@@ -1,0 +1,46 @@
+{
+  "missingAt": "2026-11-09T11:34:32.405Z",
+  "missingPending": [
+    "\t\t67 container Working Directory, ID: appDialog",
+    "\t\t\t\t72 container appDialogInputField",
+    "\t\t\t\t\t74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput",
+    "\t\t\t\t76 button (disabled) Saving…, ID: btnAppDialogOk",
+    "The focused UI element is 74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "missingFinal": [
+    "\t\t\t\t\t\t80 text This directory doesn’t exist on the server. Check the path or choose another directory.",
+    "The focused UI element is 74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "chineseAt": "2026-11-09T11:34:41.630Z",
+  "chinesePending": [
+    "\t\t74 container 工作目录, ID: appDialog",
+    "\t\t\t\t79 container appDialogInputField",
+    "\t\t\t\t\t80 text 目录路径",
+    "\t\t\t\t\t81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput",
+    "\t\t\t\t83 button (disabled) 保存中…, ID: btnAppDialogOk",
+    "The focused UI element is 81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "chineseFinal": [
+    "\t\t\t\t\t\t87 text 服务器上没有此目录。请检查路径或选择其他目录。",
+    "The focused UI element is 81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "renameAt": "2026-11-09T11:35:04.942Z",
+  "renamePending": [
+    "\t\t69 container Rename project, ID: appDialog",
+    "\t\t\t\t71 heading Rename project, Value: 2, ID: dialog-cl-101-title",
+    "\t\t\t\t\t72 text Rename project",
+    "\t\t\t\t74 container appDialogInputField",
+    "\t\t\t\t\t76 text field (settable) Project name, Value: Directory review baseline, ID: appDialogInput",
+    "\t\t\t\t78 button (disabled) Saving…, ID: btnAppDialogOk",
+    "The focused UI element is 76 text field (settable) Project name, Value: Directory review baseline, ID: appDialogInput"
+  ],
+  "renamed": [
+    "\t\t\t\t\t\t\t\t\t\t37 button (expanded) Description: Collapse Directory review baseline, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t38 button Open project: Directory review baseline",
+    "\t\t\t\t\t\t\t\t\t\t69 pop up button (collapsed) Description: Actions for Directory review baseline, ID: dropdownmenu-cl-189-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t70 button Start work in Directory review baseline",
+    "\t\t\t\t\t\t\t\t49 heading Let's work on Directory review baseline, Value: 1",
+    "\t\t\t\t\t\t\t\t\t50 text Let's work on Directory review baseline",
+    "The focused UI element is 38 button Open project: Directory review baseline"
+  ]
+}

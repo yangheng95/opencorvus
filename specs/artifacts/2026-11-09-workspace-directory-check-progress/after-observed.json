@@ -1,0 +1,66 @@
+{
+  "missingAt": "2026-11-09T11:38:28.524Z",
+  "missingPending": [
+    "\t\t67 container Working Directory, ID: appDialog",
+    "\t\t\t\t72 container appDialogInputField",
+    "\t\t\t\t\t74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput",
+    "\t\t\t\t76 button (disabled) Checking directory…, ID: btnAppDialogOk",
+    "The focused UI element is 74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "missingFinal": [
+    "\t\t\t\t\t\t80 text This directory doesn’t exist on the server. Check the path or choose another directory.",
+    "\t\t\t\t76 button Use this folder, ID: btnAppDialogOk",
+    "The focused UI element is 74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "chineseAt": "2026-11-09T11:38:47.864Z",
+  "chinesePending": [
+    "\t\t74 container 工作目录, ID: appDialog",
+    "\t\t\t\t79 container appDialogInputField",
+    "\t\t\t\t\t80 text 目录路径",
+    "\t\t\t\t\t81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput",
+    "\t\t\t\t83 button (disabled) 正在检查目录…, ID: btnAppDialogOk",
+    "The focused UI element is 81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "chineseFinal": [
+    "\t\t\t\t\t\t87 text 服务器上没有此目录。请检查路径或选择其他目录。",
+    "\t\t\t\t83 button 切换到此目录, ID: btnAppDialogOk",
+    "The focused UI element is 81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\missing-owned-folder, ID: appDialogInput"
+  ],
+  "validAt": "2026-11-09T11:38:55.025Z",
+  "validPending": [
+    "\t\t74 container 工作目录, ID: appDialog",
+    "\t\t\t\t79 container appDialogInputField",
+    "\t\t\t\t\t80 text 目录路径",
+    "\t\t\t\t\t81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\target-after, ID: appDialogInput",
+    "\t\t\t\t83 button (disabled) 正在检查目录…, ID: btnAppDialogOk",
+    "The focused UI element is 81 text field (settable) 目录路径, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b111\\target-after, ID: appDialogInput"
+  ],
+  "originalFile": [
+    "\t\t\t\t\t\t\t\t51 heading 在 target-after 中开始工作, Value: 1",
+    "\t\t\t\t\t\t\t\t\t52 text 在 target-after 中开始工作",
+    "\t\t\t\t\t\t\t\t\t\t94 text entry area (settable) Description: note.txt, Value: Owned pending feedback target-after",
+    "\t\t\t\t\t\t\t\t\t\t\t95 text Owned pending feedback target-after",
+    "The focused UI element is 94 text entry area (settable) Description: note.txt, Value: Owned pending feedback target-after"
+  ],
+  "renameAt": "2026-11-09T11:39:15.732Z",
+  "renamePending": [
+    "\t\t98 container Rename project, ID: appDialog",
+    "\t\t\t\t100 heading Rename project, Value: 2, ID: dialog-cl-101-title",
+    "\t\t\t\t\t101 text Rename project",
+    "\t\t\t\t103 container appDialogInputField",
+    "\t\t\t\t\t105 text field (settable) Project name, Value: Directory review confirmed, ID: appDialogInput",
+    "\t\t\t\t107 button (disabled) Saving…, ID: btnAppDialogOk",
+    "The focused UI element is 105 text field (settable) Project name, Value: Directory review confirmed, ID: appDialogInput"
+  ],
+  "renamed": [
+    "\t\t\t\t\t\t\t\t\t\t\t38 button (expanded) Description: Collapse Directory review confirmed, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t39 button Open project: Directory review confirmed",
+    "\t\t\t\t\t\t\t\t\t\t\t98 pop up button (collapsed) Description: Actions for Directory review confirmed, ID: dropdownmenu-cl-339-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t99 button Start work in Directory review confirmed",
+    "\t\t\t\t\t\t\t\t\t52 heading Let's work on Directory review confirmed, Value: 1",
+    "\t\t\t\t\t\t\t\t\t\t53 text Let's work on Directory review confirmed",
+    "\t\t\t\t\t\t\t\t\t\t\t95 text entry area (settable) Description: note.txt, Value: Owned pending feedback target-after",
+    "\t\t\t\t\t\t\t\t\t\t\t\t96 text Owned pending feedback target-after",
+    "The focused UI element is 39 button Open project: Directory review confirmed"
+  ]
+}

@@ -141,7 +141,9 @@ export function AppDialogHost() {
               void confirm()
             }}
           >
-            {dialogStore.app.submitting ? t("common.saving") : dialogStore.app.okLabel || t("common.ok")}
+            {dialogStore.app.submitting
+              ? dialogStore.app.submittingLabel || t("common.saving")
+              : dialogStore.app.okLabel || t("common.ok")}
           </Button>
         </>
       }

@@ -818,6 +818,7 @@ export async function chooseWorkspaceDirectory(options: {
     inputRequired: true,
     inputRequiredMessage: t("cwd.path_required"),
     validateInput: (value) => isAbsoluteServerPath(value.trim()) ? undefined : t("cwd.path_absolute_required"),
+    submittingLabel: t("cwd.path_checking"),
     confirmErrorSummary: workspaceDirectoryCheckSummary,
     onConfirm: async (value) => {
       assertApiAuthorityCurrent(authority)
