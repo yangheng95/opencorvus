@@ -34,7 +34,7 @@ function dateRange(data: UsageStatistics): string {
     month: "short",
     day: "numeric",
   })
-  return `${formatter.format(data.current.start)} – ${formatter.format(data.current.end - 1)}`
+  return formatter.formatRange(data.current.start, data.current.end - 1)
 }
 
 function comparisonLabel(value: number | null): string {

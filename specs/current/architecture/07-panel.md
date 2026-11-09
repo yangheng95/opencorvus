@@ -2158,7 +2158,9 @@ owned by that existing lifecycle; the command does not delete project data.
 
 Usage presents the current server's real aggregate with an OpenCorvus identity.
 Period selection controls the existing usage contract; year is the initial
-view. The activity header, period controls and refresh button stay mounted
+view. The overview uses the current locale's date range for the server's
+natural period in its reported time zone; a one-day period shows one date.
+The activity header, period controls and refresh button stay mounted
 while current-period data loads, preserving keyboard focus across consecutive
 selections and refreshes. Loading clears the prior data and appears within the
 activity section; a busy refresh remains focusable and suppresses repeat requests.

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [用量自然周期日期](records/2026-11/2026-11-09-usage-natural-period-date-range.md)
 - [用量失败和重试焦点](records/2026-11/2026-11-09-usage-retry-focus-and-diagnostic.md)
 - [归档行操作对象](records/2026-11/2026-11-09-archive-action-identity.md)
 - [归档成功续页焦点](records/2026-11/2026-11-09-archive-continuation-focus.md)
