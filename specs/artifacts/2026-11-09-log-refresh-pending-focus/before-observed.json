@@ -1,0 +1,24 @@
+{
+  "entryScripts": [
+    "http://127.0.0.1:39219/ui/assets/main-Ba13_cUL.js"
+  ],
+  "initial": [
+    "\t\t\t\t73 button Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-before",
+    "\t\t\t\t\t81 text Server [ WARN ] iteration-log-refresh 2026-11-09T13:34:16 opencorvus-b122-before-baseline logDomain = non-session",
+    "The focused UI element is 78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-before"
+  ],
+  "pending": [
+    "\t\t\t\t73 button (disabled) Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-before",
+    "\t\t\t\t\t81 text Server [ WARN ] iteration-log-refresh 2026-11-09T13:34:16 opencorvus-b122-before-baseline logDomain = non-session",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39219/ui/"
+  ],
+  "completed": [
+    "\t\t\t\t73 button Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-before",
+    "\t\t\t\t\t82 text opencorvus-b122-before-baseline",
+    "\t\t\t\t\t87 text opencorvus-b122-before-newer",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39219/ui/"
+  ]
+}

@@ -5514,6 +5514,8 @@ Log Viewer feedback distinguishes a failed server refresh from revealing the
 loaded log path. Both keep the original error in Details and render the current
 language in one location above the log list. A failed refresh retires the old
 server tail; any still-matching client or pipeline logs remain readable.
+During a refresh, the same toolbar action keeps keyboard focus, reports its
+localized busy state, and admits one current read.
 
 Log source badges use the current interface language. The loaded-log search
 matches the same badge label alongside the stable source identifier, which

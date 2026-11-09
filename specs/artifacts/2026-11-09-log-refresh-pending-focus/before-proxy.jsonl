@@ -1,0 +1,10 @@
+{"listenPort":39219,"upstreamPort":39218,"pid":29200,"profileDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b122\\profile-before","holdMs":6000,"cutReceipt":0}
+{"time":"2026-11-09T13:34:22.586Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T13:34:33.854Z","receipt":1,"stage":"arrival","route":"/log/tail","query":{"n":"500"},"hold":false,"cut":false}
+{"time":"2026-11-09T13:34:33.868Z","receipt":1,"stage":"origin","route":"/log/tail","status":200,"requestID":"d9136376-65f6-4580-83ce-93bf21c57da5"}
+{"time":"2026-11-09T13:34:33.869Z","receipt":1,"stage":"original-complete","bytes":48441,"lineCount":136,"ownedFile":"log\\dev.log","markers":["opencorvus-b122-before-baseline"]}
+{"time":"2026-11-09T13:34:33.869Z","receipt":1,"stage":"released","bytes":48441}
+{"time":"2026-11-09T13:34:53.185Z","receipt":2,"stage":"arrival","route":"/log/tail","query":{"n":"500"},"hold":true,"cut":false}
+{"time":"2026-11-09T13:34:53.199Z","receipt":2,"stage":"origin","route":"/log/tail","status":200,"requestID":"f2ef9b9c-9f4d-40ff-b691-a913139f05ad"}
+{"time":"2026-11-09T13:34:53.199Z","receipt":2,"stage":"original-complete","bytes":50455,"lineCount":143,"ownedFile":"log\\dev.log","markers":["opencorvus-b122-before-baseline","opencorvus-b122-before-newer"]}
+{"time":"2026-11-09T13:34:59.215Z","receipt":2,"stage":"released","bytes":50455}

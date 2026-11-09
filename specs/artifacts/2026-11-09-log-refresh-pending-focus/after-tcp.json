@@ -1,0 +1,41 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "eaa2324d-ceda-482c-8106-de02e8b2ec67",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "10a67989-2cda-4a6c-b4b6-ca272fde1c15",
+      "schemaValid": true
+    },
+    {
+      "route": "/log/tail",
+      "operationId": "log.tail",
+      "status": 200,
+      "requestID": "f1ac7b6c-216e-4a14-a45d-4cc6c36e41a5",
+      "schemaValid": true
+    }
+  ],
+  "logTail": {
+    "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b122\\profile-after\\log\\dev.log",
+    "lineCount": 184,
+    "markers": [
+      "opencorvus-b122-after-baseline",
+      "opencorvus-b122-after-newer",
+      "opencorvus-b122-after-recovery",
+      "opencorvus-b122-after-translated"
+    ]
+  },
+  "project": {
+    "id": "prj_hiBrr2jmnlfnO4vsbsIC",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b122\\project-after"
+  },
+  "listedProjectCount": 1
+}

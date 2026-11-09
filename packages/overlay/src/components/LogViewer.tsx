@@ -454,10 +454,13 @@ export function LogViewer(props: LogViewerProps) {
             variant="ghost"
             size="sm"
             tone="neutral"
-            onClick={() => void refreshServerLogs()}
-            disabled={refreshPending()}
+            onClick={() => {
+              if (!refreshPending()) void refreshServerLogs()
+            }}
+            aria-disabled={refreshPending() || undefined}
+            aria-busy={refreshPending() || undefined}
           >
-            {t("common.refresh")}
+            {t(refreshPending() ? "log.refreshing" : "common.refresh")}
           </Button>
           <Button
             type="button"

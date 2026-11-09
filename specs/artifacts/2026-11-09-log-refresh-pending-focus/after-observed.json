@@ -1,0 +1,94 @@
+{
+  "entryScripts": [
+    "http://127.0.0.1:39221/ui/assets/main-BYSh2bRL.js"
+  ],
+  "initial": [
+    "\t\t\t\t73 button Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t\t81 text Server [ WARN ] iteration-log-refresh 2026-11-09T13:38:11 opencorvus-b122-after-baseline logDomain = non-session",
+    "The focused UI element is 78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after"
+  ],
+  "pending": [
+    "\t\t\t\t73 button (disabled) Refreshing…, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t\t81 text Server [ WARN ] iteration-log-refresh 2026-11-09T13:38:11 opencorvus-b122-after-baseline logDomain = non-session",
+    "The focused UI element is 73 button (disabled) Refreshing…, ID: btnLogRefresh"
+  ],
+  "repeat": [
+    "\t\t\t\t73 button (disabled) Refreshing…, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t\t81 text Server [ WARN ] iteration-log-refresh 2026-11-09T13:38:11 opencorvus-b122-after-baseline logDomain = non-session",
+    "The focused UI element is 73 button (disabled) Refreshing…, ID: btnLogRefresh"
+  ],
+  "completed": [
+    "\t\t\t\t73 button Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t\t82 text opencorvus-b122-after-baseline",
+    "\t\t\t\t\t87 text opencorvus-b122-after-newer",
+    "The focused UI element is 73 button Refresh, ID: btnLogRefresh"
+  ],
+  "failureInFlight": [
+    "\t\t\t\t73 button (disabled) Refreshing…, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t\t82 text opencorvus-b122-after-baseline",
+    "\t\t\t\t\t87 text opencorvus-b122-after-newer",
+    "The focused UI element is 73 button (disabled) Refreshing…, ID: btnLogRefresh"
+  ],
+  "failed": [
+    "\t\t\t\t73 button Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t80 text Could not load server logs. Select Refresh to try again.",
+    "The focused UI element is 73 button Refresh, ID: btnLogRefresh"
+  ],
+  "diagnostic": [
+    "\t\t\t\t73 button Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t80 text Could not load server logs. Select Refresh to try again.",
+    "\t\t\t\t\t84 text TypeError: Failed to fetch",
+    "The focused UI element is 82 button (expanded) Details, Secondary Actions: Collapse"
+  ],
+  "recovered": [
+    "\t\t\t\t73 button Refresh, ID: btnLogRefresh",
+    "\t\t\t\t78 search text field (settable) Description: Search loaded logs, Value: opencorvus-b122-after",
+    "\t\t\t\t\t82 text opencorvus-b122-after-baseline",
+    "\t\t\t\t\t87 text opencorvus-b122-after-newer",
+    "\t\t\t\t\t92 text opencorvus-b122-after-recovery",
+    "The focused UI element is 73 button Refresh, ID: btnLogRefresh"
+  ],
+  "zhLoaded": [
+    "\t\t\t\t80 button 刷新, ID: btnLogRefresh",
+    "\t\t\t\t85 search text field (settable) Description: 搜索已加载日志, Value: opencorvus-b122-after",
+    "\t\t\t\t\t89 text opencorvus-b122-after-baseline",
+    "\t\t\t\t\t94 text opencorvus-b122-after-newer",
+    "\t\t\t\t\t99 text opencorvus-b122-after-recovery",
+    "The focused UI element is 85 search text field (settable) Description: 搜索已加载日志, Value: opencorvus-b122-after"
+  ],
+  "zhPending": [
+    "\t\t\t\t80 button (disabled) 正在刷新…, ID: btnLogRefresh",
+    "\t\t\t\t85 search text field (settable) Description: 搜索已加载日志, Value: opencorvus-b122-after",
+    "\t\t\t\t\t89 text opencorvus-b122-after-baseline",
+    "\t\t\t\t\t94 text opencorvus-b122-after-newer",
+    "\t\t\t\t\t99 text opencorvus-b122-after-recovery",
+    "The focused UI element is 80 button (disabled) 正在刷新…, ID: btnLogRefresh"
+  ],
+  "userMoved": [
+    "\t\t\t\t80 button (disabled) 正在刷新…, ID: btnLogRefresh",
+    "\t\t\t\t85 search text field (settable) Description: 搜索已加载日志, Value: opencorvus-b122-after",
+    "\t\t\t\t\t89 text opencorvus-b122-after-baseline",
+    "\t\t\t\t\t94 text opencorvus-b122-after-newer",
+    "\t\t\t\t\t99 text opencorvus-b122-after-recovery",
+    "The focused UI element is 83 button 清除, ID: btnLogClear"
+  ],
+  "zhCompleted": [
+    "\t\t\t\t80 button 刷新, ID: btnLogRefresh",
+    "\t\t\t\t85 search text field (settable) Description: 搜索已加载日志, Value: opencorvus-b122-after",
+    "\t\t\t\t\t89 text opencorvus-b122-after-baseline",
+    "\t\t\t\t\t94 text opencorvus-b122-after-newer",
+    "\t\t\t\t\t99 text opencorvus-b122-after-recovery",
+    "\t\t\t\t\t104 text opencorvus-b122-after-translated",
+    "The focused UI element is 83 button 清除, ID: btnLogClear"
+  ],
+  "closed": [
+    "The focused UI element is 8 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-322-trigger, Secondary Actions: Expand"
+  ]
+}

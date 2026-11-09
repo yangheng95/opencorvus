@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [日志刷新期间保留键盘焦点](records/2026-11/2026-11-09-log-refresh-pending-focus.md)
 - [笔记退出搜索时立即回到列表读取](records/2026-11/2026-11-09-memory-return-to-list-retires-results.md)
 - [笔记搜索读取期间保留输入焦点](records/2026-11/2026-11-09-memory-search-pending-focus.md)
 - [笔记列表重试保留搜索草稿](records/2026-11/2026-11-09-memory-notes-list-retry.md)
