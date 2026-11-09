@@ -1607,6 +1607,10 @@ their existing dialog return behavior. Batch Move and Copy dialogs use the last
 completed result as both selection anchor and focus target, including when a
 later item fails. Pointer drops keep their own selection behavior without a
 dialog focus handoff.
+Copy and Move write receipts expand and load the destination's complete parent
+chain using the same path projection as editor location. The current tree can
+then show the actual deep result row and hand off keyboard focus. The current
+search view and the operation's focus ownership continue to govern that handoff.
 Move outcomes count the exact-path matches already in the requested directory
 separately from actual write receipts. An all-unchanged move shows a neutral
 result. Mixed moves keep the existing write result, failure details, and focus

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件转移后展开深层目的目录](2026-11-09-file-transfer-deep-destination-reveal.md)
 - [移动回执显示已在目标的文件](2026-11-09-file-move-already-at-destination.md)
 - [新建和重命名的目录边界](2026-11-09-file-entry-name-parent-boundary.md)
 - [文件转移的项目相对目的路径](2026-11-09-file-transfer-project-relative-destination.md)

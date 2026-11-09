@@ -640,6 +640,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return parts.join("/")
   }
 
+  function parentDirectoryPaths(path: string): string[] {
+    const ancestors: string[] = []
+    for (let current = parentPath(path); current; current = parentPath(current)) {
+      ancestors.unshift(current)
+    }
+    return ["", ...ancestors]
+  }
+
   function fileName(path: string): string {
     const parts = normalizeExplorerPath(path).split("/").filter(Boolean)
     return parts.at(-1) || path
@@ -851,15 +859,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!selectedTarget || selectedTarget.directory !== currentDirectory) return
     const selected = selectedTarget.path
     setSingleSelection(selectionFromFilePath(selected))
-    const ancestors: string[] = []
-    let current = parentPath(selected)
-    while (current) {
-      ancestors.unshift(current)
-      current = parentPath(current)
-    }
-    setExpandedPaths((prev) => new Set([...prev, "", ...ancestors]))
+    const ancestors = parentDirectoryPaths(selected)
+    setExpandedPaths((prev) => new Set([...prev, ...ancestors]))
     untrack(() => {
-      for (const path of ["", ...ancestors]) void loadDirectory(path, { scope })
+      for (const path of ancestors) void loadDirectory(path, { scope })
     })
   })
 
@@ -1442,7 +1445,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           next.add(path)
         }
       }
-      next.add(parentPath(normalizedNext))
+      for (const parent of parentDirectoryPaths(normalizedNext)) next.add(parent)
       return next
     })
   }
@@ -1491,9 +1494,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const normalizedNext = normalizeExplorerPath(result.path)
       const sourceParent = parentPath(normalizedSource)
       const nextParent = parentPath(normalizedNext)
-      refreshTargets.push(sourceParent, nextParent)
+      refreshTargets.push(sourceParent)
       cacheTargets.push(sourceParent, nextParent, normalizedNext)
-      expandedParents.add(nextParent)
+      for (const parent of parentDirectoryPaths(normalizedNext)) expandedParents.add(parent)
       const selection = selectionFromNode(result.node)
       nextSelection.set(selection.path, selection)
     }
@@ -1501,7 +1504,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     clearDirectoryCaches(cacheTargets)
     setSelectedItems(nextSelection)
     setSelectionAnchorPath(results.at(-1)?.path ?? "")
-    return refreshFileViews(refreshTargets, scope)
+    return refreshFileViews([...refreshTargets, ...expandedParents], scope)
   }
 
   async function createEntry(type: "file" | "directory", targetDirInput?: string): Promise<void> {

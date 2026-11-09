@@ -1,0 +1,99 @@
+{
+  "phase": "before",
+  "listing": {
+    "": {
+      "requestID": "422bad6e-6c58-4f28-a121-122cb03870d0",
+      "names": [
+        ".opencorvus",
+        "control",
+        "copy-root",
+        "move-root",
+        ".gitattributes",
+        ".gitignore",
+        "copy-source.txt"
+      ]
+    },
+    "control": {
+      "requestID": "9f9a02a4-c11f-4493-ba2a-2356c0932034",
+      "names": [
+        "anchor.txt"
+      ]
+    },
+    "copy-root": {
+      "requestID": "717eaae0-0f32-4e06-ad18-40a0b8b83a64",
+      "names": [
+        "level-two"
+      ]
+    },
+    "copy-root/level-two": {
+      "requestID": "2efeda3b-703b-42c8-8e91-471ad9d3094a",
+      "names": [
+        "landing"
+      ]
+    },
+    "copy-root/level-two/landing": {
+      "requestID": "9511e5f1-ce81-4f5a-819c-d9679dc01284",
+      "names": [
+        "copied.txt",
+        "keep.txt"
+      ]
+    },
+    "move-root": {
+      "requestID": "e2796636-43ff-4ca4-a53c-88470c2eea3c",
+      "names": [
+        "level-two"
+      ]
+    },
+    "move-root/level-two": {
+      "requestID": "0a2cd020-ccd4-4d82-a116-5ba1d7e23ea6",
+      "names": [
+        "landing"
+      ]
+    },
+    "move-root/level-two/landing": {
+      "requestID": "b3770802-b611-4649-8c31-1052cbb6b47a",
+      "names": [
+        "keep.txt",
+        "move-a.txt",
+        "move-b.txt"
+      ]
+    }
+  },
+  "files": {
+    "copy-source.txt": {
+      "requestID": "5fb2f1ee-5bf7-4db5-872e-bca0b4fb2875",
+      "length": 20,
+      "content": "deep copy original\r\n"
+    },
+    "move-root/level-two/landing/move-a.txt": {
+      "requestID": "0848634a-5e37-449c-9d2d-c85a84bd454c",
+      "length": 20,
+      "content": "first move original\n"
+    },
+    "move-root/level-two/landing/move-b.txt": {
+      "requestID": "d69d3caf-0791-45c2-a2c1-99d18f1c52c2",
+      "length": 22,
+      "content": "second move original\r\n"
+    },
+    "copy-root/level-two/landing/keep.txt": {
+      "requestID": "411d5efd-9584-4421-bd41-69e717b16bf5",
+      "length": 20,
+      "content": "copy landing marker\n"
+    },
+    "move-root/level-two/landing/keep.txt": {
+      "requestID": "0008b967-3173-4b66-a669-e8f312b2a6a2",
+      "length": 20,
+      "content": "move landing marker\n"
+    },
+    "control/anchor.txt": {
+      "requestID": "6d52b730-29a7-477c-bd2e-788d18dbd11d",
+      "length": 19,
+      "content": "independent folder\n"
+    },
+    "copy-root/level-two/landing/copied.txt": {
+      "requestID": "874719bd-995c-40ec-bb1d-2d2a24c97b44",
+      "length": 20,
+      "content": "deep copy original\r\n"
+    }
+  }
+}

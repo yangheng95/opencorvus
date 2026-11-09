@@ -1,0 +1,26 @@
+{
+  "before": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b90\\project-before",
+    "head": "048c41506b8703712ee355bb47e278503af38976",
+    "files": {
+      "copy-source.txt": "deep copy original\r\n",
+      "move-a.txt": "first move original\n",
+      "move-b.txt": "second move original\r\n",
+      "copy-root/level-two/landing/keep.txt": "copy landing marker\n",
+      "move-root/level-two/landing/keep.txt": "move landing marker\n",
+      "control/anchor.txt": "independent folder\n"
+    }
+  },
+  "after": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b90\\project-after",
+    "head": "048c41506b8703712ee355bb47e278503af38976",
+    "files": {
+      "copy-source.txt": "deep copy original\r\n",
+      "move-a.txt": "first move original\n",
+      "move-b.txt": "second move original\r\n",
+      "copy-root/level-two/landing/keep.txt": "copy landing marker\n",
+      "move-root/level-two/landing/keep.txt": "move landing marker\n",
+      "control/anchor.txt": "independent folder\n"
+    }
+  }
+}

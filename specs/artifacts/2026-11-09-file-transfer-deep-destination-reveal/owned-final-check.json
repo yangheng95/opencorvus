@@ -1,0 +1,120 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b90\\project-before",
+    "head": "048c41506b8703712ee355bb47e278503af38976",
+    "fileLengths": {
+      "copy-source.txt": 20,
+      "move-root/level-two/landing/move-a.txt": 20,
+      "move-root/level-two/landing/move-b.txt": 22,
+      "copy-root/level-two/landing/keep.txt": 20,
+      "move-root/level-two/landing/keep.txt": 20,
+      "control/anchor.txt": 19
+    },
+    "copied": "copy-root/level-two/landing/copied.txt",
+    "moves": {
+      "move-a.txt": "move-root/level-two/landing/move-a.txt",
+      "move-b.txt": "move-root/level-two/landing/move-b.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "4d908bae-33b9-4a77-92c5-abcb644ffc14",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 96
+      },
+      {
+        "requestID": "5efaa571-7528-4176-9cd3-c80e6d0f43dc",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 79
+      },
+      {
+        "requestID": "32c3c477-a3c6-4b71-a250-33a90b6be9e7",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 67
+      }
+    ],
+    "trackedDiff": [
+      "D\tmove-a.txt",
+      "D\tmove-b.txt"
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b90\\project-after",
+    "head": "048c41506b8703712ee355bb47e278503af38976",
+    "fileLengths": {
+      "copy-source.txt": 20,
+      "move-root/level-two/landing/move-a.txt": 20,
+      "move-root/level-two/landing/move-b.txt": 22,
+      "copy-root/level-two/landing/keep.txt": 20,
+      "move-root/level-two/landing/keep.txt": 20,
+      "control/anchor.txt": 19
+    },
+    "copied": "copy-root/level-two/landing/copied.txt",
+    "moves": {
+      "move-a.txt": "move-root/level-two/landing/move-a.txt",
+      "move-b.txt": "move-root/level-two/landing/move-b.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "6fc560a1-4084-40be-be21-9f259fd528b3",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 92
+      },
+      {
+        "requestID": "7489c416-ceff-42d6-b78e-011fde2ff5ad",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 211
+      },
+      {
+        "requestID": "dda52963-eb70-4a96-9c23-2ff94cd694b0",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 70
+      },
+      {
+        "requestID": "fc946685-655c-4a36-9b14-0da2a0f96313",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 69
+      }
+    ],
+    "trackedDiff": [
+      "D\tmove-a.txt",
+      "D\tmove-b.txt"
+    ]
+  }
+}
