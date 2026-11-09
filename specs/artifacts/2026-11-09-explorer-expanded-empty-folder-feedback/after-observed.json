@@ -1,0 +1,83 @@
+{
+  "selected": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/drafts, ID: dropdownmenu-cl-206-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t89 button (expanded) Description: plans/drafts · Selected for file actions · Empty, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t90 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t\t91 text Empty",
+    "\t\t\t\t\t\t\t\t\t\t92 button (collapsed) reference, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Expand",
+    "The focused UI element is 89 button (expanded) Description: plans/drafts · Selected for file actions · Empty, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Collapse"
+  ],
+  "unselected": [
+    "\t\t\t\t\t\t\t\t\t\t89 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t90 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t\t91 text Empty",
+    "\t\t\t\t\t\t\t\t\t\t92 button (collapsed) reference, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Expand",
+    "The focused UI element is 89 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Collapse"
+  ],
+  "collapsed": [
+    "\t\t\t\t\t\t\t\t\t\t89 button (collapsed) drafts, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t92 button (collapsed) reference, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Expand",
+    "The focused UI element is 89 button (collapsed) drafts, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Expand"
+  ],
+  "nonempty": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-206-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t89 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t98 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t\t99 text Empty",
+    "\t\t\t\t\t\t\t\t\t\t92 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t100 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-237-trigger",
+    "The focused UI element is 92 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse"
+  ],
+  "zh": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-206-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t89 button (expanded) drafts 空目录, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t98 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t\t99 text 空目录",
+    "\t\t\t\t\t\t\t\t\t\t92 button (expanded) Description: plans/reference · 已选作文件操作对象, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t100 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-237-trigger",
+    "The focused UI element is 103 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-300-trigger, Secondary Actions: Expand"
+  ],
+  "createDialog": [
+    "\t1 container 新建文件, ID: appDialog",
+    "\t\t\t3 heading 新建文件, Value: 2, ID: dialog-cl-101-title",
+    "\t\t\t\t4 text 新建文件",
+    "\t\t\t5 text 在 plans/drafts 中新建",
+    "\t\t\t\t7 text 文件名",
+    "\t\t\t\t8 text field (settable) 文件名, Value: draft-note.txt, ID: appDialogInput",
+    "\t\t\t10 button 新建文件, ID: btnAppDialogOk",
+    "The focused UI element is 8 text field (settable) 文件名, Value: draft-note.txt, ID: appDialogInput"
+  ],
+  "created": [
+    "\t\t\t\t\t\t\t\t\t\t86 pop up button (collapsed) Description: 新建, Help: 在 plans/drafts 中新建, ID: dropdownmenu-cl-206-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t87 text 已创建 plans\\drafts\\draft-note.txt",
+    "\t\t\t\t\t\t\t\t\t\t92 button (expanded) drafts, Help: plans/drafts, ID: contextmenu-cl-229-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t93 button Description: plans/drafts/draft-note.txt · 已选作文件操作对象, Help: plans/drafts/draft-note.txt, ID: contextmenu-cl-346-trigger",
+    "\t\t\t\t\t\t\t\t\t\t94 button (expanded) reference, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t95 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-237-trigger",
+    "The focused UI element is 72 tab (selected, settable, boolean) Description: 资源管理器, Value: 1, ID: tabs-cl-68-trigger-explorer"
+  ],
+  "offline": [
+    "\t\t\t\t\t\t\t\t\t72 tab (selected, settable, boolean) Description: 资源管理器, Value: 1, ID: tabs-cl-68-trigger-explorer",
+    "\t\t\t\t\t\t\t79 container Description: 资源管理器, ID: centerWorkbenchExplorer",
+    "\t\t\t\t\t\t\t\t80 container 资源管理器",
+    "\t\t\t\t\t\t\t\t\t\t103 text 无法加载 plans",
+    "\t\t\t\t\t\t\t\t\t\t104 text 无法加载文件",
+    "\t\t\t\t\t\t\t\t\t\t107 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t108 text 无法加载 plans/drafts",
+    "\t\t\t\t\t\t\t\t\t\t109 text 无法加载文件",
+    "\t\t\t\t\t\t\t\t\t\t112 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t113 text 无法加载 plans/reference",
+    "\t\t\t\t\t\t\t\t\t\t114 text 无法加载文件",
+    "\t\t\t\t\t\t\t\t\t\t117 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t119 text 无法加载文件",
+    "\t\t\t\t\t\t\t\t\t\t122 button 重试",
+    "\t\t\t124 text OpenCorvus 后端无法访问，实时数据暂不可用。",
+    "The focused UI element is 72 tab (selected, settable, boolean) Description: 资源管理器, Value: 1, ID: tabs-cl-68-trigger-explorer"
+  ],
+  "restored": [
+    "\t\t\t\t\t\t\t\t\t102 text 已创建 plans\\drafts\\draft-note.txt",
+    "\t\t\t\t\t\t\t\t\t\t113 button (collapsed) archive, ID: contextmenu-cl-611-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t108 button Description: plans/drafts/draft-note.txt · 已选作文件操作对象, Help: plans/drafts/draft-note.txt, ID: contextmenu-cl-595-trigger",
+    "The focused UI element is 72 tab (selected, settable, boolean) Description: 资源管理器, Value: 1, ID: tabs-cl-68-trigger-explorer"
+  ]
+}

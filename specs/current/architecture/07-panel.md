@@ -4543,6 +4543,9 @@ empty search. Its existing directory fact owns the localized selection hint,
 search availability, shared background/header command availability and the
 keyboard-navigation hint. Selecting a Project restores the original loading,
 error, row and search presentation through the same readers and mutation owner.
+An expanded folder with an accepted empty listing shows a localized status
+in its own row. Loading or failure takes priority over a previous empty result.
+The selected row's accessible name includes the same status.
 The launcher heading keeps its original localized text and complete Project
 identity; native balanced wrapping and emergency word wrapping contain it in
 the existing layout as the sidebar and tools change its available width.

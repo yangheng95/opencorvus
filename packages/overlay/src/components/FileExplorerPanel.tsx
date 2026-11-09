@@ -77,6 +77,7 @@ type ExplorerRow =
       expanded: boolean
       loading: boolean
       error: ExplorerFailure | null
+      empty: boolean
     }
   | { kind: "search"; key: string; path: string; depth: number }
 
@@ -931,6 +932,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           expanded: nodeExpanded,
           loading: loading.has(node.path),
           error: errors.get(node.path) ?? null,
+          empty: nodeExpanded && children.get(node.path)?.length === 0,
         })
         if (nodeExpanded) pushChildren(node.path, depth + 1)
       }
@@ -2217,6 +2219,18 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const isDirectory = () => node().directoryTarget
     const item = () => selectionFromNode(node())
     const isNodeSelected = () => isSelected(item())
+    const readStatus = () => {
+      const current = row()
+      if (current.loading) return t("common.loading")
+      if (current.error) return t("common.error")
+      return current.empty ? t("explorer.folder_empty") : undefined
+    }
+    const selectedLabel = () => {
+      if (!isNodeSelected()) return undefined
+      const label = t("explorer.selected_path_hint", { path: node().path })
+      const status = readStatus()
+      return status ? `${label} · ${status}` : label
+    }
     const isNodeCurrent = () => currentFilePath() === item().path
     const isNodeDragging = () => draggedItems().some((entry) => entry.path === item().path)
     const isNodeDropTarget = () => dropTargetRowPath() === item().path
@@ -2243,7 +2257,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           data-ignored={node().ignored ? "true" : "false"}
           aria-current={isNodeCurrent() ? "true" : undefined}
           aria-expanded={isDirectory() ? row().expanded : undefined}
-          aria-label={isNodeSelected() ? t("explorer.selected_path_hint", { path: node().path }) : undefined}
+          aria-label={selectedLabel()}
           aria-keyshortcuts={EXPLORER_SELECTION_KEY_SHORTCUTS}
           draggable={!commandBusy()}
           style={{ "--file-explorer-row-depth": String(row().depth) }}
@@ -2285,9 +2299,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             icon={isDirectory() ? (row().expanded ? "folder-open" : "folder") : "file-document"}
             expandable={isDirectory()}
             expanded={row().expanded}
-            trailing={
-              row().loading ? t("common.loading") : !row().loading && row().error ? t("common.error") : undefined
-            }
+            trailing={readStatus()}
           />
         </ContextMenu.Trigger>
         {renderItemContextMenu(item, () => ({ isDirectory: isDirectory(), expanded: row().expanded }))}

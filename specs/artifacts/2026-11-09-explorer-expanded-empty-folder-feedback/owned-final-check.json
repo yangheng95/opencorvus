@@ -1,0 +1,156 @@
+{
+  "projects": {
+    "before": {
+      "head": "9c0e2f5d4419defff82aaefb1302bb26eeec20af",
+      "originalBytes": 40,
+      "draftEntries": [],
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      }
+    },
+    "after": {
+      "head": "217b34c16dbe2c8daf5443c14c6e701fb84ad0a6",
+      "originalBytes": 40,
+      "draftEntries": [
+        "draft-note.txt"
+      ],
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      }
+    }
+  },
+  "creation": {
+    "requestID": "0e186e90-0ad7-44a2-b621-529cd5283e59",
+    "status": 200,
+    "path": "/file/item"
+  },
+  "matchedFolderReads": [
+    {
+      "proxy": {
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b103%5Cproject-after&path=archive",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b103%5Cproject-after&path=missing-owned-archive",
+        "status": 404,
+        "requestID": "2de68a4d-c09d-4b58-8821-a0188eefc479"
+      },
+      "upstream": {
+        "time": "2026-11-09T10:11:24.756Z",
+        "requestID": "2de68a4d-c09d-4b58-8821-a0188eefc479",
+        "method": "GET",
+        "path": "/file",
+        "status": "completed",
+        "statusCode": 404,
+        "duration": 2
+      }
+    },
+    {
+      "proxy": {
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b103%5Cproject-after&path=archive",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b103%5Cproject-after&path=archive",
+        "status": 200,
+        "requestID": "d2a17d96-ac37-4d5f-8197-29802960923c"
+      },
+      "upstream": {
+        "time": "2026-11-09T10:11:39.432Z",
+        "requestID": "d2a17d96-ac37-4d5f-8197-29802960923c",
+        "method": "GET",
+        "path": "/file",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1
+      }
+    },
+    {
+      "proxy": {
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b103%5Cproject-after&path=archive",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b103%5Cproject-after&path=archive",
+        "status": 200,
+        "requestID": "d34fd68b-59f2-4734-a4a1-4d94f5be8bfb"
+      },
+      "upstream": {
+        "time": "2026-11-09T10:11:54.433Z",
+        "requestID": "d34fd68b-59f2-4734-a4a1-4d94f5be8bfb",
+        "method": "GET",
+        "path": "/file",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    }
+  ],
+  "shutdown": [
+    {
+      "phase": "before",
+      "pid": 21632,
+      "port": 39141,
+      "status": 200,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "receipt": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaT97kv00Zs4t3JC9D"
+      }
+    },
+    {
+      "phase": "after",
+      "pid": 18056,
+      "port": 39142,
+      "status": 200,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "receipt": {
+        "port": 39142,
+        "processId": 18056,
+        "startupOccurrence": "iteration-b103-after",
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaT9pQH005IJqoQ4Uy"
+        }
+      }
+    },
+    {
+      "phase": "after-recovered",
+      "pid": 22940,
+      "port": 39142,
+      "status": 200,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "receipt": {
+        "port": 39142,
+        "processId": 22940,
+        "startupOccurrence": "iteration-b103-after-recovered",
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaTAiHE00Qrciw20dZ"
+        }
+      }
+    },
+    {
+      "phase": "proxy",
+      "pid": 9604,
+      "port": 39143,
+      "status": 200,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "receipt": {
+        "pid": 9604,
+        "status": 200
+      }
+    }
+  ]
+}

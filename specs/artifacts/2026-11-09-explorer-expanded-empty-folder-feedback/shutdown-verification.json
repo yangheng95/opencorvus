@@ -1,0 +1,66 @@
+[
+  {
+    "phase": "before",
+    "pid": 21632,
+    "port": 39141,
+    "status": 200,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "receipt": {
+      "ok": true,
+      "occurrenceID": "cal_g0VaT97kv00Zs4t3JC9D"
+    }
+  },
+  {
+    "phase": "after",
+    "pid": 18056,
+    "port": 39142,
+    "status": 200,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "receipt": {
+      "port": 39142,
+      "processId": 18056,
+      "startupOccurrence": "iteration-b103-after",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaT9pQH005IJqoQ4Uy"
+      }
+    }
+  },
+  {
+    "phase": "after-recovered",
+    "pid": 22940,
+    "port": 39142,
+    "status": 200,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "receipt": {
+      "port": 39142,
+      "processId": 22940,
+      "startupOccurrence": "iteration-b103-after-recovered",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTAiHE00Qrciw20dZ"
+      }
+    }
+  },
+  {
+    "phase": "proxy",
+    "pid": 9604,
+    "port": 39143,
+    "status": 200,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "receipt": {
+      "pid": 9604,
+      "status": 200
+    }
+  }
+]

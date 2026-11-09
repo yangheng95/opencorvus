@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [已展开空目录的状态反馈](records/2026-11/2026-11-09-explorer-expanded-empty-folder-feedback.md)
 - [调试树使用真实目录](records/2026-11/2026-11-09-debug-tree-physical-directories.md)
 - [项目搜索索引包含物理空目录](records/2026-11/2026-11-09-project-index-physical-directories.md)
 - [官方用量文档链接名称](records/2026-11/2026-11-09-usage-official-docs-accessible-name.md)

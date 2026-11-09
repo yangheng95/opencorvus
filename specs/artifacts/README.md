@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [已展开空目录的状态反馈证据](2026-11-09-explorer-expanded-empty-folder-feedback/README.md)
 - [调试树使用真实目录证据](2026-11-09-debug-tree-physical-directories/README.md)
 - [项目搜索索引包含物理空目录证据](2026-11-09-project-index-physical-directories/README.md)
 - [官方用量文档链接名称证据](2026-11-09-usage-official-docs-accessible-name/README.md)
