@@ -3996,6 +3996,10 @@ button names the directory check; metadata write dialogs retain their saving
 label. Failure preserves the input and current workspace. Only an accepted
 directory reaches workspace selection or conversion; the check does not
 register a Project.
+The user may cancel while this read is pending. The current dialog occurrence
+retires and aborts its browser request, preserves the existing request timeout,
+and leaves the open workspace and files in place. Metadata writes still wait
+for their response; cancellation does not claim to undo a committed change.
 The chooser summarizes a missing directory, a file path or an incompatible
 server path using the actual typed result and the current interface language.
 An unconfirmed read describes a directory check failure. The same dialog keeps

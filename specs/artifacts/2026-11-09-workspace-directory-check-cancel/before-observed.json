@@ -1,0 +1,48 @@
+{
+  "original": [
+    "\t\t\t\t\t\t\t\t48 heading Let's work on project-before, Value: 1",
+    "\t\t\t\t\t\t\t\t\t\t91 text entry area (settable) Description: note.txt, Value: Owned cancellable check project-before",
+    "\t\t\t\t\t\t\t\t\t\t\t92 text Owned cancellable check project-before",
+    "The focused UI element is 91 text entry area (settable) Description: note.txt, Value: Owned cancellable check project-before"
+  ],
+  "confirmAt": "2026-11-09T11:52:12.092Z",
+  "beforeEscape": [
+    "\t\t\t\t102 button (disabled) Cancel, ID: btnAppDialogCancel",
+    "\t\t\t\t103 button (disabled) Checking directory…, ID: btnAppDialogOk",
+    "The focused UI element is 101 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-before, ID: appDialogInput"
+  ],
+  "escapeAt": "2026-11-09T11:52:12.188Z",
+  "afterEscape": [
+    "\t\t\t\t102 button (disabled) Cancel, ID: btnAppDialogCancel",
+    "\t\t\t\t103 button (disabled) Checking directory…, ID: btnAppDialogOk",
+    "The focused UI element is 101 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-before, ID: appDialogInput"
+  ],
+  "switchedAt": "2026-11-09T11:52:19.720Z",
+  "switched": [
+    "\t\t\t\t\t\t\t\t\t\t37 button (expanded) Description: Collapse target-before, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t38 button Open project: target-before",
+    "\t\t\t\t\t\t\t\t51 heading Let's work on target-before, Value: 1",
+    "\t\t\t\t\t\t\t\t\t52 text Let's work on target-before",
+    "\t\t\t\t\t\t\t\t\t83 text target-before",
+    "\t\t\t\t\t\t\t\t\t84 text C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-before"
+  ],
+  "renameAt": "2026-11-09T11:52:26.815Z",
+  "renameEscapeAt": "2026-11-09T11:52:26.833Z",
+  "renamePending": [
+    "\t\t\t\t104 button (disabled) Cancel, ID: btnAppDialogCancel",
+    "\t\t\t\t105 button (disabled) Saving…, ID: btnAppDialogOk",
+    "The focused UI element is 103 text field (settable) Project name, Value: Owned baseline write, ID: appDialogInput"
+  ],
+  "renamed": [
+    "\t\t\t\t\t\t\t\t\t\t\t38 button (expanded) Description: Collapse Owned baseline write, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t39 button Open project: Owned baseline write",
+    "\t\t\t\t\t\t\t\t\t\t\t96 pop up button (collapsed) Description: Actions for Owned baseline write, ID: dropdownmenu-cl-277-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t97 button Start work in Owned baseline write",
+    "\t\t\t\t\t\t\t\t\t52 heading Let's work on Owned baseline write, Value: 1",
+    "\t\t\t\t\t\t\t\t\t\t53 text Let's work on Owned baseline write",
+    "\t\t\t\t\t\t\t\t\t\t84 text Owned baseline write",
+    "\t\t98 container ID: tooltip-cl-276-content, Owned baseline write C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-before",
+    "\t\t\t99 text Owned baseline write",
+    "The focused UI element is 39 button Open project: Owned baseline write"
+  ]
+}

@@ -121,7 +121,7 @@ export function AppDialogHost() {
               variant="ghost"
               size="md"
               tone="neutral"
-              disabled={dialogStore.app.submitting}
+              disabled={dialogStore.app.submitting && !dialogStore.app.cancelWhileSubmitting}
               onClick={() => {
                 void settleAppDialog(false, dialogStore.app.epoch)
               }}

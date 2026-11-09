@@ -273,13 +273,13 @@ export async function apiJson<T = any>(path: string, init?: ApiJsonInit): Promis
   return res.body
 }
 
-function mergeAbortSignals(a: AbortSignal, b: AbortSignal): AbortSignal {
+export function mergeAbortSignals(a: AbortSignal, b: AbortSignal): AbortSignal {
   if (a.aborted) return a
   if (b.aborted) return b
   const controller = new AbortController()
-  const abort = () => controller.abort()
-  a.addEventListener("abort", abort, { once: true })
-  b.addEventListener("abort", abort, { once: true })
+  const listenerOptions = { once: true, signal: controller.signal }
+  a.addEventListener("abort", () => controller.abort(a.reason), listenerOptions)
+  b.addEventListener("abort", () => controller.abort(b.reason), listenerOptions)
   return controller.signal
 }
 

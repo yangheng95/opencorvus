@@ -1,0 +1,351 @@
+{
+  "before": {
+    "browser": {
+      "confirmAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:52:12.117Z",
+          "receipt": 3,
+          "stage": "origin",
+          "route": "/global/projects/check-directory",
+          "status": 200,
+          "requestID": "42e5425c-3fad-4394-b0bf-3a685d3dcf2f"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:52:19.131Z",
+          "receipt": 3,
+          "stage": "delivered",
+          "route": "/global/projects/check-directory"
+        },
+        "elapsedAfterServerMs": 7014,
+        "requestID": "42e5425c-3fad-4394-b0bf-3a685d3dcf2f",
+        "actual": {
+          "requestID": "42e5425c-3fad-4394-b0bf-3a685d3dcf2f",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2,
+          "time": "2026-11-09T11:52:12.117Z"
+        }
+      },
+      "renameAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:52:26.839Z",
+          "receipt": 5,
+          "stage": "origin",
+          "route": "/project/current",
+          "status": 200,
+          "requestID": "3d406d13-4fb6-4c9d-a607-4658ecbed703"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:52:33.848Z",
+          "receipt": 5,
+          "stage": "delivered",
+          "route": "/project/current"
+        },
+        "elapsedAfterServerMs": 7009,
+        "requestID": "3d406d13-4fb6-4c9d-a607-4658ecbed703",
+        "actual": {
+          "requestID": "3d406d13-4fb6-4c9d-a607-4658ecbed703",
+          "method": "PATCH",
+          "path": "/project/current",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5,
+          "time": "2026-11-09T11:52:26.839Z"
+        }
+      }
+    },
+    "checkerRequestIDs": [],
+    "projects": [
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\project-before",
+        null
+      ],
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-before",
+        "Owned baseline write"
+      ]
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\project-before",
+        "gitHead": "93c99ec3d406c7ec9a0b90205bcd6bde2a41bdd2",
+        "content": "Owned cancellable check project-before\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-before",
+        "gitHead": "8baaee498088a4ffe026a08e23250e2191d0fc3e",
+        "content": "Owned cancellable check target-before\n"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b113-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39176",
+      "pid": 30732
+    },
+    "shutdown": {
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTZx4k003w561nlNA"
+      },
+      "pid": 30732,
+      "status": 200,
+      "port": 39176
+    },
+    "proxy": {
+      "listenPort": 39177,
+      "upstreamPort": 39176,
+      "pid": 33780,
+      "delayMs": 7000
+    },
+    "proxyShutdown": {
+      "status": 200,
+      "pid": 33780,
+      "port": 39177,
+      "body": "stopping"
+    }
+  },
+  "after": {
+    "browser": {
+      "escapeCheckAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:58:29.305Z",
+          "receipt": 3,
+          "stage": "origin",
+          "route": "/global/projects/check-directory",
+          "status": 200,
+          "requestID": "c89312ec-39cd-458d-808e-f7d1ac90781d"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:58:29.425Z",
+          "receipt": 3,
+          "stage": "client-closed",
+          "route": "/global/projects/check-directory"
+        },
+        "elapsedAfterServerMs": 120,
+        "requestID": "c89312ec-39cd-458d-808e-f7d1ac90781d",
+        "actual": {
+          "requestID": "c89312ec-39cd-458d-808e-f7d1ac90781d",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1,
+          "time": "2026-11-09T11:58:29.305Z"
+        }
+      },
+      "chineseCheckAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:58:38.951Z",
+          "receipt": 4,
+          "stage": "origin",
+          "route": "/global/projects/check-directory",
+          "status": 200,
+          "requestID": "ec63fa6a-20b1-4747-aa17-cfe80d51e02d"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:58:39.095Z",
+          "receipt": 4,
+          "stage": "client-closed",
+          "route": "/global/projects/check-directory"
+        },
+        "elapsedAfterServerMs": 144,
+        "requestID": "ec63fa6a-20b1-4747-aa17-cfe80d51e02d",
+        "actual": {
+          "requestID": "ec63fa6a-20b1-4747-aa17-cfe80d51e02d",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1,
+          "time": "2026-11-09T11:58:38.951Z"
+        }
+      },
+      "timeoutAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:58:44.922Z",
+          "receipt": 5,
+          "stage": "origin",
+          "route": "/global/projects/check-directory",
+          "status": 400,
+          "requestID": "379316bb-5e89-4d5d-8e86-77efc0ac79e5"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:58:59.939Z",
+          "receipt": 5,
+          "stage": "client-closed",
+          "route": "/global/projects/check-directory"
+        },
+        "elapsedAfterServerMs": 15017,
+        "requestID": "379316bb-5e89-4d5d-8e86-77efc0ac79e5",
+        "actual": {
+          "requestID": "379316bb-5e89-4d5d-8e86-77efc0ac79e5",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 3,
+          "time": "2026-11-09T11:58:44.923Z"
+        }
+      },
+      "missingAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:59:05.937Z",
+          "receipt": 6,
+          "stage": "origin",
+          "route": "/global/projects/check-directory",
+          "status": 400,
+          "requestID": "da0978ee-e4c8-4921-812a-ec298acf8313"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:59:12.938Z",
+          "receipt": 6,
+          "stage": "delivered",
+          "route": "/global/projects/check-directory"
+        },
+        "elapsedAfterServerMs": 7001,
+        "requestID": "da0978ee-e4c8-4921-812a-ec298acf8313",
+        "actual": {
+          "requestID": "da0978ee-e4c8-4921-812a-ec298acf8313",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:59:05.939Z"
+        }
+      },
+      "validAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:59:20.469Z",
+          "receipt": 7,
+          "stage": "origin",
+          "route": "/global/projects/check-directory",
+          "status": 200,
+          "requestID": "66709a89-7f4e-4c33-8e51-e002d001d252"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:59:27.473Z",
+          "receipt": 7,
+          "stage": "delivered",
+          "route": "/global/projects/check-directory"
+        },
+        "elapsedAfterServerMs": 7004,
+        "requestID": "66709a89-7f4e-4c33-8e51-e002d001d252",
+        "actual": {
+          "requestID": "66709a89-7f4e-4c33-8e51-e002d001d252",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 0,
+          "time": "2026-11-09T11:59:20.469Z"
+        }
+      },
+      "renameAt": {
+        "receivedFromServer": {
+          "time": "2026-11-09T11:59:36.564Z",
+          "receipt": 9,
+          "stage": "origin",
+          "route": "/project/current",
+          "status": 200,
+          "requestID": "88451af8-1ee6-4f48-b743-d7c11f7e68c2"
+        },
+        "terminal": {
+          "time": "2026-11-09T11:59:43.570Z",
+          "receipt": 9,
+          "stage": "delivered",
+          "route": "/project/current"
+        },
+        "elapsedAfterServerMs": 7006,
+        "requestID": "88451af8-1ee6-4f48-b743-d7c11f7e68c2",
+        "actual": {
+          "requestID": "88451af8-1ee6-4f48-b743-d7c11f7e68c2",
+          "method": "PATCH",
+          "path": "/project/current",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 5,
+          "time": "2026-11-09T11:59:36.565Z"
+        }
+      }
+    },
+    "checkerRequestIDs": [
+      "6f6c570d-69be-4944-b1ee-ef1844582474",
+      "6ee2c4ac-a741-43a8-8d0b-cadc754eb520",
+      "f2b5f68d-13dc-4590-8f21-4d9b27c7bf93",
+      "9f06720e-65b4-4456-9ad2-701ad25fd89d",
+      "40439e03-e167-4c1b-8b4f-da10715ab179",
+      "3a211886-baa1-429a-981b-4b1d95150443",
+      "df081823-ef37-4b6e-bbf3-ee94d854a5e5"
+    ],
+    "projects": [
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\project-after",
+        null
+      ],
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-after",
+        "Owned candidate write"
+      ]
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\project-after",
+        "gitHead": "657973387998414dcafb1b9ea8008c824dfe1abc",
+        "content": "Owned cancellable check project-after\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b113\\target-after",
+        "gitHead": "7481683ac55c2fa20196e5281c23cbe55d0337a3",
+        "content": "Owned cancellable check target-after\n"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b113-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39178",
+      "pid": 29420
+    },
+    "shutdown": {
+      "pid": 29420,
+      "port": 39178,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTbkc700OlP1SKm05"
+      },
+      "status": 200
+    },
+    "proxy": {
+      "listenPort": 39179,
+      "upstreamPort": 39178,
+      "pid": 23260,
+      "delayMs": 7000,
+      "deadlineDelayMs": 19000
+    },
+    "proxyShutdown": {
+      "status": 200,
+      "pid": 23260,
+      "body": "stopping",
+      "port": 39179
+    }
+  }
+}

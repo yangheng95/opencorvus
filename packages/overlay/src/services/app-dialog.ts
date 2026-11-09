@@ -14,6 +14,8 @@ export type AppDialogOptions = {
   kind?: string
   okLabel?: string
   submittingLabel?: string
+  /** An in-flight read may be abandoned without waiting for a write receipt. */
+  cancelWhileSubmitting?: boolean
   okTone?: "accent" | "danger"
   cancelLabel?: string
   cancel?: boolean
@@ -42,7 +44,7 @@ export type AppDialogOptions = {
 export type AppDialogOpenOptions = AppDialogOptions & {
   openingGuard?: () => boolean
   validateInput?: (value: string) => string | undefined
-  onConfirm?: (value: string | null) => Promise<void>
+  onConfirm?: (value: string | null, signal?: AbortSignal) => Promise<void>
   confirmErrorSummary?: (error: unknown) => string
 }
 
@@ -57,6 +59,7 @@ type AppDialogCompletion = {
   validateInput?: AppDialogOpenOptions["validateInput"]
   onConfirm?: AppDialogOpenOptions["onConfirm"]
   confirmErrorSummary?: AppDialogOpenOptions["confirmErrorSummary"]
+  pendingAbort?: AbortController
 }
 let activeDialog: AppDialogCompletion | null = null
 
@@ -126,6 +129,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
         if (activeDialog) {
           const replaced = activeDialog
           activeDialog = null
+          replaced.pendingAbort?.abort()
           setDialogStore("app", "open", false)
           try {
             await revealNativeSurfaces(replaced.occlusionOwner)
@@ -157,6 +161,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           kind: options.kind || "",
           okLabel: options.okLabel || t("common.ok"),
           submittingLabel: options.submittingLabel,
+          cancelWhileSubmitting: options.cancelWhileSubmitting === true,
           okTone: options.okTone || "accent",
           cancelLabel: options.cancelLabel || t("common.cancel"),
           cancel: options.cancel === true,
@@ -213,7 +218,8 @@ function ownsDialog(completion: AppDialogCompletion): boolean {
 async function completeAppDialog(completion: AppDialogCompletion, confirmed: boolean, value: string | null): Promise<void> {
   if (!ownsDialog(completion)) return
   activeDialog = null
-  setDialogStore("app", "open", false)
+  if (!confirmed) completion.pendingAbort?.abort()
+  setDialogStore("app", { open: false, submitting: false })
   try {
     await revealNativeSurfaces(completion.occlusionOwner)
   } catch (error) {
@@ -226,7 +232,10 @@ async function completeAppDialog(completion: AppDialogCompletion, confirmed: boo
 async function finishAppDialog(confirmed: boolean, epoch: number): Promise<boolean> {
   const decision = await runAppDialogTransition(async () => {
     const completion = activeDialog
-    if (!completion || completion.epoch !== epoch || epoch !== dialogStore.app.epoch || dialogStore.app.submitting) {
+    if (!completion || completion.epoch !== epoch || !ownsDialog(completion)) {
+      return { kind: "settled" } as const
+    }
+    if (dialogStore.app.submitting && (confirmed || !completion.pendingAbort)) {
       return { kind: "settled" } as const
     }
     const inputValue =
@@ -257,18 +266,20 @@ async function finishAppDialog(confirmed: boolean, epoch: number): Promise<boole
       }
     }
     if (confirmed && completion.onConfirm) {
+      completion.pendingAbort = dialogStore.app.cancelWhileSubmitting ? new AbortController() : undefined
       setDialogStore("app", { submitting: true, submitError: "", submitErrorDetails: "" })
-      return { kind: "submit", completion, value } as const
+      return { kind: "submit", completion, value, signal: completion.pendingAbort?.signal } as const
     }
     await completeAppDialog(completion, confirmed, value)
     return { kind: "settled" } as const
   })
   if (decision.kind !== "submit") return decision.kind !== "invalid"
   try {
-    await decision.completion.onConfirm!(decision.value)
+    await decision.completion.onConfirm!(decision.value, decision.signal)
   } catch (error) {
     return runAppDialogTransition(async () => {
       if (!ownsDialog(decision.completion)) return true
+      decision.completion.pendingAbort = undefined
       setDialogStore("app", {
         submitting: false,
         submitError: decision.completion.confirmErrorSummary?.(error) ?? t("dialog.submit_failed"),
@@ -279,7 +290,7 @@ async function finishAppDialog(confirmed: boolean, epoch: number): Promise<boole
   }
   return runAppDialogTransition(async () => {
     if (!ownsDialog(decision.completion)) return true
-    setDialogStore("app", "submitting", false)
+    decision.completion.pendingAbort = undefined
     await completeAppDialog(decision.completion, true, decision.value)
     return true
   })

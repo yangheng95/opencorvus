@@ -39,6 +39,7 @@ import {
   apiJson,
   ApiError,
   configure as configureApi,
+  mergeAbortSignals,
   serverSettledRequest,
   captureApiAuthority,
   assertApiAuthorityCurrent,
@@ -46,7 +47,7 @@ import {
   type ApiAuthority,
 } from "./api"
 import { getHostTransport } from "./host-transport-runtime"
-import type { ProjectEditorID } from "./host-transport"
+import { DEFAULT_REQUEST_TIMEOUT_MILLISECONDS, type ProjectEditorID } from "./host-transport"
 import { nativeMessage, showAppDialog, type AppDialogOpenOptions } from "./app-dialog"
 import { nativeOpen } from "../utils/native"
 import { checkConnection } from "./connection"
@@ -819,12 +820,17 @@ export async function chooseWorkspaceDirectory(options: {
     inputRequiredMessage: t("cwd.path_required"),
     validateInput: (value) => isAbsoluteServerPath(value.trim()) ? undefined : t("cwd.path_absolute_required"),
     submittingLabel: t("cwd.path_checking"),
+    cancelWhileSubmitting: true,
     confirmErrorSummary: workspaceDirectoryCheckSummary,
-    onConfirm: async (value) => {
+    onConfirm: async (value, signal) => {
+      if (!signal) throw new Error("Cancellable directory check requires its dialog signal")
       assertApiAuthorityCurrent(authority)
       const directory = String(value ?? "").trim()
       const query = new URLSearchParams({ path: directory })
-      const checked = await apiJson<{ directory: string }>(`global/projects/check-directory?${query}`, { authority })
+      const checked = await apiJson<{ directory: string }>(`global/projects/check-directory?${query}`, {
+        authority,
+        signal: mergeAbortSignals(signal, AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT_MILLISECONDS)),
+      })
       assertApiAuthorityCurrent(authority)
       checkedDirectory = checked.directory
     },
