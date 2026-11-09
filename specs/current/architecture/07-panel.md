@@ -3729,6 +3729,11 @@ while changing another surface; the Right Dock has no independent Environment vi
 Escape on the topmost Environment surface clears its existing open owner and
 returns focus to the trigger without scrolling; nested menu dismissal retains its
 own layer precedence.
+The Git branch submenu treats its pending branch read as a cancellable opening
+intent. During the read, it keeps the current branch label visible and announces
+loading without presenting an expanded submenu. Activating the branch control
+again or pressing Escape during its read retires that intent; only the current
+project and current intent can present the accepted branch list.
 The hidden-anchor transition closes the existing controlled Popover before its
 Portal can survive without usable anchor geometry. Environment sits directly
 after the editor launcher and the Right Dock button remains the trailing

@@ -3032,6 +3032,12 @@
   text-align: left;
 }
 
+.project-runtime-branch-progress {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
 .project-runtime-change-totals {
   grid-column: 3;
   display: inline-flex;

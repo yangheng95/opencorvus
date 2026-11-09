@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { configure as configureApi } from "../src/services/api"
+import { captureApiAuthority, configure as configureApi } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { loadVcsBranches, switchVcsBranch } from "../src/services/meta"
@@ -39,6 +39,7 @@ afterEach(() => {
 describe("VCS branch service", () => {
   test("loads exact branch records through the project-scoped route", async () => {
     const requests: TransportRequest[] = []
+    const read = new AbortController()
     setSettingsStore("directory", DIRECTORY)
     configureApi({ directory: DIRECTORY })
     __setHostTransportForTest(
@@ -51,7 +52,7 @@ describe("VCS branch service", () => {
       }),
     )
 
-    expect(await loadVcsBranches()).toEqual([
+    expect(await loadVcsBranches(DIRECTORY, captureApiAuthority(), read.signal)).toEqual([
       { name: "main", current: true },
       { name: "feature/menu", current: false },
     ])
@@ -61,6 +62,7 @@ describe("VCS branch service", () => {
       method: "GET",
       query: { directory: DIRECTORY },
     })
+    expect(requests[0]?.signal).toBe(read.signal)
   })
 
   test("rejects a malformed branch payload instead of manufacturing options", async () => {

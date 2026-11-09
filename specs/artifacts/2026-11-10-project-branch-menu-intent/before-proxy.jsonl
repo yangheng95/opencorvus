@@ -1,0 +1,11 @@
+{"listenPort":39316,"upstreamPort":39314,"pid":9552}
+{"time":"2026-11-09T19:11:29.923Z","receipt":1,"stage":"arrival","path":"/vcs/branches","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b146\\project-before","hold":false}
+{"time":"2026-11-09T19:11:30.214Z","receipt":1,"stage":"origin","status":200,"requestID":"08803b72-a7fe-4a9c-8fe0-a410c6c9fe7f","target":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b146\\project-before","branches":[{"name":"master","current":true}]}}
+{"time":"2026-11-09T19:11:30.217Z","receipt":1,"stage":"released","target":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b146\\project-before","branches":[{"name":"master","current":true}]}}
+{"time":"2026-11-09T19:11:34.344Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T19:11:43.741Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T19:11:51.200Z","stage":"policy","mode":"hold","queued":0}
+{"time":"2026-11-09T19:11:57.354Z","receipt":2,"stage":"arrival","path":"/vcs/branches","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b146\\project-before","hold":true}
+{"time":"2026-11-09T19:11:57.663Z","receipt":2,"stage":"origin","status":200,"requestID":"cc3c5ef5-31f4-4d0a-a392-8f3b4fdd145d","target":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b146\\project-before","branches":[{"name":"master","current":true}]}}
+{"time":"2026-11-09T19:12:06.787Z","stage":"policy","mode":"pass","queued":1}
+{"time":"2026-11-09T19:12:06.787Z","receipt":2,"stage":"released","target":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b146\\project-before","branches":[{"name":"master","current":true}]}}

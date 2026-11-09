@@ -149,8 +149,9 @@ async function refreshMetaAfterAcceptedMutation(
 export async function loadVcsBranches(
   directory = activeProjectDirectory(),
   authority = captureApiAuthority(),
+  signal?: AbortSignal,
 ): Promise<VcsBranch[]> {
-  const result = await apiJson(projectScopedPath("vcs/branches", directory), { authority })
+  const result = await apiJson(projectScopedPath("vcs/branches", directory), { authority, signal })
   if (!Array.isArray(result)) throw new Error("vcs/branches returned a non-array payload")
   return result.map((item, index) => {
     if (

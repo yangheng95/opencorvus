@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [Git 分支菜单打开意图](2026-11-10-project-branch-menu-intent.md)
 - [会话诊断复制归属](2026-11-10-conversation-diagnostics-copy-ownership.md)
 - [连接提示键盘焦点](2026-11-10-connection-notice-focus.md)
 - [对话导出状态与标题](2026-11-10-conversation-export-feedback.md)

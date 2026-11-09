@@ -1,0 +1,42 @@
+{
+  "phase": "after",
+  "mode": "baseline",
+  "project": {
+    "id": "prj_hPUb7ydAkTtdc0i7LMvu",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b146\\project-after"
+  },
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "43dc5223-c9c1-4ffb-8e9f-08f9f8fc25a6",
+      "schemaValid": true
+    },
+    {
+      "route": "/vcs/branches",
+      "operationId": "vcs.branches",
+      "status": 200,
+      "requestID": "f67157a8-8959-48d9-b8fc-5fc2d11eeb6e",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "1ef89216-456d-48c3-95c2-0eac22b178a4",
+      "schemaValid": true
+    }
+  ],
+  "branches": [
+    {
+      "name": "master",
+      "current": true
+    }
+  ],
+  "session": {
+    "id": "ses_-zUPUc5bszz55cGIAshE",
+    "title": "Chat",
+    "messages": 0
+  }
+}

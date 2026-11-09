@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Git 分支菜单打开意图证据](2026-11-10-project-branch-menu-intent/README.md)
 - [会话诊断复制归属证据](2026-11-10-conversation-diagnostics-copy-ownership/README.md)
 - [连接提示键盘焦点证据](2026-11-10-connection-notice-focus/README.md)
 - [对话导出状态与标题证据](2026-11-10-conversation-export-feedback/README.md)

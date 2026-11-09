@@ -171,9 +171,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [localMenuOpen, setLocalMenuOpen] = createSignal(false)
   const localMenuOwner = "project-runtime-local"
   let localMenuAnchor!: HTMLButtonElement
-  const [branchMenuOpen, setBranchMenuOpen] = createSignal(false)
-  const [branches, setBranches] = createSignal<VcsBranch[]>([])
-  const [branchLoadDirectory, setBranchLoadDirectory] = createSignal("")
+  const [branchMenu, setBranchMenu] = createSignal<{ phase: "reading" | "open"; request: AbortController }>()
+  const branchMenuOpen = () => branchMenu()?.phase === "open"
+  const branchMenuReading = () => branchMenu()?.phase === "reading"
   const [branchSwitchBusy, setBranchSwitchBusy] = createSignal("")
   const [branchError, setBranchError] = createSignal("")
   const branchMenuOwner = "project-runtime-branch"
@@ -704,38 +704,16 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   onCleanup(() => {
     disposeCommitMessageStream()
+    closeBranchMenu()
     void closeCommandMenuSurface(localMenuOwner)
     void closeCommandMenuSurface(branchMenuOwner)
   })
 
-  async function syncBranches(
-    authority = captureApiAuthority(),
-    selectionEpoch = boardStore.selectEpoch,
-  ): Promise<void> {
-    const projectDirectory = dir().trim()
-    if (
-      !ownsProject(authority, projectDirectory, selectionEpoch) ||
-      !appStore.connected ||
-      !projectDirectory ||
-      branchLoadDirectory() === projectDirectory
-    )
-      return
-    setBranchLoadDirectory(projectDirectory)
-    setBranchError("")
-    try {
-      const items = await loadVcsBranches(projectDirectory, authority)
-      if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
-      setBranches(items)
-    } catch (err) {
-      if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
-      const message = errorMessage(err)
-      setBranches([])
-      setBranchError(message)
-      AppLog.warn("ui", "Failed to load project branches", { directory: projectDirectory, error: message })
-    } finally {
-      if (ownsProject(authority, projectDirectory, selectionEpoch) && branchLoadDirectory() === projectDirectory)
-        setBranchLoadDirectory("")
-    }
+  function closeBranchMenu(): void {
+    const current = untrack(branchMenu)
+    if (!current) return
+    setBranchMenu(undefined)
+    current.request.abort()
   }
 
   async function openLocalMenu(anchor: HTMLElement): Promise<void> {
@@ -748,7 +726,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       return
     }
 
-    setBranchMenuOpen(false)
+    closeBranchMenu()
     setLocalMenuOpen(true)
     try {
       await openCommandMenuSurface({
@@ -814,23 +792,36 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = dir().trim()
-    const ownsMenu = () => ownsProject(authority, directory, selectionEpoch)
-    if (branchMenuOpen()) {
-      await closeCommandMenuSurface(branchMenuOwner)
+    const ownsMenu = () => runtimePanelOpen() && appStore.connected && ownsProject(authority, directory, selectionEpoch)
+    if (branchMenu()) {
+      closeBranchMenu()
       return
     }
+    if (!directory || !ownsMenu()) return
 
     setLocalMenuOpen(false)
-    setBranchMenuOpen(true)
-    await syncBranches(authority, selectionEpoch)
-    if (!ownsMenu() || !branchMenuOpen()) return
+    setBranchError("")
+    const request = new AbortController()
+    const ownsIntent = () => ownsMenu() && branchMenu()?.request === request
+    setBranchMenu({ phase: "reading", request })
+    let branches: VcsBranch[] = []
+    let failure: string | undefined
+    try {
+      branches = await loadVcsBranches(directory, authority, request.signal)
+    } catch (error) {
+      if (!ownsIntent()) return
+      failure = errorMessage(error)
+      setBranchError(failure)
+      AppLog.warn("ui", "Failed to load project branches", { directory, error: failure })
+    }
+    if (!ownsIntent()) return
 
     const branchActions = new Map<string, VcsBranch>()
-    const items = branchError()
+    const items = failure
       ? [
           {
             id: "branch-error",
-            label: branchError(),
+            label: failure,
             icon: "status-failed" as const,
             enabled: false,
           },
@@ -840,7 +831,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             icon: "refresh" as const,
           },
         ]
-      : branches().length === 0
+      : branches.length === 0
         ? [
             {
               id: "branch-empty",
@@ -849,7 +840,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               enabled: false,
             },
           ]
-        : branches().map((branch, index) => {
+        : branches.map((branch, index) => {
             const id = `branch-${index}`
             branchActions.set(id, branch)
             return {
@@ -862,6 +853,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           })
 
     try {
+      setBranchMenu({ phase: "open", request })
       await openCommandMenuSurface({
         owner: branchMenuOwner,
         anchor,
@@ -870,10 +862,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         maxHeight: document.documentElement.clientHeight * 0.5,
         groups: [{ items }],
         onDismiss: () => {
-          if (ownsMenu()) setBranchMenuOpen(false)
+          if (ownsIntent()) setBranchMenu(undefined)
         },
         onError: (error) => {
-          if (!ownsMenu()) return
+          if (!ownsIntent()) return
           setBranchError(errorMessage(error))
           reportError({
             id: "project-runtime-branch-menu:close",
@@ -885,7 +877,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         onAction: (itemID) => {
           if (!ownsMenu()) return
           if (itemID === "branch-retry") {
-            setBranchError("")
             void openBranchMenu(anchor)
             return
           }
@@ -894,8 +885,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         },
       })
     } catch (error) {
-      if (!ownsMenu()) return
-      setBranchMenuOpen(false)
+      if (!ownsMenu() || request.signal.aborted || (branchMenu() && !ownsIntent())) return
+      if (ownsIntent()) closeBranchMenu()
       setBranchError(errorMessage(error))
     }
   }
@@ -909,8 +900,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setBranchError("")
     try {
       await switchVcsBranch(branch.name, projectDirectory, authority)
-      if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
-      await syncBranches(authority, selectionEpoch)
     } catch (err) {
       if (!ownsProject(authority, projectDirectory, selectionEpoch)) return
       const message = errorMessage(err)
@@ -1204,9 +1193,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setOperationError("")
     invalidateWorktreeProjection()
     setLocalMenuOpen(false)
-    setBranchMenuOpen(false)
-    setBranches([])
-    setBranchLoadDirectory("")
+    closeBranchMenu()
     setBranchError("")
     disposeCommitMessageStream()
     setGitActionOpen(false)
@@ -1228,7 +1215,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   createEffect(() => {
     if (runtimePanelOpen()) return
     setLocalMenuOpen(false)
-    setBranchMenuOpen(false)
+    closeBranchMenu()
   })
 
   createEffect((wasOpen: boolean) => {
@@ -1284,7 +1271,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           return
         }
         setLocalMenuOpen(false)
-        setBranchMenuOpen(false)
+        closeBranchMenu()
         await occludeNativeSurfaces(owner)
         if (generation === current && ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch)
           setOpen(true)
@@ -1459,14 +1446,24 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   data-ui="project-runtime-branch"
                   data-expanded={branchMenuOpen() ? "" : undefined}
                   title={`${branchLabel()} · ${gitStatusLabel()}`}
-                  aria-label={`${t("chat.git.branch")}: ${branchLabel()}`}
+                  aria-label={`${t("chat.git.branch")}: ${branchLabel()}${branchMenuReading() ? ` · ${t("common.loading")}` : ""}`}
                   disabled={!appStore.connected || !vcs()?.commit}
                   aria-haspopup="menu"
                   aria-expanded={branchMenuOpen()}
+                  aria-busy={branchMenuReading() || undefined}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Escape" || event.isComposing || !branchMenuReading()) return
+                    event.preventDefault()
+                    event.stopPropagation()
+                    closeBranchMenu()
+                  }}
                   onClick={() => void openBranchMenu(branchMenuAnchor)}
                 >
                   <span class="project-runtime-info-value project-runtime-branch-value">{branchLabel()}</span>
                   <Icon class="project-runtime-info-caret" name="chevron" />
+                  <Show when={branchMenuReading()}>
+                    <span class="project-runtime-branch-progress" aria-hidden="true">{t("common.loading")}</span>
+                  </Show>
                 </Button>
               </Show>
               <Button
