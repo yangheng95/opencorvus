@@ -1,0 +1,203 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "operationId": "expertSquad.catalog",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/search",
+      "operationId": "expertSquad.search",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/settings/detail",
+      "operationId": "expertSquad.settingsDetail",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/settings/detail",
+      "operationId": "expertSquad.settingsDetail",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/inventory-status",
+      "operationId": "expertSquad.inventoryStatus",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/diagnostics",
+      "operationId": "expertSquad.diagnostics",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/diagnostics",
+      "operationId": "expertSquad.diagnostics",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "diagnosticCounts": {
+    "installations": 7,
+    "issues": 1,
+    "warnings": 1
+  },
+  "diagnostics": [
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-example",
+        "namespace": "local",
+        "id": "incomplete-example",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "warning",
+      "warning": {
+        "code": "project_overrides_global",
+        "severity": "warning",
+        "logical_id": "data-analysis",
+        "effective": {
+          "scope": "project",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis",
+          "version": "2026.10.24.3",
+          "package_digest": "79f64405c8bc77bce41d27252d033075ee8e0118569b069b9565339f3e6a7968"
+        },
+        "shadowed": {
+          "scope": "global",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\profile-after\\config\\expert-squads\\builtin\\data-analysis",
+          "version": "2026.10.24.3",
+          "package_digest": "79f64405c8bc77bce41d27252d033075ee8e0118569b069b9565339f3e6a7968"
+        }
+      }
+    }
+  ],
+  "project": {
+    "id": "prj_htuHOmrGL9ZgUcNeLrWv",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\project-after"
+  },
+  "active": {
+    "effective": "dynamic",
+    "project": "dynamic",
+    "scope": {
+      "kind": "project",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\project-after"
+    }
+  },
+  "entries": [
+    {
+      "id": "advanced",
+      "name": "Advanced",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "base",
+      "name": "Base",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "dynamic",
+      "name": "Dynamic",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "research-studio",
+      "name": "Research Studio",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "squad-sdk",
+      "name": "Generate Expert Squads",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "global",
+        "namespace": "builtin"
+      }
+    },
+    {
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      }
+    }
+  ],
+  "details": [
+    {
+      "scope": "project",
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "version": "2026.10.24.3",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis",
+      "manifest": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis\\expert-squad.jsonc",
+      "readme": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis\\README.md",
+      "effectiveIdentity": {
+        "id": "data-analysis",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "version": "2026.10.24.3",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\profile-after\\config\\expert-squads\\builtin\\data-analysis",
+      "manifest": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\profile-after\\config\\expert-squads\\builtin\\data-analysis\\expert-squad.jsonc",
+      "readme": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b67\\profile-after\\config\\expert-squads\\builtin\\data-analysis\\README.md",
+      "effectiveIdentity": {
+        "id": "data-analysis",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        }
+      }
+    }
+  ]
+}

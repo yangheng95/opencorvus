@@ -5187,6 +5187,9 @@ Installed Expert Squad navigation focuses Back to list while the exact detail
 loads, then returns to the original physical installation row or selected filter.
 Installed package rows identify each physical installation by its localized scope
 and canonical namespace/ID, including when several rows share a display name.
+Expert Squad discovery issues and precedence notices belong to the catalog list.
+Issues show their localized discovery phase, exact location and expandable
+original diagnostics. The selected installation retains its own precedence feedback.
 Mission Skill reads retain original transport errors for localized inline feedback
 with expandable diagnostics. A failed read keeps only the current scope's accepted
 catalog and filters; the count describes accepted data. An unavailable scope

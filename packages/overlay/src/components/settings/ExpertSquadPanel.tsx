@@ -251,6 +251,15 @@ type BusyAction = {
 }
 type CatalogFilter = "all" | "active" | "package" | "built_in"
 type InstalledSquadSection = "overview" | "agents" | "configuration" | "evolution" | "package"
+type CatalogDiscoveryIssue = Extract<ExpertSquadDiagnosticsPage["entries"][number], { kind: "issue" }>["issue"]
+
+const catalogIssueLabels = {
+  "location.scan": "expert_squad.catalog_issue.location",
+  "namespace.scan": "expert_squad.catalog_issue.namespace",
+  "package.identity": "expert_squad.catalog_issue.identity",
+  "package.catalog": "expert_squad.catalog_issue.package",
+  "identity.duplicate": "expert_squad.catalog_issue.duplicate",
+} satisfies Record<CatalogDiscoveryIssue["phase"], string>
 
 function catalogFilterLabel(filter: CatalogFilter): string {
   if (filter === "active") return t("expert_squad.filter_active")
@@ -1387,27 +1396,31 @@ export default function ExpertSquadPanel() {
               {t("expert_squad.catalog_unavailable_hint")}
             </Feedback>
           </Show>
-          <For each={catalogIssues()}>
-            {(issue) => (
-              <Feedback tone="error" data-ui="expert-squad-catalog-issue">
-                {t("expert_squad.catalog_issue", {
-                  owner: [issue.id, issue.phase].filter(Boolean).join(" · "),
-                  error: issue.message,
-                })}
-              </Feedback>
-            )}
-          </For>
-          <For each={catalogWarnings()}>
-            {(warning) => (
-              <Feedback data-ui="expert-squad-catalog-warning">
-                {t("expert_squad.project_override_warning", { id: warning.logical_id })}
-              </Feedback>
-            )}
-          </For>
-          <Show when={catalogDiagnosticsNextCursor()}>
-            <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void loadMoreDiagnostics()}>
-              {t("expert_squad.load_more")}
-            </Button>
+          <Show when={!detailOpen()}>
+            <For each={catalogIssues()}>
+              {(issue) => (
+                <Feedback
+                  tone="warning"
+                  data-ui="expert-squad-catalog-issue"
+                  title={t(catalogIssueLabels[issue.phase])}
+                  details={issue.message}
+                >
+                  <code>{issue.location}</code>
+                </Feedback>
+              )}
+            </For>
+            <For each={catalogWarnings()}>
+              {(warning) => (
+                <Feedback data-ui="expert-squad-catalog-warning">
+                  {t("expert_squad.project_override_warning", { id: warning.logical_id })}
+                </Feedback>
+              )}
+            </For>
+            <Show when={catalogDiagnosticsNextCursor()}>
+              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void loadMoreDiagnostics()}>
+                {t("expert_squad.load_more")}
+              </Button>
+            </Show>
           </Show>
           <Show when={actionError()}>
             <Feedback
