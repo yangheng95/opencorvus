@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工作侧栏事件验收代理证据](2026-11-09-work-ledger-event-proxy/README.md)
 - [读取重试后的 Explorer 键盘焦点证据](2026-11-09-explorer-read-retry-focus/README.md)
 - [根读取重试同步刷新已展开目录证据](2026-11-09-explorer-root-retry-tree-refresh/README.md)
 - [项目根读取错误的呈现优先级证据](2026-11-09-explorer-root-error-priority/README.md)

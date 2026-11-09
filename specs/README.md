@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [工作侧栏事件验收代理](records/2026-11/2026-11-09-work-ledger-event-proxy.md)
 - [读取重试后的 Explorer 键盘焦点](records/2026-11/2026-11-09-explorer-read-retry-focus.md)
 - [根读取重试同步刷新已展开目录](records/2026-11/2026-11-09-explorer-root-retry-tree-refresh.md)
 - [项目根读取错误的呈现优先级](records/2026-11/2026-11-09-explorer-root-error-priority.md)

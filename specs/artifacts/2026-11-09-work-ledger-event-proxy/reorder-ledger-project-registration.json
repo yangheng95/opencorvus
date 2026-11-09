@@ -1,0 +1,53 @@
+{
+  "phase": "reorder",
+  "before": {
+    "at": "2026-11-09T10:50:03.598Z",
+    "requestID": "fd815ca2-2109-4326-890a-61aab27364cf",
+    "data": {
+      "rows": [
+        {
+          "kind": "project",
+          "id": "prj_hIFmHS6xEfSNaLVFwzgW",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\project-reorder",
+          "created": 1794221349058,
+          "updated": 1794221349058,
+          "pinned": false
+        }
+      ],
+      "nextCursor": null
+    }
+  },
+  "registration": {
+    "at": "2026-11-09T10:50:03.915Z",
+    "requestID": "f16430e2-f4f5-4b9d-8489-3dd943c2a67c",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\extra-reorder"
+  },
+  "after": {
+    "at": "2026-11-09T10:50:03.926Z",
+    "requestID": "16b324c4-273c-428c-af9d-d6d42cfabf77",
+    "data": {
+      "rows": [
+        {
+          "kind": "project",
+          "id": "prj_hX9PswwpaY8uu1tNiUY2",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\extra-reorder",
+          "created": 1794221403911,
+          "updated": 1794221403911,
+          "pinned": false
+        },
+        {
+          "kind": "project",
+          "id": "prj_hIFmHS6xEfSNaLVFwzgW",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\project-reorder",
+          "created": 1794221349058,
+          "updated": 1794221349058,
+          "pinned": false
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

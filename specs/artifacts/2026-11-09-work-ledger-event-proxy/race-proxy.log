@@ -1,0 +1,13 @@
+{"listenPort":39161,"upstreamPort":39160,"pid":7928,"delayMs":2400}
+{"time":"2026-11-09T10:48:03.532Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T10:48:03.548Z","receipt":1,"stage":"arrival","route":"/path"}
+{"time":"2026-11-09T10:48:03.914Z","receipt":2,"stage":"arrival","route":"/work-ledger"}
+{"time":"2026-11-09T10:48:03.914Z","receipt":2,"stage":"forward","route":"/work-ledger"}
+{"time":"2026-11-09T10:48:03.924Z","receipt":2,"stage":"origin","route":"/work-ledger","status":200,"requestID":"4747ff8e-95c6-46c8-91a9-43a81cf1d3c8"}
+{"time":"2026-11-09T10:48:03.924Z","receipt":2,"stage":"payload","rows":[{"kind":"project","id":"prj_hdvTVzmJ4ZQXvW9jTuz9","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\project-race"}],"nextCursor":null}
+{"time":"2026-11-09T10:48:04.034Z","receipt":3,"stage":"arrival","route":"/work-ledger"}
+{"time":"2026-11-09T10:48:04.034Z","receipt":3,"stage":"forward","route":"/work-ledger"}
+{"time":"2026-11-09T10:48:04.038Z","receipt":3,"stage":"origin","route":"/work-ledger","status":200,"requestID":"a4ae5a29-43c0-4161-8c9a-c97e9be8d7c6"}
+{"time":"2026-11-09T10:48:04.038Z","receipt":3,"stage":"payload","rows":[{"kind":"project","id":"prj_hdvTVzmJ4ZQXvW9jTuz9","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\project-race"}],"nextCursor":null}
+{"time":"2026-11-09T10:48:05.961Z","receipt":1,"stage":"forward","route":"/path"}
+{"time":"2026-11-09T10:48:05.963Z","receipt":1,"stage":"origin","route":"/path","status":200,"requestID":"8cbfa191-f4a1-4ab0-ab89-e5ddc26e29f0"}

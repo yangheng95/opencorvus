@@ -1,0 +1,49 @@
+{
+  "first": [
+    "\t\t\t\t\t\t\t30 container workLedgerProjectsScroll",
+    "\t\t\t\t\t\t\t\t31 text Projects",
+    "\t\t\t\t\t\t\t\t32 button Locate current work",
+    "\t\t\t\t\t\t\t\t33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-19-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t64 button (expanded) Description: Collapse project-before, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t65 button Open project: project-before",
+    "\t\t\t\t\t\t\t37 container Description: Connection Diagnostics · Online · Port 39158, ID: connBadge",
+    "\t\t\t\t\t\t\t\t38 text Online",
+    "\t\t\t\t\t\t\t44 heading Let's work on project-before, Value: 1",
+    "\t\t\t\t\t\t\t\t45 text Let's work on project-before"
+  ],
+  "race": [
+    "\t\t\t\t\t\t\t\t32 button Locate current work",
+    "\t\t\t\t\t\t\t\t33 pop up button (collapsed) Description: Organize sidebar, ID: dropdownmenu-cl-19-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t64 button (expanded) Description: Collapse project-race, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t65 button Open project: project-race",
+    "\t\t\t\t\t\t\t37 container Description: Connection Diagnostics · Online · Port 39161, ID: connBadge",
+    "\t\t\t\t\t\t\t\t38 text Online",
+    "\t\t\t\t\t\t\t44 heading Let's work on project-race, Value: 1",
+    "\t\t\t\t\t\t\t\t45 text Let's work on project-race"
+  ],
+  "httpOnlyAfterRegistration": [
+    "\t\t\t\t\t\t\t\t\t64 button (expanded) Description: Collapse project-before, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t65 button Open project: project-before",
+    "\t\t\t\t\t\t\t44 heading Let's work on project-before, Value: 1",
+    "\t\t\t\t\t\t\t\t45 text Let's work on project-before",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39158/ui/"
+  ],
+  "fullAfterRegistration": [
+    "\t\t\t\t\t\t\t\t\t\t65 button (expanded) Description: Collapse extra-reorder, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t66 button Open project: extra-reorder",
+    "\t\t\t\t\t\t\t\t\t\t68 button (expanded) Description: Collapse project-reorder, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t69 button Open project: project-reorder",
+    "\t\t\t\t\t\t\t44 heading Let's work on project-reorder, Value: 1",
+    "\t\t\t\t\t\t\t\t45 text Let's work on project-reorder",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39163/ui/"
+  ],
+  "openedNewProject": [
+    "\t\t\t\t\t\t\t\t\t\t65 button (expanded) Description: Collapse extra-reorder, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t66 button Open project: extra-reorder",
+    "\t\t\t\t\t\t\t\t\t\t68 button (expanded) Description: Collapse project-reorder, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t69 button Open project: project-reorder",
+    "\t\t\t\t\t\t\t44 heading Let's work on extra-reorder, Value: 1",
+    "\t\t\t\t\t\t\t\t45 text Let's work on extra-reorder",
+    "The focused UI element is 66 button Open project: extra-reorder"
+  ]
+}

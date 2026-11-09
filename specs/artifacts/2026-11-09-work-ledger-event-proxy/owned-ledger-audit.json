@@ -1,0 +1,258 @@
+{
+  "before": {
+    "projects": {
+      "seed": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\project-before",
+        "head": "d5cce53d6b36d29bdeeb706a66b3eaf0ddfc4c49",
+        "retainedText": "Owned Work Ledger fixture.\n"
+      },
+      "extra": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\extra-before",
+        "head": "68869c6555727044f4f36bc68496d6046d7ad83c",
+        "retainedText": "Second owned Work Ledger project.\n"
+      }
+    },
+    "tables": {
+      "project": 2,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "matchedBrowserRequests": [
+      {
+        "requestID": "1361b344-b2ec-4869-85cf-f18743fc38cb",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5,
+        "time": "2026-11-09T10:44:55.161Z"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b107-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39156",
+      "pid": 20592
+    },
+    "shutdown": {
+      "phase": "before",
+      "proxy": {
+        "pid": 9468,
+        "status": 200,
+        "port": 39158
+      },
+      "service": {
+        "pid": 20592,
+        "status": 200,
+        "port": 39156,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaTKGlg00wVLt1X4QW"
+        }
+      }
+    }
+  },
+  "race": {
+    "projects": {
+      "seed": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\project-race",
+        "head": "0c7c0d6974faad33c87f1f77d354b03037d76e22",
+        "retainedText": "Owned Work Ledger fixture.\n"
+      }
+    },
+    "tables": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "matchedBrowserRequests": [
+      {
+        "requestID": "4747ff8e-95c6-46c8-91a9-43a81cf1d3c8",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5,
+        "time": "2026-11-09T10:48:03.924Z"
+      },
+      {
+        "requestID": "a4ae5a29-43c0-4161-8c9a-c97e9be8d7c6",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2,
+        "time": "2026-11-09T10:48:04.038Z"
+      },
+      {
+        "requestID": "8cbfa191-f4a1-4ab0-ab89-e5ddc26e29f0",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1,
+        "time": "2026-11-09T10:48:05.963Z"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b107-race",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39160",
+      "pid": 14120
+    },
+    "shutdown": {
+      "phase": "race",
+      "proxy": {
+        "status": 200,
+        "pid": 7928,
+        "port": 39161
+      },
+      "service": {
+        "status": 200,
+        "pid": 14120,
+        "port": 39160,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaTKGl100sJ4W7rQuc"
+        }
+      }
+    }
+  },
+  "reorder": {
+    "projects": {
+      "seed": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\project-reorder",
+        "head": "30c388aae46b103a21e5da3757ba2bd8efe392e2",
+        "retainedText": "Owned Work Ledger fixture.\n"
+      },
+      "extra": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b107\\extra-reorder",
+        "head": "4138c5611f13a4254a0c6f40145b2cb81ec9bd98",
+        "retainedText": "Second owned Work Ledger project.\n"
+      }
+    },
+    "tables": {
+      "project": 2,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "matchedBrowserRequests": [
+      {
+        "requestID": "7745afa5-9801-4906-babd-74cd0dc388a9",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 302,
+        "time": "2026-11-09T10:49:09.064Z"
+      },
+      {
+        "requestID": "b9913547-0cc2-4b8f-9628-05dbf4abbc18",
+        "method": "GET",
+        "path": "/mission-skill/catalog",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 319,
+        "time": "2026-11-09T10:49:09.069Z"
+      },
+      {
+        "requestID": "0313641c-52be-4e28-890f-30340ed4b9a9",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5,
+        "time": "2026-11-09T10:49:09.076Z"
+      },
+      {
+        "requestID": "881ce9e4-88e8-4f43-9b41-dfe05d627ec2",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 337,
+        "time": "2026-11-09T10:49:09.086Z"
+      },
+      {
+        "requestID": "c365b3c8-f8f9-40ef-827b-f4d9b49ec04c",
+        "method": "GET",
+        "path": "/chat/capability",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 366,
+        "time": "2026-11-09T10:49:09.116Z"
+      },
+      {
+        "requestID": "4c37b729-c55d-4dde-9014-5ee88cb5b138",
+        "method": "GET",
+        "path": "/expert-squad/catalog",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 447,
+        "time": "2026-11-09T10:49:09.194Z"
+      },
+      {
+        "requestID": "14459088-e352-4187-b1a1-33bbe2a10f9e",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3,
+        "time": "2026-11-09T10:49:09.199Z"
+      },
+      {
+        "requestID": "7f6b1585-9fb3-4123-9e34-49a3828b3ca4",
+        "method": "GET",
+        "path": "/vcs",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1295,
+        "time": "2026-11-09T10:49:10.057Z"
+      },
+      {
+        "requestID": "a2ee8d9c-9e39-42fe-a66a-13f07e48506c",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 4,
+        "time": "2026-11-09T10:50:04.046Z"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b107-reorder",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39162",
+      "pid": 25572
+    },
+    "shutdown": {
+      "phase": "reorder",
+      "proxy": {
+        "status": 200,
+        "port": 39163,
+        "pid": 20872
+      },
+      "service": {
+        "status": 200,
+        "port": 39162,
+        "pid": 25572,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaTKGlB00zQLZ306wl"
+        }
+      }
+    }
+  }
+}
