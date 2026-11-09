@@ -1,0 +1,8 @@
+# 多步任务技能组合搜索桌面证据
+
+对应[Recall、根因与验收](../../records/2026-11/2026-11-09-mission-skill-search-terms.md)。全部为本人复核的真实 1280×720 开发桌面截图。
+
+- 前态：[01 单独名称命中](01-before-single-skill-name-finds-project-entry.jpg)、[02 来源与名称遗漏](02-before-source-and-name-combination-finds-no-skill.jpg)、[03 工具与名称遗漏](03-before-required-tool-and-skill-name-find-no-result.jpg)、[04 中文来源组合遗漏](04-before-localized-source-combination-is-empty.jpg)。
+- 英文候选：[05 提示与原目录](05-after-search-hint-explains-fields-and-full-catalog.jpg)、[06 项目组合](06-after-project-source-and-name-find-exact-skill.jpg)、[07 内置工具组合](07-after-required-tool-and-name-find-built-in-skill.jpg)、[08 正确详情](08-after-keyboard-opens-exact-built-in-detail.jpg)、[09 实际工具](09-after-detail-discloses-actual-matching-tool.jpg)、[10 返回保留查询与焦点](10-after-return-retains-combination-and-real-row-focus.jpg)、[11 来源筛选相交](11-after-project-filter-intersects-built-in-query.jpg)、[12 同一技能边界](12-after-terms-from-different-skills-stay-separate.jpg)、[13 清空恢复全表](13-after-clear-restores-complete-catalog.jpg)。
+- 中文候选：[14 中文提示](14-after-chinese-hint-and-complete-catalog.jpg)、[15 中文来源组合](15-after-chinese-source-and-name-respect-project-filter.jpg)、[16 项目详情](16-after-chinese-keyboard-opens-project-skill-detail.jpg)、[17 返回保留原焦点及项目筛选](17-after-chinese-return-retains-project-filter-and-row.jpg)、[18 来源、描述和名称](18-after-localized-source-description-and-name-find-one-skill.jpg)、[19 清空再选全部恢复目录](19-after-chinese-clear-and-all-restore-original-two-entries.jpg)。
+- [前态三项真实响应](before-tcp.json)、[候选三项真实响应](after-tcp.json)、[目录检查器](check-mission-skill-catalog.mjs)、[项目基线](seed.json)、[原件与数据核对](owned-final-check.json)、[数据核对脚本](audit-owned-data.py)。

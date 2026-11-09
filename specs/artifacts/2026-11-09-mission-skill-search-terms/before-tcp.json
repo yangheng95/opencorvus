@@ -1,0 +1,62 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "11f55872-88f1-4413-a037-b690f90f7340",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "6828aa58-8acf-4427-ad39-c02365c79088",
+      "schemaValid": true
+    },
+    {
+      "route": "/mission-skill/settings",
+      "operationId": "missionSkill.settings",
+      "status": 200,
+      "requestID": "f9f8772b-7a51-41e5-9166-57a14d3e2cd4",
+      "schemaValid": true
+    }
+  ],
+  "skills": [
+    {
+      "name": "general",
+      "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+      "required_tools": [
+        "panel_expert_squad_inspect",
+        "panel_multica_catalog",
+        "panel_create_task",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_read_task_artifact",
+        "panel_read_task_message",
+        "panel_read_task_dispatch_evidence",
+        "panel_complete_mission",
+        "panel_block_mission",
+        "panel_resume_task",
+        "panel_extend_task_acceptance",
+        "panel_cancel_task",
+        "panel_respond_interaction"
+      ],
+      "source": "built_in",
+      "location": null
+    },
+    {
+      "name": "inspection-demo",
+      "description": "Inspect the isolated project catalog by name.",
+      "required_tools": [],
+      "source": "project",
+      "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b132\\project-before\\.opencorvus\\mission-skills\\inspection-demo\\SKILL.md"
+    }
+  ],
+  "project": {
+    "id": "prj_hTtqVV6j7Sb9iWZOZkJB",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b132\\project-before"
+  },
+  "listedProjectCount": 1
+}

@@ -4,6 +4,7 @@ import { For, Show, createEffect, createMemo, createSignal, onCleanup, untrack }
 import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { expertSquadSettingsScope, type ExpertSquadCatalogScopeState } from "../../services/expert-squad-scope"
 import { ensureMissionSkillDirectory, loadMissionSkillSettings } from "../../services/mission-skill"
+import { matchesSearchTerms } from "../../services/text-search"
 import { pathRevealFailureText, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../../services/workspace"
 import { appStore } from "../../store/app"
 import { formatErrorDetails } from "../../utils/error-details"
@@ -85,14 +86,11 @@ export default function MissionSkillPanel() {
   const skills = createMemo(() => scopedCatalog()?.mission_skills ?? [])
   const catalogIssues = createMemo(() => scopedCatalog()?.issues ?? [])
   const filteredSkills = createMemo(() => {
-    const normalizedQuery = query().trim().toLocaleLowerCase()
+    const term = query().trim()
+    const source = filter()
     return skills().filter((skill) => {
-      if (filter() !== "all" && skill.source !== filter()) return false
-      if (!normalizedQuery) return true
-      return [skill.name, skill.description, sourceLabel(skill.source), ...skill.required_tools]
-        .join("\n")
-        .toLocaleLowerCase()
-        .includes(normalizedQuery)
+      if (source !== "all" && skill.source !== source) return false
+      return !term || matchesSearchTerms(term, [skill.name, skill.description, sourceLabel(skill.source), ...skill.required_tools])
     })
   })
   const selectedSkill = createMemo(() => {

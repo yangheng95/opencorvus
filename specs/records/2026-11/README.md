@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多步任务技能支持跨字段组合搜索](2026-11-09-mission-skill-search-terms.md)
 - [Markdown 本地图重试保留正在读取的请求](2026-11-09-markdown-local-image-retry.md)
 - [附件原件下载重试的诊断和键盘焦点](2026-11-09-original-download-retry-focus.md)
 - [文本附件区分读取失败与编码错误](2026-11-09-text-preview-failure-recovery.md)
