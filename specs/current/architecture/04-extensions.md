@@ -400,6 +400,8 @@ Base 的原始请求、真实修订、权限与适用来源定义交付义务。
   项目搜索、全局撰写器搜索、诊断和精确检查共享不透明目录游标契约。无法解析或不属于当前查询的游标
   返回 400 `ExpertSquadCatalogCursorInvalidError`；同查询的旧修订返回 409
   `ExpertSquadCatalogRevisionConflictError`，客户端从当前第一页重新读取。分页游标不作为执行绑定；
+  市场保留独立的 bundled 声明、当前安装投影与查询，复用同一个游标编解码与错误契约。市场路由同时
+  保留参数验证和原有包错误结构；
 - `active_agent_projection`、scheduler、各 active agent 和 `active_skill_projection` 的 `projection_hash` 才表示有效运行投影。Scheduler hash 覆盖 `virtual_workflows`，worker hash 覆盖其完整 projected resources；声明 hash 与运行 hash 字段不同，禁止用声明摘要冒充运行身份或缓存键；
 - 每次被选中的 built-in/project/global package 都按 manifest identity 与完整内容 digest 物化到
   `Global.Path.data/expert-squad-package-revisions` 的持久化 content-addressed revision。Task binding、

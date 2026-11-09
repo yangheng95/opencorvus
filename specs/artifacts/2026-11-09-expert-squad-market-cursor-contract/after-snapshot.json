@@ -1,0 +1,69 @@
+{
+  "phase": "after",
+  "stage": "snapshot",
+  "total": 117,
+  "first": {
+    "requestID": "ae57ed86-975f-4c33-884e-8e0902d88a80",
+    "cursor": "eyJyZXZpc2lvbiI6IjhhMmM3YTIxOThhMjlkZmYyMWE5ODE1ODhiNzRiOTBlNzc1ZmU4ODZiODIzMDkwYmJmODU3ZDg0NmE0YjIxMzQiLCJxdWVyeV9maW5nZXJwcmludCI6IjYyOTgwMzlkN2FhNGEwMmZjNjkxMDJmOTRlNTQxMjM4MGVkZGZkZGJlZGExMWI1ZmY0OGM1YzIzMzU3MmRkZTAiLCJvZmZzZXQiOjF9",
+    "id": "academic-paper-review"
+  },
+  "next": {
+    "requestID": "d0ff8ced-77a1-4483-9d9b-6ffbfb6dd832",
+    "id": "actuarial-reserving"
+  },
+  "installed": {
+    "requestID": "7825f945-60ed-4b07-ac4d-51e3782ef1be",
+    "entries": []
+  },
+  "active": {
+    "requestID": "d0d57e83-246c-48fc-a3b1-10c7d30c69f2",
+    "effective": "dynamic"
+  },
+  "malformed": {
+    "status": 400,
+    "requestID": "7b10b7f7-79e8-4887-ac2d-2269df7ce841",
+    "schemaMatches": true,
+    "body": {
+      "name": "ExpertSquadCatalogCursorInvalidError",
+      "data": {
+        "message": "The Expert Squad catalog cursor is invalid. Request the first page for this query."
+      }
+    }
+  },
+  "wrongQuery": {
+    "status": 400,
+    "requestID": "74782a4d-e1f2-41fc-8c68-e04277b9d0ab",
+    "schemaMatches": true,
+    "body": {
+      "name": "ExpertSquadCatalogCursorInvalidError",
+      "data": {
+        "message": "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query."
+      }
+    }
+  },
+  "parameterValidation": {
+    "status": 400,
+    "requestID": "83502a1c-78a6-4d22-b934-a7094d6dafbb",
+    "schemaMatches": true,
+    "body": {
+      "data": {
+        "message": "Request validation failed"
+      },
+      "error": [
+        {
+          "code": "too_small",
+          "path": [
+            "limit"
+          ],
+          "message": "Too small: expected number to be >=1"
+        }
+      ],
+      "success": false
+    }
+  },
+  "previousBuildCursor": {
+    "status": 200,
+    "requestID": "1088bccf-da94-46e8-b5fd-f3c1f9987e1f",
+    "id": "actuarial-reserving"
+  }
+}

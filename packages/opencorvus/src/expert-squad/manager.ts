@@ -17,6 +17,7 @@ import { expertSquadSearchLocalizations } from "../../generated/expert-squad-sea
 import { ExpertSquadRegistry } from "./registry"
 import { materializeExpertSquadCapabilities } from "./capability-grants"
 import { ExpertSquadArchive } from "./archive"
+import { decodeCatalogCursor, encodeCatalogCursor } from "./catalog-cursor"
 import { writeExpertSquadInstallationMetadata, type ExpertSquadGenerationMetadata } from "./installation-metadata"
 import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
@@ -1785,18 +1786,7 @@ export namespace ExpertSquadPackageManager {
     }
     snapshot.ranked.set(queryFingerprint, ranked)
     if (snapshot.ranked.size > 128) snapshot.ranked.delete(snapshot.ranked.keys().next().value!)
-    let offset = 0
-    if (input.cursor) {
-      const parsed = z
-        .object({ revision: z.string(), query_fingerprint: z.string(), offset: z.number().int().nonnegative() })
-        .strict()
-        .parse(JSON.parse(Buffer.from(input.cursor, "base64url").toString("utf8")))
-      if (parsed.revision !== snapshot.revision) throw new Error("Expert Squad market cursor is stale.")
-      if (parsed.query_fingerprint !== queryFingerprint) {
-        throw new Error("Expert Squad market cursor belongs to a different bounded query.")
-      }
-      offset = parsed.offset
-    }
+    const offset = input.cursor ? decodeCatalogCursor(input.cursor, snapshot.revision, queryFingerprint) : 0
     const limit = z
       .number()
       .int()
@@ -1819,14 +1809,7 @@ export namespace ExpertSquadPackageManager {
       })),
       nextCursor:
         nextOffset < ranked.length
-          ? Buffer.from(
-              JSON.stringify({
-                revision: snapshot.revision,
-                query_fingerprint: queryFingerprint,
-                offset: nextOffset,
-              }),
-              "utf8",
-            ).toString("base64url")
+          ? encodeCatalogCursor(snapshot.revision, queryFingerprint, nextOffset)
           : null,
       totalCount: ranked.length,
     }

@@ -1,0 +1,41 @@
+{
+  "phase": "before",
+  "stage": "advance",
+  "total": 117,
+  "first": {
+    "requestID": "6fa275a4-89fe-495e-b49c-2105cb49819f",
+    "cursor": "eyJyZXZpc2lvbiI6IjZmOTEyYzdlZmNmOWZlMGYzMDE1NWVlOTRmODBhYzJiZDg5YTEzMGEwZGRlMmViZDc3MzkzNmMzYjZiNTJkYTAiLCJxdWVyeV9maW5nZXJwcmludCI6IjYyOTgwMzlkN2FhNGEwMmZjNjkxMDJmOTRlNTQxMjM4MGVkZGZkZGJlZGExMWI1ZmY0OGM1YzIzMzU3MmRkZTAiLCJvZmZzZXQiOjF9",
+    "id": "academic-paper-review"
+  },
+  "next": {
+    "requestID": "1d3b6bd1-37f7-483b-8169-dbe728b4ef58",
+    "id": "actuarial-reserving"
+  },
+  "installed": {
+    "requestID": "2e931e5e-79d1-497f-a3b7-95d39b681aaa",
+    "entries": [
+      {
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installation_scopes": [
+          "project"
+        ]
+      }
+    ]
+  },
+  "active": {
+    "requestID": "c026391d-0092-4444-872d-a87bc4d1f106",
+    "effective": "dynamic"
+  },
+  "stale": {
+    "status": 400,
+    "requestID": "a0c9ccd9-653f-4c83-98f2-294fd9b72568",
+    "schemaMatches": true,
+    "body": {
+      "name": "ExpertSquadPackageError",
+      "data": {
+        "message": "Expert Squad market cursor is stale."
+      }
+    }
+  }
+}

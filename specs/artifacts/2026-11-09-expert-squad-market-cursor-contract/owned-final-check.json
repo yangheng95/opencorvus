@@ -1,0 +1,74 @@
+{
+  "before": {
+    "head": "2e1c27bcc937fc07ba4f52023de5173c81da7454",
+    "originalTrackedFiles": 1,
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "physicalInstallations": {
+      "project:deep-research": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b71\\project-before\\.opencorvus\\expert-squads\\builtin\\deep-research",
+        "files": [
+          "README.md",
+          "agents/deep-research-citation-reviewer/system.md",
+          "agents/deep-research-draft-writer/system.md",
+          "agents/deep-research-knowledge-curator/system.md",
+          "agents/deep-research-outline-editor/system.md",
+          "agents/deep-research-planner/system.md",
+          "agents/deep-research-report-writer/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md"
+        ]
+      }
+    }
+  },
+  "after": {
+    "head": "2e1c27bcc937fc07ba4f52023de5173c81da7454",
+    "originalTrackedFiles": 1,
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "physicalInstallations": {
+      "project:deep-research": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b71\\project-after\\.opencorvus\\expert-squads\\builtin\\deep-research",
+        "files": [
+          "README.md",
+          "agents/deep-research-citation-reviewer/system.md",
+          "agents/deep-research-draft-writer/system.md",
+          "agents/deep-research-knowledge-curator/system.md",
+          "agents/deep-research-outline-editor/system.md",
+          "agents/deep-research-planner/system.md",
+          "agents/deep-research-report-writer/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md"
+        ]
+      }
+    }
+  }
+}

@@ -320,7 +320,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/expert-squad/inspect` | Inspect one expert-squad declaration 错误: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
 | POST | `/expert-squad/install-payload` | Install one bundled expert squad 请求体: `id`, `installationScope`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.installPayload` |
 | GET | `/expert-squad/inventory-status` | Get expert-squad inventory status 错误: `BadRequestError`, `UnknownError`. | `expertSquad.inventoryStatus` |
-| GET | `/expert-squad/market` | Browse bundled expert squads 错误: `ExpertSquadPackageError`. | `expertSquad.market` |
+| GET | `/expert-squad/market` | Browse bundled expert squads 错误: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `ExpertSquadPackageError`. | `expertSquad.market` |
 | GET | `/expert-squad/market/detail` | Inspect one bundled expert squad 错误: `ExpertSquadPackageError`, `NotFoundError`. | `expertSquad.marketDetail` |
 | POST | `/expert-squad/multica/preview` | Preview a Multica squad import 请求体: `mapping`, `squadID`; 错误: `ExpertSquadPackageError`. | `expertSquad.multicaPreview` |
 | GET | `/expert-squad/multica/squads` | List Multica squads with expert-squad installation status 错误: `ExpertSquadPackageError`. | `expertSquad.multicaSquads` |

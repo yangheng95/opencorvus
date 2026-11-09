@@ -1,0 +1,64 @@
+{
+  "phase": "before",
+  "stage": "snapshot",
+  "total": 117,
+  "first": {
+    "requestID": "726f5614-25c0-476e-aacd-065ad61c768b",
+    "cursor": "eyJyZXZpc2lvbiI6IjhhMmM3YTIxOThhMjlkZmYyMWE5ODE1ODhiNzRiOTBlNzc1ZmU4ODZiODIzMDkwYmJmODU3ZDg0NmE0YjIxMzQiLCJxdWVyeV9maW5nZXJwcmludCI6IjYyOTgwMzlkN2FhNGEwMmZjNjkxMDJmOTRlNTQxMjM4MGVkZGZkZGJlZGExMWI1ZmY0OGM1YzIzMzU3MmRkZTAiLCJvZmZzZXQiOjF9",
+    "id": "academic-paper-review"
+  },
+  "next": {
+    "requestID": "2d62d696-6f18-419c-9add-a8ac063dfe9a",
+    "id": "actuarial-reserving"
+  },
+  "installed": {
+    "requestID": "7801cac1-d300-44fd-a8c4-6a5ca80b3344",
+    "entries": []
+  },
+  "active": {
+    "requestID": "621c0b23-52a2-4fd9-8589-d631c3089fcd",
+    "effective": "dynamic"
+  },
+  "malformed": {
+    "status": 400,
+    "requestID": "8f16c31e-6579-4391-b422-1dad48eee9d8",
+    "schemaMatches": true,
+    "body": {
+      "name": "ExpertSquadPackageError",
+      "data": {
+        "message": "JSON Parse error: Unrecognized token '�'"
+      }
+    }
+  },
+  "wrongQuery": {
+    "status": 400,
+    "requestID": "3bff5f73-719c-49a8-8763-c91f18532c0a",
+    "schemaMatches": true,
+    "body": {
+      "name": "ExpertSquadPackageError",
+      "data": {
+        "message": "Expert Squad market cursor belongs to a different bounded query."
+      }
+    }
+  },
+  "parameterValidation": {
+    "status": 400,
+    "requestID": "4164727e-e9ef-45da-93e7-04c516a5b0aa",
+    "schemaMatches": false,
+    "body": {
+      "data": {
+        "message": "Request validation failed"
+      },
+      "error": [
+        {
+          "code": "too_small",
+          "path": [
+            "limit"
+          ],
+          "message": "Too small: expected number to be >=1"
+        }
+      ],
+      "success": false
+    }
+  }
+}

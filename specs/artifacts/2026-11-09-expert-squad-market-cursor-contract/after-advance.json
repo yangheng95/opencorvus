@@ -1,0 +1,41 @@
+{
+  "phase": "after",
+  "stage": "advance",
+  "total": 117,
+  "first": {
+    "requestID": "52e3e02a-c2a8-4f79-a1e0-00f75eddee75",
+    "cursor": "eyJyZXZpc2lvbiI6IjZmOTEyYzdlZmNmOWZlMGYzMDE1NWVlOTRmODBhYzJiZDg5YTEzMGEwZGRlMmViZDc3MzkzNmMzYjZiNTJkYTAiLCJxdWVyeV9maW5nZXJwcmludCI6IjYyOTgwMzlkN2FhNGEwMmZjNjkxMDJmOTRlNTQxMjM4MGVkZGZkZGJlZGExMWI1ZmY0OGM1YzIzMzU3MmRkZTAiLCJvZmZzZXQiOjF9",
+    "id": "academic-paper-review"
+  },
+  "next": {
+    "requestID": "00ec0218-dd9b-4d97-aced-8acb1325a0bd",
+    "id": "actuarial-reserving"
+  },
+  "installed": {
+    "requestID": "d359061b-1bfb-4305-92ef-0a1fc6cb5ed0",
+    "entries": [
+      {
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installation_scopes": [
+          "project"
+        ]
+      }
+    ]
+  },
+  "active": {
+    "requestID": "21efe246-1cd3-406f-942d-bcbde1954c0a",
+    "effective": "dynamic"
+  },
+  "stale": {
+    "status": 409,
+    "requestID": "6e360275-6edb-48b5-baa8-57473f70aa01",
+    "schemaMatches": true,
+    "body": {
+      "name": "ExpertSquadCatalogRevisionConflictError",
+      "data": {
+        "message": "The Expert Squad catalog changed. Request the first page and use its next cursor."
+      }
+    }
+  }
+}

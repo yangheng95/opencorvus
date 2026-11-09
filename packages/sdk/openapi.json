@@ -7814,6 +7814,30 @@
         ],
         "type": "object"
       },
+      "ExpertSquadPackageError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ExpertSquadPackageError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "ExpertSquadPackageRevision": {
         "additionalProperties": false,
         "properties": {
@@ -68951,28 +68975,35 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
+                  "anyOf": [
+                    {
+                      "anyOf": [
+                        {
+                          "$ref": "#/components/schemas/BadRequestError"
+                        },
+                        {
+                          "$ref": "#/components/schemas/ExpertSquadCatalogCursorInvalidError"
+                        }
+                      ]
                     },
-                    "name": {
-                      "const": "ExpertSquadPackageError",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/ExpertSquadPackageError"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Expert squad market rejected"
+            "description": "Invalid Expert Squad market request, cursor, or package"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertSquadCatalogRevisionConflictError"
+                }
+              }
+            },
+            "description": "The Expert Squad catalog changed; request the first page again"
           }
         },
         "summary": "Browse bundled expert squads",

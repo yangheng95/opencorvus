@@ -320,7 +320,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/expert-squad/inspect` | Inspect one expert-squad declaration Errors: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
 | POST | `/expert-squad/install-payload` | Install one bundled expert squad Body: `id`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.installPayload` |
 | GET | `/expert-squad/inventory-status` | Get expert-squad inventory status Errors: `BadRequestError`, `UnknownError`. | `expertSquad.inventoryStatus` |
-| GET | `/expert-squad/market` | Browse bundled expert squads Errors: `ExpertSquadPackageError`. | `expertSquad.market` |
+| GET | `/expert-squad/market` | Browse bundled expert squads Errors: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `ExpertSquadPackageError`. | `expertSquad.market` |
 | GET | `/expert-squad/market/detail` | Inspect one bundled expert squad Errors: `ExpertSquadPackageError`, `NotFoundError`. | `expertSquad.marketDetail` |
 | POST | `/expert-squad/multica/preview` | Preview a Multica squad import Body: `mapping`, `squadID`; Errors: `ExpertSquadPackageError`. | `expertSquad.multicaPreview` |
 | GET | `/expert-squad/multica/squads` | List Multica squads with expert-squad installation status Errors: `ExpertSquadPackageError`. | `expertSquad.multicaSquads` |

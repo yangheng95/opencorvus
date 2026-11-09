@@ -2206,6 +2206,13 @@ export type ExpertSquadInventoryStatus = {
   warning_count: number
 }
 
+export type ExpertSquadPackageError = {
+  data: {
+    message: string
+  }
+  name: "ExpertSquadPackageError"
+}
+
 export type ExpertSquadPackageRevision = {
   id: string
   namespace: string
@@ -17873,14 +17880,13 @@ export type ExpertSquadMarketData = {
 
 export type ExpertSquadMarketErrors = {
   /**
-   * Expert squad market rejected
+   * Invalid Expert Squad market request, cursor, or package
    */
-  400: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "ExpertSquadPackageError"
-  }
+  400: BadRequestError | ExpertSquadCatalogCursorInvalidError | ExpertSquadPackageError
+  /**
+   * The Expert Squad catalog changed; request the first page again
+   */
+  409: ExpertSquadCatalogRevisionConflictError
 }
 
 export type ExpertSquadMarketError = ExpertSquadMarketErrors[keyof ExpertSquadMarketErrors]

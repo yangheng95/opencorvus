@@ -18,6 +18,7 @@ import {
 } from "@opencorvus-ai/plugin"
 import { ExpertSquadPackageLocations } from "@/expert-squad/locations"
 import { PromptProfileResolver } from "@/expert-squad/prompt-profile-resolver"
+import { ExpertSquadCatalogCursorInvalidError, ExpertSquadCatalogRevisionConflictError } from "@/expert-squad/catalog-cursor"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
 import { PromptProfile, PromptProfileConfigSchema } from "@/agent/prompt-profile"
@@ -28,7 +29,13 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
 import z from "zod"
-import { AuthReadUnavailableResponse, ExpertSquadCatalogCursorErrorResponses, errors, namedErrorResponse } from "../error"
+import {
+  AuthReadUnavailableResponse,
+  ExpertSquadCatalogCursorErrorResponses,
+  ExpertSquadCatalogInvalidRequestSchema,
+  errors,
+  namedErrorResponse,
+} from "../error"
 import { Auth } from "@/auth"
 import {
   ExpertSquadCatalogInspectionQuerySchema,
@@ -373,6 +380,8 @@ async function packageRoute<T>(run: () => Promise<T>): Promise<T> {
     if (Auth.findReadError(error)) throw error
     if (
       error instanceof ExpertSquadPackageError ||
+      error instanceof ExpertSquadCatalogCursorInvalidError ||
+      error instanceof ExpertSquadCatalogRevisionConflictError ||
       error instanceof EvolutionHistoryAuthorityError ||
       error instanceof ExpertSquadPackageManager.ExpertSquadPackageMutationConflictError
     ) {
@@ -678,7 +687,15 @@ export function ExpertSquadRoutes() {
               },
             },
           },
-          400: namedErrorResponse("Expert squad market rejected", "ExpertSquadPackageError"),
+          400: {
+            description: "Invalid Expert Squad market request, cursor, or package",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([ExpertSquadCatalogInvalidRequestSchema, ExpertSquadPackageError.Schema])),
+              },
+            },
+          },
+          409: ExpertSquadCatalogCursorErrorResponses[409],
         },
       }),
       validator(

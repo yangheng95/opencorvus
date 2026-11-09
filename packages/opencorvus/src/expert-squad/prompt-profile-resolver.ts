@@ -45,7 +45,7 @@ import {
 import { builtInToolProviderState } from "@/tool/global-tools"
 import { builtInPackageSources, getLoadedBuiltInPackages } from "./builtin"
 import { executePackageToolInCapsule, introspectPackageToolInCapsule } from "./package-tool-capsule"
-import { ExpertSquadCatalogCursorInvalidError, ExpertSquadCatalogRevisionConflictError } from "./catalog-cursor-error"
+import { decodeCatalogCursor, encodeCatalogCursor } from "./catalog-cursor"
 import {
   ExpertSquadCatalogSchema,
   ExpertSquadCatalogIndexEntrySchema,
@@ -2984,38 +2984,6 @@ export namespace PromptProfileResolver {
       if (catalogInventoryCache.get(key)?.inventory === inventory) catalogInventoryCache.delete(key)
       throw error
     }
-  }
-
-  const CatalogCursorSchema = z
-    .object({ revision: z.string(), query_fingerprint: z.string(), offset: z.number().int().nonnegative() })
-    .strict()
-
-  function encodeCatalogCursor(revision: string, queryFingerprint: string, offset: number): string {
-    return Buffer.from(JSON.stringify({ revision, query_fingerprint: queryFingerprint, offset }), "utf8").toString(
-      "base64url",
-    )
-  }
-
-  function decodeCatalogCursor(cursor: string, revision: string, queryFingerprint: string): number {
-    let parsed: z.output<typeof CatalogCursorSchema>
-    try {
-      parsed = CatalogCursorSchema.parse(JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")))
-    } catch {
-      throw new ExpertSquadCatalogCursorInvalidError({
-        message: "The Expert Squad catalog cursor is invalid. Request the first page for this query.",
-      })
-    }
-    if (parsed.query_fingerprint !== queryFingerprint) {
-      throw new ExpertSquadCatalogCursorInvalidError({
-        message: "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query.",
-      })
-    }
-    if (parsed.revision !== revision) {
-      throw new ExpertSquadCatalogRevisionConflictError({
-        message: "The Expert Squad catalog changed. Request the first page and use its next cursor.",
-      })
-    }
-    return parsed.offset
   }
 
   function catalogQueryFingerprint(value: unknown): string {
