@@ -5329,6 +5329,10 @@ loaded log path. Both keep the original error in Details and render the current
 language in one location above the log list. A failed refresh retires the old
 server tail; any still-matching client or pipeline logs remain readable.
 
+Log source badges use the current interface language. The loaded-log search
+matches the same badge label alongside the stable source identifier, which
+continues to identify raw details, copied logs, and exported diagnostics.
+
 Loaded logs have one local literal, case-insensitive query through the shared search primitive. The existing level-qualified aggregation depends only on original sources/level; query filters those records without re-parsing them, and empty/whitespace query returns that base result. The same matching result supplies list, Copy and no-match feedback, so Copy includes all loaded matches. Query covers header/message/structured fields/raw, is retired on close and is not persisted or sent to a backend. Search explicitly covers loaded logs; server tail remains bounded to the current fetch, not full-file history. Clear search and Clear logs keep distinct semantics; source read failures remain visible.
 
 Support ZIP exports exact retained raw files, canonical-time formatted records and original subject details. Historical timestamp/ts fields are diagnostic content rather than alternate clocks. Logging is diagnostic presentation; these records do not synthesize conversation participants or replace durable activity/occurrence timestamps.

@@ -84,10 +84,14 @@ function logPreviewValue(value: unknown): string {
   return clipText(stringifyLogValue(value), 80)
 }
 
+const LOG_SOURCE_KEYS = {
+  overlay: "log.source_overlay",
+  server: "log.source_server",
+  pipeline: "log.source_pipeline",
+} satisfies Record<LogSource, string>
+
 function logSourceLabel(source: LogSource): string {
-  if (source === "server") return "Server"
-  if (source === "pipeline") return "Pipeline"
-  return "Overlay"
+  return t(LOG_SOURCE_KEYS[source])
 }
 
 // ── Merge all log sources (
@@ -279,7 +283,7 @@ export function LogViewer(props: LogViewerProps) {
   const entries = createMemo(() => {
     const loaded = loadedEntries()
     const query = searchQuery()
-    return query.trim() ? loaded.filter((entry) => matchesLogEntrySearch(entry, query)) : loaded
+    return query.trim() ? loaded.filter((entry) => matchesLogEntrySearch(entry, query, logSourceLabel(entry.source))) : loaded
   })
 
   const invalidateRefresh = () => {

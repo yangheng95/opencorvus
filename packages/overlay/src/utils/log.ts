@@ -211,9 +211,11 @@ export const AppLog = {
 export function matchesLogEntrySearch(
   entry: Pick<ServerLogEntry, "source" | "level" | "ts" | "delta" | "service" | "message" | "fields" | "raw">,
   query: string,
+  sourceLabel?: string,
 ): boolean {
   return matchesSearchParts(query, [
     entry.source,
+    sourceLabel,
     entry.level,
     entry.ts,
     entry.delta,

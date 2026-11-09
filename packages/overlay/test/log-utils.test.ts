@@ -125,6 +125,20 @@ describe("loaded log literal search", () => {
     expect(warnSelected.filter((entry) => matchesLogEntrySearch(entry, "subject"))).toEqual(warnSelected)
   })
 
+  test("finds the same original log by its displayed source and canonical source", () => {
+    const rows = [
+      { entry: actual, label: "服务端" },
+      { entry: { ...other, source: "overlay" }, label: "Overlay 前端" },
+    ]
+    const find = (query: string) => rows
+      .filter(({ entry, label }) => matchesLogEntrySearch(entry, query, label))
+      .map(({ entry }) => entry)
+    expect(find("服务端")).toEqual([actual])
+    expect(find("SERVER")).toEqual([actual])
+    expect(find("前端")).toEqual([rows[1].entry])
+    expect(find("服务端")[0]).toBe(actual)
+  })
+
   test("filters a bounded 500-entry loaded set in actual input order", () => {
     const loaded = Array.from({ length: 500 }, (_, index) => ({
       ...other,

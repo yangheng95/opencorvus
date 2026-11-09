@@ -1,0 +1,32 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/log/tail",
+      "operationId": "log.tail",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "logTail": {
+    "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b58\\profile-before\\log\\dev.log",
+    "lineCount": 500
+  },
+  "project": {
+    "id": "prj_hIGIxBCJsjIa81HZD28g",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b58\\project-before"
+  },
+  "listedProjectCount": 1
+}
