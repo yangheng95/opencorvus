@@ -1,0 +1,5 @@
+{"listenPort":39329,"upstreamPort":39328,"pid":10156}
+{"time":"2026-11-09T20:15:14.458Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:15:29.966Z","receipt":1,"method":"POST","route":"/mission-skill/directory","mediaTypes":["application/json"],"contentType":"application/json","source":"project","status":200,"requestID":"494fc828-dcda-4b60-afaf-23c0a146d4bd"}
+{"time":"2026-11-09T20:16:04.231Z","receipt":2,"method":"POST","route":"/mission-skill/directory","mediaTypes":["application/json"],"contentType":"application/json","source":"global","status":200,"requestID":"86fe51cf-51ce-4a92-8da8-8b4787e4199a"}
+{"time":"2026-11-09T20:16:10.471Z","receipt":3,"method":"POST","route":"/mission-skill/directory","mediaTypes":["application/json"],"contentType":"application/json","source":"project","status":200,"requestID":"429bd490-4fc9-48b0-befc-91a7218535fa"}

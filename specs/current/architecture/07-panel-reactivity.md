@@ -533,6 +533,11 @@ creates a new compressor. The packageManager-pinned Bun 1.4 runtime is required
 for immediate decoding of compressed fetch streams; Bun 1.3.14 buffered them.
 Compression reduces wire bytes, not the decoded JSON or field-value allocation.
 
+Browser and desktop ordinary requests use the same body adapter. It respects an
+explicit `Content-Type` regardless of header name casing and sets a body-derived
+default only when that field is missing. JSON, text and binary carry one media
+type; Fetch still supplies the multipart boundary for form uploads.
+
 The browser and desktop HostTransport use the same WebSocket adapter for all six
 UI stream callers: selected Task/Mission/Session, global Work Ledger/Mailbox,
 Side Session, panel message POST, VCS commit message POST and MCP App. Each stream

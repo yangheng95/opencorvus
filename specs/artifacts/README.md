@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [宿主请求体媒体类型证据](2026-11-10-transport-request-content-type/README.md)
 - [多步任务技能就近操作反馈证据](2026-11-10-mission-skill-action-feedback/README.md)
 - [任务需求与交付目标读取状态证据](2026-11-10-task-scope-board-read-status/README.md)
 - [浏览器预览地址草稿与反馈证据](2026-11-10-browser-preview-address-feedback/README.md)

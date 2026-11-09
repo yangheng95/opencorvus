@@ -157,36 +157,25 @@ function buildUrl(path: string, query?: TransportRequest["query"]): URL {
   return u
 }
 
+function withRequestBody(init: RequestInit, body: BodyInit, defaultMediaType?: string): RequestInit {
+  if (!defaultMediaType) return { ...init, body }
+  const headers = new Headers(init.headers)
+  if (!headers.has("Content-Type")) headers.set("Content-Type", defaultMediaType)
+  return { ...init, body, headers }
+}
+
 function applyBody(init: RequestInit, body?: RequestBody): RequestInit {
   if (!body || body.kind === "none") return init
   switch (body.kind) {
     case "json":
-      return {
-        ...init,
-        body: JSON.stringify(body.value),
-        headers: { "Content-Type": "application/json", ...(init.headers as Record<string, string> | undefined) },
-      }
+      return withRequestBody(init, JSON.stringify(body.value), "application/json")
     case "text":
-      return {
-        ...init,
-        body: body.value,
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8",
-          ...(init.headers as Record<string, string> | undefined),
-        },
-      }
+      return withRequestBody(init, body.value, "text/plain;charset=utf-8")
     case "form":
       // FormData sets its own multipart Content-Type with boundary.
       return { ...init, body: body.value }
     case "binary":
-      return {
-        ...init,
-        body: body.value as unknown as BodyInit,
-        headers: {
-          ...(body.contentType ? { "Content-Type": body.contentType } : {}),
-          ...(init.headers as Record<string, string> | undefined),
-        },
-      }
+      return withRequestBody(init, body.value as unknown as BodyInit, body.contentType)
   }
 }
 
