@@ -3647,6 +3647,9 @@ the original diagnostic; locating a result can fail independently of that read.
 Chat export keeps the conversation title visible. A separate status announces
 the read and browser download handoff; an export failure remains inspectable
 with its original diagnostic until the next export or conversation change.
+Conversation diagnostic copy also keeps the original title. Its initiating
+conversation selection, connection and action own clipboard handoff and
+feedback; a completed read from a retired action cannot affect a later selection.
 Transcript actor avatars use neutral chrome with the role glyph; elapsed times
 are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved

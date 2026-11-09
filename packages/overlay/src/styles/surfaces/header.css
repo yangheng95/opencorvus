@@ -69,19 +69,19 @@
   min-width: calc(190px * var(--ui-scale));
 }
 
-.chat-title-group .chat-export-indicator {
+.chat-title-group .chat-header-action-indicator {
   flex: 0 1 auto;
   min-inline-size: 0;
-  max-inline-size: 45%;
+  max-inline-size: calc(220px * var(--ui-scale));
 }
 
-.chat-export-indicator__label {
+.chat-header-action-indicator__label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.chat-export-indicator > .oc-icon {
+.chat-header-action-indicator > .oc-icon {
   flex-shrink: 0;
 }
 

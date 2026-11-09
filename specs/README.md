@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [会话诊断复制归属](records/2026-11/2026-11-10-conversation-diagnostics-copy-ownership.md)
 - [连接提示键盘焦点](records/2026-11/2026-11-10-connection-notice-focus.md)
 - [对话导出状态与标题](records/2026-11/2026-11-10-conversation-export-feedback.md)
 - [对话查找读取状态](records/2026-11/2026-11-10-conversation-search-read-status.md)

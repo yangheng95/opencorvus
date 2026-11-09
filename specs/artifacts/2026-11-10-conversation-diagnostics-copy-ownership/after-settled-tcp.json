@@ -1,0 +1,61 @@
+{
+  "phase": "after",
+  "mode": "settled",
+  "project": {
+    "id": "prj_hmAADZXkVTBu2QFKimAi",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b145\\project-after"
+  },
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "360b9885-eca7-4256-8fe9-a35fb2874ecc",
+      "schemaValid": true
+    },
+    {
+      "route": "/session/{sessionID}/message",
+      "operationId": "session.messages",
+      "status": 200,
+      "requestID": "48c1ec47-d164-4576-b09c-65f54742b89c",
+      "schemaValid": true
+    },
+    {
+      "route": "/session/{sessionID}/conversation",
+      "operationId": "session.conversation",
+      "status": 200,
+      "requestID": "39e496d8-c800-47d3-828e-5ca4a1f5e187",
+      "schemaValid": true
+    },
+    {
+      "route": "/session/{sessionID}/message",
+      "operationId": "session.messages",
+      "status": 200,
+      "requestID": "a477c6dd-02d4-47d1-a3cf-e852940809f4",
+      "schemaValid": true
+    },
+    {
+      "route": "/session/{sessionID}/conversation",
+      "operationId": "session.conversation",
+      "status": 200,
+      "requestID": "933890f4-f4dc-4aa0-88bb-3c168bf7e880",
+      "schemaValid": true
+    }
+  ],
+  "chats": [
+    {
+      "name": "origin",
+      "id": "ses_-zUPUg14yzzoOP2szYQm",
+      "title": "Diagnostics source chat",
+      "rootMessages": 0,
+      "treeMessages": 0
+    },
+    {
+      "name": "other",
+      "id": "ses_-zUPUg12Jzz36mkNvc8o",
+      "title": "Chat",
+      "rootMessages": 0,
+      "treeMessages": 0
+    }
+  ]
+}

@@ -1535,7 +1535,8 @@ async function openMissionMarketExpertSquad(item: ExpertSquadMarketIndexItem): P
   )
   if (!opened) throw new Error(t("mission_board.create.market_open_unavailable"))
 }
-async function copyActiveConversationDebug(): Promise<void> {
+async function copyActiveConversationDebug(ownsAction: () => boolean): Promise<void> {
+  if (!ownsAction()) return
   const initialSource = boardStore.selectedSource
   const selectedSource = initialSource ? ({ ...initialSource } as BoardSource) : null
   const taskSelectionError = boardStore.taskSelectionError
@@ -1555,6 +1556,7 @@ async function copyActiveConversationDebug(): Promise<void> {
           directory: String(selectedSource.directory),
         })
       : undefined
+  if (!ownsAction()) return
   assertDebugSelectionCurrent(selectedSource)
   const taskRootIngressDebug =
     selectedSource.kind === "task"
@@ -1562,6 +1564,7 @@ async function copyActiveConversationDebug(): Promise<void> {
           taskScopedPath(selectedSource.id, String(selectedSource.directory), "/debug/task-root-ingresses"),
         )
       : undefined
+  if (!ownsAction()) return
   assertDebugSelectionCurrent(selectedSource)
   const debugBoard =
     selectedSource.kind === "session"
@@ -1586,7 +1589,7 @@ async function copyActiveConversationDebug(): Promise<void> {
   if (!blob) {
     throw new Error(selectedSource.kind === "session" ? "No active chat session" : "No active task")
   }
-  await writeDebugClipboard(blob)
+  if (ownsAction()) await writeDebugClipboard(blob)
 }
 
 async function renameActiveWorkLedgerItem(

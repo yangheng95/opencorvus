@@ -61,6 +61,10 @@ type ChatExportState =
   | { kind: "downloaded" }
   | { kind: "failed"; details: string }
 
+type DebugCopyResult = { kind: "copied" } | { kind: "failed"; cause: unknown }
+type DebugCopyState = { kind: "copying" } | DebugCopyResult
+type CopyConversationDebug = (ownsAction: () => boolean) => Promise<void>
+
 function workLedgerRenameLabel(row: WorkLedgerItemRow): string {
   if (row.kind === "mission") return t("work_ledger.action.rename_mission")
   if (row.kind === "chat") return t("work_ledger.action.rename_chat")
@@ -77,7 +81,7 @@ function ChatViewTitle(props: {
   active: boolean
   title: () => string
   item: () => WorkLedgerItemRow | null
-  onCopyDebug: () => Promise<void>
+  onCopyDebug: CopyConversationDebug
   onPinnedChange: (row: WorkLedgerItemRow, pinned: boolean) => void | Promise<void>
   onRename: (row: WorkLedgerItemRow) => void | Promise<void>
   onArchive: (row: WorkLedgerItemRow) => void | Promise<void>
@@ -103,16 +107,16 @@ function ChatViewTitle(props: {
   let disposed = false
   let searchReturnFocus: HTMLElement | null = null
   let searchMenuTrigger: HTMLElement | undefined
-  const [actionFeedback, setActionFeedback] = createSignal<
-    { kind: "copied" } | { kind: "failed"; message?: string } | null
-  >(null)
-  const actionFeedbackText = createMemo(() => {
-    const feedback = actionFeedback()
+  const [debugCopy, setDebugCopy] = createSignal<DebugCopyState>()
+  const copyingDebug = () => debugCopy()?.kind === "copying"
+  const debugCopyText = createMemo(() => {
+    const feedback = debugCopy()
+    if (feedback?.kind === "copying") return t("chat.debug_copying")
     if (feedback?.kind === "copied") return t("chat.debug_copy_success")
-    if (feedback?.kind === "failed") return feedback.message || t("markdown.copy_failed")
+    if (feedback?.kind === "failed") return debugCopyFailureMessage(feedback.cause, t("markdown.copy_failed"))
     return ""
   })
-  let actionFeedbackTimer: number | undefined
+  let debugCopyTimer: number | undefined
   let exportFeedbackTimer: number | undefined
   const conversationScope = createMemo(() => {
     const item = props.item()
@@ -131,11 +135,17 @@ function ChatViewTitle(props: {
     setExportState(undefined)
   }
 
-  function clearFeedbackAfterDelay(): void {
-    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
-    actionFeedbackTimer = window.setTimeout(() => {
-      setActionFeedback(null)
-      actionFeedbackTimer = undefined
+  function retireDebugCopy(): void {
+    if (debugCopyTimer !== undefined) window.clearTimeout(debugCopyTimer)
+    debugCopyTimer = undefined
+    setDebugCopy(undefined)
+  }
+
+  function settleDebugCopy(result: DebugCopyResult): void {
+    setDebugCopy(result)
+    debugCopyTimer = window.setTimeout(() => {
+      debugCopyTimer = undefined
+      if (debugCopy() === result) setDebugCopy(undefined)
     }, 4000)
   }
 
@@ -146,16 +156,14 @@ function ChatViewTitle(props: {
       setItemActionBusy(false)
       setSearchOpen(false)
       searchReturnFocus = null
-      setActionFeedback(null)
-      if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
-      actionFeedbackTimer = undefined
+      retireDebugCopy()
     },
   ))
 
   onCleanup(() => {
     disposed = true
     retireExport()
-    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
+    retireDebugCopy()
   })
 
   useHotkey({
@@ -209,18 +217,24 @@ function ChatViewTitle(props: {
   }
 
   async function copyDebugInfo(): Promise<void> {
-    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
+    if (!props.active || copyingDebug()) return
+    const authority = captureApiAuthority()
+    const scope = conversationScope()
+    const request = { kind: "copying" } as const
+    const ownsCopy = () => !disposed && debugCopy() === request &&
+      conversationScope() === scope && isApiAuthorityCurrent(authority)
+    retireDebugCopy()
+    setDebugCopy(request)
     try {
-      await props.onCopyDebug()
-      setActionFeedback({ kind: "copied" })
+      await props.onCopyDebug(ownsCopy)
+      if (ownsCopy()) settleDebugCopy({ kind: "copied" })
     } catch (error) {
-      console.error("[chat-view-title dblclick] clipboard write failed", error)
-      setActionFeedback({
-        kind: "failed",
-        message: debugCopyFailureMessage(error, t("markdown.copy_failed")),
-      })
+      if (!ownsCopy()) return
+      console.error("[chat-view-title] diagnostic copy failed", error)
+      settleDebugCopy({ kind: "failed", cause: error })
+    } finally {
+      if (debugCopy() === request) setDebugCopy(undefined)
     }
-    clearFeedbackAfterDelay()
   }
 
   async function exportConversation(format: ConversationExportFormat): Promise<void> {
@@ -281,10 +295,9 @@ function ChatViewTitle(props: {
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           tabIndex={0}
           id="chatViewTitle"
-          data-copy-feedback={actionFeedback()?.kind}
           onDblClick={() => void copyDebugInfo()}
         >
-          {actionFeedbackText() || props.title()}
+          {props.title()}
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content class="chat-title-usage-tooltip" data-ui="chat-title-usage-tooltip">
@@ -294,12 +307,12 @@ function ChatViewTitle(props: {
                 {usageText()}
               </strong>
             </Show>
-            <span class="chat-title-usage-tooltip__debug-hint">{actionFeedbackText() || t("chat.debug_copy_hint")}</span>
+            <span class="chat-title-usage-tooltip__debug-hint">{debugCopyText() || t("chat.debug_copy_hint")}</span>
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>
       <span class="chat-title-feedback-a11y" role="status" aria-live="polite" aria-atomic="true">
-        {[actionFeedbackText(), exportStatusText()].filter(Boolean).join(" ")}
+        {[debugCopyText(), exportStatusText()].filter(Boolean).join(" ")}
       </span>
       <Show when={props.item()}>
         {(item) => (
@@ -344,10 +357,11 @@ function ChatViewTitle(props: {
                   as="button"
                   type="button"
                   data-ui="chat-title-copy-debug"
+                  disabled={copyingDebug()}
                   onSelect={() => void copyDebugInfo()}
                 >
                   <Icon name="copy" size="medium" />
-                  <span>{t("chat.debug_copy_action")}</span>
+                  <span>{t(copyingDebug() ? "chat.debug_copying" : "chat.debug_copy_action")}</span>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   as="button"
@@ -385,17 +399,24 @@ function ChatViewTitle(props: {
           </DropdownMenu.Root>
         )}
       </Show>
+      <Show when={debugCopy()}>{(status) => (
+        <Badge class="chat-header-action-indicator" size="sm" tone={status().kind === "copied" ? "ok" : status().kind === "failed" ? "bad" : "neutral"}
+          title={debugCopyText()} aria-hidden="true">
+          <Icon name={status().kind === "copied" ? "check" : status().kind === "failed" ? "cancel" : "copy"} size="compact" />
+          <span class="chat-header-action-indicator__label">{status().kind === "copied" ? t("common.copied") : debugCopyText()}</span>
+        </Badge>
+      )}</Show>
       <Show when={!exportFailure() && exportStatusText()}>{(status) => (
-        <Badge class="chat-export-indicator" size="sm" tone={exporting() ? "neutral" : "ok"} title={status()} aria-hidden="true">
+        <Badge class="chat-header-action-indicator" size="sm" tone={exporting() ? "neutral" : "ok"} title={status()} aria-hidden="true">
           <Icon name={exporting() ? "download" : "check"} size="compact" />
-          <span class="chat-export-indicator__label">{status()}</span>
+          <span class="chat-header-action-indicator__label">{status()}</span>
         </Badge>
       )}</Show>
       <Show when={exportFailure()}>{(failure) => (
         <Popover.Root placement="bottom-start" gutter={6} fitViewport>
-          <Popover.Trigger as={Button} type="button" class="chat-export-indicator" variant="ghost" size="sm" tone="danger"
+          <Popover.Trigger as={Button} type="button" class="chat-header-action-indicator" variant="ghost" size="sm" tone="danger"
             title={t("chat.export_failed_short")} aria-label={t("chat.export_failed_short")}>
-            <span class="chat-export-indicator__label">{t("chat.export_failed_short")}</span>
+            <span class="chat-header-action-indicator__label">{t("chat.export_failed_short")}</span>
             <Icon name="chevron-down" size="compact" />
           </Popover.Trigger>
           <Popover.Portal>
@@ -451,7 +472,7 @@ export interface AppProps {
   restoringConversation: boolean
   conversationRestoreError: unknown
   onRestoreConversation: () => Promise<void>
-  onCopyConversationDebug: () => Promise<void>
+  onCopyConversationDebug: CopyConversationDebug
   onConversationPinnedChange: (row: WorkLedgerItemRow, pinned: boolean) => void | Promise<void>
   onRenameConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
   onArchiveConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>

@@ -1,0 +1,15 @@
+{"listenPort":39312,"upstreamPort":39310,"pid":31072}
+{"time":"2026-11-09T18:55:47.780Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:55:56.210Z","receipt":1,"stage":"arrival","path":"/session/ses_-zUPUhbyhzzTq89v3XUB/conversation","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b145\\project-before","hold":false}
+{"time":"2026-11-09T18:55:56.224Z","receipt":1,"stage":"origin","status":200,"requestID":"ebd30c90-c65d-4a78-84b3-69a4f2441e2d","target":{"id":"ses_-zUPUhbyhzzTq89v3XUB","plane":"tree","messageCount":0}}
+{"time":"2026-11-09T18:55:56.225Z","receipt":1,"stage":"released","target":{"id":"ses_-zUPUhbyhzzTq89v3XUB","plane":"tree","messageCount":0}}
+{"time":"2026-11-09T18:55:56.260Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:56:09.797Z","stage":"policy","mode":"hold","queued":0}
+{"time":"2026-11-09T18:56:22.630Z","receipt":2,"stage":"arrival","path":"/session/ses_-zUPUhbyhzzTq89v3XUB/message","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b145\\project-before","hold":true}
+{"time":"2026-11-09T18:56:22.633Z","receipt":3,"stage":"arrival","path":"/session/ses_-zUPUhbyhzzTq89v3XUB/conversation","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b145\\project-before","hold":true}
+{"time":"2026-11-09T18:56:22.636Z","receipt":2,"stage":"origin","status":200,"requestID":"e769bacb-6409-40fd-9001-c48d0e4f8394","target":{"id":"ses_-zUPUhbyhzzTq89v3XUB","plane":"root","messageCount":0}}
+{"time":"2026-11-09T18:56:22.641Z","receipt":3,"stage":"origin","status":200,"requestID":"4fa58edc-1860-4680-962e-8646472c7495","target":{"id":"ses_-zUPUhbyhzzTq89v3XUB","plane":"tree","messageCount":0}}
+{"time":"2026-11-09T18:56:30.031Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:56:34.822Z","stage":"policy","mode":"pass","queued":2}
+{"time":"2026-11-09T18:56:34.823Z","receipt":2,"stage":"released","target":{"id":"ses_-zUPUhbyhzzTq89v3XUB","plane":"root","messageCount":0}}
+{"time":"2026-11-09T18:56:34.823Z","receipt":3,"stage":"released","target":{"id":"ses_-zUPUhbyhzzTq89v3XUB","plane":"tree","messageCount":0}}

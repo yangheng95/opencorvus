@@ -1360,14 +1360,6 @@
   white-space: nowrap;
 }
 
-.chat-title-usage-trigger[data-copy-feedback="copied"] {
-  color: var(--good);
-}
-
-.chat-title-usage-trigger[data-copy-feedback="failed"] {
-  color: var(--bad);
-}
-
 .chat-title-usage-tooltip {
   display: grid;
   grid-template-columns: auto auto;
