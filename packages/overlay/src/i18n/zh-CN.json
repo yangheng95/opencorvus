@@ -897,6 +897,8 @@
   "chat.send_label": "发送",
   "chat.send_failed": "发送失败：{{error}}",
   "chat.send_failed_title": "发送失败",
+  "chat.send_unconfirmed_title": "接收状态未确认",
+  "chat.send_unconfirmed_inline": "暂时无法确认这条消息是否已接收。请先查看对话，再决定是否重发。",
   "chat.send_accepted_title": "消息已接收",
   "chat.send_accepted_inline": "消息已接收，但响应状态尚未确认。请查看对话后再继续。",
   "chat.send_title": "发送消息（Enter 发送，Shift+Enter 换行）",

@@ -1,0 +1,207 @@
+{
+  "acceptedSession": {
+    "time": "2026-11-09T23:01:42.226Z",
+    "attempt": 1,
+    "method": "POST",
+    "route": "/session/ses_hs9cUBoqu33HegADYhXW/message",
+    "upstreamStatus": 200,
+    "upstreamRequestID": "a61fa6f4-a4a0-4672-bad1-a407e52eed74",
+    "sent": {
+      "key": "msg_0ea8bd0d-4198-490e-bac1-95613730f804",
+      "text": "Accepted response review: preserve the confirmed user message after a broken reply.",
+      "model": {
+        "providerID": "b160-review",
+        "modelID": "offline"
+      }
+    },
+    "accepted": {
+      "sessionID": "ses_hs9cUBoqu33HegADYhXW",
+      "assistantMessageID": "msg_g0VaWILnQ00gmcLkrh3n",
+      "parentID": "msg_0ea8bd0d-4198-490e-bac1-95613730f804"
+    },
+    "responseBytes": 2468,
+    "browserResponse": "truncated after 16 bytes"
+  },
+  "missions": {
+    "en": [
+      {
+        "time": "2026-11-09T23:02:42.858Z",
+        "attempt": 1,
+        "method": "POST",
+        "route": "/mission/wake",
+        "upstreamStatus": 200,
+        "upstreamRequestID": "0c4af33a-004a-4905-b56d-2e5f735d3da9",
+        "sent": {
+          "key": "msg_5c9e50e5-edc6-4fa8-a0e8-89ddfad09ab4",
+          "text": "English receipt review: the original request remains visible until confirmation.",
+          "model": "b160-review/offline",
+          "productPillar": "work"
+        },
+        "accepted": {
+          "missionID": "wake-b876e0fac7ee5b855954705076c93d64",
+          "sessionID": "ses_-zUPThOJQzzA56jU8vn1",
+          "created": true
+        },
+        "responseBytes": 130,
+        "browserResponse": "truncated after 16 bytes"
+      },
+      {
+        "time": "2026-11-09T23:02:54.738Z",
+        "attempt": 2,
+        "method": "POST",
+        "route": "/mission/wake",
+        "upstreamStatus": 200,
+        "upstreamRequestID": "ad000589-a0b4-405e-9a2f-ab92e0096ed3",
+        "sent": {
+          "key": "msg_5c9e50e5-edc6-4fa8-a0e8-89ddfad09ab4",
+          "text": "English receipt review: the original request remains visible until confirmation.",
+          "model": "b160-review/offline",
+          "productPillar": "work"
+        },
+        "accepted": {
+          "missionID": "wake-b876e0fac7ee5b855954705076c93d64",
+          "sessionID": "ses_-zUPThOJQzzA56jU8vn1",
+          "created": true
+        },
+        "responseBytes": 130,
+        "browserResponse": "complete"
+      }
+    ],
+    "zh": [
+      {
+        "time": "2026-11-09T23:03:30.015Z",
+        "attempt": 1,
+        "method": "POST",
+        "route": "/mission/wake",
+        "upstreamStatus": 200,
+        "upstreamRequestID": "23a22169-9de5-498e-8cad-8ed55d1a29c8",
+        "sent": {
+          "key": "msg_fad677f3-33a1-46d8-a013-5e596596c647",
+          "text": "中文回执复核：回执中断时请保留这条真实输入。",
+          "model": "b160-review/offline",
+          "productPillar": "work"
+        },
+        "accepted": {
+          "missionID": "wake-66526bef11d1c97f8812f4436bf1b01b",
+          "sessionID": "ses_-zUPThC36zzdwpVxRIwa",
+          "created": true
+        },
+        "responseBytes": 130,
+        "browserResponse": "truncated after 16 bytes"
+      },
+      {
+        "time": "2026-11-09T23:03:36.924Z",
+        "attempt": 2,
+        "method": "POST",
+        "route": "/mission/wake",
+        "upstreamStatus": 200,
+        "upstreamRequestID": "9f6cba74-66a2-4342-a4d0-c0454e4bbf10",
+        "sent": {
+          "key": "msg_fad677f3-33a1-46d8-a013-5e596596c647",
+          "text": "中文回执复核：回执中断时请保留这条真实输入。",
+          "model": "b160-review/offline",
+          "productPillar": "work"
+        },
+        "accepted": {
+          "missionID": "wake-66526bef11d1c97f8812f4436bf1b01b",
+          "sessionID": "ses_-zUPThC36zzdwpVxRIwa",
+          "created": true
+        },
+        "responseBytes": 130,
+        "browserResponse": "complete"
+      }
+    ]
+  },
+  "persisted": {
+    "acceptedSession": {
+      "session": {
+        "id": "ses_hs9cUBoqu33HegADYhXW",
+        "project_id": "prj_hOlrTaurbDppUJUjV4XO",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b160\\project-review",
+        "kind": "assistant"
+      },
+      "user": {
+        "id": "msg_0ea8bd0d-4198-490e-bac1-95613730f804",
+        "provider": "b160-review",
+        "model": "offline",
+        "requestID": null,
+        "openedEventID": null
+      },
+      "text": "Accepted response review: preserve the confirmed user message after a broken reply.",
+      "assistant": {
+        "id": "msg_g0VaWILnQ00gmcLkrh3n",
+        "parentID": "msg_0ea8bd0d-4198-490e-bac1-95613730f804",
+        "error": "ToolSchemaBudgetError",
+        "completed": 1794265302132
+      },
+      "opened": []
+    },
+    "en": {
+      "session": {
+        "id": "ses_-zUPThOJQzzA56jU8vn1",
+        "project_id": "prj_hOlrTaurbDppUJUjV4XO",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b160\\project-review",
+        "kind": "mission"
+      },
+      "user": {
+        "id": "msg_hqS6se4Jfl19XLm1CGjR",
+        "provider": "b160-review",
+        "model": "offline",
+        "requestID": "msg_5c9e50e5-edc6-4fa8-a0e8-89ddfad09ab4",
+        "openedEventID": "pev_hDsEPzuE1C8rFegcfbrG"
+      },
+      "text": "English receipt review: the original request remains visible until confirmation.",
+      "assistant": {
+        "id": "msg_g0VaWIbho0008bzpvHqZ",
+        "parentID": "msg_hqS6se4Jfl19XLm1CGjR",
+        "error": "ToolSchemaBudgetError",
+        "completed": 1794265364014
+      },
+      "opened": [
+        {
+          "id": "pev_hDsEPzuE1C8rFegcfbrG",
+          "source": "mission.wake"
+        }
+      ]
+    },
+    "zh": {
+      "session": {
+        "id": "ses_-zUPThC36zzdwpVxRIwa",
+        "project_id": "prj_hOlrTaurbDppUJUjV4XO",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b160\\project-review",
+        "kind": "mission"
+      },
+      "user": {
+        "id": "msg_hSVFWUu29vTHFPIwbB8K",
+        "provider": "b160-review",
+        "model": "offline",
+        "requestID": "msg_fad677f3-33a1-46d8-a013-5e596596c647",
+        "openedEventID": "pev_hqkLyRhQx7i6bDivvEAH"
+      },
+      "text": "中文回执复核：回执中断时请保留这条真实输入。",
+      "assistant": {
+        "id": "msg_g0VaWIny400OGSoAWUMR",
+        "parentID": "msg_hSVFWUu29vTHFPIwbB8K",
+        "error": "ToolSchemaBudgetError",
+        "completed": 1794265411098
+      },
+      "opened": [
+        {
+          "id": "pev_hqkLyRhQx7i6bDivvEAH",
+          "source": "mission.wake"
+        }
+      ]
+    }
+  },
+  "counts": {
+    "session": 3,
+    "project": 2,
+    "engine_task": 0,
+    "automation_run": 0,
+    "provider_usage_event": 0
+  },
+  "version": 12,
+  "integrity": "ok",
+  "foreignKeyIssues": 0,
+  "gitFixtureIntact": true
+}

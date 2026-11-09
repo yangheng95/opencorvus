@@ -1300,9 +1300,13 @@ real user Message with the exact Session/Message identity, or the successful
 Session response, acknowledges that input. Mission wake and Task follow-up use
 their existing successful acceptance responses before loading their views.
 Acceptance consumes only the unchanged authored text, quotation, attachment
-references and draft revision; a late receipt preserves newer input. Failures
-before acceptance retain the input for explicit retry; failures after acceptance
-identify that the message was received while keeping the original diagnostics.
+references and draft revision; a late receipt preserves newer input. A failure
+before dispatch is reported as a send failure. After dispatch without an
+acceptance receipt, the composer reports that delivery could not be confirmed
+and retains the draft. After confirmed acceptance it says the message was
+received even if the response is incomplete. All three retain the original
+diagnostic when available; neither the error status nor its text establishes
+acceptance.
 Session and Mission retries retain the existing draft submission identity for
 the exact serialized request content, including files and model. The existing
 submission.text stores that content identity; draft.text remains author prose.

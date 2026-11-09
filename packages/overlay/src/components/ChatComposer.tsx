@@ -638,7 +638,10 @@ export function ChatComposer(props: ChatComposerProps) {
   const [caretPosition, setCaretPosition] = createSignal(0)
   const [dismissedMentionQueryKey, setDismissedMentionQueryKey] = createSignal("")
   const [highlightedMentionKey, setHighlightedMentionKey] = createSignal("")
-  const [submissionError, setSubmissionError] = createSignal<{ cause: unknown; accepted: boolean }>()
+  const [submissionError, setSubmissionError] = createSignal<{
+    cause: unknown
+    outcome: "preparation_failed" | "receipt_unconfirmed" | "accepted"
+  }>()
   createEffect(
     on(
       () => props.draftKey,
@@ -1210,7 +1213,10 @@ export function ChatComposer(props: ChatComposerProps) {
       if (!ownsScope()) return
       if (error instanceof DOMException && error.name === "AbortError") return
       console.error("[ChatComposer] submit failed", error)
-      setSubmissionError({ cause: error, accepted })
+      setSubmissionError({
+        cause: error,
+        outcome: accepted ? "accepted" : dispatched ? "receipt_unconfirmed" : "preparation_failed",
+      })
     } finally {
       if (owns()) setSubmitting(false)
     }
@@ -1574,8 +1580,14 @@ export function ChatComposer(props: ChatComposerProps) {
       <Show when={submissionError()}>
         {(failure) => (
           <Feedback
-            tone="error"
-            title={t(failure().accepted ? "chat.send_accepted_title" : "chat.send_failed_title")}
+            tone={failure().outcome === "preparation_failed" ? "error" : "warning"}
+            title={t(
+              failure().outcome === "accepted"
+                ? "chat.send_accepted_title"
+                : failure().outcome === "receipt_unconfirmed"
+                  ? "chat.send_unconfirmed_title"
+                  : "chat.send_failed_title",
+            )}
             details={
               failure().cause instanceof ComposerMentionDirectiveError ? undefined : submitErrorMessage(failure().cause)
             }
@@ -1593,7 +1605,13 @@ export function ChatComposer(props: ChatComposerProps) {
           >
             {failure().cause instanceof ComposerMentionDirectiveError
               ? submitErrorMessage(failure().cause)
-              : t(failure().accepted ? "chat.send_accepted_inline" : "chat.send_failed_inline")}
+              : t(
+                  failure().outcome === "accepted"
+                    ? "chat.send_accepted_inline"
+                    : failure().outcome === "receipt_unconfirmed"
+                      ? "chat.send_unconfirmed_inline"
+                      : "chat.send_failed_inline",
+                )}
           </Feedback>
         )}
       </Show>
