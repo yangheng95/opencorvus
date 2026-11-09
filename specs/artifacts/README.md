@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [批量复制后的键盘续接证据](2026-11-09-file-multi-copy-keyboard-continuity/README.md)
 - [定时日历重新选择同一天可补全日期证据](2026-11-09-scheduled-calendar-draft-reselection/README.md)
 - [定时编辑器的鼠标时钟选择证据](2026-11-09-scheduled-clock-pointer-picker/README.md)
 - [定时编辑器的应用语言日期与时间证据](2026-11-09-scheduled-calendar-field-language/README.md)

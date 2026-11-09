@@ -1,0 +1,58 @@
+{
+  "phase": "before",
+  "step": "base",
+  "listing": {
+    "dest": {
+      "requestID": "3aa2f406-410b-47dd-adf5-c37e537a217e",
+      "names": [
+        "alpha.txt",
+        "beta.txt",
+        "neighbor.txt"
+      ]
+    },
+    "partial": {
+      "requestID": "4f453eba-1f05-49f0-97aa-e23385151d7b",
+      "names": [
+        "alpha.txt",
+        "beta.txt"
+      ]
+    }
+  },
+  "files": {
+    "alpha.txt": {
+      "requestID": "e8d78f0f-848f-4cbb-8ab6-453594eb483d",
+      "length": 32,
+      "content": "Alpha owned source.\r\nLine two.\r\n"
+    },
+    "beta.txt": {
+      "requestID": "15e82488-7014-4fab-8ccc-237de6315050",
+      "length": 32,
+      "content": "Beta owned source.\n第二行。\n"
+    },
+    "dest/alpha.txt": {
+      "requestID": "0cb34548-852c-46eb-bace-276b626e2123",
+      "length": 32,
+      "content": "Alpha owned source.\r\nLine two.\r\n"
+    },
+    "dest/beta.txt": {
+      "requestID": "994edba7-d3fc-436b-bf90-d915e00d95ba",
+      "length": 32,
+      "content": "Beta owned source.\n第二行。\n"
+    },
+    "dest/neighbor.txt": {
+      "requestID": "9db6877d-13b0-43f2-8daf-2a732c0f2e3d",
+      "length": 28,
+      "content": "Owned destination neighbor.\n"
+    },
+    "partial/alpha.txt": {
+      "requestID": "021234da-b1bc-4da9-b373-ecb486758817",
+      "length": 32,
+      "content": "Alpha owned source.\r\nLine two.\r\n"
+    },
+    "partial/beta.txt": {
+      "requestID": "735518a1-d5df-41da-8aff-451c7484dcbd",
+      "length": 41,
+      "content": "Owned conflicting destination original.\r\n"
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "phase": "after",
+  "step": "search",
+  "listing": {
+    "dest": {
+      "requestID": "86088999-94bf-4254-b480-f34324b57ae3",
+      "names": [
+        "alpha.txt",
+        "beta.txt",
+        "neighbor.txt"
+      ]
+    },
+    "partial": {
+      "requestID": "f9f0f1c1-b9d3-4d46-a29e-65694fc6936e",
+      "names": [
+        "alpha.txt",
+        "beta.txt"
+      ]
+    },
+    "search-target": {
+      "requestID": "2fc85409-9a75-4b1f-9328-c5474dba14bc",
+      "names": [
+        "alpha.txt",
+        "anchor.txt",
+        "beta.txt"
+      ]
+    }
+  },
+  "files": {
+    "alpha.txt": {
+      "requestID": "635aa76a-d10c-4220-ae49-e2db71c372c3",
+      "length": 32,
+      "content": "Alpha owned source.\r\nLine two.\r\n"
+    },
+    "beta.txt": {
+      "requestID": "eeb74075-0dc1-46b8-af6b-432e558466a5",
+      "length": 32,
+      "content": "Beta owned source.\n第二行。\n"
+    },
+    "dest/alpha.txt": {
+      "requestID": "3b0c4b0a-bcd7-4edc-9ace-d7cca033f56f",
+      "length": 32,
+      "content": "Alpha owned source.\r\nLine two.\r\n"
+    },
+    "dest/beta.txt": {
+      "requestID": "3487775d-3714-4fa1-a58b-a04b6462a754",
+      "length": 32,
+      "content": "Beta owned source.\n第二行。\n"
+    },
+    "dest/neighbor.txt": {
+      "requestID": "0498c7b5-d0f6-46f3-9b02-cbce3a6b0b38",
+      "length": 28,
+      "content": "Owned destination neighbor.\n"
+    },
+    "partial/alpha.txt": {
+      "requestID": "712228ed-024e-41e4-a6b1-0135a999754f",
+      "length": 32,
+      "content": "Alpha owned source.\r\nLine two.\r\n"
+    },
+    "partial/beta.txt": {
+      "requestID": "64d5a776-c2a5-4419-86a9-1f19ac8bbb86",
+      "length": 41,
+      "content": "Owned conflicting destination original.\r\n"
+    },
+    "search-target/alpha.txt": {
+      "requestID": "356b8435-9ffa-4320-9233-4dcd162896e1",
+      "length": 32,
+      "content": "Alpha owned source.\r\nLine two.\r\n"
+    },
+    "search-target/beta.txt": {
+      "requestID": "ba1fe874-51f7-4fee-b366-e4e41af2c077",
+      "length": 32,
+      "content": "Beta owned source.\n第二行。\n"
+    },
+    "search-target/anchor.txt": {
+      "requestID": "12ad94f8-387a-4cf9-a399-aa590f375b66",
+      "length": 28,
+      "content": "Owned search target anchor.\n"
+    }
+  }
+}

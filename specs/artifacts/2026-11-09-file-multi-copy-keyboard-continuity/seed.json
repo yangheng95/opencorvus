@@ -1,0 +1,24 @@
+{
+  "before": {
+    "files": {
+      "alpha.txt": "Alpha owned source.\r\nLine two.\r\n",
+      "beta.txt": "Beta owned source.\n第二行。\n",
+      "dest/neighbor.txt": "Owned destination neighbor.\n",
+      "partial/beta.txt": "Owned conflicting destination original.\r\n",
+      "search-target/anchor.txt": "Owned search target anchor.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b81\\project-before",
+    "head": "470c10e89a68b875387dc0ebddb3b4c3baf4a3d4"
+  },
+  "after": {
+    "files": {
+      "alpha.txt": "Alpha owned source.\r\nLine two.\r\n",
+      "beta.txt": "Beta owned source.\n第二行。\n",
+      "dest/neighbor.txt": "Owned destination neighbor.\n",
+      "partial/beta.txt": "Owned conflicting destination original.\r\n",
+      "search-target/anchor.txt": "Owned search target anchor.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b81\\project-after",
+    "head": "470c10e89a68b875387dc0ebddb3b4c3baf4a3d4"
+  }
+}

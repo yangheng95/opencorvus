@@ -1591,7 +1591,7 @@ loading, error, depth and expansion updates do not replace the row owner. Actual
 removal, rename, type or scope changes retire it. Search/filter retirement
 and virtual-window retirement can remount rows; stable focus across those
 boundaries is not promised.
-Directory creation, explicit rename, single-item Move and single-item Copy dialogs share one operation focus owner.
+Directory creation, explicit rename, single-item Move and Copy dialogs share one operation focus owner.
 They hand keyboard focus to the new path only after the owned mutation
 receipt and current directory/search refresh have succeeded. It finds that row
 in the current projection and uses the same virtual focus request, scrolling
@@ -1600,7 +1600,8 @@ search results, the unchanged search input receives focus. The original caller
 and shared dialog return target bridge either close/refresh order. Retired
 scope, changed query, hidden/inactive panel or a user's newly chosen control
 prevents the handoff; cancellation, unchanged names and failed mutations retain
-their existing dialog return behavior.
+their existing dialog return behavior. Batch Copy uses the last completed result
+as both the selection anchor and the focus target, including when a later item fails.
 File creation continues through its editor admission and post-open result rather
 than handing focus back to an Explorer row.
 Successful token/scope-owned directory listings reconcile the existing selection

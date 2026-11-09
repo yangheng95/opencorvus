@@ -1,0 +1,124 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b81\\project-before",
+    "head": "470c10e89a68b875387dc0ebddb3b4c3baf4a3d4",
+    "trackedOriginals": [
+      "alpha.txt",
+      "beta.txt",
+      "dest/neighbor.txt",
+      "partial/beta.txt",
+      "search-target/anchor.txt"
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "copyWrites": [
+      {
+        "requestID": "bf91c30d-ad5e-4bbb-b4b0-fc48f9359e44",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 197
+      },
+      {
+        "requestID": "661fbaae-b0bb-418c-b4d5-f5d68ed6e195",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 67
+      },
+      {
+        "requestID": "a3c80fab-5667-4a4a-9779-2a9629edb9a3",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 74
+      },
+      {
+        "requestID": "b65bda3e-7323-4e2b-a3da-5310670bd814",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 409,
+        "duration": 5
+      }
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b81\\project-after",
+    "head": "470c10e89a68b875387dc0ebddb3b4c3baf4a3d4",
+    "trackedOriginals": [
+      "alpha.txt",
+      "beta.txt",
+      "dest/neighbor.txt",
+      "partial/beta.txt",
+      "search-target/anchor.txt"
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "copyWrites": [
+      {
+        "requestID": "39dd9a6a-f163-42d9-8763-132175772764",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 113
+      },
+      {
+        "requestID": "2fd87540-5c17-4961-b720-8baae3b9ec89",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 65
+      },
+      {
+        "requestID": "2be99fad-4a26-4885-b7e9-bd773a18f172",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 75
+      },
+      {
+        "requestID": "bf074fe6-535e-45da-afcd-107d9dba9486",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 409,
+        "duration": 4
+      },
+      {
+        "requestID": "00efb10c-b198-47d0-9019-2e8fabd4f604",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 70
+      },
+      {
+        "requestID": "599d1c83-8cc8-4687-8ff0-6e46d369c049",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 62
+      }
+    ]
+  }
+}
