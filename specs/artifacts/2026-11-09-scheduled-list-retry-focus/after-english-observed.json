@@ -1,0 +1,73 @@
+{
+  "cold": [
+    "\t\t\t\t\t\t17 button Scheduled",
+    "\t\t\t\t23 container Description: Scheduled tasks, ID: configDialog",
+    "\t\t\t\t\t\t\t\t38 tab (selected, settable, boolean) Scheduled tasks, Value: 1, ID: config-tab-scheduled",
+    "\t\t\t\t\t\t\t53 heading Scheduled tasks, Value: 1",
+    "\t\t\t\t\t\t\t\t54 text Scheduled tasks",
+    "\t\t\t\t\t\t\t55 container Description: Scheduled tasks, ID: config-panel-scheduled",
+    "\t\t\t\t\t\t\t\t\t\t59 text Could not load scheduled tasks. Please retry.",
+    "\t\t\t\t\t\t\t\t\t\t60 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t61 text Details",
+    "\t\t\t\t\t\t\t\t\t\t62 button Retry",
+    "\t\t63 container Scheduled Open saved schedules that start work automatically at their configured times., ID: tooltip-cl-120-content",
+    "\t\t\t64 text Scheduled",
+    "The focused UI element is 27 search text field (settable) Search settings pages..."
+  ],
+  "pending": [
+    "\t\t\t\t\t16 button Scheduled",
+    "\t\t\t22 container Description: Scheduled tasks, ID: configDialog",
+    "\t\t\t\t\t\t\t37 tab (selected, settable, boolean) Scheduled tasks, Value: 1, ID: config-tab-scheduled",
+    "\t\t\t\t\t\t52 heading Scheduled tasks, Value: 1",
+    "\t\t\t\t\t\t\t53 text Scheduled tasks",
+    "\t\t\t\t\t\t54 container Description: Scheduled tasks, ID: config-panel-scheduled",
+    "\t\t\t\t\t\t\t\t\t58 text Could not load scheduled tasks. Please retry.",
+    "\t\t\t\t\t\t\t\t\t59 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t60 text Details",
+    "    at async bt (http://127.0.0.1:39233/ui/assets/ScheduledAutomationsPanel-BG5hefKC.js:2:138078)",
+    "\t\t\t\t\t\t\t\t\t62 button (disabled) Retrying…",
+    "The focused UI element is 62 button (disabled) Retrying…"
+  ],
+  "again": [
+    "\t\t\t\t\t16 button Scheduled",
+    "\t\t\t22 container Description: Scheduled tasks, ID: configDialog",
+    "\t\t\t\t\t\t\t37 tab (selected, settable, boolean) Scheduled tasks, Value: 1, ID: config-tab-scheduled",
+    "\t\t\t\t\t\t52 heading Scheduled tasks, Value: 1",
+    "\t\t\t\t\t\t\t53 text Scheduled tasks",
+    "\t\t\t\t\t\t54 container Description: Scheduled tasks, ID: config-panel-scheduled",
+    "\t\t\t\t\t\t\t\t\t58 text Could not load scheduled tasks. Please retry.",
+    "\t\t\t\t\t\t\t\t\t59 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t60 text Details",
+    "    at async bt (http://127.0.0.1:39233/ui/assets/ScheduledAutomationsPanel-BG5hefKC.js:2:138078)",
+    "\t\t\t\t\t\t\t\t\t62 button Retry",
+    "The focused UI element is 62 button Retry"
+  ],
+  "recovered": [
+    "\t\t\t\t\t16 button Scheduled",
+    "\t\t\t22 container Description: Scheduled tasks, ID: configDialog",
+    "\t\t\t\t\t\t\t37 tab (selected, settable, boolean) Scheduled tasks, Value: 1, ID: config-tab-scheduled",
+    "\t\t\t\t\t\t52 heading Scheduled tasks, Value: 1",
+    "\t\t\t\t\t\t\t53 text Scheduled tasks",
+    "\t\t\t\t\t\t54 container Description: Scheduled tasks, ID: config-panel-scheduled",
+    "\t\t\t\t\t\t\t\t57 button New automation",
+    "\t\t\t\t\t\t\t\t\t59 search text field (settable) Search scheduled tasks",
+    "\t\t\t\t\t\t\t\t\t60 Description: Filter scheduled tasks, ID: radiogroup-cl-244",
+    "\t\t\t\t\t\t\t\t\t70 Description: Filter scheduled tasks by scope, ID: radiogroup-cl-249",
+    "\t\t\t\t\t\t\t\t\t83 text No scheduled tasks",
+    "The focused UI element is 59 search text field (settable) Search scheduled tasks"
+  ],
+  "nextKey": [
+    "\t\t\t\t\t16 button Scheduled",
+    "\t\t\t22 container Description: Scheduled tasks, ID: configDialog",
+    "\t\t\t\t\t\t\t37 tab (selected, settable, boolean) Scheduled tasks, Value: 1, ID: config-tab-scheduled",
+    "\t\t\t\t\t\t52 heading Scheduled tasks, Value: 1",
+    "\t\t\t\t\t\t\t53 text Scheduled tasks",
+    "\t\t\t\t\t\t54 container Description: Scheduled tasks, ID: config-panel-scheduled",
+    "\t\t\t\t\t\t\t\t57 button New automation",
+    "\t\t\t\t\t\t\t\t\t59 search text field (settable) Description: Search scheduled tasks, Value: q",
+    "\t\t\t\t\t\t\t\t\t60 Description: Filter scheduled tasks, ID: radiogroup-cl-244",
+    "\t\t\t\t\t\t\t\t\t70 Description: Filter scheduled tasks by scope, ID: radiogroup-cl-249",
+    "\t\t\t\t\t\t\t\t\t\t85 text No scheduled tasks match these filters",
+    "The focused UI element is 59 search text field (settable) Description: Search scheduled tasks, Value: q"
+  ]
+}

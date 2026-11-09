@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时列表重试保持原焦点](records/2026-11/2026-11-09-scheduled-list-retry-focus.md)
 - [收件箱重试期间保留焦点和原诊断](records/2026-11/2026-11-09-mailbox-retry-focus.md)
 - [日志刷新尊重当前阅读位置](records/2026-11/2026-11-09-log-reading-position-on-refresh.md)
 - [日志刷新期间保留键盘焦点](records/2026-11/2026-11-09-log-refresh-pending-focus.md)

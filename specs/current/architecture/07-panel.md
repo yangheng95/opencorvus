@@ -1848,6 +1848,9 @@ derive from the canonical generated SDK operation types.
 Scheduled failures retain one presentation record with a message key and the
 original diagnostic details. Summaries use the current interface language;
 Feedback's existing Details disclosure preserves the complete original error.
+Retrying the scheduled list keeps that diagnostic and its focusable action
+while the read is pending. Recovering the initial list gives focus to its
+search when the retiring Retry action still owns focus.
 The public InvalidAutomationRecurrenceError identity selects the calendar
 correction summary; local calendar construction failures use that same summary
 from their known operation. Other failures identify their actual operation,

@@ -1,0 +1,32 @@
+{
+  "originalFiles": [
+    {
+      "phase": "before",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b125\\project-before",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "original": "Owned scheduled list retry before\n",
+      "gitHead": "e88e5a80036b90780e2b21034a7511f72a1724ac"
+    },
+    {
+      "phase": "after",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b125\\project-after",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "original": "Owned scheduled list retry after\n",
+      "gitHead": "f88c4841246a9710b9adcd83fdd29b557672018f"
+    }
+  ],
+  "portsReleased": [
+    39230,
+    39231,
+    39232,
+    39233
+  ]
+}

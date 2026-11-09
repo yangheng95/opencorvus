@@ -1,0 +1,14 @@
+{"listenPort":39231,"upstreamPort":39230,"pid":28904,"holdMs":11000,"holdReceipts":[2],"cutReceipts":[1,2]}
+{"time":"2026-11-09T14:10:18.709Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T14:10:25.015Z","receipt":1,"stage":"arrival","route":"/global/automations","query":{},"hold":false,"cut":true}
+{"time":"2026-11-09T14:10:25.018Z","receipt":1,"stage":"origin","route":"/global/automations","status":200,"requestID":"976da492-5013-43cc-91c0-ad5e05f6c876"}
+{"time":"2026-11-09T14:10:25.019Z","receipt":1,"stage":"original-complete","bytes":2,"itemCount":0}
+{"time":"2026-11-09T14:10:25.019Z","receipt":1,"stage":"partial-body","bytes":1}
+{"time":"2026-11-09T14:10:29.072Z","receipt":2,"stage":"arrival","route":"/global/automations","query":{},"hold":true,"cut":true}
+{"time":"2026-11-09T14:10:29.074Z","receipt":2,"stage":"origin","route":"/global/automations","status":200,"requestID":"71398a92-2320-48b4-97e4-f9e2dc778218"}
+{"time":"2026-11-09T14:10:29.074Z","receipt":2,"stage":"original-complete","bytes":2,"itemCount":0}
+{"time":"2026-11-09T14:10:40.084Z","receipt":2,"stage":"partial-body","bytes":1}
+{"time":"2026-11-09T14:10:54.584Z","receipt":3,"stage":"arrival","route":"/global/automations","query":{},"hold":false,"cut":false}
+{"time":"2026-11-09T14:10:54.585Z","receipt":3,"stage":"origin","route":"/global/automations","status":200,"requestID":"97e0cdc0-c034-4067-9b3a-c2af7412b462"}
+{"time":"2026-11-09T14:10:54.586Z","receipt":3,"stage":"original-complete","bytes":2,"itemCount":0}
+{"time":"2026-11-09T14:10:54.586Z","receipt":3,"stage":"released","bytes":2}

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时列表重试保持原焦点证据](2026-11-09-scheduled-list-retry-focus/README.md)
 - [收件箱重试期间保留焦点和原诊断证据](2026-11-09-mailbox-retry-focus/README.md)
 - [日志刷新尊重当前阅读位置证据](2026-11-09-log-reading-position-on-refresh/README.md)
 - [日志刷新期间保留键盘焦点证据](2026-11-09-log-refresh-pending-focus/README.md)

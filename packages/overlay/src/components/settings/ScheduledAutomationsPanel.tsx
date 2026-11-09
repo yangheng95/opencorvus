@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
 import { ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { formatErrorDetails } from "../../utils/error-details"
@@ -305,6 +305,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let listReturnFocusElement: HTMLElement | undefined
   let detailReturnFocusElement: HTMLElement | undefined
   let listElement: HTMLElement | undefined
+  let listSearchInput: HTMLInputElement | undefined
   let detailBackButton: HTMLButtonElement | undefined
   let formNameInput: HTMLInputElement | undefined
   let projectListElement: HTMLUListElement | undefined
@@ -313,6 +314,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let projectLoadSequence = 0
   let disposed = false
   let errorFeedbackElement: HTMLDivElement | undefined
+  let errorRetryButton: HTMLButtonElement | undefined
   const selected = createMemo(() => automations().find((automation) => automation.id === selectedID()) ?? null)
   const detailProjectIDs = createMemo(() => {
     const target = selected()?.target
@@ -338,8 +340,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const filtersActive = createMemo(() => Boolean(search().trim()) || filter() !== "all" || scopeFilter() !== "all")
   const initialLoadError = createMemo(() => {
     const problem = error()
-    return automations().length === 0 && !loading() && problem?.source === "list-load" ? problem : null
+    return automations().length === 0 && problem?.source === "list-load" ? problem : null
   })
+  const listRetryPending = () => error()?.source === "list-load" && loading()
   function clearFilters(): void {
     if (busyAction()) return
     setSearch("")
@@ -470,16 +473,23 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     listRequest = request
     if (!options.background) {
       setLoading(true)
-      setError(null)
+      if (error()?.source !== "list-load") setError(null)
     }
     try {
       const items = await listAutomations(request.signal)
       if (request.signal.aborted) return
-      setAutomations(items)
-      if (!options.background) {
+      if (options.background) {
+        setAutomations(items)
+      } else {
+        const hadRetryFocus = Boolean(initialLoadError()) && document.activeElement === errorRetryButton
         const nextID = preferredID && items.some((item) => item.id === preferredID) ? preferredID : ""
-        setSelectedID(nextID)
-        if (!nextID) setRunState({ automationID: "", status: "idle", items: [] })
+        batch(() => {
+          setAutomations(items)
+          setSelectedID(nextID)
+          if (!nextID) setRunState({ automationID: "", status: "idle", items: [] })
+          if (error()?.source === "list-load") setError(null)
+        })
+        if (hadRetryFocus) focusAfterRender(() => document.activeElement === document.body ? listSearchInput : undefined)
       }
     } catch (cause) {
       if (!request.signal.aborted) {
@@ -808,7 +818,6 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   async function initializeHost(): Promise<void> {
-    setError(null)
     const automationLoad = load()
     const [projectResult, providerResult] = await Promise.allSettled([loadProjectChoices(), loadProviderInfo()])
     await automationLoad
@@ -901,7 +910,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
       <SettingsGroup>
         <SettingsSurface class="automations-layout" data-drill-in={showForm() || selected() ? "true" : undefined}>
-          <Show when={!initialLoadError() ? error() : null}>
+          <Show when={error()}>
             {(problem) => (
               <Feedback
                 ref={errorFeedbackElement}
@@ -913,14 +922,19 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                     {(retry) => (
                       <Button
                         type="button"
-                        variant="ghost"
-                        size="mini"
+                        variant={initialLoadError() ? "outline" : "ghost"}
+                        size={initialLoadError() ? "sm" : "mini"}
                         tone="neutral"
-                        disabled={Boolean(busyAction())}
-                        onClick={() => retry()()}
+                        ref={(element) => (errorRetryButton = element)}
+                        disabled={problem().source !== "list-load" && Boolean(busyAction())}
+                        aria-disabled={problem().source === "list-load" && (listRetryPending() || Boolean(busyAction())) || undefined}
+                        aria-busy={listRetryPending() || undefined}
+                        onClick={() => {
+                          if (!busyAction() && !listRetryPending()) retry()()
+                        }}
                       >
                         <Icon name="refresh" />
-                        {t("common.retry")}
+                        {t(listRetryPending() ? "common.retrying" : "common.retry")}
                       </Button>
                     )}
                   </Show>
@@ -930,29 +944,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               </Feedback>
             )}
           </Show>
-          <Show
-            when={!initialLoadError()}
-            fallback={
-              <Feedback
-                tone="error"
-                details={initialLoadError()?.details}
-                actions={
-                  <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => initialLoadError()?.retry?.()}>
-                    <Icon name="refresh" />
-                    {t("common.retry")}
-                  </Button>
-                }
-              >
-                {t(initialLoadError()!.messageKey)}
-              </Feedback>
-            }
-          >
+          <Show when={!initialLoadError()}>
           <aside ref={listElement} class="automations-list" aria-label={t("automations.list")}>
             <SearchField
               clearable
               class="automations-search"
               size="md"
               value={search()}
+              inputRef={(element) => (listSearchInput = element)}
               placeholder={t("automations.search_placeholder")}
               onValueChange={setSearch}
               disabled={Boolean(busyAction())}
