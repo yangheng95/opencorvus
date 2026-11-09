@@ -408,6 +408,20 @@ button.s-row:focus-visible {
   line-height: var(--ui-line-height-normal);
 }
 
+.mission-skill-catalog-issues {
+  display: grid;
+  gap: var(--ui-gap-xs);
+  margin: 0;
+  padding-inline-start: var(--ui-gap-lg);
+  list-style: disc;
+}
+
+.mission-skill-catalog-issues li > span {
+  display: block;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
 .mission-skill-boundary-copy {
   margin: 0;
   color: var(--text-muted);

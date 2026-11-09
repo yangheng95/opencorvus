@@ -28,6 +28,13 @@ type MissionSkillSettingsItem = MissionSkillSettingsResponse["mission_skills"][n
 type MissionSkillSource = MissionSkillSettingsItem["source"]
 type MissionSkillFilter = "all" | MissionSkillSource
 
+const catalogIssueLabels = {
+  invalid_mission_skill: "mission_skill.issue.invalid",
+  duplicate_mission_skill: "mission_skill.issue.duplicate",
+  mission_skill_shadowed: "mission_skill.issue.shadowed",
+  mission_skill_scan_failed: "mission_skill.issue.scan_failed",
+} satisfies Record<MissionSkillSettingsResponse["issues"][number]["kind"], string>
+
 function scopeIdentity(scope: ExpertSquadCatalogScopeState): string {
   if (scope.kind === "session") return `session:${scope.directory}:${scope.sessionID}`
   if (scope.kind === "project") return `project:${scope.directory}`
@@ -76,16 +83,7 @@ export default function MissionSkillPanel() {
 
   const scopedCatalog = createMemo(() => (catalogIdentity() === currentScopeIdentity() ? catalog() : null))
   const skills = createMemo(() => scopedCatalog()?.mission_skills ?? [])
-  const catalogIssues = createMemo(
-    () =>
-      (
-        scopedCatalog() as
-          | (MissionSkillSettingsResponse & {
-              issues?: Array<{ source: string; path: string; name?: string; message: string }>
-            })
-          | null
-      )?.issues ?? [],
-  )
+  const catalogIssues = createMemo(() => scopedCatalog()?.issues ?? [])
   const filteredSkills = createMemo(() => {
     const normalizedQuery = query().trim().toLocaleLowerCase()
     return skills().filter((skill) => {
@@ -294,16 +292,25 @@ export default function MissionSkillPanel() {
           </Feedback>
         )}
       </Show>
-      <For each={catalogIssues()}>
-        {(issue) => (
-          <Feedback tone="error" data-ui="mission-skill-catalog-issue">
-            {t("mission_skill.catalog_issue", {
-              owner: [issue.name, issue.source, issue.path].filter(Boolean).join(" · "),
-              error: issue.message,
-            })}
-          </Feedback>
-        )}
-      </For>
+      <Show when={!detailOpen() && catalogIssues().length > 0}>
+        <Feedback
+          tone="warning"
+          title={t("mission_skill.issues_title")}
+          data-ui="mission-skill-catalog-issues"
+          details={catalogIssues().map((issue) => issue.message).join("\n\n")}
+        >
+          <ul class="mission-skill-catalog-issues">
+            <For each={catalogIssues()}>
+              {(issue) => (
+                <li data-ui="mission-skill-catalog-issue">
+                  {t(catalogIssueLabels[issue.kind])}
+                  <span>{sourceLabel(issue.source)} · <code>{issue.path}</code></span>
+                </li>
+              )}
+            </For>
+          </ul>
+        </Feedback>
+      </Show>
 
       <SettingsGroup
         title={!detailOpen() ? t("mission_skill.catalog_title") : undefined}

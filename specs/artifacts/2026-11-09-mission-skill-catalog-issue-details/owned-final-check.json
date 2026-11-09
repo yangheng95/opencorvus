@@ -1,0 +1,43 @@
+{
+  "before": {
+    "head": "2a6291f0b2e4bcc3d684fb1fff3a726be0c76a91",
+    "originalTrackedFiles": 6,
+    "correctedFixtureFiles": [],
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/opencorvus.jsonc"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "profileConfigFiles": []
+  },
+  "after": {
+    "head": "2a6291f0b2e4bcc3d684fb1fff3a726be0c76a91",
+    "originalTrackedFiles": 6,
+    "correctedFixtureFiles": [
+      ".opencorvus/mission-skills/broken-demo/SKILL.md"
+    ],
+    "status": [
+      " M .opencorvus/mission-skills/broken-demo/SKILL.md",
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/opencorvus.jsonc"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "profileConfigFiles": []
+  }
+}

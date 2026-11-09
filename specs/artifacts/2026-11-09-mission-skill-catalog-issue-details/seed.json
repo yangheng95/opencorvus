@@ -1,0 +1,26 @@
+{
+  "before": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before",
+    "head": "2a6291f0b2e4bcc3d684fb1fff3a726be0c76a91",
+    "files": {
+      "notes.txt": "Catalog issue presentation fixture; original file.\n",
+      ".opencorvus/mission-skills/inspection-demo/SKILL.md": "---\nname: inspection-demo\ndescription: Inspect the test project catalog by name.\n---\n# Catalog inspection fixture\n\nA local file for observing the settings catalog.\n",
+      ".opencorvus/mission-skills/broken-demo/SKILL.md": "---\ndescription: A deliberately incomplete local skill definition.\n---\n# Broken fixture\n",
+      ".opencorvus/mission-skills/shadow-general/SKILL.md": "---\nname: general\ndescription: A local conflicting identity for diagnostics.\n---\n# Shadow fixture\n",
+      ".opencorvus/mission-skills/duplicate-one/SKILL.md": "---\nname: duplicate-review\ndescription: First definition for diagnostics.\n---\n# Duplicate fixture A\n",
+      ".opencorvus/mission-skills/duplicate-two/SKILL.md": "---\nname: duplicate-review\ndescription: Second definition for diagnostics.\n---\n# Duplicate fixture B\n"
+    }
+  },
+  "after": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-after",
+    "head": "2a6291f0b2e4bcc3d684fb1fff3a726be0c76a91",
+    "files": {
+      "notes.txt": "Catalog issue presentation fixture; original file.\n",
+      ".opencorvus/mission-skills/inspection-demo/SKILL.md": "---\nname: inspection-demo\ndescription: Inspect the test project catalog by name.\n---\n# Catalog inspection fixture\n\nA local file for observing the settings catalog.\n",
+      ".opencorvus/mission-skills/broken-demo/SKILL.md": "---\ndescription: A deliberately incomplete local skill definition.\n---\n# Broken fixture\n",
+      ".opencorvus/mission-skills/shadow-general/SKILL.md": "---\nname: general\ndescription: A local conflicting identity for diagnostics.\n---\n# Shadow fixture\n",
+      ".opencorvus/mission-skills/duplicate-one/SKILL.md": "---\nname: duplicate-review\ndescription: First definition for diagnostics.\n---\n# Duplicate fixture A\n",
+      ".opencorvus/mission-skills/duplicate-two/SKILL.md": "---\nname: duplicate-review\ndescription: Second definition for diagnostics.\n---\n# Duplicate fixture B\n"
+    }
+  }
+}

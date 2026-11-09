@@ -1,0 +1,90 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/mission-skill/settings",
+      "operationId": "missionSkill.settings",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "operationId": "missionSkill.catalog",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hyos1u0gyU97iLD5eGmK",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before"
+  },
+  "settings": {
+    "roots": {
+      "global": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\profile-before\\config\\mission-skills",
+      "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills"
+    },
+    "mission_skills": [
+      {
+        "name": "general",
+        "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+        "required_tools": [
+          "panel_expert_squad_inspect",
+          "panel_multica_catalog",
+          "panel_create_task",
+          "panel_query_task",
+          "panel_query_task_artifacts",
+          "panel_read_task_artifact",
+          "panel_read_task_message",
+          "panel_read_task_dispatch_evidence",
+          "panel_complete_mission",
+          "panel_block_mission",
+          "panel_resume_task",
+          "panel_extend_task_acceptance",
+          "panel_cancel_task",
+          "panel_respond_interaction"
+        ],
+        "source": "built_in",
+        "location": null
+      },
+      {
+        "name": "inspection-demo",
+        "description": "Inspect the test project catalog by name.",
+        "required_tools": [],
+        "source": "project",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\inspection-demo\\SKILL.md"
+      }
+    ],
+    "issues": [
+      {
+        "kind": "invalid_mission_skill",
+        "source": "project",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\broken-demo\\SKILL.md",
+        "message": "Mission Skill at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\broken-demo\\SKILL.md was ignored: SkillInvalidError: [\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"name\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+      },
+      {
+        "kind": "duplicate_mission_skill",
+        "source": "project",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\duplicate-two\\SKILL.md",
+        "message": "Mission Skill name \"duplicate-review\" is duplicated by C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\duplicate-one\\SKILL.md and C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\duplicate-two\\SKILL.md. Every external definition was ignored."
+      },
+      {
+        "kind": "mission_skill_shadowed",
+        "source": "project",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\shadow-general\\SKILL.md",
+        "message": "Mission Skill \"general\" at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b63\\project-before\\.opencorvus\\mission-skills\\shadow-general\\SKILL.md was ignored because built-in Mission Skill mission-builtin:general is authoritative."
+      }
+    ]
+  }
+}
