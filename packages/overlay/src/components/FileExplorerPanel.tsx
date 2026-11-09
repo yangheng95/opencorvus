@@ -65,6 +65,7 @@ const SEARCH_LIMIT = 80
 const INITIAL_DIRECTORY_LOAD_DELAY_MS = 250
 const ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS = 15_000
 const EXPLORER_SELECTION_MIME = "application/x-opencorvus-explorer-selection"
+const EXPLORER_SELECTION_KEY_SHORTCUTS = "Control+Space Shift+Space"
 
 type ExplorerRow =
   | {
@@ -2100,6 +2101,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             data-dragging={isSearchRowDragging() ? "true" : undefined}
             data-drop-target={isSearchRowDropTarget() ? dropStatus() : undefined}
             aria-current={isSearchRowCurrent() ? "true" : undefined}
+            aria-label={isSearchRowSelected() ? t("explorer.selected_path_hint", { path: row().path }) : undefined}
+            aria-keyshortcuts={EXPLORER_SELECTION_KEY_SHORTCUTS}
             draggable={!commandBusy()}
             style={{ "--file-explorer-row-depth": String(row().depth) }}
             title={row().path}
@@ -2168,6 +2171,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           data-ignored={node().ignored ? "true" : "false"}
           aria-current={isNodeCurrent() ? "true" : undefined}
           aria-expanded={isDirectory() ? row().expanded : undefined}
+          aria-label={isNodeSelected() ? t("explorer.selected_path_hint", { path: node().path }) : undefined}
+          aria-keyshortcuts={EXPLORER_SELECTION_KEY_SHORTCUTS}
           draggable={!commandBusy()}
           style={{ "--file-explorer-row-depth": String(row().depth) }}
           title={node().path}
@@ -2438,7 +2443,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         {renderBackgroundContextMenu()}
       </ContextMenu.Root>
       <Show when={directory()}>
-        <p class="file-explorer-keyboard-hint">{t(deferredQuery() ? "explorer.search_keyboard_hint" : "explorer.keyboard_hint")}</p>
+        <p class="file-explorer-keyboard-hint">
+          {t(deferredQuery() ? "explorer.search_keyboard_hint" : "explorer.keyboard_hint")}
+          <br />
+          {t("explorer.selection_keyboard_hint")}
+        </p>
       </Show>
     </section>
   )

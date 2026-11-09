@@ -1620,6 +1620,11 @@ the selection and anchor for matching paths, retains the query, and returns
 focus to the search input. Pending or failed searches cannot establish this
 partition.
 
+Explorer file rows disclose Ctrl+Space selection toggling and Shift+Space range
+selection in the current interface language. The accessible name of a selected
+row keeps its path and reports its selection separately from the current editor
+marker. Selection uses the same row and range actions as pointer input.
+
 Before the first successful root directory listing, an active scoped Explorer
 shows pending loading, including the initial request scheduling interval. Empty
 state is derived from a successful empty list; a failed root list retains its

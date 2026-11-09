@@ -1,0 +1,46 @@
+{
+  "phase": "delivery",
+  "step": "selected",
+  "listing": {
+    "dest": {
+      "requestID": "9e48712c-c706-4f13-9bd9-7086d806f0c0",
+      "names": [
+        "anchor.txt",
+        "row-alpha.txt",
+        "row-beta.txt"
+      ]
+    }
+  },
+  "files": {
+    "row-alpha.txt": {
+      "requestID": "13a3dd73-d300-4617-9642-d9f33d80642e",
+      "length": 35,
+      "content": "Alpha keyboard selection fixture.\r\n"
+    },
+    "row-beta.txt": {
+      "requestID": "0c922312-6687-4335-870a-14b035f91a13",
+      "length": 49,
+      "content": "Beta keyboard selection fixture.\n中文原文。\n"
+    },
+    "row-gamma.txt": {
+      "requestID": "67afddd2-1779-42f2-b27f-8d7bbf84034b",
+      "length": 34,
+      "content": "Gamma keyboard selection fixture.\n"
+    },
+    "dest/anchor.txt": {
+      "requestID": "c3b9e3d5-d882-4b82-aac3-28b815c24bd9",
+      "length": 26,
+      "content": "Owned destination anchor.\n"
+    },
+    "dest/row-alpha.txt": {
+      "requestID": "637f9552-2c41-4bc7-a0ed-2ee4c751e79c",
+      "length": 35,
+      "content": "Alpha keyboard selection fixture.\r\n"
+    },
+    "dest/row-beta.txt": {
+      "requestID": "48a4dcbb-50e2-430d-87c5-9719eeb7cd86",
+      "length": 49,
+      "content": "Beta keyboard selection fixture.\n中文原文。\n"
+    }
+  }
+}

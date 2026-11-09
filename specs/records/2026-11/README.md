@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件多选键盘操作提示](2026-11-09-file-selection-keyboard-discovery.md)
 - [文件搜索结果外选区](2026-11-09-file-search-outside-selection.md)
 - [批量移动后的键盘续接](2026-11-09-file-multi-move-keyboard-continuity.md)
 - [批量复制后的键盘续接](2026-11-09-file-multi-copy-keyboard-continuity.md)

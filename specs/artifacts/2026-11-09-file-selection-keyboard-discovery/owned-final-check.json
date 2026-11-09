@@ -1,0 +1,76 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b84\\project-before",
+    "head": "83d5dfd997811940ddc18f973b8d3de946fdc899",
+    "trackedOriginals": [
+      "row-alpha.txt",
+      "row-beta.txt",
+      "row-gamma.txt",
+      "dest/anchor.txt"
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "copyWrites": []
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b84\\project-after",
+    "head": "83d5dfd997811940ddc18f973b8d3de946fdc899",
+    "trackedOriginals": [
+      "row-alpha.txt",
+      "row-beta.txt",
+      "row-gamma.txt",
+      "dest/anchor.txt"
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "copyWrites": []
+  },
+  "delivery": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b84\\project-delivery",
+    "head": "e3b3ea0513d4858703ab7a2044f585f1976c2b9a",
+    "trackedOriginals": [
+      "row-alpha.txt",
+      "row-beta.txt",
+      "row-gamma.txt",
+      "dest/anchor.txt"
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "copyWrites": [
+      {
+        "requestID": "5dd593ca-360e-4cee-be08-3e962fef69a7",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 93
+      },
+      {
+        "requestID": "68f0d83f-8a09-4660-922d-745037d47703",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 71
+      }
+    ]
+  }
+}
