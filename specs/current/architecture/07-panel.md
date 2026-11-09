@@ -326,10 +326,11 @@ Original-download errors remain within the attachment's Feedback rather than
 replacing the owning message card. OriginalFileDownload checks the current
 resource error before reading its value. Its explicit retry and the text reader's
 preview retry for read failures each refetch their existing source and captured
-authority, using the same shared Blob cache. While a preview retry is pending,
-its localized action and complete read diagnostic remain visible; the action
-retains keyboard focus and guards repeated activation. Accepted text receives
-focus when the originating retry still owns it. Restoring the original bytes
+authority, using the same shared Blob cache. Pending retries retain their
+localized action, full read diagnostic and current keyboard focus, and guard
+repeated activation. Accepted text or the restored original download link
+receives focus when its originating retry still owns it. Restoring a download
+link leaves download activation to the user. Restoring the original bytes
 requires neither a new attachment identity nor a page reload.
 Short documents use their natural reading height; the editor's internal
 scroller bounds longer documents to the viewport. Other

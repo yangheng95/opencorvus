@@ -1,0 +1,14 @@
+{"listenPort":39252,"upstreamPort":39251,"pid":21784}
+{"time":"2026-11-09T15:18:07.606Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T15:18:27.500Z","receipt":1,"stage":"arrival","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","delay":0}
+{"time":"2026-11-09T15:18:27.505Z","receipt":1,"stage":"origin","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","status":404,"requestID":"8c273e77-0453-4977-a937-225f847659c6"}
+{"time":"2026-11-09T15:18:32.424Z","receipt":2,"stage":"arrival","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","delay":0}
+{"time":"2026-11-09T15:18:32.427Z","receipt":2,"stage":"origin","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","status":404,"requestID":"2c58819d-f5c0-4630-801f-84b5dac3fdf7"}
+{"time":"2026-11-09T15:18:43.519Z","receipt":3,"stage":"arrival","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","delay":11000}
+{"time":"2026-11-09T15:18:43.526Z","receipt":3,"stage":"origin","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","status":200,"requestID":"d06dbb2f-77f5-4657-b05e-47aa98e29c5d"}
+{"time":"2026-11-09T15:18:54.533Z","receipt":3,"stage":"released","bytes":61}
+{"time":"2026-11-09T15:19:18.471Z","receipt":4,"stage":"arrival","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/fc00b182161f5ca584168f51f1ee0c7ffdacc41b7faa23b4d933de175a028dad.txt","delay":0}
+{"time":"2026-11-09T15:19:18.474Z","receipt":4,"stage":"origin","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/fc00b182161f5ca584168f51f1ee0c7ffdacc41b7faa23b4d933de175a028dad.txt","status":404,"requestID":"6384bc3b-5823-45cc-9c3d-3ba09b143818"}
+{"time":"2026-11-09T15:19:27.722Z","receipt":5,"stage":"arrival","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/fc00b182161f5ca584168f51f1ee0c7ffdacc41b7faa23b4d933de175a028dad.txt","delay":12000}
+{"time":"2026-11-09T15:19:27.728Z","receipt":5,"stage":"origin","path":"/attachment/prj_hsYzmvyrYF2ncIDjjQA8/fc00b182161f5ca584168f51f1ee0c7ffdacc41b7faa23b4d933de175a028dad.txt","status":200,"requestID":"f466c476-794d-460e-b6cb-955d2078a74b"}
+{"time":"2026-11-09T15:19:39.731Z","receipt":5,"stage":"released","bytes":63}

@@ -1,0 +1,7 @@
+{"listenPort":39253,"upstreamPort":39250,"pid":28700}
+{"time":"2026-11-09T15:14:31.526Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T15:14:54.237Z","receipt":1,"stage":"arrival","path":"/attachment/prj_hjSyFmNJNIHR38XJVNUn/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","delay":0}
+{"time":"2026-11-09T15:14:54.240Z","receipt":1,"stage":"origin","path":"/attachment/prj_hjSyFmNJNIHR38XJVNUn/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","status":404,"requestID":"5122c729-d09c-429b-8a85-9890f3456b95"}
+{"time":"2026-11-09T15:15:03.888Z","receipt":2,"stage":"arrival","path":"/attachment/prj_hjSyFmNJNIHR38XJVNUn/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","delay":11000}
+{"time":"2026-11-09T15:15:03.895Z","receipt":2,"stage":"origin","path":"/attachment/prj_hjSyFmNJNIHR38XJVNUn/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt","status":200,"requestID":"5015888c-f6e8-4142-83f1-a771277806f1"}
+{"time":"2026-11-09T15:15:14.912Z","receipt":2,"stage":"released","bytes":61}

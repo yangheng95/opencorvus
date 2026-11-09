@@ -1,0 +1,43 @@
+{
+  "before": {
+    "originalNoteBytes": 42,
+    "head": "ea628c6b3b0015983ed0bd88f2669ba9cf55ca91",
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "attachments": [
+      "owned-readable-text.txt"
+    ]
+  },
+  "after": {
+    "originalNoteBytes": 41,
+    "head": "d86e9b4f95e3298ac0edf87aee15225cf36e7893",
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "attachments": [
+      "owned-readable-text.txt",
+      "owned-second-text.txt"
+    ]
+  }
+}

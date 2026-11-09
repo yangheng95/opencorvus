@@ -1,0 +1,32 @@
+{
+  "phase": "after",
+  "project": "prj_hsYzmvyrYF2ncIDjjQA8",
+  "checks": [
+    {
+      "status": 200,
+      "operationId": "project.current",
+      "requestID": "468067d6-23c5-4049-bcb1-6246760ed9a0"
+    },
+    {
+      "status": 200,
+      "operationId": "project.list",
+      "requestID": "4a145248-750d-4de0-9d67-7ea197c540e4"
+    }
+  ],
+  "files": [
+    {
+      "name": "owned-readable-text.txt",
+      "url": "/attachment/prj_hsYzmvyrYF2ncIDjjQA8/b9761399d1fbba7531f9284758a6d67f44febfe3cd556622c10f36aa134f9fb6.txt",
+      "bytes": 61,
+      "status": 200,
+      "requestID": "9b07fc53-ab6a-4cde-a730-07ab5c8ec970"
+    },
+    {
+      "name": "owned-second-text.txt",
+      "url": "/attachment/prj_hsYzmvyrYF2ncIDjjQA8/fc00b182161f5ca584168f51f1ee0c7ffdacc41b7faa23b4d933de175a028dad.txt",
+      "bytes": 63,
+      "status": 200,
+      "requestID": "bea8eac7-9a84-4651-975d-a2412386e388"
+    }
+  ]
+}
