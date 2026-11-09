@@ -5565,6 +5565,10 @@ uses the public pinned/updated/kind:id order, independently of directory-scoped
 UI row identity. Each page retains the existing request generation and authority;
 the refreshed window and continuation cursor commit together. Ordinary initial
 and continuation reads still fetch one page.
+If that refresh fails, its own Retry keeps the accepted rows, current search,
+and the committed action receipt. It reads through the last surviving row or
+exhaustion without repeating the write. Successful retry moves focus from its
+own button to the section heading only if the button still owns focus.
 Row-action settlement can move focus only while it remains on the original
 control or has returned to the document body after the control was disabled or
 removed. If another control has focus, the action leaves it there. A successful

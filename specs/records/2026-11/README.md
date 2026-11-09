@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [已恢复工作后的归档刷新可重试](2026-11-09-archive-committed-refresh-retry.md)
 - [目录检查等待时可撤回切换](2026-11-09-workspace-directory-check-cancel.md)
 - [侧栏项目摘要显示完整项目名](2026-11-09-project-summary-display-name.md)
 - [目录检查说明正在检查](2026-11-09-workspace-directory-check-progress.md)

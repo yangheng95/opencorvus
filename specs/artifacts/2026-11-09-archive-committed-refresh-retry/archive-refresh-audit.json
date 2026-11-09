@@ -1,0 +1,450 @@
+{
+  "after": {
+    "browserRequestIDs": [
+      "25e213f8-e664-4f34-ad44-83cbc7cd4eb8",
+      "6e7b7fb1-bfdf-413a-a6ed-9cb5381adf16",
+      "45d1af38-0c4a-4823-b781-9f003e968029",
+      "f1485a1e-80bf-4fbc-b0ef-4d2c30cdb64c",
+      "ecb4221b-5a09-450f-8e91-7b490ad28bb4",
+      "4c28c3ae-c728-4bc5-8a66-f264e05791dc"
+    ],
+    "mutation": {
+      "requestID": "45d1af38-0c4a-4823-b781-9f003e968029",
+      "method": "PATCH",
+      "path": "/coding/chat/session/ses_-zUPWNDtnzzkmQjmjGR4/archive",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 59,
+      "time": "2026-11-09T12:09:46.236Z"
+    },
+    "cut": [
+      {
+        "time": "2026-11-09T12:09:46.241Z",
+        "receipt": 5,
+        "stage": "arrival",
+        "route": "/work-ledger/archive",
+        "method": "GET",
+        "query": {
+          "search": "Refresh review",
+          "limit": "100"
+        },
+        "cut": true
+      },
+      {
+        "time": "2026-11-09T12:09:46.275Z",
+        "receipt": 5,
+        "stage": "origin",
+        "route": "/work-ledger/archive",
+        "status": 200,
+        "requestID": "f1485a1e-80bf-4fbc-b0ef-4d2c30cdb64c"
+      },
+      {
+        "time": "2026-11-09T12:09:46.276Z",
+        "receipt": 5,
+        "stage": "partial-body",
+        "route": "/work-ledger/archive",
+        "bytes": 32
+      }
+    ],
+    "readsAfterCut": [
+      [
+        {
+          "time": "2026-11-09T12:10:09.082Z",
+          "receipt": 6,
+          "stage": "arrival",
+          "route": "/work-ledger/archive",
+          "method": "GET",
+          "query": {
+            "search": "Refresh review",
+            "limit": "100"
+          },
+          "cut": false
+        },
+        {
+          "time": "2026-11-09T12:10:09.122Z",
+          "receipt": 6,
+          "stage": "archive-page",
+          "count": 100,
+          "first": "Refresh review 102",
+          "last": "Refresh review 003",
+          "nextCursor": {
+            "pinned": false,
+            "updated": 1794225840206,
+            "rowKey": "chat:ses_-zUPWNDtBzzI0SvX18jk"
+          }
+        }
+      ],
+      [
+        {
+          "time": "2026-11-09T12:10:09.128Z",
+          "receipt": 7,
+          "stage": "arrival",
+          "route": "/work-ledger/archive",
+          "method": "GET",
+          "query": {
+            "search": "Refresh review",
+            "limit": "100",
+            "cursorPinned": "false",
+            "cursorUpdated": "1794225840206",
+            "cursorRowKey": "chat:ses_-zUPWNDtBzzI0SvX18jk"
+          },
+          "cut": false
+        },
+        {
+          "time": "2026-11-09T12:10:09.132Z",
+          "receipt": 7,
+          "stage": "archive-page",
+          "count": 1,
+          "first": "Refresh review 002",
+          "last": "Refresh review 002",
+          "nextCursor": null
+        }
+      ]
+    ],
+    "liveCheckerRequestIDs": [
+      "2780cc30-8e41-41e8-8c14-ca0e8bc5b62e",
+      "1b22237c-1cd9-4964-b5e7-d325d3f10094",
+      "94fe9546-a387-4090-b8c4-260f43e19a86",
+      "2192dc97-9cf8-4484-915b-206d1d835276",
+      "c473a440-019c-4d1c-ace9-ac29434b6908",
+      "6064e8be-ce4e-4bb9-b043-f967f9153cbb",
+      "64c07f2d-1a6b-478c-9feb-307022330ce6"
+    ],
+    "originalSessions": 102,
+    "restored": {
+      "id": "ses_-zUPWNDtnzzkmQjmjGR4",
+      "title": "Refresh review 001",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-after",
+      "projectID": "prj_hBfH1oJyQKfveBKE9SNx",
+      "created": 1794225840160,
+      "archived": 1794225840175
+    },
+    "counts": {
+      "project": 1,
+      "session": 102,
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0
+    },
+    "file": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-after",
+      "head": "e2fb21ba59e9dfada9498971ed8ace922492683f"
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b114-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39182",
+      "pid": 29580
+    },
+    "shutdown": {
+      "status": 200,
+      "port": 39182,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTeaIX00vpy6Amrb2"
+      },
+      "pid": 29580
+    },
+    "proxy": {
+      "listenPort": 39183,
+      "upstreamPort": 39182,
+      "pid": 6244,
+      "restoreID": "ses_-zUPWNDtnzzkmQjmjGR4"
+    },
+    "proxyShutdown": {
+      "status": 200,
+      "pid": 6244,
+      "body": "stopping",
+      "port": 39183
+    }
+  },
+  "before": {
+    "browserRequestIDs": [
+      "5f24a081-b330-4806-936a-6fda700b0c7c",
+      "15fba925-fe16-4993-be25-65b23f3f71ed",
+      "e66e86a2-5e6b-49b3-bca2-639666d3faaf",
+      "e65c785f-aec1-4378-929c-5f68f608f600",
+      "14c5457f-c3f4-4bc7-ac82-35718335e3c7"
+    ],
+    "mutation": {
+      "requestID": "e66e86a2-5e6b-49b3-bca2-639666d3faaf",
+      "method": "PATCH",
+      "path": "/coding/chat/session/ses_-zUPWNDtuzzNRfvUUY1x/archive",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 62,
+      "time": "2026-11-09T12:05:11.723Z"
+    },
+    "cut": [
+      {
+        "time": "2026-11-09T12:05:11.728Z",
+        "receipt": 5,
+        "stage": "arrival",
+        "route": "/work-ledger/archive",
+        "method": "GET",
+        "query": {
+          "search": "Refresh review",
+          "limit": "100"
+        },
+        "cut": true
+      },
+      {
+        "time": "2026-11-09T12:05:11.760Z",
+        "receipt": 5,
+        "stage": "origin",
+        "route": "/work-ledger/archive",
+        "status": 200,
+        "requestID": "e65c785f-aec1-4378-929c-5f68f608f600"
+      },
+      {
+        "time": "2026-11-09T12:05:11.760Z",
+        "receipt": 5,
+        "stage": "partial-body",
+        "route": "/work-ledger/archive",
+        "bytes": 32
+      }
+    ],
+    "readsAfterCut": [
+      [
+        {
+          "time": "2026-11-09T12:05:30.581Z",
+          "receipt": 6,
+          "stage": "arrival",
+          "route": "/work-ledger/archive",
+          "method": "GET",
+          "query": {
+            "search": "Refresh revie",
+            "limit": "100"
+          },
+          "cut": false
+        },
+        {
+          "time": "2026-11-09T12:05:30.615Z",
+          "receipt": 6,
+          "stage": "archive-page",
+          "count": 100,
+          "first": "Refresh review 102",
+          "last": "Refresh review 003",
+          "nextCursor": {
+            "pinned": false,
+            "updated": 1794225840197,
+            "rowKey": "chat:ses_-zUPWNDtIzz0eohNRJuW"
+          }
+        }
+      ]
+    ],
+    "liveCheckerRequestIDs": [],
+    "originalSessions": 102,
+    "restored": {
+      "id": "ses_-zUPWNDtuzzNRfvUUY1x",
+      "title": "Refresh review 001",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-before",
+      "projectID": "prj_h06dTUd2XewQVsscD9i0",
+      "created": 1794225840153,
+      "archived": 1794225840167
+    },
+    "counts": {
+      "project": 1,
+      "session": 102,
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0
+    },
+    "file": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-before",
+      "head": "87c9cf21174227fef7ad2eeeee02d925733db90a"
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b114-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39180",
+      "pid": 23388
+    },
+    "shutdown": {
+      "pid": 23388,
+      "port": 39180,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTdIS000Kil9t776u"
+      }
+    },
+    "proxy": {
+      "listenPort": 39181,
+      "upstreamPort": 39180,
+      "pid": 27368,
+      "restoreID": "ses_-zUPWNDtuzzNRfvUUY1x"
+    },
+    "proxyShutdown": {
+      "body": "stopping",
+      "pid": 27368,
+      "status": 200,
+      "port": 39181
+    }
+  },
+  "final": {
+    "browserRequestIDs": [
+      "1eb5abd3-03a1-43f3-a0e3-964b88b5c6c4",
+      "03e8d1fd-c49e-4d71-a188-fea56dd8215d",
+      "b88eab4d-a902-4e05-b15c-01e69217a9d3",
+      "d7676444-a37b-4324-83ec-bcd1389b76d8",
+      "c2f2353a-9807-4107-bf11-2b6eebc7177b",
+      "295f6ea7-1eb1-41c6-baa3-eb5243480af8"
+    ],
+    "mutation": {
+      "requestID": "b88eab4d-a902-4e05-b15c-01e69217a9d3",
+      "method": "PATCH",
+      "path": "/coding/chat/session/ses_-zUPWLBQAzzM9UDe9G57/archive",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 63,
+      "time": "2026-11-09T12:13:40.565Z"
+    },
+    "cut": [
+      {
+        "time": "2026-11-09T12:13:40.569Z",
+        "receipt": 5,
+        "stage": "arrival",
+        "route": "/work-ledger/archive",
+        "method": "GET",
+        "query": {
+          "search": "Refresh review",
+          "limit": "100"
+        },
+        "cut": true
+      },
+      {
+        "time": "2026-11-09T12:13:40.603Z",
+        "receipt": 5,
+        "stage": "origin",
+        "route": "/work-ledger/archive",
+        "status": 200,
+        "requestID": "d7676444-a37b-4324-83ec-bcd1389b76d8"
+      },
+      {
+        "time": "2026-11-09T12:13:40.603Z",
+        "receipt": 5,
+        "stage": "partial-body",
+        "route": "/work-ledger/archive",
+        "bytes": 32
+      }
+    ],
+    "readsAfterCut": [
+      [
+        {
+          "time": "2026-11-09T12:13:52.399Z",
+          "receipt": 6,
+          "stage": "arrival",
+          "route": "/work-ledger/archive",
+          "method": "GET",
+          "query": {
+            "search": "Refresh review",
+            "limit": "100"
+          },
+          "cut": false
+        },
+        {
+          "time": "2026-11-09T12:13:52.434Z",
+          "receipt": 6,
+          "stage": "archive-page",
+          "count": 100,
+          "first": "Refresh review 102",
+          "last": "Refresh review 003",
+          "nextCursor": {
+            "pinned": false,
+            "updated": 1794226326419,
+            "rowKey": "chat:ses_-zUPWLBP3zzJ1HUMUMrF"
+          }
+        }
+      ],
+      [
+        {
+          "time": "2026-11-09T12:13:52.446Z",
+          "receipt": 7,
+          "stage": "arrival",
+          "route": "/work-ledger/archive",
+          "method": "GET",
+          "query": {
+            "search": "Refresh review",
+            "limit": "100",
+            "cursorPinned": "false",
+            "cursorUpdated": "1794226326419",
+            "cursorRowKey": "chat:ses_-zUPWLBP3zzJ1HUMUMrF"
+          },
+          "cut": false
+        },
+        {
+          "time": "2026-11-09T12:13:52.450Z",
+          "receipt": 7,
+          "stage": "archive-page",
+          "count": 1,
+          "first": "Refresh review 002",
+          "last": "Refresh review 002",
+          "nextCursor": null
+        }
+      ]
+    ],
+    "liveCheckerRequestIDs": [
+      "175a3879-2d56-466b-ac62-4f05445a9b34",
+      "3096ec88-e10b-4ff0-8eeb-999879b2a236",
+      "25cfb3bd-bffb-4835-8637-3272b559fd13",
+      "cd6e32ff-5aab-453a-9a13-5fbaaa2a597a",
+      "b0f2047f-fb7e-4231-b1b0-2d93bdc80537",
+      "5bd7a97e-5b51-4557-95a4-450098ccc36c",
+      "2e4bf671-1719-4d03-9d20-678849ede92e"
+    ],
+    "originalSessions": 102,
+    "restored": {
+      "id": "ses_-zUPWLBQAzzM9UDe9G57",
+      "title": "Refresh review 001",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final",
+      "projectID": "prj_hrmGUDOTrlPlZTSBCe8R",
+      "created": 1794226326342,
+      "archived": 1794226326369
+    },
+    "counts": {
+      "project": 1,
+      "session": 102,
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0
+    },
+    "file": {
+      "head": "cad694e836a29211eae0e69a1ae95381e1e6bc12",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final"
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b114-final",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39184",
+      "pid": 29828
+    },
+    "shutdown": {
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTfMlx00xWgGPuBtk"
+      },
+      "pid": 29828,
+      "status": 200,
+      "port": 39184
+    },
+    "proxy": {
+      "listenPort": 39185,
+      "upstreamPort": 39184,
+      "pid": 416,
+      "restoreID": "ses_-zUPWLBQAzzM9UDe9G57"
+    },
+    "proxyShutdown": {
+      "status": 200,
+      "port": 39185,
+      "pid": 416,
+      "body": "stopping"
+    }
+  }
+}

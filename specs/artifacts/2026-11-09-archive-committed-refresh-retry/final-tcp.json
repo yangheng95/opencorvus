@@ -1,0 +1,130 @@
+{
+  "phase": "final",
+  "total": 101,
+  "restoredTitles": [
+    "Refresh review 001"
+  ],
+  "checks": [
+    {
+      "operationId": "workLedger.listArchived",
+      "route": "/work-ledger/archive",
+      "status": 200,
+      "requestID": "175a3879-2d56-466b-ac62-4f05445a9b34",
+      "schemaValid": true,
+      "params": {
+        "limit": 100
+      },
+      "rows": 100,
+      "first": "Refresh review 102",
+      "last": "Refresh review 003",
+      "cursor": {
+        "pinned": false,
+        "updated": 1794226326419,
+        "rowKey": "chat:ses_-zUPWLBP3zzJ1HUMUMrF"
+      }
+    },
+    {
+      "operationId": "workLedger.listArchived",
+      "route": "/work-ledger/archive",
+      "status": 200,
+      "requestID": "3096ec88-e10b-4ff0-8eeb-999879b2a236",
+      "schemaValid": true,
+      "params": {
+        "limit": 100,
+        "cursorPinned": false,
+        "cursorUpdated": 1794226326419,
+        "cursorRowKey": "chat:ses_-zUPWLBP3zzJ1HUMUMrF"
+      },
+      "rows": 1,
+      "first": "Refresh review 002",
+      "last": "Refresh review 002",
+      "cursor": null
+    },
+    {
+      "operationId": "workLedger.listArchived",
+      "route": "/work-ledger/archive",
+      "status": 200,
+      "requestID": "25cfb3bd-bffb-4835-8637-3272b559fd13",
+      "schemaValid": true,
+      "params": {
+        "search": "Refresh review 002"
+      },
+      "records": [
+        {
+          "id": "ses_-zUPWLBPGzzzma0K2z9b",
+          "title": "Refresh review 002",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final",
+          "archived": 1794226326407
+        }
+      ]
+    },
+    {
+      "operationId": "workLedger.listArchived",
+      "route": "/work-ledger/archive",
+      "status": 200,
+      "requestID": "cd6e32ff-5aab-453a-9a13-5fbaaa2a597a",
+      "schemaValid": true,
+      "params": {
+        "search": "Refresh review 001"
+      },
+      "result": {
+        "rows": 0,
+        "cursor": null
+      }
+    },
+    {
+      "operationId": "workLedger.list",
+      "route": "/work-ledger",
+      "status": 200,
+      "requestID": "b0f2047f-fb7e-4231-b1b0-2d93bdc80537",
+      "schemaValid": true,
+      "params": {
+        "search": "Refresh review"
+      },
+      "records": [
+        {
+          "id": "ses_-zUPWLBQAzzM9UDe9G57",
+          "title": "Refresh review 001",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final",
+          "archived": null
+        }
+      ]
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "route": "/coding/chat/session/ses_-zUPWLBQAzzM9UDe9G57",
+      "status": 200,
+      "requestID": "5bd7a97e-5b51-4557-95a4-450098ccc36c",
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final"
+      },
+      "record": {
+        "id": "ses_-zUPWLBQAzzM9UDe9G57",
+        "title": "Refresh review 001",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final",
+        "projectID": "prj_hrmGUDOTrlPlZTSBCe8R",
+        "created": 1794226326342,
+        "archived": null
+      }
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "route": "/coding/chat/session/ses_-zUPWLBPGzzzma0K2z9b",
+      "status": 200,
+      "requestID": "2e4bf671-1719-4d03-9d20-678849ede92e",
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final"
+      },
+      "record": {
+        "id": "ses_-zUPWLBPGzzzma0K2z9b",
+        "title": "Refresh review 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b114\\project-final",
+        "projectID": "prj_hrmGUDOTrlPlZTSBCe8R",
+        "created": 1794226326397,
+        "archived": 1794226326407
+      }
+    }
+  ]
+}

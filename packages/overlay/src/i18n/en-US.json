@@ -677,6 +677,7 @@
   "archive.delete_succeeded": "Permanently deleted",
   "archive.delete_failed": "Permanent delete failed",
   "archive.load_failed": "Archive could not be loaded",
+  "archive.refresh_failed": "Couldn’t refresh the archive. Retry to check for current results.",
   "network.title": "Network",
   "network.proxy.title": "Proxy",
   "network.proxy.project_scope": "Proxy changes are saved to project: {{project}}",

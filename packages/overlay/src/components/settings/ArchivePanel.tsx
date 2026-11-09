@@ -26,14 +26,17 @@ import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from
 const ARCHIVE_PAGE_SIZE = 100
 const DELETE_CONFIRM_WINDOW_MS = 3_000
 
+type ArchiveRead = "initial" | "append" | "refresh"
+
 type ArchiveFailure = {
-  operation: "initial" | "append" | "refresh" | "restore" | "delete"
+  operation: ArchiveRead | "restore" | "delete"
   cause: unknown
 }
 
 function archiveFailureSummary(operation: ArchiveFailure["operation"]): string {
   if (operation === "restore") return t("archive.restore_failed")
   if (operation === "delete") return t("archive.delete_failed")
+  if (operation === "refresh") return t("archive.refresh_failed")
   return t("archive.load_failed")
 }
 
@@ -180,23 +183,28 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     })
   }
 
-  const load = async (append: boolean) => {
+  const load = async (operation: ArchiveRead, retryTrigger?: HTMLButtonElement) => {
     if (loading() || busyID()) return
+    const append = operation === "append"
+    const refresh = operation === "refresh"
     const cursor = append ? nextCursor() : null
     if (append && !cursor) return
+    const retainedTail = refresh ? rows().at(-1) : undefined
     controller?.abort()
     const requestController = new AbortController()
     controller = requestController
     const generation = ++requestGeneration
     const authority = captureApiAuthority()
     const hadContinuationFocus = append && continuationButton === document.activeElement
+    const hadRefreshFocus = refresh && retryTrigger === document.activeElement
     let focusRow: WorkLedgerItemRow | undefined
     setLoading(true)
-    setFailure(undefined)
+    if (!refresh) setFailure(undefined)
     try {
       const result = await readPages({
         search: search().trim(),
         cursor,
+        retainedTail,
         signal: requestController.signal,
         generation,
         authority,
@@ -205,9 +213,13 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       const nextFocus = hadContinuationFocus && continuationButton === document.activeElement
         ? result.rows[0] ?? (!result.nextCursor ? rows().at(-1) : undefined)
         : undefined
+      if (hadRefreshFocus && retryTrigger === document.activeElement) {
+        headingElement?.focus({ preventScroll: true })
+      }
       setRows((current) => (append ? [...current, ...result.rows] : result.rows))
       setNextCursor(result.nextCursor)
       focusRow = nextFocus
+      if (refresh) setFailure(undefined)
     } catch (cause) {
       if (
         requestController.signal.aborted ||
@@ -215,7 +227,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         cause instanceof ApiAuthorityChangedError
       )
         return
-      recordFailure("settings:archive:load", append ? "append" : "initial", cause)
+      recordFailure("settings:archive:load", operation, cause)
     } finally {
       if (ownsRequest(generation, authority)) {
         if (controller === requestController) controller = undefined
@@ -228,6 +240,19 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       }
     }
   }
+
+  const retryRead = (operation: "initial" | "refresh") => (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      tone="neutral"
+      aria-disabled={loading() || !!busyID() || undefined}
+      onClick={(event) => void load(operation, event.currentTarget)}
+    >
+      <Icon name="refresh" />{loading() ? t("common.loading") : t("common.retry")}
+    </Button>
+  )
 
   const runRowAction = async (row: WorkLedgerItemRow, action: "restore" | "delete") => {
     if (busyID() || loading()) return
@@ -359,7 +384,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     setLoading(false)
     setFailure(undefined)
     setCommittedAction(undefined)
-    untrack(() => void load(false))
+    untrack(() => void load("initial"))
   })
   onCleanup(() => {
     requestGeneration += 1
@@ -379,7 +404,12 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         )}
       </Show>
       <Show when={rows().length > 0 && panelFailure()}>
-        {(current) => <ArchiveFailureFeedback failure={current()} />}
+        {(current) => (
+          <ArchiveFailureFeedback
+            failure={current()}
+            actions={current().operation === "refresh" ? retryRead("refresh") : undefined}
+          />
+        )}
       </Show>
       <SearchField
         clearable
@@ -406,11 +436,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
             {(current) => (
               <ArchiveFailureFeedback
                 failure={current()}
-                actions={
-                  <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void load(false)}>
-                    <Icon name="refresh" />{t("common.retry")}
-                  </Button>
-                }
+                actions={retryRead(current().operation === "refresh" ? "refresh" : "initial")}
               />
             )}
           </Show>
@@ -507,7 +533,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
             tone="neutral"
             data-ui="archive-load-more"
             aria-disabled={loading() || !!busyID() || undefined}
-            onClick={() => void load(true)}
+            onClick={() => void load("append")}
           >
             {loading() ? t("common.loading") : t("work_ledger.load_more")}
           </Button>
