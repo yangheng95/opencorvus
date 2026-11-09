@@ -16,6 +16,7 @@
 #### 调整
 
 - 通道目录区分读取中、读取失败和目录实际为空，支持在原位查看诊断并重试。授权模式和操作记录在刷新时保留当前上下文。能力分配的保存结果无法确认时，可以重新读取当前分配。
+- 保存通道公网地址时可以继续编辑。前一次保存完成后会提示哪些更改仍未保存，并保留较新的草稿。
 - 项目摘要显示完整项目名。手填工作目录的等待状态可以取消。归档操作已成功但列表刷新失败时，可以单独重试刷新。
 
 #### 修复
@@ -38,6 +39,7 @@
 #### Changed
 
 - The channel catalog distinguishes loading, failed reads, and an empty catalog, with diagnostics and retry available in place. Authorization settings and records preserve context during refresh. When a capability assignment cannot be confirmed, you can reread the current assignments.
+- Keep editing a channel's public address while a save is in progress. When the earlier save completes, the newer draft stays in the field and the app indicates that it still needs saving.
 - Project summaries show full project names. You can cancel a pending check when entering a workspace directory. If an archive action succeeds and the list refresh fails, you can retry the refresh on its own.
 
 #### Fixed
