@@ -1,0 +1,27 @@
+{"listenPort":39193,"upstreamPort":39192,"pid":18036,"targetDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after","initialCut":false}
+{"time":"2026-11-09T12:39:04.364Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T12:39:05.363Z","receipt":1,"stage":"arrival","route":"/experimental/project-memory","method":"GET","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after"},"cut":false}
+{"time":"2026-11-09T12:39:05.368Z","receipt":1,"stage":"origin","route":"/experimental/project-memory","status":200,"requestID":"7907ff41-42be-452b-9e97-3a936c30519f"}
+{"time":"2026-11-09T12:39:11.825Z","receipt":2,"stage":"arrival","route":"/work-ledger","method":"GET","query":{},"cut":false}
+{"time":"2026-11-09T12:39:11.830Z","receipt":2,"stage":"origin","route":"/work-ledger","status":200,"requestID":"84e9ad4e-bbb3-4161-a2b5-31b75755325f"}
+{"time":"2026-11-09T12:39:11.830Z","receipt":2,"stage":"project-page","count":2,"projects":[{"id":"prj_h4Klbvdh79nWutoc9P2z","title":"Current Workspace","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after"},{"id":"prj_h3MxJJT6zjgIObCqSaWs","title":"Research Memory","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after"}],"nextCursor":null}
+{"time":"2026-11-09T12:39:11.846Z","receipt":3,"stage":"arrival","route":"/experimental/project-memory","method":"GET","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after"},"cut":false}
+{"time":"2026-11-09T12:39:11.847Z","receipt":4,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after"},"cut":false}
+{"time":"2026-11-09T12:39:11.849Z","receipt":3,"stage":"origin","route":"/experimental/project-memory","status":200,"requestID":"3ebede3c-23f7-405e-94e7-a892677823ee"}
+{"time":"2026-11-09T12:39:11.850Z","receipt":4,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"2192be22-0bfd-452b-92fe-b8742bab724b"}
+{"time":"2026-11-09T12:39:12.425Z","receipt":5,"stage":"arrival","route":"/experimental/project-memory","method":"GET","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after"},"cut":false}
+{"time":"2026-11-09T12:39:12.425Z","receipt":6,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after"},"cut":false}
+{"time":"2026-11-09T12:39:12.427Z","receipt":5,"stage":"origin","route":"/experimental/project-memory","status":200,"requestID":"97369535-0932-4c0f-acae-408bbc617e75"}
+{"time":"2026-11-09T12:39:12.755Z","receipt":6,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"902fa605-900b-4872-8f17-7c7e33b60005"}
+{"time":"2026-11-09T12:39:19.149Z","receipt":7,"stage":"arrival","route":"/project/current","method":"PATCH","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after"},"cut":false}
+{"time":"2026-11-09T12:39:19.155Z","receipt":7,"stage":"origin","route":"/project/current","status":200,"requestID":"8d7a92cf-242b-498c-b650-da9b681e5238"}
+{"time":"2026-11-09T12:39:19.158Z","receipt":8,"stage":"arrival","route":"/work-ledger","method":"GET","query":{},"cut":true}
+{"time":"2026-11-09T12:39:19.162Z","receipt":8,"stage":"origin","route":"/work-ledger","status":200,"requestID":"d15fdb18-9ee0-49bb-a320-52b1ad5e3f57"}
+{"time":"2026-11-09T12:39:19.162Z","receipt":8,"stage":"partial-body","route":"/work-ledger","bytes":32}
+{"time":"2026-11-09T12:39:46.891Z","receipt":9,"stage":"arrival","route":"/work-ledger","method":"GET","query":{},"cut":false}
+{"time":"2026-11-09T12:39:46.896Z","receipt":9,"stage":"origin","route":"/work-ledger","status":200,"requestID":"cf17e13a-74f1-44a1-8312-e74a0d864337"}
+{"time":"2026-11-09T12:39:46.897Z","receipt":9,"stage":"project-page","count":2,"projects":[{"id":"prj_h3MxJJT6zjgIObCqSaWs","title":"Research Memory Renamed","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after"},{"id":"prj_h4Klbvdh79nWutoc9P2z","title":"Current Workspace","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after"}],"nextCursor":null}
+{"time":"2026-11-09T12:39:50.969Z","receipt":10,"stage":"arrival","route":"/experimental/project-memory","method":"GET","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after"},"cut":false}
+{"time":"2026-11-09T12:39:50.969Z","receipt":11,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after"},"cut":false}
+{"time":"2026-11-09T12:39:50.971Z","receipt":10,"stage":"origin","route":"/experimental/project-memory","status":200,"requestID":"f5e5d729-e132-41a6-966b-7c055b4eb5c6"}
+{"time":"2026-11-09T12:39:50.973Z","receipt":11,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"a93bcfed-1867-4b3e-b00d-e70994cc035b"}

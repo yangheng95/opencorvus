@@ -1,0 +1,13 @@
+{"listenPort":39191,"upstreamPort":39190,"pid":10540,"targetDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-before"}
+{"time":"2026-11-09T12:30:55.448Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T12:31:02.067Z","receipt":1,"stage":"arrival","route":"/work-ledger","method":"GET","query":{},"cut":false}
+{"time":"2026-11-09T12:31:02.073Z","receipt":1,"stage":"origin","route":"/work-ledger","status":200,"requestID":"d1eff836-9f55-4d97-94ab-a8115bb204f2"}
+{"time":"2026-11-09T12:31:02.074Z","receipt":1,"stage":"archive-page","count":2,"projects":[{"id":"prj_h0xvTfdZ3zcWA9UGmnIu","title":"Current Workspace","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-before"},{"id":"prj_haMThMFpG0mtHuTjY73T","title":"Research Memory","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-before"}],"nextCursor":null}
+{"time":"2026-11-09T12:31:23.507Z","receipt":2,"stage":"arrival","route":"/project/current","method":"PATCH","query":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-before"},"cut":false}
+{"time":"2026-11-09T12:31:23.514Z","receipt":2,"stage":"origin","route":"/project/current","status":200,"requestID":"95a13659-977f-432f-86f5-b96519585b8f"}
+{"time":"2026-11-09T12:31:23.517Z","receipt":3,"stage":"arrival","route":"/work-ledger","method":"GET","query":{},"cut":true}
+{"time":"2026-11-09T12:31:23.521Z","receipt":3,"stage":"origin","route":"/work-ledger","status":200,"requestID":"b4cb123f-7f5d-4432-ac64-be03d547eeec"}
+{"time":"2026-11-09T12:31:23.522Z","receipt":3,"stage":"partial-body","route":"/work-ledger","bytes":32}
+{"time":"2026-11-09T12:33:26.689Z","receipt":4,"stage":"arrival","route":"/work-ledger","method":"GET","query":{},"cut":false}
+{"time":"2026-11-09T12:33:26.692Z","receipt":4,"stage":"origin","route":"/work-ledger","status":200,"requestID":"f44535a4-4124-48e1-8dc0-ce1d96b02f81"}
+{"time":"2026-11-09T12:33:26.692Z","receipt":4,"stage":"archive-page","count":2,"projects":[{"id":"prj_haMThMFpG0mtHuTjY73T","title":"Research Memory Renamed","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-before"},{"id":"prj_h0xvTfdZ3zcWA9UGmnIu","title":"Current Workspace","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-before"}],"nextCursor":null}

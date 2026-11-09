@@ -1,0 +1,186 @@
+{
+  "results": [
+    {
+      "route": "/doc",
+      "status": 200,
+      "requestID": "4e06194a-9648-4f1e-8bad-e4ba32145360"
+    },
+    {
+      "route": "/work-ledger",
+      "status": 200,
+      "requestID": "6e915df0-dbbd-4d2e-824a-145bde20165f",
+      "schemaValid": true,
+      "body": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_h3MxJJT6zjgIObCqSaWs",
+            "title": "Research Memory Renamed",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+            "created": 1794227835885,
+            "updated": 1794227959151,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_h4Klbvdh79nWutoc9P2z",
+            "title": "Current Workspace",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+            "created": 1794227836498,
+            "updated": 1794227941208,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/project/current",
+      "project": {
+        "slug": "secondary-after",
+        "id": "prj_h3MxJJT6zjgIObCqSaWs",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+        "name": "Research Memory Renamed"
+      },
+      "status": 200,
+      "requestID": "9aa6ccab-b105-4df9-968c-fa0c5886a107",
+      "schemaValid": true,
+      "body": {
+        "id": "prj_h3MxJJT6zjgIObCqSaWs",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+        "name": "Research Memory Renamed",
+        "time": {
+          "created": 1794227835885,
+          "updated": 1794227959151
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "route": "/experimental/project-memory",
+      "project": {
+        "slug": "secondary-after",
+        "id": "prj_h3MxJJT6zjgIObCqSaWs",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+        "name": "Research Memory Renamed"
+      },
+      "status": 200,
+      "requestID": "044ae94e-88d5-4696-98ca-e2111c3c45fe",
+      "schemaValid": true,
+      "body": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "",
+        "revision": 0,
+        "tokenCount": 0,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1794227876960,
+        "timeUpdated": 1794227952749
+      }
+    },
+    {
+      "route": "/panel/knowledge/memory",
+      "project": {
+        "slug": "secondary-after",
+        "id": "prj_h3MxJJT6zjgIObCqSaWs",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+        "name": "Research Memory Renamed"
+      },
+      "status": 200,
+      "requestID": "ee158836-8bd6-4b03-9ab8-900dd8124c1f",
+      "schemaValid": true,
+      "body": []
+    },
+    {
+      "route": "/project/current",
+      "project": {
+        "slug": "project-after",
+        "id": "prj_h4Klbvdh79nWutoc9P2z",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+        "name": "Current Workspace"
+      },
+      "status": 200,
+      "requestID": "e894be70-bad4-4ec4-987c-986742fa55ef",
+      "schemaValid": true,
+      "body": {
+        "id": "prj_h4Klbvdh79nWutoc9P2z",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+        "name": "Current Workspace",
+        "time": {
+          "created": 1794227836498,
+          "updated": 1794227941208
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "route": "/experimental/project-memory",
+      "project": {
+        "slug": "project-after",
+        "id": "prj_h4Klbvdh79nWutoc9P2z",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+        "name": "Current Workspace"
+      },
+      "status": 200,
+      "requestID": "3f486325-77bf-443d-8c3c-7e59fa986db5",
+      "schemaValid": true,
+      "body": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "",
+        "revision": 0,
+        "tokenCount": 0,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1794227865245,
+        "timeUpdated": 1794227945722
+      }
+    },
+    {
+      "route": "/panel/knowledge/memory",
+      "project": {
+        "slug": "project-after",
+        "id": "prj_h4Klbvdh79nWutoc9P2z",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+        "name": "Current Workspace"
+      },
+      "status": 200,
+      "requestID": "3f569e0b-6f45-40ae-af58-f10f99c2f563",
+      "schemaValid": true,
+      "body": []
+    }
+  ],
+  "originalFiles": [
+    {
+      "phase": "after",
+      "slug": "secondary-after",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+      "gitHead": "95801c35238c6db620f196de52bfa91f0e090fcd",
+      "note": "Owned Memory project secondary-after\n"
+    },
+    {
+      "phase": "after",
+      "slug": "project-after",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+      "gitHead": "760412fc8c64c9c2446386f0d25911a49c11cd8f",
+      "note": "Owned Memory project project-after\n"
+    },
+    {
+      "phase": "before",
+      "slug": "secondary-before",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-before",
+      "gitHead": "19112813d5e2cfaf6a11e52d2321fbfcd18fc2df",
+      "note": "Owned Memory project secondary-before\n"
+    },
+    {
+      "phase": "before",
+      "slug": "project-before",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-before",
+      "gitHead": "e2c0cd19535865184978e3a762f0e7c18a29fc5e",
+      "note": "Owned Memory project project-before\n"
+    }
+  ]
+}

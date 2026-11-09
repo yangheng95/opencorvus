@@ -1,0 +1,67 @@
+{
+  "selected": [
+    "\t\t\t22 container Description: Memory & Context, ID: configDialog",
+    "\t\t\t\t\t\t26 search text field (settable) Search settings pages...",
+    "\t\t\t\t\t\t\t45 tab (selected, settable, boolean) Memory & Context, Value: 1, ID: config-tab-memory",
+    "\t\t\t\t\t\t52 heading Memory & Context, Value: 1",
+    "\t\t\t\t\t\t\t53 text Memory & Context",
+    "\t\t\t\t\t\t54 container Description: Memory & Context, ID: config-panel-memory",
+    "\t\t\t\t\t\t\t55 container memoryBody",
+    "\t\t\t\t\t\t\t\t\t57 heading Project, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t58 text Project",
+    "\t\t\t\t\t\t\t\t\t59 text Read and search a project's shared memory. Choosing here keeps your current conversation open.",
+    "\t\t\t\t\t\t\t\t\t60 pop up button (collapsed) Project Research Memory, ID: select-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t61 text Research Memory",
+    "\t\t\t\t\t\t\t\t\t64 heading Project MEMORY.MD, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t65 text Project MEMORY.MD",
+    "\t\t\t\t\t\t\t\t\t66 text Shared context maintained across conversations in this project. Read-only here; discuss corrections in a conversation.",
+    "\t\t\t\t\t\t\t\t\t67 text Revision 0 0 tokens Updated 11/9/2026, 8:31:15 PM No organized project context yet. It develops as you work in this project.",
+    "\t\t\t\t\t\t\t\t\t71 text Reusable knowledge saved by assistants in this project. Search or expand an entry to read its original content.",
+    "\t\t\t\t\t\t\t\t\t72 search text field (settable) Description: Search context…, Value: keep-this-memory-draft, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t74 button Search",
+    "\t\t\t\t\t\t\t\t\t75 text No saved notes or facts in this project.",
+    "The focused UI element is 72 search text field (settable) Description: Search context…, Value: keep-this-memory-draft, ID: memorySearch"
+  ],
+  "failed": [
+    "\t\t\t22 container Description: Memory & Context, ID: configDialog",
+    "\t\t\t\t\t\t26 search text field (settable) Search settings pages...",
+    "\t\t\t\t\t\t\t45 tab (selected, settable, boolean) Memory & Context, Value: 1, ID: config-tab-memory",
+    "\t\t\t\t\t\t52 heading Memory & Context, Value: 1",
+    "\t\t\t\t\t\t\t53 text Memory & Context",
+    "\t\t\t\t\t\t54 container Description: Memory & Context, ID: config-panel-memory",
+    "\t\t\t\t\t\t\t55 container memoryBody",
+    "\t\t\t\t\t\t\t\t\t57 heading Project, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t58 text Project",
+    "\t\t\t\t\t\t\t\t\t59 text Read and search a project's shared memory. Choosing here keeps your current conversation open.",
+    "\t\t\t\t\t\t\t\t\t60 pop up button (disabled, collapsed) Project No projects available, ID: select-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t75 text No projects available",
+    "\t\t\t\t\t\t\t\t\t76 text Failed to load projects: Failed to fetch",
+    "\t\t\t\t\t\t\t\t\t64 heading Project MEMORY.MD, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t65 text Project MEMORY.MD",
+    "\t\t\t\t\t\t\t\t\t66 text Shared context maintained across conversations in this project. Read-only here; discuss corrections in a conversation.",
+    "\t\t\t\t\t\t\t\t\t77 text Select a project above to read its memory.",
+    "\t\t\t\t\t\t\t\t\t71 text Reusable knowledge saved by assistants in this project. Search or expand an entry to read its original content.",
+    "\t\t\t\t\t\t\t\t\t72 search text field (disabled) Description: Search context…, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t74 button (disabled) Search",
+    "\t\t\t\t\t\t\t\t\t\t79 text Select a project Select a project above to read its memory.",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39191/ui/"
+  ],
+  "failedZh": [
+    "\t\t\t\t\t\t\t\t\t60 pop up button (disabled, collapsed) 项目 暂无可选项目, ID: select-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t75 text 暂无可选项目",
+    "\t\t\t\t\t\t\t\t\t76 text 项目加载失败：Failed to fetch",
+    "\t\t\t\t\t\t\t\t\t72 search text field (disabled) Description: 搜索上下文…, ID: memorySearch"
+  ],
+  "remount": [
+    "\t\t\t\t\t\t\t\t\t88 pop up button (collapsed) 项目 Current Workspace, ID: select-cl-372-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t89 text Current Workspace",
+    "\t\t\t\t\t\t\t\t\t100 search text field (settable) Description: 搜索上下文…, ID: memorySearch"
+  ],
+  "reselect": [
+    "\t\t\t\t\t\t\t\t\t60 pop up button (collapsed) 项目 Research Memory Renamed, ID: select-cl-372-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t61 text Research Memory Renamed",
+    "\t\t\t\t\t\t\t\t\t62 text C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-before",
+    "\t\t\t\t\t\t\t\t\t72 search text field (settable) Description: 搜索上下文…, ID: memorySearch",
+    "The focused UI element is 60 pop up button (collapsed) 项目 Research Memory Renamed, ID: select-cl-372-trigger, Secondary Actions: Expand"
+  ]
+}

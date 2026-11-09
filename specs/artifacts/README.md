@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [记忆项目刷新失败后保留选择并重试证据](2026-11-09-memory-project-refresh-recovery/README.md)
 - [工作列表读取保留现有截止证据](2026-11-09-work-ledger-list-read-deadline/README.md)
 - [已恢复工作后的归档刷新可重试证据](2026-11-09-archive-committed-refresh-retry/README.md)
 - [目录检查等待时可撤回切换证据](2026-11-09-workspace-directory-check-cancel/README.md)

@@ -1,0 +1,64 @@
+[
+  {
+    "slug": "secondary-after",
+    "before": {
+      "status": 200,
+      "requestID": "361b248d-b2d4-418e-8fbb-e31f4a4ea5d3",
+      "data": {
+        "id": "prj_h3MxJJT6zjgIObCqSaWs",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+        "name": "Research Memory Renamed",
+        "time": {
+          "created": 1794227835885,
+          "updated": 1794227882294
+        },
+        "sandboxes": []
+      }
+    },
+    "after": {
+      "status": 200,
+      "requestID": "bbab376e-1072-4fcf-a846-eb23f15896e8",
+      "data": {
+        "id": "prj_h3MxJJT6zjgIObCqSaWs",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\secondary-after",
+        "name": "Research Memory",
+        "time": {
+          "created": 1794227835885,
+          "updated": 1794227941047
+        },
+        "sandboxes": []
+      }
+    }
+  },
+  {
+    "slug": "project-after",
+    "before": {
+      "status": 200,
+      "requestID": "5af54693-3b30-43c7-b865-3283e2fa134d",
+      "data": {
+        "id": "prj_h4Klbvdh79nWutoc9P2z",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+        "name": "Current Workspace",
+        "time": {
+          "created": 1794227836498,
+          "updated": 1794227836508
+        },
+        "sandboxes": []
+      }
+    },
+    "after": {
+      "status": 200,
+      "requestID": "2d7deed8-481f-44ea-96a7-139ff0c01857",
+      "data": {
+        "id": "prj_h4Klbvdh79nWutoc9P2z",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b116\\project-after",
+        "name": "Current Workspace",
+        "time": {
+          "created": 1794227836498,
+          "updated": 1794227941208
+        },
+        "sandboxes": []
+      }
+    }
+  }
+]

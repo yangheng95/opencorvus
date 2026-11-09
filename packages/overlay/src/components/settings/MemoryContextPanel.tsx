@@ -5,9 +5,12 @@ import { activeProjectDirectory } from "../../services/project-directory"
 import { refreshProjectMemory, type ProjectMemoryDocument } from "../../services/project-memory"
 import { loadWorkLedger, type WorkLedgerCursor } from "../../services/work-ledger"
 import { subscribeWorkLedgerChanges } from "../../services/sse"
+import { formatErrorDetails } from "../../utils/error-details"
 import { projectDirectoryKey, projectDisplayName } from "../../utils/project-directory"
 import { localeTag, t } from "../../utils/i18n"
 import { MemoryPanel } from "../MemoryPanel"
+import { Button } from "../ui/Button"
+import { Icon } from "../ui/Icon"
 import { SelectControl } from "../ui/SelectControl"
 import { SettingsEmpty, SettingsGroup, SettingsPanel } from "./layout"
 
@@ -15,6 +18,12 @@ interface MemoryProjectOption {
   key: string
   directory: string
   customName?: string
+}
+
+interface ProjectListFailure {
+  authority: ApiAuthority
+  cause: unknown
+  operation: "initial" | "refresh"
 }
 
 function projectName(project: MemoryProjectOption): string {
@@ -38,13 +47,17 @@ export function MemoryContextPanel() {
   const selectedProject = createMemo(() => projects().find((project) => project.key === selectedProjectKey()) ?? null)
   const selectedDirectory = createMemo(() => selectedProject()?.directory)
   const [projectRefreshToken, setProjectRefreshToken] = createSignal(0)
+  const refreshProjects = () => setProjectRefreshToken((value) => value + 1)
   const [loadingProjects, setLoadingProjects] = createSignal(true)
   const memoryPanelActive = createMemo(() => !loadingProjects() || projects().length > 0)
-  const [projectLoadError, setProjectLoadError] = createSignal("")
+  const [projectLoadError, setProjectLoadError] = createSignal<ProjectListFailure>()
   const [document, setDocument] = createSignal<ProjectMemoryDocument | null>(null)
   const [loadingDocument, setLoadingDocument] = createSignal(false)
   const [documentError, setDocumentError] = createSignal("")
   let loadedProjectsAuthority: ApiAuthority | undefined
+  let projectGroup: HTMLElement | undefined
+  let projectTrigger: HTMLButtonElement | undefined
+  let retryTrigger: HTMLButtonElement | undefined
 
   onCleanup(
     subscribeWorkLedgerChanges((event) => {
@@ -52,7 +65,7 @@ export function MemoryContextPanel() {
         event.type === "work-ledger.connected" ||
         (event.type === "work-ledger.changed" && event.sourceType === "project.updated")
       ) {
-        setProjectRefreshToken((value) => value + 1)
+        refreshProjects()
       }
     }),
   )
@@ -63,17 +76,21 @@ export function MemoryContextPanel() {
     const retainProjects = !!loadedProjectsAuthority && isApiAuthorityCurrent(loadedProjectsAuthority)
     const controller = new AbortController()
     const ownsLoad = () => !controller.signal.aborted && isApiAuthorityCurrent(authority)
-    if (!retainProjects) {
-      loadedProjectsAuthority = undefined
-      batch(() => {
+    const previousFailure = untrack(projectLoadError)
+    batch(() => {
+      setLoadingProjects(true)
+      if (previousFailure && !isApiAuthorityCurrent(previousFailure.authority)) {
+        retryTrigger = undefined
+        setProjectLoadError(undefined)
+      }
+      if (!retainProjects) {
+        loadedProjectsAuthority = undefined
         setProjects([])
         setSelectedProjectKey(null)
-      })
-    }
+      }
+    })
     onCleanup(() => controller.abort())
     void (async () => {
-      setLoadingProjects(true)
-      setProjectLoadError("")
       try {
         const rows = new Map<string, MemoryProjectOption>()
         let cursor: WorkLedgerCursor | null = null
@@ -99,14 +116,15 @@ export function MemoryContextPanel() {
           setProjects(options)
           setSelectedProjectKey(options.find((project) => project.key === selectedKey)?.key ?? null)
         })
-      } catch (error) {
+        if (retryTrigger && retryTrigger.ownerDocument.activeElement === retryTrigger) {
+          const destination = options.length ? projectTrigger : projectGroup
+          destination?.focus({ preventScroll: true })
+        }
+        retryTrigger = undefined
+        setProjectLoadError(undefined)
+      } catch (cause) {
         if (!ownsLoad()) return
-        loadedProjectsAuthority = undefined
-        batch(() => {
-          setProjects([])
-          setSelectedProjectKey(null)
-        })
-        setProjectLoadError(error instanceof Error ? error.message : String(error))
+        setProjectLoadError({ authority, cause, operation: retainProjects ? "refresh" : "initial" })
       } finally {
         if (ownsLoad()) setLoadingProjects(false)
       }
@@ -130,7 +148,8 @@ export function MemoryContextPanel() {
   })
 
   const pickerPlaceholder = createMemo(() => {
-    if (loadingProjects()) return t("memory.project_picker_loading")
+    if (projectLoadError()?.operation === "initial") return t("memory.project_picker_unavailable")
+    if (loadingProjects() && projects().length === 0) return t("memory.project_picker_loading")
     if (projects().length === 0) return t("memory.project_picker_empty")
     return t("memory.project_picker_placeholder")
   })
@@ -141,6 +160,9 @@ export function MemoryContextPanel() {
       <SettingsGroup
         title={t("memory.project_picker_label")}
         description={t("memory.project_picker_description")}
+        aria-label={t("memory.project_picker_label")}
+        tabIndex={-1}
+        ref={projectGroup}
         contentInset
       >
         <div class="memory-project-picker">
@@ -153,6 +175,7 @@ export function MemoryContextPanel() {
             disallowEmptySelection
             disabled={projects().length === 0}
             triggerDataUI="memory-project-picker"
+            triggerRef={(element) => { projectTrigger = element }}
             ariaLabel={t("memory.project_picker_label")}
             renderValue={(project) => <span>{project ? projectName(project) : pickerPlaceholder()}</span>}
             renderOptionLabel={projectName}
@@ -163,7 +186,30 @@ export function MemoryContextPanel() {
             {(project) => <div class="memory-project-directory">{project().directory}</div>}
           </Show>
           <Show when={projectLoadError()}>
-            <Feedback tone="error">{t("memory.project_picker_load_failed", { error: projectLoadError() })}</Feedback>
+            {(failure) => (
+              <Feedback
+                tone="error"
+                details={formatErrorDetails(failure().cause)}
+                actions={(
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    tone="neutral"
+                    aria-disabled={loadingProjects() || undefined}
+                    onClick={(event) => {
+                      if (loadingProjects()) return
+                      retryTrigger = event.currentTarget
+                      refreshProjects()
+                    }}
+                  >
+                    <Icon name="refresh" />{loadingProjects() ? t("common.loading") : t("common.retry")}
+                  </Button>
+                )}
+              >
+                {t(failure().operation === "refresh" ? "memory.project_picker_refresh_failed" : "memory.project_picker_load_failed")}
+              </Feedback>
+            )}
           </Show>
         </div>
       </SettingsGroup>
