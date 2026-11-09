@@ -5205,8 +5205,10 @@ Release notes is a canonical CONFIG_SECTIONS entry with an About action. Its
 lazy panel bundles root CHANGELOG.md through the shared util parser and uses the
 existing safe Markdown renderer. It starts at the installed Overlay version;
 searchable descending history and selected details use the same single-column
-list-to-detail pattern. Website and GitHub links supplement the offline reading
-surface rather than providing another content/cache authority.
+list-to-detail pattern. History search matches all terms against the same entry's
+version identifiers and current language notes. Website and GitHub links
+supplement the offline reading surface rather than providing another content/cache
+authority.
 
 Explicit history/detail transitions hand focus to the newly rendered version
 heading or the actual previous version row. Returning to that row restores its

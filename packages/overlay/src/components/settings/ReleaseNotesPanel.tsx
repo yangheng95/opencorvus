@@ -1,6 +1,7 @@
 import { For, Show, createMemo, createSignal } from "solid-js"
 import { parseChangelog, requireReleaseNotes, standaloneReleaseNotes, type ChangelogEntry } from "@opencorvus-ai/util/changelog"
 import changelog from "../../../../../CHANGELOG.md?raw"
+import { matchesSearchTerms } from "../../services/text-search"
 import { appStore } from "../../store/app"
 import { t, tc } from "../../utils/i18n"
 import { inlineMarkdown, renderMarkdown } from "../../utils/markdown"
@@ -22,12 +23,9 @@ export default function ReleaseNotesPanel() {
   const date = (entry: ChangelogEntry) => new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${entry.date}T00:00:00Z`))
   const [selected, setSelected] = createSignal<ChangelogEntry | null>(installed)
   const [query, setQuery] = createSignal("")
-  const filteredHistory = createMemo(() => {
-    const term = query().trim().toLowerCase()
-    return history.filter((entry) =>
-      `${entry.displayVersion} ${entry.version} ${markdown(entry)}`.toLowerCase().includes(term),
-    )
-  })
+  const filteredHistory = createMemo(() =>
+    history.filter((entry) => matchesSearchTerms(query(), [entry.displayVersion, entry.version, markdown(entry)])),
+  )
   let panel: HTMLDivElement | undefined
   let versionHeading: HTMLHeadingElement | undefined
   let historySearchInput: HTMLInputElement | undefined

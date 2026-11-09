@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [更新日志版本与功能组合搜索](2026-11-09-release-history-search-terms.md)
 - [关于页 Core 版本](2026-11-09-about-core-version.md)
 - [关于页运行宿主语言](2026-11-09-about-runtime-language.md)
 - [设置搜索方向键入口](2026-11-09-settings-search-keyboard-entry.md)
