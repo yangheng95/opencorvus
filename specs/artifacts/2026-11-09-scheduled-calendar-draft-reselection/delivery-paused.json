@@ -1,0 +1,33 @@
+{
+  "phase": "delivery",
+  "step": "paused",
+  "plans": {
+    "status": 200,
+    "requestID": "b5be04fc-a087-4e77-89e7-3901c606869d",
+    "body": [
+      {
+        "id": "atm_g0VaS4h6q00u0A032gkO",
+        "revisionId": "atm_g0VaS4kdo00uDlvPd8xU",
+        "name": "日期恢复验收 80",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20990205T090000\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "仅验证日历补全日期，不运行。",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4073936400000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "runs": {
+    "status": 200,
+    "requestID": "73249f5d-2a0d-484c-833f-2cde8b78a68e",
+    "body": []
+  }
+}

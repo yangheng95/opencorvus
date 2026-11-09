@@ -590,7 +590,7 @@
   background: var(--accent-dim);
 }
 
-.automation-calendar-popover [data-part="table-cell-trigger"]:focus-visible {
+.automation-calendar-popover [data-part="table-cell-trigger"]:focus {
   outline: var(--oc-border-width) solid var(--accent);
   outline-offset: calc(-1 * var(--oc-border-width));
 }

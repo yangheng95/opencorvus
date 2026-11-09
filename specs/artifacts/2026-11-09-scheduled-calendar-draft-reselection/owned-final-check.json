@@ -1,0 +1,100 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b80\\project-before",
+    "head": "dfaf26053811910ee128bbc00b2d1ca40fda2d1a",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b80\\project-after",
+    "head": "517d901155df7a4ed06b80f19504b08b0fd2bd27",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "delivery": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b80\\project-delivery",
+    "head": "99469bdc50667bea1a1618bd586d9f255b91c1a2",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [
+      [
+        "atm_g0VaS4h6q00u0A032gkO",
+        "atm_g0VaS4h6q00u0A032gkO",
+        1,
+        "active",
+        "DTSTART;TZID=Asia/Shanghai:20990205T090000\nRRULE:FREQ=DAILY",
+        "global",
+        "日期恢复验收 80",
+        "仅验证日历补全日期，不运行。"
+      ],
+      [
+        "atm_g0VaS4h6q00u0A032gkO",
+        "atm_g0VaS4kdo00uDlvPd8xU",
+        2,
+        "paused",
+        "DTSTART;TZID=Asia/Shanghai:20990205T090000\nRRULE:FREQ=DAILY",
+        "global",
+        "日期恢复验收 80",
+        "仅验证日历补全日期，不运行。"
+      ]
+    ],
+    "futureFires": [
+      [
+        "cal_automation_790e9efb5e308e5f874be4e486d61deb",
+        "atm_g0VaS4h6q00u0A032gkO",
+        "scheduled",
+        4073936400000
+      ]
+    ],
+    "scheduleWrites": [
+      {
+        "time": "2026-11-09T05:42:21.504Z",
+        "requestID": "076a605a-0029-4a0d-b0a6-d26dd432bf86",
+        "method": "POST",
+        "path": "/global/automations",
+        "status": "completed",
+        "statusCode": 201,
+        "duration": 18
+      },
+      {
+        "time": "2026-11-09T05:42:35.074Z",
+        "requestID": "e65cda42-2cbd-4867-bc84-fc4ddc0ef09f",
+        "method": "PATCH",
+        "path": "/global/automations/atm_g0VaS4h6q00u0A032gkO",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 14
+      }
+    ]
+  }
+}

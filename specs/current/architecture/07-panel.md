@@ -1779,6 +1779,9 @@ is suggestion data passed through that same weekly field.
 The localized clock supports direct segmented entry and a pointer picker for
 every hour and minute. Applying the picker replaces the entire keyboard draft
 with one canonical wall-clock value. Closing the picker discards its draft.
+The date picker marks a day selected only while the date draft is complete. An
+unfinished draft may use its last complete date for navigation; choosing a day
+replaces the draft with that complete date.
 
 Scheduled editing owns an opening definition snapshot; the edit flag derives
 from it. Submit uses its exact ID, original recurrence and session target, and

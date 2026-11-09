@@ -47,12 +47,19 @@ export function ScheduledCalendarField(props: ScheduledCalendarFieldProps): JSX.
     return clockAnchor.set({ hour, minute })
   })
   const [segmentInstance, replaceSegments] = createSignal(1)
-  let segments: TemporalSegmentControls | undefined
-  props.registerValidation(() => segments?.isComplete() ?? false)
+  const [segments, setSegments] = createSignal<TemporalSegmentControls>()
+  const isComplete = () => segments()?.isComplete() ?? false
+  props.registerValidation(isComplete)
+
+  function applyPickerValue(value: string) {
+    props.onChange(value)
+    // An explicit choice replaces the keyboard draft, even when the committed value is unchanged.
+    replaceSegments((instance) => instance + 1)
+  }
 
   return (
     <div class="oc-text-field" data-disabled={props.disabled || undefined}>
-      <span id={`${id}-label`} class="oc-text-field__label" onClick={() => segments?.focus()}>
+      <span id={`${id}-label`} class="oc-text-field__label" onClick={() => segments()?.focus()}>
         {t(isDate() ? "automations.start_date" : "automations.time")}
       </span>
       <div class="oc-text-field__input automation-temporal-control">
@@ -64,21 +71,23 @@ export function ScheduledCalendarField(props: ScheduledCalendarFieldProps): JSX.
             descriptionId={isDate() ? `${id}-description` : undefined}
             disabled={props.disabled}
             onChange={props.onChange}
-            onConnect={(controls) => { segments = controls }}
+            onConnect={setSegments}
           />
         </Show>
         <Show when={isDate()} fallback={
           <ScheduledClockPicker
-            readChoice={() => segments?.readClockChoice() ?? {}}
+            readChoice={() => segments()?.readClockChoice() ?? {}}
             disabled={props.disabled}
-            onChange={(value) => {
-              props.onChange(value)
-              // An explicit choice replaces the keyboard draft, even when the committed time is unchanged.
-              replaceSegments((instance) => instance + 1)
-            }}
+            onChange={applyPickerValue}
           />
         }>
-          <ScheduledCalendarPicker value={date()} timeZone={props.timeZone} disabled={props.disabled} onChange={props.onChange} />
+          <ScheduledCalendarPicker
+            value={isComplete() ? date() : undefined}
+            focusDate={date()}
+            timeZone={props.timeZone}
+            disabled={props.disabled}
+            onChange={applyPickerValue}
+          />
         </Show>
       </div>
       <Show when={isDate()}>
@@ -219,6 +228,7 @@ function ScheduledClockPicker(props: {
 
 function ScheduledCalendarPicker(props: {
   value: datePicker.DateValue | undefined
+  focusDate: datePicker.DateValue | undefined
   timeZone: string
   disabled: boolean
   onChange: (value: string) => void
@@ -232,7 +242,13 @@ function ScheduledCalendarPicker(props: {
     timeZone: props.timeZone,
     disabled: props.disabled,
     value: props.value ? [props.value] : [],
-    onValueChange: ({ value: [next] }) => props.onChange(next?.toString() ?? ""),
+    onValueChange: ({ value: [next] }) => {
+      if (next) props.onChange(next.toString())
+    },
+    onOpenChange: ({ open, value }) => {
+      // A date may guide navigation while an unfinished draft has no selected day.
+      if (open && value.length === 0 && props.focusDate) picker().setFocusedValue(props.focusDate)
+    },
     translations: {
       content: t("automations.calendar.label"),
       trigger: (open) => t(open ? "automations.calendar.close" : "automations.calendar.open"),
