@@ -4038,6 +4038,9 @@ changing names, directory identity, ordering, or command-palette labels. Context
 wraps below the name and participates in navigation/disclosure accessible names;
 the full real directory remains in the existing summary tooltip. Rename fields
 continue to receive the original Project name.
+The Project row's actions menu and start-work buttons name the same Project
+identity in their localized labels and existing hints, including directory
+context when that name is shared.
 Each Project header has separate disclosure and navigation buttons. Its arrow
 changes only the existing group visibility; its name opens the Project through
 the original selection action. Project action dialogs, pin relocation and Project

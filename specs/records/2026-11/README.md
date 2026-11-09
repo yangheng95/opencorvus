@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目行操作显示目标身份](2026-11-09-project-row-action-identity.md)
 - [工作侧栏事件验收代理](2026-11-09-work-ledger-event-proxy.md)
 - [读取重试后的 Explorer 键盘焦点](2026-11-09-explorer-read-retry-focus.md)
 - [根读取重试同步刷新已展开目录](2026-11-09-explorer-root-retry-tree-refresh.md)

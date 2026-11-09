@@ -1,0 +1,133 @@
+{
+  "phase": "after",
+  "state": "initial",
+  "reads": [
+    {
+      "route": "/path",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\project-after"
+      },
+      "status": 200,
+      "requestID": "675397c7-fef2-43b7-b47f-5b33fece4d70",
+      "data": {
+        "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after",
+        "state": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after\\state",
+        "config": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after\\config",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\project-after",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\project-after"
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\project-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "d1272129-c2ff-42c6-a2ea-df07d61eaa1f",
+      "data": {
+        "type": "text",
+        "content": "Owned Work Ledger action target: project-after\n",
+        "revision": "808b3707c4552911854028c11aab20e02705089528994d82faea658d63035354"
+      }
+    },
+    {
+      "route": "/path",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-east\\Atlas"
+      },
+      "status": 200,
+      "requestID": "f8f0055b-6b95-48eb-8216-b29b94645e56",
+      "data": {
+        "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after",
+        "state": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after\\state",
+        "config": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after\\config",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-east\\Atlas",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-east\\Atlas"
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-east\\Atlas",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "db5853f1-b45f-4b5e-ac53-cfbfe3c52d7b",
+      "data": {
+        "type": "text",
+        "content": "Owned Work Ledger action target: after-east/Atlas\n",
+        "revision": "94789753b7d89d54f47b039463aba11f81ff1bbe5f4753ca5b75195e257364c4"
+      }
+    },
+    {
+      "route": "/path",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-west\\Atlas"
+      },
+      "status": 200,
+      "requestID": "d8b8b140-bc02-4c9c-a53c-05f22b70a203",
+      "data": {
+        "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after",
+        "state": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after\\state",
+        "config": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\profile-after\\config",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-west\\Atlas",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-west\\Atlas"
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-west\\Atlas",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "550328d9-dd0f-44b7-bf3d-2869e0af5c4d",
+      "data": {
+        "type": "text",
+        "content": "Owned Work Ledger action target: after-west/Atlas\n",
+        "revision": "63106f1ab65219e3a87f9291a71613453eef0d189a2396ab2b8ffaee5becc26a"
+      }
+    },
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "afa6a3d5-9f16-4039-a0a3-371b91370c60",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_h0g1wHW4OnYuIOlFWOR4",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-west\\Atlas",
+            "created": 1794221874817,
+            "updated": 1794221874817,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_hBrzWFO31UN7JdiEY3vu",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-east\\Atlas",
+            "created": 1794221874395,
+            "updated": 1794221874395,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_hU1rlntp57BI2MiWakoP",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\project-after",
+            "created": 1794221873944,
+            "updated": 1794221873944,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  ]
+}

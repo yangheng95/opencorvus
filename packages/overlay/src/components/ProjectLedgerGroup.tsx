@@ -157,6 +157,8 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
     }),
   })
   const accessibleName = () => [label().name, props.directoryHint].filter(Boolean).join(" · ")
+  const projectActionsLabel = () => t("project.more_actions", { name: accessibleName() })
+  const startProjectWorkLabel = () => t("project.new_chat_button_title", { name: accessibleName() })
   const className = () => ["project-group", props.class].filter(Boolean).join(" ")
   const countText = () => new Intl.NumberFormat(localeTag()).format(props.count)
   const tooltipDirectory = () => props.directory.trim()
@@ -275,8 +277,8 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                 data-chrome="icon-action"
                 data-ui="project-group-more"
                 disabled={busy()}
-                title={t("project.more_actions")}
-                aria-label={t("project.more_actions")}
+                title={projectActionsLabel()}
+                aria-label={projectActionsLabel()}
               >
                 <Icon name="more-horizontal" />
               </DropdownMenu.Trigger>
@@ -383,7 +385,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                 data-ui="project-group-new-chat"
                 disabled={busy()}
                 data-project-new-chat={props.directory}
-                aria-label={t("project.new_chat_button_title")}
+                aria-label={startProjectWorkLabel()}
                 onClick={(event) => {
                   event.stopPropagation()
                   runProjectAction(`new-chat:${props.directory}`, () => props.onCreateChat?.(props.directory))
@@ -392,7 +394,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                 <Icon name="plus" />
               </Tooltip.Trigger>
               <Tooltip.Portal>
-                <Tooltip.Content>{t("project.new_chat_button_title")}</Tooltip.Content>
+                <Tooltip.Content>{startProjectWorkLabel()}</Tooltip.Content>
               </Tooltip.Portal>
             </Tooltip.Root>
           </Show>

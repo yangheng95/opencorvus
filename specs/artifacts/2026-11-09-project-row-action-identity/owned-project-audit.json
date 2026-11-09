@@ -1,0 +1,303 @@
+{
+  "before": {
+    "reads": [
+      {
+        "requestID": "a7ec481b-b4b1-489b-8456-658ac831ae94",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 486,
+        "time": "2026-11-09T10:54:25.082Z"
+      },
+      {
+        "requestID": "debb91fc-fdf4-4567-89b0-0a35ab4f54e4",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 220,
+        "time": "2026-11-09T10:54:25.305Z"
+      },
+      {
+        "requestID": "f2543ca1-5ad0-4670-9836-ee3bbe195019",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 356,
+        "time": "2026-11-09T10:54:25.664Z"
+      },
+      {
+        "requestID": "b99356a3-a4d5-409c-9b1c-25ed08c4836c",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 235,
+        "time": "2026-11-09T10:54:25.901Z"
+      },
+      {
+        "requestID": "8ead4a8a-be20-44f7-93d7-13380f51c52d",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 394,
+        "time": "2026-11-09T10:54:26.297Z"
+      },
+      {
+        "requestID": "e6cbcd7e-bf59-4f92-8077-f66f6608652b",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 176,
+        "time": "2026-11-09T10:54:26.475Z"
+      },
+      {
+        "requestID": "1c93ceb7-1b9e-406b-962a-488b5877f66c",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 8,
+        "time": "2026-11-09T10:54:26.485Z"
+      }
+    ],
+    "pinWrite": null,
+    "pinned": [],
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\project-before",
+        "gitHead": "fa3d12105854e4bd0003734b3b1551a9433b5552",
+        "text": "Owned Work Ledger action target: project-before\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\before-east\\Atlas",
+        "gitHead": "25f8bfeffc63601622902a67d252163cb3b39c1e",
+        "text": "Owned Work Ledger action target: before-east/Atlas\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\before-west\\Atlas",
+        "gitHead": "c4ad7fd767f517b098bb67927ecf5dd182549979",
+        "text": "Owned Work Ledger action target: before-west/Atlas\n"
+      }
+    ],
+    "tables": {
+      "project": 3,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b108-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39164",
+      "pid": 28248
+    },
+    "shutdown": {
+      "port": 39164,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTLSw400nC23cYIWd"
+      },
+      "pid": 28248
+    }
+  },
+  "after": {
+    "reads": [
+      {
+        "requestID": "675397c7-fef2-43b7-b47f-5b33fece4d70",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 20244,
+        "time": "2026-11-09T11:01:10.313Z"
+      },
+      {
+        "requestID": "d1272129-c2ff-42c6-a2ea-df07d61eaa1f",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 208,
+        "time": "2026-11-09T11:01:10.526Z"
+      },
+      {
+        "requestID": "f8f0055b-6b95-48eb-8216-b29b94645e56",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 267,
+        "time": "2026-11-09T11:01:10.796Z"
+      },
+      {
+        "requestID": "db5853f1-b45f-4b5e-ac53-cfbfe3c52d7b",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 253,
+        "time": "2026-11-09T11:01:11.050Z"
+      },
+      {
+        "requestID": "d8b8b140-bc02-4c9c-a53c-05f22b70a203",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 275,
+        "time": "2026-11-09T11:01:11.328Z"
+      },
+      {
+        "requestID": "550328d9-dd0f-44b7-bf3d-2869e0af5c4d",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 191,
+        "time": "2026-11-09T11:01:11.522Z"
+      },
+      {
+        "requestID": "afa6a3d5-9f16-4039-a0a3-371b91370c60",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 11,
+        "time": "2026-11-09T11:01:11.536Z"
+      },
+      {
+        "requestID": "b23b991f-4d5c-4b78-8275-c3295958e4c9",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 0,
+        "time": "2026-11-09T11:02:18.769Z"
+      },
+      {
+        "requestID": "ce437a9e-315a-4e35-91bb-132077dcd4f5",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 534,
+        "time": "2026-11-09T11:02:19.306Z"
+      },
+      {
+        "requestID": "71a73a83-602d-4530-b8cc-a6030c9b01a9",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1,
+        "time": "2026-11-09T11:02:19.312Z"
+      },
+      {
+        "requestID": "afa3a653-69e3-400c-ad4c-f703e0a1c8f4",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 203,
+        "time": "2026-11-09T11:02:19.517Z"
+      },
+      {
+        "requestID": "3fe3c9ba-4678-409b-88d2-3e4f80c6d269",
+        "method": "GET",
+        "path": "/path",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1,
+        "time": "2026-11-09T11:02:19.520Z"
+      },
+      {
+        "requestID": "0a8e7a0c-be89-42de-bcfd-e08ba186f381",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 178,
+        "time": "2026-11-09T11:02:19.700Z"
+      },
+      {
+        "requestID": "71c874ae-f7a5-47ba-956b-2288f9afddee",
+        "method": "GET",
+        "path": "/work-ledger",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 6,
+        "time": "2026-11-09T11:02:19.708Z"
+      }
+    ],
+    "pinWrite": {
+      "requestID": "eb7d05a0-7253-4902-b14b-1e3190bf798c",
+      "method": "PATCH",
+      "path": "/work-ledger/project/prj_h0g1wHW4OnYuIOlFWOR4/pin",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 10,
+      "time": "2026-11-09T11:01:42.338Z"
+    },
+    "pinned": [
+      {
+        "kind": "project",
+        "id": "prj_h0g1wHW4OnYuIOlFWOR4",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-west\\Atlas",
+        "created": 1794221874817,
+        "updated": 1794221874817,
+        "pinned": true
+      }
+    ],
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\project-after",
+        "gitHead": "5b5b65d782db16de57bf861855fa1eb874163b83",
+        "text": "Owned Work Ledger action target: project-after\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-east\\Atlas",
+        "gitHead": "79a86982a23459c263deb5cadad4d70dc350fa3b",
+        "text": "Owned Work Ledger action target: after-east/Atlas\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b108\\after-west\\Atlas",
+        "gitHead": "a6b02ce77f21d1a42e32a711077c1eedcb5076be",
+        "text": "Owned Work Ledger action target: after-west/Atlas\n"
+      }
+    ],
+    "tables": {
+      "project": 3,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b108-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39165",
+      "pid": 33068
+    },
+    "shutdown": {
+      "port": 39165,
+      "pid": 33068,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTNFtE00Yg6v938a3"
+      },
+      "status": 200
+    }
+  }
+}
