@@ -978,6 +978,11 @@ button.s-row:focus-visible {
   gap: var(--ui-gap-md);
 }
 
+/* The editor releases its fields as soon as it closes. */
+:is(.dialog, .dialog-overlay).channel-editor-dialog[data-closed] {
+  animation: none;
+}
+
 /* Channel-doc card: borderless inset card carrying the channel's
    docs link + credit + CTA button. The transition declaration
    that previously lived in a late-tail dupe at the styles.css

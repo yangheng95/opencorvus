@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [通道编辑返回焦点证据](2026-11-09-channel-editor-return-focus/README.md)
 - [通道目录操作名称证据](2026-11-09-channel-catalog-action-identity/README.md)
 - [日志来源搜索证据](2026-11-09-log-source-language-and-search/README.md)
 - [日志读取失败证据](2026-11-09-log-tail-failure-feedback/README.md)

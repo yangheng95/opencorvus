@@ -5109,6 +5109,9 @@ Channel rows use generated ChannelListResponse and display configuration status
 and runtime status separately; missing configuration is not runtime availability.
 Edit and documentation actions name the same channel as their catalog row in
 the current language, using the original catalog name for each action target.
+The channel editor publishes its actual open and closed states to the shared
+modal. Dismissal returns to the opening Edit button when its connection,
+workspace selection and directory still own the action.
 
 The current GET /channel field descriptor provides labelKey and an optional
 example-or-hint placeholder, using the shared ChannelFieldPlaceholder schema.

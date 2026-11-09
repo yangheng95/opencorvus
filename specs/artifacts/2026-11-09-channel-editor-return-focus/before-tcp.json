@@ -1,0 +1,192 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/channel",
+      "operationId": "channel.list",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "catalog": [
+    {
+      "id": "slack",
+      "name": "Slack",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "discord",
+      "name": "Discord",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "feishu",
+      "name": "Feishu / Lark",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "whatsapp",
+      "name": "WhatsApp",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "googlechat",
+      "name": "Google Chat",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "msteams",
+      "name": "Microsoft Teams",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "line",
+      "name": "LINE",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "matrix",
+      "name": "Matrix",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "mattermost",
+      "name": "Mattermost",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "signal",
+      "name": "Signal",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "wecom",
+      "name": "WeCom",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "dingtalk",
+      "name": "DingTalk",
+      "status": "missing",
+      "runtimeStatus": "disabled"
+    },
+    {
+      "id": "clickclack",
+      "name": "ClickClack",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "imessage",
+      "name": "iMessage",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "irc",
+      "name": "IRC",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "nextcloud-talk",
+      "name": "Nextcloud Talk",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "nostr",
+      "name": "Nostr",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "qqbot",
+      "name": "QQ Bot",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "raft",
+      "name": "Raft",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "reef",
+      "name": "Reef",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "sms",
+      "name": "SMS",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "synology-chat",
+      "name": "Synology Chat",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "tlon",
+      "name": "Tlon",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "twitch",
+      "name": "Twitch",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "zalo",
+      "name": "Zalo",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    },
+    {
+      "id": "zalouser",
+      "name": "Zalo Personal",
+      "status": "missing",
+      "runtimeStatus": "unavailable"
+    }
+  ],
+  "project": {
+    "id": "prj_h3oZXbFx1fCBGsZOBT9Z",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b60\\project-before"
+  },
+  "listedProjectCount": 1
+}

@@ -79,7 +79,10 @@ export default function ChannelsPanel(props: { directory: string }) {
   const [tutorialOwner, setTutorialOwner] = createSignal<TutorialOpenOwner | null>(null)
   let saveGeneration = 0
   let tutorialGeneration = 0
-  let scopeIdentity = `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${props.directory.trim()}`
+  const currentScopeIdentity = () =>
+    `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${props.directory.trim()}`
+  let scopeIdentity = currentScopeIdentity()
+  let returnToEditTrigger: (() => HTMLButtonElement | null) | undefined
   let noticeGeneration = 0
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -105,12 +108,16 @@ export default function ChannelsPanel(props: { directory: string }) {
     setPublicUrlInvalid(false)
   })
 
-  const editingEntry = createMemo(() => channels().find((c) => c.id === editingID()) ?? null)
+  const editingEntry = createMemo(() =>
+    editingOwner()?.directory === props.directory.trim()
+      ? channels().find((c) => c.id === editingID()) ?? null
+      : null,
+  )
   createEffect(() => {
-    const directory = props.directory.trim()
-    const identity = `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${directory}`
+    const identity = currentScopeIdentity()
     if (identity === scopeIdentity) return
     scopeIdentity = identity
+    returnToEditTrigger = undefined
     invalidateSaveOwner()
     invalidateTutorialOwner()
     clearNotice()
@@ -120,6 +127,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   onCleanup(() => {
     saveGeneration++
     tutorialGeneration++
+    returnToEditTrigger = undefined
     if (noticeTimer) clearTimeout(noticeTimer)
   })
 
@@ -127,9 +135,11 @@ export default function ChannelsPanel(props: { directory: string }) {
     return (appStore.config as any)?.channel?.[channelID]?.[key]
   }
 
-  function openEdit(channelID: string) {
+  function openEdit(channelID: string, trigger: HTMLButtonElement) {
     const entry = channels().find((c) => c.id === channelID)
     if (!entry) return
+    const scope = currentScopeIdentity()
+    returnToEditTrigger = () => currentScopeIdentity() === scope ? trigger : null
     invalidateSaveOwner()
     invalidateTutorialOwner()
     clearNotice()
@@ -479,7 +489,7 @@ export default function ChannelsPanel(props: { directory: string }) {
                             tone="neutral"
                             title={t("channel.edit_title", { name: item.name })}
                             aria-label={t("channel.edit_title", { name: item.name })}
-                            onClick={() => openEdit(item.id)}
+                            onClick={(event) => openEdit(item.id, event.currentTarget)}
                           >
                             {t("common.edit")}
                           </Button>
@@ -494,40 +504,50 @@ export default function ChannelsPanel(props: { directory: string }) {
         </Show>
       </SettingsPanel>
 
-      <Show when={editingEntry() !== null && editingOwner()?.directory === props.directory.trim()}>
-        {(_) => {
-          const entry = editingEntry()!
-          return (
-            <Dialog
-              open={true}
-              title={t("channel.configuration_title", { name: entry.name })}
-              onClose={() => closeEdit()}
-              footer={
-                <>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="md"
-                    tone="neutral"
-                    onClick={() => closeEdit()}
-                    disabled={savePending("channel", entry.id)}
-                  >
-                    {t("common.cancel")}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="solid"
-                    size="md"
-                    tone="accent"
-                    onClick={handleSaveChannel}
-                    disabled={savePending("channel", entry.id)}
-                  >
-                    {savePending("channel", entry.id) ? t("common.saving") : t("common.save")}
-                  </Button>
-                </>
-              }
-            >
-              <Show when={notice() && noticeFormIdentity() === `channel:${entry.id}`}>{noticeState()}</Show>
+      <Dialog
+        open={editingEntry() !== null}
+        class="channel-editor-dialog"
+        overlayClass="channel-editor-dialog"
+        title={
+          <Show when={editingEntry()}>
+            {(entry) => t("channel.configuration_title", { name: entry().name })}
+          </Show>
+        }
+        onClose={closeEdit}
+        returnFocusTarget={() => returnToEditTrigger?.() ?? null}
+        footer={
+          <Show when={editingEntry()}>
+            {(entry) => (
+              <>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="md"
+                  tone="neutral"
+                  onClick={closeEdit}
+                  disabled={savePending("channel", entry().id)}
+                >
+                  {t("common.cancel")}
+                </Button>
+                <Button
+                  type="button"
+                  variant="solid"
+                  size="md"
+                  tone="accent"
+                  onClick={handleSaveChannel}
+                  disabled={savePending("channel", entry().id)}
+                >
+                  {savePending("channel", entry().id) ? t("common.saving") : t("common.save")}
+                </Button>
+              </>
+            )}
+          </Show>
+        }
+      >
+        <Show when={editingEntry()}>
+          {(entry) => (
+            <>
+              <Show when={notice() && noticeFormIdentity() === `channel:${entry().id}`}>{noticeState()}</Show>
               <div class="channel-doc-card">
                 <div class="channel-doc-copy">
                   <span class="channel-doc-title">{t("channel.tutorial_hint")}</span>
@@ -539,22 +559,22 @@ export default function ChannelsPanel(props: { directory: string }) {
                     variant="ghost"
                     size="md"
                     tone="neutral"
-                    title={t("channel.tutorial_action", { name: entry.name })}
-                    aria-label={t("channel.tutorial_action", { name: entry.name })}
+                    title={t("channel.tutorial_action", { name: entry().name })}
+                    aria-label={t("channel.tutorial_action", { name: entry().name })}
                     disabled={
-                      tutorialOwner()?.target === entry.docs_url &&
-                      tutorialOwner()?.formIdentity === `channel:${entry.id}`
+                      tutorialOwner()?.target === entry().docs_url &&
+                      tutorialOwner()?.formIdentity === `channel:${entry().id}`
                     }
-                    onClick={(event) => void openTutorial(entry.docs_url, event.currentTarget)}
+                    onClick={(event) => void openTutorial(entry().docs_url, event.currentTarget)}
                   >
                     {t("channel.tutorial")}
                   </Button>
                 </Show>
               </div>
 
-              <For each={entry.fields}>
+              <For each={entry().fields}>
                 {(field) => {
-                  const name = `channel_${entry.id}_${field.key}`
+                  const name = `channel_${entry().id}_${field.key}`
                   const currentVal = () => fieldValues()[field.key]
 
                   if (field.type === "boolean") {
@@ -591,10 +611,10 @@ export default function ChannelsPanel(props: { directory: string }) {
                   )
                 }}
               </For>
-            </Dialog>
-          )
-        }}
-      </Show>
+            </>
+          )}
+        </Show>
+      </Dialog>
     </>
   )
 }

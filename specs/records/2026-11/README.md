@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [通道编辑返回焦点](2026-11-09-channel-editor-return-focus.md)
 - [通道目录操作名称](2026-11-09-channel-catalog-action-identity.md)
 - [日志来源语言与搜索](2026-11-09-log-source-language-and-search.md)
 - [日志读取失败反馈](2026-11-09-log-tail-failure-feedback.md)
