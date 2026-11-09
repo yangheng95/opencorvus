@@ -429,11 +429,10 @@
   background: var(--hover-wash);
 }
 
-.browser-preview-address-error {
+.browser-preview-address-guidance {
   min-width: 0;
   overflow-wrap: anywhere;
-  color: var(--bad);
-  font-family: var(--mono);
+  color: var(--text-muted);
   font-size: var(--ui-font-body);
 }
 

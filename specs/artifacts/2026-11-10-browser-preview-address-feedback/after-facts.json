@@ -1,0 +1,26 @@
+{
+  "entry": "main-mIr4Kv6b.js",
+  "health": true,
+  "externalOpen": {
+    "screenshot": "17-after-external-open.jpg",
+    "url": "http://127.0.0.1:39319/ui/?address-review=external-open-b147",
+    "title": "OpenCorvus",
+    "trigger": "Tab then Enter on external open button",
+    "observer": "manually inspected browser tab inventory and new page",
+    "initiator": "359",
+    "newTab": "360",
+    "closed": true
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUPUXeQ0zzlYY155ukH",
+      "messages": [],
+      "status": 200
+    },
+    {
+      "id": "ses_-zUPUXlamzz6UR15vlAJ",
+      "messages": [],
+      "status": 200
+    }
+  ]
+}

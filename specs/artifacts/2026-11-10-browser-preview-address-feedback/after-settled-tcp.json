@@ -1,0 +1,64 @@
+{
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "bec31428-6980-40b5-8537-c35cbc75644a",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}",
+      "operationId": "task.get",
+      "status": 200,
+      "requestID": "b4bef9c2-e049-48ba-9ced-68b3c5e6b111",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/browser-preview",
+      "operationId": "browserPreview.taskTarget",
+      "status": 200,
+      "requestID": "eaa74d6b-87ca-4dce-93c7-fe57817443f8",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hQ3gNZzDL3zvlCZiQkIQ",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b147\\project-after"
+  },
+  "task": {
+    "id": "tsk_g00VaVSEPQ00ssLPKac4",
+    "title": "Browser preview target review",
+    "status": "completed"
+  },
+  "accepted": {
+    "id": "art_g0VaVSLaL002maFaHNRg",
+    "taskID": "tsk_g00VaVSEPQ00ssLPKac4",
+    "latestEvidenceIDs": {},
+    "kind": "task-url",
+    "status": "ready",
+    "projectRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b147\\project-after",
+    "url": "http://127.0.0.1:39319/ui/?preview=owned-after",
+    "viewports": [
+      {
+        "id": "desktop",
+        "labelKey": "desktop",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "diagnostics": [
+      "Using task browser preview target art_g0VaVSLaL002maFaHNRg."
+    ],
+    "candidates": [
+      {
+        "id": "art_g0VaVSLaL002maFaHNRg",
+        "url": "http://127.0.0.1:39319/ui/?preview=owned-after",
+        "source": "engine-artifact",
+        "selected": true,
+        "timeUpdated": 1794252907633
+      }
+    ],
+    "source": "engine-artifact"
+  }
+}

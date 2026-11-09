@@ -1241,6 +1241,14 @@ the controller that actually mounts; a retired controller or stale microtask
 cannot consume or overwrite it. This event does not require Task scope or
 invalidate Browser Preview target discovery.
 
+Each Browser Preview tab retains its own address draft. Editing does not change
+the live native page or the published task target. Escape while editing restores
+the displayed address (live native page, manual navigation, then task target)
+and keeps focus in the address field. Feedback from a previous attempt clears on
+new input or Escape. When only external opening is supported, Enter gives
+localized guidance; opening the address still takes the explicit external
+button and its browser user gesture.
+
 ## Verification
 
 Permission and Question history parts retain original interaction identity,

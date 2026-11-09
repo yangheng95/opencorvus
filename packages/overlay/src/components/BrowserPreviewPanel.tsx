@@ -87,6 +87,11 @@ type BrowserPreviewNativeScope = {
   manualRequestID?: number
 }
 
+type BrowserPreviewAddressFeedback = {
+  key: "use_external" | "invalid" | "navigation_failed" | "external_open_failed"
+  diagnostic?: string
+}
+
 function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === "AbortError"
 }
@@ -267,7 +272,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   const [addressDirty, setAddressDirty] = createSignal(false)
   const [addressSubmitting, setAddressSubmitting] = createSignal(false)
   const [addressExternalOpening, setAddressExternalOpening] = createSignal(false)
-  const [addressSubmitError, setAddressSubmitError] = createSignal("")
+  const [addressFeedback, setAddressFeedback] = createSignal<BrowserPreviewAddressFeedback>()
   const [browserMenuOpen, setBrowserMenuOpen] = createSignal(false)
   const [browserMenuError, setBrowserMenuError] = createSignal("")
   const browserMenuOwner = `browser-menu:${props.tabID}`
@@ -294,7 +299,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     setAddressSubmitting(false)
     setAddressDirty(false)
     setAddressDraft(resolved.url ?? "")
-    setAddressSubmitError("")
+    setAddressFeedback(undefined)
     setNativeCurrentPage(undefined)
   })
   const renderedEvidence = createMemo<BrowserPreviewRenderedEvidence | undefined>(() => {
@@ -1098,7 +1103,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
       })
       .catch((error) => {
         if (manualNavigationRequest()?.id !== request.id) return
-        setAddressSubmitError(browserPreviewErrorMessage(error))
+        setAddressFeedback({ key: "navigation_failed", diagnostic: browserPreviewErrorMessage(error) })
         setAddressSubmitting(false)
         setManualNavigationRequest(undefined)
       })
@@ -1108,8 +1113,9 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   // actively editing it. Prefer the live native webview URL (post-redirect
   // reality) when the surface is mounted; otherwise use the resolved backend
   // target URL.
+  const displayedAddress = createMemo(() => nativeCurrentPage()?.url || manualNavigationRequest()?.url || targetUrl() || "")
   createEffect(() => {
-    const url = nativeCurrentPage()?.url || manualNavigationRequest()?.url || (targetUrl() ?? "")
+    const url = displayedAddress()
     if (addressDirty()) return
     if (addressDraft() !== url) setAddressDraft(url)
   })
@@ -1171,9 +1177,16 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   )
   const addressNavigationAvailable = createMemo(() => addressNavigationSupported() && !addressActionBusy())
   const addressExternalOpenAvailable = createMemo(() => addressExternalOpenSupported() && !addressActionBusy())
-  function requestAddressNavigation(raw: string): void {
-    setAddressSubmitError("")
-    const url = normalizeBrowserPreviewNativeUrl(raw)
+  function readAddressInput(raw: string): string | undefined {
+    try {
+      return normalizeBrowserPreviewNativeUrl(raw)
+    } catch (error) {
+      setAddressFeedback({ key: "invalid", diagnostic: browserPreviewErrorMessage(error) })
+    }
+  }
+
+  function requestAddressNavigation(url: string): void {
+    setAddressFeedback(undefined)
     setAddressDraft(url)
     setAddressDirty(false)
     setAddressSubmitting(true)
@@ -1186,15 +1199,16 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     if (!addressExternalOpenAvailable()) return
     const raw = addressDraft().trim()
     if (!raw) return
-    setAddressSubmitError("")
+    const url = readAddressInput(raw)
+    if (!url) return
+    setAddressFeedback(undefined)
     try {
-      const url = normalizeBrowserPreviewNativeUrl(raw)
       setAddressDirty(true)
       setAddressDraft(url)
       setAddressExternalOpening(true)
-      if (!(await nativeOpen(url))) throw new Error(t("browser_preview.address.external_open_failed"))
+      if (!(await nativeOpen(url))) setAddressFeedback({ key: "external_open_failed" })
     } catch (error) {
-      setAddressSubmitError(browserPreviewErrorMessage(error))
+      setAddressFeedback({ key: "external_open_failed", diagnostic: browserPreviewErrorMessage(error) })
     } finally {
       setAddressExternalOpening(false)
     }
@@ -1205,7 +1219,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
       if (!browserPreviewNativeSurfaceAvailable() || !browserPreviewNativeUrlNavigationAvailable()) {
         throw new Error(t("browser_preview.empty.native_unsupported"))
       }
-      requestAddressNavigation(url)
+      requestAddressNavigation(normalizeBrowserPreviewNativeUrl(url))
     },
   }
   const unregisterController = props.registerController?.(controller)
@@ -1596,10 +1610,11 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
               const raw = addressDraft().trim()
               if (!raw || addressActionBusy()) return
               if (!addressNavigationSupported()) {
-                setAddressSubmitError(t("browser_preview.address.navigation_unavailable"))
+                setAddressFeedback({ key: "use_external" })
                 return
               }
-              requestAddressNavigation(raw)
+              const url = readAddressInput(raw)
+              if (url) requestAddressNavigation(url)
             }}
           >
             <TextField.Root class="browser-preview-address-field" size="sm" disabled={!addressInputAvailable()}>
@@ -1617,17 +1632,25 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
                 aria-label={t("browser_preview.address.label")}
                 value={addressDraft()}
                 onKeyDown={(event) => {
-                  if (event.key !== "Enter" || event.isComposing || addressNavigationSupported()) return
-                  event.preventDefault()
-                  event.currentTarget.form?.requestSubmit()
+                  if (event.isComposing) return
+                  if (event.key === "Escape" && (addressDirty() || addressFeedback())) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    setAddressFeedback(undefined)
+                    setAddressDirty(false)
+                  } else if (event.key === "Enter" && !addressNavigationSupported()) {
+                    event.preventDefault()
+                    event.currentTarget.form?.requestSubmit()
+                  }
                 }}
                 onInput={(event) => {
+                  setAddressFeedback(undefined)
                   setAddressDirty(true)
                   setAddressDraft(event.currentTarget.value)
                 }}
                 onBlur={() => {
                   if (!addressDirty()) return
-                  if (addressDraft().trim() === (targetUrl() ?? "").trim()) setAddressDirty(false)
+                  if (addressDraft().trim() === displayedAddress()) setAddressDirty(false)
                 }}
               />
             </TextField.Root>
@@ -1679,13 +1702,20 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
             </Button>
           </div>
         </div>
-        <Show when={addressSubmitError()}>
-          {(error) => (
-            <code class="browser-preview-address-error" data-ui="browser-preview-address-error" role="alert">
-              {error()}
-            </code>
-          )}
-        </Show>
+        <Switch>
+          <Match when={addressFeedback()?.key === "use_external"}>
+            <div class="browser-preview-address-guidance" role="status">
+              {t("browser_preview.address.use_external")}
+            </div>
+          </Match>
+          <Match when={addressFeedback()}>
+            {(feedback) => (
+              <Feedback tone="error" details={feedback().diagnostic}>
+                {t(`browser_preview.address.${feedback().key}`)}
+              </Feedback>
+            )}
+          </Match>
+        </Switch>
         <Show when={targetLoading()}>
           <div class="browser-preview-progress" data-ui="browser-preview-progress" />
         </Show>
