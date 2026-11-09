@@ -1,0 +1,86 @@
+{
+  "englishFirst": {
+    "accessibility": [
+      "\t\t\t\t\t\t\t\t\t\t113 link Description: Official docs, Value: docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+      "\t\t\t\t\t\t\t\t\t\t119 link Description: Official docs, Value: learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+      "\t\t\t\t\t\t\t\t\t\t125 link Description: Official docs, Value: cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+      "The focused UI element is 113 link Description: Official docs, URL: docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html"
+    ],
+    "links": [
+      {
+        "focused": true,
+        "href": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+        "source": "AWS Bedrock control plane",
+        "visibleText": "Official docs"
+      },
+      {
+        "focused": false,
+        "href": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+        "source": "Azure OpenAI control plane",
+        "visibleText": "Official docs"
+      },
+      {
+        "focused": false,
+        "href": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+        "source": "Google Vertex AI control plane",
+        "visibleText": "Official docs"
+      }
+    ]
+  },
+  "englishSecond": {
+    "accessibility": [
+      "\t\t\t\t\t\t\t\t\t\t113 link Description: Official docs, Value: docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+      "\t\t\t\t\t\t\t\t\t\t119 link Description: Official docs, Value: learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+      "\t\t\t\t\t\t\t\t\t\t125 link Description: Official docs, Value: cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+      "The focused UI element is 119 link Description: Official docs, URL: learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference"
+    ],
+    "links": [
+      {
+        "focused": false,
+        "href": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+        "source": "AWS Bedrock control plane",
+        "visibleText": "Official docs"
+      },
+      {
+        "focused": true,
+        "href": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+        "source": "Azure OpenAI control plane",
+        "visibleText": "Official docs"
+      },
+      {
+        "focused": false,
+        "href": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+        "source": "Google Vertex AI control plane",
+        "visibleText": "Official docs"
+      }
+    ]
+  },
+  "chineseThird": {
+    "accessibility": [
+      "\t\t\t\t\t\t\t\t\t\t113 link Description: 官方文档, Value: docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+      "\t\t\t\t\t\t\t\t\t\t119 link Description: 官方文档, Value: learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+      "\t\t\t\t\t\t\t\t\t\t125 link Description: 官方文档, Value: cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+      "The focused UI element is 125 link Description: 官方文档, URL: cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list"
+    ],
+    "links": [
+      {
+        "focused": false,
+        "href": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+        "source": "AWS Bedrock 控制面",
+        "visibleText": "官方文档"
+      },
+      {
+        "focused": false,
+        "href": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+        "source": "Azure OpenAI 控制面",
+        "visibleText": "官方文档"
+      },
+      {
+        "focused": true,
+        "href": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+        "source": "Google Vertex AI 控制面",
+        "visibleText": "官方文档"
+      }
+    ]
+  }
+}

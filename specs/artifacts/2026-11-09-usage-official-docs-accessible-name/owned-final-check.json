@@ -1,0 +1,137 @@
+{
+  "projects": {
+    "before": {
+      "head": "f758087835668f7bb4547908cb49311052fe1c16",
+      "originalBytes": 50,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      },
+      "retainedLogRun": "before",
+      "actualUsageRequests": [
+        {
+          "time": "2026-11-09T09:18:00.443Z",
+          "requestID": "5ed0b91a-734d-4be8-ba47-4754a5be37dd",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:18:00.457Z",
+          "requestID": "455291a6-0153-4679-8dba-d3571424f1be",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:18:00.467Z",
+          "requestID": "21779569-22dd-474e-8f02-294453106f72",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:18:00.500Z",
+          "requestID": "3a3fc300-671d-4b68-a2bd-8a5e5dffab4c",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:18:16.056Z",
+          "requestID": "02e904b5-ae9b-4604-a25e-804c0b6db320",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:18:16.267Z",
+          "requestID": "3c3f5c8a-df0c-499d-a48d-7a674ea5c5f8",
+          "status": 200
+        }
+      ]
+    },
+    "after": {
+      "head": "b82a7aa3f6dc4a1692898a8cba37ec14030f553d",
+      "originalBytes": 49,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      },
+      "retainedLogRun": "after",
+      "actualUsageRequests": [
+        {
+          "time": "2026-11-09T09:20:54.541Z",
+          "requestID": "7de83b2d-c58b-4b2f-9324-f4e5518bddbc",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:20:54.552Z",
+          "requestID": "dac34d43-6ef5-4d25-a677-ec761b82aaee",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:20:54.559Z",
+          "requestID": "1ab97be3-3885-4092-92fe-a2365b1f89da",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:20:54.592Z",
+          "requestID": "304ab995-cc0c-444f-9f51-c8413b0e5e75",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:21:12.487Z",
+          "requestID": "484ef65c-31bb-4dd5-a9db-159bf3b4976d",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:21:12.706Z",
+          "requestID": "516c1dd2-9ad0-45c3-9e1d-c9d5391b70f8",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:21:35.571Z",
+          "requestID": "ed886463-5642-4298-9aa0-a8a0d1c76c5b",
+          "status": 200
+        }
+      ]
+    }
+  },
+  "shutdown": [
+    {
+      "phase": "before",
+      "pid": 18496,
+      "port": 39135,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "port": 39135,
+        "processId": 18496,
+        "startupOccurrence": "iteration-b100-before",
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaSx8ar00d2pN6t2BE"
+        }
+      }
+    },
+    {
+      "phase": "after",
+      "pid": 22760,
+      "port": 39136,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "port": 39136,
+        "processId": 22760,
+        "startupOccurrence": "iteration-b100-after",
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaSxv6200OOJjaZOVc"
+        }
+      }
+    }
+  ]
+}

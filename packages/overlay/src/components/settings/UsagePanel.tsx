@@ -1,6 +1,6 @@
 import { Disclosure } from "../ui/Disclosure"
 import { Feedback } from "../ui/Feedback"
-import { For, Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, createUniqueId, onCleanup } from "solid-js"
 
 import type { OfficialUsageSource, UsagePeriod, UsageStatistics } from "@opencorvus-ai/sdk"
 import type { KeyboardDelegate } from "@kobalte/core"
@@ -260,6 +260,9 @@ function TokenComposition(props: { data: UsageStatistics }) {
 }
 
 function OfficialSourceCard(props: { source: OfficialUsageSource }) {
+  const id = createUniqueId()
+  const titleID = `${id}-title`
+  const docsID = `${id}-docs`
   const source = () => props.source
   const copy = (field: "label" | "scope" | "freshness") => t(`usage.official_source.${source().id}.${field}`)
   const officialPeriod = () => {
@@ -277,7 +280,7 @@ function OfficialSourceCard(props: { source: OfficialUsageSource }) {
     <article class="usage-official-card" data-status={source().status}>
       <header>
         <div>
-          <strong>{copy("label")}</strong>
+          <strong id={titleID}>{copy("label")}</strong>
           <span>{source().providerID}</span>
         </div>
         <span class="usage-official-card__status">{t(`usage.official_status.${source().status}`)}</span>
@@ -372,7 +375,13 @@ function OfficialSourceCard(props: { source: OfficialUsageSource }) {
       </Show>
       <footer>
         <span>{copy("freshness")}</span>
-        <a href={source().documentationURL} target="_blank" rel="noreferrer">
+        <a
+          id={docsID}
+          aria-labelledby={`${docsID} ${titleID}`}
+          href={source().documentationURL}
+          target="_blank"
+          rel="noreferrer"
+        >
           {t("usage.official_docs")}
           <Icon name="channel-link" size="compact" />
         </a>

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [官方用量文档链接名称](2026-11-09-usage-official-docs-accessible-name.md)
 - [用量对账的展开选择](2026-11-09-usage-reconciliation-disclosure-intent.md)
 - [用量图表随有效数据展示](2026-11-09-usage-chart-only-with-accepted-data.md)
 - [用量响应周期辨别](2026-11-09-usage-response-period-qualification.md)

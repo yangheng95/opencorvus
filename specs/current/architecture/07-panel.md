@@ -2238,6 +2238,8 @@ Empty periods retain their actual zero-valued buckets. Official provider
 comparisons and model detail remain below the primary overview. The official
 comparison disclosure keeps the user's open or closed choice for the current
 panel across period changes and retries. Its source cards require accepted data.
+Each official documentation link is named by its visible action followed by the
+localized title of its source card.
 No personal identity, subscription, streak or plugin usage is inferred from server
 credentials.
 Activity buckets use one Listbox inspection collection with a single Tab entry,

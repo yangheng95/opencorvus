@@ -1,0 +1,118 @@
+{
+  "phase": "before",
+  "operation": "global.usage",
+  "checks": [
+    {
+      "period": "day",
+      "buckets": 24,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "cloudLinks": [
+        {
+          "id": "aws-bedrock-control-plane",
+          "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html"
+        },
+        {
+          "id": "azure-openai-control-plane",
+          "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference"
+        },
+        {
+          "id": "vertex-ai-control-plane",
+          "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list"
+        }
+      ],
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    },
+    {
+      "period": "week",
+      "buckets": 7,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "cloudLinks": [
+        {
+          "id": "aws-bedrock-control-plane",
+          "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html"
+        },
+        {
+          "id": "azure-openai-control-plane",
+          "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference"
+        },
+        {
+          "id": "vertex-ai-control-plane",
+          "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list"
+        }
+      ],
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    },
+    {
+      "period": "month",
+      "buckets": 30,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "cloudLinks": [
+        {
+          "id": "aws-bedrock-control-plane",
+          "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html"
+        },
+        {
+          "id": "azure-openai-control-plane",
+          "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference"
+        },
+        {
+          "id": "vertex-ai-control-plane",
+          "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list"
+        }
+      ],
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    },
+    {
+      "period": "year",
+      "buckets": 365,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "cloudLinks": [
+        {
+          "id": "aws-bedrock-control-plane",
+          "documentationURL": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html"
+        },
+        {
+          "id": "azure-openai-control-plane",
+          "documentationURL": "https://learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference"
+        },
+        {
+          "id": "vertex-ai-control-plane",
+          "documentationURL": "https://cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list"
+        }
+      ],
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    }
+  ]
+}

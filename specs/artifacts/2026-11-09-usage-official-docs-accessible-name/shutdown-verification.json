@@ -1,0 +1,38 @@
+[
+  {
+    "phase": "before",
+    "pid": 18496,
+    "port": 39135,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "httpShutdown": {
+      "port": 39135,
+      "processId": 18496,
+      "startupOccurrence": "iteration-b100-before",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSx8ar00d2pN6t2BE"
+      }
+    }
+  },
+  {
+    "phase": "after",
+    "pid": 22760,
+    "port": 39136,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "httpShutdown": {
+      "port": 39136,
+      "processId": 22760,
+      "startupOccurrence": "iteration-b100-after",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSxv6200OOJjaZOVc"
+      }
+    }
+  }
+]
