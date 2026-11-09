@@ -5478,7 +5478,7 @@ retire the previous request, rows and cursor through the existing request owner.
 Continuation and post-mutation reload keep the current query. The shared search
 field stays editable during reads and is disabled during a row mutation; clearing
 it reloads the first unfiltered page. Empty results are localized separately from
-an empty archive. Restore/delete and their focus ownership remain unchanged.
+an empty archive.
 Archive failures present a localized operation summary with the original
 diagnostic details. A failed continuation keeps the accepted rows and cursor
 and presents its failure above the existing continuation action. When focus
@@ -5494,6 +5494,12 @@ uses the public pinned/updated/kind:id order, independently of directory-scoped
 UI row identity. Each page retains the existing request generation and authority;
 the refreshed window and continuation cursor commit together. Ordinary initial
 and continuation reads still fetch one page.
+Row-action settlement can move focus only while it remains on the original
+control or has returned to the document body after the control was disabled or
+removed. If another control has focus, the action leaves it there. A successful
+action otherwise moves focus to the surviving row at the same position (or the
+last row), or to the section heading if no row remains. A failed mutation returns
+focus to the original control if it is still connected.
 
 The shared Work Ledger candidate reader matches the owning Project's current
 custom name for Chat/Work, Mission and Task records as well as their existing

@@ -1,0 +1,91 @@
+{
+  "before": {
+    "gitOriginalBytes": 50,
+    "head": "b05ec5344cc8acc88ce370b38df8cb99d8884f74",
+    "generatedProjectEntries": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 202,
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0
+    },
+    "exactSessionIdentities": 202,
+    "archivedAsSeeded": 200,
+    "restored": {
+      "Restore review 201": "ses_-zUPXSlskzzDAzzr0a8x",
+      "Restore review 202": "ses_-zUPXSlsgzza5bUCNHQF"
+    },
+    "mutationReceipts": [
+      {
+        "requestID": "e3f1fc4b-2263-4d34-8710-e4eda01464ee",
+        "method": "PATCH",
+        "path": "/coding/chat/session/ses_-zUPXSlsgzza5bUCNHQF/archive",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 67
+      },
+      {
+        "requestID": "3029c553-1d35-47b0-9a11-ebf3fb54dbe2",
+        "method": "PATCH",
+        "path": "/coding/chat/session/ses_-zUPXSlskzzDAzzr0a8x/archive",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 42
+      }
+    ]
+  },
+  "after": {
+    "gitOriginalBytes": 49,
+    "head": "61e7999396775e46382aab0262939d4f287bbd7e",
+    "generatedProjectEntries": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 202,
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0
+    },
+    "exactSessionIdentities": 202,
+    "archivedAsSeeded": 199,
+    "restored": {
+      "Restore review 001": "ses_-zUPXSmCVzza8sG4i2kd",
+      "Restore review 201": "ses_-zUPXSlsJzz6JzODZd72",
+      "Restore review 202": "ses_-zUPXSlsCzzQz1CUl3LL"
+    },
+    "mutationReceipts": [
+      {
+        "requestID": "342eb729-76ad-47c6-b2d8-4436e3307762",
+        "method": "PATCH",
+        "path": "/coding/chat/session/ses_-zUPXSlsCzzQz1CUl3LL/archive",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 67
+      },
+      {
+        "requestID": "938a5bf6-8bbd-4bc6-bb6a-60f61a13fe87",
+        "method": "PATCH",
+        "path": "/coding/chat/session/ses_-zUPXSlsJzz6JzODZd72/archive",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 44
+      },
+      {
+        "requestID": "a594a754-6fe0-4984-8143-3af879935639",
+        "method": "PATCH",
+        "path": "/coding/chat/session/ses_-zUPXSmCVzza8sG4i2kd/archive",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 47
+      }
+    ]
+  }
+}

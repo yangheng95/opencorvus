@@ -1,0 +1,31 @@
+{
+  "during": {
+    "busy": "true",
+    "focus": "Search settings pages..."
+  },
+  "settled": [
+    "\t\t\t\t\t\t\t\t\t63 text Restored Restore review 202",
+    "The focused UI element is 26 search text field (settable) Search settings pages..."
+  ],
+  "typing": [
+    "\t\t\t\t\t\t26 search text field (settable) Description: Search settings pages..., Value: appearance",
+    "\t\t\t\t\t\t\t30 tab (selectable, settable, boolean) Appearance, Value: 0, ID: config-tab-appearance",
+    "The focused UI element is 26 search text field (settable) Description: Search settings pages..., Value: appearance"
+  ],
+  "normal": [
+    "\t\t\t\t\t\t\t\t\t57 text 已恢复 Restore review 201",
+    "The focused UI element is 67 button 恢复 Archive Restore Review 中的 Restore review 200"
+  ],
+  "last": {
+    "heading": {
+      "element": "archive-heading-focus",
+      "focus": "已归档工作",
+      "tabIndex": "-1"
+    },
+    "observation": [
+      "\t\t\t\t\t\t\t\t\t66 text 已恢复 Restore review 001",
+      "\t\t\t\t\t\t\t\t\t63 text 0 没有匹配的归档工作。",
+      "The focused UI element is 67 container 已归档工作"
+    ]
+  }
+}

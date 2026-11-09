@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [归档恢复时的焦点归属证据](2026-11-09-archive-restore-focus-ownership/README.md)
 - [文件转移后展开深层目的目录证据](2026-11-09-file-transfer-deep-destination-reveal/README.md)
 - [移动回执显示已在目标的文件证据](2026-11-09-file-move-already-at-destination/README.md)
 - [新建和重命名的目录边界证据](2026-11-09-file-entry-name-parent-boundary/README.md)

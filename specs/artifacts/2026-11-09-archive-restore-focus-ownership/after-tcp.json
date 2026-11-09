@@ -1,0 +1,162 @@
+{
+  "phase": "after",
+  "total": 199,
+  "restoredTitles": [
+    "Restore review 202",
+    "Restore review 201",
+    "Restore review 001"
+  ],
+  "checks": [
+    {
+      "operationId": "workLedger.listArchived",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "limit": 100
+      },
+      "rows": 100,
+      "first": "Restore review 200",
+      "last": "Restore review 101",
+      "cursor": {
+        "pinned": false,
+        "updated": 1794209740968,
+        "rowKey": "chat:ses_-zUPXSm2FzzNYGXiS3YF"
+      }
+    },
+    {
+      "operationId": "workLedger.listArchived",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "limit": 100,
+        "cursorPinned": false,
+        "cursorUpdated": 1794209740968,
+        "cursorRowKey": "chat:ses_-zUPXSm2FzzNYGXiS3YF"
+      },
+      "rows": 99,
+      "first": "Restore review 100",
+      "last": "Restore review 002",
+      "cursor": null
+    },
+    {
+      "operationId": "workLedger.listArchived",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "search": "Restore review 002"
+      },
+      "records": [
+        {
+          "id": "ses_-zUPXSmC5zz5JS59eR12",
+          "title": "Restore review 002",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+          "archived": 1794209740361
+        }
+      ]
+    },
+    {
+      "operationId": "workLedger.listArchived",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "search": "Restore review 001"
+      },
+      "result": {
+        "rows": 0,
+        "cursor": null
+      }
+    },
+    {
+      "operationId": "workLedger.list",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "search": "Restore review"
+      },
+      "records": [
+        {
+          "id": "ses_-zUPXSmCVzza8sG4i2kd",
+          "title": "Restore review 001",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+          "archived": null
+        },
+        {
+          "id": "ses_-zUPXSlsJzz6JzODZd72",
+          "title": "Restore review 201",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+          "archived": null
+        },
+        {
+          "id": "ses_-zUPXSlsCzzQz1CUl3LL",
+          "title": "Restore review 202",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+          "archived": null
+        }
+      ]
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after"
+      },
+      "record": {
+        "id": "ses_-zUPXSmCVzza8sG4i2kd",
+        "title": "Restore review 001",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+        "projectID": "prj_huWydP0IsWoMMOX2uaiY",
+        "created": 1794209740328,
+        "archived": null
+      }
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after"
+      },
+      "record": {
+        "id": "ses_-zUPXSmC5zz5JS59eR12",
+        "title": "Restore review 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+        "projectID": "prj_huWydP0IsWoMMOX2uaiY",
+        "created": 1794209740354,
+        "archived": 1794209740361
+      }
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after"
+      },
+      "record": {
+        "id": "ses_-zUPXSlsJzz6JzODZd72",
+        "title": "Restore review 201",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+        "projectID": "prj_huWydP0IsWoMMOX2uaiY",
+        "created": 1794209741580,
+        "archived": null
+      }
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after"
+      },
+      "record": {
+        "id": "ses_-zUPXSlsCzzQz1CUl3LL",
+        "title": "Restore review 202",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b91\\project-after",
+        "projectID": "prj_huWydP0IsWoMMOX2uaiY",
+        "created": 1794209741587,
+        "archived": null
+      }
+    }
+  ]
+}

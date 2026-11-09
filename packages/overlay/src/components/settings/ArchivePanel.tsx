@@ -164,6 +164,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   ) => {
     queueMicrotask(() => {
       if (!ownsAction()) return
+      const active = document.activeElement
+      if (active !== previousFocus && active !== document.body) return
       if (!committed && previousFocus?.isConnected) {
         previousFocus.focus({ preventScroll: true })
         return
