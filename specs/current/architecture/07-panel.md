@@ -5107,6 +5107,8 @@ resource pages use the same loading lifecycle on first entry and manual reload;
 Skill issue projection checks its owning directory before committing the result.
 Channel rows use generated ChannelListResponse and display configuration status
 and runtime status separately; missing configuration is not runtime availability.
+Edit and documentation actions name the same channel as their catalog row in
+the current language, using the original catalog name for each action target.
 
 The current GET /channel field descriptor provides labelKey and an optional
 example-or-hint placeholder, using the shared ChannelFieldPlaceholder schema.

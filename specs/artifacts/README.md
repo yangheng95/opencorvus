@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [通道目录操作名称证据](2026-11-09-channel-catalog-action-identity/README.md)
 - [日志来源搜索证据](2026-11-09-log-source-language-and-search/README.md)
 - [日志读取失败证据](2026-11-09-log-tail-failure-feedback/README.md)
 - [关于页宿主快捷键证据](2026-11-09-about-host-shortcuts/README.md)

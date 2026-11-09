@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [通道目录操作名称](records/2026-11/2026-11-09-channel-catalog-action-identity.md)
 - [日志来源语言与搜索](records/2026-11/2026-11-09-log-source-language-and-search.md)
 - [日志读取失败反馈](records/2026-11/2026-11-09-log-tail-failure-feedback.md)
 - [关于页快捷键跟随宿主](records/2026-11/2026-11-09-about-host-shortcuts.md)

@@ -462,8 +462,8 @@ export default function ChannelsPanel(props: { directory: string }) {
                               variant="ghost"
                               size="md"
                               tone="neutral"
-                              title={t("channel.tutorial_hint")}
-                              aria-label={t("channel.tutorial_hint")}
+                              title={t("channel.tutorial_action", { name: item.name })}
+                              aria-label={t("channel.tutorial_action", { name: item.name })}
                               disabled={
                                 tutorialOwner()?.target === item.docs_url && tutorialOwner()?.formIdentity === "catalog"
                               }
@@ -477,8 +477,8 @@ export default function ChannelsPanel(props: { directory: string }) {
                             variant="ghost"
                             size="md"
                             tone="neutral"
-                            title={t("channel.edit_title")}
-                            aria-label={t("channel.edit_title")}
+                            title={t("channel.edit_title", { name: item.name })}
+                            aria-label={t("channel.edit_title", { name: item.name })}
                             onClick={() => openEdit(item.id)}
                           >
                             {t("common.edit")}
@@ -539,8 +539,8 @@ export default function ChannelsPanel(props: { directory: string }) {
                     variant="ghost"
                     size="md"
                     tone="neutral"
-                    title={t("channel.tutorial_hint")}
-                    aria-label={t("channel.tutorial_hint")}
+                    title={t("channel.tutorial_action", { name: entry.name })}
+                    aria-label={t("channel.tutorial_action", { name: entry.name })}
                     disabled={
                       tutorialOwner()?.target === entry.docs_url &&
                       tutorialOwner()?.formIdentity === `channel:${entry.id}`
