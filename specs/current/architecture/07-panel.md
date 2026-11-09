@@ -3115,6 +3115,10 @@ existing config writes. It names that project before the operator edits any
 field and exposes the full directory in its scope disclosure. When no project
 is active, the section explains how to open an editable scope; client connection
 settings remain available.
+Clearing a project proxy can leave an inherited proxy in the accepted effective
+configuration. The same mutation response supplies the existing field projection
+and a distinct localized receipt for that outcome. The receipt remains until
+the operator edits the draft, starts another operation, or leaves the scope.
 
 ## Current Surface Ownership
 

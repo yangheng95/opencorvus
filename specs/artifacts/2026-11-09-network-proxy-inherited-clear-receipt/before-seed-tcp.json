@@ -1,0 +1,60 @@
+{
+  "phase": "before",
+  "step": "seed",
+  "checks": [
+    {
+      "route": "/global/config",
+      "method": "PATCH",
+      "operationId": "global.config.update",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "808ec225-5793-419d-9c05-df7996bd3604",
+      "proxy": {
+        "url": "http://127.0.0.1:31298",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    },
+    {
+      "route": "/config",
+      "method": "PATCH",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b95\\project-before",
+      "operationId": "config.update",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "fc4ec2b6-6725-417a-a697-1089e694b110",
+      "proxy": {
+        "url": "http://127.0.0.1:31299",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    },
+    {
+      "route": "/global/config",
+      "method": "GET",
+      "operationId": "global.config.get",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "e211f5e0-4a76-4772-b433-1dfe8e55d44d",
+      "proxy": {
+        "url": "http://127.0.0.1:31298",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    },
+    {
+      "route": "/config",
+      "method": "GET",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b95\\project-before",
+      "operationId": "config.get",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "e467cbf2-7cec-4975-b624-f9886d076e71",
+      "proxy": {
+        "url": "http://127.0.0.1:31299",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    }
+  ]
+}

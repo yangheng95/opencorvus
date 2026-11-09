@@ -1,0 +1,147 @@
+{
+  "projects": {
+    "before": {
+      "head": "f546d59a7525667f2d95502e607c46ebfdf38329",
+      "originalBytes": 40,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "intermediate": {
+        "project": null,
+        "global": {
+          "url": "http://127.0.0.1:31298",
+          "llmProvider": false,
+          "webResearch": false
+        }
+      },
+      "final": {
+        "project": null,
+        "global": {
+          "url": "http://127.0.0.1:31298",
+          "llmProvider": false,
+          "webResearch": false
+        }
+      },
+      "orderedPatchReceipts": [
+        {
+          "time": "2026-11-09T08:24:37.840Z",
+          "requestID": "808ec225-5793-419d-9c05-df7996bd3604",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 87
+        },
+        {
+          "time": "2026-11-09T08:24:38.319Z",
+          "requestID": "fc4ec2b6-6725-417a-a697-1089e694b110",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 404
+        },
+        {
+          "time": "2026-11-09T08:25:01.545Z",
+          "requestID": "bb9cc10e-c965-4277-9c3d-ffd02e5253ec",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 66
+        }
+      ]
+    },
+    "after": {
+      "head": "e58753c77bf974b5c5e5ebca7c39a15f69a3cad9",
+      "originalBytes": 39,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "intermediate": {
+        "project": null,
+        "global": {
+          "url": "http://127.0.0.1:31298",
+          "llmProvider": false,
+          "webResearch": false
+        }
+      },
+      "final": {
+        "project": {
+          "url": "http://127.0.0.1:31300",
+          "llmProvider": false,
+          "webResearch": false
+        },
+        "global": {
+          "url": "http://127.0.0.1:31298",
+          "llmProvider": false,
+          "webResearch": false
+        }
+      },
+      "orderedPatchReceipts": [
+        {
+          "time": "2026-11-09T08:28:07.748Z",
+          "requestID": "b635a467-b4f1-49b7-a7f2-5dab90cc1d51",
+          "method": "PATCH",
+          "path": "/global/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 46
+        },
+        {
+          "time": "2026-11-09T08:28:08.232Z",
+          "requestID": "0b95fc43-9253-4cb0-81e5-d8afd9893651",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 408
+        },
+        {
+          "time": "2026-11-09T08:28:20.536Z",
+          "requestID": "b8849e75-d7e5-419a-bc2c-7154e5b6de3f",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 45
+        },
+        {
+          "time": "2026-11-09T08:28:46.267Z",
+          "requestID": "2b14d2d9-e172-4503-8c4e-f27f0de69cc9",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 67
+        }
+      ]
+    }
+  },
+  "shutdown": [
+    {
+      "port": 39123,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSkf3d009bMECtxhr"
+      }
+    },
+    {
+      "port": 39124,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSkf4g00eEFEIWVbR"
+      }
+    }
+  ]
+}

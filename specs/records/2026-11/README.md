@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [清除项目代理后的继承回执](2026-11-09-network-proxy-inherited-clear-receipt.md)
 - [代理设置的项目范围](2026-11-09-network-proxy-project-scope.md)
 - [连接健康响应辨别](2026-11-09-health-response-qualification.md)
 - [连接保存与健康检查回执](2026-11-09-connection-save-health-feedback.md)

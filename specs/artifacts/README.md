@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [清除项目代理后的继承回执证据](2026-11-09-network-proxy-inherited-clear-receipt/README.md)
 - [代理设置的项目范围证据](2026-11-09-network-proxy-project-scope/README.md)
 - [连接健康响应辨别证据](2026-11-09-health-response-qualification/README.md)
 - [连接保存与健康检查回执证据](2026-11-09-connection-save-health-feedback/README.md)

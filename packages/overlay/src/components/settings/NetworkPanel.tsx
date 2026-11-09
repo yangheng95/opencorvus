@@ -71,6 +71,8 @@ interface NetworkFeedback {
   details?: string
 }
 
+type ProxyCommit = "saved" | "deleted" | "inherited"
+
 function describeFailure(error: unknown): string {
   if (error instanceof Error && error.message) return error.message
   return String(error)
@@ -85,9 +87,8 @@ export default function NetworkPanel() {
   const [saving, setSaving] = createSignal(false)
   const [deleting, setDeleting] = createSignal(false)
   const [testing, setTesting] = createSignal(false)
-  const [saved, setSaved] = createSignal(false)
+  const [commit, setCommit] = createSignal<ProxyCommit>()
   const [error, setError] = createSignal<NetworkFeedback | null>(null)
-  const [deleted, setDeleted] = createSignal(false)
   const [testResult, setTestResult] = createSignal<NetworkProxyTestResult | null>(null)
   const proxyConfigured = createMemo(() => !!(appStore.config as any)?.network?.proxy)
   const directory = createMemo(() => activeProjectDirectory().trim())
@@ -113,8 +114,7 @@ export default function NetworkPanel() {
       setDeleting(false)
       setTesting(false)
       setError(null)
-      setSaved(false)
-      setDeleted(false)
+      setCommit(undefined)
       if (feedbackTimer) clearTimeout(feedbackTimer)
       feedbackTimer = undefined
     }
@@ -153,10 +153,14 @@ export default function NetworkPanel() {
     return ownsScope(owner) && owner.draftGeneration === draftGeneration
   }
 
-  function scheduleOwnedFeedbackClear(owner: NetworkOperationOwner, clear: () => void): void {
+  function recordProxyCommit(owner: NetworkOperationOwner, result: ProxyCommit): void {
+    const completionOwner = { ...owner, draftGeneration }
     if (feedbackTimer) clearTimeout(feedbackTimer)
+    feedbackTimer = undefined
+    setCommit(result)
+    if (result === "inherited") return
     feedbackTimer = setTimeout(() => {
-      if (ownsCurrentDraft(owner)) clear()
+      if (ownsCurrentDraft(completionOwner)) setCommit(undefined)
       feedbackTimer = undefined
     }, 1800)
   }
@@ -170,8 +174,7 @@ export default function NetworkPanel() {
   function clearFeedback() {
     draftGeneration += 1
     setError(null)
-    setSaved(false)
-    setDeleted(false)
+    setCommit(undefined)
     setTestResult(null)
   }
 
@@ -250,9 +253,7 @@ export default function NetworkPanel() {
         return
       }
       if (!ownsScope(owner)) return
-      const completionOwner = { ...owner, draftGeneration }
-      setSaved(true)
-      scheduleOwnedFeedbackClear(completionOwner, () => setSaved(false))
+      recordProxyCommit(owner, nextProxy === null && savedConfig.network?.proxy ? "inherited" : "saved")
     } catch (err) {
       if (ownsScope(owner)) setError({ key: "network.proxy.save_failed", details: formatErrorDetails(err) })
     } finally {
@@ -273,9 +274,7 @@ export default function NetworkPanel() {
         return
       }
       if (!ownsScope(owner)) return
-      const completionOwner = { ...owner, draftGeneration }
-      setDeleted(true)
-      scheduleOwnedFeedbackClear(completionOwner, () => setDeleted(false))
+      recordProxyCommit(owner, savedConfig.network?.proxy ? "inherited" : "deleted")
     } catch (err) {
       if (ownsScope(owner)) setError({ key: "network.proxy.delete_failed", details: formatErrorDetails(err) })
     } finally {
@@ -405,7 +404,11 @@ export default function NetworkPanel() {
 
           {error() ? <Feedback tone="error" details={error()?.details}>{t(error()!.key)}</Feedback> : null}
 
-          {deleted() ? <Feedback tone="success">{t("network.proxy.deleted")}</Feedback> : null}
+          <Show when={commit() === "deleted" || commit() === "inherited"}>
+            <Feedback tone={commit() === "deleted" ? "success" : "info"}>
+              {t(commit() === "deleted" ? "network.proxy.deleted" : "network.proxy.inherited_after_clear")}
+            </Feedback>
+          </Show>
 
           {testResult() ? (
             <Feedback tone={testResult()!.ok ? "success" : "error"} details={testResult()!.targetUrl}>
@@ -450,7 +453,7 @@ export default function NetworkPanel() {
                   onClick={() => void saveProxy()}
                   disabled={saving() || testing() || deleting()}
                 >
-                  {saving() ? t("common.saving") : saved() ? t("common.saved") : t("common.save")}
+                  {saving() ? t("common.saving") : commit() === "saved" ? t("common.saved") : t("common.save")}
                 </Button>
               </>
             }
