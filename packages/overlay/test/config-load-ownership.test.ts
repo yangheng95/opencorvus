@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
-import { configure } from "../src/services/api"
+import { ApiError, configure } from "../src/services/api"
 import { loadConfigInfo, loadProviderInfo } from "../src/services/config-load"
 import { reloadProjectScope } from "../src/services/config"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
@@ -33,6 +33,29 @@ test("project load publishes its complete configuration and settled channel reso
   expect({ config: appStore.config, channels: appStore.channels, issues: appStore.configLoadIssues }).toEqual({
     config: accepted, channels, issues: [],
   })
+})
+
+test("a rejected configuration read retains its original diagnostic and accepts the channel result", async () => {
+  const accepted = { permission_mode: "ask", locale: "en-US" }
+  const channels = [{ id: "owned-channel", status: "missing" }]
+  const error = new ApiError(409, "config?directory=C%3A%2FProject-A", {
+    name: "NonCanonicalConfigFileError",
+    data: {
+      canonical: "C:/Project-A/.opencorvus/opencorvus.jsonc",
+      conflicts: ["C:/Project-A/.opencorvus/opencorvus.json"],
+      message: "Read the canonical configuration file.",
+    },
+  }, { "x-opencorvus-request-id": "config-read-409" }, "GET")
+  setConfigSnapshot(accepted)
+  transport((request) => {
+    if (request.path === "config") throw error
+    return channels
+  })
+
+  const issues = await loadConfigInfo()
+  expect(issues).toEqual([{ resource: "config", message: "Read the canonical configuration file.", cause: error }])
+  expect(appStore.configLoadIssues[0]?.cause).toBe(error)
+  expect({ config: appStore.config, channels: appStore.channels }).toEqual({ config: accepted, channels })
 })
 
 test("directory-free workspace refresh publishes global configuration and its empty project inventory", async () => {

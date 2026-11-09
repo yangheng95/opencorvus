@@ -1,0 +1,11 @@
+{"listenPort":39280,"upstreamPort":39278,"pid":9420}
+{"time":"2026-11-09T16:47:47.345Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T16:47:48.582Z","receipt":1,"stage":"arrival","path":"/config","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b137\\project-before","delay":22000}
+{"time":"2026-11-09T16:47:48.594Z","receipt":1,"stage":"origin","status":200,"requestID":"02e9a248-6d51-49fa-80a1-7f7bbbd60c46","permissionMode":"full_access"}
+{"time":"2026-11-09T16:48:10.607Z","receipt":1,"stage":"client-closed"}
+{"time":"2026-11-09T16:48:24.248Z","receipt":2,"stage":"arrival","path":"/config","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b137\\project-before","delay":22000}
+{"time":"2026-11-09T16:48:24.254Z","receipt":2,"stage":"origin","status":200,"requestID":"f3a06a8b-4786-4b6b-9a7c-479eb1f0553a","permissionMode":"full_access"}
+{"time":"2026-11-09T16:48:46.265Z","receipt":2,"stage":"client-closed"}
+{"time":"2026-11-09T16:49:17.609Z","receipt":3,"stage":"arrival","path":"/config","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b137\\project-before","delay":5500}
+{"time":"2026-11-09T16:49:17.613Z","receipt":3,"stage":"origin","status":200,"requestID":"ce6e04e5-4284-4570-ab1e-9732ee459307","permissionMode":"full_access"}
+{"time":"2026-11-09T16:49:23.124Z","receipt":3,"stage":"released","permissionMode":"full_access"}

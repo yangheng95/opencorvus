@@ -94,9 +94,6 @@ export default function GeneralPanel() {
 
   return (
     <SettingsPanel class="general-panel">
-      <For each={appStore.configLoadIssues.filter((issue) => issue.resource === "config")}>
-        {(issue) => <Feedback tone="error">{issue.message}</Feedback>}
-      </For>
       <For each={appStore.projectLoadIssues.filter((issue) => issue.resource !== "config")}>
         {(issue) => (
           <Feedback tone="error">

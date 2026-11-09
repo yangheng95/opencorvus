@@ -1,0 +1,31 @@
+{
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "269a91e4-15c3-48e7-8e3a-e466cbade067",
+      "schemaValid": true
+    },
+    {
+      "route": "/config",
+      "operationId": "config.get",
+      "status": 200,
+      "requestID": "f841046b-b433-42d0-97ba-5979d19605d8",
+      "schemaValid": true
+    },
+    {
+      "route": "/channel",
+      "operationId": "channel.list",
+      "status": 200,
+      "requestID": "e8d1bdc6-575e-4b04-ae49-29c3d63e760d",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_h1T7AO3xvmsq2CBOfOqR",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b137\\project-before"
+  },
+  "confirmedMode": "full_access",
+  "channelCount": 27
+}

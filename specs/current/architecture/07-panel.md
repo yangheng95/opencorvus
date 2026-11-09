@@ -5347,8 +5347,10 @@ The Composer and General authorization controls project only a confirmed
 or unrecognized mode remains unavailable; neither surface substitutes Full
 access. The Composer retains its settings entry while mode choices wait for a
 confirmed value. General offers an explicit reload through the existing scoped
-configuration reader and retains its original load diagnostics. This view state
-does not change server authorization or create a second permission policy.
+configuration reader and shows the original load diagnostic beside the mode.
+Reload remains focusable while busy. A successful read moves still-owned focus
+to the actual confirmed option. This view state does not change server
+authorization or create a second permission policy.
 Permission records load on demand under one disclosure. The presentation joins
 the project-scoped ledger by request_id, derives identity from its requested row,
 and shows one expandable operation summary with a localized execution result.

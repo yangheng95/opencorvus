@@ -1661,6 +1661,7 @@
   "permissions.mode_unavailable": "Not loaded",
   "permissions.mode_unavailable_desc": "The saved authorization mode has not been loaded. Reload it before changing permissions.",
   "permissions.mode_reload": "Reload permissions",
+  "permissions.mode_configuration_failed": "Could not read the current configuration. Open the details for the cause.",
   "permissions.no_active_grants": "No reusable approvals for this project.",
   "permissions.recent_history": "Operation history",
   "permissions.recent_history_desc": "One row per operation. Expand to see its approval and execution timeline.",

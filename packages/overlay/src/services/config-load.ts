@@ -92,6 +92,10 @@ function providerLoadErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
 
+function configLoadIssue(resource: ConfigLoadIssue["resource"], cause: unknown): ConfigLoadIssue {
+  return { resource, message: providerLoadErrorMessage(cause), cause }
+}
+
 function dedupeProviderLoadIssues(issues: ProviderLoadIssue[]): ProviderLoadIssue[] {
   return issues.filter(
     (issue, index) =>
@@ -148,19 +152,19 @@ export async function loadConfigInfo(
     try {
       config = requireObjectResponse(configPath, configResult.value)
     } catch (error) {
-      issues.push({ resource: "config", message: providerLoadErrorMessage(error) })
+      issues.push(configLoadIssue("config", error))
     }
   } else {
-    issues.push({ resource: "config", message: providerLoadErrorMessage(configResult.reason) })
+    issues.push(configLoadIssue("config", configResult.reason))
   }
   if (channelResult?.status === "fulfilled") {
     try {
       channels = requireArrayResponse("channel", channelResult.value)
     } catch (error) {
-      issues.push({ resource: "channel", message: providerLoadErrorMessage(error) })
+      issues.push(configLoadIssue("channel", error))
     }
   } else if (channelResult?.status === "rejected") {
-    issues.push({ resource: "channel", message: providerLoadErrorMessage(channelResult.reason) })
+    issues.push(configLoadIssue("channel", channelResult.reason))
   }
 
   batch(() => {

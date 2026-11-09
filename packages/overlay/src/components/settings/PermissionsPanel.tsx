@@ -159,15 +159,38 @@ function operationStatus(events: PermissionLedgerEvent[]): { label: string; tone
 
 export function PermissionsSettingsGroup() {
   const mode = createMemo(currentPermissionMode)
-  const [refreshingMode, setRefreshingMode] = createSignal(false)
-  async function refreshMode(): Promise<void> {
-    const authority = captureApiAuthority()
-    const epoch = boardStore.selectEpoch
-    setRefreshingMode(true)
+  const directory = () => activeProjectDirectory().trim()
+  const modeScope = createMemo(() => appStore.connected
+    ? { directory: directory(), authority: captureApiAuthority(), epoch: boardStore.selectEpoch }
+    : undefined)
+  const modeIssue = () => appStore.configLoadIssues.find((issue) => issue.resource === "config")
+  const [modeReload, setModeReload] = createSignal<{
+    scope: NonNullable<ReturnType<typeof modeScope>>
+    button: HTMLButtonElement
+    focused: boolean
+  }>()
+  const refreshingMode = () => {
+    const reload = modeReload()
+    return reload !== undefined && reload.scope === modeScope()
+  }
+  let modeControl: HTMLDivElement | undefined
+  let modeMounted = true
+  onCleanup(() => { modeMounted = false })
+
+  async function refreshMode(button: HTMLButtonElement): Promise<void> {
+    const scope = modeScope()
+    if (!scope || mode() || refreshingMode()) return
+    const reload = { scope, button, focused: document.activeElement === button }
+    const owns = () =>
+      modeMounted && modeReload() === reload && modeScope() === scope && isApiAuthorityCurrent(scope.authority)
+    setModeReload(reload)
     try {
-      await loadConfigInfo(undefined, { authority })
+      await loadConfigInfo(undefined, { directory: scope.directory, authority: scope.authority })
+      if (!owns() || !reload.focused || !mode() || !modeControl?.isConnected) return
+      if (document.activeElement !== button && document.activeElement !== document.body) return
+      modeControl.querySelector<HTMLInputElement>('input[type="radio"]:checked')?.focus()
     } catch (error) {
-      if (isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch) {
+      if (owns()) {
         reportError({
           id: "permissions:reload",
           title: t("permissions.title"),
@@ -176,10 +199,10 @@ export function PermissionsSettingsGroup() {
         })
       }
     } finally {
-      setRefreshingMode(false)
+      if (modeReload() === reload) setModeReload(undefined)
     }
   }
-  const directory = () => activeProjectDirectory().trim()
+
   const [recordsOpen, setRecordsOpen] = createSignal(false)
   const [visibleCount, setVisibleCount] = createSignal(6)
   const [revoking, setRevoking] = createSignal("")
@@ -284,25 +307,40 @@ export function PermissionsSettingsGroup() {
                 size="sm"
                 variant="outline"
                 tone="neutral"
-                disabled={!appStore.connected || refreshingMode()}
-                onClick={() => void refreshMode()}
+                disabled={!modeScope()}
+                aria-disabled={refreshingMode() || undefined}
+                aria-busy={refreshingMode() || undefined}
+                onBlur={(event) => {
+                  const reload = modeReload()
+                  if (!mode() && reload?.button === event.currentTarget) reload.focused = false
+                }}
+                onClick={(event) => void refreshMode(event.currentTarget)}
               >
-                {refreshingMode() ? t("common.loading") : t("permissions.mode_reload")}
+                {t(refreshingMode() ? modeIssue() ? "common.retrying" : "common.loading" : "permissions.mode_reload")}
               </Button>
             }
           >
             {(confirmedMode) => (
-              <SegmentedControl
-                ariaLabel={t("permissions.mode")}
-                size="md"
-                options={modeOptions()}
-                value={confirmedMode}
-                onChange={setPermissionMode}
-              />
+              <div ref={modeControl}>
+                <SegmentedControl
+                  ariaLabel={t("permissions.mode")}
+                  size="md"
+                  options={modeOptions()}
+                  value={confirmedMode}
+                  onChange={setPermissionMode}
+                />
+              </div>
             )}
           </Show>
         }
       />
+      <Show when={modeIssue()}>
+        {(issue) => (
+          <Feedback tone="error" details={formatErrorDetails(issue().cause)}>
+            {t("permissions.mode_configuration_failed")}
+          </Feedback>
+        )}
+      </Show>
       <Show when={directory()} fallback={<SettingsRow desc={t("permissions.select_project")} />}>
         <Disclosure.Root class="permission-records" open={recordsOpen()} onOpenChange={setRecordsOpen}>
           <Disclosure.Trigger indicatorPosition="end" class="permission-records-trigger">

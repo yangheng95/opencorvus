@@ -46,6 +46,7 @@ export interface ProviderLoadIssue {
 export interface ConfigLoadIssue {
   resource: "config" | "channel"
   message: string
+  cause: unknown
 }
 
 export interface ProjectLoadIssue {
