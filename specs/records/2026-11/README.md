@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [调试树使用真实目录](2026-11-09-debug-tree-physical-directories.md)
 - [项目搜索索引包含物理空目录](2026-11-09-project-index-physical-directories.md)
 - [官方用量文档链接名称](2026-11-09-usage-official-docs-accessible-name.md)
 - [用量对账的展开选择](2026-11-09-usage-reconciliation-disclosure-intent.md)

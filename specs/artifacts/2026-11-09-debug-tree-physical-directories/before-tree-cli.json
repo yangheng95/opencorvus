@@ -1,0 +1,55 @@
+{
+  "phase": "before",
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-before",
+  "primary": [
+    "filled",
+    "filled/nested"
+  ],
+  "structured": [
+    "filled",
+    "filled/nested"
+  ],
+  "limited": [
+    "filled",
+    "filled/nested"
+  ],
+  "commands": [
+    {
+      "args": [
+        "rg",
+        "tree"
+      ],
+      "status": 0,
+      "stdout": "filled\nfilled/nested"
+    },
+    {
+      "args": [
+        "file",
+        "tree",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-before"
+      ],
+      "status": 0,
+      "stdout": "\"filled\\nfilled/nested\""
+    },
+    {
+      "args": [
+        "rg",
+        "tree",
+        "--limit",
+        "3"
+      ],
+      "status": 0,
+      "stdout": "filled\nfilled/nested"
+    },
+    {
+      "args": [
+        "file",
+        "tree",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\missing-owned-directory"
+      ],
+      "status": 1,
+      "stdout": "",
+      "stderr": "\u001b[91m\u001b[1mError: \u001b[0mUnexpected error, check log file at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\profile-cli-before\\log\\dev.log for more details\r\n\r\nNo such file or directory: 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\missing-owned-directory'"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "projects": {
+    "before": {
+      "head": "0f4f16d66c2652d3210ddf0a4b5e6836711a4e4e",
+      "files": {
+        "filled/nested/note.txt": 30,
+        ".opencorvus-handbook/manual.txt": 42
+      }
+    },
+    "after": {
+      "head": "eb4d3b85cb479c34afcad313704f73815f962077",
+      "files": {
+        "filled/nested/note.txt": 29,
+        ".opencorvus-handbook/manual.txt": 42
+      }
+    }
+  },
+  "profiles": {
+    "before": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "cli-before": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "after": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "cli-after": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  },
+  "shutdown": [
+    {
+      "phase": "before",
+      "pid": 1360,
+      "port": 39139,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaT70qx00fRnvFZyE1"
+      }
+    },
+    {
+      "phase": "after",
+      "pid": 21124,
+      "port": 39140,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaT7Mzq00IX8eE6DDg"
+      }
+    }
+  ]
+}

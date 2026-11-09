@@ -1,0 +1,111 @@
+[
+  {
+    "route": "/file",
+    "query": "path=",
+    "status": 200,
+    "body": [
+      {
+        "name": ".opencorvus",
+        "path": ".opencorvus",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\.opencorvus",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": ".opencorvus-handbook",
+        "path": ".opencorvus-handbook",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\.opencorvus-handbook",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "branch",
+        "path": "branch",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\branch",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "empty",
+        "path": "empty",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\empty",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "filled",
+        "path": "filled",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\filled",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "ignored",
+        "path": "ignored",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\ignored",
+        "type": "directory",
+        "ignored": true,
+        "directoryTarget": true
+      },
+      {
+        "name": ".gitattributes",
+        "path": ".gitattributes",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\.gitattributes",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": ".gitignore",
+        "path": ".gitignore",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\.gitignore",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      }
+    ]
+  },
+  {
+    "route": "/file",
+    "query": "path=branch",
+    "status": 200,
+    "body": [
+      {
+        "name": "empty-child",
+        "path": "branch\\empty-child",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b102\\project-after\\branch\\empty-child",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      }
+    ]
+  },
+  {
+    "route": "/find/file",
+    "query": "type=directory&limit=30&query=",
+    "status": 200,
+    "body": [
+      "branch/",
+      "branch\\empty-child/",
+      "empty/",
+      "filled/",
+      "filled\\nested/",
+      ".opencorvus-handbook/",
+      ".opencorvus/",
+      ".opencorvus\\runtime-only/"
+    ]
+  },
+  {
+    "route": "/find/file",
+    "query": "type=file&limit=10&query=manual.txt",
+    "status": 200,
+    "body": [
+      ".opencorvus-handbook\\manual.txt"
+    ]
+  }
+]

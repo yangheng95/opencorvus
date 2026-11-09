@@ -1419,6 +1419,9 @@ walk. The walk retains project ignore rules and does not recurse through links.
 Empty directories participate in the same index, with their original directory
 suffix. The completed index orders both kinds before publication. Combined
 file/directory candidates use the same path order.
+The two diagnostic directory-tree commands read the same native candidates,
+present them breadth first, and omit the actual project configuration
+directory subtree. A similarly named user directory remains a regular candidate.
 Its fuzzy candidates therefore have deterministic input order for equal-score
 bounded windows, independent of parallel scan arrival. Returned fuzzy results
 keep higher matching scores first and use original path order to resolve equal

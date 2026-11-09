@@ -1,10 +1,12 @@
 import { buffer as readStreamBuffer } from "node:stream/consumers"
 import { resolveProjectIndexRuntime } from "../runtime/project-index"
 import { ProcessSupervisor } from "../shell/process-supervisor"
+import { Filesystem } from "../util/filesystem"
 
 export type ProjectIndex = { files: string[]; dirs: string[] }
 
 export async function readProjectIndex(cwd: string): Promise<ProjectIndex> {
+  await Filesystem.assertExistingDirectory(cwd)
   const process = await ProcessSupervisor.spawnHostCommand({
     executable: await resolveProjectIndexRuntime(),
     args: [],

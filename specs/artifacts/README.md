@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [调试树使用真实目录证据](2026-11-09-debug-tree-physical-directories/README.md)
 - [项目搜索索引包含物理空目录证据](2026-11-09-project-index-physical-directories/README.md)
 - [官方用量文档链接名称证据](2026-11-09-usage-official-docs-accessible-name/README.md)
 - [用量对账的展开选择证据](2026-11-09-usage-reconciliation-disclosure-intent/README.md)

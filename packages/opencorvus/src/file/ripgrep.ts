@@ -1,9 +1,9 @@
 import path from "path"
-import fs from "fs/promises"
 import z from "zod"
 import { buffer as readStreamBuffer } from "node:stream/consumers"
 import { lazy } from "../util/lazy"
 import { Process } from "../util/process"
+import { Filesystem } from "../util/filesystem"
 import { Log } from "@/util/log"
 import { resolveRipgrepRuntime } from "@/runtime/ripgrep"
 import { ProcessSupervisor } from "@/shell/process-supervisor"
@@ -192,14 +192,7 @@ export namespace Ripgrep {
       }
     }
 
-    // Guard against invalid cwd to provide a consistent ENOENT error.
-    if (!(await fs.stat(input.cwd).catch(() => undefined))?.isDirectory()) {
-      throw Object.assign(new Error(`No such file or directory: '${input.cwd}'`), {
-        code: "ENOENT",
-        errno: -2,
-        path: input.cwd,
-      })
-    }
+    await Filesystem.assertExistingDirectory(input.cwd)
 
     const options = {
       executable,
@@ -264,64 +257,6 @@ export namespace Ripgrep {
         await proc.dispose()
       }
     }
-  }
-
-  export async function treeHost(input: { cwd: string; limit?: number; signal?: AbortSignal }) {
-    log.info("tree", input)
-    const files = await Array.fromAsync(Ripgrep.filesForHost({ cwd: input.cwd, signal: input.signal }))
-    interface Node {
-      name: string
-      children: Map<string, Node>
-    }
-
-    function dir(node: Node, name: string) {
-      const existing = node.children.get(name)
-      if (existing) return existing
-      const next = { name, children: new Map() }
-      node.children.set(name, next)
-      return next
-    }
-
-    const root: Node = { name: "", children: new Map() }
-    for (const file of files) {
-      if (file.includes(".opencorvus")) continue
-      const parts = file.split(/[\\/]/).filter(Boolean)
-      if (parts.length < 2) continue
-      let node = root
-      for (const part of parts.slice(0, -1)) {
-        node = dir(node, part)
-      }
-    }
-
-    function count(node: Node): number {
-      let total = 0
-      for (const child of node.children.values()) {
-        total += 1 + count(child)
-      }
-      return total
-    }
-
-    const total = count(root)
-    const limit = input.limit ?? total
-    const lines: string[] = []
-    const queue: { node: Node; path: string }[] = []
-    for (const child of Array.from(root.children.values()).sort((a, b) => a.name.localeCompare(b.name))) {
-      queue.push({ node: child, path: child.name })
-    }
-
-    let used = 0
-    for (let i = 0; i < queue.length && used < limit; i++) {
-      const { node, path } = queue[i]
-      lines.push(path)
-      used++
-      for (const child of Array.from(node.children.values()).sort((a, b) => a.name.localeCompare(b.name))) {
-        queue.push({ node: child, path: `${path}/${child.name}` })
-      }
-    }
-
-    if (total > used) lines.push(`[${total - used} truncated]`)
-
-    return lines.join("\n")
   }
 
   export async function searchHost(input: {

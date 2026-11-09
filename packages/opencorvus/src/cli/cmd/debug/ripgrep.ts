@@ -1,5 +1,6 @@
 import { EOL } from "os"
 import { Ripgrep } from "../../../file/ripgrep"
+import { readProjectDirectoryTree } from "../../../file/project-directory-tree"
 import { Instance } from "../../../project/instance"
 import { bootstrap } from "../../bootstrap"
 import { cmd } from "../cmd"
@@ -13,14 +14,14 @@ export const RipgrepCommand = cmd({
 
 const TreeCommand = cmd({
   command: "tree",
-  describe: "show file tree using ripgrep",
+  describe: "show project directory tree",
   builder: (yargs) =>
     yargs.option("limit", {
       type: "number",
     }),
   async handler(args) {
     await bootstrap(process.cwd(), async () => {
-      process.stdout.write((await Ripgrep.treeHost({ cwd: Instance.directory, limit: args.limit })) + EOL)
+      process.stdout.write((await readProjectDirectoryTree({ cwd: Instance.directory, limit: args.limit })) + EOL)
     })
   },
 })

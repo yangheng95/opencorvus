@@ -117,6 +117,15 @@ export namespace Filesystem {
     )
   }
 
+  export async function assertExistingDirectory(p: string): Promise<void> {
+    if (await isDir(p)) return
+    throw Object.assign(new Error(`No such file or directory: '${p}'`), {
+      code: "ENOENT",
+      errno: -2,
+      path: p,
+    })
+  }
+
   export function stat(p: string): ReturnType<typeof statSync> | undefined {
     traceSync("filesystem.statSync", {
       path_len: p.length,

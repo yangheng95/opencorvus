@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [调试树使用真实目录](records/2026-11/2026-11-09-debug-tree-physical-directories.md)
 - [项目搜索索引包含物理空目录](records/2026-11/2026-11-09-project-index-physical-directories.md)
 - [官方用量文档链接名称](records/2026-11/2026-11-09-usage-official-docs-accessible-name.md)
 - [用量对账的展开选择](records/2026-11/2026-11-09-usage-reconciliation-disclosure-intent.md)

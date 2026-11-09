@@ -1,0 +1,26 @@
+[
+  {
+    "phase": "before",
+    "pid": 1360,
+    "port": 39139,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "httpShutdown": {
+      "ok": true,
+      "occurrenceID": "cal_g0VaT70qx00fRnvFZyE1"
+    }
+  },
+  {
+    "phase": "after",
+    "pid": 21124,
+    "port": 39140,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "httpShutdown": {
+      "ok": true,
+      "occurrenceID": "cal_g0VaT7Mzq00IX8eE6DDg"
+    }
+  }
+]
