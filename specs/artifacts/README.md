@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [专家团诊断披露与续页焦点证据](2026-11-09-expert-squad-diagnostic-disclosure/README.md)
 - [专家团目录诊断视图证据](2026-11-09-expert-squad-catalog-diagnostics-view/README.md)
 - [专家团物理安装身份证据](2026-11-09-expert-squad-installation-scope-labels/README.md)
 - [已安装专家团详情焦点证据](2026-11-09-installed-expert-squad-detail-focus/README.md)

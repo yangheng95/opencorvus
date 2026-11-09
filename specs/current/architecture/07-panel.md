@@ -5190,6 +5190,9 @@ and canonical namespace/ID, including when several rows share a display name.
 Expert Squad discovery issues and precedence notices belong to the catalog list.
 Issues show their localized discovery phase, exact location and expandable
 original diagnostics. The selected installation retains its own precedence feedback.
+The catalog summarizes diagnostics in a collapsed disclosure; opening it shows
+the accepted records in source order. Diagnostic continuation uses its own action
+label and hands keyboard focus to the first appended record on success.
 Mission Skill reads retain original transport errors for localized inline feedback
 with expandable diagnostics. A failed read keeps only the current scope's accepted
 catalog and filters; the count describes accepted data. An unavailable scope

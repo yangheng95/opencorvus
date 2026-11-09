@@ -12,7 +12,7 @@ import { Feedback } from "../ui/Feedback"
 // via prompt_profile.active; this panel edits only that existing config field.
 
 import { createEffect, createMemo, createSignal, For, Show, type JSX } from "solid-js"
-import { t } from "../../utils/i18n"
+import { localeTag, t } from "../../utils/i18n"
 import { expertSquadDescription } from "../../utils/expert-squad-description"
 import { renderMarkdown } from "../../utils/markdown"
 import {
@@ -252,6 +252,7 @@ type BusyAction = {
 type CatalogFilter = "all" | "active" | "package" | "built_in"
 type InstalledSquadSection = "overview" | "agents" | "configuration" | "evolution" | "package"
 type CatalogDiscoveryIssue = Extract<ExpertSquadDiagnosticsPage["entries"][number], { kind: "issue" }>["issue"]
+type CatalogDiagnosticsSnapshot = Pick<ExpertSquadDiagnosticsPage, "entries" | "next_cursor" | "total_count">
 
 const catalogIssueLabels = {
   "location.scan": "expert_squad.catalog_issue.location",
@@ -297,8 +298,8 @@ export default function ExpertSquadPanel() {
   const [catalogEntries, setCatalogEntries] = createSignal<ExpertSquadOption[]>([])
   const [catalogNextCursor, setCatalogNextCursor] = createSignal<string | null>(null)
   const [inventoryStatus, setInventoryStatus] = createSignal<ExpertSquadInventoryStatus | null>(null)
-  const [catalogDiagnostics, setCatalogDiagnostics] = createSignal<ExpertSquadDiagnosticsPage["entries"]>([])
-  const [catalogDiagnosticsNextCursor, setCatalogDiagnosticsNextCursor] = createSignal<string | null>(null)
+  const [catalogDiagnostics, setCatalogDiagnostics] = createSignal<CatalogDiagnosticsSnapshot | null>(null)
+  const [catalogDiagnosticsOpen, setCatalogDiagnosticsOpen] = createSignal(false)
   const [selectedDetail, setSelectedDetail] = createSignal<ExpertSquadSettingsSurface | null>(null)
   const [selectedDetailIdentity, setSelectedDetailIdentity] = createSignal("")
   const [selectedDetailLoading, setSelectedDetailLoading] = createSignal(false)
@@ -335,6 +336,8 @@ export default function ExpertSquadPanel() {
   let installedOpenerKey = ""
   let installedLayout: HTMLDivElement | undefined
   let installedBackButton: HTMLButtonElement | undefined
+  let diagnosticDisclosure: HTMLDetailsElement | undefined
+  let diagnosticsMoreButton: HTMLButtonElement | undefined
 
   const currentScope = createMemo(() => expertSquadCatalogScope())
   const currentScopeIdentity = createMemo(() => catalogScopeIdentity(currentScope()))
@@ -343,6 +346,7 @@ export default function ExpertSquadPanel() {
     installedFocusSequence++
     installedOpenerKey = ""
     setDetailOpen(false)
+    setCatalogDiagnosticsOpen(false)
   })
 
   function changeInstalledView(change: () => void, target: () => HTMLElement | null | undefined) {
@@ -414,11 +418,8 @@ export default function ExpertSquadPanel() {
   })
   const scopedCatalog = createMemo(() => (catalogIdentity() === currentScopeIdentity() ? catalog() : null))
   const squads = createMemo(() => (catalogIdentity() === currentScopeIdentity() ? catalogEntries() : []))
-  const catalogIssues = createMemo(() =>
-    catalogDiagnostics().flatMap((entry) => (entry.kind === "issue" ? [entry.issue] : [])),
-  )
-  const catalogWarnings = createMemo(() =>
-    catalogDiagnostics().flatMap((entry) => (entry.kind === "warning" ? [entry.warning] : [])),
+  const diagnosticCount = createMemo(() =>
+    catalogIdentity() === currentScopeIdentity() ? catalogDiagnostics()?.total_count ?? 0 : 0,
   )
   const scopedMarket = createMemo(() => (marketIdentity() === currentScopeIdentity() ? market() : []))
   const recoveryUpdates = createMemo(() =>
@@ -576,8 +577,7 @@ export default function ExpertSquadPanel() {
       setCatalogEntries([])
       setCatalogNextCursor(null)
       setInventoryStatus(null)
-      setCatalogDiagnostics([])
-      setCatalogDiagnosticsNextCursor(null)
+      setCatalogDiagnostics(null)
       setCatalogIdentity("")
       setCatalogError(null)
       setLoading(false)
@@ -655,8 +655,7 @@ export default function ExpertSquadPanel() {
       setCatalogEntries(installations)
       setCatalogNextCursor(entries.next_cursor)
       setInventoryStatus(status)
-      setCatalogDiagnostics(diagnostics.entries)
-      setCatalogDiagnosticsNextCursor(diagnostics.next_cursor)
+      setCatalogDiagnostics(diagnostics)
       setCatalogIdentity(expectedScopeIdentity)
       setCatalogError(null)
       const selected =
@@ -743,16 +742,33 @@ export default function ExpertSquadPanel() {
 
   async function loadMoreDiagnostics(): Promise<void> {
     const scope = currentScope()
-    const cursor = catalogDiagnosticsNextCursor()
-    if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
+    const diagnostics = catalogDiagnostics()
+    if (!diagnostics?.next_cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
     const sequence = loadSequence
     const expectedScopeIdentity = currentScopeIdentity()
+    const authority = captureApiAuthority()
+    const firstNewIndex = diagnostics.entries.length
+    const origin = document.activeElement === diagnosticsMoreButton ? diagnosticsMoreButton : undefined
     setLoading(true)
     try {
-      const page = await loadExpertSquadDiagnostics(scope.directory, { cursor, limit: 20 })
+      const page = await loadExpertSquadDiagnostics(scope.directory, { cursor: diagnostics.next_cursor, limit: 20 })
       if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
-      setCatalogDiagnostics((current) => [...current, ...page.entries])
-      setCatalogDiagnosticsNextCursor(page.next_cursor)
+      const ownsFocus = origin && document.activeElement === origin
+      setCatalogDiagnostics({
+        entries: [...diagnostics.entries, ...page.entries],
+        next_cursor: page.next_cursor,
+        total_count: page.total_count,
+      })
+      if (ownsFocus && page.entries.length) {
+        queueMicrotask(() => {
+          if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity || !isApiAuthorityCurrent(authority)) return
+          if (!diagnosticDisclosure?.isConnected || !diagnosticDisclosure.open) return
+          if (document.activeElement !== origin && document.activeElement !== document.body) return
+          const row = diagnosticDisclosure.querySelector<HTMLElement>(`[data-diagnostic-index="${firstNewIndex}"]`)
+          const target = row?.querySelector<HTMLElement>("summary") ?? row
+          target?.focus()
+        })
+      }
     } catch (error) {
       if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setCatalogError({ error })
     } finally {
@@ -773,8 +789,7 @@ export default function ExpertSquadPanel() {
       setCatalogEntries([])
       setCatalogNextCursor(null)
       setInventoryStatus(null)
-      setCatalogDiagnostics([])
-      setCatalogDiagnosticsNextCursor(null)
+      setCatalogDiagnostics(null)
       setCatalogIdentity("")
       setCatalogError(null)
       setLoading(false)
@@ -1396,31 +1411,54 @@ export default function ExpertSquadPanel() {
               {t("expert_squad.catalog_unavailable_hint")}
             </Feedback>
           </Show>
-          <Show when={!detailOpen()}>
-            <For each={catalogIssues()}>
-              {(issue) => (
-                <Feedback
-                  tone="warning"
-                  data-ui="expert-squad-catalog-issue"
-                  title={t(catalogIssueLabels[issue.phase])}
-                  details={issue.message}
-                >
-                  <code>{issue.location}</code>
-                </Feedback>
-              )}
-            </For>
-            <For each={catalogWarnings()}>
-              {(warning) => (
-                <Feedback data-ui="expert-squad-catalog-warning">
-                  {t("expert_squad.project_override_warning", { id: warning.logical_id })}
-                </Feedback>
-              )}
-            </For>
-            <Show when={catalogDiagnosticsNextCursor()}>
-              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => void loadMoreDiagnostics()}>
-                {t("expert_squad.load_more")}
-              </Button>
-            </Show>
+          <Show when={!detailOpen() && diagnosticCount() > 0}>
+            <Disclosure.Root
+              ref={diagnosticDisclosure}
+              data-ui="expert-squad-catalog-diagnostics"
+              variant="surface"
+              size="md"
+              open={catalogDiagnosticsOpen()}
+              onOpenChange={setCatalogDiagnosticsOpen}
+            >
+              <Disclosure.Trigger>
+                {t("expert_squad.catalog_diagnostics_summary", { count: new Intl.NumberFormat(localeTag()).format(diagnosticCount()) })}
+              </Disclosure.Trigger>
+              <Disclosure.Content>
+                <For each={catalogDiagnostics()?.entries}>
+                  {(entry, index) => entry.kind === "issue" ? (
+                    <Feedback
+                      tone="warning"
+                      data-ui="expert-squad-catalog-issue"
+                      data-diagnostic-index={index()}
+                      tabIndex={-1}
+                      title={t(catalogIssueLabels[entry.issue.phase])}
+                      details={entry.issue.message}
+                    >
+                      <code>{entry.issue.location}</code>
+                    </Feedback>
+                  ) : (
+                    <Feedback data-ui="expert-squad-catalog-warning" data-diagnostic-index={index()} tabIndex={-1}>
+                      {t("expert_squad.project_override_warning", { id: entry.warning.logical_id })}
+                    </Feedback>
+                  )}
+                </For>
+                <Show when={catalogDiagnostics()?.next_cursor}>
+                  <Button
+                    ref={diagnosticsMoreButton}
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tone="neutral"
+                    data-ui="expert-squad-diagnostics-more"
+                    aria-disabled={loading() || undefined}
+                    aria-busy={loading() || undefined}
+                    onClick={() => void loadMoreDiagnostics()}
+                  >
+                    {t("expert_squad.load_more_diagnostics")}
+                  </Button>
+                </Show>
+              </Disclosure.Content>
+            </Disclosure.Root>
           </Show>
           <Show when={actionError()}>
             <Feedback

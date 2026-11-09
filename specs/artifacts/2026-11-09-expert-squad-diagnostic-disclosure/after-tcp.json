@@ -1,0 +1,407 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "operationId": "expertSquad.catalog",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/search",
+      "operationId": "expertSquad.search",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/settings/detail",
+      "operationId": "expertSquad.settingsDetail",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/settings/detail",
+      "operationId": "expertSquad.settingsDetail",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/inventory-status",
+      "operationId": "expertSquad.inventoryStatus",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/diagnostics",
+      "operationId": "expertSquad.diagnostics",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/diagnostics",
+      "operationId": "expertSquad.diagnostics",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "diagnosticCounts": {
+    "installations": 7,
+    "issues": 21,
+    "warnings": 1
+  },
+  "pageSizes": [
+    20,
+    2
+  ],
+  "diagnostics": [
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-000",
+        "namespace": "local",
+        "id": "incomplete-000",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-001",
+        "namespace": "local",
+        "id": "incomplete-001",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-002",
+        "namespace": "local",
+        "id": "incomplete-002",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-003",
+        "namespace": "local",
+        "id": "incomplete-003",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-004",
+        "namespace": "local",
+        "id": "incomplete-004",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-005",
+        "namespace": "local",
+        "id": "incomplete-005",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-006",
+        "namespace": "local",
+        "id": "incomplete-006",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-007",
+        "namespace": "local",
+        "id": "incomplete-007",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-008",
+        "namespace": "local",
+        "id": "incomplete-008",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-009",
+        "namespace": "local",
+        "id": "incomplete-009",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-010",
+        "namespace": "local",
+        "id": "incomplete-010",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-011",
+        "namespace": "local",
+        "id": "incomplete-011",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-012",
+        "namespace": "local",
+        "id": "incomplete-012",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-013",
+        "namespace": "local",
+        "id": "incomplete-013",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-014",
+        "namespace": "local",
+        "id": "incomplete-014",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-015",
+        "namespace": "local",
+        "id": "incomplete-015",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-016",
+        "namespace": "local",
+        "id": "incomplete-016",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-017",
+        "namespace": "local",
+        "id": "incomplete-017",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-018",
+        "namespace": "local",
+        "id": "incomplete-018",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-019",
+        "namespace": "local",
+        "id": "incomplete-019",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "issue",
+      "issue": {
+        "phase": "package.catalog",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\local\\incomplete-020",
+        "namespace": "local",
+        "id": "incomplete-020",
+        "message": "expert squad package root: missing README.md"
+      }
+    },
+    {
+      "kind": "warning",
+      "warning": {
+        "code": "project_overrides_global",
+        "severity": "warning",
+        "logical_id": "data-analysis",
+        "effective": {
+          "scope": "project",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis",
+          "version": "2026.10.24.3",
+          "package_digest": "79f64405c8bc77bce41d27252d033075ee8e0118569b069b9565339f3e6a7968"
+        },
+        "shadowed": {
+          "scope": "global",
+          "namespace": "builtin",
+          "id": "data-analysis",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\profile-after\\config\\expert-squads\\builtin\\data-analysis",
+          "version": "2026.10.24.3",
+          "package_digest": "79f64405c8bc77bce41d27252d033075ee8e0118569b069b9565339f3e6a7968"
+        }
+      }
+    }
+  ],
+  "project": {
+    "id": "prj_hvf4Nk97AuZOra8ZzTtp",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after"
+  },
+  "active": {
+    "effective": "dynamic",
+    "project": "dynamic",
+    "scope": {
+      "kind": "project",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after"
+    }
+  },
+  "entries": [
+    {
+      "id": "advanced",
+      "name": "Advanced",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "base",
+      "name": "Base",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "dynamic",
+      "name": "Dynamic",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "research-studio",
+      "name": "Research Studio",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "squad-sdk",
+      "name": "Generate Expert Squads",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "global",
+        "namespace": "builtin"
+      }
+    },
+    {
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      }
+    }
+  ],
+  "details": [
+    {
+      "scope": "project",
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "version": "2026.10.24.3",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis",
+      "manifest": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis\\expert-squad.jsonc",
+      "readme": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis\\README.md",
+      "effectiveIdentity": {
+        "id": "data-analysis",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        }
+      }
+    },
+    {
+      "scope": "global",
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "version": "2026.10.24.3",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\profile-after\\config\\expert-squads\\builtin\\data-analysis",
+      "manifest": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\profile-after\\config\\expert-squads\\builtin\\data-analysis\\expert-squad.jsonc",
+      "readme": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b68\\profile-after\\config\\expert-squads\\builtin\\data-analysis\\README.md",
+      "effectiveIdentity": {
+        "id": "data-analysis",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        }
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [专家团诊断披露与续页焦点](records/2026-11/2026-11-09-expert-squad-diagnostic-disclosure.md)
 - [专家团目录诊断视图](records/2026-11/2026-11-09-expert-squad-catalog-diagnostics-view.md)
 - [专家团物理安装身份](records/2026-11/2026-11-09-expert-squad-installation-scope-labels.md)
 - [已安装专家团详情焦点](records/2026-11/2026-11-09-installed-expert-squad-detail-focus.md)
