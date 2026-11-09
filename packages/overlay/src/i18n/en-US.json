@@ -2093,6 +2093,10 @@
   "explorer.move_success": "Moved to {{path}}",
   "explorer.move_many_message": "Move {{count}} source paths",
   "explorer.move_many_success": "Moved {{count}} items to {{target}}",
+  "explorer.move_already_at_destination": {
+    "one": "Already in {{target}}: {{count}} item",
+    "other": "Already in {{target}}: {{count}} items"
+  },
   "explorer.drop_move_invalid": "Cannot move a folder into itself or one of its descendants.",
   "explorer.delete": "Delete",
   "explorer.confirm_delete": "Confirm delete",

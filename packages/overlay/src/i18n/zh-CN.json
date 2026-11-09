@@ -2092,6 +2092,10 @@
   "explorer.move_success": "已移动到 {{path}}",
   "explorer.move_many_message": "移动 {{count}} 个来源路径",
   "explorer.move_many_success": "已移动 {{count}} 项到 {{target}}",
+  "explorer.move_already_at_destination": {
+    "one": "{{count}} 项已在 {{target}}",
+    "other": "{{count}} 项已在 {{target}}"
+  },
   "explorer.drop_move_invalid": "不能把文件夹移动到自身或其子目录中。",
   "explorer.delete": "删除",
   "explorer.confirm_delete": "确认删除",

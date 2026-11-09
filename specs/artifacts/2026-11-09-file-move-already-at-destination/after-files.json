@@ -1,0 +1,45 @@
+{
+  "phase": "after",
+  "listing": {
+    "": {
+      "requestID": "c172315b-f3f7-40dd-b545-222f22b42e2c",
+      "names": [
+        ".opencorvus",
+        "dest",
+        ".gitattributes",
+        ".gitignore",
+        "untouched.txt"
+      ]
+    },
+    "dest": {
+      "requestID": "913607e3-661c-4db0-8ac7-d79c784d7200",
+      "names": [
+        "already-a.txt",
+        "already-b.txt",
+        "incoming.txt"
+      ]
+    }
+  },
+  "files": {
+    "dest/already-a.txt": {
+      "requestID": "baaa58c7-f915-4f22-8fc1-1c434a1d2bb7",
+      "length": 16,
+      "content": "first original\r\n"
+    },
+    "dest/already-b.txt": {
+      "requestID": "00c6460b-1b1f-43e4-8759-5a08ec13185f",
+      "length": 16,
+      "content": "second original\n"
+    },
+    "dest/incoming.txt": {
+      "requestID": "e8912139-9221-4057-8409-4a1b29409599",
+      "length": 19,
+      "content": "incoming original\r\n"
+    },
+    "untouched.txt": {
+      "requestID": "bb528675-3514-462c-b08d-a4873756b80a",
+      "length": 14,
+      "content": "root original\n"
+    }
+  }
+}

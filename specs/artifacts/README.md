@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [移动回执显示已在目标的文件证据](2026-11-09-file-move-already-at-destination/README.md)
 - [新建和重命名的目录边界证据](2026-11-09-file-entry-name-parent-boundary/README.md)
 - [文件转移的项目相对目的路径证据](2026-11-09-file-transfer-project-relative-destination/README.md)
 - [菜单关闭后的键盘交接证据](2026-11-09-menu-close-keyboard-handoff/README.md)

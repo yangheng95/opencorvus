@@ -1,0 +1,22 @@
+{
+  "before": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b89\\project-before",
+    "head": "b0e69d3ce143ff0c1721ca10e1283c94f2999560",
+    "files": {
+      "dest/already-a.txt": "first original\r\n",
+      "dest/already-b.txt": "second original\n",
+      "incoming.txt": "incoming original\r\n",
+      "untouched.txt": "root original\n"
+    }
+  },
+  "after": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b89\\project-after",
+    "head": "cbed3b66343bbfedb0252d7aba95c9967bb5457b",
+    "files": {
+      "dest/already-a.txt": "first original\r\n",
+      "dest/already-b.txt": "second original\n",
+      "incoming.txt": "incoming original\r\n",
+      "untouched.txt": "root original\n"
+    }
+  }
+}

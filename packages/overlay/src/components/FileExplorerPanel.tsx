@@ -103,6 +103,7 @@ type ExplorerOutcome = {
   operation: Exclude<FileMutationKind, ""> | "upload"
   completed: (FileNode | FileCopyResult | FileMoveResult | FileDeleteResult | FileUploadResult)[]
   target?: string
+  alreadyAtDestination?: number
   failures: { phase: "member" | "operation"; path?: string; error: unknown }[]
   refresh: FileRefreshReceipt[]
   postOpen?: { path: string; status: "opened" | "stopped" } | { path: string; status: "failed"; error: unknown }
@@ -252,8 +253,20 @@ function feedbackTone(feedback: ExplorerFeedback): "neutral" | "error" | "warnin
     (feedback.postOpen && feedback.postOpen.status !== "opened")
   )
     return "warning"
-  if (feedback.failures.some(isCancelledFailure)) return "neutral"
+  if (feedback.failures.some(isCancelledFailure) || isUnchangedMove(feedback)) return "neutral"
   return "success"
+}
+
+function isUnchangedMove(outcome: ExplorerOutcome): boolean {
+  return Boolean(outcome.alreadyAtDestination && outcome.completed.length === 0 && outcome.failures.length === 0)
+}
+
+function alreadyAtDestinationMessage(outcome: ExplorerOutcome): string {
+  const count = outcome.alreadyAtDestination ?? 0
+  return tc("explorer.move_already_at_destination", count, {
+    count: new Intl.NumberFormat(localeTag()).format(count),
+    target: explorerDirectoryDisplayPath(outcome.target),
+  })
 }
 
 function isCancelledFailure(failure: ExplorerFailure): boolean {
@@ -317,6 +330,7 @@ function feedbackMessage(feedback: ExplorerFeedback): string {
         return t("explorer.refresh_success")
       }
       if (completed === 0) {
+        if (isUnchangedMove(feedback)) return alreadyAtDestinationMessage(feedback)
         if (feedback.failures.length > 0 && feedback.failures.every(isCancelledFailure) && feedback.refresh.length === 0)
           return t("explorer.operation_cancelled")
         return t("explorer.no_completed_items")
@@ -377,6 +391,15 @@ function ExplorerActionFeedback(props: { feedback: ExplorerFeedback; dataUI?: st
         details={props.feedback.kind === "failure" ? formatErrorDetails(props.feedback.error) || undefined : undefined}
       >
         {feedbackMessage(props.feedback)}
+        <Show
+          when={
+            props.feedback.kind === "outcome" && props.feedback.alreadyAtDestination && !isUnchangedMove(props.feedback)
+              ? props.feedback
+              : undefined
+          }
+        >
+          {(outcome) => <div>{alreadyAtDestinationMessage(outcome())}</div>}
+        </Show>
         <Show
           when={
             props.feedback.kind === "outcome" &&
@@ -1243,7 +1266,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       for (const item of targets) {
         if (!ownsOperation()) return
         const nextPath = joinExplorerPath(targetDir, item.name)
-        if (nextPath === item.path) continue
+        if (nextPath === item.path) {
+          outcome.alreadyAtDestination = (outcome.alreadyAtDestination ?? 0) + 1
+          continue
+        }
         try {
           moved.push(await moveFileItem(item.path, nextPath, scope))
         } catch (error) {
@@ -1311,8 +1337,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       recordOperationFailure(outcome, { phase: "operation", error })
     } finally {
       if (ownsMutationOperation()) {
-        if (outcome.completed.length > 0 || outcome.failures.length > 0 || outcome.refresh.length > 0)
+        if (
+          outcome.completed.length > 0 || outcome.alreadyAtDestination || outcome.failures.length > 0 || outcome.refresh.length > 0
+        ) {
           setMutationFeedback(outcome)
+        }
         setMutationOperation(null)
       }
     }
@@ -1659,8 +1688,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationValidation("name")
       return
     }
-    if (nextPath === item.path) return
     await runMutation("move", scope, async (ownsOperation, outcome) => {
+      if (nextPath === item.path) {
+        outcome.target = parentPath(item.path)
+        outcome.alreadyAtDestination = 1
+        return
+      }
       let result: FileMoveResult
       try {
         result = await moveFileItem(item.path, nextPath, scope)

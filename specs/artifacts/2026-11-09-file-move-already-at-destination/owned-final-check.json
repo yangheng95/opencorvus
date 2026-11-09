@@ -1,0 +1,64 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b89\\project-before",
+    "head": "b0e69d3ce143ff0c1721ca10e1283c94f2999560",
+    "fileLengths": {
+      "dest/already-a.txt": 16,
+      "dest/already-b.txt": 16,
+      "dest/incoming.txt": 19,
+      "untouched.txt": 14
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "76a5c882-e2b7-4e57-b98c-947361ec53ec",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 88
+      }
+    ],
+    "trackedDiff": [
+      "D\tincoming.txt"
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b89\\project-after",
+    "head": "cbed3b66343bbfedb0252d7aba95c9967bb5457b",
+    "fileLengths": {
+      "dest/already-a.txt": 16,
+      "dest/already-b.txt": 16,
+      "dest/incoming.txt": 19,
+      "untouched.txt": 14
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "ced05099-7674-4b60-85a4-3a99f2109768",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 97
+      }
+    ],
+    "trackedDiff": [
+      "D\tincoming.txt"
+    ]
+  }
+}
