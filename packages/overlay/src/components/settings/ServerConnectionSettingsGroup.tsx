@@ -1,17 +1,22 @@
 import { Feedback } from "../ui/Feedback"
-import { createSignal, onCleanup, Show } from "solid-js"
+import { createEffect, createSignal, onCleanup, Show } from "solid-js"
 import { ServerBaseUrlError } from "@opencorvus-ai/transport-protocol"
 import { checkConnection } from "../../services/connection"
 import { refreshConnectionWorkspace } from "../../services/connection-projection"
+import { appStore } from "../../store/app"
 import { settingsStore, SettingsActivationError } from "../../store/settings"
 import { saveConnectionSettings } from "../../services/connection-settings"
-import { isApiAuthorityCurrent, ApiAuthorityChangedError } from "../../services/api"
+import { isApiAuthorityCurrent, ApiAuthorityChangedError, type ApiAuthority } from "../../services/api"
 import { FileEditorAdmissionError } from "../../services/file-workbench"
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { Button } from "../ui/Button"
 import { SettingsGroup, SettingsRow } from "./layout"
 import { TextField } from "../ui/TextField"
+
+type ConnectionFailure =
+  | { kind: "save"; cause: unknown }
+  | { kind: "unavailable"; authority: ApiAuthority; cause: unknown }
 
 function connectionFailureMessage(error: unknown): string {
   if (error instanceof ServerBaseUrlError) {
@@ -35,11 +40,18 @@ export function ServerConnectionSettingsGroup() {
     password: settingsStore.password,
   })
   const [saved, setSaved] = createSignal(false)
-  const [error, setError] = createSignal<{ cause: unknown } | null>(null)
+  const [error, setError] = createSignal<ConnectionFailure | null>(null)
   const [saving, setSaving] = createSignal(false)
   const [referencesRetired, setReferencesRetired] = createSignal(false)
   let saveGeneration = 0
   let savedTimer: ReturnType<typeof setTimeout> | undefined
+
+  createEffect(() => {
+    const failure = error()
+    if (failure?.kind === "unavailable" && (!isApiAuthorityCurrent(failure.authority) || appStore.connected)) {
+      setError(null)
+    }
+  })
 
   const clearFeedback = () => {
     saveGeneration += 1
@@ -64,9 +76,17 @@ export function ServerConnectionSettingsGroup() {
       persistenceConfirmed = true
       if (!ownsSave()) return
       setReferencesRetired(retiredReferences)
-      const connected = await checkConnection({ authority })
-      if (!ownsSave() || !isApiAuthorityCurrent(authority)) return
-      if (connected) await refreshConnectionWorkspace(authority)
+      const connected = await checkConnection({
+        authority,
+        onUnavailable(probeAuthority, cause) {
+          if (ownsSave() && isApiAuthorityCurrent(probeAuthority)) {
+            setError({ kind: "unavailable", authority: probeAuthority, cause })
+          }
+          return undefined
+        },
+      })
+      if (!connected || !ownsSave() || !isApiAuthorityCurrent(authority)) return
+      await refreshConnectionWorkspace(authority)
       if (!ownsSave() || !isApiAuthorityCurrent(authority)) return
       setError(null)
       setSaved(true)
@@ -82,7 +102,7 @@ export function ServerConnectionSettingsGroup() {
         return
       }
       setSaved(false)
-      setError({ cause: nextError })
+      setError({ kind: "save", cause: nextError })
     } finally {
       if (ownsSave()) setSaving(false)
     }
@@ -148,7 +168,8 @@ export function ServerConnectionSettingsGroup() {
             tone="accent"
             data-ui="settings-server-save"
             onClick={() => void saveConnection()}
-            disabled={saving()}
+            aria-disabled={saving() || undefined}
+            aria-busy={saving() || undefined}
           >
             {saving() ? t("common.saving") : saved() ? t("common.saved") : t("common.save")}
           </Button>
@@ -156,7 +177,9 @@ export function ServerConnectionSettingsGroup() {
       />
       <Show when={error()}>{(failure) => (
         <Feedback tone="error" data-ui="settings-server-status" details={formatErrorDetails(failure().cause)}>
-          {connectionFailureMessage(failure().cause)}
+          {failure().kind === "unavailable"
+            ? t("settings.connection_saved_unavailable")
+            : connectionFailureMessage(failure().cause)}
         </Feedback>
       )}</Show>
       {referencesRetired() ? <Feedback tone="info">{t("settings.connection_references_retired")}</Feedback> : null}

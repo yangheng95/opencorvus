@@ -1,0 +1,38 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "route": "/global/health",
+      "operationId": "global.health",
+      "status": 200,
+      "requestID": "9e22ebe8-4891-4456-8a8d-e06ce6840293",
+      "schemaValid": true,
+      "health": {
+        "healthy": true,
+        "version": "local"
+      }
+    },
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "1bec0cd5-1a33-445e-b8fd-4a5ab3e5c593",
+      "schemaValid": true,
+      "project": {
+        "id": "prj_hy0jwhhXBwEl1FSVzD6H",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b92\\project-before"
+      }
+    },
+    {
+      "route": "/missing-prefix/global/health",
+      "status": 400,
+      "requestID": "0feb444c-2668-4065-950a-280be868f7de",
+      "body": {
+        "name": "DirectoryRequiredError",
+        "data": {
+          "message": "Project-scoped route /missing-prefix/global/health requires ?directory= query parameter or x-opencorvus-directory header"
+        }
+      }
+    }
+  ]
+}

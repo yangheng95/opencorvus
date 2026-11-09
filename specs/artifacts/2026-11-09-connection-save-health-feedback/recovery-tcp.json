@@ -1,0 +1,27 @@
+{
+  "phase": "recovery",
+  "checks": [
+    {
+      "route": "/global/health",
+      "operationId": "global.health",
+      "status": 200,
+      "requestID": "812ca68d-7527-468e-9c8b-988878030cfc",
+      "schemaValid": true,
+      "health": {
+        "healthy": true,
+        "version": "local"
+      }
+    },
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "124fa92f-c54f-4677-b229-2744d924f36e",
+      "schemaValid": true,
+      "project": {
+        "id": "prj_hvu9yGx5YVjOHEtnBDrD",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b92\\project-recovery"
+      }
+    }
+  ]
+}

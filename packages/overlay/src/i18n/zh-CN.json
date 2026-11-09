@@ -641,6 +641,7 @@
   "settings.save_failed": "设置保存失败：{{error}}",
   "settings.connection_update_failed": "连接更新未完成。请查看详细信息后重试。",
   "settings.connection_apply_failed": "连接设置已保存，但应用到当前客户端时失败。请查看详细信息。",
+  "settings.connection_saved_unavailable": "连接设置已保存，但服务器未通过连接检查。请核对服务地址，或等服务器可用后重试。",
   "settings.server_url_error.malformed": "请输入完整有效的服务地址。",
   "settings.server_url_error.unsupported_protocol": "服务地址必须以 http:// 或 https:// 开头。",
   "settings.server_url_error.query": "请移除服务地址中的查询部分（?...）。",

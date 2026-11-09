@@ -1,0 +1,58 @@
+{
+  "invalid": [
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) Server URL, Value: http://127.0.0.1:39115/missing-prefix",
+    "\t\t\t\t\t\t\t\t\t84 text Connection settings were saved, but the server did not pass the connection check. Check the server URL or try again when the server is available.",
+    "\t\t\t\t\t\t\t\t\t85 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t86 text Details",
+    "The focused UI element is 65 button Save"
+  ],
+  "details": [
+    "\t\t\t\t\t\t\t\t\t\t94 text HTTP GET 400 global/health",
+    "Request ID: babe786f-407a-4a4d-b698-0f706e413b77",
+    "  \"name\": \"DirectoryRequiredError\",",
+    "The focused UI element is 92 button (expanded) Details, Secondary Actions: Collapse"
+  ],
+  "localized": [
+    "\t\t\t\t\t\t\t\t\t59 text 服务地址",
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) 服务地址, Value: http://127.0.0.1:39115/missing-prefix",
+    "\t\t\t\t\t\t\t\t\t84 text 连接设置已保存，但服务器未通过连接检查。请核对服务地址，或等服务器可用后重试。",
+    "\t\t\t\t\t\t\t\t\t\t92 button (expanded) 详细信息, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t93 text 详细信息",
+    "\t\t\t\t\t\t\t\t\t\t94 text HTTP GET 400 global/health",
+    "Request ID: babe786f-407a-4a4d-b698-0f706e413b77"
+  ],
+  "persisted": [
+    "\t\t\t\t\t\t\t\t\t60 text 服务地址",
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) 服务地址, Value: http://127.0.0.1:39115/missing-prefix"
+  ],
+  "corrected": [
+    "\t\t\t\t\t\t\t\t\t60 text 服务地址",
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) 服务地址, Value: http://127.0.0.1:39115",
+    "\t\t\t\t\t\t\t\t\t66 button 已保存",
+    "The focused UI element is 66 button 已保存"
+  ],
+  "fragment": [
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) 服务地址, Value: http://127.0.0.1:39115/#b92",
+    "\t\t\t\t\t\t\t\t\t85 text 请移除服务地址中的片段（#...）。",
+    "The focused UI element is 66 button 保存"
+  ],
+  "beforeStart": [
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) 服务地址, Value: http://127.0.0.1:39116",
+    "\t\t\t\t\t\t\t\t\t85 text 连接设置已保存，但服务器未通过连接检查。请核对服务地址，或等服务器可用后重试。",
+    "The focused UI element is 66 button 保存"
+  ],
+  "samePageRecovered": [
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) 服务地址, Value: http://127.0.0.1:39116",
+    "The focused UI element is 66 button 保存"
+  ],
+  "recoveryBadge": [
+    "\t\t\t\t\t\t\t\t39 container Description: 连接诊断 · 在线 · 端口 39116, ID: connBadge",
+    "\t\t\t\t\t\t\t\t\t40 text 在线"
+  ],
+  "final": [
+    "Browser tab: 207, Title: \"OpenCorvus\", URL: \"http://127.0.0.1:39115/ui/\".",
+    "1 AXWebArea OpenCorvus, URL: 127.0.0.1:39115/ui/",
+    "\t\t\t\t\t\t\t\t39 container Description: 连接诊断 · 在线 · 端口 39115, ID: connBadge",
+    "\t\t\t\t\t\t\t\t\t40 text 在线"
+  ]
+}

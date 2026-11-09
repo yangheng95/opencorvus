@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [连接保存与健康检查回执](2026-11-09-connection-save-health-feedback.md)
 - [归档恢复时的焦点归属](2026-11-09-archive-restore-focus-ownership.md)
 - [文件转移后展开深层目的目录](2026-11-09-file-transfer-deep-destination-reveal.md)
 - [移动回执显示已在目标的文件](2026-11-09-file-move-already-at-destination.md)

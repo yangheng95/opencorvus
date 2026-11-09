@@ -1,0 +1,30 @@
+{
+  "during": [
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) Server URL, Value: http://127.0.0.1:39114/missing-prefix",
+    "\t\t\t\t\t\t\t\t\t65 button Saved",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39114/ui/"
+  ],
+  "stable": [
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) Server URL, Value: http://127.0.0.1:39114/missing-prefix",
+    "\t\t\t\t\t\t\t\t\t65 button Save",
+    "\t\t\t\t\t\t\t\t\t83 button Save",
+    "\t\t\t85 text OpenCorvus backend is unreachable — live data is unavailable.",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39114/ui/"
+  ],
+  "reloaded": [
+    "\t\t\t\t\t\t\t\t\t60 text Server URL",
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) Server URL, Value: http://127.0.0.1:39114/missing-prefix",
+    "\t\t\t86 text OpenCorvus backend is unreachable — live data is unavailable."
+  ],
+  "corrected": [
+    "\t\t\t\t\t\t\t\t\t60 text Server URL",
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) Server URL, Value: http://127.0.0.1:39114",
+    "\t\t\t\t\t\t\t\t\t66 button Saved",
+    "The focused UI element is 1 AXWebArea OpenCorvus, URL: 127.0.0.1:39114/ui/"
+  ],
+  "online": [
+    "\t\t\t\t\t\t\t40 container Connection Diagnostics",
+    "\t\t\t\t\t\t\t\t41 container Description: Connection Diagnostics · Online · Port 39114, ID: connBadge",
+    "\t\t\t\t\t\t\t\t\t42 text Online"
+  ]
+}

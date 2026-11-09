@@ -255,6 +255,8 @@ export interface CheckConnectionOptions {
   authority?: ApiAuthority
   /** Synchronous receipt of the exact successful probe, before the caller resumes. */
   onHealthy?: (authority: ApiAuthority) => undefined
+  /** Synchronous receipt of the current probe's terminal failure, with its original cause. */
+  onUnavailable?: (authority: ApiAuthority, cause: unknown) => undefined
 }
 
 export async function checkConnection(options: CheckConnectionOptions = {}): Promise<boolean> {
@@ -319,6 +321,7 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
   if (managed) {
     reportManagedServerFailure({ info: managedInfo, probeError: lastError })
   }
+  options.onUnavailable?.(authority, lastError)
   return false
 }
 

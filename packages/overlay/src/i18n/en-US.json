@@ -641,6 +641,7 @@
   "settings.save_failed": "Settings could not be saved: {{error}}",
   "settings.connection_update_failed": "The connection update could not be completed. Review the details and try again.",
   "settings.connection_apply_failed": "Connection settings were saved, but could not be applied to this client. Review the details.",
+  "settings.connection_saved_unavailable": "Connection settings were saved, but the server did not pass the connection check. Check the server URL or try again when the server is available.",
   "settings.server_url_error.malformed": "Enter a complete, valid server URL.",
   "settings.server_url_error.unsupported_protocol": "Use http:// or https:// for the server URL.",
   "settings.server_url_error.query": "Remove the query (?...) from the server URL.",

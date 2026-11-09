@@ -3101,6 +3101,14 @@ SettingsActivationError keeps its distinct saved-but-not-applied fact. The same
 Feedback details retain the original diagnostic through the existing formatter;
 its stable content owner survives an in-place language change. Input editing and
 the existing save generation retire feedback through their original lifecycle.
+After persistence and activation, a failed health check shows a separate
+localized in-form receipt: settings were saved, but the address did not pass
+the check. The existing probe reports its original cause for the current API
+authority; the form keeps it under the Save generation for diagnostic Details.
+A recovered or replaced connection retires this receipt. A current healthy
+probe still leads to the existing workspace refresh and ordinary Saved result.
+The Save button stays focusable while busy, with the existing submission guard
+admitting one Save at a time.
 
 ## Current Surface Ownership
 

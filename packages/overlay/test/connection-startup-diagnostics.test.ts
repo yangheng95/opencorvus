@@ -201,19 +201,34 @@ describe("managed server startup diagnostics", () => {
     expect(appStore).toMatchObject({ connectionStatus: "online", connected: true, coreVersion: "0.1.49+new" })
   })
 
-  test("failed background health probe still transitions online state to offline", async () => {
+  test("an unavailable health probe reports its original cause and current authority after publishing offline", async () => {
     const { checkConnection } = await import("../src/services/connection")
     applySettings({ ...DEFAULT_SETTINGS, autoServer: false, serverUrl: "http://api.invalid" })
     configure({ serverUrl: "http://api.invalid", directory: "" })
+    const cause = new Error("background health refused")
     installTransport({
       request() {
-        throw new Error("background health refused")
+        throw cause
       },
     })
     setConnectionStatus("online")
+    const authority = captureApiAuthority()
+    const outcomes: Array<{ authority: typeof authority; cause: unknown; status: typeof appStore.connectionStatus }> = []
 
-    expect(await checkConnection({ background: true })).toBe(false)
-    expect(appStore.connectionStatus).toBe("offline")
+    const reachable = await checkConnection({
+      background: true,
+      authority,
+      onUnavailable(currentAuthority, originalCause) {
+        outcomes.push({ authority: currentAuthority, cause: originalCause, status: appStore.connectionStatus })
+        return undefined
+      },
+    })
+    expect({ reachable, outcomes }).toEqual({
+      reachable: false,
+      outcomes: [{ authority, cause, status: "offline" }],
+    })
+    expect(outcomes[0]?.authority).toBe(authority)
+    expect(outcomes[0]?.cause).toBe(cause)
   })
 
   test("durable database-unavailable health retains runtime paths and transitions offline", async () => {
