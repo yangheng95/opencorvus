@@ -250,6 +250,7 @@ import { registerReviewPanelPresenter, requestReviewPanel } from "./services/rev
 import { createAnimationFrameScheduler } from "./utils/animation-frame"
 import {
   composerReferenceCatalogRequestKey,
+  composerReferenceCatalogScopeKey,
   composerReferenceCatalogScope,
   type ComposerReferenceCatalogScopeState,
 } from "./services/expert-squad-scope"
@@ -2855,6 +2856,7 @@ function OverlayRoot() {
           expertSquads={composerExpertSquadCatalog().squads}
           expertSquadSearch={composerExpertSquadCatalog().search}
           referenceCatalogKey={composerReferenceCatalogRequestKey(composerIntent().productPillar)}
+          referenceCatalogScopeKey={composerReferenceCatalogScopeKey(composerIntent().productPillar)}
           onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
           onMarketExpertSquadQuery={searchComposerMarketExpertSquads}
           onInstallMarketExpertSquad={installComposerMarketExpertSquad}

@@ -47,6 +47,7 @@ export interface ComposerReferenceSelectorProps {
   expertSquads: readonly ExpertSquadOption[]
   expertSquadSearch: ComposerExpertSquadSearch
   referenceCatalogKey: string
+  referenceCatalogScopeKey: string
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   onInstallMoreExpertSquads?: () => void
   // Searching only what is installed answers "which of mine fits" when the
@@ -136,15 +137,6 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
         })),
     ]
   })
-  createEffect(
-    on(
-      () => props.referenceCatalogKey,
-      () => {
-        setQuery("")
-        if (open() && !props.readOnly) props.onExpertSquadQuery?.("", props.launchReferences.expertSquadIDs)
-      },
-    ),
-  )
   const retryCatalog = () => props.onCatalogRetry?.(query(), props.launchReferences.expertSquadIDs)
   const editableGroups = createMemo<ComposerReferenceGroup[]>(() => [
     ...(filteredSkillOptions().length > 0
@@ -187,15 +179,35 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   const [marketItems, setMarketItems] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
   const [marketLoading, setMarketLoading] = createSignal(false)
   const [marketError, setMarketError] = createSignal("")
-  const [marketInstallingID, setMarketInstallingID] = createSignal("")
+  const [marketInstall, setMarketInstall] = createSignal<{ scopeKey: string; id: string }>()
+  const activeMarketInstall = () => {
+    const attempt = marketInstall()
+    return attempt?.scopeKey === props.referenceCatalogScopeKey ? attempt : undefined
+  }
+  const marketActionBusy = () => marketLoading() || !!activeMarketInstall()
   let marketSequence = 0
+
+  createEffect(
+    on(
+      [() => props.referenceCatalogScopeKey, () => props.referenceCatalogKey],
+      ([scopeKey], previous) => {
+        if (scopeKey !== previous?.[0]) {
+          setQuery("")
+          setMarketInstall(undefined)
+        }
+        if (open() && !props.readOnly) props.onExpertSquadQuery?.(query(), props.launchReferences.expertSquadIDs)
+      },
+    ),
+  )
 
   createEffect(() => {
     const opened = open()
     const search = props.onMarketExpertSquadQuery
     const text = query().trim().slice(0, 500)
+    const requestKey = props.referenceCatalogKey
     const sequence = ++marketSequence
-    if (!opened || !search || text.length < 2) {
+    const owns = () => sequence === marketSequence && requestKey === props.referenceCatalogKey
+    if (!opened || !search || !requestKey || text.length < 2) {
       setMarketItems([])
       setMarketLoading(false)
       setMarketError("")
@@ -206,36 +218,37 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     const timer = window.setTimeout(() => {
       void search(text)
         .then((items) => {
-          if (sequence !== marketSequence) return
+          if (!owns()) return
           setMarketItems(items)
         })
         .catch((error) => {
-          if (sequence !== marketSequence) return
+          if (!owns()) return
           setMarketItems([])
           setMarketError(error instanceof Error ? error.message : String(error))
         })
         .finally(() => {
-          if (sequence === marketSequence) setMarketLoading(false)
+          if (owns()) setMarketLoading(false)
         })
     }, 280)
     onCleanup(() => window.clearTimeout(timer))
   })
 
-  async function installFromMarket(item: ExpertSquadMarketIndexItem): Promise<void> {
+  async function installFromMarket(item: ExpertSquadMarketIndexItem, trigger: HTMLButtonElement): Promise<void> {
     const install = props.onInstallMarketExpertSquad
-    if (!install || marketInstallingID()) return
-    setMarketInstallingID(item.id)
+    const scopeKey = props.referenceCatalogScopeKey
+    if (!install || !scopeKey || marketActionBusy()) return
+    const attempt = { scopeKey, id: item.id }
+    const owns = () => activeMarketInstall() === attempt && open() && !props.readOnly
+    const origin = document.activeElement === trigger ? trigger : undefined
+    setMarketInstall(attempt)
     setMarketError("")
     try {
       await install(item)
-      // The installed list is the parent's, so ask it to reread rather than
-      // guessing what the install produced.
-      props.onExpertSquadQuery?.(query(), props.launchReferences.expertSquadIDs)
-      setMarketItems((current) => current.filter((entry) => entry.id !== item.id))
+      if (owns() && origin && document.activeElement === origin && searchInputRef?.isConnected) searchInputRef.focus()
     } catch (error) {
-      setMarketError(error instanceof Error ? error.message : String(error))
+      if (owns()) setMarketError(error instanceof Error ? error.message : String(error))
     } finally {
-      setMarketInstallingID("")
+      setMarketInstall((current) => current === attempt ? undefined : current)
     }
   }
 
@@ -591,10 +604,11 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                               variant="outline"
                               size="sm"
                               tone="accent"
-                              disabled={Boolean(marketInstallingID())}
-                              onClick={() => void installFromMarket(item)}
+                              aria-disabled={marketActionBusy() || undefined}
+                              aria-busy={activeMarketInstall()?.id === item.id || undefined}
+                              onClick={(event) => void installFromMarket(item, event.currentTarget)}
                             >
-                              <Show when={marketInstallingID() === item.id}>
+                              <Show when={activeMarketInstall()?.id === item.id}>
                                 <Icon name="loading" size="compact" />
                               </Show>
                               {t("chat.references.market_install")}

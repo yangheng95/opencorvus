@@ -3413,6 +3413,12 @@ state and does not retry a submission. Long diagnostics scroll inside the
 existing measured mention panel height and bounded reference Popover; they do
 not push dismissal controls beyond the clipping boundary. Reference search
 precedes feedback in focus order.
+The reference popup keeps its query while the same connection, scope and work
+type reload. A Market install refreshes the installed and Market results through
+their current readers. The temporary busy action stays focusable; after success
+it returns keyboard focus to the existing search field if the operator still
+owns the original action's focus. An inactive mention does not issue a competing
+query or replace the popup's current search.
 
 Home headings, starter actions and the Composer use the same inherited reading
 column insets as the transcript. Home has no separate percentage-width rule or

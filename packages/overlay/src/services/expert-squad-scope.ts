@@ -49,7 +49,13 @@ export function expertSquadCatalogScopeIdentity(scope: ExpertSquadCatalogScopeSt
 export function expertSquadCatalogRequestKeyForScope(
   scope: Extract<ExpertSquadCatalogScopeState, { kind: "project" | "session" }>,
 ): string {
-  return `expert-squad:catalog:${expertSquadCatalogScopeIdentity(scope)}:${expertSquadCatalogRefreshToken()}`
+  return `${expertSquadCatalogScopeKeyForRequest(scope)}:${expertSquadCatalogRefreshToken()}`
+}
+
+function expertSquadCatalogScopeKeyForRequest(
+  scope: Extract<ExpertSquadCatalogScopeState, { kind: "project" | "session" }>,
+): string {
+  return `expert-squad:catalog:${expertSquadCatalogScopeIdentity(scope)}`
 }
 
 export function expertSquadCatalogRequestKey(): string {
@@ -66,12 +72,23 @@ export function composerReferenceCatalogScope(): ComposerReferenceCatalogScopeSt
   return scope.kind === "unavailable" && appStore.connected ? { kind: "global" } : scope
 }
 
-export function composerReferenceCatalogRequestKey(productPillar: "code" | "work"): string {
+function composerReferenceCatalogContext(productPillar: "code" | "work") {
   const authority = captureApiAuthority()
   const prefix = `api:${authority.revision}:${productPillar}:`
   const scope = composerReferenceCatalogScope()
-  if (scope.kind === "global") return `${prefix}composer-reference:global:${expertSquadCatalogRefreshToken()}`
-  if (scope.kind === "unavailable") return ""
-  if (scope.kind === "pending") return `${prefix}composer-reference:pending-task:${scope.taskID}:${scope.directory}`
-  return `${prefix}${expertSquadCatalogRequestKeyForScope(scope)}`
+  if (scope.kind === "global") return { key: `${prefix}composer-reference:global`, refreshes: true }
+  if (scope.kind === "unavailable") return { key: "", refreshes: false }
+  if (scope.kind === "pending") {
+    return { key: `${prefix}composer-reference:pending-task:${scope.taskID}:${scope.directory}`, refreshes: false }
+  }
+  return { key: `${prefix}${expertSquadCatalogScopeKeyForRequest(scope)}`, refreshes: true }
+}
+
+export function composerReferenceCatalogScopeKey(productPillar: "code" | "work"): string {
+  return composerReferenceCatalogContext(productPillar).key
+}
+
+export function composerReferenceCatalogRequestKey(productPillar: "code" | "work"): string {
+  const { key, refreshes } = composerReferenceCatalogContext(productPillar)
+  return refreshes ? `${key}:${expertSquadCatalogRefreshToken()}` : key
 }

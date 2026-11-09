@@ -215,6 +215,7 @@ export interface ChatComposerProps {
   expertSquads: ExpertSquadOption[]
   expertSquadSearch: ComposerExpertSquadSearch
   referenceCatalogKey: string
+  referenceCatalogScopeKey: string
   onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
   onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
@@ -741,7 +742,9 @@ export function ChatComposer(props: ChatComposerProps) {
     ))
   }
   createEffect<string>((previousQuery) => {
-    const query = activeSquadMentionQuery()?.query ?? ""
+    const mention = activeSquadMentionQuery()
+    if (!mention) return ""
+    const query = mention.query
     const key = JSON.stringify([props.referenceCatalogKey, query])
     if (key !== previousQuery) {
       const selectedExpertSquadIDs = composerMentionDirectiveRanges(text())
@@ -1510,6 +1513,7 @@ export function ChatComposer(props: ChatComposerProps) {
         expertSquads={props.expertSquads}
         expertSquadSearch={props.expertSquadSearch}
         referenceCatalogKey={props.referenceCatalogKey}
+        referenceCatalogScopeKey={props.referenceCatalogScopeKey}
         catalogError={props.referenceCatalogError}
         onCatalogRetry={props.onReferenceCatalogRetry}
         onExpertSquadQuery={props.onExpertSquadQuery}

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [撰写器市场安装后的搜索与焦点证据](2026-11-09-composer-market-install-continuity/README.md)
 - [专家团市场安装身份证据](2026-11-09-expert-squad-market-installation-identity/README.md)
 - [专家团市场游标契约证据](2026-11-09-expert-squad-market-cursor-contract/README.md)
 - [专家团目录游标错误契约证据](2026-11-09-expert-squad-catalog-cursor-contract/README.md)

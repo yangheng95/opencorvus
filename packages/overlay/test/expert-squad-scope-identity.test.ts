@@ -2,8 +2,11 @@ import { afterEach, expect, test } from "bun:test"
 import { appStore, setAppStore } from "../src/store/app"
 import { boardStore, setBoardStore } from "../src/store/board"
 import { settingsStore, setSettingsStore } from "../src/store/settings"
-import { expertSquadCatalogPath } from "../src/services/expert-squad"
+import { expertSquadCatalogPath, expertSquadCatalogRefreshToken, markExpertSquadCatalogStale } from "../src/services/expert-squad"
+import { captureApiAuthority } from "../src/services/api"
 import {
+  composerReferenceCatalogRequestKey,
+  composerReferenceCatalogScopeKey,
   expertSquadCatalogScope,
   expertSquadCatalogScopeIdentity,
   expertSquadCatalogRequestKeyForScope,
@@ -53,4 +56,27 @@ test("ordinary selected Session and Project retain their own canonical scope", (
   setBoardStore("selectedSource", null)
   expect(expertSquadCatalogScope()).toEqual({ kind: "project", directory: "D:/owned/project" })
   expect(expertSquadCatalogScopeIdentity(expertSquadCatalogScope())).toBe("project:D:/owned/project")
+})
+
+test("Composer refresh advances the request while the project and pillar own the interaction context", () => {
+  setAppStore("connected", true)
+  setSettingsStore("directory", "D:/owned/project")
+  setBoardStore({ selectedSource: null, board: null, tasks: [], taskSwitching: false })
+  const authority = captureApiAuthority()
+  const workContext = `api:${authority.revision}:work:expert-squad:catalog:project:D:/owned/project`
+  const refresh = expertSquadCatalogRefreshToken()
+  expect(composerReferenceCatalogScopeKey("work")).toBe(workContext)
+  expect(composerReferenceCatalogRequestKey("work")).toBe(`${workContext}:${refresh}`)
+
+  markExpertSquadCatalogStale()
+  expect(composerReferenceCatalogScopeKey("work")).toBe(workContext)
+  expect(composerReferenceCatalogRequestKey("work")).toBe(`${workContext}:${refresh + 1}`)
+  expect(composerReferenceCatalogScopeKey("code")).toBe(
+    `api:${authority.revision}:code:expert-squad:catalog:project:D:/owned/project`,
+  )
+
+  setSettingsStore("directory", "D:/owned/next")
+  const nextContext = `api:${authority.revision}:work:expert-squad:catalog:project:D:/owned/next`
+  expect(composerReferenceCatalogScopeKey("work")).toBe(nextContext)
+  expect(composerReferenceCatalogRequestKey("work")).toBe(`${nextContext}:${refresh + 1}`)
 })

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [撰写器市场安装后的搜索与焦点](2026-11-09-composer-market-install-continuity.md)
 - [专家团市场安装身份](2026-11-09-expert-squad-market-installation-identity.md)
 - [专家团市场游标契约](2026-11-09-expert-squad-market-cursor-contract.md)
 - [专家团目录游标错误契约](2026-11-09-expert-squad-catalog-cursor-contract.md)
