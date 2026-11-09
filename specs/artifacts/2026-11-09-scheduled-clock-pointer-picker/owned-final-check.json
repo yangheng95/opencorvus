@@ -1,0 +1,100 @@
+{
+  "before": {
+    "project": null,
+    "head": null,
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b79\\project-after",
+    "head": "2926e6a36873a7cf70527775bc4fbdff224740cb",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "delivery": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b79\\project-delivery",
+    "head": "643f3fa39ec935119e00d615f6f6f8332d266d29",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [
+      [
+        "atm_g0VaS1pea00lWeUQGbKs",
+        "atm_g0VaS1pea00lWeUQGbKs",
+        1,
+        "active",
+        "DTSTART;TZID=Asia/Shanghai:20990105T235900\nRRULE:FREQ=DAILY",
+        "global",
+        "时钟选择验收 79",
+        "仅验证鼠标时钟选择，不运行。"
+      ],
+      [
+        "atm_g0VaS1pea00lWeUQGbKs",
+        "atm_g0VaS1snO00RRKq8arly",
+        2,
+        "paused",
+        "DTSTART;TZID=Asia/Shanghai:20990105T235900\nRRULE:FREQ=DAILY",
+        "global",
+        "时钟选择验收 79",
+        "仅验证鼠标时钟选择，不运行。"
+      ]
+    ],
+    "futureFires": [
+      [
+        "cal_automation_fe72f8f04bf7eedd0931e925a3b2f489",
+        "atm_g0VaS1pea00lWeUQGbKs",
+        "scheduled",
+        4071311940000
+      ]
+    ],
+    "scheduleWrites": [
+      {
+        "time": "2026-11-09T05:30:59.374Z",
+        "requestID": "4a2de3b0-57d9-4669-8b82-620762469f87",
+        "method": "POST",
+        "path": "/global/automations",
+        "status": "completed",
+        "statusCode": 201,
+        "duration": 30
+      },
+      {
+        "time": "2026-11-09T05:31:11.437Z",
+        "requestID": "88fff791-8473-478d-8a19-b9afcd7d67b5",
+        "method": "PATCH",
+        "path": "/global/automations/atm_g0VaS1pea00lWeUQGbKs",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 14
+      }
+    ]
+  }
+}

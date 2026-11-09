@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [定时编辑器的鼠标时钟选择](2026-11-09-scheduled-clock-pointer-picker.md)
 - [定时编辑器的应用语言日期与时间](2026-11-09-scheduled-calendar-field-language.md)
 - [定时项目筛选保留既有目标顺序](2026-11-09-scheduled-project-selection-order.md)
 - [定时项目选择的键盘焦点](2026-11-09-scheduled-project-selection-focus.md)

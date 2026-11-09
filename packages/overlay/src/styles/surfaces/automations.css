@@ -502,6 +502,44 @@
   color: var(--text-muted);
 }
 
+.automation-clock-popover {
+  display: grid;
+  gap: var(--ui-gap-md);
+  min-inline-size: calc(220px * var(--ui-scale));
+  padding: var(--ui-gap-md);
+}
+
+.automation-clock-popover > button {
+  justify-self: end;
+}
+
+.automation-clock-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ui-gap-md);
+}
+
+.automation-clock-choices label {
+  display: grid;
+  gap: var(--ui-gap-xs);
+  color: var(--text-muted);
+  font-size: var(--ui-font-body);
+}
+
+.automation-clock-choices select {
+  min-inline-size: 0;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-strong);
+  color: var(--text-strong);
+  font: inherit;
+  scrollbar-width: thin;
+}
+
+.automation-clock-choices option {
+  padding: var(--ui-gap-xs) var(--ui-gap-sm);
+}
+
 .automation-calendar-positioner {
   z-index: calc(var(--ui-z-dialog) + 1);
 }

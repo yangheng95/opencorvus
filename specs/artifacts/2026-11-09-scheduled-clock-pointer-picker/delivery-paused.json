@@ -1,0 +1,33 @@
+{
+  "phase": "delivery",
+  "step": "paused",
+  "plans": {
+    "status": 200,
+    "requestID": "d5bf268b-bdb5-496d-9720-019622988e0e",
+    "body": [
+      {
+        "id": "atm_g0VaS1pea00lWeUQGbKs",
+        "revisionId": "atm_g0VaS1snO00RRKq8arly",
+        "name": "时钟选择验收 79",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T235900\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "仅验证鼠标时钟选择，不运行。",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4071311940000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "runs": {
+    "status": 200,
+    "requestID": "e569167d-1a20-487e-a082-9db46cacaaf2",
+    "body": []
+  }
+}

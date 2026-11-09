@@ -1776,6 +1776,10 @@ authored rule in the current advanced editor. Explicit calendar changes use the
 chosen anchor, rather than resetting it to the save date. Weekly review's Friday
 is suggestion data passed through that same weekly field.
 
+The localized clock supports direct segmented entry and a pointer picker for
+every hour and minute. Applying the picker replaces the entire keyboard draft
+with one canonical wall-clock value. Closing the picker discards its draft.
+
 Scheduled editing owns an opening definition snapshot; the edit flag derives
 from it. Submit uses its exact ID, original recurrence and session target, and
 captures authored fields before resolving project identities. Background list
