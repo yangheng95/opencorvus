@@ -2319,6 +2319,11 @@ when a write response cannot be confirmed. The explicit Check current assignment
 action reads the same Project and role, keeps the original diagnostic, and uses
 the accepted read to enable editing again. It does not repeat the assignment
 write. A failed initial read also offers an in-place retry.
+While saving, assignment checkboxes remain focusable and read-only, showing
+the last confirmed value. Skill rows are keyed by their canonical names so a
+confirmed response updates the existing controls and leaves their details open.
+Unconfirmed writes move focus to the existing check action only while the
+original assignment still owns focus.
 
 General's log export keeps the same button focusable while its accepted request
 is busy, publishing aria-disabled/aria-busy and guarding repeat activation. The

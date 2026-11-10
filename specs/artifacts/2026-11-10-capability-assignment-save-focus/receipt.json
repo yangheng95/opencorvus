@@ -1,0 +1,517 @@
+{
+  "directReads": {
+    "baseline-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "1f444811-3355-412a-a5f3-67dd432f2333",
+        "asset": "main-CrEyrPqw.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "5d43958e-70b0-4120-bad2-dc1e7ac5d755"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "62f8bdc3-2e9d-4b5e-986a-ad6481f1c57b",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [
+            "grill-me"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "3795c74f-962d-449f-81d2-e1ffdabe7f0e",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts",
+            "research-report"
+          ],
+          "mcp": [
+            "browser"
+          ],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "a0ddff71-3c72-435c-a4d9-028ab7184478",
+        "connected": 0
+      }
+    },
+    "baseline-direct-skill-removed": {
+      "page": {
+        "status": 200,
+        "requestID": "e10ee74e-26e6-4ca5-b972-87d4bdedba54",
+        "asset": "main-CrEyrPqw.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "39a4e53c-d550-42db-ac38-edc9e623d098"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "9f47ac87-5625-4c31-93bb-c12a9f044362",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [
+            "grill-me"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "0bf4e189-f27b-4cb2-a90c-4aef6ae0b8c8",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts"
+          ],
+          "mcp": [
+            "browser"
+          ],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "139e199c-2f57-4f19-bedb-1005f5b300c9",
+        "connected": 0
+      }
+    },
+    "baseline-direct-all-removed": {
+      "page": {
+        "status": 200,
+        "requestID": "c57fecf2-17b4-454e-af7d-217547857f75",
+        "asset": "main-CrEyrPqw.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "ab450ecc-62ec-463d-b6b9-3a77bcbc5aa9"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "223de47b-9b59-4b2d-bfc1-6f787a588f74",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [
+            "grill-me"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "856fd3fe-41f0-40c2-8186-7310d2f3e554",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "82b9fc48-7dc4-44f6-91dd-197c31c237e7",
+        "connected": 0
+      }
+    },
+    "baseline-direct-restored": {
+      "page": {
+        "status": 200,
+        "requestID": "cfcb6c6f-ae04-415a-b418-5a281ea5c025",
+        "asset": "main-CrEyrPqw.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "58f66588-f73c-4a7a-817f-aea020c7e53b"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "7e334ddb-e1a0-4b12-bb06-337fbef692a3",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [
+            "grill-me"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "893ef8d8-138b-40e8-a2b5-c9cf3b3bb905",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts",
+            "research-report"
+          ],
+          "mcp": [
+            "browser"
+          ],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "20cc7e9f-4ac3-440c-baca-6af08c8f08fb",
+        "connected": 0
+      }
+    },
+    "candidate-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "e62aa9b7-30b8-4feb-9911-8d79e9cd62a5",
+        "asset": "main-B1seUYPE.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "9b8ca858-f8d7-4be0-b6ad-eb984fac25e6"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "9e7f6d0a-3053-4295-8c96-df84aea677ca",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [
+            "grill-me"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "ca19b623-6818-4dab-a6b8-15d441000910",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts",
+            "research-report"
+          ],
+          "mcp": [
+            "browser"
+          ],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "cc130eb9-520e-44e6-943c-2903a1449848",
+        "connected": 0
+      }
+    },
+    "candidate-direct-work-skill-removed": {
+      "page": {
+        "status": 200,
+        "requestID": "49cc41bd-9e73-4cc8-8a91-47318fc63e20",
+        "asset": "main-B1seUYPE.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "c68fd12d-e353-4d70-917f-7bd2d6755213"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "5c74928a-7f08-4fbf-983a-7a72a0e5bbb9",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [
+            "grill-me"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "f1d765b8-3f95-4a7b-a12c-46ae7ac45fdb",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts"
+          ],
+          "mcp": [
+            "browser"
+          ],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "47a92147-439c-4244-adca-f83b2ac1ce1c",
+        "connected": 0
+      }
+    },
+    "candidate-direct-unconfirmed": {
+      "page": {
+        "status": 200,
+        "requestID": "0e1f7592-3b3b-4de4-9d2a-4255ceff44ae",
+        "asset": "main-B1seUYPE.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "e2d693ca-1706-4f0d-8e21-80ba19be7b4f"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "8cb83ae7-72d8-4d57-aaa9-775e3ab87cfa",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "59cfd601-1712-4578-8fcc-cd1b67375b48",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "d874e26c-9eaa-4caa-925f-c746256aeefe",
+        "connected": 0
+      }
+    },
+    "candidate-direct-restored": {
+      "page": {
+        "status": 200,
+        "requestID": "fd287272-42bb-459f-b8c5-cfbb3c247034",
+        "asset": "main-B1seUYPE.js"
+      },
+      "contract": {
+        "status": 200,
+        "requestID": "007d2c0b-6e31-4a68-98dc-776a76574518"
+      },
+      "roles": [
+        {
+          "status": 200,
+          "requestID": "be8d8b40-196d-4651-98c1-85af76057dd3",
+          "role": "chat",
+          "operation": "chat.capability.get",
+          "skills": [
+            "grill-me"
+          ],
+          "mcp": [],
+          "installed": 6,
+          "declaredTools": 37
+        },
+        {
+          "status": 200,
+          "requestID": "96634f98-a70c-4624-bec9-40ae5a00df11",
+          "role": "work",
+          "operation": "work.capability.get",
+          "skills": [
+            "work-artifacts",
+            "research-report"
+          ],
+          "mcp": [
+            "browser"
+          ],
+          "installed": 6,
+          "declaredTools": 41
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "5c0b856b-fd6b-4f19-a8d0-7bdee0820bf0",
+        "connected": 0
+      }
+    }
+  },
+  "uiWrites": {
+    "baseline": [
+      {
+        "requestID": "ced32b05-9c60-4e59-8fa9-fd60aef09b12",
+        "role": "work",
+        "kind": "skill",
+        "ref": "research-report",
+        "assigned": false,
+        "status": 200,
+        "mode": "hold",
+        "time": "2026-11-10T08:41:14.959Z",
+        "bytes": 29747,
+        "delivered": 29747,
+        "heldMs": 5512
+      },
+      {
+        "requestID": "03adc5d2-5129-45d2-8d9a-bb567b7e80d1",
+        "role": "work",
+        "kind": "mcp_server",
+        "ref": "browser",
+        "assigned": false,
+        "status": 200,
+        "mode": "hold",
+        "time": "2026-11-10T08:41:38.153Z",
+        "bytes": 29738,
+        "delivered": 29738,
+        "heldMs": 3808
+      }
+    ],
+    "candidate": [
+      {
+        "requestID": "95937fc6-1af1-4912-8df0-971f400c1aaf",
+        "role": "work",
+        "kind": "skill",
+        "ref": "research-report",
+        "assigned": false,
+        "status": 200,
+        "mode": "hold",
+        "time": "2026-11-10T08:45:50.304Z",
+        "bytes": 29747,
+        "delivered": 29747,
+        "heldMs": 3865
+      },
+      {
+        "requestID": "909ef101-68ae-457a-92e0-4b17277ace9c",
+        "role": "work",
+        "kind": "mcp_server",
+        "ref": "browser",
+        "assigned": false,
+        "status": 200,
+        "mode": "hold",
+        "time": "2026-11-10T08:46:12.846Z",
+        "bytes": 29738,
+        "delivered": 29738,
+        "heldMs": 4273
+      },
+      {
+        "requestID": "72ab6ec4-7a36-4efe-a35e-7b13e56173fc",
+        "role": "chat",
+        "kind": "skill",
+        "ref": "grill-me",
+        "assigned": false,
+        "status": 200,
+        "mode": "hold-truncate",
+        "time": "2026-11-10T08:46:34.983Z",
+        "bytes": 29626,
+        "delivered": 1,
+        "heldMs": 3990
+      },
+      {
+        "requestID": "3ab355d3-aee4-4cf1-a63f-3ffd12e04ea6",
+        "role": "chat",
+        "kind": "skill",
+        "ref": "grill-me",
+        "assigned": true,
+        "status": 200,
+        "mode": "restore",
+        "time": "2026-11-10T08:47:03.508Z",
+        "bytes": 29636,
+        "delivered": 29636,
+        "heldMs": 0
+      }
+    ]
+  },
+  "disk": {
+    "unconfirmed": {
+      "chat": {
+        "skill_refs": [],
+        "mcp_server_refs": []
+      },
+      "work": {
+        "skill_refs": [
+          "work-artifacts"
+        ],
+        "mcp_server_refs": []
+      }
+    },
+    "restored": {
+      "chat": {
+        "skill_refs": [
+          "grill-me"
+        ],
+        "mcp_server_refs": []
+      },
+      "work": {
+        "skill_refs": [
+          "work-artifacts",
+          "research-report"
+        ],
+        "mcp_server_refs": [
+          "browser"
+        ]
+      }
+    }
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b200-baseline",
+      "apiPort": 39546,
+      "proxyPort": 39547,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b200-candidate",
+      "apiPort": 39548,
+      "proxyPort": 39549,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "reviewedScreenshots": {
+    "baseline": 5,
+    "candidate": 10
+  }
+}

@@ -3066,6 +3066,14 @@ button.s-row:focus-visible {
   margin-top: var(--ui-gap-2xl);
 }
 
+.conversation-capability-sections .oc-checkbox[data-readonly] {
+  cursor: default;
+}
+
+.conversation-capability-sections .oc-checkbox[data-readonly]:not(:focus-within) {
+  opacity: var(--ui-opacity-disabled);
+}
+
 .conversation-capability-description[data-size="sm"] > .oc-disclosure__trigger {
   align-items: start;
   padding: 0;

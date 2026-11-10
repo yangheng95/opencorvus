@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [能力分配保存时的键盘实页证据](2026-11-10-capability-assignment-save-focus/README.md)
 - [目录后台刷新诊断的实页证据](2026-11-10-explorer-directory-refresh-diagnostics/README.md)
 - [文件编辑器首次读取失败实页证据](2026-11-10-file-editor-first-read-error-focus/README.md)
 - [左侧工作列表读取重试实页证据](2026-11-10-work-ledger-sidebar-read-retry/README.md)

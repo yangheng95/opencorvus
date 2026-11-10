@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [能力分配保存保留原复选框和键盘位置](records/2026-11/2026-11-10-capability-assignment-save-focus.md)
 - [目录后台刷新保留诊断和键盘位置](records/2026-11/2026-11-10-explorer-directory-refresh-diagnostics.md)
 - [首次文件读取失败后进入重试](records/2026-11/2026-11-10-file-editor-first-read-error-focus.md)
 - [左侧工作列表重试保留键盘位置和诊断](records/2026-11/2026-11-10-work-ledger-sidebar-read-retry.md)

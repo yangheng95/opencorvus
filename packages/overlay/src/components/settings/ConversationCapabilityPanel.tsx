@@ -1,4 +1,5 @@
 import { Feedback } from "../ui/Feedback"
+import { Key } from "@solid-primitives/keyed"
 import { batch, createEffect, createSignal, For, on, Show, onCleanup } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import {
@@ -120,7 +121,9 @@ export default function ConversationCapabilityPanel(props: {
     } catch (cause) {
       if (owns()) {
         setIssue({ operation: "save", cause })
-        if (hadAssignmentFocus && document.activeElement === document.body) checkButton?.focus()
+        if (hadAssignmentFocus && (document.activeElement === active || document.activeElement === document.body)) {
+          checkButton?.focus()
+        }
       }
     } finally {
       if (owns()) setSaving(false)
@@ -212,7 +215,11 @@ export default function ConversationCapabilityPanel(props: {
             </Show>
             <Show when={settings()}>
               {(current) => (
-                <div class="conversation-capability-sections" ref={(element) => (assignmentsElement = element)}>
+                <div
+                  class="conversation-capability-sections"
+                  aria-busy={saving() || undefined}
+                  ref={(element) => (assignmentsElement = element)}
+                >
                   <Disclosure.Root>
                     <Disclosure.Trigger>
                       {t("settings.product.tools_count", { count: current().tools.declared.length })}
@@ -231,42 +238,42 @@ export default function ConversationCapabilityPanel(props: {
                         when={current().skills.installed.length > 0}
                         fallback={<SettingsEmpty>{t("skill.none")}</SettingsEmpty>}
                       >
-                        <For each={current().skills.installed}>
+                        <Key each={current().skills.installed} by="name">
                           {(skill) => {
-                            const assigned = () => current().skills.assigned_refs.includes(skill.name)
+                            const assigned = () => current().skills.assigned_refs.includes(skill().name)
                             return (
                               <SettingsRow
-                                title={skill.name}
+                                title={skill().name}
                                 children={
                                   <Disclosure.Root class="conversation-capability-description">
                                     <Disclosure.Trigger indicatorPosition="end">
                                       <span class="conversation-capability-description-preview">
-                                        {skill.description || t("settings.product.skill_available")}
+                                        {skill().description || t("settings.product.skill_available")}
                                       </span>
                                       <span class="conversation-capability-description-label">
                                         {t("common.details")}
                                       </span>
                                     </Disclosure.Trigger>
                                     <Disclosure.Content>
-                                      {skill.description || t("settings.product.skill_available")}
+                                      {skill().description || t("settings.product.skill_available")}
                                     </Disclosure.Content>
                                   </Disclosure.Root>
                                 }
                                 actions={
                                   <Checkbox
                                     checked={assigned()}
-                                    disabled={assignmentLocked()}
+                                    readOnly={assignmentLocked()}
                                     aria-label={t("settings.product.skill_toggle", {
-                                      name: skill.name,
+                                      name: skill().name,
                                       product: productLabel(),
                                     })}
-                                    onChange={(checked) => toggleSkill(skill.name, checked)}
+                                    onChange={(checked) => toggleSkill(skill().name, checked)}
                                   />
                                 }
                               />
                             )
                           }}
-                        </For>
+                        </Key>
                       </Show>
                     </SettingsSurface>
                   </SettingsGroup>
@@ -298,7 +305,7 @@ export default function ConversationCapabilityPanel(props: {
                                 actions={
                                   <Checkbox
                                     checked={assigned()}
-                                    disabled={assignmentLocked()}
+                                    readOnly={assignmentLocked()}
                                     aria-label={t("settings.product.mcp_toggle", {
                                       name: serverID,
                                       product: productLabel(),
