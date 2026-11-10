@@ -2693,6 +2693,7 @@
   "mission_board.open_task": "Open Task: {{title}} ({{status}})",
   "mission_board.loading": "Loading Missions...",
   "mission_board.load_failed": "Missions could not be loaded",
+  "mission_board.refresh_failed": "Could not refresh Missions. Showing the last successful read.",
   "mission_board.empty_true": "No Missions yet",
   "mission_board.empty_true_description": "Create a Mission to plan and track work across your projects.",
   "mission_board.empty_filtered": "No Missions match these filters",

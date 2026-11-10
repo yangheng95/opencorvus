@@ -2692,6 +2692,7 @@
   "mission_board.open_task": "打开子任务：{{title}}（{{status}}）",
   "mission_board.loading": "正在加载多步任务…",
   "mission_board.load_failed": "无法加载多步任务",
+  "mission_board.refresh_failed": "无法刷新多步任务，当前显示上次成功读取的结果。",
   "mission_board.empty_true": "还没有多步任务",
   "mission_board.empty_true_description": "创建多步任务，规划和跟踪各项目的工作。",
   "mission_board.empty_filtered": "没有符合当前筛选的多步任务",

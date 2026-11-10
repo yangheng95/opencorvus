@@ -486,27 +486,29 @@ test("panel stream preserves the original completed result when authority retire
   expect(await pending).toEqual(result)
 })
 
+const missionRow: MissionRecord = {
+  missionID: "mission_b",
+  sessionID: "ses_b",
+  directory,
+  title: "B mission",
+  boardLane: "backlog",
+  created: 1,
+  updated: 2,
+  interruptible: false,
+  pendingInteractions: 0,
+  productPillar: "code",
+  taskStats: { inactive: 0, running: 0, total: 0 },
+  tasks: [],
+}
+
 test("Mission board preserves B's completed current snapshot when A's page settles later", async () => {
   const a = captureApiAuthority()
   const old = deferred<TransportResponse>()
-  const row: MissionRecord = {
-    missionID: "mission_b",
-    sessionID: "ses_b",
-    directory,
-    title: "B mission",
-    boardLane: "backlog",
-    created: 1,
-    updated: 2,
-    interruptible: false,
-    pendingInteractions: 0,
-    productPillar: "code",
-    taskStats: { inactive: 0, running: 0, total: 0 },
-    tasks: [],
-  }
+  const row = missionRow
   transport((request) => (request.authority?.revision === a.revision ? old.promise : ok([row])))
   const first = reloadMissionBoard(a)
   configure({ serverUrl: "http://b.invalid" })
-  await reloadMissionBoard()
+  expect(await reloadMissionBoard()).toBe(true)
   old.resolve(
     ok(
       Array.from({ length: 50 }, (_, i) => ({
@@ -519,7 +521,44 @@ test("Mission board preserves B's completed current snapshot when A's page settl
   )
   await first
   expect(missionBoardStore.records).toEqual([row])
-  expect({ loading: missionBoardStore.loading, error: missionBoardStore.error }).toEqual({ loading: false, error: "" })
+  expect({ accepted: missionBoardStore.accepted, loading: missionBoardStore.loading, error: missionBoardStore.error })
+    .toEqual({ accepted: true, loading: false, error: undefined })
+})
+
+test("Mission board accepts a real empty snapshot and retires it with its connection scope", async () => {
+  transport(() => ok([]))
+  expect(await reloadMissionBoard()).toBe(true)
+  expect(missionBoardStore).toMatchObject({ accepted: true, loading: false, records: [] })
+  retireMissionBoardProjection(false)
+  expect(missionBoardStore).toMatchObject({ accepted: true, loading: false, records: [] })
+  retireMissionBoardProjection()
+  expect(missionBoardStore).toMatchObject({ accepted: false, loading: false, records: [] })
+})
+
+test("Mission board keeps the accepted list and original failed page until a full read recovers", async () => {
+  const failure = new SyntaxError("Incomplete Mission list page")
+  const recovering = deferred<TransportResponse>()
+  const updated = { ...missionRow, title: "Recovered Mission", updated: 3 }
+  const partial = Array.from({ length: 50 }, (_, i) => ({ ...updated, sessionID: `ses_partial_${i}` }))
+  transport(() => ok([missionRow]))
+  expect(await reloadMissionBoard()).toBe(true)
+
+  transport((request) => {
+    if (request.query?.cursorSessionID) throw failure
+    return ok(partial)
+  })
+  await reloadMissionBoard()
+  expect(missionBoardStore).toMatchObject({ accepted: true, loading: false, records: [missionRow] })
+  expect(missionBoardStore.error?.cause).toBe(failure)
+
+  transport(() => recovering.promise)
+  const result = reloadMissionBoard()
+  expect(missionBoardStore).toMatchObject({ accepted: true, loading: true, records: [missionRow] })
+  expect(missionBoardStore.error?.cause).toBe(failure)
+  recovering.resolve(ok([updated]))
+  expect(await result).toBe(true)
+  expect({ records: missionBoardStore.records, accepted: missionBoardStore.accepted, loading: missionBoardStore.loading, error: missionBoardStore.error })
+    .toEqual({ accepted: true, loading: false, error: undefined, records: [updated] })
 })
 
 test("sequential Skill removal preserves the first accepted A response when its authority retires", async () => {

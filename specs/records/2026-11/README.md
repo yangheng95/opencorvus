@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多步任务列表重试与已读结果](2026-11-10-mission-board-read-recovery.md)
 - [多步任务专家团读取重试保留键盘位置](2026-11-10-mission-squad-context-retry-focus.md)
 - [关于页区分任务零值与列表未读回](2026-11-10-about-accepted-task-list-count.md)
 - [从归档打开时把焦点交给只读历史](2026-11-10-archive-open-reading-focus.md)

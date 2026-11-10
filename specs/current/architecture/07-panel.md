@@ -3675,6 +3675,12 @@ records; zero counts remain visible in its navigation. List titles and child Tas
 previews are bounded to three lines. Draft controls and blocked-outcome disclosure
 remain siblings of the card's primary open action in both views. Cards lead with
 the Mission title and retain identity, time, project and execution details.
+The page publishes only complete Mission list reads. A failed refresh labels
+and retains the last accepted list (including an accepted empty list) in the
+current connection scope, with the original diagnostic in shared Feedback.
+Replacing the connection scope clears that projection. During explicit Retry,
+its action remains focusable; an accepted retry moves focus to the page heading
+only if the action still owns focus. Toolbar Refresh retains its own focus.
 Mailbox uses the shared Feedback and
 neutral navigation selection while retaining unread and attention facts.
 Retrying a failed read in the same Mailbox scope keeps the original diagnostic

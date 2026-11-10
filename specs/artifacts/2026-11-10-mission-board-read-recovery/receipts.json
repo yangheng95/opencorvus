@@ -1,0 +1,216 @@
+{
+  "baselinePageAsset": "main-DtBCiaJL.js",
+  "candidateBefore": {
+    "page": {
+      "status": 200,
+      "requestID": "ccb536e1-92c8-4519-b57d-8d0701ac9377",
+      "asset": "main-4Yhgx-WN.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "4b88d6b0-2551-48ba-ac64-104f7ee07ea7",
+      "operation": "mission.list"
+    },
+    "list": {
+      "status": 200,
+      "requestID": "f39eb137-58a3-4583-8449-43dab3f81be7",
+      "schemaValid": true,
+      "entries": []
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "7bf16824-9002-4bc6-996c-3eb2191c377e",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "candidateAfter": {
+    "page": {
+      "status": 200,
+      "requestID": "375d3465-c485-4d62-9bd3-49354c503c1d",
+      "asset": "main-4Yhgx-WN.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "cb7222cd-f84f-46ce-a7be-a0029684963c",
+      "operation": "mission.list"
+    },
+    "list": {
+      "status": 200,
+      "requestID": "67b6d62b-d427-4452-89ed-89a546156015",
+      "schemaValid": true,
+      "entries": [
+        {
+          "missionID": "draft-19da8168451839036b702d52ce71d914",
+          "sessionID": "ses_hL8KbAMFpz7zKYhdbyzp",
+          "title": "Isolated list recovery sample",
+          "boardLane": "backlog",
+          "taskCount": 0,
+          "pendingPrompt": "Keep this isolated draft available for list recovery review."
+        }
+      ]
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "512cea07-4196-4954-8325-aca73bb0762e",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "runs": {
+    "baseline": {
+      "draft": {
+        "status": 200,
+        "requestID": "da56c893-d8a7-41ee-b5ea-1776db73b27a",
+        "missionID": "draft-21d7325dacf348d7a0674521b7918a20",
+        "sessionID": "ses_hzM3fxA81UApIghNUjKz",
+        "title": "Isolated list recovery sample",
+        "boardLane": "backlog",
+        "taskCount": 0
+      },
+      "transport": [
+        {
+          "requestID": "ce79a65d-b567-4e20-a74c-8093904e2587",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 2,
+          "delivered": 1
+        },
+        {
+          "requestID": "229426a9-7697-408f-bef2-7e20f370800b",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 2,
+          "delivered": 2,
+          "heldMs": 8409
+        },
+        {
+          "requestID": "047b4613-1618-427e-927d-377dcea11cbd",
+          "status": 200,
+          "mode": "restore"
+        },
+        {
+          "requestID": "d479219f-5977-46a1-8f56-52d3bd5656e6",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 529,
+          "delivered": 1
+        },
+        {
+          "requestID": "20b60965-cbf8-4b50-8804-d58bf19d1225",
+          "status": 200,
+          "mode": "restore"
+        }
+      ],
+      "database": {
+        "integrity": "ok",
+        "sessions": 1,
+        "sessionKind": "mission",
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      },
+      "shutdown": {
+        "occurrence": "iteration-b194-baseline",
+        "apiPort": 39522,
+        "proxyPort": 39523,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    },
+    "candidate": {
+      "draft": {
+        "status": 200,
+        "requestID": "5370925c-3c16-490b-9058-dd6202c2d4ec",
+        "missionID": "draft-19da8168451839036b702d52ce71d914",
+        "sessionID": "ses_hL8KbAMFpz7zKYhdbyzp",
+        "title": "Isolated list recovery sample",
+        "boardLane": "backlog",
+        "taskCount": 0,
+        "pendingPrompt": "Keep this isolated draft available for list recovery review."
+      },
+      "transport": [
+        {
+          "requestID": "031e0f7e-1387-4eb8-be72-c801f9926058",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 2,
+          "delivered": 1
+        },
+        {
+          "requestID": "421792f3-f674-4877-af09-94dfe6f68651",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 2,
+          "delivered": 1
+        },
+        {
+          "requestID": "1b113a7d-ab49-4d1d-a740-f5e8a2dc62aa",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 2,
+          "delivered": 2,
+          "heldMs": 6272
+        },
+        {
+          "requestID": "ae462fa7-a082-4e9a-a8ef-8a50ef4d56e7",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 2,
+          "delivered": 1
+        },
+        {
+          "requestID": "e10a8f72-d462-485f-95aa-508e22732cc7",
+          "status": 200,
+          "mode": "restore"
+        },
+        {
+          "requestID": "de422fc6-85be-415a-9378-1a2b500cf958",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 529,
+          "delivered": 529,
+          "heldMs": 6264
+        },
+        {
+          "requestID": "ccf0a256-023f-4d3f-9574-edb9a5c68757",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 529,
+          "delivered": 1
+        },
+        {
+          "requestID": "b3341426-8d0c-4ba8-833f-44aae3652b9c",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 529,
+          "delivered": 529,
+          "heldMs": 10772
+        }
+      ],
+      "database": {
+        "integrity": "ok",
+        "sessions": 1,
+        "sessionKind": "mission",
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      },
+      "shutdown": {
+        "occurrence": "iteration-b194-candidate",
+        "apiPort": 39524,
+        "proxyPort": 39525,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    }
+  }
+}
