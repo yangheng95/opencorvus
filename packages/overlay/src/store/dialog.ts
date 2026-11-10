@@ -54,7 +54,7 @@ export const CONFIG_SECTIONS: readonly ConfigSection[] = [
       "permissions.title",
       "settings.git_preferences",
       "settings.offer_git_init",
-      "settings.section.diagnostics",
+      "settings.section.preferences_diagnostics",
       "settings.log_export_label",
     ],
   },

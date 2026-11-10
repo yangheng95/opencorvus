@@ -5475,7 +5475,9 @@ The settings host owns the one-shot focus handoff until the assignment section
 mounts. It respects subsequent tab, project, or focus changes. Opening an
 assignment section does not connect, assign, or change access to a server.
 
-General presents Notifications, Permissions and Diagnostics in that order.
+General presents Permissions first, followed by one compact Preferences and
+diagnostics group for desktop notifications, Git preferences and log export.
+The group's localized heading also supplies the General page's search terms.
 The Composer and General authorization controls project only a confirmed
 `permission_mode` from the current accepted configuration snapshot. An unloaded
 or unrecognized mode remains unavailable; neither surface substitutes Full

@@ -106,7 +106,7 @@ export default function GeneralPanel() {
       </Show>
       <PermissionsSettingsGroup />
 
-      <SettingsGroup title={t("settings.title")}>
+      <SettingsGroup title={t("settings.section.preferences_diagnostics")}>
         <SettingsRow
           title={<label for="settings-desktop-notifications">{t("settings.desktop_notifications_label")}</label>}
           desc={t("settings.desktop_notifications_hint")}

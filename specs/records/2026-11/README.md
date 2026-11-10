@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [通用设置显示可找到的偏好与诊断分组](2026-11-10-general-preferences-diagnostics-heading.md)
 - [技能安装表单等待真实结果并保留键盘位置](2026-11-10-skill-install-form-ownership.md)
 - [技能库按来源提示并完整使用当前语言](2026-11-10-skill-library-source-guidance.md)
 - [无项目时从 MCP 管理页直接选择工作区](2026-11-10-mcp-choose-project-first.md)

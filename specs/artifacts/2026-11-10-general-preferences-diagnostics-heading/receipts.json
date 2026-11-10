@@ -1,0 +1,105 @@
+{
+  "baselineAsset": "main-BFbx_r9Y.js",
+  "candidateAsset": "main-BjL7i151.js",
+  "baseline": [
+    {
+      "route": "config",
+      "status": 200,
+      "requestID": "d599860b-f6ee-46a8-91ea-efb9085578b9",
+      "mode": "full_access"
+    },
+    {
+      "route": "permission/history",
+      "status": 200,
+      "requestID": "b4cf36a2-ab56-456d-84c5-3320b2cad9f0",
+      "count": 0
+    },
+    {
+      "route": "permission/grants",
+      "status": 200,
+      "requestID": "0c6390d4-ecee-4463-81cb-48d4fcdb4308",
+      "count": 0
+    }
+  ],
+  "candidateBefore": [
+    {
+      "route": "config",
+      "status": 200,
+      "requestID": "0fb4ceaf-0a6b-481f-9f19-50707c14bae4",
+      "mode": "full_access"
+    },
+    {
+      "route": "permission/history",
+      "status": 200,
+      "requestID": "22742acf-887a-4891-a699-ba0cb630fe44",
+      "count": 0
+    },
+    {
+      "route": "permission/grants",
+      "status": 200,
+      "requestID": "59493966-113e-495d-b491-a3f93d19c4a7",
+      "count": 0
+    }
+  ],
+  "candidateAfter": [
+    {
+      "route": "config",
+      "status": 200,
+      "requestID": "1a5bb10d-4beb-4da9-9b55-17b9882a9605",
+      "mode": "full_access"
+    },
+    {
+      "route": "permission/history",
+      "status": 200,
+      "requestID": "0e6bd136-9cea-4ef3-8c4b-49dc6658c7da",
+      "count": 0
+    },
+    {
+      "route": "permission/grants",
+      "status": 200,
+      "requestID": "06089a2c-476e-455d-8f67-ee74f9096940",
+      "count": 0
+    }
+  ],
+  "usageBaseline": {
+    "status": 200,
+    "requestID": "f06b447c-f922-47fd-b1c4-5e21fd78d077",
+    "period": "year",
+    "timeZone": "Asia/Shanghai",
+    "buckets": 365,
+    "totals": {
+      "start": 1767196800000,
+      "end": 1798732800000,
+      "summary": {
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0,
+        "averageTokensPerCall": 0,
+        "billing": {
+          "pricedTokens": 0,
+          "unpricedTokens": 0,
+          "unknownTokens": 0,
+          "percent": null
+        }
+      }
+    }
+  },
+  "profiles": {
+    "integrity": "ok",
+    "engineTask": 0,
+    "session": 0,
+    "providerUsageEvent": 0,
+    "permissionLedger": 0
+  },
+  "providerCatalog": {
+    "visible": 88,
+    "connected": 0
+  }
+}
