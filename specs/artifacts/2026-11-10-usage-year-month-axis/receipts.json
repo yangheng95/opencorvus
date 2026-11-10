@@ -1,0 +1,352 @@
+{
+  "baseline": {
+    "phase": "baseline",
+    "page": {
+      "status": 200,
+      "requestID": "21b6fb73-1e32-4d3d-bd6f-22f1ee73f302",
+      "asset": "main-gL-u6En-.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "4e4b4326-69c9-4de6-9a34-978385155777",
+      "operation": "global.usage"
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "f7d7e6f2-33a0-47dd-9a69-3468d66e1b8c",
+      "visible": 88,
+      "connected": 0
+    },
+    "checks": [
+      {
+        "status": 200,
+        "requestID": "e2cd6ca9-96e6-47f8-a1aa-35900bd8b5cb",
+        "period": "day",
+        "timeZone": "Asia/Shanghai",
+        "grain": "hour",
+        "count": 24,
+        "window": [
+          1794240000000,
+          1794326400000
+        ],
+        "localDates": [
+          "2026-11-10",
+          "2026-11-10"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "5583b522-ba0f-4e3d-89ac-b7ab5ccbef6f",
+        "period": "week",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "count": 7,
+        "window": [
+          1794153600000,
+          1794758400000
+        ],
+        "localDates": [
+          "2026-11-09",
+          "2026-11-15"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "4822a541-8e35-4a2d-b24c-4283c2c0fd4e",
+        "period": "month",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "count": 30,
+        "window": [
+          1793462400000,
+          1796054400000
+        ],
+        "localDates": [
+          "2026-11-01",
+          "2026-11-30"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "4f300549-2340-4ced-a7f6-5eb8cb66c39d",
+        "period": "year",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "count": 365,
+        "window": [
+          1767196800000,
+          1798732800000
+        ],
+        "localDates": [
+          "2026-01-01",
+          "2026-12-31"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true,
+        "dates": [
+          {
+            "local": "2026-01-01",
+            "index": 0,
+            "start": 1767196800000,
+            "end": 1767283200000
+          },
+          {
+            "local": "2026-11-24",
+            "index": 327,
+            "start": 1795449600000,
+            "end": 1795536000000
+          },
+          {
+            "local": "2026-12-01",
+            "index": 334,
+            "start": 1796054400000,
+            "end": 1796140800000
+          },
+          {
+            "local": "2026-12-31",
+            "index": 364,
+            "start": 1798646400000,
+            "end": 1798732800000
+          }
+        ]
+      }
+    ],
+    "database": {
+      "integrity": "ok",
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    },
+    "shutdown": {
+      "occurrence": "iteration-b188-baseline",
+      "port": 39503,
+      "shutdown": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  },
+  "candidate": {
+    "phase": "candidate",
+    "page": {
+      "status": 200,
+      "requestID": "2a30a310-56ff-4ec4-89aa-0a73cee04ad6",
+      "asset": "main-DATWndV5.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "4fc38421-790b-4b9f-9704-7c0572ad9826",
+      "operation": "global.usage"
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "5d638427-1e22-4e70-9d56-e19f8ef2fba9",
+      "visible": 88,
+      "connected": 0
+    },
+    "checks": [
+      {
+        "status": 200,
+        "requestID": "8c1e9180-b115-40ff-8120-ff87b6d3ba86",
+        "period": "day",
+        "timeZone": "Asia/Shanghai",
+        "grain": "hour",
+        "count": 24,
+        "window": [
+          1794240000000,
+          1794326400000
+        ],
+        "localDates": [
+          "2026-11-10",
+          "2026-11-10"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "9bfdb595-97dd-4057-adbd-f59199c19297",
+        "period": "week",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "count": 7,
+        "window": [
+          1794153600000,
+          1794758400000
+        ],
+        "localDates": [
+          "2026-11-09",
+          "2026-11-15"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "cd564416-a2f0-4c70-a3ad-48f7cdc32ef0",
+        "period": "month",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "count": 30,
+        "window": [
+          1793462400000,
+          1796054400000
+        ],
+        "localDates": [
+          "2026-11-01",
+          "2026-11-30"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "42dd9ee2-0214-473b-af40-e6ca68a9b4de",
+        "period": "year",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "count": 365,
+        "window": [
+          1767196800000,
+          1798732800000
+        ],
+        "localDates": [
+          "2026-01-01",
+          "2026-12-31"
+        ],
+        "calls": 0,
+        "tokens": 0,
+        "official": {
+          "openai-organization": "unconfigured",
+          "anthropic-organization": "unconfigured",
+          "openrouter-account": "unconfigured",
+          "aws-bedrock-control-plane": "requires_configuration",
+          "azure-openai-control-plane": "requires_configuration",
+          "vertex-ai-control-plane": "requires_configuration"
+        },
+        "comparison": "compare_never_sum",
+        "schemaValid": true,
+        "dates": [
+          {
+            "local": "2026-01-01",
+            "index": 0,
+            "start": 1767196800000,
+            "end": 1767283200000
+          },
+          {
+            "local": "2026-11-24",
+            "index": 327,
+            "start": 1795449600000,
+            "end": 1795536000000
+          },
+          {
+            "local": "2026-12-01",
+            "index": 334,
+            "start": 1796054400000,
+            "end": 1796140800000
+          },
+          {
+            "local": "2026-12-31",
+            "index": 364,
+            "start": 1798646400000,
+            "end": 1798732800000
+          }
+        ]
+      }
+    ],
+    "database": {
+      "integrity": "ok",
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    },
+    "shutdown": {
+      "occurrence": "iteration-b188-candidate",
+      "port": 39504,
+      "shutdown": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  }
+}

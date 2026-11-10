@@ -2363,8 +2363,9 @@ credentials.
 Activity buckets use one Listbox inspection collection with a single Tab entry,
 visual-direction arrows and chronological Home/End. Zero-valued buckets remain
 inspectable; year positions express real weekdays without synthetic options.
-The collection carrier stays mounted with an empty current-data collection and
-aria-busy during loading, so a rapid Tab after refresh has a stable focus target.
+The year grid and month labels use the same week columns; each label starts at
+the column containing the month's first bucket. The shorter periods keep their
+linear axes.
 Kobalte owns collection selection and focus; retired data clears its selection.
 The shared Tooltip presents the same localized event interval, UTC offsets and
 Token count on hover or focus, with the item's registered description pointing

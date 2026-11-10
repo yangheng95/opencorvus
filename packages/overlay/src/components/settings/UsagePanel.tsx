@@ -72,6 +72,7 @@ function UsageBucketDetails(props: { tokens: number; interval: string }) {
 function UsageActivityGrid(props: { data: UsageStatistics }) {
   const bucketElements = new Map<string, HTMLLIElement>()
   const buckets = () => props.data.buckets
+  const isYear = () => props.data.period === "year"
   const intervalFormatter = createMemo(() =>
     new Intl.DateTimeFormat(localeTag(), {
       timeZone: props.data.timeZone,
@@ -127,7 +128,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
     const data = props.data
     const buckets = data.buckets
     if (buckets.length === 0) return []
-    if (data.period === "year") {
+    if (isYear()) {
       const month = new Intl.DateTimeFormat(localeTag(), { month: "short", timeZone: data.timeZone })
       const seen = new Set<string>()
       return buckets.flatMap((bucket, index) => {
@@ -149,20 +150,23 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
   }
   const yearOffset = createMemo(() => {
     const data = props.data
-    if (data.period !== "year" || data.buckets.length === 0) return 0
+    if (!isYear() || data.buckets.length === 0) return 0
     const day = new Intl.DateTimeFormat("en-US", {
       timeZone: data.timeZone,
       weekday: "short",
     }).format(data.buckets[0].start)
     return ({ Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 } as Record<string, number>)[day] ?? 0
   })
-  const labelPosition = (index: number) =>
-    props.data.period === "year"
-      ? Math.floor((index + yearOffset()) / 7) / Math.max(1, Math.ceil((buckets().length + yearOffset()) / 7) - 1)
-      : index / Math.max(1, buckets().length - 1)
+  const yearColumn = (index: number) => Math.floor((index + yearOffset()) / 7) + 1
+  const linearLabelPosition = (index: number) => index / Math.max(1, buckets().length - 1)
 
   return (
-    <div class="usage-activity" data-ui="usage-token-activity">
+    <div
+      class="usage-activity"
+      classList={{ "usage-activity--year": isYear() }}
+      style={isYear() ? { "--usage-year-columns": String(Math.max(1, yearColumn(buckets().length - 1))) } : undefined}
+      data-ui="usage-token-activity"
+    >
       <ListboxRoot<UsageStatistics["buckets"][number]>
         class={`usage-activity__grid usage-activity__grid--${props.data.period}`}
         density="default"
@@ -176,7 +180,6 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
         keyboardDelegate={keyboardDelegate}
         renderItem={(item) => {
           onCleanup(() => bucketElements.delete(item.key))
-          const position = () => item.index + yearOffset()
           return (
             <Tooltip.Root openDelay={180} closeDelay={80} placement="top" gutter={8} fitViewport>
               <Tooltip.Trigger
@@ -185,10 +188,10 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
                 ref={(element) => bucketElements.set(item.key, element)}
                 class={`usage-activity__cell usage-activity__cell--${level(item.rawValue.tokens.total)}`}
                 style={
-                  props.data.period === "year"
+                  isYear()
                     ? {
-                        "grid-row": String((position() % 7) + 1),
-                        "grid-column": String(Math.floor(position() / 7) + 1),
+                        "grid-row": String(((item.index + yearOffset()) % 7) + 1),
+                        "grid-column": String(yearColumn(item.index)),
                       }
                     : undefined
                 }
@@ -200,9 +203,21 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
           )
         }}
       />
-      <div class="usage-activity__labels" aria-hidden="true">
+      <div
+        class="usage-activity__labels"
+        classList={{ "usage-activity__labels--linear": !isYear() }}
+        aria-hidden="true"
+      >
         <For each={labels()}>
-          {(item) => <span style={{ left: `${labelPosition(item.index) * 100}%` }}>{item.label}</span>}
+          {(item) => (
+            <span
+              style={isYear()
+                ? { "grid-column": String(yearColumn(item.index)) }
+                : { left: `${linearLabelPosition(item.index) * 100}%` }}
+            >
+              {item.label}
+            </span>
+          )}
         </For>
       </div>
       <div class="usage-activity__legend" aria-hidden="true">

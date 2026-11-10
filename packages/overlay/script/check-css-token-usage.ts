@@ -109,6 +109,7 @@ const HOST_RUNTIME_TOKEN_OWNERS = new Map<string, string[]>([
   ["--screenshot-browser-columns", ["src/components/ScreenshotBrowserPanel.tsx"]],
   ["--ui-left-rail-scrollbar-gutter-x", ["src/main.tsx"]],
   ["--ui-scale", ["src/services/theme.ts", "src/native-menu.tsx"]],
+  ["--usage-year-columns", ["src/components/settings/UsagePanel.tsx"]],
   ["--work-row-child-insertion-index", ["src/components/WorkLedger.tsx"]],
 ])
 const HOST_RUNTIME_TOKENS = new Set(HOST_RUNTIME_TOKEN_OWNERS.keys())
