@@ -63,6 +63,7 @@ import {
 } from "../services/conversation-experience"
 import {
   isImplicitProjectDirectory,
+  projectDirectoryHints,
   projectDirectoryKey,
   projectDirectoryLabel,
   projectLedgerDisplayName,
@@ -1209,41 +1210,9 @@ export function WorkLedger(props: WorkLedgerProps) {
 
   const unpinnedGroups = createMemo(() => groups.filter((group) => !isPinnedProjectGroup(group)))
 
-  const projectDirectoryHints = createMemo(() => {
-    const names = new Map<string, WorkLedgerGroup[]>()
-    for (const group of groups) {
-      if (!group.directory.trim()) continue
-      const name = projectDisplayName(group)
-      const peers = names.get(name) ?? []
-      peers.push(group)
-      names.set(name, peers)
-    }
-    const hints = new Map<string, string>()
-    for (const peers of names.values()) {
-      if (peers.length < 2) continue
-      const entries = peers.map((group) => ({
-        directory: group.directory,
-        parts: group.directory.replaceAll("\\", "/").split("/").filter(Boolean),
-        keys: projectDirectoryKey(group.directory).split("/").filter(Boolean),
-      }))
-      // A shared folder name is already the heading; compare its parents.
-      const sameFolder = entries.every((entry) => entry.keys.at(-1) === entries[0].keys.at(-1))
-      if (sameFolder) {
-        for (const entry of entries) {
-          entry.parts.pop()
-          entry.keys.pop()
-        }
-      }
-      for (const entry of entries) {
-        let length = 1
-        while (length < entry.keys.length && entries.some((other) =>
-          other !== entry && other.keys.slice(-length).join("/") === entry.keys.slice(-length).join("/"),
-        )) length += 1
-        hints.set(entry.directory, entry.parts.slice(-length).join("/") || entry.directory)
-      }
-    }
-    return hints
-  })
+  const directoryHints = createMemo(() =>
+    projectDirectoryHints(groups.map((group) => ({ directory: group.directory, name: projectDisplayName(group) }))),
+  )
 
   // This presentation intent belongs to the parent that survives a Project's
   // move between lists. The current projection remains the sole pin authority.
@@ -1522,7 +1491,7 @@ export function WorkLedger(props: WorkLedgerProps) {
       group={group()}
       conversationOrdinal={(row) => conversationOrdinals().get(rowKey(row))}
       dataUi={dataUi}
-      directoryHint={projectDirectoryHints().get(group().directory)}
+      directoryHint={directoryHints().get(group().directory)}
       directoryCollapse={directoryCollapse}
       selected={selected}
       onSelect={selectRow}

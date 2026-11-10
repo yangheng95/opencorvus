@@ -10,7 +10,7 @@ import {
 import { missionBoardStore, reloadMissionBoard } from "../services/mission-board"
 import { formatErrorDetails } from "../services/diagnostics"
 import { workLedgerProject } from "../services/work-ledger"
-import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
+import { projectDirectoryHints, projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { detailStamp, relativeTime } from "../utils/time"
 import { localeTag, t } from "../utils/i18n"
 import { taskLifecycleStatusLabel } from "../utils/status-labels"
@@ -33,7 +33,7 @@ import { captureApiAuthority, assertApiAuthorityCurrent, isApiAuthorityCurrent, 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
 type MissionTask = MissionRecord["tasks"][number]
-type ProjectOption = { value: string; label: string; parent?: string }
+type ProjectOption = { value: string; label: string; parent?: string; distinctPath?: boolean }
 
 export interface MissionBoardProps {
   projectDirectories: readonly string[]
@@ -72,18 +72,14 @@ function missionDirectoryLabel(directory: string): string {
   })
 }
 
-function missionProjectLabel(mission: MissionRecord): string {
-  return missionDirectoryLabel(mission.directory)
-}
-
-function missionSearchParts(mission: MissionRecord): readonly unknown[] {
+function missionSearchParts(mission: MissionRecord, projectName: string | undefined): readonly unknown[] {
   return [
     mission.title,
     mission.missionID,
     mission.sessionID,
     mission.directory,
     mission.directory.replaceAll("\\", "/"),
-    missionProjectLabel(mission),
+    projectName,
     mission.pendingPrompt?.text,
     mission.outcome?.summary,
     ...(mission.outcome?.kind === "blocked" ? mission.outcome.unresolvedCriteria : []),
@@ -92,6 +88,7 @@ function missionSearchParts(mission: MissionRecord): readonly unknown[] {
 
 function MissionBoardCard(props: {
   mission: MissionRecord
+  project: ProjectOption | undefined
   searchQuery: string
   dispatching: boolean
   deleting: boolean
@@ -103,9 +100,17 @@ function MissionBoardCard(props: {
   onDelete: () => void
 }) {
   const now = useNowTick()
+  const openLabelID = createUniqueId()
   const titleID = createUniqueId()
   const editLabelID = createUniqueId()
   const startLabelID = createUniqueId()
+  const projectNameID = createUniqueId()
+  const projectParentID = createUniqueId()
+  const projectLabelRefs = () => {
+    const project = props.project
+    if (!project) return ""
+    return project.distinctPath ? ` ${projectNameID} ${projectParentID}` : ` ${projectNameID}`
+  }
   const taskCounts = createMemo(() =>
     props.mission.tasks.reduce(
       (counts, task) => {
@@ -124,7 +129,7 @@ function MissionBoardCard(props: {
   const remainingTasks = createMemo(() => Math.max(0, props.mission.tasks.length - MISSION_TASK_PREVIEW_LIMIT))
   const taskPreview = createMemo(() => {
     if (!props.searchQuery.trim()) return props.mission.tasks.slice(0, MISSION_TASK_PREVIEW_LIMIT)
-    const parentParts = missionSearchParts(props.mission)
+    const parentParts = missionSearchParts(props.mission, props.project?.label)
     return props.mission.tasks
       .map((task, index) => ({
         task,
@@ -156,19 +161,21 @@ function MissionBoardCard(props: {
           size="md"
           tone="neutral"
           class="mission-board-card__open"
+          id={openLabelID}
           title={props.mission.title}
           aria-label={t("mission_board.open_mission", { title: props.mission.title })}
+          aria-labelledby={props.project ? `${openLabelID}${projectLabelRefs()}` : undefined}
           disabled={props.actionBusy}
           onClick={props.onOpen}
         >
           <strong id={titleID} class="mission-board-card__title">{props.mission.title}</strong>
           <span class="mission-board-card__project" title={props.mission.directory}>
             <Icon name="folder" size="compact" />
-            <span>{missionProjectLabel(props.mission)}</span>
+            <span id={projectNameID}>{props.project?.label}</span>
           </span>
-          <Show when={projectDirectoryLabel(props.mission.directory, "", t("work_ledger.implicit_project")).parent}>
+          <Show when={props.project?.parent}>
             {(parent) => (
-              <span class="mission-board-card__project-parent" title={props.mission.directory}>
+              <span id={projectParentID} class="mission-board-card__project-parent" title={props.mission.directory}>
                 {parent()}
               </span>
             )}
@@ -289,7 +296,7 @@ function MissionBoardCard(props: {
                 variant="ghost"
                 size="sm"
                 tone="neutral"
-                aria-labelledby={`${editLabelID} ${titleID}`}
+                aria-labelledby={`${editLabelID} ${titleID}${projectLabelRefs()}`}
                 disabled={props.actionBusy}
                 onClick={props.onEdit}
               >
@@ -302,7 +309,7 @@ function MissionBoardCard(props: {
                 size="sm"
                 tone="neutral"
                 data-ui="mission-board-dispatch"
-                aria-labelledby={`${startLabelID} ${titleID}`}
+                aria-labelledby={`${startLabelID} ${titleID}${projectLabelRefs()}`}
                 disabled={props.actionBusy}
                 onClick={props.onDispatch}
               >
@@ -361,19 +368,28 @@ export function MissionBoard(props: MissionBoardProps) {
     return receipt ? missionBoardStore.records.find((mission) => mission.missionID === receipt.missionID) : undefined
   })
 
-  const projectOptions = createMemo<ProjectOption[]>(() => {
-    const directories = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].sort(
-      (left, right) => missionDirectoryLabel(left).localeCompare(missionDirectoryLabel(right)),
+  const projectContexts = createMemo(() => {
+    const projects = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].map((directory) => ({
+      directory,
+      name: missionDirectoryLabel(directory),
+    }))
+    const hints = projectDirectoryHints(projects)
+    return new Map<string, ProjectOption>(
+      projects.map(({ directory, name }) => {
+        const distinct = hints.get(directory)
+        return [directory, {
+          value: directory,
+          label: name,
+          parent: distinct ?? projectDirectoryLabel(directory, "", t("work_ledger.implicit_project")).parent,
+          distinctPath: distinct !== undefined,
+        }]
+      }),
     )
-    return [
-      { value: "", label: t("mission_board.all_projects") },
-      ...directories.map((directory) => ({
-        value: directory,
-        label: missionDirectoryLabel(directory),
-        parent: projectDirectoryLabel(directory, "", t("work_ledger.implicit_project")).parent,
-      })),
-    ]
   })
+  const projectOptions = createMemo<ProjectOption[]>(() => [
+    { value: "", label: t("mission_board.all_projects") },
+    ...[...projectContexts().values()].sort((left, right) => left.label.localeCompare(right.label)),
+  ])
   const selectedProject = createMemo(
     () => projectOptions().find((option) => option.value === projectDirectory()) ?? projectOptions()[0] ?? null,
   )
@@ -384,10 +400,11 @@ export function MissionBoard(props: MissionBoardProps) {
   const visibleMissions = createMemo(() => {
     const query = search().trim()
     const directory = projectDirectory()
+    const projects = projectContexts()
     return missionBoardStore.records.filter((mission) => {
       if (directory && mission.directory !== directory) return false
       return matchesSearchTerms(query, [
-        ...missionSearchParts(mission),
+        ...missionSearchParts(mission, projects.get(mission.directory)?.label),
         ...mission.tasks.flatMap((task) => [task.title, task.description]),
       ])
     })
@@ -779,6 +796,7 @@ export function MissionBoard(props: MissionBoardProps) {
                       {(mission) => (
                         <MissionBoardCard
                           mission={mission}
+                          project={projectContexts().get(mission.directory)}
                           searchQuery={search()}
                           dispatching={
                             pendingAction()?.kind === "dispatch" && pendingAction()?.missionID === mission.missionID

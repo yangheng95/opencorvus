@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务同名项目目录的证据](2026-11-10-mission-board-project-context/README.md)
 - [多步任务卡片重排焦点的证据](2026-11-10-mission-board-reorder-focus/README.md)
 - [多步任务草稿动作名称的证据](2026-11-10-mission-draft-action-names/README.md)
 - [侧栏本地文字草稿的证据](2026-11-10-sidebar-local-conversation-drafts/README.md)

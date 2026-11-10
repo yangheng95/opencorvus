@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多步任务可以区分同名项目的目录](2026-11-10-mission-board-project-context.md)
 - [多步任务卡片重排时保留键盘焦点](2026-11-10-mission-board-reorder-focus.md)
 - [多步任务草稿的动作可读出所属卡片](2026-11-10-mission-draft-action-names.md)
 - [侧栏显示会话中保留的本地文字草稿](2026-11-10-sidebar-local-conversation-drafts.md)

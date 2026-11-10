@@ -3747,6 +3747,10 @@ Board project choices, creation fields and Mission cards read custom project nam
 from the existing reactive work-ledger project reader, as the chat home does.
 Search covers that current display name and the original directory; a project
 rename never changes the filtering or creation target's directory identity.
+The board's project filter and cards share the same displayed project context.
+For projects with the same displayed name, they use the sidebar's shared shortest
+distinguishing directory suffix. Card action names include the project and its
+distinguishing path when the project name is shared.
 Board search matches all query terms across the current Mission title, identities,
 project name and original/normalized path, saved request, result/blocked criteria,
 and every child Task's title and request. The existing complete Board projection

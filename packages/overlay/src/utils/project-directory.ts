@@ -63,3 +63,38 @@ export function projectLedgerDisplayName(input: ProjectDisplayNameInput & { impl
   }
   return projectDisplayName(input)
 }
+
+export function projectDirectoryHints(projects: readonly { directory: string; name: string }[]): Map<string, string> {
+  const byName = new Map<string, string[]>()
+  for (const { directory, name } of projects) {
+    if (!directory.trim()) continue
+    const peers = byName.get(name) ?? []
+    peers.push(directory)
+    byName.set(name, peers)
+  }
+  const hints = new Map<string, string>()
+  for (const peers of byName.values()) {
+    if (peers.length < 2) continue
+    const entries = peers.map((directory) => ({
+      directory,
+      parts: directory.replaceAll("\\", "/").split("/").filter(Boolean),
+      keys: projectDirectoryKey(directory).split("/").filter(Boolean),
+    }))
+    // A shared folder name is already the heading; compare its parents.
+    const sameFolder = entries.every((entry) => entry.keys.at(-1) === entries[0].keys.at(-1))
+    if (sameFolder) {
+      for (const entry of entries) {
+        entry.parts.pop()
+        entry.keys.pop()
+      }
+    }
+    for (const entry of entries) {
+      let length = 1
+      while (length < entry.keys.length && entries.some((other) =>
+        other !== entry && other.keys.slice(-length).join("/") === entry.keys.slice(-length).join("/"),
+      )) length += 1
+      hints.set(entry.directory, entry.parts.slice(-length).join("/") || entry.directory)
+    }
+  }
+  return hints
+}
