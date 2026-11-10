@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, createUniqueId, For, Show } from "solid-js"
+import { createComputed, createEffect, createMemo, createSignal, createUniqueId, For, on, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
 import type { ExpertSquadMarketIndexItem } from "../services/expert-squad"
 import {
@@ -392,6 +392,34 @@ export function MissionBoard(props: MissionBoardProps) {
       ])
     })
   })
+  // Moving an existing card during list reconciliation can blur its focused control.
+  createComputed(
+    on(visibleMissions, () => {
+      const viewport = lanesElement
+      if (!viewport) return
+      const owner = viewport.ownerDocument
+      const control = owner.activeElement
+      if (
+        !(control instanceof HTMLElement) ||
+        !viewport.contains(control) ||
+        !control.closest('[data-ui="mission-board-card"]')
+      ) return
+      const authority = captureApiAuthority()
+      queueMicrotask(() => {
+        if (
+          owner.activeElement !== owner.body ||
+          lanesElement !== viewport ||
+          !control.isConnected ||
+          !viewport.contains(control) ||
+          !isApiAuthorityCurrent(authority) ||
+          control.matches(':disabled, [aria-disabled="true"]') ||
+          control.closest('[hidden], [inert], [aria-hidden="true"]') ||
+          !control.getClientRects().length
+        ) return
+        control.focus()
+      })
+    }, { defer: true }),
+  )
   const filtersActive = createMemo(() => Boolean(search().trim() || projectDirectory()))
   const resetFilters = (): void => {
     setSearch("")

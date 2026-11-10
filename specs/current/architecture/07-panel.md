@@ -1816,6 +1816,9 @@ Mission/directory and original pending text when opened;
 Board refreshes do not replace its authored input. Save uses `mission.editDraft`
 and the shared refresh lifecycle. Typed conflicts preserve entered text for
 review/copy; cancellation and saving do not dispatch an execution.
+When the list reorders, the board keeps focus on the same still-visible card
+control if the browser drops focus during the move. An operator's new focus
+and controls removed from the current view keep their normal lifecycle.
 
 Mission creation and draft editing retain authored text when a close is requested.
 The existing dialog shows an inline unsaved-input choice; continuing to edit or
