@@ -4504,7 +4504,13 @@ squad, task title, current custom project name, and project directory, applied b
 the sole Mailbox API. Counts remain global. Filtered results expose the same
 Load more operation; acknowledgements and invalidations revalidate the accepted
 prefix through its original oldest position before committing the fresh page
-sequence. Search results never substitute for the native notification
+sequence. A failed continuation preserves the accepted rows, selection,
+disclosure and scroll context. Its footer shows the original diagnostic and
+retries that cursor in the current query. A revalidation with the same cursor
+keeps the continuation diagnostic; a new cursor replaces that retry boundary.
+Successful continuation gives focus to the first newly loaded message or its
+collapsed group only while the continuation control still owns focus. Search
+results never substitute for the native notification
 projector's complete active global snapshot. Dense row timestamps may truncate
 to preserve the subject; their complete localized date remains available on
 hover.

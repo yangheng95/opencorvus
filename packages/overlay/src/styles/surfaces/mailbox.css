@@ -533,6 +533,12 @@
 
 .mailbox-panel__load-more {
   display: flex;
-  justify-content: center;
-  padding: var(--ui-gap-lg);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+  padding-block: var(--ui-gap-lg);
+}
+
+.mailbox-panel__load-more > .mailbox-panel__load-feedback {
+  align-self: stretch;
 }

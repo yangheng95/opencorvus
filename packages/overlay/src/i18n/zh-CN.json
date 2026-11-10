@@ -613,6 +613,8 @@
   "mailbox.loading": "正在加载收件箱…",
   "mailbox.load_failed": "无法加载收件箱。",
   "mailbox.load_more": "加载更多",
+  "mailbox.load_more_failed": "无法加载较早的消息。",
+  "mailbox.retry_load_more": "重试加载较早消息",
   "mailbox.unread": "未读消息",
   "mailbox.unread_count": "{{count}} 条未读",
   "mailbox.mark_all_read": "将整个收件箱标为已读",

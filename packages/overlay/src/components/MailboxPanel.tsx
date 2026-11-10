@@ -92,13 +92,16 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const [deletePending, setDeletePending] = createSignal(false)
   const [selectedMessageIDs, setSelectedMessageIDs] = createSignal<ReadonlySet<string>>(new Set<string>())
   const [expandedMessageIDs, setExpandedMessageIDs] = createSignal<ReadonlySet<string>>(new Set<string>())
-  const [loadIssue, setLoadIssue] = createSignal<{ cause: unknown } | null>(null)
+  const [loadIssue, setLoadIssue] = createSignal<{ operation: "base" | "append"; cause: unknown } | null>(null)
   const requestOwner = createMailboxRequestOwner()
   let unsubscribeMailboxChanges: (() => void) | undefined
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   let searchInput: HTMLInputElement | undefined
   let searchToggle: HTMLButtonElement | undefined
   let retryButton: HTMLButtonElement | undefined
+  let mailboxBody: HTMLDivElement | undefined
+  let continuationFooter: HTMLDivElement | undefined
+  let continuationButton: HTMLButtonElement | undefined
   let disposed = false
   const mailboxActionOperations = new Map<string, MailboxActionOperation>()
 
@@ -107,6 +110,15 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const visibleItems = items
   const currentRequestScope = () => ({ authority: currentAuthority(), view: MAILBOX_VIEW, search: currentSearch() })
   const retryUnavailable = () => loading() || !appStore.connected
+  const continuationUnavailable = () => retryUnavailable() || loadingMore() || !cursor()
+  const baseLoadIssue = () => {
+    const issue = loadIssue()
+    return issue?.operation === "base" ? issue : undefined
+  }
+  const continuationIssue = () => {
+    const issue = loadIssue()
+    return issue?.operation === "append" ? issue : undefined
+  }
 
   const visibleProjectGroups = createMemo<MailboxProjectGroup[]>(() => {
     const grouped = new Map<string, MailboxProjectGroup>()
@@ -194,12 +206,33 @@ export function MailboxPanel(props: MailboxPanelProps) {
     return pendingActionTokens().has(mailboxActionKey(messageID, action))
   }
 
+  function focusMailboxItem(item: MailboxItem | undefined): void {
+    if (item && mailboxBody) {
+      const group = mailboxBody.querySelector<HTMLDetailsElement>(
+        `details[data-project-directory="${CSS.escape(item.taskDirectory)}"]`,
+      )
+      if (group) {
+        const message = group.open ? group.querySelector<HTMLButtonElement>(
+          `[data-message-id="${CSS.escape(item.id)}"] .mailbox-item__main`,
+        ) : null
+        const target = message ?? group.querySelector<HTMLElement>("summary.mailbox-project-group__header")
+        if (target) {
+          target.focus()
+          return
+        }
+      }
+    }
+    const searchEntry = searchOpen() ? searchInput : searchToggle
+    searchEntry?.focus()
+  }
+
   async function refresh(append = false): Promise<void> {
-    if (!appStore.connected) return
+    if (!appStore.connected || (append && continuationUnavailable())) return
     const authority = currentAuthority()
     const requestView = MAILBOX_VIEW
     const requestedScope = { authority, view: requestView, search: currentSearch() }
     const previousTail = items().at(-1)
+    const previousCursor = cursor()
     let retainedTail: MailboxItem | undefined
     const request = (() => {
       if (append) return requestOwner.join(requestedScope)
@@ -227,13 +260,10 @@ export function MailboxPanel(props: MailboxPanelProps) {
       }
       return base.request
     })()
-    if (append) {
-      setLoadingMore(true)
-      setLoadIssue(null)
-    }
+    if (append) setLoadingMore(true)
     try {
       let page: MailboxPage
-      let nextCursor = append ? cursor() : null
+      let nextCursor = append ? previousCursor : null
       let refreshed: MailboxItem[] = []
       do {
         page = await loadMailbox({
@@ -252,16 +282,23 @@ export function MailboxPanel(props: MailboxPanelProps) {
       } while (true)
       const committed = request.commit(currentRequestScope(), () => {
         const hadRetryFocus = document.activeElement === retryButton
+        const hadContinuationFocus = document.activeElement === continuationButton
+        const focusItem = append && hadContinuationFocus
+          ? refreshed.find((item) => !items().some((current) => current.id === item.id))
+          : undefined
         batch(() => {
           setItems((current) => (append ? mergeItems(current, refreshed) : refreshed))
           setCursor(nextCursor)
           setCounts({ unread: page.unreadCount, active: page.activeCount, archived: page.archivedCount })
           if (!append) setLoadedAuthorityRevision(authority.revision)
-          setLoadIssue(null)
+          const sameContinuation = !append && nextCursor && previousCursor &&
+            nextCursor.id === previousCursor.id && nextCursor.createdAt === previousCursor.createdAt
+          setLoadIssue((current) => sameContinuation && current?.operation === "append" ? current : null)
         })
         if (hadRetryFocus && document.activeElement === document.body) {
           (searchOpen() ? searchInput : searchToggle)?.focus()
         }
+        if (hadContinuationFocus && (focusItem || !nextCursor)) focusMailboxItem(focusItem ?? previousTail)
       })
       if (!committed) return
       if (!append) {
@@ -275,7 +312,10 @@ export function MailboxPanel(props: MailboxPanelProps) {
     } catch (error) {
       if (disposed) return
       request.commit(currentRequestScope(), () => {
-        setLoadIssue({ cause: error })
+        setLoadIssue({ operation: append ? "append" : "base", cause: error })
+        if (append && document.activeElement === continuationButton) {
+          continuationFooter?.scrollIntoView({ block: "nearest" })
+        }
       })
     } finally {
       const ownsCurrentScope = !disposed && request.owns(currentRequestScope())
@@ -588,8 +628,8 @@ export function MailboxPanel(props: MailboxPanelProps) {
         </Show>
       </header>
 
-      <div class="mailbox-panel__body" aria-busy={loading()}>
-        <Show when={loadIssue()}>
+      <div ref={mailboxBody} class="mailbox-panel__body" aria-busy={loading()}>
+        <Show when={baseLoadIssue()}>
           {(issue) => (
             <Feedback
               tone="error"
@@ -616,7 +656,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
             </Feedback>
           )}
         </Show>
-        <Show when={!loadIssue()}>
+        <Show when={!baseLoadIssue()}>
           <Show
             when={visibleItems().length > 0}
             fallback={
@@ -819,16 +859,27 @@ export function MailboxPanel(props: MailboxPanelProps) {
               </For>
             </div>
             <Show when={cursor()}>
-              <div class="mailbox-panel__load-more">
+              <div ref={continuationFooter} class="mailbox-panel__load-more">
+                <Show when={continuationIssue()}>
+                  {(issue) => (
+                    <Feedback tone="error" class="mailbox-panel__load-feedback" details={formatErrorDetails(issue().cause)}>
+                      {t("mailbox.load_more_failed")}
+                    </Feedback>
+                  )}
+                </Show>
                 <Button
+                  ref={continuationButton}
                   type="button"
                   variant="outline"
                   size="sm"
                   tone="neutral"
-                  disabled={loadingMore()}
+                  aria-disabled={continuationUnavailable() || undefined}
+                  aria-busy={loadingMore() || undefined}
                   onClick={() => void refresh(true)}
                 >
-                  {loadingMore() ? t("mailbox.loading") : t("mailbox.load_more")}
+                  {loadingMore()
+                    ? t(continuationIssue() ? "common.retrying" : "mailbox.loading")
+                    : t(continuationIssue() ? "mailbox.retry_load_more" : "mailbox.load_more")}
                 </Button>
               </div>
             </Show>

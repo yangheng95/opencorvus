@@ -613,6 +613,8 @@
   "mailbox.loading": "Loading mailbox…",
   "mailbox.load_failed": "Could not load the mailbox.",
   "mailbox.load_more": "Load more",
+  "mailbox.load_more_failed": "Could not load older messages.",
+  "mailbox.retry_load_more": "Retry older messages",
   "mailbox.unread": "Unread message",
   "mailbox.unread_count": "{{count}} unread",
   "mailbox.mark_all_read": "Mark all inbox messages as read",

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [收件箱续页重试的真实页面证据](2026-11-10-mailbox-continuation-retry/README.md)
 - [定时任务手动运行复用已接受的执行证据](2026-11-10-automation-manual-run-replay/README.md)
 - [停止消息卡本地化和原始诊断证据](2026-11-10-stopped-message-diagnostic-disclosure/README.md)
 - [主输入区停止范围的桌面与执行证据](2026-11-10-composer-stop-scope/README.md)
