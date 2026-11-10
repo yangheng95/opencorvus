@@ -37,6 +37,7 @@ type SelectOption = {
   outsideSearch?: boolean
 }
 type SquadSearchResult = { options: ExpertSquadOption[]; matchingIDs: readonly string[] }
+type SquadReadFailure = { operation: "context" | "search"; cause: unknown }
 
 export interface MissionCreateRequest {
   requestID: string
@@ -93,7 +94,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [expertSquadIDs, setExpertSquadIDs] = createSignal<string[]>([])
   const [expertSquadQuery, setExpertSquadQuery] = createSignal("")
   const [expertSquadLoading, setExpertSquadLoading] = createSignal(false)
-  const [expertSquadError, setExpertSquadError] = createSignal("")
+  const [expertSquadError, setExpertSquadError] = createSignal<SquadReadFailure>()
   const [marketRecommendations, setMarketRecommendations] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
   const [marketLoading, setMarketLoading] = createSignal(false)
   const [marketError, setMarketError] = createSignal("")
@@ -250,13 +251,24 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     )
   }
 
-  async function loadExpertSquadsForContext(directory: string, pillar: ProductPillar): Promise<void> {
+  function acceptExpertSquadRead(retryTrigger?: HTMLButtonElement): void {
+    if (retryTrigger === document.activeElement && expertSquadSearchRef?.isConnected) {
+      expertSquadSearchRef.focus()
+    }
+    setExpertSquadError(undefined)
+  }
+
+  async function loadExpertSquadsForContext(
+    directory: string,
+    pillar: ProductPillar,
+    retryTrigger?: HTMLButtonElement,
+  ): Promise<void> {
     const generation = dialogGeneration
     const sequence = ++expertSquadRequestSequence
     setExpertSquadIDs([])
     setExpertSquadResult({ options: [], matchingIDs: [] })
     setExpertSquadLoading(true)
-    setExpertSquadError("")
+    if (!retryTrigger) setExpertSquadError(undefined)
     try {
       const [catalog, page] = await Promise.all([
         loadExpertSquadCatalog({ kind: "project", directory }),
@@ -269,30 +281,32 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         : (squads[0]?.id ?? "")
       setExpertSquadResult({ options: squads, matchingIDs: page.entries.map((squad) => squad.id) })
       setExpertSquadIDs(activeID ? [activeID] : [])
+      acceptExpertSquadRead(retryTrigger)
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
-      setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
+      setExpertSquadError({ operation: "context", cause: nextError })
     } finally {
       if (ownsSquadRequest(generation, sequence, directory, pillar)) setExpertSquadLoading(false)
     }
   }
 
-  async function searchSquads(query: string): Promise<void> {
+  async function searchSquads(query: string, retryTrigger?: HTMLButtonElement): Promise<void> {
     const directory = projectDirectory()
     const pillar = productPillar()
     if (!directory || !pillar) return
     const generation = dialogGeneration
     const sequence = ++expertSquadRequestSequence
     setExpertSquadLoading(true)
-    setExpertSquadError("")
+    if (!retryTrigger) setExpertSquadError(undefined)
     try {
       const page = await searchExpertSquads({ directory, productPillar: pillar, query, limit: 20 })
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
       const squads = mergeSquadOptions(page.entries, expertSquads(), expertSquadIDs())
       setExpertSquadResult({ options: squads, matchingIDs: page.entries.map((squad) => squad.id) })
+      acceptExpertSquadRead(retryTrigger)
     } catch (nextError) {
       if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
-      setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
+      setExpertSquadError({ operation: "search", cause: nextError })
     } finally {
       if (ownsSquadRequest(generation, sequence, directory, pillar)) setExpertSquadLoading(false)
     }
@@ -311,7 +325,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     const sequence = ++expertSquadRequestSequence
     const owns = () => isApiAuthorityCurrent(authority) && ownsSquadRequest(generation, sequence, directory, pillar)
     setExpertSquadLoading(true)
-    setExpertSquadError("")
+    setExpertSquadError(undefined)
     try {
       const [page, exact] = await Promise.all([
         searchExpertSquads({ directory, productPillar: pillar, query, limit: 20, authority }),
@@ -330,7 +344,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       })
     } catch (nextError) {
       if (!owns()) return
-      setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
+      setExpertSquadError({ operation: "search", cause: nextError })
     } finally {
       if (ownsSquadRequest(generation, sequence, directory, pillar)) setExpertSquadLoading(false)
     }
@@ -343,7 +357,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setExpertSquadResult({ options: [], matchingIDs: [] })
     setExpertSquadIDs([])
     setExpertSquadLoading(false)
-    setExpertSquadError("")
+    setExpertSquadError(undefined)
     setMarketRecommendations([])
     setMarketLoading(false)
     setMarketError("")
@@ -359,16 +373,16 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     if (directory) void loadExpertSquadsForContext(directory, pillar)
   }
 
-  function retryExpertSquads(): void {
+  function retryExpertSquads(trigger: HTMLButtonElement): void {
     const directory = projectDirectory()
     const pillar = productPillar()
-    if (!directory || !pillar || submitting()) return
-    const query = expertSquadQuery()
-    if (query) {
-      void searchSquads(query)
+    const failure = expertSquadError()
+    if (!directory || !pillar || !failure || submitting() || expertSquadLoading()) return
+    if (failure.operation === "search") {
+      void searchSquads(expertSquadQuery(), trigger)
       return
     }
-    void loadExpertSquadsForContext(directory, pillar)
+    void loadExpertSquadsForContext(directory, pillar, trigger)
   }
 
   createEffect(
@@ -396,7 +410,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setExpertSquadIDs([])
         setExpertSquadQuery("")
         setExpertSquadLoading(false)
-        setExpertSquadError("")
+        setExpertSquadError(undefined)
         setMarketRecommendations([])
         setMarketLoading(false)
         setMarketError("")
@@ -795,6 +809,29 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               placeholder={t("chat.references.search_placeholder")}
               size="sm"
             />
+            <Show when={expertSquadError()}>
+              {(failure) => (
+                <Feedback
+                  tone="error"
+                  details={formatErrorDetails(failure().cause)}
+                  actions={
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      tone="neutral"
+                      aria-disabled={expertSquadLoading() || undefined}
+                      aria-busy={expertSquadLoading() || undefined}
+                      onClick={(event) => retryExpertSquads(event.currentTarget)}
+                    >
+                      {t(expertSquadLoading() ? "common.loading" : "common.retry")}
+                    </Button>
+                  }
+                >
+                  {t("mission_board.create.context_load_failed")}
+                </Feedback>
+              )}
+            </Show>
             <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
             <Show when={noMatchingSquads()}>
               <p class="mission-create-form__context-status" role="status">
@@ -863,30 +900,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               </For>
             </div>
           </TextField.Root>
-          <Show
-            when={expertSquadError()}
-            fallback={
-              <Show when={prerequisiteMessage() && !noMatchingSquads()}>
-                <p class="mission-create-form__context-status" role="status">
-                  {prerequisiteMessage()}
-                </p>
-              </Show>
-            }
-          >
-            <div
-              id="missionCreateExpertSquadError"
-              class="mission-create-form__context-error"
-              role="alert"
-              tabIndex={-1}
-            >
-              <span>
-                <strong>{t("mission_board.create.context_load_failed")}</strong>
-                <small>{expertSquadError()}</small>
-              </span>
-              <Button type="button" variant="outline" size="sm" tone="neutral" onClick={retryExpertSquads}>
-                {t("common.retry")}
-              </Button>
-            </div>
+          <Show when={!expertSquadError() && prerequisiteMessage() && !noMatchingSquads()}>
+            <p class="mission-create-form__context-status" role="status">
+              {prerequisiteMessage()}
+            </p>
           </Show>
           <p class="mission-create-form__model-note">{t("mission_board.create.project_model_note")}</p>
         </fieldset>

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [多步任务专家团读取重试保留键盘位置](records/2026-11/2026-11-10-mission-squad-context-retry-focus.md)
 - [关于页区分任务零值与列表未读回](records/2026-11/2026-11-10-about-accepted-task-list-count.md)
 - [从归档打开时把焦点交给只读历史](records/2026-11/2026-11-10-archive-open-reading-focus.md)
 - [同名项目的归档操作标明确切目录](records/2026-11/2026-11-10-archive-actions-exact-project-directory.md)

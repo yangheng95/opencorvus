@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务专家团重试实页证据](2026-11-10-mission-squad-context-retry-focus/README.md)
 - [关于页任务列表状态实页证据](2026-11-10-about-accepted-task-list-count/README.md)
 - [归档打开与只读历史焦点实页证据](2026-11-10-archive-open-reading-focus/README.md)
 - [同名归档动作的实页证据](2026-11-10-archive-actions-exact-project-directory/README.md)

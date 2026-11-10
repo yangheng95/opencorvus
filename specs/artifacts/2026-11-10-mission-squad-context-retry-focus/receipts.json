@@ -1,0 +1,692 @@
+{
+  "baseline": {
+    "status": 200,
+    "requestID": [
+      "bc60c652-c5df-4e8e-ab26-ac90adafba74"
+    ],
+    "asset": "main-C6Xcmcka.js",
+    "count": 5,
+    "ids": [
+      "advanced",
+      "base",
+      "dynamic",
+      "research-studio",
+      "squad-sdk"
+    ]
+  },
+  "firstCandidate": {
+    "page": {
+      "status": 200,
+      "requestID": "1bb56253-642c-4e76-83b7-7ea52a3df915",
+      "asset": "main-CLzfgoBz.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "90887510-879f-4f66-a437-cfa741e174b9",
+      "operation": "expertSquad.search"
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "256029c9-ac07-4605-9f93-c376f77cf7c2",
+        "query": "",
+        "count": 5,
+        "ids": [
+          "advanced",
+          "base",
+          "dynamic",
+          "research-studio",
+          "squad-sdk"
+        ],
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "4363fe14-613d-4cea-88a2-68d170aae6c3",
+        "query": "z",
+        "count": 0,
+        "ids": [],
+        "schemaValid": true
+      }
+    ],
+    "provider": {
+      "status": 200,
+      "requestID": "f293f5dc-9067-4d59-93ac-df4b7adf6b83",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "finalBefore": {
+    "page": {
+      "status": 200,
+      "requestID": "ce2beb6e-7f46-443c-b1f9-410a77b67ab1",
+      "asset": "main-DtBCiaJL.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "53d6855f-94f3-4faa-b34b-91bf67c540be",
+      "operation": "expertSquad.search"
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "9b6bb8e0-4472-4e90-931c-dbfc1b9af384",
+        "query": "",
+        "count": 5,
+        "ids": [
+          "advanced",
+          "base",
+          "dynamic",
+          "research-studio",
+          "squad-sdk"
+        ],
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "1bfa85d2-9435-4717-af7b-3b004775b3a3",
+        "query": "z",
+        "count": 0,
+        "ids": [],
+        "schemaValid": true
+      }
+    ],
+    "provider": {
+      "status": 200,
+      "requestID": "34839e3a-c82a-47c0-88aa-5f498f9e15c1",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "finalAfter": {
+    "page": {
+      "status": 200,
+      "requestID": "b0990908-51ad-465f-b397-5e671205b1c3",
+      "asset": "main-DtBCiaJL.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "988d4586-91f2-42c1-8013-8d0b98240f40",
+      "operation": "expertSquad.search"
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "a024d15a-4a28-4974-9b5a-e830edb72f74",
+        "query": "",
+        "count": 5,
+        "ids": [
+          "advanced",
+          "base",
+          "dynamic",
+          "research-studio",
+          "squad-sdk"
+        ],
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "0c08be76-65d4-404a-8d3c-eed660869d47",
+        "query": "z",
+        "count": 0,
+        "ids": [],
+        "schemaValid": true
+      }
+    ],
+    "provider": {
+      "status": 200,
+      "requestID": "d0114cc7-38b3-4c63-afcc-848716fbef3b",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "reviewTransport": {
+    "baseline": [
+      {
+        "time": "2026-11-10T06:41:15.131Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "0652d284-1867-4278-a39e-a169b5533399",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:41:15.134Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "0652d284-1867-4278-a39e-a169b5533399",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:41:44.423Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "1417ac13-4789-4775-905b-a5ba99ceada2",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:41:44.425Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "1417ac13-4789-4775-905b-a5ba99ceada2",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:42:02.281Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "ecf094da-f68b-40e2-87a0-2e1c8fb84b2c",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:42:02.282Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "ecf094da-f68b-40e2-87a0-2e1c8fb84b2c",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:42:07.106Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "ecf094da-f68b-40e2-87a0-2e1c8fb84b2c",
+        "mode": "hold",
+        "bytes": 1766,
+        "delivered": 1766
+      }
+    ],
+    "candidate-first": [
+      {
+        "time": "2026-11-10T06:46:33.510Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "cce778b9-50a9-4fda-9f72-2bc0daa17e0c",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:46:33.513Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "cce778b9-50a9-4fda-9f72-2bc0daa17e0c",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:46:41.245Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "f1fce356-839a-4c18-9180-0c7e6231568e",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:46:41.247Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "f1fce356-839a-4c18-9180-0c7e6231568e",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:46:49.531Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "34f9b42d-8477-408b-9008-72004c868528",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:46:49.532Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "34f9b42d-8477-408b-9008-72004c868528",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:46:59.061Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "72949959-6c76-48a8-b478-464ff251461b",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:46:59.063Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "72949959-6c76-48a8-b478-464ff251461b",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:47:03.956Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "72949959-6c76-48a8-b478-464ff251461b",
+        "mode": "hold",
+        "bytes": 1766,
+        "delivered": 1766
+      },
+      {
+        "time": "2026-11-10T06:47:17.513Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "a836d945-b3fd-4e8f-bc7c-705b3930e3d7",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:47:25.163Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "0f860041-2555-47cd-8c08-0fafce0b9d8a",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:47:37.167Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "8ad37d90-2f2b-461d-b8e8-06c82946ea07",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:47:46.443Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "6178b36a-e672-4b4c-a895-bbcc013b3c76",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:47:46.444Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "6178b36a-e672-4b4c-a895-bbcc013b3c76",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:47:58.561Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "8685eea1-bfe5-45e6-8a21-8bf6aface651",
+        "mode": "restore"
+      }
+    ],
+    "candidate-final": [
+      {
+        "time": "2026-11-10T06:51:04.916Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "97f1f0ef-4bb4-4427-b1d5-2fa39d61f7a3",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:51:04.920Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "97f1f0ef-4bb4-4427-b1d5-2fa39d61f7a3",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:51:12.975Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "fbfd9ede-7ed9-4ed8-9b98-c2d62bb31e3a",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:51:12.976Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "fbfd9ede-7ed9-4ed8-9b98-c2d62bb31e3a",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:51:19.618Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "e61009e4-b521-4e1d-bf42-a8004cf1734f",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:51:19.619Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "e61009e4-b521-4e1d-bf42-a8004cf1734f",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:51:28.587Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "936a2e29-318b-48cc-b61b-5ceabd680623",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:51:28.588Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "936a2e29-318b-48cc-b61b-5ceabd680623",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:51:35.918Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "936a2e29-318b-48cc-b61b-5ceabd680623",
+        "mode": "hold",
+        "bytes": 1766,
+        "delivered": 1766
+      },
+      {
+        "time": "2026-11-10T06:51:48.683Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "b5f910a8-fb72-4471-bfff-64f080febfec",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:51:58.460Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "ec2b0a3e-dc32-487e-9943-ddfd168158a1",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:51:58.460Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "ec2b0a3e-dc32-487e-9943-ddfd168158a1",
+        "mode": "truncate",
+        "bytes": 1766,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:52:11.408Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "dd283a1a-1ac0-47fd-9cad-b6aca0bcda83",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:53:55.193Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "942bc037-8aa6-43e4-be7f-010561d9b7da",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:54:34.095Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "",
+        "status": 200,
+        "requestID": "0d976287-8aaa-485f-98bd-7762ab575d4b",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:54:45.721Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "249de37a-3ebe-428d-b043-b09c01f4ca99",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:54:45.722Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "249de37a-3ebe-428d-b043-b09c01f4ca99",
+        "mode": "truncate",
+        "bytes": 135,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:54:58.061Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "48a9327d-15fc-4139-9f3a-5aabce761eb8",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:54:58.062Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "48a9327d-15fc-4139-9f3a-5aabce761eb8",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:55:11.741Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/expert-squad/search",
+        "pillar": "work",
+        "query": "z",
+        "status": 200,
+        "requestID": "48a9327d-15fc-4139-9f3a-5aabce761eb8",
+        "mode": "hold",
+        "bytes": 135,
+        "delivered": 135
+      }
+    ]
+  },
+  "database": {
+    "baseline": {
+      "integrity": "ok",
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  },
+  "lifecycle": {
+    "baseline": {
+      "occurrence": "iteration-b193-baseline",
+      "apiPort": 39518,
+      "proxyPort": 39519,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate-first": {
+      "occurrence": "iteration-b193-candidate",
+      "apiPort": 39520,
+      "proxyPort": 39521,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate-final": {
+      "occurrence": "iteration-b193-final",
+      "apiPort": 39520,
+      "proxyPort": 39521,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  }
+}

@@ -1842,6 +1842,11 @@ the current language and number format. Available candidates with no selection,
 an empty query result and an unavailable compatible catalog have distinct hints.
 Package-authored descriptions wrap fully in the native scrolling checklist;
 the Project directory dropdown retains its compact path presentation.
+An Expert Squad context or search read failure appears next to the squad search
+and keeps its original diagnostic in Details. A retry follows the failed read's
+operation, so clearing the query preserves authored selections. The focused
+retry trigger stays mounted while pending. When that read is accepted, focus
+moves to the existing squad search only if the retry button still owns it.
 
 The creation dialog's current catalog request projection retains the exact
 returned matching identities alongside its selectable options. Options kept for
