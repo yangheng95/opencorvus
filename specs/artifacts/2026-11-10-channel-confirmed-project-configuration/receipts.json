@@ -1,0 +1,534 @@
+{
+  "before": {
+    "page": {
+      "status": 200,
+      "requestID": "00139ce3-eff2-4796-9ba6-05ea587002f5",
+      "asset": "main-BMzV7GP8.js"
+    },
+    "projects": {
+      "channel-review": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "4d0dbb9a-83ad-4de8-a39d-14b0a924bf26",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "ada01c2e-70fd-464c-8389-6474c19e3d8e",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "787c30b9-71e3-4e93-bd74-f4121e456da8",
+          "publicUrl": "https://channel-review.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "ad2ec086-e74b-4722-8bfb-4e650b72e062",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "channel-adjacent": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "f5ef78e6-7e88-4338-af40-36d4b7ad564b",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "1ac8531b-9b9e-4622-8d8f-93b77d143f20",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "b838c089-5c74-4f10-a222-31fc370095b0",
+          "publicUrl": "https://channel-adjacent.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "b1ae8539-41f5-47cf-a107-7df66a8a98e9",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "channel-empty": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "9fb230ba-21ad-4e16-8138-99d0c8d70dd1",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "b1386bc1-b689-47fc-be90-33092b792bd7",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "62bea85a-d433-4a7e-be5e-ff5e440e5c99",
+          "publicUrl": ""
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "b64cddc7-79db-40a8-b4a6-fb8cda8633f8",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "3eb28403-474a-4224-afda-048d9aff0500",
+      "visible": 88,
+      "connected": 0
+    },
+    "dictionaries": {
+      "en-US": {
+        "status": 200,
+        "requestID": "15826831-02f1-49b1-af4e-78c0b14c8f51",
+        "loading": "Loading this project's channel settings…",
+        "failure": "Could not load this project's channel settings."
+      },
+      "zh-CN": {
+        "status": 200,
+        "requestID": "45d4b29c-360b-4442-b01a-8a0e445b81a8",
+        "loading": "正在加载此项目的通道设置…",
+        "failure": "无法加载此项目的通道设置。"
+      }
+    }
+  },
+  "after": {
+    "page": {
+      "status": 200,
+      "requestID": "e2a0c90a-0c81-425b-a645-72bed32d82ed",
+      "asset": "main-BMzV7GP8.js"
+    },
+    "projects": {
+      "channel-review": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "9dff4f4a-3495-4724-91fb-1dad070a6718",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "4bb7317a-7da6-41b2-9b6f-10794ef11975",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "d5ada837-90b0-4ca2-81e7-f555e2393afa",
+          "publicUrl": "https://channel-review.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "7ebe353e-651b-4c17-9197-913543ceb8a6",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "channel-adjacent": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "bad2d520-e80d-405d-bbf0-98ec2fc29e40",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "ea63f07b-c626-499c-b8a8-a20ff490e7ea",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "2e7eb603-8058-42b8-a9e2-eae54b35bab0",
+          "publicUrl": "https://channel-adjacent.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "c66c5124-9e00-4c02-b4c5-c55c209b5a72",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "channel-empty": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "d4aef87d-8d68-44cf-8761-cf1c7d368494",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "2cd4737e-b416-4648-ae48-ed92f107e944",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "311ccb00-9faf-49c6-961f-80ba798f1a23",
+          "publicUrl": ""
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "432a2283-4681-461c-87a0-6acc56813c9b",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "8674d76d-2384-42c9-80e0-efe179e8b3f9",
+      "visible": 88,
+      "connected": 0
+    },
+    "dictionaries": {
+      "en-US": {
+        "status": 200,
+        "requestID": "c1b01637-e053-4e74-9f0d-c9714b9e1703",
+        "loading": "Loading this project's channel settings…",
+        "failure": "Could not load this project's channel settings."
+      },
+      "zh-CN": {
+        "status": 200,
+        "requestID": "f0609d58-6b77-490b-93f2-ec252e71bb39",
+        "loading": "正在加载此项目的通道设置…",
+        "failure": "无法加载此项目的通道设置。"
+      }
+    }
+  },
+  "baseline": {
+    "asset": "main-YUUGmzRQ.js",
+    "status": 200,
+    "projects": [
+      {
+        "project": "channel-review",
+        "configStatus": 200,
+        "configRequestID": "a48e9600-0317-4993-9910-2eba6be1cb6c",
+        "publicUrl": "https://channel-review.example.invalid/preview",
+        "catalogStatus": 200,
+        "catalogRequestID": "746fce75-d570-4d8e-b4bd-41374504e3c9",
+        "rows": 27
+      },
+      {
+        "project": "channel-adjacent",
+        "configStatus": 200,
+        "configRequestID": "7b593580-19d0-4350-847b-b0fbc39ed4d1",
+        "publicUrl": "https://channel-adjacent.example.invalid/preview",
+        "catalogStatus": 200,
+        "catalogRequestID": "5a818899-ef63-4ce0-acda-85c22a222451",
+        "rows": 27
+      }
+    ]
+  },
+  "baselineTransport": [
+    {
+      "time": "2026-11-10T04:59:25.855Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "27608c5f-8e02-4f00-b5c1-62ee83d6c172",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:59:25.858Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "27608c5f-8e02-4f00-b5c1-62ee83d6c172",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:59:31.889Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "27608c5f-8e02-4f00-b5c1-62ee83d6c172",
+      "mode": "hold",
+      "bytes": 1466,
+      "delivered": 1466
+    },
+    {
+      "time": "2026-11-10T04:59:50.115Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "1f9794b4-b877-4610-be69-53e0026d71bc",
+      "mode": "truncate"
+    },
+    {
+      "time": "2026-11-10T04:59:50.116Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "1f9794b4-b877-4610-be69-53e0026d71bc",
+      "mode": "truncate",
+      "bytes": 1466,
+      "delivered": 1
+    }
+  ],
+  "candidateTransport": [
+    {
+      "time": "2026-11-10T05:07:05.291Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "ef73ff89-571d-4e6b-852b-d8578570b019",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T05:07:05.294Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "ef73ff89-571d-4e6b-852b-d8578570b019",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T05:07:05.297Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "cc273e75-632f-4208-8300-5c5a3c25732f",
+      "mode": "restore"
+    },
+    {
+      "time": "2026-11-10T05:07:10.660Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "ef73ff89-571d-4e6b-852b-d8578570b019",
+      "mode": "hold",
+      "bytes": 1466,
+      "delivered": 1466
+    },
+    {
+      "time": "2026-11-10T05:07:34.390Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "4b5bc162-4db1-4fae-b334-261b7f5ac1fc",
+      "mode": "truncate"
+    },
+    {
+      "time": "2026-11-10T05:07:34.391Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "4b5bc162-4db1-4fae-b334-261b7f5ac1fc",
+      "mode": "truncate",
+      "bytes": 1466,
+      "delivered": 1
+    },
+    {
+      "time": "2026-11-10T05:07:34.392Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "19d64fa9-a400-4025-a55c-800501d59094",
+      "mode": "restore"
+    },
+    {
+      "time": "2026-11-10T05:07:51.141Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "a8b8df01-7dfb-47f7-8ff8-b2a697d64f6b",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T05:07:51.143Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "a8b8df01-7dfb-47f7-8ff8-b2a697d64f6b",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T05:07:51.143Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "5cf5a958-537b-4b65-8628-5cdc44fd50c2",
+      "mode": "restore"
+    },
+    {
+      "time": "2026-11-10T05:07:55.460Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "a8b8df01-7dfb-47f7-8ff8-b2a697d64f6b",
+      "mode": "hold",
+      "bytes": 1466,
+      "delivered": 1466
+    },
+    {
+      "time": "2026-11-10T05:08:18.259Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "e172540e-d409-4d2f-a74b-7712ee5fc082",
+      "mode": "restore"
+    },
+    {
+      "time": "2026-11-10T05:08:18.261Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "b42f34b9-af2c-4ef2-be6e-7c773fe88a22",
+      "mode": "truncate"
+    },
+    {
+      "time": "2026-11-10T05:08:18.262Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "b42f34b9-af2c-4ef2-be6e-7c773fe88a22",
+      "mode": "truncate",
+      "bytes": 24096,
+      "delivered": 1
+    },
+    {
+      "time": "2026-11-10T05:08:33.047Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "62684c6c-6ff0-4eb5-9d74-e53c619a6444",
+      "mode": "restore"
+    },
+    {
+      "time": "2026-11-10T05:08:33.049Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "2a1282df-998b-44a5-96f1-51c5e9ce08ad",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T05:08:33.049Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "2a1282df-998b-44a5-96f1-51c5e9ce08ad",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T05:08:37.715Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/channel",
+      "project": "channel-adjacent",
+      "status": 200,
+      "requestID": "2a1282df-998b-44a5-96f1-51c5e9ce08ad",
+      "mode": "hold",
+      "bytes": 24096,
+      "delivered": 24096
+    }
+  ],
+  "profiles": {
+    "baseline": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    }
+  }
+}

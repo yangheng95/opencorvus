@@ -27,6 +27,7 @@ import {
   type SettingsStatusTone,
 } from "../../utils/settings-status-labels"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
+import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
 
 type ChannelEntry = ChannelListResponse[number]
 const CHANNEL_RUNTIME_TONES: Record<ChannelEntry["runtime_status"], SettingsStatusTone> = {
@@ -39,6 +40,7 @@ const CHANNEL_RUNTIME_TONES: Record<ChannelEntry["runtime_status"], SettingsStat
 }
 
 type ChannelSaveKind = "channel" | "public-url"
+type ChannelReadResource = "config" | "catalog"
 type ChannelNoticeTone = "success" | "warning" | "error"
 
 function configuredPublicUrl(config: typeof appStore.config): string {
@@ -101,31 +103,74 @@ export default function ChannelsPanel(props: { directory: string }) {
   })
   const channels = createMemo(() => (catalog()?.entries ?? []) as ChannelEntry[])
   const catalogFailure = () => catalog()?.failure
-  const [catalogRetry, setCatalogRetry] = createSignal<{
+  const configurationFailure = () => appStore.configLoadIssues.find((issue) => issue.resource === "config")
+  const [settingsRetry, setSettingsRetry] = createSignal<{
+    resource: ChannelReadResource
     scope: string
     button: HTMLButtonElement
     focused: boolean
   }>()
-  const catalogRetryBusy = () => catalogRetry()?.scope === currentScopeIdentity()
+  const currentSettingsRetry = () => {
+    const retry = settingsRetry()
+    return retry?.scope === currentScopeIdentity() ? retry : undefined
+  }
   let catalogHeading: HTMLSpanElement | undefined
-  let catalogMounted = true
+  let externalAccessHeading: HTMLSpanElement | undefined
+  let panelMounted = true
+  const projectPicker = createSettingsProjectFolderPicker({
+    directory: () => props.directory.trim(),
+    projectScopeTrigger: () => externalAccessHeading,
+  })
+  const configurationReady = () => !!props.directory.trim() && !projectPicker.choosing() && appStore.config != null
+  const readFailure = (resource: ChannelReadResource) => resource === "config" ? configurationFailure() : catalogFailure()
 
-  async function retryCatalog(button: HTMLButtonElement): Promise<void> {
-    if (!props.directory.trim() || !appStore.connected || !catalogFailure() || catalogRetryBusy()) return
+  async function retrySettings(resource: ChannelReadResource, button: HTMLButtonElement): Promise<void> {
+    if (!props.directory.trim() || projectPicker.choosing() || !appStore.connected || !readFailure(resource) || currentSettingsRetry()) return
     const options = currentProjectConfigRequestOptions()
-    if (options.directory !== props.directory.trim()) return
-    const retry = { scope: currentScopeIdentity(), button, focused: document.activeElement === button }
-    const owns = () => catalogMounted && catalogRetry() === retry && currentScopeIdentity() === retry.scope
-    setCatalogRetry(retry)
+    const authority = options.authority
+    if (!authority || options.directory !== props.directory.trim()) return
+    const retry = { resource, scope: currentScopeIdentity(), button, focused: document.activeElement === button }
+    const owns = () => panelMounted && currentSettingsRetry() === retry && isApiAuthorityCurrent(authority)
+    setSettingsRetry(retry)
     try {
       await loadConfigInfo(undefined, options)
-      if (!owns() || !retry.focused || catalogFailure() || !catalog()?.entries || !catalogHeading?.isConnected) return
-      if (document.activeElement === button || document.activeElement === document.body) catalogHeading.focus()
+      const target = resource === "config"
+        ? (configurationReady() ? externalAccessHeading : undefined)
+        : (catalog()?.entries ? catalogHeading : undefined)
+      if (!owns() || !retry.focused || readFailure(resource) || !target?.isConnected) return
+      if (document.activeElement === button || document.activeElement === document.body) target.focus()
     } catch (error) {
-      if (owns()) showNotice({ key: "channel.catalog_load_failed", details: formatErrorDetails(error) }, "error", "catalog")
+      if (owns()) {
+        showNotice({
+          key: resource === "config" ? "channel.configuration_load_failed" : "channel.catalog_load_failed",
+          details: formatErrorDetails(error),
+        }, "error", resource === "config" ? "public-url" : "catalog")
+      }
     } finally {
-      if (catalogRetry() === retry) setCatalogRetry(undefined)
+      if (settingsRetry() === retry) setSettingsRetry(undefined)
     }
+  }
+
+  function settingsRetryButton(resource: ChannelReadResource) {
+    const retrying = () => currentSettingsRetry()?.resource === resource
+    return (
+      <Button
+        type="button"
+        size={resource === "config" ? "md" : "sm"}
+        variant="outline"
+        tone="neutral"
+        disabled={!appStore.connected}
+        aria-disabled={projectPicker.choosing() || !!currentSettingsRetry() || undefined}
+        aria-busy={retrying() || undefined}
+        onBlur={(event) => {
+          const retry = currentSettingsRetry()
+          if (readFailure(resource) && retry?.button === event.currentTarget) retry.focused = false
+        }}
+        onClick={(event) => void retrySettings(resource, event.currentTarget)}
+      >
+        {t(retrying() ? "common.retrying" : "common.retry")}
+      </Button>
+    )
   }
 
   const publicUrl = createMemo(() => configuredPublicUrl(appStore.config))
@@ -136,7 +181,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   let publicUrlInput: HTMLInputElement | undefined
 
   const editingEntry = createMemo(() =>
-    editingOwner()?.directory === props.directory.trim()
+    configurationReady() && editingOwner()?.directory === props.directory.trim()
       ? channels().find((c) => c.id === editingID()) ?? null
       : null,
   )
@@ -154,7 +199,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   })
 
   onCleanup(() => {
-    catalogMounted = false
+    panelMounted = false
     saveGeneration++
     tutorialGeneration++
     returnToEditTrigger = undefined
@@ -166,6 +211,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   }
 
   function openEdit(channelID: string, trigger: HTMLButtonElement) {
+    if (!configurationReady()) return
     const entry = channels().find((c) => c.id === channelID)
     if (!entry) return
     const scope = currentScopeIdentity()
@@ -249,7 +295,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   async function handleSaveChannel() {
     const entry = editingEntry()
     const configOwner = editingOwner()
-    if (!entry || !configOwner?.directory || configOwner.isCurrentDirectory?.(configOwner.directory) === false) {
+    if (!configurationReady() || !entry || !configOwner?.directory || configOwner.isCurrentDirectory?.(configOwner.directory) === false) {
       closeEdit()
       return
     }
@@ -308,7 +354,7 @@ export default function ChannelsPanel(props: { directory: string }) {
 
   async function handleSavePublicUrl() {
     const input = publicUrlInput
-    if (!input || savePending("public-url")) return
+    if (!configurationReady() || !input || savePending("public-url")) return
     if (!validatePublicUrl(input)) {
       if (noticeFormIdentity() === "public-url") clearNotice()
       input.focus({ preventScroll: true })
@@ -444,78 +490,81 @@ export default function ChannelsPanel(props: { directory: string }) {
       <SettingsPanel class="channel-panel">
         <Show when={notice() && noticeFormIdentity() === "catalog"}>{noticeState()}</Show>
 
-        <Show when={props.directory.trim()} fallback={<SettingsEmpty>{t("workspace.no_directory")}</SettingsEmpty>}>
+        <Show when={props.directory.trim()} fallback={
+          <Feedback
+            tone="info"
+            title={t("channel.project_required_title")}
+            actions={<SettingsProjectFolderButton picker={projectPicker} primary />}
+          >
+            {t("channel.project_required_body")}
+          </Feedback>
+        }>
           <SettingsGroup
             class="channel-public-url-group"
-            title={t("channel.external_access")}
+            title={<span ref={externalAccessHeading} tabIndex={-1}>{t("channel.external_access")}</span>}
             description={t("channel.public_url_hint")}
             contentInset
           >
-            <div class="extension-head">
-              <TextField.Root as="label" class="channel-public-url-field" invalid={publicUrlInvalid()}>
-                <TextField.Label>{t("channel.public_url")}</TextField.Label>
-                {/* Fixed example URL; the locale-sensitive field label/hint already carries the instruction. */}
-                <TextField.Input
-                  ref={(input) => {
-                    publicUrlInput = input
-                  }}
-                  type="url"
-                  pattern="[Hh][Tt][Tt][Pp][Ss]?://.+"
-                  aria-label={t("channel.public_url")}
-                  placeholder="https://opencorvus.example.com"
-                  value={localPublicUrl()}
-                  onInput={(e) => {
-                    const value = e.currentTarget.value
-                    publicUrlEditRevision++
-                    setPublicUrlInvalid(false)
-                    if (noticeFormIdentity() === "public-url") clearNotice()
-                    setPublicUrlDraft(value === publicUrl() && !savePending("public-url") ? undefined : value)
-                  }}
-                  onBlur={(e) => validatePublicUrl(e.currentTarget)}
-                />
-                <Show when={publicUrlInvalid()}>
-                  <TextField.ErrorMessage role="alert">{t("channel.public_url_invalid")}</TextField.ErrorMessage>
-                </Show>
-              </TextField.Root>
-              <div class="dialog-actions compact">
-                <Button
-                  type="button"
-                  class="channel-public-url-save"
-                  variant="solid"
-                  size="md"
-                  tone="accent"
-                  onClick={handleSavePublicUrl}
-                  aria-disabled={savePending("public-url") || undefined}
-                  aria-busy={savePending("public-url") || undefined}
-                >
-                  {t(savePending("public-url") ? "common.saving" : "common.save")}
-                </Button>
+            <Show when={configurationReady()} fallback={
+              <Show when={!projectPicker.choosing() && configurationFailure()} fallback={
+                <Feedback>{t(appStore.connected ? "channel.configuration_loading" : "channel.configuration_disconnected")}</Feedback>
+              }>
+                {(failure) => (
+                  <Feedback tone="error" details={formatErrorDetails(failure().cause)} actions={settingsRetryButton("config")}>
+                    {t("channel.configuration_load_failed")}
+                  </Feedback>
+                )}
+              </Show>
+            }>
+              <div class="extension-head">
+                <TextField.Root as="label" class="channel-public-url-field" invalid={publicUrlInvalid()}>
+                  <TextField.Label>{t("channel.public_url")}</TextField.Label>
+                  {/* Fixed example URL; the locale-sensitive field label/hint already carries the instruction. */}
+                  <TextField.Input
+                    ref={(input) => {
+                      publicUrlInput = input
+                    }}
+                    type="url"
+                    pattern="[Hh][Tt][Tt][Pp][Ss]?://.+"
+                    aria-label={t("channel.public_url")}
+                    placeholder="https://opencorvus.example.com"
+                    value={localPublicUrl()}
+                    onInput={(e) => {
+                      const value = e.currentTarget.value
+                      publicUrlEditRevision++
+                      setPublicUrlInvalid(false)
+                      if (noticeFormIdentity() === "public-url") clearNotice()
+                      setPublicUrlDraft(value === publicUrl() && !savePending("public-url") ? undefined : value)
+                    }}
+                    onBlur={(e) => validatePublicUrl(e.currentTarget)}
+                  />
+                  <Show when={publicUrlInvalid()}>
+                    <TextField.ErrorMessage role="alert">{t("channel.public_url_invalid")}</TextField.ErrorMessage>
+                  </Show>
+                </TextField.Root>
+                <div class="dialog-actions compact">
+                  <Button
+                    type="button"
+                    class="channel-public-url-save"
+                    variant="solid"
+                    size="md"
+                    tone="accent"
+                    onClick={handleSavePublicUrl}
+                    aria-disabled={savePending("public-url") || undefined}
+                    aria-busy={savePending("public-url") || undefined}
+                  >
+                    {t(savePending("public-url") ? "common.saving" : "common.save")}
+                  </Button>
+                </div>
               </div>
-            </div>
+            </Show>
             <Show when={notice() && noticeFormIdentity() === "public-url"}>{noticeState()}</Show>
           </SettingsGroup>
 
           <SettingsGroup
             title={<span ref={catalogHeading} tabIndex={-1}>{t("channel.available_channels")}</span>}
             actions={
-              <Show when={catalogFailure()}>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  tone="neutral"
-                  disabled={!appStore.connected}
-                  aria-disabled={catalogRetryBusy() || undefined}
-                  aria-busy={catalogRetryBusy() || undefined}
-                  onBlur={(event) => {
-                    const retry = catalogRetry()
-                    if (catalogFailure() && retry?.button === event.currentTarget) retry.focused = false
-                  }}
-                  onClick={(event) => void retryCatalog(event.currentTarget)}
-                >
-                  {t(catalogRetryBusy() ? "common.retrying" : "common.retry")}
-                </Button>
-              </Show>
+              <Show when={catalogFailure()}>{settingsRetryButton("catalog")}</Show>
             }
           >
             <Show when={catalogFailure()}>
@@ -576,6 +625,7 @@ export default function ChannelsPanel(props: { directory: string }) {
                             tone="neutral"
                             title={t("channel.edit_title", { name: item.name })}
                             aria-label={t("channel.edit_title", { name: item.name })}
+                            disabled={!configurationReady()}
                             onClick={(event) => openEdit(item.id, event.currentTarget)}
                           >
                             {t("common.edit")}

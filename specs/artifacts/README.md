@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [通道项目选择与配置等待实页证据](2026-11-10-channel-confirmed-project-configuration/README.md)
 - [网络代理项目选择实页证据](2026-11-10-network-proxy-choose-project/README.md)
 - [通用设置项目读取故障实页证据](2026-11-10-general-project-read-diagnostics/README.md)
 - [通用设置偏好与诊断实页证据](2026-11-10-general-preferences-diagnostics-heading/README.md)

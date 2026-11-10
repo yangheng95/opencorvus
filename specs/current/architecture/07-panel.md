@@ -5390,9 +5390,14 @@ busy state before retirement, and an older completion cannot own a newer form.
 Diagnostic details consume the shared receipt projection while the original
 configuration snapshot remains exclusively in the business response.
 
-Channel edits require the currently selected project and show the existing
-workspace selection hint in the directory-free launcher. Shared Skill/MCP
-resource pages use the same loading lifecycle on first entry and manual reload;
+Channel settings offer the existing workspace folder selection in the
+directory-free launcher. Confirmation stays on Channel and focuses External
+access when focus still belongs to that action. Address and channel editors
+wait for an accepted project configuration; the catalog and documentation
+remain independently readable. A configuration read failure keeps the original
+diagnostic and offers an in-place retry through the same scoped reader as the
+catalog. The affected section owns focus after a successful retry. Shared
+Skill/MCP resource pages use the same loading lifecycle on first entry and manual reload;
 Skill issue projection checks its owning directory before committing the result.
 Channel rows use generated ChannelListResponse and display configuration status
 and runtime status separately; missing configuration is not runtime availability.
