@@ -190,7 +190,7 @@ memory 与原始历史继续权威。所有摘要识别、持久化与 memory �
 {
   id: string                 // "qwen3.5-plus"
   providerID: string         // "alibaba-cn"
-  api: { id, url, npm }      // API model ID · base URL · SDK package
+  api: { id, url?, npm }     // API model ID · declared base URL (if any) · SDK package
   capabilities: {
     temperature, reasoning, toolcall, attachment,
     input:  { text, audio, image, video, pdf },
@@ -204,6 +204,9 @@ memory 与原始历史继续权威。所有摘要识别、持久化与 memory �
   headers: Record                   // 自定义 HTTP 头
 }
 ```
+
+`Model.api.url` 只表达模型或提供方声明的自定义地址。省略时保留真实模型和 SDK 标识；
+SDK 根据其自身配置解析端点。项目和全局目录使用同一可选字段契约。
 
 ## 调用链路
 

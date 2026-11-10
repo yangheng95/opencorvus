@@ -37,7 +37,8 @@ export const ProviderConnectionTestResult = z
 
 export type ProviderConnectionTestResult = z.infer<typeof ProviderConnectionTestResult>
 
-function normalizeApiBaseURL(raw: string): string | undefined {
+function normalizeApiBaseURL(raw: string | undefined): string | undefined {
+  if (raw === undefined) return undefined
   try {
     const url = new URL(raw.trim())
     if (url.protocol !== "http:" && url.protocol !== "https:") return undefined

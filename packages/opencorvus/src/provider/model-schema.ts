@@ -6,7 +6,7 @@ export const ProviderModelSchema = z
     providerID: z.string(),
     api: z.object({
       id: z.string(),
-      url: z.string(),
+      url: z.string().optional().describe("Explicit API base URL, when declared; otherwise the SDK resolves its endpoint."),
       npm: z.string(),
     }),
     name: z.string(),

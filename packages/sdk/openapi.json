@@ -13320,12 +13320,12 @@
                 "type": "string"
               },
               "url": {
+                "description": "Explicit API base URL, when declared; otherwise the SDK resolves its endpoint.",
                 "type": "string"
               }
             },
             "required": [
               "id",
-              "url",
               "npm"
             ],
             "type": "object"

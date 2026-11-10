@@ -3780,7 +3780,10 @@ export type Model = {
   api: {
     id: string
     npm: string
-    url: string
+    /**
+     * Explicit API base URL, when declared; otherwise the SDK resolves its endpoint.
+     */
+    url?: string
   }
   capabilities: {
     attachment: boolean

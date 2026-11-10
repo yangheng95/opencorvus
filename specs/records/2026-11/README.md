@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [提供方模型目录如实声明可选的自定义地址](2026-11-11-provider-catalog-optional-api-url.md)
 - [文件编辑器明确显示当前保存状态](2026-11-11-file-editor-save-status.md)
 - [文件比较等待同一次磁盘读取完成](2026-11-10-file-comparison-read-ownership.md)
 - [多步任务可以区分同名项目的目录](2026-11-10-mission-board-project-context.md)

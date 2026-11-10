@@ -56,6 +56,34 @@ const originalValues = {
   interleaved: { field: "reasoning_content" },
 }
 
+test("the serialized Provider projection preserves SDK model identity and declared API addresses", () => {
+  const source = declaration()
+  const explicitURL = source.api
+  delete source.api
+  source.npm = "@ai-sdk/cerebras"
+
+  const sdkManaged = Provider.fromModelsDevProvider(source)
+  const providerAddress = Provider.fromModelsDevProvider({ ...source, api: explicitURL })
+  const modelAddress = Provider.fromModelsDevProvider({
+    ...source,
+    api: explicitURL,
+    models: {
+      reasoning: {
+        ...source.models.reasoning,
+        provider: { api: "https://model.projection.invalid/v1" },
+      },
+    },
+  })
+
+  const readAPI = (provider: Provider.Info) =>
+    Provider.Info.parse(JSON.parse(JSON.stringify(provider))).models.reasoning.api
+  expect([sdkManaged, providerAddress, modelAddress].map(readAPI)).toEqual([
+    { id: "reasoning", npm: "@ai-sdk/cerebras" },
+    { id: "reasoning", npm: "@ai-sdk/cerebras", url: "https://projection.invalid/v1" },
+    { id: "reasoning", npm: "@ai-sdk/cerebras", url: "https://model.projection.invalid/v1" },
+  ])
+})
+
 function customize(provider: Provider.Info) {
   provider.env.push("PROJECT_TOKEN")
   const model = provider.models.reasoning
