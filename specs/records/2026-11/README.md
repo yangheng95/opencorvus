@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [同名项目的归档操作标明确切目录](2026-11-10-archive-actions-exact-project-directory.md)
 - [归档首读重试保留键盘位置](2026-11-10-archive-first-page-retry-focus.md)
 - [年度用量热图的月份轴与真实周列对齐](2026-11-10-usage-year-month-axis.md)
 - [网络代理可直接区分同名项目](2026-11-10-network-proxy-same-name-project-context.md)

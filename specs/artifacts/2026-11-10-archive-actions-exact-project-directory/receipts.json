@@ -1,0 +1,268 @@
+{
+  "baseline": {
+    "asset": "main-D2ed4yly.js",
+    "status": 200,
+    "requestID": [
+      "f103ad8c-da75-4151-9eb0-8a6ec23fcd87"
+    ],
+    "rows": [
+      {
+        "label": "alpha/Workspace",
+        "id": "ses_hO755gscWBSfzjkuTZE7",
+        "projectId": "prj_hmGQnF5wbi9xrUmvvHoj",
+        "title": "Shared Archive Review 190",
+        "archived": 1794290701540
+      },
+      {
+        "label": "beta/Workspace",
+        "id": "ses_hIS4EAcCZlhqeNYvbrAC",
+        "projectId": "prj_h9ptR98RcuVZO9Q02GgS",
+        "title": "Shared Archive Review 190",
+        "archived": 1794290702073
+      }
+    ]
+  },
+  "candidateBefore": {
+    "asset": "main-Dl726E21.js",
+    "page": {
+      "status": 200,
+      "requestID": "efa43359-ff83-48e3-a62c-bbe040b6bd81"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "c1d0ee94-36f7-4925-8722-254c9e97bd0b",
+      "operation": "workLedger.listArchived"
+    },
+    "subjects": [
+      {
+        "label": "alpha/Workspace",
+        "id": "ses_ha7q1CXdW33wKTNto7s5",
+        "projectID": "prj_hmGQnF5wbi9xrUmvvHoj",
+        "created": 1794290927668,
+        "archived": 1794290927775,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "7496a7a9-f353-4535-bd66-a9aab5cd7d8d"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "7663c98d-a56a-4ab7-8c4f-1507054cf420"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "41aff60f-3994-4b2d-8dea-891bb99048f4"
+          }
+        }
+      },
+      {
+        "label": "beta/Workspace",
+        "id": "ses_h9tgTcyBrXdrnQlh6291",
+        "projectID": "prj_h9ptR98RcuVZO9Q02GgS",
+        "created": 1794290927934,
+        "archived": 1794290928036,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "f37f60a1-22f5-45af-9924-c8902c418866"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "01e7398c-7691-4210-a783-62f701daa4f7"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "2945f31c-27ae-454b-ba74-35f65bf19c68"
+          }
+        }
+      }
+    ],
+    "unfiltered": {
+      "status": 200,
+      "requestID": "49897019-0bb5-4648-ac01-935c0ff737e8",
+      "search": "",
+      "count": 2,
+      "cursor": null,
+      "schemaValid": true,
+      "exactDirectories": true
+    },
+    "filtered": {
+      "status": 200,
+      "requestID": "06595053-0db0-4e3c-a21e-e10fb694b53d",
+      "search": "Shared Archive Review 190",
+      "count": 2,
+      "cursor": null,
+      "schemaValid": true,
+      "exactDirectories": true
+    },
+    "sessionReads": [
+      {
+        "status": 200,
+        "requestID": "df537929-c353-45ea-970c-3f08b9ad2e09",
+        "label": "alpha/Workspace",
+        "exactIdentity": true
+      },
+      {
+        "status": 200,
+        "requestID": "16c150b5-e719-44ea-afc0-3fa876e54f3e",
+        "label": "beta/Workspace",
+        "exactIdentity": true
+      }
+    ],
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "4c76fc0d-bb23-48fb-8975-13a021496e9f",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "candidateAfter": {
+    "asset": "main-Dl726E21.js",
+    "page": {
+      "status": 200,
+      "requestID": "9a8c9d35-d947-450e-9856-24ff30ff22f0"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "1f981bf9-994c-4224-b6dc-54ff6e3984a2",
+      "operation": "workLedger.listArchived"
+    },
+    "subjects": [
+      {
+        "label": "alpha/Workspace",
+        "id": "ses_ha7q1CXdW33wKTNto7s5",
+        "projectID": "prj_hmGQnF5wbi9xrUmvvHoj",
+        "created": 1794290927668,
+        "archived": 1794290927775,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "7496a7a9-f353-4535-bd66-a9aab5cd7d8d"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "7663c98d-a56a-4ab7-8c4f-1507054cf420"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "41aff60f-3994-4b2d-8dea-891bb99048f4"
+          }
+        }
+      },
+      {
+        "label": "beta/Workspace",
+        "id": "ses_h9tgTcyBrXdrnQlh6291",
+        "projectID": "prj_h9ptR98RcuVZO9Q02GgS",
+        "created": 1794290927934,
+        "archived": 1794290928036,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "f37f60a1-22f5-45af-9924-c8902c418866"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "01e7398c-7691-4210-a783-62f701daa4f7"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "2945f31c-27ae-454b-ba74-35f65bf19c68"
+          }
+        }
+      }
+    ],
+    "unfiltered": {
+      "status": 200,
+      "requestID": "575142a8-9f9d-43cf-b315-30052c26c933",
+      "search": "",
+      "count": 2,
+      "cursor": null,
+      "schemaValid": true,
+      "exactDirectories": true
+    },
+    "filtered": {
+      "status": 200,
+      "requestID": "2da7cacb-aaa4-440c-bf28-3a545c5cf24d",
+      "search": "Shared Archive Review 190",
+      "count": 2,
+      "cursor": null,
+      "schemaValid": true,
+      "exactDirectories": true
+    },
+    "sessionReads": [
+      {
+        "status": 200,
+        "requestID": "451d64a4-3b33-4f17-a817-496860f1b767",
+        "label": "alpha/Workspace",
+        "exactIdentity": true
+      },
+      {
+        "status": 200,
+        "requestID": "8f3eba35-6661-4b60-bf64-0ff026ade02a",
+        "label": "beta/Workspace",
+        "exactIdentity": true
+      }
+    ],
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "c3e00ce9-4b35-44f8-b5c1-8862ede15baa",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "desktopBetaReads": [
+    {
+      "requestID": "522b3f45-8c7a-422b-98d9-aef3a05d02a5",
+      "path": "/coding/chat/session/ses_h9tgTcyBrXdrnQlh6291",
+      "statusCode": 200
+    },
+    {
+      "requestID": "22c50a93-2193-446b-8cb1-b61195beb1ae",
+      "path": "/session/ses_h9tgTcyBrXdrnQlh6291/conversation",
+      "statusCode": 200
+    },
+    {
+      "requestID": "c186aa1f-6aa6-4bce-a2be-3d9775d04eb8",
+      "path": "/work-ledger/selection/session/ses_h9tgTcyBrXdrnQlh6291",
+      "statusCode": 200
+    }
+  ],
+  "lifecycle": {
+    "baseline": {
+      "shutdown": {
+        "occurrence": "iteration-b190-baseline",
+        "port": 39509,
+        "apiStopped": true,
+        "processExited": true,
+        "listenerClosed": true
+      },
+      "database": {
+        "integrity": "ok",
+        "session": 2,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "shutdown": {
+        "occurrence": "iteration-b190-candidate",
+        "port": 39510,
+        "apiStopped": true,
+        "processExited": true,
+        "listenerClosed": true
+      },
+      "database": {
+        "integrity": "ok",
+        "session": 2,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  }
+}

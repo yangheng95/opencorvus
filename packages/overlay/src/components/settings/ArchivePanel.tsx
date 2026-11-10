@@ -73,7 +73,11 @@ function archiveActionText(
   key: "archive.open_item" | "archive.restore" | "archive.delete_permanently" | "archive.delete_confirm",
   row: WorkLedgerItemRow,
 ): string {
-  return t(key, { title: row.title || row.id, project: archiveProjectName(row) })
+  const name = archiveProjectName(row)
+  const project = row.directory
+    ? t("archive.action_project_directory", { project: name, directory: row.directory })
+    : name
+  return t(key, { title: row.title || row.id, project })
 }
 
 function archivedAt(row: WorkLedgerItemRow): number {

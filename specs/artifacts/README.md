@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同名归档动作的实页证据](2026-11-10-archive-actions-exact-project-directory/README.md)
 - [归档首读重试焦点实页证据](2026-11-10-archive-first-page-retry-focus/README.md)
 - [年度用量月份轴实页证据](2026-11-10-usage-year-month-axis/README.md)
 - [同名项目网络代理范围实页证据](2026-11-10-network-proxy-same-name-project-context/README.md)
