@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [全局搜索分页键盘交互证据](2026-11-10-palette-continuation-keyboard/README.md)
 - [日志尾部跟随实际连接的证据](2026-11-10-log-tail-connection-ownership/README.md)
 - [路径与 Git 元数据的独立读取证据](2026-11-10-project-path-and-git-read-settlement/README.md)
 - [文件栏的图片与 PDF 键盘入口证据](2026-11-10-file-media-preview-entry-focus/README.md)

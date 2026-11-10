@@ -151,6 +151,17 @@
   font-size: var(--ui-font-body);
 }
 
+.cmdk-ledger-footer {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: var(--ui-gap-md);
+}
+
+.cmdk-ledger-action {
+  justify-self: start;
+}
+
 .cmdk-input {
   appearance: none;
   width: 100%;

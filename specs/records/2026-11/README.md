@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [全局搜索续页与重试可用键盘接续](2026-11-10-palette-continuation-keyboard.md)
 - [日志查看器随连接更换读取来源](2026-11-10-log-tail-connection-ownership.md)
 - [项目路径与 Git 状态分别结算](2026-11-10-project-path-and-git-read-settlement.md)
 - [文件图片与 PDF 预览的键盘入口](2026-11-10-file-media-preview-entry-focus.md)

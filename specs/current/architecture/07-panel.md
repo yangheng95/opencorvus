@@ -5945,6 +5945,10 @@ Nonempty queries include matching Project names, IDs and directories, use bounde
 pages with explicit continuation, and flatten only the
 canonical Mission child Tasks. Search covers original titles, IDs, directories
 and technical kinds, including each conversation's canonical Chat/Work experience.
+The global search Dialog owns closing; Tab can move from the query to its
+footer without clearing the query. One footer action continues or retries
+the current page and holds keyboard focus while it remains available. When
+the last page removes a focused action, the query receives focus.
 The shared active/archive projection treats percent,
 underscore and backslash literally using one escaped SQL LIKE parameter;
 archive visibility and directory boundaries remain unchanged.

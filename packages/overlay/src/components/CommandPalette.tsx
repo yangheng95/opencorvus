@@ -357,9 +357,10 @@ export function CommandPalette(props: {
   async function loadMore(event: MouseEvent & { currentTarget: HTMLButtonElement }) {
     if (!ledgerSearch || ledgerLoading()) return
     const search = ledgerSearch
-    const hadFocus = document.activeElement === event.currentTarget
+    const action = event.currentTarget
+    const hadFocus = document.activeElement === action
     await loadLedger(search, ledgerRows().length > 0 && ledgerCursor() !== null)
-    if (hadFocus && ownsSearch(search) && document.activeElement === document.body) {
+    if (hadFocus && !action.isConnected && ownsSearch(search) && document.activeElement === document.body) {
       inputRef?.focus({ preventScroll: true })
     }
   }
@@ -527,8 +528,12 @@ export function CommandPalette(props: {
         optionLabel="label"
         value={null}
         open={palette.open()}
-        onOpenChange={(open) => {
-          if (!open && palette.open()) close()
+        noResetInputOnBlur
+        onInputKeyDown={(event) => {
+          if (event.key !== "Escape" || event.isComposing) return
+          event.preventDefault()
+          event.stopPropagation()
+          close()
         }}
         onInputChange={setPaletteQuery}
         defaultFilter={() => true}
@@ -565,29 +570,28 @@ export function CommandPalette(props: {
         emptyContent={<Show when={!ledgerLoading() && !ledgerError()}><div class="cmdk-empty">{t("cmdk.empty")}</div></Show>}
       />
       <Show when={ledgerLoading() || ledgerError() || ledgerCursor()}>
-        <div class="cmdk-footer">
-          <Show when={ledgerLoading() && !ledgerError()}>
+        <div class="cmdk-footer cmdk-ledger-footer">
+          <Show when={ledgerLoading() && !ledgerError() && !ledgerCursor()}>
             <div role="status" aria-live="polite">{t("common.loading")}</div>
           </Show>
-          <Show when={ledgerError()}>
-            {(details) => <Feedback tone="error" details={details()} actions={
-              <Button
-                type="button"
-                variant="ghost"
-                size="md"
-                tone="neutral"
-                aria-disabled={ledgerLoading() || undefined}
-                aria-busy={ledgerLoading() || undefined}
-                onClick={loadMore}
-              >
-                {t(ledgerLoading() ? "common.retrying" : "common.retry")}
-              </Button>
-            }>{t("cmdk.search_failed")}</Feedback>}
-          </Show>
-          <Show when={ledgerCursor() && !ledgerError()}>
-            <Button type="button" variant="ghost" size="md" tone="neutral" disabled={ledgerLoading()} onClick={loadMore}>
-              {t("work_ledger.load_more")}
+          <Show when={ledgerCursor() || ledgerError()}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="md"
+              tone="neutral"
+              class="cmdk-ledger-action"
+              aria-disabled={ledgerLoading() || undefined}
+              aria-busy={ledgerLoading() || undefined}
+              onClick={loadMore}
+            >
+              {t(ledgerError()
+                ? ledgerLoading() ? "common.retrying" : "common.retry"
+                : ledgerLoading() ? "common.loading" : "work_ledger.load_more")}
             </Button>
+          </Show>
+          <Show when={ledgerError()}>
+            {(details) => <Feedback tone="error" details={details()}>{t("cmdk.search_failed")}</Feedback>}
           </Show>
         </div>
       </Show>

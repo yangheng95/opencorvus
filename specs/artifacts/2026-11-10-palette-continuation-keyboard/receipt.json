@@ -1,0 +1,1655 @@
+{
+  "directReads": {
+    "baseline": {
+      "before": {
+        "asset": "main-cDbxUg_6.js",
+        "ui": {
+          "status": 200,
+          "requestID": "6dc1a547-da82-4184-9624-8f0269cde5ed"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "674e77d0-1176-4b36-9a41-28226196a694"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "ee9883dc-c0a6-4486-94b5-11aa6956c0aa",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [
+          {
+            "name": "palette-focus-01",
+            "id": "prj_hwJBciKurO1n6AWQrLB8",
+            "status": 200,
+            "requestID": "1a63c476-1865-4563-8fb0-7f4bf660fee9",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-02",
+            "id": "prj_hws0EuSCKrmL7Jo6yXmf",
+            "status": 200,
+            "requestID": "dc7527e3-520f-4c3f-8ea7-49e570f36f09",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-03",
+            "id": "prj_hzyZgl077TN2QwwxvYwh",
+            "status": 200,
+            "requestID": "154afcde-c719-4851-b8ac-e72b4cb025b2",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-04",
+            "id": "prj_hZECjRtSMDR5THJvnbqp",
+            "status": 200,
+            "requestID": "5af75508-02c8-4ee1-ac8c-a4a3fec410bd",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-05",
+            "id": "prj_hhIIoQiXMZbxLgUMgXNx",
+            "status": 200,
+            "requestID": "848bae6c-6ee4-4aba-93c3-864f8598301c",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-06",
+            "id": "prj_hGgM3hgYA3FqXdgn3cbi",
+            "status": 200,
+            "requestID": "85d5d17f-c98e-4ad6-8a76-a17a6de509c1",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-07",
+            "id": "prj_hHADgFllECzQueqfdjIL",
+            "status": 200,
+            "requestID": "2986d4b7-afa9-4a55-81f5-807a1fd1a301",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-08",
+            "id": "prj_hPs3Dj4b899ahtE4dwM6",
+            "status": 200,
+            "requestID": "3c1f7839-dc3e-4537-90ed-220b9f1f5dc5",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-09",
+            "id": "prj_hknIw3Zr9tCe7pXPxNIE",
+            "status": 200,
+            "requestID": "add61b7e-3e0c-46e6-884d-cd7c25bde0b7",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-10",
+            "id": "prj_hPixpyY5NR0qab0qSvTI",
+            "status": 200,
+            "requestID": "7ee9132f-d645-4189-a8a9-9f18be6b785e",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-11",
+            "id": "prj_hDTa1FvRUNKarf3ccaww",
+            "status": 200,
+            "requestID": "043beeea-ec6a-4b59-9aaf-8fe73eac801c",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-12",
+            "id": "prj_hBLMd48fdPERJ3kO08bV",
+            "status": 200,
+            "requestID": "ce54860d-9b20-41c1-8327-de33166eb308",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-13",
+            "id": "prj_hLqMjuHHQoIaup1ndxzt",
+            "status": 200,
+            "requestID": "177c3936-802e-4fb9-ad7e-fe8776b0f313",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-14",
+            "id": "prj_hUnojdjO1jkbTXnTKGgr",
+            "status": 200,
+            "requestID": "3a33de7a-38d3-4c3e-a600-301562a49444",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-15",
+            "id": "prj_hDeMp5kHtYvX1l49zp6Q",
+            "status": 200,
+            "requestID": "7f7c7cce-0ef7-498f-b8d7-db57dc737d23",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-16",
+            "id": "prj_hKPmEGfPCbpwyIfsUvRR",
+            "status": 200,
+            "requestID": "c381ee87-7584-4b9c-85f0-7c7ec181faf9",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-17",
+            "id": "prj_hrcsycQTgjDmuqkk8Xjt",
+            "status": 200,
+            "requestID": "f39f2f0b-a63f-422f-b853-549c9c3e0112",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-18",
+            "id": "prj_h2ZwWNJldkn3FDN0z79L",
+            "status": 200,
+            "requestID": "6e125071-3e48-40b0-a15c-2fa98aa7e92d",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-19",
+            "id": "prj_hMkbKCUGC4X5R4mLIj51",
+            "status": 200,
+            "requestID": "46ae9144-c50f-4a03-8db1-0e3eed97c450",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-20",
+            "id": "prj_h69lc8SYFEdNbrXa10UV",
+            "status": 200,
+            "requestID": "5c474970-2aad-4b8b-8b2f-2ae8f4b3a27e",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-21",
+            "id": "prj_hRf1lgnLZgBUAO3Ka100",
+            "status": 200,
+            "requestID": "e4523d74-4a07-4af9-b10c-89daeb39e92a",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-22",
+            "id": "prj_hWN24FLKH4UFFKvFP58G",
+            "status": 200,
+            "requestID": "b371c2aa-c7eb-4376-939e-c5925ac1da5d",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-23",
+            "id": "prj_hGJYiOxqfvTci1PO8bgc",
+            "status": 200,
+            "requestID": "3f486335-9a8b-463f-a4ae-a6879d81b642",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-24",
+            "id": "prj_hJKhtXEaCePVwJW8TZTQ",
+            "status": 200,
+            "requestID": "a0822a5c-b5db-4c4a-be26-caa1f24d3c6e",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-25",
+            "id": "prj_h5zrHIgTM9LeO1At9JKZ",
+            "status": 200,
+            "requestID": "38599437-6cf6-4396-94c0-72bf0a0f46d0",
+            "operation": "project.current"
+          }
+        ],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "3d5dec47-69bd-4d07-ac69-f85e9a7b0da9",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-25",
+                "id": "prj_h5zrHIgTM9LeO1At9JKZ"
+              },
+              {
+                "name": "palette-focus-24",
+                "id": "prj_hJKhtXEaCePVwJW8TZTQ"
+              },
+              {
+                "name": "palette-focus-23",
+                "id": "prj_hGJYiOxqfvTci1PO8bgc"
+              },
+              {
+                "name": "palette-focus-22",
+                "id": "prj_hWN24FLKH4UFFKvFP58G"
+              },
+              {
+                "name": "palette-focus-21",
+                "id": "prj_hRf1lgnLZgBUAO3Ka100"
+              },
+              {
+                "name": "palette-focus-20",
+                "id": "prj_h69lc8SYFEdNbrXa10UV"
+              },
+              {
+                "name": "palette-focus-19",
+                "id": "prj_hMkbKCUGC4X5R4mLIj51"
+              },
+              {
+                "name": "palette-focus-18",
+                "id": "prj_h2ZwWNJldkn3FDN0z79L"
+              },
+              {
+                "name": "palette-focus-17",
+                "id": "prj_hrcsycQTgjDmuqkk8Xjt"
+              },
+              {
+                "name": "palette-focus-16",
+                "id": "prj_hKPmEGfPCbpwyIfsUvRR"
+              },
+              {
+                "name": "palette-focus-15",
+                "id": "prj_hDeMp5kHtYvX1l49zp6Q"
+              },
+              {
+                "name": "palette-focus-14",
+                "id": "prj_hUnojdjO1jkbTXnTKGgr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309151651,
+              "rowKey": "project:prj_hUnojdjO1jkbTXnTKGgr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "c0b83d2d-a7a7-4266-9afd-55e9832f17c7",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-13",
+                "id": "prj_hLqMjuHHQoIaup1ndxzt"
+              },
+              {
+                "name": "palette-focus-12",
+                "id": "prj_hBLMd48fdPERJ3kO08bV"
+              },
+              {
+                "name": "palette-focus-11",
+                "id": "prj_hDTa1FvRUNKarf3ccaww"
+              },
+              {
+                "name": "palette-focus-10",
+                "id": "prj_hPixpyY5NR0qab0qSvTI"
+              },
+              {
+                "name": "palette-focus-09",
+                "id": "prj_hknIw3Zr9tCe7pXPxNIE"
+              },
+              {
+                "name": "palette-focus-08",
+                "id": "prj_hPs3Dj4b899ahtE4dwM6"
+              },
+              {
+                "name": "palette-focus-07",
+                "id": "prj_hHADgFllECzQueqfdjIL"
+              },
+              {
+                "name": "palette-focus-06",
+                "id": "prj_hGgM3hgYA3FqXdgn3cbi"
+              },
+              {
+                "name": "palette-focus-05",
+                "id": "prj_hhIIoQiXMZbxLgUMgXNx"
+              },
+              {
+                "name": "palette-focus-04",
+                "id": "prj_hZECjRtSMDR5THJvnbqp"
+              },
+              {
+                "name": "palette-focus-03",
+                "id": "prj_hzyZgl077TN2QwwxvYwh"
+              },
+              {
+                "name": "palette-focus-02",
+                "id": "prj_hws0EuSCKrmL7Jo6yXmf"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309151444,
+              "rowKey": "project:prj_hws0EuSCKrmL7Jo6yXmf"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "5a00b79f-3be3-4fbe-b9cf-227bbc2a0785",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-01",
+                "id": "prj_hwJBciKurO1n6AWQrLB8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      },
+      "after": {
+        "asset": "main-cDbxUg_6.js",
+        "ui": {
+          "status": 200,
+          "requestID": "f1a7fd41-04a6-417b-bcb9-e1968d337738"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "acc9f3b1-014a-44ca-8237-96777e593ce3"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "b1324acb-2e29-4bca-bd49-7925bd056596",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "efce866b-2014-41fc-a9bc-40f240284949",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-25",
+                "id": "prj_h5zrHIgTM9LeO1At9JKZ"
+              },
+              {
+                "name": "palette-focus-24",
+                "id": "prj_hJKhtXEaCePVwJW8TZTQ"
+              },
+              {
+                "name": "palette-focus-23",
+                "id": "prj_hGJYiOxqfvTci1PO8bgc"
+              },
+              {
+                "name": "palette-focus-22",
+                "id": "prj_hWN24FLKH4UFFKvFP58G"
+              },
+              {
+                "name": "palette-focus-21",
+                "id": "prj_hRf1lgnLZgBUAO3Ka100"
+              },
+              {
+                "name": "palette-focus-20",
+                "id": "prj_h69lc8SYFEdNbrXa10UV"
+              },
+              {
+                "name": "palette-focus-19",
+                "id": "prj_hMkbKCUGC4X5R4mLIj51"
+              },
+              {
+                "name": "palette-focus-18",
+                "id": "prj_h2ZwWNJldkn3FDN0z79L"
+              },
+              {
+                "name": "palette-focus-17",
+                "id": "prj_hrcsycQTgjDmuqkk8Xjt"
+              },
+              {
+                "name": "palette-focus-16",
+                "id": "prj_hKPmEGfPCbpwyIfsUvRR"
+              },
+              {
+                "name": "palette-focus-15",
+                "id": "prj_hDeMp5kHtYvX1l49zp6Q"
+              },
+              {
+                "name": "palette-focus-14",
+                "id": "prj_hUnojdjO1jkbTXnTKGgr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309151651,
+              "rowKey": "project:prj_hUnojdjO1jkbTXnTKGgr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "7597eacb-3b68-4943-af71-3a9e558aff77",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-13",
+                "id": "prj_hLqMjuHHQoIaup1ndxzt"
+              },
+              {
+                "name": "palette-focus-12",
+                "id": "prj_hBLMd48fdPERJ3kO08bV"
+              },
+              {
+                "name": "palette-focus-11",
+                "id": "prj_hDTa1FvRUNKarf3ccaww"
+              },
+              {
+                "name": "palette-focus-10",
+                "id": "prj_hPixpyY5NR0qab0qSvTI"
+              },
+              {
+                "name": "palette-focus-09",
+                "id": "prj_hknIw3Zr9tCe7pXPxNIE"
+              },
+              {
+                "name": "palette-focus-08",
+                "id": "prj_hPs3Dj4b899ahtE4dwM6"
+              },
+              {
+                "name": "palette-focus-07",
+                "id": "prj_hHADgFllECzQueqfdjIL"
+              },
+              {
+                "name": "palette-focus-06",
+                "id": "prj_hGgM3hgYA3FqXdgn3cbi"
+              },
+              {
+                "name": "palette-focus-05",
+                "id": "prj_hhIIoQiXMZbxLgUMgXNx"
+              },
+              {
+                "name": "palette-focus-04",
+                "id": "prj_hZECjRtSMDR5THJvnbqp"
+              },
+              {
+                "name": "palette-focus-03",
+                "id": "prj_hzyZgl077TN2QwwxvYwh"
+              },
+              {
+                "name": "palette-focus-02",
+                "id": "prj_hws0EuSCKrmL7Jo6yXmf"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309151444,
+              "rowKey": "project:prj_hws0EuSCKrmL7Jo6yXmf"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "cd322959-200a-4d01-902a-4d02fc4a80a0",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-01",
+                "id": "prj_hwJBciKurO1n6AWQrLB8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      }
+    },
+    "candidate": {
+      "before": {
+        "asset": "main-qc7zjQwP.js",
+        "ui": {
+          "status": 200,
+          "requestID": "1535cad8-2cc4-4f35-a3ec-a7f7e9e0d3f1"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "0e72cda6-51aa-4057-9842-c5f85488455e"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "6c8a5a68-83d4-42af-b07d-4c74a3886b0c",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [
+          {
+            "name": "palette-focus-01",
+            "id": "prj_hwJBciKurO1n6AWQrLB8",
+            "status": 200,
+            "requestID": "0e568c3a-414c-4a94-ba0c-18c559d54907",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-02",
+            "id": "prj_hws0EuSCKrmL7Jo6yXmf",
+            "status": 200,
+            "requestID": "283a94ab-1fad-4ab5-aaa5-da15eca9ee6a",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-03",
+            "id": "prj_hzyZgl077TN2QwwxvYwh",
+            "status": 200,
+            "requestID": "cc715567-2d7f-40b4-b747-cceb01657878",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-04",
+            "id": "prj_hZECjRtSMDR5THJvnbqp",
+            "status": 200,
+            "requestID": "fbd377a2-b829-40db-83fe-4ac0fc54b632",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-05",
+            "id": "prj_hhIIoQiXMZbxLgUMgXNx",
+            "status": 200,
+            "requestID": "0737ce1f-a90c-4ed2-b5e5-a5059dd4b415",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-06",
+            "id": "prj_hGgM3hgYA3FqXdgn3cbi",
+            "status": 200,
+            "requestID": "a0b0ed66-fff0-4f11-90a0-9137888734d1",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-07",
+            "id": "prj_hHADgFllECzQueqfdjIL",
+            "status": 200,
+            "requestID": "a712bb8f-9386-48f7-916e-6adfad430a49",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-08",
+            "id": "prj_hPs3Dj4b899ahtE4dwM6",
+            "status": 200,
+            "requestID": "3fc1d210-c18b-4b8b-ab9b-fe5e7fe393e3",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-09",
+            "id": "prj_hknIw3Zr9tCe7pXPxNIE",
+            "status": 200,
+            "requestID": "358271b0-46fb-4d02-aca2-c9260b783ba2",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-10",
+            "id": "prj_hPixpyY5NR0qab0qSvTI",
+            "status": 200,
+            "requestID": "11d71b12-9c3b-47d6-ad40-cbcc72fbe007",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-11",
+            "id": "prj_hDTa1FvRUNKarf3ccaww",
+            "status": 200,
+            "requestID": "2ce7597c-d9fe-48b1-b5d3-ff2d7305b916",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-12",
+            "id": "prj_hBLMd48fdPERJ3kO08bV",
+            "status": 200,
+            "requestID": "795342d7-2624-4b91-9965-fa8b3c9ccf32",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-13",
+            "id": "prj_hLqMjuHHQoIaup1ndxzt",
+            "status": 200,
+            "requestID": "2bf7a3d4-bb6b-486a-9342-02264a4ed0a7",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-14",
+            "id": "prj_hUnojdjO1jkbTXnTKGgr",
+            "status": 200,
+            "requestID": "cbb6e505-c422-4644-b46f-f7c6a71e802c",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-15",
+            "id": "prj_hDeMp5kHtYvX1l49zp6Q",
+            "status": 200,
+            "requestID": "cd8ed441-b33a-440b-8da5-c8c036efb5a2",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-16",
+            "id": "prj_hKPmEGfPCbpwyIfsUvRR",
+            "status": 200,
+            "requestID": "826d5d76-01bc-4f5f-a73b-a3767acff015",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-17",
+            "id": "prj_hrcsycQTgjDmuqkk8Xjt",
+            "status": 200,
+            "requestID": "6522c433-4f23-4f9d-8915-89747cd9a99a",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-18",
+            "id": "prj_h2ZwWNJldkn3FDN0z79L",
+            "status": 200,
+            "requestID": "debcd412-12e0-44cb-9d06-3cfd0b5f974e",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-19",
+            "id": "prj_hMkbKCUGC4X5R4mLIj51",
+            "status": 200,
+            "requestID": "9f6c4782-fbd8-48b3-be05-aa0cb37d49e5",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-20",
+            "id": "prj_h69lc8SYFEdNbrXa10UV",
+            "status": 200,
+            "requestID": "cc380fde-01d6-43fb-b1d1-476532d0a4f1",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-21",
+            "id": "prj_hRf1lgnLZgBUAO3Ka100",
+            "status": 200,
+            "requestID": "99280cf5-3a72-4d3b-b681-35816a1f426e",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-22",
+            "id": "prj_hWN24FLKH4UFFKvFP58G",
+            "status": 200,
+            "requestID": "78eb3894-b2ff-48ce-b18c-cbb429aa2c82",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-23",
+            "id": "prj_hGJYiOxqfvTci1PO8bgc",
+            "status": 200,
+            "requestID": "4a0aca25-f436-46bf-af1e-5bcf865a78f8",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-24",
+            "id": "prj_hJKhtXEaCePVwJW8TZTQ",
+            "status": 200,
+            "requestID": "337daa5d-8f9e-4fc6-9ee1-8b26c78a9f69",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-25",
+            "id": "prj_h5zrHIgTM9LeO1At9JKZ",
+            "status": 200,
+            "requestID": "c88cfc68-269a-4f32-a5d7-04b06c7a9a8c",
+            "operation": "project.current"
+          }
+        ],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "73af7037-7a6e-49d9-8dc2-d21b74d9824e",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-25",
+                "id": "prj_h5zrHIgTM9LeO1At9JKZ"
+              },
+              {
+                "name": "palette-focus-24",
+                "id": "prj_hJKhtXEaCePVwJW8TZTQ"
+              },
+              {
+                "name": "palette-focus-23",
+                "id": "prj_hGJYiOxqfvTci1PO8bgc"
+              },
+              {
+                "name": "palette-focus-22",
+                "id": "prj_hWN24FLKH4UFFKvFP58G"
+              },
+              {
+                "name": "palette-focus-21",
+                "id": "prj_hRf1lgnLZgBUAO3Ka100"
+              },
+              {
+                "name": "palette-focus-20",
+                "id": "prj_h69lc8SYFEdNbrXa10UV"
+              },
+              {
+                "name": "palette-focus-19",
+                "id": "prj_hMkbKCUGC4X5R4mLIj51"
+              },
+              {
+                "name": "palette-focus-18",
+                "id": "prj_h2ZwWNJldkn3FDN0z79L"
+              },
+              {
+                "name": "palette-focus-17",
+                "id": "prj_hrcsycQTgjDmuqkk8Xjt"
+              },
+              {
+                "name": "palette-focus-16",
+                "id": "prj_hKPmEGfPCbpwyIfsUvRR"
+              },
+              {
+                "name": "palette-focus-15",
+                "id": "prj_hDeMp5kHtYvX1l49zp6Q"
+              },
+              {
+                "name": "palette-focus-14",
+                "id": "prj_hUnojdjO1jkbTXnTKGgr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309503245,
+              "rowKey": "project:prj_hUnojdjO1jkbTXnTKGgr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "30455274-c0e3-4ccd-bc6b-2f5768b35101",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-13",
+                "id": "prj_hLqMjuHHQoIaup1ndxzt"
+              },
+              {
+                "name": "palette-focus-12",
+                "id": "prj_hBLMd48fdPERJ3kO08bV"
+              },
+              {
+                "name": "palette-focus-11",
+                "id": "prj_hDTa1FvRUNKarf3ccaww"
+              },
+              {
+                "name": "palette-focus-10",
+                "id": "prj_hPixpyY5NR0qab0qSvTI"
+              },
+              {
+                "name": "palette-focus-09",
+                "id": "prj_hknIw3Zr9tCe7pXPxNIE"
+              },
+              {
+                "name": "palette-focus-08",
+                "id": "prj_hPs3Dj4b899ahtE4dwM6"
+              },
+              {
+                "name": "palette-focus-07",
+                "id": "prj_hHADgFllECzQueqfdjIL"
+              },
+              {
+                "name": "palette-focus-06",
+                "id": "prj_hGgM3hgYA3FqXdgn3cbi"
+              },
+              {
+                "name": "palette-focus-05",
+                "id": "prj_hhIIoQiXMZbxLgUMgXNx"
+              },
+              {
+                "name": "palette-focus-04",
+                "id": "prj_hZECjRtSMDR5THJvnbqp"
+              },
+              {
+                "name": "palette-focus-03",
+                "id": "prj_hzyZgl077TN2QwwxvYwh"
+              },
+              {
+                "name": "palette-focus-02",
+                "id": "prj_hws0EuSCKrmL7Jo6yXmf"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309503033,
+              "rowKey": "project:prj_hws0EuSCKrmL7Jo6yXmf"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "51a6d761-47f3-40ea-ab17-a211d9669d39",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-01",
+                "id": "prj_hwJBciKurO1n6AWQrLB8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      },
+      "after": {
+        "asset": "main-qc7zjQwP.js",
+        "ui": {
+          "status": 200,
+          "requestID": "971bc08a-2f97-43c1-a6a7-dcd07ef4cb0f"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "6281edd8-5e7a-4f06-8119-33a368c1cf72"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "1248d72b-5833-4da2-8393-4531697dcac4",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "b3cde7f3-fc91-4a0c-8b44-296b3daad180",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-25",
+                "id": "prj_h5zrHIgTM9LeO1At9JKZ"
+              },
+              {
+                "name": "palette-focus-24",
+                "id": "prj_hJKhtXEaCePVwJW8TZTQ"
+              },
+              {
+                "name": "palette-focus-23",
+                "id": "prj_hGJYiOxqfvTci1PO8bgc"
+              },
+              {
+                "name": "palette-focus-22",
+                "id": "prj_hWN24FLKH4UFFKvFP58G"
+              },
+              {
+                "name": "palette-focus-21",
+                "id": "prj_hRf1lgnLZgBUAO3Ka100"
+              },
+              {
+                "name": "palette-focus-20",
+                "id": "prj_h69lc8SYFEdNbrXa10UV"
+              },
+              {
+                "name": "palette-focus-19",
+                "id": "prj_hMkbKCUGC4X5R4mLIj51"
+              },
+              {
+                "name": "palette-focus-18",
+                "id": "prj_h2ZwWNJldkn3FDN0z79L"
+              },
+              {
+                "name": "palette-focus-17",
+                "id": "prj_hrcsycQTgjDmuqkk8Xjt"
+              },
+              {
+                "name": "palette-focus-16",
+                "id": "prj_hKPmEGfPCbpwyIfsUvRR"
+              },
+              {
+                "name": "palette-focus-15",
+                "id": "prj_hDeMp5kHtYvX1l49zp6Q"
+              },
+              {
+                "name": "palette-focus-14",
+                "id": "prj_hUnojdjO1jkbTXnTKGgr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309503245,
+              "rowKey": "project:prj_hUnojdjO1jkbTXnTKGgr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "40878351-8e45-40a7-b5ff-fcfc3ea6afdd",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-13",
+                "id": "prj_hLqMjuHHQoIaup1ndxzt"
+              },
+              {
+                "name": "palette-focus-12",
+                "id": "prj_hBLMd48fdPERJ3kO08bV"
+              },
+              {
+                "name": "palette-focus-11",
+                "id": "prj_hDTa1FvRUNKarf3ccaww"
+              },
+              {
+                "name": "palette-focus-10",
+                "id": "prj_hPixpyY5NR0qab0qSvTI"
+              },
+              {
+                "name": "palette-focus-09",
+                "id": "prj_hknIw3Zr9tCe7pXPxNIE"
+              },
+              {
+                "name": "palette-focus-08",
+                "id": "prj_hPs3Dj4b899ahtE4dwM6"
+              },
+              {
+                "name": "palette-focus-07",
+                "id": "prj_hHADgFllECzQueqfdjIL"
+              },
+              {
+                "name": "palette-focus-06",
+                "id": "prj_hGgM3hgYA3FqXdgn3cbi"
+              },
+              {
+                "name": "palette-focus-05",
+                "id": "prj_hhIIoQiXMZbxLgUMgXNx"
+              },
+              {
+                "name": "palette-focus-04",
+                "id": "prj_hZECjRtSMDR5THJvnbqp"
+              },
+              {
+                "name": "palette-focus-03",
+                "id": "prj_hzyZgl077TN2QwwxvYwh"
+              },
+              {
+                "name": "palette-focus-02",
+                "id": "prj_hws0EuSCKrmL7Jo6yXmf"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309503033,
+              "rowKey": "project:prj_hws0EuSCKrmL7Jo6yXmf"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "22b4c873-7d0d-4d26-9caf-faa2b1faed3e",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-01",
+                "id": "prj_hwJBciKurO1n6AWQrLB8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      }
+    },
+    "final": {
+      "before": {
+        "asset": "main-Cr118BQ9.js",
+        "ui": {
+          "status": 200,
+          "requestID": "933c4d05-81b5-4ad2-a13f-39239ab6df5b"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "191db692-7504-4d14-a66e-4c89717f1361"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "a3d04dc6-c35b-46c4-88a4-52df9a718efd",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [
+          {
+            "name": "palette-focus-01",
+            "id": "prj_hwJBciKurO1n6AWQrLB8",
+            "status": 200,
+            "requestID": "4a27144c-b8cc-4f48-82f3-c16fe7be101a",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-02",
+            "id": "prj_hws0EuSCKrmL7Jo6yXmf",
+            "status": 200,
+            "requestID": "3e93ffe4-278e-49b0-af1c-d8b400bf75fe",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-03",
+            "id": "prj_hzyZgl077TN2QwwxvYwh",
+            "status": 200,
+            "requestID": "c0508920-14da-4daa-84f1-e43d742a433c",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-04",
+            "id": "prj_hZECjRtSMDR5THJvnbqp",
+            "status": 200,
+            "requestID": "fa399c78-6ccf-43cc-88b4-f91dce8f3180",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-05",
+            "id": "prj_hhIIoQiXMZbxLgUMgXNx",
+            "status": 200,
+            "requestID": "1e17e807-77e4-490c-98c2-77e66b7e40ed",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-06",
+            "id": "prj_hGgM3hgYA3FqXdgn3cbi",
+            "status": 200,
+            "requestID": "1165783f-dc29-4413-b24b-08538f16f406",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-07",
+            "id": "prj_hHADgFllECzQueqfdjIL",
+            "status": 200,
+            "requestID": "37d20c57-8444-41a1-84e7-c57b11a0a354",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-08",
+            "id": "prj_hPs3Dj4b899ahtE4dwM6",
+            "status": 200,
+            "requestID": "df829100-e7b8-467e-8cc7-8d46f876747d",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-09",
+            "id": "prj_hknIw3Zr9tCe7pXPxNIE",
+            "status": 200,
+            "requestID": "d136fc45-8b7b-47aa-9326-e3d9de520b27",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-10",
+            "id": "prj_hPixpyY5NR0qab0qSvTI",
+            "status": 200,
+            "requestID": "bc372ec4-e487-4bb0-a6d4-1f293a04a502",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-11",
+            "id": "prj_hDTa1FvRUNKarf3ccaww",
+            "status": 200,
+            "requestID": "374bf70e-d3ef-4952-9245-84af352f88d2",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-12",
+            "id": "prj_hBLMd48fdPERJ3kO08bV",
+            "status": 200,
+            "requestID": "366207eb-2c6c-499b-bee9-a688126d59ba",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-13",
+            "id": "prj_hLqMjuHHQoIaup1ndxzt",
+            "status": 200,
+            "requestID": "1c266c4f-4cdc-487d-9475-0fa717ce7a88",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-14",
+            "id": "prj_hUnojdjO1jkbTXnTKGgr",
+            "status": 200,
+            "requestID": "9eafc0e8-d4e2-4ea9-a69b-08cfb4f3eeb0",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-15",
+            "id": "prj_hDeMp5kHtYvX1l49zp6Q",
+            "status": 200,
+            "requestID": "6938ad61-6180-48f2-b665-631acf0c9deb",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-16",
+            "id": "prj_hKPmEGfPCbpwyIfsUvRR",
+            "status": 200,
+            "requestID": "b7e0b0e9-9025-49b3-9e00-cf546781ad3e",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-17",
+            "id": "prj_hrcsycQTgjDmuqkk8Xjt",
+            "status": 200,
+            "requestID": "d66a38b6-d23e-4d4a-87eb-4d01c953fc7a",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-18",
+            "id": "prj_h2ZwWNJldkn3FDN0z79L",
+            "status": 200,
+            "requestID": "fda21e67-92f6-4fc2-81ff-db2d4b5dd8bf",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-19",
+            "id": "prj_hMkbKCUGC4X5R4mLIj51",
+            "status": 200,
+            "requestID": "cfe948dd-e9a7-4ce3-b823-97720d6ded05",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-20",
+            "id": "prj_h69lc8SYFEdNbrXa10UV",
+            "status": 200,
+            "requestID": "2c4d95ef-be72-4cbe-a91e-93946290886e",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-21",
+            "id": "prj_hRf1lgnLZgBUAO3Ka100",
+            "status": 200,
+            "requestID": "a7f84b01-bae8-4389-9730-c0acbf5bb14a",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-22",
+            "id": "prj_hWN24FLKH4UFFKvFP58G",
+            "status": 200,
+            "requestID": "933cd290-b4d1-4b69-ad62-15cb9cb3e2e3",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-23",
+            "id": "prj_hGJYiOxqfvTci1PO8bgc",
+            "status": 200,
+            "requestID": "20a34780-b0d2-4839-a4f3-dd3ff50334d3",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-24",
+            "id": "prj_hJKhtXEaCePVwJW8TZTQ",
+            "status": 200,
+            "requestID": "b6d11a90-bb9d-49f4-9f5b-1bf47f1e0635",
+            "operation": "project.current"
+          },
+          {
+            "name": "palette-focus-25",
+            "id": "prj_h5zrHIgTM9LeO1At9JKZ",
+            "status": 200,
+            "requestID": "61ced2b6-6b9a-4e37-abe1-698de4ab186c",
+            "operation": "project.current"
+          }
+        ],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "b1e828e6-7c7a-47e9-b453-d0a630dfeeeb",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-25",
+                "id": "prj_h5zrHIgTM9LeO1At9JKZ"
+              },
+              {
+                "name": "palette-focus-24",
+                "id": "prj_hJKhtXEaCePVwJW8TZTQ"
+              },
+              {
+                "name": "palette-focus-23",
+                "id": "prj_hGJYiOxqfvTci1PO8bgc"
+              },
+              {
+                "name": "palette-focus-22",
+                "id": "prj_hWN24FLKH4UFFKvFP58G"
+              },
+              {
+                "name": "palette-focus-21",
+                "id": "prj_hRf1lgnLZgBUAO3Ka100"
+              },
+              {
+                "name": "palette-focus-20",
+                "id": "prj_h69lc8SYFEdNbrXa10UV"
+              },
+              {
+                "name": "palette-focus-19",
+                "id": "prj_hMkbKCUGC4X5R4mLIj51"
+              },
+              {
+                "name": "palette-focus-18",
+                "id": "prj_h2ZwWNJldkn3FDN0z79L"
+              },
+              {
+                "name": "palette-focus-17",
+                "id": "prj_hrcsycQTgjDmuqkk8Xjt"
+              },
+              {
+                "name": "palette-focus-16",
+                "id": "prj_hKPmEGfPCbpwyIfsUvRR"
+              },
+              {
+                "name": "palette-focus-15",
+                "id": "prj_hDeMp5kHtYvX1l49zp6Q"
+              },
+              {
+                "name": "palette-focus-14",
+                "id": "prj_hUnojdjO1jkbTXnTKGgr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309698948,
+              "rowKey": "project:prj_hUnojdjO1jkbTXnTKGgr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "13f8ce13-57f4-46ef-83d0-51a970b72e71",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-13",
+                "id": "prj_hLqMjuHHQoIaup1ndxzt"
+              },
+              {
+                "name": "palette-focus-12",
+                "id": "prj_hBLMd48fdPERJ3kO08bV"
+              },
+              {
+                "name": "palette-focus-11",
+                "id": "prj_hDTa1FvRUNKarf3ccaww"
+              },
+              {
+                "name": "palette-focus-10",
+                "id": "prj_hPixpyY5NR0qab0qSvTI"
+              },
+              {
+                "name": "palette-focus-09",
+                "id": "prj_hknIw3Zr9tCe7pXPxNIE"
+              },
+              {
+                "name": "palette-focus-08",
+                "id": "prj_hPs3Dj4b899ahtE4dwM6"
+              },
+              {
+                "name": "palette-focus-07",
+                "id": "prj_hHADgFllECzQueqfdjIL"
+              },
+              {
+                "name": "palette-focus-06",
+                "id": "prj_hGgM3hgYA3FqXdgn3cbi"
+              },
+              {
+                "name": "palette-focus-05",
+                "id": "prj_hhIIoQiXMZbxLgUMgXNx"
+              },
+              {
+                "name": "palette-focus-04",
+                "id": "prj_hZECjRtSMDR5THJvnbqp"
+              },
+              {
+                "name": "palette-focus-03",
+                "id": "prj_hzyZgl077TN2QwwxvYwh"
+              },
+              {
+                "name": "palette-focus-02",
+                "id": "prj_hws0EuSCKrmL7Jo6yXmf"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309698749,
+              "rowKey": "project:prj_hws0EuSCKrmL7Jo6yXmf"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "c3d46ec5-486e-41f8-81da-2cf44844f2f2",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-01",
+                "id": "prj_hwJBciKurO1n6AWQrLB8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      },
+      "after": {
+        "asset": "main-Cr118BQ9.js",
+        "ui": {
+          "status": 200,
+          "requestID": "505511ec-faf2-4a78-ab82-863c59065fe0"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "94520056-e691-4bc1-a240-0d103ac6f0c2"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "84d5fd86-7c8b-4250-baa6-35b2f8220176",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "8bc7cbb7-51b3-483d-aad4-2c58c3bf3025",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-25",
+                "id": "prj_h5zrHIgTM9LeO1At9JKZ"
+              },
+              {
+                "name": "palette-focus-24",
+                "id": "prj_hJKhtXEaCePVwJW8TZTQ"
+              },
+              {
+                "name": "palette-focus-23",
+                "id": "prj_hGJYiOxqfvTci1PO8bgc"
+              },
+              {
+                "name": "palette-focus-22",
+                "id": "prj_hWN24FLKH4UFFKvFP58G"
+              },
+              {
+                "name": "palette-focus-21",
+                "id": "prj_hRf1lgnLZgBUAO3Ka100"
+              },
+              {
+                "name": "palette-focus-20",
+                "id": "prj_h69lc8SYFEdNbrXa10UV"
+              },
+              {
+                "name": "palette-focus-19",
+                "id": "prj_hMkbKCUGC4X5R4mLIj51"
+              },
+              {
+                "name": "palette-focus-18",
+                "id": "prj_h2ZwWNJldkn3FDN0z79L"
+              },
+              {
+                "name": "palette-focus-17",
+                "id": "prj_hrcsycQTgjDmuqkk8Xjt"
+              },
+              {
+                "name": "palette-focus-16",
+                "id": "prj_hKPmEGfPCbpwyIfsUvRR"
+              },
+              {
+                "name": "palette-focus-15",
+                "id": "prj_hDeMp5kHtYvX1l49zp6Q"
+              },
+              {
+                "name": "palette-focus-14",
+                "id": "prj_hUnojdjO1jkbTXnTKGgr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309698948,
+              "rowKey": "project:prj_hUnojdjO1jkbTXnTKGgr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "c4c978ac-e9ee-42bd-8715-4abc52f83049",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-13",
+                "id": "prj_hLqMjuHHQoIaup1ndxzt"
+              },
+              {
+                "name": "palette-focus-12",
+                "id": "prj_hBLMd48fdPERJ3kO08bV"
+              },
+              {
+                "name": "palette-focus-11",
+                "id": "prj_hDTa1FvRUNKarf3ccaww"
+              },
+              {
+                "name": "palette-focus-10",
+                "id": "prj_hPixpyY5NR0qab0qSvTI"
+              },
+              {
+                "name": "palette-focus-09",
+                "id": "prj_hknIw3Zr9tCe7pXPxNIE"
+              },
+              {
+                "name": "palette-focus-08",
+                "id": "prj_hPs3Dj4b899ahtE4dwM6"
+              },
+              {
+                "name": "palette-focus-07",
+                "id": "prj_hHADgFllECzQueqfdjIL"
+              },
+              {
+                "name": "palette-focus-06",
+                "id": "prj_hGgM3hgYA3FqXdgn3cbi"
+              },
+              {
+                "name": "palette-focus-05",
+                "id": "prj_hhIIoQiXMZbxLgUMgXNx"
+              },
+              {
+                "name": "palette-focus-04",
+                "id": "prj_hZECjRtSMDR5THJvnbqp"
+              },
+              {
+                "name": "palette-focus-03",
+                "id": "prj_hzyZgl077TN2QwwxvYwh"
+              },
+              {
+                "name": "palette-focus-02",
+                "id": "prj_hws0EuSCKrmL7Jo6yXmf"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794309698749,
+              "rowKey": "project:prj_hws0EuSCKrmL7Jo6yXmf"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "abd74e65-64d8-4acc-bef1-a32ebf18d5d5",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "palette-focus-01",
+                "id": "prj_hwJBciKurO1n6AWQrLB8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      }
+    }
+  },
+  "browserContinuations": {
+    "baseline": [
+      {
+        "time": "2026-11-10T11:13:33.266Z",
+        "path": "/work-ledger",
+        "requestID": "d98f0d69-6f02-4177-ad0a-9fb5225ca9ee",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2892,
+        "delivered": 2892,
+        "heldMs": 7007
+      },
+      {
+        "time": "2026-11-10T11:13:45.526Z",
+        "path": "/work-ledger",
+        "requestID": "26b5c432-de13-4b81-a7d3-aae632f75377",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 260,
+        "delivered": 1
+      }
+    ],
+    "candidate": [
+      {
+        "time": "2026-11-10T11:18:53.718Z",
+        "path": "/work-ledger",
+        "requestID": "58190321-c7b1-4b3a-bf8e-b7b49388e608",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2892,
+        "delivered": 2892,
+        "requestedCursor": "project:prj_hUnojdjO1jkbTXnTKGgr",
+        "rows": 12,
+        "nextCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "heldMs": 4035
+      },
+      {
+        "time": "2026-11-10T11:19:05.628Z",
+        "path": "/work-ledger",
+        "requestID": "7af33f0e-e3f2-4d7b-bf88-5bad5dc2bcb7",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 260,
+        "delivered": 1,
+        "requestedCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "rows": 1,
+        "nextCursor": null
+      },
+      {
+        "time": "2026-11-10T11:19:32.877Z",
+        "path": "/work-ledger",
+        "requestID": "e80906be-e39d-4f49-8df4-5a0d3b5230ff",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 260,
+        "delivered": 260,
+        "requestedCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "rows": 1,
+        "nextCursor": null,
+        "heldMs": 6485
+      }
+    ],
+    "final": [
+      {
+        "time": "2026-11-10T11:22:23.776Z",
+        "path": "/work-ledger",
+        "requestID": "e81d5851-b1dc-46b0-a0ce-06a8bd4c4382",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2892,
+        "delivered": 2892,
+        "requestedCursor": "project:prj_hUnojdjO1jkbTXnTKGgr",
+        "rows": 12,
+        "nextCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "heldMs": 8366
+      },
+      {
+        "time": "2026-11-10T11:22:37.045Z",
+        "path": "/work-ledger",
+        "requestID": "dbf25cde-9b04-4462-ad07-e0761ab39afe",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 260,
+        "delivered": 1,
+        "requestedCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "rows": 1,
+        "nextCursor": null
+      },
+      {
+        "time": "2026-11-10T11:22:53.967Z",
+        "path": "/work-ledger",
+        "requestID": "259ecf89-2189-485a-8305-66d95495308c",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 260,
+        "delivered": 260,
+        "requestedCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "rows": 1,
+        "nextCursor": null,
+        "heldMs": 4809
+      },
+      {
+        "time": "2026-11-10T11:23:35.730Z",
+        "path": "/work-ledger",
+        "requestID": "65bd5940-cefb-445a-b205-c1ce81ab60b6",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2892,
+        "delivered": 2892,
+        "requestedCursor": "project:prj_hUnojdjO1jkbTXnTKGgr",
+        "rows": 12,
+        "nextCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "heldMs": 3785
+      },
+      {
+        "time": "2026-11-10T11:23:50.301Z",
+        "path": "/work-ledger",
+        "requestID": "3f33175e-fd5f-4afe-8b10-54ef26529159",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 260,
+        "delivered": 1,
+        "requestedCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "rows": 1,
+        "nextCursor": null
+      },
+      {
+        "time": "2026-11-10T11:23:59.254Z",
+        "path": "/work-ledger",
+        "requestID": "57a4725d-4f60-4259-ae87-b917439b6812",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 260,
+        "delivered": 260,
+        "requestedCursor": "project:prj_hws0EuSCKrmL7Jo6yXmf",
+        "rows": 1,
+        "nextCursor": null
+      }
+    ]
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b210-baseline",
+      "apiPort": 39599,
+      "proxyPort": 39600,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b210-candidate",
+      "apiPort": 39601,
+      "proxyPort": 39602,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b210-final",
+      "apiPort": 39603,
+      "proxyPort": 39604,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "sampleFilesUnchanged": true
+}
