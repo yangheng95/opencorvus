@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [项目路径与 Git 状态分别结算](records/2026-11/2026-11-10-project-path-and-git-read-settlement.md)
 - [文件图片与 PDF 预览的键盘入口](records/2026-11/2026-11-10-file-media-preview-entry-focus.md)
 - [不可预览文件的下载入口与恢复](records/2026-11/2026-11-10-file-binary-download-action.md)
 - [从技能库已安装区直接选择工作区](records/2026-11/2026-11-10-skill-library-choose-workspace.md)

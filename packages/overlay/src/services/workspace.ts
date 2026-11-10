@@ -251,8 +251,11 @@ export function clearProjectScopeData(): void {
     path: null,
     vcs: null,
     vcsDirectory: "",
+    metadataAuthorityRevision: null,
+    pathLoading: false,
+    pathError: null,
     vcsLoading: false,
-    vcsError: "",
+    vcsError: null,
     changes: [],
     planPreview: "",
     specPreview: "",
@@ -361,6 +364,7 @@ function readWorkspaceDirectoryFailure(error: unknown): WorkspaceDirectoryFailur
 }
 
 export function isMissingProjectDirectoryError(error: unknown, directory: string): boolean {
+  if (error instanceof AggregateError) return error.errors.some((cause) => isMissingProjectDirectoryError(cause, directory))
   const failure = readWorkspaceDirectoryFailure(error)
   return failure?.kind === "missing" && projectDirectoryKey(failure.directory) === projectDirectoryKey(directory)
 }

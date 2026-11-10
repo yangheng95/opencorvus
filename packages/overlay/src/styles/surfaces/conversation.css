@@ -1833,6 +1833,7 @@
 }
 
 .project-worktree-head-actions .oc-button[data-busy="true"] svg,
+.project-runtime-project-row .oc-button[data-ui="project-runtime-meta-refresh"][data-busy="true"] svg,
 .project-runtime-info-row .oc-button[data-ui="project-init-git"][data-busy="true"] svg,
 .project-worktree-row .oc-button[data-ui="project-worktree-remove"][data-busy="true"] svg {
   animation: oc-spin var(--ui-duration-loop-spin) linear infinite;
@@ -1932,9 +1933,15 @@
 
 .project-runtime-project-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--ui-gap-md);
+}
+
+.project-runtime-meta-feedback .oc-feedback__diagnostic {
+  max-block-size: min(25vh, calc(160px * var(--ui-scale)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .project-runtime-branch-trigger.oc-button {

@@ -13,4 +13,6 @@ test("missing-directory recovery accepts the current project's normalized Window
   }, {}, "GET")
 
   expect(isMissingProjectDirectoryError(error, "c:/workspace/project/")).toBe(true)
+  const combined = new AggregateError([error, new Error("Git metadata unavailable")])
+  expect(isMissingProjectDirectoryError(combined, "c:/workspace/project/")).toBe(true)
 })

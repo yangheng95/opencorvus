@@ -200,6 +200,12 @@ current checkout. Runtime BranchUpdated subscriptions keep their original
 owner/disposal; branch switching explicitly reinitializes that owner after
 reset before returning fresh information. Git mutation and streamed commit
 message execution retain their existing runtime and prerequisite contracts.
+The environment panel settles the active project's path and Git information
+independently under the same request owner. A failed read retains its original
+diagnostic, while the other read can finish normally. A last confirmed Git
+snapshot belongs to its directory and connection; the panel labels it during
+a Git read failure. It can keep the separate worktree reader available, but
+does not supply current prerequisites for opening Git mutation actions.
 
 File Editor initial read failures retain one current original thrown value
 under the existing target, API authority and load/reload generations. Shared

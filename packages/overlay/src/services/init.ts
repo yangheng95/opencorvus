@@ -153,8 +153,11 @@ async function loadInitialData(
       path: null,
       vcs: null,
       vcsDirectory: "",
+      metadataAuthorityRevision: null,
+      pathLoading: false,
+      pathError: null,
       vcsLoading: false,
-      vcsError: "",
+      vcsError: null,
       changes: [],
     })
     return {

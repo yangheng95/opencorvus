@@ -1,7 +1,7 @@
 // ── Meta Service ──
 // TypeScript port of metadata and diff-normalization functions.
 
-import { boardStore, setBoardStore, setPath, setVcs } from "../store/board"
+import { boardStore, setBoardStore } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "../utils/error-details"
@@ -69,7 +69,14 @@ let metaRequest = 0
 
 export function retireMetaProjection(clear = true): void {
   metaRequest += 1
-  setBoardStore({ vcsLoading: false, vcsError: "", ...(clear ? { path: null, vcs: null, vcsDirectory: "" } : {}) })
+  setBoardStore({
+    metadataAuthorityRevision: null,
+    pathLoading: false,
+    pathError: null,
+    vcsLoading: false,
+    vcsError: null,
+    ...(clear ? { path: null, vcs: null, vcsDirectory: "" } : {}),
+  })
 }
 
 export async function loadMeta(directory = activeProjectDirectory(), authority = captureApiAuthority()): Promise<void> {
@@ -79,7 +86,7 @@ export async function loadMeta(directory = activeProjectDirectory(), authority =
   const epoch = settingsStore.directoryEpoch
   const request = ++metaRequest
   if (!directory) {
-    setBoardStore({ path: null, vcs: null, vcsDirectory: "", vcsLoading: false, vcsError: "" })
+    retireMetaProjection()
     return
   }
   const isCurrent = () =>
@@ -88,32 +95,44 @@ export async function loadMeta(directory = activeProjectDirectory(), authority =
     selectionEpoch === boardStore.selectEpoch &&
     epoch === settingsStore.directoryEpoch &&
     directory === activeProjectDirectory()
+  const sameScope = boardStore.vcsDirectory === directory && boardStore.metadataAuthorityRevision === authority.revision
   setBoardStore({
     vcsDirectory: directory,
+    metadataAuthorityRevision: authority.revision,
+    pathLoading: true,
     vcsLoading: true,
-    vcsError: "",
-    ...(boardStore.vcsDirectory !== directory ? { vcs: null } : {}),
+    ...(!sameScope ? { path: null, vcs: null, pathError: null, vcsError: null } : {}),
   })
-  try {
-    const [path, vcs] = await Promise.all([
-      apiJson(projectScopedPath("path", directory), { authority }),
-      apiJson(projectScopedPath("vcs", directory), { authority }),
-    ])
-    if (!isCurrent()) return
-    const resolvedDirectory = path && typeof path.directory === "string" ? path.directory.trim() : ""
-    setPath(resolvedDirectory ? { directory: resolvedDirectory } : null)
-    setVcs(vcs ?? null)
-  } catch (e) {
-    if (!isCurrent()) return
-    AppLog.debug("meta", "loadMeta failed", {
-      error: String(e),
-    })
-    if (!isCurrent()) return
-    setBoardStore({ vcs: null, vcsError: e instanceof Error ? e.message : String(e) })
-    throw e
-  } finally {
-    if (request === metaRequest) setBoardStore("vcsLoading", false)
+  const pathRead = apiJson(projectScopedPath("path", directory), { authority }).then(
+    (path) => {
+      if (!isCurrent()) return
+      const resolved = path && typeof path.directory === "string" ? path.directory.trim() : ""
+      setBoardStore({ path: resolved ? { directory: resolved } : null, pathLoading: false, pathError: null })
+    },
+    (cause: unknown) => {
+      if (isCurrent()) setBoardStore({ pathLoading: false, pathError: { cause } })
+      throw cause
+    },
+  )
+  const vcsRead = apiJson(projectScopedPath("vcs", directory), { authority }).then(
+    (vcs) => {
+      if (isCurrent()) setBoardStore({ vcs: vcs ?? null, vcsLoading: false, vcsError: null })
+    },
+    (cause: unknown) => {
+      if (isCurrent()) setBoardStore({ vcsLoading: false, vcsError: { cause } })
+      throw cause
+    },
+  )
+  const results = await Promise.allSettled([pathRead, vcsRead])
+  if (!isCurrent()) {
+    if (request === metaRequest) setBoardStore({ pathLoading: false, vcsLoading: false })
+    return
   }
+  const failures = results.flatMap((result) => result.status === "rejected" ? [result.reason as unknown] : [])
+  if (!failures.length) return
+  AppLog.debug("meta", "loadMeta failed", { errors: failures.map(String) })
+  if (failures.length === 1) throw failures[0]
+  throw new AggregateError(failures, failures.map(String).join("; "))
 }
 
 /** An accepted write remains accepted when only its current metadata refresh fails. */

@@ -32,6 +32,8 @@ export interface TaskSelectionError {
   details: string
 }
 
+export type ProjectMetadataFailure = { cause: unknown }
+
 export const [boardStore, setBoardStore] = createStore({
   board: null as any,
   tasks: [] as any[],
@@ -69,8 +71,11 @@ export const [boardStore, setBoardStore] = createStore({
   /** Git / VCS status object for the active task */
   vcs: null as any,
   vcsDirectory: "",
+  metadataAuthorityRevision: null as number | null,
+  pathLoading: false,
+  pathError: null as ProjectMetadataFailure | null,
   vcsLoading: false,
-  vcsError: "",
+  vcsError: null as ProjectMetadataFailure | null,
   // ── File changes (mirrors state.changes) ──
   /** File change entries for the current task's working tree */
   changes: [] as any[],
@@ -809,16 +814,6 @@ export function activeBrowserPreviewTaskID(): string {
 export function activeSessionID(): string {
   const source = boardStore.selectedSource
   return source?.kind === "session" ? source.id : ""
-}
-
-// ── VCS setters ──
-
-export function setPath(path: any): void {
-  setBoardStore("path", path ?? null)
-}
-
-export function setVcs(vcs: any): void {
-  setBoardStore("vcs", vcs ?? null)
 }
 
 // ── Changes setter ──

@@ -1,0 +1,860 @@
+{
+  "directReads": {
+    "baseline-before": {
+      "page": {
+        "status": 200,
+        "requestID": "45d043f6-9a5c-4119-b189-2f59654f4ef4",
+        "asset": "main-U1ElstGg.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "2554bdd7-f714-42cf-996a-e9417fc2bd6c"
+      },
+      "projects": [
+        {
+          "name": "alpha",
+          "paths": {
+            "status": 200,
+            "requestID": "959795ea-f3a8-48ca-a04b-bc42b1dd73a3",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "89bc6489-8a37-4a61-940c-25fef64495ca",
+            "operation": "vcs.get",
+            "initialized": true,
+            "branch": "review-branch",
+            "dirty": true
+          },
+          "session": {
+            "status": 201,
+            "requestID": "cd11b209-93b5-4393-a4f4-dc50c1cffc6d",
+            "operation": "coding.chat.session.create",
+            "id": "ses_h6DtVFQOLCZHqmKOg2TC"
+          }
+        },
+        {
+          "name": "beta",
+          "paths": {
+            "status": 200,
+            "requestID": "caef71e4-dc87-4227-b8a2-785cdd340392",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "ecd032da-8de3-4da2-946d-be95703463ee",
+            "operation": "vcs.get",
+            "initialized": false,
+            "dirty": false
+          },
+          "session": {
+            "status": 201,
+            "requestID": "aa38653c-8cbd-410e-b1f0-9eb968524ffa",
+            "operation": "coding.chat.session.create",
+            "id": "ses_h9KxtxQ2Bszk2IHfzgbB"
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "0235c188-3fa9-4a97-ba1e-f10904b1d720",
+        "connected": 0
+      }
+    },
+    "baseline-after": {
+      "page": {
+        "status": 200,
+        "requestID": "3daebc03-246d-436e-be7b-5f0df5e46941",
+        "asset": "main-U1ElstGg.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "a0c89d6a-44c9-426a-912b-6151925b007f"
+      },
+      "projects": [
+        {
+          "name": "alpha",
+          "paths": {
+            "status": 200,
+            "requestID": "f783908c-d008-4a6e-978f-141942ea378d",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "d16b02f2-65e8-40df-87da-626c3ef8b244",
+            "operation": "vcs.get",
+            "initialized": true,
+            "branch": "review-branch",
+            "dirty": true
+          }
+        },
+        {
+          "name": "beta",
+          "paths": {
+            "status": 200,
+            "requestID": "ff57f487-575a-4635-b87e-873326e98d58",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "340cd4c3-0cc9-4107-b3bc-895a6493d81f",
+            "operation": "vcs.get",
+            "initialized": false,
+            "dirty": false
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "24fed634-c7ed-45f8-a098-b65b627efc27",
+        "connected": 0
+      }
+    },
+    "candidate-before": {
+      "page": {
+        "status": 200,
+        "requestID": "c2d474fe-a836-4c5a-a16e-a8fb35985384",
+        "asset": "main-DxmdN56V.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "14d55eb7-5919-4fab-8641-341b645ac77e"
+      },
+      "projects": [
+        {
+          "name": "alpha",
+          "paths": {
+            "status": 200,
+            "requestID": "b660fd0d-d89f-4acf-91bf-2b223db8fbc5",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "8bba077a-59c2-4d09-8c0a-aa1b721ba039",
+            "operation": "vcs.get",
+            "initialized": true,
+            "branch": "review-branch",
+            "dirty": true
+          },
+          "session": {
+            "status": 201,
+            "requestID": "14081da3-bee3-4721-8a28-859a2526e59b",
+            "operation": "coding.chat.session.create",
+            "id": "ses_h1zx20PLo8f6opApBUUq"
+          }
+        },
+        {
+          "name": "beta",
+          "paths": {
+            "status": 200,
+            "requestID": "6102db8c-76a1-4e4f-9401-e84fc7386d53",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "4600ede2-8bd2-4589-93ea-ccdf70faf90a",
+            "operation": "vcs.get",
+            "initialized": false,
+            "dirty": false
+          },
+          "session": {
+            "status": 201,
+            "requestID": "8fd2bd43-bc57-4e6a-9f54-a287eef1e8d4",
+            "operation": "coding.chat.session.create",
+            "id": "ses_hDGIuJs3LlboGS1bf0YA"
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "651271fe-6504-4996-97f2-567a048ff25c",
+        "connected": 0
+      }
+    },
+    "candidate-final-before": {
+      "page": {
+        "status": 200,
+        "requestID": "455d5c66-43ba-4e50-98b6-b8985580c888",
+        "asset": "main-B__pxlxv.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "3ce5e0f7-4acc-4caa-9f7a-d0d2c9ef0512"
+      },
+      "projects": [
+        {
+          "name": "alpha",
+          "paths": {
+            "status": 200,
+            "requestID": "2a0353a8-0913-4837-8aad-b0abd055f15a",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "fc905169-58ca-496a-964d-68ef50e378bf",
+            "operation": "vcs.get",
+            "initialized": true,
+            "branch": "review-branch",
+            "dirty": true
+          },
+          "session": {
+            "status": 201,
+            "requestID": "e9c88ac3-5106-4c27-b60c-bd0444cb08f4",
+            "operation": "coding.chat.session.create",
+            "id": "ses_hmSAmZECeYGXmh1yxMMg"
+          }
+        },
+        {
+          "name": "beta",
+          "paths": {
+            "status": 200,
+            "requestID": "f7f0de1b-250e-416e-9fc7-a7fabd90fc7a",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "5dffcae3-ef3c-4668-b9d3-a39a68b253cb",
+            "operation": "vcs.get",
+            "initialized": false,
+            "dirty": false
+          },
+          "session": {
+            "status": 201,
+            "requestID": "8072670e-f74a-479a-b45d-df3a8b25a9c2",
+            "operation": "coding.chat.session.create",
+            "id": "ses_hhBsr37rr9k2EU39J3cm"
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "a58e65b5-28c8-4bd4-8465-dc45cacb9d5f",
+        "connected": 0
+      }
+    },
+    "candidate-final-after": {
+      "page": {
+        "status": 200,
+        "requestID": "8e0b0ed1-c89f-41ad-967e-358b7cbccf74",
+        "asset": "main-B__pxlxv.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "1277100c-119e-4a81-9166-047af5c4bcfe"
+      },
+      "projects": [
+        {
+          "name": "alpha",
+          "paths": {
+            "status": 200,
+            "requestID": "5b87975d-80a9-456a-8242-36ac2b337f2c",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "47946dc1-c94f-42ea-91d4-325b2da5aeab",
+            "operation": "vcs.get",
+            "initialized": true,
+            "branch": "review-branch",
+            "dirty": true
+          }
+        },
+        {
+          "name": "beta",
+          "paths": {
+            "status": 200,
+            "requestID": "994408ec-aaf1-49e6-b2e2-555701b2f687",
+            "operation": "path.get",
+            "exactDirectory": true
+          },
+          "vcs": {
+            "status": 200,
+            "requestID": "c2570a8b-bcf4-417b-a8f9-d5a26105db44",
+            "operation": "vcs.get",
+            "initialized": false,
+            "dirty": false
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "2b37498e-12cc-4803-8b68-dcf4bc13cae6",
+        "connected": 0
+      }
+    }
+  },
+  "transfers": {
+    "baseline": [
+      {
+        "time": "2026-11-10T10:31:03.016Z",
+        "path": "/path",
+        "requestID": "c09fb149-8d63-4f61-b05b-2871b0241e2f",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 538,
+        "delivered": 538
+      },
+      {
+        "time": "2026-11-10T10:31:03.797Z",
+        "path": "/vcs",
+        "requestID": "85a7dd88-f1c9-4e84-9ed0-570bc196f270",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:32:10.554Z",
+        "path": "/path",
+        "requestID": "bce28b02-93a7-4a19-9bab-10c6072b6fec",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 538,
+        "delivered": 538
+      },
+      {
+        "time": "2026-11-10T10:32:11.560Z",
+        "path": "/vcs",
+        "requestID": "93ae65e7-71ae-4fbd-9c41-2d7f5313febc",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:32:29.253Z",
+        "path": "/path",
+        "requestID": "4559bc24-92b0-4e0b-9ded-a40f24fa967d",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 538,
+        "delivered": 538
+      },
+      {
+        "time": "2026-11-10T10:32:30.323Z",
+        "path": "/vcs",
+        "requestID": "4e084397-bfdb-4c25-bdd1-4bbfbe2d039c",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:32:35.584Z",
+        "path": "/path",
+        "requestID": "8fbf046a-1890-401a-b807-7f2b359114c9",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 538,
+        "delivered": 538
+      },
+      {
+        "time": "2026-11-10T10:32:36.514Z",
+        "path": "/vcs",
+        "requestID": "7e8c42bb-9654-442a-a457-6dcfb6c3c776",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:32:58.701Z",
+        "path": "/path",
+        "requestID": "a478af26-6e51-4592-bb14-d24717cc41ce",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 538,
+        "delivered": 538
+      },
+      {
+        "time": "2026-11-10T10:33:03.237Z",
+        "path": "/vcs",
+        "requestID": "bb5dfb44-e0c8-4c5a-9605-d417353dc9fb",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 182,
+        "delivered": 1,
+        "heldMs": 3665
+      },
+      {
+        "time": "2026-11-10T10:33:25.032Z",
+        "path": "/path",
+        "requestID": "3ed51bd2-3df3-45ed-b3a2-ce512549b400",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 538,
+        "delivered": 538
+      },
+      {
+        "time": "2026-11-10T10:33:25.943Z",
+        "path": "/vcs",
+        "requestID": "1f738cf3-8af0-4f61-b582-7ae9604a2a03",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:33:39.111Z",
+        "path": "/vcs",
+        "requestID": "43edd8d4-34bd-4747-b67b-b99cf6add677",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:33:42.590Z",
+        "path": "/path",
+        "requestID": "966f9efb-68f7-4b5a-b258-46128711892d",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 538,
+        "delivered": 1,
+        "heldMs": 4467
+      },
+      {
+        "time": "2026-11-10T10:33:59.655Z",
+        "path": "/path",
+        "requestID": "c47f3d72-2478-41fd-8efd-1429da85e70a",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 536,
+        "delivered": 536
+      },
+      {
+        "time": "2026-11-10T10:33:59.657Z",
+        "path": "/vcs",
+        "requestID": "7d44405a-1bcb-43c3-8374-25f5e88c09e2",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 139,
+        "delivered": 139
+      },
+      {
+        "time": "2026-11-10T10:34:03.831Z",
+        "path": "/path",
+        "requestID": "dae131ed-45ce-43d9-8b88-b827bb0d88d9",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 536,
+        "delivered": 536
+      },
+      {
+        "time": "2026-11-10T10:34:03.831Z",
+        "path": "/vcs",
+        "requestID": "d65ddd1c-70ae-4d58-b840-4c83a5c06951",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 139,
+        "delivered": 139
+      }
+    ],
+    "candidate": [
+      {
+        "time": "2026-11-10T10:45:21.518Z",
+        "path": "/path",
+        "requestID": "d88ee1b2-6573-4e38-b994-7d7ceff9b6a5",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 541,
+        "delivered": 541
+      },
+      {
+        "time": "2026-11-10T10:45:22.495Z",
+        "path": "/vcs",
+        "requestID": "0e7c4f0c-d9b6-4c64-841f-43a702cb1e23",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:45:24.883Z",
+        "path": "/path",
+        "requestID": "3699d763-c318-47ca-9ab2-25dce6a62b94",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 541,
+        "delivered": 541
+      },
+      {
+        "time": "2026-11-10T10:45:25.133Z",
+        "path": "/path",
+        "requestID": "167d0dfa-ed87-467f-b682-5fdb497cd8a8",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 541,
+        "delivered": 541
+      },
+      {
+        "time": "2026-11-10T10:45:25.875Z",
+        "path": "/vcs",
+        "requestID": "25f546db-cbbf-48b9-9d02-1e8f1f3dfdf8",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:45:26.953Z",
+        "path": "/vcs",
+        "requestID": "a0a90436-acc1-4605-9d84-d1ebd6728430",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:45:37.989Z",
+        "path": "/vcs",
+        "requestID": "0abb717d-1371-4732-be0d-ba184c0be669",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:45:43.990Z",
+        "path": "/path",
+        "requestID": "86e3b3f0-f5b4-4fb9-8019-7442f63726f2",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 541,
+        "delivered": 1,
+        "heldMs": 7058
+      },
+      {
+        "time": "2026-11-10T10:46:04.771Z",
+        "path": "/path",
+        "requestID": "310eaf46-88d1-453a-84c3-5c19526cb31b",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 541,
+        "delivered": 541
+      },
+      {
+        "time": "2026-11-10T10:46:10.164Z",
+        "path": "/vcs",
+        "requestID": "b62f31bb-1935-4348-9f3a-037d7f620aee",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 182,
+        "delivered": 1,
+        "heldMs": 4547
+      },
+      {
+        "time": "2026-11-10T10:46:25.997Z",
+        "path": "/path",
+        "requestID": "495f2550-1145-49de-8050-7267952401a6",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 541,
+        "delivered": 541
+      },
+      {
+        "time": "2026-11-10T10:46:26.868Z",
+        "path": "/vcs",
+        "requestID": "e5702751-4453-47ce-be6e-b3e40555de5d",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:46:30.541Z",
+        "path": "/path",
+        "requestID": "db43187a-d380-447f-b109-03eef07e4e50",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 539,
+        "delivered": 539
+      },
+      {
+        "time": "2026-11-10T10:46:30.542Z",
+        "path": "/vcs",
+        "requestID": "23ca717f-a6e1-40f0-8eb0-a2491aea9d26",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 139,
+        "delivered": 139
+      },
+      {
+        "time": "2026-11-10T10:46:34.809Z",
+        "path": "/path",
+        "requestID": "a196451c-9b82-4615-88cf-c092159100e1",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 539,
+        "delivered": 539
+      },
+      {
+        "time": "2026-11-10T10:46:34.810Z",
+        "path": "/vcs",
+        "requestID": "132b8218-5aa9-4f1d-88f1-4f888da7dca2",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 139,
+        "delivered": 139
+      }
+    ],
+    "candidate-final": [
+      {
+        "time": "2026-11-10T10:49:01.683Z",
+        "path": "/path",
+        "requestID": "34954bad-ce98-4ee2-a911-a101110d9453",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 559,
+        "delivered": 559
+      },
+      {
+        "time": "2026-11-10T10:49:02.637Z",
+        "path": "/vcs",
+        "requestID": "e9a1fe64-dadd-470d-9cb2-98f8680e2800",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:49:05.229Z",
+        "path": "/path",
+        "requestID": "7716b2d6-1e35-467c-84bc-6707301cd65d",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 559,
+        "delivered": 559
+      },
+      {
+        "time": "2026-11-10T10:49:05.466Z",
+        "path": "/path",
+        "requestID": "6541a92a-bf33-4b7a-98f0-2e2df3bf681b",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 559,
+        "delivered": 559
+      },
+      {
+        "time": "2026-11-10T10:49:06.194Z",
+        "path": "/vcs",
+        "requestID": "1ce5b1d1-fe91-435e-8502-f1e392b54875",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:49:07.032Z",
+        "path": "/vcs",
+        "requestID": "34e05868-7395-4d2e-8fa7-3b0d6024ece6",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:49:19.394Z",
+        "path": "/vcs",
+        "requestID": "fea9beea-c457-4803-8ab4-d495bee53fa7",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:49:25.870Z",
+        "path": "/path",
+        "requestID": "04edf0b9-644a-4e71-acf5-136fb4ec631a",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 559,
+        "delivered": 1,
+        "heldMs": 7345
+      },
+      {
+        "time": "2026-11-10T10:49:42.629Z",
+        "path": "/path",
+        "requestID": "7c39e656-5ef2-4cf0-9b42-30e5ac03d5bf",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 559,
+        "delivered": 559
+      },
+      {
+        "time": "2026-11-10T10:49:47.304Z",
+        "path": "/vcs",
+        "requestID": "65bf2a39-6850-4538-8d83-e12b5f77036d",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 182,
+        "delivered": 1,
+        "heldMs": 3764
+      },
+      {
+        "time": "2026-11-10T10:50:11.496Z",
+        "path": "/path",
+        "requestID": "d0f73b8d-f753-4a9d-a8ef-4bd5161c043f",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 559,
+        "delivered": 559
+      },
+      {
+        "time": "2026-11-10T10:50:12.480Z",
+        "path": "/vcs",
+        "requestID": "5ea6ad28-680f-470a-acdf-dd12cab0e502",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 182,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T10:50:20.244Z",
+        "path": "/path",
+        "requestID": "6e405368-3e8a-464c-853c-15d2cdbb655e",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 559,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T10:50:21.184Z",
+        "path": "/vcs",
+        "requestID": "d1499243-c1d2-41c6-b846-54327f171ef2",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:50:30.679Z",
+        "path": "/path",
+        "requestID": "e1566918-8fa1-42aa-8bfa-e0029a14210c",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 559,
+        "delivered": 559
+      },
+      {
+        "time": "2026-11-10T10:50:31.536Z",
+        "path": "/vcs",
+        "requestID": "4d747c7d-f805-43ee-ad47-4c959eb99939",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 182,
+        "delivered": 182
+      },
+      {
+        "time": "2026-11-10T10:50:39.426Z",
+        "path": "/path",
+        "requestID": "d553d5da-673c-4df7-96ac-78d5cd5bcea2",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 557,
+        "delivered": 557
+      },
+      {
+        "time": "2026-11-10T10:50:39.427Z",
+        "path": "/vcs",
+        "requestID": "b75c1c78-1bd7-45a1-9870-5e2cf5f90a65",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 139,
+        "delivered": 139
+      },
+      {
+        "time": "2026-11-10T10:50:39.666Z",
+        "path": "/path",
+        "requestID": "ba6c7a4c-9b0e-451e-8ec5-d16f3e6f42a7",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 557,
+        "delivered": 557
+      },
+      {
+        "time": "2026-11-10T10:50:39.668Z",
+        "path": "/vcs",
+        "requestID": "b762e5a2-195d-4c7b-8e18-cfaa11885755",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 139,
+        "delivered": 139
+      }
+    ]
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 2,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 2,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate-final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 2,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b208-baseline",
+      "apiPort": 39582,
+      "proxyPort": 39583,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b208-candidate",
+      "apiPort": 39584,
+      "proxyPort": 39585,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate-final": {
+      "occurrence": "iteration-b208-candidate-final",
+      "apiPort": 39586,
+      "proxyPort": 39587,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "fixtureBytesAndGitHeadUnchanged": true
+}

@@ -57,7 +57,7 @@ for (const entry of actions) {
       throw cause
     })
     expect(await entry.invoke()).toBe(entry.result)
-    expect({ directory: boardStore.vcsDirectory, vcs: boardStore.vcs, error: boardStore.vcsError, loading: boardStore.vcsLoading }).toEqual({ directory: DIRECTORY, vcs: null, error: cause.message, loading: false })
+    expect({ directory: boardStore.vcsDirectory, vcs: boardStore.vcs, error: boardStore.vcsError, loading: boardStore.vcsLoading }).toEqual({ directory: DIRECTORY, vcs: null, error: { cause }, loading: false })
     const diagnostic = AppLog.entries.at(-1)
     expect(diagnostic).toMatchObject({ level: "warn", service: "meta", message: "VCS mutation accepted; metadata refresh failed", extra: { action: entry.action, directory: DIRECTORY, accepted: true } })
     expect((diagnostic?.extra as { cause: unknown }).cause).toBe(cause)
@@ -77,10 +77,11 @@ for (const entry of actions) {
     await started.promise
     const successorDirectory = selection === "different-project" ? "D:/successor" : DIRECTORY
     setBoardStore({ selectEpoch: 31, selectedSource: { kind: "session", id: "ses_b", directory: "D:/successor" } })
-    setBoardStore({ selectEpoch: 32, selectedSource: { kind: "session", id: "ses_current", directory: successorDirectory }, path: { directory: successorDirectory }, vcs: { branch: "successor" }, vcsDirectory: successorDirectory, vcsLoading: true, vcsError: "successor-owned" })
+    const failure = { cause: new Error("successor-owned") }
+    setBoardStore({ selectEpoch: 32, selectedSource: { kind: "session", id: "ses_current", directory: successorDirectory }, path: { directory: successorDirectory }, vcs: { branch: "successor" }, vcsDirectory: successorDirectory, vcsLoading: true, vcsError: failure })
     pending.resolve(ok(accepted))
     expect(await operation).toBe(entry.result)
-    expect({ path: boardStore.path, vcs: boardStore.vcs, directory: boardStore.vcsDirectory, loading: boardStore.vcsLoading, error: boardStore.vcsError }).toEqual({ path: { directory: successorDirectory }, vcs: { branch: "successor" }, directory: successorDirectory, loading: true, error: "successor-owned" })
+    expect({ path: boardStore.path, vcs: boardStore.vcs, directory: boardStore.vcsDirectory, loading: boardStore.vcsLoading, error: boardStore.vcsError }).toEqual({ path: { directory: successorDirectory }, vcs: { branch: "successor" }, directory: successorDirectory, loading: true, error: failure })
   })
 
   test(`${entry.action} returns the original typed API retirement response receipt`, async () => {
@@ -117,7 +118,7 @@ test("accepted commit metadata failure permits the separately accepted push and 
   await pushVcsBranch(DIRECTORY, authority)
   expect(result).toBe(accepted)
   expect(requests).toEqual(["vcs/commit", "path", "vcs", "vcs/push", "path", "vcs"])
-  expect({ vcs: boardStore.vcs, directory: boardStore.vcsDirectory, error: boardStore.vcsError, loading: boardStore.vcsLoading }).toEqual({ vcs: refreshed, directory: DIRECTORY, error: "", loading: false })
+  expect({ vcs: boardStore.vcs, directory: boardStore.vcsDirectory, error: boardStore.vcsError, loading: boardStore.vcsLoading }).toEqual({ vcs: refreshed, directory: DIRECTORY, error: null, loading: false })
 })
 
 describe("VCS action service", () => {

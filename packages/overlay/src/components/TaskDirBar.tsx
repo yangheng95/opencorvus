@@ -166,6 +166,7 @@ function localEnvironmentFeedbackTone(feedback: LocalEnvironmentFeedback): "succ
 
 function projectVcsInfo(): ProjectVcsInfo | null {
   return appStore.connected && boardStore.vcsDirectory === directoryMemo()
+    && boardStore.metadataAuthorityRevision === captureApiAuthority().revision
     ? (boardStore.vcs as ProjectVcsInfo | null)
     : null
 }
@@ -257,34 +258,42 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const visibleWorktrees = createMemo(() => worktrees().filter((item) => item.status !== "primary"))
   const removableWorktrees = createMemo(() => visibleWorktrees().filter((item) => item.removable))
   const bulkDeleteBusy = createMemo(() => bulkDeleteBusyFor(worktreeDirectory()))
-  const canDeleteAll = createMemo(() => removableWorktrees().length > 0 && !bulkDeleteBusy())
-  const vcs = createMemo(projectVcsInfo)
-  const canReadWorktrees = () => appStore.connected && !!dir().trim() && vcs()?.initialized === true
+  const metadataCurrent = () => boardStore.vcsDirectory === dir() &&
+    boardStore.metadataAuthorityRevision === captureApiAuthority().revision
+  const pathReadFailure = () => metadataCurrent() ? boardStore.pathError : null
+  const gitReadFailure = () => metadataCurrent() ? boardStore.vcsError : null
+  const metadataBusy = () => metadataCurrent() && (boardStore.pathLoading || boardStore.vcsLoading)
+  const lastVcs = createMemo(projectVcsInfo)
+  const vcs = createMemo(() => gitReadFailure() ? null : lastVcs())
+  const gitMetadataFresh = () => !!vcs() && !boardStore.vcsLoading
+  const canDeleteAll = createMemo(() => gitMetadataFresh() && removableWorktrees().length > 0 && !bulkDeleteBusy())
+  const canReadWorktrees = () => appStore.connected && !!dir().trim() && lastVcs()?.initialized === true
+  const metadataRefreshLabel = () => t(metadataBusy() ? "common.loading" :
+    pathReadFailure() || gitReadFailure() ? "project_runtime.retry_metadata" : "project_runtime.refresh_metadata")
   const worktreeRefreshLabel = () =>
     t(worktreeRead().loading ? "worktree.loading" : worktreeRead().failure ? "worktree.retry" : "worktree.refresh")
   const gitTone = createMemo(() => vcsToneFor(vcs()))
-  const gitArrows = createMemo(() => vcsArrowsFor(vcs()))
+  const gitArrows = createMemo(() => vcsArrowsFor(lastVcs()))
   const gitStatusLabel = createMemo(() => {
     if (!appStore.connected) return t("project_runtime.disconnected")
-    if (boardStore.vcsLoading) return t("common.loading")
-    const value = vcs()
-    if (!value) return t("project_runtime.git_unavailable")
-    if (!value.initialized) return t("project_runtime.git_uninitialized")
-    return value.dirty ? t("vcs.dirty") : t("vcs.clean")
+    const value = lastVcs()
+    if (!value) return t(metadataCurrent() && boardStore.vcsLoading ? "common.loading" : "project_runtime.git_unavailable")
+    const status = t(!value.initialized ? "project_runtime.git_uninitialized" : value.dirty ? "vcs.dirty" : "vcs.clean")
+    return gitReadFailure() ? t("project_runtime.git_last_confirmed", { status }) : status
   })
   const branchLabel = createMemo(
     () =>
-      vcs()?.branch ||
-      (vcs()?.commit
-        ? t("project_runtime.detached", { commit: vcs()!.commit!.slice(0, 8) })
+      lastVcs()?.branch ||
+      (lastVcs()?.commit
+        ? t("project_runtime.detached", { commit: lastVcs()!.commit!.slice(0, 8) })
         : t("project_runtime.unborn")),
   )
   const repositoryCounts = createMemo(() =>
     [
-      ["project_runtime.staged", vcs()?.staged],
-      ["project_runtime.modified", vcs()?.modified],
-      ["project_runtime.untracked", vcs()?.untracked],
-      ["project_runtime.conflicts", vcs()?.conflicts],
+      ["project_runtime.staged", lastVcs()?.staged],
+      ["project_runtime.modified", lastVcs()?.modified],
+      ["project_runtime.untracked", lastVcs()?.untracked],
+      ["project_runtime.conflicts", lastVcs()?.conflicts],
     ]
       .filter(([, count]) => Number(count) > 0)
       .map(([key, count]) => t(String(key), { count }))
@@ -668,7 +677,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   function generateCommitMessage(force = false): void {
-    if (!vcs()?.dirty) return
+    if (!gitMetadataFresh() || !vcs()?.dirty) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = dir().trim()
@@ -715,6 +724,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   function toggleGitAction(): void {
     const nextOpen = !gitActionOpen()
+    if (nextOpen && !gitMetadataFresh()) return
     setGitActionOpen(nextOpen)
     setGitActionError("")
     setGitActionNotice("")
@@ -734,7 +744,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   async function commitChanges(pushAfterCommit: boolean): Promise<void> {
     const message = commitMessage().trim()
     const directory = dir().trim()
-    if (!message || !directory || commitMessageGenerating() || gitBusy()) return
+    if (!message || !directory || !gitMetadataFresh() || commitMessageGenerating() || gitBusy()) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
@@ -766,7 +776,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   async function pushChanges(): Promise<void> {
     const directory = dir().trim()
-    if (!directory || gitBusy()) return
+    if (!directory || !gitMetadataFresh() || gitBusy()) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
@@ -923,7 +933,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       closeBranchMenu()
       return
     }
-    if (!directory || !ownsMenu()) return
+    if (!directory || !ownsMenu() || !gitMetadataFresh()) return
 
     setLocalMenuOpen(false)
     setBranchError("")
@@ -1021,7 +1031,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const projectDirectory = dir().trim()
-    if (!projectDirectory || branch.current || branchSwitchBusy()) return
+    if (!projectDirectory || !gitMetadataFresh() || branch.current || branchSwitchBusy()) return
     setBranchSwitchBusy(branch.name)
     setBranchError("")
     try {
@@ -1190,7 +1200,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const selectionEpoch = boardStore.selectEpoch
     event.stopPropagation()
     const projectDirectory = worktreeDirectory() || dir().trim()
-    if (!item.removable || deletingWorktrees().has(item.directory) || bulkDeleteBusyFor(projectDirectory)) return
+    if (!gitMetadataFresh() || !item.removable || deletingWorktrees().has(item.directory) || bulkDeleteBusyFor(projectDirectory)) return
     if (!projectDirectory) return
     const confirmed = await showAppDialog({
       title: t("worktree.delete"),
@@ -1200,7 +1210,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       okTone: "danger",
     })
     if (!confirmed.confirmed) return
-    if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
+    if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch) || !gitMetadataFresh()) return
     setDeleting([item.directory], true)
     setOperationError("")
     try {
@@ -1242,7 +1252,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     event.stopPropagation()
     const targets = removableWorktrees()
     const projectDirectory = worktreeDirectory() || dir().trim()
-    if (!targets.length || !projectDirectory || bulkDeleteBusyFor(projectDirectory)) return
+    if (!gitMetadataFresh() || !targets.length || !projectDirectory || bulkDeleteBusyFor(projectDirectory)) return
     const confirmed = await showAppDialog({
       title: t("worktree.delete_all"),
       message: t("worktree.delete_all_confirm", { count: targets.length }),
@@ -1251,7 +1261,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       okTone: "danger",
     })
     if (!confirmed.confirmed) return
-    if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch)) return
+    if (!ownsWorktreeOperation(projectDirectory, authority, selectionEpoch) || !gitMetadataFresh()) return
     const directories = targets.map((item) => item.directory)
     setBulkDeleteOperationDirectory(projectDirectory)
     setDeleting(directories, true)
@@ -1453,22 +1463,13 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               <DropdownMenu.Item
                 as="button"
                 type="button"
-                disabled={!appStore.connected || boardStore.vcsLoading}
+                disabled={!gitMetadataFresh()}
                 onSelect={toggleGitAction}
               >
                 <Icon name="git-compare" />
                 {t(vcs()?.hasRemote ? "project_runtime.commit_or_push" : "project_runtime.commit")}
               </DropdownMenu.Item>
             </Show>
-            <DropdownMenu.Item
-              as="button"
-              type="button"
-              disabled={!appStore.connected || boardStore.vcsLoading || !dir()}
-              onSelect={() => void loadMeta(dir()).catch(() => undefined)}
-            >
-              <Icon name="refresh" />
-              {t("common.refresh")}
-            </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
@@ -1534,7 +1535,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
           >
             <div class="project-runtime-project-row">
               <Show
-                when={vcs()?.initialized}
+                when={lastVcs()?.initialized}
                 fallback={
                   <div class="project-runtime-info-row" data-ui="project-runtime-git-uninitialized">
                     <Icon name="git-branch" size="medium" />
@@ -1567,7 +1568,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   data-expanded={branchMenuOpen() ? "" : undefined}
                   title={`${branchLabel()} · ${gitStatusLabel()}`}
                   aria-label={`${t("chat.git.branch")}: ${branchLabel()}${branchMenuReading() ? ` · ${t("common.loading")}` : ""}`}
-                  disabled={!appStore.connected || !vcs()?.commit}
+                  disabled={!appStore.connected || !lastVcs()?.commit}
+                  aria-disabled={!gitMetadataFresh() || undefined}
                   aria-haspopup="menu"
                   aria-expanded={branchMenuOpen()}
                   aria-busy={branchMenuReading() || undefined}
@@ -1602,8 +1604,26 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               >
                 <Icon name="more-horizontal" size="medium" />
               </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone="neutral"
+                class="project-runtime-local-control"
+                data-ui="project-runtime-meta-refresh"
+                data-busy={metadataBusy() ? "true" : "false"}
+                title={metadataRefreshLabel()}
+                aria-label={metadataRefreshLabel()}
+                aria-busy={metadataBusy() || undefined}
+                aria-disabled={metadataBusy() || !appStore.connected || !dir() || undefined}
+                onClick={() => {
+                  if (!metadataBusy() && appStore.connected && dir()) void loadMeta(dir()).catch(() => undefined)
+                }}
+              >
+                <Icon name="refresh" size="medium" />
+              </Button>
             </div>
-            <Show when={vcs()?.initialized && (repositoryCounts() || gitArrows())}>
+            <Show when={lastVcs()?.initialized && (repositoryCounts() || gitArrows() || gitReadFailure())}>
               <div class="project-runtime-repository-status" data-tone={gitTone()}>
                 <span>{gitStatusLabel()}</span>
                 <Show when={repositoryCounts()}>
@@ -1614,10 +1634,19 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 </Show>
               </div>
             </Show>
-            <Show when={boardStore.vcsDirectory === dir() && boardStore.vcsError}>
-              <div class="project-runtime-operation-error" role="alert">
-                {boardStore.vcsError}
-              </div>
+            <Show when={pathReadFailure()}>
+              {(failure) => (
+                <Feedback class="project-runtime-meta-feedback" tone="error" details={formatErrorDetails(failure().cause)}>
+                  {t("project_runtime.path_read_failed")}
+                </Feedback>
+              )}
+            </Show>
+            <Show when={gitReadFailure()}>
+              {(failure) => (
+                <Feedback class="project-runtime-meta-feedback" tone="error" details={formatErrorDetails(failure().cause)}>
+                  {t("project_runtime.git_read_failed")}
+                </Feedback>
+              )}
             </Show>
             <Show when={branchError() && !branchMenuOpen()}>
               <div
@@ -1828,7 +1857,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                               aria-label={
                                 deletingWorktrees().has(item.directory) ? t("common.loading") : t("worktree.delete")
                               }
-                              disabled={!item.removable || deletingWorktrees().has(item.directory) || bulkDeleteBusy()}
+                              disabled={!gitMetadataFresh() || !item.removable || deletingWorktrees().has(item.directory) || bulkDeleteBusy()}
                               onClick={(event) => void removeWorktree(item, event)}
                             >
                               <Icon
@@ -2197,7 +2226,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 class="project-runtime-git-dialog-action"
                 data-ui="project-runtime-commit"
-                disabled={commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
+                disabled={!gitMetadataFresh() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
                 onClick={() => void commitChanges(false)}
               >
                 <Icon name="git-compare" size="medium" />
@@ -2212,7 +2241,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   tone="neutral"
                   class="project-runtime-git-dialog-action"
                   data-ui="project-runtime-commit-and-push"
-                  disabled={commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
+                  disabled={!gitMetadataFresh() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
                   onClick={() => void commitChanges(true)}
                 >
                   <Icon name="upload" size="medium" />
@@ -2228,7 +2257,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 class="project-runtime-git-dialog-action"
                 data-ui="project-runtime-push"
-                disabled={gitBusy()}
+                disabled={!gitMetadataFresh() || gitBusy()}
                 onClick={() => void pushChanges()}
               >
                 <Icon name="upload" size="medium" />
@@ -2236,7 +2265,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               </Button>
             </Show>
           </div>
-          <Show when={!vcs()?.dirty && (vcs()?.ahead ?? 0) === 0 && !gitActionNotice()}>
+          <Show when={gitMetadataFresh() && !vcs()?.dirty && (vcs()?.ahead ?? 0) === 0 && !gitActionNotice()}>
             <div class="project-runtime-git-empty">
               {t(vcs()?.hasRemote ? "project_runtime.nothing_to_commit_or_push" : "project_runtime.nothing_to_commit")}
             </div>
