@@ -1473,6 +1473,9 @@ identity, including the directory suffix. Windows native and portable separators
 therefore match the same file; POSIX literal backslashes retain their identity.
 Hidden-directory preference consumes that same matching projection. The index,
 API result paths and file-opening authority remain the original sources.
+Explorer search uses the same owned result for waiting, errors and rows. A
+previous result with identical query text does not settle a new query source;
+the current source must supply the result before the page reports no matches.
 Ordinary project searches publish actual file and directory paths from one native
 walk. The walk retains project ignore rules and does not recurse through links.
 Empty directories participate in the same index, with their original directory

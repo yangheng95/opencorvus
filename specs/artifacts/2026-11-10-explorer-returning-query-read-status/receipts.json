@@ -1,0 +1,398 @@
+{
+  "baseline": {
+    "asset": "main-BsNlTMTK.js",
+    "operation": "find.files",
+    "entries": [
+      {
+        "query": "orchid",
+        "status": 200,
+        "requestID": "b96c1b92-dba2-44e5-8119-52278eaabf69",
+        "results": [
+          "readback-orchid.txt"
+        ]
+      },
+      {
+        "query": "quartz",
+        "status": 200,
+        "requestID": "64c5be31-a25a-4fab-a3da-e99780fd18f9",
+        "results": [
+          "readback-quartz.txt"
+        ]
+      },
+      {
+        "query": "mercury",
+        "status": 200,
+        "requestID": "c43cb555-1bb8-450a-a0f9-8279b03083c2",
+        "results": []
+      }
+    ],
+    "connectedProviders": 0
+  },
+  "candidateBefore": {
+    "page": {
+      "status": 200,
+      "requestID": "62409deb-2a3f-4a76-ac18-dddecbc0b040",
+      "asset": "main-espW9Dc7.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "af8a4975-1690-4588-bb5f-77931191200d",
+      "operations": [
+        "find.files",
+        "file.read"
+      ]
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "476b1b31-de7a-467a-8f2d-9d8aa07b144f",
+        "query": "orchid",
+        "paths": [
+          "readback-orchid.txt"
+        ],
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "8ac8280e-5dcb-4c4b-9423-693151e7c814",
+        "query": "quartz",
+        "paths": [
+          "readback-quartz.txt"
+        ],
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "48779dbf-741a-4857-8fbf-b0fd27970bd5",
+        "query": "mercury",
+        "paths": [],
+        "schemaValid": true
+      }
+    ],
+    "content": [
+      {
+        "status": 200,
+        "requestID": "dc656e36-9a15-4289-a39a-b83d526a299c",
+        "path": "readback-orchid.txt",
+        "text": "Isolated orchid search readback.\r\n",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "1dc37eeb-a7d3-4fe7-8cd0-0d7c6980756b",
+        "path": "readback-quartz.txt",
+        "text": "Isolated quartz search readback.\r\n",
+        "schemaValid": true
+      }
+    ],
+    "providers": {
+      "status": 200,
+      "requestID": "95e9f3c7-8288-4b81-8345-1330328f279a",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "candidateAfter": {
+    "page": {
+      "status": 200,
+      "requestID": "30725b72-f1b8-4d44-8be0-3417f0c88880",
+      "asset": "main-espW9Dc7.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "474c87f4-b100-4620-8760-64588be6d1f8",
+      "operations": [
+        "find.files",
+        "file.read"
+      ]
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "b547463b-634e-4004-81ff-b93fc31002e6",
+        "query": "orchid",
+        "paths": [
+          "readback-orchid.txt"
+        ],
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "e48a0412-ad1f-40e1-83d4-d49723cd54b5",
+        "query": "quartz",
+        "paths": [
+          "readback-quartz.txt"
+        ],
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "e7e8b64d-e840-4fc0-8918-1d68c1d23451",
+        "query": "mercury",
+        "paths": [],
+        "schemaValid": true
+      }
+    ],
+    "content": [
+      {
+        "status": 200,
+        "requestID": "cc148fb4-3b3b-41fa-b84a-c71e83313a4f",
+        "path": "readback-orchid.txt",
+        "text": "Isolated orchid search readback.\r\n",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "87ae005c-918b-4250-b68c-cadd196cc46a",
+        "path": "readback-quartz.txt",
+        "text": "Isolated quartz search readback.\r\n",
+        "schemaValid": true
+      }
+    ],
+    "providers": {
+      "status": 200,
+      "requestID": "55010a90-6d5e-49db-963c-4a953e4ec23e",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "browserRuns": {
+    "baseline": {
+      "transport": [
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "c0c611dc-45d3-40f9-8240-957c188dadec",
+          "status": 200,
+          "mode": "restore",
+          "time": "2026-11-10T07:36:39.854Z"
+        },
+        {
+          "stage": "origin",
+          "query": "quartz",
+          "requestID": "2774effd-b1a3-4973-a713-b6f6dddce317",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:36:59.673Z"
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "faf36a7f-f447-4873-b762-b801b69fe866",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:37:04.305Z"
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "50c6617c-a5a4-445d-9a17-69e042f5bc72",
+          "status": 200,
+          "mode": "restore",
+          "time": "2026-11-10T07:38:08.728Z"
+        },
+        {
+          "stage": "origin",
+          "query": "quartz",
+          "requestID": "5deb6c04-8773-4dc7-b512-ef865d1c5f8c",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:38:17.161Z"
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "15884811-bf89-487e-ae82-86fe6b8173a8",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:38:17.489Z"
+        },
+        {
+          "query": "quartz",
+          "requestID": "5deb6c04-8773-4dc7-b512-ef865d1c5f8c",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 23,
+          "delivered": 23,
+          "time": "2026-11-10T07:38:23.403Z",
+          "heldMs": 6241
+        },
+        {
+          "query": "orchid",
+          "requestID": "15884811-bf89-487e-ae82-86fe6b8173a8",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 23,
+          "delivered": 23,
+          "time": "2026-11-10T07:38:23.404Z",
+          "heldMs": 5914
+        }
+      ],
+      "database": {
+        "integrity": "ok",
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      },
+      "shutdown": {
+        "occurrence": "iteration-b196-baseline",
+        "apiPort": 39530,
+        "proxyPort": 39531,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    },
+    "candidate": {
+      "transport": [
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "f5d420ac-9cd0-4167-b36b-c1ae150a2c7f",
+          "status": 200,
+          "mode": "restore",
+          "time": "2026-11-10T07:42:27.080Z"
+        },
+        {
+          "stage": "origin",
+          "query": "quartz",
+          "requestID": "69530f07-5c41-4b14-a271-d84864aefae3",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:42:35.719Z"
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "e7a07e9a-e9bb-48d8-8cbf-a18f8c0c1ccb",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:42:36.065Z"
+        },
+        {
+          "query": "orchid",
+          "requestID": "e7a07e9a-e9bb-48d8-8cbf-a18f8c0c1ccb",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 23,
+          "delivered": 23,
+          "time": "2026-11-10T07:42:40.882Z",
+          "heldMs": 4816
+        },
+        {
+          "query": "quartz",
+          "requestID": "69530f07-5c41-4b14-a271-d84864aefae3",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 23,
+          "delivered": 23,
+          "time": "2026-11-10T07:42:49.125Z",
+          "heldMs": 13404
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "931441e8-d16a-4d23-9ac1-560346b3a25e",
+          "status": 200,
+          "mode": "truncate",
+          "time": "2026-11-10T07:43:26.451Z"
+        },
+        {
+          "query": "orchid",
+          "requestID": "931441e8-d16a-4d23-9ac1-560346b3a25e",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 23,
+          "delivered": 1,
+          "time": "2026-11-10T07:43:26.451Z"
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "1bfcf3aa-2ffd-44bf-8351-a32479747ffd",
+          "status": 200,
+          "mode": "restore",
+          "time": "2026-11-10T07:43:36.687Z"
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "6cba1d88-b91b-49d4-a44e-a9f3348366ae",
+          "status": 200,
+          "mode": "restore",
+          "time": "2026-11-10T07:43:54.627Z"
+        },
+        {
+          "stage": "origin",
+          "query": "quartz",
+          "requestID": "8d853f93-c52a-4146-8c46-0496f3c369aa",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:44:04.991Z"
+        },
+        {
+          "stage": "origin",
+          "query": "orchid",
+          "requestID": "65494f2f-02c5-40dc-b860-d4bbc26c5a9d",
+          "status": 200,
+          "mode": "hold",
+          "time": "2026-11-10T07:44:05.340Z"
+        },
+        {
+          "query": "orchid",
+          "requestID": "65494f2f-02c5-40dc-b860-d4bbc26c5a9d",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 23,
+          "delivered": 23,
+          "time": "2026-11-10T07:44:10.201Z",
+          "heldMs": 4860
+        },
+        {
+          "query": "quartz",
+          "requestID": "8d853f93-c52a-4146-8c46-0496f3c369aa",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 23,
+          "delivered": 23,
+          "time": "2026-11-10T07:44:18.087Z",
+          "heldMs": 13096
+        }
+      ],
+      "database": {
+        "integrity": "ok",
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      },
+      "shutdown": {
+        "occurrence": "iteration-b196-candidate",
+        "apiPort": 39532,
+        "proxyPort": 39533,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    }
+  },
+  "order": {
+    "en": {
+      "olderQuartz": "69530f07-5c41-4b14-a271-d84864aefae3",
+      "newOrchid": "e7a07e9a-e9bb-48d8-8cbf-a18f8c0c1ccb",
+      "newDeliveredFirst": true
+    },
+    "zh": {
+      "olderQuartz": "8d853f93-c52a-4146-8c46-0496f3c369aa",
+      "newOrchid": "65494f2f-02c5-40dc-b860-d4bbc26c5a9d",
+      "newDeliveredFirst": true
+    }
+  }
+}

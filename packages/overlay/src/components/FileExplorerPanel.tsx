@@ -966,12 +966,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       !childrenByPath().has("") &&
       (loadingPaths().has("") || !directoryErrors().has("")),
   )
-  const searchLoading = createMemo(() => {
-    const query = deferredQuery()
-    if (!query || !searchResults.loading) return false
-    const current = searchResults()
-    return current?.query !== query && searchResults.latest?.query !== query
-  })
+  const searchLoading = createMemo(() => Boolean(deferredQuery()) && searchResults.loading && !currentSearchResult())
   const rootError = createMemo(() => (!deferredQuery() ? (directoryErrors().get("") ?? null) : null))
   const searchError = createMemo(() => (deferredQuery() ? currentSearchFailure() : null))
   const expandedDirectoryFailures = createMemo(() => {
