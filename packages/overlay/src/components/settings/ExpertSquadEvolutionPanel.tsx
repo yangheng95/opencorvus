@@ -1,6 +1,8 @@
 import { Feedback } from "../ui/Feedback"
-import { batch, createEffect, createMemo, createSignal, createUniqueId, For, mapArray, onCleanup, Show, untrack } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, createUniqueId, For, onCleanup, Show, untrack, type Accessor } from "solid-js"
+import { Key } from "@solid-primitives/keyed"
 import { localeTag, t, tc } from "../../utils/i18n"
+import { formatErrorDetails } from "../../utils/error-details"
 import {
   executeExpertSquadEvolutionMutation,
   loadExpertSquadEvolutionHistory,
@@ -72,7 +74,6 @@ interface EvolutionRead {
 
 type EvolutionIssue = {
   summary:
-    | "expert_squad.evolution_history_failed"
     | "expert_squad.evolution_detail_failed"
     | "expert_squad.evolution_mutation_failed"
   diagnostic: string
@@ -140,6 +141,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
   const [detail, setDetail] = createSignal<ExpertSquadEvolutionHistoryDetail | null>(null)
   const [selectedKey, setSelectedKey] = createSignal("")
   const [loading, setLoading] = createSignal(false)
+  const [historyFailure, setHistoryFailure] = createSignal<{ cause: unknown }>()
   const [loadingMore, setLoadingMore] = createSignal(false)
   const [continuationFailure, setContinuationFailure] = createSignal<{ diagnostic: string }>()
   const [detailLoading, setDetailLoading] = createSignal(false)
@@ -147,13 +149,14 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
   const [error, setError] = createSignal<EvolutionIssue>()
   let historyRead: EvolutionRead | undefined
   let detailRead: AbortController | undefined
+  let refreshButton: HTMLButtonElement | undefined
   let campaignList: HTMLDivElement | undefined
   let continuationFooter: HTMLDivElement | undefined
   let continuationButton: HTMLButtonElement | undefined
 
-  const entriesByCampaign = mapArray(() => history()?.records ?? [], campaignSelections)
-  const entries = createMemo(() => entriesByCampaign().flat())
+  const entries = createMemo(() => (history()?.records ?? []).flatMap(campaignSelections))
   const selected = createMemo(() => entries().find((entry) => entry.key === selectedKey()) ?? entries()[0])
+  const refreshBusy = () => loading() || !!mutationBusy()
   const errorSummary = createMemo(() => {
     const issue = error()
     return issue && t(issue.summary)
@@ -176,10 +179,10 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       && scope.id === props.id && scope.installationScope === props.installationScope
   }
 
-  function retireDetail() {
+  function retireDetail(clear = true) {
     detailRead?.abort()
     detailRead = undefined
-    setDetail(null)
+    if (clear) setDetail(null)
     setDetailLoading(false)
   }
 
@@ -223,12 +226,16 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
     }
   }
 
-  async function refresh(preferredKey = selectedKey(), scope = readScope()): Promise<void> {
+  async function refresh({
+    preferredKey,
+    scope = readScope(),
+    retryTrigger,
+  }: { preferredKey?: string; scope?: EvolutionReadScope; retryTrigger?: HTMLButtonElement } = {}): Promise<void> {
     historyRead?.controller.abort()
     const read: EvolutionRead = { scope, controller: new AbortController() }
     historyRead = read
     batch(() => {
-      retireDetail()
+      retireDetail(false)
       setLoading(true)
       setLoadingMore(false)
       setContinuationFailure(undefined)
@@ -240,16 +247,23 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         signal: read.controller.signal,
       })
       if (!ownsHistory(read)) return
-      batch(() => {
+      if (retryTrigger && retryTrigger.ownerDocument.activeElement === retryTrigger) {
+        refreshButton?.focus({ preventScroll: true })
+      }
+      const detailPending = batch(() => {
+        const desiredKey = preferredKey ?? selectedKey()
         setHistory(next)
         const nextEntries = entries()
-        const nextSelection = nextEntries.find((entry) => entry.key === preferredKey) ?? nextEntries[0]
+        const nextSelection = nextEntries.find((entry) => entry.key === desiredKey) ?? nextEntries[0]
         setSelectedKey(nextSelection?.key ?? "")
+        setHistoryFailure(undefined)
+        setLoading(false)
+        if (nextSelection) return loadDetail(nextSelection)
+        retireDetail()
       })
-      const nextSelection = selected()
-      if (nextSelection) await loadDetail(nextSelection)
+      await detailPending
     } catch (cause) {
-      if (ownsHistory(read)) reportIssue("expert_squad.evolution_history_failed", cause)
+      if (ownsHistory(read)) setHistoryFailure({ cause })
     } finally {
       if (ownsHistory(read)) setLoading(false)
     }
@@ -298,8 +312,10 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
     const scope = readScope()
     untrack(() => batch(() => {
       setHistory(null)
+      setDetail(null)
       setSelectedKey("")
-      void refresh("", scope)
+      setHistoryFailure(undefined)
+      void refresh({ preferredKey: "", scope })
     }))
   })
 
@@ -352,7 +368,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         intent: input.intent,
       })
       await props.onMutation()
-      await refresh(input.preferredKey ?? selectedKey())
+      await refresh({ preferredKey: input.preferredKey ?? selectedKey() })
     } catch (cause) {
       reportIssue("expert_squad.evolution_mutation_failed", cause)
     } finally {
@@ -365,7 +381,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
     confirmationText: string,
     intent: ExpertSquadEvolutionMutationIntent,
   ): Promise<void> {
-    if (!entry.comparison) return
+    if (loading() || !entry.comparison) return
     await applyMutation({
       taskID: entry.comparison.artifact.task_id,
       sessionID: entry.comparison.artifact.root_session_id,
@@ -380,7 +396,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
     return `${revision.artifact.task_id}:${revision.artifact.locator.artifact_id}`
   }
 
-  function renderCampaignDetail(entry: EvolutionSelection) {
+  function renderCampaignDetail(entry: Accessor<EvolutionSelection>) {
     return (
       <section
         class="expert-squad-evolution-detail"
@@ -392,34 +408,34 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
           <h3 id={detailTitleID}>{t("expert_squad.evolution_campaign_detail")}</h3>
           <header>
             <div>
-              <strong>{entry.record.campaign.candidate_hypothesis}</strong>
-              <span>{entry.record.context.model} · {digest(entry.record.context.environment_digest)}</span>
+              <strong>{entry().record.campaign.candidate_hypothesis}</strong>
+              <span>{entry().record.context.model} · {digest(entry().record.context.environment_digest)}</span>
             </div>
-            <Badge tone={entry.record.graph_issues.length ? "bad" : "muted"}>{entry.record.graph_issues.length ? t("expert_squad.evolution_integrity_issues") : t("expert_squad.evolution_campaign_frozen")}</Badge>
+            <Badge tone={entry().record.graph_issues.length ? "bad" : "muted"}>{entry().record.graph_issues.length ? t("expert_squad.evolution_integrity_issues") : t("expert_squad.evolution_campaign_frozen")}</Badge>
           </header>
           <div class="expert-squad-evolution-facts">
-            <span>{t("expert_squad.evolution_baseline")}: {digest(entry.record.campaign.baseline_revision.package_digest)}</span>
-            <span>{t("expert_squad.evolution_dataset")}: {entry.record.context.dataset_partition} · {digest(entry.record.context.dataset_digest)}</span>
-            <span>{t("expert_squad.evolution_budget")}: {tc("expert_squad.evolution_runs", entry.record.context.budget.max_runs)} · {entry.record.context.budget.max_cost === null ? t("expert_squad.evolution_cost_ceiling_undeclared") : entry.record.context.budget.max_cost}</span>
+            <span>{t("expert_squad.evolution_baseline")}: {digest(entry().record.campaign.baseline_revision.package_digest)}</span>
+            <span>{t("expert_squad.evolution_dataset")}: {entry().record.context.dataset_partition} · {digest(entry().record.context.dataset_digest)}</span>
+            <span>{t("expert_squad.evolution_budget")}: {tc("expert_squad.evolution_runs", entry().record.context.budget.max_runs)} · {entry().record.context.budget.max_cost === null ? t("expert_squad.evolution_cost_ceiling_undeclared") : entry().record.context.budget.max_cost}</span>
           </div>
         </div>
         <Show when={[
-          ...entry.record.graph_issues,
-          ...(entry.candidate?.graph_issues ?? []),
-          ...(entry.comparison?.graph_issues ?? []),
+          ...entry().record.graph_issues,
+          ...(entry().candidate?.graph_issues ?? []),
+          ...(entry().comparison?.graph_issues ?? []),
         ].length > 0}>
           <div class="expert-squad-evolution-issues">
             <strong>{t("expert_squad.evolution_integrity_issues")}</strong>
             <For each={[
-              ...entry.record.graph_issues,
-              ...(entry.candidate?.graph_issues ?? []),
-              ...(entry.comparison?.graph_issues ?? []),
+              ...entry().record.graph_issues,
+              ...(entry().candidate?.graph_issues ?? []),
+              ...(entry().comparison?.graph_issues ?? []),
             ]}>
               {(issue) => <code>{JSON.stringify(issue)}</code>}
             </For>
           </div>
         </Show>
-        <Show when={entry.candidate}>
+        <Show when={entry().candidate}>
           {(candidate) => (
             <div class="expert-squad-evolution-section">
               <strong>{t("expert_squad.evolution_candidate")}: {candidate().candidate_revision.version}</strong>
@@ -429,7 +445,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
             </div>
           )}
         </Show>
-        <Show when={entry.comparison}>
+        <Show when={entry().comparison}>
           {(comparison) => (
             <>
               <div class="expert-squad-evolution-section">
@@ -528,12 +544,46 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
           tone="neutral"
           title={t("common.refresh")}
           aria-label={t("common.refresh")}
-          disabled={loading() || !!mutationBusy()}
-          onClick={() => void refresh()}
+          ref={refreshButton}
+          aria-disabled={refreshBusy() || undefined}
+          aria-busy={loading() || undefined}
+          onClick={() => {
+            if (!refreshBusy()) void refresh()
+          }}
         >
           <Icon name={loading() ? "loading" : "refresh"} />
         </Button>
       </header>
+
+      <Show when={historyFailure()}>
+        {(failure) => (
+          <Feedback
+            tone="error"
+            details={formatErrorDetails(failure().cause)}
+            actions={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                aria-disabled={refreshBusy() || undefined}
+                aria-busy={loading() || undefined}
+                onClick={(event) => {
+                  if (!refreshBusy()) void refresh({ retryTrigger: event.currentTarget })
+                }}
+              >
+                <Icon name={loading() ? "loading" : "refresh"} />
+                {t(loading() ? "common.retrying" : "common.retry")}
+              </Button>
+            }
+          >
+            {t(history() ? "expert_squad.evolution_history_refresh_failed" : "expert_squad.evolution_history_failed")}
+          </Feedback>
+        )}
+      </Show>
+      <Show when={loading() && !historyFailure()}>
+        <Feedback>{t(history() ? "expert_squad.evolution_history_refreshing" : "expert_squad.evolution_loading")}</Feedback>
+      </Show>
 
       <Show when={error() && Boolean(history())}>
         <Feedback tone="error" data-ui="expert-squad-evolution-error" details={error()?.diagnostic}>
@@ -694,69 +744,65 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         </section>
       </Show>
 
-      <Show when={!error() || Boolean(history())} fallback={
-        <Feedback tone="error" details={error()?.diagnostic} actions={
-          <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void refresh()}>
-            <Icon name="refresh" />{t("common.retry")}
-          </Button>
-        }>{errorSummary()}</Feedback>
-      }>
+      <Show when={history()}>
       <Show
-        when={!loading() && entries().length > 0}
+        when={entries().length > 0}
         fallback={
-          <Show when={!loading()} fallback={<Feedback>{t("expert_squad.evolution_loading")}</Feedback>}>
-            {/* Feedback revisions render above and are history too, so the
-                empty state must not claim there is none. */}
-            <Show when={(history()?.feedback_revisions.length ?? 0) === 0}>
-              <Feedback title={t("expert_squad.evolution_empty_title")}>{t("expert_squad.evolution_empty_body")}</Feedback>
-            </Show>
+          // Feedback revisions render above and also count as history.
+          <Show when={(history()?.feedback_revisions.length ?? 0) === 0}>
+            <Feedback title={t("expert_squad.evolution_empty_title")}>{t("expert_squad.evolution_empty_body")}</Feedback>
           </Show>
         }
       >
         <div ref={campaignList} class="expert-squad-evolution-records" aria-label={t("expert_squad.evolution_campaigns")}>
-          <For each={entries()}>
+          <Key each={entries()} by="key">
             {(entry) => (
-              <article class="expert-squad-evolution-record" data-evolution-entry={entry.key} classList={{ "is-selected": selectedKey() === entry.key }}>
+              <article class="expert-squad-evolution-record" data-evolution-entry={entry().key} classList={{ "is-selected": selectedKey() === entry().key }}>
                 <SettingsRow
                   as="button"
                   customContent
                   interactive
                   class="expert-squad-evolution-record-select"
-                  aria-current={selectedKey() === entry.key ? "true" : undefined}
-                  aria-controls={selectedKey() === entry.key ? detailID : undefined}
-                  onClick={() => void selectEntry(entry)}
+                  aria-current={selectedKey() === entry().key ? "true" : undefined}
+                  aria-controls={selectedKey() === entry().key ? detailID : undefined}
+                  onClick={() => void selectEntry(entry())}
                 >
                   <div class="expert-squad-evolution-record-title">
-                    <strong>{entry.record.campaign.candidate_hypothesis}</strong>
+                    <strong>{entry().record.campaign.candidate_hypothesis}</strong>
                     <Show
-                      when={entry.comparison}
-                      fallback={<Badge tone="muted">{entry.candidate ? t("expert_squad.evolution_trials_running") : t("expert_squad.evolution_campaign_frozen")}</Badge>}
+                      when={entry().comparison}
+                      fallback={<Badge tone="muted">{entry().candidate ? t("expert_squad.evolution_trials_running") : t("expert_squad.evolution_campaign_frozen")}</Badge>}
                     >
                       {(comparison) => <Badge tone={recommendationTone(comparison().recommendation)}>{recommendationLabel(comparison().recommendation)}</Badge>}
                     </Show>
                   </div>
-                  <span>{t("expert_squad.evolution_context")}: {digest(entry.record.context.context_sha256)} · {entry.record.context.dataset_partition}</span>
+                  <span>{t("expert_squad.evolution_context")}: {digest(entry().record.context.context_sha256)} · {entry().record.context.dataset_partition}</span>
                   <div class="expert-squad-evolution-metrics">
-                    <span>{t("expert_squad.evolution_candidates")}: {entry.record.candidates.length}</span>
-                    <span>{t("expert_squad.evolution_score")}: {entry.comparison ? number(entry.comparison.aggregate_score) : "—"}</span>
-                    <span>{t("expert_squad.evolution_evidence")}: {entry.comparison ? `${entry.comparison.completeness.present_evaluations}/${entry.comparison.completeness.expected_slots}` : `${entry.candidate?.evaluations.length ?? 0}`}</span>
+                    <span>{t("expert_squad.evolution_candidates")}: {entry().record.candidates.length}</span>
+                    <span>{t("expert_squad.evolution_score")}: {number(entry().comparison?.aggregate_score ?? null)}</span>
+                    <span>
+                      {t("expert_squad.evolution_evidence")}: {" "}
+                      <Show when={entry().comparison} fallback={entry().candidate?.evaluations.length ?? 0}>
+                        {(comparison) => `${comparison().completeness.present_evaluations}/${comparison().completeness.expected_slots}`}
+                      </Show>
+                    </span>
                   </div>
                 </SettingsRow>
-                <Show when={entry.comparison}>
+                <Show when={entry().comparison}>
                   {(comparison) => (
                     <div class="expert-squad-evolution-actions">
                       <Show when={comparison().promotion_intent}>
                         {(promotion) => (
-                          <Button type="button" variant="outline" size="sm" tone="accent" disabled={!!mutationBusy()} onClick={() => void runMutation(entry, promotion().confirmation_text, promotion().request)}>
-                            <Show when={mutationBusy() === `promotion:${entry.key}`}><Icon name="loading" /></Show>
+                          <Button type="button" variant="outline" size="sm" tone="accent" disabled={refreshBusy()} onClick={() => void runMutation(entry(), promotion().confirmation_text, promotion().request)}>
+                            <Show when={mutationBusy() === `promotion:${entry().key}`}><Icon name="loading" /></Show>
                             {t("expert_squad.evolution_promote")}
                           </Button>
                         )}
                       </Show>
                       <For each={comparison().restoration_intents}>
                         {(restoration) => (
-                          <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={!!mutationBusy()} title={restoration.request.restorePackageDigest} onClick={() => void runMutation(entry, restoration.confirmation_text, restoration.request)}>
-                            <Show when={mutationBusy() === `restoration:${entry.key}`}><Icon name="loading" /></Show>
+                          <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={refreshBusy()} title={restoration.request.restorePackageDigest} onClick={() => void runMutation(entry(), restoration.confirmation_text, restoration.request)}>
+                            <Show when={mutationBusy() === `restoration:${entry().key}`}><Icon name="loading" /></Show>
                             {t("expert_squad.evolution_restore")} {digest(restoration.request.restorePackageDigest)}
                           </Button>
                         )}
@@ -764,12 +810,12 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                     </div>
                   )}
                 </Show>
-                <Show when={selectedKey() === entry.key}>
+                <Show when={selectedKey() === entry().key}>
                   {renderCampaignDetail(entry)}
                 </Show>
               </article>
             )}
-          </For>
+          </Key>
           <Show when={history()?.next_cursor}>
             <div ref={continuationFooter} class="expert-squad-evolution-continuation">
               <Show when={continuationFailure()}>

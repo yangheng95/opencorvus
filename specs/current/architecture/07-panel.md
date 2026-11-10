@@ -702,12 +702,19 @@ foreign-Project authority error with HTTP400 through the shared error mapper.
 These readers do not start or resume a Task or publish an evolution mutation.
 In the installed panel, the current API connection, Project directory and exact
 installation own each accepted history. An explicit refresh retires older pages
-and detail reads. A continuation appends only to its originating snapshot at
+and detail reads, while retaining the last accepted history and exact selected
+evidence in the same scope during refresh or failure. Only a newly accepted
+history replaces those records and starts detail for the current selection.
+The first-page read owns its original diagnostic and Retry separately from
+detail and continuation. Successful Retry returns focus to Refresh only if the
+Retry action still owns focus; toolbar Refresh itself remains focusable.
+A continuation appends only to its originating snapshot at
 the same frozen Catalog upper revision; it updates the campaign rows and cursor.
 Detail belongs to that history and the exact comparison selection. A selection
 without comparison, a scope change or leaving the panel retires prior detail.
 Continuation feedback and retry stay beside the original list footer and reuse
-the current cursor. Accepted rows keep their controls on append. When focus
+the current cursor. Exact campaign identity keeps existing row controls on append
+and on a new head read that still contains the same entry. When focus
 remains on the footer button, an accepted continuation moves it to the first
 new row; an empty final page instead moves it to the last accepted row.
 The panel presents one detail region inside the selected campaign row, after

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [专家团演进首页刷新实页证据](2026-11-10-evolution-history-head-read-recovery/README.md)
 - [多步任务列表重试实页证据](2026-11-10-mission-board-read-recovery/README.md)
 - [多步任务专家团重试实页证据](2026-11-10-mission-squad-context-retry-focus/README.md)
 - [关于页任务列表状态实页证据](2026-11-10-about-accepted-task-list-count/README.md)

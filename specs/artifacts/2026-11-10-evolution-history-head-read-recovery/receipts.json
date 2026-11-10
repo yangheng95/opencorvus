@@ -1,0 +1,454 @@
+{
+  "baseline": {
+    "asset": "main-4Yhgx-WN.js",
+    "status": 200,
+    "requestID": "cb0d269d-90b2-40cd-a521-67436f918ae9",
+    "operation": "expertSquad.evolutionHistory",
+    "upper": 27,
+    "records": 20,
+    "cursor": {
+      "catalog_revision_upper": 27,
+      "before_catalog_revision": 6
+    },
+    "visibleProviders": 88,
+    "connectedProviders": 0
+  },
+  "baselineFrozen": {
+    "tail": {
+      "requestID": "28930811-e784-403b-b35c-538e5b4dc523",
+      "count": 3,
+      "status": 200,
+      "catalog": 27
+    },
+    "detail": {
+      "requestID": "4c137b4b-c68d-4cbf-b253-b45d66552cb8",
+      "slots": [
+        {
+          "case_id": "case-a",
+          "arm": "baseline",
+          "repetition": 0
+        },
+        {
+          "case_id": "case-a",
+          "arm": "candidate",
+          "repetition": 0
+        }
+      ],
+      "status": 200,
+      "catalog": 27,
+      "campaign": "B169 campaign 22",
+      "comparison": "art_g0VaWxygM00JkgwzCENW"
+    }
+  },
+  "firstCandidate": {
+    "asset": "main-BrGcuODT.js",
+    "operations": [
+      "expertSquad.evolutionHistory",
+      "expertSquad.evolutionHistoryDetail"
+    ],
+    "head": {
+      "status": 200,
+      "requestID": "af348b1a-4629-4c1b-901f-a184e28d3bcd",
+      "upper": 27,
+      "count": 20,
+      "cursor": {
+        "catalog_revision_upper": 27,
+        "before_catalog_revision": 6
+      }
+    },
+    "tail": {
+      "status": 200,
+      "requestID": "fc568690-5e7b-487b-81ff-59745fa6b699",
+      "upper": 27,
+      "count": 3
+    },
+    "detail": {
+      "status": 200,
+      "requestID": "1414592e-f79e-4d7f-9173-93cb6ce3961e",
+      "upper": 27,
+      "campaign": "B169 campaign 22",
+      "comparison": "art_g0VaWxygM00JkgwzCENW",
+      "slots": [
+        {
+          "case_id": "case-a",
+          "arm": "baseline",
+          "repetition": 0
+        },
+        {
+          "case_id": "case-a",
+          "arm": "candidate",
+          "repetition": 0
+        }
+      ]
+    },
+    "independent": {
+      "status": 200,
+      "requestID": "ac095063-c8f3-4126-80de-de3a8d779fcd",
+      "count": 0
+    },
+    "provider": {
+      "connected": 0,
+      "visible": 88
+    }
+  },
+  "finalBefore": {
+    "asset": "main-BsNlTMTK.js",
+    "operations": [
+      "expertSquad.evolutionHistory",
+      "expertSquad.evolutionHistoryDetail"
+    ],
+    "head": {
+      "status": 200,
+      "requestID": "d98a9ac0-a65f-4899-8d87-e1f2c67008f2",
+      "count": 20,
+      "cursor": {
+        "catalog_revision_upper": 27,
+        "before_catalog_revision": 6
+      },
+      "upper": 27
+    },
+    "tail": {
+      "status": 200,
+      "requestID": "a0b480fb-2d39-4cd4-a579-d66747f3fa82",
+      "upper": 27,
+      "count": 3
+    },
+    "detail": {
+      "status": 200,
+      "requestID": "c616715d-c67e-49ee-afe8-12d54468ec5b",
+      "campaign": "B169 campaign 22",
+      "slots": [
+        {
+          "case_id": "case-a",
+          "arm": "baseline",
+          "repetition": 0
+        },
+        {
+          "case_id": "case-a",
+          "arm": "candidate",
+          "repetition": 0
+        }
+      ],
+      "comparison": "art_g0VaWxygM00JkgwzCENW",
+      "upper": 27
+    },
+    "independent": {
+      "status": 200,
+      "requestID": "99c7c55d-6719-46f8-a43c-855b93ae9220",
+      "count": 0
+    },
+    "provider": {
+      "connected": 0,
+      "visible": 88
+    }
+  },
+  "finalAfter": {
+    "asset": "main-BsNlTMTK.js",
+    "operations": [
+      "expertSquad.evolutionHistory",
+      "expertSquad.evolutionHistoryDetail"
+    ],
+    "head": {
+      "status": 200,
+      "requestID": "65a0fa6e-723e-45e8-9211-1ae965c81140",
+      "cursor": {
+        "catalog_revision_upper": 27,
+        "before_catalog_revision": 6
+      },
+      "count": 20,
+      "upper": 27
+    },
+    "tail": {
+      "status": 200,
+      "requestID": "ebf32990-ccee-4c7c-a75a-1d97c7372aa1",
+      "upper": 27,
+      "count": 3
+    },
+    "detail": {
+      "status": 200,
+      "requestID": "925469fa-53b2-4163-959a-440c27b8ff5b",
+      "comparison": "art_g0VaWxygM00JkgwzCENW",
+      "slots": [
+        {
+          "case_id": "case-a",
+          "arm": "baseline",
+          "repetition": 0
+        },
+        {
+          "case_id": "case-a",
+          "arm": "candidate",
+          "repetition": 0
+        }
+      ],
+      "campaign": "B169 campaign 22",
+      "upper": 27
+    },
+    "independent": {
+      "status": 200,
+      "requestID": "84fb8e20-4746-48ee-bf55-ff103c5a088f",
+      "count": 0
+    },
+    "provider": {
+      "connected": 0,
+      "visible": 88
+    }
+  },
+  "browserRuns": {
+    "baseline": {
+      "transport": [
+        {
+          "requestID": "cf645090-2853-4c0f-af38-62346a954ae1",
+          "status": 200,
+          "method": "GET",
+          "path": "/expert-squad/evolution-history",
+          "mode": "restore"
+        },
+        {
+          "requestID": "3086672a-797c-4b82-b3bc-f667e094d427",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 5368
+        },
+        {
+          "requestID": "8bcdab25-d9c8-4032-9ea5-196367855d51",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "4a374e52-e73b-4b40-b993-302f89498f7a",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "036f0a9c-cb02-4889-8752-0f0ae0fb9b3f",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 9633
+        }
+      ],
+      "shutdown": {
+        "occurrence": "iteration-b195-baseline",
+        "apiPort": 39526,
+        "proxyPort": 39527,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    },
+    "candidate": {
+      "transport": [
+        {
+          "requestID": "462085ee-53be-459b-bd7f-964b49c94c07",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "22752f06-2e8a-415c-a784-6bb4c1e6fb92",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "f6d6334e-12c6-4922-b798-65c2fe42176c",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 5867
+        },
+        {
+          "requestID": "884572e6-5eb5-47c5-b814-bf41b4bce921",
+          "status": 200,
+          "method": "POST",
+          "path": "/expert-squad/evolution-history/detail",
+          "mode": "restore"
+        },
+        {
+          "requestID": "c2c93410-b6d4-4992-9a8d-17755c37da90",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 12535
+        },
+        {
+          "requestID": "66e47c02-131b-46cb-b0e1-6bd6aee607cc",
+          "status": 200,
+          "method": "POST",
+          "path": "/expert-squad/evolution-history/detail",
+          "mode": "restore"
+        },
+        {
+          "requestID": "ab7ddd5d-09f9-4db0-8dab-6f03774ad50c",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "998d149e-9513-4b7e-bf74-d57b097167c2",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 6921
+        }
+      ],
+      "shutdown": {
+        "occurrence": "iteration-b195-candidate",
+        "apiPort": 39528,
+        "proxyPort": 39529,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    },
+    "final": {
+      "transport": [
+        {
+          "requestID": "65d6756e-978e-456b-a17a-7197beb6770f",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "3ab88078-445b-4029-9a28-eb2cf9a08b47",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "496a3753-a04a-47cf-98d4-c1c20fefec62",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 8035
+        },
+        {
+          "requestID": "c573d94e-e47d-4450-a3e1-91d74bd4f0b7",
+          "status": 200,
+          "method": "POST",
+          "path": "/expert-squad/evolution-history/detail",
+          "mode": "restore"
+        },
+        {
+          "requestID": "0fbf08fa-8ab2-4492-b05b-d499907193db",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 14631
+        },
+        {
+          "requestID": "4d9a77fe-f65e-4cd5-8891-cc05bbee523d",
+          "status": 200,
+          "method": "POST",
+          "path": "/expert-squad/evolution-history/detail",
+          "mode": "restore"
+        },
+        {
+          "requestID": "702e48c3-3982-4af4-bd90-274e8682ee3f",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "b9da3e33-a0d0-403d-9ec7-ba1b4fb7da30",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 9973
+        },
+        {
+          "requestID": "1875a504-1023-4402-b3ff-08adbf621cc5",
+          "status": 200,
+          "method": "GET",
+          "path": "/expert-squad/evolution-history",
+          "mode": "restore"
+        },
+        {
+          "requestID": "855e37a3-e75c-4c40-8fbc-d1da00a7d21c",
+          "status": 200,
+          "method": "POST",
+          "path": "/expert-squad/evolution-history/detail",
+          "mode": "restore"
+        },
+        {
+          "requestID": "50e95696-7fad-407c-8986-c93f3fc8a204",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 56499,
+          "delivered": 1
+        },
+        {
+          "requestID": "554b3f70-9493-4ff7-89dc-1b5b1419b1f6",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 56499,
+          "delivered": 56499,
+          "heldMs": 10703
+        },
+        {
+          "requestID": "7e2710d9-527b-43a8-a70d-1f695e15e6b4",
+          "status": 200,
+          "method": "POST",
+          "path": "/expert-squad/evolution-history/detail",
+          "mode": "restore"
+        }
+      ],
+      "shutdown": {
+        "occurrence": "iteration-b195-final",
+        "apiPort": 39528,
+        "proxyPort": 39529,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    }
+  },
+  "databases": {
+    "baseline": {
+      "integrity": "ok",
+      "task": {
+        "id": "tsk_g00VaWxxuG00Ru0c08mw",
+        "project_id": "prj_hdKNDNP0w6goDO5iNI8R",
+        "session_id": "ses_-zUPT225jzz50wsfDSkm"
+      },
+      "artifacts": 27,
+      "providerUsageEvents": 0,
+      "providerActivityRequests": 0,
+      "activeRuntimeCapacityLeases": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "task": {
+        "id": "tsk_g00VaWxxuG00Ru0c08mw",
+        "project_id": "prj_hdKNDNP0w6goDO5iNI8R",
+        "session_id": "ses_-zUPT225jzz50wsfDSkm"
+      },
+      "artifacts": 27,
+      "providerUsageEvents": 0,
+      "providerActivityRequests": 0,
+      "activeRuntimeCapacityLeases": 0
+    }
+  }
+}

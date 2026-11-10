@@ -1784,6 +1784,8 @@
   "expert_squad.evolution_intro": "Review every immutable campaign in its exact comparison context. History never changes the installed revision automatically.",
   "expert_squad.evolution_loading": "Loading evolution history…",
   "expert_squad.evolution_history_failed": "Could not load evolution history.",
+  "expert_squad.evolution_history_refreshing": "Refreshing evolution history. Showing the last successful read.",
+  "expert_squad.evolution_history_refresh_failed": "Could not refresh evolution history. Showing the last successful read.",
   "expert_squad.evolution_more_failed": "Could not load more campaigns.",
   "expert_squad.evolution_detail_failed": "Could not load the selected comparison evidence.",
   "expert_squad.evolution_mutation_failed": "Could not complete the evolution operation.",
