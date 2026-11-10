@@ -1,0 +1,73 @@
+{
+  "baselineAsset": "main-DC0m8EvP.js",
+  "draftAsset": "main-Cnqgc2Rl.js",
+  "finalAsset": "main-D4izATkL.js",
+  "baseline": [
+    {
+      "project": "alpha/Workspace",
+      "status": 200,
+      "requestID": "c0a021a3-c758-4b6f-99c8-4607a48a5401",
+      "state": "disabled"
+    },
+    {
+      "project": "beta/Workspace",
+      "status": 200,
+      "requestID": "7c91e2e1-94fb-4ca8-9447-5d0481d00b7c",
+      "state": "disabled"
+    }
+  ],
+  "finalBeforeUI": [
+    {
+      "project": "alpha/Workspace",
+      "projectStatus": 200,
+      "projectRequestID": "233501a6-e903-4919-9c49-2f5e4d0a3fb4",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "e2ba0c42-cd15-40c5-af4c-1d185bf9c9e5",
+      "service": "b177-alpha-fixture",
+      "state": "disabled"
+    },
+    {
+      "project": "beta/Workspace",
+      "projectStatus": 200,
+      "projectRequestID": "8fc927a9-629b-4b5b-88fa-4e203be577b9",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "27ee1ca2-3203-405f-8664-af824e0eaa89",
+      "service": "b177-beta-fixture",
+      "state": "disabled"
+    }
+  ],
+  "finalAfterUI": [
+    {
+      "project": "alpha/Workspace",
+      "projectStatus": 200,
+      "projectRequestID": "aba4a315-f449-4534-8e52-ba0ee34b8f9f",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "0887fbde-ad88-4412-b7d2-3900b501c8bf",
+      "service": "b177-alpha-fixture",
+      "state": "disabled"
+    },
+    {
+      "project": "beta/Workspace",
+      "projectStatus": 200,
+      "projectRequestID": "da4bc708-2e5e-494f-a8c2-4018f57df6c8",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "4304bbb9-8abc-4b75-b88f-57aaf808b01d",
+      "service": "b177-beta-fixture",
+      "state": "disabled"
+    }
+  ],
+  "profiles": {
+    "integrity": "ok",
+    "engineTask": 0,
+    "session": 0,
+    "providerUsageEvent": 0
+  },
+  "providerCatalog": {
+    "visible": 88,
+    "connected": 0
+  }
+}

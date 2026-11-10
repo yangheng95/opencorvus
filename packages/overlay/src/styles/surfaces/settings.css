@@ -1666,6 +1666,27 @@ button.s-row:focus-visible {
   margin-block-start: var(--ui-gap-sm);
 }
 
+.mcp-project-scope {
+  margin-block-start: var(--ui-gap-sm);
+  overflow-wrap: anywhere;
+}
+
+.mcp-project-scope strong {
+  color: var(--text-strong);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.mcp-project-scope-parent {
+  color: var(--text-soft);
+}
+
+.mcp-project-scope-path {
+  display: block;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+}
+
 .conversation-capability-mcp {
   scroll-margin-block: var(--ui-gap-md);
 }

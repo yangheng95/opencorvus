@@ -14,18 +14,19 @@ import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import { localeTag, t } from "../../utils/i18n"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
+  activeDirectory,
   pathRevealFailureText,
   pathRevealLabelKey,
   pathRevealNoticeKey,
   pickDirectory,
   revealPath,
-  syncActiveDirectoryApiContext,
 } from "../../services/workspace"
 import { appStore } from "../../store/app"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { nativeConfirm, nativeOpen } from "../../utils/native"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
 import { createVisibilityInterval } from "../../utils/visibility-interval"
+import { projectDirectoryLabel, projectLedgerDisplayName } from "../../utils/project-directory"
 import {
   loadInstalledSkills,
   loadSkillIssues,
@@ -325,14 +326,16 @@ function SharedResourceManagementPanel(props: {
     setPanelNotice(key, { ...source, details: formatErrorDetails(error) })
   }
 
+  function selectedDirectory(): string {
+    if (props.directory === undefined) return activeDirectory().trim()
+    const value = typeof props.directory === "function" ? props.directory() : props.directory
+    return String(value || "").trim()
+  }
+
   function currentDirectory(): string {
-    if (props.directory !== undefined) {
-      const value = typeof props.directory === "function" ? props.directory() : props.directory
-      const directory = String(value || "").trim()
-      configureApi({ directory })
-      return directory
-    }
-    return syncActiveDirectoryApiContext().trim()
+    const directory = selectedDirectory()
+    configureApi({ directory })
+    return directory
   }
 
   function sourceMatchesDirectory(directory: string): boolean {
@@ -1261,6 +1264,36 @@ function SharedResourceManagementPanel(props: {
           description={
             <>
               <div>{t("mcp.resource_management_intro")}</div>
+              <Show when={selectedDirectory()} keyed>
+                {(directory) => {
+                  const directoryLabel = () => ({
+                    directory,
+                    unknownName: t("task.project.unknown"),
+                    implicitProjectName: t("work_ledger.implicit_project"),
+                  })
+                  const parent = () => {
+                    const label = directoryLabel()
+                    return projectDirectoryLabel(directory, label.unknownName, label.implicitProjectName).parent
+                  }
+                  return (
+                    <Disclosure.Root class="mcp-project-scope">
+                      <Disclosure.Trigger>
+                        <span>
+                          <strong>
+                            {t("settings.product.scope_project", { project: projectLedgerDisplayName(directoryLabel()) })}
+                          </strong>
+                          <Show when={parent()}>
+                            {(path) => <span class="mcp-project-scope-parent"> · {path()}</span>}
+                          </Show>
+                        </span>
+                      </Disclosure.Trigger>
+                      <Disclosure.Content>
+                        <code class="mcp-project-scope-path">{directory}</code>
+                      </Disclosure.Content>
+                    </Disclosure.Root>
+                  )
+                }}
+              </Show>
               <Show when={props.onOpenMcpAssignment}>
                 {(openAssignment) => (
                   <div class="s-toolbar mcp-assignment-navigation">

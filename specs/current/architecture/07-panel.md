@@ -5454,6 +5454,9 @@ Project MCP status uses one scoped read at a time for passive observation; an
 explicit readback may retire it. Read failures belong beside Server connections
 and clear on the next accepted success. Connection or configuration notices
 remain independently owned by their original actions.
+The management header names the project used for these reads and actions. Its
+directory hint and expandable exact path are derived from that same scope;
+showing the header does not change the request context or select a project.
 Project MCP management links to the active project's Chat and Work assignment
 sections using the existing settings tabs and their localized product labels.
 The settings host owns the one-shot focus handoff until the assignment section

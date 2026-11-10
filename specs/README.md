@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [MCP 管理显示实际目标项目](records/2026-11/2026-11-10-mcp-active-project-context.md)
 - [从 MCP 管理页直接到项目连接分配区](records/2026-11/2026-11-10-mcp-assignment-navigation.md)
 - [MCP 状态读回成功后收起已解决的读取提示](records/2026-11/2026-11-10-mcp-status-read-recovery.md)
 - [主输入区区分模型目录读取失败与没有可用模型](records/2026-11/2026-11-10-composer-model-catalog-read-state.md)
