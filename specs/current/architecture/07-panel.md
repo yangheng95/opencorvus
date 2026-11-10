@@ -1861,6 +1861,13 @@ same accepted Fire; the generic run-history refresh does not select the last
 entry as that action's receipt. After the exact result is confirmed, Run now
 starts a new independent action.
 
+Run history retains the last accepted target execution rows, including an
+accepted empty result, for the current definition and API connection. Refresh
+and failure label that retained view without hiding its Session links. The
+history heading owns one focusable Refresh/Retry action and the original
+diagnostic stays available during retry. Only a current read replaces the
+accepted rows. Stable Run IDs keep unchanged Session controls in place.
+
 Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing
 unrelated fields omits recurrence from the existing PATCH. Seconds and advanced

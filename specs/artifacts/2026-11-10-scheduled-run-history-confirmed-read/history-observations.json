@@ -1,0 +1,311 @@
+{
+  "assets": {
+    "baseline": "main-DsZQzjf0.js",
+    "firstCandidate": "main-CK7dO9SF.js",
+    "final": "main-DYypGkF7.js"
+  },
+  "histories": {
+    "primary": {
+      "definitionID": "atm_g0VaWgonz00zzrAdffju",
+      "ordered": [
+        {
+          "id": "atr_automation_b062a738fb192f9b96c8b788a884073b",
+          "fireId": "atm_h1dld2x3sv6KS0k8focA",
+          "session": "ses_automation_15faaaf05ef8dc1cee6d1a3017bc0b07",
+          "outcome": "succeeded"
+        },
+        {
+          "id": "atr_automation_b75febfce60f6001fd3deb3a4a881ce4",
+          "fireId": "atm_h3579veBQzgEbkcNMhnQ",
+          "session": "ses_automation_f88399a8d7543b9fc7be57c88bd9d0f3",
+          "outcome": "succeeded"
+        }
+      ]
+    },
+    "second": {
+      "definitionID": "atm_g0VaWfp6u00Ig4RdODBZ",
+      "ordered": [
+        {
+          "id": "atr_automation_c5a639e94e514926ab809d6da778ead8",
+          "fireId": "atm_hnu4ElTUAHzel3HROW6v",
+          "session": "ses_automation_224e6cc06183abd54c14dfbaef96dcc5",
+          "outcome": "succeeded"
+        },
+        {
+          "id": "atr_automation_1113c32f0259c421fd4309d82c110fe7",
+          "fireId": "atm_hGF20kOIXtxHaGmf2TG2",
+          "session": "ses_automation_d16436101926df0b9d4433bb13982346",
+          "outcome": "succeeded"
+        },
+        {
+          "id": "atr_automation_806ae5d49af8216db8b0b41945586bab",
+          "fireId": "atm_hQI6ExnROBr2VETSsGdL",
+          "session": "ses_automation_a709699d579123438052e3d9b55cb297",
+          "outcome": "succeeded"
+        }
+      ]
+    },
+    "empty": {
+      "definitionID": "atm_g0VaWp2Qp003Qa2uNWAf",
+      "ordered": [],
+      "futureFire": {
+        "id": "cal_automation_634880589c1a8dfccc3f15b9f4860df2",
+        "state": "scheduled",
+        "dueAt": 4070908800000
+      }
+    }
+  },
+  "network": {
+    "baseline": [
+      {
+        "ordinal": 1,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "bb02299f-12c1-42ed-96ae-a85aab6e4fcf",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:05:55.704Z",
+        "settled": "2026-11-10T01:05:55.712Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      },
+      {
+        "ordinal": 2,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "004886f3-fc6e-47b3-a9e4-4b7a77b4025d",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:05:59.308Z",
+        "settled": "2026-11-10T01:06:06.322Z",
+        "transport": "partial-body",
+        "deliveredBytes": 24
+      },
+      {
+        "ordinal": 3,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "261f9a9e-e366-4580-b84e-5149c1fca03b",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:06:13.480Z",
+        "settled": "2026-11-10T01:06:22.491Z",
+        "transport": "partial-body",
+        "deliveredBytes": 24
+      },
+      {
+        "ordinal": 4,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "9f27706a-991f-4cf2-9b51-ea85b1eb6d69",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:06:24.764Z",
+        "settled": "2026-11-10T01:06:24.772Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      }
+    ],
+    "firstCandidate": [
+      {
+        "ordinal": 1,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "d810c21d-4198-4553-b858-5e1e6f4edf1e",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:11:39.770Z",
+        "settled": "2026-11-10T01:11:39.780Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      },
+      {
+        "ordinal": 2,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "970479b2-0bb5-4679-af59-6393c98a5c78",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:11:40.077Z",
+        "settled": "2026-11-10T01:11:47.098Z",
+        "transport": "partial-body",
+        "deliveredBytes": 24
+      },
+      {
+        "ordinal": 3,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "c0e1bbe8-e70f-4730-b95c-a9718661b857",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:11:53.845Z",
+        "settled": "2026-11-10T01:12:02.859Z",
+        "transport": "partial-body",
+        "deliveredBytes": 24
+      },
+      {
+        "ordinal": 4,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "654e89bf-1321-49e0-ad51-4b3a6185a264",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:12:09.684Z",
+        "settled": "2026-11-10T01:12:09.694Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      },
+      {
+        "ordinal": 5,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "0254118c-0d5f-4eec-9bd3-1e528f2d7345",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:12:14.043Z",
+        "settled": "2026-11-10T01:12:23.066Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      }
+    ],
+    "final": [
+      {
+        "ordinal": 1,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "a088cd7c-7153-4dcf-80f6-7d2d3e26774d",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:15:21.095Z",
+        "settled": "2026-11-10T01:15:21.102Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      },
+      {
+        "ordinal": 2,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "8e647e7e-189f-415e-a8ed-1582bbabfb27",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:15:21.402Z",
+        "settled": "2026-11-10T01:15:28.416Z",
+        "transport": "partial-body",
+        "deliveredBytes": 24
+      },
+      {
+        "ordinal": 3,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "b6256f2c-3dab-487a-b329-07fe6654fb24",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:15:37.864Z",
+        "settled": "2026-11-10T01:15:46.880Z",
+        "transport": "partial-body",
+        "deliveredBytes": 24
+      },
+      {
+        "ordinal": 4,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "a57f0792-a35d-4a43-afcc-7c60e6970e06",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:15:54.817Z",
+        "settled": "2026-11-10T01:15:54.827Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      },
+      {
+        "ordinal": 5,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "6c525e42-9c88-4ce7-8c02-c5fa335f970d",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:15:55.090Z",
+        "settled": "2026-11-10T01:16:04.111Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      },
+      {
+        "ordinal": 6,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "e3767201-0a12-4d7f-b3dd-4b37dfc11050",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:16:22.856Z",
+        "settled": "2026-11-10T01:16:22.862Z",
+        "transport": "released",
+        "deliveredBytes": 1189
+      },
+      {
+        "ordinal": 7,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "58bbaa3e-07ea-478c-bc16-7956e745d9cf",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:16:23.234Z",
+        "settled": "2026-11-10T01:16:30.245Z",
+        "transport": "partial-body",
+        "deliveredBytes": 24
+      },
+      {
+        "ordinal": 8,
+        "path": "/global/automations/atm_g0VaWgonz00zzrAdffju/runs",
+        "requestID": "2219fe74-2cd3-4bc6-b883-15f6ce0fe8d7",
+        "http": 200,
+        "originBytes": 1189,
+        "arrival": "2026-11-10T01:16:40.584Z",
+        "settled": "2026-11-10T01:16:49.598Z",
+        "transport": "client-closed",
+        "deliveredBytes": null
+      }
+    ],
+    "empty": [
+      {
+        "ordinal": 1,
+        "path": "/global/automations/atm_g0VaWp2Qp003Qa2uNWAf/runs",
+        "requestID": "ebc5f61b-f6cf-4682-a9d0-9d9dd20a457d",
+        "http": 200,
+        "originBytes": 2,
+        "arrival": "2026-11-10T01:15:11.503Z",
+        "settled": "2026-11-10T01:15:11.511Z",
+        "transport": "partial-body",
+        "deliveredBytes": 1
+      },
+      {
+        "ordinal": 2,
+        "path": "/global/automations/atm_g0VaWp2Qp003Qa2uNWAf/runs",
+        "requestID": "723a29fa-400c-4866-a8c5-49fa3bb820ae",
+        "http": 200,
+        "originBytes": 2,
+        "arrival": "2026-11-10T01:15:15.349Z",
+        "settled": "2026-11-10T01:15:15.355Z",
+        "transport": "released",
+        "deliveredBytes": 2
+      }
+    ],
+    "openedExactSession": [
+      {
+        "time": "2026-11-10T01:16:11.625Z",
+        "stage": "session-read",
+        "path": "/session/ses_automation_15faaaf05ef8dc1cee6d1a3017bc0b07/conversation"
+      },
+      {
+        "time": "2026-11-10T01:16:11.665Z",
+        "stage": "session-read",
+        "path": "/session/ses_automation_15faaaf05ef8dc1cee6d1a3017bc0b07/config"
+      },
+      {
+        "time": "2026-11-10T01:16:11.715Z",
+        "stage": "session-read",
+        "path": "/session/ses_automation_15faaaf05ef8dc1cee6d1a3017bc0b07/config"
+      }
+    ]
+  },
+  "durableOriginalRows": {
+    "automation": 9,
+    "automation_definition_tombstone": 1,
+    "automation_fire": 22,
+    "automation_fire_attempt": 13,
+    "automation_fire_attempt_receipt": 13,
+    "automation_fire_frontier": 7,
+    "automation_project_target": 10,
+    "automation_run": 14,
+    "automation_run_receipt": 14,
+    "selected_sessions": 5
+  },
+  "separateFixtureRows": {
+    "automation": 1,
+    "automation_fire": 1,
+    "automation_fire_frontier": 1
+  }
+}

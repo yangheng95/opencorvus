@@ -1,7 +1,7 @@
 import { Feedback } from "../ui/Feedback"
 import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
-import { ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
+import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { formatErrorDetails } from "../../utils/error-details"
 import {
   automationTimeZoneOptions,
@@ -78,8 +78,9 @@ type AutomationMutationOwner =
   | { kind: "action"; id: string; operation: "run" | "status" | "delete" }
 type AutomationRunState = {
   automationID: string
-  status: "idle" | "loading" | "ready" | "error"
-  items: AutomationRunView[]
+  authority: ApiAuthority
+  pending: boolean
+  items?: AutomationRunView[]
   error?: AutomationError
 }
 
@@ -237,7 +238,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     manualRunRevision()
     return hasPendingAutomationRun(id)
   }
-  const [runState, setRunState] = createSignal<AutomationRunState>({ automationID: "", status: "idle", items: [] })
+  const [runState, setRunState] = createSignal<AutomationRunState>()
   const [loading, setLoading] = createSignal(false)
   const [mutationOwner, setMutationOwner] = createSignal<AutomationMutationOwner | null>(null)
   const saving = createMemo(() => mutationOwner()?.kind === "save")
@@ -332,10 +333,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   })
   const selectedRunState = createMemo(() => {
     const state = runState()
-    return state.automationID === selectedID()
+    return state && state.automationID === selectedID() && isApiAuthorityCurrent(state.authority)
       ? state
-      : ({ automationID: selectedID(), status: "idle", items: [] } satisfies AutomationRunState)
+      : undefined
   })
+  const acceptedRunItems = () => selectedRunState()?.items
+  const runsByID = createMemo(() => new Map((acceptedRunItems() ?? []).map((run) => [run.id, run])))
+  const runIDs = createMemo(() => [...runsByID().keys()])
   const filteredAutomations = createMemo(() => {
     const query = search().trim().toLocaleLowerCase()
     return automations().filter((automation) => {
@@ -504,7 +508,6 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         batch(() => {
           setAutomations(items)
           setSelectedID(nextID)
-          if (!nextID) setRunState({ automationID: "", status: "idle", items: [] })
           if (error()?.source === "list-load") setError(null)
         })
         if (hadRetryFocus) focusAfterRender(() => document.activeElement === document.body ? listSearchInput : undefined)
@@ -528,24 +531,34 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setLoading(false)
   }
 
-  async function loadRuns(automationID: string): Promise<void> {
+  function retireRunHistory(): void {
     runRequest?.abort()
-    if (!automationID) {
-      setRunState({ automationID: "", status: "idle", items: [] })
-      return
-    }
+    runRequest = undefined
+    setRunState(undefined)
+  }
+
+  async function loadRuns(automationID: string, options: { skipPending?: boolean } = {}): Promise<void> {
+    if (disposed || !automationID || selectedID() !== automationID) return
+    const current = selectedRunState()
+    if (options.skipPending && current?.pending) return
+    runRequest?.abort()
     const request = new AbortController()
     runRequest = request
-    const current = runState()
-    const currentItems = current.automationID === automationID ? current.items : []
-    setRunState({ automationID, status: "loading", items: currentItems })
+    const authority = captureApiAuthority()
+    const owns = () => !disposed && runRequest === request && !request.signal.aborted &&
+      selectedID() === automationID && isApiAuthorityCurrent(authority)
+    const items = current?.items
+    setRunState({ automationID, authority, pending: true, items, error: current?.error })
     try {
       const history = await listAutomationRuns(automationID, request.signal)
-      if (!request.signal.aborted) setRunState({ automationID, status: "ready", items: history })
+      if (owns()) setRunState({ automationID, authority, pending: false, items: history })
     } catch (cause) {
-      if (!request.signal.aborted) {
-        setRunState({ automationID, status: "error", items: currentItems, error: automationFailure(cause, "automations.error.history_load_failed") })
+      if (owns()) {
+        const messageKey = items ? "automations.error.history_refresh_failed" : "automations.error.history_load_failed"
+        setRunState({ automationID, authority, pending: false, items, error: automationFailure(cause, messageKey) })
       }
+    } finally {
+      if (runRequest === request) runRequest = undefined
     }
   }
 
@@ -592,7 +605,6 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (busyAction()) return
     invalidateListNavigation()
     setSelectedID("")
-    setRunState({ automationID: "", status: "idle", items: [] })
     setCreating(false)
     setEditTarget(null)
     setError(null)
@@ -797,7 +809,6 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       await deleteAutomation(id, revisionId)
       if (removingSelected) {
         setSelectedID("")
-        setRunState({ automationID: "", status: "idle", items: [] })
         setCreating(false)
         setEditTarget(null)
       }
@@ -879,8 +890,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   async function refreshDueAutomation(): Promise<void> {
     const preferredID = selectedID()
     await load(preferredID, { background: true })
-    if (selectedID()) await loadRuns(selectedID())
+    if (preferredID && selectedID() === preferredID) await loadRuns(preferredID, { skipPending: true })
   }
+
+  createEffect(() => {
+    const state = runState()
+    if (state && (state.automationID !== selectedID() || !isApiAuthorityCurrent(state.authority))) retireRunHistory()
+  })
 
   createEffect(() => {
     if (dueRefreshTimer) clearTimeout(dueRefreshTimer)
@@ -1287,81 +1303,79 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             variant="ghost"
                             size="mini"
                             tone="neutral"
-                            disabled={Boolean(busyAction())}
-                            onClick={() => void loadRuns(automation().id)}
+                            aria-disabled={Boolean(busyAction()) || selectedRunState()?.pending || undefined}
+                            aria-busy={selectedRunState()?.pending || undefined}
+                            onClick={() => {
+                              if (!busyAction()) void loadRuns(automation().id, { skipPending: true })
+                            }}
                           >
                             <Icon name="refresh" />
-                            {t("common.refresh")}
+                            {t(selectedRunState()?.error
+                              ? (selectedRunState()?.pending ? "common.retrying" : "common.retry")
+                              : "common.refresh")}
                           </Button>
                         </div>
-                        <Show
-                          when={selectedRunState().status === "ready"}
-                          fallback={
-                            <Show
-                              when={selectedRunState().status === "error"}
-                              fallback={<p class="automations-muted" role="status">{t("common.loading")}</p>}
-                            >
-                              <Show when={selectedRunState().error}>
-                              {(problem) => <Feedback
-                                tone="error"
-                                details={problem().details}
-                                actions={
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="mini"
-                                    tone="neutral"
-                                    onClick={() => void loadRuns(automation().id)}
-                                  >
-                                    <Icon name="refresh" />
-                                    {t("common.retry")}
-                                  </Button>
-                                }
-                              >
-                                {t(problem().messageKey)}
-                              </Feedback>}
+                        <Show when={selectedRunState()?.error}>
+                          {(problem) => (
+                            <Feedback tone="error" details={problem().details}>
+                              <div>{t(problem().messageKey)}</div>
+                              <Show when={acceptedRunItems()}>
+                                <div>{t("automations.history_last_confirmed")}</div>
                               </Show>
-                            </Show>
-                          }
-                        >
+                            </Feedback>
+                          )}
+                        </Show>
+                        <Show when={selectedRunState()?.pending && !selectedRunState()?.error}>
+                          <p class="automations-muted" role="status">
+                            {t(acceptedRunItems() ? "automations.history_refreshing" : "common.loading")}
+                          </p>
+                        </Show>
+                        <Show when={!selectedRunState()}>
+                          <p class="automations-muted">{t("automations.history_not_loaded")}</p>
+                        </Show>
+                        <Show when={acceptedRunItems()}>
                           <Show
-                            when={selectedRunState().items.length > 0}
+                            when={runIDs().length > 0}
                             fallback={<p class="automations-muted">{t("automations.history_empty")}</p>}
                           >
-                          <div class="automation-run-list">
-                            <For each={selectedRunState().items}>
-                              {(run) => (
-                                <div class="automation-run-row">
-                                  <Badge tone={outcomeTone(run.outcome)} size="sm">
-                                    {t(`automations.outcome.${run.outcome}`)}
-                                  </Badge>
-                                  <span>{formatTimestamp(run.startedAt)}</span>
-                                  <Show
-                                    when={run.session}
-                                    fallback={<span class="automation-run-row__session">—</span>}
-                                  >
-                                    {(session) => (
-                                      <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="mini"
-                                        tone="neutral"
-                                        data-ui="automation-open-session"
-                                        disabled={Boolean(busyAction())}
-                                        onClick={() => void openRunSession(session())}
-                                      >
-                                        <Icon name="message" />
-                                        {session().title || session().id}
-                                      </Button>
+                            <div class="automation-run-list">
+                              <For each={runIDs()}>
+                                {(runID) => (
+                                  <Show when={runsByID().get(runID)}>
+                                    {(run) => (
+                                      <div class="automation-run-row">
+                                        <Badge tone={outcomeTone(run().outcome)} size="sm">
+                                          {t(`automations.outcome.${run().outcome}`)}
+                                        </Badge>
+                                        <span>{formatTimestamp(run().startedAt)}</span>
+                                        <Show
+                                          when={run().session}
+                                          fallback={<span class="automation-run-row__session">—</span>}
+                                        >
+                                          {(session) => (
+                                            <Button
+                                              type="button"
+                                              variant="ghost"
+                                              size="mini"
+                                              tone="neutral"
+                                              data-ui="automation-open-session"
+                                              disabled={Boolean(busyAction())}
+                                              onClick={() => void openRunSession(session())}
+                                            >
+                                              <Icon name="message" />
+                                              {session().title || session().id}
+                                            </Button>
+                                          )}
+                                        </Show>
+                                        <Show when={run().error}>
+                                          <span class="automation-run-row__error">{run().error}</span>
+                                        </Show>
+                                      </div>
                                     )}
                                   </Show>
-                                  <Show when={run.error}>
-                                    <span class="automation-run-row__error">{run.error}</span>
-                                  </Show>
-                                </div>
-                              )}
-                            </For>
-                          </div>
+                                )}
+                              </For>
+                            </div>
                           </Show>
                         </Show>
                       </section>
