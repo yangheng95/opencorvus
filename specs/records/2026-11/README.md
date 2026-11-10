@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [目录后台刷新保留诊断和键盘位置](2026-11-10-explorer-directory-refresh-diagnostics.md)
 - [首次文件读取失败后进入重试](2026-11-10-file-editor-first-read-error-focus.md)
 - [左侧工作列表重试保留键盘位置和诊断](2026-11-10-work-ledger-sidebar-read-retry.md)
 - [文件搜索返回旧查询文字时保留正确加载状态](2026-11-10-explorer-returning-query-read-status.md)

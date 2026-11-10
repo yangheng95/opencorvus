@@ -4753,6 +4753,11 @@ The selected row's accessible name includes the same status.
 When the project root listing fails, its feedback owns the current tree
 surface. Individual expanded-folder failures remain available when the root
 listing returns and their folders are visible again.
+Directory feedback retains the last accepted diagnostic during its next read,
+marks that path's Retry as busy, and updates a repeated failure in place by
+canonical directory path. When an accepted listing or the root's error
+priority removes focused directory feedback, its focus returns to the existing
+Explorer search input. Focus outside that feedback stays where the user left it.
 The launcher heading keeps its original localized text and complete Project
 identity; native balanced wrapping and emergency word wrapping contain it in
 the existing layout as the sidebar and tools change its available width.

@@ -496,10 +496,19 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   })
   const [focusedRowKey, setFocusedRowKey] = createSignal<string | null>(null)
   const rowElements = new Map<string, HTMLButtonElement>()
+  let explorerElement: HTMLElement | undefined
   let listElement: HTMLDivElement | undefined
   let searchInput: HTMLInputElement | undefined
   let virtualizer: VirtualizerHandle | undefined
   let pendingFocus: { key: string; origin: Element; scope: ExplorerOperationScope; waitingForScroll: boolean } | undefined
+
+  function returnFocusFromDirectoryFailure(dismissing: (path: string) => boolean): void {
+    const feedback = explorerElement?.ownerDocument.activeElement?.closest<HTMLElement>("[data-explorer-directory-error]")
+    const path = feedback?.dataset.explorerDirectoryError
+    if (feedback && explorerElement?.contains(feedback) && path !== undefined && dismissing(path)) {
+      searchInput?.focus({ preventScroll: true })
+    }
+  }
 
   function settleRowFocus(): void {
     const request = pendingFocus
@@ -771,17 +780,20 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     tokenMap.set(normalizedPath, token)
     const ownsLoad = () => tokenMap.get(normalizedPath) === token
     setLoadingPaths((prev) => new Set(prev).add(normalizedPath))
-    setDirectoryErrors((prev) => {
-      const next = new Map(prev)
-      next.delete(normalizedPath)
-      return next
-    })
     try {
       const nodes = await loadFileDirectory(normalizedPath, scope)
       if (!ownsExplorerOperation(scope)) return { status: "retired", reason: "scope" }
       if (!ownsLoad()) return { status: "retired", reason: "superseded" }
       const normalizedNodes = nodes.map((node) => ({ ...node, path: normalizeExplorerPath(node.path) }))
       batch(() => {
+        if (directoryErrors().has(normalizedPath)) {
+          returnFocusFromDirectoryFailure((path) => path === normalizedPath)
+          setDirectoryErrors((prev) => {
+            const next = new Map(prev)
+            next.delete(normalizedPath)
+            return next
+          })
+        }
         setChildrenByPath((prev) => new Map(prev).set(normalizedPath, normalizedNodes))
         reconcileDirectoryBranches(normalizedPath, normalizedNodes)
         reconcileDirectorySelection(normalizedPath, normalizedNodes)
@@ -791,6 +803,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       if (!ownsExplorerOperation(scope)) return { status: "retired", reason: "scope", observedFailure: { error } }
       if (!ownsLoad()) return { status: "retired", reason: "superseded", observedFailure: { error } }
       if (!opts?.required) console.error("[file-explorer] list failed", normalizedPath, error)
+      if (!normalizedPath) returnFocusFromDirectoryFailure((path) => path !== "")
       setDirectoryErrors((prev) => {
         const next = new Map(prev)
         next.set(normalizedPath, { error })
@@ -964,17 +977,18 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       !!directory() &&
       !deferredQuery() &&
       !childrenByPath().has("") &&
-      (loadingPaths().has("") || !directoryErrors().has("")),
+      !directoryErrors().has(""),
   )
   const searchLoading = createMemo(() => Boolean(deferredQuery()) && searchResults.loading && !currentSearchResult())
   const rootError = createMemo(() => (!deferredQuery() ? (directoryErrors().get("") ?? null) : null))
   const searchError = createMemo(() => (deferredQuery() ? currentSearchFailure() : null))
-  const expandedDirectoryFailures = createMemo(() => {
+  const rootRetryPending = () => !searchError() && loadingPaths().has("")
+  const expandedDirectoryFailurePaths = createMemo(() => {
     if (deferredQuery() || rootError()) return []
     const visibleDirectories = new Set(
       rows().flatMap((row) => (row.kind === "node" && row.expanded ? [row.node.path] : [])),
     )
-    return [...directoryErrors()].filter(([path]) => path !== "" && visibleDirectories.has(path))
+    return [...directoryErrors().keys()].filter((path) => path !== "" && visibleDirectories.has(path))
   })
   const explorerPanelStyle = () => ({
     "--file-explorer-row-height": `calc(${FILE_EXPLORER_ROW_HEIGHT_PX}px * var(--ui-scale))`,
@@ -1047,6 +1061,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const child = directChildPath(parent, path)
       return child !== undefined && children.get(child)?.directoryTarget !== true
     }
+    returnFocusFromDirectoryFailure(retired)
     setExpandedPaths((prev) => new Set([...prev].filter((path) => !retired(path))))
     setChildrenByPath((prev) => new Map([...prev].filter(([path]) => !retired(path))))
     setDirectoryErrors((prev) => new Map([...prev].filter(([path]) => !retired(path))))
@@ -2314,6 +2329,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   return (
     <section
+      ref={explorerElement}
       class="file-explorer-panel"
       aria-label={t("explorer.title")}
       data-uploading={uploading() ? "true" : "false"}
@@ -2403,7 +2419,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           </div>
         )}
       </Show>
-      <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailures().length > 0 || searchHasMore()}>
+      <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailurePaths().length > 0 || searchHasMore()}>
         <div class="file-explorer-feedback-stack">
           <Show when={uploading()}>
             <Feedback class="file-explorer-feedback" tone="info">
@@ -2416,29 +2432,38 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           <Show when={mutationFeedback()}>
             {(feedback) => <ExplorerActionFeedback feedback={feedback()} dataUI="file-explorer-command-message" />}
           </Show>
-          <For each={expandedDirectoryFailures()}>
-            {([path, failure]) => (
-              <Feedback
-                class="file-explorer-feedback"
-                tone="error"
-                title={t("explorer.directory_load_failed", { path })}
-                details={formatErrorDetails(failure.error) || undefined}
-                actions={
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    tone="neutral"
-                    onClick={(event) =>
-                      retryReadFromFeedback(event.currentTarget, () => loadDirectory(path, { force: true }))
+          <For each={expandedDirectoryFailurePaths()}>
+            {(path) => (
+              <Show when={directoryErrors().get(path)}>
+                {(failure) => (
+                  <Feedback
+                    class="file-explorer-feedback"
+                    tone="error"
+                    data-explorer-directory-error={path}
+                    title={t("explorer.directory_load_failed", { path })}
+                    details={formatErrorDetails(failure().error) || undefined}
+                    actions={
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        tone="neutral"
+                        aria-disabled={loadingPaths().has(path) || undefined}
+                        aria-busy={loadingPaths().has(path) || undefined}
+                        onClick={(event) => {
+                          if (!loadingPaths().has(path)) {
+                            retryReadFromFeedback(event.currentTarget, () => loadDirectory(path, { force: true }))
+                          }
+                        }}
+                      >
+                        {t(loadingPaths().has(path) ? "common.loading" : "common.retry")}
+                      </Button>
                     }
                   >
-                    {t("common.retry")}
-                  </Button>
-                }
-              >
-                {fileErrorSummary(failure.error, "load")}
-              </Feedback>
+                    {fileErrorSummary(failure().error, "load")}
+                  </Feedback>
+                )}
+              </Show>
             )}
           </For>
           <Show when={searchHasMore()}>
@@ -2480,6 +2505,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                     <Feedback
                       class="file-explorer-feedback file-explorer-read-feedback"
                       tone="error"
+                      data-explorer-directory-error={searchError() ? undefined : ""}
                       details={formatErrorDetails(failure().error) || undefined}
                       actions={
                         <Button
@@ -2488,11 +2514,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                           size="sm"
                           tone="neutral"
                           data-ui={searchError() ? "file-explorer-search-retry" : "file-explorer-retry"}
-                          onClick={(event) =>
+                          aria-disabled={rootRetryPending() || undefined}
+                          aria-busy={rootRetryPending() || undefined}
+                          onClick={(event) => {
+                            if (rootRetryPending()) return
                             retryReadFromFeedback(event.currentTarget, searchError() ? refetchSearch : retryRootDirectory)
-                          }
+                          }}
                         >
-                          {t("common.retry")}
+                          {t(rootRetryPending() ? "common.loading" : "common.retry")}
                         </Button>
                       }
                     >

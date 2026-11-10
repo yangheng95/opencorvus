@@ -1,0 +1,791 @@
+{
+  "candidateDirectBefore": {
+    "page": {
+      "status": 200,
+      "requestID": "6d261b7f-4d90-4962-89f5-f10d0a430ae1",
+      "asset": "main-CrEyrPqw.js"
+    },
+    "contract": {
+      "status": 200,
+      "requestID": "2228d7ab-5067-4a96-835f-04d3a5a3af66",
+      "operation": "file.list"
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "6474b9e8-a197-4aaa-9e30-55e7087edc19",
+        "path": "",
+        "items": [
+          {
+            "name": ".opencorvus",
+            "path": ".opencorvus",
+            "type": "directory",
+            "directoryTarget": true
+          },
+          {
+            "name": "empty",
+            "path": "empty",
+            "type": "directory",
+            "directoryTarget": true
+          },
+          {
+            "name": "plans",
+            "path": "plans",
+            "type": "directory",
+            "directoryTarget": true
+          },
+          {
+            "name": ".gitattributes",
+            "path": ".gitattributes",
+            "type": "file",
+            "directoryTarget": false
+          },
+          {
+            "name": ".gitignore",
+            "path": ".gitignore",
+            "type": "file",
+            "directoryTarget": false
+          },
+          {
+            "name": "root-note.txt",
+            "path": "root-note.txt",
+            "type": "file",
+            "directoryTarget": false
+          }
+        ]
+      },
+      {
+        "status": 200,
+        "requestID": "4ba42c75-aeaf-49c2-adc6-2518ebf0af3e",
+        "path": "plans",
+        "items": [
+          {
+            "name": "plan-marker.txt",
+            "path": "plans/plan-marker.txt",
+            "type": "file",
+            "directoryTarget": false
+          }
+        ]
+      },
+      {
+        "status": 200,
+        "requestID": "d6eca2fa-5723-429c-9bf4-d28b35fcf336",
+        "path": "empty",
+        "items": []
+      },
+      {
+        "status": 404,
+        "requestID": "2b021f55-98ac-4b5f-941e-0e7d43b691df",
+        "path": "review-missing-root",
+        "body": {
+          "name": "FileNotFoundError",
+          "data": {
+            "path": "review-missing-root",
+            "message": "Directory entry not found: review-missing-root"
+          }
+        }
+      },
+      {
+        "status": 404,
+        "requestID": "b83ad34f-31c9-4359-826b-21b0fdf32a18",
+        "path": "plans/review-missing-child",
+        "body": {
+          "name": "FileNotFoundError",
+          "data": {
+            "path": "plans/review-missing-child",
+            "message": "Directory entry not found: plans/review-missing-child"
+          }
+        }
+      }
+    ],
+    "providers": {
+      "status": 200,
+      "requestID": "f1fa5729-880a-4478-af7d-467fe76640c0",
+      "connected": 0
+    }
+  },
+  "candidateDirectAfter": {
+    "page": {
+      "status": 200,
+      "requestID": "93dd60e0-cdac-421d-8d81-dbfeacaa8310",
+      "asset": "main-CrEyrPqw.js"
+    },
+    "contract": {
+      "status": 200,
+      "requestID": "5fe5f461-c598-4a72-91ea-f57559db1b09",
+      "operation": "file.list"
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "dde6838f-0c0f-4681-8fe2-9bba74e92729",
+        "path": "",
+        "items": [
+          {
+            "name": ".opencorvus",
+            "path": ".opencorvus",
+            "type": "directory",
+            "directoryTarget": true
+          },
+          {
+            "name": "empty",
+            "path": "empty",
+            "type": "directory",
+            "directoryTarget": true
+          },
+          {
+            "name": "plans",
+            "path": "plans",
+            "type": "directory",
+            "directoryTarget": true
+          },
+          {
+            "name": ".gitattributes",
+            "path": ".gitattributes",
+            "type": "file",
+            "directoryTarget": false
+          },
+          {
+            "name": ".gitignore",
+            "path": ".gitignore",
+            "type": "file",
+            "directoryTarget": false
+          },
+          {
+            "name": "root-note.txt",
+            "path": "root-note.txt",
+            "type": "file",
+            "directoryTarget": false
+          }
+        ]
+      },
+      {
+        "status": 200,
+        "requestID": "eb94e453-5a91-4116-b14b-fa7e990f53cc",
+        "path": "plans",
+        "items": [
+          {
+            "name": "plan-marker.txt",
+            "path": "plans/plan-marker.txt",
+            "type": "file",
+            "directoryTarget": false
+          }
+        ]
+      },
+      {
+        "status": 200,
+        "requestID": "33952ace-55e9-4aa1-afc7-a372b9e4b314",
+        "path": "empty",
+        "items": []
+      },
+      {
+        "status": 404,
+        "requestID": "f0fb4531-4a58-4960-bde6-c9c1ed4f962d",
+        "path": "review-missing-root",
+        "body": {
+          "name": "FileNotFoundError",
+          "data": {
+            "path": "review-missing-root",
+            "message": "Directory entry not found: review-missing-root"
+          }
+        }
+      },
+      {
+        "status": 404,
+        "requestID": "e57b242c-2b46-457c-afe7-cf942d3f8e89",
+        "path": "plans/review-missing-child",
+        "body": {
+          "name": "FileNotFoundError",
+          "data": {
+            "path": "plans/review-missing-child",
+            "message": "Directory entry not found: plans/review-missing-child"
+          }
+        }
+      }
+    ],
+    "providers": {
+      "status": 200,
+      "requestID": "aa4acd2b-86f4-415b-b4eb-2b70e5fcd20c",
+      "connected": 0
+    }
+  },
+  "directoryEvents": {
+    "baseline": [
+      {
+        "time": "2026-11-10T08:25:18.453Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "review-missing-root",
+        "status": 404,
+        "requestID": "98c1a219-3d50-4a32-8b0d-4c72c2f4f73b",
+        "mode": "missing",
+        "bytes": 125,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:25:42.213Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "review-missing-root",
+        "status": 404,
+        "requestID": "3246d3f1-1a8f-403a-8ab2-ec103af7ff19",
+        "mode": "hold-missing",
+        "bytes": 125,
+        "heldMs": 9010
+      },
+      {
+        "time": "2026-11-10T08:25:48.203Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "review-missing-root",
+        "status": 404,
+        "requestID": "9a42af05-91f5-4ffd-9de4-61ad72ba88d5",
+        "mode": "missing",
+        "bytes": 125,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:25:58.895Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "56f92d6b-6564-42e9-b1b4-08b7b81bd5c0",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:26:02.245Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "25429048-0527-4210-998c-75196cfee2d4",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:26:03.199Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "fb7713bf-6973-42a0-94fa-b84705866c35",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:26:03.200Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "a5c6e6a6-df37-4416-b516-79791c04a21a",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:26:18.201Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "a4c3e46a-7cbc-4034-a5ac-53d9ff2d625e",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:26:25.856Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "4367e52b-c271-43c9-bb0c-373eea43277f",
+        "mode": "hold-missing",
+        "bytes": 139,
+        "heldMs": 7654
+      },
+      {
+        "time": "2026-11-10T08:26:33.206Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "2a39fe98-717b-4aa0-a66f-7d432246d90f",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:26:33.207Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "c2b1875c-69ae-49a4-873f-f5cc3b0db3f3",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      }
+    ],
+    "candidate": [
+      {
+        "time": "2026-11-10T08:30:40.967Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "review-missing-root",
+        "status": 404,
+        "requestID": "dbde0825-a7e3-40d4-829a-c39835bb5a7e",
+        "mode": "missing",
+        "bytes": 125,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:31:04.721Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "review-missing-root",
+        "status": 404,
+        "requestID": "d577c690-cf77-426d-a660-5c28b8245ca7",
+        "mode": "hold-missing",
+        "bytes": 125,
+        "heldMs": 9005
+      },
+      {
+        "time": "2026-11-10T08:31:18.802Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "review-missing-root",
+        "status": 404,
+        "requestID": "eb32f2c5-9fc7-4a47-957e-f7766ca57018",
+        "mode": "hold-missing",
+        "bytes": 125,
+        "heldMs": 8085
+      },
+      {
+        "time": "2026-11-10T08:31:25.718Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "review-missing-root",
+        "status": 404,
+        "requestID": "5fd1e55f-c00b-4d35-b5bb-480131549f49",
+        "mode": "missing",
+        "bytes": 125,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:31:42.477Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "f010491e-f24e-454d-b7b2-daf1cfb923f8",
+        "mode": "hold-healthy",
+        "bytes": 1291,
+        "heldMs": 1746
+      },
+      {
+        "time": "2026-11-10T08:31:54.638Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "86596a2a-548f-4c68-b170-c8a04ea80a72",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:31:55.723Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "a2a62592-87e3-48ed-810d-b061f49bf37f",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:31:55.724Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "78eaedf5-778a-47a2-b514-a1407610ba8f",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:32:10.720Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "6c2ce7f8-421e-45cd-b763-5eb701605020",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:32:19.732Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "c80adad0-be9c-4061-a0e3-85d9f1705c4f",
+        "mode": "hold-missing",
+        "bytes": 139,
+        "heldMs": 9012
+      },
+      {
+        "time": "2026-11-10T08:32:25.734Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "c8e1889a-2271-4b98-993c-2e59a19371b9",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:32:32.876Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "cb553b12-b530-44f5-8b63-b552afa7e10b",
+        "mode": "hold-missing",
+        "bytes": 139,
+        "heldMs": 7141
+      },
+      {
+        "time": "2026-11-10T08:32:40.732Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "f4875473-532a-4cf0-9584-97dbf24f56a1",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:32:40.733Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "28d75746-5ad5-42c0-92f3-55d18383dd41",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:32:55.723Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "36159ee9-e2a0-48f6-8e73-92553e0d9074",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:04.738Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans",
+        "status": 200,
+        "requestID": "24565b6d-9ad5-4164-bb44-ad57a34d2797",
+        "mode": "hold-healthy",
+        "bytes": 244,
+        "heldMs": 9014
+      },
+      {
+        "time": "2026-11-10T08:33:10.726Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "30b64937-c383-4258-b757-f6fff1225598",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:10.727Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans",
+        "status": 200,
+        "requestID": "ec892d76-b540-479e-88cf-365c01ea6de7",
+        "mode": "healthy",
+        "bytes": 244,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:25.719Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "088b96d9-d4a2-4c73-9459-75fc48e5c6f9",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:25.720Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans",
+        "status": 200,
+        "requestID": "333bdbb9-28c7-4813-992f-46112c653813",
+        "mode": "healthy",
+        "bytes": 244,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:40.727Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "8f05b385-a926-44fa-b43c-d15ed0e5697b",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:40.728Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "ed162e9e-a264-491f-9fce-3474b12fe98c",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:55.731Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "880c6fe4-6d8d-4fad-a21f-8a56787f4be0",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:33:55.733Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans",
+        "status": 200,
+        "requestID": "0570c7ae-f63f-40b9-aef1-7c7a3fd25ab7",
+        "mode": "healthy",
+        "bytes": 244,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:10.721Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "3b7c8a6c-0c9f-45b9-8d51-4358a34b0cf6",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:10.723Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "f6305db0-8e40-43c1-b7ff-ce67a98e91af",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:25.730Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "e24a7739-219e-4d83-882e-c12453af1238",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:25.731Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "4370107c-7652-4bae-96f7-73aebc43ea8e",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:40.726Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "d1f071e2-8a77-459e-99c4-0d3509eafec8",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:40.728Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "99bca060-54de-45ae-839d-3002ce04cce9",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:55.729Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "bb78997a-01bb-46dc-9320-da2b4627336e",
+        "mode": "healthy",
+        "bytes": 1309,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:34:55.731Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "489307f2-3e7c-4c0f-a5e8-219a8916ec18",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:35:10.736Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "34144dad-1582-48c2-904d-e0b7a3fe8e92",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:35:22.603Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "54029d8d-faeb-4717-95dc-7b1d12336cd7",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:35:25.735Z",
+        "kind": "root",
+        "path": "",
+        "actualPath": "",
+        "status": 200,
+        "requestID": "4f7d5f8d-308c-49b8-950f-e118759e9960",
+        "mode": "healthy",
+        "bytes": 1291,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:35:25.737Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans/review-missing-child",
+        "status": 404,
+        "requestID": "8c8741c7-8881-4ce7-bab9-7fcb20ccf9c6",
+        "mode": "missing",
+        "bytes": 139,
+        "heldMs": 0
+      },
+      {
+        "time": "2026-11-10T08:35:29.897Z",
+        "kind": "child",
+        "path": "plans",
+        "actualPath": "plans",
+        "status": 200,
+        "requestID": "6b98d3a8-6c21-4b05-8410-f60bc0c15132",
+        "mode": "healthy",
+        "bytes": 244,
+        "heldMs": 0
+      }
+    ]
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b199-baseline",
+      "apiPort": 39542,
+      "proxyPort": 39543,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b199-candidate",
+      "apiPort": 39544,
+      "proxyPort": 39545,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "fixtureBytesRestored": true
+}
