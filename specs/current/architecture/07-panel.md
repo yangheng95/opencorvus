@@ -1414,9 +1414,13 @@ work through the shared Button's ARIA disabled/busy states. The existing action
 owner guards repeated activation, including Cancel/Discard while the unsaved
 decision is saving. Native disabled remains for an unready resource or reserved
 navigation. A clean Save remains discoverable and ARIA disabled; the existing
-dirty check owns whether any write is needed. Successful leave retains the
-destination's focus lifecycle. No delayed focus repair or parallel focus store
-supplies this behavior.
+dirty check owns whether any write is needed. The writable file header exposes
+that local draft state and active save in one localized status region. Markdown
+preview uses its own unsaved-edits wording in the same region. A clean status
+means the draft matches the editor base; it is not a disk freshness claim.
+The Save button keeps its label and busy semantics. Successful leave retains
+the destination's focus lifecycle. No delayed focus repair or parallel focus
+store supplies this behavior.
 
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of

@@ -261,6 +261,12 @@ export function FileEditorPane() {
   })
   const writable = createMemo(() => textContent() && content()?.revision !== undefined && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
+  const showFileLocation = () => !target()?.sourceAbsolutePath && fileLocation() !== fileTitle()
+  const saveStatus = () => {
+    if (saving()) return t("common.saving")
+    if (dirty()) return t(previewVisible() ? "file_editor.preview_draft_hint" : "file_editor.unsaved")
+    return t("file_editor.no_unsaved_changes")
+  }
   const projectBinary = createMemo(() => content()?.type === "binary" && !target()?.sourceAbsolutePath)
   const originalDownloadOnly = () => projectBinary() && content()?.encoding !== "base64"
   const originalDownloadFailure = () => {
@@ -734,11 +740,6 @@ export function FileEditorPane() {
         <header class="file-editor-header">
           <div class="file-editor-title" title={[displayName(), target()?.sourceAbsolutePath || path()].filter(Boolean).join("\n")}>
             <span class="file-editor-title-name">{fileTitle()}</span>
-            <Show when={dirty()}>
-              <span class="file-editor-dirty" aria-label={t("file_editor.unsaved")}>
-                *
-              </span>
-            </Show>
           </div>
           <Show
             when={!loading() && content() && !writable() || target()?.sourceAbsolutePath}
@@ -757,7 +758,7 @@ export function FileEditorPane() {
                 aria-busy={saving() || undefined}
                 onClick={() => void save()}
               >
-                {saving() ? t("common.saving") : t("common.save")}
+                {t("common.save")}
               </Button>
             }
           >
@@ -827,8 +828,17 @@ export function FileEditorPane() {
           >
             <Icon name="close" />
           </Button>
-          <Show when={!target()?.sourceAbsolutePath && fileLocation() !== fileTitle()}>
-            <span class="file-editor-title-path" title={path()}>{fileLocation()}</span>
+          <Show when={showFileLocation() || writable()}>
+            <div class="file-editor-meta">
+              <Show when={showFileLocation()}>
+                <span class="file-editor-title-path" title={path()}>{fileLocation()}</span>
+              </Show>
+              <Show when={writable()}>
+                <span class="file-editor-save-status" role="status" aria-atomic="true" data-dirty={dirty() && !saving() || undefined}>
+                  {saveStatus()}
+                </span>
+              </Show>
+            </div>
           </Show>
         </header>
         <Show when={markdownFile()}>
@@ -843,9 +853,6 @@ export function FileEditorPane() {
               ]}
               onChange={setTextView}
             />
-            <Show when={previewVisible() && dirty()}>
-              <span class="file-editor-preview-hint">{t("file_editor.preview_draft_hint")}</span>
-            </Show>
           </div>
         </Show>
         <Show when={pendingRecordedUpdate() && content() && resourceReady()}>

@@ -289,8 +289,17 @@ code .file-link:focus-visible {
   color: var(--text-strong);
 }
 
-.file-editor-title-path {
+.file-editor-meta {
   flex: 0 0 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--ui-gap-sm);
+  min-width: 0;
+}
+
+.file-editor-title-path {
+  flex: 1 1 14ch;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -306,9 +315,14 @@ code .file-link:focus-visible {
   white-space: pre;
 }
 
-.file-editor-dirty {
+.file-editor-save-status {
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  overflow-wrap: anywhere;
+}
+
+.file-editor-save-status[data-dirty="true"] {
   color: var(--warn);
-  font-family: var(--font);
 }
 
 .file-editor-header .oc-button[data-ui="file-editor-save"] {
@@ -347,11 +361,6 @@ code .file-link:focus-visible {
   gap: var(--ui-gap-sm);
   padding: var(--ui-gap-xs) var(--ui-gap-sm);
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
-}
-
-.file-editor-preview-hint {
-  color: var(--text-soft);
-  font-size: var(--ui-font-caption);
 }
 
 .file-editor-markdown-preview {

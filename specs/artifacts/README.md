@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件编辑器保存状态的证据](2026-11-11-file-editor-save-status/README.md)
 - [文件比较读取归属的证据](2026-11-10-file-comparison-read-ownership/README.md)
 - [多步任务同名项目目录的证据](2026-11-10-mission-board-project-context/README.md)
 - [多步任务卡片重排焦点的证据](2026-11-10-mission-board-reorder-focus/README.md)
