@@ -10,7 +10,7 @@ import { Feedback } from "../ui/Feedback"
 import { createEffect, createSignal, createMemo, For, on, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Key } from "@solid-primitives/keyed"
-import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
+import type { SkillInstalledResponse } from "@opencorvus-ai/sdk"
 import { localeTag, t } from "../../utils/i18n"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
@@ -21,7 +21,7 @@ import {
   pickDirectory,
   revealPath,
 } from "../../services/workspace"
-import { appStore } from "../../store/app"
+import { appStore, type SkillInventoryScope } from "../../store/app"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { nativeConfirm, nativeOpen } from "../../utils/native"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
@@ -62,7 +62,7 @@ import { SettingsProjectScope } from "./SettingsProjectScope"
 
 // ── Types ──
 
-type SkillItem = SkillMountsResponse["skills"][number]
+type SkillItem = SkillInstalledResponse[number]
 
 interface McpItem {
   status?: string
@@ -237,6 +237,16 @@ interface McpReadScope {
 
 type McpStatusRead = McpReadScope & ({ status: "ready" } | { status: "failed"; error: unknown })
 
+interface SkillReadStatus {
+  pending: boolean
+  failure?: { error: unknown }
+}
+
+type SkillLibraryRead = SkillInventoryScope & {
+  inventory: SkillReadStatus
+  discovery: SkillReadStatus & { issues?: SkillLoadIssue[] }
+}
+
 const MCP_STATUS_REFRESH_INTERVAL_MS = 1_000
 
 interface FormSelectOption extends SelectFieldOption {}
@@ -306,7 +316,11 @@ function SharedResourceManagementPanel(props: {
   let mcpReadFeedback: HTMLDivElement | undefined
   let mcpStatusHeading: HTMLSpanElement | undefined
   const [skillDragActive, setSkillDragActive] = createSignal(false)
-  const [skillLoadIssues, setSkillLoadIssues] = createSignal<SkillLoadIssue[]>([])
+  const [skillRead, setSkillRead] = createSignal<SkillLibraryRead>()
+  let skillReadRequest: SkillInventoryScope | undefined
+  let skillReloadButton: HTMLButtonElement | undefined
+  let skillInventoryFeedback: HTMLDivElement | undefined
+  let skillDiscoveryFeedback: HTMLDivElement | undefined
 
   function setPanelNotice(key: string, options: Partial<Omit<ResourceNotice, "key">> = {}) {
     setNotice({
@@ -346,7 +360,21 @@ function SharedResourceManagementPanel(props: {
   const panelActive = createMemo(() => props.active === true)
   const skillPanelActive = createMemo(() => props.mode === "skill" && panelActive())
   const mcpPanelActive = createMemo(() => props.mode === "mcp" && panelActive())
-  const poolSkills = createMemo(() => (skillPanelActive() ? (appStore.skills as SkillItem[]) : []))
+  function ownsSkillScope(scope: SkillInventoryScope): boolean {
+    return skillPanelActive() && selectedDirectory() === scope.directory && isApiAuthorityCurrent(scope.authority)
+  }
+
+  const currentSkillRead = createMemo(() => {
+    const read = skillRead()
+    return read && ownsSkillScope(read) ? read : undefined
+  })
+  const skillReadPending = () => !!(currentSkillRead()?.inventory.pending || currentSkillRead()?.discovery.pending)
+  const skillReloadLabel = () => t(skillReadPending() ? "skill.reloading" : "common.reload")
+  const skillInventoryCurrent = () => {
+    const scope = appStore.skillInventoryScope
+    return scope !== null && ownsSkillScope(scope)
+  }
+  const poolSkills = createMemo(() => (skillInventoryCurrent() ? (appStore.skills as SkillItem[]) : []))
   const mcp = createMemo(
     (): Record<string, McpItem> => (mcpPanelActive() ? { ...(appStore.mcp as Record<string, McpItem>) } : {}),
   )
@@ -397,34 +425,72 @@ function SharedResourceManagementPanel(props: {
     props.onResourcesChanged?.()
   }
 
+  async function refreshSkillLibrary(directory: string) {
+    const owner = { directory, authority: captureApiAuthority() }
+    if (!directory || !ownsSkillScope(owner)) return
+    const previous = currentSkillRead()
+    skillReadRequest = owner
+    setSkillRead({
+      ...owner,
+      inventory: { ...previous?.inventory, pending: true },
+      discovery: { ...previous?.discovery, pending: true },
+    })
+    const current = () => skillReadRequest === owner && ownsSkillScope(owner)
+    const options = { ...owner, isCurrentDirectory: (candidate: string) => candidate === directory && current() }
+    const returnFocus = (feedback?: HTMLDivElement) => {
+      if (feedback?.isConnected && feedback.contains(document.activeElement)) {
+        skillReloadButton?.focus({ preventScroll: true })
+      }
+    }
+    const inventory = async () => {
+      try {
+        await loadInstalledSkills(options)
+        if (!current()) return
+        returnFocus(skillInventoryFeedback)
+        setSkillRead((read) => read && { ...read, inventory: { pending: false } })
+      } catch (error) {
+        if (!current()) return
+        setSkillRead((read) => read && { ...read, inventory: { pending: false, failure: { error } } })
+      }
+    }
+    const discovery = async () => {
+      try {
+        const issues = await loadSkillIssues(options)
+        if (!current()) return
+        returnFocus(skillDiscoveryFeedback)
+        setSkillRead((read) => read && { ...read, discovery: { pending: false, issues } })
+      } catch (error) {
+        if (!current()) return
+        setSkillRead((read) => read && {
+          ...read,
+          discovery: { ...read.discovery, pending: false, failure: { error } },
+        })
+      }
+    }
+    await Promise.all([inventory(), discovery()])
+    if (skillReadRequest === owner) skillReadRequest = undefined
+  }
+
   async function reloadCurrentPanel(options: { directory?: string } = {}) {
     const directory = options.directory ?? currentDirectory()
+    if (props.mode === "skill") {
+      await refreshSkillLibrary(directory)
+      return
+    }
     if (!directory) {
       setLoading(false)
-      setSkillLoadIssues([])
-      if (props.mode === "skill") setPanelNotice("workspace.no_directory", { tone: "warning" })
-      else setNotice(undefined)
+      setNotice(undefined)
       return
     }
     setLoading(true)
-    setSkillLoadIssues([])
     setNotice(undefined)
-    const mcpAuthority = props.mode === "mcp" ? captureApiAuthority() : undefined
-    const current = () => mcpAuthority ? ownsMcpScope({ directory, authority: mcpAuthority }) : sourceMatchesDirectory(directory)
+    const owner = { directory, authority: captureApiAuthority() }
     try {
-      if (props.mode === "mcp") {
-        await refreshMcpStatus({ directory })
-      } else {
-        await loadInstalledSkills({ directory, isCurrentDirectory: sourceMatchesDirectory })
-        const issues = await loadSkillIssues({ directory, isCurrentDirectory: sourceMatchesDirectory })
-        if (!sourceMatchesDirectory(directory)) return
-        setSkillLoadIssues(issues)
-      }
-      if (!current()) return
+      await refreshMcpStatus({ directory })
     } catch (e) {
-      if (current()) setPanelError(e)
+      if (ownsMcpScope(owner)) setPanelError(e)
     } finally {
-      if (current()) setLoading(false)
+      if (ownsMcpScope(owner)) setLoading(false)
     }
   }
 
@@ -736,14 +802,21 @@ function SharedResourceManagementPanel(props: {
   }
 
   async function handleReloadSkills() {
+    if (skillReadPending() || !selectedDirectory()) return
     await reloadCurrentPanel()
   }
 
-  createEffect(() => {
-    if (props.mode !== "skill" || props.active !== true) return
-    const directory = currentDirectory()
-    void reloadCurrentPanel({ directory })
-  })
+  createEffect(on(
+    () => skillPanelActive() ? [selectedDirectory(), captureApiAuthority().revision] as const : undefined,
+    (scope) => {
+      if (!scope?.[0]) return
+      void refreshSkillLibrary(currentDirectory())
+      onCleanup(() => {
+        skillReadRequest = undefined
+        setSkillRead(undefined)
+      })
+    },
+  ))
 
   createEffect(() => {
     if (props.mode !== "mcp" || props.active !== true) return
@@ -898,17 +971,6 @@ function SharedResourceManagementPanel(props: {
       </Show>
 
       {renderNotice("panel")}
-
-      <For each={skillLoadIssues()}>
-        {(issue) => (
-          <Feedback tone="error" data-ui="skill-load-issue">
-            {t("skill.load_issue", {
-              owner: `${issue.kind} · ${issue.path}`,
-              error: issue.message,
-            })}
-          </Feedback>
-        )}
-      </For>
 
       {/* ── Skill Market ── */}
       <Show when={skillPanelActive()}>
@@ -1086,12 +1148,15 @@ function SharedResourceManagementPanel(props: {
                 size="md"
                 tone="neutral"
                 data-ui="tool-panel-action"
-                title={t("common.reload")}
-                aria-label={t("common.reload")}
+                title={skillReloadLabel()}
+                aria-label={skillReloadLabel()}
+                aria-disabled={(skillReadPending() || !selectedDirectory()) || undefined}
+                aria-busy={skillReadPending() || undefined}
+                ref={skillReloadButton}
                 onClick={() => runPanelAction(t("common.reload"), handleReloadSkills)}
               >
                 <Icon name="refresh" />
-                <span class="tool-panel-action-label">{t("common.reload")}</span>
+                <span class="tool-panel-action-label">{skillReloadLabel()}</span>
               </Button>
             </div>
           }
@@ -1217,10 +1282,45 @@ function SharedResourceManagementPanel(props: {
               </form>
             </Show>
             <div class="extension-list" id="skillList">
+              <Show when={!selectedDirectory()}>
+                <Feedback tone="warning">{t("workspace.no_directory")}</Feedback>
+              </Show>
+              <Show when={currentSkillRead()?.inventory.failure}>
+                {(failure) => (
+                  <Feedback tone="error" ref={skillInventoryFeedback} details={formatErrorDetails(failure().error)}>
+                    {t(skillInventoryCurrent() ? "skill.inventory_read_failed_previous" : "skill.inventory_read_failed")}
+                  </Feedback>
+                )}
+              </Show>
+              <Show when={currentSkillRead()?.discovery.failure}>
+                {(failure) => (
+                  <Feedback tone="error" ref={skillDiscoveryFeedback} details={formatErrorDetails(failure().error)}>
+                    {t(currentSkillRead()?.discovery.issues?.length
+                      ? "skill.discovery_read_failed_previous"
+                      : "skill.discovery_read_failed")}
+                  </Feedback>
+                )}
+              </Show>
+              <Show when={currentSkillRead()?.inventory.pending && !skillInventoryCurrent() && !currentSkillRead()?.inventory.failure}>
+                <div class="empty-hint" role="status">{t("skill.inventory_read_pending")}</div>
+              </Show>
+              <Show when={currentSkillRead()?.discovery.pending && !currentSkillRead()?.discovery.issues && !currentSkillRead()?.discovery.failure}>
+                <div class="empty-hint" role="status">{t("skill.discovery_read_pending")}</div>
+              </Show>
+              <For each={currentSkillRead()?.discovery.issues}>
+                {(issue) => (
+                  <Feedback tone="warning" data-ui="skill-load-issue">
+                    {t("skill.load_issue", {
+                      owner: `${issue.kind} · ${issue.path}`,
+                      error: issue.message,
+                    })}
+                  </Feedback>
+                )}
+              </For>
               <Show
                 when={poolSkills().length > 0}
                 fallback={
-                  <Show when={!loading()}>
+                  <Show when={skillInventoryCurrent()}>
                     <div class="empty-hint">{t("skill.none_custom")}</div>
                   </Show>
                 }

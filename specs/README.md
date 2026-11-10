@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [技能库分别结算已安装列表和发现诊断](records/2026-11/2026-11-10-skill-library-read-settlement.md)
 - [专家团市场入口的随附目录计数与恢复](records/2026-11/2026-11-10-market-bundled-count-recovery.md)
 - [环境信息的工作树读取与恢复](records/2026-11/2026-11-10-worktree-read-recovery.md)
 - [能力分配保存保留原复选框和键盘位置](records/2026-11/2026-11-10-capability-assignment-save-focus.md)

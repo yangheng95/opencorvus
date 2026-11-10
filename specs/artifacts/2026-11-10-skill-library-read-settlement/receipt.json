@@ -1,0 +1,761 @@
+{
+  "directReads": {
+    "baseline-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "ce28aa8c-dffc-499e-b972-efd169fd62d3",
+        "asset": "main--hTKiZCl.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "258da3f8-f7e2-4ea2-a6bc-6a8cea4e6f17"
+      },
+      "installed": {
+        "status": 200,
+        "requestID": "befa3495-0fe5-4f03-87b6-9b3de2977ea1",
+        "operation": "skill.installed",
+        "items": [
+          {
+            "name": "browser-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "computer-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "design-taste-frontend",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "grill-me",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "research-report",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "work-artifacts",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "review-skill-marker",
+            "builtin": false,
+            "source_type": "external"
+          }
+        ]
+      },
+      "issues": {
+        "status": 200,
+        "requestID": "2c919725-658e-4f2c-a612-9b535c8712ec",
+        "operation": "skill.issues",
+        "count": 1,
+        "known": {
+          "kind": "invalid_explicit_skill",
+          "path": ".opencorvus/skills/review-invalid/SKILL.md",
+          "field": "description"
+        }
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "3a0b1f4a-d533-4ef9-a2fc-bc48735a02c9",
+        "connected": 0
+      }
+    },
+    "baseline-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "d733a7b8-1c46-4b8f-8ab7-b12d8321d639",
+        "asset": "main--hTKiZCl.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "e1ae4410-d453-439c-be82-c67633adb286"
+      },
+      "installed": {
+        "status": 200,
+        "requestID": "6626e5bf-82b4-424a-a004-4571538b14b0",
+        "operation": "skill.installed",
+        "items": [
+          {
+            "name": "browser-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "computer-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "design-taste-frontend",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "grill-me",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "research-report",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "work-artifacts",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "review-skill-marker",
+            "builtin": false,
+            "source_type": "external"
+          }
+        ]
+      },
+      "issues": {
+        "status": 200,
+        "requestID": "23cc6aea-bccc-4525-824e-af4aaa8ff221",
+        "operation": "skill.issues",
+        "count": 1,
+        "known": {
+          "kind": "invalid_explicit_skill",
+          "path": ".opencorvus/skills/review-invalid/SKILL.md",
+          "field": "description"
+        }
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "1546841e-8120-4629-be9e-03c7f89b315b",
+        "connected": 0
+      }
+    },
+    "candidate-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "d2322609-246e-4636-a6ca-5d6317140ed2",
+        "asset": "main-CoRhPLnc.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "25cd1aed-2cbf-40e2-991f-00ad7daac3ae"
+      },
+      "installed": {
+        "status": 200,
+        "requestID": "20b46372-17ab-4dd7-88b1-3738d534ba4e",
+        "operation": "skill.installed",
+        "items": [
+          {
+            "name": "browser-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "computer-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "design-taste-frontend",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "grill-me",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "research-report",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "work-artifacts",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "review-skill-marker",
+            "builtin": false,
+            "source_type": "external"
+          }
+        ]
+      },
+      "issues": {
+        "status": 200,
+        "requestID": "2bc5b372-62e5-49a4-99bb-641c8245975c",
+        "operation": "skill.issues",
+        "count": 1,
+        "known": {
+          "kind": "invalid_explicit_skill",
+          "path": ".opencorvus/skills/review-invalid/SKILL.md",
+          "field": "description"
+        }
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "54f72021-c3c6-4d4d-a86e-2fa4c3ca31e5",
+        "connected": 0
+      }
+    },
+    "candidate-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "1f5ae652-a59b-4d47-8714-23e3697d678d",
+        "asset": "main-CoRhPLnc.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "93e94030-f071-440e-8eed-a27fba75c261"
+      },
+      "installed": {
+        "status": 200,
+        "requestID": "59badd54-d687-4b5d-94f0-c1cef707d60b",
+        "operation": "skill.installed",
+        "items": [
+          {
+            "name": "browser-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "computer-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "design-taste-frontend",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "grill-me",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "research-report",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "work-artifacts",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "review-skill-marker",
+            "builtin": false,
+            "source_type": "external"
+          }
+        ]
+      },
+      "issues": {
+        "status": 200,
+        "requestID": "1cabbea0-1253-45b5-a9d1-f35fd56bf460",
+        "operation": "skill.issues",
+        "count": 1,
+        "known": {
+          "kind": "invalid_explicit_skill",
+          "path": ".opencorvus/skills/review-invalid/SKILL.md",
+          "field": "description"
+        }
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "ecd61de9-b659-479b-89c7-6a92d2e8efae",
+        "connected": 0
+      }
+    },
+    "final-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "87883d77-f7eb-4d23-8a02-0bf38c079d83",
+        "asset": "main-DHumORPG.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "db45fece-1f77-4acc-a758-0ca6b036b75a"
+      },
+      "installed": {
+        "status": 200,
+        "requestID": "1efec3ab-4449-47a9-9e04-b902b0f00734",
+        "operation": "skill.installed",
+        "items": [
+          {
+            "name": "browser-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "computer-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "design-taste-frontend",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "grill-me",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "research-report",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "work-artifacts",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "review-skill-marker",
+            "builtin": false,
+            "source_type": "external"
+          }
+        ]
+      },
+      "issues": {
+        "status": 200,
+        "requestID": "687a82a0-4b16-4825-aa5d-640ca55c63f3",
+        "operation": "skill.issues",
+        "count": 1,
+        "known": {
+          "kind": "invalid_explicit_skill",
+          "path": ".opencorvus/skills/review-invalid/SKILL.md",
+          "field": "description"
+        }
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "5549f042-5d4f-46fa-8920-27282cb1c165",
+        "connected": 0
+      }
+    },
+    "final-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "fcb53766-9c87-49b5-8999-ce1558bf549e",
+        "asset": "main-DHumORPG.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "481193ac-8ec7-4c82-b954-07e73e8181ca"
+      },
+      "installed": {
+        "status": 200,
+        "requestID": "0305714e-410b-4997-9b84-9ccd8493b43b",
+        "operation": "skill.installed",
+        "items": [
+          {
+            "name": "browser-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "computer-use",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "design-taste-frontend",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "grill-me",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "research-report",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "work-artifacts",
+            "builtin": true,
+            "source_type": "builtin"
+          },
+          {
+            "name": "review-skill-marker",
+            "builtin": false,
+            "source_type": "external"
+          }
+        ]
+      },
+      "issues": {
+        "status": 200,
+        "requestID": "f33fa223-705f-423a-9ae3-e1d234149409",
+        "operation": "skill.issues",
+        "count": 1,
+        "known": {
+          "kind": "invalid_explicit_skill",
+          "path": ".opencorvus/skills/review-invalid/SKILL.md",
+          "field": "description"
+        }
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "31efe8f9-b53f-4135-9570-9d2d4ad5cbc2",
+        "connected": 0
+      }
+    }
+  },
+  "proxyReads": {
+    "baseline": [
+      {
+        "requestID": "17ce7f8b-6850-4f9f-b2dc-a5e03c3707e4",
+        "time": "2026-11-10T09:27:54.264Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "1ea582ed-f6ca-4d80-a055-948986a0a58f",
+        "time": "2026-11-10T09:27:54.309Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 567,
+        "delivered": 1,
+        "heldMs": 10007
+      },
+      {
+        "requestID": "c6c20440-1a4a-411d-978f-48e3d4e6254e",
+        "time": "2026-11-10T09:30:11.808Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "4b814137-ee9e-4af8-8046-7bf57130b0e5",
+        "time": "2026-11-10T09:30:11.830Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 0
+      },
+      {
+        "requestID": "9415c9ad-6973-4f93-bf2c-533186c92ca4",
+        "time": "2026-11-10T09:30:24.258Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 29440,
+        "delivered": 1,
+        "heldMs": 3768
+      }
+    ],
+    "candidate": [
+      {
+        "requestID": "5ab44afe-edee-4016-a7e0-480111e814d7",
+        "time": "2026-11-10T09:37:04.570Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "8a7ff0c6-e94b-4a51-97a0-197058f0c1bc",
+        "time": "2026-11-10T09:37:04.576Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 567,
+        "delivered": 1,
+        "heldMs": 3778
+      },
+      {
+        "requestID": "57c05de8-fa88-4480-a45d-0d721c1e473d",
+        "time": "2026-11-10T09:37:21.258Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "34a5ff63-dd74-494a-9b30-fdfccc9af5b3",
+        "time": "2026-11-10T09:37:21.262Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 3941
+      },
+      {
+        "requestID": "659bc183-9f89-4fed-86da-709b04f3e344",
+        "time": "2026-11-10T09:37:36.547Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 29440,
+        "delivered": 1,
+        "heldMs": 3684
+      },
+      {
+        "requestID": "febd389d-5c2f-4c7e-af2f-43a9a65a4a32",
+        "time": "2026-11-10T09:37:36.548Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 0
+      },
+      {
+        "requestID": "8558397f-9927-4c11-8bd6-a50433e34aa9",
+        "time": "2026-11-10T09:37:59.646Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "32538b04-9c60-4f5f-8780-63c63478496c",
+        "time": "2026-11-10T09:37:59.648Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 0
+      }
+    ],
+    "final": [
+      {
+        "requestID": "d59dac93-c8a8-4417-b37c-bc7da9972e8c",
+        "time": "2026-11-10T09:40:22.955Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "436998c6-a888-4b96-a6b2-4dc82fe72105",
+        "time": "2026-11-10T09:40:22.961Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 567,
+        "delivered": 1,
+        "heldMs": 5087
+      },
+      {
+        "requestID": "82a5b4c4-7573-41f2-ba74-0c09c36be991",
+        "time": "2026-11-10T09:40:41.608Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "b5273109-99ff-4629-9406-fa75be35702b",
+        "time": "2026-11-10T09:40:41.610Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 6341
+      },
+      {
+        "requestID": "9ce018a4-bb01-4d91-a909-d0309e563f52",
+        "time": "2026-11-10T09:41:12.732Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 29440,
+        "delivered": 1,
+        "heldMs": 3488
+      },
+      {
+        "requestID": "3f37c697-2856-4a53-99b7-4d2f95dea2be",
+        "time": "2026-11-10T09:41:12.734Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 0
+      },
+      {
+        "requestID": "d5a4fabb-db70-4426-aaea-86f1c3d17d36",
+        "time": "2026-11-10T09:41:28.149Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 3904
+      },
+      {
+        "requestID": "8bdb2fae-affa-40d1-83dd-fa18cbb11382",
+        "time": "2026-11-10T09:41:28.151Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 0
+      },
+      {
+        "requestID": "e56070fc-77bd-4dc3-b4c9-c07cafdac842",
+        "time": "2026-11-10T09:41:51.212Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 29440,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "6c9c264e-6257-4974-a898-619e5a9f394b",
+        "time": "2026-11-10T09:41:51.214Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 0
+      },
+      {
+        "requestID": "ba5bb0c1-f02f-4a00-a8d1-70924bdf7d89",
+        "time": "2026-11-10T09:42:04.353Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "9bc732df-c28d-4346-9069-7df24b750544",
+        "time": "2026-11-10T09:42:04.355Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 567,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "84d62d94-6309-4852-8b29-dd5283bf6e1d",
+        "time": "2026-11-10T09:42:14.214Z",
+        "path": "/skill/installed",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 29440,
+        "delivered": 29440,
+        "heldMs": 0
+      },
+      {
+        "requestID": "2b5e8a32-5080-45f2-b2a3-293bfc920c37",
+        "time": "2026-11-10T09:42:14.216Z",
+        "path": "/skill/issues",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 567,
+        "delivered": 567,
+        "heldMs": 0
+      }
+    ]
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b203-baseline",
+      "apiPort": 39562,
+      "proxyPort": 39563,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b203-candidate",
+      "apiPort": 39564,
+      "proxyPort": 39565,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b203-final",
+      "apiPort": 39566,
+      "proxyPort": 39567,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "projectFixtureBytesUnchanged": true
+}

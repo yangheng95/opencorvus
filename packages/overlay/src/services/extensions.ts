@@ -107,7 +107,6 @@ function stabilizeSkillOrder(matrix: AgentSkillMountMatrix): AgentSkillMountMatr
 function commitSkillMountMatrix(matrix: AgentSkillMountMatrix): AgentSkillMountMatrix {
   const stable = stabilizeSkillOrder(matrix)
   setSkillMounts(stable)
-  setSkills(stable.skills)
   return stable
 }
 
@@ -199,7 +198,7 @@ export async function loadExtensions(
   const [matrixResult, mcpResult] = await Promise.allSettled([loadSkillMountMatrix(options), loadMcpStatus(options)])
   assertApiAuthorityCurrent(options.authority)
   const issues: ExtensionLoadIssue[] = []
-  let skills = appStore.skills
+  let skills = appStore.skillMounts?.skills ?? []
   let mcp = appStore.mcp
   if (matrixResult.status === "fulfilled") {
     skills = matrixResult.value.skills
@@ -215,12 +214,13 @@ export async function loadExtensions(
 }
 
 export async function loadInstalledSkills(options: DirectoryOwnedRequestOptions = {}): Promise<SkillDescriptor[]> {
-  options = { ...options, authority: options.authority ?? captureApiAuthority() }
-  const skills = await apiJson(directoryOwnedPath("skill/installed", options), { authority: options.authority })
+  const authority = options.authority ?? captureApiAuthority()
+  const directory = String(options.directory || "").trim()
+  const skills = await apiJson(directoryOwnedPath("skill/installed", { directory }), { authority })
   if (!Array.isArray(skills)) {
     throw new Error("skill/installed returned a non-array payload")
   }
-  if (ownsDirectoryRequest(options)) setSkills(skills)
+  if (ownsDirectoryRequest({ ...options, directory, authority })) setSkills(skills, { directory, authority })
   return skills
 }
 
@@ -429,7 +429,7 @@ export async function deleteAllSkills(
 ): Promise<void> {
   options = { ...options, authority: options.authority ?? captureApiAuthority() }
   assertApiAuthorityCurrent(options.authority)
-  const skills: readonly SkillDescriptor[] = options.skills ?? appStore.skills
+  const skills: readonly SkillDescriptor[] = options.skills ?? await loadInstalledSkills(options)
   const custom = skills.filter((item) => !item.builtin)
   const list = custom.filter(skillRemovable)
   if (list.length === 0) return

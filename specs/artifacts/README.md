@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [技能库独立读取实页证据](2026-11-10-skill-library-read-settlement/README.md)
 - [专家团随附计数与恢复实页证据](2026-11-10-market-bundled-count-recovery/README.md)
 - [工作树读取与恢复实页证据](2026-11-10-worktree-read-recovery/README.md)
 - [能力分配保存时的键盘实页证据](2026-11-10-capability-assignment-save-focus/README.md)

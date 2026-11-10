@@ -39,7 +39,7 @@ import { composerReferenceCatalogRequestKey } from "../src/services/expert-squad
 import { promptSessionMessage, stopChatRequest, retireChatRequestProjection } from "../src/services/chat"
 import { setChatRequest } from "../src/store/messages"
 import { openMcpAppHostEventStream, retireMcpAppEventStreams } from "../src/services/interactive-artifact"
-import { deleteAllSkills } from "../src/services/extensions"
+import { deleteAllSkills, loadInstalledSkills, loadSkillMountMatrix } from "../src/services/extensions"
 import { missionBoardStore, reloadMissionBoard, retireMissionBoardProjection } from "../src/services/mission-board"
 import type { MissionRecord } from "../src/services/mission"
 
@@ -559,6 +559,27 @@ test("Mission board keeps the accepted list and original failed page until a ful
   expect(await result).toBe(true)
   expect({ records: missionBoardStore.records, accepted: missionBoardStore.accepted, loading: missionBoardStore.loading, error: missionBoardStore.error })
     .toEqual({ accepted: true, loading: false, error: undefined, records: [updated] })
+})
+
+test("Skill inventory and mount reads keep their accepted project data in the matching projection", async () => {
+  const authority = captureApiAuthority()
+  const installed = [{ name: "project-installed", source_type: "external" }]
+  const matrix = { skills: [{ name: "role-projected", projection_source: "package" }] }
+  const installedRead = deferred<TransportResponse>()
+  transport((request) => request.path === "skill/installed" ? installedRead.promise : ok(matrix))
+  try {
+    const work = loadInstalledSkills({ directory: ` ${directory} `, authority, isCurrentDirectory: (candidate) => candidate === directory })
+    installedRead.resolve(ok(installed))
+    expect(await work).toEqual(installed)
+    expect(await loadSkillMountMatrix({ directory, authority })).toEqual(matrix)
+    expect({ skills: appStore.skills, scope: appStore.skillInventoryScope, matrix: appStore.skillMounts }).toEqual({
+      skills: installed,
+      scope: { directory, authority },
+      matrix,
+    })
+  } finally {
+    setAppStore({ skills: [], skillInventoryScope: null, skillMounts: null })
+  }
 })
 
 test("sequential Skill removal preserves the first accepted A response when its authority retires", async () => {

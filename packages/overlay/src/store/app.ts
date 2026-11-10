@@ -6,7 +6,7 @@ import { createStore, reconcile } from "solid-js/store"
 import { batch } from "solid-js"
 import type { ApiAuthority } from "../services/api"
 import type { ProjectMemoryProjection } from "../services/project-memory"
-import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
+import type { SkillInstalledResponse, SkillMountsResponse } from "@opencorvus-ai/sdk"
 import type { OverlayThemeID } from "@opencorvus-ai/transport-protocol"
 
 // ── Types ──
@@ -16,6 +16,11 @@ export type LogSource = "overlay" | "server" | "pipeline"
 
 export interface McpReadScope {
   kind: "project" | "effective"
+  directory: string
+  authority: ApiAuthority
+}
+
+export interface SkillInventoryScope {
   directory: string
   authority: ApiAuthority
 }
@@ -130,6 +135,7 @@ export interface AppState {
   channelCatalog: ChannelCatalogRead | null
   /** Installed skills list */
   skills: any[]
+  skillInventoryScope: SkillInventoryScope | null
   /** Agent skill mount matrix returned by /skill/mounts */
   skillMounts: SkillMountsResponse | null
   /** MCP (Model Context Protocol) config/status map keyed by name */
@@ -180,6 +186,7 @@ const DEFAULT_APP_STATE: AppState = {
   providerTest: null,
   channelCatalog: null,
   skills: [],
+  skillInventoryScope: null,
   skillMounts: null,
   mcp: {},
   mcpReadScope: null,
@@ -288,8 +295,8 @@ export function setProviderTest(test: any): void {
 
 // ── Extensions helpers ──
 
-export function setSkills(list: any[]): void {
-  setAppStore("skills", Array.isArray(list) ? list : [])
+export function setSkills(list: SkillInstalledResponse, scope: SkillInventoryScope): void {
+  setAppStore({ skills: list, skillInventoryScope: scope })
 }
 
 export function setSkillMounts(value: SkillMountsResponse | null): void {

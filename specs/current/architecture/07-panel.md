@@ -5527,6 +5527,11 @@ An in-flight Skill Library install belongs to its form and current project and
 connection. The form presents the pending action and keeps its own diagnostics;
 closing it returns still-owned focus to the install trigger. Retiring the view
 does not cancel a request already sent to the Skill owner.
+The Skill Library settles installed inventory and discovery diagnostics
+independently for its current project and connection. The installed read owns
+the library list; the agent mount matrix owns its separate runtime projection.
+Reload retains the last accepted results in scope and reports each read failure
+beside installed skills, independently of install, update, or removal notices.
 Project MCP status uses one scoped read at a time for passive observation; an
 explicit readback may retire it. Read failures belong beside Server connections
 and clear on the next accepted success. Connection or configuration notices
