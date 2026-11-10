@@ -1643,6 +1643,7 @@
   "mcp.status.needs_client_registration": "Needs client registration",
   "mcp.configured_status": "Server connections",
   "mcp.configured_status_help": "Connection state for MCP servers configured in the current project.",
+  "mcp.status_read_failed": "Could not read connection status. Retrying automatically.",
   "mcp.transport": "Transport",
   "mcp.transport.sse": "SSE",
   "mcp.transport.streamable_http": "Streamable HTTP",

@@ -226,6 +226,14 @@ interface ResourceNotice {
   origin: "panel" | "skill-install" | "mcp-add"
   directory?: string
 }
+
+interface McpReadScope {
+  directory: string
+  authority: ApiAuthority
+}
+
+type McpStatusRead = McpReadScope & ({ status: "ready" } | { status: "failed"; error: unknown })
+
 const MCP_STATUS_REFRESH_INTERVAL_MS = 1_000
 
 interface FormSelectOption extends SelectFieldOption {}
@@ -289,7 +297,10 @@ function SharedResourceManagementPanel(props: {
   ]
   const [notice, setNotice] = createSignal<ResourceNotice>()
   const [loading, setLoading] = createSignal(false)
-  const [mcpReadOwner, setMcpReadOwner] = createSignal<{ directory: string; authority: ApiAuthority }>()
+  const [mcpStatusRead, setMcpStatusRead] = createSignal<McpStatusRead>()
+  let mcpReadRequest: McpReadScope | undefined
+  let mcpReadFeedback: HTMLDivElement | undefined
+  let mcpStatusHeading: HTMLSpanElement | undefined
   const [skillDragActive, setSkillDragActive] = createSignal(false)
   const [skillLoadIssues, setSkillLoadIssues] = createSignal<SkillLoadIssue[]>([])
 
@@ -334,26 +345,45 @@ function SharedResourceManagementPanel(props: {
     (): Record<string, McpItem> => (mcpPanelActive() ? { ...(appStore.mcp as Record<string, McpItem>) } : {}),
   )
 
+  function ownsMcpScope(owner: McpReadScope): boolean {
+    return mcpPanelActive() && isApiAuthorityCurrent(owner.authority) && sourceMatchesDirectory(owner.directory)
+  }
+
   const mcpStatusCurrent = () => {
-    const owner = mcpReadOwner()
+    const owner = mcpStatusRead()
     const scope = appStore.mcpReadScope
-    return owner && scope?.kind === "project" && scope.directory === owner.directory &&
-      isApiAuthorityCurrent(scope.authority) && isApiAuthorityCurrent(owner.authority) && sourceMatchesDirectory(owner.directory)
+    return owner?.status === "ready" && ownsMcpScope(owner) && scope?.kind === "project" &&
+      scope.directory === owner.directory && isApiAuthorityCurrent(scope.authority)
   }
   const mcpEntries = createMemo(() => mcpStatusCurrent() ? Object.entries(mcp()) : [])
+  const mcpReadFailure = createMemo(() => {
+    const read = mcpStatusRead()
+    return read?.status === "failed" && ownsMcpScope(read) ? read : undefined
+  })
 
-  async function refreshMcpStatus(options: { directory?: string } = {}) {
+  async function refreshMcpStatus(options: { directory?: string; background?: boolean } = {}): Promise<boolean> {
     const directory = options.directory ?? currentDirectory()
-    if (!directory) return undefined
-    const authority = captureApiAuthority()
-    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
+    const owner = { directory, authority: captureApiAuthority() }
+    if (!directory || !ownsMcpScope(owner)) return false
+    if (options.background && mcpReadRequest && ownsMcpScope(mcpReadRequest)) return false
+    mcpReadRequest = owner
+    const current = () => mcpReadRequest === owner && ownsMcpScope(owner)
     try {
-      const result = await loadProjectMcpStatus({ directory, authority, isCurrentDirectory: sourceMatchesDirectory })
-      if (current()) setMcpReadOwner({ directory, authority })
-      return result as Record<string, McpItem>
+      await loadProjectMcpStatus({
+        ...owner,
+        isCurrentDirectory: (candidate) => candidate === directory && current(),
+      })
+      if (!current()) return false
+      if (mcpReadFailure() && mcpReadFeedback?.contains(document.activeElement)) {
+        mcpStatusHeading?.focus({ preventScroll: true })
+      }
+      setMcpStatusRead({ ...owner, status: "ready" })
+      return true
     } catch (error) {
-      if (current()) setMcpReadOwner(undefined)
-      throw error
+      if (current()) setMcpStatusRead({ ...owner, status: "failed", error })
+      return false
+    } finally {
+      if (mcpReadRequest === owner) mcpReadRequest = undefined
     }
   }
 
@@ -372,6 +402,8 @@ function SharedResourceManagementPanel(props: {
     setLoading(true)
     setSkillLoadIssues([])
     setNotice(undefined)
+    const mcpAuthority = props.mode === "mcp" ? captureApiAuthority() : undefined
+    const current = () => mcpAuthority ? ownsMcpScope({ directory, authority: mcpAuthority }) : sourceMatchesDirectory(directory)
     try {
       if (props.mode === "mcp") {
         await refreshMcpStatus({ directory })
@@ -381,11 +413,11 @@ function SharedResourceManagementPanel(props: {
         if (!sourceMatchesDirectory(directory)) return
         setSkillLoadIssues(issues)
       }
-      if (!sourceMatchesDirectory(directory)) return
+      if (!current()) return
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelError(e)
+      if (current()) setPanelError(e)
     } finally {
-      if (sourceMatchesDirectory(directory)) setLoading(false)
+      if (current()) setLoading(false)
     }
   }
 
@@ -496,8 +528,7 @@ function SharedResourceManagementPanel(props: {
     try {
       await (disconnect ? disconnectMcp : connectMcp)(name, { directory })
       if (!current()) return
-      await refreshMcpStatus({ directory })
-      notifyResourceChange()
+      if (await refreshMcpStatus({ directory })) notifyResourceChange()
     } catch (error) {
       if (current()) setPanelError(error)
     } finally {
@@ -674,16 +705,13 @@ function SharedResourceManagementPanel(props: {
   createEffect(() => {
     if (props.mode !== "mcp" || props.active !== true) return
     const directory = currentDirectory()
+    captureApiAuthority().revision
     if (!directory) {
       void reloadCurrentPanel({ directory })
       return
     }
 
-    const refresh = () => {
-      refreshMcpStatus({ directory }).catch((e) => {
-        if (sourceMatchesDirectory(directory)) setPanelError(e)
-      })
-    }
+    const refresh = () => void refreshMcpStatus({ directory, background: true })
     void reloadCurrentPanel({ directory })
     const interval = createVisibilityInterval(refresh, MCP_STATUS_REFRESH_INTERVAL_MS, {
       onVisible: refresh,
@@ -692,6 +720,7 @@ function SharedResourceManagementPanel(props: {
 
     onCleanup(() => {
       interval.dispose()
+      mcpReadRequest = undefined
     })
   })
 
@@ -1402,7 +1431,7 @@ function SharedResourceManagementPanel(props: {
             </Show>
             <SettingsDetailSection
               class="extension-list"
-              title={t("mcp.configured_status")}
+              title={<span ref={mcpStatusHeading} tabIndex={-1}>{t("mcp.configured_status")}</span>}
               description={t("mcp.configured_status_help")}
               actions={
                 <Show when={loading()} fallback={<Show when={mcpStatusCurrent()}><Badge tone="neutral">{mcpEntries().length}</Badge></Show>}>
@@ -1410,6 +1439,13 @@ function SharedResourceManagementPanel(props: {
                 </Show>
               }
             >
+              <Show when={mcpReadFailure()}>
+                {(failure) => (
+                  <Feedback tone="error" ref={mcpReadFeedback} details={formatErrorDetails(failure().error)}>
+                    {t("mcp.status_read_failed")}
+                  </Feedback>
+                )}
+              </Show>
               <div id="mcpList">
                 <Show
                   when={mcpEntries().length > 0}

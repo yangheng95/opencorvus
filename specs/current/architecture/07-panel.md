@@ -5450,6 +5450,10 @@ shared panel owns section spacing and rows own list density; individual panels
 do not restyle that hierarchy. Settings use flat neutral surfaces, including
 About and Usage. Semantic colors remain for status and analytical graphics.
 Network and Provider result/error notices use the shared Feedback primitive.
+Project MCP status uses one scoped read at a time for passive observation; an
+explicit readback may retire it. Read failures belong beside Server connections
+and clear on the next accepted success. Connection or configuration notices
+remain independently owned by their original actions.
 
 General presents Notifications, Permissions and Diagnostics in that order.
 The Composer and General authorization controls project only a confirmed

@@ -1,0 +1,301 @@
+{
+  "baseline": {
+    "asset": "main-BDu1rkob.js",
+    "projectStatus": {
+      "status": 200,
+      "requestID": "ffeba6c6-6317-4526-b204-0af481d7648c",
+      "fixture": "disabled",
+      "error": null
+    },
+    "requests": [
+      {
+        "time": "2026-11-10T03:03:05.473Z",
+        "stage": "arrival",
+        "attempt": 10,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:03:05.481Z",
+        "stage": "origin",
+        "attempt": 10,
+        "status": 200,
+        "requestID": "554ed6a2-6a82-45bb-8d6e-8b2dba83fe5c"
+      },
+      {
+        "time": "2026-11-10T03:03:06.476Z",
+        "stage": "arrival",
+        "attempt": 11,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T03:03:06.484Z",
+        "stage": "origin",
+        "attempt": 11,
+        "status": 200,
+        "requestID": "4ff9fc22-5ba5-488d-a6a9-1c65689153d8"
+      },
+      {
+        "time": "2026-11-10T03:03:06.485Z",
+        "stage": "truncated",
+        "attempt": 11,
+        "bytes": 45,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T03:03:15.475Z",
+        "stage": "arrival",
+        "attempt": 20,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T03:03:15.484Z",
+        "stage": "origin",
+        "attempt": 20,
+        "status": 200,
+        "requestID": "7499de0e-7ccf-4e82-a74d-445158650fe7"
+      },
+      {
+        "time": "2026-11-10T03:03:15.485Z",
+        "stage": "truncated",
+        "attempt": 20,
+        "bytes": 45,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T03:03:16.471Z",
+        "stage": "arrival",
+        "attempt": 21,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:03:16.479Z",
+        "stage": "origin",
+        "attempt": 21,
+        "status": 200,
+        "requestID": "c44696d5-afae-4e84-8dcd-d73fa4ae5df3"
+      },
+      {
+        "time": "2026-11-10T03:03:17.471Z",
+        "stage": "arrival",
+        "attempt": 22,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:03:17.479Z",
+        "stage": "origin",
+        "attempt": 22,
+        "status": 200,
+        "requestID": "d5410418-49a5-4f28-80c6-dd2e099e4e29"
+      },
+      {
+        "time": "2026-11-10T03:03:18.473Z",
+        "stage": "arrival",
+        "attempt": 23,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:03:18.481Z",
+        "stage": "origin",
+        "attempt": 23,
+        "status": 200,
+        "requestID": "fb3f7eec-8648-44f0-97dc-428961e42376"
+      }
+    ]
+  },
+  "candidate": {
+    "asset": "main-Ch6FzVz3.js",
+    "projectStatus": {
+      "status": 200,
+      "requestID": "14f939b4-6e97-4a4c-a4e3-9e4dcd5564a0",
+      "fixture": "disabled"
+    },
+    "effectiveStatus": {
+      "status": 200,
+      "requestID": "6000b45e-be7c-4aa4-bce2-8c4cdca1c467",
+      "fixture": "disabled"
+    },
+    "heldSeconds": 13.969,
+    "nextStatusRead": 23,
+    "requests": [
+      {
+        "time": "2026-11-10T03:09:35.313Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:09:35.329Z",
+        "stage": "origin",
+        "attempt": 1,
+        "status": 200,
+        "requestID": "d7653e60-bf07-45da-a415-4338a20d75c0"
+      },
+      {
+        "time": "2026-11-10T03:09:55.321Z",
+        "stage": "arrival",
+        "attempt": 21,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T03:09:55.330Z",
+        "stage": "origin",
+        "attempt": 21,
+        "status": 200,
+        "requestID": "5d72337a-17e8-4dd2-b428-d6235fed3cc3"
+      },
+      {
+        "time": "2026-11-10T03:09:55.331Z",
+        "stage": "truncated",
+        "attempt": 21,
+        "bytes": 45,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T03:09:56.315Z",
+        "stage": "arrival",
+        "attempt": 22,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:09:56.325Z",
+        "stage": "origin",
+        "attempt": 22,
+        "status": 200,
+        "requestID": "a63fa2d7-6f71-4ebd-ab5f-ffcfea0cb043"
+      },
+      {
+        "time": "2026-11-10T03:09:56.326Z",
+        "stage": "held",
+        "attempt": 22,
+        "bytes": 45
+      },
+      {
+        "time": "2026-11-10T03:10:10.295Z",
+        "stage": "released",
+        "attempt": 22,
+        "bytes": 45
+      },
+      {
+        "time": "2026-11-10T03:10:10.317Z",
+        "stage": "arrival",
+        "attempt": 23,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:10:10.328Z",
+        "stage": "origin",
+        "attempt": 23,
+        "status": 200,
+        "requestID": "ff9cc259-fe66-4645-b6a5-ba87e234f154"
+      },
+      {
+        "time": "2026-11-10T03:10:44.169Z",
+        "stage": "arrival",
+        "attempt": 43,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T03:10:44.177Z",
+        "stage": "origin",
+        "attempt": 43,
+        "status": 200,
+        "requestID": "439a57a3-5e92-4f71-9847-b1785c81a8eb"
+      },
+      {
+        "time": "2026-11-10T03:10:44.178Z",
+        "stage": "truncated",
+        "attempt": 43,
+        "bytes": 45,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T03:10:45.172Z",
+        "stage": "arrival",
+        "attempt": 44,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T03:10:45.180Z",
+        "stage": "origin",
+        "attempt": 44,
+        "status": 200,
+        "requestID": "cffaaa08-51a9-432d-aadd-69fc57833967"
+      },
+      {
+        "time": "2026-11-10T03:10:45.180Z",
+        "stage": "truncated",
+        "attempt": 44,
+        "bytes": 45,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T03:10:46.158Z",
+        "stage": "arrival",
+        "attempt": 45,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:10:46.166Z",
+        "stage": "origin",
+        "attempt": 45,
+        "status": 200,
+        "requestID": "a4d51430-efb2-4cf6-b281-a4f2de4a7a7a"
+      },
+      {
+        "time": "2026-11-10T03:10:47.159Z",
+        "stage": "arrival",
+        "attempt": 46,
+        "method": "GET",
+        "path": "/mcp/project",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T03:10:47.166Z",
+        "stage": "origin",
+        "attempt": 46,
+        "status": 200,
+        "requestID": "bd218a4c-ed2f-4658-a016-1895d944cb5f"
+      }
+    ]
+  },
+  "fixture": {
+    "type": "local",
+    "command": [
+      "node",
+      "--version"
+    ],
+    "enabled": false
+  },
+  "bothProfiles": {
+    "integrity": "ok",
+    "taskCount": 0,
+    "sessionCount": 0,
+    "providerUsageCount": 0
+  }
+}
