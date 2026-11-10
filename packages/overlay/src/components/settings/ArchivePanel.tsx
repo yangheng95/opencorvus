@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { For, Show, createEffect, createSignal, onCleanup, untrack, type JSX } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, onCleanup, untrack, type JSX } from "solid-js"
 import {
   ApiAuthorityChangedError,
   captureApiAuthority,
@@ -109,6 +109,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     const current = failure()
     return current?.operation === "append" ? undefined : current
   }
+  const hasRefreshFailure = createMemo(() => panelFailure()?.operation === "refresh")
 
   const recordFailure = (id: string, operation: ArchiveFailure["operation"], cause: unknown) => {
     setFailure({ operation, cause })
@@ -196,10 +197,10 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     const generation = ++requestGeneration
     const authority = captureApiAuthority()
     const hadContinuationFocus = append && continuationButton === document.activeElement
-    const hadRefreshFocus = refresh && retryTrigger === document.activeElement
+    const hadRetryFocus = retryTrigger === document.activeElement
     let focusRow: WorkLedgerItemRow | undefined
     setLoading(true)
-    if (!refresh) setFailure(undefined)
+    if (append) setFailure(undefined)
     try {
       const result = await readPages({
         search: search().trim(),
@@ -213,13 +214,13 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       const nextFocus = hadContinuationFocus && continuationButton === document.activeElement
         ? result.rows[0] ?? (!result.nextCursor ? rows().at(-1) : undefined)
         : undefined
-      if (hadRefreshFocus && retryTrigger === document.activeElement) {
+      if (hadRetryFocus && retryTrigger === document.activeElement) {
         headingElement?.focus({ preventScroll: true })
       }
       setRows((current) => (append ? [...current, ...result.rows] : result.rows))
       setNextCursor(result.nextCursor)
       focusRow = nextFocus
-      if (refresh) setFailure(undefined)
+      if (!append) setFailure(undefined)
     } catch (cause) {
       if (
         requestController.signal.aborted ||
@@ -241,14 +242,18 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     }
   }
 
-  const retryRead = (operation: "initial" | "refresh") => (
+  const retryRead = () => (
     <Button
       type="button"
       variant="outline"
       size="sm"
       tone="neutral"
       aria-disabled={loading() || !!busyID() || undefined}
-      onClick={(event) => void load(operation, event.currentTarget)}
+      aria-busy={loading() || undefined}
+      onClick={(event) => {
+        const operation = panelFailure()?.operation
+        if (operation === "initial" || operation === "refresh") void load(operation, event.currentTarget)
+      }}
     >
       <Icon name="refresh" />{loading() ? t("common.loading") : t("common.retry")}
     </Button>
@@ -407,7 +412,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         {(current) => (
           <ArchiveFailureFeedback
             failure={current()}
-            actions={current().operation === "refresh" ? retryRead("refresh") : undefined}
+            actions={hasRefreshFailure() ? retryRead() : undefined}
           />
         )}
       </Show>
@@ -436,7 +441,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
             {(current) => (
               <ArchiveFailureFeedback
                 failure={current()}
-                actions={retryRead(current().operation === "refresh" ? "refresh" : "initial")}
+                actions={retryRead()}
               />
             )}
           </Show>

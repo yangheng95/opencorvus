@@ -5788,6 +5788,9 @@ diagnostic details. A failed continuation keeps the accepted rows and cursor
 and presents its failure above the existing continuation action. When focus
 remains there, the footer is brought into view without moving focus. Retrying
 uses that same cursor and query; first-page failures use the existing list Retry.
+First-page and post-mutation refresh Retry retain their trigger and diagnostic
+while the read is pending. A successful retry transfers focus to the section
+heading only if that trigger still owns it, before the feedback is retired.
 Continuing while the Load more button has focus preserves that focus during the
 read. On success, if the operator is still on that button, focus moves to Open
 on the first appended row. If the cursor is exhausted with no new rows, focus
@@ -5800,8 +5803,7 @@ the refreshed window and continuation cursor commit together. Ordinary initial
 and continuation reads still fetch one page.
 If that refresh fails, its own Retry keeps the accepted rows, current search,
 and the committed action receipt. It reads through the last surviving row or
-exhaustion without repeating the write. Successful retry moves focus from its
-own button to the section heading only if the button still owns focus.
+exhaustion without repeating the write.
 Row-action settlement can move focus only while it remains on the original
 control or has returned to the document body after the control was disabled or
 removed. If another control has focus, the action leaves it there. A successful

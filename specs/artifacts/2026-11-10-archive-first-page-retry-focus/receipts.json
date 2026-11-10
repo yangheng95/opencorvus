@@ -1,0 +1,429 @@
+{
+  "baseline": {
+    "actualArchive": {
+      "status": 200,
+      "requestID": [
+        "3af7b9dc-d98a-41c3-93d6-94321173df94"
+      ],
+      "id": "ses_hK6KcNmiX1PFHA3MozRG",
+      "title": "Archive Retry Review 189",
+      "archived": 1794290144386,
+      "count": 1,
+      "cursor": null
+    },
+    "reviewTransport": [
+      {
+        "time": "2026-11-10T05:55:55.292Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "da337cdd-a7f8-4a28-ae69-40037b0fb728",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T05:55:55.295Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "da337cdd-a7f8-4a28-ae69-40037b0fb728",
+        "mode": "truncate",
+        "bytes": 405,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T05:56:09.228Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "95955807-fe7c-432a-8c7f-acbffe45ab6a",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T05:56:09.229Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "95955807-fe7c-432a-8c7f-acbffe45ab6a",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T05:56:13.459Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "95955807-fe7c-432a-8c7f-acbffe45ab6a",
+        "mode": "hold",
+        "bytes": 405,
+        "delivered": 405
+      },
+      {
+        "time": "2026-11-10T05:57:07.395Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "fc42d128-e139-4192-9e9b-077d894ebd57",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T05:57:07.396Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "fc42d128-e139-4192-9e9b-077d894ebd57",
+        "mode": "truncate",
+        "bytes": 29,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T05:57:15.692Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "0b96490e-c00f-4938-bb4d-827eb9758b8b",
+        "mode": "restore"
+      }
+    ],
+    "shutdown": {
+      "occurrence": "iteration-b189-baseline",
+      "apiPort": 39505,
+      "proxyPort": 39506,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "database": {
+      "integrity": "ok",
+      "session": 1,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  },
+  "candidate": {
+    "actualArchive": {
+      "status": 200,
+      "requestID": "5b190db2-ed31-4ca3-9338-67f72ee2fb30",
+      "search": "",
+      "count": 1,
+      "cursor": null,
+      "schemaValid": true,
+      "id": "ses_hsyNXqUeMjUFRBnKyixj",
+      "title": "Archive Retry Review 189",
+      "archived": 1794290439952,
+      "asset": "main-D2ed4yly.js",
+      "doc": {
+        "status": 200,
+        "requestID": "a59d3cb1-db86-425d-aee1-be52c13043a5",
+        "operation": "workLedger.listArchived"
+      },
+      "mutations": {
+        "create": {
+          "status": 201,
+          "requestID": "dc9b3a2e-c4f0-4535-8cb7-4da4023916fe"
+        },
+        "rename": {
+          "status": 200,
+          "requestID": "9fcab697-49a7-4313-ae62-c36de2799f0e"
+        },
+        "archive": {
+          "status": 200,
+          "requestID": "b9eacfe4-413a-4bda-8019-e3754692cf28"
+        }
+      },
+      "filtered": {
+        "status": 200,
+        "requestID": "73703da4-ee1e-4ef0-b80f-9973815e8a05",
+        "search": "Archive Retry Review 189",
+        "count": 1,
+        "cursor": null,
+        "schemaValid": true
+      },
+      "empty": {
+        "status": 200,
+        "requestID": "21b06e6c-6a67-4cc1-b23a-8b3a0d1216a5",
+        "search": "No Matching Work 189",
+        "count": 0,
+        "cursor": null,
+        "schemaValid": true
+      },
+      "providerCatalog": {
+        "status": 200,
+        "requestID": "7b93b35c-84d1-404d-bac2-bd6f0450a312",
+        "visible": 88,
+        "connected": 0
+      }
+    },
+    "reviewTransport": [
+      {
+        "time": "2026-11-10T06:00:49.543Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "95f65be0-ac63-4bc9-9a3e-7c1fbaaa17ed",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:00:49.546Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "95f65be0-ac63-4bc9-9a3e-7c1fbaaa17ed",
+        "mode": "truncate",
+        "bytes": 405,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:00:53.820Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "906384fb-0b7b-4300-8608-0387f3e9ff82",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:00:53.821Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "906384fb-0b7b-4300-8608-0387f3e9ff82",
+        "mode": "truncate",
+        "bytes": 405,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:01:01.938Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "2e3d66d2-ebb2-4376-92cf-276b21db8019",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:01:01.939Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "2e3d66d2-ebb2-4376-92cf-276b21db8019",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:01:06.107Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "2e3d66d2-ebb2-4376-92cf-276b21db8019",
+        "mode": "hold",
+        "bytes": 405,
+        "delivered": 405
+      },
+      {
+        "time": "2026-11-10T06:01:18.894Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "",
+        "status": 200,
+        "requestID": "14dc0545-9c2e-4037-ac29-5ca4b7bcefd1",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:01:29.040Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "4fb96166-82c2-4c06-b694-df4378882de0",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:01:29.041Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "4fb96166-82c2-4c06-b694-df4378882de0",
+        "mode": "truncate",
+        "bytes": 29,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:01:37.811Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "1eda663e-1676-46bf-9c9b-228b66171441",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:01:37.812Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "1eda663e-1676-46bf-9c9b-228b66171441",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:01:47.131Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "1eda663e-1676-46bf-9c9b-228b66171441",
+        "mode": "hold",
+        "bytes": 29,
+        "delivered": 29
+      },
+      {
+        "time": "2026-11-10T06:02:01.899Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "231b42da-cb5c-4bcc-8376-1d4e0b3d0743",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:02:01.901Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189",
+        "status": 200,
+        "requestID": "231b42da-cb5c-4bcc-8376-1d4e0b3d0743",
+        "mode": "truncate",
+        "bytes": 29,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:02:01.928Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189 Second",
+        "status": 200,
+        "requestID": "ef280deb-3a2b-405f-92a3-7c6b0da0ed49",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:02:01.929Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189 Second",
+        "status": 200,
+        "requestID": "ef280deb-3a2b-405f-92a3-7c6b0da0ed49",
+        "mode": "truncate",
+        "bytes": 29,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:02:10.363Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/archive",
+        "search": "No Matching Work 189 Second",
+        "status": 200,
+        "requestID": "5ab4722c-c6bf-432d-b17f-78a3f33f1a26",
+        "mode": "restore"
+      }
+    ],
+    "shutdown": {
+      "occurrence": "iteration-b189-candidate",
+      "apiPort": 39507,
+      "proxyPort": 39508,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "database": {
+      "integrity": "ok",
+      "session": 1,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    },
+    "directAfter": {
+      "status": 200,
+      "requestID": "5092b5e8-63fb-443d-9133-8a0ab34164c8",
+      "search": "",
+      "count": 1,
+      "cursor": null,
+      "schemaValid": true,
+      "id": "ses_hsyNXqUeMjUFRBnKyixj",
+      "title": "Archive Retry Review 189",
+      "archived": 1794290439952,
+      "asset": "main-D2ed4yly.js",
+      "doc": {
+        "status": 200,
+        "requestID": "dd1d4c94-0034-4cab-80fd-932f4ce17518",
+        "operation": "workLedger.listArchived"
+      },
+      "filtered": {
+        "status": 200,
+        "requestID": "77af0756-959e-4045-ab7c-95e1527a5523",
+        "search": "Archive Retry Review 189",
+        "count": 1,
+        "cursor": null,
+        "schemaValid": true
+      },
+      "empty": {
+        "status": 200,
+        "requestID": "2b09edf5-4fd4-48e2-a847-a27ffe4eb30e",
+        "search": "No Matching Work 189",
+        "count": 0,
+        "cursor": null,
+        "schemaValid": true
+      },
+      "providerCatalog": {
+        "status": 200,
+        "requestID": "f1ec2d5e-4eeb-44e1-b51a-2e211d336297",
+        "visible": 88,
+        "connected": 0
+      }
+    }
+  }
+}

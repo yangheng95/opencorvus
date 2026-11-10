@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [归档首读重试保留键盘位置](records/2026-11/2026-11-10-archive-first-page-retry-focus.md)
 - [年度用量热图的月份轴与真实周列对齐](records/2026-11/2026-11-10-usage-year-month-axis.md)
 - [网络代理可直接区分同名项目](records/2026-11/2026-11-10-network-proxy-same-name-project-context.md)
 - [通道设置与编辑器显示实际目标项目](records/2026-11/2026-11-10-channel-active-project-context.md)
