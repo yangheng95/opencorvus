@@ -161,7 +161,9 @@ export function FileEditorPane() {
   let activeTargetIdentity = ""
   let contentAuthority: ApiAuthority | undefined
   let downloadController: AbortController | undefined
-  let markdownPreview: HTMLElement | undefined
+  const [markdownPreview, setMarkdownPreview] = createSignal<HTMLElement>()
+  const [imagePreviewTrigger, setImagePreviewTrigger] = createSignal<HTMLButtonElement>()
+  const [pdfNavigation, setPdfNavigation] = createSignal<HTMLDivElement>()
   let loadRetryButton: HTMLButtonElement | undefined
   let binaryDownloadButton: HTMLButtonElement | undefined
   let binaryDownloadFeedback: HTMLDivElement | undefined
@@ -269,12 +271,17 @@ export function FileEditorPane() {
   const identityOf = (file: FileEditorTarget | null) => file
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
   const resourceReady = () => !loading() && identityOf(target()) === activeTargetIdentity
+  const previewFocusTarget = () => previewVisible() ? markdownPreview()
+    : imageSource() ? imagePreviewTrigger()
+    : pdfSource() ? pdfNavigation() : undefined
   const revealPreview = createAnimationFrameScheduler(() => {
     const revision = fileEditorRevealRevision()
-    const preview = markdownPreview
+    const preview = previewFocusTarget()
+    const loaded = acceptedContent()
     if (
-      previewRevealedRevision === revision || !previewVisible() || !resourceReady() || fileEditorReserved() ||
-      !preview?.isConnected || !preview.clientWidth || !preview.clientHeight
+      previewRevealedRevision === revision || !resourceReady() || fileEditorReserved() ||
+      !loaded || !ownsFileTarget(loaded.target) || !isApiAuthorityCurrent(loaded.readerAuthority) ||
+      !preview?.isConnected || !preview.clientWidth || !preview.clientHeight || preview.closest("[inert], [hidden]")
     ) return
     previewRevealedRevision = revision
     const active = document.activeElement
@@ -284,7 +291,7 @@ export function FileEditorPane() {
   })
   createEffect(() => {
     fileEditorRevealRevision()
-    if (previewVisible() && resourceReady() && !fileEditorReserved()) revealPreview.schedule()
+    if (previewFocusTarget() && resourceReady() && !fileEditorReserved()) revealPreview.schedule()
     else revealPreview.cancel()
   })
   const isBusy = () => !resourceReady() || saving() || reloading()
@@ -928,10 +935,17 @@ export function FileEditorPane() {
                 </div>
               }>
                 <Match when={imageSource()}>
-                  {(src) => <div class="file-editor-image"><PreviewableImage src={src()} alt={displayName() ?? path()} /></div>}
+                  {(src) => (
+                    <div class="file-editor-image">
+                      <PreviewableImage src={src()} alt={displayName() ?? path()} triggerRef={setImagePreviewTrigger} />
+                    </div>
+                  )}
                 </Match>
                 <Match when={pdfSource()}>
-                  {(url) => <PdfPreview url={url()} label={displayName() ?? path()} class="file-editor-pdf" />}
+                  {(url) => (
+                    <PdfPreview url={url()} label={displayName() ?? path()} class="file-editor-pdf"
+                      onNavigationReady={setPdfNavigation} />
+                  )}
                 </Match>
                 <Match when={textContent()}>
                   <CodeEditor
@@ -948,7 +962,7 @@ export function FileEditorPane() {
                   />
                   <Show when={previewVisible()}>
                     <section
-                      ref={(element) => { markdownPreview = element }}
+                      ref={setMarkdownPreview}
                       class="file-editor-markdown-preview md-content"
                       tabIndex={0}
                       aria-label={`${fileTitle()} · ${t("file_editor.view_preview")}`}

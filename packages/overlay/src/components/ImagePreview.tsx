@@ -81,6 +81,7 @@ export function PreviewableImage(props: {
   imageAttributes?: PreviewableImageAttributes
   resourceUrl?: string
   focusOrigin?: HTMLButtonElement
+  triggerRef?: (element: HTMLButtonElement) => void
 }) {
   let triggerButton: HTMLButtonElement | undefined
   const alt = () => props.alt || ""
@@ -109,7 +110,10 @@ export function PreviewableImage(props: {
 
   return (
     <Button
-      ref={triggerButton}
+      ref={(element) => {
+        triggerButton = element
+        props.triggerRef?.(element)
+      }}
       type="button"
       variant={trigger().variant}
       size={trigger().size}

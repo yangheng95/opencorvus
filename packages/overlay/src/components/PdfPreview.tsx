@@ -13,8 +13,14 @@ import { Feedback } from "./ui/Feedback"
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker
 
-export function PdfPreview(props: { url: string; label: string; class?: string }) {
+export function PdfPreview(props: {
+  url: string
+  label: string
+  class?: string
+  onNavigationReady?: (element: HTMLDivElement) => void
+}) {
   let canvas: HTMLCanvasElement | undefined
+  let navigationControls: HTMLDivElement | undefined
   let pageHost: HTMLDivElement | undefined
   let textHost: HTMLDivElement | undefined
   let viewportHost: HTMLDivElement | undefined
@@ -311,6 +317,7 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
         frame.append(annotationTarget)
         target.dataset.ready = "true"
         paintedWidth = availableWidth
+        if (navigationControls?.isConnected) props.onNavigationReady?.(navigationControls)
         if (navigation && navigation === pendingNavigation && navigation.sequence === navigationSequence) {
           navigation.events.dispatch("textlayerrendered", { pageNumber, source: { textLayer: { div: textTarget } } })
           const rect = destinationView!.rect
@@ -352,7 +359,10 @@ export function PdfPreview(props: { url: string; label: string; class?: string }
     >
       <div class={["msg-artifact-file__pdf-preview", props.class].filter(Boolean).join(" ")}>
         <div>
-          <div class="msg-artifact-file__toolbar">
+          <div class="msg-artifact-file__toolbar" ref={navigationControls}
+            role={props.onNavigationReady ? "group" : undefined}
+            aria-label={props.onNavigationReady ? t("file_editor.pdf_navigation") : undefined}
+            tabIndex={props.onNavigationReady ? -1 : undefined}>
             <div class="msg-artifact-file__page-controls">
               <Button
                 variant="ghost"

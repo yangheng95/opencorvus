@@ -240,6 +240,10 @@ text files retain CodeEditor, citation ranges and save admission. Other binary
 content keeps the existing non-editable description. The file-image container
 owns its bounded layout and scrolling; there is no additional fetch, image
 cache, file mutation or parallel preview implementation.
+An explicit File Editor reveal with still-owned focus lands on the existing
+image preview trigger or, after PDF rendering, its existing reading controls.
+The same preview focus owner handles Markdown and retires stale file or
+connection results. Other image and PDF surfaces keep their focus behavior.
 
 File readers admit existing text candidates only when their complete original
 bytes are valid UTF-8 and contain no NUL. Invalid candidates use the existing

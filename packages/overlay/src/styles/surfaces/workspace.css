@@ -426,6 +426,11 @@ code .file-link:focus-visible {
   overscroll-behavior: contain;
 }
 
+.file-editor-pdf .msg-artifact-file__toolbar:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--oc-border-width));
+}
+
 .file-editor-code {
   display: flex;
   flex-direction: column;

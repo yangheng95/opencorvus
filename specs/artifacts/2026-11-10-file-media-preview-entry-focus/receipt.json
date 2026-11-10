@@ -1,0 +1,198 @@
+{
+  "directReads": {
+    "baseline-direct": {
+      "page": {
+        "status": 200,
+        "requestID": "e590d090-b820-4e7f-a197-baa7e4745100",
+        "asset": "main-B9j0q7b_.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "af7b90cd-ddb4-4055-8722-456046f23adc"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "fecc0a3f-28f6-443f-b448-3cb06df5de21",
+          "operation": "file.read",
+          "filename": "isolated-image.png",
+          "mime": "image/png",
+          "byteCount": 5861,
+          "exactSourceBytes": true
+        },
+        {
+          "status": 200,
+          "requestID": "f4f1c39d-8695-4f40-9679-f08c00d2d72c",
+          "operation": "file.read",
+          "filename": "isolated-paper.pdf",
+          "mime": "application/pdf",
+          "byteCount": 4472337,
+          "exactSourceBytes": true
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "8419766d-77bd-4d10-8622-e5c22b623fd3",
+        "connected": 0
+      }
+    },
+    "candidate-before": {
+      "page": {
+        "status": 200,
+        "requestID": "e031c5d9-21dd-429b-9cee-106703560726",
+        "asset": "main-U1ElstGg.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "0c966e1d-baec-40f0-8220-fcb9e3f5e1ed"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "bf44f691-a01f-4cef-bd1c-f92abc9382b5",
+          "operation": "file.read",
+          "filename": "isolated-image.png",
+          "mime": "image/png",
+          "byteCount": 5861,
+          "exactSourceBytes": true
+        },
+        {
+          "status": 200,
+          "requestID": "1363b76b-3c62-4888-adae-fc0c26e6fbf8",
+          "operation": "file.read",
+          "filename": "isolated-paper.pdf",
+          "mime": "application/pdf",
+          "byteCount": 4472337,
+          "exactSourceBytes": true
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "ced0d936-734f-42d2-90fa-d412c548d09f",
+        "connected": 0
+      }
+    },
+    "candidate-after": {
+      "page": {
+        "status": 200,
+        "requestID": "8ad42f94-3909-45ab-9476-3b65ebc598fe",
+        "asset": "main-U1ElstGg.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "ff2e83eb-a051-4f6e-a585-39d6d2e41d69"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "5454b78e-b357-448c-a09d-b435db4b7f6f",
+          "operation": "file.read",
+          "filename": "isolated-image.png",
+          "mime": "image/png",
+          "byteCount": 5861,
+          "exactSourceBytes": true
+        },
+        {
+          "status": 200,
+          "requestID": "4ac557c7-a768-48f7-8079-591f38246b48",
+          "operation": "file.read",
+          "filename": "isolated-paper.pdf",
+          "mime": "application/pdf",
+          "byteCount": 4472337,
+          "exactSourceBytes": true
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "bf1a8d2d-ab4b-44aa-a53a-5ecce52df846",
+        "connected": 0
+      }
+    }
+  },
+  "transfers": [
+    {
+      "time": "2026-11-10T10:25:57.670Z",
+      "requestID": "7b91e308-e535-4208-812a-32158a4e80dd",
+      "status": 200,
+      "mode": "restore",
+      "bytes": 7887,
+      "delivered": 7887
+    },
+    {
+      "time": "2026-11-10T10:26:10.332Z",
+      "requestID": "9005df2c-5813-4667-a3a9-3bdbf1dfbaeb",
+      "status": 200,
+      "mode": "restore",
+      "bytes": 5963193,
+      "delivered": 5963193
+    },
+    {
+      "time": "2026-11-10T10:26:27.816Z",
+      "requestID": "d897bb74-b3a0-4715-a97d-9864d192a8d3",
+      "status": 200,
+      "mode": "restore",
+      "bytes": 260,
+      "delivered": 260
+    },
+    {
+      "time": "2026-11-10T10:26:38.193Z",
+      "requestID": "0572c0b2-e274-4765-87cd-862b3617700d",
+      "status": 200,
+      "mode": "restore",
+      "bytes": 7887,
+      "delivered": 7887
+    },
+    {
+      "time": "2026-11-10T10:26:58.770Z",
+      "requestID": "9a9381ff-8164-4dfc-a5fb-6c6f9865085b",
+      "status": 200,
+      "mode": "hold",
+      "bytes": 5963193,
+      "delivered": 5963193,
+      "heldMs": 4640
+    }
+  ],
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b207-baseline",
+      "apiPort": 39579,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b207-candidate",
+      "apiPort": 39580,
+      "proxyPort": 39581,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "fixtureBytesUnchanged": true
+}
