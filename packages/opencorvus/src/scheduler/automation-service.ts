@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto"
 import { Database, NotFoundError, and, desc, eq, inArray, isNull, ne, or, sql } from "@/storage/db"
 import {
   AutomationDefinitionTombstoneTable,
@@ -231,6 +232,20 @@ export const AutomationRunningConflictError = NamedError.create(
     message: z.string(),
     automationID: z.string(),
   }),
+)
+
+const AutomationManualRunReceiptErrorData = z.object({
+  message: z.string(),
+  automationID: z.string(),
+  fireID: z.string(),
+  state: z.string(),
+})
+
+export const AutomationManualRunPendingError = NamedError.create(
+  "AutomationManualRunPendingError", AutomationManualRunReceiptErrorData,
+)
+export const AutomationManualRunReceiptUnavailableError = NamedError.create(
+  "AutomationManualRunReceiptUnavailableError", AutomationManualRunReceiptErrorData,
 )
 
 export const AutomationRevisionConflictError = NamedError.create(
@@ -843,7 +858,47 @@ export namespace AutomationService {
     return view(Database.use((db) => projectAutomationInTransaction(db, row)))
   }
 
-  export async function runNow(id: string): Promise<AutomationRunView[]> {
+  function manualApiFireID(id: string, requestID: string = randomUUID()): string {
+    return Identifier.deterministic("automation", `automation-manual-api-fire-v1\0${id}\0${requestID}`)
+  }
+
+  /** Read only the exact already-accepted public Fire, even after a later
+   * definition revision. The original frontier owns any remaining recovery. */
+  function manualApiRunReceipt(id: string, fireID: string): AutomationRunView[] | undefined {
+    const fire = Database.transaction((db) => {
+      const current = latestAutomationDefinitionInTransaction(db, id)
+      if (!current || current.kind === "delay") throw new NotFoundError({ message: `Automation not found: ${id}` })
+      const stored = db.select().from(AutomationFireTable).where(eq(AutomationFireTable.id, fireID)).get()
+      if (!stored) return undefined
+      const owner = db.select({ id: AutomationTable.definition_id })
+        .from(AutomationTable).where(eq(AutomationTable.id, stored.automation_revision_id)).get()
+      if (owner?.id !== id || stored.origin !== "manual_api") {
+        throw new Error(`Automation ${id} has conflicting ownership for manual Fire ${fireID}`)
+      }
+      return projectAutomationFireInTransaction(db, stored)
+    })
+    if (!fire) return undefined
+    const runs = listRunsForAutomation(id, fireID)
+    const identity = { automationID: id, fireID, state: fire.state }
+    if (fire.state === "scheduled" || fire.state === "running" || (fire.state === "retry_wait" && !runs.length)) {
+      throw new AutomationManualRunPendingError({
+        ...identity,
+        message: `Automation ${id} accepted Fire ${fireID} and its target results are still pending.`,
+      })
+    }
+    if (!runs.length) {
+      throw new AutomationManualRunReceiptUnavailableError({
+        ...identity,
+        message: fire.error ?? `Automation ${id} Fire ${fireID} settled without target run records.`,
+      })
+    }
+    return runs
+  }
+
+  export async function runNow(id: string, requestID?: string): Promise<AutomationRunView[]> {
+    const fireID = manualApiFireID(id, requestID)
+    const replay = manualApiRunReceipt(id, fireID)
+    if (replay) return replay
     const release = await acquireExecutionPermit()
     let handedOff = false
     try {
@@ -851,7 +906,7 @@ export namespace AutomationService {
         const execution = executeWithRuntimeSettlement(job, owner, now, execute, undefined, release)
         handedOff = true
         return execution
-      })
+      }, fireID)
     } finally {
       if (!handedOff) release()
     }
@@ -1048,26 +1103,34 @@ export namespace AutomationService {
   async function runNowWithExecutor(
     id: string,
     executeFire: (job: AutomationRow, owner: string, now: number) => Promise<string>,
+    fireID = manualApiFireID(id),
   ): Promise<AutomationRunView[]> {
+    const replay = manualApiRunReceipt(id, fireID)
+    if (replay) return replay
     const automation = assertPublicAutomation(id)
     if (automation.pending_fire_id) {
+      const accepted = manualApiRunReceipt(id, fireID)
+      if (accepted) return accepted
       throw new AutomationRunningConflictError({
         message: `Automation ${id} already has unsettled fire ${automation.pending_fire_id}`,
         automationID: id,
       })
     }
     const now = Date.now()
-    const owner = `manual:${process.pid}:${now}`
-    const row = claim(id, owner, now, true)
+    const owner = `manual:${process.pid}:${fireID}`
+    const row = claim(id, owner, now, true, fireID)
     if (!row) {
+      const accepted = manualApiRunReceipt(id, fireID)
+      if (accepted) return accepted
       throw new AutomationRunningConflictError({
         message: `Automation ${id} is already running`,
         automationID: id,
       })
     }
-    const fireID = await executeFire(row, owner, now)
-    const runs = listRunsForAutomation(id, fireID)
-    if (runs.length === 0) throw new Error(`Automation ${id} completed without run records`)
+    const executedFireID = await executeFire(row, owner, now)
+    if (executedFireID !== fireID) throw new Error(`Automation ${id} settled a different Fire ${executedFireID}`)
+    const runs = manualApiRunReceipt(id, fireID)
+    if (!runs) throw new Error(`Automation ${id} lost its accepted Fire ${fireID}`)
     return runs
   }
 
@@ -1458,7 +1521,8 @@ export namespace AutomationService {
    * away from: no fire owner runs, yet update, delete, manual rerun and due
    * selection all keep seeing the target as running until the lease expires.
    */
-  function claim(id: string, owner: string, now: number, force = false, scheduledFireID?: string) {
+  function claim(id: string, owner: string, now: number, force = false, requestedFireID?: string) {
+    const manualFireID = force ? (requestedFireID ?? manualApiFireID(id)) : undefined
     const retry = Symbol("automation-session-owner-observation-changed")
     while (true) {
       const observedDefinition = Database.use((db) => latestAutomationDefinitionInTransaction(db, id))
@@ -1472,11 +1536,13 @@ export namespace AutomationService {
         const persisted = latestAutomationDefinitionInTransaction(db, id)
         if (persisted?.id !== observedDefinition?.id) return retry
         if (!persisted) return undefined
+        if (manualFireID && db.select({ id: AutomationFireTable.id }).from(AutomationFireTable)
+          .where(eq(AutomationFireTable.id, manualFireID)).get()) return undefined
         const projected = projectAutomationFrontierInTransaction(db, persisted)
         const frontier = currentAutomationFireFrontierInTransaction(db, id)
         if (!force && (!frontier || frontier.automation_revision_id !== persisted.id)) return undefined
         if (force && projected.pending_fire_id) return undefined
-        if (!force && (frontier!.available_at > now || (scheduledFireID && frontier!.fire_id !== scheduledFireID))) {
+        if (!force && (frontier!.available_at > now || (requestedFireID && frontier!.fire_id !== requestedFireID))) {
           return undefined
         }
         const exactScheduledFire = frontier
@@ -1529,7 +1595,7 @@ export namespace AutomationService {
         })
         if (!acquired.acquired) return undefined
         const scheduledDueAt = force ? now : exactScheduledFire!.scheduled_due_at
-        const fireID = force ? Identifier.ascending("automation") : exactScheduledFire!.id
+        const fireID = manualFireID ?? exactScheduledFire!.id
         ensureAutomationFireInTransaction(db, {
           job: projected,
           fireID,

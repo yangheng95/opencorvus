@@ -6557,14 +6557,27 @@ export class Automations extends HeyApiClient {
 
   /**
    * Run a scheduled automation now
+   *
+   * Reuse requestID to retrieve the same accepted manual Fire after a lost response. A new requestID starts a distinct run when the automation is available.
    */
   public run<ThrowOnError extends boolean = false>(
     parameters: {
       id: string
+      requestID?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "path", key: "id" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "id" },
+            { in: "body", key: "requestID" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).post<
       GlobalAutomationsRunResponses,
       GlobalAutomationsRunErrors,
@@ -6573,6 +6586,11 @@ export class Automations extends HeyApiClient {
       url: "/global/automations/{id}/run",
       ...options,
       ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
     })
   }
 

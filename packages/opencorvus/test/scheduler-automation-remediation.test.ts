@@ -27,6 +27,97 @@ function completedWake() {
   }))
 }
 
+test("one manual API request observes its exact Fire while active and replays the original run after a revision", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const automation = await AutomationService.create({
+        name: "manual request identity",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+        prompt: "report the project state",
+      })
+      const entered = Promise.withResolvers<void>()
+      const release = Promise.withResolvers<void>()
+      using _wake = AutomationService.TestHooks.installWakeExecutor(async (input) => {
+        entered.resolve()
+        return {
+          sessionID: input.sessionID!,
+          messageID: input.messageID!,
+          activation: Promise.resolve({ owner: new AbortController().signal }),
+          completion: release.promise.then(() => ({ ok: true as const })),
+        }
+      })
+      const requestID = "one-manual-request"
+      const first = AutomationService.runNow(automation.id, requestID)
+      let fireID: string | undefined
+      try {
+        await entered.promise
+        fireID = AutomationService.listFireHistory(automation.id).find((fire) => fire.origin === "manual_api")?.fireId
+        expect(fireID).toEqual(expect.any(String))
+        await expect(AutomationService.runNow(automation.id, requestID)).rejects.toMatchObject({
+          name: "AutomationManualRunPendingError",
+          data: { automationID: automation.id, fireID, state: "running" },
+        })
+      } finally {
+        release.resolve()
+      }
+      const completed = await first
+      const updated = await AutomationService.update({
+        id: automation.id, expectedRevisionId: automation.revisionId, name: "manual request identity revised",
+      })
+      expect(completed).toMatchObject([{ fireId: fireID, outcome: "succeeded" }])
+      expect(await AutomationService.runNow(automation.id, requestID)).toEqual(completed)
+      const independent = await AutomationService.runNow(automation.id, "another-manual-request")
+      const byFire = new Map(AutomationService.listFireHistory(automation.id).map((fire) => [fire.fireId, fire]))
+      expect([fireID, independent[0]!.fireId].map((id) => byFire.get(id!)?.automationRevisionId)).toEqual([
+        automation.revisionId, updated.revisionId,
+      ])
+    },
+  })
+}, 30_000)
+
+test("a manual Fire with no target runs returns its exact pending and terminal receipt errors", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      let now = Date.now()
+      using _clock = spyOn(Date, "now").mockImplementation(() => now)
+      using _failure = AutomationService.TestHooks.installBeforeRunReservation(() => {
+        throw new Error("manual target admission unavailable")
+      })
+      const automation = await AutomationService.create({
+        name: "manual target admission failure",
+        target: { scope: "project", projectIds: [Instance.project.id] },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        prompt: "report the project state",
+      })
+      const requestID = "exact-manual-target-admission"
+      await expect(AutomationService.runNow(automation.id, requestID)).rejects.toThrow("manual target admission unavailable")
+      const readManual = () => AutomationService.listFireHistory(automation.id).find((fire) => fire.origin === "manual_api")!
+      const fireID = readManual().fireId
+      await expect(AutomationService.runNow(automation.id, requestID)).rejects.toMatchObject({
+        name: "AutomationManualRunPendingError",
+        data: { automationID: automation.id, fireID, state: "retry_wait" },
+      })
+      for (let attempt = 2; attempt <= 5; attempt++) {
+        now = readManual().retryAt!
+        const owner = `manual-recovery:${attempt}`
+        const job = AutomationService.TestHooks.claim(automation.id, owner, now, false, fireID)!
+        await expect(AutomationService.TestHooks.executeWithRuntimeSettlement(job, owner, now))
+          .rejects.toThrow("manual target admission unavailable")
+      }
+      expect(readManual()).toMatchObject({ fireId: fireID, attemptCount: 5, state: "failed" })
+      await expect(AutomationService.runNow(automation.id, requestID)).rejects.toMatchObject({
+        name: "AutomationManualRunReceiptUnavailableError",
+        data: { automationID: automation.id, fireID, state: "failed", message: "manual target admission unavailable" },
+      })
+    },
+  })
+}, 30_000)
+
 test("the final finite scheduled Fire commits success and exposes an exhausted schedule", async () => {
   await using project = await memoryProject()
   await Instance.provide({

@@ -16,6 +16,7 @@ import {
 import {
   createAutomation,
   deleteAutomation,
+  hasPendingAutomationRun,
   listAutomationRuns,
   listAutomations,
   pauseAutomation,
@@ -57,7 +58,7 @@ import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurfa
 import { ScheduledCalendarField } from "./ScheduledCalendarField"
 
 type SelectOption<T extends string> = { value: T; label: string }
-type AutomationError = { messageKey: string; details?: string; retry?: () => void; source?: "list-load" }
+type AutomationError = { messageKey: string; details?: string; retry?: () => void; source?: "list-load"; tone?: "warning" }
 type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean; retained?: boolean }
 type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
@@ -210,10 +211,14 @@ function outcomeTone(outcome: AutomationRunView["outcome"]): BadgeTone {
   return "accent"
 }
 
-function automationFailure(error: unknown, operationKey: string): AutomationError {
-  const name = error instanceof ApiError && error.body && typeof error.body === "object"
+function automationErrorName(error: unknown): unknown {
+  return error instanceof ApiError && error.body && typeof error.body === "object"
     ? (error.body as { name?: unknown }).name
     : undefined
+}
+
+function automationFailure(error: unknown, operationKey: string): AutomationError {
+  const name = automationErrorName(error)
   return {
     messageKey: name === "AutomationRevisionConflictError"
       ? "automations.error.revision_conflict"
@@ -227,6 +232,11 @@ function automationFailure(error: unknown, operationKey: string): AutomationErro
 export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPanelProps) {
   const [automations, setAutomations] = createSignal<AutomationView[]>([])
   const [selectedID, setSelectedID] = createSignal("")
+  const [manualRunRevision, setManualRunRevision] = createSignal(0)
+  const hasUnconfirmedRun = (id: string) => {
+    manualRunRevision()
+    return hasPendingAutomationRun(id)
+  }
   const [runState, setRunState] = createSignal<AutomationRunState>({ automationID: "", status: "idle", items: [] })
   const [loading, setLoading] = createSignal(false)
   const [mutationOwner, setMutationOwner] = createSignal<AutomationMutationOwner | null>(null)
@@ -437,6 +447,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const timeZoneOptions = automationTimeZoneOptions()
   const selectedTimeZoneOption = createMemo(() => timeZoneOptions.find((option) => option.value === timeZone()) ?? null)
   const showForm = createMemo(() => editing() || creating())
+  const displayedError = createMemo((): AutomationError | null => {
+    const reported = error()
+    if (reported) return reported
+    const id = selected()?.id
+    return id && !showForm() && runningAutomationID() !== id && hasUnconfirmedRun(id)
+      ? { messageKey: "automations.error.run_unconfirmed", tone: "warning" }
+      : null
+  })
   const sessionTargetID = createMemo(() => {
     const target = editTarget()?.target ?? selected()?.target
     if (target?.scope === "session") return target.sessionId
@@ -736,16 +754,25 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   async function performAction(id: string, operation: "run" | "status", action: () => Promise<unknown>): Promise<void> {
     if (busyAction()) return
+    const authority = captureApiAuthority()
     const owner: AutomationMutationOwner = { kind: "action", id, operation }
     setMutationOwner(owner)
     setError(null)
     try {
       await action()
+      if (!isApiAuthorityCurrent(authority)) return
       await load(id)
-      await loadRuns(id)
+      if (isApiAuthorityCurrent(authority)) await loadRuns(id)
     } catch (cause) {
-      setError(automationFailure(cause, operation === "run" ? "automations.error.run_failed" : "automations.error.status_failed"))
+      if (!isApiAuthorityCurrent(authority)) return
+      if (operation === "run" && hasPendingAutomationRun(id)) {
+        setError({ ...automationFailure(cause, automationErrorName(cause) === "AutomationManualRunPendingError"
+          ? "automations.error.run_pending" : "automations.error.run_unconfirmed"), tone: "warning" })
+      } else {
+        setError(automationFailure(cause, operation === "run" ? "automations.error.run_failed" : "automations.error.status_failed"))
+      }
     } finally {
+      if (operation === "run") setManualRunRevision((value) => value + 1)
       if (mutationOwner() === owner) setMutationOwner(null)
     }
   }
@@ -910,12 +937,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
       <SettingsGroup>
         <SettingsSurface class="automations-layout" data-drill-in={showForm() || selected() ? "true" : undefined}>
-          <Show when={error()}>
+          <Show when={displayedError()}>
             {(problem) => (
               <Feedback
                 ref={errorFeedbackElement}
                 tabIndex={-1}
-                tone="error"
+                tone={problem().tone ?? "error"}
                 details={problem().details}
                 actions={
                   <Show when={problem().retry}>
@@ -1128,10 +1155,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             tone="neutral"
                             data-ui="automation-run-now"
                             disabled={Boolean(busyAction())}
+                            title={hasUnconfirmedRun(automation().id) ? t("automations.retry_run_hint") : undefined}
                             onClick={() => void performAction(automation().id, "run", () => runAutomationNow(automation().id))}
                           >
                             <Icon name={runningAutomationID() === automation().id ? "loading" : "run"} />
-                            {t(runningAutomationID() === automation().id ? "automations.running" : "automations.run_now")}
+                            {t(runningAutomationID() === automation().id ? "automations.running" : hasUnconfirmedRun(automation().id)
+                              ? "automations.retry_run" : "automations.run_now")}
                           </Button>
                           <Button
                             type="button"
@@ -1198,7 +1227,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </div>
                         <div>
                           <span>{t("automations.last")}</span>
-                          <strong>{formatTimestamp(automation().lastRun)}</strong>
+                          <strong>{!automation().lastRun && hasUnconfirmedRun(automation().id)
+                            ? t("automations.last_run_unconfirmed") : formatTimestamp(automation().lastRun)}</strong>
                         </div>
                         <div>
                           <span>{t("automations.model")}</span>

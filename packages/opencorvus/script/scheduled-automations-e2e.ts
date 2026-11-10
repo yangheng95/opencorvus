@@ -330,7 +330,8 @@ try {
     model: { providerID, modelID },
     prompt: "SCHEDULED_E2E_SESSION_MANUAL",
   })
-  const sessionRun = await post<Run[]>(`/global/automations/${sessionAutomation.id}/run`, {})
+  const sessionManualRequest = { requestID: `${runID}-session-manual` }
+  const sessionRun = await post<Run[]>(`/global/automations/${sessionAutomation.id}/run`, sessionManualRequest)
   if (sessionRun.length !== 1 || sessionRun[0]?.outcome !== "succeeded" || sessionRun[0]?.session?.id !== session.id)
     findings.push("Run now did not reuse the exact Session")
   const paused = await patchAutomation<Automation>(sessionAutomation, { status: "paused" })
@@ -342,6 +343,12 @@ try {
     resumed.nextRun <= Date.now()
   )
     findings.push("pause/resume did not converge")
+  const sessionReplay = await post<Run[]>(`/global/automations/${sessionAutomation.id}/run`, sessionManualRequest)
+  const sessionHistory = await runs(sessionAutomation.id)
+  if (sessionReplay.length !== 1 || sessionHistory.length !== 1 ||
+    sessionReplay[0]?.fireId !== sessionRun[0]?.fireId || sessionReplay[0]?.id !== sessionRun[0]?.id ||
+    sessionReplay[0]?.session?.id !== session.id || sessionHistory[0]?.id !== sessionRun[0]?.id)
+    findings.push("manual author replay did not return the original Fire, target run and Session after revision change")
 
   const finiteAutomation = await create({
     name: "finite paused manual",

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时任务手动运行复用已接受的执行](records/2026-11/2026-11-10-automation-manual-run-replay.md)
 - [停止消息卡区分本地化说明和原始诊断](records/2026-11/2026-11-10-stopped-message-diagnostic-disclosure.md)
 - [主输入区说明当前停止操作的范围](records/2026-11/2026-11-10-composer-stop-scope.md)
 - [Task 跟进模型回执与活动轮次模型](records/2026-11/2026-11-10-task-operator-model-and-active-turn.md)

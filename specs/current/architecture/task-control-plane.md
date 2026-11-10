@@ -477,6 +477,15 @@ accepted nonterminal run still belongs to its existing Fire continuation/lease
 owner and is not presented as completion.
 
 - Automation: immutable definition revision/tombstone, logical `automation_fire`, ordered physical `automation_fire_attempt` plus attempt receipt, real `automation_run` plus ordered run receipts, the generic Automation lease, and at most one `automation_fire_frontier` physical-delivery authority per current definition. An active revision with a future occurrence atomically publishes its scheduled Fire and frontier. A valid exhausted recurrence projects `nextRun: null` and keeps its definition available for manual execution. Claim/renewal, retry, terminal settlement, manual-to-scheduled restoration, pause/tombstone and one-shot Session admission change the frontier in the same writer transaction as the fact that changes delivery authority. One global poll owner lazily reads indexed 64-row `available_at` pages into bounded physical workers. Released slots, new poll hints and the existing one-second cadence revisit due work while earlier workers remain active. Exact claim revalidates current revision, Fire and lease. Terminal scheduled reservation either publishes its exact successor or proves exhaustion before the terminal transaction commits. A zero-run terminal Fire is a real public occurrence. Current writers emit only `scheduled`, `manual_api`, or Tool-bound `manual_tool` provenance. Executor and retry read origin and due time from that immutable Fire. Manual execution is allowed while paused and preserves paused status; terminal settlement restores the existing pristine scheduled sibling when one exists, and a missing sibling requires recurrence-exhaustion evidence. Retry identity and supersession remain immutable facts; the mutable frontier owns no business outcome and is not a second recurrence calculator;
+
+  Public manual execution may carry an author request ID. The definition and
+  request identity name one exact immutable `manual_api` Fire. Its first claim
+  binds the current revision and reserves the real attempt in the existing
+  lease/frontier transaction. Exact replays return that Fire's current target
+  receipts even after a later definition revision; an accepted Fire awaiting
+  target results or terminal with zero results has a typed response and its
+  original Fire ID. Replaying a receipt does not take over execution or establish
+  a new frontier. The existing poll owner still handles durable retry/recovery.
 - Each Automation physical attempt freezes the exact lease ID, lease-grant ordinal, and admission-time expiry in its writer transaction. Historical ownership remains bound to that immutable admission, independently of the lease row's later mutable expiry.
 - Event: `event_job_fire` input plus ordered `event_job_fire_receipt` facts and leases;
 

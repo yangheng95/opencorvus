@@ -661,6 +661,78 @@
         ],
         "type": "object"
       },
+      "AutomationManualRunPendingError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "fireID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID",
+              "fireID",
+              "state"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationManualRunPendingError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "AutomationManualRunReceiptUnavailableError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "fireID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID",
+              "fireID",
+              "state"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationManualRunReceiptUnavailableError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "AutomationRevisionConflictError": {
         "properties": {
           "data": {
@@ -81222,6 +81294,7 @@
     },
     "/global/automations/{id}/run": {
       "post": {
+        "description": "Reuse requestID to retrieve the same accepted manual Fire after a lost response. A new requestID starts a distinct run when the automation is available.",
         "operationId": "global.automations.run",
         "parameters": [
           {
@@ -81233,6 +81306,23 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {
@@ -81368,7 +81458,7 @@
                 }
               }
             },
-            "description": "One completed run per target"
+            "description": "Current target receipts for one accepted manual Fire"
           },
           "400": {
             "content": {
@@ -81435,28 +81525,21 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/AutomationRunningConflictError"
                     },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/AutomationManualRunPendingError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AutomationManualRunReceiptUnavailableError"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Conflict"
+            "description": "An execution conflicts, or the accepted Fire has pending or unavailable target receipts"
           }
         },
         "summary": "Run a scheduled automation now",

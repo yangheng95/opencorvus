@@ -50,6 +50,8 @@ import { Skill } from "@/skill/skill"
 import {
   AutomationRevisionConflictError,
   AutomationRunningConflictError,
+  AutomationManualRunPendingError,
+  AutomationManualRunReceiptUnavailableError,
   AutomationRunOutcomes,
   AutomationService,
 } from "@/scheduler/automation-service"
@@ -176,6 +178,8 @@ const UpdateAutomationBody = CreateAutomationBody.partial()
     status: z.enum(["active", "paused"]).optional(),
   })
   .strict()
+
+const RunAutomationBody = z.object({ requestID: z.string().trim().min(1).max(200).optional() }).strict().optional()
 
 const GlobalComposerReferencesResponse = z
   .object({
@@ -323,16 +327,26 @@ export const GlobalRoutes = lazy(() =>
       "/automations/:id/run",
       describeRoute({
         summary: "Run a scheduled automation now",
+        description: "Reuse requestID to retrieve the same accepted manual Fire after a lost response. A new requestID starts a distinct run when the automation is available.",
         operationId: "global.automations.run",
         responses: {
           200: {
-            description: "One completed run per target",
+            description: "Current target receipts for one accepted manual Fire",
             content: { "application/json": { schema: resolver(z.array(AutomationRunViewSchema)) } },
           },
-          ...errors(400, 404, 409),
+          ...errors(400, 404),
+          409: {
+            description: "An execution conflicts, or the accepted Fire has pending or unavailable target receipts",
+            content: { "application/json": { schema: resolver(z.union([
+              AutomationRunningConflictError.Schema,
+              AutomationManualRunPendingError.Schema,
+              AutomationManualRunReceiptUnavailableError.Schema,
+            ])) } },
+          },
         },
       }),
-      async (c) => c.json(await AutomationService.runNow(c.req.param("id"))),
+      validator("json", RunAutomationBody),
+      async (c) => c.json(await AutomationService.runNow(c.req.param("id"), c.req.valid("json")?.requestID)),
     )
     .get(
       "/automations/:id/fires",

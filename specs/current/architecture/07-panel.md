@@ -1855,6 +1855,11 @@ resume. Manual Run now uses the existing server-settled request policy because
 its response contains completed execution receipts. The panel's single mutation
 owner also supplies its localized Running state until that response and the
 canonical definition/run refresh settle; it does not retry the execution.
+An unconfirmed manual action keeps its author request identity in the current
+workbench tab and offers an explicit Retry same run. The server projects the
+same accepted Fire; the generic run-history refresh does not select the last
+entry as that action's receipt. After the exact result is confirmed, Run now
+starts a new independent action.
 
 Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing

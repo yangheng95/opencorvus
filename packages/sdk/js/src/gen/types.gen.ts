@@ -175,6 +175,26 @@ export type AuthReadError = {
   name: "AuthReadError"
 }
 
+export type AutomationManualRunPendingError = {
+  data: {
+    automationID: string
+    fireID: string
+    message: string
+    state: string
+  }
+  name: "AutomationManualRunPendingError"
+}
+
+export type AutomationManualRunReceiptUnavailableError = {
+  data: {
+    automationID: string
+    fireID: string
+    message: string
+    state: string
+  }
+  name: "AutomationManualRunReceiptUnavailableError"
+}
+
 export type AutomationRevisionConflictError = {
   data: {
     automationID: string
@@ -21799,7 +21819,9 @@ export type GlobalAutomationsFiresResponses = {
 export type GlobalAutomationsFiresResponse = GlobalAutomationsFiresResponses[keyof GlobalAutomationsFiresResponses]
 
 export type GlobalAutomationsRunData = {
-  body?: never
+  body?: {
+    requestID?: string
+  }
   path: {
     id: string
   }
@@ -21829,21 +21851,16 @@ export type GlobalAutomationsRunErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Conflict
+   * An execution conflicts, or the accepted Fire has pending or unavailable target receipts
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: AutomationRunningConflictError | AutomationManualRunPendingError | AutomationManualRunReceiptUnavailableError
 }
 
 export type GlobalAutomationsRunError = GlobalAutomationsRunErrors[keyof GlobalAutomationsRunErrors]
 
 export type GlobalAutomationsRunResponses = {
   /**
-   * One completed run per target
+   * Current target receipts for one accepted manual Fire
    */
   200: Array<{
     automationId: string
