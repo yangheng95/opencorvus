@@ -11,13 +11,14 @@ import { VList, type VListHandle } from "virtua/solid"
 import { appStore, setAppStore, filteredLogEntries } from "../store/app"
 import type { LogEntry, LogLevel, LogSource } from "../store/app"
 import { t } from "../utils/i18n"
-import { apiJson } from "../services/api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { pathRevealFailureKey, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../services/workspace"
 import { useAsyncAction } from "../solid/async-action"
 import { Dialog } from "./ui/Dialog"
 import { Disclosure } from "./ui/Disclosure"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
+import { Icon } from "./ui/Icon"
 import { SelectControl } from "./ui/SelectControl"
 import { SearchField } from "./ui/SearchField"
 import { fmtElapsed, logDetailFields, matchesLogEntrySearch, parseServerLogLine, stringifyLogValue } from "../utils/log"
@@ -35,25 +36,16 @@ const LOG_LEVEL_SELECT_OPTIONS: LogLevelSelectOption[] = LOG_LEVEL_OPTIONS.map((
   label: level.toUpperCase(),
 }))
 
-// ── Internal server-log state ──
-// Stored as module-level variables (same pattern as ) so they survive
-// across component remounts but are not reactive (refresh is triggered
-// explicitly by the user or on open).
-
-interface ServerLogState {
+interface ServerLogTail {
   path: string
   lines: string[]
 }
-
-const EMPTY_SERVER_LOG_STATE: ServerLogState = { path: "", lines: [] }
-
-let _serverLogState: ServerLogState = EMPTY_SERVER_LOG_STATE
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
 
-function parseServerLogTailResponse(data: unknown): ServerLogState {
+function parseServerLogTailResponse(data: unknown): ServerLogTail {
   const body = data as { path?: unknown; lines?: unknown }
   if (!body || typeof body.path !== "string" || !body.path.trim()) {
     throw new Error("log/tail response is missing the current log file path")
@@ -67,8 +59,8 @@ function parseServerLogTailResponse(data: unknown): ServerLogState {
   }
 }
 
-async function fetchServerLogs(): Promise<ServerLogState> {
-  const data = await apiJson("log/tail?n=500")
+async function fetchServerLogs(authority: ApiAuthority): Promise<ServerLogTail> {
+  const data = await apiJson("log/tail?n=500", { authority })
   return parseServerLogTailResponse(data)
 }
 
@@ -97,7 +89,12 @@ function logSourceLabel(source: LogSource): string {
 
 // ── Merge all log sources (
 
-function buildLogEntries(overlayEntries: LogEntry[], ndjsonEvents: any[], filterLevel: LogLevel): LogEntry[] {
+function buildLogEntries(
+  serverLogLines: readonly string[],
+  overlayEntries: LogEntry[],
+  ndjsonEvents: any[],
+  filterLevel: LogLevel,
+): LogEntry[] {
   const levelOrder: Record<string, number> = {
     debug: 0,
     info: 1,
@@ -107,7 +104,7 @@ function buildLogEntries(overlayEntries: LogEntry[], ndjsonEvents: any[], filter
   const threshold = levelOrder[filterLevel] ?? 0
 
   // Server log lines (parsed from raw strings)
-  const serverLines: LogEntry[] = _serverLogState.lines
+  const serverLines: LogEntry[] = serverLogLines
     .map((line): LogEntry => {
       const entry = parseServerLogLine(line)
       return {
@@ -265,7 +262,7 @@ type LogIssue = { operation: "refresh" | "reveal"; cause: unknown }
 
 export function LogViewer(props: LogViewerProps) {
   const [searchQuery, setSearchQuery] = createSignal("")
-  const [serverLogsSeq, setServerLogsSeq] = createSignal(0)
+  const [serverLog, setServerLog] = createSignal<{ authority: ApiAuthority; tail: ServerLogTail } | null>(null)
   const [logIssue, setLogIssue] = createSignal<LogIssue | null>(null)
   const [refreshPending, setRefreshPending] = createSignal(false)
   const [copyPending, setCopyPending] = createSignal(false)
@@ -276,11 +273,16 @@ export function LogViewer(props: LogViewerProps) {
   let copyGeneration = 0
   let copyNoticeTimer: ReturnType<typeof setTimeout> | undefined
 
-  // Current level-qualified records, independent of the local search query.
-  const loadedEntries = createMemo(() => {
-    serverLogsSeq()
-    return buildLogEntries(filteredLogEntries(), props.ndjsonEvents ?? [], appStore.logFilterLevel)
+  const currentServerLog = createMemo(() => {
+    const accepted = serverLog()
+    return accepted && isApiAuthorityCurrent(accepted.authority) ? accepted.tail : null
   })
+  const waitingForServerLog = () => refreshPending() && !currentServerLog()
+
+  // Current level-qualified records, independent of the local search query.
+  const loadedEntries = createMemo(() =>
+    buildLogEntries(currentServerLog()?.lines ?? [], filteredLogEntries(), props.ndjsonEvents ?? [], appStore.logFilterLevel),
+  )
 
   const entries = createMemo(() => {
     const loaded = loadedEntries()
@@ -301,31 +303,28 @@ export function LogViewer(props: LogViewerProps) {
     setCopyNotice(null)
   }
 
+  const ownsOpenConnection = (authority: ApiAuthority) => props.open === true && isApiAuthorityCurrent(authority)
+
   const refreshServerLogs = async () => {
+    const authority = captureApiAuthority()
     const generation = ++refreshGeneration
-    const ownsRefresh = () => generation === refreshGeneration && props.open === true
+    const ownsRefresh = () => generation === refreshGeneration && ownsOpenConnection(authority)
     setLogIssue(null)
     setRefreshPending(true)
     try {
-      const next = await fetchServerLogs()
+      const tail = await fetchServerLogs(authority)
       if (!ownsRefresh()) return
-      _serverLogState = next
+      setServerLog({ authority, tail })
     } catch (error) {
       if (!ownsRefresh()) return
-      _serverLogState = EMPTY_SERVER_LOG_STATE
+      setServerLog(null)
       setLogIssue({ operation: "refresh", cause: error })
     } finally {
-      if (ownsRefresh()) {
-        setRefreshPending(false)
-        setServerLogsSeq((value) => value + 1)
-      }
+      if (ownsRefresh()) setRefreshPending(false)
     }
   }
 
-  const currentServerLogPath = createMemo(() => {
-    serverLogsSeq()
-    return _serverLogState.path.trim()
-  })
+  const currentServerLogPath = () => currentServerLog()?.path.trim() ?? ""
 
   /** Show a short-lived notice, replacing whatever one is on screen. */
   function flashNotice(tone: "success" | "error", message: string): void {
@@ -337,26 +336,29 @@ export function LogViewer(props: LogViewerProps) {
     }, 2000)
   }
 
-  const openFileAction = useAsyncAction(async () => {
+  const openFileAction = useAsyncAction(async (authority: ApiAuthority, path: string) => {
     setLogIssue(null)
-    const path = currentServerLogPath()
-    if (!path) throw new Error("Log file path is not loaded")
     const outcome = await revealPath(path)
     const notice = pathRevealNoticeKey(outcome)
-    if (notice) flashNotice("success", t(notice, { path }))
+    if (notice && ownsOpenConnection(authority)) flashNotice("success", t(notice, { path }))
   })
 
   const handleOpenLogFile = () => {
-    void openFileAction.run().catch((error) => {
-      setLogIssue({ operation: "reveal", cause: error })
+    const path = currentServerLogPath()
+    if (!path || refreshPending() || openFileAction.pending()) return
+    const authority = captureApiAuthority()
+    void openFileAction.run(authority, path).catch((error) => {
+      if (ownsOpenConnection(authority)) setLogIssue({ operation: "reveal", cause: error })
     })
   }
 
   const handleCopy = async () => {
+    if (refreshPending() || copyPending()) return
     const text = formatLogText(entries())
     if (!text) return
+    const authority = captureApiAuthority()
     const generation = ++copyGeneration
-    const ownsCopy = () => generation === copyGeneration && props.open === true
+    const ownsCopy = () => generation === copyGeneration && ownsOpenConnection(authority)
     if (copyNoticeTimer !== undefined) clearTimeout(copyNoticeTimer)
     copyNoticeTimer = undefined
     setCopyNotice(null)
@@ -373,7 +375,9 @@ export function LogViewer(props: LogViewerProps) {
     } catch (error) {
       if (!ownsCopy()) return
       setCopyNotice({ tone: "error", message: t("log.copy_failed", { error: errorMessage(error) }) })
-      requestAnimationFrame(() => document.querySelector<HTMLButtonElement>("#btnLogCopy")?.focus())
+      requestAnimationFrame(() => {
+        if (ownsCopy()) document.querySelector<HTMLButtonElement>("#btnLogCopy")?.focus()
+      })
     } finally {
       if (ownsCopy()) setCopyPending(false)
     }
@@ -383,8 +387,7 @@ export function LogViewer(props: LogViewerProps) {
     invalidateRefresh()
     // Clear overlay client log entries via the store
     setAppStore("logEntries", [])
-    _serverLogState = EMPTY_SERVER_LOG_STATE
-    setServerLogsSeq((value) => value + 1)
+    setServerLog(null)
   }
 
   const handleClose = () => {
@@ -402,15 +405,22 @@ export function LogViewer(props: LogViewerProps) {
     setAppStore("logFilterLevel", option.value)
   }
 
-  createEffect(() => {
-    if (props.open) {
-      void refreshServerLogs()
-      return
-    }
-    invalidateRefresh()
-    invalidateCopy()
-    setSearchQuery("")
-  })
+  createEffect(on(
+    () => [props.open, captureApiAuthority().revision] as const,
+    ([open, revision], previous) => {
+      const authorityChanged = previous?.[1] !== revision
+      if (authorityChanged) {
+        setServerLog(null)
+        setLogIssue(null)
+      }
+      if (authorityChanged || !open) {
+        invalidateRefresh()
+        invalidateCopy()
+      }
+      if (open) void refreshServerLogs()
+      else setSearchQuery("")
+    },
+  ))
 
   onCleanup(() => {
     invalidateRefresh()
@@ -542,8 +552,16 @@ export function LogViewer(props: LogViewerProps) {
         when={entries().length > 0}
         fallback={
           <Show when={logIssue()?.operation !== "refresh"}>
-            <div id="logViewerBody" class="log-viewer">
-              <div class="empty-hint">{t(searchQuery().trim() ? "log.search_empty" : "log.empty")}</div>
+            <div id="logViewerBody" class="log-viewer" classList={{ "log-viewer-loading": waitingForServerLog() }}>
+              <Show
+                when={waitingForServerLog()}
+                fallback={<div class="empty-hint">{t(searchQuery().trim() ? "log.search_empty" : "log.empty")}</div>}
+              >
+                <div class="log-viewer-loading-message" role="status">
+                  <Icon name="loading" />
+                  <span>{t("log.loading_server")}</span>
+                </div>
+              </Show>
             </div>
           </Show>
         }

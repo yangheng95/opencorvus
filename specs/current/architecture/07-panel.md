@@ -5804,6 +5804,11 @@ language in one location above the log list. A failed refresh retires the old
 server tail; any still-matching client or pipeline logs remain readable.
 During a refresh, the same toolbar action keeps keyboard focus, reports its
 localized busy state, and admits one current read.
+The accepted server tail and its path belong to the current API connection.
+A connection change retires both immediately; an open viewer reads the new
+connection and reports loading if it has no visible records. Other sources
+remain readable. A refresh under the same connection can retain its accepted
+tail while the request is pending.
 Log Viewer starts at the latest matching row when opened or filtered. Incoming
 records follow the tail only while the view is at the bottom; readers scrolled
 up keep their position in the same list, subject to normal bounds and retention.

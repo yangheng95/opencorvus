@@ -1195,6 +1195,20 @@ button.s-row:focus-visible {
   word-break: break-all;
 }
 
+.log-viewer-loading {
+  display: grid;
+  place-items: center;
+  font-family: var(--font);
+  word-break: normal;
+}
+
+.log-viewer-loading-message {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+  color: var(--text-muted);
+}
+
 .log-copy-feedback {
   flex: 0 0 auto;
   padding: var(--ui-gap-md) var(--ui-gap-lg);

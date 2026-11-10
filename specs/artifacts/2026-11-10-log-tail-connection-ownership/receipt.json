@@ -1,0 +1,664 @@
+{
+  "directReads": {
+    "baseline-a": {
+      "before": {
+        "side": "a",
+        "asset": "main-B__pxlxv.js",
+        "ui": {
+          "status": 200,
+          "requestID": "518462f0-b455-4d6c-9294-8ad6a90b83b7"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "b7d163aa-2e39-45c3-bb74-ce8b84ea0102"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "b360871c-e89f-46b1-87df-2464759c46ce",
+          "operation": "path.get"
+        },
+        "append": {
+          "status": 200,
+          "requestID": "9559ccdf-8467-4043-ae8c-35d129b6f8ec",
+          "operation": "app.log"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "84f8f02d-88d0-4535-971b-b9aab25c9f12",
+          "operation": "log.tail",
+          "lineCount": 19,
+          "markers": [
+            "isolated-log-review-a-01",
+            "isolated-log-review-a-02",
+            "isolated-log-review-a-03",
+            "isolated-log-review-a-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      },
+      "after": {
+        "side": "a",
+        "asset": "main-B__pxlxv.js",
+        "ui": {
+          "status": 200,
+          "requestID": "5919e33e-dfb7-4ed3-a94d-05b249810eb4"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "344fc102-ea05-4e7a-8339-16d40da12386"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "253ba7f1-4105-41ab-a774-8b5b956ea43f",
+          "operation": "path.get"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "656bfa5a-6e3d-4600-8c3f-ffac3fd5e8ea",
+          "operation": "log.tail",
+          "lineCount": 161,
+          "markers": [
+            "isolated-log-review-a-01",
+            "isolated-log-review-a-02",
+            "isolated-log-review-a-03",
+            "isolated-log-review-a-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      }
+    },
+    "baseline-b": {
+      "before": {
+        "side": "b",
+        "asset": "main-B__pxlxv.js",
+        "ui": {
+          "status": 200,
+          "requestID": "5b498d24-20f5-4c09-8ccf-76f4d4c15f89"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "c032bb2b-06a8-4bca-a28f-84ce3c13fbbc"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "169f5e6b-bfa7-4765-bf96-eb18de8f2e0a",
+          "operation": "path.get"
+        },
+        "append": {
+          "status": 200,
+          "requestID": "51abf92c-865a-44e6-af9c-1be343bf05f3",
+          "operation": "app.log"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "a9a256c5-a82b-459a-91ce-b5c31bcad311",
+          "operation": "log.tail",
+          "lineCount": 19,
+          "markers": [
+            "isolated-log-review-b-01",
+            "isolated-log-review-b-02",
+            "isolated-log-review-b-03",
+            "isolated-log-review-b-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      },
+      "after": {
+        "side": "b",
+        "asset": "main-B__pxlxv.js",
+        "ui": {
+          "status": 200,
+          "requestID": "d53424cc-59b5-4e5c-beb2-5d0ebd049bcd"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "c93b05b7-54b4-46b4-8895-0540bcaf3a0a"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "931a1284-c467-40a9-9927-e6ffb5616bd8",
+          "operation": "path.get"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "b71f5c02-becc-4fd6-994e-a710abbef29e",
+          "operation": "log.tail",
+          "lineCount": 63,
+          "markers": [
+            "isolated-log-review-b-01",
+            "isolated-log-review-b-02",
+            "isolated-log-review-b-03",
+            "isolated-log-review-b-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      }
+    },
+    "candidate-a": {
+      "before": {
+        "side": "a",
+        "asset": "main-CY1yqZCL.js",
+        "ui": {
+          "status": 200,
+          "requestID": "72852e36-a4f0-465f-8ad9-bae5f6cfd226"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "8d51f263-daef-46c1-86e1-944494143dac"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "f6838501-7723-4cec-b162-0ae7124f338f",
+          "operation": "path.get"
+        },
+        "append": {
+          "status": 200,
+          "requestID": "a37373cf-e8f4-4ee9-9f86-397eb20dc877",
+          "operation": "app.log"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "ab46c0d9-cbfe-45bd-b647-bed9a90263e3",
+          "operation": "log.tail",
+          "lineCount": 19,
+          "markers": [
+            "isolated-log-review-a-01",
+            "isolated-log-review-a-02",
+            "isolated-log-review-a-03",
+            "isolated-log-review-a-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      },
+      "after": {
+        "side": "a",
+        "asset": "main-CY1yqZCL.js",
+        "ui": {
+          "status": 200,
+          "requestID": "64a1547f-4dd5-451c-865f-0b08bcc050c4"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "060c2457-0207-4de9-8cfe-c6906e2cb97a"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "c6496e12-a4e3-40c6-ac5b-032f19b7b731",
+          "operation": "path.get"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "266822b8-7c6d-42b6-b9b1-3a7dd18c0857",
+          "operation": "log.tail",
+          "lineCount": 187,
+          "markers": [
+            "isolated-log-review-a-01",
+            "isolated-log-review-a-02",
+            "isolated-log-review-a-03",
+            "isolated-log-review-a-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      }
+    },
+    "candidate-b": {
+      "before": {
+        "side": "b",
+        "asset": "main-CY1yqZCL.js",
+        "ui": {
+          "status": 200,
+          "requestID": "1ba845b9-3d94-4384-ae79-31cbfd17d89b"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "a1200833-a6b1-4965-8b59-e12b462c89d8"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "70c9dd93-4b64-4436-91b3-dbc19aacb009",
+          "operation": "path.get"
+        },
+        "append": {
+          "status": 200,
+          "requestID": "d9799e87-a0d4-4ba3-8ac6-50a3ed01717e",
+          "operation": "app.log"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "dcf4de16-0d53-4260-b66c-6281283f92f9",
+          "operation": "log.tail",
+          "lineCount": 19,
+          "markers": [
+            "isolated-log-review-b-01",
+            "isolated-log-review-b-02",
+            "isolated-log-review-b-03",
+            "isolated-log-review-b-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      },
+      "after": {
+        "side": "b",
+        "asset": "main-CY1yqZCL.js",
+        "ui": {
+          "status": 200,
+          "requestID": "a0c6c3e4-0384-4753-a6f4-a38b7e7faae4"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "cb841caf-87a5-45c3-9107-78e4af432039"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "54ecc996-45cc-45bc-874a-c5a90c250d2c",
+          "operation": "path.get"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "0b61c90c-0c24-4072-8b21-65e0e1f562bc",
+          "operation": "log.tail",
+          "lineCount": 89,
+          "markers": [
+            "isolated-log-review-b-01",
+            "isolated-log-review-b-02",
+            "isolated-log-review-b-03",
+            "isolated-log-review-b-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      }
+    },
+    "final-a": {
+      "before": {
+        "side": "a",
+        "asset": "main-cDbxUg_6.js",
+        "ui": {
+          "status": 200,
+          "requestID": "0a320c81-4973-498a-8f4a-58a1e71eab7f"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "a8e13ba1-ffdb-4c2a-b25d-dbaab50b874f"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "fc95ab02-5343-434b-b11f-122ce46b0858",
+          "operation": "path.get"
+        },
+        "append": {
+          "status": 200,
+          "requestID": "04f9183e-1d97-4ce0-9ca6-711b367981e6",
+          "operation": "app.log"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "48ad71c8-a24e-42de-bdd7-db7f17d2c1b7",
+          "operation": "log.tail",
+          "lineCount": 19,
+          "markers": [
+            "isolated-log-review-a-01",
+            "isolated-log-review-a-02",
+            "isolated-log-review-a-03",
+            "isolated-log-review-a-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      },
+      "after": {
+        "side": "a",
+        "asset": "main-cDbxUg_6.js",
+        "ui": {
+          "status": 200,
+          "requestID": "7f1c2666-ba25-4f7a-bf76-5dceb18e4615"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "74eed582-9ead-4928-99de-f25562ee3b7a"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "cbed2c3b-84b5-4119-81a0-76b4dc8193bc",
+          "operation": "path.get"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "bb450d67-f826-445d-8cce-aa236153c664",
+          "operation": "log.tail",
+          "lineCount": 184,
+          "markers": [
+            "isolated-log-review-a-01",
+            "isolated-log-review-a-02",
+            "isolated-log-review-a-03",
+            "isolated-log-review-a-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      }
+    },
+    "final-b": {
+      "before": {
+        "side": "b",
+        "asset": "main-cDbxUg_6.js",
+        "ui": {
+          "status": 200,
+          "requestID": "284c85c9-08c7-4960-937c-20bd74da51c7"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "cb2b6793-38fd-47fc-86a8-41ef127d58ac"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "06100875-4f07-45ba-835c-f6871e36330e",
+          "operation": "path.get"
+        },
+        "append": {
+          "status": 200,
+          "requestID": "d46f642d-ede2-45f7-9d0c-77fafea04d74",
+          "operation": "app.log"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "db74d407-f2cb-43a3-9348-ac508383f0b0",
+          "operation": "log.tail",
+          "lineCount": 19,
+          "markers": [
+            "isolated-log-review-b-01",
+            "isolated-log-review-b-02",
+            "isolated-log-review-b-03",
+            "isolated-log-review-b-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      },
+      "after": {
+        "side": "b",
+        "asset": "main-cDbxUg_6.js",
+        "ui": {
+          "status": 200,
+          "requestID": "f9491779-53e9-4d4d-8f6e-cfb421f5042a"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "8838f49f-09df-4bce-b918-0aaf7f34c3cc"
+        },
+        "path": {
+          "status": 200,
+          "requestID": "27d8c93a-8b28-458a-a9e0-f8df5cb8a631",
+          "operation": "path.get"
+        },
+        "tail": {
+          "status": 200,
+          "requestID": "a07e63c7-63cd-41f6-bb9a-4c215c6ce2af",
+          "operation": "log.tail",
+          "lineCount": 80,
+          "markers": [
+            "isolated-log-review-b-01",
+            "isolated-log-review-b-02",
+            "isolated-log-review-b-03",
+            "isolated-log-review-b-04"
+          ],
+          "exactIsolatedPath": true
+        }
+      }
+    }
+  },
+  "browserTailResponses": {
+    "baseline-b": [
+      {
+        "time": "2026-11-10T10:57:01.940Z",
+        "path": "/log/tail",
+        "requestID": "4ae580bb-3232-4c37-a7ea-fcaad9e3af66",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 12824,
+        "delivered": 12824,
+        "heldMs": 4219
+      }
+    ],
+    "candidate-a": [
+      {
+        "time": "2026-11-10T11:02:23.560Z",
+        "path": "/log/tail",
+        "requestID": "e7d0a7e5-d1e2-42cc-98b0-de061db2326a",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 47609,
+        "delivered": 47609
+      },
+      {
+        "time": "2026-11-10T11:02:35.170Z",
+        "path": "/log/tail",
+        "requestID": "485509a0-c87e-4c42-9a67-1c440b6c5d47",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 48865,
+        "delivered": 48865,
+        "heldMs": 3695
+      }
+    ],
+    "candidate-b": [
+      {
+        "time": "2026-11-10T11:03:05.000Z",
+        "path": "/log/tail",
+        "requestID": "0ce704bc-ebbc-4f31-936c-d7d65171d036",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 12630,
+        "delivered": 12630,
+        "heldMs": 5887
+      },
+      {
+        "time": "2026-11-10T11:03:17.614Z",
+        "path": "/log/tail",
+        "requestID": "3127df4b-ab3c-4392-8705-a3ae99f5a401",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 17621,
+        "delivered": 17621
+      },
+      {
+        "time": "2026-11-10T11:03:29.400Z",
+        "path": "/log/tail",
+        "requestID": "bbf82cb1-aba2-421e-aa20-1073cb27506e",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 20601,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T11:03:43.743Z",
+        "path": "/log/tail",
+        "requestID": "dfc90f8e-f568-465b-be5f-22482458e8c0",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 22997,
+        "delivered": 22997
+      }
+    ],
+    "final-a": [
+      {
+        "time": "2026-11-10T11:06:13.666Z",
+        "path": "/log/tail",
+        "requestID": "7a2348a5-e885-4ad0-9e49-98c5f9ba343f",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 47587,
+        "delivered": 47587
+      },
+      {
+        "time": "2026-11-10T11:06:29.334Z",
+        "path": "/log/tail",
+        "requestID": "d7723c58-e53e-481d-b105-d44cafd51a59",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 48843,
+        "delivered": 48843,
+        "heldMs": 7084
+      }
+    ],
+    "final-b": [
+      {
+        "time": "2026-11-10T11:06:52.488Z",
+        "path": "/log/tail",
+        "requestID": "adea62a7-1720-433c-ba5a-8304c6d0755f",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 12022,
+        "delivered": 12022,
+        "heldMs": 4428
+      },
+      {
+        "time": "2026-11-10T11:07:01.047Z",
+        "path": "/log/tail",
+        "requestID": "aa2ac2fa-5813-4d28-b669-e4ef511722b1",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 15785,
+        "delivered": 15785
+      },
+      {
+        "time": "2026-11-10T11:07:09.238Z",
+        "path": "/log/tail",
+        "requestID": "8c84f40b-cd60-4e7f-8761-c5d854944de2",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 17597,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T11:07:21.617Z",
+        "path": "/log/tail",
+        "requestID": "a3b8a92d-0337-4b76-b768-9788b5e6824f",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 19993,
+        "delivered": 19993,
+        "heldMs": 3637
+      }
+    ]
+  },
+  "databases": {
+    "baseline-a": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "baseline-b": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate-a": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate-b": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final-a": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final-b": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline-a": {
+      "occurrence": "iteration-b209-baseline-a",
+      "apiPort": 39588,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "baseline-b": {
+      "occurrence": "iteration-b209-baseline-b",
+      "apiPort": 39589,
+      "proxyPort": 39590,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate-a": {
+      "occurrence": "iteration-b209-candidate-a",
+      "apiPort": 39591,
+      "proxyPort": 39594,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate-b": {
+      "occurrence": "iteration-b209-candidate-b",
+      "apiPort": 39592,
+      "proxyPort": 39593,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final-a": {
+      "occurrence": "iteration-b209-final-a",
+      "apiPort": 39595,
+      "proxyPort": 39597,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final-b": {
+      "occurrence": "iteration-b209-final-b",
+      "apiPort": 39596,
+      "proxyPort": 39598,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "sampleFilesUnchanged": true
+}
