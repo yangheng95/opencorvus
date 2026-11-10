@@ -5337,6 +5337,10 @@ Projects, pinned, single-list, and Recents presentations reuse one assignment;
 their sort order and duplicate row appearances do not change that assignment.
 The row, its tooltip, and its action label use the same display title. The
 stored title and exact conversation target remain unchanged.
+Chat and Mission sidebar action menus can rename the targeted item while
+keeping the current conversation selected. The shared rename dialog returns
+focus to the originating row if it remains available. The row's double-click
+and the selected item's header continue to use the same rename writers.
 
 `sessionInvocationTopology` is an observation of real Session ownership. Nodes carry
 the exact projected `agent`, session kind, parent session, dispatch lineage,

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [侧栏改名和键盘接续的证据](2026-11-10-sidebar-rename-actions/README.md)
 - [侧栏同名会话区分的证据](2026-11-10-sidebar-duplicate-conversation-labels/README.md)
 - [定时任务草稿导航的证据](2026-11-10-scheduled-authoring-draft-navigation/README.md)
 - [文件搜索在途重试的证据](2026-11-10-explorer-search-retry-pending/README.md)

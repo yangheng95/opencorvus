@@ -32,7 +32,7 @@ import {
   resolveComposerIntentRoute,
   type ComposerIntent,
 } from "@opencorvus-ai/transport-protocol"
-import { WorkLedger } from "./components/WorkLedger"
+import { WorkLedger, type WorkLedgerRenamePresentation } from "./components/WorkLedger"
 import type { ProjectActionPresentation } from "./components/ProjectLedgerGroup"
 import { projectDirectoryKey } from "./utils/project-directory"
 import { closeArtifactWorkspace } from "./utils/top-layer"
@@ -1296,9 +1296,10 @@ async function downloadWorkLedgerMission(row: WorkLedgerMissionRow): Promise<voi
   })
 }
 
-async function renameWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
+async function renameWorkLedgerMission(row: WorkLedgerMissionRow, presentation?: WorkLedgerRenamePresentation): Promise<void> {
   const authority = captureApiAuthority()
   await showAppDialog({
+    ...presentation,
     title: t("work_ledger.action.rename_mission"),
     input: true,
     inputLabel: t("work_ledger.action.rename_placeholder"),
@@ -1423,9 +1424,10 @@ async function stopWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
-async function renameWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
+async function renameWorkLedgerChat(row: WorkLedgerChatRow, presentation?: WorkLedgerRenamePresentation): Promise<void> {
   const authority = captureApiAuthority()
   await showAppDialog({
+    ...presentation,
     title: t("work_ledger.action.rename_chat"),
     input: true,
     inputLabel: t("work_ledger.action.rename_placeholder"),

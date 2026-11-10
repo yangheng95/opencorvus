@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从侧栏改名后继续当前会话](2026-11-10-sidebar-rename-actions.md)
 - [侧栏中的同名会话可以区分](2026-11-10-sidebar-duplicate-conversation-labels.md)
 - [定时任务草稿在应用内导航后可继续编辑](2026-11-10-scheduled-authoring-draft-navigation.md)
 - [文件搜索在途重试有明确状态](2026-11-10-explorer-search-retry-pending.md)
