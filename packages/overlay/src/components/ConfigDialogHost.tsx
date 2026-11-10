@@ -2,7 +2,7 @@ import {
   ErrorBoundary, For, Show, Suspense, createComponent, createEffect, createMemo,
   createResource, createSignal, on, onCleanup,
 } from "solid-js"
-import type { Component, JSX } from "solid-js"
+import type { Accessor, Component, JSX } from "solid-js"
 // Settings panels are the largest components in the app and none of them render
 // until the operator opens this page and selects their tab, so they load on
 // that click instead of riding in the startup bundle.
@@ -40,6 +40,7 @@ import { appStore } from "../store/app"
 import { boardStore } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { closeConfigDialog, setConfigSidebarWidth, switchConfigTab } from "../services/config-dialog-control"
+import { captureApiAuthority } from "../services/api"
 import { activeProjectDirectory } from "../services/project-directory"
 import {
   dialogStore,
@@ -390,6 +391,24 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     return rows
   })
   const activeConfigTab = createMemo(() => dialogStore.config.activeTab)
+  const [scheduledAuthor, setScheduledAuthor] = createSignal<{ revision: number; hasDraft: Accessor<boolean> }>()
+  const scheduledVisible = () => dialogStore.config.open && activeConfigTab() === "scheduled"
+  const retainedScheduledDraft = () => {
+    const author = scheduledAuthor()
+    return author?.revision === captureApiAuthority().revision && author.hasDraft()
+  }
+  const scheduledMount = () => scheduledVisible() || retainedScheduledDraft()
+    ? String(captureApiAuthority().revision)
+    : undefined
+  const otherVisibleTab = () => {
+    const tab = activeConfigTab()
+    return dialogStore.config.open && tab !== "scheduled" ? tab : undefined
+  }
+  function registerScheduledAuthor(hasDraft: Accessor<boolean>): () => void {
+    const author = { revision: captureApiAuthority().revision, hasDraft }
+    setScheduledAuthor(author)
+    return () => setScheduledAuthor((current) => current === author ? undefined : current)
+  }
   const settingsSearch = () => dialogStore.config.search
   const setSettingsSearch = (value: string) => setDialogStore("config", "search", value)
   let settingsSearchInput: HTMLInputElement | undefined
@@ -499,7 +518,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     ),
   )
 
-  const renderActivePanel = (tab: ConfigDialogTab) => {
+  const renderActivePanel = (tab: Exclude<ConfigDialogTab, "scheduled">) => {
     switch (tab) {
       case "general":
         return <GeneralPanel />
@@ -543,8 +562,6 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         return <ProvidersPanel />
       case "usage":
         return <UsagePanel />
-      case "scheduled":
-        return <ScheduledAutomationsPanel onOpenSession={props.onOpenAutomationSession} />
       case "archive":
         return <ArchivePanel onOpenItem={props.onOpenArchivedItem} />
       case "changelog":
@@ -700,11 +717,12 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   }
 
   return (
-    <Show when={dialogStore.config.open}>
+    <Show when={dialogStore.config.open || retainedScheduledDraft()}>
       <section
         ref={page}
         id="configDialog"
         class="config-page"
+        hidden={!dialogStore.config.open}
         aria-label={activeConfigTitle()}
       >
         <Tabs
@@ -807,7 +825,28 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
           />
           <div class="config-content" id="configContent">
             <h1 ref={pageTitle} tabIndex={-1} class="config-page-title">{activeConfigTitle()}</h1>
-            <Show when={activeConfigTab()}>
+            <Show when={scheduledMount()} keyed>
+              {(_revision) => (
+                <TabPanel
+                  value="scheduled"
+                  forceMount
+                  hidden={!scheduledVisible()}
+                  class="config-tab-panel"
+                  data-config-panel="scheduled"
+                  id={configPanelID("scheduled")}
+                  aria-labelledby={configTabID("scheduled")}
+                >
+                  <div class="config-section-body" id={activePanelBodyID("scheduled")}>
+                    <ScheduledAutomationsPanel
+                      active={scheduledVisible()}
+                      registerAuthor={registerScheduledAuthor}
+                      onOpenSession={props.onOpenAutomationSession}
+                    />
+                  </div>
+                </TabPanel>
+              )}
+            </Show>
+            <Show when={otherVisibleTab()}>
               {(active) => (
                 <TabPanel
                   value={active()}

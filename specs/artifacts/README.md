@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务草稿导航的证据](2026-11-10-scheduled-authoring-draft-navigation/README.md)
 - [文件搜索在途重试的证据](2026-11-10-explorer-search-retry-pending/README.md)
 - [项目列表展开键盘接续的证据](2026-11-10-sidebar-project-expand-keyboard/README.md)
 - [右侧同名浏览器标签的证据](2026-11-10-right-dock-duplicate-tab-labels/README.md)

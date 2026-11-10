@@ -1,0 +1,392 @@
+{
+  "direct": {
+    "baseline": {
+      "asset": "main-TmhB3xCS.js",
+      "ui": {
+        "status": 200,
+        "requestID": "bdd75595-0360-404e-bebd-149b4d65699b"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "395a3a7e-b074-40f4-be2e-383dde5e0d65"
+      },
+      "project": {
+        "status": 200,
+        "requestID": "bf29f86a-1614-416d-9d8a-e5561059285c",
+        "operation": "project.current",
+        "id": "prj_h1KrWUB1Z0RfpfhTsFzH",
+        "name": "schedule-draft-review"
+      },
+      "schedules": {
+        "body": [],
+        "status": 200,
+        "requestID": "efb8212c-d396-4ec0-9d72-d470ac1444b7",
+        "operation": "global.automations.list"
+      }
+    },
+    "candidate-before": {
+      "asset": "main-Li7YJXGQ.js",
+      "ui": {
+        "status": 200,
+        "requestID": "ea11a86d-2e9a-4011-a5eb-9261652d599e"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "3dc9433d-d3f8-4242-8689-fbf10f685717"
+      },
+      "project": {
+        "status": 200,
+        "requestID": "bff971c6-ed80-4509-af34-bd63184638f5",
+        "operation": "project.current",
+        "id": "prj_h1KrWUB1Z0RfpfhTsFzH",
+        "name": "schedule-draft-review"
+      },
+      "schedules": {
+        "body": [],
+        "status": 200,
+        "requestID": "3ec9e0be-ae57-4199-80e2-c1ac78bb9f6e",
+        "operation": "global.automations.list"
+      }
+    },
+    "candidate-paused": {
+      "asset": "main-Li7YJXGQ.js",
+      "ui": {
+        "status": 200,
+        "requestID": "47e127cf-9237-46b6-ae9b-ce0bad6b05ab"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "5fb60e18-d80d-4c55-8822-4025e6c8c07b"
+      },
+      "project": {
+        "status": 200,
+        "requestID": "3759f575-7b5a-42e7-a18a-ad7b9f3ff4ff",
+        "operation": "project.current",
+        "id": "prj_h1KrWUB1Z0RfpfhTsFzH",
+        "name": "schedule-draft-review"
+      },
+      "schedules": {
+        "body": [
+          {
+            "id": "atm_g0VaZeeXd00ccCzgZOXW",
+            "revisionId": "atm_g0VaZfHxh00Zr3F09gOG",
+            "name": "Preserve exact conversation target",
+            "target": {
+              "scope": "session",
+              "sessionId": "ses_hSvmIP7QDR0GPH1ZjCbq"
+            },
+            "recurrence": "DTSTART;TZID=Asia/Shanghai:20991115T090000\nRRULE:FREQ=DAILY",
+            "executionMode": "local",
+            "model": null,
+            "reasoningEffort": null,
+            "prompt": "Review the isolated report and list open questions. Keep the verified A target.",
+            "status": "paused",
+            "lastRun": null,
+            "nextRun": 4098387600000,
+            "failureCount": 0,
+            "lastError": null
+          }
+        ],
+        "status": 200,
+        "requestID": "2d2fed6e-84c9-4384-8f78-cac5f8985ffc",
+        "operation": "global.automations.list"
+      },
+      "runs": {
+        "body": [],
+        "status": 200,
+        "requestID": "63a166bd-8548-4457-9f63-94c49b7c9ce8",
+        "operation": "global.automations.runs"
+      },
+      "fires": {
+        "body": [
+          {
+            "fireId": "cal_automation_40371f6158ec716882306dc421ca6889",
+            "automationId": "atm_g0VaZeeXd00ccCzgZOXW",
+            "automationRevisionId": "atm_g0VaZeeXd00ccCzgZOXW",
+            "origin": "scheduled",
+            "scheduledDueAt": 4098387600000,
+            "startedAt": 1794314945780,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ],
+        "status": 200,
+        "requestID": "a14efd2d-5615-4b3d-bd83-d421151e670b",
+        "operation": "global.automations.fires"
+      }
+    },
+    "connection-b-before": {
+      "asset": "main-Li7YJXGQ.js",
+      "ui": {
+        "status": 200,
+        "requestID": "518b000c-5339-4420-a246-bf851ccf0f60"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "0ab29eba-ab74-47c7-b531-3944315cdf6b"
+      },
+      "project": {
+        "status": 200,
+        "requestID": "233013c7-e212-4444-ba41-690b9321b0aa",
+        "operation": "project.current",
+        "id": "prj_h1KrWUB1Z0RfpfhTsFzH",
+        "name": "schedule-draft-review"
+      },
+      "schedules": {
+        "body": [],
+        "status": 200,
+        "requestID": "f93a4b85-ec4b-481d-ba63-a815c47b19cc",
+        "operation": "global.automations.list"
+      }
+    },
+    "connection-b-after": {
+      "asset": "main-Li7YJXGQ.js",
+      "ui": {
+        "status": 200,
+        "requestID": "f6d29d31-d2d6-4c5d-973e-4ac2af957b1a"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "648f91c5-84ca-4ab2-9421-332cdb17876d"
+      },
+      "project": {
+        "status": 200,
+        "requestID": "abb03dc4-20ea-46bf-8d73-64e63a5698b9",
+        "operation": "project.current",
+        "id": "prj_h1KrWUB1Z0RfpfhTsFzH",
+        "name": "schedule-draft-review"
+      },
+      "schedules": {
+        "body": [],
+        "status": 200,
+        "requestID": "9683fba4-dad2-4371-8848-d3373cf97a66",
+        "operation": "global.automations.list"
+      }
+    },
+    "final-paused": {
+      "asset": "main-PfPqIFRv.js",
+      "ui": {
+        "status": 200,
+        "requestID": "eedf24e8-fb29-4d1b-8720-0e872b4a2b53"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "df1d2523-1742-4c4e-aa5a-8c919efc3646"
+      },
+      "project": {
+        "status": 200,
+        "requestID": "d2ce6d1e-bb82-4def-a8c4-fb3d90e70718",
+        "operation": "project.current",
+        "id": "prj_h1KrWUB1Z0RfpfhTsFzH",
+        "name": "schedule-draft-review"
+      },
+      "schedules": {
+        "body": [
+          {
+            "id": "atm_g0VaZeeXd00ccCzgZOXW",
+            "revisionId": "atm_g0VaZfHxh00Zr3F09gOG",
+            "name": "Preserve exact conversation target",
+            "target": {
+              "scope": "session",
+              "sessionId": "ses_hSvmIP7QDR0GPH1ZjCbq"
+            },
+            "recurrence": "DTSTART;TZID=Asia/Shanghai:20991115T090000\nRRULE:FREQ=DAILY",
+            "executionMode": "local",
+            "model": null,
+            "reasoningEffort": null,
+            "prompt": "Review the isolated report and list open questions. Keep the verified A target.",
+            "status": "paused",
+            "lastRun": null,
+            "nextRun": 4098387600000,
+            "failureCount": 0,
+            "lastError": null
+          }
+        ],
+        "status": 200,
+        "requestID": "3c89553d-d565-4982-a1c1-7120357cf976",
+        "operation": "global.automations.list"
+      },
+      "runs": {
+        "body": [],
+        "status": 200,
+        "requestID": "533c70bc-f12e-49b0-8aac-a12170f185e8",
+        "operation": "global.automations.runs"
+      },
+      "fires": {
+        "body": [
+          {
+            "fireId": "cal_automation_40371f6158ec716882306dc421ca6889",
+            "automationId": "atm_g0VaZeeXd00ccCzgZOXW",
+            "automationRevisionId": "atm_g0VaZeeXd00ccCzgZOXW",
+            "origin": "scheduled",
+            "scheduledDueAt": 4098387600000,
+            "startedAt": 1794314945780,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ],
+        "status": 200,
+        "requestID": "a0d30ae3-b9af-4485-9c2e-0d042703337e",
+        "operation": "global.automations.fires"
+      }
+    }
+  },
+  "seededEmptySessions": {
+    "projectID": "prj_h1KrWUB1Z0RfpfhTsFzH",
+    "sessions": [
+      {
+        "id": "ses_hSvmIP7QDR0GPH1ZjCbq",
+        "title": "Schedule draft conversation A",
+        "create": {
+          "status": 201,
+          "requestID": "837b8f26-aad7-4751-b474-3a5884a5bd21",
+          "operation": "coding.chat.session.create"
+        },
+        "rename": {
+          "status": 200,
+          "requestID": "6fd87161-972a-40bd-8658-6ac24c6358c8",
+          "operation": "session.update"
+        }
+      },
+      {
+        "id": "ses_hUgXuFkqj7TW5fsAuQiH",
+        "title": "Schedule draft conversation B",
+        "create": {
+          "status": 201,
+          "requestID": "abf1020e-fe36-4fd8-b79a-1a6f324a4ab6",
+          "operation": "coding.chat.session.create"
+        },
+        "rename": {
+          "status": 200,
+          "requestID": "63bb6447-e808-4f15-8588-756a43eb2e77",
+          "operation": "session.update"
+        }
+      }
+    ]
+  },
+  "originalProject": {
+    "name": "schedule-draft-review",
+    "originalGit": "dd3f3afd734a107fabe26e1371235b5596e5412a",
+    "originalFileUnchanged": true
+  },
+  "isolatedDatabases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "automation": 0,
+        "automation_fire": 0,
+        "automation_fire_attempt": 0,
+        "automation_fire_attempt_receipt": 0,
+        "automation_run": 0,
+        "automation_run_receipt": 0,
+        "engine_task": 0,
+        "session": 0,
+        "message": 0,
+        "permission_ledger": 0,
+        "provider_activity_request": 0,
+        "provider_usage_event": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "automation": 3,
+        "automation_fire": 1,
+        "automation_fire_attempt": 0,
+        "automation_fire_attempt_receipt": 0,
+        "automation_run": 0,
+        "automation_run_receipt": 0,
+        "engine_task": 0,
+        "session": 2,
+        "message": 0,
+        "permission_ledger": 0,
+        "provider_activity_request": 0,
+        "provider_usage_event": 0
+      },
+      "revisions": [
+        {
+          "id": "atm_g0VaZeeXd00ccCzgZOXW",
+          "definitionID": "atm_g0VaZeeXd00ccCzgZOXW",
+          "revision": 1,
+          "sessionID": "ses_hSvmIP7QDR0GPH1ZjCbq",
+          "status": "active",
+          "prompt": "Review the isolated report and list open questions.",
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20991115T090000\nRRULE:FREQ=DAILY"
+        },
+        {
+          "id": "atm_g0VaZetM600glB7D1o1V",
+          "definitionID": "atm_g0VaZeeXd00ccCzgZOXW",
+          "revision": 2,
+          "sessionID": "ses_hSvmIP7QDR0GPH1ZjCbq",
+          "status": "paused",
+          "prompt": "Review the isolated report and list open questions.",
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20991115T090000\nRRULE:FREQ=DAILY"
+        },
+        {
+          "id": "atm_g0VaZfHxh00Zr3F09gOG",
+          "definitionID": "atm_g0VaZeeXd00ccCzgZOXW",
+          "revision": 3,
+          "sessionID": "ses_hSvmIP7QDR0GPH1ZjCbq",
+          "status": "paused",
+          "prompt": "Review the isolated report and list open questions. Keep the verified A target.",
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20991115T090000\nRRULE:FREQ=DAILY"
+        }
+      ]
+    },
+    "connection-b": {
+      "quickCheck": "ok",
+      "counts": {
+        "automation": 0,
+        "automation_fire": 0,
+        "automation_fire_attempt": 0,
+        "automation_fire_attempt_receipt": 0,
+        "automation_run": 0,
+        "automation_run_receipt": 0,
+        "engine_task": 0,
+        "session": 0,
+        "message": 0,
+        "permission_ledger": 0,
+        "provider_activity_request": 0,
+        "provider_usage_event": 0
+      }
+    }
+  },
+  "retired": {
+    "baseline": {
+      "occurrence": "iteration-b215-baseline",
+      "apiPort": 39620,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b215-candidate",
+      "apiPort": 39621,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "connection-b": {
+      "occurrence": "iteration-b215-connection-b",
+      "apiPort": 39622,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b215-final",
+      "apiPort": 39623,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  }
+}

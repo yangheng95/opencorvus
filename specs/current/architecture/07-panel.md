@@ -1977,8 +1977,16 @@ in Details while retaining list-load failure identity when applicable.
 
 Scheduled authoring exposes its own Save, Cancel and Back controls; the page
 header's New automation action belongs to list and read-only detail views, so
-it cannot reset the active authoring form. Project targeting searches the current
-discovery inventory through the existing multi-term metadata matcher, including
+it cannot reset the active authoring form. While the current connection owns an
+open authoring form, leaving its Settings tab or closing Settings keeps that
+same form mounted and hidden, including unfinished calendar segments. Returning
+continues editing; explicit list return, Cancel, and a committed save finish
+authoring. A connection change retires its old form. New session-scoped drafts
+capture the exact current Session when the author chooses that scope, so a
+later workspace selection cannot change their target. Existing definitions keep
+the Session in their opening snapshot. The linked target card preserves the
+exact ID and uses the current work ledger title when available. Project targeting
+searches the current discovery inventory through the existing multi-term metadata matcher, including
 the canonical localized ledger label, original name, directory and Project ID.
 The form's single selected-target owner stores registered Project IDs and
 explicit pending directories for discovered locations that are not registered

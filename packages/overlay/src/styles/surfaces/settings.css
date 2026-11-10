@@ -1553,6 +1553,11 @@ button.s-row:focus-visible {
   margin: 0 auto;
 }
 
+.config-page[hidden],
+.config-tab-panel[data-config-panel="scheduled"][hidden] {
+  display: none;
+}
+
 .config-tab-panel[data-config-panel="memory"] {
   display: flex;
   flex-direction: column;

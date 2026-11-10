@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, Show, type Accessor } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
 import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { formatErrorDetails } from "../../utils/error-details"
@@ -40,6 +40,7 @@ import { loadDiscoveredProjects, type DiscoveredProject } from "../../services/w
 import { loadProviderInfo } from "../../services/config-load"
 import { connectedModelOptions, type ConnectedModelOption } from "../../services/llm"
 import { closeConfigDialog } from "../../services/config-dialog-control"
+import { workLedgerSessionExecution } from "../../services/work-ledger"
 import { localeTag, t } from "../../utils/i18n"
 import { projectLedgerDisplayName } from "../../utils/project-directory"
 import { matchesSearchTerms } from "../../services/text-search"
@@ -132,6 +133,8 @@ function automationSuggestions(): AutomationSuggestion[] {
 }
 
 export interface ScheduledAutomationsPanelProps {
+  active: boolean
+  registerAuthor: (hasDraft: Accessor<boolean>) => () => void
   onOpenSession: (session: AutomationRunSession) => void | Promise<void>
 }
 
@@ -259,6 +262,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [name, setName] = createSignal("")
   const [prompt, setPrompt] = createSignal("")
   const [scope, setScope] = createSignal<AutomationScope>("global")
+  const [draftSessionID, setDraftSessionID] = createSignal("")
   const [selectedProjectTargets, setSelectedProjectTargets] = createSignal<AutomationProjectTarget[]>([])
   const [projectSearch, setProjectSearch] = createSignal("")
   const projectChoices = createMemo(() => {
@@ -369,6 +373,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
   function focusAfterRender(resolveTarget: () => HTMLElement | undefined): void {
     queueMicrotask(() => {
+      if (!props.active) return
       const target = resolveTarget()
       if (target?.isConnected) target.focus()
     })
@@ -451,6 +456,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const timeZoneOptions = automationTimeZoneOptions()
   const selectedTimeZoneOption = createMemo(() => timeZoneOptions.find((option) => option.value === timeZone()) ?? null)
   const showForm = createMemo(() => editing() || creating())
+  onCleanup(props.registerAuthor(showForm))
   const displayedError = createMemo((): AutomationError | null => {
     const reported = error()
     if (reported) return reported
@@ -460,10 +466,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       : null
   })
   const sessionTargetID = createMemo(() => {
-    const target = editTarget()?.target ?? selected()?.target
+    const target = editTarget()?.target
     if (target?.scope === "session") return target.sessionId
-    return activeSessionID() || rootTaskSessionID()
+    return draftSessionID()
   })
+  const sessionTargetTitle = createMemo(() => workLedgerSessionExecution(sessionTargetID())?.title?.trim())
   function resetForm(automation?: AutomationView): void {
     const recurrence = automation ? parseAutomationRecurrence(automation.recurrence) : null
     const zone = recurrence?.timeZone ?? browserTimeZone()
@@ -472,6 +479,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setProjectSearch("")
     setPrompt(automation?.prompt ?? "")
     setScope(automation?.target.scope ?? "global")
+    setDraftSessionID("")
     setSelectedProjectTargets(
       automation?.target.scope === "project"
         ? automation.target.projectIds.map<AutomationProjectTarget>((projectID) => ({ kind: "project", projectID })) : [],
@@ -614,6 +622,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   function selectScope(nextScope: AutomationScope): void {
     setError(null)
+    if (nextScope === "session" && scope() !== "session") {
+      setDraftSessionID(activeSessionID() || rootTaskSessionID())
+    }
     setScope(nextScope)
     if (nextScope === "session") setExecutionMode("local")
   }
@@ -899,8 +910,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   })
 
   createEffect(() => {
+    if (!props.active) setTimeZoneOpen(false)
+  })
+
+  createEffect(() => {
     if (dueRefreshTimer) clearTimeout(dueRefreshTimer)
     dueRefreshTimer = undefined
+    if (!props.active) return
     const dueTimes = automations()
       .filter((automation) => automation.status === "active")
       .map((automation) => automation.nextRun)
@@ -1470,7 +1486,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                     >
                       <Icon name={sessionTargetID() ? "check" : "info-circle"} />
                       <div>
-                        <strong>{t("automations.session_target")}</strong>
+                        <strong>{sessionTargetTitle() || t("automations.session_target")}</strong>
                         <span>
                           {sessionTargetID()
                             ? t("automations.session_target_exact", { session: sessionTargetID() })

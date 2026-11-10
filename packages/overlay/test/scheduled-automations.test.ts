@@ -16,15 +16,20 @@ import {
   resolveAutomationProjectID,
   resumeAutomation,
   runAutomationNow,
+  type AutomationRunView,
 } from "../src/services/automations"
 import { configure } from "../src/services/api"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import { HOST_CAPABILITIES } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 
+const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window")
+
 afterEach(() => {
   __setHostTransportForTest(undefined)
   configure({ directory: "" })
+  if (originalWindow) Object.defineProperty(globalThis, "window", originalWindow)
+  else Reflect.deleteProperty(globalThis, "window")
 })
 
 test("recurrence presets emit one anchored RFC 5545 schedule with an explicit IANA time zone", () => {
@@ -213,6 +218,29 @@ test("calendar validation returns explicit errors and accepts a leap-day anchor"
 })
 
 test("automation service sends the full lifecycle through global target-aware HTTP routes", async () => {
+  const storage = new Map<string, string>()
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: {
+      sessionStorage: {
+        getItem: (key: string) => storage.get(key) ?? null,
+        setItem: (key: string, value: string) => storage.set(key, value),
+        removeItem: (key: string) => storage.delete(key),
+      },
+    },
+  })
+  const run: AutomationRunView = {
+    id: "run_accepted",
+    automationId: "atm_1",
+    fireId: "atm_fire_accepted",
+    targetScope: "global",
+    targetProjectId: null,
+    session: { id: "ses_review", title: "Morning review", directory: "/workspace/atlas", kind: "root", experience: "chat", productPillar: "code" },
+    outcome: "succeeded",
+    startedAt: 1000,
+    completedAt: 2000,
+    error: null,
+  }
   const requests: TransportRequest[] = []
   const transport: HostTransport = {
     kind: "tauri",
@@ -222,8 +250,8 @@ test("automation service sends the full lifecycle through global target-aware HT
       const body =
         request.path === "project/current"
           ? { id: "prj_1" }
-          : request.path.endsWith("/runs") && request.method === "GET"
-            ? []
+          : request.path === "global/automations/atm_1/run" || request.path === "global/automations/atm_1/runs"
+            ? [run]
             : {}
       return { status: 200, ok: true, headers: {}, body: body as T }
     },
@@ -252,8 +280,8 @@ test("automation service sends the full lifecycle through global target-aware HT
   await createAutomation(input)
   await pauseAutomation("atm_1", "atm_revision_opened")
   await resumeAutomation("atm_1", "atm_revision_paused")
-  await runAutomationNow("atm_1")
-  await listAutomationRuns("atm_1")
+  expect(await runAutomationNow("atm_1")).toEqual([run])
+  expect(await listAutomationRuns("atm_1")).toEqual([run])
   await deleteAutomation("atm_1", "atm_revision_resumed")
 
   expect(requests.map(({ path, method }) => `${method} ${path}`)).toEqual([
@@ -279,6 +307,7 @@ test("automation service sends the full lifecycle through global target-aware HT
   expect(requests[5]).toMatchObject({
     method: "POST",
     path: "global/automations/atm_1/run",
+    body: { kind: "json", value: { requestID: expect.any(String) } },
     timeoutMilliseconds: null,
   })
   expect(requests[7]?.query).toEqual({ expectedRevisionId: "atm_revision_resumed" })
