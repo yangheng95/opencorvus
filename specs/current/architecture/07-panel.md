@@ -5454,6 +5454,11 @@ Project MCP status uses one scoped read at a time for passive observation; an
 explicit readback may retire it. Read failures belong beside Server connections
 and clear on the next accepted success. Connection or configuration notices
 remain independently owned by their original actions.
+Project MCP management links to the active project's Chat and Work assignment
+sections using the existing settings tabs and their localized product labels.
+The settings host owns the one-shot focus handoff until the assignment section
+mounts. It respects subsequent tab, project, or focus changes. Opening an
+assignment section does not connect, assign, or change access to a server.
 
 General presents Notifications, Permissions and Diagnostics in that order.
 The Composer and General authorization controls project only a confirmed

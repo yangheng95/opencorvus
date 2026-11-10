@@ -1,0 +1,131 @@
+{
+  "baselineAsset": "main-Ch6FzVz3.js",
+  "firstCandidateAsset": "main-BjlgzIW1.js",
+  "finalCandidateAsset": "main-DC0m8EvP.js",
+  "baseline": [
+    {
+      "route": "mcp/project",
+      "status": 200,
+      "requestID": "329a23a8-2c1c-4b9e-971e-1e834910d0ee",
+      "state": "disabled"
+    },
+    {
+      "route": "chat/capability",
+      "status": 200,
+      "requestID": "f85e5930-e792-4f28-bb44-4b033dedc1e8",
+      "project": "mcp-review-project",
+      "sameProject": true,
+      "available": true,
+      "assigned": false
+    },
+    {
+      "route": "work/capability",
+      "status": 200,
+      "requestID": "44d9e9a6-92fa-48bf-8348-55b59a6fd249",
+      "project": "mcp-review-project",
+      "sameProject": true,
+      "available": true,
+      "assigned": false
+    }
+  ],
+  "candidateBeforeUI": [
+    {
+      "route": "mcp/project",
+      "status": 200,
+      "requestID": "21c14f01-417c-4852-b421-beb42d0f65ca",
+      "state": "disabled"
+    },
+    {
+      "route": "chat/capability",
+      "status": 200,
+      "requestID": "81719f7a-d084-425e-8ddf-c451321dd519",
+      "project": "mcp-review-project",
+      "sameProject": true,
+      "available": true,
+      "assigned": false
+    },
+    {
+      "route": "work/capability",
+      "status": 200,
+      "requestID": "e7bd5f4e-72d8-43ab-8774-c189d18718ba",
+      "project": "mcp-review-project",
+      "sameProject": true,
+      "available": true,
+      "assigned": false
+    }
+  ],
+  "candidateAfterUI": [
+    {
+      "route": "mcp/project",
+      "status": 200,
+      "requestID": "1a1eff82-2f70-4d78-bb13-6ffefc816197",
+      "state": "disabled"
+    },
+    {
+      "route": "chat/capability",
+      "status": 200,
+      "requestID": "4da72eda-1159-44cb-9eca-c4bef29d631c",
+      "project": "mcp-review-project",
+      "sameProject": true,
+      "available": true,
+      "assigned": false
+    },
+    {
+      "route": "work/capability",
+      "status": 200,
+      "requestID": "c73dc626-1d71-41fa-87ec-d10674441acf",
+      "project": "mcp-review-project",
+      "sameProject": true,
+      "available": true,
+      "assigned": false
+    }
+  ],
+  "transportDelay": [
+    {
+      "time": "2026-11-10T03:23:54.628Z",
+      "stage": "held",
+      "path": "/work/capability",
+      "method": "GET",
+      "status": 200,
+      "requestID": "98a129d7-df42-41a4-9ffe-f3af8fb3f73a",
+      "bytes": 29762
+    },
+    {
+      "time": "2026-11-10T03:24:03.248Z",
+      "stage": "released",
+      "path": "/work/capability",
+      "method": "GET",
+      "status": 200,
+      "requestID": "98a129d7-df42-41a4-9ffe-f3af8fb3f73a",
+      "bytes": 29762
+    },
+    {
+      "time": "2026-11-10T03:24:15.295Z",
+      "stage": "held",
+      "path": "/chat/capability",
+      "method": "GET",
+      "status": 200,
+      "requestID": "c2c0f1dd-3e73-47e1-b5ba-ddaff090f324",
+      "bytes": 29650
+    },
+    {
+      "time": "2026-11-10T03:24:20.095Z",
+      "stage": "released",
+      "path": "/chat/capability",
+      "method": "GET",
+      "status": 200,
+      "requestID": "c2c0f1dd-3e73-47e1-b5ba-ddaff090f324",
+      "bytes": 29650
+    }
+  ],
+  "providerCatalog": {
+    "visible": 88,
+    "connected": 0
+  },
+  "profiles": {
+    "integrity": "ok",
+    "engineTask": 0,
+    "session": 0,
+    "providerUsageEvent": 0
+  }
+}

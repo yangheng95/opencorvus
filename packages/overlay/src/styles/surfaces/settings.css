@@ -1662,6 +1662,19 @@ button.s-row:focus-visible {
   max-width: calc(780px * var(--ui-scale));
 }
 
+.mcp-assignment-navigation {
+  margin-block-start: var(--ui-gap-sm);
+}
+
+.conversation-capability-mcp {
+  scroll-margin-block: var(--ui-gap-md);
+}
+
+.conversation-capability-mcp:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: var(--ui-gap-xs);
+}
+
 .extension-list > .s-surface > #mcpList > .empty-hint {
   padding: var(--ui-gap-xl);
 }

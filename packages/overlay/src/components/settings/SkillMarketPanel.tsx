@@ -46,6 +46,7 @@ import {
   type SkillMarketDetail,
 } from "../../services/extensions"
 import { addMcpServer, connectMcp, disconnectMcp, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import type { ConversationExperience } from "../../services/conversation-capability"
 import {
   mcpConnectionStatusOrDisabledLabel,
   mcpConnectionStatusOrDisabledTone,
@@ -265,6 +266,7 @@ function SharedResourceManagementPanel(props: {
   active?: boolean
   directory?: DirectoryProp
   onResourcesChanged?: () => void
+  onOpenMcpAssignment?: (experience: ConversationExperience) => void
 }) {
   const nativeCommands = getHostTransport().capabilities.nativeCommands
   const canOpenRemoteUrl = createMemo(() => nativeCommands["open-url"])
@@ -1256,7 +1258,23 @@ function SharedResourceManagementPanel(props: {
         <SettingsGroup
           class="extension-settings-group"
           title={t("mcp.resource_management_title")}
-          description={t("mcp.resource_management_intro")}
+          description={
+            <>
+              <div>{t("mcp.resource_management_intro")}</div>
+              <Show when={props.onOpenMcpAssignment}>
+                {(openAssignment) => (
+                  <div class="s-toolbar mcp-assignment-navigation">
+                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => openAssignment()("chat")}>
+                      {t("mcp.open_product_assignment", { product: t("settings.section.code") })}
+                    </Button>
+                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => openAssignment()("work")}>
+                      {t("mcp.open_product_assignment", { product: t("settings.section.work") })}
+                    </Button>
+                  </div>
+                )}
+              </Show>
+            </>
+          }
           contentInset
           actions={
             <>
@@ -1516,7 +1534,12 @@ export function SkillResourceManagementPanel(
 }
 
 export function McpResourceManagementPanel(
-  props: { active?: boolean; directory?: DirectoryProp; onResourcesChanged?: () => void } = {},
+  props: {
+    active?: boolean
+    directory?: DirectoryProp
+    onResourcesChanged?: () => void
+    onOpenMcpAssignment: (experience: ConversationExperience) => void
+  },
 ) {
   return (
     <SharedResourceManagementPanel
@@ -1524,6 +1547,7 @@ export function McpResourceManagementPanel(
       active={props.active ?? true}
       directory={props.directory}
       onResourcesChanged={props.onResourcesChanged}
+      onOpenMcpAssignment={props.onOpenMcpAssignment}
     />
   )
 }

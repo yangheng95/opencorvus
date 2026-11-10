@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [MCP 连接分配导航实页证据](2026-11-10-mcp-assignment-navigation/README.md)
 - [MCP 状态恢复实页证据](2026-11-10-mcp-status-read-recovery/README.md)
 - [模型选择器读取状态实页证据](2026-11-10-composer-model-catalog-read-state/README.md)
 - [模型服务商原位读取证据](2026-11-10-provider-read-retry/README.md)

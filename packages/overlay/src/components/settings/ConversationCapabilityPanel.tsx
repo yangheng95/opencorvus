@@ -30,6 +30,7 @@ type CapabilityIssue = { operation: "load"; cause: unknown } | { operation: "sav
 export default function ConversationCapabilityPanel(props: {
   experience: ConversationExperience
   directory: DirectoryProp
+  onMcpSectionReady: (section: HTMLElement) => void
 }) {
   const [settings, setSettings] = createSignal<ConversationCapabilitySettings | null>(null)
   const [issue, setIssue] = createSignal<CapabilityIssue | null>(null)
@@ -271,6 +272,10 @@ export default function ConversationCapabilityPanel(props: {
                   </SettingsGroup>
 
                   <SettingsGroup
+                    ref={props.onMcpSectionReady}
+                    class="conversation-capability-mcp"
+                    tabIndex={-1}
+                    aria-label={t("settings.product.mcp", { product: productLabel() })}
                     title={t("settings.product.mcp", { product: productLabel() })}
                     description={t("settings.product.mcp_description", { product: productLabel() })}
                   >

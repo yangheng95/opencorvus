@@ -72,6 +72,7 @@ import {
   nextConfigSidebarKeyboardWidth,
 } from "../utils/config-sidebar-resizer"
 import type { AutomationRunSession } from "../services/automations"
+import type { ConversationExperience } from "../services/conversation-capability"
 import type { WorkLedgerItemRow } from "../services/work-ledger"
 
 function createSettingsPanel<Props extends object>(load: () => Promise<{ default: Component<Props> }>): Component<Props> {
@@ -408,6 +409,43 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   }
   const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
   let pageTitle: HTMLHeadingElement | undefined
+  let mcpAssignmentTarget: { tab: "code" | "work"; directory: string; origin: Element | null } | undefined
+  const currentMcpAssignmentTarget = () => {
+    const open = dialogStore.config.open
+    const tab = activeConfigTab()
+    const directory = activeProjectDirectory()
+    return open && mcpAssignmentTarget?.tab === tab && mcpAssignmentTarget.directory === directory
+      ? mcpAssignmentTarget
+      : undefined
+  }
+  createEffect(() => {
+    if (!currentMcpAssignmentTarget()) mcpAssignmentTarget = undefined
+  })
+  const openMcpAssignment = (experience: ConversationExperience) => {
+    const tab = experience === "chat" ? "code" : "work"
+    const target = { tab, directory: activeProjectDirectory(), origin: document.activeElement } as const
+    mcpAssignmentTarget = target
+    switchConfigTab(tab)
+    queueMicrotask(() => {
+      if (currentMcpAssignmentTarget() !== target || !pageTitle?.isConnected) return
+      if (document.activeElement === target.origin || document.activeElement === document.body) {
+        pageTitle.focus()
+      } else {
+        mcpAssignmentTarget = undefined
+      }
+    })
+  }
+  const revealMcpAssignments = (section: HTMLElement) => {
+    const target = currentMcpAssignmentTarget()
+    if (!target) return
+    queueMicrotask(() => {
+      if (currentMcpAssignmentTarget() !== target || !section.isConnected) return
+      mcpAssignmentTarget = undefined
+      if (document.activeElement !== pageTitle) return
+      section.scrollIntoView({ block: "nearest" })
+      section.focus({ preventScroll: true })
+    })
+  }
   const openReleaseNotes = () => {
     const origin = document.activeElement
     switchConfigTab("changelog")
@@ -461,9 +499,21 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
       case "appearance":
         return <AppearancePanel />
       case "code":
-        return <ConversationCapabilityPanel experience="chat" directory={activeProjectDirectory} />
+        return (
+          <ConversationCapabilityPanel
+            experience="chat"
+            directory={activeProjectDirectory}
+            onMcpSectionReady={revealMcpAssignments}
+          />
+        )
       case "work":
-        return <ConversationCapabilityPanel experience="work" directory={activeProjectDirectory} />
+        return (
+          <ConversationCapabilityPanel
+            experience="work"
+            directory={activeProjectDirectory}
+            onMcpSectionReady={revealMcpAssignments}
+          />
+        )
       case "expert-squad-install":
         return <ExpertSquadMarketPanel />
       case "expert-squad":
@@ -475,7 +525,9 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
       case "mission-skill":
         return <MissionSkillPanel />
       case "mcp":
-        return <McpResourceManagementPanel directory={activeProjectDirectory} />
+        return (
+          <McpResourceManagementPanel directory={activeProjectDirectory} onOpenMcpAssignment={openMcpAssignment} />
+        )
       case "memory":
         return <MemoryContextPanel />
       case "network":
