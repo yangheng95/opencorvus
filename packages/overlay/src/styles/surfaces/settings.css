@@ -3187,6 +3187,10 @@ button.s-row:focus-visible {
   flex-wrap: wrap;
 }
 
+.provider-head-actions .oc-button[data-ui="provider-catalog-refresh"][aria-busy="true"] {
+  opacity: var(--ui-opacity-full);
+}
+
 .config-content .provider-api-key-row .oc-button {
   align-self: stretch;
   min-width: calc(88px * var(--ui-scale));

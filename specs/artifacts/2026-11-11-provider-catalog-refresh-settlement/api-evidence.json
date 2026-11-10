@@ -1,0 +1,153 @@
+{
+  "asset": "main-CfTcjl4i.js",
+  "projectID": "prj_hByJiFBLfvBBWfSMElqu",
+  "catalog": {
+    "project": 236,
+    "global": 236,
+    "persisted": 236
+  },
+  "receipts": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "191b93dd-356c-4cf9-891c-8b8316581ead"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "68ad8b9b-1a6d-4c74-b332-2147a7ab12dd"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "d20dd5be-903d-48a3-ad32-edc24a609b11"
+    }
+  ],
+  "initial": {
+    "requestID": "c013d75b-5c02-4f10-8078-a4f892781c6a",
+    "providerCount": 88,
+    "connectedCount": 0
+  },
+  "rounds": {
+    "englishInitial": {
+      "write": {
+        "requestID": "f6ca0b0f-1e43-4661-85fe-64fd63d68c5c",
+        "fetchedAt": 1794334954072,
+        "issueCount": 0,
+        "route": "/provider/refresh",
+        "project": "catalog-refresh-review",
+        "heldMs": 4849
+      },
+      "read": {
+        "requestID": "e1c933cd-7fe5-4a59-8a3e-739772060708",
+        "providerCount": 236,
+        "connectedCount": 0,
+        "bytes": 6346360,
+        "project": "catalog-refresh-review",
+        "route": "/provider",
+        "heldMs": 14087
+      }
+    },
+    "en-confirm": {
+      "write": {
+        "requestID": "b5f74f14-d39e-4f11-b959-f53416c10214",
+        "fetchedAt": 1794335170845,
+        "issueCount": 0,
+        "route": "/provider/refresh",
+        "project": "catalog-refresh-review"
+      },
+      "read": {
+        "requestID": "7ef5ffe6-f0f2-4d1d-83dd-6f129269854a",
+        "providerCount": 236,
+        "connectedCount": 0,
+        "bytes": 6346358,
+        "project": "catalog-refresh-review",
+        "route": "/provider",
+        "heldMs": 15010
+      },
+      "laterPanelRead": {
+        "requestID": "d1394b89-74a8-4e1a-8a6b-870669bbc690",
+        "afterRefreshMs": 18903
+      }
+    },
+    "zh-move": {
+      "write": {
+        "requestID": "698e8001-e450-4aa2-aafa-9e798ca15e1e",
+        "fetchedAt": 1794335219039,
+        "issueCount": 0,
+        "route": "/provider/refresh",
+        "project": "catalog-refresh-review"
+      },
+      "read": {
+        "requestID": "bdacdaa2-341b-40da-a316-770aed60add6",
+        "providerCount": 236,
+        "connectedCount": 0,
+        "bytes": 6346358,
+        "project": "catalog-refresh-review",
+        "route": "/provider",
+        "heldMs": 6137
+      }
+    },
+    "zh-truncate": {
+      "write": {
+        "requestID": "532e0b1b-5713-4d9d-90cc-5ef0729ffe7f",
+        "fetchedAt": 1794335242846,
+        "issueCount": 0,
+        "route": "/provider/refresh",
+        "project": "catalog-refresh-review"
+      },
+      "read": {
+        "requestID": "7df05351-96a1-4300-b247-03e849b8ecab",
+        "providerCount": 236,
+        "connectedCount": 0,
+        "bytes": 6346358,
+        "deliveredBytes": 32,
+        "project": "catalog-refresh-review",
+        "route": "/provider"
+      }
+    },
+    "global-refresh": {
+      "write": {
+        "requestID": "458629dc-52f7-424c-9a6e-5d65d7ebb85c",
+        "fetchedAt": 1794335323618,
+        "issueCount": 0,
+        "route": "/global/providers/refresh",
+        "project": "global"
+      },
+      "read": {
+        "requestID": "0461713b-2c5f-4f2f-9f40-61f37a1545bf",
+        "providerCount": 236,
+        "connectedCount": 0,
+        "bytes": 6346370,
+        "project": "global",
+        "route": "/global/providers",
+        "heldMs": 5850
+      }
+    },
+    "zh-retry": {
+      "read": {
+        "requestID": "84bc600d-0390-461a-8154-8fe45922e2c2",
+        "providerCount": 236,
+        "connectedCount": 0,
+        "bytes": 6346358,
+        "project": "catalog-refresh-review",
+        "route": "/provider"
+      }
+    },
+    "scope-retire": {
+      "write": {
+        "requestID": "bf478679-05ef-4cbb-9f7a-b956a7de58ab",
+        "fetchedAt": 1794335287747,
+        "issueCount": 0,
+        "route": "/provider/refresh",
+        "project": "catalog-refresh-review",
+        "heldMs": 13179
+      },
+      "beforeWriteReceipt": {
+        "globalReadID": "d9139e14-7daf-4e52-9449-889e1de26f9e",
+        "providerCount": 236
+      }
+    }
+  },
+  "totalConfirmedWrites": 6
+}

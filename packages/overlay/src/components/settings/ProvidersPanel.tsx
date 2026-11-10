@@ -283,24 +283,25 @@ export default function ProvidersPanel() {
     }),
   )
 
-  async function refreshProviderCatalog(
-    directory: string,
-    options: ReturnType<typeof providerLoadOptions>,
-  ): Promise<void> {
+  async function handleRefreshCatalog(): Promise<void> {
+    if (refreshingProviders()) return
+    const directory = activeDirectory().trim()
+    const options = providerLoadOptions(directory)
     const sequence = ++providerRefreshSequence
+    const ownsRefresh = () => sequence === providerRefreshSequence && options.isCurrentDirectory(directory)
     setProviderRefreshError(null)
     setRefreshingProviders(true)
     try {
-      const result = await requestProviderCatalogRefresh(directory, options.authority)
-      if (result.ok)
+      const result = await requestProviderCatalogRefresh(directory, options.authority).catch((error) => {
+        if (ownsRefresh()) setProviderRefreshError(feedback("provider.catalog_refresh.failed", formatErrorDetails(error)))
+        return undefined
+      })
+      if (result?.ok)
         publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: "all" })
-      if (sequence !== providerRefreshSequence || !options.isCurrentDirectory(directory)) return
-      if (!result.ok) {
+      if (!ownsRefresh()) return
+      if (result && !result.ok) {
         setProviderRefreshError(feedback("provider.catalog_refresh.failed", result.error))
-        return
-      }
-      setLastProvidersRefreshedAt(result.fetchedAt ?? Date.now())
-      if (result.issues?.length) {
+      } else if (result?.issues?.length) {
         setProviderRefreshError(
           feedback(
             "provider.catalog_refresh.completed_with_issues",
@@ -308,12 +309,12 @@ export default function ProvidersPanel() {
           ),
         )
       }
-    } catch (e) {
-      if (sequence === providerRefreshSequence && options.isCurrentDirectory(directory)) {
-        setProviderRefreshError(feedback("provider.catalog_refresh.failed", formatErrorDetails(e)))
+      await reloadProviderInfo(directory, options)
+      if (ownsRefresh() && result?.ok && result.fetchedAt !== undefined) {
+        setLastProvidersRefreshedAt(result.fetchedAt)
       }
     } finally {
-      if (sequence === providerRefreshSequence && options.isCurrentDirectory(directory)) setRefreshingProviders(false)
+      if (ownsRefresh()) setRefreshingProviders(false)
     }
   }
 
@@ -408,14 +409,6 @@ export default function ProvidersPanel() {
       },
     ),
   )
-
-  async function handleRefreshCatalog(): Promise<void> {
-    if (refreshingProviders()) return
-    const directory = activeDirectory().trim()
-    const options = providerLoadOptions(directory)
-    await refreshProviderCatalog(directory, options)
-    if (options.isCurrentDirectory(directory)) await reloadProviderInfo(directory, options)
-  }
 
   async function handleRefreshModels(): Promise<void> {
     if (refreshingModels()) return
@@ -1205,10 +1198,12 @@ export default function ProvidersPanel() {
               size="md"
               tone="neutral"
               title={t("provider.catalog_refresh.title")}
-              disabled={refreshingProviders()}
+              data-ui="provider-catalog-refresh"
+              aria-disabled={refreshingProviders() || undefined}
+              aria-busy={refreshingProviders() || undefined}
               onClick={() => void handleRefreshCatalog()}
             >
-              <Icon name="refresh" />
+              <Icon name={refreshingProviders() ? "loading" : "refresh"} />
               {t(refreshingProviders() ? "provider.catalog_refresh.refreshing" : "provider.catalog_refresh.button")}
             </Button>
             <DropdownMenu.Root placement="bottom-end" fitViewport>
