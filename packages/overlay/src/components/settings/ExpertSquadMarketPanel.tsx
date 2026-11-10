@@ -1,7 +1,14 @@
 import { Feedback } from "../ui/Feedback"
-import { Show, createEffect, createSignal } from "solid-js"
-import { localeTag, t } from "../../utils/i18n"
-import { expertSquadCatalogRequestKey, expertSquadCatalogScope } from "../../services/expert-squad-scope"
+import { Show, createMemo, createResource, createSignal } from "solid-js"
+import { localeTag, t, tc } from "../../utils/i18n"
+import { formatErrorDetails } from "../../utils/error-details"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
+import {
+  expertSquadCatalogRequestKey,
+  expertSquadCatalogRequestKeyForScope,
+  expertSquadCatalogScope,
+  expertSquadSettingsScope,
+} from "../../services/expert-squad-scope"
 import {
   importExpertSquadArchive,
   importExpertSquadFolder,
@@ -56,34 +63,60 @@ async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
 export default function ExpertSquadMarketPanel() {
   const [installationScope, setInstallationScope] = createSignal<ExpertSquadInstallationScope>("global")
   const [busyAction, setBusyAction] = createSignal<BusyAction | null>(null)
-  const [marketTotalCount, setMarketTotalCount] = createSignal<number | null>(null)
   const [error, setError] = createSignal("")
   const [notice, setNotice] = createSignal("")
   let archiveInput: HTMLInputElement | undefined
   let pendingArchiveScope: CapturedInstallScope | null = null
-  let marketCountSequence = 0
+  let marketBrowseLink: HTMLAnchorElement | undefined
+  let marketCountFeedback: HTMLDivElement | undefined
 
-  createEffect(() => {
-    const requestKey = expertSquadCatalogRequestKey()
-    const scope = expertSquadCatalogScope()
-    const sequence = ++marketCountSequence
-    if (!requestKey || (scope.kind !== "project" && scope.kind !== "session")) {
-      setMarketTotalCount(null)
-      return
-    }
-    setMarketTotalCount(null)
-    void loadExpertSquadMarket(scope.directory, { limit: 1 })
-      .then((page) => {
-        if (sequence === marketCountSequence && expertSquadCatalogRequestKey() === requestKey) {
-          setMarketTotalCount(page.total_count)
-        }
-      })
-      .catch(() => {
-        if (sequence === marketCountSequence && expertSquadCatalogRequestKey() === requestKey) {
-          setMarketTotalCount(null)
-        }
-      })
+  const marketDirectory = createMemo(() => {
+    const scope = expertSquadSettingsScope()
+    return scope.kind === "project" ? scope.directory : ""
   })
+  const marketSource = createMemo(() => {
+    const directory = marketDirectory()
+    if (!directory) return undefined
+    return {
+      directory,
+      authority: captureApiAuthority(),
+      key: expertSquadCatalogRequestKeyForScope({ kind: "project", directory }),
+    }
+  })
+  const [marketRead, { refetch: retryMarketRead }] = createResource(marketSource, async (source) => {
+    try {
+      const page = await loadExpertSquadMarket(source.directory, { authority: source.authority, limit: 1 })
+      if (
+        marketSource() === source &&
+        isApiAuthorityCurrent(source.authority) &&
+        marketCountFeedback?.isConnected &&
+        marketBrowseLink?.isConnected &&
+        marketCountFeedback.contains(marketCountFeedback.ownerDocument.activeElement)
+      ) {
+        marketBrowseLink.focus()
+      }
+      return { source, kind: "ready" as const, count: page.total_count }
+    } catch (cause) {
+      return { source, kind: "failed" as const, cause }
+    }
+  })
+  const currentMarketRead = createMemo(() => {
+    const source = marketSource()
+    if (!source || marketRead.state === "unresolved" || marketRead.state === "pending") return undefined
+    const result = marketRead.latest
+    return result?.source === source ? result : undefined
+  })
+  const marketFailure = () => {
+    const result = currentMarketRead()
+    return result?.kind === "failed" ? result : undefined
+  }
+  const marketCountText = () => {
+    const result = currentMarketRead()
+    if (result?.kind === "ready") {
+      return tc("expert_squad.market_count", result.count, { count: result.count.toLocaleString(localeTag()) })
+    }
+    return t(marketSource() ? "expert_squad.market_count_loading" : "expert_squad.market_count_scope_required")
+  }
 
   const installScopeIdentity = (): string => {
     const scope = expertSquadCatalogScope()
@@ -222,15 +255,36 @@ export default function ExpertSquadMarketPanel() {
         <SettingsSurface class="expert-squad-market-entry" data-ui="expert-squad-market-entry">
           <div class="expert-squad-market-entry-copy">
             <p>{t("expert_squad.market_intro")}</p>
-            <div class="expert-squad-market-facts" aria-live="polite">
-              <span>
-                <strong>{marketTotalCount() ?? "—"}</strong>
-                {t("expert_squad.market_count")}
-              </span>
+            <div class="expert-squad-market-facts">
+              <Show when={marketFailure()} fallback={<span role="status">{marketCountText()}</span>}>
+                {(failure) => (
+                  <Feedback
+                    ref={marketCountFeedback}
+                    tone="error"
+                    details={formatErrorDetails(failure().cause)}
+                    actions={
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        tone="neutral"
+                        aria-disabled={marketRead.loading || undefined}
+                        aria-busy={marketRead.loading || undefined}
+                        onClick={() => { if (!marketRead.loading) void retryMarketRead() }}
+                      >
+                        {t(marketRead.loading ? "common.retrying" : "common.retry")}
+                      </Button>
+                    }
+                  >
+                    {t("expert_squad.market_count_failed")}
+                  </Feedback>
+                )}
+              </Show>
             </div>
           </div>
           <div class="expert-squad-market-entry-actions">
             <LinkButton
+              ref={marketBrowseLink}
               class="expert-squad-market-web-action"
               variant="solid"
               size="md"

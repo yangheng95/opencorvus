@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [专家团随附计数与恢复实页证据](2026-11-10-market-bundled-count-recovery/README.md)
 - [工作树读取与恢复实页证据](2026-11-10-worktree-read-recovery/README.md)
 - [能力分配保存时的键盘实页证据](2026-11-10-capability-assignment-save-focus/README.md)
 - [目录后台刷新诊断的实页证据](2026-11-10-explorer-directory-refresh-diagnostics/README.md)

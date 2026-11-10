@@ -2096,12 +2096,6 @@ button.s-row:focus-visible {
   line-height: var(--ui-line-height-tight);
 }
 
-.expert-squad-market-facts strong {
-  color: var(--text-strong);
-  font-size: var(--ui-font-caption);
-  font-variant-numeric: tabular-nums;
-}
-
 .expert-squad-market-entry-actions {
   display: flex;
   align-items: center;

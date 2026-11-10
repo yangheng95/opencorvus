@@ -1897,7 +1897,13 @@
   "expert_squad.selector_instructions_title": "Selector Guidance",
   "expert_squad.market_title": "Expert Squad Market",
   "expert_squad.market_intro": "Discover Expert Squads for your tasks, or install your own package.",
-  "expert_squad.market_count": " published Expert Squads",
+  "expert_squad.market_count": {
+    "one": "{{count}} bundled Expert Squad",
+    "other": "{{count}} bundled Expert Squads"
+  },
+  "expert_squad.market_count_loading": "Reading the bundled catalog…",
+  "expert_squad.market_count_scope_required": "A connected project is needed to read the bundled catalog.",
+  "expert_squad.market_count_failed": "Could not read the bundled catalog count.",
   "expert_squad.market_open_web": "Open Squad Market",
   "expert_squad.market_publish": "Contribute / listing guide",
   "expert_squad.local_install_title": "Local installation",

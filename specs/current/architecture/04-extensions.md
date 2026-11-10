@@ -309,6 +309,8 @@ Manager 的 folder/ZIP 安装协议要求 caller 显式选择 `project | global`
 的 SDK authoring 与 Multica import 固定选择 project。Squad Market 的可浏览目录只有公开网站
 `https://opencorvus.com/market/` 一个当前展示面；Overlay 设置页只显示 Manager 返回的目录总数、网页浏览与
 作者贡献入口，并保留使用同一 folder/ZIP Manager 协议的本地安装面，不复制搜索、筛选、条目或详情目录。
+计数是当前连接项目下随附目录的 `total_count`，与独立网站发布目录不是同一事实。设置按项目读取，区分无可读
+项目、等待、具名失败和已读数量；原位重试只读同一项目，仍持有原诊断焦点时，成功后交给既有市场链接。
 作者入口指向公开 `/publish/` 构建与贡献说明；在第三方 Registry 身份、审核和撤回服务开放前，不得表述为
 自助上架或维护第二套上传状态。网站选择精确
 package 后通过可见 handoff 返回 Overlay，Overlay 校验 archive/package digest、要求操作者明确选择

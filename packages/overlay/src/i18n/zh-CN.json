@@ -1896,7 +1896,13 @@
   "expert_squad.selector_instructions_title": "选择指导",
   "expert_squad.market_title": "专家团市场",
   "expert_squad.market_intro": "发现适合任务的专家团，或安装你自己的能力包。",
-  "expert_squad.market_count": " 个已发布专家团",
+  "expert_squad.market_count": {
+    "one": "{{count}} 个随附专家团",
+    "other": "{{count}} 个随附专家团"
+  },
+  "expert_squad.market_count_loading": "正在读取随附目录…",
+  "expert_squad.market_count_scope_required": "需要已连接的项目才能读取随附目录。",
+  "expert_squad.market_count_failed": "无法读取随附目录数量。",
   "expert_squad.market_open_web": "打开专家团市场",
   "expert_squad.market_publish": "贡献 / 上架指南",
   "expert_squad.local_install_title": "本地安装",

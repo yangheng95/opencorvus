@@ -1,0 +1,551 @@
+{
+  "directReads": {
+    "baseline-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "8c7d7d54-e2ed-4dad-8c8c-1c3c80305765",
+        "asset": "main-BFrU3XO-.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "70f11311-a01d-4667-a222-2677b9912a1e",
+        "operation": "expertSquad.market"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "b4e70a8d-4592-40b9-aeb9-1bc15a1ac11b",
+          "query": "",
+          "limit": 1,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "f673b634-e945-4c8a-a865-6db60bd768b4",
+          "query": "",
+          "limit": 3,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "actuarial-reserving",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "advertising-measurement-brand-safety",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "26f92683-29c0-4fb8-a24c-12a8557b10f4",
+          "query": "zyzzxopencorvusnoneq7465",
+          "limit": 1,
+          "total": 0,
+          "items": []
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "d50b4e14-f641-4ac2-bc32-2d5cb6fb21ce",
+        "connected": 0
+      }
+    },
+    "baseline-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "0625a1ee-c786-4e2a-ae63-62fa96c4dabf",
+        "asset": "main-BFrU3XO-.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "f6f161e2-3e44-433b-b03a-3ea6cc70ffbd",
+        "operation": "expertSquad.market"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "a1550afb-6953-4eef-8002-b919b88b9dd3",
+          "query": "",
+          "limit": 1,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "faea2ee3-676f-47e5-93ea-0ca14f24cbb4",
+          "query": "",
+          "limit": 3,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "actuarial-reserving",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "advertising-measurement-brand-safety",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "0d81d241-a48b-405e-bf6f-ca2778da8411",
+          "query": "zyzzxopencorvusnoneq7465",
+          "limit": 1,
+          "total": 0,
+          "items": []
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "ed00a2a3-5df8-499e-a00b-2f5520d4ee2d",
+        "connected": 0
+      }
+    },
+    "candidate-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "a0a4ab9e-6812-4b10-a5e6-b43f83ddcc44",
+        "asset": "main-CVSKEpxZ.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "2ebcc210-115c-40df-9a91-3cd408a51db6",
+        "operation": "expertSquad.market"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "80e7e177-bee1-4249-9744-1e56c1bf87fe",
+          "query": "",
+          "limit": 1,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "26dd78a7-3bab-434b-acd6-bde2e2824b4d",
+          "query": "",
+          "limit": 3,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "actuarial-reserving",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "advertising-measurement-brand-safety",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "a6f62d93-142e-44ef-85d4-690f4fc41f6e",
+          "query": "zyzzxopencorvusnoneq7465",
+          "limit": 1,
+          "total": 0,
+          "items": []
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "b3621d4a-0fbf-4171-a76d-6fc753d2a0a6",
+        "connected": 0
+      }
+    },
+    "candidate-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "d1aa32e1-e8b1-4220-b7c5-52280b3b2faa",
+        "asset": "main-CVSKEpxZ.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "955fe7c7-d79f-4a34-84db-3d695d4e4063",
+        "operation": "expertSquad.market"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "76903c37-0608-487e-8a4c-d8b0ecd529b4",
+          "query": "",
+          "limit": 1,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "ee236c57-3980-498f-a746-3be04c36c1ad",
+          "query": "",
+          "limit": 3,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "actuarial-reserving",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "advertising-measurement-brand-safety",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "96602570-a1ce-4ff5-8023-4f4b233273ea",
+          "query": "zyzzxopencorvusnoneq7465",
+          "limit": 1,
+          "total": 0,
+          "items": []
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "9426636c-3a12-405e-9e72-9565df74b3a2",
+        "connected": 0
+      }
+    },
+    "final-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "3720298b-f49e-4637-b131-a668fae40a66",
+        "asset": "main--hTKiZCl.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "594e8fc3-f8c3-4460-a590-3de30bf3b460",
+        "operation": "expertSquad.market"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "ac6e36e5-edec-4baf-b3ad-2141b35e2a95",
+          "query": "",
+          "limit": 1,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "e3b9be70-748e-4994-8874-b58f0b054cec",
+          "query": "",
+          "limit": 3,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "actuarial-reserving",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "advertising-measurement-brand-safety",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "f277dd37-26b9-4cd9-8f4c-45836d0e1d37",
+          "query": "zyzzxopencorvusnoneq7465",
+          "limit": 1,
+          "total": 0,
+          "items": []
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "9626be5f-a12e-4c71-8612-fb78ee9ca472",
+        "connected": 0
+      }
+    },
+    "final-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "f5a22fc9-fc4d-49de-bc0f-1f8a2b6bbd23",
+        "asset": "main--hTKiZCl.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "7c61941b-6808-4154-b03d-818ada223185",
+        "operation": "expertSquad.market"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "0811aa51-a52b-4435-9aa8-141d2714e528",
+          "query": "",
+          "limit": 1,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "096aac1a-824e-44e7-82a5-170178a621fc",
+          "query": "",
+          "limit": 3,
+          "total": 117,
+          "items": [
+            {
+              "namespace": "builtin",
+              "id": "academic-paper-review",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "actuarial-reserving",
+              "version": "2026.10.14.1"
+            },
+            {
+              "namespace": "builtin",
+              "id": "advertising-measurement-brand-safety",
+              "version": "2026.10.14.1"
+            }
+          ]
+        },
+        {
+          "status": 200,
+          "requestID": "e2830842-024d-4494-ab43-278ecec978e2",
+          "query": "zyzzxopencorvusnoneq7465",
+          "limit": 1,
+          "total": 0,
+          "items": []
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "5871cd94-4a43-48a4-b1f8-e11d8ad91c38",
+        "connected": 0
+      }
+    }
+  },
+  "proxyReads": {
+    "baseline": [
+      {
+        "requestID": "eb3fdee3-c8a3-48cf-be11-c2bcf1d52256",
+        "time": "2026-11-10T09:13:16.759Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 746,
+        "delivered": 1,
+        "heldMs": 4466
+      },
+      {
+        "requestID": "5691962a-07d5-4061-bd4d-6bbe09713f7a",
+        "time": "2026-11-10T09:13:35.802Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "8eaec3b4-ca8f-4b85-b5a1-da0aa81bab70",
+        "time": "2026-11-10T09:13:46.925Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "restore"
+      }
+    ],
+    "candidate": [
+      {
+        "requestID": "dc4ce9fb-9711-4267-9125-6958d5cb9a7d",
+        "time": "2026-11-10T09:17:39.074Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 746,
+        "delivered": 1,
+        "heldMs": 11387
+      },
+      {
+        "requestID": "001ab6f3-00fa-4b48-b33c-964d2228100c",
+        "time": "2026-11-10T09:18:04.128Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 746,
+        "delivered": 746,
+        "heldMs": 8740
+      }
+    ],
+    "final": [
+      {
+        "requestID": "d6d2c57a-0a08-419b-96cd-5ff0746371fa",
+        "time": "2026-11-10T09:20:48.541Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 746,
+        "delivered": 1,
+        "heldMs": 7913
+      },
+      {
+        "requestID": "b8d7a620-32e9-4488-b26a-bbaf16f3fb7a",
+        "time": "2026-11-10T09:21:06.015Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 746,
+        "delivered": 746,
+        "heldMs": 4222
+      },
+      {
+        "requestID": "d3dc0e98-764f-4082-9148-56d1cd534314",
+        "time": "2026-11-10T09:21:25.178Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 746,
+        "delivered": 1,
+        "heldMs": 4714
+      },
+      {
+        "requestID": "822a2127-d75d-48e2-838e-3316f8b69362",
+        "time": "2026-11-10T09:21:35.239Z",
+        "path": "/expert-squad/market",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 746,
+        "delivered": 746,
+        "heldMs": 5326
+      }
+    ]
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b202-baseline",
+      "apiPort": 39556,
+      "proxyPort": 39557,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b202-candidate",
+      "apiPort": 39558,
+      "proxyPort": 39559,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b202-final",
+      "apiPort": 39560,
+      "proxyPort": 39561,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "projectBytesUnchanged": true
+}
