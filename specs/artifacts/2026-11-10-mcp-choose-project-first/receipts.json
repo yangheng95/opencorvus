@@ -1,0 +1,70 @@
+{
+  "baselineAsset": "main-D4izATkL.js",
+  "candidateAsset": "main-S31-lZOu.js",
+  "finalPublicDictionaries": {
+    "enUS": 200,
+    "zhCN": 200
+  },
+  "finalBeforeUI": [
+    {
+      "project": "alpha/Workspace",
+      "directoryCheckStatus": 200,
+      "directoryCheckRequestID": "4bc860ca-0141-4814-90ee-5103f5dbc312",
+      "projectStatus": 200,
+      "projectRequestID": "0c841f7b-9d5d-4062-b301-2cc881889ad6",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "4826c65a-d35c-4679-9c9f-4d5ad94d4b35",
+      "service": "b177-alpha-fixture",
+      "state": "disabled"
+    },
+    {
+      "project": "beta/Workspace",
+      "directoryCheckStatus": 200,
+      "directoryCheckRequestID": "64ed6125-5758-4002-a350-00d69b932581",
+      "projectStatus": 200,
+      "projectRequestID": "3354b6d0-157e-48ba-9591-dfbf8f4b6638",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "889eff3d-9f70-499e-89e4-6fb405f7d710",
+      "service": "b177-beta-fixture",
+      "state": "disabled"
+    }
+  ],
+  "finalAfterUI": [
+    {
+      "project": "alpha/Workspace",
+      "directoryCheckStatus": 200,
+      "directoryCheckRequestID": "f66bf6a9-bd9d-4c5a-aed0-98c5837e7920",
+      "projectStatus": 200,
+      "projectRequestID": "125f25c0-64a4-4fab-980b-c92a80c58e11",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "0d947a64-812f-4e54-a25b-82a19ceba434",
+      "service": "b177-alpha-fixture",
+      "state": "disabled"
+    },
+    {
+      "project": "beta/Workspace",
+      "directoryCheckStatus": 200,
+      "directoryCheckRequestID": "3c4abe6c-3a0e-41be-9458-6957dea6bffd",
+      "projectStatus": 200,
+      "projectRequestID": "9fb6d65d-8da5-4b2e-b00f-89455fdca1dc",
+      "exactDirectory": true,
+      "connectionStatus": 200,
+      "connectionRequestID": "1ac90fe7-7bc5-41b4-adbb-4b03297b30c5",
+      "service": "b177-beta-fixture",
+      "state": "disabled"
+    }
+  ],
+  "profiles": {
+    "integrity": "ok",
+    "engineTask": 0,
+    "session": 0,
+    "providerUsageEvent": 0
+  },
+  "providerCatalog": {
+    "visible": 88,
+    "connected": 0
+  }
+}

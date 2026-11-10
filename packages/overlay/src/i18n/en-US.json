@@ -1634,6 +1634,8 @@
   "mcp.resource_management_title": "Project MCP servers",
   "mcp.resource_management_intro": "Manage shared MCP servers for this project. Choose which connections each product can use.",
   "mcp.open_product_assignment": "Open {{product}} assignments",
+  "mcp.project_required_title": "Open a project to manage MCP connections",
+  "mcp.project_required_body": "Servers and connection assignments are managed separately for each project.",
   "mcp.status.connected": "Connected",
   "mcp.status.connecting": "Connecting",
   "mcp.status.disabled": "Disabled",

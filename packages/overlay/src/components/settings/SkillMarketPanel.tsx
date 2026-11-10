@@ -7,7 +7,7 @@ import { Feedback } from "../ui/Feedback"
 // • Project MCP servers with add/remove and connection actions
 // All CRUD operations are self-contained — no dependency on static HTML dialogs.
 
-import { createEffect, createSignal, createMemo, For, onCleanup, Show } from "solid-js"
+import { createEffect, createSignal, createMemo, For, on, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Key } from "@solid-primitives/keyed"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
@@ -15,6 +15,7 @@ import { localeTag, t } from "../../utils/i18n"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
   activeDirectory,
+  browseDirectory,
   pathRevealFailureText,
   pathRevealLabelKey,
   pathRevealNoticeKey,
@@ -401,7 +402,8 @@ function SharedResourceManagementPanel(props: {
     if (!directory) {
       setLoading(false)
       setSkillLoadIssues([])
-      setPanelNotice("workspace.no_directory", { tone: "warning" })
+      if (props.mode === "skill") setPanelNotice("workspace.no_directory", { tone: "warning" })
+      else setNotice(undefined)
       return
     }
     setLoading(true)
@@ -499,10 +501,7 @@ function SharedResourceManagementPanel(props: {
   async function handleDeleteAllMcp() {
     if (loading()) return
     const directory = currentDirectory()
-    if (!directory) {
-      setPanelNotice("workspace.no_directory", { tone: "warning" })
-      return
-    }
+    if (!directory) return
     const names = mcpEntries().map(([name]) => name)
     if (names.length === 0) return
     const authority = captureApiAuthority()
@@ -731,8 +730,24 @@ function SharedResourceManagementPanel(props: {
 
   // ── Add MCP inline form ──
 
+  const [choosingMcpProject, setChoosingMcpProject] = createSignal(false)
+  let mcpProjectScopeTrigger: HTMLElement | undefined
+
+  async function handleChooseMcpProject(origin: HTMLButtonElement) {
+    if (choosingMcpProject() || selectedDirectory()) return
+    setChoosingMcpProject(true)
+    try {
+      await browseDirectory()
+    } finally {
+      setChoosingMcpProject(false)
+    }
+    if (document.activeElement !== origin && document.activeElement !== document.body) return
+    const target = selectedDirectory() ? mcpProjectScopeTrigger : origin
+    if (mcpPanelActive() && target?.isConnected) target.focus({ preventScroll: true })
+  }
+
   const [showAddMcp, setShowAddMcp] = createSignal(false)
-  const [mcpForm, setMcpForm] = createStore({
+  const initialMcpForm = {
     name: "",
     type: "remote" as "remote" | "local",
     transport: "streamable-http" as RemoteMcpTransport,
@@ -742,15 +757,20 @@ function SharedResourceManagementPanel(props: {
     credentialSecret: "",
     command: "",
     args: "",
-  })
+  }
+  const [mcpForm, setMcpForm] = createStore({ ...initialMcpForm })
+
+  function closeAndClearMcpForm() {
+    setShowAddMcp(false)
+    setMcpForm(initialMcpForm)
+  }
+
+  createEffect(on(() => mcpPanelActive() ? selectedDirectory() : undefined, closeAndClearMcpForm, { defer: true }))
 
   async function handleAddMcp() {
     if (loading()) return
     const directory = currentDirectory()
-    if (!directory) {
-      setPanelNotice("workspace.no_directory", { tone: "warning" })
-      return
-    }
+    if (!directory) return
     const authority = captureApiAuthority()
     const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
     setLoading(true)
@@ -775,18 +795,7 @@ function SharedResourceManagementPanel(props: {
             }
       await addMcpServer(request, { directory, isCurrentDirectory: sourceMatchesDirectory })
       if (!current()) return
-      setMcpForm({
-        name: "",
-        type: "remote",
-        transport: "streamable-http",
-        url: "",
-        credentialType: "none",
-        credentialName: "",
-        credentialSecret: "",
-        command: "",
-        args: "",
-      })
-      setShowAddMcp(false)
+      closeAndClearMcpForm()
       await reloadCurrentPanel({ directory })
       notifyResourceChange()
     } catch (e) {
@@ -1257,7 +1266,34 @@ function SharedResourceManagementPanel(props: {
       </Show>
 
       {/* ── MCP Servers ── */}
-      <Show when={mcpPanelActive()}>
+      <Show
+        when={mcpPanelActive() && selectedDirectory()}
+        fallback={
+          <Show when={mcpPanelActive()}>
+            <Feedback
+              tone="info"
+              title={t("mcp.project_required_title")}
+              actions={
+                <Button
+                  type="button"
+                  variant="solid"
+                  size="md"
+                  tone="accent"
+                  aria-disabled={choosingMcpProject() || undefined}
+                  onClick={(event) => {
+                    const origin = event.currentTarget
+                    runPanelAction(t("workspace.no_directory"), () => handleChooseMcpProject(origin))
+                  }}
+                >
+                  {t("workspace.no_directory")}
+                </Button>
+              }
+            >
+              {t("mcp.project_required_body")}
+            </Feedback>
+          </Show>
+        }
+      >
         <SettingsGroup
           class="extension-settings-group"
           title={t("mcp.resource_management_title")}
@@ -1277,7 +1313,7 @@ function SharedResourceManagementPanel(props: {
                   }
                   return (
                     <Disclosure.Root class="mcp-project-scope">
-                      <Disclosure.Trigger>
+                      <Disclosure.Trigger ref={(element) => (mcpProjectScopeTrigger = element)}>
                         <span>
                           <strong>
                             {t("settings.product.scope_project", { project: projectLedgerDisplayName(directoryLabel()) })}
