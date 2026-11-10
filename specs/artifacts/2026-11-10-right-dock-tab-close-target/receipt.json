@@ -1,0 +1,297 @@
+{
+  "directReads": {
+    "baseline": {
+      "before": {
+        "page": {
+          "status": 200,
+          "requestID": "50507560-152f-4e7b-aa8c-722ee8e37691",
+          "asset": "main-Cr118BQ9.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "009310df-e887-4f51-aa24-55198d5eeb22"
+        },
+        "projects": [
+          {
+            "name": "dock-review-project",
+            "paths": {
+              "status": 200,
+              "requestID": "b45b5e5f-7ef1-411f-9a90-f142454626fc",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "b66f5f46-ffe9-4dd4-b1d2-5c482f0b3bc3",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "dock-review",
+              "dirty": false
+            },
+            "session": {
+              "status": 201,
+              "requestID": "949916d6-d924-43d1-a089-77ae533eaf18",
+              "operation": "coding.chat.session.create",
+              "id": "ses_hlI4KasESr30bmoToyVg"
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "ece01358-5556-47d4-ab88-597fb55f5ed6",
+          "connected": 0
+        }
+      },
+      "after": {
+        "page": {
+          "status": 200,
+          "requestID": "bd31e6a3-bc1b-491a-b2bd-411a6b0f471c",
+          "asset": "main-Cr118BQ9.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "804a0ad5-2407-4db9-b9ef-ad1c9b0c751e"
+        },
+        "projects": [
+          {
+            "name": "dock-review-project",
+            "paths": {
+              "status": 200,
+              "requestID": "1777b9f3-8d99-4eb8-b1dc-9690cd4890ba",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "1b11b166-ef5e-40e8-8932-9a5f708e71eb",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "dock-review",
+              "dirty": true
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "bc05f9e6-2050-4325-b3ce-0122cc765486",
+          "connected": 0
+        }
+      }
+    },
+    "candidate": {
+      "before": {
+        "page": {
+          "status": 200,
+          "requestID": "02da7de2-de76-43f8-86b0-a40148f97e49",
+          "asset": "main-DV8ncBB-.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "706e62b2-d3bf-46ab-abd9-abdcc6ff94d4"
+        },
+        "projects": [
+          {
+            "name": "dock-review-project",
+            "paths": {
+              "status": 200,
+              "requestID": "c83e3936-d458-49d2-b6d8-826b38eb3cec",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "c0b3af96-355f-4b40-bee6-14b3dd345307",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "dock-review",
+              "dirty": true
+            },
+            "session": {
+              "status": 201,
+              "requestID": "a5a34dd7-bdd5-4b27-b1c8-f3f841ceaa7a",
+              "operation": "coding.chat.session.create",
+              "id": "ses_hk4FNmqJ6dBVYA8ee9Aw"
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "1ed2f0e4-869b-4273-8a24-7806e562e321",
+          "connected": 0
+        }
+      },
+      "after": {
+        "page": {
+          "status": 200,
+          "requestID": "e436031e-da84-4ade-a9af-068d177ff7c9",
+          "asset": "main-DV8ncBB-.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "57e886c2-6323-4210-80a6-9de70c641bdb"
+        },
+        "projects": [
+          {
+            "name": "dock-review-project",
+            "paths": {
+              "status": 200,
+              "requestID": "8d7094ee-d2b2-4e43-87f1-a9eae53af1d0",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "42311017-8cd3-4a58-8ab0-9c63a739ac6e",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "dock-review",
+              "dirty": true
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "db5982c8-5cf4-4fe6-8f85-d1129d602ad8",
+          "connected": 0
+        }
+      }
+    },
+    "final": {
+      "before": {
+        "page": {
+          "status": 200,
+          "requestID": "4f2d51de-3040-44ef-ba65-1dd45d8c880b",
+          "asset": "main-B9nk_DMO.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "c9c39183-6d63-4150-ad99-f49252baf847"
+        },
+        "projects": [
+          {
+            "name": "dock-review-project",
+            "paths": {
+              "status": 200,
+              "requestID": "8370b891-8a92-4902-b834-f7b7506527a9",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "9b793f42-d1c0-40c3-9356-05dd1a20923b",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "dock-review",
+              "dirty": true
+            },
+            "session": {
+              "status": 201,
+              "requestID": "2ab21ebf-81d6-4015-af69-0ca68e9e17e7",
+              "operation": "coding.chat.session.create",
+              "id": "ses_hNkX9mAtANrq6BzAub37"
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "527ed1e8-74b3-4747-8ef0-088e28527371",
+          "connected": 0
+        }
+      },
+      "after": {
+        "page": {
+          "status": 200,
+          "requestID": "bfbcd9e1-f8c0-4c10-bfdb-fd55202c3102",
+          "asset": "main-B9nk_DMO.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "b9246819-3ea8-4c11-b306-da32af795836"
+        },
+        "projects": [
+          {
+            "name": "dock-review-project",
+            "paths": {
+              "status": 200,
+              "requestID": "a89dc483-0079-4072-9414-dce5427b77b2",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "439744a1-7c1d-467f-bbd2-6e9fcfd70dc8",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "dock-review",
+              "dirty": true
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "f83ec650-4f7b-43a7-87c7-83119d4762a2",
+          "connected": 0
+        }
+      }
+    }
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 1,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 1,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 1,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b211-baseline",
+      "apiPort": 39605,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b211-candidate",
+      "apiPort": 39606,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b211-final",
+      "apiPort": 39607,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  },
+  "sampleFileAndGitHeadUnchanged": true
+}

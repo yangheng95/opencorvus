@@ -4,6 +4,7 @@ import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Tab, TabList, Tabs } from "./ui/Tabs"
+import { Tooltip } from "./ui/Tooltip"
 import { randomUUID } from "../utils/random-id"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
@@ -309,6 +310,8 @@ export function RightDock(props: RightDockProps): JSX.Element {
           <For each={tabCollection()}>
             {(tabID) => {
               const tab = () => tabForID(tabID)
+              const title = () => tabTitle(tab())
+              const closeLabel = () => t("right_dock.close_tab", { tab: title() })
               const meta = () => rightDockPanelMeta(tab().panel)
               const isOpen = () => openSet().has(tabID)
               return (
@@ -328,32 +331,46 @@ export function RightDock(props: RightDockProps): JSX.Element {
                     data-tab={tabID}
                     data-panel={tab().panel}
                     disabled={!isOpen() || hidden().has(tabID)}
-                    aria-label={tabTitle(tab())}
+                    aria-label={title()}
                     aria-keyshortcuts="Delete"
-                    title={tabTitle(tab())}
+                    title={title()}
                     onKeyDown={(event) => handleTabKeyDown(event, tabID)}
                   >
                     <Icon name={meta().icon} size="medium" />
-                    <span class="right-dock-tab__label">{tabTitle(tab())}</span>
+                    <span class="right-dock-tab__label">{title()}</span>
                   </Tab>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    tone="neutral"
-                    data-chrome="icon-action"
-                    class="right-dock-tab__close"
-                    aria-label={t("right_dock.close_tab")}
-                    title={t("right_dock.close_tab_shortcut")}
-                    onPointerDown={(event) => event.stopPropagation()}
-                    onKeyDown={(event) => event.stopPropagation()}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      void closeTab(tabID)
-                    }}
+                  <Tooltip.Root
+                    disabled={!props.open() || !isOpen() || hidden().has(tabID)}
+                    openDelay={160}
+                    placement="bottom-end"
+                    gutter={7}
+                    fitViewport
                   >
-                    <Icon name="close" size="medium" />
-                  </Button>
+                    <Tooltip.Trigger
+                      as={Button}
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      tone="neutral"
+                      data-chrome="icon-action"
+                      class="right-dock-tab__close"
+                      aria-label={closeLabel()}
+                      onPointerDown={(event: PointerEvent) => event.stopPropagation()}
+                      onKeyDown={(event: KeyboardEvent) => event.stopPropagation()}
+                      onClick={(event: MouseEvent) => {
+                        event.stopPropagation()
+                        void closeTab(tabID)
+                      }}
+                    >
+                      <Icon name="close" size="medium" />
+                    </Tooltip.Trigger>
+                    <Tooltip.Portal>
+                      <Tooltip.Content>
+                        <div aria-hidden="true">{closeLabel()}</div>
+                        <div>{t("right_dock.close_tab_shortcut")}</div>
+                      </Tooltip.Content>
+                    </Tooltip.Portal>
+                  </Tooltip.Root>
                 </div>
               )
             }}

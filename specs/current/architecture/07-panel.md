@@ -4809,6 +4809,8 @@ preceding remaining tab.
 Focused open tabs expose Delete as a direct close action. The close button and
 keyboard action await the same completed close result, including the existing
 File dirty-draft confirmation; cancellation keeps the tab and its focus owner.
+Each close control uses its tab's current title in its accessible name and
+in the shared hover and keyboard hint.
 The File decision's programmatic Dialog restores the initiating visible control
 on cancellation through the primitive close-autofocus hook. It uses the existing
 file resource and connection authority to retire stale focus intent; accepted

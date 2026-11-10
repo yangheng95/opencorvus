@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [右侧工具标签的关闭控件读出目标](records/2026-11/2026-11-10-right-dock-tab-close-target.md)
 - [全局搜索续页与重试可用键盘接续](records/2026-11/2026-11-10-palette-continuation-keyboard.md)
 - [日志查看器随连接更换读取来源](records/2026-11/2026-11-10-log-tail-connection-ownership.md)
 - [项目路径与 Git 状态分别结算](records/2026-11/2026-11-10-project-path-and-git-read-settlement.md)
