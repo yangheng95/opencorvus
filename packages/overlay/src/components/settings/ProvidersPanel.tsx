@@ -197,6 +197,8 @@ export default function ProvidersPanel() {
   const [discoveringModels, setDiscoveringModels] = createSignal(false)
   const [discoveredModelCount, setDiscoveredModelCount] = createSignal<number | null>(null)
   const [loadingProviderInfo, setLoadingProviderInfo] = createSignal(false)
+  const [providerInfoRetry, setProviderInfoRetry] = createSignal<{ trigger: HTMLButtonElement }>()
+  let providerSearchInput: HTMLInputElement | undefined
 
   function scopeProjectLabel(): string {
     const directory = activeDirectory().trim()
@@ -363,6 +365,23 @@ export default function ProvidersPanel() {
     }
   }
 
+  async function retryProviderInfo(trigger: HTMLButtonElement): Promise<void> {
+    if (loadingProviderInfo() || providerInfoRetry()) return
+    const directory = activeDirectory().trim()
+    const options = providerLoadOptions(directory)
+    const retry = { trigger }
+    setProviderInfoRetry(retry)
+    try {
+      await reloadProviderInfo(directory, options)
+      if (providerInfoRetry() === retry && options.isCurrentDirectory(directory)
+        && appStore.providerLoadIssues.length === 0 && document.activeElement === retry.trigger) {
+        providerSearchInput?.focus({ preventScroll: true })
+      }
+    } finally {
+      if (providerInfoRetry() === retry) setProviderInfoRetry(undefined)
+    }
+  }
+
   createEffect(
     on(
       () => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const,
@@ -384,6 +403,7 @@ export default function ProvidersPanel() {
         setLastModelsRefreshedAt(null)
         setProviderRefreshError(null)
         setModelRefreshError(null)
+        setProviderInfoRetry(undefined)
         void reloadProviderInfo(directory, providerLoadOptions(directory))
       },
     ),
@@ -1254,6 +1274,7 @@ export default function ProvidersPanel() {
             placeholder={t("provider.search.placeholder")}
             ariaLabel={t("provider.search.label")}
             onValueChange={setProviderSearch}
+            inputRef={(input) => { providerSearchInput = input }}
             clearDataUI="provider-search-clear"
             clearDataTestID="provider-search-clear"
           />
@@ -1265,17 +1286,33 @@ export default function ProvidersPanel() {
           </Feedback>
         </Show>
 
-        <For each={appStore.providerLoadIssues}>
-          {(issue) => (
-            <Feedback tone="error" details={issue.message}>
-              {t("provider.load.unavailable", {
-                owner: [t(`provider.load.resource.${issue.resource}`), issue.providerID, issue.phase]
-                  .filter(Boolean)
-                  .join(" · "),
-              })}
-            </Feedback>
-          )}
-        </For>
+        <Show when={appStore.providerLoadIssues.length > 0 || providerInfoRetry()}>
+          <div class="provider-load-feedback">
+            <For each={appStore.providerLoadIssues}>
+              {(issue) => (
+                <Feedback tone="error" details={issue.message}>
+                  {t("provider.load.unavailable", {
+                    owner: [t(`provider.load.resource.${issue.resource}`), issue.providerID, issue.phase]
+                      .filter(Boolean)
+                      .join(" · "),
+                  })}
+                </Feedback>
+              )}
+            </For>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              tone="neutral"
+              aria-disabled={loadingProviderInfo() || undefined}
+              aria-busy={loadingProviderInfo() || undefined}
+              onClick={(event) => void retryProviderInfo(event.currentTarget)}
+            >
+              <Icon name={loadingProviderInfo() ? "loading" : "refresh"} />
+              {t(loadingProviderInfo() ? "provider.load.loading" : "provider.load.retry")}
+            </Button>
+          </div>
+        </Show>
 
         <Show
           when={

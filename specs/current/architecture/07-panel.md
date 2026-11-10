@@ -5361,6 +5361,11 @@ removal description also names that shared credential impact. These are read-onl
 presentation facts; form-captured scope, mutation fencing, Auth ownership and
 removal semantics retain their existing contracts.
 
+The Providers settings can retry failed detail reads in place. The action
+reuses the current Project or Global read and its connection ownership;
+accepted resources, the current filter and local editing state remain usable.
+When a successful retry removes its focused button, focus returns to search.
+
 Provider saves distinguish configuration commitment, credential commitment and
 directory observation. A successful configuration response or the shared typed
 committed receipt proceeds through the existing serial followups, retaining any

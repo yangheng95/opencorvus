@@ -3049,6 +3049,15 @@ button.s-row:focus-visible {
   flex-direction: column;
   gap: var(--ui-gap-3xl);
 }
+
+.provider-load-feedback {
+  display: grid;
+  gap: var(--ui-gap-sm);
+}
+
+.provider-load-feedback > .oc-button {
+  justify-self: start;
+}
 .provider-command {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;

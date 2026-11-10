@@ -1,0 +1,362 @@
+{
+  "baseline": {
+    "asset": "main-Bdw-YmXI.js",
+    "project": {
+      "providerReadStatus": 200,
+      "requestID": "cc5ee714-ce8c-4324-86af-6d724d663c53",
+      "catalogCount": 88,
+      "connectedCount": 0,
+      "authFilePresent": false
+    },
+    "global": [
+      {
+        "path": "/global/providers",
+        "status": 200,
+        "requestID": "6591b08b-2d15-4e43-9715-472f903c0300",
+        "catalogCount": 88,
+        "connectedCount": 0
+      },
+      {
+        "path": "/global/providers/auth",
+        "status": 200,
+        "requestID": "1801b591-e352-4eca-a85b-0879e92bd7ef"
+      },
+      {
+        "path": "/global/config",
+        "status": 200,
+        "requestID": "910d0a1d-52f8-406c-8385-fa40d32a0fb4"
+      }
+    ],
+    "requests": [
+      {
+        "time": "2026-11-10T02:38:29.542Z",
+        "stage": "listening",
+        "port": 39456,
+        "up": 39455
+      },
+      {
+        "time": "2026-11-10T02:38:47.881Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "method": "GET",
+        "path": "/config",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:38:47.887Z",
+        "stage": "origin",
+        "attempt": 1,
+        "status": 200,
+        "requestID": "ca66ad38-4910-4279-a9db-0e3129f94438"
+      },
+      {
+        "time": "2026-11-10T02:38:58.474Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:38:58.478Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:38:58.504Z",
+        "stage": "origin",
+        "attempt": 2,
+        "status": 200,
+        "requestID": "30ae8feb-5499-4b40-bf51-8c4ca36764d7"
+      },
+      {
+        "time": "2026-11-10T02:38:58.510Z",
+        "stage": "origin",
+        "attempt": 3,
+        "status": 200,
+        "requestID": "bb5f6814-1594-4ea7-b340-1befcb03e257"
+      },
+      {
+        "time": "2026-11-10T02:38:58.512Z",
+        "stage": "truncated",
+        "attempt": 3,
+        "bytes": 1080,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:39:14.582Z",
+        "stage": "arrival",
+        "attempt": 4,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:39:14.583Z",
+        "stage": "arrival",
+        "attempt": 5,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:39:14.585Z",
+        "stage": "origin",
+        "attempt": 4,
+        "status": 200,
+        "requestID": "3a4b7315-da3f-409f-b4af-ad3346ea3e50"
+      },
+      {
+        "time": "2026-11-10T02:39:14.609Z",
+        "stage": "origin",
+        "attempt": 5,
+        "status": 200,
+        "requestID": "2a0003c2-aeb2-47d8-bd51-3e28a4e6799e"
+      }
+    ]
+  },
+  "candidate": {
+    "asset": "main-DgkkdouI.js",
+    "qualifiedReads": [
+      {
+        "path": "/provider",
+        "status": 200,
+        "requestID": "e001c29f-5bba-4916-992f-a140df7595c6",
+        "catalogCount": 88,
+        "connectedCount": 0
+      },
+      {
+        "path": "/global/providers",
+        "status": 200,
+        "requestID": "802ce5f3-7f7a-4520-b777-e3f1bc7bf7c7",
+        "catalogCount": 88,
+        "connectedCount": 0
+      },
+      {
+        "path": "/global/providers/auth",
+        "status": 200,
+        "requestID": "55912fb2-9efa-4914-9a18-ef6ef053048e"
+      },
+      {
+        "path": "/global/config",
+        "status": 200,
+        "requestID": "22cbb35b-62e2-496f-80ad-17953630598c"
+      }
+    ],
+    "requests": [
+      {
+        "time": "2026-11-10T02:43:39.200Z",
+        "stage": "listening",
+        "port": 39458,
+        "up": 39457
+      },
+      {
+        "time": "2026-11-10T02:44:01.279Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "method": "GET",
+        "path": "/config",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:44:01.287Z",
+        "stage": "origin",
+        "attempt": 1,
+        "status": 200,
+        "requestID": "296b7a42-0028-4587-8725-d44cf4d252f5"
+      },
+      {
+        "time": "2026-11-10T02:44:14.059Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:44:14.061Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:44:14.085Z",
+        "stage": "origin",
+        "attempt": 2,
+        "status": 200,
+        "requestID": "5490d606-7dca-490f-80a0-90723f7b895f"
+      },
+      {
+        "time": "2026-11-10T02:44:14.091Z",
+        "stage": "origin",
+        "attempt": 3,
+        "status": 200,
+        "requestID": "5352e93b-7dc4-4a13-b6a4-d39ba2aeabfa"
+      },
+      {
+        "time": "2026-11-10T02:44:14.092Z",
+        "stage": "truncated",
+        "attempt": 3,
+        "bytes": 1080,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:44:37.855Z",
+        "stage": "arrival",
+        "attempt": 4,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:44:37.857Z",
+        "stage": "arrival",
+        "attempt": 5,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:44:37.862Z",
+        "stage": "origin",
+        "attempt": 4,
+        "status": 200,
+        "requestID": "9f7bdaca-90cb-40cf-bc05-38e4103b8f49"
+      },
+      {
+        "time": "2026-11-10T02:44:37.863Z",
+        "stage": "truncated",
+        "attempt": 4,
+        "bytes": 1080,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:44:37.887Z",
+        "stage": "origin",
+        "attempt": 5,
+        "status": 200,
+        "requestID": "df44006c-b588-47c0-a42f-de25f0a2b2b6"
+      },
+      {
+        "time": "2026-11-10T02:44:48.515Z",
+        "stage": "arrival",
+        "attempt": 6,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:44:48.517Z",
+        "stage": "arrival",
+        "attempt": 7,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:44:48.519Z",
+        "stage": "origin",
+        "attempt": 6,
+        "status": 200,
+        "requestID": "94dc1c05-4bdb-4c9c-ae4d-f1c5a2032026"
+      },
+      {
+        "time": "2026-11-10T02:44:48.548Z",
+        "stage": "origin",
+        "attempt": 7,
+        "status": 200,
+        "requestID": "f0e2679e-0fd6-4aa9-893b-e94210d71b23"
+      },
+      {
+        "time": "2026-11-10T02:45:05.438Z",
+        "stage": "arrival",
+        "attempt": 8,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:45:05.439Z",
+        "stage": "arrival",
+        "attempt": 9,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:45:05.466Z",
+        "stage": "origin",
+        "attempt": 8,
+        "status": 200,
+        "requestID": "bb50ff84-aea2-4e36-a4ed-619d2949bb00"
+      },
+      {
+        "time": "2026-11-10T02:45:05.468Z",
+        "stage": "origin",
+        "attempt": 9,
+        "status": 200,
+        "requestID": "42f057d3-11c1-4847-b71b-82d42803ee04"
+      },
+      {
+        "time": "2026-11-10T02:45:05.469Z",
+        "stage": "truncated",
+        "attempt": 9,
+        "bytes": 1080,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:45:22.904Z",
+        "stage": "arrival",
+        "attempt": 10,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:45:22.904Z",
+        "stage": "arrival",
+        "attempt": 11,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:45:22.905Z",
+        "stage": "origin",
+        "attempt": 10,
+        "status": 200,
+        "requestID": "cb8b89f8-bf15-4e63-b6a2-0464d98e6a92"
+      },
+      {
+        "time": "2026-11-10T02:45:22.906Z",
+        "stage": "held",
+        "attempt": 10,
+        "bytes": 1080
+      },
+      {
+        "time": "2026-11-10T02:45:22.934Z",
+        "stage": "origin",
+        "attempt": 11,
+        "status": 200,
+        "requestID": "a6be9e10-71b1-4ece-9774-810b429c3ce1"
+      },
+      {
+        "time": "2026-11-10T02:45:29.196Z",
+        "stage": "released",
+        "attempt": 10,
+        "bytes": 1080
+      }
+    ]
+  },
+  "bothProfiles": {
+    "integrity": "ok",
+    "taskCount": 1,
+    "providerUsageCount": 0,
+    "authFilePresent": false
+  }
+}
