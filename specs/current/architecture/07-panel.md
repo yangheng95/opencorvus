@@ -5454,6 +5454,10 @@ Skill Library labels use the interface language. The install form derives its
 field label and example from the selected source: local directory, remote skill
 index directory, or Git repository. Catalog identities and supplied descriptions
 retain their original content.
+An in-flight Skill Library install belongs to its form and current project and
+connection. The form presents the pending action and keeps its own diagnostics;
+closing it returns still-owned focus to the install trigger. Retiring the view
+does not cancel a request already sent to the Skill owner.
 Project MCP status uses one scoped read at a time for passive observation; an
 explicit readback may retire it. Read failures belong beside Server connections
 and clear on the next accepted success. Connection or configuration notices

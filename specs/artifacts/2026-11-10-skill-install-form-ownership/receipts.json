@@ -1,0 +1,254 @@
+{
+  "baselineAsset": "main-SOW9noYj.js",
+  "draftAsset": "main-Briyi-sB.js",
+  "finalAsset": "main-BFbx_r9Y.js",
+  "baselineTransport": [
+    {
+      "time": "2026-11-10T04:01:33.656Z",
+      "stage": "origin",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "2d3b63f9-f793-4737-bea5-97484fec2806"
+    },
+    {
+      "time": "2026-11-10T04:01:33.659Z",
+      "stage": "held",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "2d3b63f9-f793-4737-bea5-97484fec2806",
+      "bytes": 354
+    },
+    {
+      "time": "2026-11-10T04:01:43.404Z",
+      "stage": "origin",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "0b688020-9f1a-4e28-a70f-39089142099d"
+    },
+    {
+      "time": "2026-11-10T04:01:48.487Z",
+      "stage": "released",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "2d3b63f9-f793-4737-bea5-97484fec2806",
+      "bytes": 354
+    }
+  ],
+  "firstCandidateTransport": [
+    {
+      "time": "2026-11-10T04:08:04.476Z",
+      "stage": "origin",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "6646032a-99ae-4d10-94e5-623b4dbd07e7"
+    },
+    {
+      "time": "2026-11-10T04:08:04.479Z",
+      "stage": "held",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "6646032a-99ae-4d10-94e5-623b4dbd07e7",
+      "bytes": 354
+    },
+    {
+      "time": "2026-11-10T04:08:21.909Z",
+      "stage": "client-closed",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "6646032a-99ae-4d10-94e5-623b4dbd07e7"
+    }
+  ],
+  "finalTransport": [
+    {
+      "time": "2026-11-10T04:11:04.327Z",
+      "stage": "origin",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "188ef55a-2461-4bfb-baae-e3525427780f"
+    },
+    {
+      "time": "2026-11-10T04:11:04.33Z",
+      "stage": "held",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "188ef55a-2461-4bfb-baae-e3525427780f",
+      "bytes": 354
+    },
+    {
+      "time": "2026-11-10T04:11:13.333Z",
+      "stage": "released",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "188ef55a-2461-4bfb-baae-e3525427780f",
+      "bytes": 354
+    },
+    {
+      "time": "2026-11-10T04:11:37.479Z",
+      "stage": "origin",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "7772431b-5f83-4f7f-919b-1daa7bc5dff3"
+    },
+    {
+      "time": "2026-11-10T04:12:00.432Z",
+      "stage": "origin",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "2ab32dd6-452c-43a1-a903-b7541274f8e8"
+    },
+    {
+      "time": "2026-11-10T04:12:00.433Z",
+      "stage": "held",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "2ab32dd6-452c-43a1-a903-b7541274f8e8",
+      "bytes": 354
+    },
+    {
+      "time": "2026-11-10T04:12:09.443Z",
+      "stage": "released",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "2ab32dd6-452c-43a1-a903-b7541274f8e8",
+      "bytes": 354
+    },
+    {
+      "time": "2026-11-10T04:12:35.066Z",
+      "stage": "origin",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "4307d41b-7c98-4b1d-9e1d-75c81f2ec3fa"
+    },
+    {
+      "time": "2026-11-10T04:12:35.067Z",
+      "stage": "held",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "4307d41b-7c98-4b1d-9e1d-75c81f2ec3fa",
+      "bytes": 354
+    },
+    {
+      "time": "2026-11-10T04:12:44.075Z",
+      "stage": "released",
+      "path": "/skill/install",
+      "method": "POST",
+      "status": 400,
+      "requestID": "4307d41b-7c98-4b1d-9e1d-75c81f2ec3fa",
+      "bytes": 354
+    }
+  ],
+  "baselineDirectError": {
+    "asset": "main-SOW9noYj.js",
+    "status": 400,
+    "requestID": "a2273b92-d33d-4b45-a067-3f3f8803c3bb",
+    "name": "SkillLocalSourceError",
+    "reason": "missing_directory",
+    "relativeInput": "./b180-missing-skill",
+    "exactDirectory": true
+  },
+  "baselineInventory": [
+    {
+      "project": "b180-review-workspace",
+      "status": 200,
+      "requestID": "4092bd7b-909b-4d98-a161-e1ef9bc69b27",
+      "count": 6,
+      "example": "browser-use",
+      "sourceType": "builtin"
+    },
+    {
+      "project": "beta/Workspace",
+      "status": 200,
+      "requestID": "720edb7f-86da-4d27-b61e-7fe81012d8ba",
+      "count": 6,
+      "example": "browser-use",
+      "sourceType": "builtin"
+    }
+  ],
+  "finalBeforeUI": {
+    "error": {
+      "status": 400,
+      "requestID": "6a3b237e-0fb5-47fb-afba-919dd5d568bb",
+      "name": "SkillLocalSourceError",
+      "reason": "missing_directory",
+      "exactDirectory": true
+    },
+    "inventory": [
+      {
+        "project": "b180-review-workspace",
+        "status": 200,
+        "requestID": "a6562159-0d58-43f4-ac38-07af3bd216df",
+        "count": 6,
+        "example": "browser-use",
+        "sourceType": "builtin"
+      },
+      {
+        "project": "beta/Workspace",
+        "status": 200,
+        "requestID": "e1265f47-066f-4c9e-b1f6-15e081ac9481",
+        "count": 6,
+        "example": "browser-use",
+        "sourceType": "builtin"
+      }
+    ]
+  },
+  "finalAfterUI": {
+    "error": {
+      "status": 400,
+      "requestID": "f5be89c5-baab-40f1-b7aa-3fe68f8f10ee",
+      "name": "SkillLocalSourceError",
+      "reason": "missing_directory",
+      "exactDirectory": true
+    },
+    "inventory": [
+      {
+        "project": "b180-review-workspace",
+        "status": 200,
+        "requestID": "66112c0e-4d52-4c64-b435-cd948d977fab",
+        "count": 6,
+        "example": "browser-use",
+        "sourceType": "builtin"
+      },
+      {
+        "project": "beta/Workspace",
+        "status": 200,
+        "requestID": "1c01d2e4-f68b-46ff-b440-39ce9ea37ccd",
+        "count": 6,
+        "example": "browser-use",
+        "sourceType": "builtin"
+      }
+    ]
+  },
+  "recovery": {
+    "attempted": 0,
+    "missionAttempted": 0,
+    "missionWoken": 0,
+    "missionCompleted": 0,
+    "failures": 0
+  },
+  "profiles": {
+    "integrity": "ok",
+    "engineTask": 0,
+    "session": 0,
+    "providerUsageEvent": 0
+  },
+  "providerCatalog": {
+    "visible": 88,
+    "connected": 0
+  }
+}

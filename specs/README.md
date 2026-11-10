@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [技能安装表单等待真实结果并保留键盘位置](records/2026-11/2026-11-10-skill-install-form-ownership.md)
 - [技能库按来源提示并完整使用当前语言](records/2026-11/2026-11-10-skill-library-source-guidance.md)
 - [无项目时从 MCP 管理页直接选择工作区](records/2026-11/2026-11-10-mcp-choose-project-first.md)
 - [MCP 管理显示实际目标项目](records/2026-11/2026-11-10-mcp-active-project-context.md)

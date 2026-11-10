@@ -543,6 +543,10 @@ function SharedResourceManagementPanel(props: {
   // ── Add Skill inline form ──
 
   const [showAddSkill, setShowAddSkill] = createSignal(false)
+  const [skillInstallRequest, setSkillInstallRequest] = createSignal<{ directory: string; authority: ApiAuthority }>()
+  const skillInstallPending = () => skillInstallRequest() !== undefined
+  let skillInstallTrigger: HTMLButtonElement | undefined
+  let skillInstallForm: HTMLFormElement | undefined
   const [skillForm, setSkillForm] = createStore({
     type: "path" as "path" | "url" | "git",
     value: "",
@@ -553,6 +557,33 @@ function SharedResourceManagementPanel(props: {
   const [marketDetail, setMarketDetail] = createSignal<SkillMarketDetail>()
   const [marketPolicy, setMarketPolicy] = createSignal<"allow" | "deny">("deny")
   const [marketLoading, setMarketLoading] = createSignal(false)
+
+  function clearSkillInstallNotice() {
+    setNotice((current) => current?.origin === "skill-install" ? undefined : current)
+  }
+
+  function closeSkillInstallForm(restoreFocus: boolean) {
+    const hadFocus = restoreFocus && skillInstallForm?.contains(document.activeElement)
+    clearSkillInstallNotice()
+    setShowAddSkill(false)
+    if (hadFocus) {
+      queueMicrotask(() => {
+        if (!showAddSkill() && skillInstallTrigger?.isConnected && document.activeElement === document.body) {
+          skillInstallTrigger.focus({ preventScroll: true })
+        }
+      })
+    }
+  }
+
+  createEffect(on(
+    () => skillPanelActive() ? [selectedDirectory(), captureApiAuthority().revision] : undefined,
+    () => {
+      setSkillInstallRequest(undefined)
+      closeSkillInstallForm(false)
+    },
+    { defer: true },
+  ))
+  onCleanup(() => setSkillInstallRequest(undefined))
 
   async function handleMarketSearch() {
     const query = marketQuery().trim()
@@ -620,6 +651,7 @@ function SharedResourceManagementPanel(props: {
   }
 
   async function handleAddSkill() {
+    if (!showAddSkill() || skillInstallPending()) return
     const value = skillForm.value.trim()
     if (!value) return
     const directory = currentDirectory()
@@ -627,18 +659,25 @@ function SharedResourceManagementPanel(props: {
       setPanelNotice("workspace.no_directory", { tone: "warning" })
       return
     }
+    const request = { directory, authority: captureApiAuthority() }
+    const owns = () => skillInstallRequest() === request && skillPanelActive() &&
+      selectedDirectory() === directory && isApiAuthorityCurrent(request.authority)
+    setSkillInstallRequest(request)
+    clearSkillInstallNotice()
     try {
       await installSkill(skillForm.type, value, skillForm.policy, {
-        directory,
-        isCurrentDirectory: sourceMatchesDirectory,
+        ...request,
+        isCurrentDirectory: (candidate) => candidate === directory && owns(),
       })
-      if (!sourceMatchesDirectory(directory)) return
+      if (!owns()) return
       setSkillForm({ type: "path", value: "", policy: "allow" })
-      setShowAddSkill(false)
+      closeSkillInstallForm(true)
       await reloadCurrentPanel({ directory })
-      notifyResourceChange()
+      if (owns()) notifyResourceChange()
     } catch (e) {
-      if (sourceMatchesDirectory(directory)) setPanelError(e, undefined, { origin: "skill-install", directory })
+      if (owns()) setPanelError(e, undefined, { origin: "skill-install", directory })
+    } finally {
+      if (skillInstallRequest() === request) setSkillInstallRequest(undefined)
     }
   }
 
@@ -807,7 +846,7 @@ function SharedResourceManagementPanel(props: {
 
   function noticeLocation(): ResourceNotice["origin"] {
     const origin = notice()?.origin
-    if (origin === "skill-install" && showAddSkill()) return origin
+    if (origin === "skill-install") return origin
     if (origin === "mcp-add" && showAddMcp()) return origin
     return "panel"
   }
@@ -1038,7 +1077,14 @@ function SharedResourceManagementPanel(props: {
                 data-ui="tool-panel-action"
                 title={t("skill.install")}
                 aria-label={t("skill.install")}
-                onClick={() => setShowAddSkill((visible) => !visible)}
+                aria-expanded={showAddSkill()}
+                aria-disabled={skillInstallPending() || undefined}
+                ref={(element) => (skillInstallTrigger = element)}
+                onClick={() => {
+                  if (skillInstallPending()) return
+                  if (showAddSkill()) closeSkillInstallForm(true)
+                  else setShowAddSkill(true)
+                }}
               >
                 <Icon name="plus" />
                 <span class="tool-panel-action-label">{t("skill.install")}</span>
@@ -1092,6 +1138,7 @@ function SharedResourceManagementPanel(props: {
             <Show when={showAddSkill()}>
               <form
                 class="config-inline-form"
+                ref={(element) => (skillInstallForm = element)}
                 onSubmit={(event) => {
                   event.preventDefault()
                   void handleAddSkill()
@@ -1102,6 +1149,7 @@ function SharedResourceManagementPanel(props: {
                   <SelectField<FormSelectOption>
                     value={skillForm.type}
                     options={skillSourceOptions()}
+                    disabled={skillInstallPending()}
                     ariaLabel={t("skill.source_type")}
                     onChange={(value) => setSkillForm("type", value as any)}
                     optionData={(option) => ({ "data-value": option.value })}
@@ -1113,6 +1161,7 @@ function SharedResourceManagementPanel(props: {
                     <TextField.Input
                       type="text"
                       value={skillForm.value}
+                      readOnly={skillInstallPending()}
                       placeholder={t(`skill.source_field.${skillForm.type}.placeholder`)}
                       onInput={(e) => setSkillForm("value", e.currentTarget.value)}
                     />
@@ -1122,6 +1171,7 @@ function SharedResourceManagementPanel(props: {
                         variant="ghost"
                         size="md"
                         tone="neutral"
+                        disabled={skillInstallPending()}
                         title={t("skill.browse_folder")}
                         aria-label={t("skill.browse_folder")}
                         onClick={handleBrowseFolder}
@@ -1136,6 +1186,7 @@ function SharedResourceManagementPanel(props: {
                   <SelectField<FormSelectOption>
                     value={skillForm.policy}
                     options={skillPolicyOptions()}
+                    disabled={skillInstallPending()}
                     ariaLabel={t("skill.policy")}
                     onChange={(value) => setSkillForm("policy", value as any)}
                     optionData={(option) => ({ "data-value": option.value })}
@@ -1143,6 +1194,9 @@ function SharedResourceManagementPanel(props: {
                 </TextField.Root>
                 {renderNotice("skill-install")}
                 <div class="dialog-actions compact">
+                  <Show when={skillInstallPending()}>
+                    <Badge tone="accent" role="status">{t("skill.installing")}</Badge>
+                  </Show>
                   <Button
                     type="button"
                     variant="ghost"
@@ -1150,7 +1204,10 @@ function SharedResourceManagementPanel(props: {
                     tone="neutral"
                     title={t("common.cancel")}
                     aria-label={t("common.cancel")}
-                    onClick={() => setShowAddSkill(false)}
+                    aria-disabled={skillInstallPending() || undefined}
+                    onClick={() => {
+                      if (!skillInstallPending()) closeSkillInstallForm(true)
+                    }}
                   >
                     {t("common.cancel")}
                   </Button>
@@ -1160,8 +1217,8 @@ function SharedResourceManagementPanel(props: {
                     size="md"
                     tone="accent"
                     disabled={!skillForm.value.trim()}
-                    title={t("skill.install")}
-                    aria-label={t("skill.install")}
+                    aria-disabled={skillInstallPending() || undefined}
+                    aria-busy={skillInstallPending() || undefined}
                   >
                     {t("skill.install")}
                   </Button>
