@@ -1742,6 +1742,10 @@ root and expanded paths with a listing or failure. The reads start together so
 old child failures yield to their own pending state, then each displays its
 current result. The child and search Retry actions remain scoped to their own
 directory and query, respectively.
+The last accepted search error remains readable while the current query is
+being retried. Its action shows the search resource's pending state and does
+not start another manual read until that resource settles. If the search
+feedback is removed while it contains focus, focus returns to the search field.
 An activated read Retry that owns focus transfers it to the existing Explorer
 search field before its feedback can leave the page. The query and selection
 remain intact, and background reads do not perform this transfer.

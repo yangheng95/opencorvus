@@ -1,0 +1,479 @@
+{
+  "direct": {
+    "baseline": {
+      "asset": "main-COYm3WLa.js",
+      "ui": {
+        "status": 200,
+        "requestID": "f5e63377-4191-4438-9d30-748b51c13ba6"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "a32cd2a8-73f1-49dc-8485-35af64dbeec8"
+      },
+      "operations": {
+        "search": {
+          "status": 200,
+          "requestID": "7c4d59ba-4f2e-4d48-965d-663bd9bc4477",
+          "operation": "find.files",
+          "result": [
+            "retry-ledger-a.txt",
+            "retry-ledger-b.txt"
+          ]
+        },
+        "changedQuery": {
+          "status": 200,
+          "requestID": "d89861a2-926b-43d4-9e27-cb1a392d33bc",
+          "operation": "find.files",
+          "result": [
+            "retry-ledger-b.txt"
+          ]
+        },
+        "validation": {
+          "status": 400,
+          "requestID": "8cb23c7b-cd79-4033-9df9-e61eb6d092c8",
+          "operation": "find.files",
+          "result": {
+            "success": false,
+            "issue": "invalid_value",
+            "field": "type"
+          }
+        },
+        "root": {
+          "status": 200,
+          "requestID": "709b21b9-89ac-475c-a564-08af73370cc7",
+          "operation": "file.list",
+          "result": [
+            "retry-ledger-a.txt",
+            "retry-ledger-b.txt",
+            "unrelated.txt"
+          ]
+        },
+        "bravoContent": {
+          "status": 200,
+          "requestID": "1a1a2b20-9b24-4ab1-8ecc-5d9eb330d93e",
+          "operation": "file.read",
+          "result": {
+            "type": "text",
+            "content": "Retry ledger bravo original bytes.\n"
+          }
+        }
+      }
+    },
+    "candidate": {
+      "asset": "main-C776cV2l.js",
+      "ui": {
+        "status": 200,
+        "requestID": "ab6d6d7b-1e59-4886-aab8-8fb8da175d0c"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "2914cd61-5ac1-4de6-80c4-cae057906150"
+      },
+      "operations": {
+        "search": {
+          "status": 200,
+          "requestID": "8ebbce9a-e976-4a7e-b9fb-c5db79e1a81e",
+          "operation": "find.files",
+          "result": [
+            "retry-ledger-a.txt",
+            "retry-ledger-b.txt"
+          ]
+        },
+        "changedQuery": {
+          "status": 200,
+          "requestID": "e78f3055-d606-471d-9417-d31d64d4bb26",
+          "operation": "find.files",
+          "result": [
+            "retry-ledger-b.txt"
+          ]
+        },
+        "validation": {
+          "status": 400,
+          "requestID": "c736b654-a054-4863-b5b1-19321ed58ad6",
+          "operation": "find.files",
+          "result": {
+            "success": false,
+            "issue": "invalid_value",
+            "field": "type"
+          }
+        },
+        "root": {
+          "status": 200,
+          "requestID": "46e29910-ae87-4eee-9135-057d11d42995",
+          "operation": "file.list",
+          "result": [
+            "retry-ledger-a.txt",
+            "retry-ledger-b.txt",
+            "unrelated.txt"
+          ]
+        },
+        "bravoContent": {
+          "status": 200,
+          "requestID": "06152002-6671-482f-a24e-b30e49e43d11",
+          "operation": "file.read",
+          "result": {
+            "type": "text",
+            "content": "Retry ledger bravo original bytes.\n"
+          }
+        }
+      }
+    },
+    "final": {
+      "asset": "main-TmhB3xCS.js",
+      "ui": {
+        "status": 200,
+        "requestID": "b374764a-08c9-4e4d-8037-8d933a3867af"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "9ee54360-297f-406f-ab3e-474c60a82bf5"
+      },
+      "operations": {
+        "search": {
+          "status": 200,
+          "requestID": "a78432e5-6ab5-4899-b9f3-070cf2837cfd",
+          "operation": "find.files",
+          "result": [
+            "retry-ledger-a.txt",
+            "retry-ledger-b.txt"
+          ]
+        },
+        "changedQuery": {
+          "status": 200,
+          "requestID": "e8fb25f4-416d-4321-afd4-cef96745d738",
+          "operation": "find.files",
+          "result": [
+            "retry-ledger-b.txt"
+          ]
+        },
+        "validation": {
+          "status": 400,
+          "requestID": "e9a56ce8-7f7f-4fc0-9e52-4a8e81a7451c",
+          "operation": "find.files",
+          "result": {
+            "success": false,
+            "issue": "invalid_value",
+            "field": "type"
+          }
+        },
+        "root": {
+          "status": 200,
+          "requestID": "bf854904-906d-4427-a921-a9e58548c13c",
+          "operation": "file.list",
+          "result": [
+            "retry-ledger-a.txt",
+            "retry-ledger-b.txt",
+            "unrelated.txt"
+          ]
+        },
+        "bravoContent": {
+          "status": 200,
+          "requestID": "a45b9bf9-a756-425a-9397-fa927abfd3bd",
+          "operation": "file.read",
+          "result": {
+            "type": "text",
+            "content": "Retry ledger bravo original bytes.\n"
+          }
+        }
+      }
+    }
+  },
+  "browserSearches": {
+    "baseline": [
+      {
+        "requestID": "30a44899-87f9-40d6-93e2-bf553ffdf2ce",
+        "query": "retry-ledger",
+        "mode": "invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:16:01.552Z",
+        "deliveredAt": "2026-11-10T12:16:01.553Z",
+        "validationSuccess": false
+      },
+      {
+        "requestID": "93549d93-7a74-4777-a1f1-f96899d1d414",
+        "query": "retry-ledger",
+        "mode": "hold-invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:16:18.476Z",
+        "heldAt": "2026-11-10T12:16:18.476Z",
+        "validationSuccess": false,
+        "deliveredAt": "2026-11-10T12:16:28.488Z"
+      },
+      {
+        "requestID": "488ad35a-a856-4f36-963e-4caf0e9852f4",
+        "query": "retry-ledger",
+        "mode": "hold-invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:16:28.491Z",
+        "heldAt": "2026-11-10T12:16:28.492Z",
+        "validationSuccess": false,
+        "deliveredAt": "2026-11-10T12:16:38.494Z"
+      },
+      {
+        "requestID": "180a7609-455e-4867-bc61-88503337657b",
+        "query": "retry-ledger",
+        "mode": "hold-invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:16:38.496Z",
+        "heldAt": "2026-11-10T12:16:38.496Z",
+        "validationSuccess": false,
+        "retiredAt": "2026-11-10T12:16:45.327Z"
+      },
+      {
+        "requestID": "62840af8-9239-480c-89ec-f8336d5aea23",
+        "query": "retry-ledger",
+        "mode": "hold",
+        "status": 200,
+        "originAt": "2026-11-10T12:16:53.005Z",
+        "heldAt": "2026-11-10T12:16:53.005Z",
+        "paths": [
+          "retry-ledger-a.txt",
+          "retry-ledger-b.txt"
+        ],
+        "deliveredAt": "2026-11-10T12:17:03.016Z"
+      },
+      {
+        "requestID": "2cce03cd-da90-4fe9-834f-1b8c3b300cc1",
+        "query": "retry-ledger",
+        "mode": "hold",
+        "status": 200,
+        "originAt": "2026-11-10T12:17:03.107Z",
+        "heldAt": "2026-11-10T12:17:03.108Z",
+        "paths": [
+          "retry-ledger-a.txt",
+          "retry-ledger-b.txt"
+        ],
+        "deliveredAt": "2026-11-10T12:17:05.504Z"
+      }
+    ],
+    "candidate": [
+      {
+        "requestID": "1f3a2800-c417-4d34-81ab-76c0f68d07e1",
+        "query": "retry-ledger",
+        "mode": "invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:21:08.378Z",
+        "deliveredAt": "2026-11-10T12:21:08.379Z",
+        "validationSuccess": false
+      },
+      {
+        "requestID": "1b34e77c-b5b9-489b-9d45-730ae8cbc99e",
+        "query": "retry-ledger",
+        "mode": "hold-invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:21:21.399Z",
+        "heldAt": "2026-11-10T12:21:21.399Z",
+        "validationSuccess": false,
+        "deliveredAt": "2026-11-10T12:21:31.404Z"
+      },
+      {
+        "requestID": "5255ff7d-ec51-4788-9118-a1135cfefc47",
+        "query": "retry-ledger",
+        "mode": "hold",
+        "status": 200,
+        "originAt": "2026-11-10T12:21:53.017Z",
+        "heldAt": "2026-11-10T12:21:53.017Z",
+        "paths": [
+          "retry-ledger-a.txt",
+          "retry-ledger-b.txt"
+        ],
+        "deliveredAt": "2026-11-10T12:22:00.029Z"
+      }
+    ],
+    "final": [
+      {
+        "requestID": "28d4dbdf-d284-4b37-b5c0-effc03c6f9b2",
+        "query": "retry-ledger",
+        "mode": "invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:25:46.955Z",
+        "deliveredAt": "2026-11-10T12:25:46.956Z",
+        "validationSuccess": false
+      },
+      {
+        "requestID": "f33338f8-520a-4839-ab4f-f776cb4c3127",
+        "query": "retry-ledger",
+        "mode": "hold-invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:26:00.212Z",
+        "heldAt": "2026-11-10T12:26:00.213Z",
+        "validationSuccess": false,
+        "deliveredAt": "2026-11-10T12:26:09.445Z"
+      },
+      {
+        "requestID": "bdf3ab18-4942-4129-b261-0edc85054338",
+        "query": "retry-ledger",
+        "mode": "hold",
+        "status": 200,
+        "originAt": "2026-11-10T12:26:18.289Z",
+        "heldAt": "2026-11-10T12:26:18.290Z",
+        "paths": [
+          "retry-ledger-a.txt",
+          "retry-ledger-b.txt"
+        ],
+        "deliveredAt": "2026-11-10T12:26:28.295Z"
+      },
+      {
+        "requestID": "5810362e-05b9-480c-9149-385b75ec4aea",
+        "query": "retry-ledger",
+        "mode": "invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:27:10.524Z",
+        "deliveredAt": "2026-11-10T12:27:10.524Z",
+        "validationSuccess": false
+      },
+      {
+        "requestID": "49a0f3e6-3108-4c17-88c4-ff6ec1d439cc",
+        "query": "retry-ledger",
+        "mode": "hold",
+        "status": 200,
+        "originAt": "2026-11-10T12:27:24.092Z",
+        "heldAt": "2026-11-10T12:27:24.093Z",
+        "paths": [
+          "retry-ledger-a.txt",
+          "retry-ledger-b.txt"
+        ],
+        "deliveredAt": "2026-11-10T12:27:33.307Z"
+      },
+      {
+        "requestID": "c0afb318-8185-4730-bce7-53e3d91a9b1e",
+        "query": "retry-ledger-b",
+        "mode": "restore",
+        "status": 200,
+        "originAt": "2026-11-10T12:27:24.360Z",
+        "deliveredAt": "2026-11-10T12:27:24.360Z",
+        "paths": [
+          "retry-ledger-b.txt"
+        ]
+      },
+      {
+        "requestID": "f2331b5d-a1bc-4c57-815f-98a57b11d0c2",
+        "query": "retry-ledger-b",
+        "mode": "invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:28:22.558Z",
+        "deliveredAt": "2026-11-10T12:28:22.558Z",
+        "validationSuccess": false
+      },
+      {
+        "requestID": "080509e5-5f67-40ea-a798-a48660a85ed5",
+        "query": "retry-ledger-b",
+        "mode": "hold",
+        "status": 200,
+        "originAt": "2026-11-10T12:28:41.088Z",
+        "heldAt": "2026-11-10T12:28:41.088Z",
+        "paths": [
+          "retry-ledger-b.txt"
+        ],
+        "deliveredAt": "2026-11-10T12:28:50.933Z"
+      },
+      {
+        "requestID": "6a46ea3d-9d4a-4c7b-9682-c168dc453af6",
+        "query": "retry-ledger",
+        "mode": "restore",
+        "status": 200,
+        "originAt": "2026-11-10T12:29:18.903Z",
+        "deliveredAt": "2026-11-10T12:29:18.903Z",
+        "paths": [
+          "retry-ledger-a.txt",
+          "retry-ledger-b.txt"
+        ]
+      },
+      {
+        "requestID": "a6068351-9351-46ab-affb-9f2f8e26d3cb",
+        "query": "retry-ledger-b",
+        "mode": "invalid",
+        "status": 400,
+        "originAt": "2026-11-10T12:29:18.904Z",
+        "deliveredAt": "2026-11-10T12:29:18.905Z",
+        "validationSuccess": false
+      },
+      {
+        "requestID": "1413d971-f448-41f1-885c-181b176f7ab0",
+        "query": "retry-ledger-b",
+        "mode": "hold",
+        "status": 200,
+        "originAt": "2026-11-10T12:29:33.454Z",
+        "heldAt": "2026-11-10T12:29:33.454Z",
+        "paths": [
+          "retry-ledger-b.txt"
+        ],
+        "deliveredAt": "2026-11-10T12:29:43.464Z"
+      }
+    ]
+  },
+  "isolatedDatabases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "retired": {
+    "baseline": {
+      "occurrence": "iteration-b214-baseline",
+      "apiPort": 39614,
+      "proxyPort": 39615,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b214-candidate",
+      "apiPort": 39616,
+      "proxyPort": 39617,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b214-final",
+      "apiPort": 39618,
+      "proxyPort": 39619,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "project": {
+    "name": "retry-workspace",
+    "head": "7c9178417edb8b5cc1537ccb5f67557a5c87fd02",
+    "originalFiles": [
+      "retry-ledger-a.txt",
+      "retry-ledger-b.txt",
+      "unrelated.txt"
+    ],
+    "bytesUnchanged": true
+  }
+}

@@ -1,11 +1,13 @@
 import {
   batch,
+  createComputed,
   createDeferred,
   createEffect,
   createMemo,
   createResource,
   createSignal,
   For,
+  on,
   onCleanup,
   Show,
   untrack,
@@ -502,10 +504,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   let virtualizer: VirtualizerHandle | undefined
   let pendingFocus: { key: string; origin: Element; scope: ExplorerOperationScope; waitingForScroll: boolean } | undefined
 
+  function focusedReadFailure(selector: string): HTMLElement | undefined {
+    const feedback = explorerElement?.ownerDocument.activeElement?.closest<HTMLElement>(selector)
+    return feedback && explorerElement?.contains(feedback) ? feedback : undefined
+  }
+
   function returnFocusFromDirectoryFailure(dismissing: (path: string) => boolean): void {
-    const feedback = explorerElement?.ownerDocument.activeElement?.closest<HTMLElement>("[data-explorer-directory-error]")
-    const path = feedback?.dataset.explorerDirectoryError
-    if (feedback && explorerElement?.contains(feedback) && path !== undefined && dismissing(path)) {
+    const path = focusedReadFailure("[data-explorer-directory-error]")?.dataset.explorerDirectoryError
+    if (path !== undefined && dismissing(path)) {
       searchInput?.focus({ preventScroll: true })
     }
   }
@@ -982,7 +988,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const searchLoading = createMemo(() => Boolean(deferredQuery()) && searchResults.loading && !currentSearchResult())
   const rootError = createMemo(() => (!deferredQuery() ? (directoryErrors().get("") ?? null) : null))
   const searchError = createMemo(() => (deferredQuery() ? currentSearchFailure() : null))
-  const rootRetryPending = () => !searchError() && loadingPaths().has("")
+  const readRetryPending = () => searchError() ? searchResults.loading : loadingPaths().has("")
+  // Transfer focus before the render removes this feedback and its controls.
+  createComputed(on(searchError, (failure, previous) => {
+    if (!failure && previous && active() && focusedReadFailure("[data-explorer-search-error]")) {
+      searchInput?.focus({ preventScroll: true })
+    }
+  }))
   const expandedDirectoryFailurePaths = createMemo(() => {
     if (deferredQuery() || rootError()) return []
     const visibleDirectories = new Set(
@@ -2506,6 +2518,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                       class="file-explorer-feedback file-explorer-read-feedback"
                       tone="error"
                       data-explorer-directory-error={searchError() ? undefined : ""}
+                      data-explorer-search-error={searchError() ? "" : undefined}
                       details={formatErrorDetails(failure().error) || undefined}
                       actions={
                         <Button
@@ -2514,14 +2527,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                           size="sm"
                           tone="neutral"
                           data-ui={searchError() ? "file-explorer-search-retry" : "file-explorer-retry"}
-                          aria-disabled={rootRetryPending() || undefined}
-                          aria-busy={rootRetryPending() || undefined}
+                          aria-disabled={readRetryPending() || undefined}
+                          aria-busy={readRetryPending() || undefined}
                           onClick={(event) => {
-                            if (rootRetryPending()) return
+                            if (readRetryPending()) return
                             retryReadFromFeedback(event.currentTarget, searchError() ? refetchSearch : retryRootDirectory)
                           }}
                         >
-                          {t(rootRetryPending() ? "common.loading" : "common.retry")}
+                          {t(readRetryPending() ? (searchError() ? "common.retrying" : "common.loading") : "common.retry")}
                         </Button>
                       }
                     >
