@@ -1,0 +1,184 @@
+{
+  "assets": [
+    {
+      "instance": "history",
+      "pid": 25432,
+      "port": 39412,
+      "asset": "main-C3FmnzaH.js"
+    },
+    {
+      "instance": "error",
+      "pid": 21808,
+      "port": 39413,
+      "asset": "main-C3FmnzaH.js"
+    }
+  ],
+  "coldHistory": {
+    "mission": {
+      "messageID": "msg_g0VaWY6Hi00nLWyPC1Ci",
+      "sessionID": "ses_-zUPTRtjPzzKyfj46TJr",
+      "error": {
+        "name": "MessageAbortedError",
+        "data": {
+          "message": "Operator stopped the active Mission from the composer",
+          "cancellation": {
+            "actor": "user",
+            "source": "mission.abort",
+            "surface": "overlay.composer_stop",
+            "requestID": "e2b199e2-92bc-4411-a02f-beb355cd6b84",
+            "reason": "Operator stopped the active Mission from the composer",
+            "targetSessionID": "ses_-zUPTRtjPzzKyfj46TJr",
+            "missionID": "wake-2481db2bd733f4a14bfac531d7c02235"
+          }
+        }
+      },
+      "completed": 1794269069723,
+      "partialText": [
+        "Isolated B163 streaming response."
+      ]
+    },
+    "task": {
+      "messageID": "msg_h5YSmzY9fyFFPIMOjwLF",
+      "sessionID": "ses_-zUPTSCy6zzV64WihHfg",
+      "error": {
+        "name": "MessageAbortedError",
+        "data": {
+          "message": "Task-root activation act_g0VaWXmHS00HdFKxa7K1 is inapplicable under Task tsk_g00VaWXm38000x6c7Fmq cancellation pev_g0VaWXuIQ00AL80q4nQz",
+          "cancellation": {
+            "actor": "user",
+            "source": "task.cancel",
+            "surface": "overlay.composer_stop",
+            "requestID": "1b705d16-3931-4d5f-9fbd-a5d0218f65eb",
+            "reason": "Operator stopped the active task from the composer",
+            "taskID": "tsk_g00VaWXm38000x6c7Fmq",
+            "causationEventID": "pev_g0VaWXuIQ00AL80q4nQz"
+          }
+        }
+      },
+      "completed": 1794269009074,
+      "partialText": [
+        "Isolated B163 streaming response."
+      ]
+    },
+    "work": {
+      "messageID": "msg_g0VaWXjQz00envgDeCLk",
+      "sessionID": "ses_hyIsd4CvB8ez4Uo1CLLE",
+      "error": {
+        "name": "MessageAbortedError",
+        "data": {
+          "message": "session aborted",
+          "cancellation": {
+            "actor": "user",
+            "source": "session.abort",
+            "surface": "session",
+            "requestID": "4c7e25fc-9495-4452-8301-5921827c4065",
+            "reason": "session aborted",
+            "targetSessionID": "ses_hyIsd4CvB8ez4Uo1CLLE"
+          }
+        }
+      },
+      "completed": 1794268995209,
+      "partialText": [
+        "Isolated B163 streaming response."
+      ]
+    },
+    "chat": {
+      "messageID": "msg_g0VaWY3dW001JWi0M6Og",
+      "sessionID": "ses_hIvvPFyonYSufP98miKR",
+      "error": {
+        "name": "MessageAbortedError",
+        "data": {
+          "message": "session aborted",
+          "cancellation": {
+            "actor": "user",
+            "source": "session.abort",
+            "surface": "session",
+            "requestID": "9fef331d-4b93-4bc5-9fd8-290e8bd65b5f",
+            "reason": "session aborted",
+            "targetSessionID": "ses_hIvvPFyonYSufP98miKR"
+          }
+        }
+      },
+      "completed": 1794269050695,
+      "partialText": [
+        "Isolated B163 streaming response."
+      ]
+    }
+  },
+  "ordinaryFailure": {
+    "messageID": "msg_hSTYyGm0Ff0ecl0LAOXN",
+    "sessionID": "ses_-zUPTaTSWzzlQCXU7z23",
+    "error": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Error: Task-root activation act_g0VaWPVlL00MZJUnqf6L open assistant msg_hSTYyGm0Ff0ecl0LAOXN identity changed before its next Provider step"
+      }
+    },
+    "completed": 1794267012355,
+    "partialText": [
+      "Isolated streamed model selection observation.",
+      "Isolated streamed model selection observation."
+    ]
+  },
+  "freshWork": {
+    "messageID": "msg_g0VaWaGRU005XNtQg1ln",
+    "sessionID": "ses_hyIsd4CvB8ez4Uo1CLLE",
+    "error": {
+      "name": "MessageAbortedError",
+      "data": {
+        "message": "session aborted",
+        "cancellation": {
+          "actor": "user",
+          "source": "session.abort",
+          "surface": "session",
+          "requestID": "e969bd7c-3f9a-4e3f-8619-bba80bc35e1a",
+          "reason": "session aborted",
+          "targetSessionID": "ses_hyIsd4CvB8ez4Uo1CLLE"
+        }
+      }
+    },
+    "completed": 1794269578479,
+    "partialText": [
+      "Isolated B163 streaming response."
+    ]
+  },
+  "clipboard": {
+    "matchingPersistedReason": "Operator stopped the active Mission from the composer",
+    "matchingPersistedEnvelope": {
+      "name": "MessageAbortedError",
+      "data": {
+        "message": "Operator stopped the active Mission from the composer",
+        "cancellation": {
+          "actor": "user",
+          "source": "mission.abort",
+          "surface": "overlay.composer_stop",
+          "requestID": "e2b199e2-92bc-4411-a02f-beb355cd6b84",
+          "reason": "Operator stopped the active Mission from the composer",
+          "targetSessionID": "ses_-zUPTRtjPzzKyfj46TJr",
+          "missionID": "wake-2481db2bd733f4a14bfac531d7c02235"
+        }
+      }
+    }
+  },
+  "localStreams": [
+    {
+      "id": 1,
+      "kind": "memory",
+      "label": "Work",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 2,
+      "kind": "prompt",
+      "label": "Work",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 2,
+      "label": "Work",
+      "transport": "closed"
+    }
+  ]
+}

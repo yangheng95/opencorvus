@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [停止消息卡区分本地化说明和原始诊断](2026-11-10-stopped-message-diagnostic-disclosure.md)
 - [主输入区说明当前停止操作的范围](2026-11-10-composer-stop-scope.md)
 - [Task 跟进模型回执与活动轮次模型](2026-11-10-task-operator-model-and-active-turn.md)
 - [Task 跟进重发复用已接受的消息与轮次](2026-11-10-task-operator-follow-up-replay.md)

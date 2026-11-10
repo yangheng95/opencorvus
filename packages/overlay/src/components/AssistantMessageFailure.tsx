@@ -25,15 +25,13 @@ export function AssistantMessageFailure(props: {
           <CardErrorReasonIndicator reason={props.reason} details={props.details} cancelled={props.cancelled} />
         </Show>
       </div>
-      <div>{props.cancelled ? props.reason : t("card.response_failed_hint")}</div>
-      <Show when={!props.cancelled || props.details}>
-        <Disclosure.Root class="msg-assistant-error__details" size="sm">
-          <Disclosure.Trigger>{t(props.cancelled ? "common.details" : "card.error_reason_title")}</Disclosure.Trigger>
-          <Disclosure.Content>
-            <pre>{props.cancelled ? props.details : [props.reason, props.details].filter(Boolean).join("\n\n")}</pre>
-          </Disclosure.Content>
-        </Disclosure.Root>
-      </Show>
+      <div>{t(props.cancelled ? "card.cancelled_reason_hint" : "card.response_failed_hint")}</div>
+      <Disclosure.Root class="msg-assistant-error__details" size="sm">
+        <Disclosure.Trigger>{t(props.cancelled ? "common.details" : "card.error_reason_title")}</Disclosure.Trigger>
+        <Disclosure.Content>
+          <pre>{[props.reason, props.details].filter(Boolean).join("\n\n")}</pre>
+        </Disclosure.Content>
+      </Disclosure.Root>
     </div>
   )
 }

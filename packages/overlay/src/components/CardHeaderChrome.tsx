@@ -65,9 +65,11 @@ export function CardErrorReasonIndicator(props: { reason: string; details?: stri
         <Icon name={copyFeedback() === "copied" ? "check" : props.cancelled ? "copy" : "error-reason"} size="medium" />
       </Tooltip.Trigger>
       <Tooltip.Portal>
-        <Tooltip.Content class="card-error-reason-tooltip" data-ui="card-error-reason-tooltip">
-          <strong>{t(props.cancelled ? "card.cancelled_reason_title" : "card.error_reason_title")}</strong>
-          <pre>{props.reason}</pre>
+        <Tooltip.Content class={props.cancelled ? undefined : "card-error-reason-tooltip"} data-ui="card-error-reason-tooltip">
+          <Show when={!props.cancelled}>
+            <strong>{t("card.error_reason_title")}</strong>
+            <pre>{props.reason}</pre>
+          </Show>
           <span data-copy-feedback={copyFeedback() ?? undefined} aria-live="polite">
             {feedbackText()}
           </span>

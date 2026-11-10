@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [停止消息卡本地化和原始诊断证据](2026-11-10-stopped-message-diagnostic-disclosure/README.md)
 - [主输入区停止范围的桌面与执行证据](2026-11-10-composer-stop-scope/README.md)
 - [Task 跟进模型回执与活动轮次模型证据](2026-11-10-task-operator-model-and-active-turn/README.md)
 - [Task 跟进重发复用已接受的消息与轮次证据](2026-11-10-task-operator-follow-up-replay/README.md)
