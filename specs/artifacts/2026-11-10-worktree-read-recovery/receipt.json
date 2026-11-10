@@ -1,0 +1,889 @@
+{
+  "directReads": {
+    "baseline-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "7911525a-9d2b-45fc-bd2d-ccd9a09a9ca9",
+        "asset": "main-B1seUYPE.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "1b29fa36-1c8e-4d0f-9fd0-72549fac851d"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "f4b2d37d-af7f-47e2-b6e7-cdf2b6913f8f",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Workspace",
+            "branch": "review-main",
+            "status": "primary",
+            "removable": false
+          },
+          {
+            "name": "review-managed",
+            "branch": "review-managed",
+            "status": "managed",
+            "removable": true
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "eff5f3b8-7879-4854-a5f3-63ee29987d2b",
+        "connected": 0
+      },
+      "session": {
+        "status": 201,
+        "requestID": "21384457-5adf-476e-9ac3-92f1374b3040",
+        "id": "ses_hrKDqyfNzp6qFGhtEmzE",
+        "title": "Chat",
+        "kind": "assistant",
+        "operation": "coding.chat.session.create"
+      }
+    },
+    "baseline-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "62948d63-a73a-4862-b8f4-8a62884f940b",
+        "asset": "main-B1seUYPE.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "0273efe1-f3ab-4858-820e-67b7b8e71b5b"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "8e0d0676-4fb0-43de-80a1-cee947238105",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Workspace",
+            "branch": "review-main",
+            "status": "primary",
+            "removable": false
+          },
+          {
+            "name": "review-managed",
+            "branch": "review-managed",
+            "status": "managed",
+            "removable": true
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "5a2994be-080b-4924-8148-0d8ac62ebd77",
+        "connected": 0
+      }
+    },
+    "candidate-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "6f4fa73b-5d13-44aa-a608-c219dd8f8b7e",
+        "asset": "main-D8t_pPlT.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "d58a0dea-bdec-489f-9dc3-8cc057b42476"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "5c805e19-fe84-49a0-887e-9ea0b8ad0669",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Workspace",
+            "branch": "review-main",
+            "status": "primary",
+            "removable": false
+          },
+          {
+            "name": "review-managed",
+            "branch": "review-managed",
+            "status": "managed",
+            "removable": true
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "f7cf928c-d6e7-4186-bc4d-ede72cc5dc79",
+        "connected": 0
+      },
+      "session": {
+        "status": 201,
+        "requestID": "9d5503d3-813b-4325-81ac-2e4ddb369358",
+        "id": "ses_hlpMYrcxl7VpWTp7EhOY",
+        "title": "Chat",
+        "kind": "assistant",
+        "operation": "coding.chat.session.create"
+      }
+    },
+    "candidate-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "1ef14027-aeca-4be2-b785-03af5c78b919",
+        "asset": "main-D8t_pPlT.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "e27cb5a9-85ec-4dda-a595-db326c8d6447"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "4bc029f5-de5e-4724-a01e-b6c0014143db",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Workspace",
+            "branch": "review-main",
+            "status": "primary",
+            "removable": false
+          },
+          {
+            "name": "review-managed",
+            "branch": "review-managed",
+            "status": "managed",
+            "removable": true
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "9e69380f-9e3b-4716-9e72-37c2b33ecd3c",
+        "connected": 0
+      }
+    },
+    "candidate-direct-solo-before": {
+      "page": {
+        "status": 200,
+        "requestID": "729490bd-71ed-4697-94e7-5435363ab78f",
+        "asset": "main-D8t_pPlT.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "bff44136-1baf-40d4-857b-1b9a67c77510"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "5e1f5c89-97f9-4de4-9549-cbf754f13e58",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Solo",
+            "branch": "review-solo",
+            "status": "primary",
+            "removable": false
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "aa559df2-dbe8-45ec-8bc4-d8172fe8abdc",
+        "connected": 0
+      },
+      "session": {
+        "status": 201,
+        "requestID": "3b19c3da-594f-43e5-aa34-324a2db2beea",
+        "id": "ses_hTsaL3RNIEIMBGsGEpaB",
+        "title": "Chat",
+        "kind": "assistant",
+        "operation": "coding.chat.session.create"
+      }
+    },
+    "candidate-direct-solo-after": {
+      "page": {
+        "status": 200,
+        "requestID": "913e0a63-2b17-426f-b8b7-0de396280662",
+        "asset": "main-D8t_pPlT.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "b7f68cc1-64a4-45bf-b5e0-25b1bfd5166a"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "f2bbe544-5957-48a1-b571-80536b8cd43b",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Solo",
+            "branch": "review-solo",
+            "status": "primary",
+            "removable": false
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "41c49e0e-d6f1-4756-bafd-d31520fbb0a9",
+        "connected": 0
+      }
+    },
+    "final-direct-before": {
+      "page": {
+        "status": 200,
+        "requestID": "a9d353cd-b0f3-4a48-b350-fc698fefeb81",
+        "asset": "main-BFrU3XO-.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "385795f3-c552-4a0f-a393-2f4c0ed7e09a"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "33ed4b19-6ab2-4828-91d0-6c7f0b7e41e0",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Workspace",
+            "branch": "review-main",
+            "status": "primary",
+            "removable": false
+          },
+          {
+            "name": "review-managed",
+            "branch": "review-managed",
+            "status": "managed",
+            "removable": true
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "cfd8cf76-cf4e-42a0-a111-4b740557d7c4",
+        "connected": 0
+      },
+      "session": {
+        "status": 201,
+        "requestID": "3f9295f0-8f7b-40f9-a661-42b918ed25a6",
+        "id": "ses_hKtUtA2GVBCOgSh2l2to",
+        "title": "Chat",
+        "kind": "assistant",
+        "operation": "coding.chat.session.create"
+      }
+    },
+    "final-direct-after": {
+      "page": {
+        "status": 200,
+        "requestID": "e8b9e36b-f9a3-4fe0-9c88-17852b1574ea",
+        "asset": "main-BFrU3XO-.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "5468ce84-d87d-4cf7-baba-5a1b00dcbaa8"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "17f4beb0-4dc0-4a16-ab66-239d33071f23",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Workspace",
+            "branch": "review-main",
+            "status": "primary",
+            "removable": false
+          },
+          {
+            "name": "review-managed",
+            "branch": "review-managed",
+            "status": "managed",
+            "removable": true
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "c5cead8b-b15e-4a78-bc44-2462c5da76ff",
+        "connected": 0
+      }
+    },
+    "final-direct-solo-before": {
+      "page": {
+        "status": 200,
+        "requestID": "e6f092af-ea8a-40e2-8638-0adb8771cccb",
+        "asset": "main-BFrU3XO-.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "636a643e-96ad-4076-aa01-71df9e57c703"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "d32e7466-128a-45f4-9aab-99f07704d831",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Solo",
+            "branch": "review-solo",
+            "status": "primary",
+            "removable": false
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "f660428e-83e5-4ce8-b4c4-f17e49fa257b",
+        "connected": 0
+      },
+      "session": {
+        "status": 201,
+        "requestID": "45eccd8b-be28-4b4c-b176-4286d07c27ce",
+        "id": "ses_hq6AXZbuvXCyIsqrApsL",
+        "title": "Chat",
+        "kind": "assistant",
+        "operation": "coding.chat.session.create"
+      }
+    },
+    "final-direct-solo-after": {
+      "page": {
+        "status": 200,
+        "requestID": "8fa45cb9-9a90-4cd4-84af-64c2c2e550de",
+        "asset": "main-BFrU3XO-.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "836cfb5b-a4bd-4ead-91f1-9c2befa28c91"
+      },
+      "listing": {
+        "status": 200,
+        "requestID": "6a370852-2b0a-4da9-aae5-e551e140895f",
+        "operation": "project.current.worktrees",
+        "entries": [
+          {
+            "name": "Solo",
+            "branch": "review-solo",
+            "status": "primary",
+            "removable": false
+          }
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "29dc0656-a456-4075-9218-0d8484a76c22",
+        "connected": 0
+      }
+    }
+  },
+  "proxyReads": {
+    "baseline": [
+      {
+        "requestID": "67c72449-f89e-4823-a2a6-0a5ccfea70d4",
+        "time": "2026-11-10T08:53:43.225Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "f2100d07-f410-4b84-9762-cb4ceb1c64c7",
+        "time": "2026-11-10T08:53:55.018Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 3738
+      },
+      {
+        "requestID": "7013a41d-7bdf-408a-8b95-7cb2872a938f",
+        "time": "2026-11-10T08:54:01.888Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "1c065183-d810-41ad-ae11-d295eed11478",
+        "time": "2026-11-10T08:54:05.015Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "e7d06fcd-6cbd-4e69-b694-cd740040283b",
+        "time": "2026-11-10T08:54:08.146Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "093ccd12-294c-4d8e-bdda-5c8e1f62eb40",
+        "time": "2026-11-10T08:54:11.273Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "0cffcb45-8aad-4b3c-b937-c210511a5eb7",
+        "time": "2026-11-10T08:54:27.113Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "4c5d692a-0807-4205-bee6-e4cef1fc2a7b",
+        "time": "2026-11-10T08:54:30.238Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "098508b3-05d8-4432-8b94-891bb3045084",
+        "time": "2026-11-10T08:54:33.366Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      }
+    ],
+    "candidate": [
+      {
+        "requestID": "342206ed-8128-4a0c-be15-6a3a31741937",
+        "time": "2026-11-10T08:59:49.198Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "9abd3416-2d99-4860-bd9b-3f7887adb721",
+        "time": "2026-11-10T09:00:01.899Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 3692
+      },
+      {
+        "requestID": "4b1b5445-6590-466d-a2d9-34a706a25fa9",
+        "time": "2026-11-10T09:00:08.719Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "51ab29c7-44f2-4393-8c4d-f52aeb15ba14",
+        "time": "2026-11-10T09:00:11.851Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "9737dea8-633d-4d2d-b4a9-3acd382f3c5d",
+        "time": "2026-11-10T09:00:14.985Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "2f6b5cc1-e9e2-4466-a3e5-b744c2cc78ca",
+        "time": "2026-11-10T09:00:18.114Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "bae40636-7725-4cd2-8767-91dc9c868f74",
+        "time": "2026-11-10T09:00:33.302Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "3cd68c1f-c905-4282-8358-5991d6ce7dd6",
+        "time": "2026-11-10T09:00:36.441Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "b5df81b4-2ce6-4b54-ae53-55a000a38201",
+        "time": "2026-11-10T09:00:39.613Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "19f255c2-49cb-4e7a-a1ab-4664d01f0a8f",
+        "time": "2026-11-10T09:00:42.734Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "38ff937d-e655-44f1-9600-f04ca2db202b",
+        "time": "2026-11-10T09:01:08.770Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 3999
+      },
+      {
+        "requestID": "9dfaaba4-aaec-413e-9dbe-f59c63bb7547",
+        "time": "2026-11-10T09:01:15.901Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "73e66025-012c-4f79-b8a2-4f9bf4e9e340",
+        "time": "2026-11-10T09:01:19.023Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "dce84420-9b81-495a-80a1-b2681ccb1438",
+        "time": "2026-11-10T09:01:22.161Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "9f5e76a4-25a3-49de-adb2-885cef3ac1db",
+        "time": "2026-11-10T09:01:25.293Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "6e3735e6-fadc-4dbd-a547-77804ec2b88f",
+        "time": "2026-11-10T09:01:28.421Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "3c54ca0c-970c-4b92-bdf5-ab6f2a411a7e",
+        "time": "2026-11-10T09:01:50.290Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      }
+    ],
+    "final": [
+      {
+        "requestID": "a1d77bc6-c780-432d-9380-db8e48a96601",
+        "time": "2026-11-10T09:05:10.524Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "39a919d6-caa8-4375-8769-fb533d570857",
+        "time": "2026-11-10T09:05:18.407Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 3940
+      },
+      {
+        "requestID": "80d36fcb-c64f-4f5d-8e60-7bd4c1166ac9",
+        "time": "2026-11-10T09:05:25.480Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "3e2c7524-6ad8-42bc-9e60-3bd60ce3e450",
+        "time": "2026-11-10T09:05:28.609Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "1468cbdc-b32a-45ed-a4a2-fe1a91bd2553",
+        "time": "2026-11-10T09:05:31.749Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "f6bca45c-0ec3-40a6-8b27-5e3169e6507b",
+        "time": "2026-11-10T09:05:34.874Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "7adac0e4-82f2-439c-9b42-26c389b20815",
+        "time": "2026-11-10T09:05:38.002Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "878a405e-e162-468a-b32e-cbea921cd8e9",
+        "time": "2026-11-10T09:05:55.821Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 5366
+      },
+      {
+        "requestID": "90eb7260-3e84-4b81-8fb5-1fe5dcae078b",
+        "time": "2026-11-10T09:06:04.320Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "943d450e-8b8a-4de6-a581-274de2eac01f",
+        "time": "2026-11-10T09:06:07.457Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "82193304-7ad8-4ff3-8715-dee89bd95590",
+        "time": "2026-11-10T09:06:10.632Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "c6edb0e7-9778-4535-aa8a-54d8ec4b1737",
+        "time": "2026-11-10T09:06:13.763Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "9e186283-9946-4f90-99fa-f3a25f1a82f0",
+        "time": "2026-11-10T09:06:25.509Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "c3782913-5944-454d-82c8-abe0c419941c",
+        "time": "2026-11-10T09:06:28.649Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "631cfea2-c689-448b-aea4-0db95856092c",
+        "time": "2026-11-10T09:06:31.817Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "b752ccb8-8517-4cb5-be6f-2ca9f5b35c0d",
+        "time": "2026-11-10T09:06:34.937Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "a6547db6-d487-41a8-b9af-06dbcfb24b21",
+        "time": "2026-11-10T09:06:38.063Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      },
+      {
+        "requestID": "759fcc49-8bc4-46c9-a5aa-bc0bada66028",
+        "time": "2026-11-10T09:07:21.996Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 416,
+        "delivered": 1,
+        "heldMs": 9875
+      },
+      {
+        "requestID": "499e5405-723f-45e7-b2f1-e9122c03936c",
+        "time": "2026-11-10T09:07:33.601Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 416,
+        "delivered": 416,
+        "heldMs": 4781
+      },
+      {
+        "requestID": "265b5692-916c-4ca5-a5cb-2130306a758c",
+        "time": "2026-11-10T09:07:51.065Z",
+        "path": "/project/current/worktrees",
+        "status": 200,
+        "mode": "restore"
+      }
+    ]
+  },
+  "gitFacts": [
+    {
+      "project": "Workspace",
+      "branch": "review-main",
+      "originalCommit": "cf6f2759ad4fc1a3a87a625cb741498ac7256f52",
+      "source": "review-note.txt",
+      "originalText": "Isolated Git worktree review."
+    },
+    {
+      "project": "managed",
+      "branch": "review-managed",
+      "originalCommit": "cf6f2759ad4fc1a3a87a625cb741498ac7256f52",
+      "source": "review-note.txt",
+      "originalText": "Isolated Git worktree review."
+    },
+    {
+      "project": "Solo",
+      "branch": "review-solo",
+      "originalCommit": "962f7a8125a52cbf76cd297c43c591c061cbe7f3",
+      "source": "solo-note.txt",
+      "originalText": "Only a primary worktree."
+    }
+  ],
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "sessions": 1,
+      "counts": {
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "sessions": 2,
+      "counts": {
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "sessions": 2,
+      "counts": {
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b201-baseline",
+      "apiPort": 39550,
+      "proxyPort": 39551,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b201-candidate",
+      "apiPort": 39552,
+      "proxyPort": 39553,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b201-final",
+      "apiPort": 39554,
+      "proxyPort": 39555,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  }
+}

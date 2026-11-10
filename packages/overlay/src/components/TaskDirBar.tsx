@@ -3,6 +3,7 @@
 
 import { Popover } from "./ui/Popover"
 import {
+  batch,
   createEffect,
   createMemo,
   createResource,
@@ -245,22 +246,22 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   let commitMessageGenerationKey = ""
   const [worktrees, setWorktrees] = createSignal<ProjectWorktreeInfo[]>([])
   const [worktreeDirectory, setWorktreeDirectory] = createSignal("")
-  const [error, setError] = createSignal("")
+  const [worktreeRead, setWorktreeRead] = createSignal<{ loading: boolean; failure?: { cause: unknown } }>({ loading: false })
+  let worktreeRefreshButton: HTMLButtonElement | undefined
+  let worktreeReadFeedback: HTMLDivElement | undefined
   const [operationError, setOperationError] = createSignal("")
   const [deletingWorktrees, setDeletingWorktrees] = createSignal(new Set<string>())
   const [bulkDeleteOperationDirectory, setBulkDeleteOperationDirectory] = createSignal("")
-  const [refreshingWorktreeDirectory, setRefreshingWorktreeDirectory] = createSignal("")
   let worktreeProjectionRetryTimer: ReturnType<typeof setTimeout> | undefined
   let worktreeProjectionGeneration = 0
   const visibleWorktrees = createMemo(() => worktrees().filter((item) => item.status !== "primary"))
   const removableWorktrees = createMemo(() => visibleWorktrees().filter((item) => item.removable))
   const bulkDeleteBusy = createMemo(() => bulkDeleteBusyFor(worktreeDirectory()))
-  const refreshBusy = createMemo(() => {
-    const refreshingDirectory = refreshingWorktreeDirectory()
-    return refreshingDirectory.length > 0 && refreshingDirectory === dir().trim()
-  })
   const canDeleteAll = createMemo(() => removableWorktrees().length > 0 && !bulkDeleteBusy())
   const vcs = createMemo(projectVcsInfo)
+  const canReadWorktrees = () => appStore.connected && !!dir().trim() && vcs()?.initialized === true
+  const worktreeRefreshLabel = () =>
+    t(worktreeRead().loading ? "worktree.loading" : worktreeRead().failure ? "worktree.retry" : "worktree.refresh")
   const gitTone = createMemo(() => vcsToneFor(vcs()))
   const gitArrows = createMemo(() => vcsArrowsFor(vcs()))
   const gitStatusLabel = createMemo(() => {
@@ -454,7 +455,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     () =>
       hasGoalInformation() ||
       taskInformationShortcuts().length > 0 ||
-      visibleWorktrees().length > 0 ||
+      canReadWorktrees() ||
       resourceToolShortcuts().length > 0,
   )
 
@@ -1058,37 +1059,47 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const selectionEpoch = options.selectionEpoch ?? boardStore.selectEpoch
     if (!ownsAuthority(authority) || boardStore.selectEpoch !== selectionEpoch) return
     const projectDirectory = dir().trim()
-    if (!appStore.connected || !projectDirectory || vcs()?.initialized !== true) {
-      invalidateWorktreeProjection()
-      setWorktrees([])
-      setWorktreeDirectory("")
-      setError("")
+    if (!canReadWorktrees()) {
+      clearWorktreeProjection()
       return
     }
     clearWorktreeProjectionRetry()
     const requestGeneration = ++worktreeProjectionGeneration
+    setWorktreeRead((current) => ({ ...current, loading: true }))
     try {
       const items = await loadProjectWorktrees(projectDirectory, authority)
       if (!ownsWorktreeProjection(requestGeneration, projectDirectory, authority, selectionEpoch)) return
-      setWorktrees(items)
-      setWorktreeDirectory(projectDirectory)
-      if (error()) {
+      if (worktreeRead().failure) {
         AppLog.info("ui", "Project worktree projection recovered", { directory: projectDirectory })
+        if (
+          worktreeReadFeedback?.isConnected &&
+          worktreeRefreshButton?.isConnected &&
+          worktreeReadFeedback.contains(worktreeReadFeedback.ownerDocument.activeElement)
+        ) {
+          worktreeRefreshButton.focus()
+        }
       }
-      setError("")
-    } catch (err) {
+      batch(() => {
+        setWorktrees(items)
+        setWorktreeDirectory(projectDirectory)
+        setWorktreeRead({ loading: false })
+      })
+    } catch (cause) {
       if (!ownsWorktreeProjection(requestGeneration, projectDirectory, authority, selectionEpoch)) return
-      const message = err instanceof Error ? err.message : String(err)
-      if (worktreeDirectory() !== projectDirectory) {
-        setWorktrees([])
-        setWorktreeDirectory("")
-      }
-      if (error() !== message) {
-        setError(message)
+      const message = errorMessage(cause)
+      const previous = worktreeRead().failure
+      if (!previous || errorMessage(previous.cause) !== message) {
         AppLog.warn("ui", "Failed to load project worktrees", { directory: projectDirectory, error: message })
       }
+      batch(() => {
+        if (worktreeDirectory() !== projectDirectory) {
+          setWorktrees([])
+          setWorktreeDirectory("")
+        }
+        setWorktreeRead({ loading: false, failure: { cause } })
+      })
       scheduleWorktreeProjectionRetry(requestGeneration, projectDirectory, authority, selectionEpoch)
-      if (options.requireFresh) throw err
+      if (options.requireFresh) throw cause
     }
   }
 
@@ -1101,6 +1112,15 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   function invalidateWorktreeProjection(): void {
     worktreeProjectionGeneration += 1
     clearWorktreeProjectionRetry()
+  }
+
+  function clearWorktreeProjection(): void {
+    invalidateWorktreeProjection()
+    batch(() => {
+      setWorktrees([])
+      setWorktreeDirectory("")
+      setWorktreeRead({ loading: false })
+    })
   }
 
   function ownsWorktreeProjection(
@@ -1140,26 +1160,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     return directory.length > 0 && bulkDeleteOperationDirectory() === directory
   }
 
-  async function refreshWorktrees(event: MouseEvent): Promise<void> {
-    const authority = captureApiAuthority()
-    const selectionEpoch = boardStore.selectEpoch
+  function refreshWorktrees(event: MouseEvent): void {
     event.stopPropagation()
-    const projectDirectory = dir().trim()
-    if (!projectDirectory || refreshingWorktreeDirectory() === projectDirectory) return
-    setRefreshingWorktreeDirectory(projectDirectory)
-    setOperationError("")
-    try {
-      await syncWorktrees({ requireFresh: true, authority, selectionEpoch })
-    } catch (err) {
-      if (ownsProject(authority, projectDirectory, selectionEpoch))
-        setOperationError(t("worktree.refresh_failed", { error: errorMessage(err) }))
-    } finally {
-      if (
-        ownsProject(authority, projectDirectory, selectionEpoch) &&
-        refreshingWorktreeDirectory() === projectDirectory
-      )
-        setRefreshingWorktreeDirectory("")
-    }
+    if (!canReadWorktrees() || worktreeRead().loading || bulkDeleteBusy()) return
+    void syncWorktrees()
   }
 
   async function handleInitGit(event: MouseEvent): Promise<void> {
@@ -1315,9 +1319,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setLocalEnvironmentFeedback(undefined)
     setDeletingWorktrees(new Set<string>())
     setBulkDeleteOperationDirectory("")
-    setRefreshingWorktreeDirectory("")
     setOperationError("")
-    invalidateWorktreeProjection()
+    clearWorktreeProjection()
     setLocalMenuOpen(false)
     closeBranchMenu()
     setBranchError("")
@@ -1327,9 +1330,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionError("")
     setGitActionNotice("")
     commitMessageGenerationKey = ""
-    setWorktrees([])
-    setWorktreeDirectory("")
-    setError("")
   })
 
   onCleanup(invalidateWorktreeProjection)
@@ -1353,16 +1353,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   createEffect(() => {
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
-    const eligible = runtimePanelOpen() && appStore.connected && vcs()?.initialized === true
-    dir()
+    const eligible = runtimePanelOpen() && canReadWorktrees()
     untrack(() => {
       if (eligible) void syncWorktrees({ authority, selectionEpoch })
-      else {
-        invalidateWorktreeProjection()
-        setWorktrees([])
-        setWorktreeDirectory("")
-        setError("")
-      }
+      else clearWorktreeProjection()
     })
   })
 
@@ -1641,12 +1635,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 <span>{operationError()}</span>
               </div>
             </Show>
-            <Show when={error()}>
-              <div class="project-runtime-operation-error" data-ui="project-worktree-load-error" role="alert">
-                <Icon name="status-failed" />
-                <span>{error()}</span>
-              </div>
-            </Show>
           </div>
           <Show when={subagentRecords().length > 0}>
             <section
@@ -1738,7 +1726,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   </Button>
                 )}
               </For>
-              <Show when={visibleWorktrees().length > 0}>
+              <Show when={canReadWorktrees()}>
                 <Section
                   title={t("project_runtime.category_workspace")}
                   indicatorPosition="end"
@@ -1754,17 +1742,19 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                       </span>
                       <div class="project-worktree-head-actions">
                         <Button
+                          ref={worktreeRefreshButton}
                           type="button"
                           variant="ghost"
                           size="icon"
                           tone="neutral"
                           data-chrome="icon-action"
                           data-ui="project-worktree-refresh"
-                          data-busy={refreshBusy() ? "true" : "false"}
-                          disabled={refreshBusy() || bulkDeleteBusy()}
-                          title={refreshBusy() ? t("common.loading") : t("common.refresh")}
-                          aria-label={refreshBusy() ? t("common.loading") : t("common.refresh")}
-                          onClick={(event) => void refreshWorktrees(event)}
+                          data-busy={worktreeRead().loading ? "true" : "false"}
+                          aria-disabled={worktreeRead().loading || bulkDeleteBusy() || undefined}
+                          aria-busy={worktreeRead().loading || undefined}
+                          title={worktreeRefreshLabel()}
+                          aria-label={worktreeRefreshLabel()}
+                          onClick={refreshWorktrees}
                         >
                           <Icon name="refresh" />
                         </Button>
@@ -1785,6 +1775,26 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                         </Button>
                       </div>
                     </div>
+                    <Show when={worktreeRead().failure}>
+                      {(failure) => (
+                        <Feedback
+                          ref={worktreeReadFeedback}
+                          tone="error"
+                          data-ui="project-worktree-load-error"
+                          details={formatErrorDetails(failure().cause)}
+                        >
+                          {t("worktree.read_failed")}
+                          <Show when={visibleWorktrees().length > 0}>
+                            <p>{t("worktree.last_confirmed")}</p>
+                          </Show>
+                        </Feedback>
+                      )}
+                    </Show>
+                    <Show when={!worktreeRead().failure && visibleWorktrees().length === 0}>
+                      <p class="empty-hint" role="status">
+                        {t(worktreeDirectory() === dir().trim() ? "worktree.empty" : "worktree.loading")}
+                      </p>
+                    </Show>
                     <div class="project-worktree-list project-runtime-bounded-list" data-runtime-list="worktrees">
                       <For each={visibleWorktrees()}>
                         {(item) => (

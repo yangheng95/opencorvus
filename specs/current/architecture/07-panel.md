@@ -4060,6 +4060,15 @@ Unavailable execution models do not block this read. It retains the strict
 primary/managed projection, explicit non-Git prerequisite error and current
 owned-prompt protection; deletion and cleanup keep their existing runtime
 authority and revalidate their actual ownership at mutation time.
+An initialized Git project keeps its Worktree section available during the
+first read, when only the primary worktree is registered, and after a read
+failure. The same focusable control refreshes or retries the current read.
+Manual and automatic reads share one diagnostic and accepted list; an accepted
+response clears that diagnostic. A failed refresh marks retained rows as the
+last confirmed list and preserves the original error in Details. Mutation
+receipts retain their separate ownership.
+An accepted read returns focus from its retiring diagnostic to the same
+Refresh control only if that diagnostic still owns focus.
 
 Environment Information, Goals, Requirements, Workspace, and Tools retain one
 aligned title structure. Peer classifications share one compact 32px title-row

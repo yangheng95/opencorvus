@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [环境信息的工作树读取与恢复](2026-11-10-worktree-read-recovery.md)
 - [能力分配保存保留原复选框和键盘位置](2026-11-10-capability-assignment-save-focus.md)
 - [目录后台刷新保留诊断和键盘位置](2026-11-10-explorer-directory-refresh-diagnostics.md)
 - [首次文件读取失败后进入重试](2026-11-10-file-editor-first-read-error-focus.md)
