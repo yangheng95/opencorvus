@@ -15,16 +15,15 @@ import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { workLedgerProject } from "../../services/work-ledger"
-import { projectLedgerDisplayName } from "../../utils/project-directory"
 import { Icon } from "../ui/Icon"
 import { Button } from "../ui/Button"
 import { TextField } from "../ui/TextField"
 import { Switch } from "../ui/Switch"
 import { Feedback } from "../ui/Feedback"
-import { Disclosure } from "../ui/Disclosure"
-import { SettingsGroup, SettingsPanel, SettingsReferenceList, SettingsRow } from "./layout"
+import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 import { ServerConnectionSettingsGroup } from "./ServerConnectionSettingsGroup"
 import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
+import { SettingsProjectScope } from "./SettingsProjectScope"
 
 function configuredProxy(): {
   llmProvider: boolean
@@ -98,12 +97,6 @@ export default function NetworkPanel() {
   const busy = () => !!write() || testing() || reloadingProxy()
   const proxyConfigured = createMemo(() => !!(appStore.config as any)?.network?.proxy)
   const directory = createMemo(() => activeProjectDirectory().trim())
-  const projectLabel = () => projectLedgerDisplayName({
-    directory: directory(),
-    customName: workLedgerProject(directory())?.title,
-    unknownName: t("task.project.unknown"),
-    implicitProjectName: t("work_ledger.implicit_project"),
-  })
   let operationGeneration = 0
   let draftGeneration = 0
   // A newer authored draft stays independent of the last accepted configuration.
@@ -365,14 +358,16 @@ export default function NetworkPanel() {
       <SettingsGroup
         title={t("network.proxy.title")}
         description={directory() ? (
-          <Disclosure.Root>
-            <Disclosure.Trigger ref={(element) => (projectScopeTrigger = element)}>
-              {t("network.proxy.project_scope", { project: projectLabel() })}
-            </Disclosure.Trigger>
-            <Disclosure.Content>
-              <SettingsReferenceList values={[directory()]} />
-            </Disclosure.Content>
-          </Disclosure.Root>
+          <Show when={directory()} keyed>
+            {(currentDirectory) => (
+              <SettingsProjectScope
+                directory={currentDirectory}
+                customName={workLedgerProject(currentDirectory)?.title}
+                labelKey="network.proxy.project_scope"
+                triggerRef={(element) => (projectScopeTrigger = element)}
+              />
+            )}
+          </Show>
         ) : undefined}
       >
         <Show

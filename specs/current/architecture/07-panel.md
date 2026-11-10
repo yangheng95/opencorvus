@@ -3239,9 +3239,10 @@ The Save button stays focusable while busy, with the existing submission guard
 admitting one Save at a time.
 
 The separate Proxy section uses the current project directory that owns the
-existing config writes. It names that project before the operator edits any
-field and exposes the full directory in its scope disclosure. When no project
-is active, the section offers the existing workspace folder selection; client
+existing config writes. It names that project and shows a short parent path
+before the operator edits any field. The shared settings scope disclosure
+exposes the full directory. When no project is active, the section offers the
+existing workspace folder selection; client
 connection settings remain available. Confirmation stays on Network and focuses
 the selected project's scope disclosure when focus still belongs to the action.
 Cancellation returns focus to the folder button under the same rule. Network

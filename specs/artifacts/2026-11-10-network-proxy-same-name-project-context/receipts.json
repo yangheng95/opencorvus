@@ -1,0 +1,280 @@
+{
+  "before": {
+    "page": {
+      "status": 200,
+      "requestID": "f833268b-4fef-4b41-b7b6-cfcf771d369a",
+      "asset": "main-gL-u6En-.js"
+    },
+    "projects": {
+      "alpha/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "86de77b8-5aaa-4c82-9e38-9ae16e8b68f1",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "5f544d86-15bc-47d1-bd26-f087335faf11",
+          "exactDirectory": true,
+          "projectId": "prj_heve8yTBVXVcNDtmSMWM"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "8c3b1e31-debd-434b-a2dd-b8c391e5db24",
+          "proxy": {
+            "url": "http://127.0.0.1:31927",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "9a920c49-5e18-4c1b-aa0e-36c1f39d226f",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "beta/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "0a7756bc-d0ca-4ab2-b0bd-4bffd0db9fbf",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "b12ff6cc-5241-4922-8b50-3ab68e76a757",
+          "exactDirectory": true,
+          "projectId": "prj_h4hWXo55KfBA51Pgo5A5"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "63f8146c-7f31-443b-8b92-a6b9aac49e35",
+          "proxy": {
+            "url": "http://127.0.0.1:31927",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "88747f2d-5cd6-4c90-9beb-e9efee3f2025",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "72761923-69d9-4923-8af1-2dd030dc2cdd",
+      "visible": 88,
+      "connected": 0
+    },
+    "mcpRegression": {
+      "status": 200,
+      "requestID": "ef3d25bc-05d7-441a-9cca-a8ca0ebef055",
+      "states": {
+        "b177-beta-fixture": "disabled"
+      }
+    }
+  },
+  "after": {
+    "page": {
+      "status": 200,
+      "requestID": "0ace3206-420b-4e0a-b363-9ac66d082b7c",
+      "asset": "main-gL-u6En-.js"
+    },
+    "projects": {
+      "alpha/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "8ee4ebc0-0979-4a40-a51d-3ed746fbb30f",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "46dc9629-f762-4058-b797-8cff17972dc0",
+          "exactDirectory": true,
+          "projectId": "prj_heve8yTBVXVcNDtmSMWM"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "9f86b52a-d94f-4bdb-a415-27a70a794fb5",
+          "proxy": {
+            "url": "http://127.0.0.1:31927",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "c22f2292-9b33-4ea1-9e61-27e45b0086c7",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "beta/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "36b70547-7fc3-490b-b53a-bbacdcbe9d77",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "3a4557d0-7685-46c4-96b2-9d38eb7d7fea",
+          "exactDirectory": true,
+          "projectId": "prj_h4hWXo55KfBA51Pgo5A5"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "ea4bad81-10d1-4f5f-a74e-11ae8776200b",
+          "proxy": {
+            "url": "http://127.0.0.1:31927",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "20559dc8-c84d-43d6-b03f-16087a1d8d92",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "feee99b7-0588-4c51-838c-a91c146ca1d2",
+      "visible": 88,
+      "connected": 0
+    },
+    "mcpRegression": {
+      "status": 200,
+      "requestID": "20bea223-6961-402d-ba19-ac196dad6575",
+      "states": {
+        "b177-beta-fixture": "disabled"
+      }
+    }
+  },
+  "baseline": {
+    "asset": "main-D6vzJjeu.js",
+    "status": 200,
+    "projects": [
+      {
+        "project": "alpha/Workspace",
+        "projectStatus": 200,
+        "projectRequestID": "c1da249a-c69d-4ee0-bcc3-4f800e71669c",
+        "projectId": "prj_heve8yTBVXVcNDtmSMWM",
+        "exactDirectory": true,
+        "configStatus": 200,
+        "configRequestID": "b5be61a0-d949-45ad-b2be-71dfd2ead340",
+        "proxyUrl": "http://127.0.0.1:31927",
+        "llmProvider": false,
+        "webResearch": false
+      },
+      {
+        "project": "beta/Workspace",
+        "projectStatus": 200,
+        "projectRequestID": "8faed814-3788-4153-8c87-035afca17a9c",
+        "projectId": "prj_h4hWXo55KfBA51Pgo5A5",
+        "exactDirectory": true,
+        "configStatus": 200,
+        "configRequestID": "64769092-23dd-40e9-81df-1a810686ee1d",
+        "proxyUrl": "http://127.0.0.1:31927",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    ]
+  },
+  "candidateTransport": [
+    {
+      "time": "2026-11-10T05:40:33.380Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "beta/Workspace",
+      "status": 200,
+      "requestID": "5a495112-6326-433c-938a-a6ccde632ad1",
+      "mode": "restore"
+    },
+    {
+      "time": "2026-11-10T05:40:58.033Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "beta/Workspace",
+      "status": 200,
+      "requestID": "6c91c991-855a-43f7-aff9-9b54707676f1",
+      "mode": "truncate"
+    },
+    {
+      "time": "2026-11-10T05:40:58.037Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "beta/Workspace",
+      "status": 200,
+      "requestID": "6c91c991-855a-43f7-aff9-9b54707676f1",
+      "mode": "truncate",
+      "bytes": 1485,
+      "delivered": 1
+    },
+    {
+      "time": "2026-11-10T05:41:17.650Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "beta/Workspace",
+      "status": 200,
+      "requestID": "83e73222-8eec-438c-a03c-b0ac89e05163",
+      "mode": "restore"
+    }
+  ],
+  "profiles": {
+    "baseline": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    }
+  }
+}

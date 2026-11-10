@@ -6,6 +6,7 @@ import { Disclosure } from "../ui/Disclosure"
 interface ProjectScopeProps {
   directory: string
   customName?: string
+  labelKey?: "settings.product.scope_project" | "network.proxy.project_scope"
 }
 
 export function SettingsProjectScopeLabel(props: ProjectScopeProps) {
@@ -23,7 +24,7 @@ export function SettingsProjectScopeLabel(props: ProjectScopeProps) {
   })
   return (
     <span class="settings-project-scope-label">
-      <strong>{t("settings.product.scope_project", { project: label().name })}</strong>
+      <strong>{t(props.labelKey ?? "settings.product.scope_project", { project: label().name })}</strong>
       <Show when={label().parent}>
         {(path) => (
           <span class="settings-project-scope-parent">
@@ -44,7 +45,7 @@ export function SettingsProjectScope(props: ProjectScopeProps & {
   return (
     <Disclosure.Root class={props.class ? `settings-project-scope ${props.class}` : "settings-project-scope"}>
       <Disclosure.Trigger ref={props.triggerRef}>
-        <SettingsProjectScopeLabel directory={props.directory} customName={props.customName} />
+        <SettingsProjectScopeLabel directory={props.directory} customName={props.customName} labelKey={props.labelKey} />
       </Disclosure.Trigger>
       <Disclosure.Content>
         <code class="settings-project-scope-path">{props.directory}</code>
