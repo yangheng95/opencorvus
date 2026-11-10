@@ -9,6 +9,8 @@ import {
   For,
   onCleanup,
   Show,
+  untrack,
+  type Accessor,
   type ComponentProps,
   type JSX,
 } from "solid-js"
@@ -1033,6 +1035,11 @@ export function WorkLedger(props: WorkLedgerProps) {
 
   function renderGroups(): void {
     const sort = settingsStore.workLedgerSort
+    const active = projectsScrollRef?.ownerDocument.activeElement
+    const focusedControl = active instanceof HTMLElement && projectsScrollRef.contains(active) &&
+      active.matches('[data-ui="ledger-row-main"], [data-ui="work-row-actions-menu-trigger"]')
+      ? { element: active, authority: untrack(captureApiAuthority) }
+      : undefined
     const grouped = new Map<string, WorkLedgerGroup>()
     for (const sourceRow of loadedRows) {
       const row = renderWorkLedgerRow(sourceRow)
@@ -1078,6 +1085,13 @@ export function WorkLedger(props: WorkLedgerProps) {
           { key: "renderKey", merge: true },
         ),
       )
+    })
+    if (focusedControl) queueMicrotask(() => {
+      const { element, authority } = focusedControl
+      const owner = element.ownerDocument
+      if (!disposed && isApiAuthorityCurrent(authority) && owner.activeElement === owner.body) {
+        focusLedgerControl(element)
+      }
     })
   }
 
@@ -1473,16 +1487,16 @@ export function WorkLedger(props: WorkLedgerProps) {
   )
 
   const projectGroupView = (
-    group: WorkLedgerGroup,
+    group: Accessor<WorkLedgerGroup>,
     dataUi: string,
     showProjectHeader: boolean,
     anonymousProjectHeader = false,
   ) => (
     <WorkLedgerProjectGroupView
-      group={group}
+      group={group()}
       conversationOrdinal={(row) => conversationOrdinals().get(rowKey(row))}
       dataUi={dataUi}
-      directoryHint={projectDirectoryHints().get(group.directory)}
+      directoryHint={projectDirectoryHints().get(group().directory)}
       directoryCollapse={directoryCollapse}
       selected={selected}
       onSelect={selectRow}
@@ -1507,7 +1521,7 @@ export function WorkLedger(props: WorkLedgerProps) {
       onArchiveChat={props.onArchiveChat}
       showProjectHeader={showProjectHeader}
       anonymousProjectHeader={anonymousProjectHeader}
-      revealItem={dataUi === "work-ledger-recents" ? undefined : revealRow(group)}
+      revealItem={dataUi === "work-ledger-recents" ? undefined : revealRow(group())}
       onRevealReady={finishLocate}
     />
   )
@@ -1537,7 +1551,7 @@ export function WorkLedger(props: WorkLedgerProps) {
             <For each={pinnedProjects()}>
               {(group) =>
                 projectGroupView(
-                  group,
+                  () => group,
                   "work-ledger-pinned-project-group",
                   true,
                   isImplicitProjectDirectory(group.directory),
@@ -1763,7 +1777,7 @@ export function WorkLedger(props: WorkLedgerProps) {
         >
           {(group) =>
             projectGroupView(
-              group,
+              () => group,
               "work-ledger-project-group",
               settingsStore.workLedgerOrganization === "by-project",
               isImplicitProjectDirectory(group.directory),
@@ -1773,7 +1787,7 @@ export function WorkLedger(props: WorkLedgerProps) {
         <Show when={settingsStore.workLedgerOrganization === "by-project" && recentGroup().items.length > 0}>
           <section class="work-ledger-recents" aria-label={t("work_ledger.recents")}>
             <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.recents")}</div>
-            {projectGroupView(recentGroup(), "work-ledger-recents", false)}
+            {projectGroupView(recentGroup, "work-ledger-recents", false)}
           </section>
         </Show>
       </div>

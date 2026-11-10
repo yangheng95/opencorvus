@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [侧栏工作项置顶后可继续键盘操作](records/2026-11/2026-11-10-sidebar-item-pin-focus.md)
 - [从侧栏改名后继续当前会话](records/2026-11/2026-11-10-sidebar-rename-actions.md)
 - [侧栏中的同名会话可以区分](records/2026-11/2026-11-10-sidebar-duplicate-conversation-labels.md)
 - [定时任务草稿在应用内导航后可继续编辑](records/2026-11/2026-11-10-scheduled-authoring-draft-navigation.md)

@@ -5341,6 +5341,10 @@ Chat and Mission sidebar action menus can rename the targeted item while
 keeping the current conversation selected. The shared rename dialog returns
 focus to the originating row if it remains available. The row's double-click
 and the selected item's header continue to use the same rename writers.
+When the sidebar accepts a new projection and moves a focused work row, the
+same visible row control receives focus if the move dropped it to the page.
+Recents keeps its rows mounted across projection updates for the same loaded
+items. The action menu still owns its usual close and focus return.
 
 `sessionInvocationTopology` is an observation of real Session ownership. Nodes carry
 the exact projected `agent`, session kind, parent session, dispatch lineage,
