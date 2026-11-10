@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [技能库来源提示与双语实页证据](2026-11-10-skill-library-source-guidance/README.md)
 - [MCP 工作区选择实页证据](2026-11-10-mcp-choose-project-first/README.md)
 - [MCP 实际项目身份实页证据](2026-11-10-mcp-active-project-context/README.md)
 - [MCP 连接分配导航实页证据](2026-11-10-mcp-assignment-navigation/README.md)

@@ -1,0 +1,39 @@
+{
+  "baselineAsset": "main-S31-lZOu.js",
+  "candidateAsset": "main-SOW9noYj.js",
+  "finalPublicDictionaries": {
+    "enUS": 200,
+    "zhCN": 200
+  },
+  "baseline": {
+    "status": 200,
+    "requestID": "849a5d7a-beb4-4b21-a0d8-0abc0fc84898",
+    "count": 6,
+    "name": "browser-use",
+    "sourceType": "builtin"
+  },
+  "finalBeforeUI": {
+    "status": 200,
+    "requestID": "e5aff38f-ce08-48ce-bc1d-e942a6952a27",
+    "count": 6,
+    "name": "browser-use",
+    "sourceType": "builtin"
+  },
+  "finalAfterUI": {
+    "status": 200,
+    "requestID": "17e04e38-9459-400f-931d-c1714162a53e",
+    "count": 6,
+    "name": "browser-use",
+    "sourceType": "builtin"
+  },
+  "profiles": {
+    "integrity": "ok",
+    "engineTask": 0,
+    "session": 0,
+    "providerUsageEvent": 0
+  },
+  "providerCatalog": {
+    "visible": 88,
+    "connected": 0
+  }
+}

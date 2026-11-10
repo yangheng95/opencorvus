@@ -1108,12 +1108,12 @@ function SharedResourceManagementPanel(props: {
                   />
                 </TextField.Root>
                 <TextField.Root as="label">
-                  <TextField.Label>{t("skill.value")}</TextField.Label>
+                  <TextField.Label>{t(`skill.source_field.${skillForm.type}.label`)}</TextField.Label>
                   <TextField.Root variant="group">
                     <TextField.Input
                       type="text"
                       value={skillForm.value}
-                      placeholder={t("skill.value_placeholder")}
+                      placeholder={t(`skill.source_field.${skillForm.type}.placeholder`)}
                       onInput={(e) => setSkillForm("value", e.currentTarget.value)}
                     />
                     <Show when={skillForm.type === "path" && canPickSkillDirectory()}>

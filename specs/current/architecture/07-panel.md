@@ -5450,6 +5450,10 @@ shared panel owns section spacing and rows own list density; individual panels
 do not restyle that hierarchy. Settings use flat neutral surfaces, including
 About and Usage. Semantic colors remain for status and analytical graphics.
 Network and Provider result/error notices use the shared Feedback primitive.
+Skill Library labels use the interface language. The install form derives its
+field label and example from the selected source: local directory, remote skill
+index directory, or Git repository. Catalog identities and supplied descriptions
+retain their original content.
 Project MCP status uses one scoped read at a time for passive observation; an
 explicit readback may retire it. Read failures belong beside Server connections
 and clear on the next accepted success. Connection or configuration notices
