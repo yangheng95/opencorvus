@@ -15,6 +15,7 @@ export interface LedgerListProps<T> {
   onRetry?: () => void
   revealItem?: T
   onRevealReady?: () => void
+  onExpansionFocus?: (firstRevealed: T) => void
   children: (item: T) => JSX.Element
 }
 
@@ -88,6 +89,7 @@ export function LedgerList<T>(props: LedgerListProps<T>) {
           dataUi="ledger-progressive-list"
           revealItem={props.revealItem}
           onRevealReady={props.onRevealReady}
+          onExpansionFocus={props.onExpansionFocus}
         >
           {(item) => props.children(item)}
         </ProgressiveList>

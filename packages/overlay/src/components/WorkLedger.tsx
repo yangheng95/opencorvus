@@ -228,6 +228,24 @@ function kindIcon(row: WorkLedgerItemRow): IconName {
   return "tasks"
 }
 
+function projectGroupControl(region: HTMLElement | null | undefined, directory: string): HTMLElement | null {
+  const key = projectDirectoryKey(directory)
+  const group = Array.from(region?.querySelectorAll<HTMLElement>(".project-group[data-project-directory]") ?? [])
+    .find((element) => projectDirectoryKey(element.dataset.projectDirectory ?? "") === key)
+  return group?.querySelector<HTMLElement>('[data-ui="project-group-select"]') ?? null
+}
+
+function focusLedgerControl(target: HTMLElement | null): boolean {
+  if (
+    !target?.isConnected ||
+    target.matches(":disabled") ||
+    target.getClientRects().length === 0 ||
+    target.closest('[hidden], [inert], [aria-hidden="true"]')
+  ) return false
+  target.focus()
+  return target.ownerDocument.activeElement === target
+}
+
 function kindLabel(row: WorkLedgerItemRow): string {
   if (row.kind === "mission") return t("work_ledger.kind.mission")
   if (row.kind === "chat") return conversationExperienceLabel(row.experience)
@@ -1171,10 +1189,7 @@ export function WorkLedger(props: WorkLedgerProps) {
     const ordinaryList = projectsScrollRef?.querySelector<HTMLElement>('[data-ui="ledger-list"]')
     let target: HTMLElement | null = null
     if (request.pinned || request.organization === "by-project") {
-      const projectElement = Array.from(
-        projectsScrollRef?.querySelectorAll<HTMLElement>(".project-group[data-project-directory]") ?? [],
-      ).find((element) => projectDirectoryKey(element.dataset.projectDirectory ?? "") === projectDirectoryKey(group.directory))
-      target = projectElement?.querySelector<HTMLElement>('[data-ui="project-group-select"]') ?? null
+      target = projectGroupControl(projectsScrollRef, group.directory)
     } else {
       const itemKeys = new Set(group.items.map(rowKey))
       const row = Array.from(ordinaryList?.querySelectorAll<HTMLElement>('[data-ui="work-ledger-row"]') ?? [])
@@ -1189,9 +1204,7 @@ export function WorkLedger(props: WorkLedgerProps) {
       }
       target ??= projectsScrollRef?.querySelector<HTMLElement>('[data-ui="work-ledger-organize-trigger"]') ?? null
     }
-    if (!target?.isConnected || target.matches(":disabled") || target.getClientRects().length === 0) return
-    if (target.closest('[hidden], [inert], [aria-hidden="true"]')) return
-    target.focus()
+    focusLedgerControl(target)
   })
   const recentGroup = createMemo<WorkLedgerGroup>(() => ({
     renderKey: "recent",
@@ -1289,23 +1302,15 @@ export function WorkLedger(props: WorkLedgerProps) {
       )
       target = row?.querySelector<HTMLElement>(".work-row-main") ?? null
     } else {
-      const group = Array.from(
-        region?.querySelectorAll<HTMLElement>(".project-group[data-project-directory]") ?? [],
-      ).find(
-        (element) =>
-          projectDirectoryKey(element.dataset.projectDirectory ?? "") === projectDirectoryKey(request.target.directory),
-      )
-      target = group?.querySelector<HTMLElement>('[data-ui="project-group-select"]') ?? null
+      target = projectGroupControl(region, request.target.directory)
     }
-    if (
-      !target?.isConnected ||
-      target.matches(":disabled") ||
-      target.getClientRects().length === 0 ||
-      target.closest('[hidden], [inert], [aria-hidden="true"]')
-    )
-      return
-    target.focus()
-    if (document.activeElement === target) setLocateRequest(null)
+    if (focusLedgerControl(target)) setLocateRequest(null)
+  }
+
+  function focusFirstExpandedProject(group: WorkLedgerGroup): void {
+    if (settingsStore.workLedgerOrganization !== "by-project") return
+    const region = projectsScrollRef?.querySelector<HTMLElement>('[data-ui="ledger-list"]')
+    focusLedgerControl(projectGroupControl(region, group.directory))
   }
 
   function locateCurrentWork(origin: HTMLButtonElement): void {
@@ -1694,6 +1699,7 @@ export function WorkLedger(props: WorkLedgerProps) {
           onRetry={() => void reload()}
           revealItem={revealGroup()}
           onRevealReady={finishLocate}
+          onExpansionFocus={focusFirstExpandedProject}
         >
           {(group) =>
             projectGroupView(

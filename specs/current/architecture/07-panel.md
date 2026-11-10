@@ -5315,6 +5315,10 @@ first ten entries followed by the same low-emphasis expand action, which can
 reveal the complete loaded collection and collapse it again. Pinned Projects
 remain independently visible, and Work Ledger backend pagination remains a
 separate explicit data-loading action rather than a second expansion state.
+In the Projects sidebar, activating the focused unpinned disclosure with the
+keyboard or assistive technology hands focus to the first newly revealed
+Project's existing title action. It does not select that Project, change
+pointer activation, or change the separate Locate action.
 
 `sessionInvocationTopology` is an observation of real Session ownership. Nodes carry
 the exact projected `agent`, session kind, parent session, dispatch lineage,

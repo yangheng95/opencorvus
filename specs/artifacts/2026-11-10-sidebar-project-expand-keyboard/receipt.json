@@ -1,0 +1,1523 @@
+{
+  "directReads": {
+    "baseline": {
+      "before": {
+        "asset": "main-CQWQEX3l.js",
+        "ui": {
+          "status": 200,
+          "requestID": "44048b27-5dfa-4dab-ab12-8d794282a200"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "6c3d9bf9-c5f6-493b-a618-7563f849015c"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "b865f7fa-58e2-40e0-9a45-473f95c6fd90",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [
+          {
+            "name": "sidebar-step-01",
+            "id": "prj_hoz4vR0pEiX9M0JRYED8",
+            "status": 200,
+            "requestID": "949724fb-606b-42d2-b8f3-12b1bd719d63",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-02",
+            "id": "prj_hCPeW9sREOb2p3UBIKNp",
+            "status": 200,
+            "requestID": "237e9c35-6466-4418-a329-044e5cd545ce",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-03",
+            "id": "prj_hDuLax0C1wnpKFjRR69t",
+            "status": 200,
+            "requestID": "6627fa88-a73d-45c3-adba-4450ed593467",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-04",
+            "id": "prj_h34oQxqLdBFkMyQPwlUR",
+            "status": 200,
+            "requestID": "2ebdae5b-4d9f-4a61-86be-33bcbf4530ee",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-05",
+            "id": "prj_hg9d9o6xldKkMqAPIZAQ",
+            "status": 200,
+            "requestID": "3ee7a36a-fd8b-4dde-8c6c-b6459b26ee61",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-06",
+            "id": "prj_hOx6gQtAooaGnXdkk8mU",
+            "status": 200,
+            "requestID": "39a303e9-f0e0-4cfd-9e83-0ca45170876d",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-07",
+            "id": "prj_hNw6vQTwWi7qBrkwTMtX",
+            "status": 200,
+            "requestID": "44d958b6-f109-4927-bf54-854598a389b2",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-08",
+            "id": "prj_htvKXb9OuXuyPtQ9D7Tu",
+            "status": 200,
+            "requestID": "c049783b-af0c-4cd7-8790-6951e879f671",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-09",
+            "id": "prj_hbb8H1PosMu0y0VJH3Vt",
+            "status": 200,
+            "requestID": "3064e0ff-3c9a-498f-b1d1-94030cbd821e",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-10",
+            "id": "prj_h24Bx3ld8E7Oe7HZxuop",
+            "status": 200,
+            "requestID": "c880ba9a-996c-4a13-b88a-5db06d08ad51",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-11",
+            "id": "prj_hs8Gio3AwPamvRnVssbE",
+            "status": 200,
+            "requestID": "1ac21cf9-cb5a-4fb6-8bf2-398488cb9660",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-12",
+            "id": "prj_h2HtQwwnMNWfo41ZVOiV",
+            "status": 200,
+            "requestID": "188c9ed8-ba52-4915-b08f-5a93c1f41aec",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-13",
+            "id": "prj_hDHjVb6KlJq1rEUWaQn8",
+            "status": 200,
+            "requestID": "3fb57095-d7a6-4f2c-9ec4-00b43b0fadfa",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-14",
+            "id": "prj_hYN5jdWaya8Dyv9ExKhr",
+            "status": 200,
+            "requestID": "575e9c6b-5ff9-406e-b0c6-f1e0eaebf9d2",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-15",
+            "id": "prj_hhjaBw18obb0LW9ST7br",
+            "status": 200,
+            "requestID": "0539b0fb-c7d0-4e9e-8390-71ed74cdb307",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-16",
+            "id": "prj_hXlu6Frsmvuv0bOEUZY6",
+            "status": 200,
+            "requestID": "d910f80f-d079-4cce-95ef-053801f46377",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-17",
+            "id": "prj_hTFIN0CQ3auaCZIEnKPx",
+            "status": 200,
+            "requestID": "f51570df-8494-4d75-bc71-74e17e841cdc",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-18",
+            "id": "prj_hdCAomrpQxMrli8UFJLV",
+            "status": 200,
+            "requestID": "b715be26-cb51-42d0-97ed-ca26391fb339",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-19",
+            "id": "prj_hYM4IQ5acotl1o7r6pf2",
+            "status": 200,
+            "requestID": "9b0e6fda-a07d-441f-b8f9-601aa9736952",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-20",
+            "id": "prj_hjQDz35VJKw9vrZiGhyx",
+            "status": 200,
+            "requestID": "e5dc2105-ec7f-43b4-8beb-5ebeb161006b",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-21",
+            "id": "prj_hrBPYx2r4jMeFiy5fBss",
+            "status": 200,
+            "requestID": "22e16f45-d50b-4aa3-8ab8-b92865886c1d",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-22",
+            "id": "prj_hs6wYi2J97b2eL2GaBCO",
+            "status": 200,
+            "requestID": "91ffd962-69fb-4c8d-86b6-ec15e7a2b03f",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-23",
+            "id": "prj_hRLSCETzJ5XKd7XdHr2S",
+            "status": 200,
+            "requestID": "369657b5-44bd-40b9-8d81-27ce6a3fd6d5",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-24",
+            "id": "prj_hsSKnhUVh0imUFEdvZYO",
+            "status": 200,
+            "requestID": "df77b930-5176-460b-953c-00d5780c3274",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-25",
+            "id": "prj_hftR3ttSBapV4wyWfW76",
+            "status": 200,
+            "requestID": "32341792-7d27-4acd-914b-f2982a3276ed",
+            "operation": "project.current"
+          }
+        ],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "e27be5d5-b64e-4bcb-b463-c67566ba89f5",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-25",
+                "id": "prj_hftR3ttSBapV4wyWfW76"
+              },
+              {
+                "name": "sidebar-step-24",
+                "id": "prj_hsSKnhUVh0imUFEdvZYO"
+              },
+              {
+                "name": "sidebar-step-23",
+                "id": "prj_hRLSCETzJ5XKd7XdHr2S"
+              },
+              {
+                "name": "sidebar-step-22",
+                "id": "prj_hs6wYi2J97b2eL2GaBCO"
+              },
+              {
+                "name": "sidebar-step-21",
+                "id": "prj_hrBPYx2r4jMeFiy5fBss"
+              },
+              {
+                "name": "sidebar-step-20",
+                "id": "prj_hjQDz35VJKw9vrZiGhyx"
+              },
+              {
+                "name": "sidebar-step-19",
+                "id": "prj_hYM4IQ5acotl1o7r6pf2"
+              },
+              {
+                "name": "sidebar-step-18",
+                "id": "prj_hdCAomrpQxMrli8UFJLV"
+              },
+              {
+                "name": "sidebar-step-17",
+                "id": "prj_hTFIN0CQ3auaCZIEnKPx"
+              },
+              {
+                "name": "sidebar-step-16",
+                "id": "prj_hXlu6Frsmvuv0bOEUZY6"
+              },
+              {
+                "name": "sidebar-step-15",
+                "id": "prj_hhjaBw18obb0LW9ST7br"
+              },
+              {
+                "name": "sidebar-step-14",
+                "id": "prj_hYN5jdWaya8Dyv9ExKhr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794311830221,
+              "rowKey": "project:prj_hYN5jdWaya8Dyv9ExKhr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "ccba06e3-a403-4627-b3ae-709560fe243e",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-13",
+                "id": "prj_hDHjVb6KlJq1rEUWaQn8"
+              },
+              {
+                "name": "sidebar-step-12",
+                "id": "prj_h2HtQwwnMNWfo41ZVOiV"
+              },
+              {
+                "name": "sidebar-step-11",
+                "id": "prj_hs8Gio3AwPamvRnVssbE"
+              },
+              {
+                "name": "sidebar-step-10",
+                "id": "prj_h24Bx3ld8E7Oe7HZxuop"
+              },
+              {
+                "name": "sidebar-step-09",
+                "id": "prj_hbb8H1PosMu0y0VJH3Vt"
+              },
+              {
+                "name": "sidebar-step-08",
+                "id": "prj_htvKXb9OuXuyPtQ9D7Tu"
+              },
+              {
+                "name": "sidebar-step-07",
+                "id": "prj_hNw6vQTwWi7qBrkwTMtX"
+              },
+              {
+                "name": "sidebar-step-06",
+                "id": "prj_hOx6gQtAooaGnXdkk8mU"
+              },
+              {
+                "name": "sidebar-step-05",
+                "id": "prj_hg9d9o6xldKkMqAPIZAQ"
+              },
+              {
+                "name": "sidebar-step-04",
+                "id": "prj_h34oQxqLdBFkMyQPwlUR"
+              },
+              {
+                "name": "sidebar-step-03",
+                "id": "prj_hDuLax0C1wnpKFjRR69t"
+              },
+              {
+                "name": "sidebar-step-02",
+                "id": "prj_hCPeW9sREOb2p3UBIKNp"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794311830011,
+              "rowKey": "project:prj_hCPeW9sREOb2p3UBIKNp"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "daf4a3e8-abc6-4efd-bf55-ca7d5d6a8de3",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-01",
+                "id": "prj_hoz4vR0pEiX9M0JRYED8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      },
+      "after": {
+        "asset": "main-CQWQEX3l.js",
+        "ui": {
+          "status": 200,
+          "requestID": "a2258e64-21a4-49c0-a1a9-0cde809a2ad4"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "be7844c7-bf54-4d54-81c0-79ad9bc5c106"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "4f47a2ab-4ce9-4ded-8eb3-6b1038effa5f",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "3818fd21-c7e3-4051-a981-9b78d44d92ff",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-25",
+                "id": "prj_hftR3ttSBapV4wyWfW76"
+              },
+              {
+                "name": "sidebar-step-24",
+                "id": "prj_hsSKnhUVh0imUFEdvZYO"
+              },
+              {
+                "name": "sidebar-step-23",
+                "id": "prj_hRLSCETzJ5XKd7XdHr2S"
+              },
+              {
+                "name": "sidebar-step-22",
+                "id": "prj_hs6wYi2J97b2eL2GaBCO"
+              },
+              {
+                "name": "sidebar-step-21",
+                "id": "prj_hrBPYx2r4jMeFiy5fBss"
+              },
+              {
+                "name": "sidebar-step-20",
+                "id": "prj_hjQDz35VJKw9vrZiGhyx"
+              },
+              {
+                "name": "sidebar-step-19",
+                "id": "prj_hYM4IQ5acotl1o7r6pf2"
+              },
+              {
+                "name": "sidebar-step-18",
+                "id": "prj_hdCAomrpQxMrli8UFJLV"
+              },
+              {
+                "name": "sidebar-step-17",
+                "id": "prj_hTFIN0CQ3auaCZIEnKPx"
+              },
+              {
+                "name": "sidebar-step-16",
+                "id": "prj_hXlu6Frsmvuv0bOEUZY6"
+              },
+              {
+                "name": "sidebar-step-15",
+                "id": "prj_hhjaBw18obb0LW9ST7br"
+              },
+              {
+                "name": "sidebar-step-14",
+                "id": "prj_hYN5jdWaya8Dyv9ExKhr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794311830221,
+              "rowKey": "project:prj_hYN5jdWaya8Dyv9ExKhr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "9e5bba52-5ed9-4138-a9aa-b1e34e69ed60",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-13",
+                "id": "prj_hDHjVb6KlJq1rEUWaQn8"
+              },
+              {
+                "name": "sidebar-step-12",
+                "id": "prj_h2HtQwwnMNWfo41ZVOiV"
+              },
+              {
+                "name": "sidebar-step-11",
+                "id": "prj_hs8Gio3AwPamvRnVssbE"
+              },
+              {
+                "name": "sidebar-step-10",
+                "id": "prj_h24Bx3ld8E7Oe7HZxuop"
+              },
+              {
+                "name": "sidebar-step-09",
+                "id": "prj_hbb8H1PosMu0y0VJH3Vt"
+              },
+              {
+                "name": "sidebar-step-08",
+                "id": "prj_htvKXb9OuXuyPtQ9D7Tu"
+              },
+              {
+                "name": "sidebar-step-07",
+                "id": "prj_hNw6vQTwWi7qBrkwTMtX"
+              },
+              {
+                "name": "sidebar-step-06",
+                "id": "prj_hOx6gQtAooaGnXdkk8mU"
+              },
+              {
+                "name": "sidebar-step-05",
+                "id": "prj_hg9d9o6xldKkMqAPIZAQ"
+              },
+              {
+                "name": "sidebar-step-04",
+                "id": "prj_h34oQxqLdBFkMyQPwlUR"
+              },
+              {
+                "name": "sidebar-step-03",
+                "id": "prj_hDuLax0C1wnpKFjRR69t"
+              },
+              {
+                "name": "sidebar-step-02",
+                "id": "prj_hCPeW9sREOb2p3UBIKNp"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794311830011,
+              "rowKey": "project:prj_hCPeW9sREOb2p3UBIKNp"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "c4458877-e544-4232-b535-e4e11537c25c",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-01",
+                "id": "prj_hoz4vR0pEiX9M0JRYED8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      }
+    },
+    "candidate": {
+      "before": {
+        "asset": "main-BXTr35N4.js",
+        "ui": {
+          "status": 200,
+          "requestID": "f9fa2349-0f0b-4a2b-a5a6-4f3f6887e4fa"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "136b0dea-41f3-4fed-83e7-ab6fee0c5316"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "ad9f46c2-7e23-4cd2-9583-80100a29705a",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [
+          {
+            "name": "sidebar-step-01",
+            "id": "prj_hoz4vR0pEiX9M0JRYED8",
+            "status": 200,
+            "requestID": "abdaced7-d0d8-4380-ae04-0abed59e93cc",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-02",
+            "id": "prj_hCPeW9sREOb2p3UBIKNp",
+            "status": 200,
+            "requestID": "1d7d4a3d-08de-42ef-9520-72755b8a787a",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-03",
+            "id": "prj_hDuLax0C1wnpKFjRR69t",
+            "status": 200,
+            "requestID": "49cbe2b8-491e-408a-b877-8caf160cff45",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-04",
+            "id": "prj_h34oQxqLdBFkMyQPwlUR",
+            "status": 200,
+            "requestID": "312f1203-f7eb-4605-a783-f8e05d8b60d0",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-05",
+            "id": "prj_hg9d9o6xldKkMqAPIZAQ",
+            "status": 200,
+            "requestID": "dbcdfcc6-9a38-4a3c-9c2e-980478ba52a8",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-06",
+            "id": "prj_hOx6gQtAooaGnXdkk8mU",
+            "status": 200,
+            "requestID": "3a850603-3c03-40c3-a799-19defd0c53ed",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-07",
+            "id": "prj_hNw6vQTwWi7qBrkwTMtX",
+            "status": 200,
+            "requestID": "d3e86bf6-1687-44ab-9e7c-ea0a8af3edbc",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-08",
+            "id": "prj_htvKXb9OuXuyPtQ9D7Tu",
+            "status": 200,
+            "requestID": "2ef80b5a-644f-4bd9-b534-d397c87f7c0c",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-09",
+            "id": "prj_hbb8H1PosMu0y0VJH3Vt",
+            "status": 200,
+            "requestID": "6e65bfe5-feb1-4a1d-b72f-5fee19ce6391",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-10",
+            "id": "prj_h24Bx3ld8E7Oe7HZxuop",
+            "status": 200,
+            "requestID": "b7803d25-0171-4e3b-a107-8bb7a419d0c2",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-11",
+            "id": "prj_hs8Gio3AwPamvRnVssbE",
+            "status": 200,
+            "requestID": "86b809ca-b40a-4655-beeb-d2e4c2e268ec",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-12",
+            "id": "prj_h2HtQwwnMNWfo41ZVOiV",
+            "status": 200,
+            "requestID": "6bb81276-5ae9-4e59-b2fd-f5c8ff9860f7",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-13",
+            "id": "prj_hDHjVb6KlJq1rEUWaQn8",
+            "status": 200,
+            "requestID": "d62d4525-ee9c-45e6-bd8e-15075d082763",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-14",
+            "id": "prj_hYN5jdWaya8Dyv9ExKhr",
+            "status": 200,
+            "requestID": "c13f5757-8c86-46ea-94c3-2410c6b79bd7",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-15",
+            "id": "prj_hhjaBw18obb0LW9ST7br",
+            "status": 200,
+            "requestID": "059ea04b-f4aa-48fd-9e33-861def338251",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-16",
+            "id": "prj_hXlu6Frsmvuv0bOEUZY6",
+            "status": 200,
+            "requestID": "2faf0ef5-ffc5-4465-801f-4138f3575762",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-17",
+            "id": "prj_hTFIN0CQ3auaCZIEnKPx",
+            "status": 200,
+            "requestID": "f5671bf0-4989-4f13-a80d-0e9e31e64cf3",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-18",
+            "id": "prj_hdCAomrpQxMrli8UFJLV",
+            "status": 200,
+            "requestID": "abbf76d8-62a8-4216-b3b5-eb0865d4fd8c",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-19",
+            "id": "prj_hYM4IQ5acotl1o7r6pf2",
+            "status": 200,
+            "requestID": "3e308329-cc30-41d4-94a8-ba60c2db648d",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-20",
+            "id": "prj_hjQDz35VJKw9vrZiGhyx",
+            "status": 200,
+            "requestID": "40028ea7-6011-4a0e-be54-ee191b754d11",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-21",
+            "id": "prj_hrBPYx2r4jMeFiy5fBss",
+            "status": 200,
+            "requestID": "4bc3ae7e-de73-4c97-9b24-ff9196529938",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-22",
+            "id": "prj_hs6wYi2J97b2eL2GaBCO",
+            "status": 200,
+            "requestID": "06e1aab0-0f63-4dce-972a-f7ac4be4619b",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-23",
+            "id": "prj_hRLSCETzJ5XKd7XdHr2S",
+            "status": 200,
+            "requestID": "676b615e-1302-4ac3-8d69-bbbc2df3cb61",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-24",
+            "id": "prj_hsSKnhUVh0imUFEdvZYO",
+            "status": 200,
+            "requestID": "9275be5e-1486-41af-9cb3-d7444b1652fe",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-25",
+            "id": "prj_hftR3ttSBapV4wyWfW76",
+            "status": 200,
+            "requestID": "dd2e8216-b664-4f9f-b582-a82380d04704",
+            "operation": "project.current"
+          }
+        ],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "628189fe-f12a-4cb3-8452-5d1c15669091",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-25",
+                "id": "prj_hftR3ttSBapV4wyWfW76"
+              },
+              {
+                "name": "sidebar-step-24",
+                "id": "prj_hsSKnhUVh0imUFEdvZYO"
+              },
+              {
+                "name": "sidebar-step-23",
+                "id": "prj_hRLSCETzJ5XKd7XdHr2S"
+              },
+              {
+                "name": "sidebar-step-22",
+                "id": "prj_hs6wYi2J97b2eL2GaBCO"
+              },
+              {
+                "name": "sidebar-step-21",
+                "id": "prj_hrBPYx2r4jMeFiy5fBss"
+              },
+              {
+                "name": "sidebar-step-20",
+                "id": "prj_hjQDz35VJKw9vrZiGhyx"
+              },
+              {
+                "name": "sidebar-step-19",
+                "id": "prj_hYM4IQ5acotl1o7r6pf2"
+              },
+              {
+                "name": "sidebar-step-18",
+                "id": "prj_hdCAomrpQxMrli8UFJLV"
+              },
+              {
+                "name": "sidebar-step-17",
+                "id": "prj_hTFIN0CQ3auaCZIEnKPx"
+              },
+              {
+                "name": "sidebar-step-16",
+                "id": "prj_hXlu6Frsmvuv0bOEUZY6"
+              },
+              {
+                "name": "sidebar-step-15",
+                "id": "prj_hhjaBw18obb0LW9ST7br"
+              },
+              {
+                "name": "sidebar-step-14",
+                "id": "prj_hYN5jdWaya8Dyv9ExKhr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312177402,
+              "rowKey": "project:prj_hYN5jdWaya8Dyv9ExKhr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "e6f3266b-263b-44ba-b6f1-f32d0d496fb1",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-13",
+                "id": "prj_hDHjVb6KlJq1rEUWaQn8"
+              },
+              {
+                "name": "sidebar-step-12",
+                "id": "prj_h2HtQwwnMNWfo41ZVOiV"
+              },
+              {
+                "name": "sidebar-step-11",
+                "id": "prj_hs8Gio3AwPamvRnVssbE"
+              },
+              {
+                "name": "sidebar-step-10",
+                "id": "prj_h24Bx3ld8E7Oe7HZxuop"
+              },
+              {
+                "name": "sidebar-step-09",
+                "id": "prj_hbb8H1PosMu0y0VJH3Vt"
+              },
+              {
+                "name": "sidebar-step-08",
+                "id": "prj_htvKXb9OuXuyPtQ9D7Tu"
+              },
+              {
+                "name": "sidebar-step-07",
+                "id": "prj_hNw6vQTwWi7qBrkwTMtX"
+              },
+              {
+                "name": "sidebar-step-06",
+                "id": "prj_hOx6gQtAooaGnXdkk8mU"
+              },
+              {
+                "name": "sidebar-step-05",
+                "id": "prj_hg9d9o6xldKkMqAPIZAQ"
+              },
+              {
+                "name": "sidebar-step-04",
+                "id": "prj_h34oQxqLdBFkMyQPwlUR"
+              },
+              {
+                "name": "sidebar-step-03",
+                "id": "prj_hDuLax0C1wnpKFjRR69t"
+              },
+              {
+                "name": "sidebar-step-02",
+                "id": "prj_hCPeW9sREOb2p3UBIKNp"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312177207,
+              "rowKey": "project:prj_hCPeW9sREOb2p3UBIKNp"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "2a6904b6-6b75-47b8-9199-3fff520c8809",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-01",
+                "id": "prj_hoz4vR0pEiX9M0JRYED8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      },
+      "after": {
+        "asset": "main-BXTr35N4.js",
+        "ui": {
+          "status": 200,
+          "requestID": "a68ac691-bb90-48be-b564-7677c8df12b8"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "8b57ddeb-3e39-4744-af32-92a46edf6f09"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "fbca18c7-82e4-4fc6-86c2-434f5b4a502a",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "11f67352-a293-467a-8ae7-c119d1b8a45c",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-25",
+                "id": "prj_hftR3ttSBapV4wyWfW76"
+              },
+              {
+                "name": "sidebar-step-24",
+                "id": "prj_hsSKnhUVh0imUFEdvZYO"
+              },
+              {
+                "name": "sidebar-step-23",
+                "id": "prj_hRLSCETzJ5XKd7XdHr2S"
+              },
+              {
+                "name": "sidebar-step-22",
+                "id": "prj_hs6wYi2J97b2eL2GaBCO"
+              },
+              {
+                "name": "sidebar-step-21",
+                "id": "prj_hrBPYx2r4jMeFiy5fBss"
+              },
+              {
+                "name": "sidebar-step-20",
+                "id": "prj_hjQDz35VJKw9vrZiGhyx"
+              },
+              {
+                "name": "sidebar-step-19",
+                "id": "prj_hYM4IQ5acotl1o7r6pf2"
+              },
+              {
+                "name": "sidebar-step-18",
+                "id": "prj_hdCAomrpQxMrli8UFJLV"
+              },
+              {
+                "name": "sidebar-step-17",
+                "id": "prj_hTFIN0CQ3auaCZIEnKPx"
+              },
+              {
+                "name": "sidebar-step-16",
+                "id": "prj_hXlu6Frsmvuv0bOEUZY6"
+              },
+              {
+                "name": "sidebar-step-15",
+                "id": "prj_hhjaBw18obb0LW9ST7br"
+              },
+              {
+                "name": "sidebar-step-14",
+                "id": "prj_hYN5jdWaya8Dyv9ExKhr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312177402,
+              "rowKey": "project:prj_hYN5jdWaya8Dyv9ExKhr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "58586be3-354c-4dae-8a4f-57bca7d04ee5",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-13",
+                "id": "prj_hDHjVb6KlJq1rEUWaQn8"
+              },
+              {
+                "name": "sidebar-step-12",
+                "id": "prj_h2HtQwwnMNWfo41ZVOiV"
+              },
+              {
+                "name": "sidebar-step-11",
+                "id": "prj_hs8Gio3AwPamvRnVssbE"
+              },
+              {
+                "name": "sidebar-step-10",
+                "id": "prj_h24Bx3ld8E7Oe7HZxuop"
+              },
+              {
+                "name": "sidebar-step-09",
+                "id": "prj_hbb8H1PosMu0y0VJH3Vt"
+              },
+              {
+                "name": "sidebar-step-08",
+                "id": "prj_htvKXb9OuXuyPtQ9D7Tu"
+              },
+              {
+                "name": "sidebar-step-07",
+                "id": "prj_hNw6vQTwWi7qBrkwTMtX"
+              },
+              {
+                "name": "sidebar-step-06",
+                "id": "prj_hOx6gQtAooaGnXdkk8mU"
+              },
+              {
+                "name": "sidebar-step-05",
+                "id": "prj_hg9d9o6xldKkMqAPIZAQ"
+              },
+              {
+                "name": "sidebar-step-04",
+                "id": "prj_h34oQxqLdBFkMyQPwlUR"
+              },
+              {
+                "name": "sidebar-step-03",
+                "id": "prj_hDuLax0C1wnpKFjRR69t"
+              },
+              {
+                "name": "sidebar-step-02",
+                "id": "prj_hCPeW9sREOb2p3UBIKNp"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312177207,
+              "rowKey": "project:prj_hCPeW9sREOb2p3UBIKNp"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "c5bd363e-da6f-4c95-bdc8-e50f2b28b809",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-01",
+                "id": "prj_hoz4vR0pEiX9M0JRYED8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      }
+    },
+    "final": {
+      "before": {
+        "asset": "main-COYm3WLa.js",
+        "ui": {
+          "status": 200,
+          "requestID": "3ba443a7-d0b9-4de4-922f-bf5187d6d783"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "a5333341-026f-4ce0-acca-b5d0b263e7a6"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "305358b7-6a3e-48fe-8090-47bafe9972ba",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [
+          {
+            "name": "sidebar-step-01",
+            "id": "prj_hoz4vR0pEiX9M0JRYED8",
+            "status": 200,
+            "requestID": "416f46a3-6494-4e88-91b8-50fa68528b5f",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-02",
+            "id": "prj_hCPeW9sREOb2p3UBIKNp",
+            "status": 200,
+            "requestID": "bbe5394b-f0d0-49a7-a752-8952d6965e67",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-03",
+            "id": "prj_hDuLax0C1wnpKFjRR69t",
+            "status": 200,
+            "requestID": "a6f93143-4a10-40fc-8a86-d6d60659453b",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-04",
+            "id": "prj_h34oQxqLdBFkMyQPwlUR",
+            "status": 200,
+            "requestID": "1936b691-954d-4cc8-9361-a6317bd4641f",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-05",
+            "id": "prj_hg9d9o6xldKkMqAPIZAQ",
+            "status": 200,
+            "requestID": "ebabdda7-90f3-41c4-99ae-f9438bb9c024",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-06",
+            "id": "prj_hOx6gQtAooaGnXdkk8mU",
+            "status": 200,
+            "requestID": "e9754ef8-53e7-451a-b7db-aa092347c659",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-07",
+            "id": "prj_hNw6vQTwWi7qBrkwTMtX",
+            "status": 200,
+            "requestID": "86af0b74-4e75-442e-964a-072776e458b9",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-08",
+            "id": "prj_htvKXb9OuXuyPtQ9D7Tu",
+            "status": 200,
+            "requestID": "dceb8fc9-ef87-4bf9-bc43-b85ef8c7b4c6",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-09",
+            "id": "prj_hbb8H1PosMu0y0VJH3Vt",
+            "status": 200,
+            "requestID": "52f4253d-65a3-41b6-b8f8-d06fb6cb26fd",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-10",
+            "id": "prj_h24Bx3ld8E7Oe7HZxuop",
+            "status": 200,
+            "requestID": "429b44c8-e8cb-494c-b450-c51c3f78c473",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-11",
+            "id": "prj_hs8Gio3AwPamvRnVssbE",
+            "status": 200,
+            "requestID": "59743981-b494-4795-90de-60f1d18098ca",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-12",
+            "id": "prj_h2HtQwwnMNWfo41ZVOiV",
+            "status": 200,
+            "requestID": "2ddb2459-b654-4722-83ce-eac5124fa602",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-13",
+            "id": "prj_hDHjVb6KlJq1rEUWaQn8",
+            "status": 200,
+            "requestID": "8c6a2606-7d7f-4bef-9dfc-3be16e4e5fe5",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-14",
+            "id": "prj_hYN5jdWaya8Dyv9ExKhr",
+            "status": 200,
+            "requestID": "3d80a0fb-0658-4992-b8fa-acbd67f39936",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-15",
+            "id": "prj_hhjaBw18obb0LW9ST7br",
+            "status": 200,
+            "requestID": "b69621af-4c60-47e7-9fd8-a1be18ec3583",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-16",
+            "id": "prj_hXlu6Frsmvuv0bOEUZY6",
+            "status": 200,
+            "requestID": "436f723c-f99e-4bcd-9e14-14101b17631a",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-17",
+            "id": "prj_hTFIN0CQ3auaCZIEnKPx",
+            "status": 200,
+            "requestID": "9737f326-ad2d-4d54-8821-801f43c69d37",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-18",
+            "id": "prj_hdCAomrpQxMrli8UFJLV",
+            "status": 200,
+            "requestID": "aa875f66-b1a6-49a2-9637-b6e1d493a830",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-19",
+            "id": "prj_hYM4IQ5acotl1o7r6pf2",
+            "status": 200,
+            "requestID": "d354fad4-c3d6-4d85-8cbf-f99fe4eb2ed3",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-20",
+            "id": "prj_hjQDz35VJKw9vrZiGhyx",
+            "status": 200,
+            "requestID": "3baa1856-b866-4800-884e-fa847a333482",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-21",
+            "id": "prj_hrBPYx2r4jMeFiy5fBss",
+            "status": 200,
+            "requestID": "1a1f08d4-17a1-426d-bb9c-b5aa8f50e2b5",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-22",
+            "id": "prj_hs6wYi2J97b2eL2GaBCO",
+            "status": 200,
+            "requestID": "ecd9d7d1-5026-4ee1-8a4b-4442a9bbaaf8",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-23",
+            "id": "prj_hRLSCETzJ5XKd7XdHr2S",
+            "status": 200,
+            "requestID": "6d142bb1-01cc-4d43-a131-134cf8f473c9",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-24",
+            "id": "prj_hsSKnhUVh0imUFEdvZYO",
+            "status": 200,
+            "requestID": "e74757a0-1aa6-4029-a750-ef2a3707e208",
+            "operation": "project.current"
+          },
+          {
+            "name": "sidebar-step-25",
+            "id": "prj_hftR3ttSBapV4wyWfW76",
+            "status": 200,
+            "requestID": "bfa5f4ca-d3ec-48f1-b7a9-7e851dc0af56",
+            "operation": "project.current"
+          }
+        ],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "b9f9e2bf-77c1-49fc-a747-4eddca99c1fe",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-25",
+                "id": "prj_hftR3ttSBapV4wyWfW76"
+              },
+              {
+                "name": "sidebar-step-24",
+                "id": "prj_hsSKnhUVh0imUFEdvZYO"
+              },
+              {
+                "name": "sidebar-step-23",
+                "id": "prj_hRLSCETzJ5XKd7XdHr2S"
+              },
+              {
+                "name": "sidebar-step-22",
+                "id": "prj_hs6wYi2J97b2eL2GaBCO"
+              },
+              {
+                "name": "sidebar-step-21",
+                "id": "prj_hrBPYx2r4jMeFiy5fBss"
+              },
+              {
+                "name": "sidebar-step-20",
+                "id": "prj_hjQDz35VJKw9vrZiGhyx"
+              },
+              {
+                "name": "sidebar-step-19",
+                "id": "prj_hYM4IQ5acotl1o7r6pf2"
+              },
+              {
+                "name": "sidebar-step-18",
+                "id": "prj_hdCAomrpQxMrli8UFJLV"
+              },
+              {
+                "name": "sidebar-step-17",
+                "id": "prj_hTFIN0CQ3auaCZIEnKPx"
+              },
+              {
+                "name": "sidebar-step-16",
+                "id": "prj_hXlu6Frsmvuv0bOEUZY6"
+              },
+              {
+                "name": "sidebar-step-15",
+                "id": "prj_hhjaBw18obb0LW9ST7br"
+              },
+              {
+                "name": "sidebar-step-14",
+                "id": "prj_hYN5jdWaya8Dyv9ExKhr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312349540,
+              "rowKey": "project:prj_hYN5jdWaya8Dyv9ExKhr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "e8515f7d-314b-4e62-9aa6-212360c9ed27",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-13",
+                "id": "prj_hDHjVb6KlJq1rEUWaQn8"
+              },
+              {
+                "name": "sidebar-step-12",
+                "id": "prj_h2HtQwwnMNWfo41ZVOiV"
+              },
+              {
+                "name": "sidebar-step-11",
+                "id": "prj_hs8Gio3AwPamvRnVssbE"
+              },
+              {
+                "name": "sidebar-step-10",
+                "id": "prj_h24Bx3ld8E7Oe7HZxuop"
+              },
+              {
+                "name": "sidebar-step-09",
+                "id": "prj_hbb8H1PosMu0y0VJH3Vt"
+              },
+              {
+                "name": "sidebar-step-08",
+                "id": "prj_htvKXb9OuXuyPtQ9D7Tu"
+              },
+              {
+                "name": "sidebar-step-07",
+                "id": "prj_hNw6vQTwWi7qBrkwTMtX"
+              },
+              {
+                "name": "sidebar-step-06",
+                "id": "prj_hOx6gQtAooaGnXdkk8mU"
+              },
+              {
+                "name": "sidebar-step-05",
+                "id": "prj_hg9d9o6xldKkMqAPIZAQ"
+              },
+              {
+                "name": "sidebar-step-04",
+                "id": "prj_h34oQxqLdBFkMyQPwlUR"
+              },
+              {
+                "name": "sidebar-step-03",
+                "id": "prj_hDuLax0C1wnpKFjRR69t"
+              },
+              {
+                "name": "sidebar-step-02",
+                "id": "prj_hCPeW9sREOb2p3UBIKNp"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312349343,
+              "rowKey": "project:prj_hCPeW9sREOb2p3UBIKNp"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "291b578e-785b-4dbd-972a-e2fa01940f4b",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-01",
+                "id": "prj_hoz4vR0pEiX9M0JRYED8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      },
+      "after": {
+        "asset": "main-COYm3WLa.js",
+        "ui": {
+          "status": 200,
+          "requestID": "93fb236c-d2ce-4e8d-86ad-a22fb508eef1"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "9fd4619b-467f-493a-93a7-17cb1f777726"
+        },
+        "projectList": {
+          "status": 200,
+          "requestID": "8f69d5aa-3aa6-45cc-b0e1-4155754815e8",
+          "operation": "project.list",
+          "exactIsolatedProjects": 25
+        },
+        "projects": [],
+        "pages": [
+          {
+            "status": 200,
+            "requestID": "bcb8755a-76a5-4422-b0db-aaa61036ea11",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-25",
+                "id": "prj_hftR3ttSBapV4wyWfW76"
+              },
+              {
+                "name": "sidebar-step-24",
+                "id": "prj_hsSKnhUVh0imUFEdvZYO"
+              },
+              {
+                "name": "sidebar-step-23",
+                "id": "prj_hRLSCETzJ5XKd7XdHr2S"
+              },
+              {
+                "name": "sidebar-step-22",
+                "id": "prj_hs6wYi2J97b2eL2GaBCO"
+              },
+              {
+                "name": "sidebar-step-21",
+                "id": "prj_hrBPYx2r4jMeFiy5fBss"
+              },
+              {
+                "name": "sidebar-step-20",
+                "id": "prj_hjQDz35VJKw9vrZiGhyx"
+              },
+              {
+                "name": "sidebar-step-19",
+                "id": "prj_hYM4IQ5acotl1o7r6pf2"
+              },
+              {
+                "name": "sidebar-step-18",
+                "id": "prj_hdCAomrpQxMrli8UFJLV"
+              },
+              {
+                "name": "sidebar-step-17",
+                "id": "prj_hTFIN0CQ3auaCZIEnKPx"
+              },
+              {
+                "name": "sidebar-step-16",
+                "id": "prj_hXlu6Frsmvuv0bOEUZY6"
+              },
+              {
+                "name": "sidebar-step-15",
+                "id": "prj_hhjaBw18obb0LW9ST7br"
+              },
+              {
+                "name": "sidebar-step-14",
+                "id": "prj_hYN5jdWaya8Dyv9ExKhr"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312349540,
+              "rowKey": "project:prj_hYN5jdWaya8Dyv9ExKhr"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "7763f8fa-4e34-405c-9f45-c4fdf935fc96",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-13",
+                "id": "prj_hDHjVb6KlJq1rEUWaQn8"
+              },
+              {
+                "name": "sidebar-step-12",
+                "id": "prj_h2HtQwwnMNWfo41ZVOiV"
+              },
+              {
+                "name": "sidebar-step-11",
+                "id": "prj_hs8Gio3AwPamvRnVssbE"
+              },
+              {
+                "name": "sidebar-step-10",
+                "id": "prj_h24Bx3ld8E7Oe7HZxuop"
+              },
+              {
+                "name": "sidebar-step-09",
+                "id": "prj_hbb8H1PosMu0y0VJH3Vt"
+              },
+              {
+                "name": "sidebar-step-08",
+                "id": "prj_htvKXb9OuXuyPtQ9D7Tu"
+              },
+              {
+                "name": "sidebar-step-07",
+                "id": "prj_hNw6vQTwWi7qBrkwTMtX"
+              },
+              {
+                "name": "sidebar-step-06",
+                "id": "prj_hOx6gQtAooaGnXdkk8mU"
+              },
+              {
+                "name": "sidebar-step-05",
+                "id": "prj_hg9d9o6xldKkMqAPIZAQ"
+              },
+              {
+                "name": "sidebar-step-04",
+                "id": "prj_h34oQxqLdBFkMyQPwlUR"
+              },
+              {
+                "name": "sidebar-step-03",
+                "id": "prj_hDuLax0C1wnpKFjRR69t"
+              },
+              {
+                "name": "sidebar-step-02",
+                "id": "prj_hCPeW9sREOb2p3UBIKNp"
+              }
+            ],
+            "nextCursor": {
+              "pinned": false,
+              "updated": 1794312349343,
+              "rowKey": "project:prj_hCPeW9sREOb2p3UBIKNp"
+            }
+          },
+          {
+            "status": 200,
+            "requestID": "b84c2471-f38d-4ccc-9fb3-0987f9896980",
+            "operation": "workLedger.list",
+            "items": [
+              {
+                "name": "sidebar-step-01",
+                "id": "prj_hoz4vR0pEiX9M0JRYED8"
+              }
+            ],
+            "nextCursor": null
+          }
+        ]
+      }
+    }
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "pinRecovery": {
+    "pin": {
+      "requestID": "8250c675-c76f-4b0e-b34f-885c64a2f55f",
+      "status": 200,
+      "projectID": "prj_hhjaBw18obb0LW9ST7br",
+      "pinned": true
+    },
+    "unpin": {
+      "requestID": "45fc2251-4748-4b2c-8b80-c1e2ad8602e8",
+      "status": 200,
+      "projectID": "prj_hhjaBw18obb0LW9ST7br",
+      "pinned": false
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b213-baseline",
+      "apiPort": 39611,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b213-candidate",
+      "apiPort": 39612,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b213-final",
+      "apiPort": 39613,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  },
+  "sampleFilesUnchanged": true
+}

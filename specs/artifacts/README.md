@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目列表展开键盘接续的证据](2026-11-10-sidebar-project-expand-keyboard/README.md)
 - [右侧同名浏览器标签的证据](2026-11-10-right-dock-duplicate-tab-labels/README.md)
 - [右侧工具标签关闭目标的证据](2026-11-10-right-dock-tab-close-target/README.md)
 - [全局搜索分页键盘交互证据](2026-11-10-palette-continuation-keyboard/README.md)

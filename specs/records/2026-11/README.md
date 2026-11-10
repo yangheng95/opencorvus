@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [展开项目列表后接续到新项目](2026-11-10-sidebar-project-expand-keyboard.md)
 - [右侧工具栏的同名标签可区分](2026-11-10-right-dock-duplicate-tab-labels.md)
 - [右侧工具标签的关闭控件读出目标](2026-11-10-right-dock-tab-close-target.md)
 - [全局搜索续页与重试可用键盘接续](2026-11-10-palette-continuation-keyboard.md)
