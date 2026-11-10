@@ -926,6 +926,8 @@ export function WorkLedger(props: WorkLedgerProps) {
   let loadedRows: WorkLedgerRow[] = []
   let startGlobalChatAfterCreateMenuClose = false
   let projectsScrollRef!: HTMLDivElement
+  let projectsHeading: HTMLDivElement | undefined
+  let listRetryButton: HTMLButtonElement | undefined
   let disposed = false
   let projectPinFocusSequence = 0
   const [projectPinFocus, setProjectPinFocus] = createSignal<{
@@ -1033,7 +1035,6 @@ export function WorkLedger(props: WorkLedgerProps) {
     const ownsLoad = () =>
       sequence === loadSequence && controller === nextController && isApiAuthorityCurrent(authority)
     setLoading(true)
-    setError("")
     try {
       const merged = new Map<string, WorkLedgerRow>()
       let cursor: WorkLedgerCursor | null = null
@@ -1049,13 +1050,17 @@ export function WorkLedger(props: WorkLedgerProps) {
         cursor = result.nextCursor
       } while (cursor)
       if (!ownsLoad()) return
-      loadedRows = [...merged.values()]
-      setWorkLedgerRuntimeRows(loadedRows, authority)
-      renderGroups()
+      if (listRetryButton && listRetryButton.ownerDocument.activeElement === listRetryButton) projectsHeading?.focus()
+      batch(() => {
+        loadedRows = [...merged.values()]
+        setWorkLedgerRuntimeRows(loadedRows, authority)
+        renderGroups()
+        setError("")
+      })
     } catch (nextError) {
       if (nextError instanceof DOMException && nextError.name === "AbortError") return
       if (!ownsLoad() || nextError instanceof ApiAuthorityChangedError) return
-      setError(nextError instanceof Error ? nextError.message : String(nextError))
+      setError(formatErrorDetails(nextError) || String(nextError))
     } finally {
       if (ownsLoad()) {
         setLoading(false)
@@ -1477,7 +1482,9 @@ export function WorkLedger(props: WorkLedgerProps) {
           </div>
         </Show>
         <div class="work-ledger-projects-toolbar" data-ui="work-ledger-projects-toolbar">
-          <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.title")}</div>
+          <div ref={projectsHeading} class="work-ledger-section-title oc-section-heading" role="heading" aria-level={2} tabIndex={-1}>
+            {t("work_ledger.title")}
+          </div>
           <div class="work-ledger-projects-toolbar-actions">
             <Button
               type="button"
@@ -1683,6 +1690,7 @@ export function WorkLedger(props: WorkLedgerProps) {
           error={error()}
           emptyLabel={t("work_ledger.empty")}
           retryLabel={t("common.retry")}
+          retryRef={(button) => { listRetryButton = button }}
           onRetry={() => void reload()}
           revealItem={revealGroup()}
           onRevealReady={finishLocate}

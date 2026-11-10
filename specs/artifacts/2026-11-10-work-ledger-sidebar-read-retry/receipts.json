@@ -1,0 +1,363 @@
+{
+  "baseline": {
+    "asset": "main-espW9Dc7.js",
+    "operation": "workLedger.list",
+    "status": 200,
+    "requestID": "22df27bb-00b8-49a7-b716-4e7abb76a7be",
+    "rowKinds": [],
+    "nextCursor": null,
+    "connectedProviders": 0
+  },
+  "baselineWork": {
+    "status": 200,
+    "requestID": "e6dee101-3a8e-4e96-8f62-dce01a324aa8",
+    "rows": [
+      {
+        "kind": "mission",
+        "id": "draft-bb5ff3fe68d306ca157a212165a9e1ed",
+        "title": "Sidebar refresh draft"
+      },
+      {
+        "kind": "mission",
+        "id": "draft-f66177dc647e1c9a56a0db4ae98ba6dc",
+        "title": "Sidebar recovery sample"
+      },
+      {
+        "kind": "project",
+        "id": "prj_hclNhIdEZiuWgLpYGGEp",
+        "title": ""
+      }
+    ],
+    "nextCursor": null
+  },
+  "firstCandidate": {
+    "page": {
+      "status": 200,
+      "requestID": "b68bdbc1-89d8-4799-9865-7a3a5f07a934",
+      "asset": "main-D0VbBVeP.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "2afd0771-0cb6-4784-9387-c2cd789bbbe5",
+      "operations": [
+        "workLedger.list",
+        "mission.list"
+      ]
+    },
+    "work": {
+      "status": 200,
+      "requestID": "7c9c2775-2c45-41e8-a531-11368ac05986",
+      "schemaValid": true,
+      "nextCursor": null,
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-0607b1bc9b18d05b1b6076d4f013034d",
+          "title": "Sidebar recovery sample"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hclNhIdEZiuWgLpYGGEp",
+          "title": ""
+        }
+      ]
+    },
+    "missions": {
+      "status": 200,
+      "requestID": "6d46af00-e7b2-4850-8811-5a9dcc785315",
+      "schemaValid": true,
+      "rows": [
+        {
+          "missionID": "draft-0607b1bc9b18d05b1b6076d4f013034d",
+          "sessionID": "ses_hZlMCq3V5yQLKUcQsVDw",
+          "title": "Sidebar recovery sample",
+          "boardLane": "backlog",
+          "taskCount": 0
+        }
+      ]
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "c17aa5a4-a217-4806-96ce-a38cef91f212",
+      "connected": 0,
+      "visible": 88
+    }
+  },
+  "finalBefore": {
+    "page": {
+      "status": 200,
+      "requestID": "a9d8183a-9a5e-4741-ae74-432cce3350da",
+      "asset": "main-BJMAiWvD.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "38ea9cd6-3ef1-484c-998e-cc0540c05781",
+      "operations": [
+        "workLedger.list",
+        "mission.list"
+      ]
+    },
+    "work": {
+      "status": 200,
+      "requestID": "d5a631d1-64aa-4e18-b206-d2c039191147",
+      "schemaValid": true,
+      "nextCursor": null,
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-0607b1bc9b18d05b1b6076d4f013034d",
+          "title": "Sidebar recovery sample"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hclNhIdEZiuWgLpYGGEp",
+          "title": ""
+        }
+      ]
+    },
+    "missions": {
+      "status": 200,
+      "requestID": "13fd5a71-d446-4f1e-9459-809975049df5",
+      "schemaValid": true,
+      "rows": [
+        {
+          "missionID": "draft-0607b1bc9b18d05b1b6076d4f013034d",
+          "sessionID": "ses_hZlMCq3V5yQLKUcQsVDw",
+          "title": "Sidebar recovery sample",
+          "boardLane": "backlog",
+          "taskCount": 0
+        }
+      ]
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "f52dd81a-c717-498d-b0cc-f2dfd29f692b",
+      "connected": 0,
+      "visible": 88
+    }
+  },
+  "finalAfter": {
+    "page": {
+      "status": 200,
+      "requestID": "4efa7413-e304-4f8d-a60f-bdbd385aa11a",
+      "asset": "main-BJMAiWvD.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "14067d47-5e39-4577-896f-802ed2a73dbf",
+      "operations": [
+        "workLedger.list",
+        "mission.list"
+      ]
+    },
+    "work": {
+      "status": 200,
+      "requestID": "48b5c793-7a76-426e-872d-7392f1f557bd",
+      "schemaValid": true,
+      "nextCursor": null,
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-cb92967c225242a6b70e6b012654668b",
+          "title": "Sidebar refresh draft"
+        },
+        {
+          "kind": "mission",
+          "id": "draft-0607b1bc9b18d05b1b6076d4f013034d",
+          "title": "Sidebar recovery sample"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hclNhIdEZiuWgLpYGGEp",
+          "title": ""
+        }
+      ]
+    },
+    "missions": {
+      "status": 200,
+      "requestID": "8f30b28e-8665-4a03-a3ae-48525050b2c0",
+      "schemaValid": true,
+      "rows": [
+        {
+          "missionID": "draft-cb92967c225242a6b70e6b012654668b",
+          "sessionID": "ses_h86SfacZRESY6zQzbISi",
+          "title": "Sidebar refresh draft",
+          "boardLane": "backlog",
+          "taskCount": 0
+        },
+        {
+          "missionID": "draft-0607b1bc9b18d05b1b6076d4f013034d",
+          "sessionID": "ses_hZlMCq3V5yQLKUcQsVDw",
+          "title": "Sidebar recovery sample",
+          "boardLane": "backlog",
+          "taskCount": 0
+        }
+      ]
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "d25c92d1-1472-42d1-a08b-ab4be18c88d5",
+      "connected": 0,
+      "visible": 88
+    }
+  },
+  "browserRuns": {
+    "baseline": {
+      "transport": [
+        {
+          "requestID": "e8ab4142-8ff5-47d0-aadd-4ca8b5d38702",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 260,
+          "delivered": 1
+        },
+        {
+          "requestID": "e98d28cb-293f-4c36-aabe-2c3b9f74015c",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 260,
+          "delivered": 260,
+          "heldMs": 5009
+        },
+        {
+          "requestID": "6ba82020-1c2e-4d62-952e-da80848a3dbc",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 1466,
+          "delivered": 1
+        },
+        {
+          "requestID": "5e36fdc4-cc8d-470a-806e-318329a2804a",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 1466,
+          "delivered": 1466,
+          "heldMs": 4515
+        }
+      ],
+      "heldWithoutDelivery": [],
+      "shutdown": {
+        "occurrence": "iteration-b197-baseline",
+        "apiPort": 39534,
+        "proxyPort": 39535,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    },
+    "candidate": {
+      "transport": [
+        {
+          "requestID": "1794552a-8f53-4f6d-ac63-5ad47be2b14f",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 865,
+          "delivered": 1
+        },
+        {
+          "requestID": "0d6a87b3-ba9e-4dd7-b82c-622078ab6c25",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 865,
+          "delivered": 1
+        },
+        {
+          "requestID": "c398f6a3-7867-40ff-919a-208ad7329c1c",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 865,
+          "delivered": 865,
+          "heldMs": 8381
+        }
+      ],
+      "heldWithoutDelivery": [],
+      "shutdown": {
+        "occurrence": "iteration-b197-candidate",
+        "apiPort": 39536,
+        "proxyPort": 39537,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    },
+    "final": {
+      "transport": [
+        {
+          "requestID": "8c0920ef-8554-42b9-b772-c33d6029faea",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 865,
+          "delivered": 1
+        },
+        {
+          "requestID": "45023c73-537a-4e96-8853-eae9a867a4ff",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 865,
+          "delivered": 1
+        },
+        {
+          "requestID": "f96599f9-2e01-43a5-948d-7091573392e2",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 865,
+          "delivered": 865,
+          "heldMs": 5766
+        },
+        {
+          "requestID": "856a197d-9feb-4acf-bab1-f6350f33a13a",
+          "status": 200,
+          "mode": "truncate",
+          "bytes": 1466,
+          "delivered": 1
+        },
+        {
+          "requestID": "2fcea86a-70d5-480f-aaad-737a320d03dc",
+          "status": 200,
+          "mode": "hold",
+          "bytes": 1466,
+          "delivered": 1466,
+          "heldMs": 7496
+        }
+      ],
+      "heldWithoutDelivery": [
+        {
+          "requestID": "93410d8e-7fa4-4a44-a705-1ae06b3588c5",
+          "status": 200,
+          "heldAt": "2026-11-10T08:03:25.618Z"
+        }
+      ],
+      "shutdown": {
+        "occurrence": "iteration-b197-final",
+        "apiPort": 39536,
+        "proxyPort": 39537,
+        "apiStopped": true,
+        "proxyStopped": true,
+        "processesExited": true,
+        "listenersClosed": true
+      }
+    }
+  },
+  "databases": {
+    "baseline": {
+      "integrity": "ok",
+      "missionSessions": 2,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "missionSessions": 2,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  }
+}

@@ -95,6 +95,30 @@
   padding: 0 var(--ui-left-rail-section-inline-inset);
 }
 
+.work-ledger-read-feedback.oc-feedback {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: var(--ui-gap-xs) var(--ui-gap-sm);
+}
+
+.work-ledger-read-feedback .oc-feedback__copy {
+  display: contents;
+}
+
+.work-ledger-read-feedback .oc-feedback__actions {
+  grid-area: 1 / 2;
+}
+
+.work-ledger-read-feedback .oc-feedback__details {
+  grid-area: 2 / 1 / auto / -1;
+}
+
+.work-ledger-read-diagnostic {
+  max-block-size: calc(16 * var(--ui-gap-md));
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+
 .work-ledger-implicit-project {
   display: grid;
   gap: var(--ui-gap-3xs);

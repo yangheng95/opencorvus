@@ -11,6 +11,7 @@ export interface LedgerListProps<T> {
   error?: string
   emptyLabel: string
   retryLabel?: string
+  retryRef?: (button: HTMLButtonElement) => void
   onRetry?: () => void
   revealItem?: T
   onRevealReady?: () => void
@@ -38,18 +39,34 @@ export function LedgerLoadingStatus(props: { label: string; class?: string; data
 }
 
 export function LedgerList<T>(props: LedgerListProps<T>) {
-  const initialLoading = () => Boolean(props.loading && props.items.length === 0)
+  const initialLoading = () => Boolean(props.loading && !props.error && props.items.length === 0)
   return (
     <div class="ledger-list" data-ui="ledger-list" aria-busy={props.loading ? "true" : "false"}>
       <Show when={props.error}>
         <Feedback
+          class="work-ledger-read-feedback"
           tone="error"
-          details={props.error}
+          details={
+            <div class="work-ledger-read-diagnostic" role="region" aria-label={t("common.details")} tabIndex={0}>
+              {props.error}
+            </div>
+          }
           data-ui="ledger-error"
           actions={
             <Show when={props.onRetry}>
-              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => props.onRetry?.()}>
-                {props.retryLabel}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                ref={(button) => props.retryRef?.(button)}
+                aria-disabled={props.loading || undefined}
+                aria-busy={props.loading || undefined}
+                onClick={() => {
+                  if (!props.loading) props.onRetry?.()
+                }}
+              >
+                {props.loading ? t("common.retrying") : props.retryLabel}
               </Button>
             </Show>
           }
