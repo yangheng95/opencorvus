@@ -2335,6 +2335,10 @@ export type FileContent = {
     oldHeader?: string
   }
   /**
+   * Opaque identity of the canonical resource for editable project text, independent of its bytes.
+   */
+  resourceID?: string
+  /**
    * Opaque revision of the exact loaded file bytes and canonical physical resource identity.
    */
   revision?: string

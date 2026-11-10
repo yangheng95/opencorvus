@@ -43,6 +43,32 @@ async function read(directory: string, filename: string) {
   return request(directory, "GET", `/file/content?${new URLSearchParams({ path: filename })}`)
 }
 
+test("file read and save identify the same canonical editable resource across byte changes and aliases", async () => {
+  await using project = await memoryProject("file-save-resource-identity")
+  await configure(project.path)
+  const original = "same original bytes\n"
+  const edited = "actual saved bytes — 资料\n"
+  for (const dir of ["first", "second"]) {
+    await fs.mkdir(path.join(project.path, dir))
+    await fs.writeFile(path.join(project.path, dir, "edit.txt"), original)
+  }
+  await fs.symlink(path.join(project.path, "first"), path.join(project.path, "alias"), process.platform === "win32" ? "junction" : "dir")
+  const first = await read(project.path, "first/edit.txt")
+  const alias = await read(project.path, "alias/edit.txt")
+  const second = await read(project.path, "second/edit.txt")
+  expect(structuredClone(first)).toMatchObject({ status: 200, body: { content: original, revision: expect.any(String), resourceID: expect.any(String) } })
+  expect(alias).toMatchObject({ status: 200, body: { content: original, revision: first.body.revision, resourceID: first.body.resourceID } })
+  expect(structuredClone(second)).toMatchObject({ status: 200, body: { content: original, revision: expect.any(String), resourceID: expect.any(String) } })
+  expect(new Set([first.body.resourceID, second.body.resourceID]).size).toBe(2)
+  const saved = await request(project.path, "PATCH", "/file/content", {
+    path: "alias/edit.txt", content: edited, expectedRevision: alias.body.revision,
+  })
+  expect(structuredClone(saved)).toMatchObject({ status: 200, body: { content: edited, resourceID: first.body.resourceID, revision: expect.any(String) } })
+  expect(await read(project.path, "first/edit.txt")).toMatchObject({ status: 200, body: { content: edited, revision: saved.body.revision, resourceID: first.body.resourceID } })
+  expect(await fs.readFile(path.join(project.path, "first/edit.txt"), "utf8")).toBe(edited)
+  expect(await read(project.path, "second/edit.txt")).toEqual(second)
+}, 30_000)
+
 test.skipIf(process.platform !== "win32").each(["file", "directory", "junction"] as const)(
   "case-only %s rename returns the current entry name and retains its physical identity",
   async (kind) => {

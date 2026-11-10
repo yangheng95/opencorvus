@@ -2493,6 +2493,8 @@
   "file_editor.discard_reload": "放弃并重新加载",
   "file_editor.reload_unsaved_message": "重新加载磁盘上的 {{path}}？请先保存更改，或放弃更改以读取当前文件。",
   "file_editor.save_failed": "无法保存文件。你的编辑仍保留在这里，可以重试或下载草稿。",
+  "file_editor.save_unconfirmed": "无法确认保存结果。草稿仍保留在这里；再次保存前请先与磁盘版本比较。",
+  "file_editor.save_unconfirmed_resource_changed": "无法确认保存结果。此路径现在指向另一文件，草稿仍保留在这里。",
   "file_editor.save_missing": "原文件已不可用。你的编辑仍保留在这里，可以下载草稿，或在文件恢复后重试。",
   "file_editor.close_failed": "无法关闭文件，请重试。",
   "file_editor.save_conflict": "磁盘上的文件已发生变化。你的编辑仍保留在这里。可以先比较版本，再决定保留哪些更改。",

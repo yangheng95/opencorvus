@@ -29,7 +29,7 @@ import { gitSourceLinkDiffs } from "../util/git-source-links"
 import { checkedSourceGit, gitSourceRunner, gitSourceEntryArgs } from "../util/git-source-stage"
 import { AttachmentStore } from "../storage/attachment-store"
 import { Format } from "../format"
-import { contentRevision, FileWriteConflictError } from "./content-revision"
+import { contentResourceID, contentRevision, FileWriteConflictError } from "./content-revision"
 
 export namespace File {
   const log = Log.create({ service: "file" })
@@ -76,6 +76,8 @@ export namespace File {
       content: z.string(),
       displayName: z.string().optional().describe("Canonical attachment display name for project-scoped file content."),
       revision: ContentRevision.optional(),
+      resourceID: z.string().regex(/^[a-f0-9]{64}$/).optional()
+        .describe("Opaque identity of the canonical resource for editable project text, independent of its bytes."),
       diff: z.string().optional(),
       patch: z
         .object({
@@ -975,7 +977,7 @@ export namespace File {
     return {
       type: "text",
       content: bytes.toString("utf8"),
-      ...(editable ? { revision: contentRevision(identity!, bytes) } : {}),
+      ...(editable ? { revision: contentRevision(identity!, bytes), resourceID: contentResourceID(identity!) } : {}),
     }
   }
 

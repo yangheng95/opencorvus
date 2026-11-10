@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件保存回执与磁盘核对证据](2026-11-10-file-save-receipt-reconciliation/README.md)
 - [定时运行历史已确认读取证据](2026-11-10-scheduled-run-history-confirmed-read/README.md)
 - [收件箱续页重试的真实页面证据](2026-11-10-mailbox-continuation-retry/README.md)
 - [定时任务手动运行复用已接受的执行证据](2026-11-10-automation-manual-run-replay/README.md)

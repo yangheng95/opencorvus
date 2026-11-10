@@ -2494,6 +2494,8 @@
   "file_editor.discard_reload": "Discard and reload",
   "file_editor.reload_unsaved_message": "Reload {{path}} from disk? Save your changes first or discard them to load the current file.",
   "file_editor.save_failed": "Could not save this file. Your edits are kept here. Try again or download your draft.",
+  "file_editor.save_unconfirmed": "Could not confirm the save. Your draft is kept here. Compare with disk before saving again.",
+  "file_editor.save_unconfirmed_resource_changed": "Could not confirm the save. This path now points to a different file. Your draft is kept here.",
   "file_editor.save_missing": "The original file is no longer available. Your edits are kept here. Download your draft or try again after the file is restored.",
   "file_editor.close_failed": "Could not close this file. Please try again.",
   "file_editor.save_conflict": "This file changed on disk. Your edits are kept here. Compare versions to review the changes before deciding what to keep.",

@@ -8234,6 +8234,11 @@
             ],
             "type": "object"
           },
+          "resourceID": {
+            "description": "Opaque identity of the canonical resource for editable project text, independent of its bytes.",
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
           "revision": {
             "description": "Opaque revision of the exact loaded file bytes and canonical physical resource identity.",
             "pattern": "^[a-f0-9]{64}$",

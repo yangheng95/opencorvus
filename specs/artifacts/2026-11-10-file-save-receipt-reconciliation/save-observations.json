@@ -1,0 +1,504 @@
+{
+  "assets": {
+    "baseline": "main-DYypGkF7.js",
+    "firstCandidate": "main-B6lsXnAz.js",
+    "final": "main-KScF5fjQ.js"
+  },
+  "baseline": {
+    "original": {
+      "type": "text",
+      "content": "B168 original text\n",
+      "revision": "0972b6657f96122edbf1b79a35fd4a2c94ac5fc504d97549a7f97095fdcd959f"
+    },
+    "afterTruncation": {
+      "type": "text",
+      "content": "B168 saved through the real editor.\n",
+      "revision": "9c483073b642ff12c2bc6959420835c30d4ccf92d973e1752c51a3f3d9255feb",
+      "patch": {
+        "oldFileName": "receipt-note.txt",
+        "newFileName": "receipt-note.txt",
+        "oldHeader": "old",
+        "newHeader": "new",
+        "hunks": [
+          {
+            "oldStart": 1,
+            "oldLines": 1,
+            "newStart": 1,
+            "newLines": 1,
+            "lines": [
+              "-B168 original text",
+              "+B168 saved through the real editor."
+            ]
+          }
+        ]
+      },
+      "diff": "Index: receipt-note.txt\n===================================================================\n--- receipt-note.txt\told\n+++ receipt-note.txt\tnew\n@@ -1,1 +1,1 @@\n-B168 original text\n+B168 saved through the real editor.\n"
+    },
+    "writes": [
+      {
+        "time": "2026-11-10T01:22:02.038Z",
+        "stage": "receipt",
+        "attempt": 1,
+        "status": 200,
+        "requestID": "618bd71f-99d1-4f98-ac15-fe2e1770780f",
+        "request": {
+          "path": "receipt-note.txt",
+          "content": "B168 saved through the real editor.\n",
+          "expectedRevision": "0972b6657f96122edbf1b79a35fd4a2c94ac5fc504d97549a7f97095fdcd959f"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 saved through the real editor.\n",
+          "revision": "9c483073b642ff12c2bc6959420835c30d4ccf92d973e1752c51a3f3d9255feb"
+        },
+        "originalBytes": 143,
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T01:22:17.815Z",
+        "stage": "receipt",
+        "attempt": 2,
+        "status": 409,
+        "requestID": "6bf7731b-6617-43d0-a3f5-7f6f30072987",
+        "request": {
+          "path": "receipt-note.txt",
+          "content": "B168 saved through the real editor.\n",
+          "expectedRevision": "0972b6657f96122edbf1b79a35fd4a2c94ac5fc504d97549a7f97095fdcd959f"
+        },
+        "result": {
+          "errorName": "FileWriteConflictError"
+        },
+        "originalBytes": 171,
+        "cut": false
+      }
+    ],
+    "persistence": {
+      "fileEdits": [
+        {
+          "id": "bus-occurrence:0ce3c7a1-ab29-4a76-8eea-43b8df7983c5",
+          "file": "receipt-note.txt"
+        }
+      ],
+      "deliveryOutcomes": {
+        "succeeded": 6
+      }
+    }
+  },
+  "firstCandidate": {
+    "externalConflictAndAdoption": [
+      {
+        "time": "2026-11-10T01:31:31.050Z",
+        "stage": "receipt",
+        "attempt": 4,
+        "status": 200,
+        "requestID": "e478affe-04b1-498d-bd55-7b008a07d4af",
+        "request": {
+          "path": "external-note.txt",
+          "content": "B168 editor draft for external race\n",
+          "expectedRevision": "839454e6d361b1dcb458cec3fc720d58777485071b1779462fce1865f433839c"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 editor draft for external race\n",
+          "revision": "ab8f75688c1f87907af4d5e40b8ed5ef73db1426a38a1451af28639a68d793d0",
+          "resourceID": "ee6ad91e673bf47a791f2be83ef801998eaf49bd1401809debb5ac521037895c"
+        },
+        "originalBytes": 223,
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T01:32:09.893Z",
+        "stage": "receipt",
+        "attempt": 5,
+        "status": 409,
+        "requestID": "1e948411-5434-4676-9532-9e218afedbf5",
+        "request": {
+          "path": "external-note.txt",
+          "content": "B168 editor draft for external race\n",
+          "expectedRevision": "839454e6d361b1dcb458cec3fc720d58777485071b1779462fce1865f433839c"
+        },
+        "result": {
+          "errorName": "FileWriteConflictError"
+        },
+        "originalBytes": 173,
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T01:32:36.020Z",
+        "stage": "receipt",
+        "attempt": 6,
+        "status": 200,
+        "requestID": "0eb919c6-8546-4a47-bb45-319ae6d096f0",
+        "request": {
+          "path": "external-note.txt",
+          "content": "B168 editor draft for external race\n",
+          "expectedRevision": "eecb695513d5b9a1f8ec4d0788684153f0d616566c2f36e4bbb320abf11117c7"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 editor draft for external race\n",
+          "revision": "ab8f75688c1f87907af4d5e40b8ed5ef73db1426a38a1451af28639a68d793d0",
+          "resourceID": "ee6ad91e673bf47a791f2be83ef801998eaf49bd1401809debb5ac521037895c"
+        },
+        "originalBytes": 223,
+        "cut": false
+      }
+    ],
+    "retargetedRead": {
+      "committed": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "398bd54a96e1c034b1098c1ddcf6b9b77ecc5bd74ab10b0f9458771ba64f84db",
+        "resourceID": "1e0aada6177d684b9229365131ae1eef61b315fab54dcaaf05af6af4101ff0c4"
+      },
+      "current": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "cdb76a50750357db6f89d9d978df3444806ca594d112c9ca59433fe19db2b808",
+        "resourceID": "15530efd9425e6970919fc453cc5e4a4c8d4aa0d2a1b03852f2a07bbf50a035e"
+      },
+      "changedAt": "2026-11-10T01:34:49.5029001Z"
+    },
+    "persistence": {
+      "fileEdits": [
+        {
+          "id": "bus-occurrence:c89ee1e7-badf-42a3-9fde-4893f90ab324",
+          "file": "receipt-note.txt"
+        },
+        {
+          "id": "bus-occurrence:1241f268-ea09-4dea-a169-c88ca80c8c7a",
+          "file": "later-note.txt"
+        },
+        {
+          "id": "bus-occurrence:4d558df1-af64-4d08-a0cc-fb5ab7eddccb",
+          "file": "later-note.txt"
+        },
+        {
+          "id": "bus-occurrence:05b9b429-9e9d-408f-93cb-1221bb18a9cb",
+          "file": "external-note.txt"
+        },
+        {
+          "id": "bus-occurrence:1f23ee4a-a801-494a-9a7c-2438cd402a10",
+          "file": "external-note.txt"
+        },
+        {
+          "id": "bus-occurrence:e555aebb-7e59-4793-9c3c-9890cd0c2dee",
+          "file": "relay/edit.txt"
+        },
+        {
+          "id": "bus-occurrence:6f9cf8de-6470-4262-937f-cadcedb717ac",
+          "file": "review-link/edit.txt"
+        },
+        {
+          "id": "bus-occurrence:4faaa181-b126-4760-87a0-9744a60aa9ef",
+          "file": "close-note.txt"
+        }
+      ],
+      "deliveryOutcomes": {
+        "succeeded": 50
+      }
+    }
+  },
+  "final": {
+    "fixtureGit": "7ab341e079968eb9b4afcc29630223dfe39c6aa7",
+    "writes": [
+      {
+        "time": "2026-11-10T01:38:43.962Z",
+        "stage": "receipt",
+        "attempt": 1,
+        "status": 200,
+        "requestID": "c0453fa7-5c38-49f9-af82-620eaf3671bd",
+        "request": {
+          "path": "close-note.txt",
+          "content": "B168 final verified close result\n",
+          "expectedRevision": "5683741c1712bde224e7055b9976648dcdd634d5778c6fcd7e54b9356cbf03b7"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 final verified close result\n",
+          "revision": "b74e0052a76f2c0a9080c735cac36bb397ab3d8133318aa3203f3a36817bc7d9",
+          "resourceID": "89011303699b99984784890309c6aa18e8a51782edbc144531051bc2f6bbbb46"
+        },
+        "originalBytes": 220,
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T01:39:12.072Z",
+        "stage": "receipt",
+        "attempt": 2,
+        "status": 200,
+        "requestID": "0dad5f49-514f-4932-a6a4-9237a5f6e489",
+        "request": {
+          "path": "review-link/edit.txt",
+          "content": "B168 same text new canonical resource\n",
+          "expectedRevision": "48e8b7ea39b50fb0c495c76de6c5a80ca2ffbd4b1c019000268fde19da5842c8"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 same text new canonical resource\n",
+          "revision": "3cec2b5295e9b1f4e328a4bda64a47fb29136315d89666999ef7a34008f8e02c",
+          "resourceID": "b6bf7b3d0a5a9ddee9ca04b5d4fe541a67ea981b835491e932fb36c7570d6538"
+        },
+        "originalBytes": 225,
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T01:39:46.027Z",
+        "stage": "receipt",
+        "attempt": 3,
+        "status": 200,
+        "requestID": "8a4582cb-4a4b-4ff8-bebb-0e9ab432a71d",
+        "request": {
+          "path": "later-note.txt",
+          "content": "B168 final first submitted version\n",
+          "expectedRevision": "1c9e42e7f990207da2fd8a7a0d7604ca3e25200ccc83621c5746393b3526bfa9"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 final first submitted version\n",
+          "revision": "062f345b2c6184ae35d473d4f1e1db782f6314f97831c742d4b0552bf6738dc7",
+          "resourceID": "8c6d8213f043cedcbe23cad97deb6880ebf2cc5f120a7d40b4d3f1f742dfadb6"
+        },
+        "originalBytes": 222,
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T01:39:59.665Z",
+        "stage": "receipt",
+        "attempt": 4,
+        "status": 200,
+        "requestID": "c5bc561d-725c-40cf-8e33-55ca07a9e8a6",
+        "request": {
+          "path": "later-note.txt",
+          "content": "B168 final newer draft remains\n",
+          "expectedRevision": "062f345b2c6184ae35d473d4f1e1db782f6314f97831c742d4b0552bf6738dc7"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 final newer draft remains\n",
+          "revision": "210a0dd0c6f4d0659335e4c73ce3ef315492cc0c2739a664fc81d3bdcabdb0cd",
+          "resourceID": "8c6d8213f043cedcbe23cad97deb6880ebf2cc5f120a7d40b4d3f1f742dfadb6"
+        },
+        "originalBytes": 218,
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T01:40:21.334Z",
+        "stage": "receipt",
+        "attempt": 5,
+        "status": 200,
+        "requestID": "5656c5ed-eda7-4c1a-be6a-f560d16ac279",
+        "request": {
+          "path": "external-note.txt",
+          "content": "B168 final external draft\n",
+          "expectedRevision": "67752745c084ecf34fd847c8044888a6cfcf381b2b376f2ce8f2f59c20e219c8"
+        },
+        "result": {
+          "type": "text",
+          "content": "B168 final external draft\n",
+          "revision": "03fd6e2b60f74b10ebd1ad290a9804b2eb643b49ccecc8b1e50704e59bf726f6",
+          "resourceID": "541a3b8eeabe8c126e2c3763a161d13473ef9fdf5a76ec72df9d5e6c7ff6e508"
+        },
+        "originalBytes": 213,
+        "cut": true
+      }
+    ],
+    "transport": [
+      {
+        "time": "2026-11-10T01:38:43.963Z",
+        "stage": "partial-body",
+        "attempt": 1,
+        "bytes": 24,
+        "reason": "immediate"
+      },
+      {
+        "time": "2026-11-10T01:39:12.464Z",
+        "stage": "partial-body",
+        "attempt": 2,
+        "bytes": 24,
+        "reason": "manual"
+      },
+      {
+        "time": "2026-11-10T01:39:55.514Z",
+        "stage": "partial-body",
+        "attempt": 3,
+        "bytes": 24,
+        "reason": "manual"
+      },
+      {
+        "time": "2026-11-10T01:39:59.666Z",
+        "stage": "released",
+        "attempt": 4,
+        "bytes": 218
+      },
+      {
+        "time": "2026-11-10T01:40:21.954Z",
+        "stage": "partial-body",
+        "attempt": 5,
+        "bytes": 24,
+        "reason": "manual"
+      }
+    ],
+    "verificationReads": [
+      {
+        "time": "2026-11-10T01:38:44.457Z",
+        "stage": "file-read",
+        "path": "close-note.txt",
+        "status": 200,
+        "requestID": "e379e001-16ad-48af-9b92-fea5ffc94f9f",
+        "result": {
+          "type": "text",
+          "content": "B168 final verified close result\n",
+          "revision": "b74e0052a76f2c0a9080c735cac36bb397ab3d8133318aa3203f3a36817bc7d9",
+          "resourceID": "89011303699b99984784890309c6aa18e8a51782edbc144531051bc2f6bbbb46"
+        }
+      },
+      {
+        "time": "2026-11-10T01:39:12.599Z",
+        "stage": "file-read",
+        "path": "review-link/edit.txt",
+        "status": 200,
+        "requestID": "4c5557ba-bda4-4615-bdb8-ec43dc9d5bb6",
+        "result": {
+          "type": "text",
+          "content": "B168 same text new canonical resource\n",
+          "revision": "290752ad0f07c58c766757dfbbf61580e5de64152ac8d5a3667ceeb68c617a1b",
+          "resourceID": "82db181dc91a604c1e9277ad965cb8ed0d81ee67afa788ba05084ce521077fb2"
+        }
+      },
+      {
+        "time": "2026-11-10T01:39:55.912Z",
+        "stage": "file-read",
+        "path": "later-note.txt",
+        "status": 200,
+        "requestID": "5696d0e3-21eb-4346-b2b4-86217dbb6248",
+        "result": {
+          "type": "text",
+          "content": "B168 final first submitted version\n",
+          "revision": "062f345b2c6184ae35d473d4f1e1db782f6314f97831c742d4b0552bf6738dc7",
+          "resourceID": "8c6d8213f043cedcbe23cad97deb6880ebf2cc5f120a7d40b4d3f1f742dfadb6"
+        }
+      },
+      {
+        "time": "2026-11-10T01:40:22.382Z",
+        "stage": "file-read",
+        "path": "external-note.txt",
+        "status": 200,
+        "requestID": "0c9ab124-62f7-47c2-8d9e-dca843ba7c30",
+        "result": {
+          "type": "text",
+          "content": "B168 final independent external state\n",
+          "revision": "f940ee21cec18662eb9a100fd7a6c09cc8629277e82bafe1b401d0763832a5d5",
+          "resourceID": "541a3b8eeabe8c126e2c3763a161d13473ef9fdf5a76ec72df9d5e6c7ff6e508"
+        }
+      }
+    ],
+    "fileSnapshots": {
+      "close-note.txt": {
+        "type": "text",
+        "content": "B168 final verified close result\n",
+        "revision": "b74e0052a76f2c0a9080c735cac36bb397ab3d8133318aa3203f3a36817bc7d9",
+        "resourceID": "89011303699b99984784890309c6aa18e8a51782edbc144531051bc2f6bbbb46"
+      },
+      "later-note.txt": {
+        "type": "text",
+        "content": "B168 final newer draft remains\n",
+        "revision": "210a0dd0c6f4d0659335e4c73ce3ef315492cc0c2739a664fc81d3bdcabdb0cd",
+        "resourceID": "8c6d8213f043cedcbe23cad97deb6880ebf2cc5f120a7d40b4d3f1f742dfadb6"
+      },
+      "external-note.txt": {
+        "type": "text",
+        "content": "B168 final independent external state\n",
+        "revision": "f940ee21cec18662eb9a100fd7a6c09cc8629277e82bafe1b401d0763832a5d5",
+        "resourceID": "541a3b8eeabe8c126e2c3763a161d13473ef9fdf5a76ec72df9d5e6c7ff6e508"
+      },
+      "control-note.txt": {
+        "type": "text",
+        "content": "B168 final untouched control\n",
+        "revision": "cd679db465c3374c8e4cc93d3b67e133d93c8b116de55979061d4d62002093cf",
+        "resourceID": "f60a4ec914e912c6c6891ad3fac5ad648ad2a2b261b939f19e9736d9621aafd4"
+      },
+      "alias-first/edit.txt": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "3cec2b5295e9b1f4e328a4bda64a47fb29136315d89666999ef7a34008f8e02c",
+        "resourceID": "b6bf7b3d0a5a9ddee9ca04b5d4fe541a67ea981b835491e932fb36c7570d6538"
+      },
+      "alias-second/edit.txt": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "290752ad0f07c58c766757dfbbf61580e5de64152ac8d5a3667ceeb68c617a1b",
+        "resourceID": "82db181dc91a604c1e9277ad965cb8ed0d81ee67afa788ba05084ce521077fb2"
+      },
+      "review-link/edit.txt": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "290752ad0f07c58c766757dfbbf61580e5de64152ac8d5a3667ceeb68c617a1b",
+        "resourceID": "82db181dc91a604c1e9277ad965cb8ed0d81ee67afa788ba05084ce521077fb2"
+      },
+      "review-link-original/edit.txt": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "3cec2b5295e9b1f4e328a4bda64a47fb29136315d89666999ef7a34008f8e02c",
+        "resourceID": "b6bf7b3d0a5a9ddee9ca04b5d4fe541a67ea981b835491e932fb36c7570d6538"
+      }
+    },
+    "retargeted": {
+      "committed": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "3cec2b5295e9b1f4e328a4bda64a47fb29136315d89666999ef7a34008f8e02c",
+        "resourceID": "b6bf7b3d0a5a9ddee9ca04b5d4fe541a67ea981b835491e932fb36c7570d6538"
+      },
+      "current": {
+        "type": "text",
+        "content": "B168 same text new canonical resource\n",
+        "revision": "290752ad0f07c58c766757dfbbf61580e5de64152ac8d5a3667ceeb68c617a1b",
+        "resourceID": "82db181dc91a604c1e9277ad965cb8ed0d81ee67afa788ba05084ce521077fb2"
+      },
+      "changedAt": "2026-11-10T01:39:12.4474506Z"
+    },
+    "external": {
+      "committed": {
+        "type": "text",
+        "content": "B168 final external draft\n",
+        "revision": "03fd6e2b60f74b10ebd1ad290a9804b2eb643b49ccecc8b1e50704e59bf726f6",
+        "resourceID": "541a3b8eeabe8c126e2c3763a161d13473ef9fdf5a76ec72df9d5e6c7ff6e508"
+      },
+      "current": {
+        "type": "text",
+        "content": "B168 final independent external state\n",
+        "revision": "f940ee21cec18662eb9a100fd7a6c09cc8629277e82bafe1b401d0763832a5d5",
+        "resourceID": "541a3b8eeabe8c126e2c3763a161d13473ef9fdf5a76ec72df9d5e6c7ff6e508"
+      },
+      "changedAt": "2026-11-10T01:40:21.9351665Z"
+    },
+    "persistence": {
+      "fileEdits": [
+        {
+          "id": "bus-occurrence:f6cb0b40-c8b2-4574-9026-516a409bac5a",
+          "file": "close-note.txt"
+        },
+        {
+          "id": "bus-occurrence:409962d6-efed-4f2c-8b51-5b22a80e71b0",
+          "file": "review-link/edit.txt"
+        },
+        {
+          "id": "bus-occurrence:712ac4b7-eff3-4d3d-b705-d1108b8158da",
+          "file": "later-note.txt"
+        },
+        {
+          "id": "bus-occurrence:7742d9dc-b91b-4272-a774-8dd0a1f55503",
+          "file": "later-note.txt"
+        },
+        {
+          "id": "bus-occurrence:a9fd767a-9ce2-42ab-bf81-8cb9a649952f",
+          "file": "external-note.txt"
+        }
+      ],
+      "deliveryOutcomes": {
+        "succeeded": 33
+      }
+    }
+  }
+}

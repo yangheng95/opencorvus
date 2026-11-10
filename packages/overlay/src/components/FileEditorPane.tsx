@@ -70,6 +70,14 @@ function canEdit(content: FileContent | null | undefined): boolean {
   return !!content && content.type === "text" && !content.encoding
 }
 
+type EditableFileSnapshot = FileContent & { revision: string; resourceID: string }
+
+function isEditableFileSnapshot(content: FileContent | null | undefined): content is EditableFileSnapshot {
+  return canEdit(content) && typeof content?.content === "string" &&
+    typeof content.revision === "string" && Boolean(content.revision) &&
+    typeof content.resourceID === "string" && Boolean(content.resourceID)
+}
+
 function saveFailureMessageKey(error: unknown): string {
   if (
     error instanceof ApiError &&
@@ -79,8 +87,16 @@ function saveFailureMessageKey(error: unknown): string {
     const name = (error.body as { name?: unknown }).name
     if (error.status === 409 && name === "FileWriteConflictError") return "file_editor.save_conflict"
     if (error.status === 404 && name === "FileNotFoundError") return "file_editor.save_missing"
+    if (error.status === 400 && (name === "FileInvalidPathError" ||
+      ("success" in error.body && error.body.success === false && "error" in error.body && Array.isArray(error.body.error)))) {
+      return "file_editor.save_failed"
+    }
   }
-  return "file_editor.save_failed"
+  return "file_editor.save_unconfirmed"
+}
+
+function isUnconfirmedSave(key: string | undefined): boolean {
+  return key === "file_editor.save_unconfirmed" || key === "file_editor.save_unconfirmed_resource_changed"
 }
 
 function ownsFileTarget(target: FileEditorTarget): boolean {
@@ -100,7 +116,7 @@ function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditor
   )
 }
 
-type FileEditorFailure = { messageKey: string; cause?: unknown }
+type FileEditorFailure = { messageKey: string; cause?: unknown; observationCause?: unknown }
 type AcceptedFileContent = { value: FileContent; target: FileEditorTarget; readerAuthority: ApiAuthority }
 type ComparisonMode = "disk-draft" | "base-disk" | "base-draft"
 type FileComparison = {
@@ -116,7 +132,7 @@ type FileComparison = {
 
 export function FileEditorPane() {
   const [draft, setDraft] = createSignal("")
-  const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision"> | null>(null)
+  const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision" | "resourceID"> | null>(null)
   const [saving, setSaving] = createSignal(false)
   const [reloading, setReloading] = createSignal(false)
   const [downloading, setDownloading] = createSignal(false)
@@ -284,6 +300,12 @@ export function FileEditorPane() {
     const failure = error()
     return failure && t(failure.messageKey)
   }
+  const fileErrorDetails = (failure: FileEditorFailure) =>
+    [failure.cause, failure.observationCause].map(formatErrorDetails).filter(Boolean).join("\n\n") || undefined
+  const needsDiskComparison = () => {
+    const key = error()?.messageKey
+    return key === "file_editor.save_conflict" || isUnconfirmedSave(key)
+  }
   const readFailurePresentation = createMemo(() => {
     const cause = loadFailure()?.error
     const body = cause instanceof ApiError ? cause.body : undefined
@@ -335,10 +357,10 @@ export function FileEditorPane() {
     if (!read || !disk || !revision) return
     batch(() => {
       setAcceptedContent({ value: disk, target: read.target, readerAuthority: read.authority })
-      setSavedBaseline({ content: disk.content, revision })
+      setSavedBaseline({ content: disk.content, revision, resourceID: disk.resourceID })
       setLoadedObservationKey(read.observationKey)
       // The adopted snapshot replaces the base that produced this conflict.
-      if (error()?.messageKey === "file_editor.save_conflict") setError(null)
+      if (needsDiskComparison()) setError(null)
       adoptedComparisonGeneration = loadGeneration
       retireComparison()
     })
@@ -362,7 +384,7 @@ export function FileEditorPane() {
       if (current()) setComparison({ ...request, status: "failed", cause })
     }
   }
-  const conflictComparisonAction = () => error()?.messageKey === "file_editor.save_conflict" ? (
+  const saveComparisonAction = () => needsDiskComparison() ? (
       <Button type="button" variant="outline" size="sm" tone="neutral"
         disabled={!resourceReady() || fileEditorReserved()} aria-disabled={isBusy() || fileEditorReserved() || undefined}
         onClick={() => void compareWithDisk()}>
@@ -426,7 +448,7 @@ export function FileEditorPane() {
     setError(null)
     draftRevision += 1
     setDraft(canEdit(next) ? next!.content : "")
-    setSavedBaseline(canEdit(next) ? { content: next!.content, revision: next!.revision } : null)
+    setSavedBaseline(canEdit(next) ? { content: next!.content, revision: next!.revision, resourceID: next!.resourceID } : null)
   })
 
   createEffect(() => {
@@ -478,7 +500,8 @@ export function FileEditorPane() {
     const file = target()
     if (fileEditorReserved() || isBusy()) return false
     if (!file || !writable() || !dirty()) return !dirty()
-    const expectedRevision = savedBaseline()?.revision
+    const baseline = savedBaseline()
+    const expectedRevision = baseline?.revision
     if (!expectedRevision) {
       setError({ messageKey: "file_editor.revision_required" })
       return false
@@ -488,24 +511,44 @@ export function FileEditorPane() {
     const submittedDraft = draft()
     const submittedRevision = draftRevision
     const requestGeneration = ++saveGeneration
+    const owns = () => requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)
+    const acceptSavedSnapshot = (next: EditableFileSnapshot): boolean => {
+      const ownsSubmittedDraft = draftRevision === submittedRevision
+      batch(() => {
+        setSavedBaseline({ content: next.content, revision: next.revision, resourceID: next.resourceID })
+        setLoadedObservationKey(observed)
+        if (ownsSubmittedDraft) setDraft(next.content)
+        draftRevision += 1
+      })
+      return ownsSubmittedDraft
+    }
     setSaving(true)
     setError(null)
     try {
       const next = await writeFileContent(file, submittedDraft, expectedRevision, authority)
-      if (requestGeneration !== saveGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return false
-      setSavedBaseline({ content: next.content, revision: next.revision })
-      setLoadedObservationKey(observed)
-      const ownsSubmittedDraft = draftRevision === submittedRevision
-      if (ownsSubmittedDraft) setDraft(next.content)
-      draftRevision += 1
-      return ownsSubmittedDraft
-    } catch (err) {
-      if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
-        setError({ messageKey: saveFailureMessageKey(err), cause: err })
+      if (!owns()) return false
+      if (!isEditableFileSnapshot(next)) throw new Error("File write did not return a complete editable snapshot")
+      return acceptSavedSnapshot(next)
+    } catch (cause) {
+      if (!owns()) return false
+      let messageKey = saveFailureMessageKey(cause)
+      let observationCause: unknown
+      if (messageKey === "file_editor.save_unconfirmed" && baseline?.resourceID) {
+        try {
+          const disk = await readFileContent(file, authority)
+          if (!owns()) return false
+          if (isEditableFileSnapshot(disk)) {
+            if (disk.resourceID !== baseline.resourceID) messageKey = "file_editor.save_unconfirmed_resource_changed"
+            else if (disk.content === submittedDraft) return acceptSavedSnapshot(disk)
+          }
+        } catch (error) {
+          observationCause = error
+        }
       }
+      if (owns()) setError({ messageKey, cause, observationCause })
       return false
     } finally {
-      if (requestGeneration === saveGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setSaving(false)
+      if (owns()) setSaving(false)
     }
   }
 
@@ -885,12 +928,12 @@ export function FileEditorPane() {
             </Show>
           </Show>
         </div>
-        <Show when={error()}>{(failure) =>
+        <Show when={!leaveDialogOpen() && error()}>{(failure) =>
           <Feedback
               class="file-editor-error file-editor-compare-feedback"
-            tone="error"
-            details={formatErrorDetails(failure().cause) || undefined}
-            actions={conflictComparisonAction()}
+            tone={isUnconfirmedSave(failure().messageKey) ? "warning" : "error"}
+            details={fileErrorDetails(failure())}
+            actions={saveComparisonAction()}
           >
             {currentErrorMessage()}
           </Feedback>
@@ -959,7 +1002,8 @@ export function FileEditorPane() {
           })}
         </p>
         <Show when={error()}>{(failure) =>
-            <Feedback class="file-editor-compare-feedback" tone="error" details={formatErrorDetails(failure().cause) || undefined} actions={conflictComparisonAction()}>
+            <Feedback class="file-editor-compare-feedback" tone={isUnconfirmedSave(failure().messageKey) ? "warning" : "error"}
+              details={fileErrorDetails(failure())} actions={saveComparisonAction()}>
             {currentErrorMessage()}
           </Feedback>
         }

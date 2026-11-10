@@ -252,6 +252,14 @@ the file. FileEditorPane adopts the returned formatted body only while its submi
 draft still owns the editor; a newer draft remains intact. File creation formats
 text explicitly. Attachment saves, upload, copy, move and removal retain their
 original byte-transfer semantics; edit notifications do not mutate these files.
+Editable project text carries an opaque `resourceID` from the admitted canonical
+path, independent of the bytes and their revision. When a save response cannot
+establish its outcome, the editor reads the same target without repeating the
+write. It accepts the observed revision only when the resource ID still matches
+the editor's base and the disk text exactly matches the submitted draft. That
+observation establishes the current file state; a different resource or text
+keeps the draft and offers the existing disk comparison. A newer draft remains
+separately editable against the confirmed base.
 File and file-search HTTP response declarations reuse the existing domain error
 schemas, including validator bad requests, file path/not-found/conflict errors,
 upload errors and ordinary internal failures. File status also publishes the
@@ -1383,7 +1391,7 @@ the authored draft and pending leave decision remain owned by their existing
 signals. It writes no file or navigation approval. A later explicit Save still
 uses the unchanged conditional writer with that snapshot's revision, so a newer
 disk change produces the ordinary FileWriteConflictError.
-Adoption retires only the current save-conflict feedback tied to the former base;
+Adoption retires only the current save-conflict or unconfirmed-save feedback tied to the former base;
 other action errors retain their existing lifecycle. It does not report a save
 or change the pending leave decision. A later conflict is presented by the same
 ordinary save failure owner.
