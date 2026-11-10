@@ -1,0 +1,1152 @@
+{
+  "target": "project:b169-review/history-target",
+  "baseline": {
+    "asset": "main-KScF5fjQ.js",
+    "network": [
+      {
+        "time": "2026-11-10T01:48:00.634Z",
+        "stage": "listening",
+        "port": 39442,
+        "up": 39441,
+        "pid": 31920
+      },
+      {
+        "time": "2026-11-10T01:48:19.685Z",
+        "stage": "upgrade",
+        "status": 101
+      },
+      {
+        "time": "2026-11-10T01:48:40.780Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T01:48:40.829Z",
+        "stage": "origin",
+        "attempt": 1,
+        "older": false,
+        "status": 200,
+        "requestID": "371b8db5-d192-4f74-ba54-143d15cc5040",
+        "bytes": 56481,
+        "upper": 26,
+        "cursor": {
+          "catalog_revision_upper": 26,
+          "before_catalog_revision": 5
+        },
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+            "catalog_revision": 24
+          },
+          {
+            "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+            "catalog_revision": 23
+          },
+          {
+            "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+            "catalog_revision": 22
+          },
+          {
+            "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+            "catalog_revision": 21
+          },
+          {
+            "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+            "catalog_revision": 20
+          },
+          {
+            "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+            "catalog_revision": 19
+          },
+          {
+            "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+            "catalog_revision": 18
+          },
+          {
+            "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+            "catalog_revision": 17
+          },
+          {
+            "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+            "catalog_revision": 16
+          },
+          {
+            "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+            "catalog_revision": 15
+          },
+          {
+            "artifact_id": "art_g0VaWxyUF004VrzR792r",
+            "catalog_revision": 14
+          },
+          {
+            "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+            "catalog_revision": 13
+          },
+          {
+            "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+            "catalog_revision": 12
+          },
+          {
+            "artifact_id": "art_g0VaWxyTc00stVjta7za",
+            "catalog_revision": 11
+          },
+          {
+            "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+            "catalog_revision": 10
+          },
+          {
+            "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+            "catalog_revision": 9
+          },
+          {
+            "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+            "catalog_revision": 8
+          },
+          {
+            "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+            "catalog_revision": 7
+          },
+          {
+            "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+            "catalog_revision": 6
+          },
+          {
+            "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+            "catalog_revision": 5
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:48:40.830Z",
+        "stage": "released",
+        "attempt": 1,
+        "reason": "normal",
+        "bytes": 56481
+      },
+      {
+        "time": "2026-11-10T01:49:14.301Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "26",
+          "beforeCatalogRevision": "5"
+        }
+      },
+      {
+        "time": "2026-11-10T01:49:14.338Z",
+        "stage": "origin",
+        "attempt": 2,
+        "older": true,
+        "status": 200,
+        "requestID": "ea518a17-c93b-4528-bcc8-ccf8f886b901",
+        "bytes": 5968,
+        "upper": 26,
+        "cursor": null,
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+            "catalog_revision": 4
+          },
+          {
+            "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+            "catalog_revision": 3
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:49:14.339Z",
+        "stage": "held",
+        "attempt": 2
+      },
+      {
+        "time": "2026-11-10T01:49:14.672Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T01:49:14.716Z",
+        "stage": "origin",
+        "attempt": 3,
+        "older": false,
+        "status": 200,
+        "requestID": "d96d19ff-2d6f-43fc-8896-73c75531f38e",
+        "bytes": 56499,
+        "upper": 27,
+        "cursor": {
+          "catalog_revision_upper": 27,
+          "before_catalog_revision": 6
+        },
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWyUHs00QMijjwSD2",
+            "catalog_revision": 27
+          },
+          {
+            "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+            "catalog_revision": 24
+          },
+          {
+            "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+            "catalog_revision": 23
+          },
+          {
+            "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+            "catalog_revision": 22
+          },
+          {
+            "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+            "catalog_revision": 21
+          },
+          {
+            "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+            "catalog_revision": 20
+          },
+          {
+            "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+            "catalog_revision": 19
+          },
+          {
+            "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+            "catalog_revision": 18
+          },
+          {
+            "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+            "catalog_revision": 17
+          },
+          {
+            "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+            "catalog_revision": 16
+          },
+          {
+            "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+            "catalog_revision": 15
+          },
+          {
+            "artifact_id": "art_g0VaWxyUF004VrzR792r",
+            "catalog_revision": 14
+          },
+          {
+            "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+            "catalog_revision": 13
+          },
+          {
+            "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+            "catalog_revision": 12
+          },
+          {
+            "artifact_id": "art_g0VaWxyTc00stVjta7za",
+            "catalog_revision": 11
+          },
+          {
+            "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+            "catalog_revision": 10
+          },
+          {
+            "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+            "catalog_revision": 9
+          },
+          {
+            "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+            "catalog_revision": 8
+          },
+          {
+            "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+            "catalog_revision": 7
+          },
+          {
+            "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+            "catalog_revision": 6
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:49:14.716Z",
+        "stage": "released",
+        "attempt": 3,
+        "reason": "normal",
+        "bytes": 56499
+      },
+      {
+        "time": "2026-11-10T01:49:17.219Z",
+        "stage": "released",
+        "attempt": 2,
+        "reason": "after-fresh-head",
+        "bytes": 5968
+      }
+    ],
+    "directAfterPublicationControl": {
+      "oldUpper": 26,
+      "oldRows": [
+        "art_g0VaWxyRm00jps6iaEzP",
+        "art_g0VaWxyRU00Zw6E1xRGy"
+      ],
+      "detailUpper": 27,
+      "detailTask": "tsk_g00VaWxxuG00Ru0c08mw",
+      "comparison": "art_g0VaWxygM00JkgwzCENW",
+      "slots": 2
+    },
+    "persisted": {
+      "quickCheck": "ok",
+      "task": {
+        "id": "tsk_g00VaWxxuG00Ru0c08mw",
+        "project_id": "prj_hdKNDNP0w6goDO5iNI8R",
+        "session_id": "ses_-zUPT225jzz50wsfDSkm"
+      },
+      "rootSession": {
+        "id": "ses_-zUPT225jzz50wsfDSkm",
+        "project_id": "prj_hdKNDNP0w6goDO5iNI8R"
+      },
+      "countsByArtifactType": {
+        "evolution-lab/campaign-spec": 23,
+        "evolution-lab/candidate-revision": 1,
+        "evolution-lab/comparison-recommendation": 1,
+        "opencorvus/core/task_execution_capsule_binding": 1,
+        "opencorvus/core/task_package_revision_binding": 1
+      },
+      "providerUsageEvents": 0,
+      "activeRuntimeCapacityLeases": 0,
+      "upper": 27,
+      "catalogAtUpper": {
+        "id": "art_g0VaWyUHs00QMijjwSD2",
+        "task_id": "tsk_g00VaWxxuG00Ru0c08mw",
+        "catalog_revision": 27
+      }
+    }
+  },
+  "candidate": {
+    "asset": "main-B_ZvFf4_.js",
+    "network": [
+      {
+        "time": "2026-11-10T01:55:51.985Z",
+        "stage": "listening",
+        "port": 39444,
+        "up": 39443,
+        "pid": 15300
+      },
+      {
+        "time": "2026-11-10T01:56:57.851Z",
+        "stage": "upgrade",
+        "status": 101
+      },
+      {
+        "time": "2026-11-10T01:57:02.781Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T01:57:02.828Z",
+        "stage": "origin",
+        "attempt": 1,
+        "older": false,
+        "status": 200,
+        "requestID": "d0f60e3b-da5f-40ae-aca9-c6bf1f170f00",
+        "bytes": 56481,
+        "upper": 26,
+        "cursor": {
+          "catalog_revision_upper": 26,
+          "before_catalog_revision": 5
+        },
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+            "catalog_revision": 24
+          },
+          {
+            "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+            "catalog_revision": 23
+          },
+          {
+            "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+            "catalog_revision": 22
+          },
+          {
+            "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+            "catalog_revision": 21
+          },
+          {
+            "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+            "catalog_revision": 20
+          },
+          {
+            "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+            "catalog_revision": 19
+          },
+          {
+            "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+            "catalog_revision": 18
+          },
+          {
+            "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+            "catalog_revision": 17
+          },
+          {
+            "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+            "catalog_revision": 16
+          },
+          {
+            "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+            "catalog_revision": 15
+          },
+          {
+            "artifact_id": "art_g0VaWxyUF004VrzR792r",
+            "catalog_revision": 14
+          },
+          {
+            "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+            "catalog_revision": 13
+          },
+          {
+            "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+            "catalog_revision": 12
+          },
+          {
+            "artifact_id": "art_g0VaWxyTc00stVjta7za",
+            "catalog_revision": 11
+          },
+          {
+            "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+            "catalog_revision": 10
+          },
+          {
+            "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+            "catalog_revision": 9
+          },
+          {
+            "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+            "catalog_revision": 8
+          },
+          {
+            "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+            "catalog_revision": 7
+          },
+          {
+            "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+            "catalog_revision": 6
+          },
+          {
+            "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+            "catalog_revision": 5
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:57:02.829Z",
+        "stage": "released",
+        "attempt": 1,
+        "reason": "normal",
+        "bytes": 56481
+      },
+      {
+        "time": "2026-11-10T01:57:20.516Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "26",
+          "beforeCatalogRevision": "5"
+        }
+      },
+      {
+        "time": "2026-11-10T01:57:20.551Z",
+        "stage": "origin",
+        "attempt": 2,
+        "older": true,
+        "status": 200,
+        "requestID": "3103683e-be03-43e5-b3c4-c47de6f5268b",
+        "bytes": 5968,
+        "upper": 26,
+        "cursor": null,
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+            "catalog_revision": 4
+          },
+          {
+            "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+            "catalog_revision": 3
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:57:20.552Z",
+        "stage": "held",
+        "attempt": 2
+      },
+      {
+        "time": "2026-11-10T01:57:27.719Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T01:57:27.765Z",
+        "stage": "origin",
+        "attempt": 3,
+        "older": false,
+        "status": 200,
+        "requestID": "c722c8ac-8840-4ba2-82ac-9617b9749a16",
+        "bytes": 56499,
+        "upper": 27,
+        "cursor": {
+          "catalog_revision_upper": 27,
+          "before_catalog_revision": 6
+        },
+        "rows": [
+          {
+            "artifact_id": "art_g0VaX0YSX00GBtvF9a1R",
+            "catalog_revision": 27
+          },
+          {
+            "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+            "catalog_revision": 24
+          },
+          {
+            "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+            "catalog_revision": 23
+          },
+          {
+            "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+            "catalog_revision": 22
+          },
+          {
+            "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+            "catalog_revision": 21
+          },
+          {
+            "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+            "catalog_revision": 20
+          },
+          {
+            "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+            "catalog_revision": 19
+          },
+          {
+            "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+            "catalog_revision": 18
+          },
+          {
+            "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+            "catalog_revision": 17
+          },
+          {
+            "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+            "catalog_revision": 16
+          },
+          {
+            "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+            "catalog_revision": 15
+          },
+          {
+            "artifact_id": "art_g0VaWxyUF004VrzR792r",
+            "catalog_revision": 14
+          },
+          {
+            "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+            "catalog_revision": 13
+          },
+          {
+            "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+            "catalog_revision": 12
+          },
+          {
+            "artifact_id": "art_g0VaWxyTc00stVjta7za",
+            "catalog_revision": 11
+          },
+          {
+            "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+            "catalog_revision": 10
+          },
+          {
+            "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+            "catalog_revision": 9
+          },
+          {
+            "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+            "catalog_revision": 8
+          },
+          {
+            "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+            "catalog_revision": 7
+          },
+          {
+            "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+            "catalog_revision": 6
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:57:27.765Z",
+        "stage": "released",
+        "attempt": 3,
+        "reason": "normal",
+        "bytes": 56499
+      },
+      {
+        "time": "2026-11-10T01:57:30.272Z",
+        "stage": "client-closed",
+        "attempt": 2,
+        "reason": "after-fresh-head"
+      },
+      {
+        "time": "2026-11-10T01:57:39.915Z",
+        "stage": "arrival",
+        "attempt": 4,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T01:57:39.952Z",
+        "stage": "origin",
+        "attempt": 4,
+        "older": true,
+        "status": 200,
+        "requestID": "abc0ffe7-d620-44c6-9a69-267162570df8",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+            "catalog_revision": 5
+          },
+          {
+            "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+            "catalog_revision": 4
+          },
+          {
+            "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+            "catalog_revision": 3
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:57:39.953Z",
+        "stage": "released",
+        "attempt": 4,
+        "reason": "normal",
+        "bytes": 8513
+      },
+      {
+        "time": "2026-11-10T01:57:55.053Z",
+        "stage": "detail-origin-held",
+        "status": 200,
+        "upper": 27,
+        "task": "tsk_g00VaWxxuG00Ru0c08mw",
+        "comparison": "art_g0VaWxygM00JkgwzCENW",
+        "slots": 2,
+        "requestID": "b775a5d5-c3fd-43bc-8a4e-9e35b954b313"
+      },
+      {
+        "time": "2026-11-10T01:58:03.462Z",
+        "stage": "detail-client-closed",
+        "reason": "manual-release"
+      },
+      {
+        "time": "2026-11-10T01:58:44.545Z",
+        "stage": "arrival",
+        "attempt": 5,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T01:58:44.590Z",
+        "stage": "origin",
+        "attempt": 5,
+        "older": false,
+        "status": 200,
+        "requestID": "86dffd61-fea4-46af-ab46-2bde4bf84a86",
+        "bytes": 56499,
+        "upper": 27,
+        "cursor": {
+          "catalog_revision_upper": 27,
+          "before_catalog_revision": 6
+        },
+        "rows": [
+          {
+            "artifact_id": "art_g0VaX0YSX00GBtvF9a1R",
+            "catalog_revision": 27
+          },
+          {
+            "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+            "catalog_revision": 24
+          },
+          {
+            "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+            "catalog_revision": 23
+          },
+          {
+            "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+            "catalog_revision": 22
+          },
+          {
+            "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+            "catalog_revision": 21
+          },
+          {
+            "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+            "catalog_revision": 20
+          },
+          {
+            "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+            "catalog_revision": 19
+          },
+          {
+            "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+            "catalog_revision": 18
+          },
+          {
+            "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+            "catalog_revision": 17
+          },
+          {
+            "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+            "catalog_revision": 16
+          },
+          {
+            "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+            "catalog_revision": 15
+          },
+          {
+            "artifact_id": "art_g0VaWxyUF004VrzR792r",
+            "catalog_revision": 14
+          },
+          {
+            "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+            "catalog_revision": 13
+          },
+          {
+            "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+            "catalog_revision": 12
+          },
+          {
+            "artifact_id": "art_g0VaWxyTc00stVjta7za",
+            "catalog_revision": 11
+          },
+          {
+            "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+            "catalog_revision": 10
+          },
+          {
+            "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+            "catalog_revision": 9
+          },
+          {
+            "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+            "catalog_revision": 8
+          },
+          {
+            "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+            "catalog_revision": 7
+          },
+          {
+            "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+            "catalog_revision": 6
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:58:44.591Z",
+        "stage": "released",
+        "attempt": 5,
+        "reason": "normal",
+        "bytes": 56499
+      },
+      {
+        "time": "2026-11-10T01:58:54.434Z",
+        "stage": "arrival",
+        "attempt": 6,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T01:58:54.476Z",
+        "stage": "origin",
+        "attempt": 6,
+        "older": true,
+        "status": 200,
+        "requestID": "1a1bc7de-388e-4700-a233-fb418bc25bb6",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+            "catalog_revision": 5
+          },
+          {
+            "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+            "catalog_revision": 4
+          },
+          {
+            "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+            "catalog_revision": 3
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:58:54.476Z",
+        "stage": "truncated",
+        "attempt": 6,
+        "delivered": 32,
+        "full": 8513
+      },
+      {
+        "time": "2026-11-10T01:59:13.565Z",
+        "stage": "arrival",
+        "attempt": 7,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T01:59:13.603Z",
+        "stage": "origin",
+        "attempt": 7,
+        "older": true,
+        "status": 200,
+        "requestID": "051e6e80-03ab-46f8-bd04-62f4285a1dd9",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+            "catalog_revision": 5
+          },
+          {
+            "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+            "catalog_revision": 4
+          },
+          {
+            "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+            "catalog_revision": 3
+          }
+        ]
+      },
+      {
+        "time": "2026-11-10T01:59:13.604Z",
+        "stage": "released",
+        "attempt": 7,
+        "reason": "normal",
+        "bytes": 8513
+      },
+      {
+        "time": "2026-11-10T01:59:39.774Z",
+        "stage": "detail-origin-held",
+        "status": 200,
+        "upper": 27,
+        "task": "tsk_g00VaWxxuG00Ru0c08mw",
+        "comparison": "art_g0VaWxygM00JkgwzCENW",
+        "slots": 2,
+        "requestID": "4425d352-6218-4120-8582-f8cf5dc991e7"
+      },
+      {
+        "time": "2026-11-10T01:59:44.949Z",
+        "stage": "detail-client-closed",
+        "reason": "manual-release"
+      }
+    ],
+    "directBeforePublication": {
+      "head": {
+        "upper": 26,
+        "cursor": {
+          "catalog_revision_upper": 26,
+          "before_catalog_revision": 5
+        },
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+            "catalog_revision": 24
+          },
+          {
+            "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+            "catalog_revision": 23
+          },
+          {
+            "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+            "catalog_revision": 22
+          },
+          {
+            "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+            "catalog_revision": 21
+          },
+          {
+            "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+            "catalog_revision": 20
+          },
+          {
+            "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+            "catalog_revision": 19
+          },
+          {
+            "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+            "catalog_revision": 18
+          },
+          {
+            "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+            "catalog_revision": 17
+          },
+          {
+            "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+            "catalog_revision": 16
+          },
+          {
+            "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+            "catalog_revision": 15
+          },
+          {
+            "artifact_id": "art_g0VaWxyUF004VrzR792r",
+            "catalog_revision": 14
+          },
+          {
+            "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+            "catalog_revision": 13
+          },
+          {
+            "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+            "catalog_revision": 12
+          },
+          {
+            "artifact_id": "art_g0VaWxyTc00stVjta7za",
+            "catalog_revision": 11
+          },
+          {
+            "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+            "catalog_revision": 10
+          },
+          {
+            "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+            "catalog_revision": 9
+          },
+          {
+            "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+            "catalog_revision": 8
+          },
+          {
+            "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+            "catalog_revision": 7
+          },
+          {
+            "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+            "catalog_revision": 6
+          },
+          {
+            "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+            "catalog_revision": 5
+          }
+        ]
+      },
+      "tail": {
+        "upper": 26,
+        "cursor": null,
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+            "catalog_revision": 4
+          },
+          {
+            "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+            "catalog_revision": 3
+          }
+        ]
+      }
+    },
+    "directAfterPublication": {
+      "head": {
+        "upper": 27,
+        "cursor": {
+          "catalog_revision_upper": 27,
+          "before_catalog_revision": 6
+        },
+        "rows": [
+          {
+            "artifact_id": "art_g0VaX0YSX00GBtvF9a1R",
+            "catalog_revision": 27
+          },
+          {
+            "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+            "catalog_revision": 24
+          },
+          {
+            "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+            "catalog_revision": 23
+          },
+          {
+            "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+            "catalog_revision": 22
+          },
+          {
+            "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+            "catalog_revision": 21
+          },
+          {
+            "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+            "catalog_revision": 20
+          },
+          {
+            "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+            "catalog_revision": 19
+          },
+          {
+            "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+            "catalog_revision": 18
+          },
+          {
+            "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+            "catalog_revision": 17
+          },
+          {
+            "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+            "catalog_revision": 16
+          },
+          {
+            "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+            "catalog_revision": 15
+          },
+          {
+            "artifact_id": "art_g0VaWxyUF004VrzR792r",
+            "catalog_revision": 14
+          },
+          {
+            "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+            "catalog_revision": 13
+          },
+          {
+            "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+            "catalog_revision": 12
+          },
+          {
+            "artifact_id": "art_g0VaWxyTc00stVjta7za",
+            "catalog_revision": 11
+          },
+          {
+            "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+            "catalog_revision": 10
+          },
+          {
+            "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+            "catalog_revision": 9
+          },
+          {
+            "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+            "catalog_revision": 8
+          },
+          {
+            "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+            "catalog_revision": 7
+          },
+          {
+            "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+            "catalog_revision": 6
+          }
+        ]
+      },
+      "tail": {
+        "upper": 27,
+        "cursor": null,
+        "rows": [
+          {
+            "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+            "catalog_revision": 5
+          },
+          {
+            "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+            "catalog_revision": 4
+          },
+          {
+            "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+            "catalog_revision": 3
+          }
+        ]
+      }
+    },
+    "persisted": {
+      "quickCheck": "ok",
+      "task": {
+        "id": "tsk_g00VaWxxuG00Ru0c08mw",
+        "project_id": "prj_hdKNDNP0w6goDO5iNI8R",
+        "session_id": "ses_-zUPT225jzz50wsfDSkm"
+      },
+      "rootSession": {
+        "id": "ses_-zUPT225jzz50wsfDSkm",
+        "project_id": "prj_hdKNDNP0w6goDO5iNI8R"
+      },
+      "countsByArtifactType": {
+        "evolution-lab/campaign-spec": 23,
+        "evolution-lab/candidate-revision": 1,
+        "evolution-lab/comparison-recommendation": 1,
+        "opencorvus/core/task_execution_capsule_binding": 1,
+        "opencorvus/core/task_package_revision_binding": 1
+      },
+      "providerUsageEvents": 0,
+      "activeRuntimeCapacityLeases": 0,
+      "upper": 27,
+      "catalogAtUpper": {
+        "id": "art_g0VaX0YSX00GBtvF9a1R",
+        "task_id": "tsk_g00VaWxxuG00Ru0c08mw",
+        "catalog_revision": 27
+      }
+    }
+  }
+}

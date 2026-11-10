@@ -490,6 +490,7 @@ export async function exportExpertSquadArchive(
 
 export async function loadExpertSquadEvolutionHistory(input: {
   authority?: ApiAuthority
+  signal?: AbortSignal
   directory: string
   namespace: string
   id: string
@@ -514,11 +515,15 @@ export async function loadExpertSquadEvolutionHistory(input: {
   }
   const params = new URLSearchParams()
   for (const [key, value] of Object.entries(query)) params.set(key, String(value))
-  return await apiJson<ExpertSquadEvolutionHistory>(`expert-squad/evolution-history?${params.toString()}`, { authority: input.authority })
+  return await apiJson<ExpertSquadEvolutionHistory>(`expert-squad/evolution-history?${params.toString()}`, {
+    authority: input.authority,
+    signal: input.signal,
+  })
 }
 
 export async function loadExpertSquadEvolutionHistoryDetail(input: {
   authority?: ApiAuthority
+  signal?: AbortSignal
   directory: string
   namespace: string
   id: string
@@ -545,6 +550,7 @@ export async function loadExpertSquadEvolutionHistoryDetail(input: {
     `expert-squad/evolution-history/detail?${new URLSearchParams({ directory }).toString()}`,
     {
       authority: input.authority,
+      signal: input.signal,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),

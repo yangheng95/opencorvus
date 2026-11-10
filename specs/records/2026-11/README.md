@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [专家团演进历史保留最新目录](2026-11-10-evolution-history-pagination-ownership.md)
 - [文件保存回执丢失时核对真实磁盘](2026-11-10-file-save-receipt-reconciliation.md)
 - [定时运行历史保留已确认记录](2026-11-10-scheduled-run-history-confirmed-read.md)
 - [收件箱在已加载消息后重试续页](2026-11-10-mailbox-continuation-retry.md)

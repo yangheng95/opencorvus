@@ -696,6 +696,12 @@ freeze the Artifact Catalog upper revision under the current Project's persisted
 Task/root Session graph. Detail keeps exact source locators and returns the named
 foreign-Project authority error with HTTP400 through the shared error mapper.
 These readers do not start or resume a Task or publish an evolution mutation.
+In the installed panel, the current API connection, Project directory and exact
+installation own each accepted history. An explicit refresh retires older pages
+and detail reads. A continuation appends only to its originating snapshot at
+the same frozen Catalog upper revision; it updates the campaign rows and cursor.
+Detail belongs to that history and the exact comparison selection. A selection
+without comparison, a scope change or leaving the panel retires prior detail.
 
 Installed-panel selection has one canonical physical key: built_in:id or
 installation scope:namespace:id, validated through the SDK's existing ID and

@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, For, onCleanup, Show, untrack } from "solid-js"
 import { localeTag, t, tc } from "../../utils/i18n"
 import {
   executeExpertSquadEvolutionMutation,
@@ -15,6 +15,7 @@ import {
   type ExpertSquadInstallationScope,
 } from "../../services/expert-squad"
 import { showAppDialog } from "../../services/app-dialog"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api-state"
 import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
@@ -33,6 +34,24 @@ interface EvolutionSelection {
   record: ExpertSquadEvolutionHistoryRecord
   candidate?: ExpertSquadEvolutionHistoryCandidate
   comparison?: ExpertSquadEvolutionHistoryComparison
+}
+
+type EvolutionReadScope = Pick<ExpertSquadEvolutionPanelProps, "directory" | "namespace" | "id" | "installationScope"> & {
+  authority: ApiAuthority
+}
+
+interface EvolutionRead {
+  scope: EvolutionReadScope
+  controller: AbortController
+}
+
+type EvolutionIssue = {
+  summary:
+    | "expert_squad.evolution_history_failed"
+    | "expert_squad.evolution_more_failed"
+    | "expert_squad.evolution_detail_failed"
+    | "expert_squad.evolution_mutation_failed"
+  diagnostic: string
 }
 
 function digest(value: string): string {
@@ -99,107 +118,147 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
   const [loadingMore, setLoadingMore] = createSignal(false)
   const [detailLoading, setDetailLoading] = createSignal(false)
   const [mutationBusy, setMutationBusy] = createSignal("")
-  const [error, setError] = createSignal("")
-  let loadSequence = 0
-  let detailSequence = 0
+  const [error, setError] = createSignal<EvolutionIssue>()
+  let historyRead: EvolutionRead | undefined
+  let detailRead: AbortController | undefined
 
   const entries = createMemo(() => selections(history()?.records ?? []))
   const selected = createMemo(() => entries().find((entry) => entry.key === selectedKey()) ?? entries()[0])
+  const errorSummary = createMemo(() => {
+    const issue = error()
+    return issue && t(issue.summary)
+  })
 
-  async function loadDetail(entry: EvolutionSelection, expectedSequence = loadSequence): Promise<void> {
-    const currentHistory = history()
-    if (!currentHistory || !entry.candidate || !entry.comparison) {
-      setDetail(null)
-      return
+  function readScope(): EvolutionReadScope {
+    return {
+      directory: props.directory,
+      namespace: props.namespace,
+      id: props.id,
+      installationScope: props.installationScope,
+      authority: captureApiAuthority(),
     }
-    const sequence = ++detailSequence
+  }
+
+  function ownsHistory(read: EvolutionRead): boolean {
+    const { scope, controller } = read
+    return historyRead === read && !controller.signal.aborted && isApiAuthorityCurrent(scope.authority)
+      && scope.directory === props.directory && scope.namespace === props.namespace
+      && scope.id === props.id && scope.installationScope === props.installationScope
+  }
+
+  function retireDetail() {
+    detailRead?.abort()
+    detailRead = undefined
+    setDetail(null)
+    setDetailLoading(false)
+  }
+
+  function reportIssue(summary: EvolutionIssue["summary"], cause: unknown) {
+    setError({ summary, diagnostic: cause instanceof Error ? cause.message : String(cause) })
+  }
+
+  async function loadDetail(entry: EvolutionSelection): Promise<void> {
+    retireDetail()
+    const read = historyRead
+    const currentHistory = history()
+    if (!read || !ownsHistory(read) || !currentHistory || !entry.candidate || !entry.comparison) return
+    const controller = new AbortController()
+    detailRead = controller
+    const ownsDetail = () => ownsHistory(read) && detailRead === controller && selectedKey() === entry.key
     setDetailLoading(true)
     try {
       const next = await loadExpertSquadEvolutionHistoryDetail({
-        directory: props.directory,
-        namespace: props.namespace,
-        id: props.id,
-        installationScope: props.installationScope,
+        ...read.scope,
+        signal: controller.signal,
         campaignTaskID: entry.record.campaign.artifact.task_id,
         campaignLocator: entry.record.campaign.artifact.locator,
         candidateLocator: entry.candidate.artifact.locator,
         comparisonLocator: entry.comparison.artifact.locator,
         catalogRevisionUpper: currentHistory.catalog_revision_upper,
       })
-      if (sequence === detailSequence && expectedSequence === loadSequence) setDetail(next)
+      if (ownsDetail()) setDetail(next)
     } catch (cause) {
-      if (sequence === detailSequence && expectedSequence === loadSequence)
-        setError(cause instanceof Error ? cause.message : String(cause))
+      if (ownsDetail()) reportIssue("expert_squad.evolution_detail_failed", cause)
     } finally {
-      if (sequence === detailSequence && expectedSequence === loadSequence) setDetailLoading(false)
+      if (ownsDetail()) {
+        detailRead = undefined
+        setDetailLoading(false)
+      }
     }
   }
 
-  async function refresh(preferredKey = selectedKey()): Promise<void> {
-    const sequence = ++loadSequence
-    detailSequence++
-    setLoading(true)
-    setDetailLoading(false)
-    setError("")
+  async function refresh(preferredKey = selectedKey(), scope = readScope()): Promise<void> {
+    historyRead?.controller.abort()
+    const read: EvolutionRead = { scope, controller: new AbortController() }
+    historyRead = read
+    batch(() => {
+      retireDetail()
+      setLoading(true)
+      setLoadingMore(false)
+      setError(undefined)
+    })
     try {
       const next = await loadExpertSquadEvolutionHistory({
-        directory: props.directory,
-        namespace: props.namespace,
-        id: props.id,
-        installationScope: props.installationScope,
-        limit: 20,
+        ...scope,
+        signal: read.controller.signal,
       })
-      if (sequence !== loadSequence) return
-      setHistory(next)
+      if (!ownsHistory(read)) return
       const nextEntries = selections(next.records)
       const nextSelection = nextEntries.find((entry) => entry.key === preferredKey) ?? nextEntries[0]
-      setSelectedKey(nextSelection?.key ?? "")
-      setDetail(null)
-      if (nextSelection) await loadDetail(nextSelection, sequence)
+      batch(() => {
+        setHistory(next)
+        setSelectedKey(nextSelection?.key ?? "")
+      })
+      if (nextSelection) await loadDetail(nextSelection)
     } catch (cause) {
-      if (sequence === loadSequence) setError(cause instanceof Error ? cause.message : String(cause))
+      if (ownsHistory(read)) reportIssue("expert_squad.evolution_history_failed", cause)
     } finally {
-      if (sequence === loadSequence) setLoading(false)
+      if (ownsHistory(read)) setLoading(false)
     }
   }
 
   async function loadMore(): Promise<void> {
+    const read = historyRead
     const current = history()
-    if (!current?.next_cursor || loadingMore()) return
+    const cursor = current?.next_cursor
+    if (!read || !ownsHistory(read) || !current || !cursor || loading() || loadingMore()) return
     setLoadingMore(true)
-    setError("")
+    setError(undefined)
     try {
       const next = await loadExpertSquadEvolutionHistory({
-        directory: props.directory,
-        namespace: props.namespace,
-        id: props.id,
-        installationScope: props.installationScope,
-        limit: 20,
-        cursor: current.next_cursor,
+        ...read.scope,
+        signal: read.controller.signal,
+        cursor,
       })
-      setHistory({ ...next, records: [...current.records, ...next.records] })
+      if (!ownsHistory(read) || history() !== current) return
+      if (next.catalog_revision_upper !== current.catalog_revision_upper)
+        throw new Error("Evolution history continuation returned a different Catalog revision.")
+      setHistory({ ...current, records: [...current.records, ...next.records], next_cursor: next.next_cursor })
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : String(cause))
+      if (ownsHistory(read) && history() === current) reportIssue("expert_squad.evolution_more_failed", cause)
     } finally {
-      setLoadingMore(false)
+      if (ownsHistory(read)) setLoadingMore(false)
     }
   }
 
-  createEffect<string>((previous) => {
-    const key = [props.directory, props.namespace, props.id, props.installationScope].join("\n")
-    if (key === previous) return previous
-    setHistory(null)
-    setDetail(null)
-    setSelectedKey("")
-    void refresh("")
-    return key
-  }, "")
+  createEffect(() => {
+    const scope = readScope()
+    untrack(() => batch(() => {
+      setHistory(null)
+      setSelectedKey("")
+      void refresh("", scope)
+    }))
+  })
+
+  onCleanup(() => {
+    historyRead?.controller.abort()
+    detailRead?.abort()
+  })
 
   async function selectEntry(entry: EvolutionSelection): Promise<void> {
-    if (entry.key === selectedKey() && (detail() || !entry.comparison)) return
+    if (entry.key === selectedKey() && (detail() || detailLoading() || !entry.comparison)) return
     setSelectedKey(entry.key)
-    setDetail(null)
-    setError("")
+    setError(undefined)
     await loadDetail(entry)
   }
 
@@ -222,7 +281,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
     })
     if (!dialog.confirmed) return
     setMutationBusy(input.busyKey)
-    setError("")
+    setError(undefined)
     try {
       await executeExpertSquadEvolutionMutation({
         directory: props.directory,
@@ -234,7 +293,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       await props.onMutation()
       await refresh(input.preferredKey ?? selectedKey())
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : String(cause))
+      reportIssue("expert_squad.evolution_mutation_failed", cause)
     } finally {
       setMutationBusy("")
     }
@@ -282,7 +341,9 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       </header>
 
       <Show when={error() && Boolean(history())}>
-        <Feedback tone="error" data-ui="expert-squad-evolution-error">{error()}</Feedback>
+        <Feedback tone="error" data-ui="expert-squad-evolution-error" details={error()?.diagnostic}>
+          {errorSummary()}
+        </Feedback>
       </Show>
 
       <Show when={history()}>
@@ -439,11 +500,11 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       </Show>
 
       <Show when={!error() || Boolean(history())} fallback={
-        <Feedback tone="error" actions={
+        <Feedback tone="error" details={error()?.diagnostic} actions={
           <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void refresh()}>
             <Icon name="refresh" />{t("common.retry")}
           </Button>
-        }>{error()}</Feedback>
+        }>{errorSummary()}</Feedback>
       }>
       <Show
         when={!loading() && entries().length > 0}
