@@ -5532,6 +5532,10 @@ independently for its current project and connection. The installed read owns
 the library list; the agent mount matrix owns its separate runtime projection.
 Reload retains the last accepted results in scope and reports each read failure
 beside installed skills, independently of install, update, or removal notices.
+Without a workspace, the installed section offers the existing project folder
+picker. Selecting a directory keeps the Skill Library open and identifies the
+actual scope of its installed list and import controls. The global Skill
+Market remains available independently of that project selection.
 Project MCP status uses one scoped read at a time for passive observation; an
 explicit readback may retire it. Read failures belong beside Server connections
 and clear on the next accepted success. Connection or configuration notices

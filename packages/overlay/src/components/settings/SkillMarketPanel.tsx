@@ -646,6 +646,7 @@ function SharedResourceManagementPanel(props: {
     () => {
       setSkillInstallRequest(undefined)
       closeSkillInstallForm(false)
+      setSkillDragActive(false)
     },
     { defer: true },
   ))
@@ -838,6 +839,13 @@ function SharedResourceManagementPanel(props: {
       interval.dispose()
       mcpReadRequest = undefined
     })
+  })
+
+  let skillProjectScopeTrigger: HTMLElement | undefined
+  const skillProjectPicker = createSettingsProjectFolderPicker({
+    directory: selectedDirectory,
+    projectScopeTrigger: () => skillProjectScopeTrigger,
+    active: skillPanelActive,
   })
 
   // ── Add MCP inline form ──
@@ -1115,11 +1123,37 @@ function SharedResourceManagementPanel(props: {
       </Show>
 
       {/* ── Installed Skills ── */}
-      <Show when={skillPanelActive()}>
+      <Show when={skillPanelActive() && selectedDirectory()} fallback={
+        <Show when={skillPanelActive()}>
+          <SettingsGroup
+            class="extension-settings-group"
+            title={t("skill.installed_title")}
+            onDragOver={(event) => {
+              event.preventDefault()
+              if (event.dataTransfer) event.dataTransfer.dropEffect = "none"
+            }}
+            onDrop={(event) => event.preventDefault()}
+          >
+            <Feedback tone="info" actions={<SettingsProjectFolderButton picker={skillProjectPicker} primary />}>
+              {t("skill.workspace_required")}
+            </Feedback>
+          </SettingsGroup>
+        </Show>
+      }>
         <SettingsGroup
           class="extension-settings-group"
           data-skill-drop-active={skillDragActive() ? "true" : "false"}
           title={t("skill.installed_title")}
+          description={
+            <Show when={selectedDirectory()} keyed>
+              {(directory) => (
+                <SettingsProjectScope
+                  directory={directory}
+                  triggerRef={(element) => (skillProjectScopeTrigger = element)}
+                />
+              )}
+            </Show>
+          }
           actions={
             <div class="extension-settings-actions">
               <Button
@@ -1150,7 +1184,7 @@ function SharedResourceManagementPanel(props: {
                 data-ui="tool-panel-action"
                 title={skillReloadLabel()}
                 aria-label={skillReloadLabel()}
-                aria-disabled={(skillReadPending() || !selectedDirectory()) || undefined}
+                aria-disabled={skillReadPending() || undefined}
                 aria-busy={skillReadPending() || undefined}
                 ref={skillReloadButton}
                 onClick={() => runPanelAction(t("common.reload"), handleReloadSkills)}
@@ -1282,9 +1316,6 @@ function SharedResourceManagementPanel(props: {
               </form>
             </Show>
             <div class="extension-list" id="skillList">
-              <Show when={!selectedDirectory()}>
-                <Feedback tone="warning">{t("workspace.no_directory")}</Feedback>
-              </Show>
               <Show when={currentSkillRead()?.inventory.failure}>
                 {(failure) => (
                   <Feedback tone="error" ref={skillInventoryFeedback} details={formatErrorDetails(failure().error)}>

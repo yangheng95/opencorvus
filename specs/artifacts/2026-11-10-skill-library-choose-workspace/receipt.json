@@ -1,0 +1,261 @@
+{
+  "directReads": {
+    "baseline-direct": {
+      "page": {
+        "status": 200,
+        "requestID": "c2fb510e-eab7-4e84-8fb4-c3ba01717979",
+        "asset": "main-DSBLcxVk.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "83567ecb-684c-4d54-be05-4b5afb537363"
+      },
+      "workspaces": [
+        {
+          "project": "alpha/Workspace",
+          "directory": {
+            "status": 200,
+            "requestID": "1e90ed5a-41ae-43b4-99f6-1cb67f364ac7",
+            "operation": "global.projects.checkDirectory"
+          },
+          "inventory": {
+            "status": 200,
+            "requestID": "8c11a53e-317b-4c8b-a84e-bdce0b0dbba7",
+            "operation": "skill.installed",
+            "markers": [
+              {
+                "name": "library-alpha-scope",
+                "source_type": "external",
+                "builtin": false
+              }
+            ],
+            "total": 7
+          },
+          "issues": {
+            "status": 200,
+            "requestID": "c91a3a9d-709c-4770-a14c-3cfd7da8b36e",
+            "operation": "skill.issues",
+            "count": 0
+          }
+        },
+        {
+          "project": "beta/Workspace",
+          "directory": {
+            "status": 200,
+            "requestID": "8ab058aa-9467-450c-aa71-1fd32d79cca5",
+            "operation": "global.projects.checkDirectory"
+          },
+          "inventory": {
+            "status": 200,
+            "requestID": "97b58e0d-4d9e-44cb-8b91-bf87cfba7c35",
+            "operation": "skill.installed",
+            "markers": [
+              {
+                "name": "library-beta-scope",
+                "source_type": "external",
+                "builtin": false
+              }
+            ],
+            "total": 7
+          },
+          "issues": {
+            "status": 200,
+            "requestID": "1155ed8f-f2ec-4b76-b2ab-6dc71bc817f0",
+            "operation": "skill.issues",
+            "count": 0
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "bb7c5e92-1c75-4a4e-9c44-42411e731716",
+        "connected": 0
+      }
+    },
+    "candidate-before": {
+      "page": {
+        "status": 200,
+        "requestID": "9b6038ac-d94e-4488-9231-dffa776f38fa",
+        "asset": "main-CC3zTkmo.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "247e5f38-7711-4c6d-b071-92b8438511cd"
+      },
+      "workspaces": [
+        {
+          "project": "alpha/Workspace",
+          "directory": {
+            "status": 200,
+            "requestID": "7ce83189-b1ab-45ee-8f68-41f712865b67",
+            "operation": "global.projects.checkDirectory"
+          },
+          "inventory": {
+            "status": 200,
+            "requestID": "eff13aef-de17-4094-99cc-9414ea3c1738",
+            "operation": "skill.installed",
+            "markers": [
+              {
+                "name": "library-alpha-scope",
+                "source_type": "external",
+                "builtin": false
+              }
+            ],
+            "total": 7
+          },
+          "issues": {
+            "status": 200,
+            "requestID": "6100c365-5099-4391-8ffe-c31f1cd46620",
+            "operation": "skill.issues",
+            "count": 0
+          }
+        },
+        {
+          "project": "beta/Workspace",
+          "directory": {
+            "status": 200,
+            "requestID": "6b8379d4-22c7-47e4-8b3d-ddf6bc8d88d8",
+            "operation": "global.projects.checkDirectory"
+          },
+          "inventory": {
+            "status": 200,
+            "requestID": "eb29130d-8053-420d-b8a4-6f3c78a05428",
+            "operation": "skill.installed",
+            "markers": [
+              {
+                "name": "library-beta-scope",
+                "source_type": "external",
+                "builtin": false
+              }
+            ],
+            "total": 7
+          },
+          "issues": {
+            "status": 200,
+            "requestID": "3074100a-3004-4ace-aa6a-00fb2f11e4cf",
+            "operation": "skill.issues",
+            "count": 0
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "765084af-c21d-48ea-a08c-f97465aef6e0",
+        "connected": 0
+      }
+    },
+    "candidate-after": {
+      "page": {
+        "status": 200,
+        "requestID": "8f55e16b-b82f-470f-ac24-36cfd443d061",
+        "asset": "main-CC3zTkmo.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "1f907557-4b3b-4a43-b174-32c1c3c4a286"
+      },
+      "workspaces": [
+        {
+          "project": "alpha/Workspace",
+          "directory": {
+            "status": 200,
+            "requestID": "e693f1e6-5a5c-43ee-a657-28ebe9e9604a",
+            "operation": "global.projects.checkDirectory"
+          },
+          "inventory": {
+            "status": 200,
+            "requestID": "7934ba2b-fb3b-40d4-bffa-3f47f6ab6570",
+            "operation": "skill.installed",
+            "markers": [
+              {
+                "name": "library-alpha-scope",
+                "source_type": "external",
+                "builtin": false
+              }
+            ],
+            "total": 7
+          },
+          "issues": {
+            "status": 200,
+            "requestID": "b21ae50e-a25c-4083-9fac-a9a4df265a68",
+            "operation": "skill.issues",
+            "count": 0
+          }
+        },
+        {
+          "project": "beta/Workspace",
+          "directory": {
+            "status": 200,
+            "requestID": "50484b67-c5c1-42a4-9274-7353cbb03583",
+            "operation": "global.projects.checkDirectory"
+          },
+          "inventory": {
+            "status": 200,
+            "requestID": "ec3d8318-9615-456d-94d8-0d30862fe03a",
+            "operation": "skill.installed",
+            "markers": [
+              {
+                "name": "library-beta-scope",
+                "source_type": "external",
+                "builtin": false
+              }
+            ],
+            "total": 7
+          },
+          "issues": {
+            "status": 200,
+            "requestID": "f445be9d-5119-49ed-9658-84f232cc103b",
+            "operation": "skill.issues",
+            "count": 0
+          }
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "25881605-ae8b-4665-8f5a-1132c559f584",
+        "connected": 0
+      }
+    }
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b205-baseline",
+      "apiPort": 39572,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b205-candidate",
+      "apiPort": 39573,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  },
+  "workspaceFixtureBytesUnchanged": true
+}
