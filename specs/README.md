@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [项目配置和通道目录各自发布读取结果](records/2026-11/2026-11-10-project-config-and-channel-read-settlement.md)
 - [通道设置等待项目配置并可原地选择项目](records/2026-11/2026-11-10-channel-confirmed-project-configuration.md)
 - [从网络代理设置直接选择项目](records/2026-11/2026-11-10-network-proxy-choose-project.md)
 - [通用设置的项目读取提示与原始诊断](records/2026-11/2026-11-10-general-project-read-diagnostics.md)

@@ -5399,6 +5399,9 @@ diagnostic and offers an in-place retry through the same scoped reader as the
 catalog. The affected section owns focus after a successful retry. Shared
 Skill/MCP resource pages use the same loading lifecycle on first entry and manual reload;
 Skill issue projection checks its owning directory before committing the result.
+Project configuration and the channel catalog publish their own accepted result
+or diagnostic as each response settles, with the same connection, directory and
+selection ownership. Their caller's aggregate receipt still settles after both.
 Channel rows use generated ChannelListResponse and display configuration status
 and runtime status separately; missing configuration is not runtime availability.
 Edit and documentation actions name the same channel as their catalog row in

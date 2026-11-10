@@ -39,6 +39,68 @@ test("project load publishes its complete configuration and settled channel reso
   })
 })
 
+test("a fast project configuration becomes usable while the catalog is still reading", async () => {
+  const pending = Promise.withResolvers<unknown[]>()
+  const accepted = { permission_mode: "full_access", server: { publicUrl: "https://first.example.invalid" } }
+  const newer = { permission_mode: "ask", server: { publicUrl: "https://second.example.invalid" } }
+  const channels = [{ id: "current-channel", status: "missing" }]
+  transport((request) => request.path === "config" ? accepted : pending.promise)
+  const observed: Record<string, unknown>[] = []
+  const loading = loadConfigInfo(undefined, { onAcceptedConfig: (config) => { observed.push(config) } })
+
+  await new Promise<void>((resolve) => setImmediate(resolve))
+  expect(appStore.config).toEqual(accepted)
+
+  setConfigSnapshot(newer)
+  pending.resolve(channels)
+  expect(await loading).toEqual([])
+  expect({ config: appStore.config, catalog: appStore.channelCatalog, receipts: observed }).toEqual({
+    config: newer,
+    catalog: { directory: "C:/Project-A", authorityRevision: captureApiAuthority().revision, entries: channels },
+    receipts: [accepted],
+  })
+})
+
+test("a fast channel catalog becomes readable while configuration is still reading", async () => {
+  const pending = Promise.withResolvers<Record<string, unknown>>()
+  const accepted = { permission_mode: "full_access", locale: "zh-CN" }
+  const channels = [{ id: "current-channel", status: "missing" }]
+  transport((request) => request.path === "config" ? pending.promise : channels)
+  const loading = loadConfigInfo()
+
+  await new Promise<void>((resolve) => setImmediate(resolve))
+  const catalog = { directory: "C:/Project-A", authorityRevision: captureApiAuthority().revision, entries: channels }
+  expect(appStore.channelCatalog).toEqual(catalog)
+
+  pending.resolve(accepted)
+  expect(await loading).toEqual([])
+  expect({ config: appStore.config, catalog: appStore.channelCatalog }).toEqual({ config: accepted, catalog })
+})
+
+test("the selected project owns both read projections after an earlier project partially settled", async () => {
+  const pending = Promise.withResolvers<unknown[]>()
+  const first = { permission_mode: "full_access", server: { publicUrl: "https://first.example.invalid" } }
+  const second = { permission_mode: "ask", server: { publicUrl: "https://second.example.invalid" } }
+  const secondChannels = [{ id: "second-channel", status: "missing" }]
+  transport((request) => {
+    if (request.query?.directory === "C:/Project-A") return request.path === "config" ? first : pending.promise
+    return request.path === "config" ? second : secondChannels
+  })
+  const firstLoad = loadConfigInfo()
+  await new Promise<void>((resolve) => setImmediate(resolve))
+  expect(appStore.config).toEqual(first)
+
+  setSettingsStore("directory", "C:/Project-B")
+  configure({ directory: "C:/Project-B" })
+  await loadConfigInfo()
+  pending.resolve([{ id: "first-channel", status: "missing" }])
+  await firstLoad
+  expect({ config: appStore.config, catalog: appStore.channelCatalog }).toEqual({
+    config: second,
+    catalog: { directory: "C:/Project-B", authorityRevision: captureApiAuthority().revision, entries: secondChannels },
+  })
+})
+
 test("a rejected configuration read retains its original diagnostic and accepts the channel result", async () => {
   const accepted = { permission_mode: "ask", locale: "en-US" }
   const channels = [{ id: "owned-channel", status: "missing" }]

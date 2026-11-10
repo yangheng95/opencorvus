@@ -137,57 +137,57 @@ export async function loadConfigInfo(
   assertApiAuthorityCurrent(scope.authority)
   const loadSequence = ++configInfoLoadSequence
   const configPath = scope.directory ? directoryOwnedPath("config", scope) : "global/config"
-  const [configResult, channelResult] = await Promise.allSettled([
-    apiJsonWithTimeout(configPath, timeoutMilliseconds, { authority: scope.authority }),
-    ...(scope.directory
-      ? [apiJsonWithTimeout(directoryOwnedPath("channel", scope), timeoutMilliseconds, { authority: scope.authority })]
-      : []),
-  ])
+  const owns = () => loadSequence === configInfoLoadSequence && ownsDirectoryLoad(scope)
 
-  if (loadSequence !== configInfoLoadSequence || !ownsDirectoryLoad(scope))
-    return []
-
-  const issues: ConfigLoadIssue[] = []
-  let config: Record<string, unknown> | undefined
-  let channels: unknown[] | undefined
-  if (configResult.status === "fulfilled") {
+  async function read<T>(
+    resource: ConfigLoadIssue["resource"],
+    path: string,
+    validate: (path: string, value: unknown) => T,
+  ): Promise<{ value: T; issue?: never } | { value?: never; issue: ConfigLoadIssue }> {
     try {
-      config = requireObjectResponse(configPath, configResult.value)
+      const value = await apiJsonWithTimeout(path, timeoutMilliseconds, { authority: scope.authority })
+      return { value: validate(path, value) }
     } catch (error) {
-      issues.push(configLoadIssue("config", error))
+      return { issue: configLoadIssue(resource, error) }
     }
-  } else {
-    issues.push(configLoadIssue("config", configResult.reason))
-  }
-  if (channelResult?.status === "fulfilled") {
-    try {
-      channels = requireArrayResponse("channel", channelResult.value)
-    } catch (error) {
-      issues.push(configLoadIssue("channel", error))
-    }
-  } else if (channelResult?.status === "rejected") {
-    issues.push(configLoadIssue("channel", channelResult.reason))
   }
 
-  const previous = appStore.channelCatalog
-  const previousEntries = previous?.directory === scope.directory && previous.authorityRevision === scope.authority.revision
-    ? previous.entries
-    : null
-  const channelCatalog = scope.directory ? {
-    directory: scope.directory,
-    authorityRevision: scope.authority.revision,
-    entries: channels ?? previousEntries,
-    failure: issues.find((issue) => issue.resource === "channel"),
-  } : null
-  batch(() => {
-    if (config) setConfigSnapshot(config)
-    setAppStore({
-      channelCatalog,
-      configLoadIssues: issues.filter((issue) => issue.resource === "config"),
-    })
+  // A slow catalog cannot delay the accepted configuration (or republish it
+  // after a later write). Only the caller's aggregate receipt waits for both.
+  const configRead = read("config", configPath, requireObjectResponse).then((result) => {
+    if (owns()) {
+      batch(() => {
+        if (result.value) setConfigSnapshot(result.value)
+        setAppStore("configLoadIssues", result.issue ? [result.issue] : [])
+        if (!scope.directory) setAppStore("channelCatalog", null)
+      })
+    }
+    return result
   })
+  const channelRead = scope.directory
+    ? read("channel", directoryOwnedPath("channel", scope), (_path, value) => requireArrayResponse("channel", value)).then((result) => {
+        if (owns()) {
+          const previous = appStore.channelCatalog
+          const previousEntries = previous?.directory === scope.directory && previous.authorityRevision === scope.authority.revision
+            ? previous.entries
+            : null
+          setAppStore("channelCatalog", {
+            directory: scope.directory,
+            authorityRevision: scope.authority.revision,
+            entries: result.value ?? previousEntries,
+            failure: result.issue,
+          })
+        }
+        return result
+      })
+    : undefined
 
-  if (config) options.onAcceptedConfig?.(config)
+  const [config, channel] = await Promise.all([configRead, channelRead])
+  if (!owns()) return []
+  if (config.value) options.onAcceptedConfig?.(config.value)
+  const issues: ConfigLoadIssue[] = []
+  if (config.issue) issues.push(config.issue)
+  if (channel?.issue) issues.push(channel.issue)
   return issues
 }
 
