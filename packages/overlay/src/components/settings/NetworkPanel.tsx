@@ -9,6 +9,8 @@ import {
   type NetworkProxyDraft,
   type NetworkProxyTestResult,
 } from "../../services/config"
+import { loadConfigInfo } from "../../services/config-load"
+import { reportError } from "../../services/diagnostics"
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { activeProjectDirectory } from "../../services/project-directory"
@@ -20,8 +22,9 @@ import { TextField } from "../ui/TextField"
 import { Switch } from "../ui/Switch"
 import { Feedback } from "../ui/Feedback"
 import { Disclosure } from "../ui/Disclosure"
-import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsReferenceList, SettingsRow } from "./layout"
+import { SettingsGroup, SettingsPanel, SettingsReferenceList, SettingsRow } from "./layout"
 import { ServerConnectionSettingsGroup } from "./ServerConnectionSettingsGroup"
+import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
 
 function configuredProxy(): {
   llmProvider: boolean
@@ -85,13 +88,14 @@ export default function NetworkPanel() {
   const [username, setUsername] = createSignal("")
   const [password, setPassword] = createSignal("")
   const [write, setWrite] = createSignal<"save" | "delete">()
+  const [proxyReload, setProxyReload] = createSignal<NetworkOperationOwner>()
   const [testing, setTesting] = createSignal(false)
   const [commit, setCommit] = createSignal<ProxyCommit>()
   const [error, setError] = createSignal<NetworkFeedback | null>(null)
   const [testResult, setTestResult] = createSignal<NetworkProxyTestResult | null>(null)
   const saving = () => write() === "save"
   const deleting = () => write() === "delete"
-  const busy = () => !!write() || testing()
+  const busy = () => !!write() || testing() || reloadingProxy()
   const proxyConfigured = createMemo(() => !!(appStore.config as any)?.network?.proxy)
   const directory = createMemo(() => activeProjectDirectory().trim())
   const projectLabel = () => projectLedgerDisplayName({
@@ -105,7 +109,18 @@ export default function NetworkPanel() {
   // A newer authored draft stays independent of the last accepted configuration.
   let adoptedDraftGeneration = 0
   let scopeIdentity = ""
+  let projectScopeTrigger: HTMLElement | undefined
   let feedbackTimer: ReturnType<typeof setTimeout> | undefined
+  const projectPicker = createSettingsProjectFolderPicker({
+    directory,
+    projectScopeTrigger: () => projectScopeTrigger,
+  })
+  const reloadingProxy = () => {
+    const owner = proxyReload()
+    return owner !== undefined && ownsScope(owner)
+  }
+  const proxyFormReady = () => !!directory() && !projectPicker.choosing() && !reloadingProxy() && appStore.config != null
+  const proxyLoadIssue = () => appStore.configLoadIssues.find((issue) => issue.resource === "config")
 
   createEffect(() => {
     const taskID = String(activeTaskID() || "").trim()
@@ -156,6 +171,31 @@ export default function NetworkPanel() {
 
   function ownsCurrentDraft(owner: NetworkOperationOwner): boolean {
     return ownsScope(owner) && owner.draftGeneration === draftGeneration
+  }
+
+  async function reloadProxyConfiguration(button: HTMLButtonElement): Promise<void> {
+    if (busy() || !directory() || projectPicker.choosing() || appStore.config != null || !appStore.connected) return
+    const owner = captureOwner()
+    const hadFocus = document.activeElement === button
+    setProxyReload(owner)
+    try {
+      await loadConfigInfo(undefined, { ...currentProjectConfigRequestOptions(), authority: owner.authority })
+    } catch (error) {
+      if (ownsScope(owner)) {
+        reportError({
+          id: "network-proxy-reload",
+          title: t("network.proxy.configuration_failed"),
+          message: describeFailure(error),
+          details: formatErrorDetails(error),
+        })
+      }
+    } finally {
+      if (proxyReload() === owner) setProxyReload(undefined)
+    }
+    if (!ownsScope(owner) || !proxyFormReady() || !hadFocus) return
+    if (document.activeElement === button || document.activeElement === document.body) {
+      projectScopeTrigger?.focus({ preventScroll: true })
+    }
   }
 
   function recordProxyCommit(owner: NetworkOperationOwner, committed: Exclude<ProxyCommit, "newer-draft">): void {
@@ -243,7 +283,7 @@ export default function NetworkPanel() {
   }
 
   async function saveProxy() {
-    if (busy()) return
+    if (busy() || !proxyFormReady()) return
     clearFeedback()
     const input = readProxyInput()
     if (!validateProxyInput(input, false)) return
@@ -273,7 +313,7 @@ export default function NetworkPanel() {
   }
 
   async function deleteProxy() {
-    if (busy() || !proxyConfigured()) return
+    if (busy() || !proxyFormReady() || !proxyConfigured()) return
     clearFeedback()
     const owner = captureOwner()
 
@@ -294,7 +334,7 @@ export default function NetworkPanel() {
   }
 
   async function testProxy() {
-    if (busy()) return
+    if (busy() || !proxyFormReady()) return
     clearFeedback()
     const input = readProxyInput()
     if (!validateProxyInput(input, true)) return
@@ -326,14 +366,52 @@ export default function NetworkPanel() {
         title={t("network.proxy.title")}
         description={directory() ? (
           <Disclosure.Root>
-            <Disclosure.Trigger>{t("network.proxy.project_scope", { project: projectLabel() })}</Disclosure.Trigger>
+            <Disclosure.Trigger ref={(element) => (projectScopeTrigger = element)}>
+              {t("network.proxy.project_scope", { project: projectLabel() })}
+            </Disclosure.Trigger>
             <Disclosure.Content>
               <SettingsReferenceList values={[directory()]} />
             </Disclosure.Content>
           </Disclosure.Root>
         ) : undefined}
       >
-        <Show when={directory()} fallback={<SettingsEmpty>{t("network.proxy.project_required")}</SettingsEmpty>}>
+        <Show
+          when={proxyFormReady()}
+          fallback={
+            <Show when={directory()} fallback={
+              <SettingsRow
+                desc={t("network.proxy.project_required")}
+                align="center"
+                actions={<SettingsProjectFolderButton picker={projectPicker} />}
+              />
+            }>
+              <Show
+                when={!projectPicker.choosing() && (proxyLoadIssue() || !appStore.connected || reloadingProxy())}
+                fallback={<Feedback tone="info">{t("network.proxy.configuration_loading")}</Feedback>}
+              >
+                <Feedback
+                  tone="error"
+                  details={formatErrorDetails(proxyLoadIssue()?.cause)}
+                  actions={
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="md"
+                      tone="neutral"
+                      aria-disabled={reloadingProxy() || !appStore.connected || undefined}
+                      aria-busy={reloadingProxy() || undefined}
+                      onClick={(event) => void reloadProxyConfiguration(event.currentTarget)}
+                    >
+                      {reloadingProxy() ? t("common.retrying") : t("common.retry")}
+                    </Button>
+                  }
+                >
+                  {t("network.proxy.configuration_failed")}
+                </Feedback>
+              </Show>
+            </Show>
+          }
+        >
           <SettingsRow
             title={<label for="network-proxy-llm-provider">{t("network.proxy.llm_provider_label")}</label>}
             desc={t("network.proxy.llm_provider_hint")}

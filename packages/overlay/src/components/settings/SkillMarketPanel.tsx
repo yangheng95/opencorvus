@@ -15,7 +15,6 @@ import { localeTag, t } from "../../utils/i18n"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
   activeDirectory,
-  browseDirectory,
   pathRevealFailureText,
   pathRevealLabelKey,
   pathRevealNoticeKey,
@@ -59,6 +58,7 @@ import { TextField } from "../ui/TextField"
 import { Icon } from "../ui/Icon"
 import { SelectField, type SelectFieldOption } from "../ui/SelectField"
 import { SettingsDetailSection, SettingsGroup, SettingsRow } from "./layout"
+import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
 
 // ── Types ──
 
@@ -769,21 +769,12 @@ function SharedResourceManagementPanel(props: {
 
   // ── Add MCP inline form ──
 
-  const [choosingMcpProject, setChoosingMcpProject] = createSignal(false)
   let mcpProjectScopeTrigger: HTMLElement | undefined
-
-  async function handleChooseMcpProject(origin: HTMLButtonElement) {
-    if (choosingMcpProject() || selectedDirectory()) return
-    setChoosingMcpProject(true)
-    try {
-      await browseDirectory()
-    } finally {
-      setChoosingMcpProject(false)
-    }
-    if (document.activeElement !== origin && document.activeElement !== document.body) return
-    const target = selectedDirectory() ? mcpProjectScopeTrigger : origin
-    if (mcpPanelActive() && target?.isConnected) target.focus({ preventScroll: true })
-  }
+  const mcpProjectPicker = createSettingsProjectFolderPicker({
+    directory: selectedDirectory,
+    projectScopeTrigger: () => mcpProjectScopeTrigger,
+    active: mcpPanelActive,
+  })
 
   const [showAddMcp, setShowAddMcp] = createSignal(false)
   const initialMcpForm = {
@@ -1331,19 +1322,7 @@ function SharedResourceManagementPanel(props: {
               tone="info"
               title={t("mcp.project_required_title")}
               actions={
-                <Button
-                  type="button"
-                  variant="solid"
-                  size="md"
-                  tone="accent"
-                  aria-disabled={choosingMcpProject() || undefined}
-                  onClick={(event) => {
-                    const origin = event.currentTarget
-                    runPanelAction(t("workspace.no_directory"), () => handleChooseMcpProject(origin))
-                  }}
-                >
-                  {t("workspace.no_directory")}
-                </Button>
+                <SettingsProjectFolderButton picker={mcpProjectPicker} primary />
               }
             >
               {t("mcp.project_required_body")}

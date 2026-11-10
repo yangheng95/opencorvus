@@ -1,0 +1,340 @@
+{
+  "before": {
+    "page": {
+      "status": 200,
+      "requestID": "a4f59741-89f1-4727-b2ac-89f67c4d3535",
+      "asset": "main-YUUGmzRQ.js"
+    },
+    "projects": {
+      "proxy-review": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "fa8432c9-d02a-4a00-a32c-4f4ab7dcb761",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "bc549136-063e-4f2b-abe6-c1c385580eeb",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "71c91bd5-4801-4a52-a52c-220baa694d25",
+          "proxy": {
+            "url": "http://127.0.0.1:31921",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        }
+      },
+      "proxy-adjacent": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "2b018aaf-4df5-4ed7-bf12-161633ee3d16",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "221ee6ff-c446-422c-9f41-34b9fb37d347",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "5fde5407-ca20-46c0-a12a-a098dd4d5405",
+          "proxy": {
+            "url": "http://127.0.0.1:31922",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        }
+      },
+      "mcp-beta": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "960931dd-f0a2-4d35-8370-c87ee1ff355e",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "f31c3355-f9b5-4f4d-b591-3a32f3d22799",
+          "exactDirectory": true
+        },
+        "mcp": {
+          "status": 200,
+          "requestID": "e4697953-371b-40ed-a7db-5f54d73d65e4",
+          "states": {
+            "b177-beta-fixture": "disabled"
+          }
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "ba2682f9-3aab-4f51-96f6-41aa40443b87",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "after": {
+    "page": {
+      "status": 200,
+      "requestID": "0e95a1e2-b4bb-42c6-9917-09cf38274df3",
+      "asset": "main-YUUGmzRQ.js"
+    },
+    "projects": {
+      "proxy-review": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "b1b02558-80be-4fd7-8cb0-88c3648b0c77",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "16a74783-f1ec-4244-b87d-9049946b7c5a",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "6f094038-4285-4d77-9c9b-2e5b2995e21d",
+          "proxy": {
+            "url": "http://127.0.0.1:31921",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        }
+      },
+      "proxy-adjacent": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "cab7ede9-fcda-4df9-b269-10b2d2ddb5f7",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "d20c22dd-93ce-444a-9c69-01c3c6a52ad6",
+          "exactDirectory": true
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "5737d95a-56cf-4d1a-a051-723988ba851f",
+          "proxy": {
+            "url": "http://127.0.0.1:31922",
+            "llmProvider": false,
+            "webResearch": false
+          }
+        }
+      },
+      "mcp-beta": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "eb83159c-b5a7-409a-8789-a2813550ef93",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "a9685c46-19f0-4977-9c88-4fac114d39cd",
+          "exactDirectory": true
+        },
+        "mcp": {
+          "status": 200,
+          "requestID": "19b95932-7501-4923-9379-84880e929862",
+          "states": {
+            "b177-beta-fixture": "disabled"
+          }
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "e1aab98e-7c50-4ecc-8901-c5cb51be657d",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "baseline": {
+    "asset": "main-D1kKTqFh.js",
+    "status": 200,
+    "projects": [
+      {
+        "project": "proxy-review",
+        "status": 200,
+        "requestID": "0ae91211-c929-47bb-b835-5bbf419dadac",
+        "proxy": "http://127.0.0.1:31921",
+        "llm": false,
+        "web": false
+      },
+      {
+        "project": "proxy-adjacent",
+        "status": 200,
+        "requestID": "e82db932-ab4d-4a3f-95d6-7f6281de89b3",
+        "proxy": "http://127.0.0.1:31922",
+        "llm": false,
+        "web": false
+      }
+    ]
+  },
+  "draftTransport": [
+    {
+      "time": "2026-11-10T04:49:26.677Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "55173842-212a-482d-b533-8bea1fb06ddb",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:49:26.68Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "55173842-212a-482d-b533-8bea1fb06ddb",
+      "mode": "hold"
+    }
+  ],
+  "finalTransport": [
+    {
+      "time": "2026-11-10T04:53:24.169Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "26e84f36-a21c-498c-b717-f6e4b63c57ac",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:53:24.172Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "26e84f36-a21c-498c-b717-f6e4b63c57ac",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:53:32.452Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "26e84f36-a21c-498c-b717-f6e4b63c57ac",
+      "mode": "hold",
+      "bytes": 1485,
+      "delivered": 1485
+    },
+    {
+      "time": "2026-11-10T04:54:02.12Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "e7f835fc-d8ed-4619-95ab-74a979e5af5c",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:54:02.121Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "e7f835fc-d8ed-4619-95ab-74a979e5af5c",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:54:06.583Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "e7f835fc-d8ed-4619-95ab-74a979e5af5c",
+      "mode": "hold",
+      "bytes": 1485,
+      "delivered": 1485
+    },
+    {
+      "time": "2026-11-10T04:54:31.731Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "8a0ea71a-ba4a-4e8c-8bca-45d9e2d7565e",
+      "mode": "truncate"
+    },
+    {
+      "time": "2026-11-10T04:54:31.733Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "8a0ea71a-ba4a-4e8c-8bca-45d9e2d7565e",
+      "mode": "truncate",
+      "bytes": 1485,
+      "delivered": 1
+    },
+    {
+      "time": "2026-11-10T04:54:58.118Z",
+      "stage": "origin",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "b4d78bb6-efcf-4472-8bc6-ff4d3e273176",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:54:58.12Z",
+      "stage": "held",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "b4d78bb6-efcf-4472-8bc6-ff4d3e273176",
+      "mode": "hold"
+    },
+    {
+      "time": "2026-11-10T04:55:02.277Z",
+      "stage": "delivered",
+      "method": "GET",
+      "path": "/config",
+      "project": "proxy-adjacent",
+      "status": 200,
+      "requestID": "b4d78bb6-efcf-4472-8bc6-ff4d3e273176",
+      "mode": "hold",
+      "bytes": 1485,
+      "delivered": 1485
+    }
+  ],
+  "profiles": {
+    "baseline": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    }
+  },
+  "acceptedEmptyProxy": {
+    "project": "beta/Workspace",
+    "status": 200,
+    "requestID": "65a538d5-3851-4ef2-bd89-b34077f9f581",
+    "effectiveProxyConfigured": false
+  }
+}

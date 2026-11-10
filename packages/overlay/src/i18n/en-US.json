@@ -691,6 +691,8 @@
   "network.proxy.title": "Proxy",
   "network.proxy.project_scope": "Proxy changes are saved to project: {{project}}",
   "network.proxy.project_required": "Open a project to configure its proxy.",
+  "network.proxy.configuration_loading": "Loading this project's proxy settings…",
+  "network.proxy.configuration_failed": "Could not load this project's proxy settings.",
   "network.proxy.llm_provider_label": "Model service proxy",
   "network.proxy.llm_provider_hint": "Send model service requests through the configured HTTP(S) proxy.",
   "network.proxy.web_research_label": "Web search and page reading proxy",

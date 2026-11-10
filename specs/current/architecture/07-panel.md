@@ -3241,8 +3241,14 @@ admitting one Save at a time.
 The separate Proxy section uses the current project directory that owns the
 existing config writes. It names that project before the operator edits any
 field and exposes the full directory in its scope disclosure. When no project
-is active, the section explains how to open an editable scope; client connection
-settings remain available.
+is active, the section offers the existing workspace folder selection; client
+connection settings remain available. Confirmation stays on Network and focuses
+the selected project's scope disclosure when focus still belongs to the action.
+Cancellation returns focus to the folder button under the same rule. Network
+and MCP use the same settings action and existing workspace directory validation.
+The Proxy editor waits for project selection and accepted configuration. An
+unavailable configuration uses the existing project reader for an explicit
+retry, and keeps the original read diagnostic in Details.
 Clearing a project proxy can leave an inherited proxy in the accepted effective
 configuration. The same mutation response supplies the existing field projection
 and a distinct localized receipt for that outcome. The receipt remains until

@@ -691,6 +691,8 @@
   "network.proxy.title": "代理",
   "network.proxy.project_scope": "代理改动保存到项目：{{project}}",
   "network.proxy.project_required": "请先打开一个项目，再配置该项目的代理。",
+  "network.proxy.configuration_loading": "正在加载此项目的代理设置…",
+  "network.proxy.configuration_failed": "无法加载此项目的代理设置。",
   "network.proxy.llm_provider_label": "模型服务代理",
   "network.proxy.llm_provider_hint": "通过指定的 HTTP(S) 代理发送模型服务请求。",
   "network.proxy.web_research_label": "网页搜索和读取代理",
