@@ -1,0 +1,307 @@
+{
+  "directReads": {
+    "baseline": {
+      "page": {
+        "status": 200,
+        "requestID": "bee3394e-82a5-41ca-bc56-33dd56945c04",
+        "asset": "main-DHumORPG.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "e240112c-86a7-4090-b7a3-460747413ed7"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "3b303d2d-3c3b-4e05-9dab-064330f61891",
+          "operation": "permission.grants",
+          "count": 0
+        },
+        {
+          "status": 200,
+          "requestID": "43f9bf38-af13-483a-827e-4a55e1b85aac",
+          "operation": "permission.history",
+          "count": 0
+        },
+        {
+          "status": 200,
+          "requestID": "d111a7c1-b1ae-4df9-a7ac-2e3291c3d689",
+          "operation": "permission.list",
+          "count": 0
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "2dd1f906-eaaa-43a1-a5ec-4ceaa1303a68",
+        "connected": 0
+      }
+    },
+    "candidate": {
+      "page": {
+        "status": 200,
+        "requestID": "a94a2e8b-4223-41f9-8cd8-0ea8efb3e805",
+        "asset": "main-DSBLcxVk.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "a96095b2-2f53-45ff-a750-80604dce8330"
+      },
+      "reads": [
+        {
+          "status": 200,
+          "requestID": "248fea28-38cd-4569-a32c-d5d3c196a3c5",
+          "operation": "permission.grants",
+          "count": 0
+        },
+        {
+          "status": 200,
+          "requestID": "54a03efc-9e3b-41ed-8d15-7832c30cb62d",
+          "operation": "permission.history",
+          "count": 0
+        },
+        {
+          "status": 200,
+          "requestID": "9694680e-bb41-45ac-9f7d-6793759db5d9",
+          "operation": "permission.list",
+          "count": 0
+        }
+      ],
+      "providers": {
+        "status": 200,
+        "requestID": "ab082e24-6103-437e-8c0c-f600a4386482",
+        "connected": 0
+      }
+    }
+  },
+  "proxyReads": {
+    "baseline": [
+      {
+        "requestID": "53d277e9-9a17-4228-81e2-12e7e0c14627",
+        "time": "2026-11-10T09:45:25.472Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "2e9b53b8-34c4-4f94-a7f0-14f3a81e56d6",
+        "time": "2026-11-10T09:45:25.474Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 2,
+        "delivered": 1,
+        "heldMs": 4594
+      },
+      {
+        "requestID": "f2e91a49-1410-4d07-b480-d95da9198b27",
+        "time": "2026-11-10T09:45:46.179Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "551cde5f-0b37-46ce-a29e-dbfcbe3f7974",
+        "time": "2026-11-10T09:45:46.181Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 4685
+      }
+    ],
+    "candidate": [
+      {
+        "requestID": "97f041c6-57b3-4dc6-825f-8412e0d826b6",
+        "time": "2026-11-10T09:49:24.792Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "5fc56b66-7a7b-4d51-b64d-0dbece7a2f52",
+        "time": "2026-11-10T09:49:24.794Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 2,
+        "delivered": 1,
+        "heldMs": 3968
+      },
+      {
+        "requestID": "86d075f6-872d-4838-874c-7af116c16a4f",
+        "time": "2026-11-10T09:49:41.106Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "a9fa8d2f-797e-4a16-b477-d4ad7820de9a",
+        "time": "2026-11-10T09:49:41.108Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 8177
+      },
+      {
+        "requestID": "ddc55262-30f3-432d-8ebe-a17c5357c5f3",
+        "time": "2026-11-10T09:50:19.721Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "53b435c8-6203-46d9-8a81-2719be022e19",
+        "time": "2026-11-10T09:50:19.723Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 2,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "39ed3ad2-44e1-41fd-8b3e-36e2daffc2b6",
+        "time": "2026-11-10T09:50:29.091Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "e3afc974-6fba-48b2-ba7b-1f3deea43283",
+        "time": "2026-11-10T09:50:29.093Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 3756
+      },
+      {
+        "requestID": "77f45ee4-91be-4871-a545-675de94b2c81",
+        "time": "2026-11-10T09:50:45.233Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "bd4ac28f-6575-4873-8059-cb280ca177b5",
+        "time": "2026-11-10T09:50:45.234Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "21d6869f-a232-4e24-bb4f-0a378a28c594",
+        "time": "2026-11-10T09:50:53.037Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "0182c7a5-1ab8-4be3-b0e4-872caf34953a",
+        "time": "2026-11-10T09:50:53.039Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 2,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "2a51858c-d3fc-405f-af38-ef8bf502fb38",
+        "time": "2026-11-10T09:51:01.107Z",
+        "path": "/permission/grants",
+        "status": 200,
+        "mode": "restore",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 0
+      },
+      {
+        "requestID": "37d19a98-4ef8-4887-a3a2-f0047898e8c0",
+        "time": "2026-11-10T09:51:01.109Z",
+        "path": "/permission/history",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 2,
+        "delivered": 2,
+        "heldMs": 4584
+      }
+    ]
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b204-baseline",
+      "apiPort": 39568,
+      "proxyPort": 39569,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b204-candidate",
+      "apiPort": 39570,
+      "proxyPort": 39571,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "projectBytesUnchanged": true
+}

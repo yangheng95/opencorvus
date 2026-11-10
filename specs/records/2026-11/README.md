@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [审批记录恢复时从详细信息交回重载焦点](2026-11-10-permission-record-diagnostic-focus.md)
 - [技能库分别结算已安装列表和发现诊断](2026-11-10-skill-library-read-settlement.md)
 - [专家团市场入口的随附目录计数与恢复](2026-11-10-market-bundled-count-recovery.md)
 - [环境信息的工作树读取与恢复](2026-11-10-worktree-read-recovery.md)

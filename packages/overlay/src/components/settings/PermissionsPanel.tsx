@@ -212,6 +212,8 @@ export function PermissionsSettingsGroup() {
     return path && appStore.connected ? { directory: path, authority: captureApiAuthority() } : undefined
   })
   const [recordRead, setRecordRead] = createSignal<PermissionRecordRead>()
+  let recordsRefreshButton: HTMLButtonElement | undefined
+  let recordFeedback: HTMLDivElement | undefined
   let readSequence = 0
   onCleanup(() => readSequence++)
 
@@ -236,7 +238,11 @@ export function PermissionsSettingsGroup() {
     setRecordRead({ kind: "loading", scope, accepted, failure })
     try {
       const records = await permissionRecords(scope)
-      if (owns()) setRecordRead({ kind: "ready", scope, accepted: records })
+      if (!owns()) return
+      if (recordsOpen() && recordsRefreshButton?.isConnected && recordFeedback?.contains(document.activeElement)) {
+        recordsRefreshButton.focus({ preventScroll: true })
+      }
+      setRecordRead({ kind: "ready", scope, accepted: records })
     } catch (error) {
       if (owns()) setRecordRead({ kind: "failed", scope, accepted, failure: { error } })
     }
@@ -361,6 +367,7 @@ export function PermissionsSettingsGroup() {
                 disabled={!recordsScope()}
                 aria-disabled={recordsBusy() || undefined}
                 aria-busy={recordsBusy() || undefined}
+                ref={recordsRefreshButton}
                 onClick={() => void refreshRecords()}
               >
                 {t(recordsBusy()
@@ -373,7 +380,7 @@ export function PermissionsSettingsGroup() {
             </Show>
             <Show when={recordFailure()}>
               {(failure) => (
-                <Feedback tone="error" details={formatErrorDetails(failure().error)}>
+                <Feedback ref={recordFeedback} tone="error" details={formatErrorDetails(failure().error)}>
                   {t(currentRecords() ? "permissions.refresh_records_failed" : "permissions.load_failed")}
                 </Feedback>
               )}

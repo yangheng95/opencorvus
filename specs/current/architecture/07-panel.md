@@ -5574,7 +5574,9 @@ grant endpoint. Full chronological evidence and exact scopes remain expandable.
 Permission record reads accept grants and history together for the same project
 and connection. The disclosure keeps its last successful read and focusable
 refresh action during retries, labels retained data, and exposes the original
-read error. Retained approvals cannot be revoked until a new read is accepted.
+read error. When an accepted read retires that error, focus still inside its
+diagnostic returns to the existing refresh action. Retained approvals cannot
+be revoked until a new read is accepted.
 
 SettingsRow owns a distinct read-only value slot with a bounded label column and
 a wrapping value column. Long paths never compete with labels as unshrinkable
