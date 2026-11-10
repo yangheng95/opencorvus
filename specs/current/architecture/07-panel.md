@@ -702,6 +702,10 @@ and detail reads. A continuation appends only to its originating snapshot at
 the same frozen Catalog upper revision; it updates the campaign rows and cursor.
 Detail belongs to that history and the exact comparison selection. A selection
 without comparison, a scope change or leaving the panel retires prior detail.
+Continuation feedback and retry stay beside the original list footer and reuse
+the current cursor. Accepted rows keep their controls on append. When focus
+remains on the footer button, an accepted continuation moves it to the first
+new row; an empty final page instead moves it to the last accepted row.
 
 Installed-panel selection has one canonical physical key: built_in:id or
 installation scope:namespace:id, validated through the SDK's existing ID and

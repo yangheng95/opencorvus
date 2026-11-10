@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [专家团演进历史在原位重试续页](records/2026-11/2026-11-10-evolution-history-continuation-focus.md)
 - [专家团演进历史保留最新目录](records/2026-11/2026-11-10-evolution-history-pagination-ownership.md)
 - [文件保存回执丢失时核对真实磁盘](records/2026-11/2026-11-10-file-save-receipt-reconciliation.md)
 - [定时运行历史保留已确认记录](records/2026-11/2026-11-10-scheduled-run-history-confirmed-read.md)

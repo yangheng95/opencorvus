@@ -1,0 +1,470 @@
+{
+  "target": "project:b169-review/history-target",
+  "frozenPublicHistory": {
+    "head": {
+      "upper": 27,
+      "cursor": {
+        "catalog_revision_upper": 27,
+        "before_catalog_revision": 6
+      },
+      "rows": [
+        {
+          "artifact_id": "art_g0VaX0YSX00GBtvF9a1R",
+          "catalog_revision": 27
+        },
+        {
+          "artifact_id": "art_g0VaWxyWM00IITbqa2n8",
+          "catalog_revision": 24
+        },
+        {
+          "artifact_id": "art_g0VaWxyWA00B3ECjCEo6",
+          "catalog_revision": 23
+        },
+        {
+          "artifact_id": "art_g0VaWxyVx00YPIrOxefG",
+          "catalog_revision": 22
+        },
+        {
+          "artifact_id": "art_g0VaWxyVk00YoQGPZVzO",
+          "catalog_revision": 21
+        },
+        {
+          "artifact_id": "art_g0VaWxyVX0096J9aYtgq",
+          "catalog_revision": 20
+        },
+        {
+          "artifact_id": "art_g0VaWxyVL00OFzuTkZys",
+          "catalog_revision": 19
+        },
+        {
+          "artifact_id": "art_g0VaWxyV7000Ai2BmpOX",
+          "catalog_revision": 18
+        },
+        {
+          "artifact_id": "art_g0VaWxyUu00MM0J6EZYW",
+          "catalog_revision": 17
+        },
+        {
+          "artifact_id": "art_g0VaWxyUh00sRc3s1znV",
+          "catalog_revision": 16
+        },
+        {
+          "artifact_id": "art_g0VaWxyUT0058cMX4ivj",
+          "catalog_revision": 15
+        },
+        {
+          "artifact_id": "art_g0VaWxyUF004VrzR792r",
+          "catalog_revision": 14
+        },
+        {
+          "artifact_id": "art_g0VaWxyU200q73jgu6wm",
+          "catalog_revision": 13
+        },
+        {
+          "artifact_id": "art_g0VaWxyTo009xwTbcVDs",
+          "catalog_revision": 12
+        },
+        {
+          "artifact_id": "art_g0VaWxyTc00stVjta7za",
+          "catalog_revision": 11
+        },
+        {
+          "artifact_id": "art_g0VaWxyTN00ZJkeZlBHO",
+          "catalog_revision": 10
+        },
+        {
+          "artifact_id": "art_g0VaWxyTA00JSvtYg3tp",
+          "catalog_revision": 9
+        },
+        {
+          "artifact_id": "art_g0VaWxySt004D4g1iJeJ",
+          "catalog_revision": 8
+        },
+        {
+          "artifact_id": "art_g0VaWxySb00OTbEd6yzh",
+          "catalog_revision": 7
+        },
+        {
+          "artifact_id": "art_g0VaWxySL00nrdSjD9Jj",
+          "catalog_revision": 6
+        }
+      ]
+    },
+    "tail": {
+      "upper": 27,
+      "cursor": null,
+      "rows": [
+        {
+          "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+          "catalog_revision": 5
+        },
+        {
+          "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+          "catalog_revision": 4
+        },
+        {
+          "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+          "catalog_revision": 3
+        }
+      ]
+    }
+  },
+  "persistedInBothProfiles": {
+    "quickCheck": "ok",
+    "task": {
+      "id": "tsk_g00VaWxxuG00Ru0c08mw",
+      "project_id": "prj_hdKNDNP0w6goDO5iNI8R",
+      "session_id": "ses_-zUPT225jzz50wsfDSkm"
+    },
+    "artifactCount": 27,
+    "providerUsageEvents": 0,
+    "activeRuntimeCapacityLeases": 0
+  },
+  "baseline": {
+    "asset": "main-B_ZvFf4_.js",
+    "network": [
+      {
+        "time": "2026-11-10T02:04:25.527Z",
+        "stage": "listening",
+        "port": 39446,
+        "up": 39445
+      },
+      {
+        "time": "2026-11-10T02:04:55.487Z",
+        "stage": "upgrade",
+        "status": 101
+      },
+      {
+        "time": "2026-11-10T02:05:03.625Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T02:05:03.711Z",
+        "stage": "origin",
+        "attempt": 1,
+        "older": false,
+        "status": 200,
+        "requestID": "affd4de4-49be-473e-94f8-9b5232b7c3ed",
+        "bytes": 56499,
+        "upper": 27,
+        "cursor": {
+          "catalog_revision_upper": 27,
+          "before_catalog_revision": 6
+        },
+        "rowCount": 20
+      },
+      {
+        "time": "2026-11-10T02:05:03.712Z",
+        "stage": "released",
+        "attempt": 1,
+        "reason": "normal",
+        "bytes": 56499
+      },
+      {
+        "time": "2026-11-10T02:05:15.624Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T02:05:15.681Z",
+        "stage": "origin",
+        "attempt": 2,
+        "older": true,
+        "status": 200,
+        "requestID": "4ec46388-dcfd-46c7-b331-88e7dc1a8251",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rowCount": 3
+      },
+      {
+        "time": "2026-11-10T02:05:15.682Z",
+        "stage": "truncated",
+        "attempt": 2,
+        "delivered": 32,
+        "full": 8513
+      },
+      {
+        "time": "2026-11-10T02:05:39.896Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T02:05:39.941Z",
+        "stage": "origin",
+        "attempt": 3,
+        "older": true,
+        "status": 200,
+        "requestID": "6285f42c-029a-4339-91ee-828d433605a4",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rowCount": 3
+      },
+      {
+        "time": "2026-11-10T02:05:39.941Z",
+        "stage": "tail-held",
+        "attempt": 3
+      },
+      {
+        "time": "2026-11-10T02:05:45.387Z",
+        "stage": "released",
+        "attempt": 3,
+        "reason": "manual-tail-release",
+        "bytes": 8513
+      }
+    ]
+  },
+  "candidate": {
+    "asset": "main-B1YunVhO.js",
+    "network": [
+      {
+        "time": "2026-11-10T02:09:27.635Z",
+        "stage": "listening",
+        "port": 39448,
+        "up": 39447
+      },
+      {
+        "time": "2026-11-10T02:09:45.310Z",
+        "stage": "upgrade",
+        "status": 101
+      },
+      {
+        "time": "2026-11-10T02:09:52.392Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T02:09:52.479Z",
+        "stage": "origin",
+        "attempt": 1,
+        "older": false,
+        "status": 200,
+        "requestID": "72733c62-31ae-4f5b-a241-bee373c55cae",
+        "bytes": 56499,
+        "upper": 27,
+        "cursor": {
+          "catalog_revision_upper": 27,
+          "before_catalog_revision": 6
+        },
+        "rowCount": 20
+      },
+      {
+        "time": "2026-11-10T02:09:52.480Z",
+        "stage": "released",
+        "attempt": 1,
+        "reason": "normal",
+        "bytes": 56499
+      },
+      {
+        "time": "2026-11-10T02:10:00.162Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T02:10:00.222Z",
+        "stage": "origin",
+        "attempt": 2,
+        "older": true,
+        "status": 200,
+        "requestID": "e3aec75d-6f7c-4149-8b2d-75ac23db6ba3",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rowCount": 3
+      },
+      {
+        "time": "2026-11-10T02:10:00.223Z",
+        "stage": "truncated",
+        "attempt": 2,
+        "delivered": 32,
+        "full": 8513
+      },
+      {
+        "time": "2026-11-10T02:10:29.736Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T02:10:29.779Z",
+        "stage": "origin",
+        "attempt": 3,
+        "older": true,
+        "status": 200,
+        "requestID": "03e54810-f49b-4de3-a7f4-7f0bf9d33b7b",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rowCount": 3
+      },
+      {
+        "time": "2026-11-10T02:10:29.779Z",
+        "stage": "tail-held",
+        "attempt": 3
+      },
+      {
+        "time": "2026-11-10T02:10:36.053Z",
+        "stage": "released",
+        "attempt": 3,
+        "reason": "manual-tail-release",
+        "bytes": 8513
+      },
+      {
+        "time": "2026-11-10T02:10:53.773Z",
+        "stage": "arrival",
+        "attempt": 4,
+        "older": false,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20"
+        }
+      },
+      {
+        "time": "2026-11-10T02:10:53.820Z",
+        "stage": "origin",
+        "attempt": 4,
+        "older": false,
+        "status": 200,
+        "requestID": "1b9bd182-2af7-4d91-b25d-b87c5737c701",
+        "bytes": 56499,
+        "upper": 27,
+        "cursor": {
+          "catalog_revision_upper": 27,
+          "before_catalog_revision": 6
+        },
+        "rowCount": 20
+      },
+      {
+        "time": "2026-11-10T02:10:53.820Z",
+        "stage": "released",
+        "attempt": 4,
+        "reason": "normal",
+        "bytes": 56499
+      },
+      {
+        "time": "2026-11-10T02:11:00.384Z",
+        "stage": "arrival",
+        "attempt": 5,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T02:11:00.431Z",
+        "stage": "origin",
+        "attempt": 5,
+        "older": true,
+        "status": 200,
+        "requestID": "4f2cc3fb-c0a9-4e04-9dab-5ab2d2dfa9e0",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rowCount": 3
+      },
+      {
+        "time": "2026-11-10T02:11:00.432Z",
+        "stage": "truncated",
+        "attempt": 5,
+        "delivered": 32,
+        "full": 8513
+      },
+      {
+        "time": "2026-11-10T02:11:19.717Z",
+        "stage": "arrival",
+        "attempt": 6,
+        "older": true,
+        "query": {
+          "namespace": "b169-review",
+          "id": "history-target",
+          "installationScope": "project",
+          "limit": "20",
+          "catalogRevisionUpper": "27",
+          "beforeCatalogRevision": "6"
+        }
+      },
+      {
+        "time": "2026-11-10T02:11:19.765Z",
+        "stage": "origin",
+        "attempt": 6,
+        "older": true,
+        "status": 200,
+        "requestID": "3f0e0656-dbb9-424f-89ea-88ace6ae8eff",
+        "bytes": 8513,
+        "upper": 27,
+        "cursor": null,
+        "rowCount": 3
+      },
+      {
+        "time": "2026-11-10T02:11:19.766Z",
+        "stage": "tail-held",
+        "attempt": 6
+      },
+      {
+        "time": "2026-11-10T02:11:25.670Z",
+        "stage": "released",
+        "attempt": 6,
+        "reason": "manual-tail-release",
+        "bytes": 8513
+      }
+    ]
+  }
+}

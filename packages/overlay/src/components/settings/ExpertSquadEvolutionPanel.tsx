@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { batch, createEffect, createMemo, createSignal, For, onCleanup, Show, untrack } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, For, mapArray, onCleanup, Show, untrack } from "solid-js"
 import { localeTag, t, tc } from "../../utils/i18n"
 import {
   executeExpertSquadEvolutionMutation,
@@ -48,7 +48,6 @@ interface EvolutionRead {
 type EvolutionIssue = {
   summary:
     | "expert_squad.evolution_history_failed"
-    | "expert_squad.evolution_more_failed"
     | "expert_squad.evolution_detail_failed"
     | "expert_squad.evolution_mutation_failed"
   diagnostic: string
@@ -94,19 +93,17 @@ function selectionKey(
   return `${artifact.task_id}:${artifact.locator.artifact_id}:${artifact.locator.catalog_revision}`
 }
 
-function selections(records: ExpertSquadEvolutionHistoryRecord[]): EvolutionSelection[] {
-  return records.flatMap((record) => {
-    if (record.candidates.length === 0) return [{ key: selectionKey(record), record }]
-    return record.candidates.flatMap((candidate) => {
-      if (candidate.comparisons.length === 0)
-        return [{ key: selectionKey(record, candidate), record, candidate }]
-      return candidate.comparisons.map((comparison) => ({
-        key: selectionKey(record, candidate, comparison),
-        record,
-        candidate,
-        comparison,
-      }))
-    })
+function campaignSelections(record: ExpertSquadEvolutionHistoryRecord): EvolutionSelection[] {
+  if (record.candidates.length === 0) return [{ key: selectionKey(record), record }]
+  return record.candidates.flatMap((candidate) => {
+    if (candidate.comparisons.length === 0)
+      return [{ key: selectionKey(record, candidate), record, candidate }]
+    return candidate.comparisons.map((comparison) => ({
+      key: selectionKey(record, candidate, comparison),
+      record,
+      candidate,
+      comparison,
+    }))
   })
 }
 
@@ -116,13 +113,18 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
   const [selectedKey, setSelectedKey] = createSignal("")
   const [loading, setLoading] = createSignal(false)
   const [loadingMore, setLoadingMore] = createSignal(false)
+  const [continuationFailure, setContinuationFailure] = createSignal<{ diagnostic: string }>()
   const [detailLoading, setDetailLoading] = createSignal(false)
   const [mutationBusy, setMutationBusy] = createSignal("")
   const [error, setError] = createSignal<EvolutionIssue>()
   let historyRead: EvolutionRead | undefined
   let detailRead: AbortController | undefined
+  let campaignList: HTMLDivElement | undefined
+  let continuationFooter: HTMLDivElement | undefined
+  let continuationButton: HTMLButtonElement | undefined
 
-  const entries = createMemo(() => selections(history()?.records ?? []))
+  const entriesByCampaign = mapArray(() => history()?.records ?? [], campaignSelections)
+  const entries = createMemo(() => entriesByCampaign().flat())
   const selected = createMemo(() => entries().find((entry) => entry.key === selectedKey()) ?? entries()[0])
   const errorSummary = createMemo(() => {
     const issue = error()
@@ -195,6 +197,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       retireDetail()
       setLoading(true)
       setLoadingMore(false)
+      setContinuationFailure(undefined)
       setError(undefined)
     })
     try {
@@ -203,12 +206,13 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         signal: read.controller.signal,
       })
       if (!ownsHistory(read)) return
-      const nextEntries = selections(next.records)
-      const nextSelection = nextEntries.find((entry) => entry.key === preferredKey) ?? nextEntries[0]
       batch(() => {
         setHistory(next)
+        const nextEntries = entries()
+        const nextSelection = nextEntries.find((entry) => entry.key === preferredKey) ?? nextEntries[0]
         setSelectedKey(nextSelection?.key ?? "")
       })
+      const nextSelection = selected()
       if (nextSelection) await loadDetail(nextSelection)
     } catch (cause) {
       if (ownsHistory(read)) reportIssue("expert_squad.evolution_history_failed", cause)
@@ -222,8 +226,9 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
     const current = history()
     const cursor = current?.next_cursor
     if (!read || !ownsHistory(read) || !current || !cursor || loading() || loadingMore()) return
+    const trigger = continuationButton
+    const hadFocus = !!trigger && trigger === document.activeElement
     setLoadingMore(true)
-    setError(undefined)
     try {
       const next = await loadExpertSquadEvolutionHistory({
         ...read.scope,
@@ -233,9 +238,23 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
       if (!ownsHistory(read) || history() !== current) return
       if (next.catalog_revision_upper !== current.catalog_revision_upper)
         throw new Error("Evolution history continuation returned a different Catalog revision.")
-      setHistory({ ...current, records: [...current.records, ...next.records], next_cursor: next.next_cursor })
+      const entryCount = entries().length
+      const shouldFocus = hadFocus && document.activeElement === trigger
+      batch(() => {
+        setHistory({ ...current, records: [...current.records, ...next.records], next_cursor: next.next_cursor })
+        setContinuationFailure(undefined)
+      })
+      if (shouldFocus && ownsHistory(read)
+        && (document.activeElement === trigger || (!trigger?.isConnected && document.activeElement === document.body))) {
+        const nextEntries = entries()
+        const entry = nextEntries[entryCount] ?? (!next.next_cursor ? nextEntries.at(-1) : undefined)
+        if (entry) campaignList?.querySelector<HTMLButtonElement>(`[data-evolution-entry="${CSS.escape(entry.key)}"] button`)?.focus()
+      }
     } catch (cause) {
-      if (ownsHistory(read) && history() === current) reportIssue("expert_squad.evolution_more_failed", cause)
+      if (ownsHistory(read) && history() === current) {
+        setContinuationFailure({ diagnostic: cause instanceof Error ? cause.message : String(cause) })
+        if (hadFocus && trigger === document.activeElement) continuationFooter?.scrollIntoView({ block: "nearest" })
+      }
     } finally {
       if (ownsHistory(read)) setLoadingMore(false)
     }
@@ -519,10 +538,10 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         }
       >
         <div class="expert-squad-evolution-layout">
-          <div class="expert-squad-evolution-records" aria-label={t("expert_squad.evolution_campaigns")}>
+          <div ref={campaignList} class="expert-squad-evolution-records" aria-label={t("expert_squad.evolution_campaigns")}>
             <For each={entries()}>
               {(entry) => (
-                <article class="expert-squad-evolution-record" classList={{ "is-selected": selectedKey() === entry.key }}>
+                <article class="expert-squad-evolution-record" data-evolution-entry={entry.key} classList={{ "is-selected": selectedKey() === entry.key }}>
                   <SettingsRow
                     as="button"
                     customContent
@@ -572,10 +591,25 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
               )}
             </For>
             <Show when={history()?.next_cursor}>
-              <Button type="button" variant="outline" size="sm" tone="neutral" disabled={loadingMore()} onClick={() => void loadMore()}>
-                <Show when={loadingMore()}><Icon name="loading" /></Show>
-                {t("expert_squad.evolution_load_more")}
-              </Button>
+              <div ref={continuationFooter} class="expert-squad-evolution-continuation">
+                <Show when={continuationFailure()}>
+                  {(failure) => <Feedback tone="error" details={failure().diagnostic}>{t("expert_squad.evolution_more_failed")}</Feedback>}
+                </Show>
+                <Button
+                  ref={continuationButton}
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  aria-disabled={loadingMore() || undefined}
+                  aria-busy={loadingMore() || undefined}
+                  onClick={() => void loadMore()}
+                >
+                  <Show when={loadingMore()}><Icon name="loading" /></Show>
+                  {t(loadingMore() ? "expert_squad.evolution_loading_more"
+                    : continuationFailure() ? "expert_squad.evolution_retry_more" : "expert_squad.evolution_load_more")}
+                </Button>
+              </div>
             </Show>
           </div>
 
