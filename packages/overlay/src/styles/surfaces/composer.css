@@ -1282,6 +1282,8 @@
 }
 
 .composer-model-selector-popover {
+  display: flex;
+  flex-direction: column;
   z-index: calc(var(--ui-z-dialog) + 1);
   min-width: min(calc(420px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - 24px));
 }
@@ -1349,16 +1351,15 @@ div:has(> .composer-model-selector-popover) {
   line-height: var(--ui-line-height-tight);
 }
 
-.model-selector-popover-error {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--ui-gap-md);
+.model-selector-catalog-feedback {
+  display: grid;
+  flex-shrink: 0;
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
 }
 
-.model-selector-popover-error > span {
-  min-width: 0;
-  overflow-wrap: anywhere;
+.model-selector-catalog-feedback > .oc-button {
+  justify-self: start;
 }
 
 .model-selector-popover-group {

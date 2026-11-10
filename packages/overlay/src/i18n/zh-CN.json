@@ -1405,6 +1405,8 @@
   "model_selector.account_usage_empty": "— / —",
   "model_selector.account_usage_error": "暂不可用",
   "model_selector.no_available_models": "当前没有可选模型。请打开「{{providers}}」，连接服务商或检查模型配置。",
+  "model_selector.catalog_failed": "无法读取模型列表。",
+  "model_selector.catalog_retry": "重试读取模型列表",
   "model_selector.model_choose": "选择模型",
   "model_selector.model_inherit": "继承配置",
   "model_selector.search_placeholder": "搜索模型或服务商名称",

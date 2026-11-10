@@ -23,6 +23,7 @@ import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { connectedModelOptions, providerAccountUsageCapability, providerLabel } from "../services/llm"
 import { localeTag, t, tc } from "../utils/i18n"
 import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
 import { SearchField } from "./ui/SearchField"
 import { matchesSearchTerms } from "../services/text-search"
 import { selectComposerModel } from "../services/composer-model"
@@ -312,6 +313,7 @@ export function ComposerModelSelector() {
   const disclosure = useDisclosure()
   const [slotRef, setSlotRef] = createSignal<HTMLElement>()
   const [providerLoading, setProviderLoading] = createSignal(false)
+  const [catalogRetry, setCatalogRetry] = createSignal<{ trigger: HTMLButtonElement }>()
   const [query, setQuery] = createSignal("")
   let providerLoadsInFlight = 0
   let searchInputRef: HTMLInputElement | undefined
@@ -324,6 +326,7 @@ export function ComposerModelSelector() {
   })
   const accountUsage = createProviderAccountUsageState(selectedModel, taskID)
   const groups = createMemo(mirrorProviderGroups)
+  const catalogIssue = createMemo(() => appStore.providerLoadIssues.find((issue) => issue.resource === "catalog"))
   const filteredGroups = createMemo(() => {
     const search = query()
     return groups()
@@ -342,11 +345,11 @@ export function ComposerModelSelector() {
     activeDirectory().trim()
     providerLoadsInFlight = 0
     setProviderLoading(false)
-    disclosure.close()
+    close()
     setQuery("")
   })
 
-  async function loadProviderInfoOnOpen(): Promise<void> {
+  async function readProviderInfo(): Promise<void> {
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = activeDirectory().trim()
@@ -370,19 +373,37 @@ export function ComposerModelSelector() {
     }
   }
 
+  async function retryCatalog(trigger: HTMLButtonElement): Promise<void> {
+    if (providerLoading() || catalogRetry()) return
+    const retry = { trigger }
+    setCatalogRetry(retry)
+    try {
+      await readProviderInfo()
+      if (catalogRetry() === retry && disclosure.open() && appStore.providerCatalog && !catalogIssue()
+        && document.activeElement === retry.trigger) searchInputRef?.focus({ preventScroll: true })
+    } finally {
+      if (catalogRetry() === retry) setCatalogRetry(undefined)
+    }
+  }
+
+  function close() {
+    setCatalogRetry(undefined)
+    disclosure.close()
+  }
+
   function open() {
-    runModelSelectorAction("composer-provider-info", loadProviderInfoOnOpen)
+    runModelSelectorAction("composer-provider-info", readProviderInfo)
     disclosure.openIt()
     queueMicrotask(() => searchInputRef?.focus())
   }
 
   async function pickModel(value: string) {
-    disclosure.close()
+    close()
     await selectComposerModel(value)
   }
 
   function configureProvider() {
-    disclosure.close()
+    close()
     openConfigDialog("providers")
   }
 
@@ -395,7 +416,7 @@ export function ComposerModelSelector() {
           return
         }
         setQuery("")
-        disclosure.close()
+        close()
       }}
       anchorRef={slotRef}
       placement="top-start"
@@ -458,14 +479,38 @@ export function ComposerModelSelector() {
               clearDataUI="model-selector-search-clear"
             />
           </div>
+          <Show when={catalogIssue() || catalogRetry()}>
+            <div class="model-selector-catalog-feedback">
+              <Show when={catalogIssue()}>
+                {(issue) => <Feedback tone="error" details={issue().message}>{t("model_selector.catalog_failed")}</Feedback>}
+              </Show>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                aria-disabled={providerLoading() || undefined}
+                aria-busy={providerLoading() || undefined}
+                onClick={(event) => {
+                  const trigger = event.currentTarget
+                  runModelSelectorAction("composer-provider-info", () => retryCatalog(trigger))
+                }}
+              >
+                <Icon name={providerLoading() ? "loading" : "refresh"} />
+                {t(providerLoading() ? "common.loading" : "model_selector.catalog_retry")}
+              </Button>
+            </div>
+          </Show>
           <Show
             when={groups().length > 0}
             fallback={
-              <div class="model-selector-popover-empty">
-                {providerLoading()
-                  ? t("common.loading")
-                  : t("model_selector.no_available_models", { providers: t("cmdk.settings.providers") })}
-              </div>
+              <Show when={!catalogIssue()}>
+                <div class="model-selector-popover-empty">
+                  {providerLoading() || !appStore.providerCatalog
+                    ? t("common.loading")
+                    : t("model_selector.no_available_models", { providers: t("cmdk.settings.providers") })}
+                </div>
+              </Show>
             }
           >
             <Show

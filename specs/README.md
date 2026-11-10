@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [主输入区区分模型目录读取失败与没有可用模型](records/2026-11/2026-11-10-composer-model-catalog-read-state.md)
 - [在当前页面重试模型服务商读取](records/2026-11/2026-11-10-provider-read-retry.md)
 - [用当前界面语言阅读演进证据状态](records/2026-11/2026-11-10-evolution-evidence-localized-status.md)
 - [在所选演进记录旁阅读详情](records/2026-11/2026-11-10-evolution-history-inline-detail.md)

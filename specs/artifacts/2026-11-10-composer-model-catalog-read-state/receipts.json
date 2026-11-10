@@ -1,0 +1,415 @@
+{
+  "baseline": {
+    "asset": "main-DgkkdouI.js",
+    "qualifiedRead": {
+      "status": 200,
+      "requestID": "4a7ca73f-3862-4d26-8b63-f1527742b4f2",
+      "catalogCount": 88,
+      "connectedCount": 0,
+      "authFilePresent": false
+    },
+    "requests": [
+      {
+        "time": "2026-11-10T02:48:48.980Z",
+        "stage": "listening",
+        "port": 39460,
+        "up": 39459
+      },
+      {
+        "time": "2026-11-10T02:49:16.269Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "method": "GET",
+        "path": "/config",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:49:16.278Z",
+        "stage": "origin",
+        "attempt": 1,
+        "status": 200,
+        "requestID": "195d46d7-dbcb-4159-bba9-16ce8e1fadc6"
+      },
+      {
+        "time": "2026-11-10T02:49:26.510Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "method": "GET",
+        "path": "/provider",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:49:26.513Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:49:26.541Z",
+        "stage": "origin",
+        "attempt": 2,
+        "status": 200,
+        "requestID": "8a17259d-51c5-4418-9f33-92f7df4d22cc"
+      },
+      {
+        "time": "2026-11-10T02:49:26.545Z",
+        "stage": "truncated",
+        "attempt": 2,
+        "bytes": 1899837,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:49:26.546Z",
+        "stage": "origin",
+        "attempt": 3,
+        "status": 200,
+        "requestID": "a08256dc-729e-401b-8439-bbad2fb0bfe0"
+      },
+      {
+        "time": "2026-11-10T02:49:49.657Z",
+        "stage": "arrival",
+        "attempt": 4,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:49:49.659Z",
+        "stage": "arrival",
+        "attempt": 5,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:49:49.682Z",
+        "stage": "origin",
+        "attempt": 4,
+        "status": 200,
+        "requestID": "004a7fd6-b159-4e5a-9702-1d195a5f64d5"
+      },
+      {
+        "time": "2026-11-10T02:49:49.689Z",
+        "stage": "origin",
+        "attempt": 5,
+        "status": 200,
+        "requestID": "aa470ccc-f6bf-45be-a630-e710b9ae0663"
+      }
+    ]
+  },
+  "candidate": {
+    "asset": "main-BDu1rkob.js",
+    "qualifiedReads": [
+      {
+        "path": "/provider",
+        "status": 200,
+        "requestID": "e98bc505-324c-452c-88cd-4e3a4247ffe3",
+        "catalogCount": 88,
+        "connectedCount": 0
+      },
+      {
+        "path": "/provider/auth",
+        "status": 200,
+        "requestID": "85ef7973-af28-4fe0-96f8-e943ce627861"
+      },
+      {
+        "path": "/global/providers",
+        "status": 200,
+        "requestID": "06a7b66b-ec19-4e02-910b-0d88c25a6489",
+        "catalogCount": 88,
+        "connectedCount": 0
+      },
+      {
+        "path": "/global/providers/auth",
+        "status": 200,
+        "requestID": "d31f59fd-f42d-454b-86f2-0508b6f91322"
+      }
+    ],
+    "requests": [
+      {
+        "time": "2026-11-10T02:54:27.318Z",
+        "stage": "listening",
+        "port": 39462,
+        "up": 39461
+      },
+      {
+        "time": "2026-11-10T02:54:50.657Z",
+        "stage": "arrival",
+        "attempt": 1,
+        "method": "GET",
+        "path": "/config",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:54:50.664Z",
+        "stage": "origin",
+        "attempt": 1,
+        "status": 200,
+        "requestID": "7f538c1d-2c26-41d5-a7c5-b7c0f29a55a6"
+      },
+      {
+        "time": "2026-11-10T02:54:59.627Z",
+        "stage": "arrival",
+        "attempt": 2,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:54:59.630Z",
+        "stage": "arrival",
+        "attempt": 3,
+        "method": "GET",
+        "path": "/provider",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:54:59.633Z",
+        "stage": "origin",
+        "attempt": 2,
+        "status": 200,
+        "requestID": "f1a6d297-a67b-4453-b6fb-53034207019c"
+      },
+      {
+        "time": "2026-11-10T02:54:59.657Z",
+        "stage": "origin",
+        "attempt": 3,
+        "status": 200,
+        "requestID": "58ee5656-f2f8-40fe-a96a-a4fd16cbca9b"
+      },
+      {
+        "time": "2026-11-10T02:54:59.662Z",
+        "stage": "truncated",
+        "attempt": 3,
+        "bytes": 1899837,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:55:30.278Z",
+        "stage": "arrival",
+        "attempt": 4,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:55:30.280Z",
+        "stage": "arrival",
+        "attempt": 5,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:55:30.283Z",
+        "stage": "origin",
+        "attempt": 5,
+        "status": 200,
+        "requestID": "f6a3cdb6-6c3f-4652-b95b-019868554332"
+      },
+      {
+        "time": "2026-11-10T02:55:30.307Z",
+        "stage": "origin",
+        "attempt": 4,
+        "status": 200,
+        "requestID": "fe043ab6-d5f3-4ff2-b58b-c13cd20aa08b"
+      },
+      {
+        "time": "2026-11-10T02:55:30.311Z",
+        "stage": "held",
+        "attempt": 4,
+        "bytes": 1899837
+      },
+      {
+        "time": "2026-11-10T02:55:36.453Z",
+        "stage": "released",
+        "attempt": 4,
+        "bytes": 1899837
+      },
+      {
+        "time": "2026-11-10T02:55:53.599Z",
+        "stage": "arrival",
+        "attempt": 6,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:55:53.600Z",
+        "stage": "arrival",
+        "attempt": 7,
+        "method": "GET",
+        "path": "/provider",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:55:53.602Z",
+        "stage": "origin",
+        "attempt": 6,
+        "status": 200,
+        "requestID": "701aaf9e-7494-440c-9c37-a75fd8553b1a"
+      },
+      {
+        "time": "2026-11-10T02:55:53.628Z",
+        "stage": "origin",
+        "attempt": 7,
+        "status": 200,
+        "requestID": "382970c5-b7c2-4233-8868-23291cf8b30f"
+      },
+      {
+        "time": "2026-11-10T02:55:53.631Z",
+        "stage": "truncated",
+        "attempt": 7,
+        "bytes": 1899837,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:56:07.912Z",
+        "stage": "arrival",
+        "attempt": 8,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:56:07.914Z",
+        "stage": "arrival",
+        "attempt": 9,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:56:07.939Z",
+        "stage": "origin",
+        "attempt": 8,
+        "status": 200,
+        "requestID": "642ebb24-1bb7-49b7-bf34-bab5d125c648"
+      },
+      {
+        "time": "2026-11-10T02:56:07.948Z",
+        "stage": "origin",
+        "attempt": 9,
+        "status": 200,
+        "requestID": "bdf00090-3e92-4562-9bb4-593f50880abe"
+      },
+      {
+        "time": "2026-11-10T02:56:25.655Z",
+        "stage": "arrival",
+        "attempt": 10,
+        "method": "GET",
+        "path": "/provider",
+        "cut": true
+      },
+      {
+        "time": "2026-11-10T02:56:25.657Z",
+        "stage": "arrival",
+        "attempt": 11,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:56:25.683Z",
+        "stage": "origin",
+        "attempt": 10,
+        "status": 200,
+        "requestID": "77b1e868-0529-4723-9666-25baff22a197"
+      },
+      {
+        "time": "2026-11-10T02:56:25.688Z",
+        "stage": "truncated",
+        "attempt": 10,
+        "bytes": 1899837,
+        "delivered": 8
+      },
+      {
+        "time": "2026-11-10T02:56:25.689Z",
+        "stage": "origin",
+        "attempt": 11,
+        "status": 200,
+        "requestID": "f2d2bcce-90ca-41f5-b9b0-1eb223a30cdb"
+      },
+      {
+        "time": "2026-11-10T02:56:40.364Z",
+        "stage": "arrival",
+        "attempt": 12,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:56:40.366Z",
+        "stage": "arrival",
+        "attempt": 13,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:56:40.392Z",
+        "stage": "origin",
+        "attempt": 12,
+        "status": 200,
+        "requestID": "41c59647-ddbf-48b6-8c55-f804d88e3429"
+      },
+      {
+        "time": "2026-11-10T02:56:40.397Z",
+        "stage": "held",
+        "attempt": 12,
+        "bytes": 1899837
+      },
+      {
+        "time": "2026-11-10T02:56:40.398Z",
+        "stage": "origin",
+        "attempt": 13,
+        "status": 200,
+        "requestID": "a33650a7-95a0-4853-95a1-26f77ad3745c"
+      },
+      {
+        "time": "2026-11-10T02:56:46.390Z",
+        "stage": "released",
+        "attempt": 12,
+        "bytes": 1899837
+      },
+      {
+        "time": "2026-11-10T02:56:51.386Z",
+        "stage": "arrival",
+        "attempt": 14,
+        "method": "GET",
+        "path": "/provider",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:56:51.388Z",
+        "stage": "arrival",
+        "attempt": 15,
+        "method": "GET",
+        "path": "/provider/auth",
+        "cut": false
+      },
+      {
+        "time": "2026-11-10T02:56:51.412Z",
+        "stage": "origin",
+        "attempt": 14,
+        "status": 200,
+        "requestID": "3f3bb913-3291-4a81-a65c-0b4ae75a2bf8"
+      },
+      {
+        "time": "2026-11-10T02:56:51.414Z",
+        "stage": "origin",
+        "attempt": 15,
+        "status": 200,
+        "requestID": "a572c624-4222-427a-a5d1-71c6af25e41a"
+      }
+    ]
+  },
+  "bothProfiles": {
+    "integrity": "ok",
+    "taskCount": 1,
+    "providerUsageCount": 0,
+    "authFilePresent": false
+  }
+}

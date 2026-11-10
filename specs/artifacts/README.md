@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [模型选择器读取状态实页证据](2026-11-10-composer-model-catalog-read-state/README.md)
 - [模型服务商原位读取证据](2026-11-10-provider-read-retry/README.md)
 - [演进证据状态本地化实页证据](2026-11-10-evolution-evidence-localized-status/README.md)
 - [演进记录与详情邻接证据](2026-11-10-evolution-history-inline-detail/README.md)

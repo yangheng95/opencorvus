@@ -164,6 +164,10 @@ blank input retains all candidates. Provider rows keep their existing field
 scope, including model IDs only where the row already supplies them.
 Listbox typeahead uses that visible model label for prefix navigation. Selection
 and persistence continue to use the fully-qualified model ID.
+The selector distinguishes a failed catalog read from an accepted empty list.
+It shows the canonical read issue beside the current query and retries the
+same scoped read. Previously accepted models remain available, and a retry
+that removes its focused button returns focus to the query field.
 
 Project file listing, content/source-content, file status and text/file search
 GET readers use the existing Project identity admission independently of
