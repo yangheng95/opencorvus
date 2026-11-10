@@ -103,6 +103,9 @@ function MissionBoardCard(props: {
   onDelete: () => void
 }) {
   const now = useNowTick()
+  const titleID = createUniqueId()
+  const editLabelID = createUniqueId()
+  const startLabelID = createUniqueId()
   const taskCounts = createMemo(() =>
     props.mission.tasks.reduce(
       (counts, task) => {
@@ -158,7 +161,7 @@ function MissionBoardCard(props: {
           disabled={props.actionBusy}
           onClick={props.onOpen}
         >
-          <strong class="mission-board-card__title">{props.mission.title}</strong>
+          <strong id={titleID} class="mission-board-card__title">{props.mission.title}</strong>
           <span class="mission-board-card__project" title={props.mission.directory}>
             <Icon name="folder" size="compact" />
             <span>{missionProjectLabel(props.mission)}</span>
@@ -286,11 +289,12 @@ function MissionBoardCard(props: {
                 variant="ghost"
                 size="sm"
                 tone="neutral"
+                aria-labelledby={`${editLabelID} ${titleID}`}
                 disabled={props.actionBusy}
                 onClick={props.onEdit}
               >
                 <Icon name="edit" size="compact" />
-                {t("mission_board.edit.action")}
+                <span id={editLabelID}>{t("mission_board.edit.action")}</span>
               </Button>
               <Button
                 type="button"
@@ -298,11 +302,14 @@ function MissionBoardCard(props: {
                 size="sm"
                 tone="neutral"
                 data-ui="mission-board-dispatch"
+                aria-labelledby={`${startLabelID} ${titleID}`}
                 disabled={props.actionBusy}
                 onClick={props.onDispatch}
               >
                 <Icon name={props.dispatching ? "loading" : "send"} size="compact" />
-                {props.dispatching ? t("mission_board.create.dispatching") : t("mission_board.create.dispatch")}
+                <span id={startLabelID}>
+                  {props.dispatching ? t("mission_board.create.dispatching") : t("mission_board.create.dispatch")}
+                </span>
               </Button>
             </div>
           </div>

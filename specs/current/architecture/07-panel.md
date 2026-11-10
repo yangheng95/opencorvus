@@ -1809,8 +1809,10 @@ blocked outcome alone owns the criteria; no cached result or inferred next step
 is introduced. Existing summaries, acceptance, lanes and conversation navigation
 retain their owners.
 
-Mission Board draft cards offer separate Edit request and Start actions. The
-editor snapshots exact Mission/directory and original pending text when opened;
+Mission Board draft cards offer separate Edit request and Start actions. Each
+action's accessible name starts with its visible label and includes its own
+card's current title in both layouts. The editor snapshots exact
+Mission/directory and original pending text when opened;
 Board refreshes do not replace its authored input. Save uses `mission.editDraft`
 and the shared refresh lifecycle. Typed conflicts preserve entered text for
 review/copy; cancellation and saving do not dispatch an execution.

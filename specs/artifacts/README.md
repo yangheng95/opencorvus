@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务草稿动作名称的证据](2026-11-10-mission-draft-action-names/README.md)
 - [侧栏本地文字草稿的证据](2026-11-10-sidebar-local-conversation-drafts/README.md)
 - [侧栏布局和排序单选组的证据](2026-11-10-sidebar-preference-single-choice/README.md)
 - [侧栏置顶和列表更新焦点的证据](2026-11-10-sidebar-item-pin-focus/README.md)
