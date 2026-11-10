@@ -1668,23 +1668,42 @@ button.s-row:focus-visible {
 
 .mcp-project-scope {
   margin-block-start: var(--ui-gap-sm);
+}
+
+.settings-project-scope,
+.settings-project-scope-label {
   overflow-wrap: anywhere;
 }
 
-.mcp-project-scope strong {
+.settings-project-scope-label strong {
   color: var(--text-strong);
   font-weight: var(--ui-font-weight-strong);
 }
 
-.mcp-project-scope-parent {
+.settings-project-scope-parent {
   color: var(--text-soft);
 }
 
-.mcp-project-scope-path {
+.settings-project-scope-path {
   display: block;
   color: var(--text-muted);
   font-family: var(--mono);
   font-size: var(--ui-font-caption);
+}
+
+.channel-editor-project-scope {
+  display: block;
+  margin-block-start: var(--ui-gap-xs);
+  font-size: var(--ui-font-secondary);
+  line-height: var(--ui-line-height-normal);
+}
+
+.channel-editor-project-scope .settings-project-scope-parent {
+  display: block;
+}
+
+.channel-editor-project-scope .settings-project-scope-separator {
+  display: none;
 }
 
 .conversation-capability-mcp {

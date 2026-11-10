@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [通道设置与编辑器显示实际目标项目](2026-11-10-channel-active-project-context.md)
 - [项目配置和通道目录各自发布读取结果](2026-11-10-project-config-and-channel-read-settlement.md)
 - [通道设置等待项目配置并可原地选择项目](2026-11-10-channel-confirmed-project-configuration.md)
 - [从网络代理设置直接选择项目](2026-11-10-network-proxy-choose-project.md)

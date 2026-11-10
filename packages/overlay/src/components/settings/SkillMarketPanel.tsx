@@ -26,7 +26,6 @@ import { getHostTransport } from "../../services/host-transport-runtime"
 import { nativeConfirm, nativeOpen } from "../../utils/native"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
 import { createVisibilityInterval } from "../../utils/visibility-interval"
-import { projectDirectoryLabel, projectLedgerDisplayName } from "../../utils/project-directory"
 import {
   loadInstalledSkills,
   loadSkillIssues,
@@ -59,6 +58,7 @@ import { Icon } from "../ui/Icon"
 import { SelectField, type SelectFieldOption } from "../ui/SelectField"
 import { SettingsDetailSection, SettingsGroup, SettingsRow } from "./layout"
 import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
+import { SettingsProjectScope } from "./SettingsProjectScope"
 
 // ── Types ──
 
@@ -1337,34 +1337,13 @@ function SharedResourceManagementPanel(props: {
             <>
               <div>{t("mcp.resource_management_intro")}</div>
               <Show when={selectedDirectory()} keyed>
-                {(directory) => {
-                  const directoryLabel = () => ({
-                    directory,
-                    unknownName: t("task.project.unknown"),
-                    implicitProjectName: t("work_ledger.implicit_project"),
-                  })
-                  const parent = () => {
-                    const label = directoryLabel()
-                    return projectDirectoryLabel(directory, label.unknownName, label.implicitProjectName).parent
-                  }
-                  return (
-                    <Disclosure.Root class="mcp-project-scope">
-                      <Disclosure.Trigger ref={(element) => (mcpProjectScopeTrigger = element)}>
-                        <span>
-                          <strong>
-                            {t("settings.product.scope_project", { project: projectLedgerDisplayName(directoryLabel()) })}
-                          </strong>
-                          <Show when={parent()}>
-                            {(path) => <span class="mcp-project-scope-parent"> · {path()}</span>}
-                          </Show>
-                        </span>
-                      </Disclosure.Trigger>
-                      <Disclosure.Content>
-                        <code class="mcp-project-scope-path">{directory}</code>
-                      </Disclosure.Content>
-                    </Disclosure.Root>
-                  )
-                }}
+                {(directory) => (
+                  <SettingsProjectScope
+                    class="mcp-project-scope"
+                    directory={directory}
+                    triggerRef={(element) => (mcpProjectScopeTrigger = element)}
+                  />
+                )}
               </Show>
               <Show when={props.onOpenMcpAssignment}>
                 {(openAssignment) => (

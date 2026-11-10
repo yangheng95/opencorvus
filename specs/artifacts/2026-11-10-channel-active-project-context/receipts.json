@@ -1,0 +1,222 @@
+{
+  "before": {
+    "page": {
+      "status": 200,
+      "requestID": "f03fcddc-6c95-4987-bc18-fafe804fcb9e",
+      "asset": "main-D6vzJjeu.js"
+    },
+    "projects": {
+      "alpha/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "cafac94a-c82a-47c2-aaac-ed40ca1e7a24",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "002162bb-770b-4d15-b4aa-aa25e2889641",
+          "exactDirectory": true,
+          "projectId": "prj_hgay6YH349U1xQQKzOCU"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "3b63672a-2e95-4393-962f-e07c85da0ef1",
+          "publicUrl": "https://scope-review.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "33910626-e4c4-4e96-a935-bbda67cf7fce",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "beta/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "4b32095a-d3af-493b-a29c-47c0bd7604c0",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "1894f0c0-055c-4727-95e6-3229de80fd73",
+          "exactDirectory": true,
+          "projectId": "prj_h6fp3SsxrOpBt2nP6xFY"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "a0a95af0-8e4d-41b5-9ce9-46d9f606167d",
+          "publicUrl": "https://scope-review.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "2ac4788c-5378-4fac-b25b-23be67790c85",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "436451fb-285d-4d42-bca0-81371f2e0421",
+      "visible": 88,
+      "connected": 0
+    },
+    "mcpRegression": {
+      "status": 200,
+      "requestID": "edc40d03-8247-49a0-9818-d5887406e572",
+      "states": {
+        "b177-beta-fixture": "disabled"
+      }
+    }
+  },
+  "after": {
+    "page": {
+      "status": 200,
+      "requestID": "c8e37e02-4e9b-4249-a33c-18857bbe2899",
+      "asset": "main-D6vzJjeu.js"
+    },
+    "projects": {
+      "alpha/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "70847fdf-9907-4d2b-8037-038334adc2ef",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "677f3d3d-06d5-42c8-b454-99b2c96a41f4",
+          "exactDirectory": true,
+          "projectId": "prj_hgay6YH349U1xQQKzOCU"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "0c3ff188-2b6a-43f5-92c0-cb1645379b57",
+          "publicUrl": "https://scope-review.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "91487224-c9be-4f52-9191-d4636bff4ad7",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      },
+      "beta/Workspace": {
+        "directoryCheck": {
+          "status": 200,
+          "requestID": "a2ec608e-e640-4f95-a2bf-6e4252cf370a",
+          "exactDirectory": true
+        },
+        "projectCurrent": {
+          "status": 200,
+          "requestID": "eba242f5-916e-439b-ab1f-19274cc7b976",
+          "exactDirectory": true,
+          "projectId": "prj_h6fp3SsxrOpBt2nP6xFY"
+        },
+        "effectiveConfig": {
+          "status": 200,
+          "requestID": "f51b770f-7388-4257-bdc7-b1498dc16071",
+          "publicUrl": "https://scope-review.example.invalid/preview"
+        },
+        "catalog": {
+          "status": 200,
+          "requestID": "3d86551d-dfec-415e-8b3c-a571bab3a427",
+          "count": 27,
+          "runtime": {
+            "disabled": 13,
+            "unavailable": 14
+          },
+          "knownNames": [
+            "Slack",
+            "Telegram",
+            "Discord"
+          ]
+        }
+      }
+    },
+    "providerCatalog": {
+      "status": 200,
+      "requestID": "6d8c2ec5-7390-4c20-bcfe-2e0e5c90fb4b",
+      "visible": 88,
+      "connected": 0
+    },
+    "mcpRegression": {
+      "status": 200,
+      "requestID": "8e7065b6-3659-46d2-988f-7a4e8ad36215",
+      "states": {
+        "b177-beta-fixture": "disabled"
+      }
+    }
+  },
+  "baseline": {
+    "asset": "main-D78hTcHr.js",
+    "status": 200,
+    "projects": [
+      {
+        "project": "alpha/Workspace",
+        "projectStatus": 200,
+        "projectRequestID": "a7b639d5-58fb-41ec-91a9-55f29ccd8249",
+        "projectId": "prj_hgay6YH349U1xQQKzOCU",
+        "exactDirectory": true,
+        "configStatus": 200,
+        "configRequestID": "5206ebdc-7f0d-42f1-abeb-395b83d2d315",
+        "publicUrl": "https://scope-review.example.invalid/preview",
+        "catalogStatus": 200,
+        "catalogRequestID": "4d738fa1-6721-4e09-b8ed-f26768f813e2",
+        "rows": 27
+      },
+      {
+        "project": "beta/Workspace",
+        "projectStatus": 200,
+        "projectRequestID": "3c611239-9c80-4a9d-bc21-70516306461f",
+        "projectId": "prj_h6fp3SsxrOpBt2nP6xFY",
+        "exactDirectory": true,
+        "configStatus": 200,
+        "configRequestID": "99917016-eacf-4285-84f3-a6696cfa4116",
+        "publicUrl": "https://scope-review.example.invalid/preview",
+        "catalogStatus": 200,
+        "catalogRequestID": "e5badcee-6448-4805-94bb-7cdbff07277a",
+        "rows": 27
+      }
+    ]
+  },
+  "profiles": {
+    "baseline": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    }
+  }
+}

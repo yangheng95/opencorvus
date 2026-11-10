@@ -14,6 +14,7 @@ import { committedConfigFromError, currentProjectConfigRequestOptions, updateCon
 import { loadConfigInfo } from "../../services/config-load"
 import { formatErrorDetails } from "../../utils/error-details"
 import { activeProjectDirectory } from "../../services/project-directory"
+import { workLedgerProject } from "../../services/work-ledger"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { nativeOpen } from "../../utils/native"
 import { Dialog } from "../ui/Dialog"
@@ -28,6 +29,7 @@ import {
 } from "../../utils/settings-status-labels"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
+import { SettingsProjectScope, SettingsProjectScopeLabel } from "./SettingsProjectScope"
 
 type ChannelEntry = ChannelListResponse[number]
 const CHANNEL_RUNTIME_TONES: Record<ChannelEntry["runtime_status"], SettingsStatusTone> = {
@@ -499,6 +501,9 @@ export default function ChannelsPanel(props: { directory: string }) {
             {t("channel.project_required_body")}
           </Feedback>
         }>
+          <Show when={props.directory.trim()} keyed>
+            {(directory) => <SettingsProjectScope directory={directory} customName={workLedgerProject(directory)?.title} />}
+          </Show>
           <SettingsGroup
             class="channel-public-url-group"
             title={<span ref={externalAccessHeading} tabIndex={-1}>{t("channel.external_access")}</span>}
@@ -647,7 +652,18 @@ export default function ChannelsPanel(props: { directory: string }) {
         overlayClass="channel-editor-dialog"
         title={
           <Show when={editingEntry()}>
-            {(entry) => t("channel.configuration_title", { name: entry().name })}
+            {(entry) => (
+              <>
+                {t("channel.configuration_title", { name: entry().name })}
+                <Show when={editingOwner()?.directory} keyed>
+                  {(directory) => (
+                    <span class="channel-editor-project-scope">
+                      <SettingsProjectScopeLabel directory={directory} customName={workLedgerProject(directory)?.title} />
+                    </span>
+                  )}
+                </Show>
+              </>
+            )}
           </Show>
         }
         onClose={closeEdit}

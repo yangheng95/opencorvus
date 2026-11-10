@@ -5392,7 +5392,10 @@ configuration snapshot remains exclusively in the business response.
 
 Channel settings offer the existing workspace folder selection in the
 directory-free launcher. Confirmation stays on Channel and focuses External
-access when focus still belongs to that action. Address and channel editors
+access when focus still belongs to that action. The page identifies the owning
+project by name and short parent path before either settings group, with its
+exact directory in the shared settings scope disclosure. The channel editor
+title repeats the scope from its captured editing owner. Address and channel editors
 wait for an accepted project configuration; the catalog and documentation
 remain independently readable. A configuration read failure keeps the original
 diagnostic and offers an in-place retry through the same scoped reader as the
