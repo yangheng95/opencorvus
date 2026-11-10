@@ -5584,7 +5584,10 @@ About presents product identity, a concise runtime status summary and desktop
 updates first; exact server and workspace facts plus keyboard shortcuts remain
 available in disclosures. The runtime summary names the current host transport
 in the interface language while retaining its technical identity. The Core row
-displays the version from the current server's health probe verbatim. About
+displays the version from the current server's health probe verbatim. The loaded
+task count uses the current accepted client list and distinguishes a genuine zero
+from an unavailable or not-yet-loaded list and from a directory-free workspace.
+Retiring the task-list owner clears its accepted-read marker. About
 lists developer tools and application zoom keys only when the current host
 owns them, using the same capabilities as shortcut dispatch. Usage gives the
 measured Token total and selected

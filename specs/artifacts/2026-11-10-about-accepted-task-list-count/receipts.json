@@ -1,0 +1,269 @@
+{
+  "baseline": {
+    "status": 200,
+    "requestID": [
+      "3f9dee19-d638-4da6-a5cd-fb2d45363feb"
+    ],
+    "asset": "main-DhuWCkui.js",
+    "operation": "task.global.list",
+    "taskCount": 0
+  },
+  "candidateBefore": {
+    "page": {
+      "status": 200,
+      "requestID": "cdf15f5a-27c9-44d0-a7ca-38887212f990",
+      "asset": "main-C6Xcmcka.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "92991fc5-4718-4a20-ae4c-0ad90de0d22b",
+      "operation": "task.global.list"
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "ceed07aa-98cf-41d4-b2d9-971dd8791d5a",
+        "limit": 1,
+        "count": 0,
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "01c68ee5-601d-406c-8f13-1ffbedca7291",
+        "limit": 11,
+        "count": 0,
+        "schemaValid": true
+      }
+    ],
+    "dictionary": {
+      "en-US": {
+        "status": 200,
+        "requestID": "b2bc1da1-90b9-4544-ae73-dbe27b4ea3bd",
+        "loaded": "Loaded tasks",
+        "notLoaded": "Not loaded",
+        "noProject": "No project selected",
+        "unavailable": "Unavailable"
+      },
+      "zh-CN": {
+        "status": 200,
+        "requestID": "390c1ca2-41d1-4ec5-bc73-d6c38aca406c",
+        "loaded": "\u5df2\u52a0\u8f7d\u4efb\u52a1",
+        "notLoaded": "\u5c1a\u672a\u52a0\u8f7d",
+        "noProject": "\u672a\u9009\u62e9\u9879\u76ee",
+        "unavailable": "\u4e0d\u53ef\u7528"
+      }
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "da1b49c1-bdc4-469c-b5f3-b95906676be6",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "candidateAfter": {
+    "page": {
+      "status": 200,
+      "requestID": "67f063da-8716-4bfe-90ac-8e540f628a7d",
+      "asset": "main-C6Xcmcka.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "f43e836e-c168-49cd-a8d4-e09543d2f22f",
+      "operation": "task.global.list"
+    },
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "696940c0-aa8c-468d-b27b-0cb7b4e91323",
+        "limit": 1,
+        "count": 0,
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "e8f84460-6979-4be2-a96c-df85d3bf5993",
+        "limit": 11,
+        "count": 0,
+        "schemaValid": true
+      }
+    ],
+    "dictionary": {
+      "en-US": {
+        "status": 200,
+        "requestID": "3d8ae295-6ed2-43ef-ad36-915131ac4af9",
+        "loaded": "Loaded tasks",
+        "notLoaded": "Not loaded",
+        "noProject": "No project selected",
+        "unavailable": "Unavailable"
+      },
+      "zh-CN": {
+        "status": 200,
+        "requestID": "4ec417f1-778e-4f02-924d-4fca8e4bbfce",
+        "loaded": "\u5df2\u52a0\u8f7d\u4efb\u52a1",
+        "notLoaded": "\u5c1a\u672a\u52a0\u8f7d",
+        "noProject": "\u672a\u9009\u62e9\u9879\u76ee",
+        "unavailable": "\u4e0d\u53ef\u7528"
+      }
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "8bd9e9b0-c839-4bf5-95d4-15d96a2a67be",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "reviewTransport": {
+    "baseline": [
+      {
+        "time": "2026-11-10T06:29:48.054Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "f3d3fb66-903a-4dfa-be4e-4b7ab58a75ff",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:29:48.057Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "f3d3fb66-903a-4dfa-be4e-4b7ab58a75ff",
+        "mode": "truncate",
+        "bytes": 148,
+        "delivered": 1
+      }
+    ],
+    "candidate": [
+      {
+        "time": "2026-11-10T06:36:11.669Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "6b11ca4a-089e-4431-9483-7452719cb7ec",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:36:11.672Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "6b11ca4a-089e-4431-9483-7452719cb7ec",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:36:21.471Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "6b11ca4a-089e-4431-9483-7452719cb7ec",
+        "mode": "hold",
+        "bytes": 148,
+        "delivered": 148
+      },
+      {
+        "time": "2026-11-10T06:36:36.217Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "c9430200-f2d5-4892-b270-202fd56875e5",
+        "mode": "truncate"
+      },
+      {
+        "time": "2026-11-10T06:36:36.219Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "c9430200-f2d5-4892-b270-202fd56875e5",
+        "mode": "truncate",
+        "bytes": 148,
+        "delivered": 1
+      },
+      {
+        "time": "2026-11-10T06:37:13.788Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "e99dbea2-7603-40fe-a91a-7aa64ce56476",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:37:13.789Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "e99dbea2-7603-40fe-a91a-7aa64ce56476",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:37:21.327Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/global/tasks",
+        "limit": "11",
+        "status": 200,
+        "requestID": "e99dbea2-7603-40fe-a91a-7aa64ce56476",
+        "mode": "hold",
+        "bytes": 148,
+        "delivered": 148
+      }
+    ]
+  },
+  "database": {
+    "baseline": {
+      "integrity": "ok",
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  },
+  "lifecycle": {
+    "baseline": {
+      "occurrence": "iteration-b192-baseline",
+      "apiPort": 39514,
+      "proxyPort": 39515,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b192-candidate",
+      "apiPort": 39516,
+      "proxyPort": 39517,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  }
+}

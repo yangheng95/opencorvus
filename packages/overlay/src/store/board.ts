@@ -83,12 +83,7 @@ export const [boardStore, setBoardStore] = createStore({
    *  must surface the error instead of rendering an empty list. Cleared on
    *  the next successful reload. */
   tasksError: "" as string,
-  /** Flips true after the first successful loadTasks() round-trip
-   *  completes, regardless of whether the list ended up empty. The
-   *  TaskList component reads this to distinguish "still fetching"
-   *  (skeleton rows) from "fetched but project really has zero tasks"
-   *  (empty-hint copy). Stays true for the lifetime of the overlay
-   *  unless tasksError is set. */
+  /** An actual task page has been accepted since the current list was established. */
   tasksLoaded: false as boolean,
   tasksHasMore: false as boolean,
   tasksLoadedLimit: 0 as number,
@@ -498,19 +493,15 @@ function reconcileTaskItems(next: any[], previous: any[]): any[] {
 export function retireTaskListRequests(): void {
   _tasksLoading = null
   invalidateTaskListPagination()
-  setBoardStore("tasksLoadingMore", false)
+  setBoardStore({ tasksLoadingMore: false, tasksLoaded: false, tasksError: "" })
 }
 
 export function clearTasksForMissingDirectory(): void {
-  retireTaskListRequests()
-  applyTasks([], [])
-  setBoardStore("tasksError", "")
-  setBoardStore("tasksLoaded", true)
-  setBoardStore("tasksHasMore", false)
-  setBoardStore("tasksLoadedLimit", 0)
-  setBoardStore("tasksCursorUpdated", null)
-  setBoardStore("tasksCursorTaskID", "")
-  setBoardStore("tasksLoadingMore", false)
+  batch(() => {
+    retireTaskListRequests()
+    applyTasks([], [])
+    setBoardStore({ tasksHasMore: false, tasksLoadedLimit: 0, tasksCursorUpdated: null, tasksCursorTaskID: "" })
+  })
 }
 
 export interface LoadTasksOptions {

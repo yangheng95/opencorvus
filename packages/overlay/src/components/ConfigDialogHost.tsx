@@ -52,7 +52,7 @@ import {
 import { getHostTransport } from "../services/host-transport-runtime"
 import { formatErrorDetails } from "../services/diagnostics"
 import { matchesSearchTerms, normalizeSearchText } from "../services/text-search"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import {
   AUTHOR_EMAIL,
   AUTHOR_GITHUB_URL,
@@ -241,6 +241,13 @@ function configPanelID(tab: ConfigDialogTab): string {
 function runtimeTypeLabel(): string {
   const hostKind = getHostTransport().kind
   return t(hostKind === "tauri" ? "about.runtime_tauri" : "about.runtime_browser")
+}
+
+function loadedTaskCountLabel(): string {
+  if (!activeProjectDirectory()) return t("about.rt_tasks_no_project")
+  if (!appStore.connected || boardStore.tasksError) return t("about.rt_unavailable")
+  if (!boardStore.tasksLoaded) return t("about.rt_tasks_not_loaded")
+  return boardStore.tasks.length.toLocaleString(localeTag())
 }
 
 interface ResizableOptions {
@@ -602,7 +609,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
                 </div>
                 <div>
                   <span>{t("about.rt_tasks")}</span>
-                  <strong>{String(boardStore.tasks?.length || 0)}</strong>
+                  <strong>{loadedTaskCountLabel()}</strong>
                 </div>
               </div>
               <Disclosure.Root class="about-disclosure">

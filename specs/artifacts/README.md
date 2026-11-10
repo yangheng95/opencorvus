@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [关于页任务列表状态实页证据](2026-11-10-about-accepted-task-list-count/README.md)
 - [归档打开与只读历史焦点实页证据](2026-11-10-archive-open-reading-focus/README.md)
 - [同名归档动作的实页证据](2026-11-10-archive-actions-exact-project-directory/README.md)
 - [归档首读重试焦点实页证据](2026-11-10-archive-first-page-retry-focus/README.md)

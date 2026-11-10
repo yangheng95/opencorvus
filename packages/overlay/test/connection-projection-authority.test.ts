@@ -12,7 +12,9 @@ import {
 } from "../src/services/host-transport"
 import { appStore, setAppStore } from "../src/store/app"
 import { setSettingsStore } from "../src/store/settings"
-import { boardStore, setBoardStore, clearBoard, loadBoard, loadTasks, retireTaskListRequests } from "../src/store/board"
+import {
+  boardStore, setBoardStore, clearBoard, clearTasksForMissingDirectory, loadBoard, loadTasks, retireTaskListRequests,
+} from "../src/store/board"
 import { loadMeta, streamVcsCommitMessage } from "../src/services/meta"
 import { updateConfig } from "../src/services/config"
 import {
@@ -176,6 +178,20 @@ test("local global Task list uses B's pending owner and retains its exact rows a
   await old
   expect(boardStore.tasks.map((row) => row.task.id)).toEqual(["tsk_b"])
   expect({ loaded: boardStore.tasksLoaded, error: boardStore.tasksError }).toEqual({ loaded: true, error: "" })
+})
+
+test("local Task list distinguishes a cleared project from an accepted empty page", async () => {
+  transport(() => ok({ tasks: [{ task: { id: "tsk_alpha", directory, status: "inactive", time: { updated: 10 } } }] }))
+  await loadTasks()
+  expect({ accepted: boardStore.tasksLoaded, count: boardStore.tasks.length }).toEqual({ accepted: true, count: 1 })
+
+  clearTasksForMissingDirectory()
+  expect({ accepted: boardStore.tasksLoaded, count: boardStore.tasks.length }).toEqual({ accepted: false, count: 0 })
+
+  transport(() => ok({ tasks: [] }))
+  await loadTasks()
+  expect({ accepted: boardStore.tasksLoaded, count: boardStore.tasks.length, error: boardStore.tasksError })
+    .toEqual({ accepted: true, count: 0, error: "" })
 })
 
 test("local same-ID Session mutation retains A receipt and B busy owner before B completes", async () => {

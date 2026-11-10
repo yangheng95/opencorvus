@@ -260,8 +260,6 @@ export function clearProjectScopeData(): void {
     boardEtag: "",
     boardQueued: false,
     snapshotVersion: "",
-    tasksError: "",
-    tasksLoaded: true,
   })
   setAppStore({
     config: null,
