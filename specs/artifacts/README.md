@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件编辑器首次读取失败实页证据](2026-11-10-file-editor-first-read-error-focus/README.md)
 - [左侧工作列表读取重试实页证据](2026-11-10-work-ledger-sidebar-read-retry/README.md)
 - [文件搜索返回查询的实页证据](2026-11-10-explorer-returning-query-read-status/README.md)
 - [专家团演进首页刷新实页证据](2026-11-10-evolution-history-head-read-recovery/README.md)

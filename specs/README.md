@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [首次文件读取失败后进入重试](records/2026-11/2026-11-10-file-editor-first-read-error-focus.md)
 - [左侧工作列表重试保留键盘位置和诊断](records/2026-11/2026-11-10-work-ledger-sidebar-read-retry.md)
 - [文件搜索返回旧查询文字时保留正确加载状态](records/2026-11/2026-11-10-explorer-returning-query-read-status.md)
 - [专家团演进首页刷新保留已读证据](records/2026-11/2026-11-10-evolution-history-head-read-recovery.md)

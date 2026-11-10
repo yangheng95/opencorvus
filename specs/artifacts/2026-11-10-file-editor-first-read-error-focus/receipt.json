@@ -1,0 +1,220 @@
+{
+  "baseline": {
+    "asset": "main-BJMAiWvD.js",
+    "operation": "file.read",
+    "reads": [
+      {
+        "path": "isolated-note.txt",
+        "status": 200,
+        "requestID": "13ba175a-2f74-43cd-b55a-caf4d30d97d7",
+        "text": "Isolated text file for retry review.\r\nKeep this second line visible after reading.\r\n"
+      },
+      {
+        "path": "second-note.txt",
+        "status": 200,
+        "requestID": "d3f6f8cf-b51c-48fe-9c62-c508db1ff690",
+        "text": "An independent file for the original navigation control.\r\n"
+      }
+    ],
+    "connectedProviders": 0
+  },
+  "candidateBefore": {
+    "page": {
+      "status": 200,
+      "requestID": "0eea6996-e1a1-4dd6-a6cc-3120c03c4d01",
+      "asset": "main-CHV-eRZ7.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "3791d073-c872-471e-aee6-14e14513b20f",
+      "operations": [
+        "file.read"
+      ]
+    },
+    "content": [
+      {
+        "status": 200,
+        "requestID": "dcc1ef27-7695-41e8-9732-38f463fd88a8",
+        "path": "isolated-note.txt",
+        "text": "Isolated text file for retry review.\r\nKeep this second line visible after reading.\r\n",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "b70da28a-f770-4313-a284-4c0e90124a5e",
+        "path": "second-note.txt",
+        "text": "An independent file for the original navigation control.\r\n",
+        "schemaValid": true
+      }
+    ],
+    "providers": {
+      "status": 200,
+      "requestID": "0c0966ad-d292-4ba8-9bbe-2652d569d832",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "candidateAfter": {
+    "page": {
+      "status": 200,
+      "requestID": "2881a008-a619-4c8e-8afd-88e31159dd5c",
+      "asset": "main-CHV-eRZ7.js"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "dca114e5-595d-4c06-9711-321b5322e250",
+      "operations": [
+        "file.read"
+      ]
+    },
+    "content": [
+      {
+        "status": 200,
+        "requestID": "d3810593-970a-425c-8c6d-2db5a3f305ec",
+        "path": "isolated-note.txt",
+        "text": "Isolated text file for retry review.\r\nKeep this second line visible after reading.\r\n",
+        "schemaValid": true
+      },
+      {
+        "status": 200,
+        "requestID": "9ea54c20-cea0-44da-8214-ab306599f615",
+        "path": "second-note.txt",
+        "text": "An independent file for the original navigation control.\r\n",
+        "schemaValid": true
+      }
+    ],
+    "providers": {
+      "status": 200,
+      "requestID": "db54b5ed-95d2-4f00-8431-d609ebd4edd5",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "deliveries": {
+    "baseline": [
+      {
+        "requestID": "197672c4-55cd-4a86-b9ca-4bdc3a83c044",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 274,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "a102dcca-5db4-4173-ba05-4b9a8a59f19f",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 274,
+        "delivered": 274,
+        "heldMs": 4319
+      },
+      {
+        "requestID": "427af9d0-7e15-4c1e-ac35-5bf4b1c55867",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 274,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "071b2131-6d14-4ca9-97ce-3cfad3d2affe",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 274,
+        "delivered": 274,
+        "heldMs": 4563
+      }
+    ],
+    "candidate": [
+      {
+        "requestID": "0bc58361-38b5-4d91-b859-0f4ca268206f",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 274,
+        "delivered": 1,
+        "heldMs": 0
+      },
+      {
+        "requestID": "bf5b1d20-9c43-42da-a636-59bdd45a6838",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 274,
+        "delivered": 274,
+        "heldMs": 4229
+      },
+      {
+        "requestID": "56c2ee1e-4a95-42b7-8599-40a9c65776ca",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "hold-truncate",
+        "bytes": 274,
+        "delivered": 1,
+        "heldMs": 3409
+      },
+      {
+        "requestID": "7c2ad32c-7c96-42b5-9345-432a378288c1",
+        "file": "isolated-note.txt",
+        "status": 200,
+        "mode": "truncate",
+        "bytes": 274,
+        "delivered": 1,
+        "heldMs": 0
+      }
+    ]
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b198-baseline",
+      "apiPort": 39538,
+      "proxyPort": 39539,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b198-candidate",
+      "apiPort": 39540,
+      "proxyPort": 39541,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "fileBytesUnchanged": true,
+  "reviewedScreenshots": {
+    "baseline": 6,
+    "candidate": 7
+  }
+}

@@ -1189,6 +1189,10 @@ An explicit located file reveal returns to Source for its original range and
 keyboard handoff. Preview is a named keyboard-scrollable reading region; other
 file types retain their current presentation and no additional content store is
 introduced.
+When the first read for an explicit file reveal fails, the existing Retry
+receives focus if the current reveal still owns it. Background reads and
+focus moved to another control leave that focus alone. Successful Retry uses
+the existing Source or Preview focus handoff.
 
 The File editor's existing download action exports the current text draft or the
 complete loaded base64 image/PDF bytes with their MIME type and canonical file

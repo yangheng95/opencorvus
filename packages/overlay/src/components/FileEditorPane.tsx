@@ -162,6 +162,7 @@ export function FileEditorPane() {
   let contentAuthority: ApiAuthority | undefined
   let downloadController: AbortController | undefined
   let markdownPreview: HTMLElement | undefined
+  let loadRetryButton: HTMLButtonElement | undefined
   let previewRevealedRevision: number | undefined
 
   const contentTarget = createMemo(
@@ -451,11 +452,12 @@ export function FileEditorPane() {
     setSavedBaseline(canEdit(next) ? { content: next!.content, revision: next!.revision, resourceID: next!.resourceID } : null)
   })
 
-  createEffect(() => {
+  createEffect((previousRevealRevision: number) => {
     const file = contentTarget()
     const authority = captureApiAuthority()
     const observed = observationKey()
-    fileEditorRevealRevision()
+    const revealRevision = fileEditorRevealRevision()
+    const revealRequested = revealRevision !== previousRevealRevision
     untrack(() => {
       const identity = identityOf(file)
       if (identity === activeTargetIdentity && contentAuthority && isApiAuthorityCurrent(contentAuthority)) {
@@ -484,6 +486,7 @@ export function FileEditorPane() {
       applyContent(null, null)
       setLoadFailure(null)
       if (!file) return
+      const focusOrigin = revealRequested ? revealFocusOrigin() : null
       setLoading(true)
       const current = () => generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)
       void readFileContent(file, authority).then((next) => {
@@ -491,10 +494,19 @@ export function FileEditorPane() {
       }, (cause) => {
         if (current()) setLoadFailure({ error: cause })
       }).finally(() => {
-        if (current()) setLoading(false)
+        if (!current()) return
+        setLoading(false)
+        const retry = loadRetryButton
+        if (
+          !revealRequested || !loadFailure() || fileEditorRevealRevision() !== revealRevision || fileEditorReserved() ||
+          !retry?.isConnected || !retry.clientWidth || !retry.clientHeight || !current()
+        ) return
+        const { activeElement, body } = retry.ownerDocument
+        if (activeElement === focusOrigin || activeElement === body) retry.focus({ preventScroll: true })
       })
     })
-  })
+    return revealRevision
+  }, 0)
 
   const save = async (): Promise<boolean> => {
     const file = target()
@@ -860,6 +872,7 @@ export function FileEditorPane() {
                       variant="outline"
                       size="sm"
                       tone="neutral"
+                      ref={loadRetryButton}
                       disabled={!resourceReady() || fileEditorReserved()}
                       aria-disabled={isBusy() || fileEditorReserved() || undefined}
                       aria-busy={reloading() || undefined}
