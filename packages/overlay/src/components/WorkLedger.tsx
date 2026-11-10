@@ -6,6 +6,7 @@ import {
   createEffect,
   createMemo,
   createSignal,
+  createUniqueId,
   For,
   onCleanup,
   Show,
@@ -1485,6 +1486,8 @@ export function WorkLedger(props: WorkLedgerProps) {
       </Show>
     </span>
   )
+  const layoutHeadingID = createUniqueId()
+  const sortHeadingID = createUniqueId()
 
   const projectGroupView = (
     group: Accessor<WorkLedgerGroup>,
@@ -1595,103 +1598,116 @@ export function WorkLedger(props: WorkLedgerProps) {
               </DropdownMenu.Trigger>
               <DropdownMenu.Portal>
                 <DropdownMenu.Content class="work-ledger-toolbar-menu" data-ui="work-ledger-organize-menu">
-                  <div class="work-ledger-toolbar-menu-heading oc-section-heading">{t("work_ledger.organize")}</div>
-                  <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
-                    <Tooltip.Trigger
-                      as={DropdownMenu.CheckboxItem}
-                      class="work-ledger-toolbar-menu-item"
-                      data-ui="work-ledger-organization-by-project"
-                      checked={settingsStore.workLedgerOrganization === "by-project"}
-                      onChange={() => void updateWorkLedgerOrganization("by-project")}
-                    >
-                      {checkedMenuIcon(settingsStore.workLedgerOrganization === "by-project")}
-                      <span>{t("work_ledger.organization.by_project")}</span>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.ExplainerContent
-                        data-ui="work-ledger-organization-by-project-tooltip"
-                        heading={t("work_ledger.organization.by_project")}
-                        description={t("work_ledger.tooltip.organization.by_project")}
-                      />
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                  <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
-                    <Tooltip.Trigger
-                      as={DropdownMenu.CheckboxItem}
-                      class="work-ledger-toolbar-menu-item"
-                      data-ui="work-ledger-organization-one-list"
-                      checked={settingsStore.workLedgerOrganization === "one-list"}
-                      onChange={() => void updateWorkLedgerOrganization("one-list")}
-                    >
-                      {checkedMenuIcon(settingsStore.workLedgerOrganization === "one-list")}
-                      <span>{t("work_ledger.organization.one_list")}</span>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.ExplainerContent
-                        data-ui="work-ledger-organization-one-list-tooltip"
-                        heading={t("work_ledger.organization.one_list")}
-                        description={t("work_ledger.tooltip.organization.one_list")}
-                      />
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                  <div class="work-ledger-toolbar-menu-heading oc-section-heading">{t("work_ledger.sort_by")}</div>
-                  <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
-                    <Tooltip.Trigger
-                      as={DropdownMenu.CheckboxItem}
-                      class="work-ledger-toolbar-menu-item"
-                      data-ui="work-ledger-sort-priority"
-                      checked={settingsStore.workLedgerSort === "priority"}
-                      onChange={() => void updateWorkLedgerSort("priority")}
-                    >
-                      {checkedMenuIcon(settingsStore.workLedgerSort === "priority")}
-                      <span>{t("work_ledger.sort.priority")}</span>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.ExplainerContent
-                        data-ui="work-ledger-sort-priority-tooltip"
-                        heading={t("work_ledger.sort.priority")}
-                        description={t("work_ledger.tooltip.sort.priority")}
-                      />
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                  <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
-                    <Tooltip.Trigger
-                      as={DropdownMenu.CheckboxItem}
-                      class="work-ledger-toolbar-menu-item"
-                      data-ui="work-ledger-sort-updated"
-                      checked={settingsStore.workLedgerSort === "updated"}
-                      onChange={() => void updateWorkLedgerSort("updated")}
-                    >
-                      {checkedMenuIcon(settingsStore.workLedgerSort === "updated")}
-                      <span>{t("work_ledger.sort.updated")}</span>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.ExplainerContent
-                        data-ui="work-ledger-sort-updated-tooltip"
-                        heading={t("work_ledger.sort.updated")}
-                        description={t("work_ledger.tooltip.sort.updated")}
-                      />
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                  <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
-                    <Tooltip.Trigger
-                      as={DropdownMenu.CheckboxItem}
-                      class="work-ledger-toolbar-menu-item"
-                      data-ui="work-ledger-sort-manual"
-                      checked={settingsStore.workLedgerSort === "manual"}
-                      onChange={() => void updateWorkLedgerSort("manual")}
-                    >
-                      {checkedMenuIcon(settingsStore.workLedgerSort === "manual")}
-                      <span>{t("work_ledger.sort.manual")}</span>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.ExplainerContent
-                        data-ui="work-ledger-sort-manual-tooltip"
-                        heading={t("work_ledger.sort.manual")}
-                        description={t("work_ledger.tooltip.sort.manual")}
-                      />
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
+                  <DropdownMenu.RadioGroup<WorkLedgerOrganization>
+                    class="work-ledger-toolbar-menu-group"
+                    aria-labelledby={layoutHeadingID}
+                    value={settingsStore.workLedgerOrganization}
+                    onChange={(value) => void updateWorkLedgerOrganization(value)}
+                  >
+                    <div id={layoutHeadingID} class="work-ledger-toolbar-menu-heading oc-section-heading">
+                      {t("work_ledger.organization.label")}
+                    </div>
+                    <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
+                      <Tooltip.Trigger
+                        as={DropdownMenu.RadioItem}
+                        class="work-ledger-toolbar-menu-item"
+                        data-ui="work-ledger-organization-by-project"
+                        value="by-project"
+                      >
+                        {checkedMenuIcon(settingsStore.workLedgerOrganization === "by-project")}
+                        <span>{t("work_ledger.organization.by_project")}</span>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.ExplainerContent
+                          data-ui="work-ledger-organization-by-project-tooltip"
+                          heading={t("work_ledger.organization.by_project")}
+                          description={t("work_ledger.tooltip.organization.by_project")}
+                        />
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                    <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
+                      <Tooltip.Trigger
+                        as={DropdownMenu.RadioItem}
+                        class="work-ledger-toolbar-menu-item"
+                        data-ui="work-ledger-organization-one-list"
+                        value="one-list"
+                      >
+                        {checkedMenuIcon(settingsStore.workLedgerOrganization === "one-list")}
+                        <span>{t("work_ledger.organization.one_list")}</span>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.ExplainerContent
+                          data-ui="work-ledger-organization-one-list-tooltip"
+                          heading={t("work_ledger.organization.one_list")}
+                          description={t("work_ledger.tooltip.organization.one_list")}
+                        />
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </DropdownMenu.RadioGroup>
+                  <DropdownMenu.RadioGroup<WorkLedgerSort>
+                    class="work-ledger-toolbar-menu-group"
+                    aria-labelledby={sortHeadingID}
+                    value={settingsStore.workLedgerSort}
+                    onChange={(value) => void updateWorkLedgerSort(value)}
+                  >
+                    <div id={sortHeadingID} class="work-ledger-toolbar-menu-heading oc-section-heading">
+                      {t("work_ledger.sort_by")}
+                    </div>
+                    <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
+                      <Tooltip.Trigger
+                        as={DropdownMenu.RadioItem}
+                        class="work-ledger-toolbar-menu-item"
+                        data-ui="work-ledger-sort-priority"
+                        value="priority"
+                      >
+                        {checkedMenuIcon(settingsStore.workLedgerSort === "priority")}
+                        <span>{t("work_ledger.sort.priority")}</span>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.ExplainerContent
+                          data-ui="work-ledger-sort-priority-tooltip"
+                          heading={t("work_ledger.sort.priority")}
+                          description={t("work_ledger.tooltip.sort.priority")}
+                        />
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                    <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
+                      <Tooltip.Trigger
+                        as={DropdownMenu.RadioItem}
+                        class="work-ledger-toolbar-menu-item"
+                        data-ui="work-ledger-sort-updated"
+                        value="updated"
+                      >
+                        {checkedMenuIcon(settingsStore.workLedgerSort === "updated")}
+                        <span>{t("work_ledger.sort.updated")}</span>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.ExplainerContent
+                          data-ui="work-ledger-sort-updated-tooltip"
+                          heading={t("work_ledger.sort.updated")}
+                          description={t("work_ledger.tooltip.sort.updated")}
+                        />
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                    <Tooltip.Root openDelay={240} closeDelay={80} placement="right-start" gutter={8} fitViewport>
+                      <Tooltip.Trigger
+                        as={DropdownMenu.RadioItem}
+                        class="work-ledger-toolbar-menu-item"
+                        data-ui="work-ledger-sort-manual"
+                        value="manual"
+                      >
+                        {checkedMenuIcon(settingsStore.workLedgerSort === "manual")}
+                        <span>{t("work_ledger.sort.manual")}</span>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.ExplainerContent
+                          data-ui="work-ledger-sort-manual-tooltip"
+                          heading={t("work_ledger.sort.manual")}
+                          description={t("work_ledger.tooltip.sort.manual")}
+                        />
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </DropdownMenu.RadioGroup>
                 </DropdownMenu.Content>
               </DropdownMenu.Portal>
             </DropdownMenu.Root>

@@ -61,6 +61,11 @@
   min-width: calc(250px * var(--ui-scale));
 }
 
+.work-ledger-toolbar-menu-group {
+  display: grid;
+  gap: var(--ui-gap-3xs);
+}
+
 .work-ledger-toolbar-menu-heading {
   padding: var(--ui-gap-md) var(--ui-gap-md) var(--ui-gap-xs);
   color: var(--text-muted);

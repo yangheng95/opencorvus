@@ -5345,6 +5345,8 @@ When the sidebar accepts a new projection and moves a focused work row, the
 same visible row control receives focus if the move dropped it to the page.
 Recents keeps its rows mounted across projection updates for the same loaded
 items. The action menu still owns its usual close and focus return.
+The Organize sidebar menu exposes Layout and Sort by as independently named
+single-choice groups, backed by the existing separate persisted preferences.
 
 `sessionInvocationTopology` is an observation of real Session ownership. Nodes carry
 the exact projected `agent`, session kind, parent session, dispatch lineage,
