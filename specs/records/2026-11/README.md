@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [右侧工具栏的同名标签可区分](2026-11-10-right-dock-duplicate-tab-labels.md)
 - [右侧工具标签的关闭控件读出目标](2026-11-10-right-dock-tab-close-target.md)
 - [全局搜索续页与重试可用键盘接续](2026-11-10-palette-continuation-keyboard.md)
 - [日志查看器随连接更换读取来源](2026-11-10-log-tail-connection-ownership.md)

@@ -1,5 +1,5 @@
 import { For, Show, createEffect, createMemo, createSignal, onCleanup, type Accessor, type JSX } from "solid-js"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { Icon, type IconName } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { DropdownMenu } from "./ui/DropdownMenu"
@@ -278,6 +278,26 @@ export function RightDock(props: RightDockProps): JSX.Element {
     throw new Error(`Right Dock tab "${tabID}" has no open, fixed, or reserved identity`)
   }
   const tabTitle = (tab: RightDockTab) => props.titleForTab?.(tab) || t(rightDockPanelMeta(tab.panel).tabLabelKey)
+  const tabLabels = createMemo(() => {
+    const byTitle = new Map<string, string[]>()
+    for (const tab of props.tabs()) {
+      const title = tabTitle(tab)
+      const ids = byTitle.get(title)
+      if (ids) ids.push(tab.id)
+      else byTitle.set(title, [tab.id])
+    }
+    const labels = new Map<string, string>()
+    for (const [title, ids] of byTitle) {
+      ids.forEach((id, index) => {
+        labels.set(id, ids.length === 1 ? title : t("right_dock.tab.duplicate_title", {
+          index: (index + 1).toLocaleString(localeTag()),
+          title,
+        }))
+      })
+    }
+    return labels
+  })
+  const tabLabel = (tab: RightDockTab) => tabLabels().get(tab.id) ?? tabTitle(tab)
 
   function openTabChooserFromStrip(event: MouseEvent): void {
     if (event.target !== event.currentTarget) return
@@ -310,7 +330,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
           <For each={tabCollection()}>
             {(tabID) => {
               const tab = () => tabForID(tabID)
-              const title = () => tabTitle(tab())
+              const title = () => tabLabel(tab())
               const closeLabel = () => t("right_dock.close_tab", { tab: title() })
               const meta = () => rightDockPanelMeta(tab().panel)
               const isOpen = () => openSet().has(tabID)
@@ -416,7 +436,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
                         onSelect={() => props.onSelect(tab.id)}
                       >
                         <Icon name={meta().icon} size="compact" />
-                        <span>{tabTitle(tab)}</span>
+                        <span>{tabLabel(tab)}</span>
                       </DropdownMenu.Item>
                     )
                   }}

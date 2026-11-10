@@ -4811,6 +4811,10 @@ keyboard action await the same completed close result, including the existing
 File dirty-draft confirmation; cancellation keeps the tab and its focus owner.
 Each close control uses its tab's current title in its accessible name and
 in the shared hover and keyboard hint.
+Equal titles receive a localized ordinal within their group, derived from the
+canonical open tab order. The strip, overflow menu and close controls share
+that label; selecting or overflowing a tab does not change its ordinal.
+The original page title and tab identity remain intact.
 The File decision's programmatic Dialog restores the initiating visible control
 on cancellation through the primitive close-autofocus hook. It uses the existing
 file resource and connection authority to retire stale focus intent; accepted

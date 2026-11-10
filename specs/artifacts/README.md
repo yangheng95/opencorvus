@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [右侧同名浏览器标签的证据](2026-11-10-right-dock-duplicate-tab-labels/README.md)
 - [右侧工具标签关闭目标的证据](2026-11-10-right-dock-tab-close-target/README.md)
 - [全局搜索分页键盘交互证据](2026-11-10-palette-continuation-keyboard/README.md)
 - [日志尾部跟随实际连接的证据](2026-11-10-log-tail-connection-ownership/README.md)

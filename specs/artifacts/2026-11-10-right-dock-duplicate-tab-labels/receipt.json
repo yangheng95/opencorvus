@@ -1,0 +1,321 @@
+{
+  "directReads": {
+    "baseline": {
+      "before": {
+        "page": {
+          "status": 200,
+          "requestID": "461eeceb-2a3f-44ee-b580-b1bbdfae72e0",
+          "asset": "main-B9nk_DMO.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "fc614968-9bfa-4700-83be-6ecccc4037b1"
+        },
+        "projects": [
+          {
+            "name": "browser-tabs-project",
+            "paths": {
+              "status": 200,
+              "requestID": "423fdd57-28f8-4d93-8adf-b5ae4ed3b2a9",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "6043532f-0561-458d-aef3-eb1249c8b458",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "tabs-review",
+              "dirty": false
+            },
+            "session": {
+              "status": 201,
+              "requestID": "1781b7fb-2bc7-4664-b460-e81452e52bfb",
+              "operation": "coding.chat.session.create",
+              "id": "ses_hCRJK0jKP24JJupfnrzm"
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "59ed1449-cd82-448c-83d7-ec560abb7f04",
+          "connected": 0
+        }
+      },
+      "after": {
+        "page": {
+          "status": 200,
+          "requestID": "d7822ed4-91e5-49d3-b09c-2e1fac269329",
+          "asset": "main-B9nk_DMO.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "65757e4a-cb7f-44ae-9e86-c8b4f4c52874"
+        },
+        "projects": [
+          {
+            "name": "browser-tabs-project",
+            "paths": {
+              "status": 200,
+              "requestID": "bd423e77-422b-4b8e-85f5-9b656ecb1b05",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "d218e1dd-2e0a-47cd-a7d4-ce3b540e9456",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "tabs-review",
+              "dirty": true
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "0f04274b-6ddf-4d72-adf4-54b61a0adb1f",
+          "connected": 0
+        }
+      }
+    },
+    "candidate": {
+      "before": {
+        "page": {
+          "status": 200,
+          "requestID": "c5459a5b-66b3-4f49-b757-eb7260fd5ea0",
+          "asset": "main-CQWQEX3l.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "a1993884-f85a-4a08-a5a0-78de93bbacab"
+        },
+        "projects": [
+          {
+            "name": "browser-tabs-project",
+            "paths": {
+              "status": 200,
+              "requestID": "4c96475a-f1ac-490e-98df-4ced43d33ee9",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "d66c6095-0bb1-45d1-a005-7d45c30f3275",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "tabs-review",
+              "dirty": true
+            },
+            "session": {
+              "status": 201,
+              "requestID": "3f9e1f24-d1a8-4de9-a0c4-a03f32b3189b",
+              "operation": "coding.chat.session.create",
+              "id": "ses_hDNq6rwQrE7lV3AfhsUn"
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "adb8b43e-ac50-4bee-80a7-adf5f9392820",
+          "connected": 0
+        }
+      },
+      "after": {
+        "page": {
+          "status": 200,
+          "requestID": "f54ac93d-b77c-4647-99f3-986c702decb9",
+          "asset": "main-CQWQEX3l.js"
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "d9fdca34-6623-4999-ba7c-e92804da0fb9"
+        },
+        "projects": [
+          {
+            "name": "browser-tabs-project",
+            "paths": {
+              "status": 200,
+              "requestID": "2e71ce88-e9a4-43e4-9446-55791f86af57",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "96ba0894-397c-4c2b-b5a1-69bbcd59ace5",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "tabs-review",
+              "dirty": true
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "72acb612-78dd-48bd-9ed1-c3ce9f879d27",
+          "connected": 0
+        }
+      }
+    },
+    "final": {
+      "before": {
+        "page": {
+          "status": 200,
+          "requestID": "e85c6d10-15b7-4504-9827-cd8cf9898f78",
+          "asset": "main-CQWQEX3l.js"
+        },
+        "locales": {
+          "en-US": {
+            "status": 200,
+            "requestID": "2ff26b17-c0e7-4f45-b4f5-0bdaf3b05434",
+            "tabLabelTemplate": "{{index}}. {{title}}"
+          },
+          "zh-CN": {
+            "status": 200,
+            "requestID": "1d0eacdc-ea44-4fa8-8bf4-ce5b379d3c4c",
+            "tabLabelTemplate": "{{index}}. {{title}}"
+          }
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "97c7e4f4-965f-4d49-a56a-328c67c8c1ef"
+        },
+        "projects": [
+          {
+            "name": "browser-tabs-project",
+            "paths": {
+              "status": 200,
+              "requestID": "b3e9a37b-3356-4dcf-9380-b631f6ecc225",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "686d683a-c0d8-4968-b057-b4d21d000aff",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "tabs-review",
+              "dirty": true
+            },
+            "session": {
+              "status": 201,
+              "requestID": "1ceeb8ac-40ed-4d52-b5e7-7f9802167901",
+              "operation": "coding.chat.session.create",
+              "id": "ses_hB4WI8ZpLQ0c8lOhqy0w"
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "87800572-beec-499a-a6cb-a40d5f2e5247",
+          "connected": 0
+        }
+      },
+      "after": {
+        "page": {
+          "status": 200,
+          "requestID": "4e0d3296-48fb-46cc-80b4-35549039905b",
+          "asset": "main-CQWQEX3l.js"
+        },
+        "locales": {
+          "en-US": {
+            "status": 200,
+            "requestID": "ca6c852a-1963-4567-847c-73ab25bf6f2b",
+            "tabLabelTemplate": "{{index}}. {{title}}"
+          },
+          "zh-CN": {
+            "status": 200,
+            "requestID": "d6202fa2-0fed-4bfb-8e5c-b26bb24abc50",
+            "tabLabelTemplate": "{{index}}. {{title}}"
+          }
+        },
+        "doc": {
+          "status": 200,
+          "requestID": "5813dde4-1591-4638-b72a-fe79536322b8"
+        },
+        "projects": [
+          {
+            "name": "browser-tabs-project",
+            "paths": {
+              "status": 200,
+              "requestID": "1a6ee70f-6335-4d65-b8f9-cc98ca34d278",
+              "operation": "path.get",
+              "exactDirectory": true
+            },
+            "vcs": {
+              "status": 200,
+              "requestID": "ba9029af-8fe2-40d2-a480-9153e14d1aec",
+              "operation": "vcs.get",
+              "initialized": true,
+              "branch": "tabs-review",
+              "dirty": true
+            }
+          }
+        ],
+        "providers": {
+          "status": 200,
+          "requestID": "5f4228fd-d2bc-4f72-82a9-b9c93fee9eb1",
+          "connected": 0
+        }
+      }
+    }
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 1,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 1,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 1,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b212-baseline",
+      "apiPort": 39608,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b212-candidate",
+      "apiPort": 39609,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b212-final",
+      "apiPort": 39610,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  },
+  "sampleFileAndGitHeadUnchanged": true
+}
