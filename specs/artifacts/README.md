@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件编辑器二进制下载证据](2026-11-10-file-binary-download-action/README.md)
 - [技能库内选择工作区实页证据](2026-11-10-skill-library-choose-workspace/README.md)
 - [审批记录的错误详情焦点证据](2026-11-10-permission-record-diagnostic-focus/README.md)
 - [技能库独立读取实页证据](2026-11-10-skill-library-read-settlement/README.md)

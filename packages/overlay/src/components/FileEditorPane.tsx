@@ -163,6 +163,8 @@ export function FileEditorPane() {
   let downloadController: AbortController | undefined
   let markdownPreview: HTMLElement | undefined
   let loadRetryButton: HTMLButtonElement | undefined
+  let binaryDownloadButton: HTMLButtonElement | undefined
+  let binaryDownloadFeedback: HTMLDivElement | undefined
   let previewRevealedRevision: number | undefined
 
   const contentTarget = createMemo(
@@ -258,6 +260,11 @@ export function FileEditorPane() {
   const writable = createMemo(() => textContent() && content()?.revision !== undefined && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
   const projectBinary = createMemo(() => content()?.type === "binary" && !target()?.sourceAbsolutePath)
+  const originalDownloadOnly = () => projectBinary() && content()?.encoding !== "base64"
+  const originalDownloadFailure = () => {
+    const failure = error()
+    return originalDownloadOnly() && failure?.messageKey === "file.download_failed" ? failure : null
+  }
   const downloadable = () => textContent() || content()?.encoding === "base64" || projectBinary()
   const identityOf = (file: FileEditorTarget | null) => file
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
@@ -423,6 +430,10 @@ export function FileEditorPane() {
       }
       if (current()) {
         downloadBlob(blob, filename)
+        if (originalDownloadFailure() && binaryDownloadButton?.isConnected &&
+          binaryDownloadFeedback?.contains(binaryDownloadButton.ownerDocument.activeElement)) {
+          binaryDownloadButton.focus({ preventScroll: true })
+        }
         setError((failure) => failure?.messageKey === "file.download_failed" ? null : failure)
       }
     } catch (cause) {
@@ -496,13 +507,13 @@ export function FileEditorPane() {
       }).finally(() => {
         if (!current()) return
         setLoading(false)
-        const retry = loadRetryButton
+        const action = loadFailure() ? loadRetryButton : originalDownloadOnly() ? binaryDownloadButton : undefined
         if (
-          !revealRequested || !loadFailure() || fileEditorRevealRevision() !== revealRevision || fileEditorReserved() ||
-          !retry?.isConnected || !retry.clientWidth || !retry.clientHeight || !current()
+          !revealRequested || fileEditorRevealRevision() !== revealRevision || fileEditorReserved() ||
+          !action?.isConnected || !action.clientWidth || !action.clientHeight || !current()
         ) return
-        const { activeElement, body } = retry.ownerDocument
-        if (activeElement === focusOrigin || activeElement === body) retry.focus({ preventScroll: true })
+        const { activeElement, body } = action.ownerDocument
+        if (activeElement === focusOrigin || activeElement === body) action.focus({ preventScroll: true })
       })
     })
     return revealRevision
@@ -761,7 +772,7 @@ export function FileEditorPane() {
               <Icon name="git-compare" />
             </Button>
           </Show>
-          <Show when={downloadable()}>
+          <Show when={downloadable() && !originalDownloadOnly()}>
             <Button
               type="button"
               variant="ghost"
@@ -897,13 +908,22 @@ export function FileEditorPane() {
                       variant="outline"
                       size="sm"
                       tone="neutral"
+                      ref={binaryDownloadButton}
                       disabled={!resourceReady() || fileEditorReserved()}
                       aria-disabled={isBusy() || fileEditorReserved() || downloading() || undefined}
                       aria-busy={downloading() || undefined}
                       onClick={() => void downloadCurrentFile()}
                     >
-                      {t(downloading() ? "file.downloading" : "file.download")}
+                      {t(downloading() ? "file.downloading" : originalDownloadFailure() ? "file_editor.retry_download" : "file.download")}
                     </Button>
+                  </Show>
+                  <Show when={originalDownloadFailure()}>
+                    {(failure) => (
+                      <Feedback class="file-editor-binary-download-feedback" ref={binaryDownloadFeedback}
+                        tone="error" details={fileErrorDetails(failure())}>
+                        {t(failure().messageKey)}
+                      </Feedback>
+                    )}
                   </Show>
                 </div>
               }>
@@ -941,7 +961,7 @@ export function FileEditorPane() {
             </Show>
           </Show>
         </div>
-        <Show when={!leaveDialogOpen() && error()}>{(failure) =>
+        <Show when={!leaveDialogOpen() && !originalDownloadFailure() && error()}>{(failure) =>
           <Feedback
               class="file-editor-error file-editor-compare-feedback"
             tone={isUnconfirmedSave(failure().messageKey) ? "warning" : "error"}

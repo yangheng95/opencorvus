@@ -515,6 +515,17 @@ code .file-link:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.file-editor-binary-download-feedback {
+  align-self: stretch;
+  text-align: start;
+}
+
+.file-editor-binary-download-feedback .oc-feedback__diagnostic {
+  max-block-size: min(25vh, calc(180px * var(--ui-scale)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .file-editor-error {
   flex: 0 0 auto;
   min-height: 0;

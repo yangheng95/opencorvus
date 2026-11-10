@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [不可预览文件的下载入口与恢复](2026-11-10-file-binary-download-action.md)
 - [从技能库已安装区直接选择工作区](2026-11-10-skill-library-choose-workspace.md)
 - [审批记录恢复时从详细信息交回重载焦点](2026-11-10-permission-record-diagnostic-focus.md)
 - [技能库分别结算已安装列表和发现诊断](2026-11-10-skill-library-read-settlement.md)

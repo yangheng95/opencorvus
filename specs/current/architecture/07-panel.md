@@ -1211,6 +1211,10 @@ download failure. Successful draft export preserves an unresolved save conflict,
 its original diagnostics and comparison action because it does not change the
 editing base or save the file. A new download failure remains the current action
 failure under the existing latest-failure contract.
+For project binary content without inline bytes, the empty preview owns the
+single Download action and its local retry feedback. An explicit first reveal
+hands off still-owned focus to that action. Recovering removes only the
+download error and returns focus still inside its details to the same action.
 The original-byte route always returns `application/octet-stream`, matching its
 OpenAPI binary schema and default SDK Blob parsing even for TXT or JSON originals.
 The filename remains in Content-Disposition; preview MIME types remain separate.

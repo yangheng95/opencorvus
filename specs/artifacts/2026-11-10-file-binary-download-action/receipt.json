@@ -1,0 +1,460 @@
+{
+  "directReads": {
+    "baseline-direct": {
+      "page": {
+        "status": 200,
+        "requestID": "d8d2aa48-a516-4583-9d02-8e81de61126f",
+        "asset": "main-CC3zTkmo.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "93244948-8f53-44d9-be01-5d27a47e6489"
+      },
+      "read": {
+        "status": 200,
+        "requestID": "bea7146f-c2be-4fc2-8668-bb41d67ec112",
+        "operation": "file.read",
+        "type": "binary"
+      },
+      "download": {
+        "status": 200,
+        "requestID": "8b8ccfaa-9b90-4ff3-9522-dc0e265a82e1",
+        "operation": "file.download",
+        "filename": "isolated-sample.bin",
+        "bytes": [
+          0,
+          255,
+          65,
+          13,
+          10,
+          128,
+          0,
+          66,
+          127,
+          90,
+          250,
+          1,
+          0,
+          222,
+          128,
+          64
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "1851529a-bb43-46b1-b593-258d6c42601b",
+        "connected": 0
+      }
+    },
+    "candidate-before": {
+      "page": {
+        "status": 200,
+        "requestID": "1a859993-a557-4a08-ac3f-1cced9c0d3f0",
+        "asset": "main-ByWS8mKg.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "b1ed4994-c7ef-40c5-9ffd-f0152fd518a2"
+      },
+      "read": {
+        "status": 200,
+        "requestID": "11ab8217-63d1-43bf-90ae-22b33fec41d3",
+        "operation": "file.read",
+        "type": "binary"
+      },
+      "download": {
+        "status": 200,
+        "requestID": "5d8659ff-300f-4d75-967c-7f7667bc1dd1",
+        "operation": "file.download",
+        "filename": "isolated-sample.bin",
+        "bytes": [
+          0,
+          255,
+          65,
+          13,
+          10,
+          128,
+          0,
+          66,
+          127,
+          90,
+          250,
+          1,
+          0,
+          222,
+          128,
+          64
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "820914c1-d0c2-41f2-a899-826642448c29",
+        "connected": 0
+      }
+    },
+    "candidate-after": {
+      "page": {
+        "status": 200,
+        "requestID": "9180f2f5-d30d-42b6-8e39-9cfad7ed4e45",
+        "asset": "main-ByWS8mKg.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "89e12860-f7b7-4546-8086-e82b953afd95"
+      },
+      "read": {
+        "status": 200,
+        "requestID": "ee21dae1-477b-4022-8476-068daec6319d",
+        "operation": "file.read",
+        "type": "binary"
+      },
+      "download": {
+        "status": 200,
+        "requestID": "53f6ffab-2b02-44ae-9918-b0fed02a6981",
+        "operation": "file.download",
+        "filename": "isolated-sample.bin",
+        "bytes": [
+          0,
+          255,
+          65,
+          13,
+          10,
+          128,
+          0,
+          66,
+          127,
+          90,
+          250,
+          1,
+          0,
+          222,
+          128,
+          64
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "3cc7a394-3d26-48c1-a9a3-3bb739aae766",
+        "connected": 0
+      }
+    },
+    "final-before": {
+      "page": {
+        "status": 200,
+        "requestID": "fc87bc37-c21e-4d0e-b012-fdf42b2b258a",
+        "asset": "main-B9j0q7b_.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "e6de75de-4ec4-405d-bbdb-4a6902771888"
+      },
+      "read": {
+        "status": 200,
+        "requestID": "70a60eca-81dd-41ce-a1e2-a5ff1d02c059",
+        "operation": "file.read",
+        "type": "binary"
+      },
+      "download": {
+        "status": 200,
+        "requestID": "89aa8320-ea02-4faa-a5b8-ba954ae04308",
+        "operation": "file.download",
+        "filename": "isolated-sample.bin",
+        "bytes": [
+          0,
+          255,
+          65,
+          13,
+          10,
+          128,
+          0,
+          66,
+          127,
+          90,
+          250,
+          1,
+          0,
+          222,
+          128,
+          64
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "6d348829-adb2-407f-9462-d16e5f2a1cd5",
+        "connected": 0
+      }
+    },
+    "final-after": {
+      "page": {
+        "status": 200,
+        "requestID": "22e024c2-d00d-458a-b4bf-c926afd2e32d",
+        "asset": "main-B9j0q7b_.js"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "1821ab02-7b04-4c73-a73d-29a0ac805bff"
+      },
+      "read": {
+        "status": 200,
+        "requestID": "3ff32ac1-de90-4614-a524-2514803f7061",
+        "operation": "file.read",
+        "type": "binary"
+      },
+      "download": {
+        "status": 200,
+        "requestID": "26809fa1-185c-41e4-a0ac-ac8b418d661c",
+        "operation": "file.download",
+        "filename": "isolated-sample.bin",
+        "bytes": [
+          0,
+          255,
+          65,
+          13,
+          10,
+          128,
+          0,
+          66,
+          127,
+          90,
+          250,
+          1,
+          0,
+          222,
+          128,
+          64
+        ]
+      },
+      "providers": {
+        "status": 200,
+        "requestID": "5807ece3-58a6-4c6f-b98a-5aa85e057c36",
+        "connected": 0
+      }
+    }
+  },
+  "browserFiles": {
+    "candidate-browser-en-recovery": {
+      "name": "isolated-sample.bin",
+      "count": 16,
+      "bytes": [
+        0,
+        255,
+        65,
+        13,
+        10,
+        128,
+        0,
+        66,
+        127,
+        90,
+        250,
+        1,
+        0,
+        222,
+        128,
+        64
+      ],
+      "same": true
+    },
+    "final-browser-en-recovery": {
+      "name": "isolated-sample.bin",
+      "count": 16,
+      "bytes": [
+        0,
+        255,
+        65,
+        13,
+        10,
+        128,
+        0,
+        66,
+        127,
+        90,
+        250,
+        1,
+        0,
+        222,
+        128,
+        64
+      ],
+      "same": true
+    },
+    "final-browser-zh-recovery": {
+      "name": "isolated-sample.bin",
+      "count": 16,
+      "bytes": [
+        0,
+        255,
+        65,
+        13,
+        10,
+        128,
+        0,
+        66,
+        127,
+        90,
+        250,
+        1,
+        0,
+        222,
+        128,
+        64
+      ],
+      "same": true
+    },
+    "final-browser-en-text": {
+      "name": "second-note.txt",
+      "count": 28,
+      "bytes": [
+        65,
+        32,
+        114,
+        101,
+        97,
+        108,
+        32,
+        105,
+        115,
+        111,
+        108,
+        97,
+        116,
+        101,
+        100,
+        32,
+        116,
+        101,
+        120,
+        116,
+        32,
+        110,
+        111,
+        116,
+        101,
+        46,
+        13,
+        10
+      ],
+      "same": true
+    }
+  },
+  "transfers": {
+    "candidate": [
+      {
+        "time": "2026-11-10T10:11:21.758Z",
+        "requestID": "8d684542-a836-4d31-90c6-faad37556481",
+        "status": 404,
+        "mode": "restore",
+        "bytes": 120,
+        "delivered": 120
+      },
+      {
+        "time": "2026-11-10T10:12:14.822Z",
+        "requestID": "13a64207-3ff5-4f4c-9719-2a19c44d3228",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 16,
+        "delivered": 16,
+        "heldMs": 10006
+      }
+    ],
+    "final": [
+      {
+        "time": "2026-11-10T10:14:56.110Z",
+        "requestID": "ff8d7b55-edd1-48a9-ac85-9b56f736a744",
+        "status": 404,
+        "mode": "restore",
+        "bytes": 120,
+        "delivered": 120
+      },
+      {
+        "time": "2026-11-10T10:15:34.181Z",
+        "requestID": "b1f495a0-fe8a-4318-a6ab-dc71469cf912",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 16,
+        "delivered": 16,
+        "heldMs": 10012
+      },
+      {
+        "time": "2026-11-10T10:16:17.940Z",
+        "requestID": "a6246568-c8f4-4df5-bf04-c9a724bfef12",
+        "status": 404,
+        "mode": "restore",
+        "bytes": 120,
+        "delivered": 120
+      },
+      {
+        "time": "2026-11-10T10:16:44.691Z",
+        "requestID": "97b6fb9e-c6ea-43f2-a523-bba968085d64",
+        "status": 200,
+        "mode": "hold",
+        "bytes": 16,
+        "delivered": 16,
+        "heldMs": 10009
+      }
+    ]
+  },
+  "databases": {
+    "baseline": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "candidate": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    },
+    "final": {
+      "quickCheck": "ok",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0,
+        "permission_ledger": 0
+      }
+    }
+  },
+  "closed": {
+    "baseline": {
+      "occurrence": "iteration-b206-baseline",
+      "apiPort": 39574,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b206-candidate",
+      "apiPort": 39575,
+      "proxyPort": 39576,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "final": {
+      "occurrence": "iteration-b206-final",
+      "apiPort": 39577,
+      "proxyPort": 39578,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "fixtureBytesUnchanged": true
+}
