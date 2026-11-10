@@ -1,0 +1,68 @@
+{
+  "target": "project:b169-review/history-target",
+  "baseline": {
+    "asset": "main-Dk4SyIXc.js",
+    "requestID": "3e54d638-ee39-4e04-9bd9-f22df02a36c7"
+  },
+  "candidate": {
+    "asset": "main-Bdw-YmXI.js",
+    "requestID": "41e5c32b-fda2-4fe6-a325-bea8d8628ae4"
+  },
+  "samePublicEvidence": {
+    "upper": 27,
+    "task": "tsk_g00VaWxxuG00Ru0c08mw",
+    "comparison": "art_g0VaWxygM00JkgwzCENW",
+    "hypothesis": "B169 campaign 22",
+    "model": "fixture-no-execution",
+    "confidence": "low",
+    "visualReview": "not_applicable",
+    "dimensions": [
+      "activity_duration_ms_delta",
+      "aggregate_score",
+      "cost_delta",
+      "evaluation:case-a:baseline:0",
+      "evaluation:case-a:candidate:0",
+      "integrity_review:case-a:baseline:0",
+      "integrity_review:case-a:candidate:0",
+      "run:case-a:baseline:0",
+      "run:case-a:candidate:0",
+      "scorer:quality:case-a:baseline:0",
+      "scorer:quality:case-a:candidate:0",
+      "token_delta"
+    ],
+    "slots": [
+      {
+        "arm": "baseline",
+        "caseID": "case-a",
+        "repetition": 0,
+        "scoreResults": [
+          {
+            "status": "missing",
+            "scorer_id": "quality"
+          }
+        ]
+      },
+      {
+        "arm": "candidate",
+        "caseID": "case-a",
+        "repetition": 0,
+        "scoreResults": [
+          {
+            "status": "missing",
+            "scorer_id": "quality"
+          }
+        ]
+      }
+    ]
+  },
+  "persistedInBothProfiles": {
+    "quickCheck": "ok",
+    "task": {
+      "id": "tsk_g00VaWxxuG00Ru0c08mw",
+      "project_id": "prj_hdKNDNP0w6goDO5iNI8R",
+      "session_id": "ses_-zUPT225jzz50wsfDSkm"
+    },
+    "campaigns": 23,
+    "providerUsageEvents": 0
+  }
+}

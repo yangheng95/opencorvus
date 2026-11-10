@@ -36,6 +36,31 @@ interface EvolutionSelection {
   comparison?: ExpertSquadEvolutionHistoryComparison
 }
 
+type EvolutionEvidenceSlot = ExpertSquadEvolutionHistoryDetail["slots"][number]
+
+const confidenceLabels = {
+  high: "expert_squad.evolution_confidence_high",
+  medium: "expert_squad.evolution_confidence_medium",
+  low: "expert_squad.evolution_confidence_low",
+} satisfies Record<ExpertSquadEvolutionHistoryComparison["confidence"], string>
+
+const visualReviewLabels = {
+  reviewed: "expert_squad.evolution_visual_review_reviewed",
+  not_applicable: "expert_squad.evolution_visual_review_not_applicable",
+  unavailable: "expert_squad.evolution_status_unavailable",
+} satisfies Record<ExpertSquadEvolutionHistoryComparison["visual_review"]["status"], string>
+
+const evidenceArmLabels = {
+  baseline: "expert_squad.evolution_baseline",
+  candidate: "expert_squad.evolution_candidate",
+} satisfies Record<EvolutionEvidenceSlot["arm"], string>
+
+const scorerStatusLabels = {
+  measured: "expert_squad.evolution_scorer_measured",
+  unavailable: "expert_squad.evolution_status_unavailable",
+  missing: "expert_squad.evolution_scorer_missing",
+} satisfies Record<EvolutionEvidenceSlot["scorer_results"][number]["status"], string>
+
 type EvolutionReadScope = Pick<ExpertSquadEvolutionPanelProps, "directory" | "namespace" | "id" | "installationScope"> & {
   authority: ApiAuthority
 }
@@ -411,7 +436,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                 <strong>{t("expert_squad.evolution_comparison")}</strong>
                 <div class="expert-squad-evolution-facts">
                   <span>{t("expert_squad.evolution_score")}: {number(comparison().aggregate_score)}</span>
-                  <span>{t("expert_squad.evolution_confidence")}: {comparison().confidence}</span>
+                  <span>{t("expert_squad.evolution_confidence")}: {t(confidenceLabels[comparison().confidence])}</span>
                   <span>{t("expert_squad.evolution_cost_delta")}: {number(comparison().cost_delta)}</span>
                   <span>{t("expert_squad.evolution_token_delta")}: {number(comparison().token_delta, 0)}</span>
                   <span>{t("expert_squad.evolution_duration_delta")}: {t("expert_squad.evolution_milliseconds", { value: number(comparison().activity_duration_ms_delta, 0) })}</span>
@@ -430,7 +455,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                 <span>{t("expert_squad.evolution_regressions")}: {comparison().regressions.join(" · ") || "—"}</span>
                 <span>{t("expert_squad.evolution_unavailable_dimensions")}: {comparison().unavailable_dimensions.join(" · ") || "—"}</span>
                 <span>{t("expert_squad.evolution_unknowns")}: {comparison().unknowns.join(" · ") || "—"}</span>
-                <span>{t("expert_squad.evolution_visual_review")}: {comparison().visual_review.status}</span>
+                <span>{t("expert_squad.evolution_visual_review")}: {t(visualReviewLabels[comparison().visual_review.status])}</span>
                 <span>{t("expert_squad.evolution_evidence")}: {comparison().visual_review.evidence.map(evidenceLocator).join(" · ") || "—"}</span>
                 <span>{t("expert_squad.evolution_reward_review")}: {comparison().reward_hacking_review.findings.join(" · ") || "—"}</span>
                 <span>{t("expert_squad.evolution_evidence")}: {comparison().reward_hacking_review.evidence.map(evidenceLocator).join(" · ") || "—"}</span>
@@ -464,14 +489,14 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
                   {(slot) => (
                     <div class="expert-squad-evolution-slot">
                       <strong>{slot.case_id}</strong>
-                      <Badge tone={slot.arm === "candidate" ? "accent" : "muted"}>{slot.arm}</Badge>
+                      <Badge tone={slot.arm === "candidate" ? "accent" : "muted"}>{t(evidenceArmLabels[slot.arm])}</Badge>
                       <span>#{slot.repetition + 1}</span>
                       <span>{slot.run ? t("expert_squad.evolution_run_present") : t("expert_squad.evolution_run_missing")}</span>
                       <span>{slot.evaluation ? t("expert_squad.evolution_evaluation_present") : t("expert_squad.evolution_evaluation_missing")}</span>
                       <For each={slot.scorer_results}>
                         {(result) => (
                           <span>
-                            {result.scorer_id}: {result.status}
+                            {result.scorer_id}: {t(scorerStatusLabels[result.status])}
                             {result.status === "measured" ? ` · ${result.value}` : ""}
                             {result.status === "unavailable" ? ` · ${result.reason}` : ""}
                             {result.status === "missing" ? "" : ` · ${result.evidence.map(evidenceLocator).join(" · ")}`}

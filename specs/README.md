@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [用当前界面语言阅读演进证据状态](records/2026-11/2026-11-10-evolution-evidence-localized-status.md)
 - [在所选演进记录旁阅读详情](records/2026-11/2026-11-10-evolution-history-inline-detail.md)
 - [专家团演进历史在原位重试续页](records/2026-11/2026-11-10-evolution-history-continuation-focus.md)
 - [专家团演进历史保留最新目录](records/2026-11/2026-11-10-evolution-history-pagination-ownership.md)
