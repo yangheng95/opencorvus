@@ -51,7 +51,7 @@ import { createPersistedSelectionOwner } from "../services/persisted-selection-o
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import { saveSettings, settingsStore, setSettingsStore } from "../store/settings"
 import { detailStamp, relativeTime } from "../utils/time"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import {
   conversationExperienceDescription,
   conversationExperienceIcon,
@@ -352,6 +352,7 @@ function WorkLedgerMenuButtonItem(props: ComponentProps<typeof DropdownMenu.Item
 
 function WorkLedgerRowView(props: {
   row: WorkLedgerItemRow
+  conversationOrdinal?: number
   selected: boolean
   isSelected?: (row: WorkLedgerItemRow) => boolean
   onSelect: (row: WorkLedgerItemRow) => void
@@ -370,7 +371,16 @@ function WorkLedgerRowView(props: {
 }) {
   const [busy, setBusy] = createSignal(false)
   const row = () => props.row
-  const tooltipTitle = () => row().title.trim()
+  const presentationTitle = () => props.conversationOrdinal === undefined
+    ? rowTitle(row())
+    : t("work_ledger.conversation_duplicate_title", {
+        index: new Intl.NumberFormat(localeTag()).format(props.conversationOrdinal),
+        title: rowTitle(row()),
+      })
+  const tooltipTitle = () => props.conversationOrdinal === undefined ? row().title.trim() : presentationTitle()
+  const actionsLabel = () => props.conversationOrdinal === undefined
+    ? t("work_ledger.action.more")
+    : t("work_ledger.action.more_for", { title: presentationTitle() })
   const tooltipFolderName = () => {
     const directory = row().directory.trim()
     return directory ? projectDirectoryLabel(directory, "").name.trim() : ""
@@ -580,7 +590,7 @@ function WorkLedgerRowView(props: {
                     <Icon name="chevron" />
                   </span>
                 </Show>
-                <span class="work-row-title">{rowTitle(row())}</span>
+                <span class="work-row-title">{presentationTitle()}</span>
                 <WorkOutcomeBadge item={row()} compact />
                 <Show when={pendingInteractionCount(row()) > 0}>
                   <Badge
@@ -675,8 +685,8 @@ function WorkLedgerRowView(props: {
                 aria-disabled={busy() || undefined}
                 aria-busy={busy() || undefined}
                 tabIndex={rowActions.actionButtonTabIndex()}
-                title={t("work_ledger.action.more")}
-                aria-label={t("work_ledger.action.more")}
+                title={actionsLabel()}
+                aria-label={actionsLabel()}
               >
                 <Icon name="more-horizontal" />
               </DropdownMenu.Trigger>
@@ -833,6 +843,7 @@ function WorkLedgerTaskChildRow(props: {
 
 function WorkLedgerProjectGroupView(props: {
   group: WorkLedgerGroup
+  conversationOrdinal: (row: WorkLedgerItemRow) => number | undefined
   dataUi?: string
   directoryHint?: string
   directoryCollapse: ReturnType<typeof createProjectLedgerGroupCollapseState>
@@ -874,6 +885,7 @@ function WorkLedgerProjectGroupView(props: {
       {(row) => (
         <WorkLedgerRowView
           row={row}
+          conversationOrdinal={props.conversationOrdinal(row)}
           selected={props.selected(row)}
           isSelected={props.selected}
           onSelect={props.onSelect}
@@ -1215,6 +1227,28 @@ export function WorkLedger(props: WorkLedgerProps) {
       .sort((a, b) => b.updated - a.updated)
       .slice(0, 8),
   }))
+  const conversationOrdinals = createMemo(() => {
+    const byTitle = new Map<string, WorkLedgerChatRow[]>()
+    for (const group of groups) {
+      for (const row of group.items) {
+        if (row.kind !== "chat") continue
+        const title = rowTitle(row)
+        const sameTitle = byTitle.get(title)
+        if (sameTitle) sameTitle.push(row)
+        else byTitle.set(title, [row])
+      }
+    }
+    const ordinals = new Map<string, number>()
+    for (const rows of byTitle.values()) {
+      if (rows.length < 2) continue
+      rows.sort((left, right) => {
+        const earlier = (left.started ?? Number.MAX_SAFE_INTEGER) - (right.started ?? Number.MAX_SAFE_INTEGER)
+        return earlier || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0)
+      })
+      rows.forEach((row, index) => ordinals.set(rowKey(row), index + 1))
+    }
+    return ordinals
+  })
 
   function selected(row: WorkLedgerItemRow): boolean {
     if (props.primarySurface !== "conversation") return false
@@ -1421,6 +1455,7 @@ export function WorkLedger(props: WorkLedgerProps) {
   ) => (
     <WorkLedgerProjectGroupView
       group={group}
+      conversationOrdinal={(row) => conversationOrdinals().get(rowKey(row))}
       dataUi={dataUi}
       directoryHint={projectDirectoryHints().get(group.directory)}
       directoryCollapse={directoryCollapse}

@@ -1,0 +1,183 @@
+{
+  "seededEmptySessions": {
+    "projectID": "prj_hQpy7yAi0kQ357MJainR",
+    "sessions": [
+      {
+        "id": "ses_hgjmWjRdh0DYJIH3naJa",
+        "title": "Quarterly review",
+        "create": {
+          "status": 201,
+          "requestID": "8267d054-397b-423e-848a-4fe330db6bd0",
+          "operation": "coding.chat.session.create"
+        },
+        "rename": {
+          "status": 200,
+          "requestID": "a6f3f1a0-e1ff-428e-bc16-ed697534ebf2",
+          "operation": "session.update"
+        }
+      },
+      {
+        "id": "ses_heI9wEUoCh9N7xghYhUB",
+        "title": "Quarterly review",
+        "create": {
+          "status": 201,
+          "requestID": "f07fd5d7-ba35-488a-9f5b-84e0f43a7fd5",
+          "operation": "coding.chat.session.create"
+        },
+        "rename": {
+          "status": 200,
+          "requestID": "05394430-3a76-43f3-a9a6-8a0b6cc0374a",
+          "operation": "session.update"
+        }
+      }
+    ]
+  },
+  "direct": {
+    "baseline": {
+      "asset": "main-PfPqIFRv.js",
+      "ui": {
+        "status": 200,
+        "requestID": "646f8e12-1788-4ded-9b4f-1fde6762d7a2"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "02d41cd7-6c68-4223-877e-710572c34bbf"
+      },
+      "ledger": {
+        "status": 200,
+        "requestID": "90d4b8b9-d31c-46aa-8458-8c6e4c677762",
+        "operation": "workLedger.list",
+        "rows": [
+          {
+            "sessionID": "ses_hgjmWjRdh0DYJIH3naJa",
+            "rowID": "ses_hgjmWjRdh0DYJIH3naJa",
+            "title": "Quarterly review",
+            "started": 1794315836345,
+            "updated": 1794315836422,
+            "requestID": "d434a6b6-6999-4bb1-aa29-a1e0d582caa8",
+            "status": 200,
+            "operation": "session.get"
+          },
+          {
+            "sessionID": "ses_heI9wEUoCh9N7xghYhUB",
+            "rowID": "ses_heI9wEUoCh9N7xghYhUB",
+            "title": "Quarterly review",
+            "started": 1794315836483,
+            "updated": 1794315836551,
+            "requestID": "d25af804-98c8-47c1-8625-046be2155d9b",
+            "status": 200,
+            "operation": "session.get"
+          }
+        ]
+      }
+    },
+    "candidate-before": {
+      "asset": "main-CiYiG1LE.js",
+      "ui": {
+        "status": 200,
+        "requestID": "b3721d60-4348-4001-980b-6a53cf53d0c2"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "2feb52d3-5816-4423-82bd-3af58023ef9a"
+      },
+      "ledger": {
+        "status": 200,
+        "requestID": "c455028b-04b2-409a-9a9e-e0665ef0eeb0",
+        "operation": "workLedger.list",
+        "rows": [
+          {
+            "sessionID": "ses_hgjmWjRdh0DYJIH3naJa",
+            "rowID": "ses_hgjmWjRdh0DYJIH3naJa",
+            "title": "Quarterly review",
+            "started": 1794315836345,
+            "updated": 1794315836422,
+            "requestID": "2b3eeead-2e59-4db8-a462-38e951014f95",
+            "status": 200,
+            "operation": "session.get"
+          },
+          {
+            "sessionID": "ses_heI9wEUoCh9N7xghYhUB",
+            "rowID": "ses_heI9wEUoCh9N7xghYhUB",
+            "title": "Quarterly review",
+            "started": 1794315836483,
+            "updated": 1794315836551,
+            "requestID": "2716d175-a214-4ee8-920b-233c606151b1",
+            "status": 200,
+            "operation": "session.get"
+          }
+        ]
+      }
+    },
+    "candidate-after": {
+      "asset": "main-CiYiG1LE.js",
+      "ui": {
+        "status": 200,
+        "requestID": "95ae9634-4a1d-4bfc-b29f-804e8842dc94"
+      },
+      "doc": {
+        "status": 200,
+        "requestID": "337a1a1c-e9e8-448c-82c6-cb4991301aab"
+      },
+      "ledger": {
+        "status": 200,
+        "requestID": "022e8220-98a7-4e8c-b031-57f8a6d50479",
+        "operation": "workLedger.list",
+        "rows": [
+          {
+            "sessionID": "ses_hgjmWjRdh0DYJIH3naJa",
+            "rowID": "ses_hgjmWjRdh0DYJIH3naJa",
+            "title": "Quarterly review",
+            "started": 1794315836345,
+            "updated": 1794315836422,
+            "requestID": "c06411a5-9e60-44d5-9e51-e1547197432d",
+            "status": 200,
+            "operation": "session.get"
+          },
+          {
+            "sessionID": "ses_heI9wEUoCh9N7xghYhUB",
+            "rowID": "ses_heI9wEUoCh9N7xghYhUB",
+            "title": "Quarterly review follow-up",
+            "started": 1794315836483,
+            "updated": 1794316413229,
+            "requestID": "900f313b-0cd6-4ab4-8f69-a161b238fbf8",
+            "status": 200,
+            "operation": "session.get"
+          }
+        ]
+      }
+    }
+  },
+  "isolatedDatabase": {
+    "quickCheck": "ok",
+    "counts": {
+      "session": 2,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  },
+  "originalProject": {
+    "name": "conversation-identity-review",
+    "originalGit": "0a0b91de5ff15a211eaddddacb7aa0d67dfaed46",
+    "originalFileUnchanged": true
+  },
+  "retired": {
+    "baseline": {
+      "occurrence": "iteration-b216-baseline",
+      "apiPort": 39624,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate": {
+      "occurrence": "iteration-b216-candidate",
+      "apiPort": 39625,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    }
+  }
+}

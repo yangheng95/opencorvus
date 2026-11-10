@@ -5331,6 +5331,12 @@ In the Projects sidebar, activating the focused unpinned disclosure with the
 keyboard or assistive technology hands focus to the first newly revealed
 Project's existing title action. It does not select that Project, change
 pointer activation, or change the separate Locate action.
+The sidebar distinguishes loaded conversations with the same title using a
+localized ordinal from their creation order and stable row identity. The
+Projects, pinned, single-list, and Recents presentations reuse one assignment;
+their sort order and duplicate row appearances do not change that assignment.
+The row, its tooltip, and its action label use the same display title. The
+stored title and exact conversation target remain unchanged.
 
 `sessionInvocationTopology` is an observation of real Session ownership. Nodes carry
 the exact projected `agent`, session kind, parent session, dispatch lineage,

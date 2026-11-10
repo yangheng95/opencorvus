@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [侧栏中的同名会话可以区分](records/2026-11/2026-11-10-sidebar-duplicate-conversation-labels.md)
 - [定时任务草稿在应用内导航后可继续编辑](records/2026-11/2026-11-10-scheduled-authoring-draft-navigation.md)
 - [文件搜索在途重试有明确状态](records/2026-11/2026-11-10-explorer-search-retry-pending.md)
 - [展开项目列表后接续到新项目](records/2026-11/2026-11-10-sidebar-project-expand-keyboard.md)
