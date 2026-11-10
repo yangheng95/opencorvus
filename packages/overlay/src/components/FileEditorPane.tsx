@@ -295,6 +295,8 @@ export function FileEditorPane() {
     else revealPreview.cancel()
   })
   const isBusy = () => !resourceReady() || saving() || reloading()
+  const comparisonReading = () => comparison()?.status === "loading"
+  const comparisonUnavailable = () => comparisonReading() || isBusy() || fileEditorReserved()
   const pendingRecordedUpdate = () => observationKey() !== null && observationKey() !== loadedObservationKey()
   const searchFile = () => {
     const file = target()
@@ -382,7 +384,7 @@ export function FileEditorPane() {
   }
   const compareWithDisk = async (resetMode = true) => {
     const file = target()
-    if (!file || !writable() || !savedBaseline() || isBusy() || fileEditorReserved()) return
+    if (!file || !writable() || !savedBaseline() || comparisonUnavailable()) return
     adoptedComparisonGeneration = undefined
     comparison()?.controller.abort()
     if (resetMode) setComparisonMode("disk-draft")
@@ -401,7 +403,7 @@ export function FileEditorPane() {
   }
   const saveComparisonAction = () => needsDiskComparison() ? (
       <Button type="button" variant="outline" size="sm" tone="neutral"
-        disabled={!resourceReady() || fileEditorReserved()} aria-disabled={isBusy() || fileEditorReserved() || undefined}
+        disabled={!resourceReady() || fileEditorReserved()} aria-disabled={comparisonUnavailable() || undefined}
         onClick={() => void compareWithDisk()}>
         {t("file_editor.compare")}
       </Button>
@@ -773,7 +775,7 @@ export function FileEditorPane() {
           <Show when={writable()}>
             <Button type="button" variant="ghost" size="icon" tone="neutral"
               data-ui="file-editor-compare" disabled={!resourceReady() || fileEditorReserved()}
-              aria-disabled={isBusy() || fileEditorReserved() || undefined}
+              aria-disabled={comparisonUnavailable() || undefined}
               title={t("file_editor.compare")} aria-label={t("file_editor.compare")}
               onClick={() => void compareWithDisk()}>
               <Icon name="git-compare" />
@@ -853,7 +855,8 @@ export function FileEditorPane() {
             actions={<>
               <Show when={writable()}>
                 <Button type="button" variant="outline" size="sm" tone="neutral"
-                  disabled={isBusy() || fileEditorReserved()} onClick={() => void compareWithDisk()}>
+                  disabled={isBusy() || fileEditorReserved()} aria-disabled={comparisonUnavailable() || undefined}
+                  onClick={() => void compareWithDisk()}>
                   {t("file_editor.compare")}
                 </Button>
               </Show>
@@ -1082,8 +1085,10 @@ export function FileEditorPane() {
         footer={
           <>
             <Button type="button" variant="ghost" size="md" tone="neutral"
+                aria-disabled={comparisonUnavailable() || undefined}
+                aria-busy={comparisonReading() || undefined}
                 onClick={() => void compareWithDisk(false)}>
-              {t("file_editor.compare_refresh")}
+              {t(comparisonReading() ? "common.loading" : "file_editor.compare_refresh")}
             </Button>
             <Show when={comparedDiskForBase()}>
               <Button type="button" variant="outline" size="md" tone="accent" onClick={adoptComparedDiskBase}>

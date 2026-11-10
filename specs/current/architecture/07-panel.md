@@ -1425,7 +1425,9 @@ authored draft remain in their existing signals. The base is the most recently
 loaded, successfully saved or explicitly adopted disk text. Closing, replacing the read,
 changing resource or API authority and unmounting retire that read. Three pair
 views compare disk/draft, base/disk and base/draft through the shared text
-diff renderer. Refresh updates only the disk snapshot. Non-text and failed reads
+diff renderer. Refresh updates only the disk snapshot. While a comparison read
+is pending, the same focusable refresh control reports busy and further
+activations wait for that read. Close can still retire the read. Non-text and failed reads
 retain explicit current-language feedback and original diagnostics. Reading,
 refreshing and closing a comparison preserve the draft and editing base.
 For a dirty writable text file, a different current disk snapshot with a revision
