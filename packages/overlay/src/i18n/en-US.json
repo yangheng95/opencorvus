@@ -1097,6 +1097,7 @@
   "common.more": "More",
   "chat.send_failed_inline": "Your message could not be sent. Review the details before trying again.",
   "provider.load.unavailable": "{{owner}} is unavailable.",
+  "provider.load.catalog_retained": "Provider catalog is unavailable. You can still browse the last loaded catalog.",
   "provider.load.loading": "Loading provider details…",
   "provider.load.retry": "Retry reading provider details",
   "provider.load.loading_description": "Reading the catalog, connection status and configuration. This may take longer while settings are being saved.",

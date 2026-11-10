@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [模型服务商搜索区分真实结果和上次目录](records/2026-11/2026-11-11-provider-catalog-read-status.md)
 - [模型目录刷新等待当前页面读完](records/2026-11/2026-11-11-provider-catalog-refresh-settlement.md)
 - [提供方模型目录如实声明可选的自定义地址](records/2026-11/2026-11-11-provider-catalog-optional-api-url.md)
 - [文件编辑器明确显示当前保存状态](records/2026-11/2026-11-11-file-editor-save-status.md)

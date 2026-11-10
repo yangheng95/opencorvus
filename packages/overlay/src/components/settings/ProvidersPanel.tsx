@@ -1141,7 +1141,8 @@ export default function ProvidersPanel() {
   const hasProviderSearch = createMemo(() => providerSearch().trim().length > 0)
   const configuredProviderCount = createMemo(() => configuredProviderIDs().size)
   const catalogProviderCount = createMemo(() => catalogProviders().length)
-  const catalogUnavailable = () => appStore.providerLoadIssues.some((issue) => issue.resource === "catalog")
+  const catalogAvailable = () =>
+    Boolean(appStore.providerCatalog) && !appStore.providerLoadIssues.some((issue) => issue.resource === "catalog")
   const configuredUnavailable = () =>
     appStore.providerLoadIssues.some((issue) => ["catalog", "auth", "config"].includes(issue.resource))
 
@@ -1182,9 +1183,9 @@ export default function ProvidersPanel() {
               </span>
               <span>
                 {t("provider.stats.catalog")} ·{" "}
-                {catalogUnavailable() || !appStore.providerCatalog ? "—" : catalogProviderCount()}
+                {catalogAvailable() ? catalogProviderCount() : "—"}
               </span>
-              <Show when={hasProviderSearch()}>
+              <Show when={hasProviderSearch() && catalogAvailable()}>
                 <span>
                   {t("provider.search.count", { shown: visibleProviderCount(), total: totalProviderCount() })}
                 </span>
@@ -1286,11 +1287,13 @@ export default function ProvidersPanel() {
             <For each={appStore.providerLoadIssues}>
               {(issue) => (
                 <Feedback tone="error" details={issue.message}>
-                  {t("provider.load.unavailable", {
-                    owner: [t(`provider.load.resource.${issue.resource}`), issue.providerID, issue.phase]
-                      .filter(Boolean)
-                      .join(" · "),
-                  })}
+                  {issue.resource === "catalog" && appStore.providerCatalog
+                    ? t("provider.load.catalog_retained")
+                    : t("provider.load.unavailable", {
+                      owner: [t(`provider.load.resource.${issue.resource}`), issue.providerID, issue.phase]
+                        .filter(Boolean)
+                        .join(" · "),
+                    })}
                 </Feedback>
               )}
             </For>

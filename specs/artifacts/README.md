@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [模型服务商目录和搜索状态的证据](2026-11-11-provider-catalog-read-status/README.md)
 - [模型目录刷新结算的证据](2026-11-11-provider-catalog-refresh-settlement/README.md)
 - [提供方模型地址契约的证据](2026-11-11-provider-catalog-optional-api-url/README.md)
 - [文件编辑器保存状态的证据](2026-11-11-file-editor-save-status/README.md)

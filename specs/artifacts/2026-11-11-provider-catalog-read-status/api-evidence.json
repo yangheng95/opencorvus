@@ -1,0 +1,331 @@
+{
+  "asset": "main-Dr1qS8c-.js",
+  "projectID": "prj_h206s7mHYVwcmPSeEibV",
+  "stats": {
+    "project": {
+      "providers": 88,
+      "connected": 0,
+      "bedrock": 67
+    },
+    "global": {
+      "providers": 88,
+      "connected": 0,
+      "bedrock": 67
+    }
+  },
+  "profiles": {
+    "baseline": {
+      "providers": 88,
+      "bedrockModels": 67
+    },
+    "final": {
+      "providers": 88,
+      "bedrockModels": 67
+    }
+  },
+  "direct": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "ad84adf4-036b-4c07-bd57-7ca64c4a947b"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "bfae89a0-8810-496b-a210-063d081e6b2a"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "49bf2253-a8a0-42ba-a71c-9d4d8ccca8ea"
+    }
+  ],
+  "traces": {
+    "baseline": [
+      {
+        "round": "first-catalog-failure",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "71afcb59-cbc6-441e-916a-056a623369b9"
+      },
+      {
+        "round": "first-catalog-failure",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "88a1569e-0adc-463c-8b48-724559598365",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "first-recovery",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "5d432eee-dfe2-4908-a97e-7a7e486e6bc6",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "first-recovery",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "e4ada94d-6af6-4ca3-928c-c9d1acab46e3"
+      },
+      {
+        "round": "retained-catalog-failure",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "57820b76-bb39-4a98-b251-bf24a8911224",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "retained-catalog-failure",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "11ea8058-0c22-4517-bc7a-2273fbbc2de4"
+      },
+      {
+        "round": "auth-only-failure",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "d50ea544-fffb-461a-b57d-b735f2dbee43",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "auth-only-failure",
+        "stage": "truncated",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "12d6a35b-ce42-4b04-829c-be20a5fff8b3",
+        "bytes": 1080,
+        "deliveredBytes": 32
+      }
+    ],
+    "final": [
+      {
+        "round": "en-first-failure",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "2d73ab6e-4eda-43bf-9056-4b1ffdff9c81"
+      },
+      {
+        "round": "en-first-failure",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "6906ed3a-0aa0-4871-a902-cdcfbea759b9",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "en-first-retry",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "34ff3c47-6f2f-4028-91fc-65f792ebe349"
+      },
+      {
+        "round": "en-first-retry",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "1b2339c4-c448-4c56-9ea9-ac5187066721",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "zh-retained",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "8c8e2298-a7f0-4ecf-8655-786f68efa498"
+      },
+      {
+        "round": "zh-retained",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "c2058da7-51d8-4679-9bf5-d8785ae07cd3",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "zh-auth",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "9107514e-8865-40ce-89e4-fc51db85e352",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "zh-auth",
+        "stage": "truncated",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "51518db0-c996-453b-abd6-e8aef423e0c2",
+        "bytes": 1080,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "zh-recovery",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "086fd512-0921-497f-af12-745b6ef4474e"
+      },
+      {
+        "round": "zh-recovery",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "2f47dc42-98f7-44fb-953e-c7b8a9f29303",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "zh-recovery",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "ad0210a2-2337-45d2-b9e6-5c45051b7ca0",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "zh-recovery",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "catalog-status-review",
+        "requestID": "76d3810b-53d6-4d0a-be4d-8767b9d0c076"
+      },
+      {
+        "round": "zh-recovery",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/global/providers/auth",
+        "status": 200,
+        "project": "global",
+        "requestID": "2e7a0d84-e886-498c-a407-cae921a7db57"
+      },
+      {
+        "round": "zh-recovery",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/global/providers",
+        "status": 200,
+        "project": "global",
+        "requestID": "cdbed622-3d2c-4035-9085-7bf781f2a141",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899849
+      },
+      {
+        "round": "zh-global",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/global/providers/auth",
+        "status": 200,
+        "project": "global",
+        "requestID": "92c6c8f4-f68e-4ae8-b312-1dadfc5c2930"
+      },
+      {
+        "round": "zh-global",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/global/providers",
+        "status": 200,
+        "project": "global",
+        "requestID": "238b3a24-67bb-45d2-911c-72ffb1a28cfe",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899849,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "zh-global-retry",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/global/providers",
+        "status": 200,
+        "project": "global",
+        "requestID": "0081c43f-2b7f-4a10-82a9-0109617ef161",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899849
+      },
+      {
+        "round": "zh-global-retry",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/global/providers/auth",
+        "status": 200,
+        "project": "global",
+        "requestID": "7bd2d9fd-07f5-4d49-830d-c71c7da9337f"
+      }
+    ]
+  }
+}
