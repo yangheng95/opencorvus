@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [通用设置的项目读取提示与原始诊断](records/2026-11/2026-11-10-general-project-read-diagnostics.md)
 - [通用设置显示可找到的偏好与诊断分组](records/2026-11/2026-11-10-general-preferences-diagnostics-heading.md)
 - [技能安装表单等待真实结果并保留键盘位置](records/2026-11/2026-11-10-skill-install-form-ownership.md)
 - [技能库按来源提示并完整使用当前语言](records/2026-11/2026-11-10-skill-library-source-guidance.md)

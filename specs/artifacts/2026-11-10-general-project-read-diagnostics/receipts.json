@@ -1,0 +1,241 @@
+{
+  "baselineAsset": "main-BjL7i151.js",
+  "candidateAsset": "main-D1kKTqFh.js",
+  "pageStatus": 200,
+  "summaries": {
+    "en-US": "Some information about this project's skills or MCP connections could not be loaded.",
+    "zh-CN": "此项目的技能或 MCP 连接信息未能完整加载。"
+  },
+  "direct": {
+    "original": [
+      {
+        "route": "skill/mounts",
+        "status": 200,
+        "requestID": "54ff701e-e8f5-4c9b-9cff-f2bd3d18d5cb",
+        "skills": 7
+      },
+      {
+        "route": "mcp",
+        "status": 200,
+        "requestID": "6d963fc5-89e1-4640-9581-e63ec2041d01",
+        "states": {
+          "browser": "disconnected",
+          "computer": "disconnected"
+        }
+      },
+      {
+        "route": "mcp/project",
+        "status": 200,
+        "requestID": "b8fca82f-88bd-4345-93f1-d3cb129acf93",
+        "states": {}
+      },
+      {
+        "route": "config",
+        "status": 200,
+        "requestID": "7bce82a1-f589-4ebe-bf7c-e66eb39d9214",
+        "mode": "full_access"
+      },
+      {
+        "route": "permission/history",
+        "status": 200,
+        "requestID": "0be762ad-f7a5-45a6-8af5-822e43836d4d",
+        "count": 0
+      },
+      {
+        "route": "permission/grants",
+        "status": 200,
+        "requestID": "5e7e185a-39ca-49b7-ac1e-1955d1fa6e30",
+        "count": 0
+      },
+      {
+        "route": "provider",
+        "status": 200,
+        "requestID": "9dd7001b-0d4c-401d-b951-9fd39c069c19",
+        "visible": 88,
+        "connected": 0
+      }
+    ],
+    "beta": [
+      {
+        "route": "skill/mounts",
+        "status": 200,
+        "requestID": "166f3774-585c-492b-98f7-68b148a8cc6d",
+        "skills": 7
+      },
+      {
+        "route": "mcp",
+        "status": 200,
+        "requestID": "b71c676a-960e-4f80-b7ad-d154cca6ac6d",
+        "states": {
+          "b177-beta-fixture": "disabled",
+          "browser": "disconnected",
+          "computer": "disconnected"
+        }
+      },
+      {
+        "route": "mcp/project",
+        "status": 200,
+        "requestID": "5af32017-52c4-4cc2-a553-13e3000aa55b",
+        "states": {
+          "b177-beta-fixture": "disabled"
+        }
+      },
+      {
+        "route": "config",
+        "status": 200,
+        "requestID": "b1256c7f-a013-4bc8-b1a6-babe53d6ebec",
+        "mode": "full_access"
+      },
+      {
+        "route": "permission/history",
+        "status": 200,
+        "requestID": "1001a4ca-c6c3-4e9e-a2e0-6882dff88cfd",
+        "count": 0
+      },
+      {
+        "route": "permission/grants",
+        "status": 200,
+        "requestID": "4b3bf935-3752-4005-9992-67cb1297af57",
+        "count": 0
+      },
+      {
+        "route": "provider",
+        "status": 200,
+        "requestID": "fcb37897-2ad6-4139-9571-14be3eb92efd",
+        "visible": 88,
+        "connected": 0
+      }
+    ]
+  },
+  "baselineDirect": [
+    {
+      "route": "skill/mounts",
+      "status": 200,
+      "requestID": "f7480bd4-58a7-40f3-b074-dca24de84f3c",
+      "skills": 7
+    },
+    {
+      "route": "mcp",
+      "status": 200,
+      "requestID": "40f44a79-0080-4088-a705-3d8f128010db",
+      "servers": [
+        "browser",
+        "computer"
+      ]
+    }
+  ],
+  "baselineBrowserTransport": [
+    {
+      "time": "2026-11-10T04:26:21.934Z",
+      "stage": "origin",
+      "path": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "bfff4e77-7192-4ef6-aea0-4a6bd626cdb4",
+      "cut": true
+    },
+    {
+      "time": "2026-11-10T04:26:21.938Z",
+      "stage": "truncated",
+      "path": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "bfff4e77-7192-4ef6-aea0-4a6bd626cdb4",
+      "bytes": 74,
+      "delivered": 8
+    },
+    {
+      "time": "2026-11-10T04:26:22.057Z",
+      "stage": "origin",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "status": 200,
+      "requestID": "8d63fd45-3647-4f2c-8cfb-fd51dc03b72d",
+      "cut": true
+    },
+    {
+      "time": "2026-11-10T04:26:22.059Z",
+      "stage": "truncated",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "status": 200,
+      "requestID": "8d63fd45-3647-4f2c-8cfb-fd51dc03b72d",
+      "bytes": 50770,
+      "delivered": 8
+    }
+  ],
+  "candidateBrowserTransport": [
+    {
+      "time": "2026-11-10T04:34:37.600Z",
+      "stage": "origin",
+      "path": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "685d43fc-3c9e-4c82-a868-c5acb38f68fc",
+      "cut": true
+    },
+    {
+      "time": "2026-11-10T04:34:37.606Z",
+      "stage": "truncated",
+      "path": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "685d43fc-3c9e-4c82-a868-c5acb38f68fc",
+      "bytes": 74,
+      "delivered": 8
+    },
+    {
+      "time": "2026-11-10T04:34:37.684Z",
+      "stage": "origin",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "status": 200,
+      "requestID": "a2569063-d5b0-43e5-a047-9c931fad94ae",
+      "cut": true
+    },
+    {
+      "time": "2026-11-10T04:34:37.687Z",
+      "stage": "truncated",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "status": 200,
+      "requestID": "a2569063-d5b0-43e5-a047-9c931fad94ae",
+      "bytes": 50770,
+      "delivered": 8
+    },
+    {
+      "time": "2026-11-10T04:35:19.976Z",
+      "stage": "origin",
+      "path": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "ab014ad5-a3fd-4d77-8d7a-b1c5d503ef31",
+      "cut": false
+    },
+    {
+      "time": "2026-11-10T04:35:20.033Z",
+      "stage": "origin",
+      "path": "/skill/mounts",
+      "method": "GET",
+      "status": 200,
+      "requestID": "2960addd-f5af-4bd0-a5fa-c9a9a92ed8ee",
+      "cut": false
+    }
+  ],
+  "profiles": {
+    "baseline": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "engine_task": 0,
+      "session": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0
+    }
+  }
+}

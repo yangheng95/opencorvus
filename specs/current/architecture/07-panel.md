@@ -5478,6 +5478,10 @@ assignment section does not connect, assign, or change access to a server.
 General presents Permissions first, followed by one compact Preferences and
 diagnostics group for desktop notifications, Git preferences and log export.
 The group's localized heading also supplies the General page's search terms.
+Above those groups, the active project's task list, metadata, and extension
+read failures each have one localized summary per resource. The disclosure
+keeps all original diagnostics for that resource. Configuration failures remain
+with their existing settings owners.
 The Composer and General authorization controls project only a confirmed
 `permission_mode` from the current accepted configuration snapshot. An unloaded
 or unrecognized mode remains unavailable; neither surface substitutes Full

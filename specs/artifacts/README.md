@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [通用设置项目读取故障实页证据](2026-11-10-general-project-read-diagnostics/README.md)
 - [通用设置偏好与诊断实页证据](2026-11-10-general-preferences-diagnostics-heading/README.md)
 - [技能安装回执与焦点实页证据](2026-11-10-skill-install-form-ownership/README.md)
 - [技能库来源提示与双语实页证据](2026-11-10-skill-library-source-guidance/README.md)

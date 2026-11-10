@@ -14,6 +14,12 @@ import { formatErrorDetails } from "../../utils/error-details"
 
 type LogExportNotice = { status: "complete" } | { status: "failed"; error: unknown }
 
+const projectReadSummaries = [
+  { resource: "tasks", message: () => t("settings.project_read_issue.tasks") },
+  { resource: "meta", message: () => t("settings.project_read_issue.meta") },
+  { resource: "extensions", message: () => t("settings.project_read_issue.extensions") },
+] as const
+
 let desktopNotificationAction = 0
 let persistedDesktopNotificationError = ""
 const desktopNotificationErrorSubscribers = new Set<(value: string) => void>()
@@ -94,12 +100,17 @@ export default function GeneralPanel() {
 
   return (
     <SettingsPanel class="general-panel">
-      <For each={appStore.projectLoadIssues.filter((issue) => issue.resource !== "config")}>
-        {(issue) => (
-          <Feedback tone="error">
-            {issue.resource}: {issue.message}
-          </Feedback>
-        )}
+      <For each={projectReadSummaries}>
+        {({ resource, message }) => {
+          const issues = createMemo(() => appStore.projectLoadIssues.filter((issue) => issue.resource === resource))
+          return (
+            <Show when={issues().length}>
+              <Feedback tone="error" details={issues().map((issue) => issue.message).join("\n\n")}>
+                {message()}
+              </Feedback>
+            </Show>
+          )
+        }}
       </For>
       <Show when={!inSecureContext()}>
         <Feedback>{t("settings.insecure_context")}</Feedback>
