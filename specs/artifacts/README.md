@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [侧栏本地文字草稿的证据](2026-11-10-sidebar-local-conversation-drafts/README.md)
 - [侧栏布局和排序单选组的证据](2026-11-10-sidebar-preference-single-choice/README.md)
 - [侧栏置顶和列表更新焦点的证据](2026-11-10-sidebar-item-pin-focus/README.md)
 - [侧栏改名和键盘接续的证据](2026-11-10-sidebar-rename-actions/README.md)

@@ -50,6 +50,7 @@ import { cancelMissionBoardLoad, missionBoardStore, reloadMissionBoard } from ".
 import { MISSION_BOARD_LANES, missionBoardCounts } from "../services/mission"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { browseDirectory } from "../services/workspace"
+import { composerDraftText, workspaceComposerDraftKey } from "../services/composer-draft"
 import { createPersistedSelectionOwner } from "../services/persisted-selection-owner"
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import { saveSettings, settingsStore, setSettingsStore } from "../store/settings"
@@ -376,6 +377,10 @@ function WorkLedgerRowView(props: {
 }) {
   const [busy, setBusy] = createSignal(false)
   const row = () => props.row
+  const hasLocalDraft = createMemo(() => {
+    const current = row()
+    return current.kind === "chat" && composerDraftText(workspaceComposerDraftKey("", current.sessionID, "")).trim().length > 0
+  })
   const presentationTitle = () => props.conversationOrdinal === undefined
     ? rowTitle(row())
     : t("work_ledger.conversation_duplicate_title", {
@@ -607,6 +612,18 @@ function WorkLedgerRowView(props: {
                   </span>
                 </Show>
                 <span class="work-row-title">{presentationTitle()}</span>
+                <Show when={hasLocalDraft()}>
+                  <Badge
+                    class="work-row-local-draft"
+                    size="sm"
+                    data-ui="work-row-local-draft"
+                    role="img"
+                    aria-label={t("work_ledger.draft.label")}
+                  >
+                    <span class="work-row-local-draft-label" aria-hidden="true">{t("work_ledger.draft.label")}</span>
+                    <Icon class="work-row-local-draft-icon" name="edit" size="compact" />
+                  </Badge>
+                </Show>
                 <WorkOutcomeBadge item={row()} compact />
                 <Show when={pendingInteractionCount(row()) > 0}>
                   <Badge
@@ -660,6 +677,12 @@ function WorkLedgerRowView(props: {
                     <div class="work-ledger-tooltip__fact" data-ui="work-row-summary-folder">
                       <Icon name="folder" size="medium" />
                       <span class="work-ledger-tooltip__fact-value">{tooltipFolderName()}</span>
+                    </div>
+                  </Show>
+                  <Show when={hasLocalDraft()}>
+                    <div class="work-ledger-tooltip__fact" data-ui="work-row-summary-local-draft">
+                      <Icon name="edit" size="medium" />
+                      <span class="work-ledger-tooltip__fact-value">{t("work_ledger.draft.local_text")}</span>
                     </div>
                   </Show>
                 </Tooltip.Content>

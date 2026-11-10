@@ -5347,6 +5347,11 @@ Recents keeps its rows mounted across projection updates for the same loaded
 items. The action menu still owns its usual close and focus return.
 The Organize sidebar menu exposes Layout and Sort by as independently named
 single-choice groups, backed by the existing separate persisted preferences.
+Chat and Work sidebar rows show Draft when their existing local composer scope
+contains non-whitespace text. Each appearance of the same conversation reads
+that same scope. A narrow sidebar shows a compact mark with the same accessible
+label. The row and its tooltip expose only the state; the text stays in the
+composer.
 
 `sessionInvocationTopology` is an observation of real Session ownership. Nodes carry
 the exact projected `agent`, session kind, parent session, dispatch lineage,

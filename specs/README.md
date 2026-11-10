@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [侧栏显示会话中保留的本地文字草稿](records/2026-11/2026-11-10-sidebar-local-conversation-drafts.md)
 - [侧栏布局和排序各自是一组单选项](records/2026-11/2026-11-10-sidebar-preference-single-choice.md)
 - [侧栏工作项置顶后可继续键盘操作](records/2026-11/2026-11-10-sidebar-item-pin-focus.md)
 - [从侧栏改名后继续当前会话](records/2026-11/2026-11-10-sidebar-rename-actions.md)

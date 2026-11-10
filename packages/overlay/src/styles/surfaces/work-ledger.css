@@ -6,6 +6,7 @@
 }
 
 .work-ledger-projects-scroll {
+  container: work-ledger-list / inline-size;
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -243,6 +244,29 @@
 
 .work-row-title {
   flex: 0 1 auto;
+}
+
+.work-row-local-draft-icon.oc-icon {
+  display: none;
+}
+
+@container work-ledger-list (width < 17.5em) {
+  .work-row-head:has(> .work-row-local-draft) {
+    gap: var(--ui-gap-3xs);
+  }
+
+  .work-row-local-draft.oc-badge {
+    padding: 0;
+    background: transparent;
+  }
+
+  .work-row-local-draft-label {
+    display: none;
+  }
+
+  .work-row-local-draft-icon.oc-icon {
+    display: block;
+  }
 }
 
 .work-row-attention.oc-badge {
