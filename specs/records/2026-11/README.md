@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [在所选演进记录旁阅读详情](2026-11-10-evolution-history-inline-detail.md)
 - [专家团演进历史在原位重试续页](2026-11-10-evolution-history-continuation-focus.md)
 - [专家团演进历史保留最新目录](2026-11-10-evolution-history-pagination-ownership.md)
 - [文件保存回执丢失时核对真实磁盘](2026-11-10-file-save-receipt-reconciliation.md)

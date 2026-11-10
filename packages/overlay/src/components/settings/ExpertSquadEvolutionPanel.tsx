@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { batch, createEffect, createMemo, createSignal, For, mapArray, onCleanup, Show, untrack } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, createUniqueId, For, mapArray, onCleanup, Show, untrack } from "solid-js"
 import { localeTag, t, tc } from "../../utils/i18n"
 import {
   executeExpertSquadEvolutionMutation,
@@ -108,6 +108,9 @@ function campaignSelections(record: ExpertSquadEvolutionHistoryRecord): Evolutio
 }
 
 export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPanelProps) {
+  const detailID = createUniqueId()
+  const detailTitleID = `${detailID}-title`
+  const detailSummaryID = `${detailID}-summary`
   const [history, setHistory] = createSignal<ExpertSquadEvolutionHistory | null>(null)
   const [detail, setDetail] = createSignal<ExpertSquadEvolutionHistoryDetail | null>(null)
   const [selectedKey, setSelectedKey] = createSignal("")
@@ -157,6 +160,12 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
 
   function reportIssue(summary: EvolutionIssue["summary"], cause: unknown) {
     setError({ summary, diagnostic: cause instanceof Error ? cause.message : String(cause) })
+  }
+
+  function campaignButton(key: string): HTMLButtonElement | null | undefined {
+    return campaignList?.querySelector<HTMLButtonElement>(
+      `[data-evolution-entry="${CSS.escape(key)}"] > .expert-squad-evolution-record-select`,
+    )
   }
 
   async function loadDetail(entry: EvolutionSelection): Promise<void> {
@@ -248,7 +257,7 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
         && (document.activeElement === trigger || (!trigger?.isConnected && document.activeElement === document.body))) {
         const nextEntries = entries()
         const entry = nextEntries[entryCount] ?? (!next.next_cursor ? nextEntries.at(-1) : undefined)
-        if (entry) campaignList?.querySelector<HTMLButtonElement>(`[data-evolution-entry="${CSS.escape(entry.key)}"] button`)?.focus()
+        if (entry) campaignButton(entry.key)?.focus()
       }
     } catch (cause) {
       if (ownsHistory(read) && history() === current) {
@@ -275,10 +284,18 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
   })
 
   async function selectEntry(entry: EvolutionSelection): Promise<void> {
-    if (entry.key === selectedKey() && (detail() || detailLoading() || !entry.comparison)) return
-    setSelectedKey(entry.key)
-    setError(undefined)
-    await loadDetail(entry)
+    const alreadyOpen = entry.key === selectedKey() && (detail() || detailLoading() || !entry.comparison)
+    const pending = alreadyOpen ? undefined : batch(() => {
+      setSelectedKey(entry.key)
+      setError(undefined)
+      return loadDetail(entry)
+    })
+    const summary = document.getElementById(detailSummaryID)
+    if (summary) {
+      campaignButton(entry.key)?.scrollIntoView({ block: "nearest" })
+      summary.scrollIntoView({ block: "nearest" })
+    }
+    if (pending) await pending
   }
 
   async function applyMutation(input: {
@@ -336,6 +353,140 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
 
   function feedbackKey(revision: ExpertSquadEvolutionFeedbackRevision): string {
     return `${revision.artifact.task_id}:${revision.artifact.locator.artifact_id}`
+  }
+
+  function renderCampaignDetail(entry: EvolutionSelection) {
+    return (
+      <section
+        class="expert-squad-evolution-detail"
+        id={detailID}
+        aria-labelledby={detailTitleID}
+        data-ui="expert-squad-evolution-detail"
+      >
+        <div id={detailSummaryID} class="expert-squad-evolution-detail-summary">
+          <h3 id={detailTitleID}>{t("expert_squad.evolution_campaign_detail")}</h3>
+          <header>
+            <div>
+              <strong>{entry.record.campaign.candidate_hypothesis}</strong>
+              <span>{entry.record.context.model} · {digest(entry.record.context.environment_digest)}</span>
+            </div>
+            <Badge tone={entry.record.graph_issues.length ? "bad" : "muted"}>{entry.record.graph_issues.length ? t("expert_squad.evolution_integrity_issues") : t("expert_squad.evolution_campaign_frozen")}</Badge>
+          </header>
+          <div class="expert-squad-evolution-facts">
+            <span>{t("expert_squad.evolution_baseline")}: {digest(entry.record.campaign.baseline_revision.package_digest)}</span>
+            <span>{t("expert_squad.evolution_dataset")}: {entry.record.context.dataset_partition} · {digest(entry.record.context.dataset_digest)}</span>
+            <span>{t("expert_squad.evolution_budget")}: {tc("expert_squad.evolution_runs", entry.record.context.budget.max_runs)} · {entry.record.context.budget.max_cost === null ? t("expert_squad.evolution_cost_ceiling_undeclared") : entry.record.context.budget.max_cost}</span>
+          </div>
+        </div>
+        <Show when={[
+          ...entry.record.graph_issues,
+          ...(entry.candidate?.graph_issues ?? []),
+          ...(entry.comparison?.graph_issues ?? []),
+        ].length > 0}>
+          <div class="expert-squad-evolution-issues">
+            <strong>{t("expert_squad.evolution_integrity_issues")}</strong>
+            <For each={[
+              ...entry.record.graph_issues,
+              ...(entry.candidate?.graph_issues ?? []),
+              ...(entry.comparison?.graph_issues ?? []),
+            ]}>
+              {(issue) => <code>{JSON.stringify(issue)}</code>}
+            </For>
+          </div>
+        </Show>
+        <Show when={entry.candidate}>
+          {(candidate) => (
+            <div class="expert-squad-evolution-section">
+              <strong>{t("expert_squad.evolution_candidate")}: {candidate().candidate_revision.version}</strong>
+              <span>{candidate().hypothesis}</span>
+              <span>{t("expert_squad.evolution_changed_paths")}: {candidate().changed_paths.join(" · ")}</span>
+              <span>{t("expert_squad.evolution_preserved_runs")}: {candidate().runs.length} · {t("expert_squad.evolution_preserved_evaluations")}: {candidate().evaluations.length}</span>
+            </div>
+          )}
+        </Show>
+        <Show when={entry.comparison}>
+          {(comparison) => (
+            <>
+              <div class="expert-squad-evolution-section">
+                <strong>{t("expert_squad.evolution_comparison")}</strong>
+                <div class="expert-squad-evolution-facts">
+                  <span>{t("expert_squad.evolution_score")}: {number(comparison().aggregate_score)}</span>
+                  <span>{t("expert_squad.evolution_confidence")}: {comparison().confidence}</span>
+                  <span>{t("expert_squad.evolution_cost_delta")}: {number(comparison().cost_delta)}</span>
+                  <span>{t("expert_squad.evolution_token_delta")}: {number(comparison().token_delta, 0)}</span>
+                  <span>{t("expert_squad.evolution_duration_delta")}: {t("expert_squad.evolution_milliseconds", { value: number(comparison().activity_duration_ms_delta, 0) })}</span>
+                  <span>{t("expert_squad.evolution_failure_rate")}: {rate(comparison().outcome_rates.baseline.failure)} → {rate(comparison().outcome_rates.candidate.failure)}</span>
+                  <span>{t("expert_squad.evolution_unavailable_rate")}: {rate(comparison().outcome_rates.baseline.unavailable)} → {rate(comparison().outcome_rates.candidate.unavailable)}</span>
+                </div>
+                <For each={comparison().paired_deltas}>
+                  {(delta) => (
+                    <div class="expert-squad-evolution-delta">
+                      <strong>{delta.scorer_id}</strong>
+                      <span>{t("expert_squad.evolution_statistics", { mean: number(delta.mean), median: number(delta.median), variance: number(delta.variance) })}</span>
+                      <span>{t("expert_squad.evolution_interval", { confidence: rate(delta.confidence_interval.confidence), lower: number(delta.confidence_interval.lower), upper: number(delta.confidence_interval.upper), wins: delta.win_tie_loss.wins, ties: delta.win_tie_loss.ties, losses: delta.win_tie_loss.losses })}</span>
+                    </div>
+                  )}
+                </For>
+                <span>{t("expert_squad.evolution_regressions")}: {comparison().regressions.join(" · ") || "—"}</span>
+                <span>{t("expert_squad.evolution_unavailable_dimensions")}: {comparison().unavailable_dimensions.join(" · ") || "—"}</span>
+                <span>{t("expert_squad.evolution_unknowns")}: {comparison().unknowns.join(" · ") || "—"}</span>
+                <span>{t("expert_squad.evolution_visual_review")}: {comparison().visual_review.status}</span>
+                <span>{t("expert_squad.evolution_evidence")}: {comparison().visual_review.evidence.map(evidenceLocator).join(" · ") || "—"}</span>
+                <span>{t("expert_squad.evolution_reward_review")}: {comparison().reward_hacking_review.findings.join(" · ") || "—"}</span>
+                <span>{t("expert_squad.evolution_evidence")}: {comparison().reward_hacking_review.evidence.map(evidenceLocator).join(" · ") || "—"}</span>
+              </div>
+              <Show when={comparison().receipts.length > 0}>
+                <div class="expert-squad-evolution-section">
+                  <strong>{t("expert_squad.evolution_receipts")}</strong>
+                  <For each={comparison().receipts}>
+                    {(item) => (
+                      <div class="expert-squad-evolution-receipt">
+                        <strong>{item.receipt.operation}</strong>
+                        <span>{item.receipt.before_digest} → {item.receipt.after_digest}</span>
+                        <span>{t("expert_squad.evolution_authorization")}: {item.receipt.authorization.message_id} · {new Date(item.receipt.authorization.time_created).toLocaleString()}</span>
+                        <span>{t("expert_squad.evolution_manager_receipt")}: {item.receipt.manager_receipt.operation}</span>
+                        <span>{t("expert_squad.evolution_evidence")}: {item.receipt.evidence.map(evidenceLocator).join(" · ")}</span>
+                      </div>
+                    )}
+                  </For>
+                </div>
+              </Show>
+            </>
+          )}
+        </Show>
+        <Show when={detailLoading()}><Feedback>{t("expert_squad.evolution_detail_loading")}</Feedback></Show>
+        <Show when={!detailLoading() && detail()}>
+          {(current) => (
+            <div class="expert-squad-evolution-section">
+              <strong>{t("expert_squad.evolution_evidence_matrix")}</strong>
+              <div class="expert-squad-evolution-slot-list">
+                <For each={current().slots}>
+                  {(slot) => (
+                    <div class="expert-squad-evolution-slot">
+                      <strong>{slot.case_id}</strong>
+                      <Badge tone={slot.arm === "candidate" ? "accent" : "muted"}>{slot.arm}</Badge>
+                      <span>#{slot.repetition + 1}</span>
+                      <span>{slot.run ? t("expert_squad.evolution_run_present") : t("expert_squad.evolution_run_missing")}</span>
+                      <span>{slot.evaluation ? t("expert_squad.evolution_evaluation_present") : t("expert_squad.evolution_evaluation_missing")}</span>
+                      <For each={slot.scorer_results}>
+                        {(result) => (
+                          <span>
+                            {result.scorer_id}: {result.status}
+                            {result.status === "measured" ? ` · ${result.value}` : ""}
+                            {result.status === "unavailable" ? ` · ${result.reason}` : ""}
+                            {result.status === "missing" ? "" : ` · ${result.evidence.map(evidenceLocator).join(" · ")}`}
+                          </span>
+                        )}
+                      </For>
+                    </div>
+                  )}
+                </For>
+              </div>
+            </div>
+          )}
+        </Show>
+      </section>
+    )
   }
 
   return (
@@ -537,209 +688,84 @@ export default function ExpertSquadEvolutionPanel(props: ExpertSquadEvolutionPan
           </Show>
         }
       >
-        <div class="expert-squad-evolution-layout">
-          <div ref={campaignList} class="expert-squad-evolution-records" aria-label={t("expert_squad.evolution_campaigns")}>
-            <For each={entries()}>
-              {(entry) => (
-                <article class="expert-squad-evolution-record" data-evolution-entry={entry.key} classList={{ "is-selected": selectedKey() === entry.key }}>
-                  <SettingsRow
-                    as="button"
-                    customContent
-                    interactive
-                    class="expert-squad-evolution-record-select"
-                    onClick={() => void selectEntry(entry)}
-                  >
-                    <div class="expert-squad-evolution-record-title">
-                      <strong>{entry.record.campaign.candidate_hypothesis}</strong>
-                      <Show
-                        when={entry.comparison}
-                        fallback={<Badge tone="muted">{entry.candidate ? t("expert_squad.evolution_trials_running") : t("expert_squad.evolution_campaign_frozen")}</Badge>}
-                      >
-                        {(comparison) => <Badge tone={recommendationTone(comparison().recommendation)}>{recommendationLabel(comparison().recommendation)}</Badge>}
-                      </Show>
-                    </div>
-                    <span>{t("expert_squad.evolution_context")}: {digest(entry.record.context.context_sha256)} · {entry.record.context.dataset_partition}</span>
-                    <div class="expert-squad-evolution-metrics">
-                      <span>{t("expert_squad.evolution_candidates")}: {entry.record.candidates.length}</span>
-                      <span>{t("expert_squad.evolution_score")}: {entry.comparison ? number(entry.comparison.aggregate_score) : "—"}</span>
-                      <span>{t("expert_squad.evolution_evidence")}: {entry.comparison ? `${entry.comparison.completeness.present_evaluations}/${entry.comparison.completeness.expected_slots}` : `${entry.candidate?.evaluations.length ?? 0}`}</span>
-                    </div>
-                  </SettingsRow>
-                  <Show when={entry.comparison}>
-                    {(comparison) => (
-                      <div class="expert-squad-evolution-actions">
-                        <Show when={comparison().promotion_intent}>
-                          {(promotion) => (
-                            <Button type="button" variant="outline" size="sm" tone="accent" disabled={!!mutationBusy()} onClick={() => void runMutation(entry, promotion().confirmation_text, promotion().request)}>
-                              <Show when={mutationBusy() === `promotion:${entry.key}`}><Icon name="loading" /></Show>
-                              {t("expert_squad.evolution_promote")}
-                            </Button>
-                          )}
-                        </Show>
-                        <For each={comparison().restoration_intents}>
-                          {(restoration) => (
-                            <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={!!mutationBusy()} title={restoration.request.restorePackageDigest} onClick={() => void runMutation(entry, restoration.confirmation_text, restoration.request)}>
-                              <Show when={mutationBusy() === `restoration:${entry.key}`}><Icon name="loading" /></Show>
-                              {t("expert_squad.evolution_restore")} {digest(restoration.request.restorePackageDigest)}
-                            </Button>
-                          )}
-                        </For>
-                      </div>
-                    )}
-                  </Show>
-                </article>
-              )}
-            </For>
-            <Show when={history()?.next_cursor}>
-              <div ref={continuationFooter} class="expert-squad-evolution-continuation">
-                <Show when={continuationFailure()}>
-                  {(failure) => <Feedback tone="error" details={failure().diagnostic}>{t("expert_squad.evolution_more_failed")}</Feedback>}
-                </Show>
-                <Button
-                  ref={continuationButton}
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  tone="neutral"
-                  aria-disabled={loadingMore() || undefined}
-                  aria-busy={loadingMore() || undefined}
-                  onClick={() => void loadMore()}
+        <div ref={campaignList} class="expert-squad-evolution-records" aria-label={t("expert_squad.evolution_campaigns")}>
+          <For each={entries()}>
+            {(entry) => (
+              <article class="expert-squad-evolution-record" data-evolution-entry={entry.key} classList={{ "is-selected": selectedKey() === entry.key }}>
+                <SettingsRow
+                  as="button"
+                  customContent
+                  interactive
+                  class="expert-squad-evolution-record-select"
+                  aria-current={selectedKey() === entry.key ? "true" : undefined}
+                  aria-controls={selectedKey() === entry.key ? detailID : undefined}
+                  onClick={() => void selectEntry(entry)}
                 >
-                  <Show when={loadingMore()}><Icon name="loading" /></Show>
-                  {t(loadingMore() ? "expert_squad.evolution_loading_more"
-                    : continuationFailure() ? "expert_squad.evolution_retry_more" : "expert_squad.evolution_load_more")}
-                </Button>
-              </div>
-            </Show>
-          </div>
-
-          <section class="expert-squad-evolution-detail" data-ui="expert-squad-evolution-detail">
-            <Show when={selected()}>
-              {(entry) => (
-                <>
-                  <header>
-                    <div>
-                      <strong>{entry().record.campaign.candidate_hypothesis}</strong>
-                      <span>{entry().record.context.model} · {digest(entry().record.context.environment_digest)}</span>
-                    </div>
-                    <Badge tone={entry().record.graph_issues.length ? "bad" : "muted"}>{entry().record.graph_issues.length ? t("expert_squad.evolution_integrity_issues") : t("expert_squad.evolution_campaign_frozen")}</Badge>
-                  </header>
-                  <div class="expert-squad-evolution-facts">
-                    <span>{t("expert_squad.evolution_baseline")}: {digest(entry().record.campaign.baseline_revision.package_digest)}</span>
-                    <span>{t("expert_squad.evolution_dataset")}: {entry().record.context.dataset_partition} · {digest(entry().record.context.dataset_digest)}</span>
-                    <span>{t("expert_squad.evolution_budget")}: {tc("expert_squad.evolution_runs", entry().record.context.budget.max_runs)} · {entry().record.context.budget.max_cost === null ? t("expert_squad.evolution_cost_ceiling_undeclared") : entry().record.context.budget.max_cost}</span>
+                  <div class="expert-squad-evolution-record-title">
+                    <strong>{entry.record.campaign.candidate_hypothesis}</strong>
+                    <Show
+                      when={entry.comparison}
+                      fallback={<Badge tone="muted">{entry.candidate ? t("expert_squad.evolution_trials_running") : t("expert_squad.evolution_campaign_frozen")}</Badge>}
+                    >
+                      {(comparison) => <Badge tone={recommendationTone(comparison().recommendation)}>{recommendationLabel(comparison().recommendation)}</Badge>}
+                    </Show>
                   </div>
-                  <Show when={[
-                    ...entry().record.graph_issues,
-                    ...(entry().candidate?.graph_issues ?? []),
-                    ...(entry().comparison?.graph_issues ?? []),
-                  ].length > 0}>
-                    <div class="expert-squad-evolution-issues">
-                      <strong>{t("expert_squad.evolution_integrity_issues")}</strong>
-                      <For each={[
-                        ...entry().record.graph_issues,
-                        ...(entry().candidate?.graph_issues ?? []),
-                        ...(entry().comparison?.graph_issues ?? []),
-                      ]}>
-                        {(issue) => <code>{JSON.stringify(issue)}</code>}
+                  <span>{t("expert_squad.evolution_context")}: {digest(entry.record.context.context_sha256)} · {entry.record.context.dataset_partition}</span>
+                  <div class="expert-squad-evolution-metrics">
+                    <span>{t("expert_squad.evolution_candidates")}: {entry.record.candidates.length}</span>
+                    <span>{t("expert_squad.evolution_score")}: {entry.comparison ? number(entry.comparison.aggregate_score) : "—"}</span>
+                    <span>{t("expert_squad.evolution_evidence")}: {entry.comparison ? `${entry.comparison.completeness.present_evaluations}/${entry.comparison.completeness.expected_slots}` : `${entry.candidate?.evaluations.length ?? 0}`}</span>
+                  </div>
+                </SettingsRow>
+                <Show when={entry.comparison}>
+                  {(comparison) => (
+                    <div class="expert-squad-evolution-actions">
+                      <Show when={comparison().promotion_intent}>
+                        {(promotion) => (
+                          <Button type="button" variant="outline" size="sm" tone="accent" disabled={!!mutationBusy()} onClick={() => void runMutation(entry, promotion().confirmation_text, promotion().request)}>
+                            <Show when={mutationBusy() === `promotion:${entry.key}`}><Icon name="loading" /></Show>
+                            {t("expert_squad.evolution_promote")}
+                          </Button>
+                        )}
+                      </Show>
+                      <For each={comparison().restoration_intents}>
+                        {(restoration) => (
+                          <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={!!mutationBusy()} title={restoration.request.restorePackageDigest} onClick={() => void runMutation(entry, restoration.confirmation_text, restoration.request)}>
+                            <Show when={mutationBusy() === `restoration:${entry.key}`}><Icon name="loading" /></Show>
+                            {t("expert_squad.evolution_restore")} {digest(restoration.request.restorePackageDigest)}
+                          </Button>
+                        )}
                       </For>
                     </div>
-                  </Show>
-                  <Show when={entry().candidate}>
-                    {(candidate) => (
-                      <div class="expert-squad-evolution-section">
-                        <strong>{t("expert_squad.evolution_candidate")}: {candidate().candidate_revision.version}</strong>
-                        <span>{candidate().hypothesis}</span>
-                        <span>{t("expert_squad.evolution_changed_paths")}: {candidate().changed_paths.join(" · ")}</span>
-                        <span>{t("expert_squad.evolution_preserved_runs")}: {candidate().runs.length} · {t("expert_squad.evolution_preserved_evaluations")}: {candidate().evaluations.length}</span>
-                      </div>
-                    )}
-                  </Show>
-                  <Show when={entry().comparison}>
-                    {(comparison) => (
-                      <>
-                        <div class="expert-squad-evolution-section">
-                          <strong>{t("expert_squad.evolution_comparison")}</strong>
-                          <div class="expert-squad-evolution-facts">
-                            <span>{t("expert_squad.evolution_score")}: {number(comparison().aggregate_score)}</span>
-                            <span>{t("expert_squad.evolution_confidence")}: {comparison().confidence}</span>
-                            <span>{t("expert_squad.evolution_cost_delta")}: {number(comparison().cost_delta)}</span>
-                            <span>{t("expert_squad.evolution_token_delta")}: {number(comparison().token_delta, 0)}</span>
-                            <span>{t("expert_squad.evolution_duration_delta")}: {t("expert_squad.evolution_milliseconds", { value: number(comparison().activity_duration_ms_delta, 0) })}</span>
-                            <span>{t("expert_squad.evolution_failure_rate")}: {rate(comparison().outcome_rates.baseline.failure)} → {rate(comparison().outcome_rates.candidate.failure)}</span>
-                            <span>{t("expert_squad.evolution_unavailable_rate")}: {rate(comparison().outcome_rates.baseline.unavailable)} → {rate(comparison().outcome_rates.candidate.unavailable)}</span>
-                          </div>
-                          <For each={comparison().paired_deltas}>
-                            {(delta) => (
-                              <div class="expert-squad-evolution-delta">
-                                <strong>{delta.scorer_id}</strong>
-                                <span>{t("expert_squad.evolution_statistics", { mean: number(delta.mean), median: number(delta.median), variance: number(delta.variance) })}</span>
-                                <span>{t("expert_squad.evolution_interval", { confidence: rate(delta.confidence_interval.confidence), lower: number(delta.confidence_interval.lower), upper: number(delta.confidence_interval.upper), wins: delta.win_tie_loss.wins, ties: delta.win_tie_loss.ties, losses: delta.win_tie_loss.losses })}</span>
-                              </div>
-                            )}
-                          </For>
-                          <span>{t("expert_squad.evolution_regressions")}: {comparison().regressions.join(" · ") || "—"}</span>
-                          <span>{t("expert_squad.evolution_unavailable_dimensions")}: {comparison().unavailable_dimensions.join(" · ") || "—"}</span>
-                          <span>{t("expert_squad.evolution_unknowns")}: {comparison().unknowns.join(" · ") || "—"}</span>
-                          <span>{t("expert_squad.evolution_visual_review")}: {comparison().visual_review.status}</span>
-                          <span>{t("expert_squad.evolution_evidence")}: {comparison().visual_review.evidence.map(evidenceLocator).join(" · ") || "—"}</span>
-                          <span>{t("expert_squad.evolution_reward_review")}: {comparison().reward_hacking_review.findings.join(" · ") || "—"}</span>
-                          <span>{t("expert_squad.evolution_evidence")}: {comparison().reward_hacking_review.evidence.map(evidenceLocator).join(" · ") || "—"}</span>
-                        </div>
-                        <Show when={comparison().receipts.length > 0}>
-                          <div class="expert-squad-evolution-section">
-                            <strong>{t("expert_squad.evolution_receipts")}</strong>
-                            <For each={comparison().receipts}>
-                              {(item) => (
-                                <div class="expert-squad-evolution-receipt">
-                                  <strong>{item.receipt.operation}</strong>
-                                  <span>{item.receipt.before_digest} → {item.receipt.after_digest}</span>
-                                  <span>{t("expert_squad.evolution_authorization")}: {item.receipt.authorization.message_id} · {new Date(item.receipt.authorization.time_created).toLocaleString()}</span>
-                                  <span>{t("expert_squad.evolution_manager_receipt")}: {item.receipt.manager_receipt.operation}</span>
-                                  <span>{t("expert_squad.evolution_evidence")}: {item.receipt.evidence.map(evidenceLocator).join(" · ")}</span>
-                                </div>
-                              )}
-                            </For>
-                          </div>
-                        </Show>
-                      </>
-                    )}
-                  </Show>
-                  <Show when={detailLoading()}><Feedback>{t("expert_squad.evolution_detail_loading")}</Feedback></Show>
-                  <Show when={!detailLoading() && detail()}>
-                    {(current) => (
-                      <div class="expert-squad-evolution-section">
-                        <strong>{t("expert_squad.evolution_evidence_matrix")}</strong>
-                        <div class="expert-squad-evolution-slot-list">
-                          <For each={current().slots}>
-                            {(slot) => (
-                              <div class="expert-squad-evolution-slot">
-                                <strong>{slot.case_id}</strong>
-                                <Badge tone={slot.arm === "candidate" ? "accent" : "muted"}>{slot.arm}</Badge>
-                                <span>#{slot.repetition + 1}</span>
-                                <span>{slot.run ? t("expert_squad.evolution_run_present") : t("expert_squad.evolution_run_missing")}</span>
-                                <span>{slot.evaluation ? t("expert_squad.evolution_evaluation_present") : t("expert_squad.evolution_evaluation_missing")}</span>
-                                <For each={slot.scorer_results}>
-                                  {(result) => (
-                                    <span>
-                                      {result.scorer_id}: {result.status}
-                                      {result.status === "measured" ? ` · ${result.value}` : ""}
-                                      {result.status === "unavailable" ? ` · ${result.reason}` : ""}
-                                      {result.status === "missing" ? "" : ` · ${result.evidence.map(evidenceLocator).join(" · ")}`}
-                                    </span>
-                                  )}
-                                </For>
-                              </div>
-                            )}
-                          </For>
-                        </div>
-                      </div>
-                    )}
-                  </Show>
-                </>
-              )}
-            </Show>
-          </section>
+                  )}
+                </Show>
+                <Show when={selectedKey() === entry.key}>
+                  {renderCampaignDetail(entry)}
+                </Show>
+              </article>
+            )}
+          </For>
+          <Show when={history()?.next_cursor}>
+            <div ref={continuationFooter} class="expert-squad-evolution-continuation">
+              <Show when={continuationFailure()}>
+                {(failure) => <Feedback tone="error" details={failure().diagnostic}>{t("expert_squad.evolution_more_failed")}</Feedback>}
+              </Show>
+              <Button
+                ref={continuationButton}
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                aria-disabled={loadingMore() || undefined}
+                aria-busy={loadingMore() || undefined}
+                onClick={() => void loadMore()}
+              >
+                <Show when={loadingMore()}><Icon name="loading" /></Show>
+                {t(loadingMore() ? "expert_squad.evolution_loading_more"
+                  : continuationFailure() ? "expert_squad.evolution_retry_more" : "expert_squad.evolution_load_more")}
+              </Button>
+            </div>
+          </Show>
         </div>
       </Show>
       </Show>

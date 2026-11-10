@@ -1,0 +1,67 @@
+{
+  "target": "project:b169-review/history-target",
+  "baseline": {
+    "asset": "main-B1YunVhO.js",
+    "catalogUpper": 27,
+    "listRows": 20,
+    "cursor": {
+      "catalog_revision_upper": 27,
+      "before_catalog_revision": 6
+    },
+    "listRequest": "efc1d158-cdbb-40ea-91b3-199917e28631",
+    "detailRequest": "c57c89c3-7eec-49d5-b7f9-ae54df916da7",
+    "detailTask": "tsk_g00VaWxxuG00Ru0c08mw",
+    "comparison": "art_g0VaWxygM00JkgwzCENW",
+    "slotArms": [
+      "baseline",
+      "candidate"
+    ]
+  },
+  "firstCandidate": {
+    "asset": "main-heZ7mhjo.js",
+    "manualObservation": "Summary reached viewport; focused campaign row clipped."
+  },
+  "revisedCandidate": {
+    "asset": "main-Dk4SyIXc.js",
+    "catalogUpper": 27,
+    "listRows": 20,
+    "cursor": {
+      "catalog_revision_upper": 27,
+      "before_catalog_revision": 6
+    },
+    "listRequest": "eac3ef18-32d8-4ab1-a446-b64e0465ac2a",
+    "tailRequest": "0725af3f-ad1d-4f09-99e3-63b0971680c1",
+    "detailRequest": "b076a24a-1a5d-4667-bb49-4493c15a95cf",
+    "detailTask": "tsk_g00VaWxxuG00Ru0c08mw",
+    "comparison": "art_g0VaWxygM00JkgwzCENW",
+    "slotArms": [
+      "baseline",
+      "candidate"
+    ],
+    "tailRows": [
+      {
+        "artifact_id": "art_g0VaWxyS400fxLTSaoeq",
+        "catalog_revision": 5
+      },
+      {
+        "artifact_id": "art_g0VaWxyRm00jps6iaEzP",
+        "catalog_revision": 4
+      },
+      {
+        "artifact_id": "art_g0VaWxyRU00Zw6E1xRGy",
+        "catalog_revision": 3
+      }
+    ]
+  },
+  "persistedInBothProfiles": {
+    "quickCheck": "ok",
+    "task": {
+      "id": "tsk_g00VaWxxuG00Ru0c08mw",
+      "project_id": "prj_hdKNDNP0w6goDO5iNI8R",
+      "session_id": "ses_-zUPT225jzz50wsfDSkm"
+    },
+    "campaigns": 23,
+    "providerUsageEvents": 0,
+    "activeRuntimeCapacityLeases": 0
+  }
+}

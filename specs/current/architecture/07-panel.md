@@ -706,6 +706,9 @@ Continuation feedback and retry stay beside the original list footer and reuse
 the current cursor. Accepted rows keep their controls on append. When focus
 remains on the footer button, an accepted continuation moves it to the first
 new row; an empty final page instead moves it to the last accepted row.
+The panel presents one detail region inside the selected campaign row, after
+that row's actions. Explicit selection brings its summary into view and leaves
+focus on the row. Automatic selection or a read response does not scroll it.
 
 Installed-panel selection has one canonical physical key: built_in:id or
 installation scope:namespace:id, validated through the SDK's existing ID and

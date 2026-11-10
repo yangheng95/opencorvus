@@ -2324,7 +2324,7 @@ button.s-row:focus-visible {
 }
 
 .expert-squad-evolution-head,
-.expert-squad-evolution-detail > header,
+.expert-squad-evolution-detail-summary > header,
 .expert-squad-evolution-record-title,
 .expert-squad-evolution-actions {
   display: flex;
@@ -2334,20 +2334,20 @@ button.s-row:focus-visible {
 }
 
 .expert-squad-evolution-head > div,
-.expert-squad-evolution-detail > header > div {
+.expert-squad-evolution-detail-summary > header > div {
   display: grid;
   gap: var(--ui-gap-xs);
   min-width: 0;
 }
 
 .expert-squad-evolution-head strong,
-.expert-squad-evolution-detail > header strong {
+.expert-squad-evolution-detail-summary > header strong {
   color: var(--text-strong);
   font-size: var(--ui-font-body);
 }
 
 .expert-squad-evolution-head span,
-.expert-squad-evolution-detail > header span {
+.expert-squad-evolution-detail-summary > header span {
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   line-height: var(--ui-line-height-normal);
@@ -2381,13 +2381,6 @@ button.s-row:focus-visible {
   overflow-wrap: anywhere;
   color: var(--text-strong);
   font-size: var(--ui-font-body);
-}
-
-.expert-squad-evolution-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--ui-gap-lg);
-  align-items: start;
 }
 
 .expert-squad-evolution-revisions {
@@ -2534,7 +2527,20 @@ button.s-row:focus-visible {
 .expert-squad-evolution-detail {
   display: grid;
   gap: var(--ui-gap-lg);
+  margin: 0 var(--ui-gap-lg) var(--ui-gap-lg);
   padding: var(--ui-gap-lg);
+  background: var(--surface-inset);
+}
+
+.expert-squad-evolution-detail-summary {
+  display: grid;
+  gap: var(--ui-gap-md);
+}
+
+.expert-squad-evolution-detail-summary > h3 {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
 }
 
 .expert-squad-evolution-facts {

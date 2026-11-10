@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [演进记录与详情邻接证据](2026-11-10-evolution-history-inline-detail/README.md)
 - [演进历史续页提示和键盘证据](2026-11-10-evolution-history-continuation-focus/README.md)
 - [专家团演进历史读取证据](2026-11-10-evolution-history-pagination-ownership/README.md)
 - [文件保存回执与磁盘核对证据](2026-11-10-file-save-receipt-reconciliation/README.md)
