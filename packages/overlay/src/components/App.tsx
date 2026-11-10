@@ -477,7 +477,7 @@ export interface AppProps {
   onRenameConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
   onArchiveConversationItem: (row: WorkLedgerItemRow) => void | Promise<void>
   onOpenAutomationSession: (session: AutomationRunSession) => Promise<void>
-  onOpenArchivedItem: (row: WorkLedgerItemRow) => Promise<void>
+  onOpenArchivedItem: (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => Promise<void>
 }
 
 export function App(props: AppProps) {
@@ -841,16 +841,18 @@ export function App(props: AppProps) {
                             <div class="chat-content-frame" id="chatContentFrame">
                               <div class="chat-message-pane" id="chatMessagePane">
                                 <Show when={props.conversationItem()?.archived !== undefined}>
-                                    <Feedback tone="neutral" title={t("archive.archived_at", {
-                                      time: new Intl.DateTimeFormat(localeTag(), { dateStyle: "medium", timeStyle: "short" }).format(props.conversationItem()!.archived!),
-                                    })} actions={
+                                    <Feedback id="archivedWorkNotice" tabIndex={-1} tone="neutral"
+                                      aria-labelledby="archivedWorkNoticeTitle" aria-describedby="archivedWorkNoticeMessage"
+                                      title={<span id="archivedWorkNoticeTitle">{t("archive.archived_at", {
+                                        time: new Intl.DateTimeFormat(localeTag(), { dateStyle: "medium", timeStyle: "short" }).format(props.conversationItem()!.archived!),
+                                      })}</span>} actions={
                                       <Button type="button" variant="outline" size="sm" tone="neutral"
                                         disabled={props.restoringConversation}
                                         onClick={() => void props.onRestoreConversation()}>
                                         {t(props.restoringConversation ? "work_ledger.restoring" : "work_ledger.restore")}
                                       </Button>
                                     }>
-                                      {t("work_ledger.archived_readonly")}
+                                      <span id="archivedWorkNoticeMessage">{t("work_ledger.archived_readonly")}</span>
                                     </Feedback>
                                 </Show>
                                 <Show when={props.conversationReadError() || props.conversationRestoreError}>

@@ -5763,6 +5763,10 @@ action reads original identity and history while preserving archive metadata; it
 does not restore or admit execution. It follows ordinary authority, selection
 epoch and unsaved-file navigation admission. Reopening the current ready identity
 also closes Settings and reveals its conversation under the same authority/epoch.
+If Open still owned focus when Settings closed, the accepted exact archived
+item transfers focus to its read-only notice. A later user focus change or
+replacement selection retires that handoff. Ordinary Settings dismissal keeps
+its original return focus.
 Restore and permanent deletion remain separate existing actions.
 
 The Chat/Work, Task and Mission archive/restore endpoints use the existing

@@ -233,6 +233,7 @@ import {
   type MissionWakeResult,
 } from "./services/mission"
 import type { WorkLedgerChatRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "./services/work-ledger"
+import { archiveRowKey } from "./services/archive-row-key"
 import { subscribeWorkLedgerChanges, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
 import { refreshProjectMemory } from "./services/project-memory"
 import { openImagePreview } from "./services/image-preview"
@@ -599,23 +600,32 @@ function assertUserNavigationCurrent(selectionEpoch: number): void {
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Workspace navigation superseded", "AbortError")
 }
 
-async function revealCurrentConversationFromBoard(authority: ApiAuthority): Promise<void> {
+type WorkspaceSettingsDismissal = (selectionEpoch: number) => Promise<void>
+
+async function revealCurrentConversationFromBoard(
+  authority: ApiAuthority,
+  dismissSettings: WorkspaceSettingsDismissal = closeConfigDialog,
+): Promise<void> {
   const selectionEpoch = boardStore.selectEpoch
-  await closeConfigDialog()
+  await dismissSettings(selectionEpoch)
   assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(selectionEpoch)
   if (primaryWorkspaceSurface() === "mission-board") setPrimaryWorkspaceSurface("conversation")
 }
 
-async function selectTaskWithUILifecycle(taskID: string, directory: string): Promise<void> {
+async function selectTaskWithUILifecycle(
+  taskID: string,
+  directory: string,
+  dismissSettings: WorkspaceSettingsDismissal = closeConfigDialog,
+): Promise<void> {
   const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection({ kind: "task", id: taskID, directory })
   assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
-    await revealCurrentConversationFromBoard(authority)
+    await revealCurrentConversationFromBoard(authority, dismissSettings)
     return
   }
-  await closeConfigDialog()
+  await dismissSettings(admission.epoch)
   assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   const row = workLedgerActiveItem({ taskID, sessionID: undefined })
@@ -632,6 +642,7 @@ async function selectConversationWithUILifecycle(
   sessionID: string,
   directory: string,
   experience: "chat" | "work",
+  dismissSettings: WorkspaceSettingsDismissal = closeConfigDialog,
 ): Promise<void> {
   const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection({
@@ -643,10 +654,10 @@ async function selectConversationWithUILifecycle(
   })
   assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
-    await revealCurrentConversationFromBoard(authority)
+    await revealCurrentConversationFromBoard(authority, dismissSettings)
     return
   }
-  await closeConfigDialog()
+  await dismissSettings(admission.epoch)
   assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   setComposerIntent({ productPillar: productPillarFromConversationExperience(experience), conversationTarget: "chat" })
@@ -867,12 +878,12 @@ async function handleComposerIntentChange(intent: ComposerIntent): Promise<void>
   if (!activeDirectory()) replaceWorkspaceLocation({ kind: "launcher", ...intent })
 }
 
-async function selectWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
-  await selectTaskWithUILifecycle(row.id, row.directory)
+async function selectWorkLedgerTask(row: WorkLedgerTaskRow, dismissSettings?: WorkspaceSettingsDismissal): Promise<void> {
+  await selectTaskWithUILifecycle(row.id, row.directory, dismissSettings)
 }
 
-async function openWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
-  await selectConversationWithUILifecycle(row.sessionID, row.directory, row.experience)
+async function openWorkLedgerChat(row: WorkLedgerChatRow, dismissSettings?: WorkspaceSettingsDismissal): Promise<void> {
+  await selectConversationWithUILifecycle(row.sessionID, row.directory, row.experience, dismissSettings)
 }
 
 async function openGlobalComposer(intent: ComposerIntent): Promise<void> {
@@ -1130,7 +1141,7 @@ async function promoteWorkLedgerAnonymousProject(directory: string, presentation
   }
 }
 
-async function openWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
+async function openWorkLedgerMission(row: WorkLedgerMissionRow, dismissSettings?: WorkspaceSettingsDismissal): Promise<void> {
   await openMissionWithUILifecycle(
     {
       missionID: row.missionID,
@@ -1140,6 +1151,7 @@ async function openWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
       title: row.title,
     },
     row.directory,
+    dismissSettings,
   )
 }
 
@@ -1612,6 +1624,7 @@ async function archiveActiveWorkLedgerItem(
 async function openMissionWithUILifecycle(
   result: Parameters<typeof openMissionSession>[0],
   directory: string,
+  dismissSettings: WorkspaceSettingsDismissal = closeConfigDialog,
 ): Promise<void> {
   const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection({
@@ -1622,10 +1635,10 @@ async function openMissionWithUILifecycle(
   })
   assertApiAuthorityCurrent(authority)
   if (admission.kind === "unchanged") {
-    await revealCurrentConversationFromBoard(authority)
+    await revealCurrentConversationFromBoard(authority, dismissSettings)
     return
   }
-  await closeConfigDialog()
+  await dismissSettings(admission.epoch)
   assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   resetCenterWorkbenchToPrimaryPanel("mission")
@@ -2365,6 +2378,86 @@ function OverlayRoot() {
     const current = selection()
     return current && current.key === selectionRequest()?.key ? current.row : null
   }
+  type ArchiveFocusIntent = {
+    key: string
+    selectionID: string
+    directory: string
+    epoch: number
+    authority: ApiAuthority
+    owner: Element
+  }
+  const [archiveFocus, setArchiveFocus] = createSignal<ArchiveFocusIntent>()
+  const ownsArchiveFocus = (intent: ArchiveFocusIntent) =>
+    ownsWorkspaceSelection(intent.epoch) && isApiAuthorityCurrent(intent.authority) &&
+    appStore.connected && !dialogStore.config.open && document.activeElement === intent.owner
+
+  createEffect(() => {
+    const intent = archiveFocus()
+    if (!intent) return
+    const clear = () => {
+      if (archiveFocus() === intent) setArchiveFocus(undefined)
+    }
+    const request = selectionRequest()
+    if (!ownsArchiveFocus(intent) || (selection.error && request?.id === intent.selectionID &&
+      projectDirectoryKey(request.directory) === intent.directory)) {
+      clear()
+      return
+    }
+    const current = selectedItem()
+    if (current && archiveRowKey(current) === intent.key && primaryWorkspaceSurface() === "conversation") {
+      queueMicrotask(() => {
+        if (archiveFocus() !== intent) return
+        clear()
+        if (!ownsArchiveFocus(intent) || current.archived === undefined || selectedItem() !== current) return
+        const notice = document.getElementById("archivedWorkNotice")
+        if (notice?.getClientRects().length && !notice.closest('[inert], [hidden], [aria-hidden="true"]')) {
+          notice.focus({ preventScroll: true })
+        }
+      })
+      return
+    }
+    const onFocus = (event: FocusEvent) => {
+      if (event.target !== intent.owner) clear()
+    }
+    document.addEventListener("focusin", onFocus, true)
+    onCleanup(() => document.removeEventListener("focusin", onFocus, true))
+  })
+
+  const openArchivedItem = (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => {
+    setArchiveFocus(undefined)
+    let intent: ArchiveFocusIntent | undefined
+    const dismissSettings: WorkspaceSettingsDismissal = (epoch) => {
+      const handoff = dialogStore.config.open && document.activeElement === trigger
+      const authority = captureApiAuthority()
+      const closing = closeConfigDialog()
+      if (handoff) {
+        queueMicrotask(() => {
+          const owner = document.activeElement
+          if (!owner || !ownsWorkspaceSelection(epoch) || !isApiAuthorityCurrent(authority) || dialogStore.config.open) return
+          intent = {
+            key: archiveRowKey(row),
+            selectionID: row.kind === "task" ? row.id : row.sessionID,
+            directory: projectDirectoryKey(row.directory),
+            epoch,
+            authority,
+            owner,
+          }
+          setArchiveFocus(intent)
+        })
+      }
+      return closing
+    }
+    return runUserNavigation("archive.open", async () => {
+      try {
+        if (row.kind === "task") await selectWorkLedgerTask(row, dismissSettings)
+        else if (row.kind === "mission") await openWorkLedgerMission(row, dismissSettings)
+        else await openWorkLedgerChat(row, dismissSettings)
+      } catch (error) {
+        if (intent && archiveFocus() === intent) setArchiveFocus(undefined)
+        throw error
+      }
+    })
+  }
   function composerStop(scope: ComposerStopAction["scope"], stop: () => Promise<void>): ComposerStopAction {
     return {
       scope,
@@ -2782,11 +2875,7 @@ function OverlayRoot() {
         archiveActiveWorkLedgerItem(row)
       }
       onOpenAutomationSession={openAutomationSession}
-      onOpenArchivedItem={(row) => runUserNavigation("archive.open", async () => {
-        if (row.kind === "task") await selectWorkLedgerTask(row)
-        else if (row.kind === "mission") await openWorkLedgerMission(row)
-        else await openWorkLedgerChat(row)
-      })}
+      onOpenArchivedItem={openArchivedItem}
       sidebarToggle={
         <Button
           variant="ghost"

@@ -87,7 +87,7 @@ function archivedAt(row: WorkLedgerItemRow): number {
   return row.archived
 }
 
-export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRow) => Promise<void> }) {
+export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => Promise<void> }) {
   const [search, setSearch] = createSignal("")
   const [rows, setRows] = createSignal<WorkLedgerItemRow[]>([])
   const [nextCursor, setNextCursor] = createSignal<WorkLedgerCursor | null>(null)
@@ -487,7 +487,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       aria-label={archiveActionText("archive.open_item", row)}
                       data-archive-action="open"
                       disabled={!!busyID() || loading()}
-                      onClick={() => void props.onOpenItem(row)}
+                      onClick={(event) => void props.onOpenItem(row, event.currentTarget)}
                     >
                       {t("archive.open")}
                     </Button>

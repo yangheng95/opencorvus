@@ -316,7 +316,7 @@ function useResizable(opts: ResizableOptions) {
 
 export interface ConfigDialogHostProps {
   onOpenAutomationSession: (session: AutomationRunSession) => void | Promise<void>
-  onOpenArchivedItem: (row: WorkLedgerItemRow) => Promise<void>
+  onOpenArchivedItem: (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => Promise<void>
 }
 
 export function ConfigDialogHost(props: ConfigDialogHostProps) {

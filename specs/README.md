@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从归档打开时把焦点交给只读历史](records/2026-11/2026-11-10-archive-open-reading-focus.md)
 - [同名项目的归档操作标明确切目录](records/2026-11/2026-11-10-archive-actions-exact-project-directory.md)
 - [归档首读重试保留键盘位置](records/2026-11/2026-11-10-archive-first-page-retry-focus.md)
 - [年度用量热图的月份轴与真实周列对齐](records/2026-11/2026-11-10-usage-year-month-axis.md)

@@ -1,0 +1,386 @@
+{
+  "baseline": {
+    "asset": "main-Dl726E21.js",
+    "status": 200,
+    "requestID": [
+      "bea4bd49-19e2-4e89-94ac-cc99e0208cc9"
+    ],
+    "rows": [
+      {
+        "kind": "chat",
+        "id": "ses_hoopjHfVdS8WmntkKL08",
+        "projectId": "prj_hvXSsEzCpo5w2zgFhW9Y",
+        "title": "Archived chat Focus Review 191",
+        "archived": 1794291212666
+      },
+      {
+        "kind": "work",
+        "id": "ses_hvoc3vdXvLFFi8oxrQKQ",
+        "projectId": "prj_hvXSsEzCpo5w2zgFhW9Y",
+        "title": "Archived work Focus Review 191",
+        "archived": 1794291212803
+      }
+    ]
+  },
+  "candidateBefore": {
+    "asset": "main-BT4-U0v7.js",
+    "page": {
+      "status": 200,
+      "requestID": "589d6782-7fb3-49fc-b54e-66b9ecc74d8e"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "e1c94cd7-f801-48b6-8601-3551ea27f61b",
+      "operation": "workLedger.listArchived"
+    },
+    "subjects": [
+      {
+        "kind": "chat",
+        "title": "Archived chat Focus Review 191",
+        "id": "ses_hmWHq7PTn7l5MCy4m49D",
+        "projectID": "prj_hvXSsEzCpo5w2zgFhW9Y",
+        "created": 1794291627278,
+        "archived": 1794291627383,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "f7b036ec-0618-41e0-921f-f384efa3699d"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "78d97a45-2581-4598-9fbb-46aa1b617fe4"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "1c612b77-e507-42bd-b0d6-804646358778"
+          }
+        }
+      },
+      {
+        "kind": "work",
+        "title": "Archived work Focus Review 191",
+        "id": "ses_hEPCUoUbJqKeYhoYzTDG",
+        "projectID": "prj_hvXSsEzCpo5w2zgFhW9Y",
+        "created": 1794291627429,
+        "archived": 1794291627513,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "37c1c740-9a0e-4546-b335-db61ae1789c4"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "5dff075e-9c90-4f17-ae28-cd5ffdbc1aea"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "9f565fd0-21b0-4a4f-a3f2-b15d915890bd"
+          }
+        }
+      }
+    ],
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "f53423fa-c145-4c7a-a3d1-ba438da5832d",
+        "kind": "chat",
+        "exact": true
+      },
+      {
+        "status": 200,
+        "requestID": "f0c72673-96ac-41ca-827b-f5339788426d",
+        "kind": "work",
+        "exact": true
+      }
+    ],
+    "list": {
+      "status": 200,
+      "requestID": "4a56270a-e52c-4cd7-94e3-431e91f46261",
+      "matched": 2,
+      "schemaValid": true,
+      "exactDirectory": true
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "8c216f26-0606-4f55-a0d3-d5b8c156a4ff",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "candidateAfter": {
+    "asset": "main-DhuWCkui.js",
+    "page": {
+      "status": 200,
+      "requestID": "526186df-d1a5-4221-86d1-fb2f41295353"
+    },
+    "doc": {
+      "status": 200,
+      "requestID": "5a30a3bc-7978-46a5-a19c-23f5a421c1d0",
+      "operation": "workLedger.listArchived"
+    },
+    "subjects": [
+      {
+        "kind": "chat",
+        "title": "Archived chat Focus Review 191",
+        "id": "ses_hmWHq7PTn7l5MCy4m49D",
+        "projectID": "prj_hvXSsEzCpo5w2zgFhW9Y",
+        "created": 1794291627278,
+        "archived": 1794291627383,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "f7b036ec-0618-41e0-921f-f384efa3699d"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "78d97a45-2581-4598-9fbb-46aa1b617fe4"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "1c612b77-e507-42bd-b0d6-804646358778"
+          }
+        }
+      },
+      {
+        "kind": "work",
+        "title": "Archived work Focus Review 191",
+        "id": "ses_hEPCUoUbJqKeYhoYzTDG",
+        "projectID": "prj_hvXSsEzCpo5w2zgFhW9Y",
+        "created": 1794291627429,
+        "archived": 1794291627513,
+        "mutations": {
+          "create": {
+            "status": 201,
+            "requestID": "37c1c740-9a0e-4546-b335-db61ae1789c4"
+          },
+          "rename": {
+            "status": 200,
+            "requestID": "5dff075e-9c90-4f17-ae28-cd5ffdbc1aea"
+          },
+          "archive": {
+            "status": 200,
+            "requestID": "9f565fd0-21b0-4a4f-a3f2-b15d915890bd"
+          }
+        }
+      }
+    ],
+    "reads": [
+      {
+        "status": 200,
+        "requestID": "1d17af87-f36a-4dee-b58b-a483fe51a07b",
+        "kind": "chat",
+        "exact": true
+      },
+      {
+        "status": 200,
+        "requestID": "89c25b12-2c5a-4ced-9f0c-acd2f3f57a02",
+        "kind": "work",
+        "exact": true
+      }
+    ],
+    "list": {
+      "status": 200,
+      "requestID": "76330979-1e65-489c-b712-602972988f38",
+      "matched": 2,
+      "schemaValid": true,
+      "exactDirectory": true
+    },
+    "provider": {
+      "status": 200,
+      "requestID": "0d8b6464-586a-4ea5-b1c9-0be3076391cd",
+      "visible": 88,
+      "connected": 0
+    }
+  },
+  "desktopSelections": [
+    {
+      "requestID": "4a2e1d96-0a7b-4730-885e-3dfc3fb15966",
+      "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+      "statusCode": 200,
+      "kind": "work"
+    },
+    {
+      "requestID": "8ff93b5e-7b28-48f3-8cab-3e3930add9ad",
+      "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+      "statusCode": 200,
+      "kind": "work"
+    },
+    {
+      "requestID": "6f6a0411-bb48-4172-b082-2efffb8781fd",
+      "path": "/work-ledger/selection/session/ses_hmWHq7PTn7l5MCy4m49D",
+      "statusCode": 200,
+      "kind": "chat"
+    },
+    {
+      "requestID": "71fe6ae0-b78b-490b-9683-6dac33c96a35",
+      "path": "/work-ledger/selection/session/ses_hmWHq7PTn7l5MCy4m49D",
+      "statusCode": 200,
+      "kind": "chat"
+    },
+    {
+      "requestID": "6bf39ceb-0853-491b-b12f-453b8ebb67f7",
+      "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+      "statusCode": 200,
+      "kind": "work"
+    }
+  ],
+  "controlledTransport": {
+    "candidate": [
+      {
+        "time": "2026-11-10T06:21:05.881Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "ee758aee-e37b-40af-99e2-894cb5cf80a0",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:21:05.884Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "ee758aee-e37b-40af-99e2-894cb5cf80a0",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:21:11.150Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "ee758aee-e37b-40af-99e2-894cb5cf80a0",
+        "mode": "hold",
+        "bytes": 382,
+        "delivered": 382
+      }
+    ],
+    "candidate-final": [
+      {
+        "time": "2026-11-10T06:24:11.870Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "4a2e1d96-0a7b-4730-885e-3dfc3fb15966",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:24:11.873Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "4a2e1d96-0a7b-4730-885e-3dfc3fb15966",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:24:16.336Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "4a2e1d96-0a7b-4730-885e-3dfc3fb15966",
+        "mode": "hold",
+        "bytes": 382,
+        "delivered": 382
+      },
+      {
+        "time": "2026-11-10T06:24:55.284Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "8ff93b5e-7b28-48f3-8cab-3e3930add9ad",
+        "mode": "restore"
+      },
+      {
+        "time": "2026-11-10T06:25:15.462Z",
+        "stage": "origin",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "6bf39ceb-0853-491b-b12f-453b8ebb67f7",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:25:15.463Z",
+        "stage": "held",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "6bf39ceb-0853-491b-b12f-453b8ebb67f7",
+        "mode": "hold"
+      },
+      {
+        "time": "2026-11-10T06:25:20.345Z",
+        "stage": "delivered",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_hEPCUoUbJqKeYhoYzTDG",
+        "search": "",
+        "status": 200,
+        "requestID": "6bf39ceb-0853-491b-b12f-453b8ebb67f7",
+        "mode": "hold",
+        "bytes": 382,
+        "delivered": 382
+      }
+    ]
+  },
+  "lifecycle": {
+    "baseline": {
+      "occurrence": "iteration-b191-baseline",
+      "port": 39511,
+      "apiStopped": true,
+      "processExited": true,
+      "listenerClosed": true
+    },
+    "candidate-first": {
+      "occurrence": "iteration-b191-candidate",
+      "apiPort": 39512,
+      "proxyPort": 39513,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    },
+    "candidate-final": {
+      "occurrence": "iteration-b191-final",
+      "apiPort": 39512,
+      "proxyPort": 39513,
+      "apiStopped": true,
+      "proxyStopped": true,
+      "processesExited": true,
+      "listenersClosed": true
+    }
+  },
+  "databases": {
+    "baseline": {
+      "integrity": "ok",
+      "session": 2,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    },
+    "candidate": {
+      "integrity": "ok",
+      "session": 2,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  }
+}
