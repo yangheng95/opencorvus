@@ -1,0 +1,354 @@
+{
+  "asset": "main-D5yUyp3i.js",
+  "baseline": {
+    "work": [
+      {
+        "messageID": "msg_g0VaWVuJV00Y32gLlcLR",
+        "sessionID": "ses_hrEt1IibLwYopI19D78C",
+        "agent": "work",
+        "completed": 1794268542127,
+        "error": {
+          "name": "MessageAbortedError",
+          "data": {
+            "message": "session aborted",
+            "cancellation": {
+              "actor": "user",
+              "source": "session.abort",
+              "surface": "session",
+              "requestID": "465bd5cc-7481-4f35-826b-f55552a544ff",
+              "reason": "session aborted",
+              "targetSessionID": "ses_hrEt1IibLwYopI19D78C"
+            }
+          }
+        }
+      }
+    ],
+    "otherTaskID": "tsk_g00VaWVoEo00B6ZAtGRY"
+  },
+  "candidate": {
+    "work": [
+      {
+        "messageID": "msg_g0VaWXjQz00envgDeCLk",
+        "sessionID": "ses_hyIsd4CvB8ez4Uo1CLLE",
+        "agent": "work",
+        "completed": 1794268995209,
+        "error": {
+          "name": "MessageAbortedError",
+          "data": {
+            "message": "session aborted",
+            "cancellation": {
+              "actor": "user",
+              "source": "session.abort",
+              "surface": "session",
+              "requestID": "4c7e25fc-9495-4452-8301-5921827c4065",
+              "reason": "session aborted",
+              "targetSessionID": "ses_hyIsd4CvB8ez4Uo1CLLE"
+            }
+          }
+        }
+      }
+    ],
+    "chat": [
+      {
+        "messageID": "msg_g0VaWY3dW001JWi0M6Og",
+        "sessionID": "ses_hIvvPFyonYSufP98miKR",
+        "agent": "chat",
+        "completed": 1794269050695,
+        "error": {
+          "name": "MessageAbortedError",
+          "data": {
+            "message": "session aborted",
+            "cancellation": {
+              "actor": "user",
+              "source": "session.abort",
+              "surface": "session",
+              "requestID": "9fef331d-4b93-4bc5-9fd8-290e8bd65b5f",
+              "reason": "session aborted",
+              "targetSessionID": "ses_hIvvPFyonYSufP98miKR"
+            }
+          }
+        }
+      }
+    ],
+    "task": [
+      {
+        "messageID": "msg_h5YSmzY9fyFFPIMOjwLF",
+        "sessionID": "ses_-zUPTSCy6zzV64WihHfg",
+        "agent": "orchestrator",
+        "completed": 1794269009074,
+        "error": {
+          "name": "MessageAbortedError",
+          "data": {
+            "message": "Task-root activation act_g0VaWXmHS00HdFKxa7K1 is inapplicable under Task tsk_g00VaWXm38000x6c7Fmq cancellation pev_g0VaWXuIQ00AL80q4nQz",
+            "cancellation": {
+              "actor": "user",
+              "source": "task.cancel",
+              "surface": "overlay.composer_stop",
+              "requestID": "1b705d16-3931-4d5f-9fbd-a5d0218f65eb",
+              "reason": "Operator stopped the active task from the composer",
+              "taskID": "tsk_g00VaWXm38000x6c7Fmq",
+              "causationEventID": "pev_g0VaWXuIQ00AL80q4nQz"
+            }
+          }
+        }
+      }
+    ],
+    "mission": [
+      {
+        "messageID": "msg_g0VaWY6Hi00nLWyPC1Ci",
+        "sessionID": "ses_-zUPTRtjPzzKyfj46TJr",
+        "agent": "mission",
+        "completed": 1794269069723,
+        "error": {
+          "name": "MessageAbortedError",
+          "data": {
+            "message": "Operator stopped the active Mission from the composer",
+            "cancellation": {
+              "actor": "user",
+              "source": "mission.abort",
+              "surface": "overlay.composer_stop",
+              "requestID": "e2b199e2-92bc-4411-a02f-beb355cd6b84",
+              "reason": "Operator stopped the active Mission from the composer",
+              "targetSessionID": "ses_-zUPTRtjPzzKyfj46TJr",
+              "missionID": "wake-2481db2bd733f4a14bfac531d7c02235"
+            }
+          }
+        }
+      }
+    ],
+    "taskEvents": [
+      {
+        "id": "pev_g0VaWXmGe0099t73SJyW",
+        "type": "task.execution.opened",
+        "seq": 3,
+        "source": "engine.pipeline",
+        "emitted_at": 1794268977338,
+        "payload": {
+          "execution_epoch": 1
+        }
+      },
+      {
+        "id": "pev_g0VaWXuIQ00AL80q4nQz",
+        "type": "task.cancellation.requested",
+        "seq": 7,
+        "source": "task.cancel",
+        "emitted_at": 1794269009038,
+        "payload": {
+          "execution_epoch": 1,
+          "actor": "user",
+          "surface": "overlay.composer_stop",
+          "reason": "Operator stopped the active task from the composer",
+          "summary": "Cancellation requested: Operator stopped the active task from the composer"
+        }
+      },
+      {
+        "id": "pev_g0VaWXuJl008b9pkTsJI",
+        "type": "task.cancelled",
+        "seq": 9,
+        "source": "state.task",
+        "emitted_at": 1794269009119,
+        "payload": {
+          "execution_epoch": 1,
+          "summary": "Task cancelled",
+          "error": "task cancelled"
+        }
+      }
+    ],
+    "missionEvents": [
+      {
+        "id": "pev_hfr4mzHxEuCoFilW0fqs",
+        "type": "mission.execution.opened",
+        "seq": 1,
+        "source": "mission.wake",
+        "emitted_at": 1794269055074,
+        "payload": {
+          "missionID": "wake-2481db2bd733f4a14bfac531d7c02235",
+          "requestID": "b163-mission-candidate",
+          "requestFingerprint": "608ff30854c4d850119c459e316e247e2ffda608d074ba737f248cbeb16c69e8"
+        }
+      },
+      {
+        "id": "pev_g0VaWYA4y00Oqp0MCP6E",
+        "type": "mission.execution.closing",
+        "seq": 4,
+        "source": "mission.abort",
+        "emitted_at": 1794269069708,
+        "payload": {
+          "missionID": "wake-2481db2bd733f4a14bfac531d7c02235",
+          "requestID": "e2b199e2-92bc-4411-a02f-beb355cd6b84",
+          "provenance": {
+            "kind": "request",
+            "surface": "overlay.composer_stop",
+            "reason": "Operator stopped the active Mission from the composer"
+          }
+        }
+      },
+      {
+        "id": "pev_g0VaWYA6500jIpu8P1tU",
+        "type": "mission.execution.closed",
+        "seq": 9,
+        "source": "mission.abort",
+        "emitted_at": 1794269069777,
+        "payload": {
+          "missionID": "wake-2481db2bd733f4a14bfac531d7c02235",
+          "requestID": "e2b199e2-92bc-4411-a02f-beb355cd6b84",
+          "provenance": {
+            "kind": "request",
+            "surface": "overlay.composer_stop",
+            "reason": "Operator stopped the active Mission from the composer"
+          }
+        }
+      }
+    ],
+    "publicStatus": {
+      "task": {
+        "taskID": "tsk_g00VaWXm38000x6c7Fmq",
+        "epoch": 1,
+        "openedEventID": "pev_g0VaWXmGe0099t73SJyW",
+        "openedAt": 1794268977338,
+        "status": "cancelled",
+        "terminalEventID": "pev_g0VaWXuJl008b9pkTsJI",
+        "terminalAt": 1794269009119,
+        "terminalError": "task cancelled"
+      },
+      "mission": {
+        "missionID": "wake-2481db2bd733f4a14bfac531d7c02235",
+        "sessionID": "ses_-zUPTRtjPzzKyfj46TJr",
+        "status": "inactive",
+        "taskCounts": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    }
+  },
+  "streams": [
+    {
+      "id": 1,
+      "kind": "memory",
+      "label": "Task",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 2,
+      "kind": "prompt",
+      "label": "Task",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 3,
+      "kind": "memory",
+      "label": "Work",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 4,
+      "kind": "prompt",
+      "label": "Work",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 4,
+      "label": "Work",
+      "transport": "closed"
+    },
+    {
+      "id": 2,
+      "label": "Task",
+      "transport": "closed"
+    },
+    {
+      "id": 7,
+      "kind": "prompt",
+      "label": "Task",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 7,
+      "label": "Task",
+      "transport": "closed"
+    },
+    {
+      "id": 9,
+      "kind": "memory",
+      "label": "Work",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 10,
+      "kind": "prompt",
+      "label": "Work",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 11,
+      "kind": "memory",
+      "label": "Task",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 12,
+      "kind": "prompt",
+      "label": "Task",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 10,
+      "label": "Work",
+      "transport": "closed"
+    },
+    {
+      "id": 12,
+      "label": "Task",
+      "transport": "closed"
+    },
+    {
+      "id": 15,
+      "kind": "memory",
+      "label": "Chat",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 16,
+      "kind": "prompt",
+      "label": "Chat",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 16,
+      "label": "Chat",
+      "transport": "closed"
+    },
+    {
+      "id": 18,
+      "kind": "memory",
+      "label": "Mission",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 19,
+      "kind": "prompt",
+      "label": "Mission",
+      "model": "review",
+      "stream": true
+    },
+    {
+      "id": 19,
+      "label": "Mission",
+      "transport": "closed"
+    }
+  ]
+}

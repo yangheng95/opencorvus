@@ -17,6 +17,7 @@ import {
 import type { JSX } from "solid-js"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Popover } from "./ui/Popover"
+import { Tooltip } from "./ui/Tooltip"
 import { settingsStore } from "../store/settings"
 import { Slider } from "./ui/Slider"
 import { localeTag, t } from "../utils/i18n"
@@ -166,17 +167,25 @@ export interface ComposerSubmissionCallbacks {
   onAccepted: () => void
 }
 
+const COMPOSER_STOP_COPY = {
+  task: { label: "chat.stop_task", description: "chat.stop_task_description" },
+  mission: { label: "chat.stop_mission", description: "chat.stop_mission_description" },
+  conversation: { label: "chat.stop_conversation", description: "chat.stop_conversation_description" },
+} as const
+
+export type ComposerStopAction = {
+  scope: keyof typeof COMPOSER_STOP_COPY
+  run: () => void
+}
+
 export interface ChatComposerProps {
   /**
    * Availability derived by the existing connection and launcher owners.
    */
   availability: "ready" | "submitting" | "unavailable"
   unavailableReason?: string
-  /**
-   * Whether a task is active (in-flight request or interruptable task status).
-   * When true the send button becomes a stop button.
-   */
-  busy: boolean
+  /** The same exact operation owns the Stop control and its explanation. */
+  stopAction?: ComposerStopAction
   /**
    * Whether the busy request is being stopped (transitional state).
    */
@@ -194,8 +203,6 @@ export interface ChatComposerProps {
   onAcceptedSubmit: () => void
   /** Resolve and activate the Project that owns a real attachment upload. */
   resolveAttachmentDirectory: (selectionEpoch: number, authority: ApiAuthority) => ComposerProjectOperation
-  /** Called when the user clicks the stop button while busy. */
-  onStop?: () => void
   onSideChat?: (prompt: string, sourceDraft: ComposerDraftRevision | undefined) => Promise<void>
   onGoal: () => void
   formID?: string
@@ -573,6 +580,7 @@ function utf8ByteLength(value: string): number {
 // ── Component ──
 
 export function ChatComposer(props: ChatComposerProps) {
+  const busy = () => props.stopAction !== undefined
   const composerEnabled = createMemo(() => props.availability === "ready")
   let textareaRef!: HTMLTextAreaElement
   let mentionPresentationRef: HTMLDivElement | undefined
@@ -731,7 +739,7 @@ export function ChatComposer(props: ChatComposerProps) {
     ),
   }))
   const activeMentionQuery = createMemo(() => {
-    if (!focused() || !composerEnabled() || props.busy) return null
+    if (!focused() || !composerEnabled() || busy()) return null
     return findComposerMentionQuery(text(), caretPosition())
   })
   const activeSquadMentionQuery = createMemo(() => {
@@ -1357,11 +1365,24 @@ export function ChatComposer(props: ChatComposerProps) {
 
   const primaryAction = createMemo(() =>
     composerPrimaryAction({
-      activeWork: props.busy,
+      activeWork: busy(),
       hasDraft: hasText(),
     }),
   )
   const stopMode = createMemo(() => primaryAction() === "stop")
+  const stopCopy = () => props.stopAction && COMPOSER_STOP_COPY[props.stopAction.scope]
+  const stopLabel = () => {
+    const copy = stopCopy()
+    return copy && t(copy.label)
+  }
+  const stopTooltip = () => {
+    const copy = stopCopy()
+    return copy && (
+      <Tooltip.Portal>
+        <Tooltip.Content>{t(copy.description)}</Tooltip.Content>
+      </Tooltip.Portal>
+    )
+  }
 
   const sendDisabledReason = createMemo(() => {
     if (stopMode()) return stopping() ? "stopping" : undefined
@@ -1374,9 +1395,9 @@ export function ChatComposer(props: ChatComposerProps) {
   })
   const sendDisabled = () => sendDisabledReason() !== undefined
 
-  // Explain the same state that owns Send availability. Stop keeps its precedence.
+  // Explain the same state that owns Send availability.
   const sendTitle = () => {
-    if (stopMode()) return t("chat.stop_title")
+    if (stopMode()) return undefined
     const reason = sendDisabledReason()
     if (reason === "submitting") return t("chat.disabled_submitting")
     if (reason === "uploading") return t("chat.attachment_loader.uploading", { count: uploadingCount() })
@@ -1386,7 +1407,7 @@ export function ChatComposer(props: ChatComposerProps) {
     return t(localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_title")
   }
   const sendAriaLabel = () =>
-    t(stopMode() ? "chat.stop_label" : localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_label")
+    stopMode() ? stopLabel() : t(localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_label")
   const sendLabel = sendAriaLabel
   const activeComposerIntent = createMemo(() => props.activeComposerIntent ?? props.composerIntent)
   const productPillarOptions = createMemo<ComposerIntentOption<ProductPillar>[]>(() => [
@@ -1461,7 +1482,7 @@ export function ChatComposer(props: ChatComposerProps) {
           optionValue="value"
           optionTextValue="label"
           disallowEmptySelection
-          disabled={!composerEnabled() || props.busy}
+          disabled={!composerEnabled() || busy()}
           ariaLabel={t("chat.composer_product_pillar_aria_label")}
           triggerDataUI="composer-product-pillar-select"
           triggerTitle={selectedProductPillar()?.label}
@@ -1484,7 +1505,7 @@ export function ChatComposer(props: ChatComposerProps) {
           optionValue="value"
           optionTextValue="label"
           disallowEmptySelection
-          disabled={!composerEnabled() || props.busy}
+          disabled={!composerEnabled() || busy()}
           ariaLabel={t("chat.composer_target_aria_label")}
           triggerDataUI="composer-conversation-target-select"
           triggerTitle={selectedConversationTarget()?.label}
@@ -1532,7 +1553,7 @@ export function ChatComposer(props: ChatComposerProps) {
         referenceOrigin={props.conversationActive && props.activeWorkItemKind === "task" ? "task-request" : "first-message"}
         contextLabel={toolbarContextLabel()}
         controls={props.conversationActive ? undefined : renderIntentControls()}
-        disabled={!props.conversationActive && (!composerEnabled() || props.busy)}
+        disabled={!props.conversationActive && (!composerEnabled() || busy())}
       />
       <ComposerPermissionControl disabled={!composerEnabled()} />
       <ComposerModelSelector />
@@ -1813,7 +1834,7 @@ export function ChatComposer(props: ChatComposerProps) {
               disabled={!canAcceptComposerAttachment() || uploadingCount() > 0}
               parallelism={runControlState().parallelism}
               unattended={runControlState().unattended}
-              runControlBusy={savingRunControl() !== null || props.busy}
+              runControlBusy={savingRunControl() !== null || busy()}
               parallelismFailure={parallelismFailure()}
               onFiles={addFiles}
               onFolder={addFolder}
@@ -1859,56 +1880,63 @@ export function ChatComposer(props: ChatComposerProps) {
             </Show>
           </div>
           <div class="chat-compose-meta-right">
-            <Show when={props.busy && !stopMode()}>
-              <Button
-                id={props.stopID ?? "btnTaskInterrupt"}
-                variant="ghost"
+            <Show when={busy() && !stopMode()}>
+              <Tooltip.Root openDelay={160} placement="top" gutter={8} fitViewport>
+                <Tooltip.Trigger
+                  as={Button}
+                  id={props.stopID ?? "btnTaskInterrupt"}
+                  variant="ghost"
+                  size="icon"
+                  tone="danger"
+                  type="button"
+                  data-ui="composer-active-stop"
+                  data-busy="true"
+                  disabled={stopping()}
+                  aria-label={stopLabel()}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    props.stopAction?.run()
+                  }}
+                >
+                  <span class="chat-send-icon" aria-hidden="true">
+                    <Icon name="stop" size="medium" />
+                  </span>
+                  <span class="chat-send-label">{stopLabel()}</span>
+                </Tooltip.Trigger>
+                {stopTooltip()}
+              </Tooltip.Root>
+            </Show>
+            {/* Send / Stop button */}
+            <Tooltip.Root openDelay={160} placement="top" gutter={8} fitViewport disabled={!stopMode()}>
+              <Tooltip.Trigger
+                as={Button}
+                id={stopMode() ? (props.stopID ?? "btnTaskInterrupt") : (props.sendID ?? "chatSend")}
+                variant="solid"
                 size="icon"
-                tone="danger"
-                type="button"
-                data-ui="composer-active-stop"
-                data-busy="true"
-                disabled={stopping()}
-                title={t("chat.stop_title")}
-                aria-label={t("chat.stop_label")}
-                onClick={(event) => {
-                  event.preventDefault()
-                  props.onStop?.()
+                tone={stopMode() ? "danger" : "neutral"}
+                type={stopMode() ? "button" : "submit"}
+                data-ui={props.sendDataUI}
+                data-busy={stopMode() ? "true" : undefined}
+                data-mode={primaryAction()}
+                disabled={sendDisabled()}
+                title={sendTitle()}
+                aria-label={sendAriaLabel()}
+                onClick={(e) => {
+                  if (stopMode()) {
+                    e.preventDefault()
+                    props.stopAction?.run()
+                  }
                 }}
               >
                 <span class="chat-send-icon" aria-hidden="true">
-                  <Icon name="stop" size="medium" />
+                  <Show when={stopMode()} fallback={<Icon name="arrow-up" size="medium" />}>
+                    <Icon name="stop" size="medium" />
+                  </Show>
                 </span>
-                <span class="chat-send-label">{t("chat.stop_label")}</span>
-              </Button>
-            </Show>
-            {/* Send / Stop button */}
-            <Button
-              id={stopMode() ? (props.stopID ?? "btnTaskInterrupt") : (props.sendID ?? "chatSend")}
-              variant="solid"
-              size="icon"
-              tone={stopMode() ? "danger" : "neutral"}
-              type={stopMode() ? "button" : "submit"}
-              data-ui={props.sendDataUI}
-              data-busy={stopMode() ? "true" : undefined}
-              data-mode={primaryAction()}
-              disabled={sendDisabled()}
-              title={sendTitle()}
-              aria-label={sendAriaLabel()}
-              onClick={(e) => {
-                if (stopMode()) {
-                  e.preventDefault()
-                  props.onStop?.()
-                }
-              }}
-            >
-              <span class="chat-send-icon" aria-hidden="true">
-                <Show when={stopMode()} fallback={<Icon name="arrow-up" size="medium" />}>
-                  <Icon name="stop" size="medium" />
-                </Show>
-              </span>
-              <span class="chat-send-label">{sendLabel()}</span>
-            </Button>
+                <span class="chat-send-label">{sendLabel()}</span>
+              </Tooltip.Trigger>
+              <Show when={stopMode()}>{stopTooltip()}</Show>
+            </Tooltip.Root>
           </div>
         </div>
       </form>

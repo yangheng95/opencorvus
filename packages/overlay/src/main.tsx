@@ -24,7 +24,7 @@ import { App } from "./components/App"
 import { Icon, LUCIDE_ICON_NAMES, REGISTERED_ICONS, type IconName } from "./components/ui/Icon"
 import { Conversation } from "./components/Conversation"
 import { GoalsBoardPanel, RequirementsBoardPanel } from "./components/Board"
-import { ChatComposer } from "./components/ChatComposer"
+import { ChatComposer, type ComposerStopAction } from "./components/ChatComposer"
 import {
   DEFAULT_COMPOSER_INTENT,
   conversationExperienceFromProductPillar,
@@ -2365,6 +2365,63 @@ function OverlayRoot() {
     const current = selection()
     return current && current.key === selectionRequest()?.key ? current.row : null
   }
+  function composerStop(scope: ComposerStopAction["scope"], stop: () => Promise<void>): ComposerStopAction {
+    return {
+      scope,
+      run: () => {
+        void runMainAsync("chat.stop", async () => {
+          if (composerStopping()) return
+          setComposerStopping(true)
+          try {
+            await stop()
+          } finally {
+            setComposerStopping(false)
+          }
+        })
+      },
+    }
+  }
+  const composerStopAction = createMemo((): ComposerStopAction | undefined => {
+    const request = messageStore.chatRequest
+    if (request) {
+      return composerStop(request.target.kind === "session" ? "conversation" : request.target.kind, async () => {
+        await stopChatRequest()
+      })
+    }
+    const taskID = activeTaskID()
+    if (taskID && isTaskInterruptable()) {
+      return composerStop("task", () => cancelTask(taskID, {
+        surface: "overlay.composer_stop",
+        reason: "Operator stopped the active task from the composer",
+      }))
+    }
+    const sessionID = activeSessionID()
+    if (!workLedgerSessionInterruptible(sessionID)) return undefined
+    const execution = workLedgerSessionExecution(sessionID)
+    if (execution?.kind === "mission") {
+      return composerStop("mission", async () => {
+        const ok = await abortMission(
+          { missionID: execution.missionID, directory: execution.directory },
+          {
+            surface: "overlay.composer_stop",
+            reason: "Operator stopped the active Mission from the composer",
+          },
+        )
+        if (!ok) throw new Error(t("mission.error.action.abort"))
+        setMissionSharedRefreshToken((value) => value + 1)
+      })
+    }
+    if (execution?.kind === "chat") {
+      return composerStop("conversation", async () => {
+        await stopConversationSession({
+          sessionID: execution.sessionID,
+          directory: execution.directory,
+          experience: execution.experience,
+        })
+        setMissionSharedRefreshToken((value) => value + 1)
+      })
+    }
+  })
   const selectionUnavailable = () => !!boardStore.selectedSource && (!selectedItem() || !!selection.error)
   const selectedArchived = () => selectedItem()?.archived !== undefined
   let refreshPending: Promise<void> | undefined
@@ -2845,9 +2902,7 @@ function OverlayRoot() {
                 : "ready"
           }
           unavailableReason={selectedArchived() ? t("work_ledger.archived_readonly") : undefined}
-          busy={
-            !!messageStore.chatRequest || isTaskInterruptable() || workLedgerSessionInterruptible(activeSessionID())
-          }
+          stopAction={composerStopAction()}
           stopping={composerStopping()}
           draftKey={panelComposerDraftKey()}
           placeholder={
@@ -3051,50 +3106,6 @@ function OverlayRoot() {
             if (!isApiAuthorityCurrent(authority)) return result
             if (refreshMissionLedger) setMissionSharedRefreshToken((value) => value + 1)
             return result
-          }}
-          onStop={() => {
-            runMainAsync("chat.stop", async () => {
-              if (composerStopping()) return
-              setComposerStopping(true)
-              try {
-                if (messageStore.chatRequest) {
-                  await stopChatRequest()
-                  return
-                }
-                const taskID = activeTaskID()
-                if (taskID && isTaskInterruptable()) {
-                  await cancelTask(taskID, {
-                    surface: "overlay.composer_stop",
-                    reason: "Operator stopped the active task from the composer",
-                  })
-                  return
-                }
-                const execution = workLedgerSessionExecution(activeSessionID())
-                if (execution?.kind === "mission") {
-                  const ok = await abortMission(
-                    { missionID: execution.missionID, directory: execution.directory },
-                    {
-                      surface: "overlay.composer_stop",
-                      reason: "Operator stopped the active Mission from the composer",
-                    },
-                  )
-                  if (!ok) throw new Error(t("mission.error.action.abort"))
-                  setMissionSharedRefreshToken((value) => value + 1)
-                  return
-                }
-                if (execution?.kind === "chat") {
-                  const ok = await stopConversationSession({
-                    sessionID: execution.sessionID,
-                    directory: execution.directory,
-                    experience: execution.experience,
-                  })
-                  if (!ok) throw new Error("Coding assistant stop failed")
-                  setMissionSharedRefreshToken((value) => value + 1)
-                }
-              } finally {
-                setComposerStopping(false)
-              }
-            })
           }}
         />
       )}

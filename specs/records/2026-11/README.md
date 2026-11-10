@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [主输入区说明当前停止操作的范围](2026-11-10-composer-stop-scope.md)
 - [Task 跟进模型回执与活动轮次模型](2026-11-10-task-operator-model-and-active-turn.md)
 - [Task 跟进重发复用已接受的消息与轮次](2026-11-10-task-operator-follow-up-replay.md)
 - [主输入区区分消息接收未确认与发送前失败](2026-11-10-composer-delivery-uncertain-feedback.md)

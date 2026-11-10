@@ -648,6 +648,14 @@ Task cancellation retains its independent cleanup lease after the request return
 unavailable execution models do not replace these controls with model bootstrap.
 New input and actual execution retain full runtime initialization.
 
+The main Composer derives its Stop control and execution from the same current
+action. A pending local request retains priority; otherwise a stoppable Task,
+Mission or standalone conversation contributes its domain action. The empty
+Composer's primary Stop and the separate Stop next to a draft's Send expose the
+same localized scope through their accessible name and shared keyboard/pointer
+tooltip. The header still describes physical activity: an open Task can be idle
+and retain its Task-level cancellation action.
+
 Accepted Task and Mission stops retain the existing cleanup drivers even under
 cached identity admission. Original cancelling/closing intents survive request
 failure and converge through the same durable request and physical owner.
