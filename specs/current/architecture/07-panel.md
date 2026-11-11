@@ -806,6 +806,10 @@ the displayed and source descriptions. The reference picker keeps its local
 name results first, followed by Mission Skills matching the description.
 Project and user-global descriptions, exact directives, and catalog responses
 retain their source content.
+The reference picker labels its combined Skill and Expert Squad search. Mission
+creation labels its narrower Expert Squad search by name or capability. Mission
+Skill reference types, mention groups, accessible names, and validation feedback
+share the same locale term.
 The existing request key includes API authority, work type and catalog scope.
 Search waits for the owned initial catalog, then publishes under that key and
 the original sequence; retries reload and search the current query with its

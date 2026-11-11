@@ -92,7 +92,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
       label: skill.name,
       description: missionSkillDescription(skill),
       sourceDescription: skill.description,
-      typeLabel: t("chat.references.mission_skill"),
+      typeLabel: t("mission_skill.label"),
     })),
   ])
   const squadOptions = createMemo<ComposerReferenceOption[]>(() =>
@@ -181,7 +181,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
           typeLabel: key.startsWith("squad:")
             ? t("chat.references.expert_squad")
             : key.startsWith("mission-skill:")
-              ? t("chat.references.mission_skill")
+              ? t("mission_skill.label")
               : t("chat.references.skill"),
         },
     )

@@ -150,7 +150,7 @@ export function ComposerMentionMenu(props: ComposerMentionMenuProps) {
             class="composer-mention-listbox"
             density="rich"
             data-ui="composer-mention-listbox"
-            aria-label={t("chat.mention.aria_label")}
+            aria-label={t("chat.mention.aria_label", { missionSkill: t("mission_skill.label") })}
             options={groups()}
             optionGroupChildren="options"
             value={props.selectedKey ? [props.selectedKey] : []}

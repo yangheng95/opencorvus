@@ -806,7 +806,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                 setExpertSquadQuery(value)
                 void searchSquads(value)
               }}
-              placeholder={t("chat.references.search_placeholder")}
+              placeholder={t("mission_board.create.squad_search_placeholder")}
               size="sm"
             />
             <Show when={expertSquadError()}>

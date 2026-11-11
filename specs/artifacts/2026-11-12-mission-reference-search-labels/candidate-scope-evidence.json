@@ -1,0 +1,24 @@
+{
+  "asset": "main-DdeP6Qu1.js",
+  "squadQuery": "dynamic",
+  "checked": [
+    {
+      "route": "/expert-squad/search",
+      "status": 200,
+      "requestID": "4977f8c0-d689-4479-922e-486d05884ca4",
+      "identity": "dynamic"
+    },
+    {
+      "route": "/mission-skill/settings",
+      "status": 200,
+      "requestID": "b09f3da5-e4fc-4d2e-a927-927ed6f4718f",
+      "identity": "general"
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "status": 200,
+      "requestID": "215a1290-70e9-4948-93a0-9c4492cecf3e",
+      "identity": "general"
+    }
+  ]
+}

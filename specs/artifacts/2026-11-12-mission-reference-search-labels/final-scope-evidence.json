@@ -1,0 +1,24 @@
+{
+  "asset": "main-DdeP6Qu1.js",
+  "squadQuery": "临时专家团队",
+  "checked": [
+    {
+      "route": "/expert-squad/search",
+      "status": 200,
+      "requestID": "05f3c72a-97fb-4751-8583-2952181901f4",
+      "identity": "dynamic"
+    },
+    {
+      "route": "/mission-skill/settings",
+      "status": 200,
+      "requestID": "1cc864ee-fc55-4443-bea8-ff7a8427a27e",
+      "identity": "general"
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "status": 200,
+      "requestID": "126ac377-8726-42f9-aeae-577fb41de42c",
+      "identity": "general"
+    }
+  ]
+}

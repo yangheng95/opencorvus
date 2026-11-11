@@ -704,7 +704,7 @@ export function ChatComposer(props: ChatComposerProps) {
       },
       {
         kind: "mission-skill",
-        label: t("chat.mention.category_mission_skill"),
+        label: t("mission_skill.label"),
         description: t("chat.mention.category_mission_skill_description"),
       },
       {
@@ -1124,7 +1124,10 @@ export function ChatComposer(props: ChatComposerProps) {
       if (error.code === "malformed_reference") return t("chat.mention.error_malformed_reference")
       if (error.code === "unknown_skill") return t("chat.mention.error_unknown_skill", { name: error.entity })
       if (error.code === "unknown_mission_skill") {
-        return t("chat.mention.error_unknown_mission_skill", { name: error.entity })
+        return t("chat.mention.error_unknown_mission_skill", {
+          missionSkill: t("mission_skill.label"),
+          name: error.entity,
+        })
       }
       if (error.code === "unknown_squad") return t("chat.mention.error_unknown_squad", { name: error.entity })
       return error.entity
