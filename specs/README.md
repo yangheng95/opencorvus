@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [归档阅读和恢复准确标明多步任务](records/2026-11/2026-11-12-mission-archive-reading-wording.md)
 - [从保存确认直接打开确切的多步任务草稿](records/2026-11/2026-11-12-mission-draft-receipt-open.md)
 - [草稿文本附件按内容调整阅读高度](records/2026-11/2026-11-12-draft-attachment-reading-height.md)
 - [文本附件预览和原件下载共用一次读取](records/2026-11/2026-11-12-text-attachment-shared-read.md)

@@ -1,0 +1,66 @@
+{
+  "asset": "main-B-llbEIe.js",
+  "active": {
+    "requestID": "9b1d2d2d-e1c6-49d4-8019-e4b403e651ef",
+    "body": []
+  },
+  "listed": {
+    "requestID": "a463f940-6fd0-4521-8042-1fbf7e4a26bd",
+    "body": {
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-dfc2a684fcc4ad38a8e34c32bbe343d6",
+          "missionID": "draft-dfc2a684fcc4ad38a8e34c32bbe343d6",
+          "sessionID": "ses_hyFtzxyIjXkyi8pwH8pR",
+          "title": "Archived reading labels review",
+          "pendingPromptText": "Read the saved Mission request and identify its restore action.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b251\\baseline-project\\archive-reading-labels",
+          "created": 1794427817785,
+          "started": 1794427817785,
+          "updated": 1794427827646,
+          "pinned": false,
+          "archived": 1794427827646,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        }
+      ],
+      "nextCursor": null
+    }
+  },
+  "exact": {
+    "requestID": "75dd4b31-14a2-42e7-8985-8e4b81dc96eb",
+    "body": {
+      "kind": "mission",
+      "id": "draft-dfc2a684fcc4ad38a8e34c32bbe343d6",
+      "missionID": "draft-dfc2a684fcc4ad38a8e34c32bbe343d6",
+      "sessionID": "ses_hyFtzxyIjXkyi8pwH8pR",
+      "title": "Archived reading labels review",
+      "pendingPromptText": "Read the saved Mission request and identify its restore action.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b251\\baseline-project\\archive-reading-labels",
+      "created": 1794427817785,
+      "started": 1794427817785,
+      "updated": 1794427827646,
+      "pinned": false,
+      "archived": 1794427827646,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  }
+}
