@@ -1523,7 +1523,7 @@ async function openExpertSquadMarketForProject(projectDirectory?: string): Promi
   await openConfigDialog("expert-squad-install")
 }
 
-async function searchMissionMarketExpertSquads(
+async function searchProjectMarketExpertSquads(
   projectDirectory: string,
   query: string,
   productPillar: ProductPillar,
@@ -2201,13 +2201,7 @@ function retryComposerReferenceCatalog(query: string, selectedExpertSquadIDs: re
 async function searchComposerMarketExpertSquads(query: string): Promise<readonly ExpertSquadMarketIndexItem[]> {
   const scope = composerReferenceCatalogScope()
   if (scope.kind !== "project" && scope.kind !== "session") return []
-  const page = await loadExpertSquadMarket(scope.directory, {
-    query: query.trim().slice(0, 500),
-    availability: "available",
-    productPillar: composerIntent().productPillar,
-    limit: 3,
-  })
-  return page.entries
+  return searchProjectMarketExpertSquads(scope.directory, query, composerIntent().productPillar)
 }
 
 async function installComposerMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
@@ -2775,7 +2769,7 @@ function OverlayRoot() {
           onInstallMoreExpertSquads={(directory) =>
             void runUserNavigation("expert-squad.open-market", () => openExpertSquadMarketForProject(directory))
           }
-          onMarketExpertSquadQuery={searchMissionMarketExpertSquads}
+          onMarketExpertSquadQuery={searchProjectMarketExpertSquads}
           onInstallMarketExpertSquad={installMissionMarketExpertSquad}
           onOpenMarketExpertSquad={openMissionMarketExpertSquad}
           canOpenMarketWebPage={getHostTransport().capabilities.nativeCommands["open-url"]}

@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, createUniqueId, For, on, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
@@ -8,6 +8,7 @@ import {
   type ExpertSquadMarketIndexItem,
   type ExpertSquadOption,
 } from "../services/expert-squad"
+import { createExpertSquadMarketRecommendations } from "../services/expert-squad-market-recommendations"
 import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { workLedgerProject } from "../services/work-ledger"
 import { formatErrorDetails } from "../services/diagnostics"
@@ -26,6 +27,7 @@ import { ComboboxControl } from "./ui/ComboboxControl"
 import { matchesSearchTerms } from "../services/text-search"
 import { SearchField } from "./ui/SearchField"
 import { TextField } from "./ui/TextField"
+import { ExpertSquadMarketSearchFeedback } from "./ExpertSquadMarketSearchFeedback"
 
 type MissionCreateMode = "manual" | "ai"
 type MissionTypeSelection = ProductPillar | ""
@@ -96,9 +98,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [expertSquadLoading, setExpertSquadLoading] = createSignal(false)
   const [expertSquadError, setExpertSquadError] = createSignal<SquadReadFailure>()
   const squadResultsReady = () => !expertSquadLoading() && !expertSquadError()
-  const [marketRecommendations, setMarketRecommendations] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
-  const [marketLoading, setMarketLoading] = createSignal(false)
-  const [marketError, setMarketError] = createSignal("")
+  const [marketActionError, setMarketActionError] = createSignal("")
   const [marketInstallingID, setMarketInstallingID] = createSignal("")
   const [marketInstalledID, setMarketInstalledID] = createSignal("")
   const [submitting, setSubmitting] = createSignal(false)
@@ -360,9 +360,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setExpertSquadIDs([])
     setExpertSquadLoading(false)
     setExpertSquadError(undefined)
-    setMarketRecommendations([])
-    setMarketLoading(false)
-    setMarketError("")
+    setMarketActionError("")
     const pillar = productPillar()
     if (directory && pillar) void loadExpertSquadsForContext(directory, pillar)
   }
@@ -413,9 +411,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setExpertSquadQuery("")
         setExpertSquadLoading(false)
         setExpertSquadError(undefined)
-        setMarketRecommendations([])
-        setMarketLoading(false)
-        setMarketError("")
+        setMarketActionError("")
         setSubmitting(false)
         setError(undefined)
         setSubmitAttempted(false)
@@ -439,40 +435,16 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     ),
   )
 
-  let marketSearchSequence = 0
-  createEffect(() => {
-    const open = props.open
+  const marketSource = createMemo(() => {
     const directory = projectDirectory().trim()
     const pillar = productPillar()
     const query = expertSquadQuery().trim().slice(0, 500)
     const search = props.onMarketExpertSquadQuery
-    const sequence = ++marketSearchSequence
-    if (!open || !directory || !pillar || query.length < 2 || !search) {
-      setMarketRecommendations([])
-      setMarketLoading(false)
-      setMarketError("")
-      return
-    }
-    setMarketLoading(true)
-    setMarketRecommendations([])
-    setMarketError("")
-    const timer = window.setTimeout(() => {
-      void search(directory, query, pillar)
-        .then((items) => {
-          if (sequence !== marketSearchSequence) return
-          setMarketRecommendations(items)
-        })
-        .catch((nextError) => {
-          if (sequence !== marketSearchSequence) return
-          setMarketRecommendations([])
-          setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
-        })
-        .finally(() => {
-          if (sequence === marketSearchSequence) setMarketLoading(false)
-        })
-    }, 280)
-    onCleanup(() => window.clearTimeout(timer))
+    if (!props.open || !directory || !pillar || query.length < 2 || !search) return undefined
+    return { authority: captureApiAuthority(), load: () => search(directory, query, pillar) }
   })
+  const market = createExpertSquadMarketRecommendations(marketSource, () => expertSquadSearchRef)
+  createEffect(on(marketSource, () => setMarketActionError("")))
 
   let installLifecycleSequence = 0
   createEffect(on(
@@ -488,8 +460,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     const install = props.onInstallMarketExpertSquad
     const directory = projectDirectory().trim()
     const pillar = productPillar()
-    const loadMarket = props.onMarketExpertSquadQuery
-    if (!install || !loadMarket || !directory || !pillar || submitting() || marketInstallingID()) return
+    if (!install || !marketSource() || !directory || !pillar || submitting() || marketInstallingID()) return
     const lifecycle = ++installLifecycleSequence
     const authority = captureApiAuthority()
     const origin = document.activeElement === trigger ? trigger : undefined
@@ -500,34 +471,21 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       projectDirectory().trim() === directory &&
       productPillar() === pillar &&
       isApiAuthorityCurrent(authority)
-    let refreshSequence: number | undefined
-    marketSearchSequence += 1
-    setMarketLoading(false)
     setMarketInstallingID(item.id)
     setMarketInstalledID("")
-    setMarketError("")
+    setMarketActionError("")
     try {
       await install(directory, item)
       if (!owns()) return
       if (origin && document.activeElement === origin && expertSquadSearchRef?.isConnected) expertSquadSearchRef.focus()
       setMarketInstalledID(item.id)
       const query = expertSquadQuery().trim().slice(0, 500)
-      refreshSequence = ++marketSearchSequence
-      setMarketRecommendations([])
-      setMarketLoading(query.length >= 2)
-      const [, market] = await Promise.all([
+      await Promise.all([
         refreshSquadsAfterInstall(directory, pillar, query, query === offeredQuery ? item : undefined, authority),
-        query.length >= 2 ? loadMarket(directory, query, pillar) : Promise.resolve([]),
+        market.refresh(),
       ])
-      if (owns() && refreshSequence === marketSearchSequence) {
-        setMarketRecommendations(market)
-        setMarketLoading(false)
-      }
     } catch (nextError) {
-      if (owns() && (refreshSequence === undefined || refreshSequence === marketSearchSequence)) {
-        if (refreshSequence !== undefined) setMarketLoading(false)
-        setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
-      }
+      if (owns()) setMarketActionError(nextError instanceof Error ? nextError.message : String(nextError))
     } finally {
       if (lifecycle === installLifecycleSequence) setMarketInstallingID("")
     }
@@ -535,11 +493,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
 
   async function openMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
     if (!props.onOpenMarketExpertSquad) return
-    setMarketError("")
+    setMarketActionError("")
     try {
       await props.onOpenMarketExpertSquad(item)
     } catch (nextError) {
-      setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
+      setMarketActionError(nextError instanceof Error ? nextError.message : String(nextError))
     }
   }
 
@@ -922,13 +880,14 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           <p class="mission-create-form__model-note">{t("mission_board.create.project_model_note")}</p>
         </fieldset>
 
-        <Show when={marketLoading()}>
+        <ExpertSquadMarketSearchFeedback failure={market.failure()} loading={market.loading()} onRetry={market.retry} />
+        <Show when={market.loading() && !market.failure()}>
           <div class="mission-create-form__market-state" role="status" aria-live="polite">
             <Icon name="loading" size="compact" />
             <span>{t("mission_board.create.market_searching")}</span>
           </div>
         </Show>
-        <Show when={marketRecommendations().length > 0}>
+        <Show when={market.items().length > 0}>
           <section class="mission-create-form__market" aria-labelledby="missionCreateMarketTitle">
             <header>
               <div>
@@ -938,7 +897,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               <Icon name="config-skill-market" size="medium" />
             </header>
             <div class="mission-create-form__market-list">
-              <For each={marketRecommendations()}>
+              <For each={market.items()}>
                 {(item) => (
                   <article class="mission-create-form__market-item" data-market-id={item.id}>
                     <div class="mission-create-form__market-copy">
@@ -1005,10 +964,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             </Feedback>
           )}
         </Show>
-        <Show when={!error() && marketError()}>
+        <Show when={!error() && marketActionError()}>
           <div class="mission-create-form__error" role="alert" tabIndex={-1}>
             <Icon name="error-reason" size="compact" />
-            <span>{marketError()}</span>
+            <span>{marketActionError()}</span>
           </div>
         </Show>
       </form>

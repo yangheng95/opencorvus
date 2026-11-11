@@ -810,6 +810,11 @@ The reference picker labels its combined Skill and Expert Squad search. Mission
 creation labels its narrower Expert Squad search by name or capability. Mission
 Skill reference types, mention groups, accessible names, and validation feedback
 share the same locale term.
+Composer references and Mission creation share the current-query resource for
+project Squad Market recommendations. Its localized failure preserves the
+original diagnostic and retries the same owned request. On acceptance, focus
+still owned by Retry returns to the search field. Installed matches and authored
+selections keep their own request and presentation.
 The existing request key includes API authority, work type and catalog scope.
 Search waits for the owned initial catalog, then publishes under that key and
 the original sequence; retries reload and search the current query with its

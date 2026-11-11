@@ -1,0 +1,51 @@
+{
+  "manifest": ".opencorvus/expert-squads/builtin/browser-research-acceptance/expert-squad.jsonc",
+  "checked": [
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "87f79ce4-5cae-4a76-a8bc-2c340a5353ff",
+      "result": {
+        "active": "dynamic"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "a73453a4-ec01-4272-ad70-b45b186b8544",
+      "result": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        }
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "7682ca79-3452-448a-8775-5ade486551e0",
+      "result": {
+        "ids": [
+          "deep-research",
+          "equity-research",
+          "sales-strategy"
+        ]
+      }
+    }
+  ],
+  "delivered": {
+    "time": "2026-11-11T18:32:06.586Z",
+    "stage": "delivered",
+    "route": "/expert-squad/market",
+    "project": "mission-create-market-search",
+    "query": "research",
+    "round": "mission-zh-market-after-install",
+    "status": 200,
+    "requestID": "4b229ded-015b-45ff-b11c-6084bce19ccc",
+    "bytes": 1432,
+    "ids": [
+      "deep-research",
+      "equity-research",
+      "sales-strategy"
+    ]
+  }
+}

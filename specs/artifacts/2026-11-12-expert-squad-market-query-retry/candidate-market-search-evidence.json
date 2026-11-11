@@ -1,0 +1,334 @@
+{
+  "asset": "main-Bf8VzRoF.js",
+  "checked": [
+    {
+      "route": "/expert-squad/market",
+      "status": 200,
+      "requestID": "08d29138-7361-4a32-8f94-2ac036a1ac2d",
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "route": "/expert-squad/search",
+      "status": 200,
+      "requestID": "f869ae84-2187-426b-a519-3a4cb0c5a9a3",
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T18:25:55.060Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-en-market-first",
+      "status": 200,
+      "requestID": "3d445eb3-3498-40c0-9b23-86efe1becc0d",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:26:02.170Z",
+      "stage": "truncated",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-en-market-first",
+      "status": 200,
+      "requestID": "3d445eb3-3498-40c0-9b23-86efe1becc0d",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ],
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:26:44.451Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-en-market-retry",
+      "status": 200,
+      "requestID": "950188d7-cb91-4a7c-be3e-070813025c45",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:26:44.493Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-en-market-retry",
+      "status": 200,
+      "requestID": "950188d7-cb91-4a7c-be3e-070813025c45",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:27:13.064Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-en-market-first",
+      "status": 200,
+      "requestID": "7d02e53d-8eba-4b5d-9cf6-bacae71144ee",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:27:17.968Z",
+      "stage": "truncated",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-en-market-first",
+      "status": 200,
+      "requestID": "7d02e53d-8eba-4b5d-9cf6-bacae71144ee",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ],
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:27:33.152Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-en-market-retry",
+      "status": 200,
+      "requestID": "eef7f24c-6139-4492-ac7b-574560ed29b8",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:27:33.210Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-en-market-retry",
+      "status": 200,
+      "requestID": "eef7f24c-6139-4492-ac7b-574560ed29b8",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:28:15.062Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-zh-market-first",
+      "status": 200,
+      "requestID": "6d4d826e-3e99-4296-8333-4c59feb7db67",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:28:21.241Z",
+      "stage": "truncated",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-zh-market-first",
+      "status": 200,
+      "requestID": "6d4d826e-3e99-4296-8333-4c59feb7db67",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ],
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:28:33.656Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-zh-market-retry",
+      "status": 200,
+      "requestID": "d52614d5-cf14-40e4-a25e-70d6e84fb3f7",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:28:33.693Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "composer-zh-market-retry",
+      "status": 200,
+      "requestID": "d52614d5-cf14-40e4-a25e-70d6e84fb3f7",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:29:01.202Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "audit",
+      "round": "composer-zh-market-retired-audit",
+      "status": 200,
+      "requestID": "c7787bc8-11b7-403f-ab80-574f1153a95d",
+      "bytes": 1589,
+      "ids": [
+        "internal-audit-control-assurance",
+        "academic-paper-review",
+        "biopharmaceutical-manufacturing-quality"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:29:05.883Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "translation",
+      "round": "composer-zh-market-retired-audit",
+      "status": 200,
+      "requestID": "c50951ab-0b37-423f-904b-bad7dd358f9a",
+      "bytes": 1533,
+      "ids": [
+        "localization-adaptation",
+        "patent-landscape-prior-art",
+        "hr-operations"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:29:11.877Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "audit",
+      "round": "composer-zh-market-retired-audit",
+      "status": 200,
+      "requestID": "c7787bc8-11b7-403f-ab80-574f1153a95d",
+      "bytes": 1589,
+      "ids": [
+        "internal-audit-control-assurance",
+        "academic-paper-review",
+        "biopharmaceutical-manufacturing-quality"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:29:33.413Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-zh-market-first",
+      "status": 200,
+      "requestID": "5c5e1c20-85ca-44d4-ab05-95dad8fab481",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:29:39.241Z",
+      "stage": "truncated",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-zh-market-first",
+      "status": 200,
+      "requestID": "5c5e1c20-85ca-44d4-ab05-95dad8fab481",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ],
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:29:50.417Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-zh-market-retry",
+      "status": 200,
+      "requestID": "264316f7-5d2b-4a0a-9a28-6af629a3b081",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:29:50.455Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "mission-create-market-search",
+      "query": "research",
+      "round": "mission-zh-market-retry",
+      "status": 200,
+      "requestID": "264316f7-5d2b-4a0a-9a28-6af629a3b081",
+      "bytes": 1423,
+      "ids": [
+        "browser-research-acceptance",
+        "deep-research",
+        "equity-research"
+      ]
+    }
+  ]
+}

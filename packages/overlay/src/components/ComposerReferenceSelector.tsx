@@ -1,6 +1,8 @@
-import { createEffect, createMemo, createSignal, For, on, onCleanup, Show, type JSX } from "solid-js"
+import { createEffect, createMemo, createSignal, For, on, Show, type JSX } from "solid-js"
 import type { VisibleComposerReferences } from "@opencorvus-ai/transport-protocol"
+import { captureApiAuthority } from "../services/api"
 import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/expert-squad"
+import { createExpertSquadMarketRecommendations } from "../services/expert-squad-market-recommendations"
 import type { ComposerExpertSquadPackage, ComposerExpertSquadSearch } from "../services/composer-expert-squad-catalog"
 import { setComposerMentionDirectiveSelected, type ComposerMentionKind } from "../services/composer-mention"
 import { fuzzySearch } from "../services/fuzzy-search"
@@ -16,6 +18,7 @@ import { SearchField } from "./ui/SearchField"
 import { Badge } from "./ui/Badge"
 import { Disclosure } from "./ui/Disclosure"
 import { ComposerReferenceFeedback } from "./ComposerReferenceFeedback"
+import { ExpertSquadMarketSearchFeedback } from "./ExpertSquadMarketSearchFeedback"
 
 export interface ComposerReferenceSkillOption {
   name: string
@@ -187,17 +190,12 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     )
   })
 
-  const [marketItems, setMarketItems] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
-  const [marketLoading, setMarketLoading] = createSignal(false)
-  const [marketError, setMarketError] = createSignal("")
+  const [marketActionError, setMarketActionError] = createSignal("")
   const [marketInstall, setMarketInstall] = createSignal<{ scopeKey: string; id: string }>()
   const activeMarketInstall = () => {
     const attempt = marketInstall()
     return attempt?.scopeKey === props.referenceCatalogScopeKey ? attempt : undefined
   }
-  const marketActionBusy = () => marketLoading() || !!activeMarketInstall()
-  let marketSequence = 0
-
   createEffect(
     on(
       [() => props.referenceCatalogScopeKey, () => props.referenceCatalogKey],
@@ -211,38 +209,15 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     ),
   )
 
-  createEffect(() => {
-    const opened = open()
+  const marketSource = createMemo(() => {
     const search = props.onMarketExpertSquadQuery
     const text = query().trim().slice(0, 500)
-    const requestKey = props.referenceCatalogKey
-    const sequence = ++marketSequence
-    const owns = () => sequence === marketSequence && requestKey === props.referenceCatalogKey
-    if (!opened || !search || !requestKey || text.length < 2) {
-      setMarketItems([])
-      setMarketLoading(false)
-      setMarketError("")
-      return
-    }
-    setMarketLoading(true)
-    setMarketError("")
-    const timer = window.setTimeout(() => {
-      void search(text)
-        .then((items) => {
-          if (!owns()) return
-          setMarketItems(items)
-        })
-        .catch((error) => {
-          if (!owns()) return
-          setMarketItems([])
-          setMarketError(error instanceof Error ? error.message : String(error))
-        })
-        .finally(() => {
-          if (owns()) setMarketLoading(false)
-        })
-    }, 280)
-    onCleanup(() => window.clearTimeout(timer))
+    if (!open() || props.readOnly || !search || !props.referenceCatalogKey || text.length < 2) return undefined
+    return { authority: captureApiAuthority(), load: () => search(text) }
   })
+  const market = createExpertSquadMarketRecommendations(marketSource, () => searchInputRef)
+  const marketActionBusy = () => market.loading() || !!activeMarketInstall()
+  createEffect(on(marketSource, () => setMarketActionError("")))
 
   async function installFromMarket(item: ExpertSquadMarketIndexItem, trigger: HTMLButtonElement): Promise<void> {
     const install = props.onInstallMarketExpertSquad
@@ -252,12 +227,12 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     const owns = () => activeMarketInstall() === attempt && open() && !props.readOnly
     const origin = document.activeElement === trigger ? trigger : undefined
     setMarketInstall(attempt)
-    setMarketError("")
+    setMarketActionError("")
     try {
       await install(item)
       if (owns() && origin && document.activeElement === origin && searchInputRef?.isConnected) searchInputRef.focus()
     } catch (error) {
-      if (owns()) setMarketError(error instanceof Error ? error.message : String(error))
+      if (owns()) setMarketActionError(error instanceof Error ? error.message : String(error))
     } finally {
       setMarketInstall((current) => current === attempt ? undefined : current)
     }
@@ -267,10 +242,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     setOpen(next)
     if (!next) {
       setQuery("")
-      marketSequence += 1
-      setMarketItems([])
-      setMarketLoading(false)
-      setMarketError("")
+      setMarketActionError("")
       props.onExpertSquadQuery?.("", props.launchReferences.expertSquadIDs)
       return
     }
@@ -573,26 +545,28 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                     when={
                       filteredSkillOptions().length === 0 &&
                       filteredSquadOptions().every((option) => option.outsideSearch) &&
-                      marketItems().length === 0 &&
-                      !marketLoading() &&
+                      market.items().length === 0 &&
+                      !market.loading() &&
+                      !market.failure() &&
                       !squadSearchLoading() &&
                       !props.catalogError
                     }
                   >
                     <div class="composer-reference-empty">{t("chat.references.no_matches")}</div>
                   </Show>
-                  <Show when={marketLoading() || marketError() || marketItems().length > 0}>
+                  <Show when={market.loading() || market.failure() || marketActionError() || market.items().length > 0}>
                     <div class="composer-reference-market" data-ui="composer-reference-market">
                       <div class="composer-reference-market-head">
                         <span>{t("chat.references.market_results")}</span>
-                        <Show when={marketLoading()}>
+                        <Show when={market.loading() && !market.failure()}>
                           <Icon name="loading" size="compact" />
                         </Show>
                       </div>
-                      <Show when={marketError()}>
-                        <div class="composer-reference-market-error">{marketError()}</div>
+                      <ExpertSquadMarketSearchFeedback failure={market.failure()} loading={market.loading()} onRetry={market.retry} />
+                      <Show when={marketActionError()}>
+                        <div class="composer-reference-market-error">{marketActionError()}</div>
                       </Show>
-                      <For each={marketItems()}>
+                      <For each={market.items()}>
                         {(item) => (
                           <div class="composer-reference-option" data-reference-kind="market">
                             <span class="composer-reference-option-selection" aria-hidden="true" />
