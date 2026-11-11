@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务草稿项目发现的真实证据](2026-11-12-scheduled-authoring-project-discovery/README.md)
 - [服务商保存后目录反馈的证据](2026-11-12-provider-save-catalog-feedback/README.md)
 - [配置回执发布顺序的真实证据](2026-11-12-config-receipt-publication-order/README.md)
 - [配置读取与保存顺序的真实回执](2026-11-11-config-read-after-commit/README.md)

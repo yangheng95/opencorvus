@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时任务草稿区分项目发现的等待、失败和空结果](records/2026-11/2026-11-12-scheduled-authoring-project-discovery.md)
 - [服务商保存后的目录等待与恢复反馈](records/2026-11/2026-11-12-provider-save-catalog-feedback.md)
 - [配置回执与当前完整配置的发布顺序](records/2026-11/2026-11-12-config-receipt-publication-order.md)
 - [已确认配置保存保护当前客户端投影](records/2026-11/2026-11-11-config-read-after-commit.md)

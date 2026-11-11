@@ -1,0 +1,104 @@
+{
+  "asset": "main-Czl9wPkE.js",
+  "checked": [
+    {
+      "route": "/global/projects/discover",
+      "status": 200,
+      "requestID": "d5d05338-89a0-4a39-8cd2-3fe89214a0fd",
+      "names": [
+        "scheduled-authoring-review",
+        "authoring-target"
+      ]
+    },
+    {
+      "route": "/global/automations",
+      "status": 200,
+      "requestID": "6c0f5fc3-68f9-49f7-a48f-d348e2a960d6",
+      "definitions": 0
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T16:48:53.168Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-read",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "afd173e0-3e16-4f51-916b-864c27de4df5",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:49:06.727Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "authoring-project-read",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "afd173e0-3e16-4f51-916b-864c27de4df5",
+      "projectCount": 2,
+      "bytes": 872,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:49:36.500Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-repeat",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "77cdf9a0-5a53-402d-9fe7-abd38be5390f",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:50:04.624Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "57f4b71f-d653-4469-9a6c-39b49c871000",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:50:04.911Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "authoring-project-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "57f4b71f-d653-4469-9a6c-39b49c871000",
+      "projectCount": 2,
+      "bytes": 872
+    },
+    {
+      "time": "2026-11-11T16:51:28.182Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-initial-stable",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "2f66b2fe-40b9-4081-a908-0f027a6e6d3f",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:51:35.071Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "authoring-project-initial-stable",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "2f66b2fe-40b9-4081-a908-0f027a6e6d3f",
+      "projectCount": 2,
+      "bytes": 872,
+      "deliveredBytes": 32
+    }
+  ]
+}
