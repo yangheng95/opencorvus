@@ -14,13 +14,13 @@ import {
   type AutomationWeekday,
 } from "../../services/automation-recurrence"
 import {
+  AutomationStatusUnconfirmedError,
+  changeAutomationStatus,
   createAutomation,
   deleteAutomation,
   hasPendingAutomationRun,
   listAutomationRuns,
   listAutomations,
-  pauseAutomation,
-  resumeAutomation,
   runAutomationNow,
   updateAutomation,
   type AutomationExecutionMode,
@@ -59,7 +59,13 @@ import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurfa
 import { ScheduledCalendarField } from "./ScheduledCalendarField"
 
 type SelectOption<T extends string> = { value: T; label: string }
-type AutomationError = { messageKey: string; details?: string; retry?: () => void; source?: "list-load"; tone?: "warning" }
+type AutomationError = {
+  messageKey: string
+  details?: string
+  retry?: () => void
+  source?: "list-load" | "status-check"
+  tone?: "warning"
+}
 type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean; retained?: boolean }
 type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
@@ -370,7 +376,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const problem = error()
     return automations().length === 0 && problem?.source === "list-load" ? problem : null
   })
-  const listRetryPending = () => error()?.source === "list-load" && loading()
+  const feedbackRetryPending = () => error()?.source !== undefined && loading()
+  const statusUnconfirmed = () => error()?.source === "status-check"
+  const checkingStatus = () => statusUnconfirmed() && loading()
   function clearFilters(): void {
     if (busyAction()) return
     setSearch("")
@@ -507,13 +515,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setError(null)
   }
 
-  async function load(preferredID?: string, options: { background?: boolean } = {}): Promise<void> {
+  async function load(preferredID?: string, options: { background?: boolean; statusCheck?: AutomationError } = {}): Promise<void> {
+    const statusCheck = options.statusCheck
     listRequest?.abort()
     const request = new AbortController()
     listRequest = request
     if (!options.background) {
       setLoading(true)
-      if (error()?.source !== "list-load") setError(null)
+      if (!statusCheck && error()?.source !== "list-load") setError(null)
     }
     try {
       const items = await listAutomations(request.signal)
@@ -521,22 +530,30 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       if (options.background) {
         setAutomations(items)
       } else {
-        const hadRetryFocus = Boolean(initialLoadError()) && document.activeElement === errorRetryButton
+        const hadRetryFocus = Boolean(statusCheck || initialLoadError()) && document.activeElement === errorRetryButton
         const nextID = preferredID && items.some((item) => item.id === preferredID) ? preferredID : ""
         batch(() => {
           setAutomations(items)
           setSelectedID(nextID)
-          if (error()?.source === "list-load") setError(null)
+          if (statusCheck || error()?.source === "list-load") setError(null)
+          setLoading(false)
         })
-        if (hadRetryFocus) focusAfterRender(() => document.activeElement === document.body ? listSearchInput : undefined)
+        if (hadRetryFocus) {
+          focusAfterRender(() => document.activeElement === document.body
+            ? (nextID ? detailBackButton : listSearchInput) : undefined)
+        }
       }
     } catch (cause) {
       if (!request.signal.aborted) {
-        setError({
-          ...automationFailure(cause, "automations.error.list_load_failed"),
-          retry: () => void load(preferredID),
-          source: "list-load",
-        })
+        if (statusCheck) {
+          setError({ ...statusCheck, details: [statusCheck.details, formatErrorDetails(cause)].filter(Boolean).join("\n\n") })
+        } else if (!options.background || error()?.source !== "status-check") {
+          setError({
+            ...automationFailure(cause, "automations.error.list_load_failed"),
+            retry: () => void load(preferredID),
+            source: "list-load",
+          })
+        }
       }
     } finally {
       if (!request.signal.aborted && !options.background) setLoading(false)
@@ -785,27 +802,65 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
   }
 
-  async function performAction(id: string, operation: "run" | "status", action: () => Promise<unknown>): Promise<void> {
+  async function performRun(id: string): Promise<void> {
     if (busyAction()) return
     const authority = captureApiAuthority()
-    const owner: AutomationMutationOwner = { kind: "action", id, operation }
+    const owner: AutomationMutationOwner = { kind: "action", id, operation: "run" }
     setMutationOwner(owner)
     setError(null)
     try {
-      await action()
+      await runAutomationNow(id)
       if (!isApiAuthorityCurrent(authority)) return
       await load(id)
       if (isApiAuthorityCurrent(authority)) await loadRuns(id)
     } catch (cause) {
       if (!isApiAuthorityCurrent(authority)) return
-      if (operation === "run" && hasPendingAutomationRun(id)) {
+      if (hasPendingAutomationRun(id)) {
         setError({ ...automationFailure(cause, automationErrorName(cause) === "AutomationManualRunPendingError"
           ? "automations.error.run_pending" : "automations.error.run_unconfirmed"), tone: "warning" })
       } else {
-        setError(automationFailure(cause, operation === "run" ? "automations.error.run_failed" : "automations.error.status_failed"))
+        setError(automationFailure(cause, "automations.error.run_failed"))
       }
     } finally {
-      if (operation === "run") setManualRunRevision((value) => value + 1)
+      setManualRunRevision((value) => value + 1)
+      if (mutationOwner() === owner) setMutationOwner(null)
+    }
+  }
+
+  async function performStatusChange(current: AutomationView): Promise<void> {
+    if (busyAction() || statusUnconfirmed()) return
+    const authority = captureApiAuthority()
+    const owner: AutomationMutationOwner = { kind: "action", id: current.id, operation: "status" }
+    const owns = () => !disposed && mutationOwner() === owner && selectedID() === current.id && isApiAuthorityCurrent(authority)
+    setMutationOwner(owner)
+    setError(null)
+    try {
+      const status = current.status === "active" ? "paused" : "active"
+      const confirmed = await changeAutomationStatus(current.id, current.revisionId, status, authority)
+      if (!owns()) return
+      invalidateListNavigation()
+      setAutomations((items) => items.map((item) =>
+        item.id === current.id && item.revisionId === current.revisionId ? confirmed : item,
+      ))
+    } catch (cause) {
+      if (!owns()) return
+      if (!(cause instanceof AutomationStatusUnconfirmedError)) {
+        setError(automationFailure(cause, "automations.error.status_failed"))
+        return
+      }
+      const problem: AutomationError = {
+        ...automationFailure(cause, "automations.error.status_unconfirmed"),
+        source: "status-check",
+        tone: "warning",
+        retry: () => {
+          if (!disposed && selectedID() === current.id && isApiAuthorityCurrent(authority)) {
+            void load(current.id, { statusCheck: problem })
+          }
+        },
+      }
+      setError(problem)
+      focusAfterRender(() => document.activeElement === document.body ? errorRetryButton : undefined)
+    } finally {
       if (mutationOwner() === owner) setMutationOwner(null)
     }
   }
@@ -1023,15 +1078,16 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         size={initialLoadError() ? "sm" : "mini"}
                         tone="neutral"
                         ref={(element) => (errorRetryButton = element)}
-                        disabled={problem().source !== "list-load" && Boolean(busyAction())}
-                        aria-disabled={problem().source === "list-load" && (listRetryPending() || Boolean(busyAction())) || undefined}
-                        aria-busy={listRetryPending() || undefined}
+                        disabled={!problem().source && Boolean(busyAction())}
+                        aria-disabled={Boolean(problem().source) && (feedbackRetryPending() || Boolean(busyAction())) || undefined}
+                        aria-busy={feedbackRetryPending() || undefined}
                         onClick={() => {
-                          if (!busyAction() && !listRetryPending()) retry()()
+                          if (!busyAction() && !feedbackRetryPending()) retry()()
                         }}
                       >
                         <Icon name="refresh" />
-                        {t(listRetryPending() ? "common.retrying" : "common.retry")}
+                        {t(feedbackRetryPending() ? "common.retrying"
+                          : problem().source === "status-check" ? "automations.check_status" : "common.retry")}
                       </Button>
                     )}
                   </Show>
@@ -1169,7 +1225,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
           </aside>
 
           <section class="automations-detail">
-            <Show when={!loading()} fallback={<SettingsEmpty>{t("common.loading")}</SettingsEmpty>}>
+            <Show when={!loading() || checkingStatus()} fallback={<SettingsEmpty>{t("common.loading")}</SettingsEmpty>}>
               <Show
                 when={showForm()}
                 fallback={
@@ -1202,7 +1258,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         variant="ghost"
                         size="sm"
                         tone="neutral"
-                        disabled={Boolean(busyAction())}
+                        disabled={Boolean(busyAction()) || checkingStatus()}
                         onClick={returnToList}
                       >
                         <Icon name="nav-back" />
@@ -1212,8 +1268,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         <div>
                           <div class="automation-detail-heading">
                             <h3>{automation().name}</h3>
-                            <Badge tone={statusTone(automation().status)}>
-                              {t(`automations.status.${automation().status}`)}
+                            <Badge tone={statusUnconfirmed() ? "neutral" : statusTone(automation().status)}>
+                              {t(statusUnconfirmed() ? "automations.status.unconfirmed" : `automations.status.${automation().status}`)}
                             </Badge>
                           </div>
                           <p>{recurrenceSummary(automation().recurrence)}</p>
@@ -1225,9 +1281,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-run-now"
-                            disabled={Boolean(busyAction())}
+                            disabled={Boolean(busyAction()) || checkingStatus()}
                             title={hasUnconfirmedRun(automation().id) ? t("automations.retry_run_hint") : undefined}
-                            onClick={() => void performAction(automation().id, "run", () => runAutomationNow(automation().id))}
+                            onClick={() => void performRun(automation().id)}
                           >
                             <Icon name={runningAutomationID() === automation().id ? "loading" : "run"} />
                             {t(runningAutomationID() === automation().id ? "automations.running" : hasUnconfirmedRun(automation().id)
@@ -1239,7 +1295,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-edit"
-                            disabled={Boolean(busyAction())}
+                            disabled={Boolean(busyAction()) || checkingStatus()}
                             onClick={beginEdit}
                           >
                             <Icon name="edit" />
@@ -1251,17 +1307,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-status"
-                            disabled={Boolean(busyAction())}
-                            onClick={() => {
-                              const current = automation()
-                              void performAction(
-                                current.id,
-                                "status",
-                                current.status === "active"
-                                  ? () => pauseAutomation(current.id, current.revisionId)
-                                  : () => resumeAutomation(current.id, current.revisionId),
-                              )
-                            }}
+                            disabled={Boolean(busyAction()) || statusUnconfirmed()}
+                            onClick={() => void performStatusChange(automation())}
                           >
                             {automation().status === "active" ? t("automations.pause") : t("automations.resume")}
                           </Button>
@@ -1271,7 +1318,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             tone="danger"
                             label={t("automations.delete")}
                             armedDescription={t("automations.delete_confirm")}
-                            disabled={Boolean(busyAction())}
+                            disabled={Boolean(busyAction()) || checkingStatus()}
                             onConfirm={() => void removeSelected()}
                             confirmChildren={t("automations.delete_confirm")}
                           >
@@ -1294,7 +1341,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </Show>
                         <div>
                           <span>{t("automations.next")}</span>
-                          <strong>{nextRunValue(automation())}</strong>
+                          <strong>{statusUnconfirmed() ? t("automations.status.unconfirmed") : nextRunValue(automation())}</strong>
                         </div>
                         <div>
                           <span>{t("automations.last")}</span>

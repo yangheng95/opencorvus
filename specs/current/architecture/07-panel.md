@@ -2004,6 +2004,13 @@ status changes and deletion submit that exact version to the conditional public
 writer. Revision conflicts retain authored input and explain an explicit fresh
 read; the panel does not retry against a newer head. Automation public shapes
 derive from the canonical generated SDK operation types.
+Pause and Resume validate the definition ID, new revision and requested status
+in the write receipt. An uncertain receipt reads the same definition from the
+current list on the same connection, without replaying the write. The result
+updates the observed revision in the shared list. If the state remains
+uncertain, Check status reads the current definition in place and preserves the
+original diagnostics and detail while that read is pending. The status and
+next-run fields identify an unconfirmed result until the read completes.
 Scheduled failures retain one presentation record with a message key and the
 original diagnostic details. Summaries use the current interface language;
 Feedback's existing Details disclosure preserves the complete original error.

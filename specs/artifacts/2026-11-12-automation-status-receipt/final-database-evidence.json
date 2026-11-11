@@ -1,0 +1,74 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 6,
+    "automation_fire": 3,
+    "automation_fire_frontier": 1,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_usage_event": 0,
+    "permission_ledger": 0
+  },
+  "revisionSteps": {
+    "english": [
+      [
+        "atm_g0Vahvrzr00tz74nrb6d",
+        1,
+        "active",
+        "Retain the original English schedule instruction.",
+        "prj_h9Bfc0cxolU3opZBOEcZ"
+      ],
+      [
+        "atm_g0Vahvvu100ueZp9ElS1",
+        2,
+        "paused",
+        "Retain the original English schedule instruction.",
+        "prj_h9Bfc0cxolU3opZBOEcZ"
+      ],
+      [
+        "atm_g0VahvxZQ00RayxrYslx",
+        3,
+        "active",
+        "Retain the original English schedule instruction.",
+        "prj_h9Bfc0cxolU3opZBOEcZ"
+      ]
+    ],
+    "chinese": [
+      [
+        "atm_g0Vahvs4X00YfQ2rW3Rd",
+        1,
+        "active",
+        "保留原始定时任务指令。",
+        "prj_hIC8asf5ua97BTM0CTxT"
+      ],
+      [
+        "atm_g0Vahw0ST00Mj31DtwIS",
+        2,
+        "paused",
+        "保留原始定时任务指令。",
+        "prj_hIC8asf5ua97BTM0CTxT"
+      ],
+      [
+        "atm_g0Vahw60900SKSYxP3vE",
+        3,
+        "paused",
+        "保留原始定时任务指令。",
+        "prj_hIC8asf5ua97BTM0CTxT"
+      ]
+    ]
+  },
+  "frontier": [
+    [
+      "atm_g0Vahvrzr00tz74nrb6d",
+      "atm_g0VahvxZQ00RayxrYslx",
+      "cal_automation_4677a10ea388025c1ef331e7481aa051",
+      4070908800000,
+      4070908800000,
+      "scheduled"
+    ]
+  ]
+}

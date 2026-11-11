@@ -8,17 +8,18 @@ import {
   type AutomationRecurrenceInput,
 } from "../src/services/automation-recurrence"
 import {
+  AutomationStatusUnconfirmedError,
+  changeAutomationStatus,
   createAutomation,
   deleteAutomation,
   listAutomationRuns,
   listAutomations,
-  pauseAutomation,
   resolveAutomationProjectID,
-  resumeAutomation,
   runAutomationNow,
   type AutomationRunView,
+  type AutomationView,
 } from "../src/services/automations"
-import { configure } from "../src/services/api"
+import { ApiError, configure } from "../src/services/api"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import { HOST_CAPABILITIES } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
@@ -27,7 +28,7 @@ const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window")
 
 afterEach(() => {
   __setHostTransportForTest(undefined)
-  configure({ directory: "" })
+  configure({ directory: "", serverUrl: "http://127.0.0.1:7878" })
   if (originalWindow) Object.defineProperty(globalThis, "window", originalWindow)
   else Reflect.deleteProperty(globalThis, "window")
 })
@@ -247,6 +248,12 @@ test("automation service sends the full lifecycle through global target-aware HT
     capabilities: HOST_CAPABILITIES.tauri,
     async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
       requests.push(request)
+      if (request.method === "PATCH" && request.path === "global/automations/atm_1") {
+        if (request.body?.kind !== "json") throw new Error("Expected a scheduled status request body")
+        const { status } = request.body.value as { status: string }
+        const revisionId = status === "paused" ? "atm_revision_paused" : "atm_revision_resumed"
+        return { status: 200, ok: true, headers: {}, body: { id: "atm_1", status, revisionId } as T }
+      }
       const body =
         request.path === "project/current"
           ? { id: "prj_1" }
@@ -278,8 +285,10 @@ test("automation service sends the full lifecycle through global target-aware HT
   await listAutomations()
   expect(await resolveAutomationProjectID("/workspace/atlas")).toBe("prj_1")
   await createAutomation(input)
-  await pauseAutomation("atm_1", "atm_revision_opened")
-  await resumeAutomation("atm_1", "atm_revision_paused")
+  expect(await changeAutomationStatus("atm_1", "atm_revision_opened", "paused"))
+    .toMatchObject({ id: "atm_1", status: "paused", revisionId: "atm_revision_paused" })
+  expect(await changeAutomationStatus("atm_1", "atm_revision_paused", "active"))
+    .toMatchObject({ id: "atm_1", status: "active", revisionId: "atm_revision_resumed" })
   expect(await runAutomationNow("atm_1")).toEqual([run])
   expect(await listAutomationRuns("atm_1")).toEqual([run])
   await deleteAutomation("atm_1", "atm_revision_resumed")
@@ -311,4 +320,91 @@ test("automation service sends the full lifecycle through global target-aware HT
     timeoutMilliseconds: null,
   })
   expect(requests[7]?.query).toEqual({ expectedRevisionId: "atm_revision_resumed" })
+})
+
+const pausedDefinition: AutomationView = {
+  id: "atm_original",
+  revisionId: "atm_paused",
+  name: "Original scheduled task",
+  target: { scope: "project", projectIds: ["prj_original"] },
+  recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+  executionMode: "local",
+  model: null,
+  reasoningEffort: null,
+  prompt: "Retain the original request.",
+  status: "paused",
+  lastRun: null,
+  nextRun: 4070908800000,
+  failureCount: 0,
+  lastError: null,
+}
+
+test.each(["paused", "active"] as const)("an uncertain scheduled status=%s returns the exact current definition", async (status) => {
+  const operations: Array<{ method: string; path: string; body?: unknown }> = []
+  const confirmed = { ...pausedDefinition, status }
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    async fetch(request) {
+      const { method } = request
+      const { pathname: path } = new URL(request.url)
+      operations.push({ method, path, ...(method === "PATCH" ? { body: await request.json() } : {}) })
+      if (method === "PATCH") return Response.json({ message: "The write receipt was interrupted" }, { status: 503 })
+      return Response.json([
+        { ...confirmed, id: "atm_other", target: { scope: "project", projectIds: ["prj_other"] } },
+        confirmed,
+      ])
+    },
+  })
+  configure({ serverUrl: server.url.origin })
+  try {
+    expect(await changeAutomationStatus(confirmed.id, "atm_opened", status)).toEqual(confirmed)
+    expect(operations).toEqual([
+      { method: "PATCH", path: "/global/automations/atm_original", body: { expectedRevisionId: "atm_opened", status } },
+      { method: "GET", path: "/global/automations" },
+    ])
+  } finally {
+    await server.stop(true)
+  }
+})
+
+test("an unreadable scheduled status check preserves both observed diagnostics", async () => {
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    fetch(request) {
+      return Response.json({ message: "Request interrupted" }, {
+        status: 503,
+        headers: { "x-opencorvus-request-id": request.method === "PATCH" ? "status-write" : "status-read" },
+      })
+    },
+  })
+  configure({ serverUrl: server.url.origin })
+  try {
+    const error = await changeAutomationStatus(pausedDefinition.id, "atm_opened", "paused").catch((cause) => cause)
+    expect(error).toBeInstanceOf(AutomationStatusUnconfirmedError)
+    expect(error.errors).toEqual([
+      expect.objectContaining({ status: 503, method: "PATCH", requestID: "status-write" }),
+      expect.objectContaining({ status: 503, method: "GET", requestID: "status-read" }),
+    ])
+  } finally {
+    await server.stop(true)
+  }
+})
+
+test("a definitive scheduled revision conflict preserves the original error", async () => {
+  const conflict = { name: "AutomationRevisionConflictError", data: { expectedRevisionId: "atm_opened" } }
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    fetch: () => Response.json(conflict, { status: 409, headers: { "x-opencorvus-request-id": "status-conflict" } }),
+  })
+  configure({ serverUrl: server.url.origin })
+  try {
+    const error = await changeAutomationStatus(pausedDefinition.id, "atm_opened", "paused").catch((cause) => cause)
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error).toMatchObject({ status: 409, requestID: "status-conflict", body: conflict })
+  } finally {
+    await server.stop(true)
+  }
 })

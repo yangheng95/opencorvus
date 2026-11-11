@@ -1,0 +1,421 @@
+{
+  "asset": "main-fMjKjhbC.js",
+  "occurrence": "iteration-b259-final",
+  "upgrades": [
+    {
+      "time": "2026-11-11T22:47:46.366Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    }
+  ],
+  "enPause": {
+    "time": "2026-11-11T22:47:54.892Z",
+    "stage": "truncated",
+    "route": "/global/automations/atm_g0Vahvrzr00tz74nrb6d",
+    "method": "PATCH",
+    "round": "final-en-pause",
+    "directory": null,
+    "search": null,
+    "requestID": "49ba96ab-d651-47e4-ac15-2f883e5a4f2c",
+    "status": 200,
+    "bytes": 457,
+    "target": {
+      "id": "atm_g0Vahvrzr00tz74nrb6d",
+      "revisionId": "atm_g0Vahvvu100ueZp9ElS1",
+      "name": "Pause status confirmation",
+      "status": "paused",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_h9Bfc0cxolU3opZBOEcZ"
+        ]
+      },
+      "nextRun": 4070908800000
+    },
+    "deliveredBytes": 12
+  },
+  "enCheck": {
+    "time": "2026-11-11T22:47:54.974Z",
+    "stage": "delivered",
+    "route": "/global/automations",
+    "method": "GET",
+    "round": "final-en-pause-verify",
+    "directory": null,
+    "search": null,
+    "requestID": "20122d39-ef24-4ab0-81df-760c0155d103",
+    "status": 200,
+    "bytes": 900,
+    "items": [
+      {
+        "id": "atm_g0Vahvrzr00tz74nrb6d",
+        "revisionId": "atm_g0Vahvvu100ueZp9ElS1",
+        "name": "Pause status confirmation",
+        "status": "paused",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Bfc0cxolU3opZBOEcZ"
+          ]
+        },
+        "nextRun": 4070908800000
+      },
+      {
+        "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+        "revisionId": "atm_g0Vahvs4X00YfQ2rW3Rd",
+        "name": "定时任务暂停确认",
+        "status": "active",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hIC8asf5ua97BTM0CTxT"
+          ]
+        },
+        "nextRun": 4070908800000
+      }
+    ]
+  },
+  "enResume": {
+    "time": "2026-11-11T22:48:01.197Z",
+    "stage": "delivered",
+    "route": "/global/automations/atm_g0Vahvrzr00tz74nrb6d",
+    "method": "PATCH",
+    "round": "final-en-resume",
+    "directory": null,
+    "search": null,
+    "requestID": "361519fd-5521-40b6-816a-6e10733c3e04",
+    "status": 200,
+    "bytes": 457,
+    "target": {
+      "id": "atm_g0Vahvrzr00tz74nrb6d",
+      "revisionId": "atm_g0VahvxZQ00RayxrYslx",
+      "name": "Pause status confirmation",
+      "status": "active",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_h9Bfc0cxolU3opZBOEcZ"
+        ]
+      },
+      "nextRun": 4070908800000
+    }
+  },
+  "zhPause": {
+    "time": "2026-11-11T22:48:12.406Z",
+    "stage": "truncated",
+    "route": "/global/automations/atm_g0Vahvs4X00YfQ2rW3Rd",
+    "method": "PATCH",
+    "round": "final-zh-pause",
+    "directory": null,
+    "search": null,
+    "requestID": "b8806f92-48cc-47ff-b1f2-10d0149302aa",
+    "status": 200,
+    "bytes": 440,
+    "target": {
+      "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+      "revisionId": "atm_g0Vahw0ST00Mj31DtwIS",
+      "name": "定时任务暂停确认",
+      "status": "paused",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hIC8asf5ua97BTM0CTxT"
+        ]
+      },
+      "nextRun": 4070908800000
+    },
+    "deliveredBytes": 12
+  },
+  "zhCheck": {
+    "time": "2026-11-11T22:48:12.488Z",
+    "stage": "truncated",
+    "route": "/global/automations",
+    "method": "GET",
+    "round": "final-zh-pause-verify",
+    "directory": null,
+    "search": null,
+    "requestID": "5e50fd60-be80-4653-a6dc-ed1f85e8f59f",
+    "status": 200,
+    "bytes": 900,
+    "items": [
+      {
+        "id": "atm_g0Vahvrzr00tz74nrb6d",
+        "revisionId": "atm_g0VahvxZQ00RayxrYslx",
+        "name": "Pause status confirmation",
+        "status": "active",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Bfc0cxolU3opZBOEcZ"
+          ]
+        },
+        "nextRun": 4070908800000
+      },
+      {
+        "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+        "revisionId": "atm_g0Vahw0ST00Mj31DtwIS",
+        "name": "定时任务暂停确认",
+        "status": "paused",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hIC8asf5ua97BTM0CTxT"
+          ]
+        },
+        "nextRun": 4070908800000
+      }
+    ],
+    "deliveredBytes": 12
+  },
+  "manualFail": {
+    "time": "2026-11-11T22:48:19.677Z",
+    "stage": "truncated",
+    "route": "/global/automations",
+    "method": "GET",
+    "round": "final-zh-manual-fail",
+    "directory": null,
+    "search": null,
+    "requestID": "518d50f0-e306-476b-8587-892d53e6b06d",
+    "status": 200,
+    "bytes": 900,
+    "items": [
+      {
+        "id": "atm_g0Vahvrzr00tz74nrb6d",
+        "revisionId": "atm_g0VahvxZQ00RayxrYslx",
+        "name": "Pause status confirmation",
+        "status": "active",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Bfc0cxolU3opZBOEcZ"
+          ]
+        },
+        "nextRun": 4070908800000
+      },
+      {
+        "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+        "revisionId": "atm_g0Vahw0ST00Mj31DtwIS",
+        "name": "定时任务暂停确认",
+        "status": "paused",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hIC8asf5ua97BTM0CTxT"
+          ]
+        },
+        "nextRun": 4070908800000
+      }
+    ],
+    "deliveredBytes": 12
+  },
+  "manualSuccess": {
+    "time": "2026-11-11T22:48:27.617Z",
+    "stage": "delivered",
+    "route": "/global/automations",
+    "method": "GET",
+    "round": "final-zh-check-pending",
+    "directory": null,
+    "search": null,
+    "requestID": "b20e75b3-c100-492a-a144-dda70ec42f80",
+    "status": 200,
+    "bytes": 900,
+    "items": [
+      {
+        "id": "atm_g0Vahvrzr00tz74nrb6d",
+        "revisionId": "atm_g0VahvxZQ00RayxrYslx",
+        "name": "Pause status confirmation",
+        "status": "active",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Bfc0cxolU3opZBOEcZ"
+          ]
+        },
+        "nextRun": 4070908800000
+      },
+      {
+        "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+        "revisionId": "atm_g0Vahw0ST00Mj31DtwIS",
+        "name": "定时任务暂停确认",
+        "status": "paused",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hIC8asf5ua97BTM0CTxT"
+          ]
+        },
+        "nextRun": 4070908800000
+      }
+    ]
+  },
+  "concurrent": {
+    "before": {
+      "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+      "revisionId": "atm_g0Vahw0ST00Mj31DtwIS",
+      "name": "定时任务暂停确认",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hIC8asf5ua97BTM0CTxT"
+        ]
+      },
+      "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "保留原始定时任务指令。",
+      "status": "paused",
+      "lastRun": null,
+      "nextRun": 4070908800000,
+      "failureCount": 0,
+      "lastError": null
+    },
+    "after": {
+      "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+      "revisionId": "atm_g0Vahw60900SKSYxP3vE",
+      "name": "另一连接已改名的定时任务",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hIC8asf5ua97BTM0CTxT"
+        ]
+      },
+      "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "保留原始定时任务指令。",
+      "status": "paused",
+      "lastRun": null,
+      "nextRun": 4070908800000,
+      "failureCount": 0,
+      "lastError": null
+    },
+    "requestID": "f3ac6b9e-e8f5-4a7b-8b40-54a68dc38035"
+  },
+  "conflict": {
+    "time": "2026-11-11T22:48:40.028Z",
+    "stage": "delivered",
+    "route": "/global/automations/atm_g0Vahvs4X00YfQ2rW3Rd",
+    "method": "PATCH",
+    "round": "final-zh-conflict",
+    "directory": null,
+    "search": null,
+    "requestID": "cb2eb853-7507-4c0c-ac3b-364425d1f4cf",
+    "status": 409,
+    "bytes": 380
+  },
+  "list": {
+    "requestID": "9f1b4f40-fc48-4925-9a5e-e9b88c1f3f14",
+    "body": [
+      {
+        "id": "atm_g0Vahvrzr00tz74nrb6d",
+        "revisionId": "atm_g0VahvxZQ00RayxrYslx",
+        "name": "Pause status confirmation",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Bfc0cxolU3opZBOEcZ"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain the original English schedule instruction.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+        "revisionId": "atm_g0Vahw60900SKSYxP3vE",
+        "name": "另一连接已改名的定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hIC8asf5ua97BTM0CTxT"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "history": {
+    "english": {
+      "runs": {
+        "requestID": "859df195-3556-4553-9d0d-98efe80747e3",
+        "body": []
+      },
+      "fires": {
+        "requestID": "c1ff94f8-3e58-4e31-ad87-432c467d0dd0",
+        "body": [
+          {
+            "fireId": "cal_automation_4677a10ea388025c1ef331e7481aa051",
+            "automationId": "atm_g0Vahvrzr00tz74nrb6d",
+            "automationRevisionId": "atm_g0VahvxZQ00RayxrYslx",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794437281190,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_b530c0b7a286d64d0ea250fb8c2724d6",
+            "automationId": "atm_g0Vahvrzr00tz74nrb6d",
+            "automationRevisionId": "atm_g0Vahvrzr00tz74nrb6d",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794437259767,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    "chinese": {
+      "runs": {
+        "requestID": "8b2268ba-ce2a-4421-85b2-899519a28fda",
+        "body": []
+      },
+      "fires": {
+        "requestID": "09e799b1-48cb-402d-a8a5-016294da8ab4",
+        "body": [
+          {
+            "fireId": "cal_automation_9c23b6184c8aa6c861c938dcdc496c2f",
+            "automationId": "atm_g0Vahvs4X00YfQ2rW3Rd",
+            "automationRevisionId": "atm_g0Vahvs4X00YfQ2rW3Rd",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794437260057,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    }
+  }
+}

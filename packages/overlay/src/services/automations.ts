@@ -1,4 +1,5 @@
-import { ApiError, apiJson, captureApiAuthority, getServerUrl, serverSettledRequest } from "./api"
+import { ApiError, apiJson, captureApiAuthority, getServerUrl, serverSettledRequest, type ApiAuthority } from "./api"
+import { settleMutationReceipt } from "./mutation-receipt"
 import { directoryScopedPath } from "./task-path"
 import { randomUUID } from "../utils/random-id"
 import type {
@@ -28,8 +29,8 @@ function automationPath(suffix = ""): string {
   return `/global/automations${suffix}`
 }
 
-export function listAutomations(signal?: AbortSignal): Promise<AutomationView[]> {
-  return apiJson<AutomationView[]>(automationPath(), { signal })
+export function listAutomations(signal?: AbortSignal, authority?: ApiAuthority): Promise<AutomationView[]> {
+  return apiJson<AutomationView[]>(automationPath(), { signal, authority })
 }
 
 export function createAutomation(
@@ -42,20 +43,44 @@ export function createAutomation(
   })
 }
 
-export function updateAutomation(id: string, input: AutomationUpdate): Promise<AutomationView> {
+export function updateAutomation(id: string, input: AutomationUpdate, authority?: ApiAuthority): Promise<AutomationView> {
   return apiJson(automationPath(`/${encodeURIComponent(id)}`), {
+    authority,
     method: "PATCH",
     headers: jsonHeaders,
     body: JSON.stringify(input),
   })
 }
 
-export function pauseAutomation(id: string, expectedRevisionId: string): Promise<AutomationView> {
-  return updateAutomation(id, { status: "paused", expectedRevisionId })
+export class AutomationStatusUnconfirmedError extends AggregateError {
+  override readonly name = "AutomationStatusUnconfirmedError"
+
+  constructor(receiptError: unknown, verificationError: unknown) {
+    super([receiptError, verificationError], "The requested scheduled task status could not be confirmed.")
+  }
 }
 
-export function resumeAutomation(id: string, expectedRevisionId: string): Promise<AutomationView> {
-  return updateAutomation(id, { status: "active", expectedRevisionId })
+export function changeAutomationStatus(
+  id: string,
+  expectedRevisionId: string,
+  status: AutomationStatus,
+  authority = captureApiAuthority(),
+): Promise<AutomationView> {
+  const confirm = (row: AutomationView | undefined) => {
+    if (
+      row?.id !== id || row.status !== status ||
+      typeof row.revisionId !== "string" || !row.revisionId.trim() || row.revisionId === expectedRevisionId
+    ) {
+      throw new Error("The current scheduled task does not confirm the requested status and revision.")
+    }
+    return row
+  }
+  return settleMutationReceipt({
+    authority,
+    write: async () => confirm(await updateAutomation(id, { status, expectedRevisionId }, authority)),
+    verify: async () => confirm((await listAutomations(undefined, authority)).find((row) => row.id === id)),
+    UnconfirmedError: AutomationStatusUnconfirmedError,
+  })
 }
 
 function manualRunStorageKey(id: string): string {
