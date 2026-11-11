@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [草稿文本附件阅读高度的桌面证据](2026-11-12-draft-attachment-reading-height/README.md)
 - [文本附件预览和原件读取的桌面证据](2026-11-12-text-attachment-shared-read/README.md)
 - [新建多步任务安装反馈位置的桌面证据](2026-11-12-mission-market-install-feedback-placement/README.md)
 - [市场安装回执中断和项目安装核对的证据](2026-11-12-expert-squad-market-install-receipt/README.md)

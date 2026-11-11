@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [草稿文本附件按内容调整阅读高度](2026-11-12-draft-attachment-reading-height.md)
 - [文本附件预览和原件下载共用一次读取](2026-11-12-text-attachment-shared-read.md)
 - [新建多步任务在专家团搜索旁显示安装结果](2026-11-12-mission-market-install-feedback-placement.md)
 - [市场安装回执中断后核对项目安装](2026-11-12-expert-squad-market-install-receipt.md)

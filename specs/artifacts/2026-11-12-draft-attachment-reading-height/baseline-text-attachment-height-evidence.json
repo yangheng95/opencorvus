@@ -1,0 +1,45 @@
+{
+  "asset": "main-DoRaetm1.js",
+  "originals": [
+    {
+      "filename": "long-review.txt",
+      "size": 7466,
+      "uploadRequestID": "eec80db7-fc34-4d2c-8e34-324c5abe5f5e",
+      "url": "/attachment/prj_hILH66VI7IEP9z8kOFE9/04a8b71f9964da116ed40d6dec5ccc361b72612425f205c826bbef342a66c4ec.txt",
+      "originalRequestID": "2ea21997-b2dd-4d60-a678-d2a83d629e7a",
+      "browserDownloadChecked": true
+    },
+    {
+      "filename": "short-review.txt",
+      "size": 77,
+      "uploadRequestID": "2e985733-80bf-4efd-b9fc-eb97655bc3bd",
+      "url": "/attachment/prj_hILH66VI7IEP9z8kOFE9/5d92184b58fa7a6ac398909a6f66668206eb9dac6754bc9f12c66cbd8c848445.txt",
+      "originalRequestID": "a46e639a-80ec-4d8e-adc9-ee470e238d13",
+      "browserDownloadChecked": false
+    }
+  ],
+  "reads": [
+    {
+      "time": "2026-11-11T19:45:38.243Z",
+      "stage": "delivered",
+      "route": "/attachment/prj_hILH66VI7IEP9z8kOFE9/5d92184b58fa7a6ac398909a6f66668206eb9dac6754bc9f12c66cbd8c848445.txt",
+      "method": "GET",
+      "round": "initial",
+      "filename": null,
+      "requestID": "82a35641-1eb5-4ed0-b440-6171e058e106",
+      "status": 200,
+      "bytes": 77
+    },
+    {
+      "time": "2026-11-11T19:45:46.042Z",
+      "stage": "delivered",
+      "route": "/attachment/prj_hILH66VI7IEP9z8kOFE9/04a8b71f9964da116ed40d6dec5ccc361b72612425f205c826bbef342a66c4ec.txt",
+      "method": "GET",
+      "round": "initial",
+      "filename": null,
+      "requestID": "a0011e63-9131-4f89-9672-042dff5ac01c",
+      "status": 200,
+      "bytes": 7466
+    }
+  ]
+}
