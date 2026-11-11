@@ -5,8 +5,7 @@ import type { StoredAttachmentReference } from "../services/attachment-upload"
 import { boardStore } from "../store/board"
 import { t } from "../utils/i18n"
 import { FilePart } from "./FilePart"
-import { ResourceTextPreview } from "./ResourceTextPreview"
-import { OriginalFileDownload } from "./OriginalFileDownload"
+import { createResourceTextRead, ResourceTextDownload, ResourceTextPreview } from "./ResourceTextPreview"
 import { Button } from "./ui/Button"
 import { Dialog } from "./ui/Dialog"
 
@@ -22,6 +21,9 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
     if (context() && !current()) setOpen(false)
   })
   const text = () => isDecodableText(props.attachment.mime, props.attachment.filename)
+  const textRead = createResourceTextRead(() => open() && current() && text()
+    ? { url: props.attachment.url, authority: context()?.authority }
+    : undefined)
 
   return (
     <>
@@ -54,10 +56,10 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
         footer={
           <>
             <Show when={text()}>
-              <OriginalFileDownload
-                url={props.attachment.url}
-                name={props.attachment.filename}
-                authority={context()?.authority}
+              <ResourceTextDownload
+                read={textRead}
+                filename={props.attachment.filename}
+                label={props.displayLabel}
               />
             </Show>
             <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => setOpen(false)}>
@@ -70,10 +72,9 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
           <Show when={open()}>
             <Show when={text()} fallback={<FilePart part={{ type: "file", ...props.attachment }} />}>
               <ResourceTextPreview
-                url={props.attachment.url}
+                read={textRead}
                 filename={props.attachment.filename}
                 label={props.displayLabel}
-                authority={context()?.authority}
               />
             </Show>
           </Show>

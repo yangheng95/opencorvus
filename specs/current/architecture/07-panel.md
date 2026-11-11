@@ -344,16 +344,17 @@ User-message decodable text attachments also keep a compact, initially
 collapsed filename disclosure. Expanding loads the shared ResourceTextPreview
 with its complete read-only document and original download. Collapsing releases
 the reader; reopening uses the same canonical resource and authorized cache.
-Original-download errors remain within the attachment's Feedback rather than
-replacing the owning message card. OriginalFileDownload checks the current
-resource error before reading its value. Its explicit retry and the text reader's
-preview retry for read failures each refetch their existing source and captured
-authority, using the same shared Blob cache. Pending retries retain their
-localized action, full read diagnostic and current keyboard focus, and guard
-repeated activation. Accepted text or the restored original download link
-receives focus when its originating retry still owns it. Restoring a download
-link leaves download activation to the user. Restoring the original bytes
-requires neither a new attachment identity nor a page reload.
+An expanded message text attachment and a draft text preview each project the
+reader and authorized original download from one current resource. A transport
+failure shows one retry with its full diagnostic. Accepted bytes restore the
+reader and original link together. An unsupported text encoding keeps the
+download available from the accepted original bytes. Direct external links keep
+their own navigation URL. The current source, authority, and shared Blob cache
+are used for retry. Pending retries keep their localized action and keyboard
+focus, and guard repeated activation. Accepted text receives focus when its
+originating retry still owns it. Independent original-download actions retain
+their own feedback and focus. Restoring a download link leaves activation to the
+user.
 Short documents use their natural reading height; the editor's internal
 scroller bounds longer documents to the viewport. Other
 file presentations and unknown binary formats retain their current behavior.

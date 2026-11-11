@@ -11,7 +11,7 @@ import { localeTag, t } from "../utils/i18n"
 import { PreviewableImage } from "./ImagePreview"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
 import { Disclosure } from "./ui/Disclosure"
-import { ResourceTextPreview } from "./ResourceTextPreview"
+import { createResourceTextRead, ResourceTextDownload, ResourceTextPreview } from "./ResourceTextPreview"
 import { DownloadLink, OriginalFileDownload } from "./OriginalFileDownload"
 import { formatErrorDetails } from "../utils/error-details"
 import { Feedback } from "./ui/Feedback"
@@ -178,6 +178,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
 
 function TextAttachment(props: { url: string; name: string; displayLabel?: string; mime: string }) {
   const [expanded, setExpanded] = createSignal(false)
+  const textRead = createResourceTextRead(() => expanded() ? { url: props.url } : undefined)
   return (
     <Disclosure.Root class="msg-text-attachment" variant="surface" open={expanded()} onOpenChange={setExpanded}>
       <Disclosure.Trigger
@@ -190,9 +191,9 @@ function TextAttachment(props: { url: string; name: string; displayLabel?: strin
       </Disclosure.Trigger>
       <Disclosure.Content>
         <Show when={expanded()}>
-          <ResourceTextPreview url={props.url} filename={props.name} label={props.displayLabel ?? props.name} />
+          <ResourceTextPreview read={textRead} filename={props.name} label={props.displayLabel ?? props.name} />
           <div class="msg-text-attachment__actions">
-            <OriginalFileDownload url={props.url} name={props.name} displayLabel={props.displayLabel} />
+            <ResourceTextDownload read={textRead} filename={props.name} label={props.displayLabel} />
           </div>
         </Show>
       </Disclosure.Content>
