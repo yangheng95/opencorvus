@@ -1,0 +1,290 @@
+{
+  "upgrades": [
+    {
+      "time": "2026-11-11T20:54:41.409Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T20:57:45.140Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    }
+  ],
+  "event": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hnKAUhowWzFelNAsqvzx",
+      "sequence": 1794430508607
+    },
+    "rename": {
+      "requestID": "4609444f-116b-451d-a5c6-1b1bc83356a3",
+      "session": {
+        "id": "ses_hnKAUhowWzFelNAsqvzx",
+        "slug": "glowing-canyon",
+        "projectID": "prj_h4pqKffz66MJaF4Hnw7g",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\alternate-project\\archive-restore-receipt",
+        "title": "Foreign Chat update during draft read",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b253-other-project-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794430325476,
+          "updated": 1794430508607
+        }
+      }
+    },
+    "selected": {
+      "requestID": "24d80bf7-6751-4106-baa3-601792aed7d0",
+      "row": {
+        "kind": "mission",
+        "id": "draft-89d0662ee25bcf43a7596995ee047671",
+        "missionID": "draft-89d0662ee25bcf43a7596995ee047671",
+        "sessionID": "ses_hOSYEPfmL0K8y5wqrBX9",
+        "title": "Selected draft while another project changes",
+        "pendingPromptText": "Keep this original draft readable while a different project updates its own Chat.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+        "created": 1794430324058,
+        "started": 1794430324058,
+        "updated": 1794430324058,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "otherCut": {
+    "time": "2026-11-11T20:55:08.652Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hOSYEPfmL0K8y5wqrBX9",
+    "method": "GET",
+    "round": "b253-foreign-notification",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "762f1d3c-b979-40a0-b76d-ff4556bbc6e1",
+    "status": 200,
+    "bytes": 678,
+    "target": {
+      "missionID": "draft-89d0662ee25bcf43a7596995ee047671",
+      "sessionID": "ses_hOSYEPfmL0K8y5wqrBX9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+      "title": "Selected draft while another project changes",
+      "request": "Keep this original draft readable while a different project updates its own Chat.",
+      "archived": null,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "selectionRetry": {
+    "time": "2026-11-11T20:55:59.318Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hOSYEPfmL0K8y5wqrBX9",
+    "method": "GET",
+    "round": "b253-explicit-read-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "552cda3e-452e-4f3c-b3e3-ed9e10de8db9",
+    "status": 200,
+    "bytes": 678,
+    "target": {
+      "missionID": "draft-89d0662ee25bcf43a7596995ee047671",
+      "sessionID": "ses_hOSYEPfmL0K8y5wqrBX9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+      "title": "Selected draft while another project changes",
+      "request": "Keep this original draft readable while a different project updates its own Chat.",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "readerRestoreCut": {
+    "time": "2026-11-11T20:56:20.792Z",
+    "stage": "truncated",
+    "route": "/mission/draft-89d0662ee25bcf43a7596995ee047671/archive",
+    "method": "PATCH",
+    "round": "b252-socket-restore-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "d22b4d6f-c478-4b1a-a198-541fd19c1116",
+    "status": 200,
+    "bytes": 588,
+    "target": {
+      "missionID": "draft-89d0662ee25bcf43a7596995ee047671",
+      "sessionID": "ses_hOSYEPfmL0K8y5wqrBX9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+      "title": "Selected draft while another project changes",
+      "request": "Keep this original draft readable while a different project updates its own Chat.",
+      "archived": null,
+      "boardLane": "backlog"
+    },
+    "deliveredBytes": 12
+  },
+  "readerWhileHeld": {
+    "time": "2026-11-11T20:56:20.754Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hOSYEPfmL0K8y5wqrBX9",
+    "method": "GET",
+    "round": "b252-socket-restore-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "0a495108-b46a-428f-8591-3c9f2dda45f4",
+    "status": 200,
+    "bytes": 678,
+    "target": {
+      "missionID": "draft-89d0662ee25bcf43a7596995ee047671",
+      "sessionID": "ses_hOSYEPfmL0K8y5wqrBX9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+      "title": "Selected draft while another project changes",
+      "request": "Keep this original draft readable while a different project updates its own Chat.",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "readerRestoreCheck": {
+    "time": "2026-11-11T20:56:20.873Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hOSYEPfmL0K8y5wqrBX9",
+    "method": "GET",
+    "round": "b252-socket-restore-confirm",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "82d6b66b-50dc-433f-8bd4-001e69362fc7",
+    "status": 200,
+    "bytes": 678,
+    "target": {
+      "missionID": "draft-89d0662ee25bcf43a7596995ee047671",
+      "sessionID": "ses_hOSYEPfmL0K8y5wqrBX9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+      "title": "Selected draft while another project changes",
+      "request": "Keep this original draft readable while a different project updates its own Chat.",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "chatRestoreCut": {
+    "time": "2026-11-11T20:57:53.923Z",
+    "stage": "truncated",
+    "route": "/coding/chat/session/ses_hnKAUhowWzFelNAsqvzx/archive",
+    "method": "PATCH",
+    "round": "b252-socket-chat-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\alternate-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "abcd0056-7cad-4f9a-8a84-efd0770957f2",
+    "status": 200,
+    "bytes": 554,
+    "target": {
+      "sessionID": "ses_hnKAUhowWzFelNAsqvzx",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\alternate-project\\archive-restore-receipt",
+      "title": "Foreign Chat update during draft read",
+      "archived": null,
+      "experience": "chat"
+    },
+    "deliveredBytes": 12
+  },
+  "chatRestoreCheck": {
+    "time": "2026-11-11T20:57:54.023Z",
+    "stage": "delivered",
+    "route": "/coding/chat/session/ses_hnKAUhowWzFelNAsqvzx",
+    "method": "GET",
+    "round": "b252-socket-chat-confirm",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\alternate-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "befcc81f-5398-44b1-8c70-f5cc50e668a9",
+    "status": 200,
+    "bytes": 554,
+    "target": {
+      "sessionID": "ses_hnKAUhowWzFelNAsqvzx",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\alternate-project\\archive-restore-receipt",
+      "title": "Foreign Chat update during draft read",
+      "archived": null,
+      "experience": "chat"
+    }
+  },
+  "selected": {
+    "requestID": "3371c9f2-6219-4eee-8628-cc2f4d0f3645",
+    "body": {
+      "kind": "mission",
+      "id": "draft-89d0662ee25bcf43a7596995ee047671",
+      "missionID": "draft-89d0662ee25bcf43a7596995ee047671",
+      "sessionID": "ses_hOSYEPfmL0K8y5wqrBX9",
+      "title": "Selected draft while another project changes",
+      "pendingPromptText": "Keep this original draft readable while a different project updates its own Chat.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\baseline-project\\archive-restore-receipt",
+      "created": 1794430324058,
+      "started": 1794430324058,
+      "updated": 1794430580690,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "conversation": {
+    "requestID": "37570b02-ea6c-4d73-bb21-4b3d65d83c8d",
+    "body": {
+      "session": {
+        "id": "ses_hnKAUhowWzFelNAsqvzx",
+        "slug": "glowing-canyon",
+        "projectID": "prj_h4pqKffz66MJaF4Hnw7g",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\alternate-project\\archive-restore-receipt",
+        "title": "Foreign Chat update during draft read",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b253-other-project-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794430325476,
+          "updated": 1794430673815
+        }
+      }
+    }
+  },
+  "archive": {
+    "requestID": "b9336fe7-49a2-477f-a82f-f3e64f5395b6",
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  }
+}

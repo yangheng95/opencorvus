@@ -7,5 +7,6 @@
 - 写回执和精确读取都被截断时，[中文原请求和无法确认提示](12-candidate-zh-unconfirmed.png)可见，展开有[两条真实传输诊断](13-candidate-zh-unconfirmed-diagnostics.png)。恢复传输后的[显式重试回到同一草稿](14-candidate-zh-retried.png)。
 - 中文设置归档通过[键盘定位恢复](15-candidate-zh-keyboard-restore.png)并按 Enter，[确认成功、空列表和归档标题焦点](16-candidate-zh-keyboard-restored.png)。
 - [候选真实响应和精确持久读取](candidate-archive-restore-receipt-evidence.json)，[候选 SQLite 完整性和数据计数](profile-candidate-db-evidence.json)。
+- 原代理仅转发 HTTP。已在保留真实 WebSocket 的隔离页面重新核对阅读页和设置归档的中断回执恢复。[补验截图与精确读回](../2026-11-12-work-ledger-selection-invalidation/README.md)
 
 桌面截图由本人复核。[根因、影响及方案](../../records/2026-11/2026-11-12-archive-restore-receipt.md)
