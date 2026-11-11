@@ -1,0 +1,210 @@
+{
+  "asset": "main-DwNPPWEn.js",
+  "checked": [
+    {
+      "route": "/expert-squad/search",
+      "query": "advanced",
+      "status": 200,
+      "requestID": "43641f42-6023-41a0-9213-9e28f0c3a80c",
+      "ids": [
+        "advanced"
+      ]
+    },
+    {
+      "route": "/expert-squad/search",
+      "query": "research",
+      "status": 200,
+      "requestID": "a953ab0f-2694-4ba5-9407-b39a0414773d",
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "route": "/expert-squad/search",
+      "query": "zzqqxqqxqz",
+      "status": 200,
+      "requestID": "a823e2b9-03fe-4d0e-9dea-37ae4ab13809",
+      "ids": []
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T18:07:45.740Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "advanced",
+      "round": "setup",
+      "status": 200,
+      "requestID": "a4b3ec6f-558e-4a14-8622-e392d797c462",
+      "bytes": 462,
+      "ids": [
+        "advanced"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:07:52.274Z",
+      "stage": "held",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-first",
+      "status": 200,
+      "requestID": "dac069ea-32b8-4637-96d2-fea7e09c7dbc",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:07:52.306Z",
+      "stage": "truncated",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-first",
+      "status": 200,
+      "requestID": "dac069ea-32b8-4637-96d2-fea7e09c7dbc",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ],
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:08:05.965Z",
+      "stage": "held",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-retry",
+      "status": 200,
+      "requestID": "50845e6e-b343-4816-b0aa-1dca03d07a27",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:08:06.016Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-retry",
+      "status": 200,
+      "requestID": "50845e6e-b343-4816-b0aa-1dca03d07a27",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:09:01.155Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "advanced",
+      "round": "en-research-released",
+      "status": 200,
+      "requestID": "752aa6c1-94b3-4369-940e-1a800e8f404f",
+      "bytes": 462,
+      "ids": [
+        "advanced"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:09:06.997Z",
+      "stage": "held",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "zh-research-first",
+      "status": 200,
+      "requestID": "ac64bafe-d584-46b7-b955-e06284551e84",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:09:07.049Z",
+      "stage": "truncated",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "zh-research-first",
+      "status": 200,
+      "requestID": "ac64bafe-d584-46b7-b955-e06284551e84",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ],
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:09:38.820Z",
+      "stage": "held",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "zh-research-retry",
+      "status": 200,
+      "requestID": "b98e8444-04af-477b-b73d-47d26f4ec827",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:09:38.821Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "zh-research-retry",
+      "status": 200,
+      "requestID": "b98e8444-04af-477b-b73d-47d26f4ec827",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:09:43.857Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "zzqqxqqxqz",
+      "round": "zh-research-released",
+      "status": 200,
+      "requestID": "90562d7f-4d9d-48bf-9dc4-7971c540f711",
+      "bytes": 135,
+      "ids": []
+    },
+    {
+      "time": "2026-11-11T18:09:57.795Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "zh-research-released",
+      "status": 200,
+      "requestID": "f1155b0b-fe18-499b-ac2f-359d135851b7",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    }
+  ]
+}

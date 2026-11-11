@@ -95,6 +95,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [expertSquadQuery, setExpertSquadQuery] = createSignal("")
   const [expertSquadLoading, setExpertSquadLoading] = createSignal(false)
   const [expertSquadError, setExpertSquadError] = createSignal<SquadReadFailure>()
+  const squadResultsReady = () => !expertSquadLoading() && !expertSquadError()
   const [marketRecommendations, setMarketRecommendations] = createSignal<readonly ExpertSquadMarketIndexItem[]>([])
   const [marketLoading, setMarketLoading] = createSignal(false)
   const [marketError, setMarketError] = createSignal("")
@@ -185,14 +186,17 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     () => projectOptions().find((option) => option.value === projectDirectory()) ?? null,
   )
   const expertSquadOptions = createMemo<SelectOption[]>(() => {
-    const options = expertSquads().map((squad) => ({
+    const ready = squadResultsReady()
+    const visibleSquads = ready
+      ? expertSquads()
+      : expertSquads().filter((squad) => expertSquadIDs().includes(squad.id))
+    const options = visibleSquads.map((squad) => ({
       value: squad.id,
       label: squad.display_label,
       description: expertSquadDescription(squad),
       outsideSearch:
         Boolean(expertSquadQuery().trim()) &&
-        !expertSquadLoading() &&
-        !expertSquadError() &&
+        ready &&
         !expertSquadResult().matchingIDs.includes(squad.id),
     }))
     if (!projectDirectory()) return options
@@ -210,8 +214,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const noMatchingSquads = createMemo(
     () =>
       Boolean(expertSquadQuery().trim()) &&
-      !expertSquadLoading() &&
-      !expertSquadError() &&
+      squadResultsReady() &&
       expertSquadResult().matchingIDs.length === 0,
   )
   const canSubmit = createMemo(
@@ -222,8 +225,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           selectedExpertSquadCount() > 0 &&
           request().trim() &&
           !marketInstallingID() &&
-          !expertSquadLoading() &&
-          !expertSquadError(),
+          squadResultsReady(),
       ) && (mode() === "manual" ? Boolean(title().trim()) : true),
   )
   const prerequisiteMessage = createMemo(() => {
@@ -789,7 +791,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               <Show when={expertSquadLoading()}>
                 <Icon name="loading" size="compact" />
               </Show>
-              <Show when={productPillar() && !expertSquadLoading() && !expertSquadError()}>
+              <Show when={productPillar() && (squadResultsReady() || selectedExpertSquadCount() > 0)}>
                 <span class="mission-create-form__selection-count" role="status">
                   {t("mission_board.create.squads_selected", {
                     count: new Intl.NumberFormat(localeTag()).format(selectedExpertSquadCount()),
@@ -832,7 +834,15 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                 </Feedback>
               )}
             </Show>
-            <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
+            <Show when={squadResultsReady()} fallback={
+              <Show when={selectedExpertSquadCount() > 0}>
+                <p class="mission-create-form__context-status" role="status">
+                  {t("mission_board.create.squad_selection_retained_during_read")}
+                </p>
+              </Show>
+            }>
+              <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
+            </Show>
             <Show when={noMatchingSquads()}>
               <p class="mission-create-form__context-status" role="status">
                 {t("mission_board.create.no_matching_squads")}
@@ -874,6 +884,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                       checked={expertSquadIDs().includes(option.value)}
                       disabled={submitting() || expertSquadLoading()}
                       onChange={(checked) => {
+                        if (!squadResultsReady()) {
+                          if (checked) return
+                          expertSquadSearchRef?.focus()
+                        }
                         setExpertSquadIDs((current) =>
                           checked
                             ? current.includes(option.value)
