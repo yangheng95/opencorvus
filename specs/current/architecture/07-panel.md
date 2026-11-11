@@ -5735,8 +5735,9 @@ measured Token total and selected
 calendar period one dominant summary, keeps supporting metrics compact, and
 preserves official Provider reconciliation as a separate compare-only section.
 The usage reader checks that each response identifies the requested period
-before its aggregate can be presented. A different or missing period uses
-the existing localized failure and retry surface, keeping the selected period.
+and time zone before its aggregate can be presented. A different or missing
+identity uses the existing localized failure and retry surface, keeping the
+selected period and the original time-zone request.
 Its server identity uses compact inline chrome above the existing overview;
 the measured total has the primary typographic weight. Composition and Provider
 sections follow one vertical reading column when the canonical call count is

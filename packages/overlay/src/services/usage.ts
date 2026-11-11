@@ -27,18 +27,43 @@ export class UsagePeriodMismatchError extends Error {
   }
 }
 
+function reportedTimeZone(value: unknown): string | undefined {
+  if (typeof value !== "string") return
+  try {
+    new Intl.DateTimeFormat("en", { timeZone: value })
+    return value
+  } catch {
+    return undefined
+  }
+}
+
+export class UsageTimeZoneMismatchError extends Error {
+  override readonly name = "UsageTimeZoneMismatchError"
+  readonly received: string | undefined
+
+  constructor(readonly requested: string, timeZone: unknown) {
+    const received = reportedTimeZone(timeZone)
+    super(received
+      ? `Requested usage time zone ${requested}, received ${received}.`
+      : `The usage response did not identify the requested time zone ${requested}.`)
+    this.received = received
+  }
+}
+
 export async function loadUsageStatistics(input: {
   period: UsagePeriod
   timeZone?: string
   signal?: AbortSignal
 }): Promise<UsageStatistics> {
+  const timeZone = (input.timeZone ?? userTimeZone()).trim()
   const query = new URLSearchParams({
     period: input.period,
-    timeZone: input.timeZone ?? userTimeZone(),
+    timeZone,
   })
   try {
     const result = await apiJson<UsageStatistics>(`/global/usage?${query}`, { signal: input.signal })
     if (result?.period !== input.period) throw new UsagePeriodMismatchError(input.period, result?.period)
+    if (result.timeZone !== timeZone) throw new UsageTimeZoneMismatchError(timeZone, result.timeZone)
     return result
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) {

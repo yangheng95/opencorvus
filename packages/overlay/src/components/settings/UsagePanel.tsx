@@ -6,7 +6,7 @@ import type { OfficialUsageSource, UsagePeriod, UsageStatistics } from "@opencor
 import type { KeyboardDelegate } from "@kobalte/core"
 import { createListState } from "@kobalte/core"
 
-import { USAGE_PERIODS, UsagePeriodMismatchError, UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
+import { USAGE_PERIODS, UsagePeriodMismatchError, UsageServerVersionError, UsageTimeZoneMismatchError, loadUsageStatistics, userTimeZone } from "../../services/usage"
 import { useDisclosure } from "../../solid/disclosure"
 import { formatErrorDetails } from "../../utils/error-details"
 import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
@@ -405,6 +405,12 @@ function OfficialSourceCard(props: { source: OfficialUsageSource }) {
   )
 }
 
+function usageReadHelp(cause: unknown): string | undefined {
+  if (cause instanceof UsageServerVersionError) return t("usage.server_restart_required")
+  if (cause instanceof UsagePeriodMismatchError) return t("usage.period_mismatch")
+  if (cause instanceof UsageTimeZoneMismatchError) return t("usage.time_zone_mismatch")
+}
+
 export default function UsagePanel() {
   const [period, setPeriod] = createSignal<UsagePeriod>("year")
   const [revision, setRevision] = createSignal(0)
@@ -478,11 +484,7 @@ export default function UsagePanel() {
               </Button>
             }
           >
-            {current().cause instanceof UsageServerVersionError
-              ? t("usage.server_restart_required")
-              : current().cause instanceof UsagePeriodMismatchError
-                ? t("usage.period_mismatch")
-                : null}
+            {usageReadHelp(current().cause)}
           </Feedback>
         )}
       </Show>

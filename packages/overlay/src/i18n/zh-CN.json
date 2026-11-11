@@ -2957,6 +2957,7 @@
   "usage.loading": "正在加载用量…",
   "usage.load_failed": "无法加载用量统计",
   "usage.period_mismatch": "服务器返回的数据与所选周期不符。请重试以加载该周期。",
+  "usage.time_zone_mismatch": "服务器返回的用量与请求时区不符。请重试以加载当前时区的用量。",
   "usage.server_restart_required": "当前 OpenCorvus 后台尚未加载用量统计接口。请重启 OpenCorvus 以加载更新后的后台，然后重试。",
   "usage.event_time_note": "按模型调用时间统计",
   "usage.summary_aria": "用量摘要",

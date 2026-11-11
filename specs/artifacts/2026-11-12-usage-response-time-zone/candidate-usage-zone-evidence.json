@@ -1,0 +1,196 @@
+{
+  "asset": "main-pw4aA7Kq.js",
+  "desktop": [
+    {
+      "status": 200,
+      "requestID": "84e01881-4a36-4d95-88d6-8ce18f60dd0d",
+      "period": "year",
+      "requested": "Asia/Shanghai",
+      "forwarded": "Asia/Shanghai",
+      "responsePeriod": "year",
+      "responseZone": "Asia/Shanghai",
+      "buckets": 365,
+      "first": 1767196800000,
+      "last": 1798732800000
+    },
+    {
+      "status": 200,
+      "requestID": "80e4eb3c-3399-48e7-a07b-fe681426e7c7",
+      "period": "day",
+      "requested": "Asia/Shanghai",
+      "forwarded": "Asia/Shanghai",
+      "responsePeriod": "day",
+      "responseZone": "Asia/Shanghai",
+      "buckets": 24,
+      "first": 1794412800000,
+      "last": 1794499200000
+    },
+    {
+      "status": 200,
+      "requestID": "ab8ab098-56a3-4ca1-ac0f-f871b8a86b64",
+      "period": "day",
+      "requested": "Asia/Shanghai",
+      "forwarded": "America/Los_Angeles",
+      "responsePeriod": "day",
+      "responseZone": "America/Los_Angeles",
+      "buckets": 24,
+      "first": 1794384000000,
+      "last": 1794470400000
+    },
+    {
+      "status": 200,
+      "requestID": "161d36b7-879a-48d0-8a30-1177d54942dc",
+      "period": "day",
+      "requested": "Asia/Shanghai",
+      "forwarded": "Asia/Shanghai",
+      "responsePeriod": "day",
+      "responseZone": "Asia/Shanghai",
+      "buckets": 24,
+      "first": 1794412800000,
+      "last": 1794499200000
+    },
+    {
+      "status": 200,
+      "requestID": "90f38e65-3abd-4915-bea0-5db8f175f7dc",
+      "period": "year",
+      "requested": "Asia/Shanghai",
+      "forwarded": "Asia/Shanghai",
+      "responsePeriod": "year",
+      "responseZone": "Asia/Shanghai",
+      "buckets": 365,
+      "first": 1767196800000,
+      "last": 1798732800000
+    },
+    {
+      "status": 200,
+      "requestID": "eb1e1ad0-a899-4227-b9ad-8c1d4b382ec4",
+      "period": "day",
+      "requested": "Asia/Shanghai",
+      "forwarded": "America/Los_Angeles",
+      "responsePeriod": "day",
+      "responseZone": "America/Los_Angeles",
+      "buckets": 24,
+      "first": 1794384000000,
+      "last": 1794470400000
+    },
+    {
+      "status": 200,
+      "requestID": "86e89e62-9705-4895-a782-58c9d89bbf6d",
+      "period": "day",
+      "requested": "Asia/Shanghai",
+      "forwarded": "Asia/Shanghai",
+      "responsePeriod": "day",
+      "responseZone": "Asia/Shanghai",
+      "buckets": 24,
+      "first": 1794412800000,
+      "last": 1794499200000
+    }
+  ],
+  "checked": [
+    {
+      "status": 200,
+      "requestID": "b13a63c4-2c6f-42f1-99d2-31f0825ecab8",
+      "input": "Asia/Shanghai",
+      "responseZone": "Asia/Shanghai",
+      "first": 1794412800000,
+      "last": 1794499200000,
+      "calls": 0,
+      "official": [
+        {
+          "id": "openai-organization",
+          "status": "unconfigured"
+        },
+        {
+          "id": "anthropic-organization",
+          "status": "unconfigured"
+        },
+        {
+          "id": "openrouter-account",
+          "status": "unconfigured"
+        },
+        {
+          "id": "aws-bedrock-control-plane",
+          "status": "requires_configuration"
+        },
+        {
+          "id": "azure-openai-control-plane",
+          "status": "requires_configuration"
+        },
+        {
+          "id": "vertex-ai-control-plane",
+          "status": "requires_configuration"
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "requestID": "e5f5e1c8-bc0d-4081-b590-78824e7c9c7e",
+      "input": "America/Los_Angeles",
+      "responseZone": "America/Los_Angeles",
+      "first": 1794384000000,
+      "last": 1794470400000,
+      "calls": 0,
+      "official": [
+        {
+          "id": "openai-organization",
+          "status": "unconfigured"
+        },
+        {
+          "id": "anthropic-organization",
+          "status": "unconfigured"
+        },
+        {
+          "id": "openrouter-account",
+          "status": "unconfigured"
+        },
+        {
+          "id": "aws-bedrock-control-plane",
+          "status": "requires_configuration"
+        },
+        {
+          "id": "azure-openai-control-plane",
+          "status": "requires_configuration"
+        },
+        {
+          "id": "vertex-ai-control-plane",
+          "status": "requires_configuration"
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "requestID": "dcdcc13c-0375-4697-9a9c-689fc708f13e",
+      "input": "  Etc/UTC  ",
+      "responseZone": "Etc/UTC",
+      "first": 1794355200000,
+      "last": 1794441600000,
+      "calls": 0,
+      "official": [
+        {
+          "id": "openai-organization",
+          "status": "unconfigured"
+        },
+        {
+          "id": "anthropic-organization",
+          "status": "unconfigured"
+        },
+        {
+          "id": "openrouter-account",
+          "status": "unconfigured"
+        },
+        {
+          "id": "aws-bedrock-control-plane",
+          "status": "requires_configuration"
+        },
+        {
+          "id": "azure-openai-control-plane",
+          "status": "requires_configuration"
+        },
+        {
+          "id": "vertex-ai-control-plane",
+          "status": "requires_configuration"
+        }
+      ]
+    }
+  ]
+}
