@@ -2498,6 +2498,11 @@ function OverlayRoot() {
   })
   const selectionUnavailable = () => !!boardStore.selectedSource && (!selectedItem() || !!selection.error)
   const selectedArchived = () => selectedItem()?.archived !== undefined
+  const archivedComposerReason = () => {
+    const item = selectedItem()
+    if (item?.archived === undefined) return undefined
+    return t(item.kind === "mission" ? "work_ledger.archived_mission_composer" : "work_ledger.archived_readonly")
+  }
   let refreshPending: Promise<void> | undefined
   let refreshQueued = false
   const refreshSelection = (): Promise<void> => {
@@ -2971,18 +2976,18 @@ function OverlayRoot() {
                 ? "submitting"
                 : "ready"
           }
-          unavailableReason={selectedArchived() ? t("work_ledger.archived_readonly") : undefined}
+          unavailableReason={archivedComposerReason()}
           stopAction={composerStopAction()}
           stopping={composerStopping()}
           draftKey={panelComposerDraftKey()}
           placeholder={
-            selectedArchived() ? t("work_ledger.archived_readonly") : missionSubmitActive()
+            archivedComposerReason() ?? (missionSubmitActive()
               ? t("mission.launcher.placeholder")
               : conversationSubmitActive()
                 ? composerIntent().productPillar === "work"
                   ? t("work.launcher.placeholder")
                   : t("coding_assistant.launcher.placeholder")
-                : undefined
+                : undefined)
           }
           textareaDataUI={
             missionSubmitActive()

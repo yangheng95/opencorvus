@@ -1,0 +1,89 @@
+{
+  "asset": "main-CofXWOJ6.js",
+  "network": {
+    "failure": {
+      "method": "PATCH",
+      "path": "/mission/draft-52e31a07dd4a3bd78f2e11345d0d7173/archive",
+      "error": "net::ERR_INTERNET_DISCONNECTED"
+    },
+    "restore": {
+      "method": "PATCH",
+      "path": "/mission/draft-52e31a07dd4a3bd78f2e11345d0d7173/archive",
+      "status": 200,
+      "requestID": "c6349300-50fb-41ea-80cd-1b9fe6ae5592",
+      "body": {
+        "missionID": "draft-52e31a07dd4a3bd78f2e11345d0d7173",
+        "sessionID": "ses_hpUDBSRx43yBn7XHP0NG",
+        "title": "Archived reading labels review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b251\\candidate-project\\archive-reading-labels",
+        "created": 1794428236662,
+        "updated": 1794428318083,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Read the saved Mission request and identify its restore action."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    }
+  },
+  "active": {
+    "requestID": "06bdc45f-f800-4d9f-a8ad-82784ef45cb8",
+    "body": [
+      {
+        "missionID": "draft-52e31a07dd4a3bd78f2e11345d0d7173",
+        "sessionID": "ses_hpUDBSRx43yBn7XHP0NG",
+        "title": "Archived reading labels review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b251\\candidate-project\\archive-reading-labels",
+        "created": 1794428236662,
+        "updated": 1794428318083,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Read the saved Mission request and identify its restore action."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "exact": {
+    "requestID": "8ae35b45-bb01-412b-9dd4-4a0ccc968b38",
+    "body": {
+      "kind": "mission",
+      "id": "draft-52e31a07dd4a3bd78f2e11345d0d7173",
+      "missionID": "draft-52e31a07dd4a3bd78f2e11345d0d7173",
+      "sessionID": "ses_hpUDBSRx43yBn7XHP0NG",
+      "title": "Archived reading labels review",
+      "pendingPromptText": "Read the saved Mission request and identify its restore action.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b251\\candidate-project\\archive-reading-labels",
+      "created": 1794428236662,
+      "started": 1794428236662,
+      "updated": 1794428318083,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  }
+}

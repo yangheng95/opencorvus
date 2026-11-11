@@ -1940,7 +1940,9 @@ single metadata projection, including the existing selection refresh owner after
 edits and renames. The saved request is a read-only context section outside the
 message tree. Active work retains the Board action for editing or starting;
 archived work explains restoration and uses the existing page-level Restore
-action before Board work. Loading, failed or mismatched selection data does not
+action before Board work. The archived header, restore action and failure, and
+read-only composer identify the selected Mission using the current locale.
+Loading, failed or mismatched selection data does not
 supply draft text. Long requests retain native focused-region keyboard scrolling;
 the parent history keymap owns only its directly focused viewport. Opening the
 already selected source from the Board reveals that conversation without another

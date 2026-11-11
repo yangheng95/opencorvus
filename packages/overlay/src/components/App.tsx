@@ -482,6 +482,7 @@ export interface AppProps {
 
 export function App(props: AppProps) {
   const filesAvailable = createMemo(() => appStore.connected && Boolean(activeDirectory().trim()))
+  const conversationIsMission = () => props.conversationItem()?.kind === "mission"
   const openProjectFiles = () => {
     if (filesAvailable()) props.onOpenRightDockPanel("explorer")
   }
@@ -849,18 +850,36 @@ export function App(props: AppProps) {
                                       <Button type="button" variant="outline" size="sm" tone="neutral"
                                         disabled={props.restoringConversation}
                                         onClick={() => void props.onRestoreConversation()}>
-                                        {t(props.restoringConversation ? "work_ledger.restoring" : "work_ledger.restore")}
+                                        {props.restoringConversation
+                                          ? t("work_ledger.restoring")
+                                          : t(conversationIsMission() ? "work_ledger.restore_mission" : "work_ledger.restore")}
                                       </Button>
                                     }>
-                                      <span id="archivedWorkNoticeMessage">{t("work_ledger.archived_readonly")}</span>
+                                      <span id="archivedWorkNoticeMessage">
+                                        {t(conversationIsMission() ? "work_ledger.archived_mission_readonly" : "work_ledger.archived_readonly")}
+                                      </span>
                                     </Feedback>
                                 </Show>
                                 <Show when={props.conversationReadError() || props.conversationRestoreError}>
-                                  {(error) => <Feedback tone="error" title={t(props.conversationRestoreError ? "work_ledger.restore_error" : "work_ledger.selection_error")}
-                                    details={formatErrorDetails(error())} actions={
-                                      <Button type="button" variant="ghost" size="sm" tone="neutral"
-                                        onClick={() => void (props.conversationRestoreError ? props.onRestoreConversation() : props.onRetryConversationRead()).catch(() => {})}>{t("common.retry")}</Button>
-                                    }>{t(props.conversationRestoreError ? "work_ledger.restore_error_hint" : "work_ledger.selection_error_hint")}</Feedback>}
+                                  {(error) => (
+                                    <Feedback
+                                      tone="error"
+                                      title={props.conversationRestoreError
+                                        ? t(conversationIsMission() ? "work_ledger.restore_mission_error" : "work_ledger.restore_error")
+                                        : t("work_ledger.selection_error")}
+                                      details={formatErrorDetails(error())}
+                                      actions={
+                                        <Button type="button" variant="ghost" size="sm" tone="neutral"
+                                          onClick={() => void (props.conversationRestoreError ? props.onRestoreConversation() : props.onRetryConversationRead()).catch(() => {})}>
+                                          {t("common.retry")}
+                                        </Button>
+                                      }
+                                    >
+                                      {props.conversationRestoreError
+                                        ? t(conversationIsMission() ? "work_ledger.restore_mission_error_hint" : "work_ledger.restore_error_hint")
+                                        : t("work_ledger.selection_error_hint")}
+                                    </Feedback>
+                                  )}
                                 </Show>
                                 <Show when={appStore.workspaceLocationError}>
                                   {(error) => (
