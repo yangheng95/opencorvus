@@ -1,0 +1,261 @@
+{
+  "asset": "main-5bfBpmqI.js",
+  "checked": [
+    {
+      "route": "/global/projects/discover",
+      "status": 200,
+      "requestID": "675b6cfd-19d3-4792-844b-aa0a80e0577e",
+      "names": [
+        "scheduled-authoring-review",
+        "authoring-target"
+      ]
+    },
+    {
+      "route": "/global/automations",
+      "status": 200,
+      "requestID": "e703754b-b962-442a-b5fc-c8446f92cf20",
+      "definitions": 0
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T16:57:09.313Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-read",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "aa45f964-52c8-49be-b5c4-dd8945c74023",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:57:10.112Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "authoring-project-read",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "aa45f964-52c8-49be-b5c4-dd8945c74023",
+      "projectCount": 2,
+      "bytes": 872,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:57:23.357Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "24dff94c-e7f9-4779-883e-86e768cd60eb",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:57:31.652Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "authoring-project-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "24dff94c-e7f9-4779-883e-86e768cd60eb",
+      "projectCount": 2,
+      "bytes": 872
+    },
+    {
+      "time": "2026-11-11T16:58:09.773Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-zh-initial",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "ac638c60-2afc-42d7-b664-196ac0ae8513",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:58:17.800Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "authoring-project-zh-initial",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "ac638c60-2afc-42d7-b664-196ac0ae8513",
+      "projectCount": 2,
+      "bytes": 872,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:58:32.380Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-zh-retry-fail",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "cbc54ca7-38dc-45e5-b788-fb315805a9fe",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:58:32.446Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "authoring-project-zh-retry-fail",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "cbc54ca7-38dc-45e5-b788-fb315805a9fe",
+      "projectCount": 2,
+      "bytes": 872,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:58:39.640Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "authoring-project-zh-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "0e4043cf-68d0-4d3d-8279-d43f20b2a67c",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T16:58:39.728Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "authoring-project-zh-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "0e4043cf-68d0-4d3d-8279-d43f20b2a67c",
+      "projectCount": 2,
+      "bytes": 872
+    }
+  ],
+  "retained": [
+    {
+      "time": "2026-11-11T17:00:13.114Z",
+      "stage": "held",
+      "kind": "auth",
+      "round": "retained-model-auth",
+      "route": "/provider/auth",
+      "project": "scheduled-authoring-review",
+      "status": 200,
+      "requestID": "e4408dc8-8cf9-4c27-8bd2-cdbf18e9a41d"
+    },
+    {
+      "time": "2026-11-11T17:00:13.115Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "retained-model-auth",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "f8465fc9-b556-43e3-8159-1b6b0b3af351",
+      "projectCount": 2,
+      "bytes": 872
+    },
+    {
+      "time": "2026-11-11T17:00:19.317Z",
+      "stage": "truncated",
+      "kind": "auth",
+      "round": "retained-model-auth",
+      "route": "/provider/auth",
+      "project": "scheduled-authoring-review",
+      "status": 200,
+      "requestID": "e4408dc8-8cf9-4c27-8bd2-cdbf18e9a41d",
+      "bytes": 1080,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T17:00:31.584Z",
+      "stage": "delivered",
+      "kind": "auth",
+      "round": "retained-project-reload",
+      "route": "/provider/auth",
+      "project": "scheduled-authoring-review",
+      "status": 200,
+      "requestID": "50bce85e-4c94-4291-8560-5c127bdd40b6"
+    },
+    {
+      "time": "2026-11-11T17:00:31.586Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "retained-project-reload",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "6965cfb4-f7f2-42d9-b46e-a4a36e587e3f",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T17:00:31.899Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "retained-project-reload",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "6965cfb4-f7f2-42d9-b46e-a4a36e587e3f",
+      "projectCount": 2,
+      "bytes": 872,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T17:00:37.092Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "retained-project-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "70946140-ecdf-46ff-aa28-3e08f9d06ba1",
+      "projectCount": 2
+    },
+    {
+      "time": "2026-11-11T17:00:41.637Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "retained-project-retry",
+      "route": "/global/projects/discover",
+      "project": "global",
+      "status": 200,
+      "requestID": "70946140-ecdf-46ff-aa28-3e08f9d06ba1",
+      "projectCount": 2,
+      "bytes": 872
+    }
+  ],
+  "emptyBrowser": [
+    {
+      "route": "/global/projects/discover",
+      "status": 200,
+      "requestID": "87f94c2e-7e60-47f2-bf69-01a24b042397",
+      "projectCount": 0
+    },
+    {
+      "route": "/global/projects/discover",
+      "status": 200,
+      "requestID": "440e5e7e-cd99-4db9-b12c-221483548379",
+      "projectCount": 0
+    }
+  ],
+  "empty": [
+    {
+      "route": "/global/projects/discover",
+      "status": 200,
+      "requestID": "67949db3-212d-4f22-801c-b5555ae65e37",
+      "count": 0
+    },
+    {
+      "route": "/global/automations",
+      "status": 200,
+      "requestID": "34f69e66-0a0a-462b-a7f0-9d1917ec0c33",
+      "count": 0
+    }
+  ]
+}

@@ -65,6 +65,10 @@ type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
 
 type AutomationProjectOption = { key: string; target: AutomationProjectTarget; project?: DiscoveredProject }
+type AutomationProjectRead =
+  | { status: "reading"; projects?: DiscoveredProject[] }
+  | { status: "ready"; projects: DiscoveredProject[] }
+  | { status: "failed" | "retrying"; projects?: DiscoveredProject[]; cause: unknown; afterSave: boolean }
 
 function projectChoiceLabel(option: AutomationProjectOption): string {
   return option.project ? projectOptionLabel(option.project)
@@ -254,7 +258,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [editTarget, setEditTarget] = createSignal<AutomationView | null>(null)
   const editing = () => editTarget() !== null
   const [creating, setCreating] = createSignal(false)
-  const [projects, setProjects] = createSignal<DiscoveredProject[]>([])
+  const [projectRead, setProjectRead] = createSignal<AutomationProjectRead>({ status: "reading" })
+  const projects = () => projectRead().projects ?? []
+  const projectReadIssue = createMemo(() => {
+    const state = projectRead()
+    return state.status === "failed" || state.status === "retrying" ? state : undefined
+  })
   const [search, setSearch] = createSignal("")
   const [filter, setFilter] = createSignal<AutomationFilter>("all")
   const [scopeFilter, setScopeFilter] = createSignal<AutomationScopeFilter>("all")
@@ -323,6 +332,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let listSearchInput: HTMLInputElement | undefined
   let detailBackButton: HTMLButtonElement | undefined
   let formNameInput: HTMLInputElement | undefined
+  let projectSearchInput: HTMLInputElement | undefined
   let projectListElement: HTMLUListElement | undefined
   let isStartDateComplete: (() => boolean) | undefined
   let isTimeComplete: (() => boolean) | undefined
@@ -761,7 +771,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       setEditTarget(null)
       await load(preferredID)
       await loadRuns(preferredID)
-      if (form.scope === "project") await refreshSavedProjectChoices()
+      if (form.scope === "project") await loadProjectChoices({ afterSave: true })
       focusAfterRender(() => detailBackButton)
     } catch (cause) {
       showFormError(automationFailure(cause,
@@ -832,55 +842,83 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
   }
 
-  async function loadProjectChoices(): Promise<boolean> {
+  async function loadProjectChoices(options: { afterSave?: boolean; trigger?: HTMLButtonElement } = {}): Promise<void> {
+    const previous = projectRead()
+    if (options.trigger && previous.status !== "failed") return
+    const issue = projectReadIssue()
+    const afterSave = options.afterSave || issue?.afterSave || false
     const sequence = ++projectLoadSequence
     const authority = captureApiAuthority()
     const owns = () => !disposed && sequence === projectLoadSequence && isApiAuthorityCurrent(authority)
+    setProjectRead(issue
+      ? { ...issue, status: "retrying", afterSave }
+      : { status: "reading", projects: previous.projects })
     try {
       const discovery = await loadDiscoveredProjects(authority)
-      if (!owns()) return false
-      setProjects(discovery.projects)
-      return true
+      if (!owns()) return
+      const returnFocus = options.trigger?.isConnected && document.activeElement === options.trigger
+      setProjectRead({ status: "ready", projects: discovery.projects })
+      if (returnFocus) focusAfterRender(() => {
+        if (document.activeElement !== document.body) return
+        if (showForm() && scope() === "project") return projectSearchInput
+        return selected() && !showForm() ? detailBackButton : listSearchInput
+      })
     } catch (cause) {
-      if (owns()) throw cause
-      return false
+      if (owns()) setProjectRead({ status: "failed", projects: previous.projects, cause, afterSave })
     }
   }
 
-  async function refreshSavedProjectChoices(): Promise<void> {
-    const previous = error()
-    try {
-      const applied = await loadProjectChoices()
-      if (applied && error() === previous && previous?.messageKey === "automations.error.project_details_refresh_failed")
-        setError(null)
-    } catch (cause) {
-      if (disposed) return
-      const current = error()
-      if (current && current.messageKey !== "automations.error.project_details_refresh_failed") {
-        setError({ ...current, details: [current.details, formatErrorDetails(cause)].filter(Boolean).join("\n\n"),
-          retry: () => void initializeHost() })
-      } else {
-        setError({ ...automationFailure(cause, "automations.error.project_details_refresh_failed"),
-          retry: () => void refreshSavedProjectChoices() })
-      }
-    }
+  function projectReadFeedback(showLoading: boolean) {
+    return (
+      <Show when={projectReadIssue()} fallback={
+        <Show when={showLoading && projectRead().status === "reading"}>
+          <Feedback tone="info" aria-busy="true">
+            {t(projectRead().projects?.length ? "automations.project_targets_loading_retained" : "automations.project_targets_loading")}
+          </Feedback>
+        </Show>
+      }>
+        {(issue) => (
+          <Feedback
+            tone="error"
+            details={formatErrorDetails(issue().cause)}
+            actions={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                aria-disabled={issue().status === "retrying" || Boolean(busyAction()) || undefined}
+                aria-busy={issue().status === "retrying" || undefined}
+                onClick={(event) => {
+                  if (!busyAction()) void loadProjectChoices({ trigger: event.currentTarget })
+                }}
+              >
+                <Icon name={issue().status === "retrying" ? "loading" : "refresh"} />
+                {t(issue().status === "retrying" ? "common.retrying" : "common.retry")}
+              </Button>
+            }
+          >
+            {t(issue().afterSave ? "automations.error.project_details_refresh_failed"
+              : issue().projects?.length ? "automations.project_targets_load_failed_retained" : "automations.project_targets_load_failed")}
+          </Feedback>
+        )}
+      </Show>
+    )
   }
 
   async function initializeHost(): Promise<void> {
     const automationLoad = load()
-    const [projectResult, providerResult] = await Promise.allSettled([loadProjectChoices(), loadProviderInfo()])
+    void loadProjectChoices()
+    const details = await loadProviderInfo().then(
+      (issues) => issues.map((issue) => issue.message),
+      (cause) => [formatErrorDetails(cause)],
+    )
     await automationLoad
-    const details = [
-      ...(projectResult.status === "rejected" ? [formatErrorDetails(projectResult.reason)] : []),
-      ...(providerResult.status === "rejected"
-        ? [formatErrorDetails(providerResult.reason)]
-        : providerResult.value.map((issue) => issue.message)),
-    ]
     if (details.length > 0) {
       const previous = error()
       const listLoadFailed = previous?.source === "list-load"
       setError({
-        messageKey: listLoadFailed ? previous.messageKey : "automations.error.setup_failed",
+        messageKey: listLoadFailed ? previous.messageKey : "automations.error.provider_setup_failed",
         details: [...(listLoadFailed && previous.details ? [previous.details] : []), ...details].join("\n\n"),
         retry: () => void initializeHost(),
         source: listLoadFailed ? "list-load" : undefined,
@@ -1003,6 +1041,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               </Feedback>
             )}
           </Show>
+          <Show when={!showForm() || scope() !== "project"}>{projectReadFeedback(false)}</Show>
           <Show when={!initialLoadError()}>
           <aside ref={listElement} class="automations-list" aria-label={t("automations.list")}>
             <SearchField
@@ -1502,6 +1541,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       <SearchField
                         clearable
                         value={projectSearch()}
+                        inputRef={(element) => (projectSearchInput = element)}
                         placeholder={t("automations.project_search")}
                         onValueChange={setProjectSearch}
                         disabled={Boolean(busyAction())}
@@ -1516,15 +1556,20 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           target.focus()
                         }}
                       />
-                      <span class="automations-muted" role="status" aria-live="polite">
-                        {t("automations.project_results", {
-                          visible: visibleProjects().length.toLocaleString(localeTag()),
-                          total: projectChoices().length.toLocaleString(localeTag()),
-                          selected: selectedProjectTargets().length.toLocaleString(localeTag()),
-                        })}
-                      </span>
+                      {projectReadFeedback(true)}
+                      <Show when={projectRead().projects !== undefined}>
+                        <span class="automations-muted" role="status" aria-live="polite">
+                          {t("automations.project_results", {
+                            visible: visibleProjects().length.toLocaleString(localeTag()),
+                            total: projectChoices().length.toLocaleString(localeTag()),
+                            selected: selectedProjectTargets().length.toLocaleString(localeTag()),
+                          })}
+                        </span>
+                      </Show>
                       <Show when={visibleProjects().length > 0} fallback={
-                        <span class="automations-muted">{t(projectChoices().length > 0 ? "automations.project_search_empty" : "automations.project_targets_empty")}</span>
+                        <Show when={projectRead().status === "ready"}>
+                          <span class="automations-muted">{t(projectChoices().length > 0 ? "automations.project_search_empty" : "automations.project_targets_empty")}</span>
+                        </Show>
                       }>
                       <ListboxRoot<AutomationProjectOption>
                         ref={projectListElement}

@@ -1,0 +1,47 @@
+{
+  "baseline": {
+    "sqlite": "ok",
+    "counts": {
+      "automation": 0,
+      "automation_fire": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  },
+  "candidate": {
+    "sqlite": "ok",
+    "counts": {
+      "automation": 0,
+      "automation_fire": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  },
+  "empty": {
+    "sqlite": "ok",
+    "counts": {
+      "automation": 0,
+      "automation_fire": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0
+    }
+  }
+}

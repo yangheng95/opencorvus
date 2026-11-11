@@ -2022,6 +2022,11 @@ display names and directories under its current authority/request owner. A
 metadata read failure reports that saving succeeded and offers a read-only
 retry, retaining any primary load error and all original diagnostics. It does
 not repeat the writer or reinterpret an ID through an obsolete directory.
+Project discovery owns its pending, accepted and failed states independently
+of draft validation, automation lists and model details. The authoring form
+shows discovery status beside the project search. Accepted empty results and
+retained projects have distinct descriptions. A read-only retry preserves the
+query and selected target identities and returns still-owned focus to search.
 
 Standard schedule authoring displays the start date, clock and date chooser in
 the current application language. Keyboard segments and the calendar project
