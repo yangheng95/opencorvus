@@ -29,7 +29,10 @@ import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
-import { apiJson, ApiError, serverSettledRequest, type ApiAuthority } from "./api"
+import { apiJson, ApiError, captureApiAuthority, serverSettledRequest, type ApiAuthority } from "./api"
+import { settleArchiveRestore } from "./archive-restore"
+import { verifyWorkLedgerRestore } from "./work-ledger"
+import { projectDirectoryKey } from "../utils/project-directory"
 import { composerSubmission } from "./composer-draft"
 import { downloadProjectArchive } from "./project-archive"
 import type { BoardSource } from "../store/board"
@@ -415,35 +418,56 @@ export async function deleteMission(
   }
 }
 
-export function setMissionArchived(
+function writeMissionArchive(
   target: MissionActionTarget,
-  archived: true,
-  provenance: TaskCancellationRequestBodyValue,
-): Promise<MissionSetArchivedResponse>
-export function setMissionArchived(target: MissionActionTarget, archived: false): Promise<MissionSetArchivedResponse>
-export async function setMissionArchived(
-  target: MissionActionTarget,
-  archived: boolean,
-  provenance?: TaskCancellationRequestBodyValue,
+  body: TaskArchiveRequestBody,
 ): Promise<MissionSetArchivedResponse> {
-  const body = TaskArchiveRequestBody.parse(
-    archived
-      ? {
-          archived,
-          ...TaskCancellationRequestBody.parse(provenance),
-        }
-      : { archived },
-  )
   const request = {
     authority: target.authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   } satisfies Parameters<typeof apiJson>[1]
-  return await apiJson<MissionSetArchivedResponse>(
+  return apiJson<MissionSetArchivedResponse>(
     missionActionPath(target, "/archive"),
-    archived ? serverSettledRequest(request) : request,
+    body.archived ? serverSettledRequest(request) : request,
   )
+}
+
+export function setMissionArchived(
+  target: MissionActionTarget,
+  archived: true,
+  provenance: TaskCancellationRequestBodyValue,
+): Promise<MissionSetArchivedResponse> {
+  return writeMissionArchive(target, TaskArchiveRequestBody.parse({
+    archived,
+    ...TaskCancellationRequestBody.parse(provenance),
+  }))
+}
+
+export async function restoreMission(target: MissionActionTarget & { sessionID: string }): Promise<void> {
+  const authority = target.authority ?? captureApiAuthority()
+  const missionID = target.missionID.trim()
+  const sessionID = target.sessionID.trim()
+  const directory = target.directory.trim()
+  const owner = { missionID, directory, authority }
+  if (!sessionID) throw new Error("restoreMission: sessionID is required")
+  await settleArchiveRestore({
+    authority,
+    write: async () => {
+      const receipt = await writeMissionArchive(owner, TaskArchiveRequestBody.parse({ archived: false }))
+      if (
+        receipt?.missionID !== missionID ||
+        receipt.sessionID !== sessionID ||
+        typeof receipt.directory !== "string" ||
+        projectDirectoryKey(receipt.directory) !== projectDirectoryKey(directory) ||
+        receipt.archived !== undefined
+      ) {
+        throw new Error("The Mission restore receipt does not confirm the selected Mission.")
+      }
+    },
+    readRestored: () => verifyWorkLedgerRestore({ kind: "mission", ...owner, sessionID }),
+  })
 }
 
 export async function downloadMissionProjectArchive(target: MissionActionTarget): Promise<boolean> {

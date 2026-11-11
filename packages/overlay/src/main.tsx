@@ -38,6 +38,7 @@ import { projectDirectoryKey } from "./utils/project-directory"
 import { closeArtifactWorkspace } from "./utils/top-layer"
 import { replaceWorkspaceLocation, type ClientWorkspaceLocation } from "./services/workspace-location"
 import type { ApiAuthority } from "./services/api"
+import { restoreArchivedWork } from "./services/restore-archived-work"
 import { MissionBoard } from "./components/MissionBoard"
 import type { MissionCreateRequest, MissionManualCreateRequest } from "./components/MissionCreateDialog"
 import {
@@ -2530,10 +2531,7 @@ function OverlayRoot() {
     setRestoreFailure(undefined)
     let restored = false
     try {
-      const target = { directory: item.directory, authority: request.authority }
-      if (item.kind === "task") await setTaskArchived({ ...target, taskID: item.id }, false)
-      else if (item.kind === "mission") await setMissionArchived({ ...target, missionID: item.missionID }, false)
-      else await setConversationSessionArchived({ ...target, sessionID: item.sessionID, experience: item.experience }, false)
+      await restoreArchivedWork(item, request.authority)
       restored = true
       if (!owns()) return
       await refreshSelection()

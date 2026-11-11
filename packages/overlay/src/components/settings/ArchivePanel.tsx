@@ -8,9 +8,11 @@ import {
 } from "../../services/api"
 import { loadArchivedWorkLedger, workLedgerProject, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
 import { archiveRowKey } from "../../services/archive-row-key"
-import { deleteMission, setMissionArchived } from "../../services/mission"
-import { deleteTask, setTaskArchived } from "../../services/task"
-import { deleteConversationSession, setConversationSessionArchived } from "../../services/conversation-session"
+import { ArchiveRestoreUnconfirmedError } from "../../services/archive-restore"
+import { restoreArchivedWork } from "../../services/restore-archived-work"
+import { deleteMission } from "../../services/mission"
+import { deleteTask } from "../../services/task"
+import { deleteConversationSession } from "../../services/conversation-session"
 import { conversationExperienceIcon, conversationExperienceLabel } from "../../services/conversation-experience"
 import { formatErrorDetails, reportError, reportSuccess, runPostCommitUiEffect } from "../../services/diagnostics"
 import { detailStamp } from "../../utils/time"
@@ -33,7 +35,8 @@ type ArchiveFailure = {
   cause: unknown
 }
 
-function archiveFailureSummary(operation: ArchiveFailure["operation"]): string {
+function archiveFailureSummary({ operation, cause }: ArchiveFailure): string {
+  if (cause instanceof ArchiveRestoreUnconfirmedError) return t("archive.restore_unconfirmed")
   if (operation === "restore") return t("archive.restore_failed")
   if (operation === "delete") return t("archive.delete_failed")
   if (operation === "refresh") return t("archive.refresh_failed")
@@ -43,7 +46,7 @@ function archiveFailureSummary(operation: ArchiveFailure["operation"]): string {
 function ArchiveFailureFeedback(props: { failure: ArchiveFailure; actions?: JSX.Element }) {
   return (
     <Feedback tone="error" details={formatErrorDetails(props.failure.cause)} actions={props.actions}>
-      {archiveFailureSummary(props.failure.operation)}
+      {archiveFailureSummary(props.failure)}
     </Feedback>
   )
 }
@@ -116,10 +119,11 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const hasRefreshFailure = createMemo(() => panelFailure()?.operation === "refresh")
 
   const recordFailure = (id: string, operation: ArchiveFailure["operation"], cause: unknown) => {
-    setFailure({ operation, cause })
+    const failure = { operation, cause }
+    setFailure(failure)
     reportError({
       id,
-      title: archiveFailureSummary(operation),
+      title: archiveFailureSummary(failure),
       message: cause instanceof Error ? cause.message : String(cause),
       details: formatErrorDetails(cause),
     })
@@ -283,16 +287,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     let committed = false
     try {
       if (action === "restore") {
-        if (row.kind === "mission") {
-          await setMissionArchived({ missionID: row.missionID, directory: row.directory, authority }, false)
-        } else if (row.kind === "chat") {
-          await setConversationSessionArchived(
-            { sessionID: row.sessionID, directory: row.directory, experience: row.experience, authority },
-            false,
-          )
-        } else {
-          await setTaskArchived({ taskID: row.id, directory: row.directory, authority }, false)
-        }
+        await restoreArchivedWork(row, authority)
       } else if (row.kind === "mission") {
         await deleteMission(
           { missionID: row.missionID, directory: row.directory, authority },

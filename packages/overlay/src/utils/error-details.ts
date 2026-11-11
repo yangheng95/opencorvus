@@ -9,6 +9,9 @@ import { configMutationReceiptDiagnostic, readConfigMutationReceipt } from "../s
  */
 export function formatErrorDetails(err: unknown): string {
   if (err == null) return ""
+  if (err instanceof AggregateError && err.errors.length) {
+    return [err.stack || err.message, ...err.errors.map(formatErrorDetails)].filter(Boolean).join("\n\n")
+  }
   if (err instanceof Error) {
     const parts: string[] = []
     const meta = err as Error & {

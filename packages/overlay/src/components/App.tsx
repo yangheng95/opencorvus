@@ -30,6 +30,7 @@ import { Badge } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
+import { ArchiveRestoreUnconfirmedError } from "../services/archive-restore"
 import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { showAppDialog } from "../services/app-dialog"
 import { activeDirectory } from "../services/workspace"
@@ -864,9 +865,11 @@ export function App(props: AppProps) {
                                   {(error) => (
                                     <Feedback
                                       tone="error"
-                                      title={props.conversationRestoreError
-                                        ? t(conversationIsMission() ? "work_ledger.restore_mission_error" : "work_ledger.restore_error")
-                                        : t("work_ledger.selection_error")}
+                                      title={props.conversationRestoreError instanceof ArchiveRestoreUnconfirmedError
+                                        ? t("archive.restore_unconfirmed")
+                                        : props.conversationRestoreError
+                                          ? t(conversationIsMission() ? "work_ledger.restore_mission_error" : "work_ledger.restore_error")
+                                          : t("work_ledger.selection_error")}
                                       details={formatErrorDetails(error())}
                                       actions={
                                         <Button type="button" variant="ghost" size="sm" tone="neutral"
@@ -875,9 +878,11 @@ export function App(props: AppProps) {
                                         </Button>
                                       }
                                     >
-                                      {props.conversationRestoreError
-                                        ? t(conversationIsMission() ? "work_ledger.restore_mission_error_hint" : "work_ledger.restore_error_hint")
-                                        : t("work_ledger.selection_error_hint")}
+                                      {props.conversationRestoreError instanceof ArchiveRestoreUnconfirmedError
+                                        ? t("work_ledger.restore_unconfirmed_hint")
+                                        : props.conversationRestoreError
+                                          ? t(conversationIsMission() ? "work_ledger.restore_mission_error_hint" : "work_ledger.restore_error_hint")
+                                          : t("work_ledger.selection_error_hint")}
                                     </Feedback>
                                   )}
                                 </Show>

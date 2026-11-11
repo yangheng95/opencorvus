@@ -1,0 +1,386 @@
+{
+  "occurrence": "iteration-b252-candidate",
+  "asset": "main-khPyk4Pk.js",
+  "reader": {
+    "held": {
+      "time": "2026-11-11T20:45:47.392Z",
+      "stage": "held",
+      "route": "/mission/draft-d3b2e2d3652d31bfed85f8bc0dbf4f03/archive",
+      "method": "PATCH",
+      "round": "b252-reader-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "a3fc9842-bf97-4237-96f3-81336f50df72",
+      "status": 200,
+      "bytes": 540,
+      "target": {
+        "missionID": "draft-d3b2e2d3652d31bfed85f8bc0dbf4f03",
+        "sessionID": "ses_hc6yQLaQ9Vsw5OI8qo4J",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "Reader restore receipt",
+        "request": "Keep the original request and reopen this exact draft.",
+        "archived": null,
+        "boardLane": "backlog"
+      }
+    },
+    "truncated": {
+      "time": "2026-11-11T20:45:47.429Z",
+      "stage": "truncated",
+      "route": "/mission/draft-d3b2e2d3652d31bfed85f8bc0dbf4f03/archive",
+      "method": "PATCH",
+      "round": "b252-reader-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "a3fc9842-bf97-4237-96f3-81336f50df72",
+      "status": 200,
+      "bytes": 540,
+      "target": {
+        "missionID": "draft-d3b2e2d3652d31bfed85f8bc0dbf4f03",
+        "sessionID": "ses_hc6yQLaQ9Vsw5OI8qo4J",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "Reader restore receipt",
+        "request": "Keep the original request and reopen this exact draft.",
+        "archived": null,
+        "boardLane": "backlog"
+      },
+      "deliveredBytes": 12
+    },
+    "exactCheck": {
+      "time": "2026-11-11T20:45:47.511Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hc6yQLaQ9Vsw5OI8qo4J",
+      "method": "GET",
+      "round": "b252-reader-verify",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "0a8e0170-d007-4e1c-b9fe-8880cbe3ebd8",
+      "status": 200,
+      "bytes": 630,
+      "target": {
+        "missionID": "draft-d3b2e2d3652d31bfed85f8bc0dbf4f03",
+        "sessionID": "ses_hc6yQLaQ9Vsw5OI8qo4J",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "Reader restore receipt",
+        "request": "Keep the original request and reopen this exact draft.",
+        "archived": null,
+        "boardLane": null
+      }
+    }
+  },
+  "chat": {
+    "held": {
+      "time": "2026-11-11T20:45:47.393Z",
+      "stage": "held",
+      "route": "/coding/chat/session/ses_hUr9CSF9M4GjEf4EKCZy/archive",
+      "method": "PATCH",
+      "round": "b252-chat-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+      "search": null,
+      "requestID": "84c12680-a441-4668-88d7-d9305f24cfa3",
+      "status": 200,
+      "bytes": 534,
+      "target": {
+        "sessionID": "ses_hUr9CSF9M4GjEf4EKCZy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+        "title": "Chat restore receipt",
+        "archived": null,
+        "experience": "chat"
+      }
+    },
+    "truncated": {
+      "time": "2026-11-11T20:45:47.430Z",
+      "stage": "truncated",
+      "route": "/coding/chat/session/ses_hUr9CSF9M4GjEf4EKCZy/archive",
+      "method": "PATCH",
+      "round": "b252-chat-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+      "search": null,
+      "requestID": "84c12680-a441-4668-88d7-d9305f24cfa3",
+      "status": 200,
+      "bytes": 534,
+      "target": {
+        "sessionID": "ses_hUr9CSF9M4GjEf4EKCZy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+        "title": "Chat restore receipt",
+        "archived": null,
+        "experience": "chat"
+      },
+      "deliveredBytes": 12
+    },
+    "exactCheck": {
+      "time": "2026-11-11T20:45:47.512Z",
+      "stage": "delivered",
+      "route": "/coding/chat/session/ses_hUr9CSF9M4GjEf4EKCZy",
+      "method": "GET",
+      "round": "b252-chat-verify",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+      "search": null,
+      "requestID": "04e67fcb-8e45-4d24-b386-101e9f52117f",
+      "status": 200,
+      "bytes": 534,
+      "target": {
+        "sessionID": "ses_hUr9CSF9M4GjEf4EKCZy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+        "title": "Chat restore receipt",
+        "archived": null,
+        "experience": "chat"
+      }
+    }
+  },
+  "normal": {
+    "receipt": {
+      "time": "2026-11-11T20:47:38.859Z",
+      "stage": "delivered",
+      "route": "/mission/draft-16b96053753588749a714b0f83c6af70/archive",
+      "method": "PATCH",
+      "round": "b252-normal-zh-keyboard",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "5ca93a3c-f296-4bc6-abaa-5c8c949c8e32",
+      "status": 200,
+      "bytes": 537,
+      "target": {
+        "missionID": "draft-16b96053753588749a714b0f83c6af70",
+        "sessionID": "ses_hiEqPGg3jXRYHvOo48ZK",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "Normal restore receipt",
+        "request": "Read the original request after a complete receipt.",
+        "archived": null,
+        "boardLane": "backlog"
+      }
+    },
+    "archiveConverged": {
+      "time": "2026-11-11T20:47:38.868Z",
+      "stage": "delivered",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "b252-normal-zh-keyboard",
+      "directory": null,
+      "search": null,
+      "requestID": "9dbb9cd0-8305-426b-bc94-a6cedb46af6e",
+      "status": 200,
+      "bytes": 29,
+      "sessions": []
+    }
+  },
+  "uncertain": {
+    "truncatedWrite": {
+      "time": "2026-11-11T20:46:25.671Z",
+      "stage": "truncated",
+      "route": "/mission/draft-6dce6ec5a0476470ae39aee2ca69c1e6/archive",
+      "method": "PATCH",
+      "round": "b252-uncertain-write",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "78d73186-c8db-469f-b4e5-0468a499c104",
+      "status": 200,
+      "bytes": 566,
+      "target": {
+        "missionID": "draft-6dce6ec5a0476470ae39aee2ca69c1e6",
+        "sessionID": "ses_htQRIO5hO3UCN5dDXAN8",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "无法确认的恢复回执",
+        "request": "恢复同一份草稿并保留原请求，直到精确读取确认状态。",
+        "archived": null,
+        "boardLane": "backlog"
+      },
+      "deliveredBytes": 12
+    },
+    "truncatedCheck": {
+      "time": "2026-11-11T20:46:25.751Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_htQRIO5hO3UCN5dDXAN8",
+      "method": "GET",
+      "round": "b252-uncertain-check",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "3b60a42c-6fb0-483b-8159-22222decef39",
+      "status": 200,
+      "bytes": 656,
+      "target": {
+        "missionID": "draft-6dce6ec5a0476470ae39aee2ca69c1e6",
+        "sessionID": "ses_htQRIO5hO3UCN5dDXAN8",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "无法确认的恢复回执",
+        "request": "恢复同一份草稿并保留原请求，直到精确读取确认状态。",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "retryReceipt": {
+      "time": "2026-11-11T20:46:59.887Z",
+      "stage": "delivered",
+      "route": "/mission/draft-6dce6ec5a0476470ae39aee2ca69c1e6/archive",
+      "method": "PATCH",
+      "round": "b252-uncertain-check",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "4e74d937-dc36-4817-8ffd-162d84197146",
+      "status": 200,
+      "bytes": 566,
+      "target": {
+        "missionID": "draft-6dce6ec5a0476470ae39aee2ca69c1e6",
+        "sessionID": "ses_htQRIO5hO3UCN5dDXAN8",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "无法确认的恢复回执",
+        "request": "恢复同一份草稿并保留原请求，直到精确读取确认状态。",
+        "archived": null,
+        "boardLane": "backlog"
+      }
+    },
+    "retryCheck": {
+      "time": "2026-11-11T20:46:59.895Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_htQRIO5hO3UCN5dDXAN8",
+      "method": "GET",
+      "round": "b252-zh-retry",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "2b37b2e0-4958-4be8-b37f-c7859d1be642",
+      "status": 200,
+      "bytes": 656,
+      "target": {
+        "missionID": "draft-6dce6ec5a0476470ae39aee2ca69c1e6",
+        "sessionID": "ses_htQRIO5hO3UCN5dDXAN8",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "title": "无法确认的恢复回执",
+        "request": "恢复同一份草稿并保留原请求，直到精确读取确认状态。",
+        "archived": null,
+        "boardLane": null
+      }
+    }
+  },
+  "selections": [
+    {
+      "requestID": "d89b8296-0bf5-4559-a83e-5f6d0e3da043",
+      "body": {
+        "kind": "mission",
+        "id": "draft-d3b2e2d3652d31bfed85f8bc0dbf4f03",
+        "missionID": "draft-d3b2e2d3652d31bfed85f8bc0dbf4f03",
+        "sessionID": "ses_hc6yQLaQ9Vsw5OI8qo4J",
+        "title": "Reader restore receipt",
+        "pendingPromptText": "Keep the original request and reopen this exact draft.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "created": 1794429877544,
+        "started": 1794429877544,
+        "updated": 1794429947317,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    },
+    {
+      "requestID": "fb28d000-6463-4fc8-b75c-1325fb5b46a9",
+      "body": {
+        "kind": "mission",
+        "id": "draft-16b96053753588749a714b0f83c6af70",
+        "missionID": "draft-16b96053753588749a714b0f83c6af70",
+        "sessionID": "ses_hiEqPGg3jXRYHvOo48ZK",
+        "title": "Normal restore receipt",
+        "pendingPromptText": "Read the original request after a complete receipt.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "created": 1794429877672,
+        "started": 1794429877672,
+        "updated": 1794430058805,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    },
+    {
+      "requestID": "832357c3-42ac-4bd0-b2b9-712e7feca755",
+      "body": {
+        "kind": "mission",
+        "id": "draft-6dce6ec5a0476470ae39aee2ca69c1e6",
+        "missionID": "draft-6dce6ec5a0476470ae39aee2ca69c1e6",
+        "sessionID": "ses_htQRIO5hO3UCN5dDXAN8",
+        "title": "无法确认的恢复回执",
+        "pendingPromptText": "恢复同一份草稿并保留原请求，直到精确读取确认状态。",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-project\\archive-restore-receipt",
+        "created": 1794429877730,
+        "started": 1794429877730,
+        "updated": 1794430008428,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  ],
+  "chatSelected": {
+    "requestID": "85b77534-761e-4c0e-9bdb-50f25d5b41b3",
+    "body": {
+      "kind": "chat",
+      "experience": "chat",
+      "id": "ses_hUr9CSF9M4GjEf4EKCZy",
+      "sessionID": "ses_hUr9CSF9M4GjEf4EKCZy",
+      "title": "Chat restore receipt",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+      "created": 1794429878483,
+      "started": 1794429878483,
+      "updated": 1794429947330,
+      "pinned": false,
+      "status": "idle"
+    }
+  },
+  "chatNative": {
+    "requestID": "99499807-81aa-4f37-b3e1-fff3f4f6ec13",
+    "body": {
+      "session": {
+        "id": "ses_hUr9CSF9M4GjEf4EKCZy",
+        "slug": "playful-tiger",
+        "projectID": "prj_hagmBNtx9yJ75RoFYPZJ",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\candidate-alternate\\archive-restore-receipt",
+        "title": "Chat restore receipt",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b252-candidate-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794429878483,
+          "updated": 1794429947330
+        }
+      }
+    }
+  },
+  "archive": {
+    "requestID": "07394a97-7f00-44e2-a749-66f48efe477c",
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  }
+}

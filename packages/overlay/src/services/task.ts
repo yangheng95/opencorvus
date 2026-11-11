@@ -18,6 +18,7 @@ import {
 
 import { apiJson, ApiError, serverSettledRequest } from "./api"
 import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+import { settleArchiveRestore } from "./archive-restore"
 import type { StreamHandle } from "./host-transport"
 import { getHostTransport } from "./host-transport-runtime"
 import { isSelectedTaskSSEConnected, startSSE, stopSSE } from "./sse"
@@ -67,7 +68,7 @@ import {
   restoreDraftComposerModel,
 } from "./composer-model"
 import { wakeMission } from "./mission"
-import { workLedgerSessionExecution } from "./work-ledger"
+import { verifyWorkLedgerRestore, workLedgerSessionExecution } from "./work-ledger"
 import { randomUUID } from "../utils/random-id"
 import { replaceWorkspaceLocation } from "./workspace-location"
 
@@ -431,10 +432,19 @@ export async function setTaskArchived(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   } satisfies Parameters<typeof apiJson>[1]
-  await apiJson(
-    `${taskRecordPath(taskID)}/archive?${params.toString()}`,
-    archived ? serverSettledRequest(request) : request,
-  )
+  const path = `${taskRecordPath(taskID)}/archive?${params.toString()}`
+  if (archived) {
+    await apiJson(path, serverSettledRequest(request))
+  } else {
+    await settleArchiveRestore({
+      authority,
+      write: async () => {
+        const receipt = await apiJson<unknown>(path, request)
+        if (receipt !== true) throw new Error("The Task restore receipt is invalid.")
+      },
+      readRestored: () => verifyWorkLedgerRestore({ kind: "task", taskID, directory, authority }),
+    })
+  }
   if (!isApiAuthorityCurrent(authority)) return true
   if (archived) {
     await reconcileRemovedTaskAfterCommit(taskID, "archive")

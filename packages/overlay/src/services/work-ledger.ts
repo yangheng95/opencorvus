@@ -168,11 +168,33 @@ export async function loadArchivedWorkLedger(input: WorkLedgerPageInput = {}): P
   return WorkLedgerArchiveListSchema.parse(await readWorkLedgerPage("work-ledger/archive", input))
 }
 
-export async function loadWorkLedgerSelection(input: { kind: "task" | "session"; id: string; directory: string; authority: ApiAuthority; signal: AbortSignal }): Promise<WorkLedgerItemRow> {
+export async function loadWorkLedgerSelection(input: { kind: "task" | "session"; id: string; directory: string; authority: ApiAuthority; signal?: AbortSignal }): Promise<WorkLedgerItemRow> {
   return WorkLedgerArchiveRowSchema.parse(await apiJson<unknown>(
     directoryScopedPath(`work-ledger/selection/${input.kind}/${encodeURIComponent(input.id)}`, input.directory),
     { authority: input.authority, signal: input.signal },
   ))
+}
+
+type WorkLedgerRestoreIdentity =
+  | { kind: "task"; taskID: string }
+  | { kind: "mission"; missionID: string; sessionID: string }
+
+export async function verifyWorkLedgerRestore(
+  input: WorkLedgerRestoreIdentity & { directory: string; authority: ApiAuthority },
+): Promise<void> {
+  const row = await loadWorkLedgerSelection({
+    kind: input.kind === "task" ? "task" : "session",
+    id: input.kind === "task" ? input.taskID : input.sessionID,
+    directory: input.directory,
+    authority: input.authority,
+  })
+  const sameOwner = input.kind === "task"
+    ? row.kind === "task" && row.id === input.taskID
+    : row.kind === "mission" && row.missionID === input.missionID && row.sessionID === input.sessionID
+  if (!sameOwner || projectDirectoryKey(row.directory) !== projectDirectoryKey(input.directory)) {
+    throw new Error("The archive restore check returned a different Work Ledger identity.")
+  }
+  if (row.archived !== undefined) throw new Error("The selected Work Ledger item is still archived.")
 }
 
 export async function setWorkLedgerProjectPinned(input: { projectID: string; pinned: boolean; authority?: ApiAuthority }): Promise<void> {

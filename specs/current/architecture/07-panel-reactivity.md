@@ -1163,7 +1163,12 @@ existing stream invalidations refresh that reader. Its title, status and Goal
 owner share that one response. Archived history remains readable with its real
 title and a localized archive date. The mounted composer and Goal mutations
 are read-only; explicit Restore uses the existing owner archive endpoint and
-refreshes the same selection without executing or resuming it. Read failures
+refreshes the same selection without executing or resuming it. If the restore
+receipt is uncertain, the client verifies the exact owner on the same
+connection before reconciling either the reader or the archive list. Task and
+Mission use the Work Ledger selection read, while Chat and Work use the native
+project and experience scoped Session read to update their Session projection.
+An unconfirmed restore exposes the write and read diagnostics. Read failures
 retain the history with an actionable error, and keep execution input unavailable.
 Every Mailbox change causes a fresh
 canonical page read, so the notification stream is not a second payload/history

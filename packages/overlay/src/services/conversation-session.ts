@@ -13,6 +13,7 @@ import { startSSE, stopSSE } from "./sse"
 import { resetSelectedLiveCursor } from "./selected-stream-cursor"
 import { loadConversationUiStateForSource } from "../store/conversation-ui"
 import { apiJson, ApiError, serverSettledRequest } from "./api"
+import { settleArchiveRestore } from "./archive-restore"
 import {
   ApiAuthorityChangedError,
   captureApiAuthority,
@@ -28,6 +29,7 @@ import type { WorkLedgerStreamEvent } from "./sse"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
 import { replaceWorkspaceLocation } from "./workspace-location"
 import { captureComposerDraftRevision, composerSubmission, moveComposerDraft, workspaceComposerDraftKey } from "./composer-draft"
+import { projectDirectoryKey } from "../utils/project-directory"
 
 type ConversationSessionResponse = {
   session: ConversationSessionInfo
@@ -201,6 +203,32 @@ function conversationSessionPath(target: ConversationSessionActionTarget, suffix
   if (!sessionID || !directory) throw new Error("conversationSessionSessionPath: sessionID and directory are required")
   const params = new URLSearchParams({ directory })
   return `coding/${target.experience}/session/${encodeURIComponent(sessionID)}${suffix}?${params.toString()}`
+}
+
+function readConversationSession(target: ConversationSessionActionTarget, signal?: AbortSignal) {
+  return apiJson<ConversationSessionResponse>(conversationSessionPath(target), { authority: target.authority, signal })
+}
+
+function restoredConversation(
+  response: ConversationSessionResponse,
+  target: ConversationSessionActionTarget,
+): ConversationSessionResponse {
+  const session = response?.session
+  const conversation = session?.metadata?.conversation
+  if (
+    session?.id !== target.sessionID.trim() ||
+    session.kind !== "assistant" ||
+    !session.directory ||
+    projectDirectoryKey(session.directory) !== projectDirectoryKey(target.directory) ||
+    !conversation || typeof conversation !== "object" ||
+    !("experience" in conversation) || conversation.experience !== target.experience ||
+    !("surface" in conversation) || conversation.surface !== "right-sidebar" ||
+    typeof session.time?.updated !== "number"
+  ) {
+    throw new Error("The archive restore result returned a different or incomplete conversation identity.")
+  }
+  if (session.time.archived !== undefined) throw new Error("The selected conversation is still archived.")
+  return response
 }
 
 export async function loadConversationSessions(options: {
@@ -424,13 +452,9 @@ export async function selectConversationSession(options: SelectConversationSessi
     const sessionID = requestedSessionID
     const stale = () => !isApiAuthorityCurrent(authority) || !ownsWorkspaceSelection(selectionEpoch)
     assertNotAborted(options.signal)
-    const claimed = (await apiJson(
-      conversationSessionPath({ sessionID, directory: inputDirectory, experience: options.experience }),
-      {
-        authority,
-        signal: options.signal,
-      },
-    )) as ConversationSessionResponse | undefined
+    const claimed = await readConversationSession({
+      sessionID, directory: inputDirectory, experience: options.experience, authority,
+    }, options.signal)
     if (stale()) throw new DOMException("Coding assistant selection superseded", "AbortError")
     if (claimed?.session) setSessionRow(claimed.session)
     const directory = String(claimed?.session?.directory || "").trim()
@@ -623,10 +647,14 @@ export async function setConversationSessionArchived(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ archived }),
     } satisfies Parameters<typeof apiJson>[1]
-    const response = (await apiJson(
-      conversationSessionPath(target, "/archive"),
-      archived ? serverSettledRequest(request) : request,
-    )) as ConversationSessionResponse
+    const path = conversationSessionPath(target, "/archive")
+    const response = archived
+      ? await apiJson<ConversationSessionResponse>(path, serverSettledRequest(request))
+      : await settleArchiveRestore({
+          authority,
+          write: async () => restoredConversation(await apiJson<ConversationSessionResponse>(path, request), target),
+          readRestored: async () => restoredConversation(await readConversationSession({ ...target, authority }), target),
+        })
     if (!owns()) return true
     reconcileSessionAfterCommit(id, archived ? "archive" : "restore", () => {
       if (!archived) {
