@@ -800,6 +800,12 @@ English-name matcher to the server's localized results. Selected entries outside
 an accepted page remain visible with an explicit label and preserve their exact
 visible directive. Skill queries retain their local ranking. Pending reads show
 loading; source failures retain their diagnostic.
+Mission Skill settings, reference choices, and mentions use the same localized
+product description for the reserved built-in `general` identity. Search accepts
+the displayed and source descriptions. The reference picker keeps its local
+name results first, followed by Mission Skills matching the description.
+Project and user-global descriptions, exact directives, and catalog responses
+retain their source content.
 The existing request key includes API authority, work type and catalog scope.
 Search waits for the owned initial catalog, then publishes under that key and
 the original sequence; retries reload and search the current query with its

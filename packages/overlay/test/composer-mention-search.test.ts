@@ -70,3 +70,26 @@ describe("Composer producer-qualified Squad references", () => {
     expect(applyComposerMentionOption(text, query, options[0]!).text).toBe('@squad("research-studio") ')
   })
 })
+
+test("Mission Skill display and source descriptions resolve to the same exact directive", () => {
+  const current = catalog()
+  current.missionSkills = [{
+    kind: "mission-skill",
+    id: "general",
+    label: "general",
+    description: "使用固定配置协调多步任务",
+    sourceDescription: "Coordinate with fixed-profile Tasks",
+  }]
+
+  for (const phrase of ["固定配置", "fixed-profile"]) {
+    const text = `@mission ${phrase}`
+    const query = findComposerMentionQuery(text, text.length)!
+    const options = composerMentionOptions(query, current)
+    expect(options.map(({ id, description }) => ({ id, description }))).toEqual([
+      { id: "general", description: "使用固定配置协调多步任务" },
+    ])
+    const selected = applyComposerMentionOption(text, query, options[0]!)
+    expect(selected.text).toBe('@mission("general") ')
+    expect(resolveComposerMentionDirectives(selected.text, current).missionSkillNames).toEqual(["general"])
+  }
+})

@@ -9,6 +9,7 @@ import { pathRevealFailureKey, pathRevealLabelKey, pathRevealNoticeKey, revealPa
 import { appStore } from "../../store/app"
 import { formatErrorDetails } from "../../utils/error-details"
 import { t, tc } from "../../utils/i18n"
+import { missionSkillDescription } from "../../utils/mission-skill-description"
 import { Badge } from "../ui/Badge"
 import { Disclosure } from "../ui/Disclosure"
 import { Button } from "../ui/Button"
@@ -128,7 +129,9 @@ export default function MissionSkillPanel() {
     const source = filter()
     return skills().filter((skill) => {
       if (source !== "all" && skill.source !== source) return false
-      return !term || matchesSearchTerms(term, [skill.name, skill.description, sourceLabel(skill.source), ...skill.required_tools])
+      return !term || matchesSearchTerms(term, [
+        skill.name, missionSkillDescription(skill), skill.description, sourceLabel(skill.source), ...skill.required_tools,
+      ])
     })
   })
   const selectedSkill = createMemo(() => {
@@ -503,7 +506,7 @@ export default function MissionSkillPanel() {
                 >
                   {(skill) => (
                     <>
-                      <p class="mission-skill-detail-description">{skill().description}</p>
+                      <p class="mission-skill-detail-description">{missionSkillDescription(skill())}</p>
                       <div class="mission-skill-detail-section mission-skill-invocation">
                         <strong>{t("mission_skill.invoke_title")}</strong>
                         <code>{invocation(skill().name)}</code>

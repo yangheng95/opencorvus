@@ -8,6 +8,7 @@ export interface ComposerMentionEntity {
   id: string
   label: string
   description?: string
+  sourceDescription?: string
   disabled?: boolean
 }
 
@@ -33,6 +34,7 @@ export interface ComposerMentionOption {
   id: string
   label: string
   description?: string
+  sourceDescription?: string
   searchText: string
   disabled: boolean
 }
@@ -147,7 +149,6 @@ function rankedOptionScore(option: ComposerMentionOption, query: string): number
   const normalizedLabel = normalizeSearchText(option.label)
   const normalizedID = normalizeSearchText(option.id)
   const normalizedSyntax = normalizeSearchText(composerMentionSyntax(option.kind))
-  const normalizedDescription = normalizeSearchText(option.description ?? "")
   if (normalizedID === normalizedQuery || normalizedLabel === normalizedQuery || normalizedSyntax === normalizedQuery) {
     return 0
   }
@@ -165,7 +166,10 @@ function rankedOptionScore(option: ComposerMentionOption, query: string): number
   ) {
     return 2
   }
-  if (normalizedDescription.includes(normalizedQuery)) return 3
+  if (
+    normalizeSearchText(option.description ?? "").includes(normalizedQuery) ||
+    normalizeSearchText(option.sourceDescription ?? "").includes(normalizedQuery)
+  ) return 3
   return null
 }
 
@@ -177,7 +181,8 @@ function entityOptions(entities: readonly ComposerMentionEntity[]): ComposerMent
     id: entity.id,
     label: entity.label,
     description: entity.description,
-    searchText: [entity.id, entity.label, entity.description ?? ""].join(" "),
+    sourceDescription: entity.sourceDescription,
+    searchText: [entity.id, entity.label, entity.description, entity.sourceDescription].filter(Boolean).join(" "),
     disabled: entity.disabled === true,
   }))
 }

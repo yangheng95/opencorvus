@@ -1,0 +1,51 @@
+{
+  "asset": "main-DVRfnkEs.js",
+  "checked": [
+    {
+      "route": "/mission-skill/settings",
+      "status": 200,
+      "requestID": "0400aee4-5ca5-4533-b967-16a7a807c9b1",
+      "projected": [
+        {
+          "name": "general",
+          "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+          "requiredTools": 14
+        },
+        {
+          "name": "local-review",
+          "description": "Explain the team's review checklist for this isolated project.",
+          "requiredTools": 1
+        }
+      ]
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "status": 200,
+      "requestID": "5bc12402-50f7-450d-b5fb-2591fa0e651f",
+      "projected": [
+        {
+          "name": "general",
+          "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+          "requiredTools": 14
+        },
+        {
+          "name": "local-review",
+          "description": "Explain the team's review checklist for this isolated project.",
+          "requiredTools": 1
+        }
+      ]
+    },
+    {
+      "route": "/global/composer-references",
+      "status": 200,
+      "requestID": "d97a1b22-50ea-43a5-bd54-eff33fc84277",
+      "projected": [
+        {
+          "name": "general",
+          "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+          "requiredTools": 14
+        }
+      ]
+    }
+  ]
+}

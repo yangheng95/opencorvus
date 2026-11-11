@@ -4,8 +4,10 @@ import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/
 import type { ComposerExpertSquadPackage, ComposerExpertSquadSearch } from "../services/composer-expert-squad-catalog"
 import { setComposerMentionDirectiveSelected, type ComposerMentionKind } from "../services/composer-mention"
 import { fuzzySearch } from "../services/fuzzy-search"
+import { matchesSearchTerms } from "../services/text-search"
 import { t } from "../utils/i18n"
 import { expertSquadDescription } from "../utils/expert-squad-description"
+import { missionSkillDescription } from "../utils/mission-skill-description"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { ListboxItem, ListboxRoot, ListboxSection } from "./ui/Listbox"
@@ -26,6 +28,7 @@ interface ComposerReferenceOption {
   id: string
   label: string
   description?: string
+  sourceDescription?: string
   typeLabel: string
   systemRole?: "expert_squad_generator"
   outsideSearch?: boolean
@@ -64,10 +67,6 @@ export interface ComposerReferenceSelectorProps {
   onCatalogRetry?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
 }
 
-function referenceSearchText(option: ComposerReferenceOption): string {
-  return option.label
-}
-
 export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps) {
   const [open, setOpen] = createSignal(false)
   const [query, setQuery] = createSignal("")
@@ -91,7 +90,8 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
       kind: "mission-skill" as const,
       id: skill.name,
       label: skill.name,
-      description: skill.description,
+      description: missionSkillDescription(skill),
+      sourceDescription: skill.description,
       typeLabel: t("chat.references.mission_skill"),
     })),
   ])
@@ -115,7 +115,18 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     ])
   })
   const selectedCount = createMemo(() => selectedKeys().size)
-  const filteredSkillOptions = createMemo(() => fuzzySearch(skillOptions(), query(), referenceSearchText))
+  const filteredSkillOptions = createMemo(() => {
+    const options = skillOptions()
+    const text = query()
+    const nameMatches = fuzzySearch(options, text, (option) => option.label)
+    if (!text.trim()) return nameMatches
+    const descriptionMatches = options.filter((option) =>
+      option.kind === "mission-skill" &&
+      !nameMatches.includes(option) &&
+      matchesSearchTerms(text, [option.description, option.sourceDescription]),
+    )
+    return [...nameMatches, ...descriptionMatches]
+  })
   const squadSearchCurrent = () => props.expertSquadSearch.query === query().trim()
   const squadSearchLoading = () => !squadSearchCurrent() || props.expertSquadSearch.status === "pending"
   const filteredSquadOptions = createMemo(() => {

@@ -22,6 +22,7 @@ import { settingsStore } from "../store/settings"
 import { Slider } from "./ui/Slider"
 import { localeTag, t } from "../utils/i18n"
 import { expertSquadDescription } from "../utils/expert-squad-description"
+import { missionSkillDescription } from "../utils/mission-skill-description"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { messageStore, setChatAttachments } from "../store/messages"
@@ -725,7 +726,8 @@ export function ChatComposer(props: ChatComposerProps) {
         kind: "mission-skill",
         id: skill.name,
         label: skill.name,
-        description: skill.description,
+        description: missionSkillDescription(skill),
+        sourceDescription: skill.description,
       }),
     ),
     squadSearch: props.expertSquadSearch,
