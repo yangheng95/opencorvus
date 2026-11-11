@@ -1,0 +1,100 @@
+{
+  "asset": "main-Bf8VzRoF.js",
+  "checked": [
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "8d61b94c-e977-4ca5-b9b0-ef31c4733f9a",
+      "result": {
+        "active": "dynamic"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "f425d57d-8eb9-4e79-9553-1799a520e743",
+      "result": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/deep-research/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "3bdaec7f-7fb1-48ea-b4a6-a378d585d409",
+      "result": {
+        "ids": [
+          "academic-paper-review",
+          "data-analysis",
+          "commercial-legal"
+        ]
+      }
+    }
+  ],
+  "installs": [
+    {
+      "time": "2026-11-11T18:37:54.601Z",
+      "stage": "delivered",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-install-refresh-held",
+      "status": 200,
+      "requestID": "d7e882a1-99ce-45f7-8bc0-93faed10d70e",
+      "bytes": 530,
+      "installation": {}
+    }
+  ],
+  "market": [
+    {
+      "time": "2026-11-11T18:37:40.928Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "setup",
+      "status": 200,
+      "requestID": "ad481fc7-a1fd-459c-a953-262edd2d1591",
+      "bytes": 1454,
+      "ids": [
+        "deep-research",
+        "academic-paper-review",
+        "data-analysis"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:37:55.103Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-install-refresh-held",
+      "status": 200,
+      "requestID": "3a4cb211-baad-4ae6-b17a-326c622b4ff9",
+      "bytes": 1490,
+      "ids": [
+        "academic-paper-review",
+        "data-analysis",
+        "commercial-legal"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:38:06.371Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-install-refresh-held",
+      "status": 200,
+      "requestID": "3a4cb211-baad-4ae6-b17a-326c622b4ff9",
+      "bytes": 1490,
+      "ids": [
+        "academic-paper-review",
+        "data-analysis",
+        "commercial-legal"
+      ]
+    }
+  ]
+}

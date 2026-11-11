@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [输入区市场安装焦点交接的证据](2026-11-12-composer-market-install-trigger-focus/README.md)
 - [专家团市场推荐读取和原位重试的证据](2026-11-12-expert-squad-market-query-retry/README.md)
 - [新建多步任务专家团搜索结算的证据](2026-11-12-mission-create-squad-search-settlement/README.md)
 - [多步任务引用术语和搜索范围的证据](2026-11-12-mission-reference-search-labels/README.md)

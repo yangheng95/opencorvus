@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [输入区市场安装完成后从原搜索继续](2026-11-12-composer-market-install-trigger-focus.md)
 - [专家团市场推荐可原位重试查询](2026-11-12-expert-squad-market-query-retry.md)
 - [新建多步任务只从已确认的搜索结果添加专家团](2026-11-12-mission-create-squad-search-settlement.md)
 - [多步任务的引用术语与搜索范围](2026-11-12-mission-reference-search-labels.md)
