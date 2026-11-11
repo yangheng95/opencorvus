@@ -1,0 +1,142 @@
+{
+  "asset": "main-B-llbEIe.js",
+  "saved": {
+    "time": "2026-11-11T20:05:28.056Z",
+    "stage": "delivered",
+    "route": "/mission/draft",
+    "method": "POST",
+    "round": "b250-zh-board-read",
+    "filename": null,
+    "requestID": "e3b55088-8dd8-46cd-9fb4-4288d52347de",
+    "status": 200,
+    "bytes": 551,
+    "target": {
+      "missionID": "draft-7ab666d3750e50b68fa376292f43c5af",
+      "sessionID": "ses_hWC2oPaCt7QUvg7x5kgK",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\candidate-project\\archive-review",
+      "title": "确认活动列表等待中的草稿",
+      "request": "只核对保存的原请求，并保持看板原有筛选。"
+    }
+  },
+  "held": {
+    "time": "2026-11-11T20:05:28.197Z",
+    "stage": "held",
+    "route": "/mission",
+    "method": "GET",
+    "round": "b250-zh-board-read",
+    "filename": null,
+    "requestID": "faf97720-ddf4-4f30-8bb7-4f8148c77afd",
+    "status": 200,
+    "bytes": 1093,
+    "sessions": [
+      "ses_hWC2oPaCt7QUvg7x5kgK",
+      "ses_h9N0BxUTscAs4M11dXHV"
+    ]
+  },
+  "shown": {
+    "time": "2026-11-11T20:05:38.578Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hWC2oPaCt7QUvg7x5kgK",
+    "method": "GET",
+    "round": "b250-zh-board-read",
+    "filename": null,
+    "requestID": "2cb38cba-65d3-4a29-a1ff-0adda1f3204e",
+    "status": 200,
+    "bytes": 641,
+    "target": {
+      "missionID": "draft-7ab666d3750e50b68fa376292f43c5af",
+      "sessionID": "ses_hWC2oPaCt7QUvg7x5kgK",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\candidate-project\\archive-review",
+      "title": "确认活动列表等待中的草稿",
+      "request": "只核对保存的原请求，并保持看板原有筛选。"
+    }
+  },
+  "released": {
+    "time": "2026-11-11T20:05:38.766Z",
+    "stage": "delivered",
+    "route": "/mission",
+    "method": "GET",
+    "round": "b250-zh-board-read",
+    "filename": null,
+    "requestID": "faf97720-ddf4-4f30-8bb7-4f8148c77afd",
+    "status": 200,
+    "bytes": 1093,
+    "sessions": [
+      "ses_hWC2oPaCt7QUvg7x5kgK",
+      "ses_h9N0BxUTscAs4M11dXHV"
+    ]
+  },
+  "active": {
+    "requestID": "47ebf9db-b342-49e4-aae7-22fe67e50b3c",
+    "body": [
+      {
+        "missionID": "draft-7ab666d3750e50b68fa376292f43c5af",
+        "sessionID": "ses_hWC2oPaCt7QUvg7x5kgK",
+        "title": "确认活动列表等待中的草稿",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\candidate-project\\archive-review",
+        "created": 1794427527988,
+        "updated": 1794427527988,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "只核对保存的原请求，并保持看板原有筛选。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-05305dd15f9a8bac102311aa034ef9ed",
+        "sessionID": "ses_h9N0BxUTscAs4M11dXHV",
+        "title": "Review archive continuity",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\candidate-project\\archive-review",
+        "created": 1794427431489,
+        "updated": 1794427461130,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Read the exact preserved request after archive and restore."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "exact": {
+    "requestID": "2d37ca6d-25fb-4169-ad50-c893832f8dba",
+    "body": {
+      "kind": "mission",
+      "id": "draft-7ab666d3750e50b68fa376292f43c5af",
+      "missionID": "draft-7ab666d3750e50b68fa376292f43c5af",
+      "sessionID": "ses_hWC2oPaCt7QUvg7x5kgK",
+      "title": "确认活动列表等待中的草稿",
+      "pendingPromptText": "只核对保存的原请求，并保持看板原有筛选。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\candidate-project\\archive-review",
+      "created": 1794427527988,
+      "started": 1794427527988,
+      "updated": 1794427527988,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  }
+}

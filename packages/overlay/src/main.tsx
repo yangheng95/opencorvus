@@ -1164,18 +1164,6 @@ function openMissionBoard(): void {
   queueMicrotask(() => document.getElementById("missionBoardTitle")?.focus())
 }
 
-async function openMissionBoardMission(row: MissionRecord): Promise<void> {
-  await openMissionWithUILifecycle(
-    {
-      missionID: row.missionID,
-      sessionID: row.sessionID,
-      created: false,
-      productPillar: row.productPillar,
-    },
-    row.directory,
-  )
-}
-
 function missionBoardProjectDirectories(): string[] {
   const currentDirectory = activeDirectory().trim()
   return [...new Set([...(currentDirectory ? [currentDirectory] : []), ...workLedgerProjectDirectories()])]
@@ -2771,7 +2759,7 @@ function OverlayRoot() {
           onOpenMarketExpertSquad={openMissionMarketExpertSquad}
           canOpenMarketWebPage={getHostTransport().capabilities.nativeCommands["open-url"]}
           onOpenMission={(mission) =>
-            runUserNavigation("mission-board.open-mission", () => openMissionBoardMission(mission))
+            runUserNavigation("mission-board.open-mission", () => openMissionWithUILifecycle(mission, mission.directory))
           }
           onOpenTask={(task) =>
             runUserNavigation("mission-board.open-task", () => selectTaskWithUILifecycle(task.id, task.directory))

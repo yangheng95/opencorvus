@@ -33,6 +33,7 @@ import { captureApiAuthority, assertApiAuthorityCurrent, isApiAuthorityCurrent, 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
 type MissionTask = MissionRecord["tasks"][number]
+type MissionOpenTarget = Pick<MissionRecord, "sessionID" | "directory" | "productPillar">
 type ProjectOption = { value: string; label: string; parent?: string; distinctPath?: boolean }
 
 export interface MissionBoardProps {
@@ -47,7 +48,7 @@ export interface MissionBoardProps {
   onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<ExpertSquadMarketInstallOutcome>
   onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   canOpenMarketWebPage?: boolean
-  onOpenMission: (mission: MissionRecord) => void | Promise<void>
+  onOpenMission: (mission: MissionOpenTarget) => void | Promise<void>
   onOpenTask: (task: MissionTask) => void | Promise<void>
   onCreateManual: (input: MissionManualCreateRequest) => Promise<MissionRecord>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
@@ -344,7 +345,7 @@ export function MissionBoard(props: MissionBoardProps) {
   const [layout, setLayout] = createSignal<"list" | "board">("list")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [createOpen, setCreateOpen] = createSignal(false)
-  const [savedDraftReceipt, setSavedDraftReceipt] = createSignal<{ missionID: string; authority: ApiAuthority } | null>(null)
+  const [savedDraftReceipt, setSavedDraftReceipt] = createSignal<(MissionOpenTarget & { authority: ApiAuthority }) | null>(null)
   const [pendingAction, setPendingAction] = createSignal<{ kind: "dispatch" | "delete"; missionID: string } | null>(
     null,
   )
@@ -363,11 +364,6 @@ export function MissionBoard(props: MissionBoardProps) {
     const receipt = savedDraftReceipt()
     return receipt && isApiAuthorityCurrent(receipt.authority) ? receipt : null
   })
-  const savedDraftMission = createMemo(() => {
-    const receipt = currentSavedDraftReceipt()
-    return receipt ? missionBoardStore.records.find((mission) => mission.missionID === receipt.missionID) : undefined
-  })
-
   const projectContexts = createMemo(() => {
     const projects = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].map((directory) => ({
       directory,
@@ -632,9 +628,9 @@ export function MissionBoard(props: MissionBoardProps) {
                 variant="outline"
                 size="sm"
                 tone="neutral"
-                disabled={!savedDraftMission() || Boolean(pendingAction())}
+                disabled={Boolean(pendingAction())}
                 onClick={() => {
-                  const mission = savedDraftMission()
+                  const mission = currentSavedDraftReceipt()
                   if (mission) void props.onOpenMission(mission)
                 }}
               >
@@ -846,7 +842,8 @@ export function MissionBoard(props: MissionBoardProps) {
           const authority = captureApiAuthority()
           const created = await props.onCreateManual(input)
           assertApiAuthorityCurrent(authority)
-          setSavedDraftReceipt({ missionID: created.missionID, authority })
+          const { sessionID, directory, productPillar } = created
+          setSavedDraftReceipt({ sessionID, directory, productPillar, authority })
         }}
         onCreateWithAI={props.onCreateWithAI}
       />

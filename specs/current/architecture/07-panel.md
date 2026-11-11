@@ -1878,12 +1878,13 @@ and placeholder are shared by both modes and the same request label is used
 by draft editing. Saving and starting use their own existing busy labels;
 switching modes retains authored fields and the existing validation/context.
 Manual creation returns its existing committed MissionRecord through the main
-binding. The Missions page retains only a saved Mission identity and captured
-API authority as an ephemeral acknowledgement. It shows inline success outside
-the search/project results, with an Open Mission action derived from that exact
-identity in the existing complete Mission reader. Search/project values stay
-unchanged and the existing navigation owns opening. A pending/failed reader
-does not rewrite the committed save; the action waits for its canonical record.
+binding. The Missions page retains the receipt's session, project directory,
+work type, and captured API authority as an ephemeral acknowledgement. It shows
+inline success outside the search/project results. Open Mission navigates to
+that exact session through the existing Mission selection. A pending, failed,
+or filtered active list does not control the action. Navigation reads the
+current persisted record, including its archive state. Search/project values
+stay unchanged.
 Retired API authority invalidates the acknowledgement, and explicit dismissal
 removes it and focuses the existing Create Mission button when it is mounted,
 visible and enabled. Automatic retirement does not initiate focus.

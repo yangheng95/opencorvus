@@ -1,0 +1,55 @@
+{
+  "asset": "main-B-llbEIe.js",
+  "active": {
+    "requestID": "6e159845-7032-49bc-992a-a340865755f6",
+    "body": [
+      {
+        "missionID": "draft-05305dd15f9a8bac102311aa034ef9ed",
+        "sessionID": "ses_h9N0BxUTscAs4M11dXHV",
+        "title": "Review archive continuity",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\candidate-project\\archive-review",
+        "created": 1794427431489,
+        "updated": 1794427461130,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Read the exact preserved request after archive and restore."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "exact": {
+    "requestID": "e5267784-1222-448d-90f6-5ba59cfbbf34",
+    "body": {
+      "kind": "mission",
+      "id": "draft-05305dd15f9a8bac102311aa034ef9ed",
+      "missionID": "draft-05305dd15f9a8bac102311aa034ef9ed",
+      "sessionID": "ses_h9N0BxUTscAs4M11dXHV",
+      "title": "Review archive continuity",
+      "pendingPromptText": "Read the exact preserved request after archive and restore.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\candidate-project\\archive-review",
+      "created": 1794427431489,
+      "started": 1794427431489,
+      "updated": 1794427461130,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  }
+}
