@@ -9,7 +9,7 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, on, onClea
 import { t, tc } from "../../utils/i18n"
 import { preciseStamp } from "../../utils/time"
 import { useNowTick } from "../../services/clock"
-import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
+import { appStore, dismissProviderAuth, setAppStore, type ProviderLoadIssue } from "../../store/app"
 import { committedConfigFromError, updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { boardStore } from "../../store/board"
@@ -199,7 +199,13 @@ export default function ProvidersPanel() {
   const [loadingProviderInfo, setLoadingProviderInfo] = createSignal(false)
   const [providerInfoRetry, setProviderInfoRetry] = createSignal<{ trigger: HTMLButtonElement }>()
   const providerInfoBusy = () => loadingProviderInfo() || Boolean(providerInfoRetry())
-  const providerInfoFeedbackVisible = () => appStore.providerLoadIssues.length > 0 || Boolean(providerInfoRetry())
+  const providerInfoIssues = createMemo<ProviderLoadIssue[]>(() => {
+    const issues = appStore.providerLoadIssues
+    if (activeDirectory().trim()) return issues
+    const configIssue = appStore.configLoadIssues.find((issue) => issue.resource === "config")
+    return configIssue ? [...issues, { resource: "config", message: configIssue.message }] : issues
+  })
+  const providerInfoFeedbackVisible = () => providerInfoIssues().length > 0 || Boolean(providerInfoRetry())
   const providerScope = createMemo(() => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const)
   let providerSearchInput: HTMLInputElement | undefined
 
@@ -378,7 +384,7 @@ export default function ProvidersPanel() {
     try {
       await reloadProviderInfo(directory, options)
       if (providerInfoRetry() === retry && options.isCurrentDirectory(directory)
-        && appStore.providerLoadIssues.length === 0 && document.activeElement === retry.trigger) {
+        && providerInfoIssues().length === 0 && document.activeElement === retry.trigger) {
         providerSearchInput?.focus({ preventScroll: true })
       }
     } finally {
@@ -1149,7 +1155,7 @@ export default function ProvidersPanel() {
   const catalogAvailable = () =>
     Boolean(appStore.providerCatalog) && !appStore.providerLoadIssues.some((issue) => issue.resource === "catalog")
   const configuredUnavailable = () =>
-    appStore.providerLoadIssues.some((issue) => ["catalog", "auth", "config"].includes(issue.resource))
+    providerInfoIssues().some((issue) => ["catalog", "auth", "config"].includes(issue.resource))
 
   function modelSummary(modelIds: string[]): string {
     if (modelIds.length === 0) return t("provider.label.no_models")
@@ -1289,7 +1295,7 @@ export default function ProvidersPanel() {
 
         <Show when={providerInfoFeedbackVisible()}>
           <div class="provider-load-feedback">
-            <For each={appStore.providerLoadIssues}>
+            <For each={providerInfoIssues()}>
               {(issue) => (
                 <Feedback tone="error" details={issue.message}>
                   {issue.resource === "catalog" && appStore.providerCatalog
@@ -1324,7 +1330,7 @@ export default function ProvidersPanel() {
             providerEntries().size === 0 &&
             catalogEntries().size === 0 &&
             !showAdd() &&
-            appStore.providerLoadIssues.length === 0 &&
+            providerInfoIssues().length === 0 &&
             Boolean(appStore.providerCatalog)
           }
         >

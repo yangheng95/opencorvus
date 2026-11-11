@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [全局配置回执顺序的证据](2026-11-11-global-provider-config-settlement/README.md)
 - [关闭项目时切换读取范围的证据](2026-11-11-project-close-scope-commit/README.md)
 - [服务商目录行焦点的证据](2026-11-11-provider-row-identity/README.md)
 - [服务商读取和重试进度的证据](2026-11-11-provider-read-progress/README.md)

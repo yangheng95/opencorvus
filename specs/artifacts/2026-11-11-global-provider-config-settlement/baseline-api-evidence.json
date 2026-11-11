@@ -1,0 +1,126 @@
+{
+  "asset": "main-___uU3J7.js",
+  "checked": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "c68f2c00-2a24-44da-b5a3-0c0dea4d0ea4"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "377caf1b-4699-4a52-a7a9-7f87bcc713c3"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "2e9a564e-3d41-44d8-a5be-8351fc3e5276"
+    },
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "04171dc9-70f5-46f5-9666-7670f22ea333"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "3c755de5-c6f5-4a11-bea7-af9580148eeb"
+    }
+  ],
+  "catalogs": {
+    "project": {
+      "providers": 90,
+      "connected": 0,
+      "reviewCustom": "Review Custom"
+    },
+    "global": {
+      "providers": 89,
+      "connected": 0,
+      "reviewGlobal": "Review Global"
+    }
+  },
+  "round": {
+    "originalConfig": {
+      "time": "2026-11-11T05:10:56.937Z",
+      "stage": "delivered",
+      "round": "b232-close-ordering",
+      "route": "/global/config",
+      "ordinal": 1,
+      "scope": "global",
+      "status": 200,
+      "requestID": "c5721dac-dd68-4351-a651-e42a50f290d7",
+      "reviewGlobal": null
+    },
+    "originalCatalog": {
+      "time": "2026-11-11T05:10:56.996Z",
+      "stage": "held",
+      "label": "global-catalog",
+      "round": "b232-close-ordering",
+      "route": "/global/providers",
+      "scope": "global",
+      "status": 200,
+      "requestID": "52874304-b276-422e-8fdf-0a36ebbdd3dd",
+      "providerCount": 88,
+      "reviewGlobal": false
+    },
+    "gatedWorkspace": {
+      "time": "2026-11-11T05:10:56.939Z",
+      "stage": "held",
+      "label": "workspace-config",
+      "round": "b232-close-ordering",
+      "route": "/global/config",
+      "ordinal": 2,
+      "scope": "global"
+    },
+    "commit": {
+      "status": 200,
+      "requestID": "1eba3692-8434-4641-8828-d6ee22dd7c4d",
+      "name": "Review Global"
+    },
+    "newestConfig": {
+      "time": "2026-11-11T05:10:57.212Z",
+      "stage": "delivered",
+      "round": "b232-close-ordering",
+      "route": "/global/config",
+      "ordinal": 2,
+      "scope": "global",
+      "status": 200,
+      "requestID": "540e631f-ee22-43e7-ad1e-ded7fd27ae9a",
+      "reviewGlobal": "Review Global"
+    }
+  },
+  "originalCatalog": {
+    "time": "2026-11-11T05:11:13.619Z",
+    "stage": "delivered",
+    "round": "b232-close-ordering",
+    "route": "/global/providers",
+    "scope": "global",
+    "status": 200,
+    "requestID": "52874304-b276-422e-8fdf-0a36ebbdd3dd",
+    "providerCount": 88,
+    "reviewGlobal": false
+  },
+  "projectCatalogReceipt": {
+    "time": "2026-11-11T05:11:06.161Z",
+    "stage": "delivered",
+    "round": "b232-close-ordering",
+    "route": "/provider",
+    "scope": "config-race-review",
+    "status": 200,
+    "requestID": "9a0bf307-8487-466e-b70f-a7ed34b89772",
+    "providerCount": 89,
+    "reviewGlobal": false
+  },
+  "reread": {
+    "time": "2026-11-11T05:11:51.154Z",
+    "stage": "delivered",
+    "round": "confirm-current",
+    "route": "/global/providers",
+    "scope": "global",
+    "status": 200,
+    "requestID": "265312e7-0800-4721-9c6b-f37ff3e3bd85",
+    "providerCount": 89,
+    "reviewGlobal": true
+  },
+  "retry": []
+}

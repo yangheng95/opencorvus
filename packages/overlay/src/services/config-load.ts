@@ -203,7 +203,7 @@ export async function loadProviderInfo(
     const [providerResult, authResult, configResult] = await Promise.allSettled([
       apiJsonWithTimeout("global/providers", timeoutMilliseconds, { authority: options.authority }),
       apiJsonWithTimeout("global/providers/auth", timeoutMilliseconds, { authority: options.authority }),
-      apiJsonWithTimeout("global/config", timeoutMilliseconds, { authority: options.authority }),
+      loadConfigInfo(timeoutMilliseconds, options),
     ])
     if (
       !isApiAuthorityCurrent(options.authority) ||
@@ -214,7 +214,6 @@ export async function loadProviderInfo(
     const issues: ProviderLoadIssue[] = []
     let providerCatalog: Record<string, unknown> | undefined
     let providerAuth: Record<string, unknown> | undefined
-    let config: Record<string, unknown> | undefined
     if (providerResult.status === "fulfilled") {
       try {
         const response = requireObjectResponse("global/providers", providerResult.value)
@@ -235,28 +234,19 @@ export async function loadProviderInfo(
     } else {
       issues.push(providerLoadIssue("auth", authResult.reason))
     }
-    if (configResult.status === "fulfilled") {
-      try {
-        config = requireObjectResponse("global/config", configResult.value)
-      } catch (error) {
-        issues.push(providerLoadIssue("config", error))
-      }
-    } else {
-      issues.push(providerLoadIssue("config", configResult.reason))
-    }
     const settledIssues = dedupeProviderLoadIssues(issues)
-    batch(() => {
-      if (config) setConfigSnapshot(config)
-      setAppStore({
-        ...(providerCatalog ? { providerCatalog } : {}),
-        ...(providerAuth ? { providerAuth } : {}),
-        providerLoadIssues: settledIssues,
-        ...((providerCatalog || providerAuth) && {
-          providerAuthRefreshRevision: appStore.providerAuthRefreshRevision + 1,
-        }),
-      })
+    setAppStore({
+      ...(providerCatalog ? { providerCatalog } : {}),
+      ...(providerAuth ? { providerAuth } : {}),
+      providerLoadIssues: settledIssues,
+      ...((providerCatalog || providerAuth) && {
+        providerAuthRefreshRevision: appStore.providerAuthRefreshRevision + 1,
+      }),
     })
-    return settledIssues
+    const configIssues: ProviderLoadIssue[] = configResult.status === "fulfilled"
+      ? configResult.value.map(({ message }) => ({ resource: "config", message }))
+      : [providerLoadIssue("config", configResult.reason)]
+    return [...settledIssues, ...configIssues]
   }
   const [catalogResult, authResult] = await Promise.allSettled(providerInfoRequests(timeoutMilliseconds, options))
   if (!isApiAuthorityCurrent(options.authority) || loadSequence !== providerInfoLoadSequence || !ownsDirectoryLoad(options))

@@ -112,6 +112,7 @@ and before its original persisted progress and terminal Tool result settle.
 Overlay 的配置投影按当前实际目录选择读取范围：项目读取 `/config?directory=…` 与项目 channel，
 无项目工作区读取既有 `/global/config`，并清空项目 channel 投影。启动、New Chat、关闭/丢失项目及
 重连通过同一配置 reader 刷新；Config 与 Provider reader 均绑定 API authority、目录和选择/目录轮次。
+无项目的 Provider 读取把配置交给同一 reader，配置和诊断按该 reader 的当前读取独立发布，目录结算只发布目录与认证。
 恢复后的延迟能力加载在当前归属内发起，子读取与最终投影沿该归属结算，不能把恢复前的项目错误发布到首页。
 明确关闭项目与活动目录不可用的即时恢复在同一响应式提交中推进轮次、清除旧工作项和目录、发布全局范围。
 离开项目后的全局配置刷新独立于导航完成；读取不能延迟新会话提交意图的发布。

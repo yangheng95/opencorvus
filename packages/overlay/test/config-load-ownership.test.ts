@@ -215,6 +215,54 @@ test("global provider load publishes the complete global configuration with cata
   })
 })
 
+test("global provider catalog settles while keeping the newer accepted global configuration", async () => {
+  setSettingsStore("directory", "")
+  configure({ directory: "" })
+  const previous = { locale: "en-US" }
+  const current = { locale: "zh-CN", provider: { "review-global": { name: "Review Global" } } }
+  const catalog = { all: [{ id: "owned-global" }], connected: [] }
+  const pendingCatalog = Promise.withResolvers<unknown>()
+  let configReads = 0
+  transport((request) => {
+    switch (request.path) {
+      case "global/config": return ++configReads === 1 ? previous : current
+      case "global/providers": return pendingCatalog.promise
+      case "global/providers/auth": return {}
+      default: throw new Error(`Unexpected global read ${request.path}`)
+    }
+  })
+  const loading = loadProviderInfo()
+  try {
+    await new Promise<void>((resolve) => setImmediate(resolve))
+    expect(appStore.config).toEqual(previous)
+    expect(await loadConfigInfo()).toEqual([])
+    expect(appStore.config).toEqual(current)
+  } finally {
+    pendingCatalog.resolve({ catalog })
+    await loading
+  }
+  expect({ config: appStore.config, catalog: appStore.providerCatalog }).toEqual({ config: current, catalog })
+})
+
+test("global provider load returns the configuration diagnostic with its accepted catalog and authorization", async () => {
+  setSettingsStore("directory", "")
+  configure({ directory: "" })
+  const failure = new ApiError(503, "global/config", "Global configuration could not be read", {}, "GET")
+  const catalog = { connected: ["owned-global"] }
+  const authentication = { "owned-global": [{ type: "api", label: "API key" }] }
+  transport((request) => {
+    switch (request.path) {
+      case "global/config": throw failure
+      case "global/providers": return { catalog }
+      case "global/providers/auth": return authentication
+      default: throw new Error(`Unexpected global read ${request.path}`)
+    }
+  })
+  expect(await loadProviderInfo()).toEqual([{ resource: "config", message: failure.message }])
+  expect({ configIssues: appStore.configLoadIssues, catalog: appStore.providerCatalog, authentication: appStore.providerAuth })
+    .toEqual({ configIssues: [{ resource: "config", message: failure.message, cause: failure }], catalog, authentication })
+})
+
 test("default provider refresh loads the active project's catalog and retains its saved authorization", async () => {
   const requests: TransportRequest[] = []
   transport((request) => {

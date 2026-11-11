@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [目录读取结算时保留已接受的全局配置](records/2026-11/2026-11-11-global-provider-config-settlement.md)
 - [关闭项目时一次发布全局读取范围](records/2026-11/2026-11-11-project-close-scope-commit.md)
 - [服务商目录更新时保留同一行的控件](records/2026-11/2026-11-11-provider-row-identity.md)
 - [服务商读取与重试各显示一次等待状态](records/2026-11/2026-11-11-provider-read-progress.md)
