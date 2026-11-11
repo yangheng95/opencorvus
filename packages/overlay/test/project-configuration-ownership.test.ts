@@ -285,6 +285,79 @@ test("a committed global error preserves its typed receipt and accepted snapshot
   expect({ config: appStore.config, issues: appStore.configLoadIssues }).toEqual({ config: accepted, issues: [] })
 })
 
+test.each(["project", "global"] as const)("reversed %s write responses preserve each receipt and refresh the complete projection", async (scope) => {
+  const project = scope === "project"
+  if (!project) {
+    setBoardStore({ selectedSource: null, board: null })
+    setSettingsStore("directory", "")
+    configure({ directory: "" })
+  }
+  const path = project ? "config" : "global/config"
+  const options = project ? currentProjectConfigRequestOptions() : undefined
+  const earlierResponse = Promise.withResolvers<TransportResponse<unknown>>()
+  const refreshedResponse = Promise.withResolvers<TransportResponse<unknown>>()
+  const original = { locale: "zh-CN", name: "Before" }
+  const later = { locale: "zh-CN", name: "After" }
+  const refreshed = { ...later, marker: "current-server-value" }
+  let reads = 0
+  reply = async (request) => {
+    expect(request.path).toBe(path)
+    if (request.method === "PATCH") return jsonBody(request).locale ? earlierResponse.promise : ok(later)
+    return ++reads === 1 ? ok(original) : refreshedResponse.promise
+  }
+  const earlier = project ? patchConfig({ locale: "zh-CN" }, options) : patchGlobalConfig({ locale: "zh-CN" })
+  try {
+    const rename = (value: Record<string, unknown>) => { value.name = "After" }
+    expect(await (project ? updateConfig(rename, options) : updateGlobalConfig(rename))).toEqual(later)
+    earlierResponse.resolve(ok(original))
+    expect(await earlier).toEqual(original)
+    expect(appStore.config).toEqual(later)
+    refreshedResponse.resolve(ok(refreshed))
+    await new Promise<void>((resolve) => setImmediate(resolve))
+    expect(appStore.config).toEqual(refreshed)
+  } finally {
+    earlierResponse.resolve(ok(original))
+    refreshedResponse.resolve(ok(refreshed))
+    await earlier
+  }
+})
+
+test("an overlapping committed project error keeps the current read and reports the actual refresh failure", async () => {
+  const delayed = Promise.withResolvers<TransportResponse<unknown>>()
+  const pendingChannel = Promise.withResolvers<TransportResponse<unknown>>()
+  const accepted = { locale: "zh-CN", name: "Latest read" }
+  const channels = [{ id: "owned-channel", status: "missing" }]
+  const receipt = {
+    name: "ProjectConfigCommittedReconcileError",
+    data: { committed: true, message: "Runtime reconciliation failed", config: { locale: "zh-CN" }, failures: ["runtime"] },
+  }
+  let reads = 0
+  reply = async (request) => {
+    if (request.method === "PATCH") return delayed.promise
+    if (request.path === "channel") return pendingChannel.promise
+    if (++reads === 1) return ok(accepted)
+    return { status: 503, ok: false, headers: {}, body: { error: "Current configuration unavailable" } }
+  }
+  const saving = patchConfig({ locale: "zh-CN" }, currentProjectConfigRequestOptions())
+  const reading = loadConfigInfo()
+  try {
+    await new Promise<void>((resolve) => setImmediate(resolve))
+    expect(appStore.config).toEqual(accepted)
+    delayed.resolve({ status: 409, ok: false, headers: {}, body: receipt })
+    await expect(saving).rejects.toMatchObject({ status: 409, body: receipt })
+  } finally {
+    delayed.resolve({ status: 409, ok: false, headers: {}, body: receipt })
+    pendingChannel.resolve(ok(channels))
+    await reading
+  }
+  expect(appStore.config).toEqual(accepted)
+  expect(appStore.channelCatalog?.entries).toEqual(channels)
+  expect(appStore.configLoadIssues.map(({ resource, message }) => ({ resource, message }))).toEqual([{
+    resource: "config",
+    message: "Current configuration unavailable",
+  }])
+})
+
 test("project ABA preserves a pending PATCH's accepted A return and the current A projection", async () => {
   const pending = Promise.withResolvers<TransportResponse<unknown>>()
   reply = () => pending.promise

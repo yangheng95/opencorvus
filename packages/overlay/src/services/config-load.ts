@@ -7,6 +7,7 @@ import { activeProjectDirectory } from "./project-directory"
 
 export const CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS = 20_000
 let configInfoLoadSequence = 0
+let configSnapshotReadSequence = 0
 let providerInfoLoadSequence = 0
 
 export interface DirectoryOwnedLoadOptions {
@@ -129,6 +130,42 @@ function providerProjectionIssues(value: Record<string, unknown>): ProviderLoadI
   })
 }
 
+async function readConfigResource<T>(
+  resource: ConfigLoadIssue["resource"],
+  path: string,
+  authority: ApiAuthority,
+  timeoutMilliseconds: number,
+  validate: (path: string, value: unknown) => T,
+): Promise<{ value: T; issue?: never } | { value?: never; issue: ConfigLoadIssue }> {
+  try {
+    const value = await apiJsonWithTimeout(path, timeoutMilliseconds, { authority })
+    return { value: validate(path, value) }
+  } catch (error) {
+    return { issue: configLoadIssue(resource, error) }
+  }
+}
+
+export function beginConfigSnapshotRead(
+  path: string,
+  authority: ApiAuthority,
+  ownsScope: () => boolean,
+  timeoutMilliseconds = CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS,
+) {
+  const sequence = ++configSnapshotReadSequence
+  const commitRevision = currentConfigCommitRevision()
+  const owns = () => sequence === configSnapshotReadSequence && currentConfigCommitRevision() === commitRevision && ownsScope()
+  const result = readConfigResource("config", path, authority, timeoutMilliseconds, requireObjectResponse).then((result) => {
+    if (owns()) {
+      batch(() => {
+        if (result.value) setConfigSnapshot(result.value)
+        setAppStore("configLoadIssues", result.issue ? [result.issue] : [])
+      })
+    }
+    return result
+  })
+  return { result, owns }
+}
+
 export async function loadConfigInfo(
   timeoutMilliseconds = CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS,
   options: LoadConfigInfoOptions = {},
@@ -136,40 +173,12 @@ export async function loadConfigInfo(
   const scope = captureDirectoryLoad(options)
   assertApiAuthorityCurrent(scope.authority)
   const loadSequence = ++configInfoLoadSequence
-  const commitRevision = currentConfigCommitRevision()
   const configPath = scope.directory ? directoryOwnedPath("config", scope) : "global/config"
   const owns = () => loadSequence === configInfoLoadSequence && ownsDirectoryLoad(scope)
-  const ownsConfig = () => currentConfigCommitRevision() === commitRevision
-
-  async function read<T>(
-    resource: ConfigLoadIssue["resource"],
-    path: string,
-    validate: (path: string, value: unknown) => T,
-  ): Promise<{ value: T; issue?: never } | { value?: never; issue: ConfigLoadIssue }> {
-    try {
-      const value = await apiJsonWithTimeout(path, timeoutMilliseconds, { authority: scope.authority })
-      return { value: validate(path, value) }
-    } catch (error) {
-      return { issue: configLoadIssue(resource, error) }
-    }
-  }
-
-  // Configuration and channels settle independently. The configuration can
-  // also lose publication ownership to a confirmed write within this scope.
-  const configRead = read("config", configPath, requireObjectResponse).then((result) => {
-    if (owns()) {
-      batch(() => {
-        if (ownsConfig()) {
-          if (result.value) setConfigSnapshot(result.value)
-          setAppStore("configLoadIssues", result.issue ? [result.issue] : [])
-        }
-        if (!scope.directory) setAppStore("channelCatalog", null)
-      })
-    }
-    return result
-  })
+  const configRead = beginConfigSnapshotRead(configPath, scope.authority, owns, timeoutMilliseconds)
   const channelRead = scope.directory
-    ? read("channel", directoryOwnedPath("channel", scope), (_path, value) => requireArrayResponse("channel", value)).then((result) => {
+    ? readConfigResource("channel", directoryOwnedPath("channel", scope), scope.authority, timeoutMilliseconds,
+      (_path, value) => requireArrayResponse("channel", value)).then((result) => {
         if (owns()) {
           const previous = appStore.channelCatalog
           const previousEntries = previous?.directory === scope.directory && previous.authorityRevision === scope.authority.revision
@@ -186,10 +195,11 @@ export async function loadConfigInfo(
       })
     : undefined
 
-  const [config, channel] = await Promise.all([configRead, channelRead])
+  const [config, channel] = await Promise.all([configRead.result, channelRead])
   if (!owns()) return []
+  if (!scope.directory) setAppStore("channelCatalog", null)
   const issues: ConfigLoadIssue[] = []
-  if (ownsConfig()) {
+  if (configRead.owns()) {
     if (config.value) options.onAcceptedConfig?.(config.value)
     if (config.issue) issues.push(config.issue)
   }

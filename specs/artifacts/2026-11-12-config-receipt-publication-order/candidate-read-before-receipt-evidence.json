@@ -1,0 +1,80 @@
+{
+  "results": [
+    {
+      "scope": "project",
+      "events": [
+        {
+          "stage": "held",
+          "status": 200,
+          "requestID": "12ef6387-e534-4a0a-bcf7-246679241b03",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        },
+        {
+          "stage": "delivered",
+          "status": 200,
+          "requestID": "12ef6387-e534-4a0a-bcf7-246679241b03",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        }
+      ],
+      "projectedAfterSecond": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Project Confirmed"
+      },
+      "projectedAfterFirst": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Project Confirmed"
+      },
+      "refresh": {
+        "status": 200,
+        "requestID": "12d18aeb-86fb-4566-ac19-2fa526bd1992",
+        "locale": "zh-CN",
+        "providerName": "Overlap Project Confirmed"
+      },
+      "durableConfig": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Project Confirmed"
+      },
+      "durableRequestID": "96bcc95d-eae4-4c6f-96e7-af72880af523"
+    },
+    {
+      "scope": "global",
+      "events": [
+        {
+          "stage": "held",
+          "status": 200,
+          "requestID": "69b4bedd-4e00-4c4f-a822-5a30a0279517",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        },
+        {
+          "stage": "delivered",
+          "status": 200,
+          "requestID": "69b4bedd-4e00-4c4f-a822-5a30a0279517",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        }
+      ],
+      "projectedAfterSecond": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Global Confirmed"
+      },
+      "projectedAfterFirst": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Global Confirmed"
+      },
+      "refresh": {
+        "status": 200,
+        "requestID": "2286baef-f073-45d7-8a69-356bed96af62",
+        "locale": "zh-CN",
+        "providerName": "Overlap Global Confirmed"
+      },
+      "durableConfig": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Global Confirmed"
+      },
+      "durableRequestID": "d409fe36-ad59-4aa1-9d2a-4dc580b7b6c8"
+    }
+  ]
+}

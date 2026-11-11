@@ -4,9 +4,9 @@
 import { ApiError, apiJson, configure as configureApi, serverSettledRequest } from "./api"
 import { readConfigMutationReceipt } from "./config-mutation-receipt"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
-import { appStore, currentConfigCommitRevision, setAppStore, setCommittedConfigSnapshot, setConfigSnapshot, type ProjectLoadIssue } from "../store/app"
+import { appStore, currentConfigObservationRevision, recordConfigCommit, setAppStore, setConfigSnapshot, type ProjectLoadIssue } from "../store/app"
 import { t } from "../utils/i18n"
-import { loadConfigInfo } from "./config-load"
+import { beginConfigSnapshotRead, loadConfigInfo } from "./config-load"
 import { loadExtensions } from "./extensions"
 import { loadMeta } from "./meta"
 import { activeProjectDirectory, restoreWorkspaceDirectory } from "./project-directory"
@@ -128,18 +128,40 @@ function configRequestPath(options: ConfigRequestOptions = {}): string {
   return directory ? `config?directory=${encodeURIComponent(directory)}` : "config"
 }
 
-function configResponseStillOwned(options: ConfigRequestOptions, selectionEpoch: number): boolean {
-  if (boardStore.selectEpoch !== selectionEpoch) return false
-  if (options.authority && !isApiAuthorityCurrent(options.authority)) return false
-  const directory = options.directory?.trim()
-  const ownsDirectory = !directory || !options.isCurrentDirectory || options.isCurrentDirectory(directory)
-  return ownsDirectory && (!options.ownsResponse || options.ownsResponse())
+function captureConfigWriter(options: ConfigRequestOptions, scope: "project" | "global") {
+  const authority = options.authority ?? captureApiAuthority()
+  const selectionEpoch = boardStore.selectEpoch
+  const activeDirectory = activeProjectDirectory().trim()
+  const requestedDirectory = options.directory?.trim()
+  const directory = scope === "global" ? "" : requestedDirectory || activeDirectory
+  const ownsScope = () => activeDirectory === directory && isApiAuthorityCurrent(authority) &&
+    boardStore.selectEpoch === selectionEpoch &&
+    activeProjectDirectory().trim() === directory
+  const ownsResponse = () => ownsScope() &&
+    (!requestedDirectory || !options.isCurrentDirectory || options.isCurrentDirectory(directory)) &&
+    (!options.ownsResponse || options.ownsResponse())
+  return {
+    authority,
+    path: scope === "global" ? "global/config" : configRequestPath(options),
+    ownsScope,
+    ownsResponse,
+  }
 }
 
-function captureGlobalConfigOwnership(options: ConfigRequestOptions): () => boolean {
-  const selectionEpoch = boardStore.selectEpoch
-  const directoryFree = !activeProjectDirectory().trim()
-  return () => directoryFree && !activeProjectDirectory().trim() && configResponseStillOwned(options, selectionEpoch)
+type ConfigWriter = ReturnType<typeof captureConfigWriter>
+
+function publishConfigReceipt(writer: ConfigWriter, observation: number, config: Record<string, unknown>): void {
+  if (!writer.ownsResponse()) return
+  if (currentConfigObservationRevision() === observation) {
+    recordConfigCommit(config)
+    return
+  }
+  // The receipt settles this write. A current read settles the complete
+  // projection when another snapshot has already been accepted.
+  recordConfigCommit()
+  void beginConfigSnapshotRead(writer.path, writer.authority, writer.ownsScope).result.catch((error) => {
+    AppLog.error("config", "Failed to publish configuration read after concurrent save", { error: String(error) })
+  })
 }
 
 export function committedConfigFromError(error: unknown): Record<string, any> | undefined {
@@ -166,51 +188,19 @@ export function projectConfigWriteEvidence(error: unknown): ProjectConfigWriteEv
 
 /**
  * Send a partial config diff to the server (JSON Merge Patch).
- * Updates appStore.config with the server response.
+ * Settles the write and updates the current configuration projection.
  */
 export async function patchConfig(diff: Record<string, any>, options: ConfigRequestOptions = {}): Promise<any> {
-  const selectionEpoch = boardStore.selectEpoch
-  options = { ...options, authority: options.authority ?? captureApiAuthority() }
   if (!appStore.connected) throw new Error("Cannot patch config while disconnected")
-  let saved: Record<string, any>
-  try {
-    saved = await apiJson(configRequestPath(options), serverSettledRequest({
-      authority: options.authority,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(diff),
-    }))
-  } catch (error) {
-    const committed = committedConfigFromError(error)
-    if (committed && configResponseStillOwned(options, selectionEpoch)) setCommittedConfigSnapshot(committed)
-    throw error
-  }
-  if (configResponseStillOwned(options, selectionEpoch)) setCommittedConfigSnapshot(saved)
-  return saved
+  return await writeConfigPatch(captureConfigWriter(options, "project"), diff)
 }
 
 export async function patchGlobalConfig(
   diff: Record<string, any>,
   options: Pick<ConfigRequestOptions, "ownsResponse" | "authority"> = {},
 ): Promise<any> {
-  options = { ...options, authority: options.authority ?? captureApiAuthority() }
-  const owns = captureGlobalConfigOwnership(options)
   if (!appStore.connected) throw new Error("Cannot patch global config while disconnected")
-  let saved: Record<string, any>
-  try {
-    saved = await apiJson("global/config", serverSettledRequest({
-      authority: options.authority,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(diff),
-    }))
-  } catch (error) {
-    const committed = committedConfigFromError(error)
-    if (committed && owns()) setCommittedConfigSnapshot(committed)
-    throw error
-  }
-  if (owns()) setCommittedConfigSnapshot(saved)
-  return saved
+  return await writeConfigPatch(captureConfigWriter(options, "global"), diff)
 }
 
 export interface SessionConfigResponse {
@@ -484,47 +474,50 @@ export async function updateConfig(
   mutator: (config: Record<string, any>) => void,
   options: ConfigRequestOptions = {},
 ): Promise<any> {
-  const selectionEpoch = boardStore.selectEpoch
-  options = { ...options, authority: options.authority ?? captureApiAuthority() }
-  const configPath = configRequestPath(options)
-  return await updateConfigPath(configPath, mutator, () => configResponseStillOwned(options, selectionEpoch), options.authority)
+  return await updateConfigPath(captureConfigWriter(options, "project"), mutator)
 }
 
 export async function updateGlobalConfig(mutator: (config: Record<string, any>) => void, authority = captureApiAuthority()): Promise<any> {
-  return await updateConfigPath("global/config", mutator, captureGlobalConfigOwnership({ authority }), authority)
+  return await updateConfigPath(captureConfigWriter({ authority }, "global"), mutator)
 }
 
 async function updateConfigPath(
-  configPath: string,
+  writer: ConfigWriter,
   mutator: (config: Record<string, any>) => void,
-  ownsResponse: () => boolean,
-  authority: ApiAuthority,
 ): Promise<any> {
-  const commitRevision = currentConfigCommitRevision()
-  const current = await apiJson(configPath, { authority })
-  assertApiAuthorityCurrent(authority)
+  const observation = currentConfigObservationRevision()
+  const current = await apiJson(writer.path, { authority: writer.authority })
+  assertApiAuthorityCurrent(writer.authority)
   const next = structuredClone(current || {})
   mutator(next)
   const diff = configDraftMergePatch(current || {}, next)
   if (diff === undefined) {
-    if (isApiAuthorityCurrent(authority) && ownsResponse() && currentConfigCommitRevision() === commitRevision)
+    if (writer.ownsResponse() && currentConfigObservationRevision() === observation)
       setConfigSnapshot(current)
     return current
   }
+  return await writeConfigPatch(writer, diff, observation)
+}
+
+async function writeConfigPatch(
+  writer: ConfigWriter,
+  diff: Record<string, unknown>,
+  observation = currentConfigObservationRevision(),
+): Promise<Record<string, unknown>> {
   let saved: Record<string, any>
   try {
-    saved = await apiJson(configPath, serverSettledRequest({
-      authority,
+    saved = await apiJson(writer.path, serverSettledRequest({
+      authority: writer.authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(diff),
     }))
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && isApiAuthorityCurrent(authority) && ownsResponse()) setCommittedConfigSnapshot(committed)
+    if (committed) publishConfigReceipt(writer, observation, committed)
     throw error
   }
-  if (isApiAuthorityCurrent(authority) && ownsResponse()) setCommittedConfigSnapshot(saved)
+  publishConfigReceipt(writer, observation, saved)
   return saved
 }
 

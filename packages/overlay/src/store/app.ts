@@ -203,19 +203,29 @@ const DEFAULT_APP_STATE: AppState = {
 export const [appStore, setAppStore] = createStore<AppState>({ ...DEFAULT_APP_STATE })
 
 let configCommitRevision = 0
+let configObservationRevision = 0
 
 export function currentConfigCommitRevision(): number {
   return configCommitRevision
 }
 
+export function currentConfigObservationRevision(): number {
+  return configObservationRevision
+}
+
 /** Publish a complete accepted server configuration, including removed keys. */
 export function setConfigSnapshot(value: Record<string, unknown> | null): void {
+  configObservationRevision += 1
   setAppStore("config", reconcile(value, { merge: false }))
 }
 
-/** A confirmed write supersedes configuration reads already in flight. */
-export function setCommittedConfigSnapshot(value: Record<string, unknown>): void {
+/** Record the write even when its snapshot needs a current read before publication. */
+export function recordConfigCommit(value?: Record<string, unknown>): void {
   configCommitRevision += 1
+  if (value === undefined) {
+    configObservationRevision += 1
+    return
+  }
   batch(() => {
     setConfigSnapshot(value)
     setAppStore("configLoadIssues", (issues) => issues.filter((issue) => issue.resource !== "config"))
