@@ -18,7 +18,7 @@ import {
 
 import { apiJson, ApiError, serverSettledRequest } from "./api"
 import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
-import { settleArchiveRestore } from "./archive-restore"
+import { settleArchiveState } from "./archive-state"
 import type { StreamHandle } from "./host-transport"
 import { getHostTransport } from "./host-transport-runtime"
 import { isSelectedTaskSSEConnected, startSSE, stopSSE } from "./sse"
@@ -68,7 +68,7 @@ import {
   restoreDraftComposerModel,
 } from "./composer-model"
 import { wakeMission } from "./mission"
-import { verifyWorkLedgerRestore, workLedgerSessionExecution } from "./work-ledger"
+import { verifyWorkLedgerArchiveState, workLedgerSessionExecution } from "./work-ledger"
 import { randomUUID } from "../utils/random-id"
 import { replaceWorkspaceLocation } from "./workspace-location"
 
@@ -403,13 +403,13 @@ export function setTaskArchived(
   target: { taskID: string; directory: string; authority?: ApiAuthority },
   archived: true,
   provenance: TaskCancellationRequestBodyValue,
-): Promise<boolean>
-export function setTaskArchived(target: { taskID: string; directory: string; authority?: ApiAuthority }, archived: false): Promise<boolean>
+): Promise<void>
+export function setTaskArchived(target: { taskID: string; directory: string; authority?: ApiAuthority }, archived: false): Promise<void>
 export async function setTaskArchived(
   target: { taskID: string; directory: string; authority?: ApiAuthority },
   archived: boolean,
   provenance?: TaskCancellationRequestBodyValue,
-): Promise<boolean> {
+): Promise<void> {
   const authority = target.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
   const taskID = target.taskID.trim()
@@ -433,19 +433,15 @@ export async function setTaskArchived(
     body: JSON.stringify(body),
   } satisfies Parameters<typeof apiJson>[1]
   const path = `${taskRecordPath(taskID)}/archive?${params.toString()}`
-  if (archived) {
-    await apiJson(path, serverSettledRequest(request))
-  } else {
-    await settleArchiveRestore({
-      authority,
-      write: async () => {
-        const receipt = await apiJson<unknown>(path, request)
-        if (receipt !== true) throw new Error("The Task restore receipt is invalid.")
-      },
-      readRestored: () => verifyWorkLedgerRestore({ kind: "task", taskID, directory, authority }),
-    })
-  }
-  if (!isApiAuthorityCurrent(authority)) return true
+  await settleArchiveState({
+    authority,
+    write: async () => {
+      const receipt = await apiJson<unknown>(path, archived ? serverSettledRequest(request) : request)
+      if (receipt !== true) throw new Error("The Task archive receipt is invalid.")
+    },
+    verify: () => verifyWorkLedgerArchiveState({ kind: "task", taskID, directory, authority, archived }),
+  })
+  if (!isApiAuthorityCurrent(authority)) return
   if (archived) {
     await reconcileRemovedTaskAfterCommit(taskID, "archive")
   } else {
@@ -461,7 +457,6 @@ export async function setTaskArchived(
       })
     })
   }
-  return true
 }
 
 function removeTaskProjection(taskID: string): void {

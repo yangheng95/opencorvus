@@ -30,9 +30,9 @@ import {
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
 import { apiJson, ApiError, captureApiAuthority, serverSettledRequest, type ApiAuthority } from "./api"
-import { settleArchiveRestore } from "./archive-restore"
+import { matchesArchiveState, settleArchiveState } from "./archive-state"
 import { settleMutationReceipt } from "./mutation-receipt"
-import { loadWorkLedgerSelection, verifyWorkLedgerRestore } from "./work-ledger"
+import { loadWorkLedgerSelection, verifyWorkLedgerArchiveState } from "./work-ledger"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { composerSubmission } from "./composer-draft"
 import { downloadProjectArchive } from "./project-archive"
@@ -450,55 +450,50 @@ export async function deleteMission(
   }
 }
 
-function writeMissionArchive(
-  target: MissionActionTarget,
-  body: TaskArchiveRequestBody,
-): Promise<MissionSetArchivedResponse> {
-  const request = {
-    authority: target.authority,
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  } satisfies Parameters<typeof apiJson>[1]
-  return apiJson<MissionSetArchivedResponse>(
-    missionActionPath(target, "/archive"),
-    body.archived ? serverSettledRequest(request) : request,
-  )
-}
+type MissionArchiveTarget = MissionActionTarget & { sessionID: string }
 
 export function setMissionArchived(
-  target: MissionActionTarget,
+  target: MissionArchiveTarget,
   archived: true,
   provenance: TaskCancellationRequestBodyValue,
-): Promise<MissionSetArchivedResponse> {
-  return writeMissionArchive(target, TaskArchiveRequestBody.parse({
-    archived,
-    ...TaskCancellationRequestBody.parse(provenance),
-  }))
-}
-
-export async function restoreMission(target: MissionActionTarget & { sessionID: string }): Promise<void> {
+): Promise<void>
+export function setMissionArchived(target: MissionArchiveTarget, archived: false): Promise<void>
+export async function setMissionArchived(
+  target: MissionArchiveTarget,
+  archived: boolean,
+  provenance?: TaskCancellationRequestBodyValue,
+): Promise<void> {
   const authority = target.authority ?? captureApiAuthority()
   const missionID = target.missionID.trim()
   const sessionID = target.sessionID.trim()
   const directory = target.directory.trim()
+  if (!sessionID) throw new Error("setMissionArchived: sessionID is required")
   const owner = { missionID, directory, authority }
-  if (!sessionID) throw new Error("restoreMission: sessionID is required")
-  await settleArchiveRestore({
+  const path = missionActionPath(owner, "/archive")
+  const body = TaskArchiveRequestBody.parse(archived
+    ? { archived, ...TaskCancellationRequestBody.parse(provenance) }
+    : { archived })
+  const request = {
+    authority,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  } satisfies Parameters<typeof apiJson>[1]
+  await settleArchiveState({
     authority,
     write: async () => {
-      const receipt = await writeMissionArchive(owner, TaskArchiveRequestBody.parse({ archived: false }))
+      const receipt = await apiJson<MissionSetArchivedResponse>(path, archived ? serverSettledRequest(request) : request)
       if (
         receipt?.missionID !== missionID ||
         receipt.sessionID !== sessionID ||
         typeof receipt.directory !== "string" ||
         projectDirectoryKey(receipt.directory) !== projectDirectoryKey(directory) ||
-        receipt.archived !== undefined
+        !matchesArchiveState(receipt.archived, archived)
       ) {
-        throw new Error("The Mission restore receipt does not confirm the selected Mission.")
+        throw new Error("The Mission archive receipt does not confirm the requested state for the selected Mission.")
       }
     },
-    readRestored: () => verifyWorkLedgerRestore({ kind: "mission", ...owner, sessionID }),
+    verify: () => verifyWorkLedgerArchiveState({ kind: "mission", ...owner, sessionID, archived }),
   })
 }
 

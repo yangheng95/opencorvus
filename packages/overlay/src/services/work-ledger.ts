@@ -14,6 +14,7 @@ import {
   type WorkLedgerTaskRow,
 } from "@opencorvus-ai/transport-protocol"
 import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, mergeAbortSignals, type ApiAuthority } from "./api"
+import { ArchiveStateUnconfirmedError } from "./archive-state"
 import { createSignal } from "solid-js"
 import { t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
@@ -27,6 +28,16 @@ export type WorkLedgerKind = WorkLedgerItemRow["kind"]
 export type WorkLedgerChatStatus = WorkLedgerChatRow["status"]
 export type WorkLedgerPresentationStatus = "active" | "inactive"
 export type WorkLedgerChangeIdentity = { sessionID?: string; taskID?: string | null }
+
+export function workLedgerActionFailureText(action: string, error: unknown, title: string) {
+  if (action === "archive" && error instanceof ArchiveStateUnconfirmedError) {
+    return { title: t("archive.change_unconfirmed_title"), message: t("archive.check_after_unconfirmed", { title }) }
+  }
+  return {
+    title: t("work_ledger.action_failed_title"),
+    message: t("work_ledger.action_failed_message", { title }),
+  }
+}
 
 export function workLedgerRefreshScope(
   change: WorkLedgerChangeIdentity | undefined,
@@ -220,12 +231,12 @@ export async function readWorkLedgerSelection(
   }
 }
 
-type WorkLedgerRestoreIdentity =
+type WorkLedgerArchiveIdentity =
   | { kind: "task"; taskID: string }
   | { kind: "mission"; missionID: string; sessionID: string }
 
-export async function verifyWorkLedgerRestore(
-  input: WorkLedgerRestoreIdentity & { directory: string; authority: ApiAuthority },
+export async function verifyWorkLedgerArchiveState(
+  input: WorkLedgerArchiveIdentity & { directory: string; authority: ApiAuthority; archived: boolean },
 ): Promise<void> {
   const row = await loadWorkLedgerSelection({
     kind: input.kind === "task" ? "task" : "session",
@@ -237,9 +248,11 @@ export async function verifyWorkLedgerRestore(
     ? row.kind === "task" && row.id === input.taskID
     : row.kind === "mission" && row.missionID === input.missionID && row.sessionID === input.sessionID
   if (!sameOwner || projectDirectoryKey(row.directory) !== projectDirectoryKey(input.directory)) {
-    throw new Error("The archive restore check returned a different Work Ledger identity.")
+    throw new Error("The archive check returned a different Work Ledger identity.")
   }
-  if (row.archived !== undefined) throw new Error("The selected Work Ledger item is still archived.")
+  if ((row.archived !== undefined) !== input.archived) {
+    throw new Error("The selected Work Ledger item has not reached the requested archive state.")
+  }
 }
 
 export async function setWorkLedgerProjectPinned(input: { projectID: string; pinned: boolean; authority?: ApiAuthority }): Promise<void> {

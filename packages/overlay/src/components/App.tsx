@@ -30,7 +30,7 @@ import { Badge } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
-import { ArchiveRestoreUnconfirmedError } from "../services/archive-restore"
+import { ArchiveStateUnconfirmedError } from "../services/archive-state"
 import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { showAppDialog } from "../services/app-dialog"
 import { activeDirectory } from "../services/workspace"
@@ -53,7 +53,7 @@ import { cardTreeStore } from "../store/card-tree"
 import { dialogStore } from "../store/dialog"
 import { openConfigDialog } from "../services/config-dialog-control"
 import type { AutomationRunSession } from "../services/automations"
-import type { WorkLedgerItemRow, WorkLedgerMissionRow } from "../services/work-ledger"
+import { workLedgerActionFailureText, type WorkLedgerItemRow, type WorkLedgerMissionRow } from "../services/work-ledger"
 
 const MAILBOX_HOVER_OPEN_DELAY_MILLISECONDS = 180
 
@@ -203,10 +203,10 @@ function ChatViewTitle(props: {
     } catch (error) {
       if (!ownsAction() || error instanceof ApiAuthorityChangedError) return
       const details = formatErrorDetails(error)
-      reportError({ id: `work-ledger:header:${actionName}:${row.kind}:${row.id}`, title: t("work_ledger.action_failed_title"), details })
+      const failure = workLedgerActionFailureText(actionName, error, row.title || row.id)
+      reportError({ id: `work-ledger:header:${actionName}:${row.kind}:${row.id}`, title: failure.title, details })
       await showAppDialog({
-        title: t("work_ledger.action_failed_title"),
-        message: t("work_ledger.action_failed_message", { title: row.title || row.id }),
+        ...failure,
         details,
         kind: "error",
         openingGuard: ownsAction,
@@ -878,7 +878,7 @@ export function App(props: AppProps) {
                                       tone="error"
                                       title={failure().kind === "read"
                                         ? t(conversationIsMission() ? "work_ledger.selection_mission_error" : "work_ledger.selection_error")
-                                        : failure().cause instanceof ArchiveRestoreUnconfirmedError
+                                        : failure().cause instanceof ArchiveStateUnconfirmedError
                                           ? t("archive.restore_unconfirmed")
                                           : t(conversationIsMission() ? "work_ledger.restore_mission_error" : "work_ledger.restore_error")}
                                       details={[
@@ -901,7 +901,7 @@ export function App(props: AppProps) {
                                     >
                                       {failure().kind === "read"
                                         ? t(props.conversationReadRetained() ? "work_ledger.selection_error_retained" : "work_ledger.selection_error_hint")
-                                        : failure().cause instanceof ArchiveRestoreUnconfirmedError
+                                        : failure().cause instanceof ArchiveStateUnconfirmedError
                                           ? t("work_ledger.restore_unconfirmed_hint")
                                           : t(conversationIsMission() ? "work_ledger.restore_mission_error_hint" : "work_ledger.restore_error_hint")}
                                     </Feedback>

@@ -23,6 +23,7 @@ import {
   setWorkLedgerItemPinned,
   setWorkLedgerRuntimeRows,
   setWorkLedgerProjectPinned,
+  workLedgerActionFailureText,
   workLedgerPresentationLabel,
   workLedgerPresentationStatus,
   type WorkLedgerChatRow,
@@ -453,16 +454,16 @@ function WorkLedgerRowView(props: {
       props.onAfterAction()
     } catch (error) {
       if (!ownsAction() || error instanceof ApiAuthorityChangedError) return
+      const details = formatErrorDetails(error)
       reportError({
         id: `work-ledger:${current.kind}:${actionName}:${current.id}`,
         title: t("common.error"),
         message: error instanceof Error ? error.message : String(error),
-        details: formatErrorDetails(error),
+        details,
       })
       await showAppDialog({
-        title: t("work_ledger.action_failed_title"),
-        message: t("work_ledger.action_failed_message", { title: current.title || current.id }),
-        details: formatErrorDetails(error),
+        ...workLedgerActionFailureText(actionName, error, current.title || current.id),
+        details,
         kind: "error",
         openingGuard: ownsAction,
         returnFocusTarget: () => ownsAction() ? rowActions.getMainButton() ?? null : null,

@@ -842,9 +842,8 @@ async function archiveConversationHandoffCaller(
   authority = captureApiAuthority(),
 ): Promise<void> {
   assertApiAuthorityCurrent(authority)
-  const archived = await setConversationSessionArchived({ ...target, authority }, true)
+  await setConversationSessionArchived({ ...target, authority }, true)
   if (!isApiAuthorityCurrent(authority)) return
-  if (!archived) throw new Error(t("coding_assistant.archive_failed"))
   refreshWorkLedgerViews({ sessionID: target.sessionID })
 }
 
@@ -1326,7 +1325,7 @@ async function renameWorkLedgerMission(row: WorkLedgerMissionRow, presentation?:
 
 async function archiveWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
   const authority = captureApiAuthority()
-  await setMissionArchived({ missionID: row.missionID, directory: row.directory, authority }, true, {
+  await setMissionArchived({ missionID: row.missionID, sessionID: row.sessionID, directory: row.directory, authority }, true, {
     surface: "overlay.work_ledger",
     reason: "Operator archived the Mission from Work Ledger",
   })
@@ -1401,12 +1400,11 @@ async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
 
 async function archiveWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   const authority = captureApiAuthority()
-  const ok = await setTaskArchived({ taskID: row.id, directory: row.directory, authority }, true, {
+  await setTaskArchived({ taskID: row.id, directory: row.directory, authority }, true, {
     surface: "overlay.work_ledger",
     reason: "Operator archived the task from Work Ledger",
   })
   if (!isApiAuthorityCurrent(authority)) return
-  if (!ok) throw new Error(t("task.archive_failed"))
   runPostCommitUiEffect({ id: `task:archive-refresh:${row.id}`, title: "Task archive committed" }, () =>
     refreshWorkLedgerViews(),
   )
@@ -1457,12 +1455,11 @@ async function renameWorkLedgerChat(row: WorkLedgerChatRow, presentation?: WorkL
 
 async function archiveWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
   const authority = captureApiAuthority()
-  const ok = await setConversationSessionArchived(
+  await setConversationSessionArchived(
     { sessionID: row.sessionID, directory: row.directory, experience: row.experience, authority },
     true,
   )
   if (!isApiAuthorityCurrent(authority)) return
-  if (!ok) throw new Error(t("coding_assistant.archive_failed"))
   if (boardStore.selectedSource?.kind === "session" && boardStore.selectedSource.id === row.sessionID) {
     void selectTask("", { selectionEpoch: beginWorkspaceSelection() }).catch((error) => {
       runPostCommitUiEffect(

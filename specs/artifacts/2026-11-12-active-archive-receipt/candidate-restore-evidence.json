@@ -1,0 +1,213 @@
+{
+  "sent": {
+    "time": "2026-11-11T22:21:44.970Z",
+    "stage": "received",
+    "route": "/task/tsk_g00VahoAds00wszfEbue/archive",
+    "method": "PATCH",
+    "round": "candidate-zh-task-restore",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+    "search": null
+  },
+  "interrupted": {
+    "time": "2026-11-11T22:21:45.089Z",
+    "stage": "truncated",
+    "route": "/task/tsk_g00VahoAds00wszfEbue/archive",
+    "method": "PATCH",
+    "round": "candidate-zh-task-restore",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+    "search": null,
+    "requestID": "02307cf4-3a19-4c50-a069-0eaa244fabfb",
+    "status": 200,
+    "bytes": 4,
+    "target": {
+      "archived": null,
+      "boardLane": null
+    },
+    "deliveredBytes": 3
+  },
+  "confirmed": {
+    "time": "2026-11-11T22:21:45.163Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/task/tsk_g00VahoAds00wszfEbue",
+    "method": "GET",
+    "round": "candidate-zh-task-restore-verify",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+    "search": null,
+    "requestID": "f06c3f0a-f27c-47fc-afbd-aaf08f72acd1",
+    "status": 200,
+    "bytes": 548,
+    "target": {
+      "sessionID": "tsk_g00VahoAds00wszfEbue",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+      "title": "归档原有独立任务",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "exact": {
+    "requestID": "a99563e3-25d9-4f50-b745-abbeef48cc65",
+    "status": 200,
+    "body": {
+      "kind": "task",
+      "id": "tsk_g00VahoAds00wszfEbue",
+      "title": "归档原有独立任务",
+      "description": "归档后保留原始单步任务。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+      "created": 1794435424817,
+      "started": 1794435424817,
+      "completed": 1794435615641,
+      "updated": 1794435615641,
+      "pinned": false,
+      "lifecycleStatus": "cancelled",
+      "cancellationStatus": "cancelled",
+      "activityStatus": "inactive",
+      "priority": "normal",
+      "source": "user",
+      "productPillar": "work",
+      "pendingInteractions": 0
+    }
+  },
+  "full": {
+    "requestID": "5d78d4a5-22f9-49bb-a92f-2cc115f49ba5",
+    "status": 200,
+    "body": {
+      "id": "tsk_g00VahoAds00wszfEbue",
+      "orderKey": "v1:0001794435424817:0000000000000010:0000000000000000:task:tsk_g00VahoAds00wszfEbue",
+      "projectID": "prj_hsmig1VjMHRNMGgS4OFx",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+      "sessionID": "ses_-zUPIBpMIzz6z224kyKO",
+      "source": "user",
+      "productPillar": "work",
+      "title": "归档原有独立任务",
+      "request": "归档后保留原始单步任务。",
+      "status": "cancelled",
+      "executionLifecycle": {
+        "taskID": "tsk_g00VahoAds00wszfEbue",
+        "epoch": 1,
+        "openedEventID": "pev_g0VahoAdu0037TVEkuUd",
+        "openedAt": 1794435424817,
+        "status": "cancelled",
+        "terminalEventID": "pev_g0VahoyHk00bWHUYFPDj",
+        "terminalAt": 1794435615641,
+        "terminalError": "task cancelled"
+      },
+      "terminalReason": "cancelled",
+      "cancellation": {
+        "requestEventID": "pev_g0VahoyHI004p3AxpJrn",
+        "requestedAt": 1794435615615,
+        "source": "task.archive",
+        "requestID": "fceffc99-5d0a-4ab8-bdb4-88d00665fc2e",
+        "actor": "user",
+        "surface": "overlay.work_ledger",
+        "reason": "Operator archived the task from Work Ledger",
+        "status": "cancelled",
+        "terminalEventID": "pev_g0VahoyHk00bWHUYFPDj",
+        "terminalAt": 1794435615641
+      },
+      "priority": "normal",
+      "packageRevisionBinding": {
+        "scope": "built_in",
+        "project_id": null,
+        "namespace": "builtin",
+        "id": "base",
+        "version": "2026.11.07.1",
+        "package_digest": "701d742b575358ddfeb59c480b3d17b974b105b6949ea90fcd4f3733750c5b8c"
+      },
+      "error": "task cancelled",
+      "metadata": {
+        "actor": "user"
+      },
+      "time": {
+        "created": 1794435424817,
+        "updated": 1794435615641,
+        "started": 1794435424817,
+        "completed": 1794435615641
+      }
+    }
+  },
+  "archived": {
+    "requestID": "67cedf79-bd39-4dda-b778-8a5355935eea",
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-ee84e821f9ca3c5043625853462d0356",
+          "missionID": "draft-ee84e821f9ca3c5043625853462d0356",
+          "sessionID": "ses_h45z6UxIyiBr2SJLW7Kh",
+          "title": "保留原请求的草稿",
+          "pendingPromptText": "归档后保留原始请求。",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+          "created": 1794435440466,
+          "started": 1794435440466,
+          "updated": 1794435628739,
+          "pinned": false,
+          "archived": 1794435628739,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "chat",
+          "experience": "work",
+          "id": "ses_h5VwU3xSI2DXroqfZB5C",
+          "sessionID": "ses_h5VwU3xSI2DXroqfZB5C",
+          "title": "归档原有协作会话",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-alternate\\archive-review",
+          "created": 1794435441359,
+          "started": 1794435441359,
+          "updated": 1794435587063,
+          "pinned": false,
+          "archived": 1794435587061,
+          "status": "idle"
+        },
+        {
+          "kind": "mission",
+          "id": "draft-0d0595d78da8f1412f668c8bbf1a483f",
+          "missionID": "draft-0d0595d78da8f1412f668c8bbf1a483f",
+          "sessionID": "ses_h7Yqu2oMH1x0yktc8fxa",
+          "title": "Archive original draft",
+          "pendingPromptText": "Keep the original request when archiving.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-project\\archive-review",
+          "created": 1794435440294,
+          "started": 1794435440294,
+          "updated": 1794435474269,
+          "pinned": false,
+          "archived": 1794435474269,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "chat",
+          "experience": "chat",
+          "id": "ses_hHUfmraZJWEJZeeP1Nbq",
+          "sessionID": "ses_hHUfmraZJWEJZeeP1Nbq",
+          "title": "Archive original Chat",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\candidate-project\\archive-review",
+          "created": 1794435440896,
+          "started": 1794435440896,
+          "updated": 1794435463026,
+          "pinned": false,
+          "archived": 1794435463024,
+          "status": "idle"
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

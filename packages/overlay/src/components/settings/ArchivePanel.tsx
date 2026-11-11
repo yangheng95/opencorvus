@@ -8,7 +8,7 @@ import {
 } from "../../services/api"
 import { loadArchivedWorkLedger, workLedgerProject, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
 import { archiveRowKey } from "../../services/archive-row-key"
-import { ArchiveRestoreUnconfirmedError } from "../../services/archive-restore"
+import { ArchiveStateUnconfirmedError } from "../../services/archive-state"
 import { restoreArchivedWork } from "../../services/restore-archived-work"
 import { deleteMission } from "../../services/mission"
 import { deleteTask } from "../../services/task"
@@ -36,7 +36,7 @@ type ArchiveFailure = {
 }
 
 function archiveFailureSummary({ operation, cause }: ArchiveFailure): string {
-  if (cause instanceof ArchiveRestoreUnconfirmedError) return t("archive.restore_unconfirmed")
+  if (cause instanceof ArchiveStateUnconfirmedError) return t("archive.restore_unconfirmed")
   if (operation === "restore") return t("archive.restore_failed")
   if (operation === "delete") return t("archive.delete_failed")
   if (operation === "refresh") return t("archive.refresh_failed")

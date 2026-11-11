@@ -13,7 +13,7 @@ import { startSSE, stopSSE } from "./sse"
 import { resetSelectedLiveCursor } from "./selected-stream-cursor"
 import { loadConversationUiStateForSource } from "../store/conversation-ui"
 import { apiJson, ApiError, serverSettledRequest } from "./api"
-import { settleArchiveRestore } from "./archive-restore"
+import { matchesArchiveState, settleArchiveState } from "./archive-state"
 import {
   ApiAuthorityChangedError,
   captureApiAuthority,
@@ -209,9 +209,10 @@ function readConversationSession(target: ConversationSessionActionTarget, signal
   return apiJson<ConversationSessionResponse>(conversationSessionPath(target), { authority: target.authority, signal })
 }
 
-function restoredConversation(
+function confirmedConversationArchive(
   response: ConversationSessionResponse,
   target: ConversationSessionActionTarget,
+  archived: boolean,
 ): ConversationSessionResponse {
   const session = response?.session
   const conversation = session?.metadata?.conversation
@@ -225,9 +226,11 @@ function restoredConversation(
     !("surface" in conversation) || conversation.surface !== "right-sidebar" ||
     typeof session.time?.updated !== "number"
   ) {
-    throw new Error("The archive restore result returned a different or incomplete conversation identity.")
+    throw new Error("The archive result returned a different or incomplete conversation identity.")
   }
-  if (session.time.archived !== undefined) throw new Error("The selected conversation is still archived.")
+  if (!matchesArchiveState(session.time.archived, archived)) {
+    throw new Error("The selected conversation has not reached the requested archive state.")
+  }
   return response
 }
 
@@ -627,7 +630,7 @@ export async function deleteConversationSession(target: ConversationSessionActio
 export async function setConversationSessionArchived(
   target: ConversationSessionActionTarget,
   archived: boolean,
-): Promise<boolean> {
+): Promise<void> {
   const authority = target.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
   const owner = Symbol("archive")
@@ -648,14 +651,20 @@ export async function setConversationSessionArchived(
       body: JSON.stringify({ archived }),
     } satisfies Parameters<typeof apiJson>[1]
     const path = conversationSessionPath(target, "/archive")
-    const response = archived
-      ? await apiJson<ConversationSessionResponse>(path, serverSettledRequest(request))
-      : await settleArchiveRestore({
-          authority,
-          write: async () => restoredConversation(await apiJson<ConversationSessionResponse>(path, request), target),
-          readRestored: async () => restoredConversation(await readConversationSession({ ...target, authority }), target),
-        })
-    if (!owns()) return true
+    const response = await settleArchiveState({
+      authority,
+      write: async () => confirmedConversationArchive(
+        await apiJson<ConversationSessionResponse>(path, archived ? serverSettledRequest(request) : request),
+        target,
+        archived,
+      ),
+      verify: async () => confirmedConversationArchive(
+        await readConversationSession({ ...target, authority }),
+        target,
+        archived,
+      ),
+    })
+    if (!owns()) return
     reconcileSessionAfterCommit(id, archived ? "archive" : "restore", () => {
       if (!archived) {
         setSessionRow(response.session)
@@ -676,7 +685,6 @@ export async function setConversationSessionArchived(
       }
       removeSessionRow(id)
     })
-    return true
   } catch (error) {
     if (owns()) console.error("[conversation-session] archive update failed", { sessionID: id, archived, error })
     throw error

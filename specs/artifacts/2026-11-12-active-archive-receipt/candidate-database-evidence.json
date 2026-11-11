@@ -1,0 +1,40 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "session": 5,
+    "message": 0,
+    "engine_task": 1,
+    "provider_usage_event": 0,
+    "provider_activity_request": 0,
+    "permission_ledger": 0
+  },
+  "restoredTask": {
+    "taskID": "tsk_g00VahoAds00wszfEbue",
+    "sessionID": "ses_-zUPIBpMIzz6z224kyKO",
+    "title": "归档原有独立任务",
+    "request": "归档后保留原始单步任务。",
+    "archived": null
+  },
+  "archivedSessions": [
+    [
+      "ses_h45z6UxIyiBr2SJLW7Kh",
+      "保留原请求的草稿",
+      1794435628739
+    ],
+    [
+      "ses_h5VwU3xSI2DXroqfZB5C",
+      "归档原有协作会话",
+      1794435587061
+    ],
+    [
+      "ses_h7Yqu2oMH1x0yktc8fxa",
+      "Archive original draft",
+      1794435474269
+    ],
+    [
+      "ses_hHUfmraZJWEJZeeP1Nbq",
+      "Archive original Chat",
+      1794435463024
+    ]
+  ]
+}

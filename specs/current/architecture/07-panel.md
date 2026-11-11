@@ -5961,6 +5961,14 @@ Project identity context independently of execution-model initialization.
 Their original ownership, cancellation, physical settlement, closure and
 retention transactions remain authoritative. Restore retains the original
 stopped occurrence and paused Goal; it does not admit new execution.
+Both archive and restore validate the current write receipt for the exact
+owner and requested archive state. An interrupted or invalid receipt triggers
+one exact read on the same API authority. The observed state of the original
+Task, Mission Session or right-sidebar conversation authorizes the existing
+post-commit reconciliation. Explicit server refusals retain their error
+contract. If the result remains uncertain, feedback retains the original write
+and read diagnostics. Active archive feedback directs the operator to the
+archive for the selected project's item. Confirmation never repeats the write.
 
 Settings Archive passes its current search to the existing archived Work Ledger
 reader. Search runs over the complete archive before cursor pagination; it does
