@@ -1537,11 +1537,8 @@ async function searchProjectMarketExpertSquads(
   return page.entries
 }
 
-async function installMissionMarketExpertSquad(
-  projectDirectory: string,
-  item: ExpertSquadMarketIndexItem,
-): Promise<void> {
-  await installExpertSquadMarketPackage(projectDirectory, item.id, "project")
+function installMissionMarketExpertSquad(projectDirectory: string, item: ExpertSquadMarketIndexItem) {
+  return installExpertSquadMarketPackage(projectDirectory, item, "project")
 }
 
 async function openMissionMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
@@ -2204,11 +2201,11 @@ async function searchComposerMarketExpertSquads(query: string): Promise<readonly
   return searchProjectMarketExpertSquads(scope.directory, query, composerIntent().productPillar)
 }
 
-async function installComposerMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+async function installComposerMarketExpertSquad(item: ExpertSquadMarketIndexItem) {
   const scope = composerReferenceCatalogScope()
   if (scope.kind !== "project" && scope.kind !== "session")
     throw new Error(t("chat.references.market_install_scope_unavailable"))
-  await installExpertSquadMarketPackage(scope.directory, item.id, "project")
+  return installExpertSquadMarketPackage(scope.directory, item, "project")
 }
 
 async function searchComposerExpertSquads(

@@ -5,7 +5,9 @@ import {
   inspectExpertSquad,
   loadExpertSquadCatalog,
   searchExpertSquads,
+  type ExpertSquadInspection,
   type ExpertSquadMarketIndexItem,
+  type ExpertSquadMarketInstallOutcome,
   type ExpertSquadOption,
 } from "../services/expert-squad"
 import { createExpertSquadMarketRecommendations } from "../services/expert-squad-market-recommendations"
@@ -28,6 +30,7 @@ import { matchesSearchTerms } from "../services/text-search"
 import { SearchField } from "./ui/SearchField"
 import { TextField } from "./ui/TextField"
 import { ExpertSquadMarketSearchFeedback } from "./ExpertSquadMarketSearchFeedback"
+import { ExpertSquadMarketInstallFeedback } from "./ExpertSquadMarketInstallFeedback"
 
 type MissionCreateMode = "manual" | "ai"
 type MissionTypeSelection = ProductPillar | ""
@@ -63,7 +66,7 @@ export interface MissionCreateDialogProps {
     query: string,
     productPillar: ProductPillar,
   ) => Promise<readonly ExpertSquadMarketIndexItem[]>
-  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<void>
+  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<ExpertSquadMarketInstallOutcome>
   onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   canOpenMarketWebPage?: boolean
   onClose: () => void
@@ -100,7 +103,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const squadResultsReady = () => !expertSquadLoading() && !expertSquadError()
   const [marketActionError, setMarketActionError] = createSignal("")
   const [marketInstallingID, setMarketInstallingID] = createSignal("")
-  const [marketInstalledID, setMarketInstalledID] = createSignal("")
+  const [marketInstallOutcome, setMarketInstallOutcome] = createSignal<ExpertSquadMarketInstallOutcome>()
+  const installedReceiptID = () => {
+    const outcome = marketInstallOutcome()
+    return outcome?.kind === "receipt" ? outcome.receipt.after.id : undefined
+  }
   const [submitting, setSubmitting] = createSignal(false)
   const [error, setError] = createSignal<{ mode: MissionCreateMode; cause: unknown }>()
   const [submitAttempted, setSubmitAttempted] = createSignal(false)
@@ -321,6 +328,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     pillar: ProductPillar,
     query: string,
     offered: ExpertSquadMarketIndexItem | undefined,
+    confirmedInstallation: ExpertSquadInspection | undefined,
     authority: ApiAuthority,
   ): Promise<void> {
     const generation = dialogGeneration
@@ -331,9 +339,9 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     try {
       const [page, exact] = await Promise.all([
         searchExpertSquads({ directory, productPillar: pillar, query, limit: 20, authority }),
-        offered && inspectExpertSquad({
+        offered && (confirmedInstallation ?? inspectExpertSquad({
           directory, id: offered.id, namespace: offered.namespace, installationScope: "project", authority,
-        }),
+        })),
       ])
       if (!owns()) return
       const installed = exact?.product_pillars.includes(pillar) ? exact : undefined
@@ -452,7 +460,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     () => {
       installLifecycleSequence += 1
       setMarketInstallingID("")
-      setMarketInstalledID("")
+      setMarketInstallOutcome(undefined)
     },
   ))
 
@@ -472,16 +480,24 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       productPillar() === pillar &&
       isApiAuthorityCurrent(authority)
     setMarketInstallingID(item.id)
-    setMarketInstalledID("")
+    setMarketInstallOutcome(undefined)
     setMarketActionError("")
     try {
-      await install(directory, item)
+      const outcome = await install(directory, item)
       if (!owns()) return
+      setMarketInstallOutcome(outcome)
+      if (outcome.kind === "unconfirmed") return
       if (origin && document.activeElement === origin && expertSquadSearchRef?.isConnected) expertSquadSearchRef.focus()
-      setMarketInstalledID(item.id)
       const query = expertSquadQuery().trim().slice(0, 500)
       await Promise.all([
-        refreshSquadsAfterInstall(directory, pillar, query, query === offeredQuery ? item : undefined, authority),
+        refreshSquadsAfterInstall(
+          directory,
+          pillar,
+          query,
+          query === offeredQuery ? item : undefined,
+          outcome.kind === "confirmed" ? outcome.inspection : undefined,
+          authority,
+        ),
         market.refresh(),
       ])
     } catch (nextError) {
@@ -880,6 +896,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           <p class="mission-create-form__model-note">{t("mission_board.create.project_model_note")}</p>
         </fieldset>
 
+        <ExpertSquadMarketInstallFeedback outcome={marketInstallOutcome()} />
         <ExpertSquadMarketSearchFeedback failure={market.failure()} loading={market.loading()} onRetry={market.retry} />
         <Show when={market.loading() && !market.failure()}>
           <div class="mission-create-form__market-state" role="status" aria-live="polite">
@@ -944,10 +961,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             </div>
           </section>
         </Show>
-        <Show when={marketInstalledID()}>
+        <Show when={installedReceiptID()}>
           <div class="mission-create-form__market-state is-success" role="status" aria-live="polite">
             <Icon name="status-completed" size="compact" />
-            <span>{t("mission_board.create.market_installed", { id: marketInstalledID() })}</span>
+            <span>{t("mission_board.create.market_installed", { id: installedReceiptID() })}</span>
           </div>
         </Show>
 

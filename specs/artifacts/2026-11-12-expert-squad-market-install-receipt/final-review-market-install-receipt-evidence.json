@@ -1,0 +1,154 @@
+{
+  "asset": "main-iLEZAu1S.js",
+  "checked": [
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "62523e45-5efc-4e7f-8f68-cbd19cdf8dcc",
+      "result": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/deep-research/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "b9f50139-0a7b-4123-b32f-caee900975c8",
+      "result": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/browser-research-acceptance/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "4b79fd5d-3d59-43ed-a8bb-aef19201d1b6",
+      "result": {
+        "active": "dynamic"
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "661f8f3a-0a74-4f85-bca0-51f1591a25c3",
+      "result": {
+        "query": "deep research",
+        "ids": [
+          "academic-paper-review",
+          "data-analysis",
+          "commercial-legal"
+        ]
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "c3544aec-5b23-4a77-b5ee-77bb240a01b8",
+      "result": {
+        "query": "research",
+        "ids": [
+          "equity-research",
+          "sales-strategy",
+          "scientific-research-design"
+        ]
+      }
+    }
+  ],
+  "receiptCuts": [
+    {
+      "time": "2026-11-11T19:13:21.176Z",
+      "stage": "truncated",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "final-composer-committed-receipt-cut",
+      "status": 200,
+      "requestID": "a5ea7c6b-596d-4890-b7c3-86d467f5eedb",
+      "bytes": 560,
+      "installation": {
+        "operation": "installed",
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      },
+      "deliveredBytes": 32
+    }
+  ],
+  "checks": [
+    {
+      "time": "2026-11-11T19:13:21.290Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "final-composer-committed-receipt-released",
+      "target": {
+        "id": "deep-research",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "cf0fdba1-7e03-4f5c-b4a8-4d61e5ed4ffa",
+      "bytes": 11595,
+      "inspection": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Deep Research"
+      }
+    },
+    {
+      "time": "2026-11-11T19:13:39.831Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "final-composer-committed-receipt-released",
+      "target": {
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "48fff244-3dfe-4e98-b2a6-bd8886eb5fa8",
+      "bytes": 5772,
+      "inspection": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Browser Research & Acceptance"
+      }
+    }
+  ],
+  "dropped": [],
+  "completeReceipts": [
+    {
+      "time": "2026-11-11T19:13:39.731Z",
+      "stage": "delivered",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "final-composer-committed-receipt-released",
+      "status": 200,
+      "requestID": "0f79a089-03fa-4f33-b3b7-c82b250e5860",
+      "bytes": 588,
+      "installation": {
+        "operation": "installed",
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    }
+  ]
+}

@@ -30,7 +30,7 @@ import type {
   ExpertSquadSettingsDetailResponse,
 } from "@opencorvus-ai/sdk"
 import { appStore } from "../store/app"
-import { apiJson, serverSettledRequest } from "./api"
+import { ApiError, apiJson, serverSettledRequest } from "./api"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { patchSessionConfig, updateConfig, type SessionConfigResponse } from "./config"
 
@@ -58,6 +58,10 @@ export type ExpertSquadMarketPage = ExpertSquadMarketResponse
 export type ExpertSquadMarketIndexItem = ExpertSquadMarketPage["entries"][number]
 export type ExpertSquadMarketItem = ExpertSquadMarketDetailResponse
 export type ExpertSquadMarketInstallResult = ExpertSquadInstallPayloadResponse
+export type ExpertSquadMarketInstallOutcome =
+  | { kind: "receipt"; receipt: ExpertSquadMarketInstallResult }
+  | { kind: "confirmed"; inspection: ExpertSquadInspection; receiptError: unknown }
+  | { kind: "unconfirmed"; id: string; receiptError: unknown; inspectionError: unknown }
 export type ExpertSquadUpdateSource = NonNullable<ExpertSquadUpdateData["body"]>["source"]
 export type ExpertSquadUpdateResult = ExpertSquadUpdateResponse
 
@@ -409,23 +413,53 @@ export async function loadExpertSquadMarketDetail(directory: string, id: string,
 
 export async function installExpertSquadMarketPackage(
   directory: string,
-  expertSquadID: string,
+  item: Pick<ExpertSquadMarketIndexItem, "id" | "namespace">,
   installationScope: ExpertSquadInstallationScope,
   authority = captureApiAuthority(),
-): Promise<ExpertSquadMarketInstallResult> {
-  const id = expertSquadID.trim()
-  if (!id) throw new Error("installExpertSquadMarketPackage: expertSquadID is required")
-  const result = (await apiJson(
-    directoryScopedPath("expert-squad/install-payload", directory, "installExpertSquadMarketPackage"),
-    {
+): Promise<ExpertSquadMarketInstallOutcome> {
+  const id = item.id.trim()
+  const namespace = item.namespace.trim()
+  if (!id || !namespace) throw new Error("installExpertSquadMarketPackage: id and namespace are required")
+  const requestPath = directoryScopedPath("expert-squad/install-payload", directory, "installExpertSquadMarketPackage")
+  let outcome: ExpertSquadMarketInstallOutcome
+  try {
+    const receipt = await apiJson<ExpertSquadMarketInstallResult>(requestPath, {
       authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, installationScope }),
-    },
-  )) as ExpertSquadMarketInstallResult
-  if (isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
-  return result
+    })
+    if (
+      (receipt?.operation !== "installed" && receipt?.operation !== "unchanged") ||
+      receipt.after?.id !== id ||
+      receipt.after.namespace !== namespace ||
+      receipt.after.installationScope !== installationScope
+    ) {
+      throw new Error("The market installation receipt has a different package identity")
+    }
+    outcome = { kind: "receipt", receipt }
+  } catch (receiptError) {
+    if (!isApiAuthorityCurrent(authority) || (receiptError instanceof ApiError && receiptError.status < 500)) {
+      throw receiptError
+    }
+    try {
+      const inspection = await inspectExpertSquad({ directory, id, namespace, installationScope, authority })
+      if (
+        inspection.id !== id ||
+        inspection.source.kind !== "installed_package" ||
+        inspection.source.namespace !== namespace ||
+        inspection.source.installation_scope !== installationScope
+      ) {
+        throw new Error("The market installation check has a different package identity")
+      }
+      outcome = { kind: "confirmed", inspection, receiptError }
+    } catch (inspectionError) {
+      if (!isApiAuthorityCurrent(authority)) throw inspectionError
+      outcome = { kind: "unconfirmed", id, receiptError, inspectionError }
+    }
+  }
+  if (outcome.kind !== "unconfirmed" && isApiAuthorityCurrent(authority)) markExpertSquadCatalogStale()
+  return outcome
 }
 
 export async function updateExpertSquadPackage(

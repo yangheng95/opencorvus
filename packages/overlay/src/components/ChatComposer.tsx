@@ -69,7 +69,7 @@ import {
   normalizeComposerDraftKey,
   setComposerDraft,
 } from "../services/composer-draft"
-import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/expert-squad"
+import type { ExpertSquadMarketIndexItem, ExpertSquadMarketInstallOutcome, ExpertSquadOption } from "../services/expert-squad"
 import { currentUIScale } from "../utils/layout-tokens"
 import { ComposerModelSelector } from "./ComposerModelSelector"
 import { ComposerPermissionControl } from "./ComposerPermissionControl"
@@ -225,7 +225,7 @@ export interface ChatComposerProps {
   referenceCatalogKey: string
   referenceCatalogScopeKey: string
   onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
-  onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
+  onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<ExpertSquadMarketInstallOutcome>
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   onInstallMoreExpertSquads?: () => void
   activeExpertSquadPackage: ComposerExpertSquadPackage | null

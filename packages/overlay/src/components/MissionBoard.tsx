@@ -1,6 +1,6 @@
 import { createComputed, createEffect, createMemo, createSignal, createUniqueId, For, on, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
-import type { ExpertSquadMarketIndexItem } from "../services/expert-squad"
+import type { ExpertSquadMarketIndexItem, ExpertSquadMarketInstallOutcome } from "../services/expert-squad"
 import {
   MISSION_BOARD_LANES,
   type MissionBoardLane,
@@ -44,7 +44,7 @@ export interface MissionBoardProps {
     query: string,
     productPillar: ProductPillar,
   ) => Promise<readonly ExpertSquadMarketIndexItem[]>
-  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<void>
+  onInstallMarketExpertSquad?: (projectDirectory: string, item: ExpertSquadMarketIndexItem) => Promise<ExpertSquadMarketInstallOutcome>
   onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   canOpenMarketWebPage?: boolean
   onOpenMission: (mission: MissionRecord) => void | Promise<void>

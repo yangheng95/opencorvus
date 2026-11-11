@@ -1,0 +1,189 @@
+{
+  "asset": "main-iLEZAu1S.js",
+  "checked": [
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "24aa1f89-db60-473f-96ab-085b924e54e3",
+      "result": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/deep-research/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "22cebd87-8276-4442-93fd-b532391ae173",
+      "result": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/browser-research-acceptance/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "23aec045-e683-480d-82e4-3e6d1b05801c",
+      "result": {
+        "active": "dynamic"
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "bfcaaadf-ad35-4b3a-bfd4-3d78f1d7c5e5",
+      "result": {
+        "query": "deep research",
+        "ids": [
+          "academic-paper-review",
+          "data-analysis",
+          "commercial-legal"
+        ]
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "13f1209c-2fa9-4e35-b97e-c10503604848",
+      "result": {
+        "query": "research",
+        "ids": [
+          "equity-research",
+          "sales-strategy",
+          "scientific-research-design"
+        ]
+      }
+    }
+  ],
+  "receiptCuts": [
+    {
+      "time": "2026-11-11T19:04:56.104Z",
+      "stage": "truncated",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "composer-committed-receipt-cut",
+      "status": 200,
+      "requestID": "60da2c9b-1abe-4a3a-8f3e-f2a8b2f05e68",
+      "bytes": 554,
+      "installation": {
+        "operation": "installed",
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      },
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T19:06:50.568Z",
+      "stage": "truncated",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "mission-committed-receipt-cut",
+      "status": 200,
+      "requestID": "625b2b2f-8c47-4661-a6d5-9d9cb29c88e3",
+      "bytes": 582,
+      "installation": {
+        "operation": "installed",
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "installationScope": "project"
+      },
+      "deliveredBytes": 32
+    }
+  ],
+  "checks": [
+    {
+      "time": "2026-11-11T19:04:56.230Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "composer-committed-receipt-released",
+      "target": {
+        "id": "deep-research",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "6dc1261d-8310-4411-b0d4-a11858520faf",
+      "bytes": 11595,
+      "inspection": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Deep Research"
+      }
+    },
+    {
+      "time": "2026-11-11T19:05:40.201Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "composer-install-request-check",
+      "target": {
+        "id": "academic-paper-review",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 404,
+      "requestID": "961cef67-e00a-4c4c-9f1d-10c54b4201ab",
+      "bytes": 91,
+      "inspection": {
+        "errorName": "NotFoundError"
+      }
+    },
+    {
+      "time": "2026-11-11T19:06:50.674Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "mission-committed-receipt-released",
+      "target": {
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "0d1dd9fe-9973-4d6d-a2d2-8fb1263fb1de",
+      "bytes": 5772,
+      "inspection": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Browser Research & Acceptance"
+      }
+    }
+  ],
+  "dropped": [
+    {
+      "time": "2026-11-11T19:05:40.180Z",
+      "stage": "dropped",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "composer-install-request-dropped"
+    },
+    {
+      "time": "2026-11-11T19:05:40.182Z",
+      "stage": "dropped",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "composer-install-request-dropped"
+    }
+  ]
+}
