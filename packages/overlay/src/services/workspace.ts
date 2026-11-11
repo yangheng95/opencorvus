@@ -317,10 +317,11 @@ function refreshDirectoryFreeConfig(authority: ApiAuthority, selectionEpoch: num
  */
 export async function closeProject(): Promise<void> {
   const authority = captureApiAuthority()
-  const admission = await requestWorkspaceSelection()
+  const admission = await admitWorkspaceSelection(undefined, {
+    committed: (epoch) => enterDirectoryFreeWorkspace("", epoch),
+  })
   if (admission.kind === "unchanged") return
   if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
-  enterDirectoryFreeWorkspace("", admission.epoch)
   await saveSettings()
   if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
   if (isApiAuthorityCurrent(authority)) refreshDirectoryFreeConfig(authority, admission.epoch)
@@ -399,8 +400,11 @@ export async function leaveUnavailableProject(directory: string): Promise<void> 
   const savedDirectory =
     projectDirectoryKey(settingsStore.savedDirectory) === unavailableKey ? "" : settingsStore.savedDirectory
   if (ownsRuntimeDirectory) {
-    recoveryEpoch = beginWorkspaceSelection()
-    enterDirectoryFreeWorkspace(savedDirectory, recoveryEpoch)
+    recoveryEpoch = batch(() => {
+      const epoch = beginWorkspaceSelection()
+      enterDirectoryFreeWorkspace(savedDirectory, epoch)
+      return epoch
+    })
   } else {
     // A selected Task or Session can temporarily own another live Project
     // while settings still retain this removed directory. Clear only the
@@ -1052,11 +1056,11 @@ export function requestWorkspaceSelection(target?: BoardSource): Promise<Workspa
 
 async function admitWorkspaceSelection(
   target?: BoardSource,
-  observer?: { requested: (sequence: number) => void; committed: (epoch: number) => void },
+  observer?: { requested?: (sequence: number) => void; committed?: (epoch: number) => void },
 ): Promise<WorkspaceAdmission> {
   if (fileEditorReserved()) throw new FileEditorAdmissionError("busy")
   const sequence = ++workspaceAdmissionSequence
-  observer?.requested(sequence)
+  observer?.requested?.(sequence)
   if (target && isWorkspaceSelectionReady(target)) return { kind: "unchanged" }
   const previousEpoch = boardStore.selectEpoch
   let epoch = previousEpoch
@@ -1064,7 +1068,7 @@ async function admitWorkspaceSelection(
     isCurrent: () => sequence === workspaceAdmissionSequence && ownsWorkspaceSelection(previousEpoch),
     commit: () => {
       epoch = beginWorkspaceSelection()
-      observer?.committed(epoch)
+      observer?.committed?.(epoch)
     },
   })
   if (!accepted) throw new DOMException("Workspace selection cancelled or superseded", "AbortError")

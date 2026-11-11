@@ -1,0 +1,115 @@
+{
+  "asset": "main-___uU3J7.js",
+  "checked": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "1945d7a0-1add-4437-946c-ebb3ec5ca1a9"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "926d0c18-9e2c-4ab9-95da-001e4e197563"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "75217973-df4f-43e4-abe9-489c69d7187c"
+    },
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "1f7312f5-af62-4e97-b4cf-678dc569929b"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "63d239f1-3c19-4b35-a0cd-957dc5d2badc"
+    }
+  ],
+  "stats": {
+    "project": {
+      "providers": 89,
+      "connected": 0
+    },
+    "global": {
+      "providers": 88,
+      "connected": 0
+    },
+    "projectMatches": 1,
+    "globalMatches": 0
+  },
+  "baselineClose": [
+    {
+      "time": "2026-11-11T04:45:03.934Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "candidate-search-handoff",
+      "route": "/provider",
+      "project": "provider-row-review",
+      "status": 200,
+      "requestID": "35dd7e41-caa6-4350-8281-3474f78e2c71",
+      "providerCount": 89,
+      "connectedCount": 0,
+      "bytes": 1899960
+    },
+    {
+      "time": "2026-11-11T04:45:03.999Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "candidate-search-handoff",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "41cc1f35-cf21-402d-8a4f-be59b9751b58",
+      "providerCount": 88,
+      "connectedCount": 0,
+      "bytes": 1899849
+    }
+  ],
+  "candidateClose": [
+    {
+      "time": "2026-11-11T05:00:26.907Z",
+      "stage": "delivered",
+      "kind": "auth",
+      "round": "close-settled",
+      "route": "/global/providers/auth",
+      "project": "global",
+      "status": 200,
+      "requestID": "a2ff5b94-8776-4f87-9271-70505b393c1a"
+    },
+    {
+      "time": "2026-11-11T05:00:26.910Z",
+      "stage": "delivered",
+      "kind": "config",
+      "round": "close-settled",
+      "route": "/global/config",
+      "project": "global",
+      "status": 200,
+      "requestID": "572da157-acfb-4f02-b979-b1205f56fa1d"
+    },
+    {
+      "time": "2026-11-11T05:00:26.974Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "close-settled",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "f53db38b-d2be-4166-92fc-4bf87a79b8c0",
+      "providerCount": 88,
+      "connectedCount": 0,
+      "bytes": 1899849
+    },
+    {
+      "time": "2026-11-11T05:00:26.975Z",
+      "stage": "delivered",
+      "kind": "config",
+      "round": "close-settled",
+      "route": "/global/config",
+      "project": "global",
+      "status": 200,
+      "requestID": "e1907bf7-e0df-4fe1-befe-ecf65d610868"
+    }
+  ]
+}

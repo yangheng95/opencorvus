@@ -1,11 +1,14 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
+import { createComputed, createRoot } from "solid-js"
 import { captureApiAuthority, configure } from "../src/services/api"
+import { queryWithDirectory } from "../src/services/api-state"
 import { currentProjectConfigRequestOptions, patchConfig, reloadProjectScope, updateConfig } from "../src/services/config"
+import { loadProviderInfo } from "../src/services/config-load"
 import { setPermissionMode } from "../src/services/permission-mode"
 import { boardStore, setBoardStore } from "../src/store/board"
 import { appStore, setAppStore } from "../src/store/app"
 import { applySettings, bootstrapOverlaySettings, DEFAULT_SETTINGS, loadSettings, settingsStore, setSettingsStore } from "../src/store/settings"
-import { requestWorkspaceSelection } from "../src/services/workspace"
+import { activeDirectory, closeProject, leaveUnavailableProject, requestWorkspaceSelection } from "../src/services/workspace"
 import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { setLocale } from "../src/utils/i18n"
@@ -23,6 +26,7 @@ let persisted: PersistedOverlaySettings
 let requests: TransportRequest[]
 let reply: (request: TransportRequest) => Promise<TransportResponse<unknown>>
 let persist: (value: PersistedOverlaySettings) => Promise<void>
+const originalFrame = globalThis.requestAnimationFrame
 
 function jsonBody(request: TransportRequest): Record<string, unknown> {
   if (request.body?.kind !== "json") throw new Error("Expected canonical JSON request")
@@ -63,6 +67,10 @@ function connectB() {
 }
 
 beforeEach(async () => {
+  globalThis.requestAnimationFrame = (callback) => {
+    queueMicrotask(() => callback(performance.now()))
+    return 0
+  }
   applySettings({ ...DEFAULT_SETTINGS, serverUrl: A, autoServer: false, directory, savedDirectory: directory, locale: "en-US" })
   configure({ serverUrl: A, directory, username: "opencorvus", password: "" })
   persisted = bootstrapOverlaySettings()
@@ -79,6 +87,7 @@ afterEach(async () => {
   // setPermissionMode intentionally returns void; one event-loop boundary
   // drains already-resolved fixture microtasks without a production test accessor.
   await new Promise<void>((resolve) => setImmediate(resolve))
+  globalThis.requestAnimationFrame = originalFrame
   __setHostTransportForTest(undefined)
   setBoardStore({ selectedSource: null, board: null, taskSwitching: false })
   setAppStore({ connected: false, config: null })
@@ -97,6 +106,71 @@ test("admitted transient A/B/A selections advance the shared selection epoch bef
   })
   expect(await requestWorkspaceSelection(sourceA)).toEqual({ kind: "unchanged" })
   expect(boardStore.selectEpoch).toBe(epoch + 2)
+})
+
+test.each([
+  ["operator close", closeProject],
+  ["unavailable active directory", () => leaveUnavailableProject(directory)],
+] as const)("%s publishes one coherent transition to the global configuration scope", async (_, leave) => {
+  const epoch = boardStore.selectEpoch
+  const directoryEpoch = settingsStore.directoryEpoch
+  const globalConfig = { marker: "accepted-global" }
+  reply = async () => ok(globalConfig)
+  const scope = () => ({
+    epoch: boardStore.selectEpoch,
+    directoryEpoch: settingsStore.directoryEpoch,
+    active: activeDirectory(),
+    source: boardStore.selectedSource?.id ?? null,
+    apiDirectory: queryWithDirectory("config")?.directory ?? "",
+  })
+  const scopes: ReturnType<typeof scope>[] = []
+  const dispose = createRoot((dispose) => {
+    createComputed(() => {
+      scopes.push(scope())
+    })
+    return dispose
+  })
+  try {
+    await leave()
+    expect(scopes).toEqual([
+      { epoch, directoryEpoch, active: directory, source: sourceA.id, apiDirectory: directory },
+      { epoch: epoch + 1, directoryEpoch: directoryEpoch + 1, active: "", source: null, apiDirectory: "" },
+    ])
+    await new Promise<void>((resolve) => setImmediate(resolve))
+    expect(requests.map(({ path, query }) => ({ path, query }))).toEqual([{ path: "global/config", query: undefined }])
+    expect({ config: appStore.config, savedDirectory: persisted.directory, session: persisted.workspaceTaskID }).toEqual({
+      config: globalConfig, savedDirectory: undefined, session: undefined,
+    })
+  } finally {
+    dispose()
+  }
+})
+
+test("a late project catalog leaves the accepted global catalog and configuration current after close", async () => {
+  const pendingProjectCatalog = Promise.withResolvers<TransportResponse<unknown>>()
+  const globalCatalog = { all: [{ id: "global-provider" }], connected: [] }
+  const globalConfig = { marker: "accepted-global" }
+  reply = async (request) => {
+    switch (request.path) {
+      case "provider": return pendingProjectCatalog.promise
+      case "global/providers": return ok({ catalog: globalCatalog })
+      case "global/config": return ok(globalConfig)
+      case "provider/auth":
+      case "global/providers/auth": return ok({})
+      default: throw new Error(`Unexpected provider route ${request.path}`)
+    }
+  }
+  const projectRead = loadProviderInfo()
+  try {
+    await closeProject()
+    expect(await loadProviderInfo()).toEqual([])
+  } finally {
+    pendingProjectCatalog.resolve(ok({ all: [{ id: "project-provider" }], connected: [] }))
+    await projectRead
+  }
+  expect({ directory: activeDirectory(), catalog: appStore.providerCatalog, config: appStore.config }).toEqual({
+    directory: "", catalog: globalCatalog, config: globalConfig,
+  })
 })
 
 test("stable project config projects and returns its exact accepted response", async () => {

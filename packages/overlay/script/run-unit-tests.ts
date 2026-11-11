@@ -10,6 +10,7 @@ import { prepareTestProcessSupervisor } from "../../opencorvus/script/prepare-te
 
 const OVERLAY_ROOT = path.resolve(import.meta.dir, "..")
 const UNIT_TEST_INACTIVITY_TIMEOUT_MILLISECONDS = 120_000
+const REACTIVE_SERVICE_TESTS = new Set(["meta-project-scope.test.ts", "project-configuration-ownership.test.ts"])
 const testProcessSupervisor = prepareTestProcessSupervisor()
 const runnerRuntime = await bootstrapIsolatedTestRuntime("runner")
 if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
@@ -30,9 +31,11 @@ try {
   const childEnvironment = isolatedTestChildEnvironment(runnerRuntime)
   for (const file of files) {
     settlementConfirmed = false
+    // Solid's server exports expose store values but do not rerun observers.
+    const conditions = REACTIVE_SERVICE_TESTS.has(path.basename(file)) ? ["--conditions=browser"] : []
     const result = await runHostCommandWithInactivity({
       executable: process.execPath,
-      args: ["test", "--timeout=0", file],
+      args: ["test", ...conditions, "--timeout=0", file],
       cwd: OVERLAY_ROOT,
       env: childEnvironment,
       deadlineAt: testCommandDeadlineAt(),
