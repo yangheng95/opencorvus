@@ -5709,6 +5709,10 @@ still disables Refresh.
 An accepted Mission Skill catalog lists localized issue kinds and sources with
 the original paths and expandable original diagnostics. The warning belongs to
 the list; an unrelated issue does not occupy the selected skill's detail view.
+If an in-flight catalog refresh continues into a skill's detail, the detail
+identifies the last loaded contents and offers the same read as a retry after
+failure. A successful retry keeps the skill identity and returns focus still
+owned by its retry button to the detail heading.
 Browsing details never activates a Squad.
 Independent capability groups, usage sections and settings forms flow vertically;
 the settings navigation rail and ordinary label/value rows retain their roles. Skill

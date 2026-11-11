@@ -185,11 +185,10 @@ export default function MissionSkillPanel() {
     }
   }
 
-  async function refresh(
-    scope = currentScope(),
-    expectedIdentity = currentScopeIdentity(),
-    authority = captureApiAuthority(),
-  ): Promise<void> {
+  async function refresh(retryTrigger?: HTMLButtonElement): Promise<void> {
+    const scope = currentScope()
+    const expectedIdentity = currentScopeIdentity()
+    const authority = captureApiAuthority()
     if (scope.kind === "unavailable") {
       loadSequence++
       setCatalog(null)
@@ -202,7 +201,6 @@ export default function MissionSkillPanel() {
     const owns = () =>
       sequence === loadSequence && currentScopeIdentity() === expectedIdentity && isApiAuthorityCurrent(authority)
     setLoading(true)
-    setReadFailure(undefined)
     try {
       const next = await loadMissionSkillSettings({ ...scope, authority })
       if (!owns()) return
@@ -210,13 +208,13 @@ export default function MissionSkillPanel() {
         batch(() => {
           setCatalog(next)
           setCatalogIdentity(expectedIdentity)
+          setReadFailure(undefined)
         })
       const name = selectedName()
       const origin = document.activeElement
-      if (
-        origin && detailSurface?.contains(origin) && selectedSkill() &&
+      const focusedSkillRemoved = origin && detailSurface?.contains(origin) && selectedSkill() &&
         !next.mission_skills.some((skill) => skill.name === name)
-      ) {
+      if (origin && ((origin === retryTrigger && detailOpen()) || focusedSkillRemoved)) {
         changeCatalogView(accept, () => (!origin.isConnected && selectedName() === name ? detailHeading : undefined))
       } else {
         accept()
@@ -232,10 +230,11 @@ export default function MissionSkillPanel() {
     const identity = currentScopeIdentity()
     if (identity === previousIdentity) return previousIdentity
     setSelectedName(undefined)
+    setReadFailure(undefined)
     operationGeneration += 1
     focusGeneration += 1
     setActionResult(undefined)
-    untrack(() => void refresh(currentScope(), identity))
+    untrack(() => void refresh())
     return identity
   }, "")
 
@@ -323,10 +322,37 @@ export default function MissionSkillPanel() {
         </SettingsToolbar>
       </Show>
 
+      <Show when={detailOpen() && loading() && scopedCatalog() && !readFailure()}>
+        <Feedback tone="info" aria-busy="true">
+          {t("mission_skill.detail_refreshing_retained")}
+        </Feedback>
+      </Show>
       <Show when={readFailure()}>
         {(failure) => (
-          <Feedback tone="error" data-ui="mission-skill-error" details={formatErrorDetails(failure().cause)}>
-            {t("mission_skill.load_failed")}
+          <Feedback
+            tone="error"
+            data-ui="mission-skill-error"
+            details={formatErrorDetails(failure().cause)}
+            actions={
+              <Show when={detailOpen()}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  aria-disabled={refreshBusy() || undefined}
+                  aria-busy={refreshBusy() || undefined}
+                  onClick={(event) => {
+                    if (!scopeUnavailable() && !loading()) void refresh(event.currentTarget)
+                  }}
+                >
+                  <Icon name={refreshBusy() ? "loading" : "refresh"} />
+                  {t(refreshBusy() ? "common.retrying" : "common.retry")}
+                </Button>
+              </Show>
+            }
+          >
+            {t(scopedCatalog() ? "mission_skill.load_failed_retained" : "mission_skill.load_failed")}
           </Feedback>
         )}
       </Show>
@@ -401,7 +427,9 @@ export default function MissionSkillPanel() {
                 </Feedback>
               }
             >
-              <Show when={!loading() || scopedCatalog()} fallback={<Feedback>{t("common.loading")}</Feedback>}>
+              <Show when={!loading() || scopedCatalog()} fallback={
+                <Show when={!readFailure()}><Feedback>{t("common.loading")}</Feedback></Show>
+              }>
                 <Show
                   when={skills().length > 0}
                   fallback={

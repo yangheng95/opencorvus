@@ -1,0 +1,203 @@
+{
+  "asset": "main-Cac26gn_.js",
+  "checked": [
+    {
+      "route": "/mission-skill/settings",
+      "status": 200,
+      "requestID": "f5549d66-f4c9-4649-8f10-24aadf449ae1",
+      "names": [
+        "general"
+      ],
+      "requiredTools": 14
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "status": 200,
+      "requestID": "7cf418af-d557-403a-b15d-8ee27bc63fee",
+      "names": [
+        "general"
+      ],
+      "requiredTools": 14
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T17:24:00.594Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "setup",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "36e45685-0b26-44f3-8f87-9c85ba402135",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 897
+    },
+    {
+      "time": "2026-11-11T17:24:06.569Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "en-detail-read",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "9cdd2ea3-4098-4f90-bbef-2efcf7391b52",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ]
+    },
+    {
+      "time": "2026-11-11T17:24:06.679Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "en-detail-read",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "9cdd2ea3-4098-4f90-bbef-2efcf7391b52",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 897,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T17:26:02.494Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "en-detail-second-failure",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "8c33a0eb-7bc2-49e1-ba8d-bc0815e3bf01",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ]
+    },
+    {
+      "time": "2026-11-11T17:26:02.558Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "en-detail-second-failure",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "8c33a0eb-7bc2-49e1-ba8d-bc0815e3bf01",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 897,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T17:26:06.480Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "en-detail-retry",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "efb01795-0aa6-427e-85ba-9088d58ab937",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ]
+    },
+    {
+      "time": "2026-11-11T17:26:06.481Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "en-detail-retry",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "efb01795-0aa6-427e-85ba-9088d58ab937",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 897
+    },
+    {
+      "time": "2026-11-11T17:26:20.256Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "en-detail-release",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "ac82de26-99e8-4cc0-a56f-98c7e409e36e",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 897
+    },
+    {
+      "time": "2026-11-11T17:26:24.724Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "zh-detail-read",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "8a5e26d8-62c7-4ebb-8710-937dffc957ae",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ]
+    },
+    {
+      "time": "2026-11-11T17:26:24.805Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "zh-detail-read",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "8a5e26d8-62c7-4ebb-8710-937dffc957ae",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 897,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T17:26:29.940Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "zh-detail-retry",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "c24baff3-6b2d-46f0-8e7f-bf576883b56e",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ]
+    },
+    {
+      "time": "2026-11-11T17:26:30.019Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "zh-detail-retry",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "c24baff3-6b2d-46f0-8e7f-bf576883b56e",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 897
+    }
+  ]
+}
