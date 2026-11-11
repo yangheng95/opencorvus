@@ -1,0 +1,66 @@
+{
+  "asset": "main-e1zMAa7a.js",
+  "active": {
+    "requestID": "bb096277-5a2f-4b98-b7b6-962ff96d3347",
+    "body": []
+  },
+  "listed": {
+    "requestID": "dfc40d19-cfb7-4844-8606-29aba3a44573",
+    "body": {
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-eb88fe3a13e08ee0876d7d69a94df403",
+          "missionID": "draft-eb88fe3a13e08ee0876d7d69a94df403",
+          "sessionID": "ses_hIFO5lTZ7ISyWbSajGuS",
+          "title": "Review archive continuity",
+          "pendingPromptText": "Read the exact preserved request after archive and restore.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\baseline-project\\archive-review",
+          "created": 1794426904480,
+          "started": 1794426904480,
+          "updated": 1794426923287,
+          "pinned": false,
+          "archived": 1794426923287,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        }
+      ],
+      "nextCursor": null
+    }
+  },
+  "exact": {
+    "requestID": "3cd2be1c-abc5-4eab-b1f4-1ffc563afbfa",
+    "body": {
+      "kind": "mission",
+      "id": "draft-eb88fe3a13e08ee0876d7d69a94df403",
+      "missionID": "draft-eb88fe3a13e08ee0876d7d69a94df403",
+      "sessionID": "ses_hIFO5lTZ7ISyWbSajGuS",
+      "title": "Review archive continuity",
+      "pendingPromptText": "Read the exact preserved request after archive and restore.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b250\\baseline-project\\archive-review",
+      "created": 1794426904480,
+      "started": 1794426904480,
+      "updated": 1794426923287,
+      "pinned": false,
+      "archived": 1794426923287,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  }
+}
