@@ -3,7 +3,7 @@
 // a single tail so two surfaces racing on the same config key cannot land out
 // of order, and a generation guard drops responses that lost their Project.
 
-import { appStore, setConfigSnapshot } from "../store/app"
+import { appStore } from "../store/app"
 import { boardStore } from "../store/board"
 import { captureApiAuthority, assertApiAuthorityCurrent, isApiAuthorityCurrent } from "./api"
 import { t } from "../utils/i18n"
@@ -48,8 +48,7 @@ export function setPermissionMode(mode: PermissionMode): void {
           ownsResponse,
         })
       } else {
-        const saved = await patchGlobalConfig(diff, { ownsResponse, authority })
-        if (ownsResponse()) setConfigSnapshot(saved)
+        await patchGlobalConfig(diff, { ownsResponse, authority })
       }
     } catch (error) {
       if (!ownsResponse()) return

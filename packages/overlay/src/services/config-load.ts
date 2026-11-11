@@ -1,5 +1,5 @@
 import { batch } from "solid-js"
-import { appStore, setAppStore, setConfigSnapshot, type ConfigLoadIssue, type ProviderLoadIssue } from "../store/app"
+import { appStore, currentConfigCommitRevision, setAppStore, setConfigSnapshot, type ConfigLoadIssue, type ProviderLoadIssue } from "../store/app"
 import { settingsStore } from "../store/settings"
 import { boardStore } from "../store/board"
 import { ApiError, apiJsonWithTimeout, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
@@ -136,8 +136,10 @@ export async function loadConfigInfo(
   const scope = captureDirectoryLoad(options)
   assertApiAuthorityCurrent(scope.authority)
   const loadSequence = ++configInfoLoadSequence
+  const commitRevision = currentConfigCommitRevision()
   const configPath = scope.directory ? directoryOwnedPath("config", scope) : "global/config"
   const owns = () => loadSequence === configInfoLoadSequence && ownsDirectoryLoad(scope)
+  const ownsConfig = () => currentConfigCommitRevision() === commitRevision
 
   async function read<T>(
     resource: ConfigLoadIssue["resource"],
@@ -152,13 +154,15 @@ export async function loadConfigInfo(
     }
   }
 
-  // A slow catalog cannot delay the accepted configuration (or republish it
-  // after a later write). Only the caller's aggregate receipt waits for both.
+  // Configuration and channels settle independently. The configuration can
+  // also lose publication ownership to a confirmed write within this scope.
   const configRead = read("config", configPath, requireObjectResponse).then((result) => {
     if (owns()) {
       batch(() => {
-        if (result.value) setConfigSnapshot(result.value)
-        setAppStore("configLoadIssues", result.issue ? [result.issue] : [])
+        if (ownsConfig()) {
+          if (result.value) setConfigSnapshot(result.value)
+          setAppStore("configLoadIssues", result.issue ? [result.issue] : [])
+        }
         if (!scope.directory) setAppStore("channelCatalog", null)
       })
     }
@@ -184,9 +188,11 @@ export async function loadConfigInfo(
 
   const [config, channel] = await Promise.all([configRead, channelRead])
   if (!owns()) return []
-  if (config.value) options.onAcceptedConfig?.(config.value)
   const issues: ConfigLoadIssue[] = []
-  if (config.issue) issues.push(config.issue)
+  if (ownsConfig()) {
+    if (config.value) options.onAcceptedConfig?.(config.value)
+    if (config.issue) issues.push(config.issue)
+  }
   if (channel?.issue) issues.push(channel.issue)
   return issues
 }

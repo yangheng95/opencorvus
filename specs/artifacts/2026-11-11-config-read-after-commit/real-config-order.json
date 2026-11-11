@@ -1,0 +1,63 @@
+{
+  "baseline": [
+    {
+      "scope": "project",
+      "read": "aed2bd67-9af9-4c32-8abd-752e6e85729a",
+      "write": "275bba96-5974-417d-ab9e-9389b5b2db40",
+      "durable": "5505bd12-c6e2-47f7-a05d-75faa9034e4e",
+      "projectedAfterWrite": "zh-CN",
+      "projectedAfterDelayedRead": "en-US",
+      "durableLocale": "zh-CN"
+    },
+    {
+      "scope": "global",
+      "read": "04a2a31e-3997-4429-b282-e60ee54abd66",
+      "write": "4a9d4cea-68af-433e-8a11-6026f517281f",
+      "durable": "f8dcfe90-bd03-49c1-98c8-8e2f004438b4",
+      "projectedAfterWrite": "zh-CN",
+      "projectedAfterDelayedRead": "en-US",
+      "durableLocale": "zh-CN"
+    }
+  ],
+  "candidate": [
+    {
+      "scope": "project",
+      "read": "e8caaf72-121b-4f9e-8f77-81c28f180018",
+      "write": "19f24786-9b2c-4f75-b83f-02da0673805b",
+      "durable": "3e01fa0e-42f9-4f09-942d-23c53822b31e",
+      "projectedAfterWrite": "zh-CN",
+      "projectedAfterDelayedRead": "zh-CN",
+      "durableLocale": "zh-CN",
+      "freshLocale": "zh-CN"
+    },
+    {
+      "scope": "global",
+      "read": "cc0e4ef9-afec-4c5e-b163-0f49832e35f5",
+      "write": "3c9ea4bb-567c-4a52-bee0-8c62f36f3fd4",
+      "durable": "f03c74c2-6fb9-4a64-8f38-52ac63e18e90",
+      "projectedAfterWrite": "zh-CN",
+      "projectedAfterDelayedRead": "zh-CN",
+      "durableLocale": "zh-CN",
+      "freshLocale": "zh-CN"
+    }
+  ],
+  "checked": [
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "4bdb2802-040c-4824-aa54-39d54732c89a",
+      "locale": "zh-CN"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "56da3a0a-256d-49b5-a745-a8e588d16373",
+      "locale": "zh-CN"
+    },
+    {
+      "route": "/channel",
+      "status": 200,
+      "requestID": "6ab68390-bbb9-42ab-a4de-65d82e4399e4"
+    }
+  ]
+}

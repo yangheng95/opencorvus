@@ -138,7 +138,10 @@ describe("config service fail-fast writes", () => {
   ] as const)("%s publishes its complete committed snapshot with the original error", async (name, write) => {
     const accepted = { locale: "zh-CN" }
     const body = { name, data: { committed: true, message: "Owned runtime reconciliation failed", config: accepted, failures: ["owned projection"] } }
-    configure({ directory: "C:/Users/example/project" })
+    const directory = name === "GlobalConfigCommittedReconcileError" ? "" : "C:/Users/example/project"
+    configure({ directory })
+    setBoardStore({ board: null, selectedSource: null })
+    setSettingsStore("directory", directory)
     setAppStore("connected", true)
     setConfigSnapshot({ server: { publicUrl: "http://127.0.0.1:2" }, locale: "en-US" })
     __setHostTransportForTest(fakeTransport(() => ({ status: 409, ok: false, headers: {}, body })))

@@ -2,8 +2,8 @@ import { afterEach, beforeEach, expect, test } from "bun:test"
 import { createComputed, createRoot } from "solid-js"
 import { captureApiAuthority, configure } from "../src/services/api"
 import { queryWithDirectory } from "../src/services/api-state"
-import { currentProjectConfigRequestOptions, patchConfig, reloadProjectScope, updateConfig } from "../src/services/config"
-import { loadProviderInfo } from "../src/services/config-load"
+import { currentProjectConfigRequestOptions, patchConfig, patchGlobalConfig, reloadProjectScope, updateConfig, updateGlobalConfig } from "../src/services/config"
+import { loadConfigInfo, loadProviderInfo } from "../src/services/config-load"
 import { setPermissionMode } from "../src/services/permission-mode"
 import { boardStore, setBoardStore } from "../src/store/board"
 import { appStore, setAppStore } from "../src/store/app"
@@ -178,6 +178,111 @@ test("stable project config projects and returns its exact accepted response", a
   reply = async () => ok(response)
   expect(await patchConfig({ locale: "zh-CN" }, currentProjectConfigRequestOptions())).toEqual(response)
   expect(appStore.config).toEqual(response)
+})
+
+test.each(["delayed", "already accepted"] as const)("a project commit keeps its accepted configuration with an %s read and a pending channel", async (timing) => {
+  const earlierConfig = Promise.withResolvers<TransportResponse<unknown>>()
+  const pendingChannel = Promise.withResolvers<TransportResponse<unknown>>()
+  const previous = { locale: "en-US" }
+  const saved = { locale: "zh-CN" }
+  const channels = [{ id: "owned-channel", status: "missing" }]
+  const observed: Record<string, unknown>[] = []
+  reply = async (request) => {
+    if (request.path === "channel") return pendingChannel.promise
+    if (request.method === "PATCH") return ok(saved)
+    return earlierConfig.promise
+  }
+  const reading = loadConfigInfo(undefined, { onAcceptedConfig: (config) => { observed.push(config) } })
+  try {
+    if (timing === "already accepted") {
+      earlierConfig.resolve(ok(previous))
+      await new Promise<void>((resolve) => setImmediate(resolve))
+      expect(appStore.config).toEqual(previous)
+    }
+    expect(await patchConfig(saved, currentProjectConfigRequestOptions())).toEqual(saved)
+  } finally {
+    earlierConfig.resolve(ok(previous))
+    pendingChannel.resolve(ok(channels))
+    await reading
+  }
+  expect(appStore.config).toEqual(saved)
+  expect(appStore.channelCatalog?.entries).toEqual(channels)
+
+  const current = { locale: "zh-CN", model: "review/one" }
+  reply = async (request) => ok(request.path === "channel" ? channels : current)
+  await loadConfigInfo(undefined, { onAcceptedConfig: (config) => { observed.push(config) } })
+  expect({ config: appStore.config, receipts: observed }).toEqual({ config: current, receipts: [current] })
+})
+
+test("a global save returns its receipt while the selected project's configuration keeps ownership", async () => {
+  const current = { locale: "en-US", marker: "active-project" }
+  const global = { locale: "zh-CN", marker: "global" }
+  setSettingsStore("directory", "")
+  setAppStore("config", current)
+  reply = async () => ok(global)
+  expect(await patchGlobalConfig(global)).toEqual(global)
+  expect(appStore.config).toEqual(current)
+})
+
+test("a global update keeps its accepted configuration when an earlier global read settles", async () => {
+  setBoardStore({ selectedSource: null, board: null })
+  setSettingsStore("directory", "")
+  configure({ directory: "" })
+  const earlierConfig = Promise.withResolvers<TransportResponse<unknown>>()
+  const saved = { locale: "zh-CN" }
+  let reads = 0
+  reply = async (request) => {
+    expect(request.path).toBe("global/config")
+    if (request.method === "PATCH") return ok(saved)
+    return ++reads === 1 ? earlierConfig.promise : ok({ locale: "en-US" })
+  }
+  const reading = loadConfigInfo()
+  try {
+    expect(await updateGlobalConfig((config) => { config.locale = "zh-CN" })).toEqual(saved)
+  } finally {
+    earlierConfig.resolve(ok({ locale: "en-US" }))
+    await reading
+  }
+  expect(appStore.config).toEqual(saved)
+})
+
+test("an unchanged project update returns its own read while the accepted commit remains current", async () => {
+  const previous = { locale: "en-US" }
+  const saved = { locale: "zh-CN" }
+  const earlierConfig = Promise.withResolvers<TransportResponse<unknown>>()
+  reply = async (request) => request.method === "GET" ? earlierConfig.promise : ok(saved)
+  const checking = updateConfig(() => {}, currentProjectConfigRequestOptions())
+  try {
+    expect(await patchConfig(saved, currentProjectConfigRequestOptions())).toEqual(saved)
+  } finally {
+    earlierConfig.resolve(ok(previous))
+  }
+  expect(await checking).toEqual(previous)
+  expect(appStore.config).toEqual(saved)
+})
+
+test("a committed global error preserves its typed receipt and accepted snapshot across an earlier read failure", async () => {
+  setBoardStore({ selectedSource: null, board: null })
+  setSettingsStore("directory", "")
+  configure({ directory: "" })
+  const earlierConfig = Promise.withResolvers<TransportResponse<unknown>>()
+  const accepted = { locale: "zh-CN" }
+  const receipt = {
+    name: "GlobalConfigCommittedReconcileError",
+    data: { committed: true, message: "Runtime reconciliation failed", config: accepted, failures: ["runtime"] },
+  }
+  const earlierIssue = { name: "AuthReadError", data: { message: "Earlier configuration unavailable" } }
+  reply = async (request) => request.method === "GET"
+    ? earlierConfig.promise
+    : { status: 409, ok: false, headers: {}, body: receipt }
+  const reading = loadConfigInfo()
+  try {
+    await expect(patchGlobalConfig(accepted)).rejects.toMatchObject({ status: 409, body: receipt })
+  } finally {
+    earlierConfig.resolve({ status: 503, ok: false, headers: {}, body: earlierIssue })
+  }
+  expect(await reading).toEqual([])
+  expect({ config: appStore.config, issues: appStore.configLoadIssues }).toEqual({ config: accepted, issues: [] })
 })
 
 test("project ABA preserves a pending PATCH's accepted A return and the current A projection", async () => {

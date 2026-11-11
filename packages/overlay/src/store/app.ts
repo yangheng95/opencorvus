@@ -202,9 +202,24 @@ const DEFAULT_APP_STATE: AppState = {
 
 export const [appStore, setAppStore] = createStore<AppState>({ ...DEFAULT_APP_STATE })
 
+let configCommitRevision = 0
+
+export function currentConfigCommitRevision(): number {
+  return configCommitRevision
+}
+
 /** Publish a complete accepted server configuration, including removed keys. */
 export function setConfigSnapshot(value: Record<string, unknown> | null): void {
   setAppStore("config", reconcile(value, { merge: false }))
+}
+
+/** A confirmed write supersedes configuration reads already in flight. */
+export function setCommittedConfigSnapshot(value: Record<string, unknown>): void {
+  configCommitRevision += 1
+  batch(() => {
+    setConfigSnapshot(value)
+    setAppStore("configLoadIssues", (issues) => issues.filter((issue) => issue.resource !== "config"))
+  })
 }
 
 // ── Log helpers ──

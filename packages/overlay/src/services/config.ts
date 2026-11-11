@@ -4,8 +4,7 @@
 import { ApiError, apiJson, configure as configureApi, serverSettledRequest } from "./api"
 import { readConfigMutationReceipt } from "./config-mutation-receipt"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
-import { appStore, setAppStore, setConfigSnapshot, type ProjectLoadIssue } from "../store/app"
-import { settingsStore } from "../store/settings"
+import { appStore, currentConfigCommitRevision, setAppStore, setCommittedConfigSnapshot, setConfigSnapshot, type ProjectLoadIssue } from "../store/app"
 import { t } from "../utils/i18n"
 import { loadConfigInfo } from "./config-load"
 import { loadExtensions } from "./extensions"
@@ -137,6 +136,12 @@ function configResponseStillOwned(options: ConfigRequestOptions, selectionEpoch:
   return ownsDirectory && (!options.ownsResponse || options.ownsResponse())
 }
 
+function captureGlobalConfigOwnership(options: ConfigRequestOptions): () => boolean {
+  const selectionEpoch = boardStore.selectEpoch
+  const directoryFree = !activeProjectDirectory().trim()
+  return () => directoryFree && !activeProjectDirectory().trim() && configResponseStillOwned(options, selectionEpoch)
+}
+
 export function committedConfigFromError(error: unknown): Record<string, any> | undefined {
   if (!(error instanceof ApiError)) return undefined
   return readConfigMutationReceipt(error.body)?.data.config
@@ -177,10 +182,10 @@ export async function patchConfig(diff: Record<string, any>, options: ConfigRequ
     }))
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(committed)
+    if (committed && configResponseStillOwned(options, selectionEpoch)) setCommittedConfigSnapshot(committed)
     throw error
   }
-  if (configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(saved)
+  if (configResponseStillOwned(options, selectionEpoch)) setCommittedConfigSnapshot(saved)
   return saved
 }
 
@@ -188,11 +193,12 @@ export async function patchGlobalConfig(
   diff: Record<string, any>,
   options: Pick<ConfigRequestOptions, "ownsResponse" | "authority"> = {},
 ): Promise<any> {
-  const selectionEpoch = boardStore.selectEpoch
   options = { ...options, authority: options.authority ?? captureApiAuthority() }
+  const owns = captureGlobalConfigOwnership(options)
   if (!appStore.connected) throw new Error("Cannot patch global config while disconnected")
+  let saved: Record<string, any>
   try {
-    return await apiJson("global/config", serverSettledRequest({
+    saved = await apiJson("global/config", serverSettledRequest({
       authority: options.authority,
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -200,9 +206,11 @@ export async function patchGlobalConfig(
     }))
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && configResponseStillOwned(options, selectionEpoch)) setConfigSnapshot(committed)
+    if (committed && owns()) setCommittedConfigSnapshot(committed)
     throw error
   }
+  if (owns()) setCommittedConfigSnapshot(saved)
+  return saved
 }
 
 export interface SessionConfigResponse {
@@ -483,8 +491,7 @@ export async function updateConfig(
 }
 
 export async function updateGlobalConfig(mutator: (config: Record<string, any>) => void, authority = captureApiAuthority()): Promise<any> {
-  const selectionEpoch = boardStore.selectEpoch
-  return await updateConfigPath("global/config", mutator, () => boardStore.selectEpoch === selectionEpoch && !settingsStore.directory.trim(), authority)
+  return await updateConfigPath("global/config", mutator, captureGlobalConfigOwnership({ authority }), authority)
 }
 
 async function updateConfigPath(
@@ -493,13 +500,15 @@ async function updateConfigPath(
   ownsResponse: () => boolean,
   authority: ApiAuthority,
 ): Promise<any> {
+  const commitRevision = currentConfigCommitRevision()
   const current = await apiJson(configPath, { authority })
   assertApiAuthorityCurrent(authority)
   const next = structuredClone(current || {})
   mutator(next)
   const diff = configDraftMergePatch(current || {}, next)
   if (diff === undefined) {
-    if (isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(current)
+    if (isApiAuthorityCurrent(authority) && ownsResponse() && currentConfigCommitRevision() === commitRevision)
+      setConfigSnapshot(current)
     return current
   }
   let saved: Record<string, any>
@@ -512,10 +521,10 @@ async function updateConfigPath(
     }))
   } catch (error) {
     const committed = committedConfigFromError(error)
-    if (committed && isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(committed)
+    if (committed && isApiAuthorityCurrent(authority) && ownsResponse()) setCommittedConfigSnapshot(committed)
     throw error
   }
-  if (isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(saved)
+  if (isApiAuthorityCurrent(authority) && ownsResponse()) setCommittedConfigSnapshot(saved)
   return saved
 }
 
