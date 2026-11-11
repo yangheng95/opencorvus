@@ -1,0 +1,68 @@
+{
+  "results": [
+    {
+      "scope": "project",
+      "events": [
+        {
+          "stage": "held",
+          "status": 200,
+          "requestID": "e1fcf681-c68c-4bad-a9ac-5c0b404de8d9",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        },
+        {
+          "stage": "delivered",
+          "status": 200,
+          "requestID": "e1fcf681-c68c-4bad-a9ac-5c0b404de8d9",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        }
+      ],
+      "projectedAfterSecond": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Project Confirmed"
+      },
+      "projectedAfterFirst": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Before"
+      },
+      "durableConfig": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Project Confirmed"
+      },
+      "durableRequestID": "0056b1a6-6cac-4f52-9402-2bb41274bf70"
+    },
+    {
+      "scope": "global",
+      "events": [
+        {
+          "stage": "held",
+          "status": 200,
+          "requestID": "374f05b5-ca61-4a34-9757-c37606dcdd5b",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        },
+        {
+          "stage": "delivered",
+          "status": 200,
+          "requestID": "374f05b5-ca61-4a34-9757-c37606dcdd5b",
+          "locale": "zh-CN",
+          "providerName": "Overlap Before"
+        }
+      ],
+      "projectedAfterSecond": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Global Confirmed"
+      },
+      "projectedAfterFirst": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Before"
+      },
+      "durableConfig": {
+        "locale": "zh-CN",
+        "providerName": "Overlap Global Confirmed"
+      },
+      "durableRequestID": "25bd4143-154a-4b3b-8045-96c7f11657aa"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [配置回执发布顺序的真实证据](2026-11-12-config-receipt-publication-order/README.md)
 - [配置读取与保存顺序的真实回执](2026-11-11-config-read-after-commit/README.md)
 - [主输入区模型列表来源的证据](2026-11-11-composer-model-list-provenance/README.md)
 - [服务商目录条目和模型数量的证据](2026-11-11-provider-model-catalog-presence/README.md)
