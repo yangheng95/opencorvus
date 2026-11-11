@@ -1,0 +1,484 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b262-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39809",
+    "pid": 26708
+  },
+  "rounds": {
+    "english-interrupted-edit": {
+      "input": {
+        "name": "Project schedule recovered after edit receipt loss",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hzV1lrp5dYvi0eMJAEcE"
+          ]
+        },
+        "executionMode": "local",
+        "prompt": "Retain the original English schedule instruction.",
+        "expectedRevisionId": "atm_hJdQoaueJPMQWUbTDDJC",
+        "requestID": "5eceaf53-ebac-4280-a65f-124a4dfd795e",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "response": {
+        "time": "2026-11-11T23:37:18.051Z",
+        "stage": "truncated",
+        "route": "/global/automations/atm_hJdQoaueJPMQWUbTDDJC",
+        "method": "PATCH",
+        "round": "english-interrupted-edit",
+        "directory": null,
+        "search": null,
+        "requestID": "326987e0-dd15-4af4-94de-72ec3bdaa651",
+        "status": 200,
+        "bytes": 482,
+        "target": {
+          "id": "atm_hJdQoaueJPMQWUbTDDJC",
+          "revisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+          "name": "Project schedule recovered after edit receipt loss",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hzV1lrp5dYvi0eMJAEcE"
+            ]
+          },
+          "nextRun": 4070908800000
+        },
+        "deliveredBytes": 12
+      }
+    },
+    "english-replay-edit": {
+      "input": {
+        "name": "Project schedule recovered after edit receipt loss",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hzV1lrp5dYvi0eMJAEcE"
+          ]
+        },
+        "executionMode": "local",
+        "prompt": "Retain the original English schedule instruction.",
+        "expectedRevisionId": "atm_hJdQoaueJPMQWUbTDDJC",
+        "requestID": "5eceaf53-ebac-4280-a65f-124a4dfd795e",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "response": {
+        "time": "2026-11-11T23:37:28.157Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_hJdQoaueJPMQWUbTDDJC",
+        "method": "PATCH",
+        "round": "english-replay-edit",
+        "directory": null,
+        "search": null,
+        "requestID": "2507a7d1-e5ab-4704-b5b4-89c98e86c8f2",
+        "status": 200,
+        "bytes": 482,
+        "target": {
+          "id": "atm_hJdQoaueJPMQWUbTDDJC",
+          "revisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+          "name": "Project schedule recovered after edit receipt loss",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hzV1lrp5dYvi0eMJAEcE"
+            ]
+          },
+          "nextRun": 4070908800000
+        }
+      }
+    },
+    "chinese-interrupted-edit": {
+      "input": {
+        "name": "定时任务编辑回执已确认",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "保留原始定时任务指令。",
+        "expectedRevisionId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "requestID": "0b545e7e-e26e-496a-be60-0ba5fd08ba93",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "response": {
+        "time": "2026-11-11T23:37:57.293Z",
+        "stage": "truncated",
+        "route": "/global/automations/atm_hGEEDGVqt5M2tyVIBlfd",
+        "method": "PATCH",
+        "round": "chinese-interrupted-edit",
+        "directory": null,
+        "search": null,
+        "requestID": "40e76da1-575a-48b9-9406-e9e0ec3c789c",
+        "status": 200,
+        "bytes": 449,
+        "target": {
+          "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+          "revisionId": "atm_h8ZQyAExcQMXilNl62FX",
+          "name": "定时任务编辑回执已确认",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hFl7IY5c7fEkMY42JCyj"
+            ]
+          },
+          "nextRun": 4070995200000
+        },
+        "deliveredBytes": 12
+      }
+    },
+    "chinese-changed-edit": {
+      "input": {
+        "name": "回执中断后修改的新名称",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "保留原始定时任务指令。",
+        "expectedRevisionId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "requestID": "0b545e7e-e26e-496a-be60-0ba5fd08ba93",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "response": {
+        "time": "2026-11-11T23:38:23.287Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_hGEEDGVqt5M2tyVIBlfd",
+        "method": "PATCH",
+        "round": "chinese-changed-edit",
+        "directory": null,
+        "search": null,
+        "requestID": "c5339b69-e47e-4e53-be97-9d319133126f",
+        "status": 409,
+        "bytes": 186,
+        "error": {
+          "name": "AutomationUpdateConflictError",
+          "automationID": "atm_hGEEDGVqt5M2tyVIBlfd"
+        }
+      }
+    },
+    "chinese-replay-edit": {
+      "input": {
+        "name": "定时任务编辑回执已确认",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "保留原始定时任务指令。",
+        "expectedRevisionId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "requestID": "0b545e7e-e26e-496a-be60-0ba5fd08ba93",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "response": {
+        "time": "2026-11-11T23:38:30.264Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_hGEEDGVqt5M2tyVIBlfd",
+        "method": "PATCH",
+        "round": "chinese-replay-edit",
+        "directory": null,
+        "search": null,
+        "requestID": "bae238e0-8b38-4853-844a-f41a2376a6a7",
+        "status": 200,
+        "bytes": 449,
+        "target": {
+          "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+          "revisionId": "atm_h8ZQyAExcQMXilNl62FX",
+          "name": "定时任务编辑回执已确认",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hFl7IY5c7fEkMY42JCyj"
+            ]
+          },
+          "nextRun": 4070995200000
+        }
+      }
+    },
+    "chinese-concurrent-conflict": {
+      "input": {
+        "name": "并发冲突时保留的本地名称",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "executionMode": "local",
+        "prompt": "保留原始定时任务指令。",
+        "expectedRevisionId": "atm_h8ZQyAExcQMXilNl62FX",
+        "requestID": "5a3ce343-4ec1-4b6b-ab37-0c952f9ef08b",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "response": {
+        "time": "2026-11-11T23:38:59.718Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_hGEEDGVqt5M2tyVIBlfd",
+        "method": "PATCH",
+        "round": "chinese-concurrent-conflict",
+        "directory": null,
+        "search": null,
+        "requestID": "b9092b73-a98c-46cb-8d2f-b73587cd4c25",
+        "status": 409,
+        "bytes": 380,
+        "error": {
+          "name": "AutomationRevisionConflictError",
+          "automationID": "atm_hGEEDGVqt5M2tyVIBlfd",
+          "expectedRevisionId": "atm_h8ZQyAExcQMXilNl62FX",
+          "currentRevisionId": "atm_hFXYH0VZTTUyB2D1bJtn"
+        }
+      }
+    },
+    "chinese-fresh-edit": {
+      "input": {
+        "name": "重新打开后正常保存的定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "executionMode": "local",
+        "prompt": "保留原始定时任务指令。",
+        "expectedRevisionId": "atm_hFXYH0VZTTUyB2D1bJtn",
+        "requestID": "9d7d3e19-8880-4586-9a05-f058af837700",
+        "model": null,
+        "reasoningEffort": null
+      },
+      "response": {
+        "time": "2026-11-11T23:39:11.217Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_hGEEDGVqt5M2tyVIBlfd",
+        "method": "PATCH",
+        "round": "chinese-fresh-edit",
+        "directory": null,
+        "search": null,
+        "requestID": "51c2f3b3-01e3-4499-ba33-2fc958db311b",
+        "status": 200,
+        "bytes": 458,
+        "target": {
+          "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+          "revisionId": "atm_hol7U98HGYWYHbWB8fNw",
+          "name": "重新打开后正常保存的定时任务",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hFl7IY5c7fEkMY42JCyj"
+            ]
+          },
+          "nextRun": 4070995200000
+        }
+      }
+    }
+  },
+  "compete": {
+    "httpStatus": 200,
+    "requestID": "d133459b-b93f-4add-bd76-1667df8f1d4c",
+    "input": {
+      "requestID": "iteration-b262-explicit-concurrent-edit",
+      "expectedRevisionId": "atm_h8ZQyAExcQMXilNl62FX",
+      "name": "另一连接已保存定时任务"
+    },
+    "body": {
+      "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+      "revisionId": "atm_hFXYH0VZTTUyB2D1bJtn",
+      "name": "另一连接已保存定时任务",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hFl7IY5c7fEkMY42JCyj"
+        ]
+      },
+      "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "保留原始定时任务指令。",
+      "status": "active",
+      "lastRun": null,
+      "nextRun": 4070995200000,
+      "failureCount": 0,
+      "lastError": null
+    }
+  },
+  "list": {
+    "requestID": "3dd8bf9d-afbf-44af-9441-093467870bae",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_hJdQoaueJPMQWUbTDDJC",
+        "revisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+        "name": "Project schedule recovered after edit receipt loss",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hzV1lrp5dYvi0eMJAEcE"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain the original English schedule instruction.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "revisionId": "atm_hol7U98HGYWYHbWB8fNw",
+        "name": "重新打开后正常保存的定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070995200000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "history": {
+    "atm_hJdQoaueJPMQWUbTDDJC": {
+      "fires": {
+        "requestID": "3759f893-41cd-472c-a9a4-c3c5178b3a9f",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_b2e10b371423a3d7d068b7bfd809406c",
+            "automationId": "atm_hJdQoaueJPMQWUbTDDJC",
+            "automationRevisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794440237956,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_e34eda7c5194bfcf9ca045cd4a9d756a",
+            "automationId": "atm_hJdQoaueJPMQWUbTDDJC",
+            "automationRevisionId": "atm_hJdQoaueJPMQWUbTDDJC",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794440205999,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "6b4cf37a-af07-48d6-b914-f8ad7e268d2e",
+        "status": 200,
+        "body": []
+      }
+    },
+    "atm_hGEEDGVqt5M2tyVIBlfd": {
+      "fires": {
+        "requestID": "799d1569-49b9-45c2-bc46-834aaf060a2c",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_96be4a543355f3ec6638f13ba384e80b",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_hol7U98HGYWYHbWB8fNw",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070995200000,
+            "startedAt": 1794440351209,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_9eadf2ae83d5d14d7ac7d3aeda3ac9e4",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_hFXYH0VZTTUyB2D1bJtn",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070995200000,
+            "startedAt": 1794440335353,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_877a81844f16d751bc970a3630985d58",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_h8ZQyAExcQMXilNl62FX",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070995200000,
+            "startedAt": 1794440277188,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_e564d6495eddc9c607ff2d98aab10e0f",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794440206330,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "1f42b07a-c467-4e1c-896c-61e78441f055",
+        "status": 200,
+        "body": []
+      }
+    }
+  }
+}

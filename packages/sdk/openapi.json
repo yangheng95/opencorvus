@@ -853,6 +853,62 @@
         ],
         "type": "object"
       },
+      "AutomationUpdateConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationUpdateConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "AutomationUpdateUnavailableError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationUpdateUnavailableError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "BadRequestError": {
         "additionalProperties": false,
         "properties": {
@@ -80714,6 +80770,7 @@
         ]
       },
       "patch": {
+        "description": "Reuse requestID and the original expectedRevisionId and inputs to recover the accepted revision after a lost response.",
         "operationId": "global.automations.update",
         "parameters": [
           {
@@ -80786,6 +80843,11 @@
                     ]
                   },
                   "recurrence": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
                     "minLength": 1,
                     "type": "string"
                   },
@@ -81099,12 +81161,25 @@
                     },
                     {
                       "$ref": "#/components/schemas/AutomationRunningConflictError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AutomationUpdateConflictError"
                     }
                   ]
                 }
               }
             },
-            "description": "Observed definition changed or its execution is running"
+            "description": "Observed definition changed, its execution is running, or the update request is bound to different inputs"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationUpdateUnavailableError"
+                }
+              }
+            },
+            "description": "The scheduled automation accepted for this update was deleted"
           }
         },
         "summary": "Update a scheduled automation",

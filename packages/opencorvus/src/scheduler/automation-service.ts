@@ -258,13 +258,19 @@ export const AutomationRevisionConflictError = NamedError.create(
   }),
 )
 
-const AutomationCreationReceiptErrorData = z.object({ message: z.string(), automationID: z.string() })
+const AutomationMutationRequestErrorData = z.object({ message: z.string(), automationID: z.string() })
 
 export const AutomationCreationConflictError = NamedError.create(
-  "AutomationCreationConflictError", AutomationCreationReceiptErrorData,
+  "AutomationCreationConflictError", AutomationMutationRequestErrorData,
 )
 export const AutomationCreationUnavailableError = NamedError.create(
-  "AutomationCreationUnavailableError", AutomationCreationReceiptErrorData,
+  "AutomationCreationUnavailableError", AutomationMutationRequestErrorData,
+)
+export const AutomationUpdateConflictError = NamedError.create(
+  "AutomationUpdateConflictError", AutomationMutationRequestErrorData,
+)
+export const AutomationUpdateUnavailableError = NamedError.create(
+  "AutomationUpdateUnavailableError", AutomationMutationRequestErrorData,
 )
 
 /**
@@ -309,7 +315,7 @@ export namespace AutomationService {
     inputDigest: string
   }
 
-  type AutomationCreationSource =
+  type AutomationDefinitionWriteSource =
     | { kind: "http"; requestID: string }
     | { kind: "tool"; causation: ScheduleToolCausation }
 
@@ -639,7 +645,7 @@ export namespace AutomationService {
     return createAutomation(input, { kind: "tool", causation })
   }
 
-  function creationTargetKey(target: AutomationTarget): string {
+  function definitionTargetKey(target: AutomationTarget): string {
     switch (target.scope) {
       case "global": return target.scope
       case "session": return JSON.stringify([target.scope, target.sessionId])
@@ -647,9 +653,36 @@ export namespace AutomationService {
     }
   }
 
+  function matchesDefinitionInput(
+    db: Database.TxOrDb,
+    row: typeof AutomationTable.$inferSelect,
+    input: CreateAutomationInput & { status: "active" | "paused" },
+  ): boolean {
+    const target = targetForRevision(db, { revisionID: row.id, scope: row.scope, sessionID: row.session_id })
+    return row.name === input.name && row.prompt === input.prompt && row.status === input.status &&
+      row.recurrence === Recurrence.normalize(input.recurrence) && row.execution_mode === (input.executionMode ?? "local") &&
+      row.model_provider_id === (input.model?.providerID ?? null) && row.model_id === (input.model?.modelID ?? null) &&
+      row.reasoning_effort === (input.reasoningEffort ?? null) && definitionTargetKey(target) === definitionTargetKey(input.target)
+  }
+
+  function readToolDefinitionWrite(
+    db: Database.TxOrDb,
+    definitionID: string,
+    causation: ScheduleToolCausation,
+    operation: "create" | "update",
+  ) {
+    assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+    const accepted = db.select().from(AutomationTable)
+      .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID)).get()
+    if (accepted && (accepted.definition_id !== definitionID || accepted.tool_input_digest !== causation.inputDigest)) {
+      throw scheduledToolOccurrenceConflict(causation.occurrence, `changed its Automation ${operation} input`)
+    }
+    return accepted
+  }
+
   async function createAutomation(
     input: CreateAutomationInput,
-    source: AutomationCreationSource,
+    source: AutomationDefinitionWriteSource,
   ): Promise<AutomationDefinitionReceipt> {
     const causation = source.kind === "tool" ? source.causation : undefined
     const id = Identifier.deterministic("automation", source.kind === "tool"
@@ -658,28 +691,14 @@ export namespace AutomationService {
     const executionMode = input.executionMode ?? "local"
     const readAccepted = (db: Database.TxOrDb): AutomationDefinitionReceipt | undefined => {
       if (causation) {
-        assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
-        const existing = db
-          .select()
-          .from(AutomationTable)
-          .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID))
-          .get()
-        if (!existing) return undefined
-        if (existing.tool_input_digest !== causation.inputDigest || existing.definition_id !== id) {
-          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation create input")
-        }
-        return definitionReceiptInTransaction(db, existing)
+        const existing = readToolDefinitionWrite(db, id, causation, "create")
+        return existing ? definitionReceiptInTransaction(db, existing) : undefined
       }
       const original = db.select().from(AutomationTable).where(eq(AutomationTable.id, id)).get()
       if (!original) return undefined
       if (
         original.kind !== "recurring" || original.definition_id !== id || original.revision !== 1 ||
-        original.tool_part_id !== null || original.name !== input.name || original.prompt !== input.prompt ||
-        original.recurrence !== Recurrence.normalize(input.recurrence) || original.execution_mode !== executionMode ||
-        original.model_provider_id !== (input.model?.providerID ?? null) || original.model_id !== (input.model?.modelID ?? null) ||
-        original.reasoning_effort !== (input.reasoningEffort ?? null) ||
-        creationTargetKey(targetForRevision(db, { revisionID: original.id, scope: original.scope, sessionID: original.session_id })) !==
-          creationTargetKey(input.target)
+        original.tool_part_id !== null || !matchesDefinitionInput(db, original, { ...input, status: "active" })
       ) {
         throw new AutomationCreationConflictError({
           message: "This scheduled task creation request is bound to a different definition.",
@@ -742,95 +761,88 @@ export namespace AutomationService {
     })
   }
 
-  export async function update(input: UpdateAutomationInput): Promise<AutomationView> {
-    return updateAutomation(input)
+  export async function update(input: UpdateAutomationInput, requestID: string = randomUUID()): Promise<AutomationView> {
+    const row = await updateAutomation(input, { kind: "http", requestID })
+    return view(Database.use((db) => projectAutomationInTransaction(db, row)))
   }
 
   export async function updateFromTool(
     input: UpdateAutomationInput,
     causation: ScheduleToolCausation,
   ): Promise<AutomationDefinitionReceipt> {
-    return updateAutomation(input, causation)
+    const row = await updateAutomation(input, { kind: "tool", causation })
+    return Database.use((db) => definitionReceiptInTransaction(db, row))
+  }
+
+  function definitionInputForUpdate(
+    db: Database.TxOrDb,
+    observed: typeof AutomationTable.$inferSelect,
+    input: UpdateAutomationInput,
+  ) {
+    const observedModel = observed.model_provider_id && observed.model_id
+      ? { providerID: observed.model_provider_id, modelID: observed.model_id }
+      : undefined
+    return {
+      name: input.name ?? observed.name,
+      target: input.target ?? targetForRevision(db, {
+        revisionID: observed.id, scope: observed.scope, sessionID: observed.session_id,
+      }),
+      recurrence: input.recurrence ?? observed.recurrence ?? "",
+      executionMode: input.executionMode ?? observed.execution_mode,
+      model: input.model === undefined ? observedModel : input.model ?? undefined,
+      reasoningEffort: (input.reasoningEffort === undefined ? observed.reasoning_effort : input.reasoningEffort) ?? undefined,
+      prompt: input.prompt ?? observed.prompt,
+      status: input.status ?? observed.status,
+    }
   }
 
   async function updateAutomation(
     input: UpdateAutomationInput,
-    causation: ScheduleToolCausation,
-  ): Promise<AutomationDefinitionReceipt>
-  async function updateAutomation(input: UpdateAutomationInput, causation?: undefined): Promise<AutomationView>
-  async function updateAutomation(
-    input: UpdateAutomationInput,
-    causation?: ScheduleToolCausation,
-  ): Promise<AutomationView | AutomationDefinitionReceipt> {
-    if (causation) {
-      const replay = Database.immediateTransaction((db) => {
-        assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
-        const existing = db
-          .select()
-          .from(AutomationTable)
-          .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID))
-          .get()
-        if (!existing) return undefined
-        if (existing.definition_id !== input.id || existing.tool_input_digest !== causation.inputDigest) {
-          throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation update input")
-        }
-        return definitionReceiptInTransaction(db, existing)
-      })
-      if (replay) return replay
-    }
-    const current = Database.immediateTransaction((db) =>
-      projectAutomationInTransaction(db, assertMutationDefinitionInTransaction(db, input.id, input.expectedRevisionId)),
-    )
-    const currentTarget = Database.use((db) =>
-      targetForRevision(db, { revisionID: current.revision_id, scope: current.scope, sessionID: current.session_id }),
-    )
-    const next = {
-      name: input.name ?? current.name,
-      target: input.target ?? currentTarget,
-      recurrence: input.recurrence ?? current.recurrence ?? "",
-      executionMode: input.executionMode ?? current.execution_mode,
-      model:
-        input.model === undefined
-          ? current.model_provider_id && current.model_id
-            ? { providerID: current.model_provider_id, modelID: current.model_id }
-            : undefined
-          : (input.model ?? undefined),
-      reasoningEffort:
-        input.reasoningEffort === undefined
-          ? (current.reasoning_effort ?? undefined)
-          : (input.reasoningEffort ?? undefined),
-      prompt: input.prompt ?? current.prompt,
-      status: input.status ?? current.status,
-    }
-    await assertPublicInput({
-      name: next.name,
-      target: next.target,
-      recurrence: next.recurrence,
-      executionMode: next.executionMode,
-      model: next.model,
-      reasoningEffort: next.reasoningEffort,
-      prompt: next.prompt,
-    })
-    const committedAt = Date.now()
-    const row = Database.immediateTransaction((tx) => {
-      if (causation) {
-        assertScheduledToolOccurrenceInTransaction(tx, causation.occurrence)
-        const accepted = tx
-          .select()
-          .from(AutomationTable)
-          .where(eq(AutomationTable.tool_part_id, causation.occurrence.toolPartID))
-          .get()
-        if (accepted) {
-          if (accepted.definition_id !== input.id || accepted.tool_input_digest !== causation.inputDigest) {
-            throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation update input")
-          }
-          return accepted
-        }
+    source: AutomationDefinitionWriteSource,
+  ): Promise<typeof AutomationTable.$inferSelect> {
+    const causation = source.kind === "tool" ? source.causation : undefined
+    const revisionID = Identifier.deterministic("automation", source.kind === "tool"
+      ? `automation-revision-v1\0${source.causation.occurrence.toolPartID}`
+      : JSON.stringify(["automation-http-update-v1", input.id, source.requestID]))
+    const readAccepted = (db: Database.TxOrDb) => {
+      if (causation) return readToolDefinitionWrite(db, input.id, causation, "update")
+      const accepted = db.select().from(AutomationTable).where(eq(AutomationTable.id, revisionID)).get()
+      if (!accepted) return undefined
+      const observed = db.select().from(AutomationTable).where(eq(AutomationTable.id, input.expectedRevisionId)).get()
+      if (
+        accepted.kind !== "recurring" || accepted.definition_id !== input.id || accepted.tool_part_id !== null ||
+        !observed || observed.kind !== "recurring" || observed.definition_id !== input.id ||
+        accepted.revision !== observed.revision + 1 ||
+        !matchesDefinitionInput(db, accepted, definitionInputForUpdate(db, observed, input))
+      ) {
+        throw new AutomationUpdateConflictError({
+          message: "This scheduled task update request is bound to a different revision or definition.",
+          automationID: input.id,
+        })
       }
+      if (!latestAutomationDefinitionInTransaction(db, input.id)) {
+        throw new AutomationUpdateUnavailableError({
+          message: "The scheduled task accepted for this update request was deleted.",
+          automationID: input.id,
+        })
+      }
+      return accepted
+    }
+    const observed = Database.immediateTransaction((db) => {
+      const accepted = readAccepted(db)
+      if (accepted) return { kind: "accepted", row: accepted } as const
+      const row = assertMutationDefinitionInTransaction(db, input.id, input.expectedRevisionId)
+      return { kind: "pending", next: definitionInputForUpdate(db, row, input) } as const
+    })
+    if (observed.kind === "accepted") return observed.row
+    const { next } = observed
+    await assertPublicInput(next)
+    const recurrence = Recurrence.normalize(next.recurrence)
+    const committedAt = Date.now()
+    return Database.immediateTransaction((tx) => {
+      const accepted = readAccepted(tx)
+      if (accepted) return accepted
       const latest = assertMutationDefinitionInTransaction(tx, input.id, input.expectedRevisionId)
-      const revisionID = causation
-        ? Identifier.deterministic("automation", `automation-revision-v1\0${causation.occurrence.toolPartID}`)
-        : Identifier.ascending("automation")
       tx.insert(AutomationTable)
         .values({
           ...latest,
@@ -840,8 +852,8 @@ export namespace AutomationService {
           name: next.name,
           kind: "recurring",
           scope: next.target.scope,
-          recurrence: Recurrence.normalize(next.recurrence),
-          execution_mode: next.target.scope === "session" ? "local" : next.executionMode,
+          recurrence,
+          execution_mode: next.executionMode,
           model_provider_id: next.model?.providerID,
           model_id: next.model?.modelID,
           reasoning_effort: next.reasoningEffort,
@@ -877,8 +889,6 @@ export namespace AutomationService {
       }
       return inserted
     })
-    if (causation) return Database.use((db) => definitionReceiptInTransaction(db, row))
-    return view(Database.use((db) => projectAutomationInTransaction(db, row)))
   }
 
   function manualApiFireID(id: string, requestID: string = randomUUID()): string {

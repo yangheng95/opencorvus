@@ -1,0 +1,275 @@
+{
+  "stopped": {
+    "occurrence": "iteration-b262-candidate",
+    "apiPort": 39809,
+    "proxyPort": 39810,
+    "apiStopped": true,
+    "proxyStopped": true,
+    "processesExited": true,
+    "listenersClosed": true
+  },
+  "restarted": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b262-restart",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39809",
+    "pid": 31788
+  },
+  "replays": [
+    {
+      "name": "english-interrupted-edit",
+      "replay": {
+        "requestID": "aff9ad0a-c4d8-4932-923a-8a4d0ed0fed0",
+        "status": 200,
+        "body": {
+          "id": "atm_hJdQoaueJPMQWUbTDDJC",
+          "revisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+          "name": "Project schedule recovered after edit receipt loss",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hzV1lrp5dYvi0eMJAEcE"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Retain the original English schedule instruction.",
+          "status": "active",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      }
+    },
+    {
+      "name": "chinese-interrupted-edit",
+      "replay": {
+        "requestID": "81ffb761-d005-44db-8c8a-3b31b081525f",
+        "status": 200,
+        "body": {
+          "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+          "revisionId": "atm_h8ZQyAExcQMXilNl62FX",
+          "name": "定时任务编辑回执已确认",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hFl7IY5c7fEkMY42JCyj"
+            ]
+          },
+          "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "保留原始定时任务指令。",
+          "status": "active",
+          "lastRun": null,
+          "nextRun": 4070995200000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      }
+    },
+    {
+      "name": "chinese-fresh-edit",
+      "replay": {
+        "requestID": "0bc559a0-14f0-42c3-86f1-d611bceae12d",
+        "status": 200,
+        "body": {
+          "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+          "revisionId": "atm_hol7U98HGYWYHbWB8fNw",
+          "name": "重新打开后正常保存的定时任务",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hFl7IY5c7fEkMY42JCyj"
+            ]
+          },
+          "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "保留原始定时任务指令。",
+          "status": "active",
+          "lastRun": null,
+          "nextRun": 4070995200000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      }
+    }
+  ],
+  "conflict": {
+    "requestID": "e91aa850-225d-4b08-9f49-8da6eac43500",
+    "status": 409,
+    "body": {
+      "name": "AutomationUpdateConflictError",
+      "data": {
+        "message": "This scheduled task update request is bound to a different revision or definition.",
+        "automationID": "atm_hGEEDGVqt5M2tyVIBlfd"
+      }
+    }
+  },
+  "list": {
+    "requestID": "71666e8d-8fa4-4287-ba8f-9b58bf86ceed",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_hJdQoaueJPMQWUbTDDJC",
+        "revisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+        "name": "Project schedule recovered after edit receipt loss",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hzV1lrp5dYvi0eMJAEcE"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain the original English schedule instruction.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "revisionId": "atm_hol7U98HGYWYHbWB8fNw",
+        "name": "重新打开后正常保存的定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070995200000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "history": {
+    "atm_hJdQoaueJPMQWUbTDDJC": {
+      "fires": {
+        "requestID": "f4966681-b916-44ef-9535-5f7c58848e5a",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_b2e10b371423a3d7d068b7bfd809406c",
+            "automationId": "atm_hJdQoaueJPMQWUbTDDJC",
+            "automationRevisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794440237956,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_e34eda7c5194bfcf9ca045cd4a9d756a",
+            "automationId": "atm_hJdQoaueJPMQWUbTDDJC",
+            "automationRevisionId": "atm_hJdQoaueJPMQWUbTDDJC",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794440205999,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "e682b234-3459-4d6b-b545-821315cc75c6",
+        "status": 200,
+        "body": []
+      }
+    },
+    "atm_hGEEDGVqt5M2tyVIBlfd": {
+      "fires": {
+        "requestID": "24124454-c590-4ed6-a068-7b3c3e05be03",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_96be4a543355f3ec6638f13ba384e80b",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_hol7U98HGYWYHbWB8fNw",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070995200000,
+            "startedAt": 1794440351209,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_9eadf2ae83d5d14d7ac7d3aeda3ac9e4",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_hFXYH0VZTTUyB2D1bJtn",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070995200000,
+            "startedAt": 1794440335353,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_877a81844f16d751bc970a3630985d58",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_h8ZQyAExcQMXilNl62FX",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070995200000,
+            "startedAt": 1794440277188,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_e564d6495eddc9c607ff2d98aab10e0f",
+            "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "automationRevisionId": "atm_hGEEDGVqt5M2tyVIBlfd",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794440206330,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "9c5a2df5-ec1d-4cb4-b388-05758968853c",
+        "status": 200,
+        "body": []
+      }
+    }
+  }
+}

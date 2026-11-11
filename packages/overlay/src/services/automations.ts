@@ -41,19 +41,28 @@ export function listAutomations(signal?: AbortSignal, authority?: ApiAuthority):
   return apiJson<AutomationView[]>(automationPath(), { signal, authority })
 }
 
-export class AutomationCreateUnconfirmedError extends AggregateError {
-  override readonly name = "AutomationCreateUnconfirmedError"
+export class AutomationSaveUnconfirmedError extends AggregateError {
+  override readonly name = "AutomationSaveUnconfirmedError"
 
   constructor(cause: unknown) {
-    super([cause], "The scheduled task creation receipt could not be confirmed.")
+    super([cause], "The scheduled task save receipt could not be confirmed.")
   }
 }
 
-export async function createAutomation(
+async function confirmAutomationSave<T>(authority: ApiAuthority, write: () => Promise<T>): Promise<T> {
+  try {
+    return await write()
+  } catch (cause) {
+    if (!isApiAuthorityCurrent(authority) || !isUncertainMutationReceipt(cause)) throw cause
+    throw new AutomationSaveUnconfirmedError(cause)
+  }
+}
+
+export function createAutomation(
   input: AutomationInput,
   authority = captureApiAuthority(),
 ): Promise<GlobalAutomationsCreateResponse> {
-  try {
+  return confirmAutomationSave(authority, async () => {
     const receipt = await apiJson<GlobalAutomationsCreateResponse>(automationPath(), {
       authority,
       method: "POST",
@@ -68,18 +77,32 @@ export async function createAutomation(
       throw new Error("The scheduled task creation receipt is invalid.")
     }
     return receipt
-  } catch (cause) {
-    if (!isApiAuthorityCurrent(authority) || !isUncertainMutationReceipt(cause)) throw cause
-    throw new AutomationCreateUnconfirmedError(cause)
-  }
+  })
 }
 
-export function updateAutomation(id: string, input: AutomationUpdate, authority?: ApiAuthority): Promise<AutomationView> {
+function updateAutomation(id: string, input: AutomationUpdate, authority: ApiAuthority): Promise<AutomationView> {
   return apiJson(automationPath(`/${encodeURIComponent(id)}`), {
     authority,
     method: "PATCH",
     headers: jsonHeaders,
     body: JSON.stringify(input),
+  })
+}
+
+export function editAutomation(
+  id: string,
+  input: AutomationUpdate & { requestID: string },
+  authority = captureApiAuthority(),
+): Promise<AutomationView> {
+  return confirmAutomationSave(authority, async () => {
+    const receipt = await updateAutomation(id, input, authority)
+    if (
+      receipt?.id !== id || typeof receipt.revisionId !== "string" || !receipt.revisionId.trim() ||
+      receipt.revisionId === input.expectedRevisionId || (input.name !== undefined && receipt.name !== input.name)
+    ) {
+      throw new Error("The scheduled task edit receipt is invalid.")
+    }
+    return receipt
   })
 }
 

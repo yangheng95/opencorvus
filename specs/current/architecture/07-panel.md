@@ -2004,11 +2004,14 @@ the same details retrieves the original accepted definition; changed input
 and a deleted accepted definition have distinct public errors. A separate new
 draft owns a separate request ID.
 
-The opening snapshot also owns the observed physical revisionId. Save, explicit
-status changes and deletion submit that exact version to the conditional public
-writer. Revision conflicts retain authored input and explain an explicit fresh
-read; the panel does not retry against a newer head. Automation public shapes
-derive from the canonical generated SDK operation types.
+An edit draft owns the observed physical revision ID and one update request ID.
+Save submits both to the conditional public writer. An uncertain receipt retains
+the draft and diagnostics. Saving the same details explicitly retrieves the
+accepted revision before opening the current definition. Reusing the accepted
+request ID with changed details and deleting its definition have distinct errors.
+Explicit status changes and deletion use the observed physical revision ID.
+Revision conflicts retain authored input and explain an explicit fresh read.
+Automation public shapes derive from the canonical generated SDK operation types.
 Pause and Resume validate the definition ID, new revision and requested status
 in the write receipt. An uncertain receipt reads the same definition from the
 current list on the same connection, without replaying the write. The result

@@ -51,6 +51,8 @@ import {
   AutomationCreationConflictError,
   AutomationCreationUnavailableError,
   AutomationRevisionConflictError,
+  AutomationUpdateConflictError,
+  AutomationUpdateUnavailableError,
   AutomationRunningConflictError,
   AutomationManualRunPendingError,
   AutomationManualRunReceiptUnavailableError,
@@ -176,6 +178,7 @@ const CreateAutomationBody = AutomationDefinitionInput.extend({
 const UpdateAutomationBody = AutomationDefinitionInput.partial()
   .extend({
     expectedRevisionId: z.string().min(1),
+    requestID: z.string().trim().min(1).max(200).optional(),
     model: z
       .object({ providerID: z.string().min(1), modelID: z.string().min(1) })
       .nullable()
@@ -319,6 +322,7 @@ export const GlobalRoutes = lazy(() =>
       "/automations/:id",
       describeRoute({
         summary: "Update a scheduled automation",
+        description: "Reuse requestID and the original expectedRevisionId and inputs to recover the accepted revision after a lost response.",
         operationId: "global.automations.update",
         responses: {
           200: {
@@ -327,19 +331,28 @@ export const GlobalRoutes = lazy(() =>
           },
           ...errors(400, 404),
           409: {
-            description: "Observed definition changed or its execution is running",
+            description: "Observed definition changed, its execution is running, or the update request is bound to different inputs",
             content: {
               "application/json": {
-                schema: resolver(
-                  z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema]),
-                ),
+                schema: resolver(z.union([
+                  AutomationRevisionConflictError.Schema,
+                  AutomationRunningConflictError.Schema,
+                  AutomationUpdateConflictError.Schema,
+                ])),
               },
             },
+          },
+          410: {
+            description: "The scheduled automation accepted for this update was deleted",
+            content: { "application/json": { schema: resolver(AutomationUpdateUnavailableError.Schema) } },
           },
         },
       }),
       validator("json", UpdateAutomationBody),
-      async (c) => c.json(await AutomationService.update({ ...c.req.valid("json"), id: c.req.param("id") })),
+      async (c) => {
+        const { requestID, ...input } = c.req.valid("json")
+        return c.json(await AutomationService.update({ ...input, id: c.req.param("id") }, requestID))
+      },
     )
     .post(
       "/automations/:id/run",

@@ -6471,6 +6471,8 @@ export class Automations extends HeyApiClient {
 
   /**
    * Update a scheduled automation
+   *
+   * Reuse requestID and the original expectedRevisionId and inputs to recover the accepted revision after a lost response.
    */
   public update<ThrowOnError extends boolean = false>(
     parameters: {
@@ -6485,6 +6487,7 @@ export class Automations extends HeyApiClient {
       prompt?: string
       reasoningEffort?: string | null
       recurrence?: string
+      requestID?: string
       status?: "active" | "paused"
       target?:
         | {
@@ -6514,6 +6517,7 @@ export class Automations extends HeyApiClient {
             { in: "body", key: "prompt" },
             { in: "body", key: "reasoningEffort" },
             { in: "body", key: "recurrence" },
+            { in: "body", key: "requestID" },
             { in: "body", key: "status" },
             { in: "body", key: "target" },
           ],

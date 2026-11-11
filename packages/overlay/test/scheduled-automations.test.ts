@@ -8,11 +8,12 @@ import {
   type AutomationRecurrenceInput,
 } from "../src/services/automation-recurrence"
 import {
-  AutomationCreateUnconfirmedError,
+  AutomationSaveUnconfirmedError,
   AutomationStatusUnconfirmedError,
   changeAutomationStatus,
   createAutomation,
   deleteAutomation,
+  editAutomation,
   listAutomationRuns,
   listAutomations,
   resolveAutomationProjectID,
@@ -372,9 +373,42 @@ test("repeating a scheduled save carries its original request ID and accepts the
   configure({ serverUrl: server.url.origin })
   try {
     const error = await createAutomation(input).catch((cause) => cause)
-    expect(error).toBeInstanceOf(AutomationCreateUnconfirmedError)
+    expect(error).toBeInstanceOf(AutomationSaveUnconfirmedError)
     expect(error.errors).toEqual([expect.objectContaining({ status: 503, requestID: "create-interrupted" })])
     expect(await createAutomation(input)).toEqual(receipt)
+    expect(requests).toEqual([input, input])
+  } finally {
+    await server.stop(true)
+  }
+})
+
+test("repeating an interrupted edit uses its original request ID and observed revision", async () => {
+  const input = {
+    requestID: "original-edit-request",
+    expectedRevisionId: "atm_observed",
+    name: "Accepted edited name",
+  }
+  const receipt = { ...pausedDefinition, name: input.name }
+  const requests: unknown[] = []
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    async fetch(request) {
+      requests.push(await request.json())
+      if (requests.length === 1) {
+        return Response.json({ message: "Edit receipt interrupted" }, {
+          status: 503, headers: { "x-opencorvus-request-id": "edit-interrupted" },
+        })
+      }
+      return Response.json(receipt)
+    },
+  })
+  configure({ serverUrl: server.url.origin })
+  try {
+    const error = await editAutomation(receipt.id, input).catch((cause) => cause)
+    expect(error).toBeInstanceOf(AutomationSaveUnconfirmedError)
+    expect(error.errors).toEqual([expect.objectContaining({ status: 503, requestID: "edit-interrupted" })])
+    expect(await editAutomation(receipt.id, input)).toEqual(receipt)
     expect(requests).toEqual([input, input])
   } finally {
     await server.stop(true)

@@ -229,6 +229,22 @@ export type AutomationRunningConflictError = {
   name: "AutomationRunningConflictError"
 }
 
+export type AutomationUpdateConflictError = {
+  data: {
+    automationID: string
+    message: string
+  }
+  name: "AutomationUpdateConflictError"
+}
+
+export type AutomationUpdateUnavailableError = {
+  data: {
+    automationID: string
+    message: string
+  }
+  name: "AutomationUpdateUnavailableError"
+}
+
 export type BadRequestError = {
   data: {
     message: string
@@ -21695,6 +21711,7 @@ export type GlobalAutomationsUpdateData = {
     prompt?: string
     reasoningEffort?: string | null
     recurrence?: string
+    requestID?: string
     status?: "active" | "paused"
     target?:
       | {
@@ -21738,9 +21755,13 @@ export type GlobalAutomationsUpdateErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Observed definition changed or its execution is running
+   * Observed definition changed, its execution is running, or the update request is bound to different inputs
    */
-  409: AutomationRevisionConflictError | AutomationRunningConflictError
+  409: AutomationRevisionConflictError | AutomationRunningConflictError | AutomationUpdateConflictError
+  /**
+   * The scheduled automation accepted for this update was deleted
+   */
+  410: AutomationUpdateUnavailableError
 }
 
 export type GlobalAutomationsUpdateError = GlobalAutomationsUpdateErrors[keyof GlobalAutomationsUpdateErrors]

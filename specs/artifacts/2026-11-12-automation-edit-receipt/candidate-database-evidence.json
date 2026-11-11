@@ -1,0 +1,123 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 6,
+    "automation_definition_tombstone": 0,
+    "automation_fire": 6,
+    "automation_fire_frontier": 2,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_usage_event": 0,
+    "permission_ledger": 0
+  },
+  "definitions": [
+    [
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      1,
+      "定时任务暂停确认",
+      "保留原始定时任务指令。",
+      "project",
+      "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ],
+    [
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      "atm_h8ZQyAExcQMXilNl62FX",
+      2,
+      "定时任务编辑回执已确认",
+      "保留原始定时任务指令。",
+      "project",
+      "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ],
+    [
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      "atm_hFXYH0VZTTUyB2D1bJtn",
+      3,
+      "另一连接已保存定时任务",
+      "保留原始定时任务指令。",
+      "project",
+      "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ],
+    [
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      "atm_hol7U98HGYWYHbWB8fNw",
+      4,
+      "重新打开后正常保存的定时任务",
+      "保留原始定时任务指令。",
+      "project",
+      "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ],
+    [
+      "atm_hJdQoaueJPMQWUbTDDJC",
+      "atm_hJdQoaueJPMQWUbTDDJC",
+      1,
+      "Pause status confirmation",
+      "Retain the original English schedule instruction.",
+      "project",
+      "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ],
+    [
+      "atm_hJdQoaueJPMQWUbTDDJC",
+      "atm_hvG2Qhqkh2aKWS9Sofme",
+      2,
+      "Project schedule recovered after edit receipt loss",
+      "Retain the original English schedule instruction.",
+      "project",
+      "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ]
+  ],
+  "projectTargets": [
+    [
+      "atm_h8ZQyAExcQMXilNl62FX",
+      "prj_hFl7IY5c7fEkMY42JCyj",
+      0
+    ],
+    [
+      "atm_hFXYH0VZTTUyB2D1bJtn",
+      "prj_hFl7IY5c7fEkMY42JCyj",
+      0
+    ],
+    [
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      "prj_hFl7IY5c7fEkMY42JCyj",
+      0
+    ],
+    [
+      "atm_hJdQoaueJPMQWUbTDDJC",
+      "prj_hzV1lrp5dYvi0eMJAEcE",
+      0
+    ],
+    [
+      "atm_hol7U98HGYWYHbWB8fNw",
+      "prj_hFl7IY5c7fEkMY42JCyj",
+      0
+    ],
+    [
+      "atm_hvG2Qhqkh2aKWS9Sofme",
+      "prj_hzV1lrp5dYvi0eMJAEcE",
+      0
+    ]
+  ],
+  "frontier": [
+    [
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      "atm_hol7U98HGYWYHbWB8fNw",
+      "cal_automation_96be4a543355f3ec6638f13ba384e80b",
+      4070995200000,
+      4070995200000,
+      "scheduled"
+    ],
+    [
+      "atm_hJdQoaueJPMQWUbTDDJC",
+      "atm_hvG2Qhqkh2aKWS9Sofme",
+      "cal_automation_b2e10b371423a3d7d068b7bfd809406c",
+      4070908800000,
+      4070908800000,
+      "scheduled"
+    ]
+  ]
+}
