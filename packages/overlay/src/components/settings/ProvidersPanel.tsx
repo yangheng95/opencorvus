@@ -200,6 +200,7 @@ export default function ProvidersPanel() {
   const [providerInfoRetry, setProviderInfoRetry] = createSignal<{ trigger: HTMLButtonElement }>()
   const providerInfoBusy = () => loadingProviderInfo() || Boolean(providerInfoRetry())
   const providerInfoFeedbackVisible = () => appStore.providerLoadIssues.length > 0 || Boolean(providerInfoRetry())
+  const providerScope = createMemo(() => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const)
   let providerSearchInput: HTMLInputElement | undefined
 
   function scopeProjectLabel(): string {
@@ -387,7 +388,7 @@ export default function ProvidersPanel() {
 
   createEffect(
     on(
-      () => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const,
+      providerScope,
       ([directory]) => {
         providerTestScopeGeneration += 1
         providerRefreshSequence += 1
@@ -557,7 +558,7 @@ export default function ProvidersPanel() {
   })
   createEffect(
     on(
-      () => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const,
+      providerScope,
       () => cancel(),
       { defer: true },
     ),
@@ -1081,8 +1082,8 @@ export default function ProvidersPanel() {
       }
     }),
   )
-  const providerEntries = createMemo(() =>
-    unfilteredProviderEntries().filter((row) =>
+  const providerEntries = createMemo(() => {
+    const visible = unfilteredProviderEntries().filter((row) =>
       providerMatchesSearch([
         row.id,
         row.name,
@@ -1095,8 +1096,9 @@ export default function ProvidersPanel() {
         row.statusText,
         row.configurationText,
       ]),
-    ),
-  )
+    )
+    return new Map(visible.map((row) => [row.id, row]))
+  })
   const unfilteredCatalogEntries = createMemo(() => {
     const custom = new Set(Object.keys(configProviders()))
     return catalogProviders()
@@ -1133,13 +1135,14 @@ export default function ProvidersPanel() {
           Number(right.configured) - Number(left.configured) || left.name.localeCompare(right.name),
       )
   })
-  const catalogEntries = createMemo(() =>
-    unfilteredCatalogEntries().filter((row) =>
+  const catalogEntries = createMemo(() => {
+    const visible = unfilteredCatalogEntries().filter((row) =>
       providerMatchesSearch([row.id, row.name, row.modelCountText, row.statusText, row.configurationText]),
-    ),
-  )
+    )
+    return new Map(visible.map((row) => [row.id, row]))
+  })
   const totalProviderCount = createMemo(() => unfilteredProviderEntries().length + unfilteredCatalogEntries().length)
-  const visibleProviderCount = createMemo(() => providerEntries().length + catalogEntries().length)
+  const visibleProviderCount = createMemo(() => providerEntries().size + catalogEntries().size)
   const hasProviderSearch = createMemo(() => providerSearch().trim().length > 0)
   const configuredProviderCount = createMemo(() => configuredProviderIDs().size)
   const catalogProviderCount = createMemo(() => catalogProviders().length)
@@ -1318,8 +1321,8 @@ export default function ProvidersPanel() {
 
         <Show
           when={
-            providerEntries().length === 0 &&
-            catalogEntries().length === 0 &&
+            providerEntries().size === 0 &&
+            catalogEntries().size === 0 &&
             !showAdd() &&
             appStore.providerLoadIssues.length === 0 &&
             Boolean(appStore.providerCatalog)
@@ -1342,126 +1345,128 @@ export default function ProvidersPanel() {
 
         <Show when={!showAdd() ? formError() : null}>{(messages) => <ProviderMessages messages={messages()} />}</Show>
 
-        <Show when={providerEntries().length > 0}>
+        <Show when={providerEntries().size > 0 && providerScope()} keyed>
           <SettingsDetailSection
             class="provider-flat-section"
             title={t("provider.section.custom")}
-            description={t("provider.section.count", { count: providerEntries().length })}
+            description={t("provider.section.count", { count: providerEntries().size })}
           >
             <div class="provider-flat-list">
-              <For each={providerEntries()}>
-                {(row) => {
-                  return (
-                    <SettingsRow
-                      class="provider-settings-row"
-                      data-testid={`provider-custom-row-${row.id}`}
-                      customContent
-                      interactive
-                    >
-                      <div class="provider-row-main">
-                        <div class="provider-row-title-line">
-                          <strong class="provider-row-title">{row.name}</strong>
-                          <span class="provider-row-id">{row.id}</span>
-                        </div>
-                        <div class="provider-row-meta">
-                          <span>
-                            {t("provider.label.api")}: {row.provider.api}
-                          </span>
-                          <Show when={row.envText}>
+              <For each={[...providerEntries().keys()]}>
+                {(providerID) => (
+                  <Show when={providerEntries().get(providerID)}>
+                    {(row) => (
+                      <SettingsRow
+                        class="provider-settings-row"
+                        data-testid={`provider-custom-row-${providerID}`}
+                        customContent
+                        interactive
+                      >
+                        <div class="provider-row-main">
+                          <div class="provider-row-title-line">
+                            <strong class="provider-row-title">{row().name}</strong>
+                            <span class="provider-row-id">{providerID}</span>
+                          </div>
+                          <div class="provider-row-meta">
                             <span>
-                              {t("provider.label.env")}: {row.envText}
+                              {t("provider.label.api")}: {row().provider.api}
                             </span>
+                            <Show when={row().envText}>
+                              <span>
+                                {t("provider.label.env")}: {row().envText}
+                              </span>
+                            </Show>
+                          </div>
+                        </div>
+                        <div class="provider-row-summary">
+                          <span class="provider-model-count">{row().modelCountText}</span>
+                          <Show when={row().status}>
+                            {(s) => (
+                              <Badge class="provider-auth-status" tone={providerStatusTone(s().tone)}>
+                                {row().statusText}
+                              </Badge>
+                            )}
                           </Show>
                         </div>
-                      </div>
-                      <div class="provider-row-summary">
-                        <span class="provider-model-count">{row.modelCountText}</span>
-                        <Show when={row.status}>
-                          {(s) => (
-                            <Badge class="provider-auth-status" tone={providerStatusTone(s().tone)}>
-                              {row.statusText}
-                            </Badge>
-                          )}
-                        </Show>
-                      </div>
-                      <div class="provider-row-actions">
-                        <Show when={row.canAuthenticate}>
+                        <div class="provider-row-actions">
+                          <Show when={row().canAuthenticate}>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="md"
+                              tone="neutral"
+                              onClick={() => void handleAuth(providerID)}
+                              disabled={authing().has(providerID)}
+                              title={t("llm.auth_connect_title")}
+                              data-testid={`provider-auth-${providerID}`}
+                            >
+                              {authing().has(providerID) ? t("common.loading") : t("llm.auth_connect")}
+                            </Button>
+                          </Show>
                           <Button
                             type="button"
                             variant="outline"
                             size="md"
                             tone="neutral"
-                            onClick={() => void handleAuth(row.id)}
-                            disabled={authing().has(row.id)}
-                            title={t("llm.auth_connect_title")}
-                            data-testid={`provider-auth-${row.id}`}
+                            onClick={() => void handleTest(providerID)}
+                            disabled={testing().has(providerID)}
+                            title={t("provider.test.button_title")}
+                            data-testid={`provider-test-${providerID}`}
                           >
-                            {authing().has(row.id) ? t("common.loading") : t("llm.auth_connect")}
+                            {testing().has(providerID) ? t("provider.test.testing") : t("provider.test.button")}
                           </Button>
-                        </Show>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="md"
-                          tone="neutral"
-                          onClick={() => void handleTest(row.id)}
-                          disabled={testing().has(row.id)}
-                          title={t("provider.test.button_title")}
-                          data-testid={`provider-test-${row.id}`}
-                        >
-                          {testing().has(row.id) ? t("provider.test.testing") : t("provider.test.button")}
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="md"
-                          tone="neutral"
-                          onClick={() => startEdit(row.id)}
-                        >
-                          {t("common.edit")}
-                        </Button>
-                        <ArmedConfirmButton
-                          type="button"
-                          variant="outline"
-                          size="md"
-                          tone="danger"
-                          label={t("provider.delete.label", { id: row.id })}
-                          armedDescription={t("provider.delete.armed", { id: row.id })}
-                          onConfirm={() => void handleDelete(row.id)}
-                          disabled={deletingProviders().has(row.id)}
-                          data-testid={`provider-delete-${row.id}`}
-                          confirmChildren={<span>{t("provider.delete.confirm")}</span>}
-                        >
-                          {deletingProviders().has(row.id) ? t("common.loading") : t("common.delete")}
-                        </ArmedConfirmButton>
-                      </div>
-                      <div class="provider-row-key">
-                        <ApiKeyEditor providerId={row.id} />
-                      </div>
-                      <Show when={testResults().get(row.id)}>
-                        {(result) => (
-                          <Feedback
-                            class="provider-connection-feedback"
-                            tone={connectionResult(result())?.ok ? "success" : "error"}
-                            details={connectionDetails(result())}
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="md"
+                            tone="neutral"
+                            onClick={() => startEdit(providerID)}
                           >
-                            {t(connectionSummary(result()))}
-                            <Show when={connectionResult(result())?.modelID}>
-                              {" · "}
-                              {connectionResult(result())?.modelID}
-                            </Show>
-                          </Feedback>
-                        )}
-                      </Show>
-                      <div class="provider-row-models" title={row.modelIds.join(", ")}>
-                        {row.modelSummaryText}
-                        <Show when={row.modelOverflowText}>
-                          <span class="provider-model-overflow">{row.modelOverflowText}</span>
+                            {t("common.edit")}
+                          </Button>
+                          <ArmedConfirmButton
+                            type="button"
+                            variant="outline"
+                            size="md"
+                            tone="danger"
+                            label={t("provider.delete.label", { id: providerID })}
+                            armedDescription={t("provider.delete.armed", { id: providerID })}
+                            onConfirm={() => void handleDelete(providerID)}
+                            disabled={deletingProviders().has(providerID)}
+                            data-testid={`provider-delete-${providerID}`}
+                            confirmChildren={<span>{t("provider.delete.confirm")}</span>}
+                          >
+                            {deletingProviders().has(providerID) ? t("common.loading") : t("common.delete")}
+                          </ArmedConfirmButton>
+                        </div>
+                        <div class="provider-row-key">
+                          <ApiKeyEditor providerId={providerID} />
+                        </div>
+                        <Show when={testResults().get(providerID)}>
+                          {(result) => (
+                            <Feedback
+                              class="provider-connection-feedback"
+                              tone={connectionResult(result())?.ok ? "success" : "error"}
+                              details={connectionDetails(result())}
+                            >
+                              {t(connectionSummary(result()))}
+                              <Show when={connectionResult(result())?.modelID}>
+                                {" · "}
+                                {connectionResult(result())?.modelID}
+                              </Show>
+                            </Feedback>
+                          )}
                         </Show>
-                      </div>
-                    </SettingsRow>
-                  )
-                }}
+                        <div class="provider-row-models" title={row().modelIds.join(", ")}>
+                          {row().modelSummaryText}
+                          <Show when={row().modelOverflowText}>
+                            <span class="provider-model-overflow">{row().modelOverflowText}</span>
+                          </Show>
+                        </div>
+                      </SettingsRow>
+                    )}
+                  </Show>
+                )}
               </For>
             </div>
           </SettingsDetailSection>
@@ -1610,79 +1615,83 @@ export default function ProvidersPanel() {
             </div>
           </div>
         </Show>
-        <Show when={catalogEntries().length > 0}>
+        <Show when={catalogEntries().size > 0 && providerScope()} keyed>
           <SettingsDetailSection
             class="provider-flat-section provider-catalog-section"
             title={t("provider.section.catalog")}
             description={t("provider.catalog.hint")}
           >
             <div class="provider-flat-list">
-              <For each={catalogEntries()}>
-                {(p) => (
-                  <SettingsRow
-                    class="provider-settings-row provider-catalog-row"
-                    data-testid={`provider-catalog-row-${p.id}`}
-                    customContent
-                    interactive
-                  >
-                    <div class="provider-row-main">
-                      <div class="provider-row-title-line">
-                        <strong class="provider-row-title">{p.name}</strong>
-                        <span class="provider-row-id">{p.id}</span>
-                      </div>
-                    </div>
-                    <div class="provider-row-summary">
-                      <span class="provider-model-count">{p.modelCountText}</span>
-                      <Show when={p.status}>
-                        {(status) => (
-                          <Badge class="provider-auth-status" tone={providerStatusTone(status().tone)}>
-                            {p.statusText}
-                          </Badge>
-                        )}
-                      </Show>
-                    </div>
-                    <div class="provider-row-actions">
-                      <Show when={p.authMethods > 0 && expandedCatalogProviderID() === p.id}>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="md"
-                          tone="neutral"
-                          onClick={() => void handleAuth(p.id)}
-                          disabled={authing().has(p.id)}
-                          title={t("llm.auth_connect_title")}
-                          data-testid={`provider-auth-${p.id}`}
-                        >
-                          {authing().has(p.id) ? t("common.loading") : t("llm.auth_connect")}
-                        </Button>
-                      </Show>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="md"
-                        tone="neutral"
-                        data-ui="provider-catalog-configure"
-                        data-testid={`provider-catalog-configure-${p.id}`}
-                        aria-expanded={expandedCatalogProviderID() === p.id}
-                        title={
-                          expandedCatalogProviderID() === p.id
-                            ? t("provider.action.collapse")
-                            : t("provider.action.configure")
-                        }
-                        onClick={() => setExpandedCatalogProviderID((current) => (current === p.id ? "" : p.id))}
+              <For each={[...catalogEntries().keys()]}>
+                {(providerID) => (
+                  <Show when={catalogEntries().get(providerID)}>
+                    {(provider) => (
+                      <SettingsRow
+                        class="provider-settings-row provider-catalog-row"
+                        data-testid={`provider-catalog-row-${providerID}`}
+                        customContent
+                        interactive
                       >
-                        <Icon name={expandedCatalogProviderID() === p.id ? "chevron-down" : "chevron"} size="compact" />
-                        {expandedCatalogProviderID() === p.id
-                          ? t("provider.action.collapse")
-                          : t("provider.action.configure")}
-                      </Button>
-                    </div>
-                    <Show when={expandedCatalogProviderID() === p.id}>
-                      <div class="provider-row-key">
-                        <ApiKeyEditor providerId={p.id} />
-                      </div>
-                    </Show>
-                  </SettingsRow>
+                        <div class="provider-row-main">
+                          <div class="provider-row-title-line">
+                            <strong class="provider-row-title">{provider().name}</strong>
+                            <span class="provider-row-id">{providerID}</span>
+                          </div>
+                        </div>
+                        <div class="provider-row-summary">
+                          <span class="provider-model-count">{provider().modelCountText}</span>
+                          <Show when={provider().status}>
+                            {(status) => (
+                              <Badge class="provider-auth-status" tone={providerStatusTone(status().tone)}>
+                                {provider().statusText}
+                              </Badge>
+                            )}
+                          </Show>
+                        </div>
+                        <div class="provider-row-actions">
+                          <Show when={provider().authMethods > 0 && expandedCatalogProviderID() === providerID}>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="md"
+                              tone="neutral"
+                              onClick={() => void handleAuth(providerID)}
+                              disabled={authing().has(providerID)}
+                              title={t("llm.auth_connect_title")}
+                              data-testid={`provider-auth-${providerID}`}
+                            >
+                              {authing().has(providerID) ? t("common.loading") : t("llm.auth_connect")}
+                            </Button>
+                          </Show>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="md"
+                            tone="neutral"
+                            data-ui="provider-catalog-configure"
+                            data-testid={`provider-catalog-configure-${providerID}`}
+                            aria-expanded={expandedCatalogProviderID() === providerID}
+                            title={
+                              expandedCatalogProviderID() === providerID
+                                ? t("provider.action.collapse")
+                                : t("provider.action.configure")
+                            }
+                            onClick={() => setExpandedCatalogProviderID((current) => (current === providerID ? "" : providerID))}
+                          >
+                            <Icon name={expandedCatalogProviderID() === providerID ? "chevron-down" : "chevron"} size="compact" />
+                            {expandedCatalogProviderID() === providerID
+                              ? t("provider.action.collapse")
+                              : t("provider.action.configure")}
+                          </Button>
+                        </div>
+                        <Show when={expandedCatalogProviderID() === providerID}>
+                          <div class="provider-row-key">
+                            <ApiKeyEditor providerId={providerID} />
+                          </div>
+                        </Show>
+                      </SettingsRow>
+                    )}
+                  </Show>
                 )}
               </For>
             </div>

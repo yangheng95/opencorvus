@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [服务商目录更新时保留同一行的控件](records/2026-11/2026-11-11-provider-row-identity.md)
 - [服务商读取与重试各显示一次等待状态](records/2026-11/2026-11-11-provider-read-progress.md)
 - [模型服务商搜索区分真实结果和上次目录](records/2026-11/2026-11-11-provider-catalog-read-status.md)
 - [模型目录刷新等待当前页面读完](records/2026-11/2026-11-11-provider-catalog-refresh-settlement.md)

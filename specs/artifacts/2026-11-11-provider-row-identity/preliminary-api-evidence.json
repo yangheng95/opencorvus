@@ -1,0 +1,125 @@
+{
+  "asset": "main-7iSD4iJm.js",
+  "projectID": "prj_hh6XebqVOxyL28DmjDhx",
+  "stats": {
+    "project": {
+      "providers": 89,
+      "connected": 0,
+      "bedrock": 67
+    },
+    "global": {
+      "providers": 88,
+      "connected": 0,
+      "bedrock": 67
+    }
+  },
+  "profiles": {
+    "baseline": {
+      "providers": 88,
+      "bedrockModels": 67
+    },
+    "final": {
+      "providers": 88,
+      "bedrockModels": 67
+    }
+  },
+  "direct": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "14f91adf-5a96-46d4-b386-17a86c9083a2"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "153c37e8-eb3b-4c5c-8c5c-b2da468b39a8"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "542d1187-7468-49a2-a7c4-07016642210f"
+    },
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "5d3122da-bc9b-43ea-bb24-e7cad74f3944"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "cc9b3db3-0085-4ead-8e4f-720bf44d87e2"
+    }
+  ],
+  "projectProvider": {
+    "name": "Review Custom",
+    "api": "https://review.invalid/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "models": {}
+  },
+  "baselineReads": [
+    {
+      "round": "setup",
+      "stage": "delivered",
+      "kind": "auth",
+      "route": "/provider/auth",
+      "status": 200,
+      "project": "provider-row-review",
+      "requestID": "101d4bf6-eafd-4206-bc25-70dbbba8e402"
+    },
+    {
+      "round": "setup",
+      "stage": "delivered",
+      "kind": "read",
+      "route": "/provider",
+      "status": 200,
+      "project": "provider-row-review",
+      "requestID": "a03bb029-6b23-43db-b57f-f3f45bb3a91c",
+      "providerCount": 88,
+      "connectedCount": 0,
+      "bytes": 1899837
+    },
+    {
+      "round": "baseline-catalog-error",
+      "stage": "delivered",
+      "kind": "auth",
+      "route": "/provider/auth",
+      "status": 200,
+      "project": "provider-row-review",
+      "requestID": "f9b69287-db74-4249-8ea0-82153a64cd76"
+    },
+    {
+      "round": "baseline-catalog-error",
+      "stage": "truncated",
+      "kind": "read",
+      "route": "/provider",
+      "status": 200,
+      "project": "provider-row-review",
+      "requestID": "c1f18d55-45a1-4c98-95c0-a760258d6f47",
+      "providerCount": 88,
+      "connectedCount": 0,
+      "bytes": 1899837,
+      "deliveredBytes": 32
+    },
+    {
+      "round": "baseline-row-focus",
+      "stage": "delivered",
+      "kind": "auth",
+      "route": "/provider/auth",
+      "status": 200,
+      "project": "provider-row-review",
+      "requestID": "3f901d8c-ee81-47d4-80d7-0c073999d34e"
+    },
+    {
+      "round": "baseline-row-focus",
+      "stage": "delivered",
+      "kind": "read",
+      "route": "/provider",
+      "status": 200,
+      "project": "provider-row-review",
+      "requestID": "b34b8e66-6c7d-43f7-89a6-e954545b1da4",
+      "providerCount": 88,
+      "connectedCount": 0,
+      "bytes": 1899837
+    }
+  ]
+}
