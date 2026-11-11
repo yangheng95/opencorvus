@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务草稿编辑回执的真实桌面证据](2026-11-12-mission-draft-edit-receipt/README.md)
 - [选中记录重试等待的真实桌面证据](2026-11-12-work-ledger-selection-read-retry-progress/README.md)
 - [精确读取中断时的真实桌面证据](2026-11-12-work-ledger-selection-reading-recovery/README.md)
 - [工作台选中记录刷新范围的桌面证据](2026-11-12-work-ledger-selection-invalidation/README.md)

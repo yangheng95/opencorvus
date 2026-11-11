@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多步任务草稿编辑的中断回执确认](2026-11-12-mission-draft-edit-receipt.md)
 - [选中记录重试等待与重复触发](2026-11-12-work-ledger-selection-read-retry-progress.md)
 - [精确读取中断时保留已读内容和重试入口](2026-11-12-work-ledger-selection-reading-recovery.md)
 - [工作台按会话身份刷新选中记录](2026-11-12-work-ledger-selection-invalidation.md)

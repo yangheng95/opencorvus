@@ -1,0 +1,7 @@
+# 多步任务草稿编辑回执的真实桌面证据
+
+- [编辑原草稿](01-baseline-edit-original-draft.png)后，截断真实已提交的回执使编辑框[继续显示传输失败](02-baseline-committed-edit-still-reports-error.png)。[正式精确读](baseline-edit-evidence.json)已保存新请求。
+- 原样点击保存后[列表确认同一请求](03-baseline-replayed-edit-shows-current-request.png)。[真实重放及更新时间](baseline-edit-replay-evidence.json)证明原回执丢失后的重放按当前契约返回同一结果。
+- [明确并发冲突仍保留本地输入](04-baseline-explicit-conflict-preserves-edit.png)，[另一连接的真实写回执](baseline-concurrent-edit.json)。
+
+截图由本人复核。[根因、影响及方案](../../records/2026-11/2026-11-12-mission-draft-edit-receipt.md)

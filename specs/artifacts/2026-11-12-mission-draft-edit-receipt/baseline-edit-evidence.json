@@ -1,0 +1,52 @@
+{
+  "write": [
+    {
+      "time": "2026-11-11T21:51:24.581Z",
+      "stage": "truncated",
+      "route": "/mission/draft-17924e4010510222f0afe33b2cf82321/draft",
+      "method": "PATCH",
+      "round": "b256-baseline-edit-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "search": null,
+      "requestID": "f913918e-123e-4609-936d-15b616e95bd6",
+      "status": 200,
+      "bytes": 544,
+      "target": {
+        "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+        "title": "Archive after one confirmed read",
+        "request": "Edited draft preserved after an interrupted save receipt.",
+        "archived": null,
+        "boardLane": "backlog"
+      },
+      "deliveredBytes": 12
+    }
+  ],
+  "read": {
+    "body": {
+      "kind": "mission",
+      "id": "draft-17924e4010510222f0afe33b2cf82321",
+      "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+      "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+      "title": "Archive after one confirmed read",
+      "pendingPromptText": "Edited draft preserved after an interrupted save receipt.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "created": 1794433268610,
+      "started": 1794433268610,
+      "updated": 1794433884470,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    },
+    "requestID": "0ee3323d-71f2-4951-a88c-660a357dbd25"
+  }
+}
