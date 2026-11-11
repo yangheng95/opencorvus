@@ -1,0 +1,145 @@
+{
+  "asset": "main-CrU-g8VG.js",
+  "checked": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "1b3f10ad-58b9-4707-97be-b7beae591e72"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "83c9450e-aad7-4b40-a142-7e800c4a37bc"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "8ab6d642-c060-4633-8f7e-c7b0a5d41351"
+    },
+    {
+      "route": "/provider/auth",
+      "status": 200,
+      "requestID": "2165a4b6-5442-4721-93ca-597473df6de1"
+    },
+    {
+      "route": "/global/providers/auth",
+      "status": 200,
+      "requestID": "488e97eb-8b86-453b-b18a-47a65b67c2db"
+    }
+  ],
+  "catalog": {
+    "project": {
+      "count": 89,
+      "connected": [
+        "review-composer"
+      ],
+      "models": [
+        "review-alpha",
+        "review-beta"
+      ]
+    },
+    "global": {
+      "count": 88,
+      "connected": []
+    }
+  },
+  "rounds": [
+    {
+      "time": "2026-11-11T15:11:09.407Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "candidate-current",
+      "route": "/provider",
+      "project": "composer-list-candidate",
+      "status": 200,
+      "requestID": "282eb948-bd16-43d3-a5ad-d0fbd717d10c",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304
+    },
+    {
+      "time": "2026-11-11T15:11:43.400Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "candidate-retained-failed",
+      "route": "/provider",
+      "project": "composer-list-candidate",
+      "status": 200,
+      "requestID": "f6784314-5259-4ae4-9dad-d8f001241074",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304,
+      "deliveredBytes": 32,
+      "heldMs": 10693
+    },
+    {
+      "time": "2026-11-11T15:12:12.979Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "candidate-retry",
+      "route": "/provider",
+      "project": "composer-list-candidate",
+      "status": 200,
+      "requestID": "1fe8d630-15d9-4a92-9999-5c02907e9543",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304,
+      "heldMs": 6592
+    },
+    {
+      "time": "2026-11-11T15:13:18.704Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "candidate-cn-failed",
+      "route": "/provider",
+      "project": "composer-list-candidate",
+      "status": 200,
+      "requestID": "19c3225e-6a38-4285-97ae-595b85c2baf1",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T15:13:43.876Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "candidate-cn-retry",
+      "route": "/provider",
+      "project": "composer-list-candidate",
+      "status": 200,
+      "requestID": "3da7a38d-4614-4d80-a4e8-5a34b87fc26e",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304
+    },
+    {
+      "time": "2026-11-11T15:14:38.076Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "candidate-global-failed",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "28bccd46-4c66-45b8-8acf-71f31650a2e5",
+      "providerCount": 88,
+      "connectedCount": 0,
+      "bytes": 1899849,
+      "deliveredBytes": 32,
+      "heldMs": 14358
+    },
+    {
+      "time": "2026-11-11T15:14:54.648Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "candidate-global-retry",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "b4921f4c-dc91-4673-8e85-860f8fb97140",
+      "providerCount": 88,
+      "connectedCount": 0,
+      "bytes": 1899849
+    }
+  ]
+}
