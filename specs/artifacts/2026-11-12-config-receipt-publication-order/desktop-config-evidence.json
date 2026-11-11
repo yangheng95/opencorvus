@@ -1,0 +1,319 @@
+{
+  "asset": "main-DCRa8FiI.js",
+  "failures": [
+    {
+      "at": "2026-11-11T16:24:32.051Z",
+      "stage": "cut",
+      "round": "project-confirmed-initial-cut",
+      "label": "project-confirmed-initial-cut",
+      "method": "GET",
+      "route": "/config",
+      "project": "config-overlap-review",
+      "status": 200,
+      "requestID": "871b904a-f682-479b-bbce-6d2485042da0",
+      "providers": {
+        "review-overlap": "Overlap Desktop Project Before",
+        "review-overlap-desktop": "Overlap Desktop Second Before"
+      }
+    },
+    {
+      "at": "2026-11-11T16:25:16.764Z",
+      "stage": "cut",
+      "round": "global-confirmed-initial-cut",
+      "label": "global-confirmed-initial-cut",
+      "method": "GET",
+      "route": "/global/config",
+      "project": "global",
+      "status": 200,
+      "requestID": "5eed1f24-dd67-4368-8777-7811e8a2d9b1",
+      "providers": {
+        "review-overlap": "Overlap Desktop Global Before",
+        "review-overlap-desktop": "Overlap Desktop Second Before"
+      }
+    }
+  ],
+  "observed": [
+    {
+      "scope": "project",
+      "peer": {
+        "route": "/config",
+        "id": "review-overlap",
+        "name": "Overlap Desktop Project Peer Confirmed",
+        "status": 200,
+        "requestID": "e97502df-3fc2-4d16-b6ab-2915a3e6d2f5",
+        "at": "2026-11-11T16:24:52.865Z"
+      },
+      "events": [
+        {
+          "at": "2026-11-11T16:24:40.573Z",
+          "stage": "request-held",
+          "round": "project-confirmed-write",
+          "label": "project-confirmed-read",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-overlap-review"
+        },
+        {
+          "at": "2026-11-11T16:24:48.339Z",
+          "stage": "delivered",
+          "round": "project-confirmed-write",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-overlap-review",
+          "status": 200,
+          "requestID": "3e609a76-e07d-46a2-bbc9-9b381b0869fe",
+          "providers": {
+            "review-overlap": "Overlap Desktop Project Before",
+            "review-overlap-desktop": "Overlap Desktop Second Before"
+          }
+        },
+        {
+          "at": "2026-11-11T16:24:48.404Z",
+          "stage": "response-held",
+          "round": "project-confirmed-write",
+          "label": "project-confirmed-write",
+          "method": "PATCH",
+          "route": "/config",
+          "project": "config-overlap-review",
+          "status": 200,
+          "requestID": "a6af3d67-ebb1-49f5-8f00-3e0074269d7a",
+          "providers": {
+            "review-overlap": "Overlap Desktop Project Before",
+            "review-overlap-desktop": "Overlap Desktop Second Before",
+            "review-overlap-desktop-added": "Overlap Desktop Project Added"
+          }
+        },
+        {
+          "at": "2026-11-11T16:24:52.867Z",
+          "stage": "request-released",
+          "round": "project-confirmed-write",
+          "label": "project-confirmed-read",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-overlap-review"
+        },
+        {
+          "at": "2026-11-11T16:24:52.869Z",
+          "stage": "delivered",
+          "round": "project-confirmed-write",
+          "label": "project-confirmed-read",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-overlap-review",
+          "status": 200,
+          "requestID": "e715c746-0a23-4872-9765-2bf41a27e02d",
+          "providers": {
+            "review-overlap": "Overlap Desktop Project Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Second Before",
+            "review-overlap-desktop-added": "Overlap Desktop Project Added"
+          }
+        },
+        {
+          "at": "2026-11-11T16:24:57.190Z",
+          "stage": "delivered",
+          "round": "project-confirmed-write",
+          "label": "project-confirmed-write",
+          "method": "PATCH",
+          "route": "/config",
+          "project": "config-overlap-review",
+          "status": 200,
+          "requestID": "a6af3d67-ebb1-49f5-8f00-3e0074269d7a",
+          "providers": {
+            "review-overlap": "Overlap Desktop Project Before",
+            "review-overlap-desktop": "Overlap Desktop Second Before",
+            "review-overlap-desktop-added": "Overlap Desktop Project Added"
+          }
+        },
+        {
+          "at": "2026-11-11T16:24:57.195Z",
+          "stage": "response-held",
+          "round": "project-confirmed-write",
+          "label": "project-confirmed-refresh",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-overlap-review",
+          "status": 200,
+          "requestID": "96ae58f4-12eb-4548-8c8b-18159b5b5d7c",
+          "providers": {
+            "review-overlap": "Overlap Desktop Project Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Second Before",
+            "review-overlap-desktop-added": "Overlap Desktop Project Added"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:01.646Z",
+          "stage": "delivered",
+          "round": "project-confirmed-write",
+          "label": "project-confirmed-refresh",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-overlap-review",
+          "status": 200,
+          "requestID": "96ae58f4-12eb-4548-8c8b-18159b5b5d7c",
+          "providers": {
+            "review-overlap": "Overlap Desktop Project Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Second Before",
+            "review-overlap-desktop-added": "Overlap Desktop Project Added"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "peer": {
+        "route": "/global/config",
+        "id": "review-overlap",
+        "name": "Overlap Desktop Global Peer Confirmed",
+        "status": 200,
+        "requestID": "80721c5c-595c-49aa-bb72-f5f6059229d6",
+        "at": "2026-11-11T16:25:43.681Z"
+      },
+      "events": [
+        {
+          "at": "2026-11-11T16:25:38.792Z",
+          "stage": "delivered",
+          "round": "global-confirmed-write",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "e24e134c-73cc-4698-9c2d-bcb36649d5fe",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Before",
+            "review-overlap-desktop": "Overlap Desktop Second Before"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:38.860Z",
+          "stage": "response-held",
+          "round": "global-confirmed-write",
+          "label": "global-confirmed-write",
+          "method": "PATCH",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "6431a440-d277-4086-bda6-18b922a2207d",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Before",
+            "review-overlap-desktop": "Overlap Desktop Global Form Saved"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:43.690Z",
+          "stage": "delivered",
+          "round": "global-confirmed-write",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "eb73c423-7d64-4baf-951e-ef6b66ba082a",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Global Form Saved"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:48.668Z",
+          "stage": "delivered",
+          "round": "global-confirmed-write",
+          "label": "global-confirmed-write",
+          "method": "PATCH",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "6431a440-d277-4086-bda6-18b922a2207d",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Before",
+            "review-overlap-desktop": "Overlap Desktop Global Form Saved"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:48.674Z",
+          "stage": "response-held",
+          "round": "global-confirmed-write",
+          "label": "global-confirmed-refresh",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "b1f49d5b-b24f-4eae-88a2-4503accc6ec4",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Global Form Saved"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:48.710Z",
+          "stage": "response-held",
+          "round": "global-confirmed-write",
+          "label": "global-confirmed-refresh",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "afb9df8d-0c1f-490e-ac75-12846006b1a8",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Global Form Saved"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:53.412Z",
+          "stage": "delivered",
+          "round": "global-confirmed-write",
+          "label": "global-confirmed-refresh",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "b1f49d5b-b24f-4eae-88a2-4503accc6ec4",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Global Form Saved"
+          }
+        },
+        {
+          "at": "2026-11-11T16:25:53.414Z",
+          "stage": "delivered",
+          "round": "global-confirmed-write",
+          "label": "global-confirmed-refresh",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "afb9df8d-0c1f-490e-ac75-12846006b1a8",
+          "providers": {
+            "review-overlap": "Overlap Desktop Global Peer Confirmed",
+            "review-overlap-desktop": "Overlap Desktop Global Form Saved"
+          }
+        }
+      ]
+    }
+  ],
+  "checked": [
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "db4b70da-407d-4d21-8f82-c2dfd3f4b41e",
+      "providers": {
+        "review-overlap-desktop": "Overlap Desktop Global Form Saved",
+        "review-overlap": "Overlap Desktop Project Peer Confirmed",
+        "review-overlap-desktop-added": "Overlap Desktop Project Added"
+      }
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "563fa2f1-b14c-4095-b354-811aff670577",
+      "providers": {
+        "review-overlap-desktop": "Overlap Desktop Global Form Saved",
+        "review-overlap": "Overlap Desktop Global Peer Confirmed"
+      }
+    },
+    {
+      "route": "/channel",
+      "status": 200,
+      "requestID": "19237b30-ce9c-4e57-901c-9adde64b31fd"
+    }
+  ]
+}
