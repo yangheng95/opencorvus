@@ -1,0 +1,217 @@
+{
+  "asset": "main-DYqZTrfT.js",
+  "upgrade": {
+    "time": "2026-11-11T23:02:19.270Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "first": {
+    "time": "2026-11-11T23:02:53.338Z",
+    "stage": "truncated",
+    "route": "/global/automations",
+    "method": "POST",
+    "round": "b261-baseline-create",
+    "directory": null,
+    "search": null,
+    "requestID": "664d66bb-48ef-45f9-9c41-43ad3c2bda43",
+    "status": 201,
+    "bytes": 137,
+    "target": {
+      "id": "atm_g0Vahzhd200BOvs3EsCu",
+      "revisionId": "atm_g0Vahzhd200BOvs3EsCu",
+      "name": "Future schedule receipt review",
+      "nextRun": 4070908800000
+    },
+    "deliveredBytes": 12
+  },
+  "second": {
+    "time": "2026-11-11T23:02:59.918Z",
+    "stage": "delivered",
+    "route": "/global/automations",
+    "method": "POST",
+    "round": "b261-baseline-resave",
+    "directory": null,
+    "search": null,
+    "requestID": "9fb337bf-ed8a-4aa6-ae2d-7716e1bb5dba",
+    "status": 201,
+    "bytes": 137,
+    "target": {
+      "id": "atm_g0VahzjMv00BWd6gBitM",
+      "revisionId": "atm_g0VahzjMv00BWd6gBitM",
+      "name": "Future schedule receipt review",
+      "nextRun": 4070908800000
+    }
+  },
+  "firstInput": {
+    "time": "2026-11-11T23:02:53.220Z",
+    "stage": "request-body",
+    "route": "/global/automations",
+    "method": "POST",
+    "round": "b261-baseline-create",
+    "directory": null,
+    "search": null,
+    "input": {
+      "name": "Future schedule receipt review",
+      "target": {
+        "scope": "global"
+      },
+      "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "prompt": "Retain this local future schedule exactly once."
+    }
+  },
+  "secondInput": {
+    "time": "2026-11-11T23:02:59.909Z",
+    "stage": "request-body",
+    "route": "/global/automations",
+    "method": "POST",
+    "round": "b261-baseline-resave",
+    "directory": null,
+    "search": null,
+    "input": {
+      "name": "Future schedule receipt review",
+      "target": {
+        "scope": "global"
+      },
+      "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "prompt": "Retain this local future schedule exactly once."
+    }
+  },
+  "list": {
+    "requestID": "50d2eceb-078c-4c0a-a208-b29912194c52",
+    "body": [
+      {
+        "id": "atm_g0VahyCNS00uqUeKPTTp",
+        "revisionId": "atm_g0VahyLHB00lj60r3xEp",
+        "name": "English schedule updated in another connection",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hG8x6YzCzW2aRQj6AmvT"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain the original English schedule instruction.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_g0VahyCRo00F0IkZ5E7R",
+        "revisionId": "atm_g0VahyVkG00isQzatqD8",
+        "name": "另一连接更新的中文定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hLFxjrv6STeoC5hDghuT"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_g0Vahzhd200BOvs3EsCu",
+        "revisionId": "atm_g0Vahzhd200BOvs3EsCu",
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain this local future schedule exactly once.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_g0VahzjMv00BWd6gBitM",
+        "revisionId": "atm_g0VahzjMv00BWd6gBitM",
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain this local future schedule exactly once.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "history": {
+    "atm_g0Vahzhd200BOvs3EsCu": {
+      "runs": {
+        "requestID": "bde61b52-12cf-48b0-b85e-9cd63f7159e4",
+        "body": []
+      },
+      "fires": {
+        "requestID": "3afc1d4d-d290-4ae7-81eb-6403fe6fa736",
+        "body": [
+          {
+            "fireId": "cal_automation_b9e66cf9f801615e2e0a71b17366a7b7",
+            "automationId": "atm_g0Vahzhd200BOvs3EsCu",
+            "automationRevisionId": "atm_g0Vahzhd200BOvs3EsCu",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794438173224,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    "atm_g0VahzjMv00BWd6gBitM": {
+      "runs": {
+        "requestID": "c54e2651-968e-48f8-9bfb-1e708631c5d5",
+        "body": []
+      },
+      "fires": {
+        "requestID": "5c234888-f674-4b35-9f84-9ecb716c2ab6",
+        "body": [
+          {
+            "fireId": "cal_automation_52194a3476c50819ab63347c2117ebcb",
+            "automationId": "atm_g0VahzjMv00BWd6gBitM",
+            "automationRevisionId": "atm_g0VahzjMv00BWd6gBitM",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794438179912,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    }
+  }
+}

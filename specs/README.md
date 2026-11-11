@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [新建定时任务回执中断后的原定义确认](records/2026-11/2026-11-12-automation-create-receipt.md)
 - [定时任务状态冲突后就地检查当前版本](records/2026-11/2026-11-12-automation-status-revision-conflict.md)
 - [定时任务暂停和恢复的回执确认](records/2026-11/2026-11-12-automation-status-receipt.md)
 - [独立任务归档前说明取消执行](records/2026-11/2026-11-12-task-archive-cancellation-label.md)

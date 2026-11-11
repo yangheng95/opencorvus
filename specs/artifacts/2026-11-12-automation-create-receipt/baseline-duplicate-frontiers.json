@@ -1,0 +1,22 @@
+{
+  "sqlite": "ok",
+  "duplicateFrontiers": [
+    [
+      "atm_g0Vahzhd200BOvs3EsCu",
+      "atm_g0Vahzhd200BOvs3EsCu",
+      "cal_automation_b9e66cf9f801615e2e0a71b17366a7b7",
+      4070908800000
+    ],
+    [
+      "atm_g0VahzjMv00BWd6gBitM",
+      "atm_g0VahzjMv00BWd6gBitM",
+      "cal_automation_52194a3476c50819ab63347c2117ebcb",
+      4070908800000
+    ]
+  ],
+  "counts": {
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "provider_activity_request": 0
+  }
+}
