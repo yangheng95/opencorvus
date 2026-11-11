@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [独立任务归档前说明取消执行](records/2026-11/2026-11-12-task-archive-cancellation-label.md)
 - [主动归档回执中断后的状态确认](records/2026-11/2026-11-12-active-archive-receipt.md)
 - [多步任务草稿编辑的中断回执确认](records/2026-11/2026-11-12-mission-draft-edit-receipt.md)
 - [选中记录重试等待与重复触发](records/2026-11/2026-11-12-work-ledger-selection-read-retry-progress.md)
