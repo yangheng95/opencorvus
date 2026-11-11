@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [已确认配置保存保护当前客户端投影](2026-11-11-config-read-after-commit.md)
 - [主输入区标明上次读取的模型列表](2026-11-11-composer-model-list-provenance.md)
 - [服务商模型数量以目录中的实际条目为准](2026-11-11-provider-model-catalog-presence.md)
 - [目录读取结算时保留已接受的全局配置](2026-11-11-global-provider-config-settlement.md)
