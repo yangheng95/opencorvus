@@ -1,0 +1,184 @@
+{
+  "selected": {
+    "id": "atm_hJdQoaueJPMQWUbTDDJC",
+    "revisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+    "name": "Project schedule recovered after edit receipt loss",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hzV1lrp5dYvi0eMJAEcE"
+      ]
+    },
+    "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Retain the original English schedule instruction.",
+    "status": "active",
+    "lastRun": null,
+    "nextRun": 4070908800000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  "other": {
+    "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+    "revisionId": "atm_hol7U98HGYWYHbWB8fNw",
+    "name": "重新打开后正常保存的定时任务",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFl7IY5c7fEkMY42JCyj"
+      ]
+    },
+    "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "保留原始定时任务指令。",
+    "status": "active",
+    "lastRun": null,
+    "nextRun": 4070995200000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  "interrupted": {
+    "time": "2026-11-11T23:46:51.344Z",
+    "stage": "truncated",
+    "route": "/global/automations/atm_hJdQoaueJPMQWUbTDDJC",
+    "method": "DELETE",
+    "round": "baseline-delete-committed",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+    "operationRequestID": null,
+    "requestID": "dfc8908a-a895-46d8-a3b7-9f8d19b8936a",
+    "status": 200,
+    "bytes": 93,
+    "target": {
+      "id": "atm_hJdQoaueJPMQWUbTDDJC",
+      "name": "Project schedule recovered after edit receipt loss"
+    },
+    "deliveredBytes": 12
+  },
+  "repeat": {
+    "time": "2026-11-11T23:46:57.271Z",
+    "stage": "delivered",
+    "route": "/global/automations/atm_hJdQoaueJPMQWUbTDDJC",
+    "method": "DELETE",
+    "round": "baseline-delete-repeat",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": "atm_hvG2Qhqkh2aKWS9Sofme",
+    "operationRequestID": null,
+    "requestID": "70134845-5814-4d81-9041-d59992404b8a",
+    "status": 404,
+    "bytes": 92,
+    "error": {
+      "name": "NotFoundError"
+    }
+  },
+  "list": {
+    "requestID": "973fdfc6-c178-459e-ad83-e7f21cf6f571",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "revisionId": "atm_hol7U98HGYWYHbWB8fNw",
+        "name": "重新打开后正常保存的定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hFl7IY5c7fEkMY42JCyj"
+          ]
+        },
+        "recurrence": "DTSTART:20990102T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070995200000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "deletedHistory": {
+    "requestID": "f133b5f7-fbec-40e9-995e-269486ac5291",
+    "status": 404,
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Automation not found: atm_hJdQoaueJPMQWUbTDDJC"
+      }
+    }
+  },
+  "retainedHistory": {
+    "requestID": "9d5eef11-5180-41ae-8519-a132c7b97838",
+    "status": 200,
+    "body": [
+      {
+        "fireId": "cal_automation_96be4a543355f3ec6638f13ba384e80b",
+        "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "automationRevisionId": "atm_hol7U98HGYWYHbWB8fNw",
+        "origin": "scheduled",
+        "scheduledDueAt": 4070995200000,
+        "startedAt": 1794440351209,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      },
+      {
+        "fireId": "cal_automation_9eadf2ae83d5d14d7ac7d3aeda3ac9e4",
+        "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "automationRevisionId": "atm_hFXYH0VZTTUyB2D1bJtn",
+        "origin": "scheduled",
+        "scheduledDueAt": 4070995200000,
+        "startedAt": 1794440335353,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      },
+      {
+        "fireId": "cal_automation_877a81844f16d751bc970a3630985d58",
+        "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "automationRevisionId": "atm_h8ZQyAExcQMXilNl62FX",
+        "origin": "scheduled",
+        "scheduledDueAt": 4070995200000,
+        "startedAt": 1794440277188,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      },
+      {
+        "fireId": "cal_automation_e564d6495eddc9c607ff2d98aab10e0f",
+        "automationId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "automationRevisionId": "atm_hGEEDGVqt5M2tyVIBlfd",
+        "origin": "scheduled",
+        "scheduledDueAt": 4070908800000,
+        "startedAt": 1794440206330,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      }
+    ]
+  },
+  "retainedRuns": {
+    "requestID": "06a3280c-c419-4e22-a66a-d1ea1eb0385c",
+    "status": 200,
+    "body": []
+  }
+}

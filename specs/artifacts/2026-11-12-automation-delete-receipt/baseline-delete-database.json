@@ -1,0 +1,42 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 6,
+    "automation_definition_tombstone": 1,
+    "automation_fire": 6,
+    "automation_fire_frontier": 1,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  },
+  "tombstones": [
+    [
+      "atm_g0VaiAltW00xI6tHHsek",
+      "atm_hJdQoaueJPMQWUbTDDJC",
+      3,
+      null
+    ]
+  ],
+  "remainingFrontier": [
+    [
+      "atm_hGEEDGVqt5M2tyVIBlfd",
+      "atm_hol7U98HGYWYHbWB8fNw",
+      4070995200000
+    ]
+  ],
+  "deletedHistoricalFires": [
+    [
+      "cal_automation_e34eda7c5194bfcf9ca045cd4a9d756a",
+      "atm_hJdQoaueJPMQWUbTDDJC",
+      4070908800000
+    ],
+    [
+      "cal_automation_b2e10b371423a3d7d068b7bfd809406c",
+      "atm_hvG2Qhqkh2aKWS9Sofme",
+      4070908800000
+    ]
+  ]
+}

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务删除回执的真实桌面证据](2026-11-12-automation-delete-receipt/README.md)
 - [定时任务编辑回执的真实桌面证据](2026-11-12-automation-edit-receipt/README.md)
 - [新建定时任务的真实桌面回执证据](2026-11-12-automation-create-receipt/README.md)
 - [定时任务状态冲突的真实桌面证据](2026-11-12-automation-status-revision-conflict/README.md)
