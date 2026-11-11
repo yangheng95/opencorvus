@@ -1,0 +1,101 @@
+{
+  "asset": "main-DdeP6Qu1.js",
+  "checked": [
+    {
+      "route": "/expert-squad/search",
+      "query": "advanced",
+      "status": 200,
+      "requestID": "7aeba712-e143-42f8-92eb-771e85c733f3",
+      "ids": [
+        "advanced"
+      ]
+    },
+    {
+      "route": "/expert-squad/search",
+      "query": "research",
+      "status": 200,
+      "requestID": "a452fa1a-4540-4a5b-88b1-1efa60c393af",
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T18:01:25.650Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "advanced",
+      "round": "en-research-cut",
+      "status": 200,
+      "requestID": "3cd7546c-9b0f-4c68-aef6-efa55ec13835",
+      "bytes": 462,
+      "ids": [
+        "advanced"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:01:32.344Z",
+      "stage": "held",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-first",
+      "status": 200,
+      "requestID": "e3f2ca2a-f0d2-4a17-baa6-f6a9d53e3bf6",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:01:32.387Z",
+      "stage": "truncated",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-first",
+      "status": 200,
+      "requestID": "e3f2ca2a-f0d2-4a17-baa6-f6a9d53e3bf6",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ],
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:01:51.475Z",
+      "stage": "held",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-retry",
+      "status": 200,
+      "requestID": "32b76e90-d8a2-441d-acf0-476df4574c0b",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:01:51.522Z",
+      "stage": "delivered",
+      "route": "/expert-squad/search",
+      "project": "mission-create-squad-search",
+      "query": "research",
+      "round": "en-research-retry",
+      "status": 200,
+      "requestID": "32b76e90-d8a2-441d-acf0-476df4574c0b",
+      "bytes": 748,
+      "ids": [
+        "research-studio",
+        "base"
+      ]
+    }
+  ]
+}

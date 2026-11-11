@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [新建多步任务只从已确认的搜索结果添加专家团](2026-11-12-mission-create-squad-search-settlement.md)
 - [多步任务的引用术语与搜索范围](2026-11-12-mission-reference-search-labels.md)
 - [内置多步任务技能说明随界面语言显示和搜索](2026-11-12-mission-skill-description-locale.md)
 - [多步任务技能详情可以原位重试目录读取](2026-11-12-mission-skill-detail-read-retry.md)
