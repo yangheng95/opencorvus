@@ -1,0 +1,175 @@
+{
+  "asset": "main-iLEZAu1S.js",
+  "checked": [
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "500ce578-1ad6-4a1b-bedf-e157b3e1f8e6",
+      "id": "browser-research-acceptance",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      },
+      "manifest": ".opencorvus/expert-squads/builtin/browser-research-acceptance/expert-squad.jsonc"
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "51803694-204b-4e06-ac97-12ebb321e557",
+      "id": "deep-research",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      },
+      "manifest": ".opencorvus/expert-squads/builtin/deep-research/expert-squad.jsonc"
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "43c6e71b-88c5-4e9d-8e70-99a871aa0658",
+      "id": "equity-research",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      },
+      "manifest": ".opencorvus/expert-squads/builtin/equity-research/expert-squad.jsonc"
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "2fa04cb4-6e29-4b33-a111-270a52d6cd58",
+      "active": "dynamic"
+    }
+  ],
+  "receipts": [
+    {
+      "time": "2026-11-11T19:18:20.863Z",
+      "stage": "delivered",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "setup",
+      "status": 200,
+      "requestID": "8bcc0f48-cc6f-4bdb-802e-ab8ac1657905",
+      "bytes": 580,
+      "installation": {
+        "operation": "installed",
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T19:18:49.415Z",
+      "stage": "delivered",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "setup",
+      "status": 200,
+      "requestID": "193f419c-1b37-4958-a9c3-4dca0bad82c4",
+      "bytes": 552,
+      "installation": {
+        "operation": "installed",
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T19:19:21.879Z",
+      "stage": "truncated",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "b247-baseline-equity-receipt",
+      "status": 200,
+      "requestID": "e3d65c06-094c-4801-a669-7dfbf2663b5a",
+      "bytes": 556,
+      "installation": {
+        "operation": "installed",
+        "id": "equity-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      },
+      "deliveredBytes": 32
+    }
+  ],
+  "reads": [
+    {
+      "time": "2026-11-11T19:18:20.982Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "setup",
+      "target": {
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "ba140afa-383f-45bc-80ee-cbdab457c44a",
+      "bytes": 5772,
+      "inspection": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Browser Research & Acceptance"
+      }
+    },
+    {
+      "time": "2026-11-11T19:18:49.524Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "setup",
+      "target": {
+        "id": "deep-research",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "13db28d2-b6e7-412a-9f21-8daf14e78d31",
+      "bytes": 11595,
+      "inspection": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Deep Research"
+      }
+    },
+    {
+      "time": "2026-11-11T19:19:21.994Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "b247-baseline-equity-check",
+      "target": {
+        "id": "equity-research",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "4f6a4f1f-3c45-4283-ac14-6f881a8e0b64",
+      "bytes": 13427,
+      "inspection": {
+        "id": "equity-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Equity Research"
+      }
+    }
+  ],
+  "dropped": []
+}
