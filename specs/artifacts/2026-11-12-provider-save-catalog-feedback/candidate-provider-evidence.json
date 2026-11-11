@@ -1,0 +1,240 @@
+{
+  "asset": "main-Czl9wPkE.js",
+  "writes": [
+    {
+      "path": "/config",
+      "status": 200,
+      "requestID": "5b034260-6486-491b-9ddf-a9c6af6121d4",
+      "models": [
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "path": "/global/config",
+      "status": 200,
+      "requestID": "ae6b1b52-e3a3-470b-9c76-17df96849f67",
+      "models": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T16:38:30.964Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "setup",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "8d25f68a-cc37-4d62-b37b-5d777e7ede4b",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-before"
+      ],
+      "bytes": 1900680
+    },
+    {
+      "time": "2026-11-11T16:38:42.208Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "project-saved-catalog-held",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "f092edd9-aa51-4ab7-93ca-da42f2c1291e",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:38:48.183Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "project-saved-catalog-held",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "f092edd9-aa51-4ab7-93ca-da42f2c1291e",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ],
+      "bytes": 1901382,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:38:53.772Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "project-saved-catalog-retry",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "62303752-452a-4c24-ad7f-bd6257e5c449",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:38:57.987Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "project-saved-catalog-retry",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "62303752-452a-4c24-ad7f-bd6257e5c449",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ],
+      "bytes": 1901382
+    },
+    {
+      "time": "2026-11-11T16:39:36.261Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "project-saved-catalog-retry-delivered",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "792c13ec-2243-44ff-8a5a-0e30ea3cb978",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-before"
+      ],
+      "bytes": 1900727
+    },
+    {
+      "time": "2026-11-11T16:39:57.446Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "global-saved-catalog-held",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "1f033ca2-8dfa-45cd-926c-97713883fed9",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:40:03.231Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "global-saved-catalog-held",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "1f033ca2-8dfa-45cd-926c-97713883fed9",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ],
+      "bytes": 1901403,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:40:13.211Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "global-saved-catalog-retry",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "799c7614-8ac6-453e-ba11-cea19941e6dc",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:40:17.946Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "global-saved-catalog-retry",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "799c7614-8ac6-453e-ba11-cea19941e6dc",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ],
+      "bytes": 1901403
+    }
+  ],
+  "checked": [
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "acf7ddef-7937-4ec1-a0a0-30717b912c92",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta",
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "27ebb426-041e-4577-a2c4-a482e97e7755",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "1fb99ecb-f99a-4970-a839-e401e14d282d",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta",
+        "review-after-alpha",
+        "review-after-beta"
+      ],
+      "apiKeyConfigured": false
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "15c69ab2-8160-431f-aa1c-c680d7ec0a8d",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta"
+      ],
+      "apiKeyConfigured": false
+    },
+    {
+      "route": "/global/providers/auth",
+      "status": 200,
+      "requestID": "b7ca15be-b61d-4117-9312-ef0cc9b1221c"
+    }
+  ]
+}

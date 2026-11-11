@@ -319,7 +319,7 @@ export default function ProvidersPanel() {
           ),
         )
       }
-      await reloadProviderInfo(directory, options)
+      await reloadProviderInfo(options)
       if (ownsRefresh() && result?.ok && result.fetchedAt !== undefined) {
         setLastProvidersRefreshedAt(result.fetchedAt)
       }
@@ -363,16 +363,23 @@ export default function ProvidersPanel() {
     }
   }
 
-  async function reloadProviderInfo(directory: string, options: ReturnType<typeof providerLoadOptions>): Promise<void> {
+  function beginProviderInfoRead(options: ReturnType<typeof providerLoadOptions>) {
     const sequence = ++providerInfoLoadSequence
+    const owns = () => sequence === providerInfoLoadSequence && options.isCurrentDirectory(options.directory)
     setLoadingProviderInfo(true)
+    const settled = loadProviderInfo(undefined, options).finally(() => {
+      if (owns()) setLoadingProviderInfo(false)
+    })
+    return { owns, settled }
+  }
+
+  async function reloadProviderInfo(options: ReturnType<typeof providerLoadOptions>): Promise<void> {
+    const reading = beginProviderInfoRead(options)
     try {
-      await loadProviderInfo(undefined, options)
+      await reading.settled
     } catch (error) {
-      if (sequence === providerInfoLoadSequence && options.isCurrentDirectory(directory))
+      if (reading.owns())
         setFormError(feedback("provider.form.error.reload_failed", formatErrorDetails(error)))
-    } finally {
-      if (sequence === providerInfoLoadSequence && options.isCurrentDirectory(directory)) setLoadingProviderInfo(false)
     }
   }
 
@@ -383,7 +390,7 @@ export default function ProvidersPanel() {
     const retry = { trigger }
     setProviderInfoRetry(retry)
     try {
-      await reloadProviderInfo(directory, options)
+      await reloadProviderInfo(options)
       if (providerInfoRetry() === retry && options.isCurrentDirectory(directory)
         && providerInfoIssues().length === 0 && document.activeElement === retry.trigger) {
         providerSearchInput?.focus({ preventScroll: true })
@@ -415,7 +422,7 @@ export default function ProvidersPanel() {
         setProviderRefreshError(null)
         setModelRefreshError(null)
         setProviderInfoRetry(undefined)
-        void reloadProviderInfo(directory, providerLoadOptions(directory))
+        void reloadProviderInfo(providerLoadOptions(directory))
       },
     ),
   )
@@ -425,7 +432,7 @@ export default function ProvidersPanel() {
     const directory = activeDirectory().trim()
     const options = providerLoadOptions(directory)
     await refreshProviderModels(directory, options)
-    if (options.isCurrentDirectory(directory)) await reloadProviderInfo(directory, options)
+    if (options.isCurrentDirectory(directory)) await reloadProviderInfo(options)
   }
 
   async function handleTest(providerId: string) {
@@ -488,8 +495,8 @@ export default function ProvidersPanel() {
     },
   })
 
-  async function refreshAuthState(options: ReturnType<typeof providerLoadOptions>) {
-    return options.isCurrentDirectory(options.directory) ? await loadProviderInfo(undefined, options) : []
+  async function refreshProviderDetails(options: ReturnType<typeof providerLoadOptions>): Promise<void> {
+    if (options.isCurrentDirectory(options.directory)) await beginProviderInfoRead(options).settled
   }
 
   async function handleAuth(providerId: string) {
@@ -504,7 +511,7 @@ export default function ProvidersPanel() {
       if (ok) publishProviderMutation({ authority: options.authority, scope: { kind: "global" }, providerIDs: "all" })
       if (ok && owns()) {
         try {
-          await refreshAuthState(options)
+          await refreshProviderDetails(options)
           if (!owns()) return
           await nativeMessage(t("llm.status.connected"), {
             title: t("llm.title"),
@@ -791,7 +798,7 @@ export default function ProvidersPanel() {
           },
         )
       }
-      followups.push({ phase: "provider.reload", run: () => refreshAuthState(options) })
+      followups.push({ phase: "provider.reload", run: () => refreshProviderDetails(options) })
       issues.push(...(await settleProviderSaveFollowups(followups, ownsForm)))
 
       if (!ownsForm()) return
@@ -917,7 +924,7 @@ export default function ProvidersPanel() {
         },
         {
           phase: "provider.reload",
-          run: () => refreshAuthState(options),
+          run: () => refreshProviderDetails(options),
         },
       ]
       const issues = await settleProviderSaveFollowups(followups, owns)
@@ -1008,7 +1015,7 @@ export default function ProvidersPanel() {
       if (residueNotice) setFormError(residueNotice)
       clearApiKeyInput(id)
       try {
-        await refreshAuthState(options)
+        await refreshProviderDetails(options)
       } catch (error) {
         if (!owns()) return
         const refreshNotice = feedback("provider.form.error.delete_refresh_failed", formatErrorDetails(error), { id })
@@ -1281,9 +1288,9 @@ export default function ProvidersPanel() {
           />
         </div>
 
-        <Show when={loadingProviderInfo() && !appStore.providerCatalog && !providerInfoFeedbackVisible()}>
+        <Show when={loadingProviderInfo() && !providerInfoFeedbackVisible()}>
           <Feedback tone="info" title={t("provider.load.loading")} aria-busy="true">
-            {t("provider.load.loading_description")}
+            {t(appStore.providerCatalog ? "provider.load.loading_retained" : "provider.load.loading_description")}
           </Feedback>
         </Show>
 

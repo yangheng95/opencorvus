@@ -1,0 +1,57 @@
+{
+  "asset": "main-Czl9wPkE.js",
+  "reads": [
+    {
+      "time": "2026-11-11T16:42:57.709Z",
+      "stage": "held",
+      "round": "final-en-retained",
+      "route": "/provider",
+      "status": 200,
+      "requestID": "18f80eb0-32fe-4670-bb8f-f64d3c2d3b92",
+      "modelIDs": [
+        "review-global-beta",
+        "review-global-alpha",
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:43:02.295Z",
+      "stage": "delivered",
+      "round": "final-en-retained",
+      "route": "/provider",
+      "status": 200,
+      "requestID": "18f80eb0-32fe-4670-bb8f-f64d3c2d3b92",
+      "modelIDs": [
+        "review-global-beta",
+        "review-global-alpha",
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:43:40.964Z",
+      "stage": "held",
+      "round": "final-zh-retained",
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "69a25a3b-2ce2-4e78-b0b8-41eec1d2bb3e",
+      "modelIDs": [
+        "review-global-beta",
+        "review-global-alpha"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:43:46.894Z",
+      "stage": "delivered",
+      "round": "final-zh-retained",
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "69a25a3b-2ce2-4e78-b0b8-41eec1d2bb3e",
+      "modelIDs": [
+        "review-global-beta",
+        "review-global-alpha"
+      ]
+    }
+  ]
+}

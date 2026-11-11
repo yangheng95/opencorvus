@@ -9,14 +9,12 @@ test("credential cleanup settles before successful directory observation", async
         phase: "config.credential-cleanup",
         run: async () => {
           stages.push("cleanup")
-          return []
         },
       },
       {
         phase: "provider.reload",
         run: async () => {
           stages.push("reload")
-          return []
         },
       },
     ],
@@ -25,12 +23,19 @@ test("credential cleanup settles before successful directory observation", async
   expect({ stages, issues }).toEqual({ stages: ["cleanup", "reload"], issues: [] })
 })
 
-test("cleanup rejection preserves its error and the independent directory result", async () => {
+test("credential settlement retains its commit issues and cleanup error through directory observation", async () => {
   const stages: string[] = []
   const error = new Error("Owned cleanup write failed")
   error.stack = "Error: Owned cleanup write failed"
   const issues = await settleProviderSaveFollowups(
     [
+      {
+        phase: "auth.save",
+        run: async () => {
+          stages.push("auth")
+          return [{ providerID: "owned", phase: "cache.provider", message: "Owned cache reset failed" }]
+        },
+      },
       {
         phase: "config.credential-cleanup",
         run: async () => {
@@ -42,30 +47,21 @@ test("cleanup rejection preserves its error and the independent directory result
         phase: "provider.reload",
         run: async () => {
           stages.push("reload")
-          return [
-            {
-              resource: "catalog",
-              providerID: "owned",
-              phase: "projection",
-              message: "Owned directory partial result",
-            },
-          ]
         },
       },
     ],
     () => true,
   )
   expect({ stages, issues }).toEqual({
-    stages: ["cleanup", "reload"],
+    stages: ["auth", "cleanup", "reload"],
     issues: [
-      { stage: "config.credential-cleanup", message: "Error: Owned cleanup write failed" },
       {
-        stage: "provider.reload",
-        phase: "projection",
+        stage: "auth.save",
+        phase: "cache.provider",
         providerID: "owned",
-        resource: "catalog",
-        message: "Owned directory partial result",
+        message: "Owned cache reset failed",
       },
+      { stage: "config.credential-cleanup", message: "Error: Owned cleanup write failed" },
     ],
   })
 })

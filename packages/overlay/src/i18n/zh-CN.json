@@ -1101,6 +1101,7 @@
   "provider.load.loading": "正在读取服务商信息…",
   "provider.load.retry": "重试读取服务商信息",
   "provider.load.loading_description": "正在读取目录、连接状态和配置。保存设置期间可能需要等待更久。",
+  "provider.load.loading_retained": "暂时显示上次读取的目录。",
   "ledger.load_failed": "列表暂时无法加载。",
   "ledger.update_failed": "更新失败，当前显示此前加载的内容。",
   "common.close": "关闭",
