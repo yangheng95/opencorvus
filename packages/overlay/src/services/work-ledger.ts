@@ -132,6 +132,16 @@ export function workLedgerPresentationStatus(row: WorkLedgerItemRow): WorkLedger
   return "inactive"
 }
 
+export function workLedgerTaskCanStop(row: WorkLedgerTaskRow): boolean {
+  return row.lifecycleStatus === "active"
+}
+
+export function workLedgerArchiveLabel(row: WorkLedgerItemRow): string {
+  if (row.kind === "mission") return t("mission.ledger.archive_title")
+  if (row.kind === "chat") return t("coding_assistant.ledger.archive_title")
+  return t(workLedgerTaskCanStop(row) ? "task.cancel_and_archive" : "task.archive_button_title")
+}
+
 export type WorkLedgerOutcomeStatus = Exclude<WorkLedgerTaskRow["lifecycleStatus"], "active"> | "blocked"
 
 export function workLedgerOutcomeStatus(row: WorkLedgerItemRow): WorkLedgerOutcomeStatus | null {

@@ -53,7 +53,12 @@ import { cardTreeStore } from "../store/card-tree"
 import { dialogStore } from "../store/dialog"
 import { openConfigDialog } from "../services/config-dialog-control"
 import type { AutomationRunSession } from "../services/automations"
-import { workLedgerActionFailureText, type WorkLedgerItemRow, type WorkLedgerMissionRow } from "../services/work-ledger"
+import {
+  workLedgerActionFailureText,
+  workLedgerArchiveLabel,
+  type WorkLedgerItemRow,
+  type WorkLedgerMissionRow,
+} from "../services/work-ledger"
 
 const MAILBOX_HOVER_OPEN_DELAY_MILLISECONDS = 180
 
@@ -70,12 +75,6 @@ function workLedgerRenameLabel(row: WorkLedgerItemRow): string {
   if (row.kind === "mission") return t("work_ledger.action.rename_mission")
   if (row.kind === "chat") return t("work_ledger.action.rename_chat")
   return t("task.rename_button_title")
-}
-
-function workLedgerArchiveLabel(row: WorkLedgerItemRow): string {
-  if (row.kind === "mission") return t("mission.ledger.archive_title")
-  if (row.kind === "chat") return t("coding_assistant.ledger.archive_title")
-  return t("task.archive_button_title")
 }
 
 function ChatViewTitle(props: {

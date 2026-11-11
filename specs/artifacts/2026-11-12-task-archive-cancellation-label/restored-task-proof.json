@@ -1,0 +1,103 @@
+{
+  "phase": "restored",
+  "asset": "main-Bq7ml9PD.js",
+  "exact": {
+    "requestID": "910848a6-f500-482f-bae9-8f746cdf10e9",
+    "status": 200,
+    "body": {
+      "kind": "task",
+      "id": "tsk_g00VahrGhh00h4bsgfvR",
+      "title": "归档原有独立任务",
+      "description": "归档后保留原始单步任务。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b258\\candidate-alternate\\archive-review",
+      "created": 1794436163101,
+      "started": 1794436163101,
+      "completed": 1794436227317,
+      "updated": 1794436227317,
+      "pinned": false,
+      "lifecycleStatus": "cancelled",
+      "cancellationStatus": "cancelled",
+      "activityStatus": "inactive",
+      "priority": "normal",
+      "source": "user",
+      "productPillar": "work",
+      "pendingInteractions": 0
+    }
+  },
+  "detail": {
+    "requestID": "192b1100-fd78-489a-afc4-587a2e6c1172",
+    "status": 200,
+    "body": {
+      "id": "tsk_g00VahrGhh00h4bsgfvR",
+      "orderKey": "v1:0001794436163101:0000000000000010:0000000000000000:task:tsk_g00VahrGhh00h4bsgfvR",
+      "projectID": "prj_h3pej6Hr19kuFgs0hn6Z",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b258\\candidate-alternate\\archive-review",
+      "sessionID": "ses_-zUPI8jITzzyBqV4N1Y3",
+      "source": "user",
+      "productPillar": "work",
+      "title": "归档原有独立任务",
+      "request": "归档后保留原始单步任务。",
+      "status": "cancelled",
+      "executionLifecycle": {
+        "taskID": "tsk_g00VahrGhh00h4bsgfvR",
+        "epoch": 1,
+        "openedEventID": "pev_g0VahrGhi001oCIk9BH8",
+        "openedAt": 1794436163101,
+        "status": "cancelled",
+        "terminalEventID": "pev_g0VahrXPU00R5Og7bD2t",
+        "terminalAt": 1794436227317,
+        "terminalError": "task cancelled"
+      },
+      "terminalReason": "cancelled",
+      "cancellation": {
+        "requestEventID": "pev_g0VahrXP300UCNqfAirs",
+        "requestedAt": 1794436227293,
+        "source": "task.archive",
+        "requestID": "838056f3-a63b-4209-ab64-cd8fb65c3dbd",
+        "actor": "user",
+        "surface": "overlay.work_ledger",
+        "reason": "Operator archived the task from Work Ledger",
+        "status": "cancelled",
+        "terminalEventID": "pev_g0VahrXPU00R5Og7bD2t",
+        "terminalAt": 1794436227317
+      },
+      "priority": "normal",
+      "packageRevisionBinding": {
+        "scope": "built_in",
+        "project_id": null,
+        "namespace": "builtin",
+        "id": "base",
+        "version": "2026.11.07.1",
+        "package_digest": "701d742b575358ddfeb59c480b3d17b974b105b6949ea90fcd4f3733750c5b8c"
+      },
+      "error": "task cancelled",
+      "metadata": {
+        "actor": "user"
+      },
+      "time": {
+        "created": 1794436163101,
+        "updated": 1794436227317,
+        "started": 1794436163101,
+        "completed": 1794436227317
+      }
+    }
+  },
+  "archive": {
+    "requestID": "35ec84ff-62f2-4945-92fc-8858602a7453",
+    "status": 200,
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  },
+  "foreign": {
+    "requestID": "f72e052c-283c-4365-bfaf-fd777942385e",
+    "status": 404,
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Selected Work Ledger item is unavailable in this Project and directory."
+      }
+    }
+  }
+}

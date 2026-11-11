@@ -5969,6 +5969,10 @@ post-commit reconciliation. Explicit server refusals retain their error
 contract. If the result remains uncertain, feedback retains the original write
 and read diagnostics. Active archive feedback directs the operator to the
 archive for the selected project's item. Confirmation never repeats the write.
+Task archive actions in the Work Ledger and conversation title identify the
+cancellation when the Task still has an open execution occurrence. They use
+the same lifecycle condition as the Task stop action, including when the
+occurrence has no current runtime activity.
 
 Settings Archive passes its current search to the existing archived Work Ledger
 reader. Search runs over the complete archive before cursor pagination; it does

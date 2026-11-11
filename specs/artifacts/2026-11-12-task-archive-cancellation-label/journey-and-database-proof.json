@@ -1,0 +1,73 @@
+{
+  "occurrence": "iteration-b258-candidate",
+  "upgrade": [
+    {
+      "time": "2026-11-11T22:29:44.556Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T22:30:03.511Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T22:30:56.697Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    }
+  ],
+  "receipts": [
+    {
+      "time": "2026-11-11T22:30:27.517Z",
+      "stage": "delivered",
+      "route": "/task/tsk_g00VahrGhh00h4bsgfvR/archive",
+      "method": "PATCH",
+      "round": "b258-archive-from-header",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b258\\candidate-alternate\\archive-review",
+      "search": null,
+      "requestID": "838056f3-a63b-4209-ab64-cd8fb65c3dbd",
+      "status": 200,
+      "bytes": 4,
+      "target": {
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    {
+      "time": "2026-11-11T22:30:43.016Z",
+      "stage": "delivered",
+      "route": "/task/tsk_g00VahrGhh00h4bsgfvR/archive",
+      "method": "PATCH",
+      "round": "b258-restore-from-settings",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b258\\candidate-alternate\\archive-review",
+      "search": null,
+      "requestID": "3decf9a5-7617-4a0e-ae81-ecfd46459a84",
+      "status": 200,
+      "bytes": 4,
+      "target": {
+        "archived": null,
+        "boardLane": null
+      }
+    }
+  ],
+  "sqlite": "ok",
+  "counts": {
+    "session": 5,
+    "message": 0,
+    "engine_task": 1,
+    "provider_usage_event": 0,
+    "provider_activity_request": 0,
+    "permission_ledger": 0
+  },
+  "persistedTask": {
+    "id": "tsk_g00VahrGhh00h4bsgfvR",
+    "sessionID": "ses_-zUPI8jITzzyBqV4N1Y3",
+    "title": "归档原有独立任务",
+    "request": "归档后保留原始单步任务。",
+    "archived": null
+  }
+}

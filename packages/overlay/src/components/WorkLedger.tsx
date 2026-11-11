@@ -24,8 +24,10 @@ import {
   setWorkLedgerRuntimeRows,
   setWorkLedgerProjectPinned,
   workLedgerActionFailureText,
+  workLedgerArchiveLabel,
   workLedgerPresentationLabel,
   workLedgerPresentationStatus,
+  workLedgerTaskCanStop,
   type WorkLedgerChatRow,
   type WorkLedgerCursor,
   type WorkLedgerItemRow,
@@ -268,16 +270,12 @@ function pendingInteractionCount(row: WorkLedgerItemRow): number {
   return row.kind === "chat" ? 0 : row.pendingInteractions
 }
 
-function taskCanStop(row: WorkLedgerTaskRow): boolean {
-  return row.lifecycleStatus === "active"
-}
-
 function taskCancellationPending(row: WorkLedgerTaskRow): boolean {
   return row.cancellationStatus === "cancelling"
 }
 
 function missionHasVisibleStoppableTask(row: WorkLedgerMissionRow): boolean {
-  return row.tasks.some(taskCanStop)
+  return row.tasks.some(workLedgerTaskCanStop)
 }
 
 function WorkLedgerKindMark(props: { row: WorkLedgerItemRow }) {
@@ -420,7 +418,7 @@ function WorkLedgerRowView(props: {
   const canStop = () => {
     const current = row()
     if (current.kind === "mission") return current.interruptible && !missionHasVisibleStoppableTask(current)
-    if (current.kind === "task") return taskCanStop(current)
+    if (current.kind === "task") return workLedgerTaskCanStop(current)
     return !current.archived && (current.status === "active" || current.status === "idle")
   }
   const canDownload = () => row().kind !== "chat" && !!row().directory
@@ -538,12 +536,6 @@ function WorkLedgerRowView(props: {
 
   function downloadLabel(): string {
     return row().kind === "mission" ? t("work_ledger.action.download_mission") : t("task.download_project_button_title")
-  }
-
-  function archiveLabel(): string {
-    if (row().kind === "mission") return t("mission.ledger.archive_title")
-    if (row().kind === "chat") return t("coding_assistant.ledger.archive_title")
-    return t("task.archive_button_title")
   }
 
   function archiveDataUi() {
@@ -803,7 +795,7 @@ function WorkLedgerRowView(props: {
                     }
                   >
                     <Icon name="archive" />
-                    {archiveLabel()}
+                    {workLedgerArchiveLabel(row())}
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>
               </DropdownMenu.Portal>
