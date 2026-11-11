@@ -456,6 +456,7 @@ function VirtualizedConversationCards(props: {
 export function Conversation(props: {
   container: HTMLElement
   item: () => WorkLedgerItemRow | null
+  selectionReadFailed: boolean
   homeActive: boolean
   launcherIntent: ComposerIntent
   onGoal: () => void
@@ -971,7 +972,7 @@ export function Conversation(props: {
 
   return (
     <>
-      <Show when={emptyMissionSource()}>
+      <Show when={emptyMissionSource() && (!props.selectionReadFailed || emptyMissionItem())}>
         <section class="chat-empty mission-empty-context" aria-label={t("mission.conversation.context")}>
           <div class="chat-empty-marker" aria-hidden="true">
             <Icon name="mission" size="large" />
@@ -995,14 +996,16 @@ export function Conversation(props: {
                 </div>
               )}
             </Show>
-            <p class="mission-empty-context__hint">
-              {emptyMissionItem()?.archived !== undefined
-                ? t("mission.conversation.archived_hint")
-                : emptyMissionItem()?.pendingPromptText
-                  ? t("mission.conversation.draft_hint")
-                  : t("mission.conversation.empty_hint")}
-            </p>
-            <Show when={emptyMissionItem() && emptyMissionItem()?.archived === undefined}>
+            <Show when={!props.selectionReadFailed}>
+              <p class="mission-empty-context__hint">
+                {emptyMissionItem()?.archived !== undefined
+                  ? t("mission.conversation.archived_hint")
+                  : emptyMissionItem()?.pendingPromptText
+                    ? t("mission.conversation.draft_hint")
+                    : t("mission.conversation.empty_hint")}
+              </p>
+            </Show>
+            <Show when={!props.selectionReadFailed && emptyMissionItem() && emptyMissionItem()?.archived === undefined}>
               <div class="chat-empty-actions">
                 <Button type="button" variant="outline" size="sm" tone="neutral" onClick={props.onOpenMissionBoard}>
                   <Icon name="mission" size="compact" />

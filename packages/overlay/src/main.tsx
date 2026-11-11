@@ -43,9 +43,10 @@ import { MissionBoard } from "./components/MissionBoard"
 import type { MissionCreateRequest, MissionManualCreateRequest } from "./components/MissionCreateDialog"
 import {
   setWorkLedgerItemPinned,
-  loadWorkLedgerSelection,
+  readWorkLedgerSelection,
   type WorkLedgerChangeIdentity,
   type WorkLedgerItemRow,
+  type WorkLedgerSelectionRead,
   workLedgerActiveItem,
   workLedgerProjectDirectories,
   workLedgerRefreshScope,
@@ -2361,15 +2362,26 @@ function OverlayRoot() {
     }
   }, undefined, { equals: (a, b) => a?.key === b?.key })
   let selectionController: AbortController | undefined
-  const [selection, { refetch: refetchSelection }] = createResource(selectionRequest, async (request) => {
+  const [selection, { refetch: refetchSelection }] = createResource<
+    WorkLedgerSelectionRead,
+    NonNullable<ReturnType<typeof selectionRequest>>
+  >(selectionRequest, (request, { value }) => {
     selectionController?.abort()
     selectionController = new AbortController()
-    return { key: request.key, row: await loadWorkLedgerSelection({ ...request, signal: selectionController.signal }) }
+    return readWorkLedgerSelection({ ...request, signal: selectionController.signal }, value)
   })
-  const selectedItem = () => {
-    if (selection.error) return null
+  const selectionRead = createMemo(() => {
     const current = selection()
-    return current && current.key === selectionRequest()?.key ? current.row : null
+    return current && current.key === selectionRequest()?.key ? current : undefined
+  })
+  const readableSelectedItem = () => selectionRead()?.row ?? null
+  const selectedItem = () => {
+    const read = selectionRead()
+    return read?.kind === "current" ? read.row : null
+  }
+  const selectionReadError = () => {
+    const read = selectionRead()
+    return read?.kind === "unavailable" ? read.cause : undefined
   }
   type ArchiveFocusIntent = {
     key: string
@@ -2391,7 +2403,7 @@ function OverlayRoot() {
       if (archiveFocus() === intent) setArchiveFocus(undefined)
     }
     const request = selectionRequest()
-    if (!ownsArchiveFocus(intent) || (selection.error && request?.id === intent.selectionID &&
+    if (!ownsArchiveFocus(intent) || (selectionReadError() && request?.id === intent.selectionID &&
       projectDirectoryKey(request.directory) === intent.directory)) {
       clear()
       return
@@ -2508,7 +2520,7 @@ function OverlayRoot() {
       })
     }
   })
-  const selectionUnavailable = () => !!boardStore.selectedSource && (!selectedItem() || !!selection.error)
+  const selectionUnavailable = () => !!boardStore.selectedSource && !selectedItem()
   const selectedArchived = () => selectedItem()?.archived !== undefined
   const archivedComposerReason = () => {
     const item = selectedItem()
@@ -2533,6 +2545,11 @@ function OverlayRoot() {
   const [restoringSelection, setRestoringSelection] = createSignal(false)
   const [restoreFailure, setRestoreFailure] = createSignal<unknown>()
   createEffect(on(() => selectionRequest()?.key, () => { setRestoringSelection(false); setRestoreFailure(undefined) }))
+  createEffect(() => {
+    if (!restoreFailure()) return
+    const current = selectedItem()
+    if (current && current.archived === undefined) setRestoreFailure(undefined)
+  })
   async function restoreSelection(): Promise<void> {
     const item = selectedItem(), request = selectionRequest()
     if (!item || item.archived === undefined || !request || restoringSelection()) return
@@ -2548,7 +2565,9 @@ function OverlayRoot() {
       await refreshSelection()
       if (owns()) {
         setWorkLedgerListRefreshToken((value) => value + 1)
-        if (!selectedArchived() && (document.activeElement === trigger || document.activeElement === document.body)) focusComposerInput(trigger)
+        const current = selectedItem()
+        if (current && current.archived === undefined &&
+          (document.activeElement === trigger || document.activeElement === document.body)) focusComposerInput(trigger)
       }
     } catch (error) { if (owns() && !restored) setRestoreFailure(error) }
     finally { if (owns()) setRestoringSelection(false) }
@@ -2837,7 +2856,7 @@ function OverlayRoot() {
       }
       conversationTitle={() => {
         settingsStore.locale
-        const activeItem = selectedItem()
+        const activeItem = readableSelectedItem()
         return missionSubmitActive()
           ? t("mission.launcher.title")
           : conversationSubmitActive()
@@ -2854,7 +2873,8 @@ function OverlayRoot() {
                   : t("task.panel_title"))
       }}
       conversationItem={selectedItem}
-      conversationReadError={() => selectionRequest() ? selection.error : undefined}
+      conversationReadError={selectionReadError}
+      conversationReadRetained={() => selectionRead()?.kind === "unavailable" && !!readableSelectedItem()}
       onRetryConversationRead={() => refreshSelection()}
       restoringConversation={restoringSelection()}
       conversationRestoreError={restoreFailure()}
@@ -2960,7 +2980,8 @@ function OverlayRoot() {
         <QuotationSelection onQuote={quoteInMain} onSideChat={(quotation) => requestSideChat(quotation)}>
           <Conversation
             container={container}
-            item={selectedItem}
+            item={readableSelectedItem}
+            selectionReadFailed={!!selectionReadError()}
             homeActive={homeActive()}
             launcherIntent={composerIntent()}
             onGoal={onGoal}
@@ -2985,7 +3006,7 @@ function OverlayRoot() {
                 ? "submitting"
                 : "ready"
           }
-          unavailableReason={archivedComposerReason()}
+          unavailableReason={selectionReadError() ? t("work_ledger.selection_error_composer") : archivedComposerReason()}
           stopAction={composerStopAction()}
           stopping={composerStopping()}
           draftKey={panelComposerDraftKey()}

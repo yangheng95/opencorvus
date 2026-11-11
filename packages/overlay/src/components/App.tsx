@@ -469,6 +469,7 @@ export interface AppProps {
   conversationTitle: () => string
   conversationItem: () => WorkLedgerItemRow | null
   conversationReadError: () => unknown
+  conversationReadRetained: () => boolean
   onRetryConversationRead: () => Promise<void>
   restoringConversation: boolean
   conversationRestoreError: unknown
@@ -483,7 +484,16 @@ export interface AppProps {
 
 export function App(props: AppProps) {
   const filesAvailable = createMemo(() => appStore.connected && Boolean(activeDirectory().trim()))
-  const conversationIsMission = () => props.conversationItem()?.kind === "mission"
+  const conversationIsMission = () => {
+    const source = boardStore.selectedSource
+    return props.conversationItem()?.kind === "mission" || (source?.kind === "session" && source.sessionKind === "mission")
+  }
+  const conversationFailure = createMemo(() => {
+    const read = props.conversationReadError()
+    if (read) return { kind: "read" as const, cause: read }
+    const restore = props.conversationRestoreError
+    if (restore) return { kind: "restore" as const, cause: restore }
+  })
   const openProjectFiles = () => {
     if (filesAvailable()) props.onOpenRightDockPanel("explorer")
   }
@@ -861,28 +871,31 @@ export function App(props: AppProps) {
                                       </span>
                                     </Feedback>
                                 </Show>
-                                <Show when={props.conversationReadError() || props.conversationRestoreError}>
-                                  {(error) => (
+                                <Show when={conversationFailure()}>
+                                  {(failure) => (
                                     <Feedback
                                       tone="error"
-                                      title={props.conversationRestoreError instanceof ArchiveRestoreUnconfirmedError
-                                        ? t("archive.restore_unconfirmed")
-                                        : props.conversationRestoreError
-                                          ? t(conversationIsMission() ? "work_ledger.restore_mission_error" : "work_ledger.restore_error")
-                                          : t("work_ledger.selection_error")}
-                                      details={formatErrorDetails(error())}
+                                      title={failure().kind === "read"
+                                        ? t(conversationIsMission() ? "work_ledger.selection_mission_error" : "work_ledger.selection_error")
+                                        : failure().cause instanceof ArchiveRestoreUnconfirmedError
+                                          ? t("archive.restore_unconfirmed")
+                                          : t(conversationIsMission() ? "work_ledger.restore_mission_error" : "work_ledger.restore_error")}
+                                      details={[
+                                        formatErrorDetails(failure().cause),
+                                        failure().kind === "read" ? formatErrorDetails(props.conversationRestoreError) : "",
+                                      ].filter(Boolean).join("\n\n")}
                                       actions={
                                         <Button type="button" variant="ghost" size="sm" tone="neutral"
-                                          onClick={() => void (props.conversationRestoreError ? props.onRestoreConversation() : props.onRetryConversationRead()).catch(() => {})}>
+                                          onClick={() => void (failure().kind === "read" ? props.onRetryConversationRead() : props.onRestoreConversation()).catch(() => {})}>
                                           {t("common.retry")}
                                         </Button>
                                       }
                                     >
-                                      {props.conversationRestoreError instanceof ArchiveRestoreUnconfirmedError
-                                        ? t("work_ledger.restore_unconfirmed_hint")
-                                        : props.conversationRestoreError
-                                          ? t(conversationIsMission() ? "work_ledger.restore_mission_error_hint" : "work_ledger.restore_error_hint")
-                                          : t("work_ledger.selection_error_hint")}
+                                      {failure().kind === "read"
+                                        ? t(props.conversationReadRetained() ? "work_ledger.selection_error_retained" : "work_ledger.selection_error_hint")
+                                        : failure().cause instanceof ArchiveRestoreUnconfirmedError
+                                          ? t("work_ledger.restore_unconfirmed_hint")
+                                          : t(conversationIsMission() ? "work_ledger.restore_mission_error_hint" : "work_ledger.restore_error_hint")}
                                     </Feedback>
                                   )}
                                 </Show>

@@ -1,0 +1,420 @@
+{
+  "occurrence": "iteration-b254-candidate-live",
+  "asset": "main-55s9s2RL.js",
+  "upgrade": {
+    "time": "2026-11-11T21:27:07.333Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "chatEvent": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+      "sequence": 1794432445199
+    },
+    "write": {
+      "requestID": "2d652344-c126-411a-af72-7f3784d55664",
+      "body": {
+        "session": {
+          "id": "ses_hTahPuaKKYeyHrPZcRhz",
+          "slug": "proud-circuit",
+          "projectID": "prj_hsxwvujiJJe0TiSrv7mW",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+          "title": "Current Chat title",
+          "version": "local",
+          "kind": "assistant",
+          "metadata": {
+            "projectConversationCreation": {
+              "version": 1,
+              "requestID": "b254-candidate-chat",
+              "model": null
+            },
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1794432300429,
+            "updated": 1794432445199
+          }
+        }
+      }
+    },
+    "selected": {
+      "requestID": "a07d3fc7-8164-431c-aa88-169af04cfc13",
+      "body": {
+        "kind": "chat",
+        "experience": "chat",
+        "id": "ses_hTahPuaKKYeyHrPZcRhz",
+        "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+        "title": "Current Chat title",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+        "created": 1794432300429,
+        "started": 1794432300429,
+        "updated": 1794432445199,
+        "pinned": false,
+        "status": "idle"
+      }
+    }
+  },
+  "chatCut": {
+    "time": "2026-11-11T21:27:25.241Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hTahPuaKKYeyHrPZcRhz",
+    "method": "GET",
+    "round": "b254-candidate-chat-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+    "search": null,
+    "requestID": "09a6627b-9d07-4a08-a950-4370b832981d",
+    "status": 200,
+    "bytes": 367,
+    "target": {
+      "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+      "title": "Current Chat title",
+      "archived": null,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "chatRetry": {
+    "time": "2026-11-11T21:27:30.915Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hTahPuaKKYeyHrPZcRhz",
+    "method": "GET",
+    "round": "b254-candidate-chat-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+    "search": null,
+    "requestID": "4cd846ca-de70-4547-b40c-6d07390eb6c8",
+    "status": 200,
+    "bytes": 367,
+    "target": {
+      "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+      "title": "Current Chat title",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "coldCut": {
+    "time": "2026-11-11T21:27:51.320Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+    "method": "GET",
+    "round": "b254-candidate-cold-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+    "search": null,
+    "requestID": "73a5fad2-c768-41d2-9491-1b8bd832411d",
+    "status": 200,
+    "bytes": 669,
+    "target": {
+      "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+      "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "title": "上次读取的归档草稿",
+      "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+      "archived": 1794432299670,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "coldRetry": {
+    "time": "2026-11-11T21:27:55.014Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+    "method": "GET",
+    "round": "b254-candidate-cold-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+    "search": null,
+    "requestID": "914f8aa4-b065-455c-953b-d0539f93d480",
+    "status": 200,
+    "bytes": 669,
+    "target": {
+      "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+      "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "title": "上次读取的归档草稿",
+      "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+      "archived": 1794432299670,
+      "boardLane": null
+    }
+  },
+  "missionEvent": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+      "sequence": 1794432491790
+    },
+    "write": {
+      "requestID": "a3147a32-b20d-4841-baef-57509fb0a025",
+      "body": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "title": "归档草稿最新标题",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "created": 1794432299628,
+        "updated": 1794432491790,
+        "archived": 1794432299670,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "恢复精确读取之前，也能阅读这份已保存的原请求。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    },
+    "selected": {
+      "requestID": "2e1b5a88-c445-4313-b400-4d0a74fbf54e",
+      "body": {
+        "kind": "mission",
+        "id": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "title": "归档草稿最新标题",
+        "pendingPromptText": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "created": 1794432299628,
+        "started": 1794432299628,
+        "updated": 1794432491790,
+        "pinned": false,
+        "archived": 1794432299670,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "missionCut": {
+    "time": "2026-11-11T21:28:11.833Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+    "method": "GET",
+    "round": "b254-candidate-archive-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+    "search": null,
+    "requestID": "ddce23b2-13d7-40a6-81d5-703ebc755201",
+    "status": 200,
+    "bytes": 666,
+    "target": {
+      "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+      "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "title": "归档草稿最新标题",
+      "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+      "archived": 1794432299670,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "missionRetry": {
+    "time": "2026-11-11T21:28:18.013Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+    "method": "GET",
+    "round": "b254-candidate-archive-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+    "search": null,
+    "requestID": "cfbe1255-636d-4c9a-9ddf-b9a463bad7ba",
+    "status": 200,
+    "bytes": 666,
+    "target": {
+      "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+      "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "title": "归档草稿最新标题",
+      "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+      "archived": 1794432299670,
+      "boardLane": null
+    }
+  },
+  "mixed": {
+    "write": {
+      "time": "2026-11-11T21:28:25.939Z",
+      "stage": "truncated",
+      "route": "/mission/draft-a11874533241ec00e8fbbcb59a3523f3/archive",
+      "method": "PATCH",
+      "round": "b254-candidate-mixed",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "eae09b91-d7c7-4788-a79e-1d507af3bf6a",
+      "status": 200,
+      "bytes": 551,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "归档草稿最新标题",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": null,
+        "boardLane": "backlog"
+      },
+      "deliveredBytes": 12
+    },
+    "selection": {
+      "time": "2026-11-11T21:28:25.870Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+      "method": "GET",
+      "round": "b254-candidate-mixed",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "46d22a5b-5baa-4ddf-ace1-cfcbf57b874a",
+      "status": 200,
+      "bytes": 641,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "归档草稿最新标题",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "verification": {
+      "time": "2026-11-11T21:28:26.025Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+      "method": "GET",
+      "round": "b254-candidate-mixed-verify",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "e70bdc20-05fe-4cde-bddb-4399fd55b850",
+      "status": 200,
+      "bytes": 641,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "归档草稿最新标题",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "retry": {
+      "time": "2026-11-11T21:28:53.744Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+      "method": "GET",
+      "round": "b254-candidate-mixed-retry",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "a82fe520-075c-4a8a-9ae3-3c5815118021",
+      "status": 200,
+      "bytes": 641,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "归档草稿最新标题",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    "retriedRequests": [
+      {
+        "time": "2026-11-11T21:28:53.738Z",
+        "stage": "received",
+        "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+        "method": "GET",
+        "round": "b254-candidate-mixed-retry",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "search": null
+      }
+    ]
+  },
+  "selected": {
+    "requestID": "feb89acf-4d15-4533-8836-a1cee94853b5",
+    "body": {
+      "kind": "mission",
+      "id": "draft-a11874533241ec00e8fbbcb59a3523f3",
+      "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+      "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+      "title": "归档草稿最新标题",
+      "pendingPromptText": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "created": 1794432299628,
+      "started": 1794432299628,
+      "updated": 1794432505826,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "conversation": {
+    "requestID": "4af42f45-6d64-4608-a01a-2ae675728a2a",
+    "body": {
+      "session": {
+        "id": "ses_hTahPuaKKYeyHrPZcRhz",
+        "slug": "proud-circuit",
+        "projectID": "prj_hsxwvujiJJe0TiSrv7mW",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+        "title": "Current Chat title",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b254-candidate-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794432300429,
+          "updated": 1794432445199
+        }
+      }
+    }
+  },
+  "archive": {
+    "requestID": "3310d955-77bf-48d4-8c06-f33797ce94e9",
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  }
+}

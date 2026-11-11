@@ -13,7 +13,7 @@ import {
   type WorkLedgerRow,
   type WorkLedgerTaskRow,
 } from "@opencorvus-ai/transport-protocol"
-import { apiJson, captureApiAuthority, isApiAuthorityCurrent, mergeAbortSignals, type ApiAuthority } from "./api"
+import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, mergeAbortSignals, type ApiAuthority } from "./api"
 import { createSignal } from "solid-js"
 import { t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
@@ -183,11 +183,41 @@ export async function loadArchivedWorkLedger(input: WorkLedgerPageInput = {}): P
   return WorkLedgerArchiveListSchema.parse(await readWorkLedgerPage("work-ledger/archive", input))
 }
 
-export async function loadWorkLedgerSelection(input: { kind: "task" | "session"; id: string; directory: string; authority: ApiAuthority; signal?: AbortSignal }): Promise<WorkLedgerItemRow> {
+type WorkLedgerSelectionTarget = {
+  kind: "task" | "session"
+  id: string
+  directory: string
+  authority: ApiAuthority
+  signal?: AbortSignal
+}
+
+export async function loadWorkLedgerSelection(input: WorkLedgerSelectionTarget): Promise<WorkLedgerItemRow> {
   return WorkLedgerArchiveRowSchema.parse(await apiJson<unknown>(
     directoryScopedPath(`work-ledger/selection/${input.kind}/${encodeURIComponent(input.id)}`, input.directory),
     { authority: input.authority, signal: input.signal },
   ))
+}
+
+export type WorkLedgerSelectionRead =
+  | { kind: "current"; key: string; row: WorkLedgerItemRow }
+  | { kind: "unavailable"; key: string; row: WorkLedgerItemRow | null; cause: unknown }
+
+function isTemporarySelectionReadFailure(cause: unknown): boolean {
+  if (cause instanceof ApiError) return cause.status >= 500 || cause.status === 408 || cause.status === 429
+  return cause instanceof TypeError || (cause instanceof DOMException && cause.name === "TimeoutError")
+}
+
+export async function readWorkLedgerSelection(
+  input: WorkLedgerSelectionTarget & { key: string },
+  previous: WorkLedgerSelectionRead | undefined,
+): Promise<WorkLedgerSelectionRead> {
+  const { key } = input
+  try {
+    return { kind: "current", key, row: await loadWorkLedgerSelection(input) }
+  } catch (cause) {
+    const row = previous?.key === key && isTemporarySelectionReadFailure(cause) ? previous.row : null
+    return { kind: "unavailable", key, row, cause }
+  }
 }
 
 type WorkLedgerRestoreIdentity =

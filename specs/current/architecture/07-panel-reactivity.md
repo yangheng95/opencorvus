@@ -1171,8 +1171,12 @@ receipt is uncertain, the client verifies the exact owner on the same
 connection before reconciling either the reader or the archive list. Task and
 Mission use the Work Ledger selection read, while Chat and Work use the native
 project and experience scoped Session read to update their Session projection.
-An unconfirmed restore exposes the write and read diagnostics. Read failures
-retain the history with an actionable error, and keep execution input unavailable.
+An unconfirmed restore exposes the write and read diagnostics. A temporary
+read failure keeps the last accepted title and original request readable for
+the same connection, selection and directory. Commands and current status
+require a successful exact read. A new identity or explicit rejection has no
+retained row. If restore and read both fail, Retry reads the exact record first.
+A successful read of the restored record clears the restore feedback.
 Every Mailbox change causes a fresh
 canonical page read, so the notification stream is not a second payload/history
 source. Project directory changes abort the previous
