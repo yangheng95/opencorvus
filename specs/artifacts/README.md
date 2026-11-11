@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务引用术语和搜索范围的证据](2026-11-12-mission-reference-search-labels/README.md)
 - [内置多步任务技能说明语言与搜索的证据](2026-11-12-mission-skill-description-locale/README.md)
 - [技能详情目录重试的证据](2026-11-12-mission-skill-detail-read-retry/README.md)
 - [用量自然周期的时区证据](2026-11-12-usage-response-time-zone/README.md)
