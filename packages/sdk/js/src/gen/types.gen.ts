@@ -175,6 +175,22 @@ export type AuthReadError = {
   name: "AuthReadError"
 }
 
+export type AutomationCreationConflictError = {
+  data: {
+    automationID: string
+    message: string
+  }
+  name: "AutomationCreationConflictError"
+}
+
+export type AutomationCreationUnavailableError = {
+  data: {
+    automationID: string
+    message: string
+  }
+  name: "AutomationCreationUnavailableError"
+}
+
 export type AutomationManualRunPendingError = {
   data: {
     automationID: string
@@ -21549,6 +21565,7 @@ export type GlobalAutomationsCreateData = {
     prompt: string
     reasoningEffort?: string
     recurrence: string
+    requestID?: string
     target:
       | {
           scope: "session"
@@ -21588,6 +21605,14 @@ export type GlobalAutomationsCreateErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * The creation request is already bound to a different definition
+   */
+  409: AutomationCreationConflictError
+  /**
+   * The accepted scheduled automation was deleted
+   */
+  410: AutomationCreationUnavailableError
 }
 
 export type GlobalAutomationsCreateError = GlobalAutomationsCreateErrors[keyof GlobalAutomationsCreateErrors]

@@ -48,6 +48,8 @@ import { ExpertSquadCatalogPageSchema, ExpertSquadCatalogSearchQuerySchema } fro
 import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
 import {
+  AutomationCreationConflictError,
+  AutomationCreationUnavailableError,
   AutomationRevisionConflictError,
   AutomationRunningConflictError,
   AutomationManualRunPendingError,
@@ -155,7 +157,7 @@ export const AutomationFireHistoryViewSchema = z
   })
   .strict()
 
-const CreateAutomationBody = z
+const AutomationDefinitionInput = z
   .object({
     name: z.string().min(1),
     target: AutomationTarget,
@@ -167,7 +169,11 @@ const CreateAutomationBody = z
   })
   .strict()
 
-const UpdateAutomationBody = CreateAutomationBody.partial()
+const CreateAutomationBody = AutomationDefinitionInput.extend({
+  requestID: z.string().trim().min(1).max(200).optional(),
+}).strict()
+
+const UpdateAutomationBody = AutomationDefinitionInput.partial()
   .extend({
     expectedRevisionId: z.string().min(1),
     model: z
@@ -274,6 +280,7 @@ export const GlobalRoutes = lazy(() =>
       "/automations",
       describeRoute({
         summary: "Create a scheduled automation",
+        description: "Reuse requestID with the original input to recover the same accepted definition after a lost response.",
         operationId: "global.automations.create",
         responses: {
           201: {
@@ -292,10 +299,21 @@ export const GlobalRoutes = lazy(() =>
             },
           },
           ...errors(400, 404),
+          409: {
+            description: "The creation request is already bound to a different definition",
+            content: { "application/json": { schema: resolver(AutomationCreationConflictError.Schema) } },
+          },
+          410: {
+            description: "The accepted scheduled automation was deleted",
+            content: { "application/json": { schema: resolver(AutomationCreationUnavailableError.Schema) } },
+          },
         },
       }),
       validator("json", CreateAutomationBody),
-      async (c) => c.json(await AutomationService.create(c.req.valid("json")), 201),
+      async (c) => {
+        const { requestID, ...input } = c.req.valid("json")
+        return c.json(await AutomationService.create(input, requestID), 201)
+      },
     )
     .patch(
       "/automations/:id",

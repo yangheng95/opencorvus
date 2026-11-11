@@ -1998,6 +1998,11 @@ captures authored fields before resolving project identities. Background list
 refreshes own list data only and cannot change navigation. User navigation
 invalidates old list requests. Missing edit targets retain the form and report
 an explicit error rather than becoming new definitions.
+Each new scheduled draft owns one creation request ID for its lifetime. An
+uncertain save retains the draft and diagnostics. A later explicit save with
+the same details retrieves the original accepted definition; changed input
+and a deleted accepted definition have distinct public errors. A separate new
+draft owns a separate request ID.
 
 The opening snapshot also owns the observed physical revisionId. Save, explicit
 status changes and deletion submit that exact version to the conditional public

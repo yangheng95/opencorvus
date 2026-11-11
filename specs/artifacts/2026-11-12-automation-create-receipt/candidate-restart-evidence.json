@@ -1,0 +1,200 @@
+{
+  "initial": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b261-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39806",
+    "pid": 34980
+  },
+  "restarted": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b261-restart",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39806",
+    "pid": 11996
+  },
+  "settled": {
+    "occurrence": "iteration-b261-candidate",
+    "apiPort": 39806,
+    "proxyPort": 39807,
+    "apiStopped": true,
+    "proxyStopped": true,
+    "processesExited": true,
+    "listenersClosed": true
+  },
+  "replays": [
+    {
+      "round": "b261-en-initial",
+      "replay": {
+        "requestID": "f4e4e147-d32d-4dd8-a71a-cb4e02a0d778",
+        "status": 201,
+        "body": {
+          "id": "atm_hKKSNA0BmZlDmEXULBg5",
+          "revisionId": "atm_hKKSNA0BmZlDmEXULBg5",
+          "name": "Future schedule receipt review",
+          "nextRun": 4070908800000
+        }
+      },
+      "history": {
+        "requestID": "fee11d63-994b-4746-bc69-904f5a5c96a0",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_f2ff71c09049062280dcf3ab3a61967d",
+            "automationId": "atm_hKKSNA0BmZlDmEXULBg5",
+            "automationRevisionId": "atm_hKKSNA0BmZlDmEXULBg5",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794438989688,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    {
+      "round": "b261-en-new-draft",
+      "replay": {
+        "requestID": "ef676f87-1705-498e-9967-f3cec4c95630",
+        "status": 201,
+        "body": {
+          "id": "atm_hFBlQeYdFO1GXklQtgu8",
+          "revisionId": "atm_hFBlQeYdFO1GXklQtgu8",
+          "name": "Future schedule receipt review",
+          "nextRun": 4070908800000
+        }
+      },
+      "history": {
+        "requestID": "fa5b7948-52a1-45e7-8930-669633062a50",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_f6c695a6c2289597c9de6a9ae9a7e753",
+            "automationId": "atm_hFBlQeYdFO1GXklQtgu8",
+            "automationRevisionId": "atm_hFBlQeYdFO1GXklQtgu8",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794439021285,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    {
+      "round": "b261-zh-initial",
+      "replay": {
+        "requestID": "34eae085-ad86-406b-83ee-2d02906b256e",
+        "status": 201,
+        "body": {
+          "id": "atm_heYvXC96h2vs3riX2Vnt",
+          "revisionId": "atm_heYvXC96h2vs3riX2Vnt",
+          "name": "项目定时任务原始草稿",
+          "nextRun": 4070908800000
+        }
+      },
+      "history": {
+        "requestID": "6793cecd-0b2a-4881-866b-a16806988193",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_2860e06d4ff53decdb64129b1625e6ee",
+            "automationId": "atm_heYvXC96h2vs3riX2Vnt",
+            "automationRevisionId": "atm_heYvXC96h2vs3riX2Vnt",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794439060523,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    }
+  ],
+  "conflict": {
+    "requestID": "4f7299ae-60e9-49ac-aba4-60d4302953c8",
+    "status": 409,
+    "body": {
+      "name": "AutomationCreationConflictError",
+      "data": {
+        "message": "This scheduled task creation request is bound to a different definition.",
+        "automationID": "atm_heYvXC96h2vs3riX2Vnt"
+      }
+    }
+  },
+  "list": {
+    "requestID": "b1915153-d9fe-468f-96aa-b0780b820a7f",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_heYvXC96h2vs3riX2Vnt",
+        "revisionId": "atm_heYvXC96h2vs3riX2Vnt",
+        "name": "项目定时任务原始草稿",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hdRpfMxonOQXN0zB37v2"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留这条任务的原始项目指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hFBlQeYdFO1GXklQtgu8",
+        "revisionId": "atm_hFBlQeYdFO1GXklQtgu8",
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain this local future schedule exactly once.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hKKSNA0BmZlDmEXULBg5",
+        "revisionId": "atm_hKKSNA0BmZlDmEXULBg5",
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain this local future schedule exactly once.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  }
+}

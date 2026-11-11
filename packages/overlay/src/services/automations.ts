@@ -1,5 +1,13 @@
-import { ApiError, apiJson, captureApiAuthority, getServerUrl, serverSettledRequest, type ApiAuthority } from "./api"
-import { settleMutationReceipt } from "./mutation-receipt"
+import {
+  ApiError,
+  apiJson,
+  captureApiAuthority,
+  getServerUrl,
+  isApiAuthorityCurrent,
+  serverSettledRequest,
+  type ApiAuthority,
+} from "./api"
+import { isUncertainMutationReceipt, settleMutationReceipt } from "./mutation-receipt"
 import { directoryScopedPath } from "./task-path"
 import { randomUUID } from "../utils/random-id"
 import type {
@@ -33,14 +41,37 @@ export function listAutomations(signal?: AbortSignal, authority?: ApiAuthority):
   return apiJson<AutomationView[]>(automationPath(), { signal, authority })
 }
 
-export function createAutomation(
+export class AutomationCreateUnconfirmedError extends AggregateError {
+  override readonly name = "AutomationCreateUnconfirmedError"
+
+  constructor(cause: unknown) {
+    super([cause], "The scheduled task creation receipt could not be confirmed.")
+  }
+}
+
+export async function createAutomation(
   input: AutomationInput,
+  authority = captureApiAuthority(),
 ): Promise<GlobalAutomationsCreateResponse> {
-  return apiJson(automationPath(), {
-    method: "POST",
-    headers: jsonHeaders,
-    body: JSON.stringify(input),
-  })
+  try {
+    const receipt = await apiJson<GlobalAutomationsCreateResponse>(automationPath(), {
+      authority,
+      method: "POST",
+      headers: jsonHeaders,
+      body: JSON.stringify(input),
+    })
+    if (
+      typeof receipt?.id !== "string" || !receipt.id.trim() ||
+      receipt.revisionId !== receipt.id || receipt.name !== input.name ||
+      (receipt.nextRun !== null && !Number.isFinite(receipt.nextRun))
+    ) {
+      throw new Error("The scheduled task creation receipt is invalid.")
+    }
+    return receipt
+  } catch (cause) {
+    if (!isApiAuthorityCurrent(authority) || !isUncertainMutationReceipt(cause)) throw cause
+    throw new AutomationCreateUnconfirmedError(cause)
+  }
 }
 
 export function updateAutomation(id: string, input: AutomationUpdate, authority?: ApiAuthority): Promise<AutomationView> {

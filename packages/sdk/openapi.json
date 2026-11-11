@@ -661,6 +661,62 @@
         ],
         "type": "object"
       },
+      "AutomationCreationConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationCreationConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "AutomationCreationUnavailableError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationCreationUnavailableError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "AutomationManualRunPendingError": {
         "properties": {
           "data": {
@@ -80276,6 +80332,7 @@
         ]
       },
       "post": {
+        "description": "Reuse requestID with the original input to recover the same accepted definition after a lost response.",
         "operationId": "global.automations.create",
         "requestBody": {
           "content": {
@@ -80320,6 +80377,11 @@
                     "type": "string"
                   },
                   "recurrence": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
                     "minLength": 1,
                     "type": "string"
                   },
@@ -80487,6 +80549,26 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationCreationConflictError"
+                }
+              }
+            },
+            "description": "The creation request is already bound to a different definition"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutomationCreationUnavailableError"
+                }
+              }
+            },
+            "description": "The accepted scheduled automation was deleted"
           }
         },
         "summary": "Create a scheduled automation",

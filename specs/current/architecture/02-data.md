@@ -982,6 +982,8 @@ Scheduler 表按事实 owner 分层写入：Automation service 拥有 definition
 
 Automation target membership 属于 exact physical definition revision。当前投影的 `id` 是稳定 `definition_id`，`revision_id` 才是目标关系与 Fire 冻结的物理修订。展示、后续定义更新、manual/due claim 与 retry/restart execution 通过同一显式 revision target reader 读取关系；projected caller 必须传 `revision_id`，Tool immutable receipt 传其原始物理 `id`。两者不能互相 fallback，也不得由稳定 definition ID 读取首版本项目成员。目标顺序保留对应物理修订的 position；不同修订与历史 Fire 仍各自保留真实目标事实。
 
+公开 Automation 创建使用调用方请求标识派生独立命名空间内的首版物理 ID。首版定义及其项目位置关系绑定规范化输入，同一事务写入首个 Fire 和当前投递权威。写前重查同一首版使并发或重启后的原请求读回同一创建结果，现有后续版本保持各自的定义和目标。已提交的 tombstone 保留原身份并使创建回执返回 410。Tool 创建仍按工具调用身份及其已接收输入确认。
+
 Automation physical attempt 在同一 writer transaction 冻结 exact lease ID、lease-grant ordinal 与 admission-time expiry；三者必须精确匹配 acquisition/renewal 时追加的 immutable `engine_control_activation_lease_grant`，attempt 对 lease/grant 的 retained foreign key 防止历史权限成为 orphan。后续 lease release 或 renewal 不改写既有 grant。Live admission 以 `(time_activated DESC, id DESC)` 选择 current lease，并冻结当时 latest grant ordinal；后续 grant renewal 保留原 attempt 的 immutable admission，不按 mutable live expiry 重新解释历史授权。
 
 ## Trace — 统一运行追踪（横切）

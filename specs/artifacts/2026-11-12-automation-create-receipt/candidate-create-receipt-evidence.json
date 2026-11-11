@@ -1,0 +1,346 @@
+{
+  "asset": "main-ByO1lrJF.js",
+  "occurrence": "iteration-b261-candidate",
+  "upgrade": {
+    "time": "2026-11-11T23:16:14.637Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "projects": [
+    {
+      "id": "prj_hp7eXxaUNO9YNdEwVpbF",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b261\\candidate-project\\archive-review"
+    },
+    {
+      "id": "prj_hdRpfMxonOQXN0zB37v2",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b261\\candidate-alternate\\archive-review"
+    }
+  ],
+  "rounds": {
+    "b261-en-initial": {
+      "input": {
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "Retain this local future schedule exactly once.",
+        "requestID": "25986a02-8b17-44fd-9e19-7c4b80fdf290"
+      },
+      "response": {
+        "time": "2026-11-11T23:16:29.798Z",
+        "stage": "truncated",
+        "route": "/global/automations",
+        "method": "POST",
+        "round": "b261-en-initial",
+        "directory": null,
+        "search": null,
+        "requestID": "6afcaf34-e6e4-4ed1-82f2-b239a51c0938",
+        "status": 201,
+        "bytes": 137,
+        "target": {
+          "id": "atm_hKKSNA0BmZlDmEXULBg5",
+          "revisionId": "atm_hKKSNA0BmZlDmEXULBg5",
+          "name": "Future schedule receipt review",
+          "nextRun": 4070908800000
+        },
+        "deliveredBytes": 12
+      }
+    },
+    "b261-en-repeat": {
+      "input": {
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "Retain this local future schedule exactly once.",
+        "requestID": "25986a02-8b17-44fd-9e19-7c4b80fdf290"
+      },
+      "response": {
+        "time": "2026-11-11T23:16:42.884Z",
+        "stage": "delivered",
+        "route": "/global/automations",
+        "method": "POST",
+        "round": "b261-en-repeat",
+        "directory": null,
+        "search": null,
+        "requestID": "00b28941-2112-4d86-a5fb-7ed689838120",
+        "status": 201,
+        "bytes": 137,
+        "target": {
+          "id": "atm_hKKSNA0BmZlDmEXULBg5",
+          "revisionId": "atm_hKKSNA0BmZlDmEXULBg5",
+          "name": "Future schedule receipt review",
+          "nextRun": 4070908800000
+        }
+      }
+    },
+    "b261-en-new-draft": {
+      "input": {
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "Retain this local future schedule exactly once.",
+        "requestID": "671d1208-ebf5-44fa-bdca-28a5452d4db7"
+      },
+      "response": {
+        "time": "2026-11-11T23:17:01.289Z",
+        "stage": "delivered",
+        "route": "/global/automations",
+        "method": "POST",
+        "round": "b261-en-new-draft",
+        "directory": null,
+        "search": null,
+        "requestID": "8b3ff440-2721-4e30-8c3f-61ce4fe9566b",
+        "status": 201,
+        "bytes": 137,
+        "target": {
+          "id": "atm_hFBlQeYdFO1GXklQtgu8",
+          "revisionId": "atm_hFBlQeYdFO1GXklQtgu8",
+          "name": "Future schedule receipt review",
+          "nextRun": 4070908800000
+        }
+      }
+    },
+    "b261-zh-initial": {
+      "input": {
+        "name": "项目定时任务原始草稿",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hdRpfMxonOQXN0zB37v2"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "保留这条任务的原始项目指令。",
+        "requestID": "6e670ae7-dc79-438c-8b87-6cc7a8d1eed1"
+      },
+      "response": {
+        "time": "2026-11-11T23:17:40.633Z",
+        "stage": "truncated",
+        "route": "/global/automations",
+        "method": "POST",
+        "round": "b261-zh-initial",
+        "directory": null,
+        "search": null,
+        "requestID": "9f9ea84e-6a97-43c6-8fbf-edaae9b20910",
+        "status": 201,
+        "bytes": 137,
+        "target": {
+          "id": "atm_heYvXC96h2vs3riX2Vnt",
+          "revisionId": "atm_heYvXC96h2vs3riX2Vnt",
+          "name": "项目定时任务原始草稿",
+          "nextRun": 4070908800000
+        },
+        "deliveredBytes": 12
+      }
+    },
+    "b261-zh-changed": {
+      "input": {
+        "name": "同一草稿改写后的名称",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hdRpfMxonOQXN0zB37v2"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "保留这条任务的原始项目指令。",
+        "requestID": "6e670ae7-dc79-438c-8b87-6cc7a8d1eed1"
+      },
+      "response": {
+        "time": "2026-11-11T23:17:50.610Z",
+        "stage": "delivered",
+        "route": "/global/automations",
+        "method": "POST",
+        "round": "b261-zh-changed",
+        "directory": null,
+        "search": null,
+        "requestID": "f481920e-496a-47cb-b324-524cd46b1a68",
+        "status": 409,
+        "bytes": 178
+      }
+    },
+    "b261-zh-repeat": {
+      "input": {
+        "name": "项目定时任务原始草稿",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hdRpfMxonOQXN0zB37v2"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "prompt": "保留这条任务的原始项目指令。",
+        "requestID": "6e670ae7-dc79-438c-8b87-6cc7a8d1eed1"
+      },
+      "response": {
+        "time": "2026-11-11T23:18:00.941Z",
+        "stage": "delivered",
+        "route": "/global/automations",
+        "method": "POST",
+        "round": "b261-zh-repeat",
+        "directory": null,
+        "search": null,
+        "requestID": "aba383df-c551-45a3-8408-39aa71d8f3dc",
+        "status": 201,
+        "bytes": 137,
+        "target": {
+          "id": "atm_heYvXC96h2vs3riX2Vnt",
+          "revisionId": "atm_heYvXC96h2vs3riX2Vnt",
+          "name": "项目定时任务原始草稿",
+          "nextRun": 4070908800000
+        }
+      }
+    }
+  },
+  "list": {
+    "requestID": "2135f3da-3473-42f2-9ece-1ce5b7bf70c4",
+    "body": [
+      {
+        "id": "atm_heYvXC96h2vs3riX2Vnt",
+        "revisionId": "atm_heYvXC96h2vs3riX2Vnt",
+        "name": "项目定时任务原始草稿",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hdRpfMxonOQXN0zB37v2"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留这条任务的原始项目指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hFBlQeYdFO1GXklQtgu8",
+        "revisionId": "atm_hFBlQeYdFO1GXklQtgu8",
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain this local future schedule exactly once.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hKKSNA0BmZlDmEXULBg5",
+        "revisionId": "atm_hKKSNA0BmZlDmEXULBg5",
+        "name": "Future schedule receipt review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain this local future schedule exactly once.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "history": {
+    "atm_hKKSNA0BmZlDmEXULBg5": {
+      "runs": {
+        "requestID": "642934d8-b1f6-4aba-a22e-c3798e1c03f6",
+        "body": []
+      },
+      "fires": {
+        "requestID": "7972f813-d7ee-494a-a170-d6db5a5b7ce0",
+        "body": [
+          {
+            "fireId": "cal_automation_f2ff71c09049062280dcf3ab3a61967d",
+            "automationId": "atm_hKKSNA0BmZlDmEXULBg5",
+            "automationRevisionId": "atm_hKKSNA0BmZlDmEXULBg5",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794438989688,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    "atm_hFBlQeYdFO1GXklQtgu8": {
+      "runs": {
+        "requestID": "0cbe893c-850b-46e1-b7e9-8da40078ea15",
+        "body": []
+      },
+      "fires": {
+        "requestID": "5f09feec-0730-46f9-9f7d-2ef0c57eea2d",
+        "body": [
+          {
+            "fireId": "cal_automation_f6c695a6c2289597c9de6a9ae9a7e753",
+            "automationId": "atm_hFBlQeYdFO1GXklQtgu8",
+            "automationRevisionId": "atm_hFBlQeYdFO1GXklQtgu8",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794439021285,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    "atm_heYvXC96h2vs3riX2Vnt": {
+      "runs": {
+        "requestID": "67dc6dc9-320d-43ce-9178-1e0311e8ff84",
+        "body": []
+      },
+      "fires": {
+        "requestID": "3a8d5188-4308-468e-9ab2-59df09aaa499",
+        "body": [
+          {
+            "fireId": "cal_automation_2860e06d4ff53decdb64129b1625e6ee",
+            "automationId": "atm_heYvXC96h2vs3riX2Vnt",
+            "automationRevisionId": "atm_heYvXC96h2vs3riX2Vnt",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794439060523,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    }
+  }
+}

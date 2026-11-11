@@ -6374,6 +6374,8 @@ export class Automations extends HeyApiClient {
 
   /**
    * Create a scheduled automation
+   *
+   * Reuse requestID with the original input to recover the same accepted definition after a lost response.
    */
   public create<ThrowOnError extends boolean = false>(
     parameters: {
@@ -6386,6 +6388,7 @@ export class Automations extends HeyApiClient {
       prompt: string
       reasoningEffort?: string
       recurrence: string
+      requestID?: string
       target:
         | {
             scope: "session"
@@ -6412,6 +6415,7 @@ export class Automations extends HeyApiClient {
             { in: "body", key: "prompt" },
             { in: "body", key: "reasoningEffort" },
             { in: "body", key: "recurrence" },
+            { in: "body", key: "requestID" },
             { in: "body", key: "target" },
           ],
         },

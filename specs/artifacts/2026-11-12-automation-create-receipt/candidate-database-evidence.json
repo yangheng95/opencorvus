@@ -1,0 +1,78 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 3,
+    "automation_fire": 3,
+    "automation_fire_frontier": 3,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_usage_event": 0,
+    "permission_ledger": 0
+  },
+  "definitions": [
+    [
+      "atm_hFBlQeYdFO1GXklQtgu8",
+      "atm_hFBlQeYdFO1GXklQtgu8",
+      1,
+      "Future schedule receipt review",
+      "Retain this local future schedule exactly once.",
+      "global",
+      "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ],
+    [
+      "atm_hKKSNA0BmZlDmEXULBg5",
+      "atm_hKKSNA0BmZlDmEXULBg5",
+      1,
+      "Future schedule receipt review",
+      "Retain this local future schedule exactly once.",
+      "global",
+      "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ],
+    [
+      "atm_heYvXC96h2vs3riX2Vnt",
+      "atm_heYvXC96h2vs3riX2Vnt",
+      1,
+      "项目定时任务原始草稿",
+      "保留这条任务的原始项目指令。",
+      "project",
+      "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1"
+    ]
+  ],
+  "projectTargets": [
+    [
+      "atm_heYvXC96h2vs3riX2Vnt",
+      "prj_hdRpfMxonOQXN0zB37v2",
+      0
+    ]
+  ],
+  "frontier": [
+    [
+      "atm_hFBlQeYdFO1GXklQtgu8",
+      "atm_hFBlQeYdFO1GXklQtgu8",
+      "cal_automation_f6c695a6c2289597c9de6a9ae9a7e753",
+      4070908800000,
+      4070908800000,
+      "scheduled"
+    ],
+    [
+      "atm_hKKSNA0BmZlDmEXULBg5",
+      "atm_hKKSNA0BmZlDmEXULBg5",
+      "cal_automation_f2ff71c09049062280dcf3ab3a61967d",
+      4070908800000,
+      4070908800000,
+      "scheduled"
+    ],
+    [
+      "atm_heYvXC96h2vs3riX2Vnt",
+      "atm_heYvXC96h2vs3riX2Vnt",
+      "cal_automation_2860e06d4ff53decdb64129b1625e6ee",
+      4070908800000,
+      4070908800000,
+      "scheduled"
+    ]
+  ]
+}

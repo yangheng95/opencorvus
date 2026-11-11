@@ -1,5 +1,9 @@
 import { ApiError, assertApiAuthorityCurrent, isApiAuthorityCurrent, type ApiAuthority } from "./api"
 
+export function isUncertainMutationReceipt(error: unknown): boolean {
+  return !(error instanceof ApiError) || error.status >= 500 || error.status === 408
+}
+
 export async function settleMutationReceipt<T>(input: {
   authority: ApiAuthority
   write: () => Promise<T>
@@ -11,10 +15,7 @@ export async function settleMutationReceipt<T>(input: {
   try {
     return await write()
   } catch (receiptError) {
-    if (
-      !isApiAuthorityCurrent(authority) ||
-      (receiptError instanceof ApiError && receiptError.status < 500 && receiptError.status !== 408)
-    ) {
+    if (!isApiAuthorityCurrent(authority) || !isUncertainMutationReceipt(receiptError)) {
       throw receiptError
     }
     try {

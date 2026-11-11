@@ -8,6 +8,7 @@ import {
   type AutomationRecurrenceInput,
 } from "../src/services/automation-recurrence"
 import {
+  AutomationCreateUnconfirmedError,
   AutomationStatusUnconfirmedError,
   changeAutomationStatus,
   createAutomation,
@@ -248,6 +249,10 @@ test("automation service sends the full lifecycle through global target-aware HT
     capabilities: HOST_CAPABILITIES.tauri,
     async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
       requests.push(request)
+      if (request.method === "POST" && request.path === "global/automations") {
+        const body = { id: "atm_1", revisionId: "atm_1", name: "Morning review", nextRun: 4070908800000 }
+        return { status: 201, ok: true, headers: {}, body: body as T }
+      }
       if (request.method === "PATCH" && request.path === "global/automations/atm_1") {
         if (request.body?.kind !== "json") throw new Error("Expected a scheduled status request body")
         const { status } = request.body.value as { status: string }
@@ -284,7 +289,9 @@ test("automation service sends the full lifecycle through global target-aware HT
   }
   await listAutomations()
   expect(await resolveAutomationProjectID("/workspace/atlas")).toBe("prj_1")
-  await createAutomation(input)
+  expect(await createAutomation(input)).toEqual({
+    id: "atm_1", revisionId: "atm_1", name: input.name, nextRun: 4070908800000,
+  })
   expect(await changeAutomationStatus("atm_1", "atm_revision_opened", "paused"))
     .toMatchObject({ id: "atm_1", status: "paused", revisionId: "atm_revision_paused" })
   expect(await changeAutomationStatus("atm_1", "atm_revision_paused", "active"))
@@ -338,6 +345,41 @@ const pausedDefinition: AutomationView = {
   failureCount: 0,
   lastError: null,
 }
+
+test("repeating a scheduled save carries its original request ID and accepts the original receipt", async () => {
+  const input = {
+    name: "One accepted draft",
+    target: { scope: "global" as const },
+    recurrence: pausedDefinition.recurrence,
+    prompt: pausedDefinition.prompt,
+    requestID: "original-create-request",
+  }
+  const receipt = { id: "atm_accepted", revisionId: "atm_accepted", name: input.name, nextRun: 4070908800000 }
+  const requests: unknown[] = []
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    async fetch(request) {
+      requests.push(await request.json())
+      if (requests.length === 1) {
+        return Response.json({ message: "Creation receipt interrupted" }, {
+          status: 503, headers: { "x-opencorvus-request-id": "create-interrupted" },
+        })
+      }
+      return Response.json(receipt, { status: 201 })
+    },
+  })
+  configure({ serverUrl: server.url.origin })
+  try {
+    const error = await createAutomation(input).catch((cause) => cause)
+    expect(error).toBeInstanceOf(AutomationCreateUnconfirmedError)
+    expect(error.errors).toEqual([expect.objectContaining({ status: 503, requestID: "create-interrupted" })])
+    expect(await createAutomation(input)).toEqual(receipt)
+    expect(requests).toEqual([input, input])
+  } finally {
+    await server.stop(true)
+  }
+})
 
 test.each(["paused", "active"] as const)("an uncertain scheduled status=%s returns the exact current definition", async (status) => {
   const operations: Array<{ method: string; path: string; body?: unknown }> = []
