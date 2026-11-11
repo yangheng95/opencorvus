@@ -1,4 +1,5 @@
-import { ApiError, assertApiAuthorityCurrent, isApiAuthorityCurrent, type ApiAuthority } from "./api"
+import type { ApiAuthority } from "./api"
+import { settleMutationReceipt } from "./mutation-receipt"
 
 export class ArchiveRestoreUnconfirmedError extends AggregateError {
   override readonly name = "ArchiveRestoreUnconfirmedError"
@@ -8,29 +9,15 @@ export class ArchiveRestoreUnconfirmedError extends AggregateError {
   }
 }
 
-export async function settleArchiveRestore<T>(input: {
+export function settleArchiveRestore<T>(input: {
   authority: ApiAuthority
   write: () => Promise<T>
   readRestored: () => Promise<T>
 }): Promise<T> {
-  const { authority, write, readRestored } = input
-  assertApiAuthorityCurrent(authority)
-  try {
-    return await write()
-  } catch (receiptError) {
-    if (
-      !isApiAuthorityCurrent(authority) ||
-      (receiptError instanceof ApiError && receiptError.status < 500 && receiptError.status !== 408)
-    ) {
-      throw receiptError
-    }
-    try {
-      const restored = await readRestored()
-      assertApiAuthorityCurrent(authority)
-      return restored
-    } catch (verificationError) {
-      if (!isApiAuthorityCurrent(authority)) throw verificationError
-      throw new ArchiveRestoreUnconfirmedError(receiptError, verificationError)
-    }
-  }
+  return settleMutationReceipt({
+    authority: input.authority,
+    write: input.write,
+    verify: input.readRestored,
+    UnconfirmedError: ArchiveRestoreUnconfirmedError,
+  })
 }

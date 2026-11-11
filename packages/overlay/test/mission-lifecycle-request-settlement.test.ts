@@ -17,6 +17,8 @@ function recordingTransport(requests: TransportRequest[]): HostTransport {
         body: {
           missionID: "mission_board_acceptance",
           sessionID: "session_board_acceptance",
+          directory: "D:/project",
+          pendingPrompt: { text: "Publish the revised backlog item" },
           created: true,
           productPillar: "code",
         } as T,
@@ -57,6 +59,7 @@ test("Mission wake, draft creation, editing, and dispatch settle on the authorit
   await dispatchMission({ missionID: "mission_board_acceptance", directory: "D:/project" }, "openai/gpt-5.6-terra")
   await editMissionDraft({
     missionID: "mission_board_acceptance",
+    sessionID: "session_board_acceptance",
     directory: "D:/project",
     request: "  Publish the revised backlog item  ",
     expectedRequest: "Publish the backlog item",

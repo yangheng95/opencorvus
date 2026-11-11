@@ -31,7 +31,8 @@ import {
 } from "@opencorvus-ai/transport-protocol"
 import { apiJson, ApiError, captureApiAuthority, serverSettledRequest, type ApiAuthority } from "./api"
 import { settleArchiveRestore } from "./archive-restore"
-import { verifyWorkLedgerRestore } from "./work-ledger"
+import { settleMutationReceipt } from "./mutation-receipt"
+import { loadWorkLedgerSelection, verifyWorkLedgerRestore } from "./work-ledger"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { composerSubmission } from "./composer-draft"
 import { downloadProjectArchive } from "./project-archive"
@@ -176,7 +177,15 @@ export interface MissionActionTarget {
   directory: string
 }
 
-export type MissionDraftEditInput = MissionEditDraftData["body"] & MissionActionTarget
+export type MissionDraftEditInput = MissionEditDraftData["body"] & MissionActionTarget & { sessionID: string }
+
+export class MissionDraftEditUnconfirmedError extends AggregateError {
+  override readonly name = "MissionDraftEditUnconfirmedError"
+
+  constructor(receiptError: unknown, verificationError: unknown) {
+    super([receiptError, verificationError], "The Mission draft save could not be confirmed.")
+  }
+}
 
 export interface MissionStatusRequest {
   authority?: ApiAuthority
@@ -345,20 +354,43 @@ export async function dispatchMission(
   )
 }
 
-export async function editMissionDraft(input: MissionDraftEditInput): Promise<MissionEditDraftResponse> {
+export async function editMissionDraft(input: MissionDraftEditInput): Promise<void> {
   const request = input.request.trim()
+  const sessionID = input.sessionID.trim()
   if (!request || request.length > 32000 || !input.expectedRequest || input.expectedRequest.length > 32000) {
     throw new Error("editMissionDraft: request and expectedRequest must contain 1-32000 characters")
   }
-  return await apiJson<MissionEditDraftResponse>(
-    missionActionPath(input, "/draft"),
-    serverSettledRequest({
-      authority: input.authority,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ request, expectedRequest: input.expectedRequest } satisfies MissionEditDraftData["body"]),
-    }),
-  )
+  if (!sessionID) throw new Error("editMissionDraft: sessionID is required")
+  const authority = input.authority ?? captureApiAuthority()
+  const missionID = input.missionID.trim()
+  const directory = input.directory.trim()
+  const path = missionActionPath({ missionID, directory }, "/draft")
+  const directoryKey = projectDirectoryKey(directory)
+  await settleMutationReceipt({
+    authority,
+    write: async () => {
+      const receipt = await apiJson<MissionEditDraftResponse>(path, serverSettledRequest({
+        authority,
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ request, expectedRequest: input.expectedRequest } satisfies MissionEditDraftData["body"]),
+      }))
+      if (
+        receipt?.missionID !== missionID || receipt.sessionID !== sessionID ||
+        typeof receipt.directory !== "string" || projectDirectoryKey(receipt.directory) !== directoryKey ||
+        receipt.pendingPrompt?.text !== request
+      ) throw new Error("The Mission draft receipt does not confirm the selected request.")
+    },
+    verify: async () => {
+      const row = await loadWorkLedgerSelection({ kind: "session", id: sessionID, directory, authority })
+      if (
+        row.kind !== "mission" || row.missionID !== missionID || row.sessionID !== sessionID ||
+        projectDirectoryKey(row.directory) !== directoryKey
+      ) throw new Error("The draft check returned a different Mission identity.")
+      if (row.pendingPromptText !== request) throw new Error("The current Mission draft does not contain the submitted request.")
+    },
+    UnconfirmedError: MissionDraftEditUnconfirmedError,
+  })
 }
 
 function missionActionPath(target: MissionActionTarget, suffix = ""): string {

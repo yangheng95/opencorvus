@@ -276,6 +276,9 @@ archived drafts return `MissionDraftEditConflictError` (HTTP 409); wrong
 ownership uses the existing NotFound response. A current draft already equal
 to the desired text returns its unchanged record after those checks. Save
 creates no Message or execution occurrence, and cannot revive a consumed draft.
+After an uncertain save receipt, the editor reads the exact original Session
+in its Project. A matching pending request completes the save feedback.
+Explicit rejections and unconfirmed results retain the editor's input.
 
 `mission.dispatch` binds one pending operator draft to the deterministic
 Session/source/request Message. A replay reads that Message's accepted text

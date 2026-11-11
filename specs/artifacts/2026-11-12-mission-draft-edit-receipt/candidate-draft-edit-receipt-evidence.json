@@ -1,0 +1,346 @@
+{
+  "occurrence": "iteration-b256-candidate",
+  "asset": "main-4FnZltWa.js",
+  "upgrade": {
+    "time": "2026-11-11T21:59:34.862Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "englishComplete": {
+    "time": "2026-11-11T21:59:46.234Z",
+    "stage": "delivered",
+    "route": "/mission/draft-01925a61100d09e4028af0366a8e142a/draft",
+    "method": "PATCH",
+    "round": "b256-candidate-en-complete",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+    "search": null,
+    "requestID": "bc16c8e3-92bf-4eb9-a2a5-eda1186a7d64",
+    "status": 200,
+    "bytes": 514,
+    "target": {
+      "missionID": "draft-01925a61100d09e4028af0366a8e142a",
+      "sessionID": "ses_hYGz3crFyEQqwKSlCPg8",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+      "title": "Draft save confirmation",
+      "request": "One complete receipt saves this request.",
+      "archived": null,
+      "boardLane": "backlog"
+    }
+  },
+  "englishCut": {
+    "time": "2026-11-11T21:59:58.554Z",
+    "stage": "truncated",
+    "route": "/mission/draft-01925a61100d09e4028af0366a8e142a/draft",
+    "method": "PATCH",
+    "round": "b256-candidate-en-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+    "search": null,
+    "requestID": "a11b9a84-1a17-469c-89a0-a9cdd7181f3d",
+    "status": 200,
+    "bytes": 516,
+    "target": {
+      "missionID": "draft-01925a61100d09e4028af0366a8e142a",
+      "sessionID": "ses_hYGz3crFyEQqwKSlCPg8",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+      "title": "Draft save confirmation",
+      "request": "English draft recovered by the exact read.",
+      "archived": null,
+      "boardLane": "backlog"
+    },
+    "deliveredBytes": 12
+  },
+  "englishConfirm": {
+    "time": "2026-11-11T21:59:58.628Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hYGz3crFyEQqwKSlCPg8",
+    "method": "GET",
+    "round": "b256-candidate-en-verify",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+    "search": null,
+    "requestID": "5c3c801f-23ad-42ce-aa84-07cc4900c767",
+    "status": 200,
+    "bytes": 606,
+    "target": {
+      "missionID": "draft-01925a61100d09e4028af0366a8e142a",
+      "sessionID": "ses_hYGz3crFyEQqwKSlCPg8",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+      "title": "Draft save confirmation",
+      "request": "English draft recovered by the exact read.",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "enSteps": [
+    {
+      "time": "2026-11-11T21:59:58.397Z",
+      "stage": "received",
+      "route": "/mission/draft-01925a61100d09e4028af0366a8e142a/draft",
+      "method": "PATCH",
+      "round": "b256-candidate-en-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+      "search": null
+    },
+    {
+      "time": "2026-11-11T21:59:58.622Z",
+      "stage": "received",
+      "route": "/work-ledger/selection/session/ses_hYGz3crFyEQqwKSlCPg8",
+      "method": "GET",
+      "round": "b256-candidate-en-verify",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+      "search": null
+    }
+  ],
+  "chineseCut": {
+    "time": "2026-11-11T22:00:48.534Z",
+    "stage": "truncated",
+    "route": "/mission/draft-9276dcfedc3e0e381f37ab63758542d6/draft",
+    "method": "PATCH",
+    "round": "b256-candidate-zh-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+    "search": null,
+    "requestID": "2e3c9419-c8f0-4070-b021-c95a20c75901",
+    "status": 200,
+    "bytes": 519,
+    "target": {
+      "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+      "title": "草稿保存确认",
+      "request": "回执与确认读取中断后保留此编辑。",
+      "archived": null,
+      "boardLane": "backlog"
+    },
+    "deliveredBytes": 12
+  },
+  "chineseCheckCut": {
+    "time": "2026-11-11T22:00:48.605Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_htU1TNqrcVFNRc78lSgF",
+    "method": "GET",
+    "round": "b256-candidate-zh-check-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+    "search": null,
+    "requestID": "dd17125d-84de-409c-9d66-9ba8dfc33457",
+    "status": 200,
+    "bytes": 609,
+    "target": {
+      "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+      "title": "草稿保存确认",
+      "request": "回执与确认读取中断后保留此编辑。",
+      "archived": null,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "chineseReplay": {
+    "time": "2026-11-11T22:01:16.035Z",
+    "stage": "delivered",
+    "route": "/mission/draft-9276dcfedc3e0e381f37ab63758542d6/draft",
+    "method": "PATCH",
+    "round": "b256-candidate-zh-replay",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+    "search": null,
+    "requestID": "c8afa06c-3111-4e6a-8e00-64de189798e6",
+    "status": 200,
+    "bytes": 519,
+    "target": {
+      "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+      "title": "草稿保存确认",
+      "request": "回执与确认读取中断后保留此编辑。",
+      "archived": null,
+      "boardLane": "backlog"
+    }
+  },
+  "beforeReplay": {
+    "requestID": "0c551c2f-9422-487e-9d79-679a487e938c",
+    "body": {
+      "kind": "mission",
+      "id": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+      "title": "草稿保存确认",
+      "pendingPromptText": "回执与确认读取中断后保留此编辑。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+      "created": 1794434369443,
+      "started": 1794434369443,
+      "updated": 1794434448424,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "afterReplay": {
+    "requestID": "eadee292-3e43-4a62-9e9c-09bbef604a03",
+    "body": {
+      "kind": "mission",
+      "id": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+      "title": "草稿保存确认",
+      "pendingPromptText": "回执与确认读取中断后保留此编辑。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+      "created": 1794434369443,
+      "started": 1794434369443,
+      "updated": 1794434448424,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "concurrent": {
+    "requestID": "d74d7d17-18d2-4f3f-a63c-af31685095ec",
+    "body": {
+      "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+      "title": "草稿保存确认",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+      "created": 1794434369443,
+      "updated": 1794434510123,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "另一连接已经保存了这份最新请求。"
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "chineseConflict": {
+    "time": "2026-11-11T22:01:54.149Z",
+    "stage": "delivered",
+    "route": "/mission/draft-9276dcfedc3e0e381f37ab63758542d6/draft",
+    "method": "PATCH",
+    "round": "b256-candidate-zh-conflict",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+    "search": null,
+    "requestID": "11792946-0938-4f71-9f08-99c425a15c71",
+    "status": 409,
+    "bytes": 250
+  },
+  "english": {
+    "requestID": "37808d3f-b8aa-4e8d-ac69-3feebc469914",
+    "body": {
+      "kind": "mission",
+      "id": "draft-01925a61100d09e4028af0366a8e142a",
+      "missionID": "draft-01925a61100d09e4028af0366a8e142a",
+      "sessionID": "ses_hYGz3crFyEQqwKSlCPg8",
+      "title": "Draft save confirmation",
+      "pendingPromptText": "English draft recovered by the exact read.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+      "created": 1794434369141,
+      "started": 1794434369141,
+      "updated": 1794434398403,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "chinese": {
+    "requestID": "4da356b5-c3a3-422e-bf16-45c6db54d6c9",
+    "body": {
+      "kind": "mission",
+      "id": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+      "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+      "title": "草稿保存确认",
+      "pendingPromptText": "另一连接已经保存了这份最新请求。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+      "created": 1794434369443,
+      "started": 1794434369443,
+      "updated": 1794434510123,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "missions": {
+    "requestID": "e9359b5c-fb81-47c7-b235-68c1ef676c49",
+    "body": [
+      {
+        "missionID": "draft-9276dcfedc3e0e381f37ab63758542d6",
+        "sessionID": "ses_htU1TNqrcVFNRc78lSgF",
+        "title": "草稿保存确认",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-alternate\\draft-edit",
+        "created": 1794434369443,
+        "updated": 1794434510123,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "另一连接已经保存了这份最新请求。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-01925a61100d09e4028af0366a8e142a",
+        "sessionID": "ses_hYGz3crFyEQqwKSlCPg8",
+        "title": "Draft save confirmation",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b256\\candidate-project\\draft-edit",
+        "created": 1794434369141,
+        "updated": 1794434398403,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "English draft recovered by the exact read."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  }
+}

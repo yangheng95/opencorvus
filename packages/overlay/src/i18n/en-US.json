@@ -2831,6 +2831,8 @@
   "mission_board.edit.changed": "This draft changed while you were editing. Your text is kept here; copy it if needed, then close and reopen the editor to review the current draft.",
   "mission_board.edit.missing": "That saved request is no longer available for editing. Your text is kept here; close the editor to review the Mission.",
   "mission_board.edit.archived": "Restore this archived Mission before editing its draft. Your text is kept here.",
+  "mission_board.edit.failed": "Could not save this draft. Your changes are still here.",
+  "mission_board.edit.unconfirmed": "Could not confirm the save. Your changes are still here.",
   "mission_board.unsaved.title": "Unsaved input",
   "mission_board.unsaved.message": "Keep editing, or discard this input to leave the form.",
   "mission_board.unsaved.keep": "Keep editing",

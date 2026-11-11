@@ -807,6 +807,7 @@ export function MissionBoard(props: MissionBoardProps) {
                           onEdit={() =>
                             setEditingDraft({
                               missionID: mission.missionID,
+                              sessionID: mission.sessionID,
                               directory: mission.directory,
                               title: mission.title,
                               expectedRequest: mission.pendingPrompt!.text,

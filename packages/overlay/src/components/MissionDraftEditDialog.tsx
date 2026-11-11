@@ -1,6 +1,7 @@
 import { createEffect, createSignal, on, onCleanup, Show } from "solid-js"
 import { ApiError } from "../services/api"
-import type { MissionDraftEditInput, MissionRecord } from "../services/mission"
+import { formatErrorDetails } from "../services/diagnostics"
+import { MissionDraftEditUnconfirmedError, type MissionDraftEditInput, type MissionRecord } from "../services/mission"
 import { t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Button } from "./ui/Button"
@@ -8,11 +9,12 @@ import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { TextField } from "./ui/TextField"
 
-export type MissionDraftEditTarget = Pick<MissionRecord, "missionID" | "directory" | "title"> & {
+export type MissionDraftEditTarget = Pick<MissionRecord, "missionID" | "sessionID" | "directory" | "title"> & {
   expectedRequest: string
 }
 
 function saveError(error: unknown): string {
+  if (error instanceof MissionDraftEditUnconfirmedError) return t("mission_board.edit.unconfirmed")
   if (error instanceof ApiError && error.status === 409 && error.body && typeof error.body === "object") {
     const body = error.body as { name?: string; data?: { reason?: string } }
     if (body.name === "MissionDraftEditConflictError") {
@@ -21,7 +23,7 @@ function saveError(error: unknown): string {
       if (body.data?.reason === "archived") return t("mission_board.edit.archived")
     }
   }
-  return error instanceof Error ? error.message : String(error)
+  return t("mission_board.edit.failed")
 }
 
 export function MissionDraftEditDialog(props: {
@@ -31,7 +33,7 @@ export function MissionDraftEditDialog(props: {
 }) {
   const [request, setRequest] = createSignal("")
   const [saving, setSaving] = createSignal(false)
-  const [error, setError] = createSignal("")
+  const [error, setError] = createSignal<{ cause: unknown }>()
   const [leaving, setLeaving] = createSignal(false)
   let requestInput: HTMLTextAreaElement | undefined
   let leaveFeedback: HTMLDivElement | undefined
@@ -44,7 +46,7 @@ export function MissionDraftEditDialog(props: {
         generation += 1
         setRequest(target?.expectedRequest ?? "")
         setSaving(false)
-        setError("")
+        setError(undefined)
         setLeaving(false)
       },
     ),
@@ -74,17 +76,18 @@ export function MissionDraftEditDialog(props: {
     if (!target || saving() || !text || text.length > 32000) return
     const currentGeneration = generation
     setSaving(true)
-    setError("")
+    setError(undefined)
     try {
       await props.onSave({
         missionID: target.missionID,
+        sessionID: target.sessionID,
         directory: target.directory,
         request: text,
         expectedRequest: target.expectedRequest,
       })
       if (generation === currentGeneration && props.target === target) props.onClose()
     } catch (cause) {
-      if (generation === currentGeneration && props.target === target) setError(saveError(cause))
+      if (generation === currentGeneration && props.target === target) setError({ cause })
     } finally {
       if (generation === currentGeneration && props.target === target) setSaving(false)
     }
@@ -156,7 +159,7 @@ export function MissionDraftEditDialog(props: {
           />
         </TextField.Root>
         <Show when={error()}>
-          <Feedback tone="error">{error()}</Feedback>
+          {(failure) => <Feedback tone="error" details={formatErrorDetails(failure().cause)}>{saveError(failure().cause)}</Feedback>}
         </Show>
       </form>
     </Dialog>
