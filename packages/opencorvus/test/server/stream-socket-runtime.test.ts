@@ -15,15 +15,15 @@ import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { configure } from "../../../overlay/src/services/api"
 import { __setHostTransportForTest } from "../../../overlay/src/services/host-transport-runtime"
 import {
-  setWorkLedgerChangeHandler,
   startWorkLedgerSSE,
   stopWorkLedgerSSE,
+  subscribeWorkLedgerChanges,
   type WorkLedgerStreamEvent,
 } from "../../../overlay/src/services/sse"
 
 let listener: ReturnType<typeof Server.listenPrepared> | undefined
 afterAll(async () => {
-  setWorkLedgerChangeHandler(null)
+  stopWorkLedgerSSE()
   __setHostTransportForTest(undefined)
   await listener?.stop(true)
   await resetMemoryDatabase()
@@ -44,7 +44,7 @@ test("repeated global stream startup preserves current canonical session notific
     if (url.pathname === "/work-ledger/events") physical.push(url.searchParams.get(STREAM_INSTANCE_QUERY_KEY)!)
   })
   let receive: (event: WorkLedgerStreamEvent) => void = () => {}
-  setWorkLedgerChangeHandler((event) => receive(event))
+  const unsubscribe = subscribeWorkLedgerChanges((event) => receive(event))
   const next = () =>
     new Promise<WorkLedgerStreamEvent>((resolve) => {
       receive = resolve
@@ -71,7 +71,7 @@ test("repeated global stream startup preserves current canonical session notific
     expect(new Set(physical).size).toBe(2)
     expect((await Session.get(session.id)).title).toBe("Updated through the current owner")
   } finally {
-    setWorkLedgerChangeHandler(null)
+    unsubscribe()
   }
 })
 

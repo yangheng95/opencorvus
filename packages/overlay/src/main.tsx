@@ -44,9 +44,11 @@ import type { MissionCreateRequest, MissionManualCreateRequest } from "./compone
 import {
   setWorkLedgerItemPinned,
   loadWorkLedgerSelection,
+  type WorkLedgerChangeIdentity,
   type WorkLedgerItemRow,
   workLedgerActiveItem,
   workLedgerProjectDirectories,
+  workLedgerRefreshScope,
   workLedgerSessionExecution,
   workLedgerSessionInterruptible,
 } from "./services/work-ledger"
@@ -557,7 +559,16 @@ function requestSideChat(quotation?: Quotation, prompt?: string, sourceDraft?: S
 }
 const [primaryCenterPanel, setPrimaryCenterPanel] = createSignal<PrimaryCenterPanel>("chat")
 const [primaryWorkspaceSurface, setPrimaryWorkspaceSurface] = createSignal<PrimaryWorkspaceSurface>("conversation")
-const [missionSharedRefreshToken, setMissionSharedRefreshToken] = createSignal(0)
+const [workLedgerListRefreshToken, setWorkLedgerListRefreshToken] = createSignal(0)
+const [workLedgerSelectionRefreshToken, setWorkLedgerSelectionRefreshToken] = createSignal(0)
+
+function refreshWorkLedgerViews(change?: WorkLedgerChangeIdentity): void {
+  const scope = workLedgerRefreshScope(change, boardStore.selectedSource)
+  batch(() => {
+    setWorkLedgerListRefreshToken((value) => value + 1)
+    if (scope === "list-and-selection") setWorkLedgerSelectionRefreshToken((value) => value + 1)
+  })
+}
 const [missionLauncherSubmitting, setMissionLauncherSubmitting] = createSignal(false)
 const [expertSquadLauncherSubmitting, setExpertSquadLauncherSubmitting] = createSignal(false)
 const [assistantLauncherSubmitting, setAssistantLauncherSubmitting] = createSignal(false)
@@ -754,14 +765,14 @@ function isMissionSessionSource(): boolean {
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   const authority = captureApiAuthority()
-  setMissionSharedRefreshToken((value) => value + 1)
+  const selectedSource = boardStore.selectedSource
+  refreshWorkLedgerViews(event.type === "work-ledger.changed" ? event : undefined)
   if (event.type === "work-ledger.changed" && event.sourceType === "project.memory.notice.changed") {
     void refreshProjectMemory({ authority }).catch((error) => {
       if (isApiAuthorityCurrent(authority))
         AppLog.warn("project-memory", "Project MEMORY.MD notice refresh failed", { error: String(error) })
     })
   }
-  const selectedSource = boardStore.selectedSource
   const missionHandoff = activeMissionHandoff(event, selectedSource)
   if (missionHandoff) {
     runMainAsync("work-ledger.mission-handoff", async () => {
@@ -833,7 +844,7 @@ async function archiveConversationHandoffCaller(
   const archived = await setConversationSessionArchived({ ...target, authority }, true)
   if (!isApiAuthorityCurrent(authority)) return
   if (!archived) throw new Error(t("coding_assistant.archive_failed"))
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews({ sessionID: target.sessionID })
 }
 
 function focusComposerInput(origin: Element | null): void {
@@ -947,7 +958,7 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
     if (!isApiAuthorityCurrent(authority)) return
     await openMissionSession(result, projectDirectory, selectionEpoch, authority)
     if (!isApiAuthorityCurrent(authority)) return
-    setMissionSharedRefreshToken((value) => value + 1)
+    refreshWorkLedgerViews()
   } finally {
     if (isApiAuthorityCurrent(authority)) setMissionLauncherSubmitting(false)
   }
@@ -1018,7 +1029,7 @@ async function deleteWorkLedgerProject(directory: string, presentation: ProjectA
     }
   })
   runPostCommitUiEffect({ id: `${diagnosticID}:refresh`, title: "Project deletion committed" }, () => {
-    setMissionSharedRefreshToken((value) => value + 1)
+    refreshWorkLedgerViews()
   })
   runPostCommitUiEffect({ id: `${diagnosticID}:notification`, title: "Project deletion committed" }, () => {
     const directory = outcome.status === "deleted" ? outcome.result.directory : outcome.directory
@@ -1070,7 +1081,7 @@ async function renameWorkLedgerProject(directory: string, currentName: string, p
       await renameProjectRecord(projectDirectory, name, authority)
       if (!isApiAuthorityCurrent(authority)) return
       runPostCommitUiEffect({ id: `project:rename:${projectDirectory}`, title: t("project.rename_title") }, () =>
-        setMissionSharedRefreshToken((token) => token + 1),
+        refreshWorkLedgerViews(),
       )
     },
   })
@@ -1123,7 +1134,7 @@ async function promoteWorkLedgerAnonymousProject(directory: string, presentation
       authority,
     })
     if (!applied || !owns()) return
-    setMissionSharedRefreshToken((value) => value + 1)
+    refreshWorkLedgerViews()
     if (result.cleanupPending) {
       reportWarning({
         id: `project:promote:${result.project.id}:cleanup`,
@@ -1174,7 +1185,7 @@ async function createMissionBoardDraft(input: MissionManualCreateRequest): Promi
   const authority = captureApiAuthority()
   const created = await createMissionDraft({ ...input, authority })
   assertApiAuthorityCurrent(authority)
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews({ sessionID: created.sessionID })
   return created
 }
 
@@ -1194,7 +1205,7 @@ async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<vo
     expertSquadIDs: input.expertSquadIDs,
     requestID: input.requestID,
   })
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews()
   assertUserNavigationCurrent(selectionEpoch)
   if (!isApiAuthorityCurrent(authority)) return
   await openMissionSession(result, input.directory, selectionEpoch, authority)
@@ -1211,7 +1222,7 @@ async function dispatchMissionBoardDraft(mission: MissionRecord): Promise<void> 
   resetCenterWorkbenchToPrimaryPanel("mission")
   const result = await dispatchMission({ missionID: mission.missionID, directory: mission.directory, authority })
   if (!isApiAuthorityCurrent(authority)) return
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews()
   assertUserNavigationCurrent(selectionEpoch)
   await openMissionSession(result, mission.directory, selectionEpoch, authority)
   assertUserNavigationCurrent(selectionEpoch)
@@ -1250,7 +1261,7 @@ async function deleteMissionBoardMission(mission: MissionRecord): Promise<boolea
       },
     )
   }
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews()
   reportSuccess({
     id: `mission:delete:${mission.missionID}`,
     title: t("mission_board.delete.succeeded"),
@@ -1270,7 +1281,7 @@ async function abortWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> 
   )
   if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("mission.error.action.abort"))
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews()
 }
 
 async function downloadWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void> {
@@ -1306,7 +1317,7 @@ async function renameWorkLedgerMission(row: WorkLedgerMissionRow, presentation?:
       await renameMission({ missionID: row.missionID, directory: row.directory, authority }, title)
       if (!isApiAuthorityCurrent(authority)) return
       runPostCommitUiEffect({ id: `mission:rename:${row.missionID}`, title: t("work_ledger.action.rename_mission") }, () =>
-        setMissionSharedRefreshToken((token) => token + 1),
+        refreshWorkLedgerViews({ sessionID: row.sessionID }),
       )
     },
   })
@@ -1334,7 +1345,7 @@ async function archiveWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void
     })
   }
   runPostCommitUiEffect({ id: `mission:archive-refresh:${row.missionID}`, title: "Mission archive committed" }, () =>
-    setMissionSharedRefreshToken((value) => value + 1),
+    refreshWorkLedgerViews(),
   )
 }
 
@@ -1345,7 +1356,7 @@ async function cancelWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
     reason: "Operator cancelled the task from Work Ledger",
   })
   if (!isApiAuthorityCurrent(authority)) return
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews()
 }
 
 async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
@@ -1381,7 +1392,7 @@ async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
       if (!isApiAuthorityCurrent(authority)) return
       if (!ok) throw new Error(t("task.rename_placeholder"))
       runPostCommitUiEffect({ id: `task:rename:${row.id}`, title: t("task.rename_button_title") }, () =>
-        setMissionSharedRefreshToken((token) => token + 1),
+        refreshWorkLedgerViews(),
       )
     },
   })
@@ -1396,7 +1407,7 @@ async function archiveWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error(t("task.archive_failed"))
   runPostCommitUiEffect({ id: `task:archive-refresh:${row.id}`, title: "Task archive committed" }, () =>
-    setMissionSharedRefreshToken((value) => value + 1),
+    refreshWorkLedgerViews(),
   )
 }
 
@@ -1410,7 +1421,7 @@ async function stopWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
   })
   if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error("Coding assistant stop failed")
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews({ sessionID: row.sessionID })
 }
 
 async function renameWorkLedgerChat(row: WorkLedgerChatRow, presentation?: WorkLedgerRenamePresentation): Promise<void> {
@@ -1437,7 +1448,7 @@ async function renameWorkLedgerChat(row: WorkLedgerChatRow, presentation?: WorkL
       )
       if (!isApiAuthorityCurrent(authority)) return
       runPostCommitUiEffect({ id: `chat:rename:${row.sessionID}`, title: t("work_ledger.action.rename_chat") }, () =>
-        setMissionSharedRefreshToken((token) => token + 1),
+        refreshWorkLedgerViews({ sessionID: row.sessionID }),
       )
     },
   })
@@ -1466,7 +1477,7 @@ async function archiveWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
     })
   }
   runPostCommitUiEffect({ id: `chat:archive-refresh:${row.sessionID}`, title: "Chat archive committed" }, () =>
-    setMissionSharedRefreshToken((value) => value + 1),
+    refreshWorkLedgerViews({ sessionID: row.sessionID }),
   )
 }
 
@@ -1477,7 +1488,7 @@ async function setActiveWorkLedgerItemPinned(
   const authority = captureApiAuthority()
   await setWorkLedgerItemPinned({ row, pinned, authority })
   if (!isApiAuthorityCurrent(authority)) return
-  setMissionSharedRefreshToken((value) => value + 1)
+  refreshWorkLedgerViews(row.kind === "task" ? { taskID: row.id } : { sessionID: row.sessionID })
 }
 
 function assertDebugSelectionCurrent(source: BoardSource): void {
@@ -2483,7 +2494,7 @@ function OverlayRoot() {
           },
         )
         if (!ok) throw new Error(t("mission.error.action.abort"))
-        setMissionSharedRefreshToken((value) => value + 1)
+        refreshWorkLedgerViews()
       })
     }
     if (execution?.kind === "chat") {
@@ -2493,7 +2504,7 @@ function OverlayRoot() {
           directory: execution.directory,
           experience: execution.experience,
         })
-        setMissionSharedRefreshToken((value) => value + 1)
+          refreshWorkLedgerViews({ sessionID: execution.sessionID })
       })
     }
   })
@@ -2514,7 +2525,7 @@ function OverlayRoot() {
     })().finally(() => { refreshPending = undefined })
     return refreshPending
   }
-  createEffect(on(missionSharedRefreshToken, () => {
+  createEffect(on(workLedgerSelectionRefreshToken, () => {
     void refreshSelection().catch(() => { /* The resource presents the read error with Retry. */ })
   }, { defer: true }))
   createEffect(() => { if (!selectionRequest()) selectionController?.abort() })
@@ -2536,7 +2547,7 @@ function OverlayRoot() {
       if (!owns()) return
       await refreshSelection()
       if (owns()) {
-        setMissionSharedRefreshToken((value) => value + 1)
+        setWorkLedgerListRefreshToken((value) => value + 1)
         if (!selectedArchived() && (document.activeElement === trigger || document.activeElement === document.body)) focusComposerInput(trigger)
       }
     } catch (error) { if (owns() && !restored) setRestoreFailure(error) }
@@ -2771,8 +2782,8 @@ function OverlayRoot() {
           onCreateWithAI={createMissionBoardWithAI}
           onDispatchMission={dispatchMissionBoardDraft}
           onEditMissionDraft={async (input) => {
-            await editMissionDraft(input)
-            setMissionSharedRefreshToken((value) => value + 1)
+            const edited = await editMissionDraft(input)
+            refreshWorkLedgerViews({ sessionID: edited.sessionID })
           }}
           onConfirmDeleteMission={confirmDeleteMissionBoardMission}
           onDeleteMission={deleteMissionBoardMission}
@@ -2911,7 +2922,7 @@ function OverlayRoot() {
           }
           selectedTaskID={activeTaskID()}
           selectedSessionID={activeSessionID()}
-          refreshToken={missionSharedRefreshToken()}
+          refreshToken={workLedgerListRefreshToken()}
           onOpenMissionBoard={() =>
             runMainAsync("work-ledger.open-mission-board", async () => {
               await closeConfigDialog()
@@ -3104,7 +3115,7 @@ function OverlayRoot() {
                   runMainAsync("composer.remember-created-project", () =>
                     rememberProjectComposerIntent(directory, submittedIntent),
                   )
-                setMissionSharedRefreshToken((value) => value + 1)
+                refreshWorkLedgerViews()
                 return result
               } finally {
                 if (isApiAuthorityCurrent(authority)) setExpertSquadLauncherSubmitting(false)
@@ -3164,7 +3175,7 @@ function OverlayRoot() {
                 ) {
                   setBoardStore("board", "composerReferences", visibleComposerReferences(text))
                 }
-                setMissionSharedRefreshToken((value) => value + 1)
+                refreshWorkLedgerViews()
                 return result
               } finally {
                 if (isApiAuthorityCurrent(authority)) setAssistantLauncherSubmitting(false)
@@ -3177,7 +3188,7 @@ function OverlayRoot() {
               onAccepted: submission.onAccepted,
             })
             if (!isApiAuthorityCurrent(authority)) return result
-            if (refreshMissionLedger) setMissionSharedRefreshToken((value) => value + 1)
+            if (refreshMissionLedger) refreshWorkLedgerViews()
             return result
           }}
         />

@@ -1,0 +1,183 @@
+{
+  "foreign": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hp2IDLR57r4OyUQ37AP4",
+      "sequence": 1794431092080
+    },
+    "rename": {
+      "requestID": "0a7ab1fe-db07-4941-9234-c8d433774931",
+      "session": {
+        "id": "ses_hp2IDLR57r4OyUQ37AP4",
+        "slug": "playful-lagoon",
+        "projectID": "prj_hCdwuZsBZFFEbQNo7izy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-alternate\\archive-restore-receipt",
+        "title": "Renamed in project B",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b253-candidate-other-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794431066863,
+          "updated": 1794431092080
+        }
+      }
+    },
+    "selected": {
+      "requestID": "d77f2b11-9c0a-4d6d-811a-f412d69f668d",
+      "row": {
+        "kind": "mission",
+        "id": "draft-ad0e2d87c44ea76fa0bc379036fed55b",
+        "missionID": "draft-ad0e2d87c44ea76fa0bc379036fed55b",
+        "sessionID": "ses_hf5v7N3gQap0wQiasoS9",
+        "title": "Selected draft in project A",
+        "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-project\\archive-restore-receipt",
+        "created": 1794431066125,
+        "started": 1794431066125,
+        "updated": 1794431066125,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "dropped": {
+    "time": "2026-11-11T21:05:14.453Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hf5v7N3gQap0wQiasoS9",
+    "method": "GET",
+    "round": "b253-local-chat-rename",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "4d62cf35-1659-4a78-8ce8-d0641af748e8",
+    "status": 200,
+    "bytes": 655,
+    "target": {
+      "missionID": "draft-ad0e2d87c44ea76fa0bc379036fed55b",
+      "sessionID": "ses_hf5v7N3gQap0wQiasoS9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-project\\archive-restore-receipt",
+      "title": "Selected draft in project A",
+      "request": "Keep this original request available while project B changes its own Chat.",
+      "archived": null,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "ledger": {
+    "time": "2026-11-11T21:05:14.466Z",
+    "stage": "delivered",
+    "route": "/work-ledger",
+    "method": "GET",
+    "round": "b253-local-chat-rename",
+    "directory": null,
+    "search": null,
+    "requestID": "55554f65-47cc-4a5e-a516-24edde60fc63",
+    "status": 200,
+    "bytes": 1583,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hp2IDLR57r4OyUQ37AP4",
+        "title": "Local rename in project B",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-alternate\\archive-restore-receipt"
+      },
+      {
+        "kind": "project",
+        "id": "prj_hCdwuZsBZFFEbQNo7izy",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-alternate\\archive-restore-receipt"
+      },
+      {
+        "kind": "mission",
+        "id": "draft-ad0e2d87c44ea76fa0bc379036fed55b",
+        "title": "Selected draft in project A",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-project\\archive-restore-receipt"
+      },
+      {
+        "kind": "project",
+        "id": "prj_hpSLHMsECgdGey2294a3",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-project\\archive-restore-receipt"
+      }
+    ]
+  },
+  "exact": {
+    "requestID": "1b4bf96c-7c72-42d1-8f8b-2bf9fadc02bd",
+    "body": {
+      "kind": "mission",
+      "id": "draft-ad0e2d87c44ea76fa0bc379036fed55b",
+      "missionID": "draft-ad0e2d87c44ea76fa0bc379036fed55b",
+      "sessionID": "ses_hf5v7N3gQap0wQiasoS9",
+      "title": "Selected draft in project A",
+      "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-project\\archive-restore-receipt",
+      "created": 1794431066125,
+      "started": 1794431066125,
+      "updated": 1794431066125,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "actualChat": {
+    "requestID": "805ce505-0a94-42be-9ce0-2fb7045b8399",
+    "body": {
+      "session": {
+        "id": "ses_hp2IDLR57r4OyUQ37AP4",
+        "slug": "playful-lagoon",
+        "projectID": "prj_hCdwuZsBZFFEbQNo7izy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\candidate-alternate\\archive-restore-receipt",
+        "title": "Local rename in project B",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b253-candidate-other-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794431066863,
+          "updated": 1794431114393
+        }
+      }
+    }
+  }
+}

@@ -19,12 +19,27 @@ import { t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { DEFAULT_REQUEST_TIMEOUT_MILLISECONDS } from "./host-transport"
+import type { BoardSource } from "../store/board"
 
 export type WorkLedgerItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerKind = WorkLedgerItemRow["kind"]
 export type WorkLedgerChatStatus = WorkLedgerChatRow["status"]
 export type WorkLedgerPresentationStatus = "active" | "inactive"
+export type WorkLedgerChangeIdentity = { sessionID?: string; taskID?: string | null }
+
+export function workLedgerRefreshScope(
+  change: WorkLedgerChangeIdentity | undefined,
+  selected: Pick<BoardSource, "kind" | "id"> | null,
+): "list" | "list-and-selection" {
+  if (!selected) return "list"
+  if (change?.sessionID && !change.taskID) {
+    return selected.kind === "session" && selected.id === change.sessionID ? "list-and-selection" : "list"
+  }
+  // Task events may change a selected Mission through a child Task.
+  return "list-and-selection"
+}
+
 export type {
   WorkLedgerArchiveList,
   WorkLedgerArchiveRow,

@@ -1,0 +1,456 @@
+{
+  "occurrence": "iteration-b253-final",
+  "asset": "main-DQVUnf6P.js",
+  "upgrade": {
+    "time": "2026-11-11T21:08:31.179Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "foreign": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hxIQnZzM6McAwMoORMxE",
+      "sequence": 1794431330091
+    },
+    "rename": {
+      "requestID": "3a0422a1-0527-465d-922d-468dba9ecf4e",
+      "session": {
+        "id": "ses_hxIQnZzM6McAwMoORMxE",
+        "slug": "nimble-harbor",
+        "projectID": "prj_hgfS0UQGkfVpegoWtkqy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+        "title": "Remote title in B",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b253-final-other-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794431306919,
+          "updated": 1794431330091
+        }
+      }
+    },
+    "selected": {
+      "requestID": "b24318e7-3a2f-4b45-9e92-756c227bb817",
+      "row": {
+        "kind": "mission",
+        "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "Selected draft in project A",
+        "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "started": 1794431306162,
+        "updated": 1794431306162,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "foreignList": {
+    "time": "2026-11-11T21:08:50.277Z",
+    "stage": "delivered",
+    "route": "/work-ledger",
+    "method": "GET",
+    "round": "b253-final-foreign",
+    "directory": null,
+    "search": null,
+    "requestID": "b88d6819-c054-486b-9aeb-10c6bc26f23d",
+    "status": 200,
+    "bytes": 1559,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hxIQnZzM6McAwMoORMxE",
+        "title": "Remote title in B",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt"
+      },
+      {
+        "kind": "project",
+        "id": "prj_hgfS0UQGkfVpegoWtkqy",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt"
+      },
+      {
+        "kind": "mission",
+        "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "title": "Selected draft in project A",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt"
+      },
+      {
+        "kind": "project",
+        "id": "prj_haU6kQZM7G0aH5iRi9hh",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt"
+      }
+    ]
+  },
+  "local": [
+    {
+      "time": "2026-11-11T21:09:10.112Z",
+      "stage": "delivered",
+      "route": "/coding/chat/session/ses_hxIQnZzM6McAwMoORMxE",
+      "method": "PATCH",
+      "round": "b253-final-local",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+      "search": null,
+      "requestID": "54769825-3b1a-4e86-8cd3-589b90e60a04",
+      "status": 200,
+      "bytes": 528,
+      "target": {
+        "sessionID": "ses_hxIQnZzM6McAwMoORMxE",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+        "title": "Local title in B",
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    {
+      "time": "2026-11-11T21:09:10.134Z",
+      "stage": "delivered",
+      "route": "/work-ledger",
+      "method": "GET",
+      "round": "b253-final-local",
+      "directory": null,
+      "search": null,
+      "requestID": "8ce4eb35-9ae0-4697-9098-fd7fa984b3e5",
+      "status": 200,
+      "bytes": 1558,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hxIQnZzM6McAwMoORMxE",
+          "title": "Local title in B",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hgfS0UQGkfVpegoWtkqy",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt"
+        },
+        {
+          "kind": "mission",
+          "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+          "title": "Selected draft in project A",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt"
+        },
+        {
+          "kind": "project",
+          "id": "prj_haU6kQZM7G0aH5iRi9hh",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt"
+        }
+      ]
+    },
+    {
+      "time": "2026-11-11T21:09:10.253Z",
+      "stage": "delivered",
+      "route": "/work-ledger",
+      "method": "GET",
+      "round": "b253-final-local",
+      "directory": null,
+      "search": null,
+      "requestID": "87122f86-65a3-4d29-82f4-7216c6608fef",
+      "status": 200,
+      "bytes": 1558,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hxIQnZzM6McAwMoORMxE",
+          "title": "Local title in B",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hgfS0UQGkfVpegoWtkqy",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt"
+        },
+        {
+          "kind": "mission",
+          "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+          "title": "Selected draft in project A",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt"
+        },
+        {
+          "kind": "project",
+          "id": "prj_haU6kQZM7G0aH5iRi9hh",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt"
+        }
+      ]
+    }
+  ],
+  "own": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "sequence": 1794431382151
+    },
+    "write": {
+      "requestID": "5219b386-c0bf-4d4c-b270-ec0dd82a02fb",
+      "body": {
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "Updated selected draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "updated": 1794431382151,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Keep this original request available while project B changes its own Chat."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    },
+    "selected": {
+      "requestID": "256de3bb-497d-439c-91dd-a3763e8a73d5",
+      "body": {
+        "kind": "mission",
+        "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "Updated selected draft",
+        "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "started": 1794431306162,
+        "updated": 1794431382151,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "acceptedOwn": {
+    "time": "2026-11-11T21:09:42.191Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hucdyjdmNetCbH3efPX2",
+    "method": "GET",
+    "round": "b253-final-own-title",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "47a42b86-8b3c-46d6-b777-da021fcd9788",
+    "status": 200,
+    "bytes": 646,
+    "target": {
+      "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "title": "Updated selected draft",
+      "request": "Keep this original request available while project B changes its own Chat.",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "failure": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "sequence": 1794431392609
+    },
+    "write": {
+      "requestID": "e0498196-14dd-416f-b3e9-b9a7d5e385a9",
+      "body": {
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "Selected title after retry",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "updated": 1794431392609,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Keep this original request available while project B changes its own Chat."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    },
+    "selected": {
+      "requestID": "2734e7d9-8f09-4c2d-b3aa-babbd4dee406",
+      "body": {
+        "kind": "mission",
+        "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "Selected title after retry",
+        "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "started": 1794431306162,
+        "updated": 1794431392609,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "rejectedRead": {
+    "time": "2026-11-11T21:09:52.648Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hucdyjdmNetCbH3efPX2",
+    "method": "GET",
+    "round": "b253-final-own-read-fault",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "94be0860-c0db-4e6b-b32c-9bb4ddca1f54",
+    "status": 200,
+    "bytes": 650,
+    "target": {
+      "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "title": "Selected title after retry",
+      "request": "Keep this original request available while project B changes its own Chat.",
+      "archived": null,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "retriedRead": {
+    "time": "2026-11-11T21:10:03.176Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hucdyjdmNetCbH3efPX2",
+    "method": "GET",
+    "round": "b253-final-own-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "954e5ac4-1f66-4f06-bcea-ed721652f9b0",
+    "status": 200,
+    "bytes": 650,
+    "target": {
+      "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "title": "Selected title after retry",
+      "request": "Keep this original request available while project B changes its own Chat.",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "selected": {
+    "requestID": "f894b545-c4e4-4fc6-b715-c56acd08f503",
+    "body": {
+      "kind": "mission",
+      "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "title": "Selected title after retry",
+      "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "created": 1794431306162,
+      "started": 1794431306162,
+      "updated": 1794431392609,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "chat": {
+    "requestID": "fc4f33b9-2dda-4b33-8624-421812632765",
+    "body": {
+      "session": {
+        "id": "ses_hxIQnZzM6McAwMoORMxE",
+        "slug": "nimble-harbor",
+        "projectID": "prj_hgfS0UQGkfVpegoWtkqy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+        "title": "Local title in B",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b253-final-other-chat",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794431306919,
+          "updated": 1794431350054
+        }
+      }
+    }
+  }
+}
