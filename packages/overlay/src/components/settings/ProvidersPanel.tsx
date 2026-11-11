@@ -198,6 +198,8 @@ export default function ProvidersPanel() {
   const [discoveredModelCount, setDiscoveredModelCount] = createSignal<number | null>(null)
   const [loadingProviderInfo, setLoadingProviderInfo] = createSignal(false)
   const [providerInfoRetry, setProviderInfoRetry] = createSignal<{ trigger: HTMLButtonElement }>()
+  const providerInfoBusy = () => loadingProviderInfo() || Boolean(providerInfoRetry())
+  const providerInfoFeedbackVisible = () => appStore.providerLoadIssues.length > 0 || Boolean(providerInfoRetry())
   let providerSearchInput: HTMLInputElement | undefined
 
   function scopeProjectLabel(): string {
@@ -367,7 +369,7 @@ export default function ProvidersPanel() {
   }
 
   async function retryProviderInfo(trigger: HTMLButtonElement): Promise<void> {
-    if (loadingProviderInfo() || providerInfoRetry()) return
+    if (providerInfoBusy()) return
     const directory = activeDirectory().trim()
     const options = providerLoadOptions(directory)
     const retry = { trigger }
@@ -1276,13 +1278,13 @@ export default function ProvidersPanel() {
           />
         </div>
 
-        <Show when={loadingProviderInfo() && !appStore.providerCatalog}>
+        <Show when={loadingProviderInfo() && !appStore.providerCatalog && !providerInfoFeedbackVisible()}>
           <Feedback tone="info" title={t("provider.load.loading")} aria-busy="true">
             {t("provider.load.loading_description")}
           </Feedback>
         </Show>
 
-        <Show when={appStore.providerLoadIssues.length > 0 || providerInfoRetry()}>
+        <Show when={providerInfoFeedbackVisible()}>
           <div class="provider-load-feedback">
             <For each={appStore.providerLoadIssues}>
               {(issue) => (
@@ -1302,12 +1304,14 @@ export default function ProvidersPanel() {
               variant="outline"
               size="sm"
               tone="neutral"
-              aria-disabled={loadingProviderInfo() || undefined}
-              aria-busy={loadingProviderInfo() || undefined}
+              aria-disabled={providerInfoBusy() || undefined}
+              aria-busy={providerInfoBusy() || undefined}
               onClick={(event) => void retryProviderInfo(event.currentTarget)}
             >
-              <Icon name={loadingProviderInfo() ? "loading" : "refresh"} />
-              {t(loadingProviderInfo() ? "provider.load.loading" : "provider.load.retry")}
+              <Icon name={providerInfoBusy() ? "loading" : "refresh"} />
+              {t(
+                providerInfoRetry() ? "common.retrying" : loadingProviderInfo() ? "provider.load.loading" : "provider.load.retry",
+              )}
             </Button>
           </div>
         </Show>

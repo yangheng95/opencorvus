@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [服务商读取与重试各显示一次等待状态](2026-11-11-provider-read-progress.md)
 - [模型服务商搜索区分真实结果和上次目录](2026-11-11-provider-catalog-read-status.md)
 - [模型目录刷新等待当前页面读完](2026-11-11-provider-catalog-refresh-settlement.md)
 - [提供方模型目录如实声明可选的自定义地址](2026-11-11-provider-catalog-optional-api-url.md)

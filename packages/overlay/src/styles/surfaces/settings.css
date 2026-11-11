@@ -3187,7 +3187,8 @@ button.s-row:focus-visible {
   flex-wrap: wrap;
 }
 
-.provider-head-actions .oc-button[data-ui="provider-catalog-refresh"][aria-busy="true"] {
+.provider-head-actions .oc-button[data-ui="provider-catalog-refresh"][aria-busy="true"],
+.provider-load-feedback > .oc-button[aria-busy="true"] {
   opacity: var(--ui-opacity-full);
 }
 

@@ -433,6 +433,7 @@ Project `MEMORY.MD` Organizer 是固定身份中的显式例外：配置 schema 
 - 打开 Providers 配置页时只按当前 project/global scope 读取稳定的 Provider catalog、Auth method 和 config owner；不得隐式执行网络刷新。Provider 目录刷新和实时模型刷新只由两个显式按钮分别触发，各自完成后重读 Provider owner，各自拥有独立错误面。
 - 显式目录刷新在当前视图的一次交互内等待写回执及随后的原范围读取结算；期间按钮保持键盘焦点并拒绝重复触发。写入成功仍立即发布原全局变更事件；面板仅在仍拥有同一范围时更新，读取结算后展示服务的刷新时间，读取问题由现有重读入口处理。
 - 设置页的目录与搜索总数仅在当前目录可用时显示。目录读取失败但仍保留上次条目时说明其来源；认证方法或配置独立读取失败不隐藏已接受目录的搜索结果。
+- 初次读取且没有旧目录或恢复区时显示加载提示。已有错误或正在主动重试时，读进度和原诊断留在同一恢复区；在位重试保留焦点，成功后沿现有搜索焦点交接。
 - 没有活动项目目录的桌面首次启动使用 `/global/providers`、`/global/providers/refresh`、`/global/providers/models/refresh`、`/global/providers/discover-models` 和 `/global/providers/:providerID/test`；这些路由把 `Config.getGlobal()` 显式传入与项目路由共用的 Provider 实现。`/auth/:providerID` 仍是唯一 API credential 写入面，项目目录不是新增 Provider、保存 API key、发现模型、测试连接或使用内置 Provider OAuth 的前置条件。`Plugin.listGlobalProviderHooks()` 是唯一 project-independent built-in hook catalog，同时投影 auth method、OAuth loader 和 Provider model projection；installed project plugins 仍只由真实 Project `Instance` 的 `Plugin.list()` 拥有。
 
 OpenAI Codex OAuth 的目录投影由同一个内置插件拥有。模型家族版本按整数 major 与可选整数 minor 比较，支持 `gpt-6-luna` 这类整数主版本，也正确排序多位 minor；不得用浮点数比较版本或为新型号逐一添加例外。现有接纳边界和历史例外保持，目录身份、能力与限制仍来自原声明。全局、项目和 helper 使用同一投影；目录可见性不等于远端账户已获准调用，实际请求结果单独记录。

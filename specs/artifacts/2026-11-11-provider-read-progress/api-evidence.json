@@ -1,0 +1,282 @@
+{
+  "asset": "main-CPJ1FqYC.js",
+  "projectID": "prj_hInRhs53UA3x1aG1CAuS",
+  "stats": {
+    "project": {
+      "providers": 88,
+      "connected": 0,
+      "bedrock": 67
+    },
+    "global": {
+      "providers": 88,
+      "connected": 0,
+      "bedrock": 67
+    }
+  },
+  "profiles": {
+    "baseline": {
+      "providers": 88,
+      "bedrockModels": 67
+    },
+    "final": {
+      "providers": 88,
+      "bedrockModels": 67
+    }
+  },
+  "direct": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "9518fdfb-d59e-4ab6-b981-a9a9437e56f5"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "70b24fa0-742f-4e79-acd8-7faf6e57e1a3"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "5a173403-2349-4813-afeb-a5cb3c826cba"
+    }
+  ],
+  "traces": {
+    "baseline": [
+      {
+        "round": "first-failure",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "665c6b55-5802-42e6-acf3-45c0be8d8697"
+      },
+      {
+        "round": "first-failure",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "fb8e6400-20c7-41b0-a4f3-ce50a536fdcc",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "automatic-reopen",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "a3f9d2a0-e2ba-461f-bc6f-c5406ce3fd69"
+      },
+      {
+        "round": "automatic-reopen",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "47a644b6-109c-4edf-9b65-f8356a2a6961",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      }
+    ],
+    "final": [
+      {
+        "round": "en-first",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "52572323-f059-4832-bf08-2e3551c36a65"
+      },
+      {
+        "round": "en-first",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "e9f7c692-7dfd-49e9-a8eb-48f22a3b01cd",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "en-auto",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "943e1fa2-1b9a-4418-9291-f4084130a298"
+      },
+      {
+        "round": "en-auto",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "baf97f30-3d3b-4f8c-af56-f5572a0348f4",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "en-retry",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "05f3f8eb-5f16-421a-ba99-0fa8865181e1"
+      },
+      {
+        "round": "en-retry",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "877296ae-0e69-4435-8cfa-b2b569291268",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "zh-first",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "1de20848-0bb0-4d89-8692-0dc167ef91ae"
+      },
+      {
+        "round": "zh-first",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "056e79af-2ca2-438f-81c2-6bf5836712dd",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "zh-failed-retry",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "0dea0e19-3525-45c3-b6eb-3f70b30f96f9"
+      },
+      {
+        "round": "zh-failed-retry",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "c2928101-edb5-4c0b-b520-936864043784",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "zh-recover",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "c7ee600d-1e25-4da6-aa0e-6ad3d8b68d53"
+      },
+      {
+        "round": "zh-recover",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "4c3f2762-df3f-498e-b37d-499becccdfed",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "stable-first",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "fbeccb82-2bb8-46b4-8669-835a5a8c27ac"
+      },
+      {
+        "round": "stable-first",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-retry-review",
+        "requestID": "c55c4cac-d746-42ff-bf4c-1114582b20b5",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      }
+    ]
+  },
+  "held": [
+    {
+      "phase": "baseline",
+      "round": "automatic-reopen",
+      "requestID": "47a644b6-109c-4edf-9b65-f8356a2a6961",
+      "holdMs": 7836
+    },
+    {
+      "phase": "final",
+      "round": "en-first",
+      "requestID": "e9f7c692-7dfd-49e9-a8eb-48f22a3b01cd",
+      "holdMs": 8893
+    },
+    {
+      "phase": "final",
+      "round": "en-auto",
+      "requestID": "baf97f30-3d3b-4f8c-af56-f5572a0348f4",
+      "holdMs": 8559
+    },
+    {
+      "phase": "final",
+      "round": "en-retry",
+      "requestID": "877296ae-0e69-4435-8cfa-b2b569291268",
+      "holdMs": 11605
+    },
+    {
+      "phase": "final",
+      "round": "zh-failed-retry",
+      "requestID": "c2928101-edb5-4c0b-b520-936864043784",
+      "holdMs": 7973
+    },
+    {
+      "phase": "final",
+      "round": "zh-recover",
+      "requestID": "4c3f2762-df3f-498e-b37d-499becccdfed",
+      "holdMs": 8599
+    }
+  ]
+}
