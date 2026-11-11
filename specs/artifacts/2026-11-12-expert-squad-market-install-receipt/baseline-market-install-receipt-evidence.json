@@ -1,0 +1,100 @@
+{
+  "asset": "main-CdgLlRNt.js",
+  "checked": [
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "69ea2b2f-5b85-43e6-8f2e-08043cbdc4e4",
+      "result": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/deep-research/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "b811f863-ffad-4ddf-9299-432b14617adc",
+      "result": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/browser-research-acceptance/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "85f46842-b2ef-4135-b56b-80fa6a64e499",
+      "result": {
+        "active": "dynamic"
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "3db09d03-9d4d-4186-ba54-3ab3cdd11ec6",
+      "result": {
+        "query": "deep research",
+        "ids": [
+          "academic-paper-review",
+          "data-analysis",
+          "commercial-legal"
+        ]
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "37d93b14-72c1-4e74-8d8e-db36e3d6ac77",
+      "result": {
+        "query": "research",
+        "ids": [
+          "equity-research",
+          "sales-strategy",
+          "scientific-research-design"
+        ]
+      }
+    }
+  ],
+  "receiptCuts": [
+    {
+      "time": "2026-11-11T18:52:30.876Z",
+      "stage": "truncated",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "composer-committed-receipt-cut",
+      "status": 200,
+      "requestID": "f3b87107-50aa-42f4-a759-ce27fae978a7",
+      "bytes": 552,
+      "installation": {
+        "operation": "installed",
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      },
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T18:53:13.315Z",
+      "stage": "truncated",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "mission-committed-receipt-cut",
+      "status": 200,
+      "requestID": "ea5c7e71-3b1f-49fa-ac49-faaa1b7d29b0",
+      "bytes": 580,
+      "installation": {
+        "operation": "installed",
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "installationScope": "project"
+      },
+      "deliveredBytes": 32
+    }
+  ]
+}

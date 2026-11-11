@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [市场安装回执中断后核对项目安装](records/2026-11/2026-11-12-expert-squad-market-install-receipt.md)
 - [输入区市场安装完成后从原搜索继续](records/2026-11/2026-11-12-composer-market-install-trigger-focus.md)
 - [专家团市场推荐可原位重试查询](records/2026-11/2026-11-12-expert-squad-market-query-retry.md)
 - [新建多步任务只从已确认的搜索结果添加专家团](records/2026-11/2026-11-12-mission-create-squad-search-settlement.md)
