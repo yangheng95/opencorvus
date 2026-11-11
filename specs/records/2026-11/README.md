@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [服务商保存后的目录等待与恢复反馈](2026-11-12-provider-save-catalog-feedback.md)
 - [配置回执与当前完整配置的发布顺序](2026-11-12-config-receipt-publication-order.md)
 - [已确认配置保存保护当前客户端投影](2026-11-11-config-read-after-commit.md)
 - [主输入区标明上次读取的模型列表](2026-11-11-composer-model-list-provenance.md)

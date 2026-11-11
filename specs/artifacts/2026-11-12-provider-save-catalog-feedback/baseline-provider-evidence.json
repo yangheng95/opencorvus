@@ -1,0 +1,231 @@
+{
+  "asset": "main-DCRa8FiI.js",
+  "writes": [
+    {
+      "path": "/global/config",
+      "status": 200,
+      "requestID": "388f5293-b602-4762-9c14-3d08bd24d53c",
+      "models": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T16:29:49.954Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "setup",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "bd5ddb94-6ef3-46b4-869f-c6426af002f1",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-before"
+      ],
+      "bytes": 1900680
+    },
+    {
+      "time": "2026-11-11T16:30:12.430Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "project-saved-catalog-held",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "81e06910-c45a-4731-8b6f-ca88cb641a13",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:30:17.240Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "project-saved-catalog-held",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "81e06910-c45a-4731-8b6f-ca88cb641a13",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ],
+      "bytes": 1901382,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:30:27.463Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "project-saved-catalog-retry",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "fad5eff4-a703-4788-97f5-f86ee41eb10b",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:30:33.504Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "project-saved-catalog-retry",
+      "route": "/provider",
+      "project": "provider-model-freshness-review",
+      "status": 200,
+      "requestID": "fad5eff4-a703-4788-97f5-f86ee41eb10b",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-after-alpha",
+        "review-after-beta"
+      ],
+      "bytes": 1901382
+    },
+    {
+      "time": "2026-11-11T16:31:45.470Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "project-saved-catalog-retry-delivered",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "a83e16e8-ea3d-4dcd-8fda-fd9e11f76b46",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-before"
+      ],
+      "bytes": 1900727
+    },
+    {
+      "time": "2026-11-11T16:32:11.361Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "global-saved-catalog-held",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "7942b8a1-b41b-438d-a706-8600e908da8b",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:32:16.145Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "global-saved-catalog-held",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "7942b8a1-b41b-438d-a706-8600e908da8b",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ],
+      "bytes": 1901403,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T16:32:21.242Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "global-saved-catalog-retry",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "cc9b2490-553c-4f3a-948f-696b87fd58cf",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    },
+    {
+      "time": "2026-11-11T16:32:24.885Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "global-saved-catalog-retry",
+      "route": "/global/providers",
+      "project": "global",
+      "status": 200,
+      "requestID": "cc9b2490-553c-4f3a-948f-696b87fd58cf",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "modelIDs": [
+        "review-global-alpha",
+        "review-global-beta"
+      ],
+      "bytes": 1901403
+    }
+  ],
+  "checked": [
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "23b59f24-c6e0-4f0f-bd2e-f1269fba7a78",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta",
+        "review-after-alpha",
+        "review-after-beta"
+      ]
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "8805f81c-0e1b-4494-a41c-5cace36fcfa2",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta"
+      ]
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "715ad0ef-3733-4861-89b6-2e502cfd7912",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta",
+        "review-after-alpha",
+        "review-after-beta"
+      ],
+      "apiKeyConfigured": false
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "c116101c-96b9-4f69-9f99-fbe524055b0b",
+      "ids": [
+        "review-global-alpha",
+        "review-global-beta"
+      ],
+      "apiKeyConfigured": false
+    },
+    {
+      "route": "/global/providers/auth",
+      "status": 200,
+      "requestID": "1fe593cb-4624-4e9e-91a6-1efca45da531"
+    }
+  ]
+}
