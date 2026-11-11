@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [内置多步任务技能说明随界面语言显示和搜索](records/2026-11/2026-11-12-mission-skill-description-locale.md)
 - [多步任务技能详情可以原位重试目录读取](records/2026-11/2026-11-12-mission-skill-detail-read-retry.md)
 - [用量页按请求的时区确认自然周期](records/2026-11/2026-11-12-usage-response-time-zone.md)
 - [定时任务草稿区分项目发现的等待、失败和空结果](records/2026-11/2026-11-12-scheduled-authoring-project-discovery.md)

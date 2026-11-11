@@ -1,0 +1,51 @@
+{
+  "asset": "main-Cac26gn_.js",
+  "checked": [
+    {
+      "route": "/mission-skill/settings",
+      "status": 200,
+      "requestID": "ead04ba4-0d68-4d7e-ae12-75504d42d7de",
+      "projected": [
+        {
+          "name": "general",
+          "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+          "requiredTools": 14
+        },
+        {
+          "name": "local-review",
+          "description": "Explain the team's review checklist for this isolated project.",
+          "requiredTools": 1
+        }
+      ]
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "status": 200,
+      "requestID": "865a5aaa-ba93-456e-aa38-6ef0c4c3967b",
+      "projected": [
+        {
+          "name": "general",
+          "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+          "requiredTools": 14
+        },
+        {
+          "name": "local-review",
+          "description": "Explain the team's review checklist for this isolated project.",
+          "requiredTools": 1
+        }
+      ]
+    },
+    {
+      "route": "/global/composer-references",
+      "status": 200,
+      "requestID": "3a4802aa-f4e7-49cf-aab2-7b3e92074544",
+      "projected": [
+        {
+          "name": "general",
+          "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+          "requiredTools": 14
+        }
+      ]
+    }
+  ]
+}
