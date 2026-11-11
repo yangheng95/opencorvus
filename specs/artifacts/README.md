@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [用量自然周期的时区证据](2026-11-12-usage-response-time-zone/README.md)
 - [定时任务草稿项目发现的真实证据](2026-11-12-scheduled-authoring-project-discovery/README.md)
 - [服务商保存后目录反馈的证据](2026-11-12-provider-save-catalog-feedback/README.md)
 - [配置回执发布顺序的真实证据](2026-11-12-config-receipt-publication-order/README.md)

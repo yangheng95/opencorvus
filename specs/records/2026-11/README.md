@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [用量页按请求的时区确认自然周期](2026-11-12-usage-response-time-zone.md)
 - [定时任务草稿区分项目发现的等待、失败和空结果](2026-11-12-scheduled-authoring-project-discovery.md)
 - [服务商保存后的目录等待与恢复反馈](2026-11-12-provider-save-catalog-feedback.md)
 - [配置回执与当前完整配置的发布顺序](2026-11-12-config-receipt-publication-order.md)
