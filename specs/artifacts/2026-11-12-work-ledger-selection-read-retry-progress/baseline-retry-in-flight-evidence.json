@@ -1,0 +1,340 @@
+{
+  "upgrade": {
+    "time": "2026-11-11T21:34:31.245Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "reading": {
+    "event": {
+      "connected": {
+        "type": "work-ledger.connected",
+        "sourceType": "work-ledger.connected",
+        "sequence": 0
+      },
+      "changed": {
+        "type": "work-ledger.changed",
+        "sourceType": "session.updated",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "sequence": 1794432887988
+      },
+      "write": {
+        "requestID": "16807a2f-019a-4fd4-bd93-01a221dd0c7b",
+        "body": {
+          "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+          "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+          "title": "Archived draft with keyboard recovery",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+          "created": 1794432299628,
+          "updated": 1794432887988,
+          "archived": 1794432615247,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "恢复精确读取之前，也能阅读这份已保存的原请求。"
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        }
+      },
+      "selected": {
+        "requestID": "12ccc602-f3e7-46f5-917f-26eefff80874",
+        "body": {
+          "kind": "mission",
+          "id": "draft-a11874533241ec00e8fbbcb59a3523f3",
+          "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+          "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+          "title": "Archived draft with keyboard recovery",
+          "pendingPromptText": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+          "created": 1794432299628,
+          "started": 1794432299628,
+          "updated": 1794432887988,
+          "pinned": false,
+          "archived": 1794432615247,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        }
+      }
+    },
+    "cut": {
+      "time": "2026-11-11T21:34:48.046Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+      "method": "GET",
+      "round": "b255-baseline-read-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "ed9deb8e-8a7c-4dd0-af0f-b8ecf4b28e71",
+      "status": 200,
+      "bytes": 679,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "Archived draft with keyboard recovery",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": 1794432615247,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "held": {
+      "time": "2026-11-11T21:34:55.937Z",
+      "stage": "held",
+      "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+      "method": "GET",
+      "round": "b255-baseline-retry-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "c1d710a8-b9d5-4e04-b480-0322e4329f15",
+      "status": 200,
+      "bytes": 679,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "Archived draft with keyboard recovery",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": 1794432615247,
+        "boardLane": null
+      }
+    },
+    "first": {
+      "time": "2026-11-11T21:34:56.183Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+      "method": "GET",
+      "round": "b255-baseline-retry-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "c1d710a8-b9d5-4e04-b480-0322e4329f15",
+      "status": 200,
+      "bytes": 679,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "Archived draft with keyboard recovery",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": 1794432615247,
+        "boardLane": null
+      }
+    },
+    "second": {
+      "time": "2026-11-11T21:34:56.215Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hNIyOsEiCqEkm8jrxkML",
+      "method": "GET",
+      "round": "b255-baseline-retry-release",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+      "search": null,
+      "requestID": "7b9d6d5d-cf5a-4a17-bbd6-300193a9caaa",
+      "status": 200,
+      "bytes": 679,
+      "target": {
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "title": "Archived draft with keyboard recovery",
+        "request": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "archived": 1794432615247,
+        "boardLane": null
+      }
+    },
+    "stored": {
+      "requestID": "6b8649c5-dc98-4c2f-a22d-5bed7539b784",
+      "body": {
+        "kind": "mission",
+        "id": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "missionID": "draft-a11874533241ec00e8fbbcb59a3523f3",
+        "sessionID": "ses_hNIyOsEiCqEkm8jrxkML",
+        "title": "Archived draft with keyboard recovery",
+        "pendingPromptText": "恢复精确读取之前，也能阅读这份已保存的原请求。",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-project\\selection-reading",
+        "created": 1794432299628,
+        "started": 1794432299628,
+        "updated": 1794432887988,
+        "pinned": false,
+        "archived": 1794432615247,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "conversation": {
+    "event": {
+      "connected": {
+        "type": "work-ledger.connected",
+        "sourceType": "work-ledger.connected",
+        "sequence": 0
+      },
+      "changed": {
+        "type": "work-ledger.changed",
+        "sourceType": "session.updated",
+        "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+        "sequence": 1794432974287
+      },
+      "write": {
+        "requestID": "a88371f5-afaf-4f36-a6e9-ef3916b8c377",
+        "body": {
+          "session": {
+            "id": "ses_hTahPuaKKYeyHrPZcRhz",
+            "slug": "proud-circuit",
+            "projectID": "prj_hsxwvujiJJe0TiSrv7mW",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+            "title": "Chat with keyboard recovery",
+            "version": "local",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "b254-candidate-chat",
+                "model": null
+              },
+              "conversation": {
+                "experience": "chat",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794432300429,
+              "updated": 1794432974287
+            }
+          }
+        }
+      },
+      "selected": {
+        "requestID": "ca5bc9c5-7103-4b7f-b396-9f4d02bbc9e9",
+        "body": {
+          "kind": "chat",
+          "experience": "chat",
+          "id": "ses_hTahPuaKKYeyHrPZcRhz",
+          "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+          "title": "Chat with keyboard recovery",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+          "created": 1794432300429,
+          "started": 1794432300429,
+          "updated": 1794432974287,
+          "pinned": false,
+          "status": "idle"
+        }
+      }
+    },
+    "cut": {
+      "time": "2026-11-11T21:36:14.332Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hTahPuaKKYeyHrPZcRhz",
+      "method": "GET",
+      "round": "b255-baseline-chat-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+      "search": null,
+      "requestID": "110affbf-4a32-4856-b2e7-579940708a0e",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+        "title": "Chat with keyboard recovery",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "held": {
+      "time": "2026-11-11T21:36:21.455Z",
+      "stage": "held",
+      "route": "/work-ledger/selection/session/ses_hTahPuaKKYeyHrPZcRhz",
+      "method": "GET",
+      "round": "b255-baseline-chat-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+      "search": null,
+      "requestID": "1e2f93b1-047c-426c-ad10-b38fe58f9bd4",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+        "title": "Chat with keyboard recovery",
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    "first": {
+      "time": "2026-11-11T21:36:21.591Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hTahPuaKKYeyHrPZcRhz",
+      "method": "GET",
+      "round": "b255-baseline-chat-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+      "search": null,
+      "requestID": "1e2f93b1-047c-426c-ad10-b38fe58f9bd4",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+        "title": "Chat with keyboard recovery",
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    "second": {
+      "time": "2026-11-11T21:36:21.608Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hTahPuaKKYeyHrPZcRhz",
+      "method": "GET",
+      "round": "b255-baseline-chat-release",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+      "search": null,
+      "requestID": "08f8091d-b98e-46e5-b7db-75bcc30a7ff4",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+        "title": "Chat with keyboard recovery",
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    "stored": {
+      "requestID": "ce0ea42e-6a19-40a1-8eed-50754b456206",
+      "body": {
+        "kind": "chat",
+        "experience": "chat",
+        "id": "ses_hTahPuaKKYeyHrPZcRhz",
+        "sessionID": "ses_hTahPuaKKYeyHrPZcRhz",
+        "title": "Chat with keyboard recovery",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b254\\candidate-alternate\\selection-reading",
+        "created": 1794432300429,
+        "started": 1794432300429,
+        "updated": 1794432974287,
+        "pinned": false,
+        "status": "idle"
+      }
+    }
+  }
+}

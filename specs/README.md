@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [选中记录重试等待与重复触发](records/2026-11/2026-11-12-work-ledger-selection-read-retry-progress.md)
 - [精确读取中断时保留已读内容和重试入口](records/2026-11/2026-11-12-work-ledger-selection-reading-recovery.md)
 - [工作台按会话身份刷新选中记录](records/2026-11/2026-11-12-work-ledger-selection-invalidation.md)
 - [归档恢复回执中断后的状态确认](records/2026-11/2026-11-12-archive-restore-receipt.md)
