@@ -1,0 +1,104 @@
+{
+  "asset": "main-CiZMSdvZ.js",
+  "checked": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "cd4428cb-4fd0-44fc-9b8b-269b689a9f2b"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "2cedb9c3-1102-4ea1-8fa2-a90b2cfe9f4b"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "239c688e-8217-4132-89dc-7e7876420315"
+    },
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "13692116-f70b-49a4-afe1-df0052c5743b"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "336702e3-b3be-4146-bd1f-4e82b6a92798"
+    }
+  ],
+  "catalogs": {
+    "project": {
+      "providers": 90,
+      "connected": [
+        "review-global"
+      ],
+      "rows": {
+        "review-global": [
+          "review-one"
+        ],
+        "review-custom": []
+      }
+    },
+    "global": {
+      "providers": 89,
+      "connected": [
+        "review-global"
+      ],
+      "rows": {
+        "review-global": [
+          "review-one"
+        ]
+      }
+    }
+  },
+  "earlier": {
+    "time": "2026-11-11T05:32:52.570Z",
+    "stage": "delivered",
+    "round": "b233-close-ordering",
+    "route": "/global/config",
+    "ordinal": 1,
+    "scope": "global",
+    "status": 200,
+    "requestID": "9d2ce665-a421-4b92-9168-fe7973158011",
+    "reviewGlobal": null
+  },
+  "receipt": {
+    "status": 200,
+    "time": "2026-11-11T05:32:52.813Z",
+    "requestID": "b661b490-6de0-4ae3-ad94-75931af83860"
+  },
+  "newer": {
+    "time": "2026-11-11T05:33:07.719Z",
+    "stage": "delivered",
+    "round": "b233-close-ordering",
+    "route": "/global/config",
+    "ordinal": 2,
+    "scope": "global",
+    "status": 200,
+    "requestID": "5adaf385-c243-4562-ac8d-fc09e7bceeb4",
+    "reviewGlobal": "Review Global"
+  },
+  "olderCatalog": {
+    "time": "2026-11-11T05:33:09.636Z",
+    "stage": "delivered",
+    "round": "b233-close-ordering",
+    "route": "/global/providers",
+    "scope": "global",
+    "status": 200,
+    "requestID": "66dee4f3-4318-4f80-ad0d-8aca5bc389ee",
+    "providerCount": 88,
+    "reviewGlobal": false
+  },
+  "reread": {
+    "time": "2026-11-11T05:33:37.748Z",
+    "stage": "delivered",
+    "round": "confirm-current",
+    "route": "/global/providers",
+    "scope": "global",
+    "status": 200,
+    "requestID": "e78bf0db-4d93-4e1c-9110-aaabd62ce065",
+    "providerCount": 89,
+    "reviewGlobal": true
+  }
+}

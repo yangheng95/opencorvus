@@ -449,6 +449,8 @@ OpenAI Codex OAuth 的目录投影由同一个内置插件拥有。模型家族�
 
 `config.provider[id].models` 是可选配置覆盖，明确空对象也是合法声明。保存声明、名称、地址或环境变量不以 textarea 至少有一个 ID 为前提；模型可稍后添加或发现。Provider state 仍从 canonical catalog、配置和 Auth 派生，模型执行保持现有 loader、过滤与模型引用校验。零声明数量不能用作可运行模型数量。
 
+服务商设置中的模型数量以已接受的目录条目为准。已加载目录缺少某个已声明的服务商时，行显示未知数量和范围说明；目录包含明确的空模型集合时显示零。
+
 空到空的编辑保留 models 缺席或明确 `{}`，保存时重读当前配置并只应用用户字段意图。清空旧表单中的 ID 只删除原覆盖，保留保存前已新增的模型与其元数据；项目覆盖删除可以恢复全局同 ID，配置覆盖删除可以恢复 catalog 同 ID。此操作不表达屏蔽继承模型。清空仍被引用的唯一自定义模型继续返回 ProviderModelNotFoundError；Auth 存在事实保持独立。
 
 ### Provider Auth occurrence authority

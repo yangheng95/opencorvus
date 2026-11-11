@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [服务商模型数量以目录中的实际条目为准](2026-11-11-provider-model-catalog-presence.md)
 - [目录读取结算时保留已接受的全局配置](2026-11-11-global-provider-config-settlement.md)
 - [关闭项目时一次发布全局读取范围](2026-11-11-project-close-scope-commit.md)
 - [服务商目录更新时保留同一行的控件](2026-11-11-provider-row-identity.md)

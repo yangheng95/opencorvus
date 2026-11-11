@@ -32,6 +32,7 @@ import {
   modelsForProvider,
   providerAuthMethods,
   providerApiKeyConfigured,
+  providerEntry,
   providerState,
   readProviderTestResult,
   testProviderConnection,
@@ -1041,10 +1042,6 @@ export default function ProvidersPanel() {
     )
   }
 
-  function modelListKnown(providerID: string): boolean {
-    return Boolean(appStore.providerCatalog) && !modelListIssue(providerID)
-  }
-
   const configuredProviderIDs = createMemo(() => {
     const configured = new Set(Object.keys(providerConfigs()))
     const connected = appStore.providerCatalog?.connected
@@ -1058,7 +1055,8 @@ export default function ProvidersPanel() {
 
   const unfilteredProviderEntries = createMemo(() =>
     Object.entries(configProviders()).map(([id, provider]) => {
-      const modelsKnown = modelListKnown(id)
+      const modelIssue = modelListIssue(id)
+      const modelsKnown = Boolean(providerEntry(id)) && !modelIssue
       const modelIds = modelsKnown ? modelsForProvider(id) : []
       const canAuthenticate = providerAuthMethods(id).length > 0
       const status = canAuthenticate ? providerState(id) : null
@@ -1078,8 +1076,9 @@ export default function ProvidersPanel() {
         modelIds,
         modelCountText: modelsKnown ? tc("provider.models.count", modelIds.length) : "—",
         modelSummaryText: modelsKnown
-          ? modelSummary(modelIds)
-          : t(modelListIssue(id) ? "provider.models.unavailable" : "common.loading"),
+          ? modelIds.slice(0, VISIBLE_MODEL_SUMMARY_LIMIT).join(", ")
+          : t(modelIssue ? "provider.models.unavailable"
+            : appStore.providerCatalog ? "provider.models.catalog_entry_missing" : "common.loading"),
         modelOverflowText,
         configurationText: configuredProviderIDs().has(id) ? t("llm.status.configured") : "",
         canAuthenticate,
@@ -1110,7 +1109,7 @@ export default function ProvidersPanel() {
     return catalogProviders()
       .filter((p: any) => p && typeof p.id === "string" && !custom.has(p.id))
       .map((p: any) => {
-        const modelsKnown = modelListKnown(p.id)
+        const modelsKnown = !modelListIssue(p.id)
         const modelCount = modelsKnown ? modelsForProvider(p.id).length : 0
         const providerStatus = providerState(p.id)
         const configured = configuredProviderIDs().has(p.id)
@@ -1156,11 +1155,6 @@ export default function ProvidersPanel() {
     Boolean(appStore.providerCatalog) && !appStore.providerLoadIssues.some((issue) => issue.resource === "catalog")
   const configuredUnavailable = () =>
     providerInfoIssues().some((issue) => ["catalog", "auth", "config"].includes(issue.resource))
-
-  function modelSummary(modelIds: string[]): string {
-    if (modelIds.length === 0) return t("provider.label.no_models")
-    return modelIds.slice(0, VISIBLE_MODEL_SUMMARY_LIMIT).join(", ")
-  }
 
   function hasMoreModels(modelIds: string[]): boolean {
     return modelIds.length > VISIBLE_MODEL_SUMMARY_LIMIT
@@ -1463,12 +1457,16 @@ export default function ProvidersPanel() {
                             </Feedback>
                           )}
                         </Show>
-                        <div class="provider-row-models" title={row().modelIds.join(", ")}>
-                          {row().modelSummaryText}
-                          <Show when={row().modelOverflowText}>
-                            <span class="provider-model-overflow">{row().modelOverflowText}</span>
-                          </Show>
-                        </div>
+                        <Show when={row().modelSummaryText}>
+                          {(summary) => (
+                            <div class="provider-row-models" title={row().modelIds.join(", ") || undefined}>
+                              {summary()}
+                              <Show when={row().modelOverflowText}>
+                                <span class="provider-model-overflow">{row().modelOverflowText}</span>
+                              </Show>
+                            </div>
+                          )}
+                        </Show>
                       </SettingsRow>
                     )}
                   </Show>

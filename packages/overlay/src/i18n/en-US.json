@@ -870,7 +870,7 @@
   "provider.clipboard_key_prompt.dismiss": "Not now",
   "provider.label.api": "API",
   "provider.label.env": "Env",
-  "provider.label.no_models": "none",
+  "provider.models.catalog_entry_missing": "Provider missing from the loaded catalog",
   "provider.models.unavailable": "Model list unavailable",
   "provider.models.count": {
     "one": "{{count}} model",
