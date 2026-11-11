@@ -1,0 +1,329 @@
+{
+  "archiveSetup": {
+    "requestID": "4a209b85-2c4f-4aaf-94e4-55af7e4947cc",
+    "body": {
+      "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "title": "Selected title after retry",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "created": 1794431306162,
+      "updated": 1794431652415,
+      "archived": 1794431652415,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Keep this original request available while project B changes its own Chat."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "archivedWrite": {
+    "connected": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    "changed": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "sequence": 1794431663015
+    },
+    "write": {
+      "requestID": "8b15444a-51b2-4848-91b2-a38911a39388",
+      "body": {
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "归档草稿的新标题",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "updated": 1794431663015,
+        "archived": 1794431652415,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Keep this original request available while project B changes its own Chat."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    },
+    "selected": {
+      "requestID": "25b6952c-dfd1-4958-aeac-d371069f0d1c",
+      "body": {
+        "kind": "mission",
+        "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "归档草稿的新标题",
+        "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "started": 1794431306162,
+        "updated": 1794431663015,
+        "pinned": false,
+        "archived": 1794431652415,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  },
+  "archivedCut": {
+    "time": "2026-11-11T21:14:23.058Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hucdyjdmNetCbH3efPX2",
+    "method": "GET",
+    "round": "b254-archived-read-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "53466d27-a24c-49e8-b84a-0a95711889b4",
+    "status": 200,
+    "bytes": 673,
+    "target": {
+      "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "title": "归档草稿的新标题",
+      "request": "Keep this original request available while project B changes its own Chat.",
+      "archived": 1794431652415,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "archivedRetry": {
+    "time": "2026-11-11T21:14:34.067Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hucdyjdmNetCbH3efPX2",
+    "method": "GET",
+    "round": "b254-archived-read-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "b0d4b027-4d9d-4ba1-b9c4-53069fb61175",
+    "status": 200,
+    "bytes": 673,
+    "target": {
+      "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+      "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "title": "归档草稿的新标题",
+      "request": "Keep this original request available while project B changes its own Chat.",
+      "archived": 1794431652415,
+      "boardLane": null
+    }
+  },
+  "chatWrite": {
+    "write": {
+      "requestID": "a5e28e74-49f7-4ce3-bfdb-01810b1a3a85",
+      "body": {
+        "session": {
+          "id": "ses_hxIQnZzM6McAwMoORMxE",
+          "slug": "nimble-harbor",
+          "projectID": "prj_hgfS0UQGkfVpegoWtkqy",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+          "title": "Chat title after exact read retry",
+          "version": "local",
+          "kind": "assistant",
+          "metadata": {
+            "projectConversationCreation": {
+              "version": 1,
+              "requestID": "b253-final-other-chat",
+              "model": null
+            },
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1794431306919,
+            "updated": 1794431716530
+          }
+        }
+      }
+    },
+    "read": {
+      "requestID": "6ddc3bd2-5401-4cb6-858e-07d309c5fd22",
+      "body": {
+        "kind": "chat",
+        "experience": "chat",
+        "id": "ses_hxIQnZzM6McAwMoORMxE",
+        "sessionID": "ses_hxIQnZzM6McAwMoORMxE",
+        "title": "Chat title after exact read retry",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+        "created": 1794431306919,
+        "started": 1794431306919,
+        "updated": 1794431716530,
+        "pinned": false,
+        "status": "idle"
+      }
+    }
+  },
+  "chatCut": {
+    "time": "2026-11-11T21:15:16.571Z",
+    "stage": "truncated",
+    "route": "/work-ledger/selection/session/ses_hxIQnZzM6McAwMoORMxE",
+    "method": "GET",
+    "round": "b254-chat-read-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+    "search": null,
+    "requestID": "b8217d6a-2d71-42c5-9342-cf095d8aaba1",
+    "status": 200,
+    "bytes": 384,
+    "target": {
+      "sessionID": "ses_hxIQnZzM6McAwMoORMxE",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+      "title": "Chat title after exact read retry",
+      "archived": null,
+      "boardLane": null
+    },
+    "deliveredBytes": 12
+  },
+  "chatRetry": {
+    "time": "2026-11-11T21:15:21.662Z",
+    "stage": "delivered",
+    "route": "/work-ledger/selection/session/ses_hxIQnZzM6McAwMoORMxE",
+    "method": "GET",
+    "round": "b254-chat-read-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+    "search": null,
+    "requestID": "29ebd720-6585-4239-acb9-40c08d348284",
+    "status": 200,
+    "bytes": 384,
+    "target": {
+      "sessionID": "ses_hxIQnZzM6McAwMoORMxE",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-alternate\\archive-restore-receipt",
+      "title": "Chat title after exact read retry",
+      "archived": null,
+      "boardLane": null
+    }
+  },
+  "mixed": {
+    "upgrade": {
+      "time": "2026-11-11T21:18:15.420Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    "patchCut": {
+      "time": "2026-11-11T21:18:33.044Z",
+      "stage": "truncated",
+      "route": "/mission/draft-0d3bb443f97813b202a2c4c75b8febd9/archive",
+      "method": "PATCH",
+      "round": "b254-mixed-restore",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "b7684d03-0667-4ce8-b091-d6c625bee3d1",
+      "status": 200,
+      "bytes": 558,
+      "target": {
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "title": "归档草稿的新标题",
+        "request": "Keep this original request available while project B changes its own Chat.",
+        "archived": null,
+        "boardLane": "backlog"
+      },
+      "deliveredBytes": 12
+    },
+    "selectedCut": {
+      "time": "2026-11-11T21:18:33.015Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hucdyjdmNetCbH3efPX2",
+      "method": "GET",
+      "round": "b254-mixed-restore",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "208f930a-842a-4cb9-a384-30468ee7be76",
+      "status": 200,
+      "bytes": 648,
+      "target": {
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "title": "归档草稿的新标题",
+        "request": "Keep this original request available while project B changes its own Chat.",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "verificationCut": {
+      "time": "2026-11-11T21:18:33.133Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hucdyjdmNetCbH3efPX2",
+      "method": "GET",
+      "round": "b254-mixed-verify",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "8ed96786-1b74-4b58-9a42-a2cb394a2452",
+      "status": 200,
+      "bytes": 648,
+      "target": {
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "title": "归档草稿的新标题",
+        "request": "Keep this original request available while project B changes its own Chat.",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "retryObserved": [
+      {
+        "time": "2026-11-11T21:18:37.568Z",
+        "stage": "mode",
+        "mode": "pass",
+        "round": "b254-mixed-retry-click"
+      }
+    ],
+    "latest": {
+      "requestID": "70ba5bb0-5556-4a6d-9843-b68d7b584ecd",
+      "body": {
+        "kind": "mission",
+        "id": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "missionID": "draft-0d3bb443f97813b202a2c4c75b8febd9",
+        "sessionID": "ses_hucdyjdmNetCbH3efPX2",
+        "title": "归档草稿的新标题",
+        "pendingPromptText": "Keep this original request available while project B changes its own Chat.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b253\\final-project\\archive-restore-receipt",
+        "created": 1794431306162,
+        "started": 1794431306162,
+        "updated": 1794431912941,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  }
+}

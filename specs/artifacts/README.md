@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [精确读取中断时的真实桌面证据](2026-11-12-work-ledger-selection-reading-recovery/README.md)
 - [工作台选中记录刷新范围的桌面证据](2026-11-12-work-ledger-selection-invalidation/README.md)
 - [归档恢复回执中断的桌面证据](2026-11-12-archive-restore-receipt/README.md)
 - [归档多步任务阅读和恢复文案的桌面证据](2026-11-12-mission-archive-reading-wording/README.md)
