@@ -815,6 +815,8 @@ project Squad Market recommendations. Its localized failure preserves the
 original diagnostic and retries the same owned request. On acceptance, focus
 still owned by Retry returns to the search field. Installed matches and authored
 selections keep their own request and presentation.
+The Composer preserves the active market install control through a same-query
+catalog refresh until the original control has handed its focus to search.
 The existing request key includes API authority, work type and catalog scope.
 Search waits for the owned initial catalog, then publishes under that key and
 the original sequence; retries reload and search the current query with its

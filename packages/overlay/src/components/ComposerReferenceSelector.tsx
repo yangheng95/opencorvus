@@ -191,11 +191,16 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   })
 
   const [marketActionError, setMarketActionError] = createSignal("")
-  const [marketInstall, setMarketInstall] = createSignal<{ scopeKey: string; id: string }>()
+  const [marketInstall, setMarketInstall] = createSignal<{
+    scopeKey: string
+    query: string
+    item: ExpertSquadMarketIndexItem
+  }>()
   const activeMarketInstall = () => {
     const attempt = marketInstall()
     return attempt?.scopeKey === props.referenceCatalogScopeKey ? attempt : undefined
   }
+  const marketQuery = () => query().trim().slice(0, 500)
   createEffect(
     on(
       [() => props.referenceCatalogScopeKey, () => props.referenceCatalogKey],
@@ -211,11 +216,17 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
 
   const marketSource = createMemo(() => {
     const search = props.onMarketExpertSquadQuery
-    const text = query().trim().slice(0, 500)
+    const text = marketQuery()
     if (!open() || props.readOnly || !search || !props.referenceCatalogKey || text.length < 2) return undefined
     return { authority: captureApiAuthority(), load: () => search(text) }
   })
   const market = createExpertSquadMarketRecommendations(marketSource, () => searchInputRef)
+  const marketItems = createMemo(() => {
+    const items = market.items()
+    const attempt = activeMarketInstall()
+    if (!attempt || attempt.query !== marketQuery() || items.includes(attempt.item)) return items
+    return [attempt.item, ...items.filter((item) => item.id !== attempt.item.id)]
+  })
   const marketActionBusy = () => market.loading() || !!activeMarketInstall()
   createEffect(on(marketSource, () => setMarketActionError("")))
 
@@ -223,14 +234,16 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
     const install = props.onInstallMarketExpertSquad
     const scopeKey = props.referenceCatalogScopeKey
     if (!install || !scopeKey || marketActionBusy()) return
-    const attempt = { scopeKey, id: item.id }
+    const attempt = { scopeKey, query: marketQuery(), item }
     const owns = () => activeMarketInstall() === attempt && open() && !props.readOnly
     const origin = document.activeElement === trigger ? trigger : undefined
     setMarketInstall(attempt)
     setMarketActionError("")
     try {
       await install(item)
-      if (owns() && origin && document.activeElement === origin && searchInputRef?.isConnected) searchInputRef.focus()
+      if (owns() && attempt.query === marketQuery() && origin && document.activeElement === origin && searchInputRef?.isConnected) {
+        searchInputRef.focus()
+      }
     } catch (error) {
       if (owns()) setMarketActionError(error instanceof Error ? error.message : String(error))
     } finally {
@@ -545,7 +558,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                     when={
                       filteredSkillOptions().length === 0 &&
                       filteredSquadOptions().every((option) => option.outsideSearch) &&
-                      market.items().length === 0 &&
+                      marketItems().length === 0 &&
                       !market.loading() &&
                       !market.failure() &&
                       !squadSearchLoading() &&
@@ -554,7 +567,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                   >
                     <div class="composer-reference-empty">{t("chat.references.no_matches")}</div>
                   </Show>
-                  <Show when={market.loading() || market.failure() || marketActionError() || market.items().length > 0}>
+                  <Show when={market.loading() || market.failure() || marketActionError() || marketItems().length > 0}>
                     <div class="composer-reference-market" data-ui="composer-reference-market">
                       <div class="composer-reference-market-head">
                         <span>{t("chat.references.market_results")}</span>
@@ -566,7 +579,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                       <Show when={marketActionError()}>
                         <div class="composer-reference-market-error">{marketActionError()}</div>
                       </Show>
-                      <For each={market.items()}>
+                      <For each={marketItems()}>
                         {(item) => (
                           <div class="composer-reference-option" data-reference-kind="market">
                             <span class="composer-reference-option-selection" aria-hidden="true" />
@@ -590,10 +603,10 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                               size="sm"
                               tone="accent"
                               aria-disabled={marketActionBusy() || undefined}
-                              aria-busy={activeMarketInstall()?.id === item.id || undefined}
+                              aria-busy={activeMarketInstall()?.item === item || undefined}
                               onClick={(event) => void installFromMarket(item, event.currentTarget)}
                             >
-                              <Show when={activeMarketInstall()?.id === item.id}>
+                              <Show when={activeMarketInstall()?.item === item}>
                                 <Icon name="loading" size="compact" />
                               </Show>
                               {t("chat.references.market_install")}

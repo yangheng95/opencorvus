@@ -1,0 +1,332 @@
+{
+  "asset": "main-CdgLlRNt.js",
+  "checked": [
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "c1f7d9c6-2a09-4ead-81ed-1ac685c4b7b8",
+      "result": {
+        "active": "dynamic"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "00600eba-7cdd-4e01-9906-2f7ae9b9d5b3",
+      "result": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/deep-research/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "327f8d0e-9f87-44ff-93e8-67d672e0f4b6",
+      "result": {
+        "id": "academic-paper-review",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/academic-paper-review/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "ed30bd97-b876-450c-b05b-f55a650bc143",
+      "result": {
+        "id": "data-analysis",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "manifest": ".opencorvus/expert-squads/builtin/data-analysis/expert-squad.jsonc"
+      }
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "aedcac4b-3aa2-4779-902d-527fc0311a6d",
+      "result": {
+        "ids": [
+          "commercial-legal",
+          "scientific-research-design",
+          "equity-research"
+        ]
+      }
+    }
+  ],
+  "installs": [
+    {
+      "time": "2026-11-11T18:44:51.683Z",
+      "stage": "origin",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-install-refresh-held",
+      "status": 200,
+      "requestID": "7f970495-a737-48d5-9b10-b63f44837cb6",
+      "bytes": 568,
+      "installation": {
+        "operation": "installed",
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T18:45:45.885Z",
+      "stage": "origin",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-zh-install-receipt-held",
+      "status": 200,
+      "requestID": "9cbce40c-8329-429e-9190-bde0c2b47198",
+      "bytes": 584,
+      "installation": {
+        "operation": "installed",
+        "id": "academic-paper-review",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T18:47:51.143Z",
+      "stage": "origin",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-zh-install-short-hold",
+      "status": 200,
+      "requestID": "1ba7a938-9b09-44ec-86e3-28c9ddfd34c6",
+      "bytes": 568,
+      "installation": {
+        "operation": "installed",
+        "id": "data-analysis",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    }
+  ],
+  "receiptDelivery": [
+    {
+      "time": "2026-11-11T18:44:51.684Z",
+      "stage": "delivered",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-install-refresh-held",
+      "status": 200,
+      "requestID": "7f970495-a737-48d5-9b10-b63f44837cb6",
+      "bytes": 568,
+      "installation": {
+        "operation": "installed",
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T18:45:45.886Z",
+      "stage": "held",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-zh-install-receipt-held",
+      "status": 200,
+      "requestID": "9cbce40c-8329-429e-9190-bde0c2b47198",
+      "bytes": 584,
+      "installation": {
+        "operation": "installed",
+        "id": "academic-paper-review",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T18:46:03.033Z",
+      "stage": "retired",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-zh-install-receipt-held",
+      "status": 200,
+      "requestID": "9cbce40c-8329-429e-9190-bde0c2b47198",
+      "bytes": 584,
+      "installation": {
+        "operation": "installed",
+        "id": "academic-paper-review",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T18:47:51.143Z",
+      "stage": "held",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-zh-install-short-hold",
+      "status": 200,
+      "requestID": "1ba7a938-9b09-44ec-86e3-28c9ddfd34c6",
+      "bytes": 568,
+      "installation": {
+        "operation": "installed",
+        "id": "data-analysis",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T18:47:51.364Z",
+      "stage": "delivered",
+      "route": "/expert-squad/install-payload",
+      "project": "composer-market-install-focus",
+      "query": null,
+      "round": "composer-zh-install-short-hold",
+      "status": 200,
+      "requestID": "1ba7a938-9b09-44ec-86e3-28c9ddfd34c6",
+      "bytes": 568,
+      "installation": {
+        "operation": "installed",
+        "id": "data-analysis",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    }
+  ],
+  "market": [
+    {
+      "time": "2026-11-11T18:44:40.291Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "setup",
+      "status": 200,
+      "requestID": "dd02ea06-c23a-46c5-be15-7b3d13a2aa8a",
+      "bytes": 1454,
+      "ids": [
+        "deep-research",
+        "academic-paper-review",
+        "data-analysis"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:44:52.184Z",
+      "stage": "held",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-install-refresh-held",
+      "status": 200,
+      "requestID": "0b3dfabf-9ba3-44cd-b189-f468be22a0cd",
+      "bytes": 1490,
+      "ids": [
+        "academic-paper-review",
+        "data-analysis",
+        "commercial-legal"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:44:56.747Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-install-refresh-held",
+      "status": 200,
+      "requestID": "0b3dfabf-9ba3-44cd-b189-f468be22a0cd",
+      "bytes": 1490,
+      "ids": [
+        "academic-paper-review",
+        "data-analysis",
+        "commercial-legal"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:45:33.924Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-install-refresh-released",
+      "status": 200,
+      "requestID": "c1a4a50d-7234-488f-abff-4b783448a5ca",
+      "bytes": 1490,
+      "ids": [
+        "academic-paper-review",
+        "data-analysis",
+        "commercial-legal"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:46:10.308Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-zh-install-receipt-released",
+      "status": 200,
+      "requestID": "fde3b3e7-c7b6-4ed7-a31c-462ec1bcb79d",
+      "bytes": 1464,
+      "ids": [
+        "data-analysis",
+        "commercial-legal",
+        "scientific-research-design"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:47:26.214Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-zh-install-receipt-released",
+      "status": 200,
+      "requestID": "748b3b1e-1f6c-4ec2-acbf-dcff25517028",
+      "bytes": 1464,
+      "ids": [
+        "data-analysis",
+        "commercial-legal",
+        "scientific-research-design"
+      ]
+    },
+    {
+      "time": "2026-11-11T18:47:58.417Z",
+      "stage": "delivered",
+      "route": "/expert-squad/market",
+      "project": "composer-market-install-focus",
+      "query": "deep research",
+      "round": "composer-zh-install-short-released",
+      "status": 200,
+      "requestID": "8660506a-e8d0-45f7-81bc-8f82f1135822",
+      "bytes": 1444,
+      "ids": [
+        "commercial-legal",
+        "scientific-research-design",
+        "equity-research"
+      ]
+    }
+  ],
+  "translation": {
+    "time": "2026-11-11T18:47:51.700Z",
+    "stage": "delivered",
+    "route": "/expert-squad/market",
+    "project": "composer-market-install-focus",
+    "query": "translation",
+    "round": "composer-zh-install-short-released",
+    "status": 200,
+    "requestID": "3df575f8-42ea-465a-a41f-5ff7da3b4489",
+    "bytes": 1533,
+    "ids": [
+      "localization-adaptation",
+      "patent-landscape-prior-art",
+      "hr-operations"
+    ]
+  }
+}
