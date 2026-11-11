@@ -1,0 +1,107 @@
+{
+  "asset": "main-fMjKjhbC.js",
+  "concurrent": {
+    "before": {
+      "id": "atm_g0Vahvrzr00tz74nrb6d",
+      "revisionId": "atm_g0VahvxZQ00RayxrYslx",
+      "name": "Pause status confirmation",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_h9Bfc0cxolU3opZBOEcZ"
+        ]
+      },
+      "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "Retain the original English schedule instruction.",
+      "status": "active",
+      "lastRun": null,
+      "nextRun": 4070908800000,
+      "failureCount": 0,
+      "lastError": null
+    },
+    "after": {
+      "id": "atm_g0Vahvrzr00tz74nrb6d",
+      "revisionId": "atm_g0VahxAF300KdJ3u0BMl",
+      "name": "English schedule updated in another connection",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_h9Bfc0cxolU3opZBOEcZ"
+        ]
+      },
+      "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "Retain the original English schedule instruction.",
+      "status": "paused",
+      "lastRun": null,
+      "nextRun": 4070908800000,
+      "failureCount": 0,
+      "lastError": null
+    },
+    "requestID": "965b0cfa-0ea5-4394-b0b5-1c917ffaeda4"
+  },
+  "refusal": {
+    "time": "2026-11-11T22:52:54.454Z",
+    "stage": "delivered",
+    "route": "/global/automations/atm_g0Vahvrzr00tz74nrb6d",
+    "method": "PATCH",
+    "round": "baseline-b260-en-conflict",
+    "directory": null,
+    "search": null,
+    "requestID": "18b0d147-d65a-46a7-bc0d-2d1b30c9bd5d",
+    "status": 409,
+    "bytes": 380
+  },
+  "read": {
+    "requestID": "0532ad34-a60b-4561-87dd-d3ac0bc8ace0",
+    "rows": [
+      {
+        "id": "atm_g0Vahvrzr00tz74nrb6d",
+        "revisionId": "atm_g0VahxAF300KdJ3u0BMl",
+        "name": "English schedule updated in another connection",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Bfc0cxolU3opZBOEcZ"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain the original English schedule instruction.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_g0Vahvs4X00YfQ2rW3Rd",
+        "revisionId": "atm_g0Vahw60900SKSYxP3vE",
+        "name": "另一连接已改名的定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hIC8asf5ua97BTM0CTxT"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  }
+}

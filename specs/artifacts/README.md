@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务状态冲突的真实桌面证据](2026-11-12-automation-status-revision-conflict/README.md)
 - [定时任务状态回执的真实桌面证据](2026-11-12-automation-status-receipt/README.md)
 - [独立任务归档菜单的真实桌面证据](2026-11-12-task-archive-cancellation-label/README.md)
 - [主动归档回执的真实桌面证据](2026-11-12-active-archive-receipt/README.md)
