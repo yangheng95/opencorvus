@@ -1,0 +1,167 @@
+{
+  "asset": "main-C78hZGs4.js",
+  "failures": [
+    {
+      "at": "2026-11-11T15:24:12.766Z",
+      "stage": "cut",
+      "round": "project-read-failure",
+      "method": "GET",
+      "route": "/config",
+      "project": "config-receipt-review",
+      "status": 200,
+      "requestID": "1dc8c475-7543-44a4-884c-018c7aa4ba03",
+      "publicUrl": "http://127.0.0.1:41351",
+      "providerName": "Review Config Before"
+    },
+    {
+      "at": "2026-11-11T16:06:49.441Z",
+      "stage": "cut",
+      "round": "global-read-failure-confirmed",
+      "method": "GET",
+      "route": "/global/config",
+      "project": "global",
+      "status": 200,
+      "requestID": "d90fca2a-d83d-404c-89b3-e9be9843f8eb",
+      "providerName": "Review Config Global After"
+    }
+  ],
+  "captured": [
+    {
+      "round": "project-retry-save",
+      "events": [
+        {
+          "at": "2026-11-11T15:24:24.784Z",
+          "stage": "held",
+          "round": "project-retry-save",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-receipt-review",
+          "status": 200,
+          "requestID": "f16302fb-a88a-45a8-9118-bccaae7b0ca2",
+          "publicUrl": "http://127.0.0.1:41351",
+          "providerName": "Review Config Before"
+        },
+        {
+          "at": "2026-11-11T15:24:31.580Z",
+          "stage": "delivered",
+          "round": "project-retry-save",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-receipt-review",
+          "status": 200,
+          "requestID": "3805762c-36b0-40e1-af96-7045d9f7a401",
+          "publicUrl": "http://127.0.0.1:41351",
+          "providerName": "Review Config Before"
+        },
+        {
+          "at": "2026-11-11T15:24:31.668Z",
+          "stage": "delivered",
+          "round": "project-retry-save",
+          "method": "PATCH",
+          "route": "/config",
+          "project": "config-receipt-review",
+          "status": 200,
+          "requestID": "15ad9104-e22c-4aa2-8ac6-9692d030260a",
+          "publicUrl": "http://127.0.0.1:41351",
+          "projectProviderName": "Review Config Project After",
+          "providerName": "Review Config Before"
+        },
+        {
+          "at": "2026-11-11T15:24:39.666Z",
+          "stage": "delivered",
+          "round": "project-retry-save",
+          "method": "GET",
+          "route": "/config",
+          "project": "config-receipt-review",
+          "status": 200,
+          "requestID": "f16302fb-a88a-45a8-9118-bccaae7b0ca2",
+          "publicUrl": "http://127.0.0.1:41351",
+          "providerName": "Review Config Before"
+        }
+      ]
+    },
+    {
+      "round": "global-retry-save-confirmed",
+      "events": [
+        {
+          "at": "2026-11-11T16:07:10.445Z",
+          "stage": "held",
+          "round": "global-retry-save-confirmed",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "4ccd0c99-7d55-4c50-b762-4965438e4a77",
+          "providerName": "Review Config Global After"
+        },
+        {
+          "at": "2026-11-11T16:07:15.035Z",
+          "stage": "delivered",
+          "round": "global-retry-save-confirmed",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "cb927979-bc6e-49f4-b77d-dc0ea6123cce",
+          "providerName": "Review Config Global After"
+        },
+        {
+          "at": "2026-11-11T16:07:15.126Z",
+          "stage": "delivered",
+          "round": "global-retry-save-confirmed",
+          "method": "PATCH",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "98f570b4-8809-455e-9b44-22b9b2fe52d5",
+          "providerName": "Review Config Global Confirmed"
+        },
+        {
+          "at": "2026-11-11T16:07:15.143Z",
+          "stage": "delivered",
+          "round": "global-retry-save-confirmed",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "1c12e374-fa28-4c57-9e83-086747aaf86a",
+          "providerName": "Review Config Global Confirmed"
+        },
+        {
+          "at": "2026-11-11T16:07:18.712Z",
+          "stage": "delivered",
+          "round": "global-retry-save-confirmed",
+          "method": "GET",
+          "route": "/global/config",
+          "project": "global",
+          "status": 200,
+          "requestID": "4ccd0c99-7d55-4c50-b762-4965438e4a77",
+          "providerName": "Review Config Global After"
+        }
+      ]
+    }
+  ],
+  "checked": [
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "d970f52d-c0a5-4afa-ad11-89bdeacaa82d",
+      "projectProviderName": "Review Config Project After",
+      "publicUrl": "http://127.0.0.1:41351"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "f73cd2f9-5f37-4aa8-9889-0ea476bf1283",
+      "providerName": "Review Config Global Confirmed",
+      "providerIDs": [
+        "review-config"
+      ]
+    },
+    {
+      "route": "/channel",
+      "status": 200,
+      "requestID": "d002256f-6bae-4a5a-a599-6dcb6595ea40"
+    }
+  ]
+}
