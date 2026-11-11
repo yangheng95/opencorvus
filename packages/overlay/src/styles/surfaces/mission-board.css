@@ -955,10 +955,6 @@ body {
   min-height: calc(28px * var(--ui-scale));
 }
 
-.mission-create-form__market-state.is-success {
-  color: var(--good);
-}
-
 .mission-create-form__error {
   display: flex;
   align-items: flex-start;

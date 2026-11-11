@@ -785,6 +785,16 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               placeholder={t("mission_board.create.squad_search_placeholder")}
               size="sm"
             />
+            <Show when={installedReceiptID()}>
+              {(id) => (
+                <Feedback tone="success" data-ui="mission-create-market-installed">
+                  {t("mission_board.create.market_installed", { id: id() })}
+                </Feedback>
+              )}
+            </Show>
+            <Show when={marketInstallOutcome()?.kind === "confirmed"}>
+              <ExpertSquadMarketInstallFeedback outcome={marketInstallOutcome()} />
+            </Show>
             <Show when={expertSquadError()}>
               {(failure) => (
                 <Feedback
@@ -896,7 +906,9 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           <p class="mission-create-form__model-note">{t("mission_board.create.project_model_note")}</p>
         </fieldset>
 
-        <ExpertSquadMarketInstallFeedback outcome={marketInstallOutcome()} />
+        <Show when={marketInstallOutcome()?.kind === "unconfirmed"}>
+          <ExpertSquadMarketInstallFeedback outcome={marketInstallOutcome()} />
+        </Show>
         <ExpertSquadMarketSearchFeedback failure={market.failure()} loading={market.loading()} onRetry={market.retry} />
         <Show when={market.loading() && !market.failure()}>
           <div class="mission-create-form__market-state" role="status" aria-live="polite">
@@ -961,13 +973,6 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             </div>
           </section>
         </Show>
-        <Show when={installedReceiptID()}>
-          <div class="mission-create-form__market-state is-success" role="status" aria-live="polite">
-            <Icon name="status-completed" size="compact" />
-            <span>{t("mission_board.create.market_installed", { id: installedReceiptID() })}</span>
-          </div>
-        </Show>
-
         <Show when={error()}>
           {(failure) => (
             <Feedback

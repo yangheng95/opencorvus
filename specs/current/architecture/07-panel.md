@@ -823,6 +823,9 @@ inspection confirms the current installation and refreshes the catalogs.
 The interface distinguishes the installation check from the action receipt and
 retains the original transport diagnostic. An inconclusive check keeps the
 installation unconfirmed.
+In Mission creation, a successful receipt or confirmed installation appears
+beside the search field that receives focus. An unconfirmed installation keeps
+its feedback beside the Market actions.
 The existing request key includes API authority, work type and catalog scope.
 Search waits for the owned initial catalog, then publishes under that key and
 the original sequence; retries reload and search the current query with its

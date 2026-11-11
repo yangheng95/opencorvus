@@ -1,0 +1,168 @@
+{
+  "asset": "main-DUzMeGoA.js",
+  "checked": [
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "b45a44a0-748d-439c-b02d-5b38e5a79f30",
+      "id": "browser-research-acceptance",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      },
+      "manifest": ".opencorvus/expert-squads/builtin/browser-research-acceptance/expert-squad.jsonc"
+    },
+    {
+      "route": "/expert-squad/inspect",
+      "requestID": "d9880e5a-8985-4a65-8d14-2b2574a38e2c",
+      "id": "deep-research",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      },
+      "manifest": ".opencorvus/expert-squads/builtin/deep-research/expert-squad.jsonc"
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "requestID": "59d98635-ee8d-44fa-a5d6-522004d435a0",
+      "active": "dynamic"
+    },
+    {
+      "route": "/expert-squad/market",
+      "requestID": "5a445ec6-4fec-4de9-a862-5a71a85af20e",
+      "query": "research",
+      "ids": [
+        "equity-research",
+        "sales-strategy",
+        "scientific-research-design"
+      ]
+    }
+  ],
+  "receipts": [
+    {
+      "time": "2026-11-11T19:24:31.056Z",
+      "stage": "delivered",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "setup",
+      "status": 200,
+      "requestID": "68f21b3b-473a-480b-833a-d6234a81e253",
+      "bytes": 582,
+      "installation": {
+        "operation": "installed",
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "installationScope": "project"
+      }
+    },
+    {
+      "time": "2026-11-11T19:26:20.141Z",
+      "stage": "truncated",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "b247-candidate-deep-receipt",
+      "status": 200,
+      "requestID": "843a0da3-c1c1-4ea8-8aa8-f8a9261018b2",
+      "bytes": 554,
+      "installation": {
+        "operation": "installed",
+        "id": "deep-research",
+        "namespace": "builtin",
+        "installationScope": "project"
+      },
+      "deliveredBytes": 32
+    }
+  ],
+  "reads": [
+    {
+      "time": "2026-11-11T19:24:31.166Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "setup",
+      "target": {
+        "id": "browser-research-acceptance",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "c74f5e5e-8f03-4530-a217-6b134637e281",
+      "bytes": 5772,
+      "inspection": {
+        "id": "browser-research-acceptance",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Browser Research & Acceptance"
+      }
+    },
+    {
+      "time": "2026-11-11T19:26:20.246Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "b247-candidate-deep-check",
+      "target": {
+        "id": "deep-research",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 200,
+      "requestID": "02663632-9fd2-4194-801d-fcde423aea66",
+      "bytes": 11595,
+      "inspection": {
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "project",
+          "namespace": "builtin"
+        },
+        "errorName": "Deep Research"
+      }
+    },
+    {
+      "time": "2026-11-11T19:26:44.146Z",
+      "stage": "delivered",
+      "route": "/expert-squad/inspect",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "b247-candidate-equity-drop",
+      "target": {
+        "id": "equity-research",
+        "namespace": "builtin",
+        "scope": "project"
+      },
+      "status": 404,
+      "requestID": "b7cfe338-6f05-49cf-81d5-4d856e2bce0a",
+      "bytes": 85,
+      "inspection": {
+        "errorName": "NotFoundError"
+      }
+    }
+  ],
+  "dropped": [
+    {
+      "time": "2026-11-11T19:26:44.128Z",
+      "stage": "dropped",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "b247-candidate-equity-drop"
+    },
+    {
+      "time": "2026-11-11T19:26:44.130Z",
+      "stage": "dropped",
+      "route": "/expert-squad/install-payload",
+      "project": "market-install-receipt",
+      "query": null,
+      "round": "b247-candidate-equity-drop"
+    }
+  ]
+}
