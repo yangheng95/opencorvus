@@ -1090,6 +1090,7 @@
   "automations.error.run_pending": "This run was accepted and its results are pending. Retry the same run to check again.",
   "automations.error.run_unconfirmed": "The run receipt is unconfirmed. Retry the same run to recover its result without starting it twice.",
   "automations.error.status_failed": "Could not change the automatic-run status.",
+  "automations.error.status_revision_conflict": "This scheduled task has a newer version.",
   "automations.error.status_unconfirmed": "The current automatic-run status could not be confirmed.",
   "automations.error.delete_failed": "Could not confirm whether this automation was deleted. Refresh the list to check.",
   "automations.error.provider_setup_failed": "Model provider information could not be loaded.",

@@ -377,8 +377,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     return automations().length === 0 && problem?.source === "list-load" ? problem : null
   })
   const feedbackRetryPending = () => error()?.source !== undefined && loading()
-  const statusUnconfirmed = () => error()?.source === "status-check"
-  const checkingStatus = () => statusUnconfirmed() && loading()
+  const statusNeedsCheck = () => error()?.source === "status-check"
+  const checkingStatus = () => statusNeedsCheck() && loading()
   function clearFilters(): void {
     if (busyAction()) return
     setSearch("")
@@ -547,7 +547,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       if (!request.signal.aborted) {
         if (statusCheck) {
           setError({ ...statusCheck, details: [statusCheck.details, formatErrorDetails(cause)].filter(Boolean).join("\n\n") })
-        } else if (!options.background || error()?.source !== "status-check") {
+        } else if (!options.background || !statusNeedsCheck()) {
           setError({
             ...automationFailure(cause, "automations.error.list_load_failed"),
             retry: () => void load(preferredID),
@@ -828,7 +828,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   }
 
   async function performStatusChange(current: AutomationView): Promise<void> {
-    if (busyAction() || statusUnconfirmed()) return
+    if (busyAction() || statusNeedsCheck()) return
     const authority = captureApiAuthority()
     const owner: AutomationMutationOwner = { kind: "action", id: current.id, operation: "status" }
     const owns = () => !disposed && mutationOwner() === owner && selectedID() === current.id && isApiAuthorityCurrent(authority)
@@ -844,12 +844,15 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       ))
     } catch (cause) {
       if (!owns()) return
-      if (!(cause instanceof AutomationStatusUnconfirmedError)) {
+      const revisionConflict = cause instanceof ApiError && cause.status === 409 &&
+        automationErrorName(cause) === "AutomationRevisionConflictError"
+      if (!revisionConflict && !(cause instanceof AutomationStatusUnconfirmedError)) {
         setError(automationFailure(cause, "automations.error.status_failed"))
         return
       }
       const problem: AutomationError = {
-        ...automationFailure(cause, "automations.error.status_unconfirmed"),
+        messageKey: revisionConflict ? "automations.error.status_revision_conflict" : "automations.error.status_unconfirmed",
+        details: formatErrorDetails(cause),
         source: "status-check",
         tone: "warning",
         retry: () => {
@@ -1268,8 +1271,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         <div>
                           <div class="automation-detail-heading">
                             <h3>{automation().name}</h3>
-                            <Badge tone={statusUnconfirmed() ? "neutral" : statusTone(automation().status)}>
-                              {t(statusUnconfirmed() ? "automations.status.unconfirmed" : `automations.status.${automation().status}`)}
+                            <Badge tone={statusNeedsCheck() ? "neutral" : statusTone(automation().status)}>
+                              {t(statusNeedsCheck() ? "automations.status.unconfirmed" : `automations.status.${automation().status}`)}
                             </Badge>
                           </div>
                           <p>{recurrenceSummary(automation().recurrence)}</p>
@@ -1307,7 +1310,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-status"
-                            disabled={Boolean(busyAction()) || statusUnconfirmed()}
+                            disabled={Boolean(busyAction()) || statusNeedsCheck()}
                             onClick={() => void performStatusChange(automation())}
                           >
                             {automation().status === "active" ? t("automations.pause") : t("automations.resume")}
@@ -1341,7 +1344,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </Show>
                         <div>
                           <span>{t("automations.next")}</span>
-                          <strong>{statusUnconfirmed() ? t("automations.status.unconfirmed") : nextRunValue(automation())}</strong>
+                          <strong>{statusNeedsCheck() ? t("automations.status.unconfirmed") : nextRunValue(automation())}</strong>
                         </div>
                         <div>
                           <span>{t("automations.last")}</span>

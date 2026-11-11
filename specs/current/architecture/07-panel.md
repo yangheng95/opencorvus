@@ -2011,6 +2011,9 @@ updates the observed revision in the shared list. If the state remains
 uncertain, Check status reads the current definition in place and preserves the
 original diagnostics and detail while that read is pending. The status and
 next-run fields identify an unconfirmed result until the read completes.
+A definitive status revision conflict retains the original refusal and offers
+the same in-place read. A later Pause or Resume uses the revision the user
+observed after that read.
 Scheduled failures retain one presentation record with a message key and the
 original diagnostic details. Summaries use the current interface language;
 Feedback's existing Details disclosure preserves the complete original error.

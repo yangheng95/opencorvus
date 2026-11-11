@@ -1,0 +1,508 @@
+{
+  "asset": "main-DYqZTrfT.js",
+  "occurrence": "iteration-b260-candidate",
+  "upgrade": {
+    "time": "2026-11-11T22:57:01.954Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "initialPause": {
+    "time": "2026-11-11T22:57:41.248Z",
+    "stage": "delivered",
+    "route": "/global/automations/atm_g0VahyCRo00F0IkZ5E7R",
+    "method": "PATCH",
+    "round": "b260-zh-initial-pause",
+    "directory": null,
+    "search": null,
+    "requestID": "b47b5a61-b5fa-43ae-8f43-2e803851cb04",
+    "status": 200,
+    "bytes": 440,
+    "target": {
+      "id": "atm_g0VahyCRo00F0IkZ5E7R",
+      "revisionId": "atm_g0VahyOT600jMIl151LN",
+      "name": "定时任务暂停确认",
+      "status": "paused",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hLFxjrv6STeoC5hDghuT"
+        ]
+      },
+      "nextRun": 4070908800000
+    }
+  },
+  "results": {
+    "english": {
+      "original": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b260\\candidate-project\\archive-review",
+        "projectID": "prj_hG8x6YzCzW2aRQj6AmvT",
+        "input": {
+          "name": "Pause status confirmation",
+          "prompt": "Retain the original English schedule instruction.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hG8x6YzCzW2aRQj6AmvT"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local"
+        },
+        "receipt": {
+          "id": "atm_g0VahyCNS00uqUeKPTTp",
+          "revisionId": "atm_g0VahyCNS00uqUeKPTTp",
+          "name": "Pause status confirmation",
+          "nextRun": 4070908800000
+        },
+        "requestID": "ebbc5f5d-5f88-4bde-b024-af629c3658b0"
+      },
+      "concurrent": {
+        "before": {
+          "id": "atm_g0VahyCNS00uqUeKPTTp",
+          "revisionId": "atm_g0VahyCNS00uqUeKPTTp",
+          "name": "Pause status confirmation",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hG8x6YzCzW2aRQj6AmvT"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Retain the original English schedule instruction.",
+          "status": "active",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        "after": {
+          "id": "atm_g0VahyCNS00uqUeKPTTp",
+          "revisionId": "atm_g0VahyG8w00332hmZz4v",
+          "name": "English schedule updated in another connection",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hG8x6YzCzW2aRQj6AmvT"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Retain the original English schedule instruction.",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        "requestID": "5b700be8-3725-4d46-a0b2-9c8d7ae20198"
+      },
+      "staleInput": {
+        "time": "2026-11-11T22:57:14.323Z",
+        "stage": "request-body",
+        "route": "/global/automations/atm_g0VahyCNS00uqUeKPTTp",
+        "method": "PATCH",
+        "round": "b260-en-conflict",
+        "directory": null,
+        "search": null,
+        "requestedStatus": "paused",
+        "expectedRevisionId": "atm_g0VahyCNS00uqUeKPTTp"
+      },
+      "conflict": {
+        "time": "2026-11-11T22:57:14.327Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_g0VahyCNS00uqUeKPTTp",
+        "method": "PATCH",
+        "round": "b260-en-conflict",
+        "directory": null,
+        "search": null,
+        "requestID": "0a4f92ae-e384-4111-9284-6f3e9b39bda3",
+        "status": 409,
+        "bytes": 380,
+        "error": {
+          "name": "AutomationRevisionConflictError",
+          "automationID": "atm_g0VahyCNS00uqUeKPTTp",
+          "expectedRevisionId": "atm_g0VahyCNS00uqUeKPTTp",
+          "currentRevisionId": "atm_g0VahyG8w00332hmZz4v"
+        }
+      },
+      "check": {
+        "time": "2026-11-11T22:57:22.741Z",
+        "stage": "delivered",
+        "route": "/global/automations",
+        "method": "GET",
+        "round": "b260-en-check",
+        "directory": null,
+        "search": null,
+        "requestID": "f4639bce-1618-48ef-90ad-d1fcdba034f5",
+        "status": 200,
+        "bytes": 921,
+        "items": [
+          {
+            "id": "atm_g0VahyCNS00uqUeKPTTp",
+            "revisionId": "atm_g0VahyG8w00332hmZz4v",
+            "name": "English schedule updated in another connection",
+            "status": "paused",
+            "target": {
+              "scope": "project",
+              "projectIds": [
+                "prj_hG8x6YzCzW2aRQj6AmvT"
+              ]
+            },
+            "nextRun": 4070908800000
+          },
+          {
+            "id": "atm_g0VahyCRo00F0IkZ5E7R",
+            "revisionId": "atm_g0VahyCRo00F0IkZ5E7R",
+            "name": "定时任务暂停确认",
+            "status": "active",
+            "target": {
+              "scope": "project",
+              "projectIds": [
+                "prj_hLFxjrv6STeoC5hDghuT"
+              ]
+            },
+            "nextRun": 4070908800000
+          }
+        ]
+      },
+      "resumeInput": {
+        "time": "2026-11-11T22:57:28.963Z",
+        "stage": "request-body",
+        "route": "/global/automations/atm_g0VahyCNS00uqUeKPTTp",
+        "method": "PATCH",
+        "round": "b260-en-resume",
+        "directory": null,
+        "search": null,
+        "requestedStatus": "active",
+        "expectedRevisionId": "atm_g0VahyG8w00332hmZz4v"
+      },
+      "resume": {
+        "time": "2026-11-11T22:57:28.980Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_g0VahyCNS00uqUeKPTTp",
+        "method": "PATCH",
+        "round": "b260-en-resume",
+        "directory": null,
+        "search": null,
+        "requestID": "ebde6cb1-aa46-41ea-a1ec-5bb5f5f6ae53",
+        "status": 200,
+        "bytes": 478,
+        "target": {
+          "id": "atm_g0VahyCNS00uqUeKPTTp",
+          "revisionId": "atm_g0VahyLHB00lj60r3xEp",
+          "name": "English schedule updated in another connection",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hG8x6YzCzW2aRQj6AmvT"
+            ]
+          },
+          "nextRun": 4070908800000
+        }
+      },
+      "runs": {
+        "requestID": "95fe1799-d112-44b4-a72c-c9993f805201",
+        "body": []
+      },
+      "fires": {
+        "requestID": "bd7dd148-d7e9-4247-b71b-890ae298840e",
+        "body": [
+          {
+            "fireId": "cal_automation_b4c4816044a967d7a952475b51ea1e03",
+            "automationId": "atm_g0VahyCNS00uqUeKPTTp",
+            "automationRevisionId": "atm_g0VahyLHB00lj60r3xEp",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794437848970,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_9b2f29da12dabf356d1fec64a7092699",
+            "automationId": "atm_g0VahyCNS00uqUeKPTTp",
+            "automationRevisionId": "atm_g0VahyCNS00uqUeKPTTp",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794437814766,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    "chinese": {
+      "original": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b260\\candidate-alternate\\archive-review",
+        "projectID": "prj_hLFxjrv6STeoC5hDghuT",
+        "input": {
+          "name": "定时任务暂停确认",
+          "prompt": "保留原始定时任务指令。",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hLFxjrv6STeoC5hDghuT"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local"
+        },
+        "receipt": {
+          "id": "atm_g0VahyCRo00F0IkZ5E7R",
+          "revisionId": "atm_g0VahyCRo00F0IkZ5E7R",
+          "name": "定时任务暂停确认",
+          "nextRun": 4070908800000
+        },
+        "requestID": "73a51e1f-a5a9-40e5-b8b0-c28af71faeb7"
+      },
+      "concurrent": {
+        "before": {
+          "id": "atm_g0VahyCRo00F0IkZ5E7R",
+          "revisionId": "atm_g0VahyOT600jMIl151LN",
+          "name": "定时任务暂停确认",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hLFxjrv6STeoC5hDghuT"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "保留原始定时任务指令。",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        "after": {
+          "id": "atm_g0VahyCRo00F0IkZ5E7R",
+          "revisionId": "atm_g0VahyQ0700XYhmrMYQs",
+          "name": "另一连接更新的中文定时任务",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hLFxjrv6STeoC5hDghuT"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "保留原始定时任务指令。",
+          "status": "paused",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        },
+        "requestID": "0a5896f0-32e7-4df6-8814-ab09e3cac53e"
+      },
+      "staleInput": {
+        "time": "2026-11-11T22:57:54.058Z",
+        "stage": "request-body",
+        "route": "/global/automations/atm_g0VahyCRo00F0IkZ5E7R",
+        "method": "PATCH",
+        "round": "b260-zh-conflict",
+        "directory": null,
+        "search": null,
+        "requestedStatus": "active",
+        "expectedRevisionId": "atm_g0VahyOT600jMIl151LN"
+      },
+      "conflict": {
+        "time": "2026-11-11T22:57:54.061Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_g0VahyCRo00F0IkZ5E7R",
+        "method": "PATCH",
+        "round": "b260-zh-conflict",
+        "directory": null,
+        "search": null,
+        "requestID": "2b752549-9eb8-484d-8609-de308894ab8b",
+        "status": 409,
+        "bytes": 380,
+        "error": {
+          "name": "AutomationRevisionConflictError",
+          "automationID": "atm_g0VahyCRo00F0IkZ5E7R",
+          "expectedRevisionId": "atm_g0VahyOT600jMIl151LN",
+          "currentRevisionId": "atm_g0VahyQ0700XYhmrMYQs"
+        }
+      },
+      "check": {
+        "time": "2026-11-11T22:58:03.225Z",
+        "stage": "delivered",
+        "route": "/global/automations",
+        "method": "GET",
+        "round": "b260-zh-check",
+        "directory": null,
+        "search": null,
+        "requestID": "ac0e3370-b1df-4a42-80c6-5043fe58eb15",
+        "status": 200,
+        "bytes": 936,
+        "items": [
+          {
+            "id": "atm_g0VahyCNS00uqUeKPTTp",
+            "revisionId": "atm_g0VahyLHB00lj60r3xEp",
+            "name": "English schedule updated in another connection",
+            "status": "active",
+            "target": {
+              "scope": "project",
+              "projectIds": [
+                "prj_hG8x6YzCzW2aRQj6AmvT"
+              ]
+            },
+            "nextRun": 4070908800000
+          },
+          {
+            "id": "atm_g0VahyCRo00F0IkZ5E7R",
+            "revisionId": "atm_g0VahyQ0700XYhmrMYQs",
+            "name": "另一连接更新的中文定时任务",
+            "status": "paused",
+            "target": {
+              "scope": "project",
+              "projectIds": [
+                "prj_hLFxjrv6STeoC5hDghuT"
+              ]
+            },
+            "nextRun": 4070908800000
+          }
+        ]
+      },
+      "resumeInput": {
+        "time": "2026-11-11T22:58:09.208Z",
+        "stage": "request-body",
+        "route": "/global/automations/atm_g0VahyCRo00F0IkZ5E7R",
+        "method": "PATCH",
+        "round": "b260-zh-resume",
+        "directory": null,
+        "search": null,
+        "requestedStatus": "active",
+        "expectedRevisionId": "atm_g0VahyQ0700XYhmrMYQs"
+      },
+      "resume": {
+        "time": "2026-11-11T22:58:09.224Z",
+        "stage": "delivered",
+        "route": "/global/automations/atm_g0VahyCRo00F0IkZ5E7R",
+        "method": "PATCH",
+        "round": "b260-zh-resume",
+        "directory": null,
+        "search": null,
+        "requestID": "243213e1-f0d2-4783-a83e-942ba0a82974",
+        "status": 200,
+        "bytes": 455,
+        "target": {
+          "id": "atm_g0VahyCRo00F0IkZ5E7R",
+          "revisionId": "atm_g0VahyVkG00isQzatqD8",
+          "name": "另一连接更新的中文定时任务",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hLFxjrv6STeoC5hDghuT"
+            ]
+          },
+          "nextRun": 4070908800000
+        }
+      },
+      "runs": {
+        "requestID": "d6a85f57-80b1-4502-94c1-d3e7e9705cb5",
+        "body": []
+      },
+      "fires": {
+        "requestID": "42a7171f-bec3-4d56-a009-1afc94385eba",
+        "body": [
+          {
+            "fireId": "cal_automation_c0d6b8009a4ef04f7fa5a93b4035aad1",
+            "automationId": "atm_g0VahyCRo00F0IkZ5E7R",
+            "automationRevisionId": "atm_g0VahyVkG00isQzatqD8",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794437889214,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          },
+          {
+            "fireId": "cal_automation_f024a6441085fa6a86f405e6acee48a5",
+            "automationId": "atm_g0VahyCRo00F0IkZ5E7R",
+            "automationRevisionId": "atm_g0VahyCRo00F0IkZ5E7R",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794437815036,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    }
+  },
+  "final": {
+    "requestID": "01a9a381-96b5-4608-9571-7ab46153fabc",
+    "body": [
+      {
+        "id": "atm_g0VahyCNS00uqUeKPTTp",
+        "revisionId": "atm_g0VahyLHB00lj60r3xEp",
+        "name": "English schedule updated in another connection",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hG8x6YzCzW2aRQj6AmvT"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain the original English schedule instruction.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_g0VahyCRo00F0IkZ5E7R",
+        "revisionId": "atm_g0VahyVkG00isQzatqD8",
+        "name": "另一连接更新的中文定时任务",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hLFxjrv6STeoC5hDghuT"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  }
+}
