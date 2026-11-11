@@ -2537,6 +2537,10 @@ function OverlayRoot() {
     })().finally(() => { refreshPending = undefined })
     return refreshPending
   }
+  const retrySelectionRead = (): Promise<void> => {
+    if (!selectionReadError()) return Promise.resolve()
+    return refreshPending ?? refreshSelection()
+  }
   createEffect(on(workLedgerSelectionRefreshToken, () => {
     void refreshSelection().catch(() => { /* The resource presents the read error with Retry. */ })
   }, { defer: true }))
@@ -2875,7 +2879,8 @@ function OverlayRoot() {
       conversationItem={selectedItem}
       conversationReadError={selectionReadError}
       conversationReadRetained={() => selectionRead()?.kind === "unavailable" && !!readableSelectedItem()}
-      onRetryConversationRead={() => refreshSelection()}
+      conversationReadRetrying={!!selectionReadError() && selection.loading}
+      onRetryConversationRead={retrySelectionRead}
       restoringConversation={restoringSelection()}
       conversationRestoreError={restoreFailure()}
       onRestoreConversation={() => restoreSelection()}

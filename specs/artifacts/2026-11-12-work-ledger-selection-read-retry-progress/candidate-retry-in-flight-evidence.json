@@ -1,0 +1,424 @@
+{
+  "asset": "main-CRtue14o.js",
+  "occurrence": "iteration-b255-final",
+  "upgrades": [
+    {
+      "time": "2026-11-11T21:41:14.150Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T21:41:24.236Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T21:45:18.169Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T21:45:38.447Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T21:46:14.133Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T21:47:18.249Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "time": "2026-11-11T21:47:27.445Z",
+      "stage": "upgrade",
+      "route": "/global/transport/stream",
+      "status": 101
+    }
+  ],
+  "eventWhileHeld": {
+    "autoHeld": {
+      "time": "2026-11-11T21:42:09.896Z",
+      "stage": "held",
+      "route": "/work-ledger/selection/session/ses_hPD1VU2nYRs3n4csVxIn",
+      "method": "GET",
+      "round": "b255-candidate-auto-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "search": null,
+      "requestID": "9df9de90-4245-4905-8a0b-a84230a4bca0",
+      "status": 200,
+      "bytes": 650,
+      "target": {
+        "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+        "title": "First title during retry",
+        "request": "Read this same archived request after the current retry.",
+        "archived": 1794433268655,
+        "boardLane": null
+      }
+    },
+    "autoDelivered": {
+      "time": "2026-11-11T21:42:19.128Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hPD1VU2nYRs3n4csVxIn",
+      "method": "GET",
+      "round": "b255-candidate-auto-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "search": null,
+      "requestID": "9df9de90-4245-4905-8a0b-a84230a4bca0",
+      "status": 200,
+      "bytes": 650,
+      "target": {
+        "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+        "title": "First title during retry",
+        "request": "Read this same archived request after the current retry.",
+        "archived": 1794433268655,
+        "boardLane": null
+      }
+    },
+    "autoList": {
+      "time": "2026-11-11T21:42:14.647Z",
+      "stage": "delivered",
+      "route": "/work-ledger",
+      "method": "GET",
+      "round": "b255-candidate-auto-hold",
+      "directory": null,
+      "search": null,
+      "requestID": "a5583a09-0c0e-4ca3-b93c-ad55ea4b6cdf",
+      "status": 200,
+      "bytes": 892,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hkqNNPGGJUX3xA079UGj",
+          "title": "Chat before retry",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hyQAwDyTk03X3R1xrTpk",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hTkzHu6f5MzEd2KqnXho",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress"
+        }
+      ]
+    },
+    "autoLatest": {
+      "time": "2026-11-11T21:42:19.146Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hPD1VU2nYRs3n4csVxIn",
+      "method": "GET",
+      "round": "b255-candidate-auto-release",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "search": null,
+      "requestID": "21e1f693-b0de-4c84-910e-438a6bcc49cb",
+      "status": 200,
+      "bytes": 657,
+      "target": {
+        "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+        "title": "Latest title from the new event",
+        "request": "Read this same archived request after the current retry.",
+        "archived": 1794433268655,
+        "boardLane": null
+      }
+    },
+    "autoEvent": {
+      "connected": {
+        "type": "work-ledger.connected",
+        "sourceType": "work-ledger.connected",
+        "sequence": 0
+      },
+      "changed": {
+        "type": "work-ledger.changed",
+        "sourceType": "session.updated",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "sequence": 1794433334468
+      },
+      "write": {
+        "requestID": "7b382ed2-7acc-4bbb-83b7-eb1911ab7dad",
+        "body": {
+          "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+          "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+          "title": "Latest title from the new event",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+          "created": 1794433268610,
+          "updated": 1794433334468,
+          "archived": 1794433268655,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "Read this same archived request after the current retry."
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        }
+      },
+      "selected": {
+        "requestID": "3d762100-4fc9-42d7-a809-2fa59841913e",
+        "body": {
+          "kind": "mission",
+          "id": "draft-17924e4010510222f0afe33b2cf82321",
+          "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+          "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+          "title": "Latest title from the new event",
+          "pendingPromptText": "Read this same archived request after the current retry.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+          "created": 1794433268610,
+          "started": 1794433268610,
+          "updated": 1794433334468,
+          "pinned": false,
+          "archived": 1794433268655,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        }
+      }
+    }
+  },
+  "english": {
+    "enCut": {
+      "time": "2026-11-11T21:47:36.085Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hPD1VU2nYRs3n4csVxIn",
+      "method": "GET",
+      "round": "b255-final-en-proof-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "search": null,
+      "requestID": "9010678a-dd97-4444-972f-0a3c23dd77e1",
+      "status": 200,
+      "bytes": 658,
+      "target": {
+        "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+        "title": "Archive after one confirmed read",
+        "request": "Read this same archived request after the current retry.",
+        "archived": 1794433268655,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "enHeld": {
+      "time": "2026-11-11T21:47:43.860Z",
+      "stage": "held",
+      "route": "/work-ledger/selection/session/ses_hPD1VU2nYRs3n4csVxIn",
+      "method": "GET",
+      "round": "b255-final-en-proof-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "search": null,
+      "requestID": "41ec3121-6a8e-4e0d-92c6-4c608543dffc",
+      "status": 200,
+      "bytes": 658,
+      "target": {
+        "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+        "title": "Archive after one confirmed read",
+        "request": "Read this same archived request after the current retry.",
+        "archived": 1794433268655,
+        "boardLane": null
+      }
+    },
+    "enRead": {
+      "time": "2026-11-11T21:47:44.027Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hPD1VU2nYRs3n4csVxIn",
+      "method": "GET",
+      "round": "b255-final-en-proof-hold",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "search": null,
+      "requestID": "41ec3121-6a8e-4e0d-92c6-4c608543dffc",
+      "status": 200,
+      "bytes": 658,
+      "target": {
+        "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+        "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+        "title": "Archive after one confirmed read",
+        "request": "Read this same archived request after the current retry.",
+        "archived": 1794433268655,
+        "boardLane": null
+      }
+    },
+    "enComplete": {
+      "time": "2026-11-11T21:47:49.566Z",
+      "stage": "mode",
+      "mode": "pass",
+      "round": "b255-final-en-proof-complete"
+    }
+  },
+  "chinese": {
+    "zhCut": {
+      "time": "2026-11-11T21:46:22.010Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hkqNNPGGJUX3xA079UGj",
+      "method": "GET",
+      "round": "b255-final-chat-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+      "search": null,
+      "requestID": "79fbdbbe-d43d-40e0-b1ce-eaca4a56ca00",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hkqNNPGGJUX3xA079UGj",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+        "title": "重试后确认的会话名称",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "zhFailureHeld": {
+      "time": "2026-11-11T21:46:29.663Z",
+      "stage": "held",
+      "route": "/work-ledger/selection/session/ses_hkqNNPGGJUX3xA079UGj",
+      "method": "GET",
+      "round": "b255-final-chat-held-failure",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+      "search": null,
+      "requestID": "7477b299-18a4-4301-ad51-7f84e3bb9b85",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hkqNNPGGJUX3xA079UGj",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+        "title": "重试后确认的会话名称",
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    "zhFailure": {
+      "time": "2026-11-11T21:46:29.713Z",
+      "stage": "truncated",
+      "route": "/work-ledger/selection/session/ses_hkqNNPGGJUX3xA079UGj",
+      "method": "GET",
+      "round": "b255-final-chat-held-failure",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+      "search": null,
+      "requestID": "7477b299-18a4-4301-ad51-7f84e3bb9b85",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hkqNNPGGJUX3xA079UGj",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+        "title": "重试后确认的会话名称",
+        "archived": null,
+        "boardLane": null
+      },
+      "deliveredBytes": 12
+    },
+    "zhSuccessHeld": {
+      "time": "2026-11-11T21:46:37.049Z",
+      "stage": "held",
+      "route": "/work-ledger/selection/session/ses_hkqNNPGGJUX3xA079UGj",
+      "method": "GET",
+      "round": "b255-final-chat-held-success",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+      "search": null,
+      "requestID": "d505cd9d-f737-4dca-a604-fd636c591db8",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hkqNNPGGJUX3xA079UGj",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+        "title": "重试后确认的会话名称",
+        "archived": null,
+        "boardLane": null
+      }
+    },
+    "zhSuccess": {
+      "time": "2026-11-11T21:46:37.157Z",
+      "stage": "delivered",
+      "route": "/work-ledger/selection/session/ses_hkqNNPGGJUX3xA079UGj",
+      "method": "GET",
+      "round": "b255-final-chat-held-success",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+      "search": null,
+      "requestID": "d505cd9d-f737-4dca-a604-fd636c591db8",
+      "status": 200,
+      "bytes": 376,
+      "target": {
+        "sessionID": "ses_hkqNNPGGJUX3xA079UGj",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+        "title": "重试后确认的会话名称",
+        "archived": null,
+        "boardLane": null
+      }
+    }
+  },
+  "archived": {
+    "requestID": "523ceeaa-d480-4192-b2f3-7b81d9d4aaf9",
+    "body": {
+      "kind": "mission",
+      "id": "draft-17924e4010510222f0afe33b2cf82321",
+      "missionID": "draft-17924e4010510222f0afe33b2cf82321",
+      "sessionID": "ses_hPD1VU2nYRs3n4csVxIn",
+      "title": "Archive after one confirmed read",
+      "pendingPromptText": "Read this same archived request after the current retry.",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-project\\retry-progress",
+      "created": 1794433268610,
+      "started": 1794433268610,
+      "updated": 1794433656037,
+      "pinned": false,
+      "archived": 1794433268655,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  },
+  "current": {
+    "requestID": "0c9aa6b6-04f5-4a9c-869b-91369209eb22",
+    "body": {
+      "kind": "chat",
+      "experience": "chat",
+      "id": "ses_hkqNNPGGJUX3xA079UGj",
+      "sessionID": "ses_hkqNNPGGJUX3xA079UGj",
+      "title": "重试后确认的会话名称",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b255\\candidate-alternate\\retry-progress",
+      "created": 1794433269343,
+      "started": 1794433269343,
+      "updated": 1794433581976,
+      "pinned": false,
+      "status": "idle"
+    }
+  }
+}

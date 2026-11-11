@@ -470,6 +470,7 @@ export interface AppProps {
   conversationItem: () => WorkLedgerItemRow | null
   conversationReadError: () => unknown
   conversationReadRetained: () => boolean
+  conversationReadRetrying: boolean
   onRetryConversationRead: () => Promise<void>
   restoringConversation: boolean
   conversationRestoreError: unknown
@@ -885,9 +886,16 @@ export function App(props: AppProps) {
                                         failure().kind === "read" ? formatErrorDetails(props.conversationRestoreError) : "",
                                       ].filter(Boolean).join("\n\n")}
                                       actions={
-                                        <Button type="button" variant="ghost" size="sm" tone="neutral"
-                                          onClick={() => void (failure().kind === "read" ? props.onRetryConversationRead() : props.onRestoreConversation()).catch(() => {})}>
-                                          {t("common.retry")}
+                                        <Button type="button" variant="ghost" size="sm" tone="neutral" class="conversation-read-retry"
+                                          aria-disabled={props.conversationReadRetrying || undefined}
+                                          aria-busy={props.conversationReadRetrying || undefined}
+                                          onClick={() => {
+                                            if (props.conversationReadRetrying) return
+                                            const retry = failure().kind === "read"
+                                              ? props.onRetryConversationRead : props.onRestoreConversation
+                                            void retry().catch(() => {})
+                                          }}>
+                                          {t(props.conversationReadRetrying ? "common.retrying" : "common.retry")}
                                         </Button>
                                       }
                                     >

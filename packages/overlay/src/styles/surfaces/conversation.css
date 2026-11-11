@@ -2,6 +2,10 @@
    The `.chat-empty--task` shell lives in composer.css because that file
    already owns the task-aware composer/empty-state chrome. */
 
+.oc-button.conversation-read-retry[aria-busy="true"] {
+  opacity: var(--ui-opacity-full);
+}
+
 /* Chat scroll: the message column flow. Conversation owns the inline
    card contract so ordinary agent bubbles and structured execution
    cards cannot drift into separate widths. */

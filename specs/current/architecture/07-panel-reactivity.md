@@ -1177,6 +1177,8 @@ the same connection, selection and directory. Commands and current status
 require a successful exact read. A new identity or explicit rejection has no
 retained row. If restore and read both fail, Retry reads the exact record first.
 A successful read of the restored record clears the restore feedback.
+Retry shows the current read as busy and uses its result when already in
+progress. A later owner notification still schedules a new exact read.
 Every Mailbox change causes a fresh
 canonical page read, so the notification stream is not a second payload/history
 source. Project directory changes abort the previous
