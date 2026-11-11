@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文本附件预览和原件读取的桌面证据](2026-11-12-text-attachment-shared-read/README.md)
 - [新建多步任务安装反馈位置的桌面证据](2026-11-12-mission-market-install-feedback-placement/README.md)
 - [市场安装回执中断和项目安装核对的证据](2026-11-12-expert-squad-market-install-receipt/README.md)
 - [输入区市场安装焦点交接的证据](2026-11-12-composer-market-install-trigger-focus/README.md)

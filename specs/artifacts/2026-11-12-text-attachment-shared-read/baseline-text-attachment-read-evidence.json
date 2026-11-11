@@ -1,0 +1,79 @@
+{
+  "asset": "main-DUzMeGoA.js",
+  "originals": [
+    {
+      "filename": "reading-notes.txt",
+      "size": 114,
+      "uploadRequestID": "4ca0f14d-795f-45c9-9590-b6c292c85837",
+      "url": "/attachment/prj_hm91kgsEWD0qR97wkwbg/8fb26477b2fefd924e00476c5675d640557f95a03390f9115924bf8a5e73563c.txt",
+      "originalRequestID": "3fc617d2-19bf-444e-9c06-a0b9481c79dd",
+      "browserDownloadChecked": false
+    },
+    {
+      "filename": "reading-retry.txt",
+      "size": 120,
+      "uploadRequestID": "fa14162a-b92f-441f-b008-e169c9ca48ca",
+      "url": "/attachment/prj_hm91kgsEWD0qR97wkwbg/a9aa2e6615c281dcc0417e861947ef9f48389f65934d67b2fa10685aa4699409.txt",
+      "originalRequestID": "50f363df-b1b4-453e-a2b8-56feb1bf6c0e",
+      "browserDownloadChecked": true
+    }
+  ],
+  "reads": [
+    {
+      "time": "2026-11-11T19:31:41.773Z",
+      "stage": "held",
+      "route": "/attachment/prj_hm91kgsEWD0qR97wkwbg/8fb26477b2fefd924e00476c5675d640557f95a03390f9115924bf8a5e73563c.txt",
+      "method": "GET",
+      "round": "b248-base-preview-close",
+      "filename": null,
+      "requestID": "94c975d7-4746-45e6-97f2-c64006793cf2",
+      "status": 200,
+      "bytes": 114
+    },
+    {
+      "time": "2026-11-11T19:31:42.307Z",
+      "stage": "delivered",
+      "route": "/attachment/prj_hm91kgsEWD0qR97wkwbg/8fb26477b2fefd924e00476c5675d640557f95a03390f9115924bf8a5e73563c.txt",
+      "method": "GET",
+      "round": "b248-base-preview-close",
+      "filename": null,
+      "requestID": "94c975d7-4746-45e6-97f2-c64006793cf2",
+      "status": 200,
+      "bytes": 114
+    },
+    {
+      "time": "2026-11-11T19:32:23.459Z",
+      "stage": "held",
+      "route": "/attachment/prj_hm91kgsEWD0qR97wkwbg/a9aa2e6615c281dcc0417e861947ef9f48389f65934d67b2fa10685aa4699409.txt",
+      "method": "GET",
+      "round": "b248-base-preview-failure",
+      "filename": null,
+      "requestID": "a55d4cc7-5732-43a5-adce-6a00c8d88464",
+      "status": 200,
+      "bytes": 120
+    },
+    {
+      "time": "2026-11-11T19:32:23.624Z",
+      "stage": "truncated",
+      "route": "/attachment/prj_hm91kgsEWD0qR97wkwbg/a9aa2e6615c281dcc0417e861947ef9f48389f65934d67b2fa10685aa4699409.txt",
+      "method": "GET",
+      "round": "b248-base-preview-failure",
+      "filename": null,
+      "requestID": "a55d4cc7-5732-43a5-adce-6a00c8d88464",
+      "status": 200,
+      "bytes": 120,
+      "deliveredBytes": 12
+    },
+    {
+      "time": "2026-11-11T19:32:31.348Z",
+      "stage": "delivered",
+      "route": "/attachment/prj_hm91kgsEWD0qR97wkwbg/a9aa2e6615c281dcc0417e861947ef9f48389f65934d67b2fa10685aa4699409.txt",
+      "method": "GET",
+      "round": "b248-base-preview-failed",
+      "filename": null,
+      "requestID": "e33a306c-77a7-48f7-bfaf-9c7441b0b3a1",
+      "status": 200,
+      "bytes": 120
+    }
+  ]
+}
