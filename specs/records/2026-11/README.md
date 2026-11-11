@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [定时任务编辑回执中断后的原版本确认](2026-11-12-automation-edit-receipt.md)
 - [新建定时任务回执中断后的原定义确认](2026-11-12-automation-create-receipt.md)
 - [定时任务状态冲突后就地检查当前版本](2026-11-12-automation-status-revision-conflict.md)
 - [定时任务暂停和恢复的回执确认](2026-11-12-automation-status-receipt.md)
