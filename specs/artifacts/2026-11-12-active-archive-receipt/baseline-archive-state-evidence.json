@@ -1,0 +1,151 @@
+{
+  "occurrence": "iteration-b257-baseline",
+  "asset": "main-4FnZltWa.js",
+  "upgrade": {
+    "time": "2026-11-11T22:09:03.538Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "results": {
+    "englishMission": {
+      "receipt": {
+        "time": "2026-11-11T22:09:31.435Z",
+        "stage": "truncated",
+        "route": "/mission/draft-f28176691c3d937d1def5b69a16edee6/archive",
+        "method": "PATCH",
+        "round": "baseline-mission",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\baseline-project\\archive-review",
+        "search": null,
+        "requestID": "8a125fb4-899e-49d9-a161-9c64ab7baf7c",
+        "status": 200,
+        "bytes": 542,
+        "target": {
+          "missionID": "draft-f28176691c3d937d1def5b69a16edee6",
+          "sessionID": "ses_hVAVdtCC8RQAMoclWzrq",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\baseline-project\\archive-review",
+          "title": "Archive original draft",
+          "request": "Keep the original request when archiving.",
+          "archived": 1794434967355,
+          "boardLane": "backlog"
+        },
+        "deliveredBytes": 12
+      },
+      "exact": {
+        "requestID": "e68a135c-cddf-4270-881c-34109e36569f",
+        "status": 200,
+        "body": {
+          "kind": "mission",
+          "id": "draft-f28176691c3d937d1def5b69a16edee6",
+          "missionID": "draft-f28176691c3d937d1def5b69a16edee6",
+          "sessionID": "ses_hVAVdtCC8RQAMoclWzrq",
+          "title": "Archive original draft",
+          "pendingPromptText": "Keep the original request when archiving.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\baseline-project\\archive-review",
+          "created": 1794434909836,
+          "started": 1794434909836,
+          "updated": 1794434967355,
+          "pinned": false,
+          "archived": 1794434967355,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        }
+      },
+      "foreign": {
+        "requestID": "afb95da3-23a3-4aa6-945e-b37b54f407a5",
+        "status": 404,
+        "body": {
+          "name": "NotFoundError",
+          "data": {
+            "message": "Session not found: ses_hVAVdtCC8RQAMoclWzrq"
+          }
+        }
+      }
+    },
+    "englishChat": {
+      "receipt": {
+        "time": "2026-11-11T22:10:08.776Z",
+        "stage": "truncated",
+        "route": "/coding/chat/session/ses_hSNwDYgKiv7AcdWwQolW/archive",
+        "method": "PATCH",
+        "round": "baseline-selected-chat",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\baseline-project\\archive-review",
+        "search": null,
+        "requestID": "980f6d42-037b-4eca-9b20-595b17016d2f",
+        "status": 200,
+        "bytes": 563,
+        "target": {
+          "sessionID": "ses_hSNwDYgKiv7AcdWwQolW",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\baseline-project\\archive-review",
+          "title": "Archive original Chat",
+          "archived": 1794435008668,
+          "boardLane": null
+        },
+        "deliveredBytes": 12
+      },
+      "exact": {
+        "requestID": "af839d4c-7187-4d0b-8537-845df78556b1",
+        "status": 200,
+        "body": {
+          "kind": "chat",
+          "experience": "chat",
+          "id": "ses_hSNwDYgKiv7AcdWwQolW",
+          "sessionID": "ses_hSNwDYgKiv7AcdWwQolW",
+          "title": "Archive original Chat",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\baseline-project\\archive-review",
+          "created": 1794434934159,
+          "started": 1794434934159,
+          "updated": 1794435008669,
+          "pinned": false,
+          "archived": 1794435008668,
+          "status": "idle"
+        }
+      },
+      "foreign": {
+        "requestID": "934cab78-ddda-43d4-90f1-212d3fffedf7",
+        "status": 404,
+        "body": {
+          "name": "NotFoundError",
+          "data": {
+            "message": "Session not found: ses_hSNwDYgKiv7AcdWwQolW"
+          }
+        }
+      }
+    }
+  },
+  "other": {
+    "requestID": "2fdcef0d-28e1-406f-b881-2d8a3ea2e54d",
+    "status": 200,
+    "body": {
+      "kind": "mission",
+      "id": "draft-7619335c09392309f39760a74dbee97f",
+      "missionID": "draft-7619335c09392309f39760a74dbee97f",
+      "sessionID": "ses_hpTdNPIL2RUy5xFJbImt",
+      "title": "保留原请求的草稿",
+      "pendingPromptText": "归档后保留原始请求。",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b257\\baseline-alternate\\archive-review",
+      "created": 1794434910173,
+      "started": 1794434910173,
+      "updated": 1794434910173,
+      "pinned": false,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  }
+}

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [主动归档回执的真实桌面证据](2026-11-12-active-archive-receipt/README.md)
 - [多步任务草稿编辑回执的真实桌面证据](2026-11-12-mission-draft-edit-receipt/README.md)
 - [选中记录重试等待的真实桌面证据](2026-11-12-work-ledger-selection-read-retry-progress/README.md)
 - [精确读取中断时的真实桌面证据](2026-11-12-work-ledger-selection-reading-recovery/README.md)
