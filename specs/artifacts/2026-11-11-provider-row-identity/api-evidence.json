@@ -1,0 +1,352 @@
+{
+  "asset": "main-7iSD4iJm.js",
+  "projectID": "prj_hh6XebqVOxyL28DmjDhx",
+  "stats": {
+    "project": {
+      "providers": 89,
+      "connected": 0,
+      "bedrock": 67
+    },
+    "global": {
+      "providers": 88,
+      "connected": 0,
+      "bedrock": 67
+    }
+  },
+  "profiles": {
+    "baseline": {
+      "providers": 88,
+      "bedrockModels": 67
+    },
+    "final": {
+      "providers": 88,
+      "bedrockModels": 67
+    }
+  },
+  "direct": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "c9683974-f7f8-4d7a-a517-fbd5f7683597"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "2882913e-de1a-41ea-9321-4345266f759f"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "1b0c0bc8-e946-41e7-8898-71dfc79cf9a0"
+    },
+    {
+      "route": "/config",
+      "status": 200,
+      "requestID": "9da77f99-6111-4edb-81a5-964679766424"
+    },
+    {
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "4bc4dd7a-5027-4ef4-aede-ff9beb000168"
+    }
+  ],
+  "projectProvider": {
+    "name": "Review Custom",
+    "api": "https://review.invalid/v1",
+    "npm": "@ai-sdk/openai-compatible",
+    "models": {}
+  },
+  "verification": {
+    "baselineError": "c1f18d55-45a1-4c98-95c0-a760258d6f47",
+    "baselineRow": "b34b8e66-6c7d-43f7-89a6-e954545b1da4",
+    "catalogError": "1c786d92-70d8-43bc-8869-93eadf51e676",
+    "catalogRow": "31bd5590-9e28-4a89-a0c4-8fca28003863",
+    "customError": "03aaa74b-095e-4423-bfe9-3882136a56a5",
+    "customRow": "6b6084d6-3aac-4d46-bd81-1f835f88c3f2",
+    "searchHandoff": "dd88ba94-3e3a-4d33-84a0-30e23ab40aca",
+    "scopeTransitionProjectRead": "35dd7e41-caa6-4350-8281-3474f78e2c71",
+    "globalHandoff": "41cc1f35-cf21-402d-8a4f-be59b9751b58"
+  },
+  "traces": {
+    "baseline": [
+      {
+        "round": "setup",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "101d4bf6-eafd-4206-bc25-70dbbba8e402"
+      },
+      {
+        "round": "setup",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "a03bb029-6b23-43db-b57f-f3f45bb3a91c",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      },
+      {
+        "round": "baseline-catalog-error",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "f9b69287-db74-4249-8ea0-82153a64cd76"
+      },
+      {
+        "round": "baseline-catalog-error",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "c1f18d55-45a1-4c98-95c0-a760258d6f47",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "baseline-row-focus",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "3f901d8c-ee81-47d4-80d7-0c073999d34e"
+      },
+      {
+        "round": "baseline-row-focus",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "b34b8e66-6c7d-43f7-89a6-e954545b1da4",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899837
+      }
+    ],
+    "final": [
+      {
+        "round": "setup",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "a01bc5f7-da55-4768-98d9-a8b9432df0ad"
+      },
+      {
+        "round": "setup",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "ec755de5-8853-46c3-ba29-38bceecf4bd9",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960
+      },
+      {
+        "round": "candidate-catalog-error",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "1c786d92-70d8-43bc-8869-93eadf51e676",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "candidate-catalog-error",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "3ff54c55-017c-42e3-b5d1-fc0c81968e9f"
+      },
+      {
+        "round": "candidate-catalog-focus",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "d8a205e4-828a-466f-9448-929e3e881381"
+      },
+      {
+        "round": "candidate-catalog-focus",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "31bd5590-9e28-4a89-a0c4-8fca28003863",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960
+      },
+      {
+        "round": "candidate-custom-error",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "03aaa74b-095e-4423-bfe9-3882136a56a5",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "candidate-custom-error",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "94c5d629-0800-4a25-abc7-7ac4b076db00"
+      },
+      {
+        "round": "candidate-custom-focus",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "e800bef9-2bc9-4e60-9239-6f58a8d18575"
+      },
+      {
+        "round": "candidate-custom-focus",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "6b6084d6-3aac-4d46-bd81-1f835f88c3f2",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960
+      },
+      {
+        "round": "candidate-handoff-error",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "1e8ef917-ad9f-448d-a6f9-6eb72c843244"
+      },
+      {
+        "round": "candidate-handoff-error",
+        "stage": "truncated",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "d215e6b3-4402-4edd-94cd-426219ae1df2",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960,
+        "deliveredBytes": 32
+      },
+      {
+        "round": "candidate-search-handoff",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "dd88ba94-3e3a-4d33-84a0-30e23ab40aca",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960
+      },
+      {
+        "round": "candidate-search-handoff",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "b612c39a-26da-4de6-b35a-6cc913763f4b"
+      },
+      {
+        "round": "candidate-search-handoff",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/provider",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "35dd7e41-caa6-4350-8281-3474f78e2c71",
+        "providerCount": 89,
+        "connectedCount": 0,
+        "bytes": 1899960
+      },
+      {
+        "round": "candidate-search-handoff",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/provider/auth",
+        "status": 200,
+        "project": "provider-row-review",
+        "requestID": "bc893901-c7a8-4d88-8d8f-6ae70275331a"
+      },
+      {
+        "round": "candidate-search-handoff",
+        "stage": "delivered",
+        "kind": "auth",
+        "route": "/global/providers/auth",
+        "status": 200,
+        "project": "global",
+        "requestID": "4771286e-b11b-421f-b289-08f6defbe43d"
+      },
+      {
+        "round": "candidate-search-handoff",
+        "stage": "delivered",
+        "kind": "read",
+        "route": "/global/providers",
+        "status": 200,
+        "project": "global",
+        "requestID": "41cc1f35-cf21-402d-8a4f-be59b9751b58",
+        "providerCount": 88,
+        "connectedCount": 0,
+        "bytes": 1899849
+      }
+    ]
+  },
+  "held": [
+    {
+      "phase": "baseline",
+      "round": "baseline-row-focus",
+      "requestID": "b34b8e66-6c7d-43f7-89a6-e954545b1da4",
+      "holdMs": 10465
+    },
+    {
+      "phase": "final",
+      "round": "candidate-catalog-focus",
+      "requestID": "31bd5590-9e28-4a89-a0c4-8fca28003863",
+      "holdMs": 9714
+    },
+    {
+      "phase": "final",
+      "round": "candidate-custom-focus",
+      "requestID": "6b6084d6-3aac-4d46-bd81-1f835f88c3f2",
+      "holdMs": 15014
+    }
+  ]
+}
