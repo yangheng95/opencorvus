@@ -1,0 +1,146 @@
+{
+  "asset": "main-Bq7ml9PD.js",
+  "upgrade": {
+    "time": "2026-11-11T22:35:16.793Z",
+    "stage": "upgrade",
+    "route": "/global/transport/stream",
+    "status": 101
+  },
+  "interrupted": {
+    "time": "2026-11-11T22:35:32.878Z",
+    "stage": "truncated",
+    "route": "/global/automations/atm_g0Vahsj8700IliHNNelV",
+    "method": "PATCH",
+    "round": "baseline-pause",
+    "directory": null,
+    "search": null,
+    "requestID": "82945406-d31a-424e-b766-e48fab6c313b",
+    "status": 200,
+    "bytes": 457,
+    "target": {
+      "id": "atm_g0Vahsj8700IliHNNelV",
+      "revisionId": "atm_g0VahsotC00QUlGwuEEO",
+      "name": "Pause status confirmation",
+      "status": "paused",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hlbEG56Tgy1Khf1uoY1O"
+        ]
+      },
+      "nextRun": 4070908800000
+    },
+    "deliveredBytes": 12
+  },
+  "conflict": {
+    "time": "2026-11-11T22:35:46.064Z",
+    "stage": "delivered",
+    "route": "/global/automations/atm_g0Vahsj8700IliHNNelV",
+    "method": "PATCH",
+    "round": "baseline-stale-pause",
+    "directory": null,
+    "search": null,
+    "requestID": "5c199080-5d54-4fb0-b029-8e5f92e473b0",
+    "status": 409,
+    "bytes": 380
+  },
+  "list": {
+    "requestID": "4c5d26dd-be41-4080-b610-ba8b8aaf1455",
+    "body": [
+      {
+        "id": "atm_g0Vahsj8700IliHNNelV",
+        "revisionId": "atm_g0VahsotC00QUlGwuEEO",
+        "name": "Pause status confirmation",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hlbEG56Tgy1Khf1uoY1O"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Retain the original English schedule instruction.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_g0Vahsj8K00pVAAY5cFq",
+        "revisionId": "atm_g0Vahsj8K00pVAAY5cFq",
+        "name": "定时任务暂停确认",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h3pej6Hr19kuFgs0hn6Z"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "保留原始定时任务指令。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "history": {
+    "english": {
+      "runs": {
+        "requestID": "f6af00cc-d0a2-47ac-94fb-8506d1220e38",
+        "body": []
+      },
+      "fires": {
+        "requestID": "03810982-a538-418b-9ae9-ff3a84a3593f",
+        "body": [
+          {
+            "fireId": "cal_automation_c259bed95888c586317508f43e2aca7d",
+            "automationId": "atm_g0Vahsj8700IliHNNelV",
+            "automationRevisionId": "atm_g0Vahsj8700IliHNNelV",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794436510699,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    },
+    "chinese": {
+      "runs": {
+        "requestID": "43dc22a0-a626-42a4-b7eb-cd7129fa2ea9",
+        "body": []
+      },
+      "fires": {
+        "requestID": "efd6fd84-3cb6-488f-96c4-4b19c6b7f9da",
+        "body": [
+          {
+            "fireId": "cal_automation_2cfae86ee4a89e892cc19ea1abd53712",
+            "automationId": "atm_g0Vahsj8K00pVAAY5cFq",
+            "automationRevisionId": "atm_g0Vahsj8K00pVAAY5cFq",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794436510712,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      }
+    }
+  }
+}
