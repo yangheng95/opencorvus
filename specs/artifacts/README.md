@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [主输入区模型列表来源的证据](2026-11-11-composer-model-list-provenance/README.md)
 - [服务商目录条目和模型数量的证据](2026-11-11-provider-model-catalog-presence/README.md)
 - [全局配置回执顺序的证据](2026-11-11-global-provider-config-settlement/README.md)
 - [关闭项目时切换读取范围的证据](2026-11-11-project-close-scope-commit/README.md)

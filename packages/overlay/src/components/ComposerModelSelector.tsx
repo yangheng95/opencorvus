@@ -327,6 +327,7 @@ export function ComposerModelSelector() {
   const accountUsage = createProviderAccountUsageState(selectedModel, taskID)
   const groups = createMemo(mirrorProviderGroups)
   const catalogIssue = createMemo(() => appStore.providerLoadIssues.find((issue) => issue.resource === "catalog"))
+  const retainedModelList = () => groups().length > 0 && (providerLoading() || Boolean(catalogIssue()))
   const filteredGroups = createMemo(() => {
     const search = query()
     return groups()
@@ -479,26 +480,37 @@ export function ComposerModelSelector() {
               clearDataUI="model-selector-search-clear"
             />
           </div>
-          <Show when={catalogIssue() || catalogRetry()}>
+          <Show when={catalogIssue() || catalogRetry() || retainedModelList()}>
             <div class="model-selector-catalog-feedback">
-              <Show when={catalogIssue()}>
-                {(issue) => <Feedback tone="error" details={issue().message}>{t("model_selector.catalog_failed")}</Feedback>}
+              <Show when={retainedModelList() && !catalogIssue()}>
+                <Feedback tone="info">
+                  {t(filteredGroups().length ? "model_selector.catalog_reading_retained" : "model_selector.catalog_reading")}
+                </Feedback>
               </Show>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                tone="neutral"
-                aria-disabled={providerLoading() || undefined}
-                aria-busy={providerLoading() || undefined}
-                onClick={(event) => {
-                  const trigger = event.currentTarget
-                  runModelSelectorAction("composer-provider-info", () => retryCatalog(trigger))
-                }}
-              >
-                <Icon name={providerLoading() ? "loading" : "refresh"} />
-                {t(providerLoading() ? "common.loading" : "model_selector.catalog_retry")}
-              </Button>
+              <Show when={catalogIssue()}>
+                {(issue) => (
+                  <Feedback tone="error" details={issue().message}>
+                    {t(filteredGroups().length ? "model_selector.catalog_failed_retained" : "model_selector.catalog_failed")}
+                  </Feedback>
+                )}
+              </Show>
+              <Show when={catalogIssue() || catalogRetry()}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  aria-disabled={providerLoading() || undefined}
+                  aria-busy={providerLoading() || undefined}
+                  onClick={(event) => {
+                    const trigger = event.currentTarget
+                    runModelSelectorAction("composer-provider-info", () => retryCatalog(trigger))
+                  }}
+                >
+                  <Icon name={providerLoading() ? "loading" : "refresh"} />
+                  {t(providerLoading() ? "common.loading" : "model_selector.catalog_retry")}
+                </Button>
+              </Show>
             </div>
           </Show>
           <Show
@@ -515,7 +527,11 @@ export function ComposerModelSelector() {
           >
             <Show
               when={filteredGroups().length > 0}
-              fallback={<div class="model-selector-popover-empty">{t("model_selector.no_matches")}</div>}
+              fallback={
+                <div class="model-selector-popover-empty">
+                  {t(retainedModelList() ? "model_selector.no_matches_retained" : "model_selector.no_matches")}
+                </div>
+              }
             >
               <div class="model-selector-popover-body">
                 <For each={filteredGroups()}>

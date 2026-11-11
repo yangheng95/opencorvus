@@ -1,0 +1,90 @@
+{
+  "asset": "main-Ci2yQIPf.js",
+  "checked": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "fe3f34e5-263e-4a8a-9e14-2a8cb495d60a"
+    },
+    {
+      "route": "/provider",
+      "status": 200,
+      "requestID": "76a2157f-97ac-426a-9569-0e19e71ac3b8"
+    },
+    {
+      "route": "/global/providers",
+      "status": 200,
+      "requestID": "1769354e-81fc-4e1e-88fa-6df0c4811ef5"
+    },
+    {
+      "route": "/provider/auth",
+      "status": 200,
+      "requestID": "0e7ca7c4-a72b-486a-ba04-92152f4130a4"
+    },
+    {
+      "route": "/global/providers/auth",
+      "status": 200,
+      "requestID": "b3392019-c015-477c-9b2a-48caa1cb4bc7"
+    }
+  ],
+  "catalog": {
+    "project": {
+      "count": 89,
+      "connected": [
+        "review-composer"
+      ],
+      "models": [
+        "review-alpha",
+        "review-beta"
+      ]
+    },
+    "global": {
+      "count": 88,
+      "connected": []
+    }
+  },
+  "rounds": [
+    {
+      "time": "2026-11-11T05:50:13.554Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "setup",
+      "route": "/provider",
+      "project": "composer-list-baseline",
+      "status": 200,
+      "requestID": "1bcb6cef-ec4f-4453-8b7e-d8c1106d5aed",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304
+    },
+    {
+      "time": "2026-11-11T05:50:57.204Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "baseline-retained-failed",
+      "route": "/provider",
+      "project": "composer-list-baseline",
+      "status": 200,
+      "requestID": "16ac4144-8b69-420c-bca8-8241e7018a82",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304,
+      "deliveredBytes": 32,
+      "heldMs": 15073
+    },
+    {
+      "time": "2026-11-11T05:51:34.710Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "baseline-retry",
+      "route": "/provider",
+      "project": "composer-list-baseline",
+      "status": 200,
+      "requestID": "b165a219-e034-43e8-adc8-808164b217fd",
+      "providerCount": 89,
+      "connectedCount": 1,
+      "bytes": 1901304,
+      "heldMs": 6501
+    }
+  ]
+}

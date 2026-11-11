@@ -5481,6 +5481,9 @@ contracts. Saving configuration alone does not claim inference qualification.
 
 The Composer's empty model list describes unavailable model choices, without
 inferring missing authentication from an empty runnable-provider projection.
+While the model list is being read or its latest read has failed, the picker
+identifies retained choices and empty search results as coming from the last
+loaded list. A successful read restores the current search result language.
 The settings destination in that localized hint uses the same Providers label
 as CONFIG_SECTIONS. Chinese provider settings use model-service terminology and
 localized form/search/action guidance, while canonical brand/model/provider IDs,

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [主输入区标明上次读取的模型列表](records/2026-11/2026-11-11-composer-model-list-provenance.md)
 - [服务商模型数量以目录中的实际条目为准](records/2026-11/2026-11-11-provider-model-catalog-presence.md)
 - [目录读取结算时保留已接受的全局配置](records/2026-11/2026-11-11-global-provider-config-settlement.md)
 - [关闭项目时一次发布全局读取范围](records/2026-11/2026-11-11-project-close-scope-commit.md)
