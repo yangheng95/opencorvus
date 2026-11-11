@@ -1,0 +1,157 @@
+{
+  "asset": "main-CofXWOJ6.js",
+  "cuts": [
+    {
+      "time": "2026-11-11T20:23:14.412Z",
+      "stage": "truncated",
+      "route": "/mission/draft-d25cf825d5c30e89f056f165322909bd/archive",
+      "method": "PATCH",
+      "round": "b252-baseline-reader-restore",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "8b6b2413-e286-4f13-a38a-cffccf185d77",
+      "status": 200,
+      "bytes": 564,
+      "target": {
+        "missionID": "draft-d25cf825d5c30e89f056f165322909bd",
+        "sessionID": "ses_hCc6kiaeW0Y9xySLVQ4l",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "title": "Restore receipt from reader",
+        "request": "Read the exact restored draft even if the mutation receipt is interrupted.",
+        "archived": null,
+        "boardLane": "backlog"
+      },
+      "deliveredBytes": 12
+    },
+    {
+      "time": "2026-11-11T20:24:43.938Z",
+      "stage": "truncated",
+      "route": "/mission/draft-d96b6136e0ad6fd9b4ea8916ce1b1361/archive",
+      "method": "PATCH",
+      "round": "b252-baseline-settings-restore",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+      "search": null,
+      "requestID": "c2674e31-fd30-4b22-96a6-34e04f2d2097",
+      "status": 200,
+      "bytes": 563,
+      "target": {
+        "missionID": "draft-d96b6136e0ad6fd9b4ea8916ce1b1361",
+        "sessionID": "ses_hlLkIp4dcORnkGgkVLwI",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "title": "Restore receipt from archive settings",
+        "request": "Keep the original request and restore only this archived draft.",
+        "archived": null,
+        "boardLane": "backlog"
+      },
+      "deliveredBytes": 12
+    }
+  ],
+  "active": {
+    "requestID": "2681f4ac-5f8a-41bb-a2aa-8b52b33f99e8",
+    "body": [
+      {
+        "missionID": "draft-d96b6136e0ad6fd9b4ea8916ce1b1361",
+        "sessionID": "ses_hlLkIp4dcORnkGgkVLwI",
+        "title": "Restore receipt from archive settings",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "created": 1794428646272,
+        "updated": 1794428683837,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Keep the original request and restore only this archived draft."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-d25cf825d5c30e89f056f165322909bd",
+        "sessionID": "ses_hCc6kiaeW0Y9xySLVQ4l",
+        "title": "Restore receipt from reader",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "created": 1794428566985,
+        "updated": 1794428594311,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Read the exact restored draft even if the mutation receipt is interrupted."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "selected": [
+    {
+      "requestID": "fe50b81d-7d61-4350-8d0d-1b34da7602cb",
+      "body": {
+        "kind": "mission",
+        "id": "draft-d25cf825d5c30e89f056f165322909bd",
+        "missionID": "draft-d25cf825d5c30e89f056f165322909bd",
+        "sessionID": "ses_hCc6kiaeW0Y9xySLVQ4l",
+        "title": "Restore receipt from reader",
+        "pendingPromptText": "Read the exact restored draft even if the mutation receipt is interrupted.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "created": 1794428566985,
+        "started": 1794428566985,
+        "updated": 1794428594311,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    },
+    {
+      "requestID": "ddba87ff-32c6-4b5b-a716-395ca6d36ae0",
+      "body": {
+        "kind": "mission",
+        "id": "draft-d96b6136e0ad6fd9b4ea8916ce1b1361",
+        "missionID": "draft-d96b6136e0ad6fd9b4ea8916ce1b1361",
+        "sessionID": "ses_hlLkIp4dcORnkGgkVLwI",
+        "title": "Restore receipt from archive settings",
+        "pendingPromptText": "Keep the original request and restore only this archived draft.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "created": 1794428646272,
+        "started": 1794428646272,
+        "updated": 1794428683837,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  ],
+  "archive": {
+    "requestID": "bf8ebfac-7ad7-4723-8f5e-57a3fc0ef8f9",
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  }
+}

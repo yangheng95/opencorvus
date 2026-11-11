@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [归档恢复回执中断的桌面证据](2026-11-12-archive-restore-receipt/README.md)
 - [归档多步任务阅读和恢复文案的桌面证据](2026-11-12-mission-archive-reading-wording/README.md)
 - [多步任务保存确认直接打开的桌面证据](2026-11-12-mission-draft-receipt-open/README.md)
 - [草稿文本附件阅读高度的桌面证据](2026-11-12-draft-attachment-reading-height/README.md)

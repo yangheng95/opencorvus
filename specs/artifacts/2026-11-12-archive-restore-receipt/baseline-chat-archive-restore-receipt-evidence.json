@@ -1,0 +1,187 @@
+{
+  "occurrence": "iteration-b252-baseline",
+  "original": {
+    "createID": [
+      "1f421f92-d536-4829-8f2c-5b67b0c975c4"
+    ],
+    "renameID": [
+      "abc5c21d-1892-4b8b-a36f-011f62e79e59"
+    ],
+    "archiveID": [
+      "95b1006c-1fc8-4c40-bc78-d74e3d972c61"
+    ],
+    "session": {
+      "id": "ses_hQzTsjfHHJb8c6O9qIDQ",
+      "slug": "playful-cabin",
+      "projectID": "prj_hHirAZdzN8l0xYttn4op",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\alternate-project\\archive-restore-receipt",
+      "title": "Chat archive receipt review",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "projectConversationCreation": {
+          "version": 1,
+          "requestID": "b252-isolated-chat-restore",
+          "model": null
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        }
+      },
+      "time": {
+        "created": 1794428949582,
+        "updated": 1794428949743,
+        "archived": 1794428949741
+      }
+    }
+  },
+  "cut": {
+    "time": "2026-11-11T20:29:53.643Z",
+    "stage": "truncated",
+    "route": "/coding/chat/session/ses_hQzTsjfHHJb8c6O9qIDQ/archive",
+    "method": "PATCH",
+    "round": "b252-baseline-chat-settings-restore",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\alternate-project\\archive-restore-receipt",
+    "search": null,
+    "requestID": "44e4f5a0-5664-4460-b791-be867ce6a0fb",
+    "status": 200,
+    "bytes": 546,
+    "target": {
+      "sessionID": "ses_hQzTsjfHHJb8c6O9qIDQ",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\alternate-project\\archive-restore-receipt",
+      "title": "Chat archive receipt review",
+      "archived": null,
+      "experience": "chat"
+    },
+    "deliveredBytes": 12
+  },
+  "conversation": {
+    "requestID": "bc66b591-a6de-4a19-9d51-cf3a2106ac51",
+    "body": {
+      "session": {
+        "id": "ses_hQzTsjfHHJb8c6O9qIDQ",
+        "slug": "playful-cabin",
+        "projectID": "prj_hHirAZdzN8l0xYttn4op",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\alternate-project\\archive-restore-receipt",
+        "title": "Chat archive receipt review",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "b252-isolated-chat-restore",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794428949582,
+          "updated": 1794428993536
+        }
+      }
+    }
+  },
+  "selected": {
+    "requestID": "be193ea0-ab47-4c15-a04a-5fbdfcae970a",
+    "body": {
+      "kind": "chat",
+      "experience": "chat",
+      "id": "ses_hQzTsjfHHJb8c6O9qIDQ",
+      "sessionID": "ses_hQzTsjfHHJb8c6O9qIDQ",
+      "title": "Chat archive receipt review",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\alternate-project\\archive-restore-receipt",
+      "created": 1794428949582,
+      "started": 1794428949582,
+      "updated": 1794428993536,
+      "pinned": false,
+      "status": "idle"
+    }
+  },
+  "missions": [
+    {
+      "requestID": "9e73a1c8-4138-4037-8bd1-9ac082def6a8",
+      "body": {
+        "kind": "mission",
+        "id": "draft-d25cf825d5c30e89f056f165322909bd",
+        "missionID": "draft-d25cf825d5c30e89f056f165322909bd",
+        "sessionID": "ses_hCc6kiaeW0Y9xySLVQ4l",
+        "title": "Restore receipt from reader",
+        "pendingPromptText": "Read the exact restored draft even if the mutation receipt is interrupted.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "created": 1794428566985,
+        "started": 1794428566985,
+        "updated": 1794428594311,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    },
+    {
+      "requestID": "77de231f-4d51-4ac8-9296-6f89fe37f633",
+      "body": {
+        "kind": "mission",
+        "id": "draft-d96b6136e0ad6fd9b4ea8916ce1b1361",
+        "missionID": "draft-d96b6136e0ad6fd9b4ea8916ce1b1361",
+        "sessionID": "ses_hlLkIp4dcORnkGgkVLwI",
+        "title": "Restore receipt from archive settings",
+        "pendingPromptText": "Keep the original request and restore only this archived draft.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b252\\baseline-project\\archive-restore-receipt",
+        "created": 1794428646272,
+        "started": 1794428646272,
+        "updated": 1794428683837,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    }
+  ],
+  "wrongProject": [
+    {
+      "status": 404,
+      "requestID": "e40a170e-d187-492a-b9ea-eced1c4b730e",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Session not found: ses_hCc6kiaeW0Y9xySLVQ4l"
+        }
+      }
+    },
+    {
+      "status": 404,
+      "requestID": "9a088355-fdc3-471a-953c-e584c5798dbf",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Session not found: ses_hlLkIp4dcORnkGgkVLwI"
+        }
+      }
+    }
+  ],
+  "archive": {
+    "requestID": "8fe2cdfb-5c45-4fe5-9206-66446483fc54",
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  }
+}
