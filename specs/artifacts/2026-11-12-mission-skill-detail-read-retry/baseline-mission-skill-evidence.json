@@ -1,0 +1,99 @@
+{
+  "asset": "main-pw4aA7Kq.js",
+  "checked": [
+    {
+      "route": "/mission-skill/settings",
+      "status": 200,
+      "requestID": "979e5c89-13a1-451b-b7d6-cc6bca16d59b",
+      "names": [
+        "general"
+      ],
+      "requiredTools": 14
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "status": 200,
+      "requestID": "a7dbdbb9-7839-4167-8858-3921b09af736",
+      "names": [
+        "general"
+      ],
+      "requiredTools": 14
+    }
+  ],
+  "stages": [
+    {
+      "time": "2026-11-11T17:18:41.353Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "setup",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "2a0163f9-062d-4bda-a75b-f11ae9a7240c",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 896
+    },
+    {
+      "time": "2026-11-11T17:18:54.685Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "detail-old-catalog",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "bc789125-2eca-4a63-bfbd-ccdfecc6a625",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ]
+    },
+    {
+      "time": "2026-11-11T17:18:54.789Z",
+      "stage": "truncated",
+      "kind": "read",
+      "round": "detail-old-catalog",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "bc789125-2eca-4a63-bfbd-ccdfecc6a625",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 896,
+      "deliveredBytes": 32
+    },
+    {
+      "time": "2026-11-11T17:19:18.789Z",
+      "stage": "held",
+      "kind": "read",
+      "round": "list-baseline-retry",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "4a84c922-4a86-4c33-b7b7-af128ba0e837",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ]
+    },
+    {
+      "time": "2026-11-11T17:19:18.791Z",
+      "stage": "delivered",
+      "kind": "read",
+      "round": "list-baseline-retry",
+      "route": "/mission-skill/settings",
+      "project": "mission-skill-read-review",
+      "status": 200,
+      "requestID": "4a84c922-4a86-4c33-b7b7-af128ba0e837",
+      "skillCount": 1,
+      "names": [
+        "general"
+      ],
+      "bytes": 896
+    }
+  ]
+}
