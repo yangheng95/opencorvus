@@ -997,24 +997,24 @@
   overscroll-behavior: contain;
 }
 
-.msg-text-attachment .msg-artifact-code,
+:is(.msg-text-attachment, .composer-attachment-dialog) .resource-text-preview,
 .msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] {
   flex: initial;
   min-height: 0;
   max-height: none;
 }
 
-.msg-text-attachment .file-editor-view,
+:is(.msg-text-attachment, .composer-attachment-dialog) .resource-text-preview .file-editor-view,
 .msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] > .file-editor-view {
   flex: initial;
 }
 
-.msg-text-attachment .cm-editor,
+:is(.msg-text-attachment, .composer-attachment-dialog) .resource-text-preview .cm-editor,
 .msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] .cm-editor {
   height: auto;
 }
 
-.msg-text-attachment .cm-scroller,
+:is(.msg-text-attachment, .composer-attachment-dialog) .resource-text-preview .cm-scroller,
 .msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] .cm-scroller {
   max-height: min(50vh, calc(560px * var(--ui-scale)));
   overscroll-behavior: contain;

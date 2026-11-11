@@ -1,0 +1,45 @@
+{
+  "asset": "main-e1zMAa7a.js",
+  "originals": [
+    {
+      "filename": "short-review.txt",
+      "size": 77,
+      "uploadRequestID": "d73c4766-0b82-4925-aa9e-57647fd5ca2a",
+      "url": "/attachment/prj_hvlkhaBxkqOiOiFwzrGs/5d92184b58fa7a6ac398909a6f66668206eb9dac6754bc9f12c66cbd8c848445.txt",
+      "originalRequestID": "367a3665-ebaa-4051-8a72-67cf122326ab",
+      "browserDownloadChecked": false
+    },
+    {
+      "filename": "long-review.txt",
+      "size": 7466,
+      "uploadRequestID": "6c4974cf-349a-4be4-bacb-a54a0e668413",
+      "url": "/attachment/prj_hvlkhaBxkqOiOiFwzrGs/04a8b71f9964da116ed40d6dec5ccc361b72612425f205c826bbef342a66c4ec.txt",
+      "originalRequestID": "f72b1dac-5d00-4080-9bca-e7a642f5527d",
+      "browserDownloadChecked": true
+    }
+  ],
+  "reads": [
+    {
+      "time": "2026-11-11T19:50:22.288Z",
+      "stage": "delivered",
+      "route": "/attachment/prj_hvlkhaBxkqOiOiFwzrGs/5d92184b58fa7a6ac398909a6f66668206eb9dac6754bc9f12c66cbd8c848445.txt",
+      "method": "GET",
+      "round": "initial",
+      "filename": null,
+      "requestID": "35184716-b1d9-4229-9cae-a228943b9a07",
+      "status": 200,
+      "bytes": 77
+    },
+    {
+      "time": "2026-11-11T19:50:31.472Z",
+      "stage": "delivered",
+      "route": "/attachment/prj_hvlkhaBxkqOiOiFwzrGs/04a8b71f9964da116ed40d6dec5ccc361b72612425f205c826bbef342a66c4ec.txt",
+      "method": "GET",
+      "round": "initial",
+      "filename": null,
+      "requestID": "df7a4c79-74a4-4c05-9aea-54bd3e073a84",
+      "status": 200,
+      "bytes": 7466
+    }
+  ]
+}

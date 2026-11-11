@@ -384,17 +384,17 @@ already stored references retain their existing metadata and capture behavior.
 The shared text reader decodes original bytes strictly: a UTF-16 BOM selects
 little or big endian, otherwise UTF-8 applies (including a UTF-8 BOM). Malformed
 input shows localized encoding feedback with the original download and guidance
-to save a UTF-8 copy, since repeating the preview would read the same bytes. Pending
-text review also offers the shared authorized original download in its footer;
+to save a UTF-8 copy, since repeating the preview would read the same bytes.
+The draft preview footer offers the original download once its bytes are accepted;
 history and file artifacts retain their original download/export actions.
 This read-only decoding contract does not change storage, model read tools or
 file editing and saving encodings.
 FilePart's PDF content loads the same PdfPreview on demand, including canonical
 attachments; they do not depend on a host PDF plugin. The composer's constrained
 body scrolls independently of its header and footer, keeping Close visible.
-Text review gives its editor a viewport-bounded reading height instead of
-shrinking to the inline artifact minimum; its internal scroller retains the
-complete document and keyboard navigation.
+Draft text review uses the content-sized reading layout of message attachments.
+Short text fits its content. Long text scrolls in the viewport-bounded editor
+with the complete document and keyboard navigation available.
 Image chips keep their existing full-image preview and folders remain references.
 Review is read-only and retains the original draft and attachment list. The
 dialog retires with its selection/API authority or attachment row, and closes
