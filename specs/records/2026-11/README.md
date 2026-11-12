@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [新增 MCP 回执必须包含所提交服务的有效状态](2026-11-12-mcp-add-exact-acknowledgment.md)
 - [MCP 操作按收到的回执描述状态核对](2026-11-12-mcp-mutation-reply-description.md)
 - [项目发现尊重内置 MCP 的执行所有权](2026-11-12-mcp-execution-owned-project-discovery.md)
 - [手动断开和配置禁用的 MCP 状态](2026-11-12-mcp-manual-disconnect-status.md)

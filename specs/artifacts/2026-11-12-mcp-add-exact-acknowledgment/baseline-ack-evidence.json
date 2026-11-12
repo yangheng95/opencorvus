@@ -1,0 +1,205 @@
+{
+  "actions": [
+    {
+      "input": {
+        "time": "2026-11-12T05:38:48.964Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "baseline-wrong-target",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b282\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "ack-review",
+        "type": "remote"
+      },
+      "actual": {
+        "time": "2026-11-12T05:38:49.143Z",
+        "stage": "substituted",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "baseline-wrong-target",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b282\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "0c826c9f-6f31-47f9-b20e-dfb9058d2712",
+        "status": 200,
+        "bytes": 150,
+        "target": {
+          "ack-review": {
+            "status": "connected"
+          },
+          "browser": {
+            "status": "disconnected",
+            "scope": "execution"
+          },
+          "computer": {
+            "status": "disconnected",
+            "scope": "execution"
+          }
+        },
+        "clientReceipt": {
+          "other-receipt": {
+            "status": "connected"
+          }
+        },
+        "deliveredBytes": 40
+      },
+      "clientBodySchemaValid": true
+    },
+    {
+      "input": {
+        "time": "2026-11-12T05:39:08.332Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "baseline-invalid-status",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b282\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "invalid-review",
+        "type": "remote"
+      },
+      "actual": {
+        "time": "2026-11-12T05:39:08.449Z",
+        "stage": "substituted",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "baseline-invalid-status",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b282\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "45f2fb42-0c97-483f-9770-37eb0e1147e7",
+        "status": 200,
+        "bytes": 190,
+        "target": {
+          "ack-review": {
+            "status": "connected"
+          },
+          "invalid-review": {
+            "status": "connected"
+          },
+          "browser": {
+            "status": "disconnected",
+            "scope": "execution"
+          },
+          "computer": {
+            "status": "disconnected",
+            "scope": "execution"
+          }
+        },
+        "clientReceipt": {
+          "invalid-review": {
+            "status": "failed"
+          }
+        },
+        "deliveredBytes": 38
+      },
+      "clientBodySchemaValid": false
+    }
+  ],
+  "projects": [
+    {
+      "side": "project",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b282\\candidate-project\\archive-review",
+      "requestID": "e2ecdd75-d4dd-45a0-b859-d21e7fb944a0",
+      "status": {
+        "ack-review": {
+          "status": "connected"
+        },
+        "invalid-review": {
+          "status": "connected"
+        }
+      },
+      "definitions": {
+        "ack-review": {
+          "type": "remote",
+          "url": "http://127.0.0.1:39900/mcp",
+          "transport": "streamable-http"
+        },
+        "invalid-review": {
+          "type": "remote",
+          "url": "http://127.0.0.1:39900/mcp",
+          "transport": "streamable-http"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b282\\candidate-alternate\\archive-review",
+      "requestID": "81949e5b-703b-4d45-ba40-75fc4558409b",
+      "status": {},
+      "definitions": {}
+    }
+  ],
+  "protocol": [
+    {
+      "kind": "response",
+      "pid": 23032,
+      "port": 39900,
+      "scope": "public",
+      "time": "2026-11-12T05:38:49.115Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 23032,
+      "port": 39900,
+      "scope": "public",
+      "time": "2026-11-12T05:38:49.127Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 23032,
+      "port": 39900,
+      "scope": "public",
+      "time": "2026-11-12T05:38:49.137Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 23032,
+      "port": 39900,
+      "scope": "public",
+      "time": "2026-11-12T05:39:08.434Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 23032,
+      "port": 39900,
+      "scope": "public",
+      "time": "2026-11-12T05:39:08.439Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 23032,
+      "port": 39900,
+      "scope": "public",
+      "time": "2026-11-12T05:39:08.446Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ]
+}
