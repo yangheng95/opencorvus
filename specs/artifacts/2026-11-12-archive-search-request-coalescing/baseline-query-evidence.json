@@ -1,0 +1,361 @@
+{
+  "typingReceived": [
+    {
+      "time": "2026-11-12T01:18:23.908Z",
+      "stage": "received",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "S",
+      "expectedRevisionId": null,
+      "operationRequestID": null
+    },
+    {
+      "time": "2026-11-12T01:18:24.002Z",
+      "stage": "received",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Sh",
+      "expectedRevisionId": null,
+      "operationRequestID": null
+    },
+    {
+      "time": "2026-11-12T01:18:24.094Z",
+      "stage": "received",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Sha",
+      "expectedRevisionId": null,
+      "operationRequestID": null
+    },
+    {
+      "time": "2026-11-12T01:18:24.187Z",
+      "stage": "received",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Shar",
+      "expectedRevisionId": null,
+      "operationRequestID": null
+    },
+    {
+      "time": "2026-11-12T01:18:24.266Z",
+      "stage": "received",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Share",
+      "expectedRevisionId": null,
+      "operationRequestID": null
+    },
+    {
+      "time": "2026-11-12T01:18:24.346Z",
+      "stage": "received",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Shared",
+      "expectedRevisionId": null,
+      "operationRequestID": null
+    }
+  ],
+  "retiredReads": [
+    {
+      "time": "2026-11-12T01:18:24.004Z",
+      "stage": "client-disconnected",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "S",
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "c7d44785-292e-4cba-9de2-052e8f2fcf32",
+      "status": 200,
+      "bytes": 1613,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_htyv2JFjyK9kZy448YLJ",
+          "sessionID": "ses_htyv2JFjyK9kZy448YLJ",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+          "title": "Normal Work deletion",
+          "archived": 1794446289610
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hiKbZwds6p8hYhXJHFZv",
+          "sessionID": "ses_hiKbZwds6p8hYhXJHFZv",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+          "title": "Archive control record kept",
+          "archived": 1794446289474
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446289325
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h823jFmIxhjdNOVnS6xB",
+          "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446288552
+        }
+      ]
+    },
+    {
+      "time": "2026-11-12T01:18:24.103Z",
+      "stage": "client-disconnected",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Sh",
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "23650699-6ceb-4e89-b0e2-95455f7debfa",
+      "status": 200,
+      "bytes": 826,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446289325
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h823jFmIxhjdNOVnS6xB",
+          "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446288552
+        }
+      ]
+    },
+    {
+      "time": "2026-11-12T01:18:24.189Z",
+      "stage": "client-disconnected",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Sha",
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "5fea72f6-10f6-42bd-b04c-0f543ba219b3",
+      "status": 200,
+      "bytes": 826,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446289325
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h823jFmIxhjdNOVnS6xB",
+          "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446288552
+        }
+      ]
+    },
+    {
+      "time": "2026-11-12T01:18:24.268Z",
+      "stage": "client-disconnected",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Shar",
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "713896ca-bda9-40d8-904b-dd370d322969",
+      "status": 200,
+      "bytes": 826,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446289325
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h823jFmIxhjdNOVnS6xB",
+          "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446288552
+        }
+      ]
+    },
+    {
+      "time": "2026-11-12T01:18:24.348Z",
+      "stage": "client-disconnected",
+      "route": "/work-ledger/archive",
+      "method": "GET",
+      "round": "typing",
+      "directory": null,
+      "search": "Share",
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "6f00c2da-5f79-42b4-b56a-aa09848cbfe9",
+      "status": 200,
+      "bytes": 826,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446289325
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h823jFmIxhjdNOVnS6xB",
+          "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+          "title": "Shared archive receipt review",
+          "archived": 1794446288552
+        }
+      ]
+    }
+  ],
+  "term": {
+    "time": "2026-11-12T01:18:24.475Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "typing",
+    "directory": null,
+    "search": "Shared",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "4debc2f1-5a1f-4764-aeea-940843f30d07",
+    "status": 200,
+    "bytes": 826,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+        "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446289325
+      },
+      {
+        "kind": "chat",
+        "id": "ses_h823jFmIxhjdNOVnS6xB",
+        "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446288552
+      }
+    ]
+  },
+  "space": {
+    "time": "2026-11-12T01:18:38.691Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "trailing-space",
+    "directory": null,
+    "search": "Shared",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "28e453d0-c413-42fd-b2f1-d26e19c459ea",
+    "status": 200,
+    "bytes": 826,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+        "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446289325
+      },
+      {
+        "kind": "chat",
+        "id": "ses_h823jFmIxhjdNOVnS6xB",
+        "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446288552
+      }
+    ]
+  },
+  "clear": {
+    "time": "2026-11-12T01:18:38.862Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "clear",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "4048fefe-3944-4f49-b0bc-2f1c603e345c",
+    "status": 200,
+    "bytes": 1613,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_htyv2JFjyK9kZy448YLJ",
+        "sessionID": "ses_htyv2JFjyK9kZy448YLJ",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+        "title": "Normal Work deletion",
+        "archived": 1794446289610
+      },
+      {
+        "kind": "chat",
+        "id": "ses_hiKbZwds6p8hYhXJHFZv",
+        "sessionID": "ses_hiKbZwds6p8hYhXJHFZv",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+        "title": "Archive control record kept",
+        "archived": 1794446289474
+      },
+      {
+        "kind": "chat",
+        "id": "ses_hXGiDBgjBmiqDbHHjQ2v",
+        "sessionID": "ses_hXGiDBgjBmiqDbHHjQ2v",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-alternate\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446289325
+      },
+      {
+        "kind": "chat",
+        "id": "ses_h823jFmIxhjdNOVnS6xB",
+        "sessionID": "ses_h823jFmIxhjdNOVnS6xB",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\baseline-project\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446288552
+      }
+    ]
+  },
+  "exactRead": "66b35406-d112-4009-a080-6c5b95ff9953"
+}
