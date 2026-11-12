@@ -24,6 +24,10 @@ import type { BoardSource } from "../store/board"
 
 export const WORK_LEDGER_SEARCH_DELAY_MS = 150
 
+export function normalizeWorkLedgerSearch(value: string): string {
+  return value.trim()
+}
+
 export type WorkLedgerItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerKind = WorkLedgerItemRow["kind"]
@@ -185,7 +189,7 @@ type WorkLedgerPageInput = {
 
 function readWorkLedgerPage(path: "work-ledger" | "work-ledger/archive", input: WorkLedgerPageInput): Promise<unknown> {
   const params = new URLSearchParams()
-  const search = input.search?.trim()
+  const search = normalizeWorkLedgerSearch(input.search ?? "")
   if (search) params.set("search", search)
   if (typeof input.limit === "number") params.set("limit", String(input.limit))
   if (input.cursor) {

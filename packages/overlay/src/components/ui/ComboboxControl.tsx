@@ -46,6 +46,7 @@ export interface ComboboxControlProps<T extends object> {
   inputTitle?: string
   inputDataUI?: string
   onInputChange?: (value: string) => void
+  preserveFocusedOptionOnInputChange?: (value: string) => boolean
   onInputKeyDown?: JSX.EventHandlerUnion<HTMLInputElement, KeyboardEvent>
   renderOptionPrefix?: (option: T) => JSX.Element | undefined
   renderOptionDescription?: (option: T) => JSX.Element | undefined
@@ -54,21 +55,25 @@ export interface ComboboxControlProps<T extends object> {
   emptyContent?: JSX.Element
 }
 
-function ComboboxFocus(props: { options: readonly object[] }): null {
+function ComboboxFocus(props: {
+  options: readonly object[]
+  takeRetainedOption: (value: string | undefined) => string | undefined
+}): null {
   const context = Combobox.useComboboxContext()
   createEffect(() => {
     if (!context.isOpen()) return
     void props.options
-    void context.inputValue()
+    const inputValue = context.inputValue()
     queueMicrotask(() => {
-      if (!context.isOpen()) return
+      if (!context.isOpen() || context.inputValue() !== inputValue) return
+      const retainedKey = props.takeRetainedOption(inputValue)
       const listState = context.listState()
       const collection = listState.collection()
       const selectionManager = listState.selectionManager()
       const focusedKey = selectionManager.focusedKey()
       if (focusedKey != null && collection.getItem(focusedKey)) return
       selectionManager.setFocused(true)
-      selectionManager.setFocusedKey(collection.getFirstKey())
+      selectionManager.setFocusedKey(retainedKey != null && collection.getItem(retainedKey) ? retainedKey : collection.getFirstKey())
     })
   })
   return null
@@ -83,6 +88,7 @@ function ComboboxEmptyState(props: { children?: JSX.Element }): JSX.Element {
 export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>): JSX.Element {
   let comboboxContext: ReturnType<typeof Combobox.useComboboxContext> | undefined
   let input: HTMLInputElement | undefined
+  let retainedOption: { value: string; key: string } | undefined
   const popup = () => props.presentation === "popup"
   const textFieldControl = useTextFieldControlProps()
   const popupClass = (base: string, extra?: string) => (popup() ? [base, extra].filter(Boolean).join(" ") : extra)
@@ -102,6 +108,21 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
     t(count === 1 ? "combobox.option_available" : "combobox.options_available", {
       count: count.toLocaleString(localeTag()),
     })
+
+  const handleInputChange = (value: string) => {
+    // Kobalte clears its current option after it notifies the input consumer.
+    const key = input === document.activeElement && comboboxContext?.isOpen() && props.preserveFocusedOptionOnInputChange?.(value)
+      ? comboboxContext.listState().selectionManager().focusedKey()
+      : undefined
+    retainedOption = key == null ? undefined : { value, key }
+    props.onInputChange?.(value)
+  }
+
+  const takeRetainedOption = (value: string | undefined) => {
+    const retained = retainedOption
+    retainedOption = undefined
+    return retained && retained.value === value && input === document.activeElement ? retained.key : undefined
+  }
 
   function ComboboxContextBridge(): null {
     comboboxContext = Combobox.useComboboxContext()
@@ -207,7 +228,7 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
       }}
       open={props.open}
       onOpenChange={props.onOpenChange}
-      onInputChange={props.onInputChange}
+      onInputChange={props.preserveFocusedOptionOnInputChange ? handleInputChange : props.onInputChange}
       placeholder={props.placeholder}
       defaultFilter={props.defaultFilter}
       triggerMode={props.triggerMode ?? "input"}
@@ -219,7 +240,7 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
       itemComponent={ComboboxControlItem}
     >
       <ComboboxContextBridge />
-      <ComboboxFocus options={props.options} />
+      <ComboboxFocus options={props.options} takeRetainedOption={takeRetainedOption} />
       <Combobox.Control class={controlClass()}>
         <Show when={popup()}>
           <Icon name="search" size="compact" />

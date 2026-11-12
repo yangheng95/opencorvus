@@ -27,6 +27,7 @@ import { conversationExperienceIcon, conversationExperienceLabel } from "../serv
 import {
   WORK_LEDGER_SEARCH_DELAY_MS,
   loadWorkLedger,
+  normalizeWorkLedgerSearch,
   workLedgerProject,
   type WorkLedgerChatRow,
   type WorkLedgerCursor,
@@ -120,7 +121,7 @@ export function CommandPalette(props: {
 }) {
   const palette = useDisclosure()
   const [ledgerRows, setLedgerRows] = createSignal<PaletteLedgerRow[]>([])
-  const [paletteQuery, setPaletteQuery] = createSignal("")
+  const [query, setQuery] = createSignal("")
   const [ledgerCursor, setLedgerCursor] = createSignal<WorkLedgerCursor | null>(null)
   const [ledgerLoading, setLedgerLoading] = createSignal(false)
   const [ledgerError, setLedgerError] = createSignal<string>()
@@ -298,9 +299,9 @@ export function CommandPalette(props: {
   })
 
   const visibleCommands = createMemo(() => {
-    const query = paletteQuery().trim()
-    const visible = commands().filter((command) => query
-      ? command.id.startsWith("ledger:") || commandMatches(command, query)
+    const term = query()
+    const visible = commands().filter((command) => term
+      ? command.id.startsWith("ledger:") || commandMatches(command, term)
       : command.id.startsWith("ledger:") || command.visibleWhenEmpty)
     let previousGroup = ""
     let shortcutIndex = 0
@@ -315,7 +316,7 @@ export function CommandPalette(props: {
   })
 
   function ownsSearch(search: LedgerSearch): boolean {
-    return ledgerSearch === search && palette.open() && paletteQuery().trim() === search.query &&
+    return ledgerSearch === search && palette.open() && query() === search.query &&
       isApiAuthorityCurrent(search.authority)
   }
 
@@ -367,8 +368,8 @@ export function CommandPalette(props: {
 
   createEffect(
     on(
-      () => ({ open: palette.open(), query: paletteQuery().trim(), authority: captureApiAuthority() }),
-      ({ open, query, authority }) => {
+      [palette.open, query, captureApiAuthority],
+      ([open, term, authority]) => {
         ledgerSearch?.controller.abort()
         ledgerSearch = undefined
         setLedgerRows([])
@@ -376,12 +377,12 @@ export function CommandPalette(props: {
         setLedgerError(undefined)
         setLedgerLoading(open)
         if (!open) {
-          setPaletteQuery("")
+          setQuery("")
           return
         }
-        const search = { query, authority, controller: new AbortController() }
+        const search = { query: term, authority, controller: new AbortController() }
         ledgerSearch = search
-        const timer = setTimeout(() => void loadLedger(search), query ? WORK_LEDGER_SEARCH_DELAY_MS : 0)
+        const timer = setTimeout(() => void loadLedger(search), term ? WORK_LEDGER_SEARCH_DELAY_MS : 0)
         onCleanup(() => {
           clearTimeout(timer)
           search.controller.abort()
@@ -535,7 +536,8 @@ export function CommandPalette(props: {
           event.stopPropagation()
           close()
         }}
-        onInputChange={setPaletteQuery}
+        onInputChange={(value) => setQuery(normalizeWorkLedgerSearch(value))}
+        preserveFocusedOptionOnInputChange={(value) => normalizeWorkLedgerSearch(value) === query()}
         defaultFilter={() => true}
         allowsEmptyCollection
         closeOnSelection

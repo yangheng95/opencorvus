@@ -9,6 +9,7 @@ import {
 import {
   WORK_LEDGER_SEARCH_DELAY_MS,
   loadArchivedWorkLedger,
+  normalizeWorkLedgerSearch,
   workLedgerProject,
   type WorkLedgerCursor,
   type WorkLedgerItemRow,
@@ -100,7 +101,7 @@ function archivedAt(row: WorkLedgerItemRow): number {
 
 export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => Promise<void> }) {
   const [search, setSearch] = createSignal("")
-  const query = createMemo(() => search().trim())
+  const query = createMemo(() => normalizeWorkLedgerSearch(search()))
   const [rows, setRows] = createSignal<WorkLedgerItemRow[]>([])
   const [nextCursor, setNextCursor] = createSignal<WorkLedgerCursor | null>(null)
   const [loading, setLoading] = createSignal(false)

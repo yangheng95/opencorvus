@@ -6109,6 +6109,8 @@ Nonempty queries include matching Project names, IDs and directories, use bounde
 pages with explicit continuation, and flatten only the
 canonical Mission child Tasks. Search covers original titles, IDs, directories
 and technical kinds, including each conversation's canonical Chat/Work experience.
+Surrounding whitespace preserves the current effective query, accepted results,
+cursor and diagnostics. The input keeps the operator's text.
 The global search Dialog owns closing; Tab can move from the query to its
 footer without clearing the query. One footer action continues or retries
 the current page and holds keyboard focus while it remains available. When
@@ -6167,8 +6169,10 @@ The shared ComboboxControl retains an existing focused option while its canonica
 key remains in the current collection. Appending results or updating their labels
 does not reset the active option to the first row or trigger a return to the top.
 Only an empty or retired key receives the current first option after collection
-commit. Kobalte retains ownership of input filtering, keyboard selection and
-scrolling; neither caller stores a parallel focus key or scroll compensation.
+commit. When the command palette identifies an equivalent input, the control
+can carry the existing option through Kobalte's input reset if the input still
+owns focus and the option still exists. Kobalte retains ownership of keyboard
+selection and scrolling.
 Option elements derive their IDs from the existing Combobox root namespace and
 canonical item keys, so collection updates retain valid active-descendant and
 label/description references alongside the actual highlighted option.
