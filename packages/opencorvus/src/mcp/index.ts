@@ -2793,9 +2793,18 @@ export namespace MCP {
     .strict()
     .meta({ ref: "MCPRemoveConfiguredInput" })
 
+  const nonblankConfigureName = /\S/
+
   export const ConfigureRequest = z
     .object({
-      name: z.string().trim().min(1),
+      name: z
+        .string()
+        .superRefine((name, context) => {
+          if (nonblankConfigureName.test(name)) return
+          context.addIssue({ code: "too_small", origin: "string", minimum: 1, inclusive: true })
+        })
+        .describe("Exact MCP server name, including any leading or trailing whitespace. Requires a non-whitespace character.")
+        .meta({ minLength: 1, pattern: nonblankConfigureName.source }),
       config: Config.Mcp,
       credentialSecret: z.string().min(1).optional(),
     })

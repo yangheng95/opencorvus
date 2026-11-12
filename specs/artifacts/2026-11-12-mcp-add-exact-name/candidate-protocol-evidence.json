@@ -1,0 +1,77 @@
+{
+  "total": 42,
+  "groups": [
+    {
+      "endpoint": "/alternate/normal",
+      "operation": "initialize",
+      "status": 200,
+      "count": 3
+    },
+    {
+      "endpoint": "/alternate/normal",
+      "operation": "notifications/initialized",
+      "status": 202,
+      "count": 3
+    },
+    {
+      "endpoint": "/alternate/normal",
+      "operation": "tools/list",
+      "status": 200,
+      "count": 3
+    },
+    {
+      "endpoint": "/alternate/padded",
+      "operation": "initialize",
+      "status": 200,
+      "count": 4
+    },
+    {
+      "endpoint": "/alternate/padded",
+      "operation": "notifications/initialized",
+      "status": 202,
+      "count": 4
+    },
+    {
+      "endpoint": "/alternate/padded",
+      "operation": "tools/list",
+      "status": 200,
+      "count": 4
+    },
+    {
+      "endpoint": "/project/normal",
+      "operation": "initialize",
+      "status": 200,
+      "count": 3
+    },
+    {
+      "endpoint": "/project/normal",
+      "operation": "notifications/initialized",
+      "status": 202,
+      "count": 3
+    },
+    {
+      "endpoint": "/project/normal",
+      "operation": "tools/list",
+      "status": 200,
+      "count": 3
+    },
+    {
+      "endpoint": "/project/padded",
+      "operation": "initialize",
+      "status": 200,
+      "count": 4
+    },
+    {
+      "endpoint": "/project/padded",
+      "operation": "notifications/initialized",
+      "status": 202,
+      "count": 4
+    },
+    {
+      "endpoint": "/project/padded",
+      "operation": "tools/list",
+      "status": 200,
+      "count": 4
+    }
+  ]
+}

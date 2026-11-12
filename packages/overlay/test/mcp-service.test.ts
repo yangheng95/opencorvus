@@ -106,7 +106,7 @@ describe("MCP overlay service", () => {
     ["needs_auth", { status: "needs_auth" }],
   ] as const)("acknowledges a saved remote MCP server with status %s", async (_status, entry) => {
     const requests: TransportRequest[] = []
-    __setHostTransportForTest(fakeTransport((req) => requests.push(req), { docs: entry }))
+    __setHostTransportForTest(fakeTransport((req) => requests.push(req), { " docs ": entry }))
     const authority = captureApiAuthority()
 
     const request = buildMcpAddRequest({
@@ -127,7 +127,7 @@ describe("MCP overlay service", () => {
         body: {
           kind: "json",
           value: {
-            name: "docs",
+            name: " docs ",
             config: {
               type: "remote",
               transport: "streamable-http",

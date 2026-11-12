@@ -1,0 +1,122 @@
+{
+  "results": {
+    "project": [
+      {
+        "name": "review-tools",
+        "url": "http://127.0.0.1:39930/project/normal",
+        "initial": "disconnected",
+        "final": "connected"
+      },
+      {
+        "name": " review-tools ",
+        "url": "http://127.0.0.1:39930/project/padded",
+        "initial": "disconnected",
+        "final": "connected"
+      }
+    ],
+    "alternate": [
+      {
+        "name": "review-tools",
+        "url": "http://127.0.0.1:39930/alternate/normal",
+        "initial": "disconnected",
+        "final": "connected"
+      },
+      {
+        "name": " review-tools ",
+        "url": "http://127.0.0.1:39930/alternate/padded",
+        "initial": "disconnected",
+        "final": "connected"
+      }
+    ]
+  },
+  "sent": [
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "135b4ddb-4412-4bef-a58b-45767d7afeab"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "1623b352-f79a-4218-9fbc-ee86075fcb74"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "8cf4fefd-f865-4a38-bbf3-3894e5bca983"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": " review-tools ",
+      "status": 200,
+      "requestID": "650502e6-279b-4fc1-83ba-b3bf573cb15e"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "8c211f67-b99f-46e4-b14a-4bbff16e960e"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "0f7bcfef-82ae-4e12-9a53-4b118e6848e4"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "301bd99c-6035-45cc-9649-616d1b471b1e"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "e59eafda-542c-4e52-8cd0-f9c655f2e4f9"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "212cdeb8-4977-4c6d-b45b-677af57e69df"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": " review-tools ",
+      "status": 200,
+      "requestID": "374f32d0-ea6f-4f84-9a42-854ef6f1e92a"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "ddc14d54-00c1-4621-8474-45e40379d155"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "160beb07-c7ba-4ec0-8dec-679390bfed9a"
+    }
+  ]
+}

@@ -827,6 +827,9 @@ OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并�
 授予的工具暴露给 Agent。`mcp browser` 是内置浏览器 MCP 的独立 stdio 入口，Task 调度只使用
 内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
 
+`POST /mcp` 将请求中的连接原名用作项目配置、连接状态和凭据事务的同一个键。新增或更新要求
+名称至少含一个非空白字符，首尾空白参与名称匹配。相同原名更新现有条目。
+
 Local MCP form arguments preserve the authored argument sequence, including an
 explicit empty single- or double-quoted argument. Quoted fragments join within
 the same argument; whitespace outside quotes separates arguments. The form

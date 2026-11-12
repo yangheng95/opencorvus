@@ -1,0 +1,224 @@
+{
+  "bundle": "./assets/main-E9Idb3WQ.js",
+  "before": [
+    {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "131d3974-8dfa-4111-85df-1476e34d5239",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/normal",
+          "status": "disconnected"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+      "status": 200,
+      "requestID": "57175196-c29c-4b52-87af-e023644973df",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/alternate/normal",
+          "status": "disconnected"
+        }
+      ]
+    }
+  ],
+  "afterEnglish": [
+    {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "1b07538b-61d8-40fa-88a0-9fe4fb8036b8",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/normal",
+          "status": "connected"
+        },
+        {
+          "name": " review-tools ",
+          "url": "http://127.0.0.1:39930/project/padded",
+          "status": "connected"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+      "status": 200,
+      "requestID": "92cb70be-2a14-492c-8980-993b04d6564d",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/alternate/normal",
+          "status": "disconnected"
+        }
+      ]
+    }
+  ],
+  "afterChinese": [
+    {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "e6aad1a3-4ccf-4162-8a46-fab2ec2fb5e7",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/normal",
+          "status": "connected"
+        },
+        {
+          "name": " review-tools ",
+          "url": "http://127.0.0.1:39930/project/padded",
+          "status": "connected"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+      "status": 200,
+      "requestID": "2adfba79-cfde-425a-a37b-523e9dc89dc6",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/alternate/normal",
+          "status": "connected"
+        },
+        {
+          "name": " review-tools ",
+          "url": "http://127.0.0.1:39930/alternate/padded",
+          "status": "connected"
+        }
+      ]
+    }
+  ],
+  "paddedDisconnected": {
+    "side": "alternate",
+    "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+    "status": 200,
+    "requestID": "f5ab3227-cd4d-4b75-a296-f1fbc0a3e375",
+    "connections": [
+      {
+        "name": "review-tools",
+        "url": "http://127.0.0.1:39930/alternate/normal",
+        "status": "connected"
+      },
+      {
+        "name": " review-tools ",
+        "url": "http://127.0.0.1:39930/alternate/padded",
+        "status": "disabled"
+      }
+    ]
+  },
+  "paddedReconnected": {
+    "side": "alternate",
+    "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+    "status": 200,
+    "requestID": "b61be87d-ded3-4f37-9e1a-e6cfe85dab3b",
+    "connections": [
+      {
+        "name": "review-tools",
+        "url": "http://127.0.0.1:39930/alternate/normal",
+        "status": "connected"
+      },
+      {
+        "name": " review-tools ",
+        "url": "http://127.0.0.1:39930/alternate/padded",
+        "status": "connected"
+      }
+    ]
+  },
+  "desktop": [
+    {
+      "route": "/mcp",
+      "name": " review-tools ",
+      "url": "http://127.0.0.1:39930/project/padded",
+      "status": 200,
+      "requestID": "2a7b7c4f-6120-40f8-af06-8212dbdda75b",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b290\\candidate-project\\archive-review",
+      "result": [
+        {
+          "name": "review-tools",
+          "status": "disconnected"
+        },
+        {
+          "name": " review-tools ",
+          "status": "connected"
+        },
+        {
+          "name": "browser",
+          "status": "disconnected"
+        },
+        {
+          "name": "computer",
+          "status": "disconnected"
+        }
+      ]
+    },
+    {
+      "route": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "346b9912-aada-4c15-905c-d577c892fcc9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b290\\candidate-project\\archive-review",
+      "result": true
+    },
+    {
+      "route": "/mcp",
+      "name": " review-tools ",
+      "url": "http://127.0.0.1:39930/alternate/padded",
+      "status": 200,
+      "requestID": "2683e56f-2082-4197-bc41-2a3d0a1b0fed",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b290\\candidate-alternate\\archive-review",
+      "result": [
+        {
+          "name": "review-tools",
+          "status": "disconnected"
+        },
+        {
+          "name": " review-tools ",
+          "status": "connected"
+        },
+        {
+          "name": "browser",
+          "status": "disconnected"
+        },
+        {
+          "name": "computer",
+          "status": "disconnected"
+        }
+      ]
+    },
+    {
+      "route": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "4d43bab8-8860-4e97-b937-3b5cb059c1e8",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b290\\candidate-alternate\\archive-review",
+      "result": true
+    },
+    {
+      "route": "/mcp/disconnect",
+      "name": " review-tools ",
+      "status": 200,
+      "requestID": "b9261015-a227-405f-aebb-774e78e0699d",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b290\\candidate-alternate\\archive-review",
+      "result": true
+    },
+    {
+      "route": "/mcp/connect",
+      "name": " review-tools ",
+      "status": 200,
+      "requestID": "a5e18f41-b1ad-4485-9057-645278c7790e",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b290\\candidate-alternate\\archive-review",
+      "result": true
+    }
+  ]
+}

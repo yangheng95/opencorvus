@@ -1,0 +1,94 @@
+{
+  "results": {
+    "project": [
+      {
+        "name": "review-tools",
+        "url": "http://127.0.0.1:39930/project/normal",
+        "initial": "connected",
+        "final": "connected"
+      },
+      {
+        "name": " review-tools ",
+        "url": "http://127.0.0.1:39930/project/padded",
+        "initial": "connected",
+        "final": "connected"
+      }
+    ],
+    "alternate": [
+      {
+        "name": "review-tools",
+        "url": "http://127.0.0.1:39930/alternate/normal",
+        "initial": "connected",
+        "final": "connected"
+      },
+      {
+        "name": " review-tools ",
+        "url": "http://127.0.0.1:39930/alternate/padded",
+        "initial": "connected",
+        "final": "connected"
+      }
+    ]
+  },
+  "sent": [
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "b35f8238-6ca8-4605-b528-0dd4bdf23612"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp",
+      "name": " review-tools ",
+      "status": 200,
+      "requestID": "30a59217-fd4d-4a96-bd68-5ebca7885706"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp",
+      "name": " \t  ",
+      "status": 400,
+      "requestID": "7cf8ceee-9e72-453f-8a9a-10b7f68b7c3a"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "1063cacf-0454-47ea-a187-191e35dfcf7a"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "2ef7d608-4d68-44e9-b517-58a23a3166ec"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp",
+      "name": " review-tools ",
+      "status": 200,
+      "requestID": "2a89512c-f5de-47c1-bd9b-61c7cada09f1"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp",
+      "name": " \t  ",
+      "status": 400,
+      "requestID": "7af3ff32-153e-4d7a-ab34-680dc8d0dd1c"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp/project",
+      "status": 200,
+      "requestID": "d19f66c4-8e6b-4b8f-914b-4c62a733bb0d"
+    }
+  ]
+}

@@ -89910,7 +89910,9 @@
                     "type": "string"
                   },
                   "name": {
+                    "description": "Exact MCP server name, including any leading or trailing whitespace. Requires a non-whitespace character.",
                     "minLength": 1,
+                    "pattern": "\\S",
                     "type": "string"
                   }
                 },

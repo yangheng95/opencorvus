@@ -24799,6 +24799,9 @@ export type McpAddData = {
   body: {
     config: McpLocalConfig | McpRemoteConfig
     credentialSecret?: string
+    /**
+     * Exact MCP server name, including any leading or trailing whitespace. Requires a non-whitespace character.
+     */
     name: string
   }
   path?: never

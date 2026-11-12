@@ -1088,6 +1088,7 @@ function SharedResourceManagementPanel(props: {
             },
       )
       const { name } = request
+      const shownName = displayMcpName(name)
       const observation = await readMcpStatusAfterMutation(owner, current, () => addMcpServer(request, owner), () => {
         const draftMatches = Object.entries(submitted).every(([key, value]) => mcpForm[key as keyof typeof submitted] === value)
         if (draftMatches) {
@@ -1096,7 +1097,7 @@ function SharedResourceManagementPanel(props: {
           setPanelNotice("mcp.earlier_add_saved", {
             ...noticeOwner,
             tone: "success",
-            vars: () => ({ name }),
+            vars: () => ({ name: shownName }),
           })
         }
       })
@@ -1110,7 +1111,7 @@ function SharedResourceManagementPanel(props: {
             tone: "warning",
             vars: () => ({
               reply: mcpReplySummary(receiptFailure.cause),
-              name,
+              name: shownName,
               directory,
               status: observed
                 ? mcpConnectionStatusLabel(observed.status, observed)
@@ -1123,7 +1124,7 @@ function SharedResourceManagementPanel(props: {
           setPanelNotice("mcp.add_state_unconfirmed", {
             ...noticeOwner,
             tone: "warning",
-            vars: () => ({ reply: mcpReplySummary(receiptFailure.cause), name, directory }),
+            vars: () => ({ reply: mcpReplySummary(receiptFailure.cause), name: shownName, directory }),
             details: formatErrorDetails(new AggregateError(
               [receiptFailure.cause, reason],
               "The project MCP add reply and state could not be read",
@@ -1783,6 +1784,9 @@ function SharedResourceManagementPanel(props: {
                     placeholder="exa"
                     onInput={(e) => setMcpForm("name", e.currentTarget.value)}
                   />
+                  <Show when={mcpForm.name.trim() && mcpForm.name !== mcpForm.name.trim()}>
+                    <TextField.Description>{t("mcp.name_whitespace_hint")}</TextField.Description>
+                  </Show>
                 </TextField.Root>
                 <TextField.Root>
                   <TextField.Label>{t("mcp.type")}</TextField.Label>

@@ -1,0 +1,80 @@
+{
+  "requests": [
+    {
+      "route": "/mcp",
+      "name": " review-tools ",
+      "url": "http://127.0.0.1:39930/project/padded",
+      "status": 200,
+      "requestID": "5a899481-e67b-42ea-b073-84b5fa424d3e",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b290\\candidate-project\\archive-review",
+      "result": [
+        {
+          "name": "review-tools",
+          "status": "disconnected"
+        },
+        {
+          "name": " review-tools ",
+          "status": "connected"
+        },
+        {
+          "name": "browser",
+          "status": "disconnected"
+        },
+        {
+          "name": "computer",
+          "status": "disconnected"
+        }
+      ]
+    }
+  ],
+  "readback": [
+    {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "c552d4a6-c9a8-4778-8232-b32dadce2407",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/normal",
+          "status": "disconnected"
+        },
+        {
+          "name": " review-tools ",
+          "url": "http://127.0.0.1:39930/project/padded",
+          "status": "connected"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+      "status": 200,
+      "requestID": "5a1cab5d-97b1-46f2-9b26-d49bff57a863",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/alternate/normal",
+          "status": "disconnected"
+        }
+      ]
+    }
+  ],
+  "reset": {
+    "status": 200,
+    "requestID": "63fe92ac-2883-4596-8efc-843ef36de5ab",
+    "readback": {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "c601b45a-8a79-452c-afcd-e0d3e7b761ae",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/normal",
+          "status": "disconnected"
+        }
+      ]
+    }
+  }
+}

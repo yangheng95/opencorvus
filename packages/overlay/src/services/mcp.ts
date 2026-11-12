@@ -119,8 +119,8 @@ export function parseMcpArguments(input: string): string[] {
 }
 
 export function buildMcpAddRequest(input: AddMcpInput): McpAddRequest {
-  const name = input.name.trim()
-  if (!name) throw new Error("MCP name is required")
+  const { name } = input
+  if (!name.trim()) throw new Error("MCP name is required")
 
   if (input.type === "remote") {
     const url = (input.url ?? "").trim()
