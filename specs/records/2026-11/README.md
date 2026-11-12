@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [命令行执行已注册命令时保留文件](2026-11-12-cli-command-attachments.md)
 - [编辑器斜杠命令保留随请求提交的上下文](2026-11-12-acp-command-context.md)
 - [编辑器斜杠命令选择时提示参数](2026-11-12-acp-slash-input.md)
 - [远端命令按声明接收实际参数](2026-11-12-mcp-command-arguments.md)

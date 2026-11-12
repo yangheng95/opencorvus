@@ -1,0 +1,80 @@
+{
+  "mode": "attached",
+  "command": true,
+  "title": "attached command attachment",
+  "outcome": {
+    "exit": 0,
+    "signal": null
+  },
+  "sessionID": "ses_hxCm6iNQArosss63a26R",
+  "events": [
+    {
+      "type": "step_start",
+      "timestamp": 1794485538854,
+      "sessionID": "ses_hxCm6iNQArosss63a26R",
+      "part": {
+        "id": "prt_g0ValCRaf00ItiYEJ8sC",
+        "sessionID": "ses_hxCm6iNQArosss63a26R",
+        "messageID": "msg_g0ValCRT000neI3wcPDy",
+        "orderKey": "v1:0001794485538845:0000000000000031:0000000000000000:part:prt_g0ValCRaf00ItiYEJ8sC",
+        "type": "step-start"
+      }
+    },
+    {
+      "type": "text_delta",
+      "timestamp": 1794485538888,
+      "sessionID": "ses_hxCm6iNQArosss63a26R",
+      "messageID": "msg_g0ValCRT000neI3wcPDy",
+      "partID": "prt_g0ValCRax002X1PQ2Vyf",
+      "partType": "text",
+      "field": "text",
+      "delta": "The selected local command reached the stream.",
+      "value": "The selected local command reached the stream."
+    },
+    {
+      "type": "text",
+      "timestamp": 1794485538888,
+      "sessionID": "ses_hxCm6iNQArosss63a26R",
+      "part": {
+        "id": "prt_g0ValCRax002X1PQ2Vyf",
+        "sessionID": "ses_hxCm6iNQArosss63a26R",
+        "messageID": "msg_g0ValCRT000neI3wcPDy",
+        "orderKey": "v1:0001794485538863:0000000000000031:0000000000000000:part:prt_g0ValCRax002X1PQ2Vyf",
+        "type": "text",
+        "text": "The selected local command reached the stream.",
+        "time": {
+          "start": 1794485538863,
+          "end": 1794485538872
+        }
+      }
+    },
+    {
+      "type": "step_finish",
+      "timestamp": 1794485538900,
+      "sessionID": "ses_hxCm6iNQArosss63a26R",
+      "part": {
+        "id": "prt_g0ValCRbB00MligubOuG",
+        "sessionID": "ses_hxCm6iNQArosss63a26R",
+        "messageID": "msg_g0ValCRT000neI3wcPDy",
+        "orderKey": "v1:0001794485538878:0000000000000031:0000000000000000:part:prt_g0ValCRbB00MligubOuG",
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        }
+      }
+    }
+  ],
+  "stderr": ""
+}

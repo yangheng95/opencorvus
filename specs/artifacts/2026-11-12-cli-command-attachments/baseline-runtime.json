@@ -1,0 +1,209 @@
+[
+  {
+    "mode": "local",
+    "command": false,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "local ordinary attachment",
+    "sessionID": "ses_-zUPEnyOmzzXwchppowY",
+    "messages": [
+      {
+        "id": "msg_g0ValC1Vb00sYa05B6T4",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b300\\\\project\\\\archive-review\\\\panel.png\"}"
+          },
+          {
+            "type": "file",
+            "filename": "panel.png",
+            "mime": "image/png",
+            "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          },
+          {
+            "type": "text",
+            "text": "\"local ordinary image\"\n"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValC1ht00ZywdJy6gF",
+        "role": "assistant",
+        "parentID": "msg_g0ValC1Vb00sYa05B6T4",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "quickCheck": "ok"
+  },
+  {
+    "mode": "local",
+    "command": true,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "local command attachment",
+    "sessionID": "ses_-zUPEnx0Xzzo6wBKaFA0",
+    "messages": [
+      {
+        "id": "msg_g0ValC2uU00r8Gzjijg4",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-21."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValC33T003qTNMjLGZ",
+        "role": "assistant",
+        "parentID": "msg_g0ValC2uU00r8Gzjijg4",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "quickCheck": "ok"
+  },
+  {
+    "mode": "attached",
+    "command": false,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "attached ordinary attachment",
+    "sessionID": "ses_-zUPEnyTRzzMcvnxZGql",
+    "requestID": "432e4c4f-561c-459c-97aa-7cfe2db677bf",
+    "messages": [
+      {
+        "id": "msg_g0ValC1Di00bZ0FogIoF",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b300\\\\project\\\\archive-review\\\\panel.png\"}"
+          },
+          {
+            "type": "file",
+            "filename": "panel.png",
+            "mime": "image/png",
+            "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          },
+          {
+            "type": "text",
+            "text": "\"attached ordinary image\"\n"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValC1cj00VUZTlHEeR",
+        "role": "assistant",
+        "parentID": "msg_g0ValC1Di00bZ0FogIoF",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "attachmentDownload": {
+      "requestID": "d29d8cd1-6e08-4662-a744-faa3661c9127",
+      "bytes": 100,
+      "type": "image/png"
+    }
+  },
+  {
+    "mode": "attached",
+    "command": true,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "attached command attachment",
+    "sessionID": "ses_-zUPEnxQQzzevMLPWk1W",
+    "requestID": "1c0e0b73-5105-4cb1-b41d-0be4f2a476f3",
+    "messages": [
+      {
+        "id": "msg_g0ValC2ZU00jisL5SWzu",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-22."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValC2c400HiBjWh9z7",
+        "role": "assistant",
+        "parentID": "msg_g0ValC2ZU00jisL5SWzu",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "mode": "attached",
+    "command": true,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "Prepare a local CLI attachment review.",
+    "sessionID": "ses_hxCm6iNQArosss63a26R",
+    "requestID": "e5468b47-d291-43f1-bb88-51bb0e141d56",
+    "messages": [
+      {
+        "id": "msg_9143b93b-7b96-48ac-b114-ea9e248eff05",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Prepare a local CLI attachment review."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValCIBw0035pQKyu9u",
+        "role": "assistant",
+        "parentID": "msg_9143b93b-7b96-48ac-b114-ea9e248eff05",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValCRRa00Ow0GL48sL",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-23."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValCRT000neI3wcPDy",
+        "role": "assistant",
+        "parentID": "msg_g0ValCRRa00Ow0GL48sL",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ]
+  }
+]
