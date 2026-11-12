@@ -4123,6 +4123,9 @@ node. Zoom, width fit,
 whole-image fit, original size, copy, pan, and modified-wheel zoom remain
 behaviors of that one host; consumers cannot introduce another lightbox or
 parallel image source.
+The header menu button provides a keyboard entry for copy, width fit,
+whole-image fit and original size. Its dropdown is mounted inside the dialog.
+The image's pointer context menu shares the same commands and enabled state.
 
 Image triggers synchronously open this host with the displayed image identity
 and canonical resource URL. FilePart and Screenshot Browser do not pre-read the

@@ -1,0 +1,38 @@
+{
+  "pageStatus": 200,
+  "assets": [
+    "./assets/main-2b2R9STk.js",
+    "./assets/main-BzCZOyZA.css"
+  ],
+  "files": [
+    {
+      "name": "tall-markers.png",
+      "requestID": "5f22e948-60d6-4c97-bd99-1576f65e6359",
+      "mimeType": "image/png",
+      "width": 800,
+      "height": 1100,
+      "depth": 8,
+      "colorType": 2,
+      "bytes": 5268,
+      "browserDownloadExact": true
+    },
+    {
+      "name": "panel-small.png",
+      "requestID": "ff9411cf-ca97-47b1-9e0b-5a0467058c91",
+      "mimeType": "image/png",
+      "width": 32,
+      "height": 32,
+      "depth": 8,
+      "colorType": 2,
+      "bytes": 100,
+      "browserDownloadExact": true
+    }
+  ],
+  "databaseQuickCheck": "ok",
+  "counts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  }
+}

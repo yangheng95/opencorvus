@@ -875,14 +875,21 @@
   pointer-events: auto;
 }
 
-.image-preview-dialog__context-menu.oc-menu {
+.image-preview-dialog__menu.oc-menu {
   min-width: calc(190px * var(--ui-scale));
   z-index: calc(var(--ui-z-dialog) + 1);
 }
 
-.image-preview-dialog__context-ratio {
-  width: var(--oc-icon-size-compact);
-  flex: 0 0 var(--oc-icon-size-compact);
+.image-preview-dialog__menu .oc-menu-item {
+  display: grid;
+  grid-template-columns: max(var(--oc-icon-size-compact), 1.75em) minmax(0, 1fr);
+}
+
+.image-preview-dialog__menu .oc-menu-item > :first-child {
+  justify-self: center;
+}
+
+.image-preview-dialog__menu-ratio {
   color: currentColor;
   font-family: var(--mono);
   font-size: var(--ui-font-caption);

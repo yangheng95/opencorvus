@@ -24,10 +24,11 @@ import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
 import { ContextMenu } from "./ui/ContextMenu"
+import { DropdownMenu } from "./ui/DropdownMenu"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
-import { closeArtifactWorkspace } from "../utils/top-layer"
+import { closeArtifactWorkspace, topLayerPortalMount } from "../utils/top-layer"
 
 const SCALE_STEP = 0.25
 const COPY_FEEDBACK_DURATION_MS = 2400
@@ -195,6 +196,7 @@ export function ImagePreviewHost() {
     scrollTop: number
   } | null>(null)
   let bodyRef: HTMLDivElement | undefined
+  let actionsTriggerRef: HTMLButtonElement | undefined
   let imageRef: HTMLImageElement | undefined
   let resizeObserver: ResizeObserver | undefined
   let pendingWheelScale: { clientX: number; clientY: number; delta: number } | null = null
@@ -574,6 +576,30 @@ export function ImagePreviewHost() {
     setPanStart(null)
   }
 
+  function ImageActionItems({ menu }: { menu: Pick<typeof ContextMenu, "Item" | "Separator"> }) {
+    return (
+      <>
+        <menu.Item disabled={copyInFlight()} closeOnSelect onSelect={() => void copyPreviewImage()}>
+          <Icon name="copy" size="compact" />
+          <span>{t("image_preview.copy_image")}</span>
+        </menu.Item>
+        <menu.Separator />
+        <menu.Item disabled={!imageReady()} closeOnSelect onSelect={setWidthScale}>
+          <Icon name="panel-right" size="compact" />
+          <span>{t("image_preview.fit_width")}</span>
+        </menu.Item>
+        <menu.Item disabled={!imageReady()} closeOnSelect onSelect={setFitScale}>
+          <Icon name="maximize" size="compact" />
+          <span>{t("image_preview.fit_image")}</span>
+        </menu.Item>
+        <menu.Item disabled={!imageReady()} closeOnSelect onSelect={setOriginalScale}>
+          <span class="image-preview-dialog__menu-ratio" aria-hidden="true">1:1</span>
+          <span>{t("image_preview.original_size")}</span>
+        </menu.Item>
+      </>
+    )
+  }
+
   return (
     <Dialog
       id="imagePreviewDialog"
@@ -588,6 +614,27 @@ export function ImagePreviewHost() {
       draggable={false}
       headerActions={
         <>
+          <DropdownMenu.Root placement="bottom-end">
+            <DropdownMenu.Trigger
+              as={Button}
+              class="image-preview-dialog__header-action"
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              data-chrome="icon-action"
+              title={t("image_preview.actions")}
+              aria-label={t("image_preview.actions")}
+              ref={(element) => { actionsTriggerRef = element }}
+            >
+              <Icon name="more-horizontal" />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Portal mount={topLayerPortalMount(actionsTriggerRef)}>
+              <DropdownMenu.Content class="image-preview-dialog__menu">
+                <ImageActionItems menu={DropdownMenu} />
+              </DropdownMenu.Content>
+            </DropdownMenu.Portal>
+          </DropdownMenu.Root>
           <Button
             class="image-preview-dialog__header-action"
             type="button"
@@ -710,28 +757,10 @@ export function ImagePreviewHost() {
             </ContextMenu.Trigger>
             <ContextMenu.Portal mount={bodyRef}>
               <ContextMenu.Content
-                class="image-preview-dialog__context-menu"
+                class="image-preview-dialog__menu"
                 onPointerDown={(event) => event.stopPropagation()}
               >
-                <ContextMenu.Item disabled={copyInFlight()} closeOnSelect onSelect={() => void copyPreviewImage()}>
-                  <Icon name="copy" size="compact" />
-                  <span>{t("image_preview.copy_image")}</span>
-                </ContextMenu.Item>
-                <ContextMenu.Separator />
-                <ContextMenu.Item disabled={!imageReady()} closeOnSelect onSelect={setWidthScale}>
-                  <Icon name="panel-right" size="compact" />
-                  <span>{t("image_preview.fit_width")}</span>
-                </ContextMenu.Item>
-                <ContextMenu.Item disabled={!imageReady()} closeOnSelect onSelect={setFitScale}>
-                  <Icon name="maximize" size="compact" />
-                  <span>{t("image_preview.fit_image")}</span>
-                </ContextMenu.Item>
-                <ContextMenu.Item disabled={!imageReady()} closeOnSelect onSelect={setOriginalScale}>
-                  <span class="image-preview-dialog__context-ratio" aria-hidden="true">
-                    1:1
-                  </span>
-                  <span>{t("image_preview.original_size")}</span>
-                </ContextMenu.Item>
+                <ImageActionItems menu={ContextMenu} />
               </ContextMenu.Content>
             </ContextMenu.Portal>
           </ContextMenu.Root>
