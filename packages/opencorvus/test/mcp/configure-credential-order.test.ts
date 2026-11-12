@@ -449,9 +449,8 @@ describe("MCP configure commits the credential before the definition", () => {
       fn: async () => {
         await MCP.configure(SERVER, remoteConfig(), "live-secret")
         expect((await Config.getProject()).mcp?.[SERVER]).toMatchObject({ type: "remote", url: URL })
-        const stored = await McpAuth.getForUrl(`${Instance.project.id}:${SERVER}`, URL, undefined as never)
-        expect((await McpAuth.get(`${Instance.project.id}:${SERVER}`))?.staticCredential?.secret).toBe("live-secret")
-        void stored
+        const { credentials } = await McpAuth.readForUrl(`${Instance.project.id}:${SERVER}`, URL)
+        expect(credentials?.staticCredential?.secret).toBe("live-secret")
       },
     })
   }, 60_000)

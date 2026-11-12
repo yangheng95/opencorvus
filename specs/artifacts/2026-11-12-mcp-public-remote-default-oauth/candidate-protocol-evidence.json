@@ -1,0 +1,408 @@
+{
+  "apps": [
+    {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b278-initial",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39884",
+      "pid": 12060
+    },
+    {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b278-restart",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39884",
+      "pid": 22900
+    }
+  ],
+  "reads": [
+    {
+      "label": "desktop-disconnected",
+      "side": "project",
+      "requestID": "f85d4c82-ce6c-48ac-9e09-d10130caa8cf",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "disabled"
+        }
+      }
+    },
+    {
+      "label": "other-project-before-add",
+      "side": "alternate",
+      "requestID": "e3a602ef-cd9e-4ccf-9c80-cdad34ef7402",
+      "status": 200,
+      "body": {}
+    },
+    {
+      "label": "desktop-reconnected",
+      "side": "project",
+      "requestID": "48ca0a9a-2126-4bc1-b903-41c82d858401",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "label": "both-before-restart",
+      "side": "alternate",
+      "requestID": "99a059f9-cc16-4a92-b13d-a65cdbd9c182",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "label": "both-before-restart",
+      "side": "project",
+      "requestID": "61ccba04-e20d-493e-a879-856f1d5be93e",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "label": "fresh-runtime-before-connect",
+      "side": "alternate",
+      "requestID": "c2965c75-113d-4982-b39a-870b08525a57",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "label": "fresh-runtime-before-connect",
+      "side": "project",
+      "requestID": "6576ffe8-d2d2-4d23-975c-4a9d7bde6d7c",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "label": "both-after-restart",
+      "side": "alternate",
+      "requestID": "237d9e85-2e5a-401a-82f1-30ae99daa0ca",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "label": "both-after-restart",
+      "side": "project",
+      "requestID": "2274effa-cd2a-4aea-b713-d50cf97b449c",
+      "status": 200,
+      "body": {
+        "public-review": {
+          "status": "connected"
+        }
+      }
+    }
+  ],
+  "controls": [
+    {
+      "side": "project",
+      "requestID": "e9abaa47-4e1f-40c0-8b41-fcbb73f47343",
+      "status": 200,
+      "body": true
+    }
+  ],
+  "credentialEntries": [
+    {
+      "key": "prj_h2mlkDIImbhvV2H38VAK:public-review",
+      "fields": [
+        "revision"
+      ],
+      "hasRevision": true,
+      "sameAcrossRestart": true
+    },
+    {
+      "key": "prj_hEdK4U4UXsqOeFuIRmJ8:public-review",
+      "fields": [
+        "revision"
+      ],
+      "hasRevision": true,
+      "sameAcrossRestart": true
+    }
+  ],
+  "distinctProjectRevisions": true,
+  "parallelConnect": [
+    {
+      "requestID": "e9abaa47-4e1f-40c0-8b41-fcbb73f47343",
+      "startedAt": "2026-11-12T04:32:37.353Z",
+      "completedAt": "2026-11-12T04:32:37.414Z"
+    },
+    {
+      "requestID": "4e85c721-a9d9-41ad-a6b9-7d54a2085d90",
+      "startedAt": "2026-11-12T04:32:37.357Z",
+      "completedAt": "2026-11-12T04:32:37.423Z"
+    }
+  ],
+  "endpoints": [
+    {
+      "post": {
+        "time": "2026-11-12T04:31:03.633Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "primary-add",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b278\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "public-review",
+        "type": "remote"
+      },
+      "receipt": {
+        "time": "2026-11-12T04:31:03.784Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "primary-add",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b278\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "515b16ae-4e44-41fb-a471-a16dfa5f59d0",
+        "status": 200,
+        "bytes": 113,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "public-review": {
+            "status": "connected"
+          }
+        }
+      },
+      "definitions": {
+        "public-review": {
+          "type": "remote",
+          "url": "http://127.0.0.1:39886/mcp",
+          "transport": "streamable-http"
+        }
+      },
+      "protocol": [
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:31:03.766Z",
+          "method": "POST",
+          "operation": "initialize",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:31:03.774Z",
+          "method": "POST",
+          "operation": "notifications/initialized",
+          "status": 202
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:31:03.782Z",
+          "method": "POST",
+          "operation": "tools/list",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:31:21.427Z",
+          "method": "POST",
+          "operation": "initialize",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:31:21.431Z",
+          "method": "POST",
+          "operation": "notifications/initialized",
+          "status": 202
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:31:21.437Z",
+          "method": "POST",
+          "operation": "tools/list",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:32:37.386Z",
+          "method": "POST",
+          "operation": "initialize",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:32:37.401Z",
+          "method": "POST",
+          "operation": "notifications/initialized",
+          "status": 202
+        },
+        {
+          "kind": "response",
+          "pid": 22096,
+          "port": 39886,
+          "scope": "primary",
+          "time": "2026-11-12T04:32:37.410Z",
+          "method": "POST",
+          "operation": "tools/list",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "post": {
+        "time": "2026-11-12T04:31:40.437Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "alternate-add",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b278\\candidate-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "public-review",
+        "type": "remote"
+      },
+      "receipt": {
+        "time": "2026-11-12T04:31:40.679Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "alternate-add",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b278\\candidate-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "6682e803-bb8d-4e53-aa7d-73f120aac11e",
+        "status": 200,
+        "bytes": 113,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "public-review": {
+            "status": "connected"
+          }
+        }
+      },
+      "definitions": {
+        "public-review": {
+          "type": "remote",
+          "url": "http://127.0.0.1:39887/mcp",
+          "transport": "streamable-http"
+        }
+      },
+      "protocol": [
+        {
+          "kind": "response",
+          "pid": 24312,
+          "port": 39887,
+          "scope": "alternate",
+          "time": "2026-11-12T04:31:40.663Z",
+          "method": "POST",
+          "operation": "initialize",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 24312,
+          "port": 39887,
+          "scope": "alternate",
+          "time": "2026-11-12T04:31:40.669Z",
+          "method": "POST",
+          "operation": "notifications/initialized",
+          "status": 202
+        },
+        {
+          "kind": "response",
+          "pid": 24312,
+          "port": 39887,
+          "scope": "alternate",
+          "time": "2026-11-12T04:31:40.676Z",
+          "method": "POST",
+          "operation": "tools/list",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 24312,
+          "port": 39887,
+          "scope": "alternate",
+          "time": "2026-11-12T04:32:37.399Z",
+          "method": "POST",
+          "operation": "initialize",
+          "status": 200
+        },
+        {
+          "kind": "response",
+          "pid": 24312,
+          "port": 39887,
+          "scope": "alternate",
+          "time": "2026-11-12T04:32:37.408Z",
+          "method": "POST",
+          "operation": "notifications/initialized",
+          "status": 202
+        },
+        {
+          "kind": "response",
+          "pid": 24312,
+          "port": 39887,
+          "scope": "alternate",
+          "time": "2026-11-12T04:32:37.418Z",
+          "method": "POST",
+          "operation": "tools/list",
+          "status": 200
+        }
+      ]
+    }
+  ]
+}

@@ -199,6 +199,44 @@ function startOAuthMcpServer(input?: {
 }
 
 describe("MCP OAuth finish from durable facts", () => {
+  test("a public remote serves initialization and tools with OAuth enabled by default", async () => {
+    await using project = await memoryProject()
+    const { server, events } = startOAuthMcpServer()
+    try {
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const config = {
+            type: "remote",
+            transport: "streamable-http",
+            url: `http://127.0.0.1:${server.port}/mcp`,
+          } as const
+          const result = await MCP.configure(SERVER, config)
+          expect(result.status[SERVER]).toEqual({ status: "connected" })
+
+          const client = (await MCP.clients())[SERVER]!
+          expect(await client.callTool({ name: "ping", arguments: {} })).toMatchObject({
+            content: [{ type: "text", text: "pong" }],
+          })
+          const posts = events.flatMap((event) =>
+            event.kind === "mcp_request" && event.method === "POST"
+              ? [[event.rpcMethod, event.credential, event.responseStatus]]
+              : [],
+          )
+          expect(posts).toEqual([
+            ["initialize", "absent", 200],
+            ["notifications/initialized", "absent", 202],
+            ["tools/list", "absent", 200],
+            ["tools/call", "absent", 200],
+          ])
+        },
+      })
+    } finally {
+      await Instance.disposeAll()
+      await server.stop(true)
+    }
+  }, 30_000)
+
   for (const admission of ["connection", "authorization"] as const) {
     test(`${admission} credential admission retains its canonical generation`, async () => {
       await using project = await memoryProject()

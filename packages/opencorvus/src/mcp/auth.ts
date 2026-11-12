@@ -241,28 +241,22 @@ export namespace McpAuth {
     return data[authKey]
   }
 
-  /**
-   * Get auth entry and validate it's for the correct URL.
-   * Returns undefined if URL has changed (credentials are invalid).
-   */
-  export async function getForUrl(
+  /** Read the durable generation and matching credential material together. */
+  export async function readForUrl(
     authKey: string,
     serverUrl: string,
     credentialIdentity?: string,
-  ): Promise<Entry | undefined> {
+  ): Promise<{ revision: Revision; credentials: Entry | undefined }> {
     const entry = await get(authKey)
-    if (!entry) return undefined
-
-    // If no serverUrl is stored, this is from an old version - consider it invalid
-    if (!entry.serverUrl) return undefined
-
-    // If URL has changed, credentials are invalid
-    if (entry.serverUrl !== serverUrl) return undefined
-    if (credentialIdentity && entry.credentialIdentity !== credentialIdentity) {
-      return undefined
+    const revision = entry?.revision ?? INITIAL_REVISION
+    if (
+      !entry?.serverUrl ||
+      entry.serverUrl !== serverUrl ||
+      (credentialIdentity && entry.credentialIdentity !== credentialIdentity)
+    ) {
+      return { revision, credentials: undefined }
     }
-
-    return entry
+    return { revision, credentials: entry }
   }
 
   export async function all(): Promise<Record<string, Entry>> {

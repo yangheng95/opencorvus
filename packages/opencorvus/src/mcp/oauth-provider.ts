@@ -46,6 +46,13 @@ export class McpOAuthIssuerRequiredError extends UnauthorizedError {
   }
 }
 
+class McpOAuthCredentialSnapshotChangedError extends Error {
+  constructor() {
+    super("MCP OAuth credential snapshot changed; retry connection")
+    this.name = "McpOAuthCredentialSnapshotChangedError"
+  }
+}
+
 const McpOAuthCredentialIdentity = z
   .object({
     serverUrl: z.string(),
@@ -85,6 +92,12 @@ export class McpOAuthProvider implements OAuthClientProvider {
     this.clientInfoSnapshot = entry?.clientInfo ? McpAuth.ClientInfo.parse(entry.clientInfo) : undefined
     this.tokenClientInfoSnapshot = entry?.tokenClientInfo ? McpAuth.ClientInfo.parse(entry.tokenClientInfo) : undefined
     this.tokenSnapshot = entry?.tokens ? McpAuth.Tokens.parse(entry.tokens) : undefined
+  }
+
+  private async connectionCredentials(): Promise<McpAuth.Entry | undefined> {
+    const { revision, credentials } = await McpAuth.readForUrl(this.authKey, this.serverUrl, this.credentialIdentity())
+    if (revision !== this.authRevision) throw new McpOAuthCredentialSnapshotChangedError()
+    return credentials
   }
 
   private async authorizationEntry(): Promise<McpAuth.Entry> {
@@ -183,10 +196,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     // Capture the exact store inputs this SDK attempt selected. A rejected
     // refresh is not allowed to invalidate a newer callback's client/token
     // set merely because both providers still hold the same flow revision.
-    let entry =
-      this.mode === "authorization"
-        ? await this.authorizationEntry()
-        : await McpAuth.getForUrl(this.authKey, this.serverUrl, this.credentialIdentity())
+    let entry = this.mode === "authorization" ? await this.authorizationEntry() : await this.connectionCredentials()
     this.captureCredentialSnapshot(entry)
     if (await this.retireUnboundCredentials(entry)) {
       entry = undefined
@@ -204,7 +214,6 @@ export class McpOAuthProvider implements OAuthClientProvider {
     }
 
     // Check stored client info (from dynamic registration)
-    // Use getForUrl to validate credentials are for the current server URL
     const useTokenClient = this.mode === "connection" && entry?.tokens
     const clientInfo = useTokenClient ? (entry?.tokenClientInfo ?? entry?.clientInfo) : entry?.clientInfo
     const callbackBinding = this.callbackBinding
@@ -266,7 +275,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     // input. If the SDK asks for tokens directly, capture the same complete
     // store snapshot here; otherwise retain the snapshot clientInformation
     // already returned instead of mixing facts from two generations.
-    const current = await McpAuth.getForUrl(this.authKey, this.serverUrl, this.credentialIdentity())
+    const current = await this.connectionCredentials()
     await this.retireUnboundCredentials(current)
     if (!this.clientSnapshotRead) {
       this.captureCredentialSnapshot(current)
@@ -274,22 +283,15 @@ export class McpOAuthProvider implements OAuthClientProvider {
       const capturedClient = this.tokenClientInfoSnapshot ?? this.clientInfoSnapshot
       const currentClient = current?.tokens ? (current.tokenClientInfo ?? current.clientInfo) : current?.clientInfo
       if (
-        current?.revision !== this.authRevision ||
         JSON.stringify(current?.tokens) !== JSON.stringify(this.tokenSnapshot) ||
         JSON.stringify(currentClient) !== JSON.stringify(capturedClient)
       ) {
-        throw new UnauthorizedError("MCP OAuth credential snapshot changed; retry connection")
+        throw new McpOAuthCredentialSnapshotChangedError()
       }
     }
     this.tokenSnapshotRead = true
     if (!this.tokenSnapshot) return undefined
-    // This is the final local fence before the SDK may disclose a refresh
-    // token/client pair to the remote endpoint. The revision protects against
-    // same-value credential generations; assertCurrent protects the canonical
-    // Project MCP definition independently of auth-store reconciliation.
-    if (current?.revision !== this.authRevision) {
-      throw new UnauthorizedError("MCP OAuth credential snapshot changed; retry connection")
-    }
+    // The project definition is an independent fence before credential disclosure.
     await this.assertCurrent?.()
     this.storedTokensDisclosed = true
 

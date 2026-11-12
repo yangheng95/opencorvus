@@ -3300,8 +3300,8 @@ export namespace MCP {
       let staticCredentialSecret: string | undefined
 
       if (mcp.credential) {
-        const staticCredential = await McpAuth.getForUrl(mcpAuthKey(key), mcp.url, configuredCredentialIdentity(mcp))
-        staticCredentialSecret = staticCredential?.staticCredential?.secret
+        const { credentials } = await McpAuth.readForUrl(mcpAuthKey(key), mcp.url, configuredCredentialIdentity(mcp))
+        staticCredentialSecret = credentials?.staticCredential?.secret
         if (!staticCredentialSecret) throw new Error(`MCP server ${key} static credential is not configured`)
       }
 

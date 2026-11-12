@@ -93,7 +93,7 @@ describe("remote MCP static credential contract", () => {
     try {
       await McpAuth.stageStaticCredential(authKey, "initial-secret", serverUrl, credentialIdentity)
         await McpAuth.promoteStagedStaticCredential(authKey, { serverUrl: serverUrl, credentialIdentity: credentialIdentity })
-      expect(await McpAuth.getForUrl(authKey, serverUrl, credentialIdentity)).toEqual({
+      expect((await McpAuth.readForUrl(authKey, serverUrl, credentialIdentity)).credentials).toEqual({
         staticCredential: { secret: "initial-secret" },
         serverUrl,
         credentialIdentity,
@@ -101,7 +101,7 @@ describe("remote MCP static credential contract", () => {
 
       await McpAuth.stageStaticCredential(authKey, "rotated-secret", serverUrl, credentialIdentity)
         await McpAuth.promoteStagedStaticCredential(authKey, { serverUrl: serverUrl, credentialIdentity: credentialIdentity })
-      expect(await McpAuth.getForUrl(authKey, serverUrl, credentialIdentity)).toEqual({
+      expect((await McpAuth.readForUrl(authKey, serverUrl, credentialIdentity)).credentials).toEqual({
         staticCredential: { secret: "rotated-secret" },
         serverUrl,
         credentialIdentity,
