@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [注册命令模板保留文本与主机操作的权限边界](records/2026-11/2026-11-12-command-template-content-authority.md)
 - [编辑器斜杠命令保留参数内部空白](records/2026-11/2026-11-12-acp-command-argument-whitespace.md)
 - [全图预览的键盘操作菜单](records/2026-11/2026-11-12-image-preview-actions-menu.md)
 - [全图预览保留原图的四角和尺寸](records/2026-11/2026-11-12-image-preview-full-frame.md)
