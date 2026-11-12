@@ -4151,6 +4151,8 @@ single image preview host reports native decode failures and original resource
 errors through Feedback. Only positive intrinsic dimensions qualify an image
 for zoom and pan; rendered layout dimensions and `complete` alone do not prove
 successful decoding. Copy reports image unavailability before clipboard work.
+The full-image preview paints its outline outside the scaled image content.
+The complete rectangular frame remains visible at original size and at zoom.
 Source changes retire the previous decode result, and a successful native load
 restores normal controls. No alternate image, retry loop or second resource
 loader is introduced; original resource error details remain available.

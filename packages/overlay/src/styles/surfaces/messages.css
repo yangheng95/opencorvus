@@ -868,8 +868,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: var(--oc-radius-xl);
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--border-strong) 40%, transparent);
+  outline: var(--oc-border-width) solid color-mix(in srgb, var(--border-strong) 40%, transparent);
   background: var(--surface);
   box-shadow: 0 calc(18px * var(--ui-scale)) calc(46px * var(--ui-scale))
     color-mix(in srgb, var(--ui-shadow-tone) 52%, transparent);
