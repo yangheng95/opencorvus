@@ -352,6 +352,7 @@ export const ExpertSquadCatalogSchema = z
     default: z.string(),
     scope: ExpertSquadCatalogScopeSchema,
     launch_catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
+    disabled_default_mcp_servers: z.array(z.string()).min(1).optional(),
     active_agent_projection: ExpertSquadActiveAgentProjectionSchema,
     active_skill_projection: ExpertSquadActiveSkillProjectionSchema,
   })

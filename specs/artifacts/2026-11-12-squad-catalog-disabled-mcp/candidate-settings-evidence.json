@@ -1,0 +1,590 @@
+{
+  "requests": [
+    {
+      "side": "project",
+      "route": "/skill/mounts",
+      "query": {},
+      "status": 200,
+      "requestID": "beef49b0-6279-41af-8d54-ce9f0d5a3dd7",
+      "summary": {
+        "scope": "project",
+        "active": "dynamic",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": null,
+          "session_override": null,
+          "effective": false,
+          "enabled": null
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 33
+      }
+    },
+    {
+      "side": "project",
+      "route": "/skill/mounts",
+      "query": {
+        "sessionID": "ses_hocyyFz3IE67uqpk0yP9"
+      },
+      "status": 200,
+      "requestID": "8dcb3da1-f336-4fcf-a354-0aa3c117605c",
+      "summary": {
+        "scope": "session",
+        "active": "dynamic",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": null,
+          "session_override": null,
+          "effective": false,
+          "enabled": null
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 33
+      }
+    },
+    {
+      "side": "project",
+      "route": "/skill/mounts",
+      "query": {
+        "expertSquadID": "base"
+      },
+      "status": 200,
+      "requestID": "94d7c0f1-2c61-4cb5-ad61-2e852f54b9a0",
+      "summary": {
+        "scope": "project",
+        "active": "base",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 43
+      }
+    },
+    {
+      "side": "project",
+      "route": "/expert-squad/catalog",
+      "query": {},
+      "status": 200,
+      "requestID": "0c1b6427-2b64-4dc5-9810-434ff1265e6f",
+      "summary": {
+        "scope": "project",
+        "active": "dynamic",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 33
+      }
+    },
+    {
+      "side": "project",
+      "route": "/expert-squad/catalog",
+      "query": {
+        "sessionID": "ses_hocyyFz3IE67uqpk0yP9"
+      },
+      "status": 200,
+      "requestID": "4025607a-ba23-4514-8d8e-b252f42b0ba9",
+      "summary": {
+        "scope": "session",
+        "active": "dynamic",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 33
+      }
+    },
+    {
+      "side": "project",
+      "route": "/mcp/project",
+      "query": {},
+      "status": 200,
+      "requestID": "f79b1ede-1350-4d80-b77e-3d16ae061e3c",
+      "summary": {
+        "browser": {
+          "status": "disabled",
+          "scope": "execution"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/skill/mounts",
+      "query": {},
+      "status": 200,
+      "requestID": "c0371e8a-4e87-4e5c-ac27-fc4568c9f016",
+      "summary": {
+        "scope": "project",
+        "active": "dynamic",
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": null,
+          "session_override": null,
+          "effective": false,
+          "enabled": null
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 50
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/skill/mounts",
+      "query": {
+        "sessionID": "ses_hlzHNWo8xJuVY7FTleh6"
+      },
+      "status": 200,
+      "requestID": "eac9f5cc-2724-45d2-bcd8-8d5b6935e7b2",
+      "summary": {
+        "scope": "session",
+        "active": "dynamic",
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": null,
+          "session_override": null,
+          "effective": false,
+          "enabled": null
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 50
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/skill/mounts",
+      "query": {
+        "expertSquadID": "base"
+      },
+      "status": 200,
+      "requestID": "4e5c49a9-6449-4993-9d92-63c8fcf22cae",
+      "summary": {
+        "scope": "project",
+        "active": "base",
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "base-developer",
+          "base-planner",
+          "base-researcher",
+          "base-tester"
+        ],
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 60
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/expert-squad/catalog",
+      "query": {},
+      "status": 200,
+      "requestID": "c0916abb-f78f-4e86-8ebd-2900c0f3e543",
+      "summary": {
+        "scope": "project",
+        "active": "dynamic",
+        "agents": [
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 50
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/expert-squad/catalog",
+      "query": {
+        "sessionID": "ses_hlzHNWo8xJuVY7FTleh6"
+      },
+      "status": 200,
+      "requestID": "e4873ae8-a76a-4bcf-b32e-b8a58af092f3",
+      "summary": {
+        "scope": "session",
+        "active": "dynamic",
+        "agents": [
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 50
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/mcp/project",
+      "query": {},
+      "status": 200,
+      "requestID": "4e3366a4-35ec-4d6f-83f0-a8e93f8e7aea",
+      "summary": {}
+    },
+    {
+      "side": "project",
+      "route": "/skill/mount",
+      "query": {},
+      "status": 200,
+      "requestID": "b54cee4f-1789-414a-9029-c61a3cf21ad5",
+      "summary": {
+        "scope": "project",
+        "active": "dynamic",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": true,
+          "session_override": null,
+          "effective": true,
+          "enabled": true
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 33
+      },
+      "patch": {
+        "expertSquadID": "dynamic",
+        "agentID": "dynamic-builder",
+        "defaultSkillRef": "default/skill/grill-me",
+        "scope": "project",
+        "override": true
+      }
+    },
+    {
+      "side": "project",
+      "route": "/skill/mount",
+      "query": {},
+      "status": 200,
+      "requestID": "5c2a5abe-2cc8-4ed8-884e-5d264ee70447",
+      "summary": {
+        "scope": "session",
+        "active": "dynamic",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": true,
+          "session_override": false,
+          "effective": false,
+          "enabled": null
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 33
+      },
+      "patch": {
+        "expertSquadID": "dynamic",
+        "agentID": "dynamic-builder",
+        "defaultSkillRef": "default/skill/grill-me",
+        "scope": "session",
+        "override": false,
+        "sessionID": "ses_hocyyFz3IE67uqpk0yP9"
+      }
+    },
+    {
+      "side": "project",
+      "route": "/skill/mount",
+      "query": {},
+      "status": 200,
+      "requestID": "21d5cdb7-d892-4082-b505-6eed9da21106",
+      "summary": {
+        "scope": "session",
+        "active": "dynamic",
+        "disabled": [
+          "browser"
+        ],
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": true,
+          "session_override": null,
+          "effective": true,
+          "enabled": true
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 33
+      },
+      "patch": {
+        "expertSquadID": "dynamic",
+        "agentID": "dynamic-builder",
+        "defaultSkillRef": "default/skill/grill-me",
+        "scope": "session",
+        "override": null,
+        "sessionID": "ses_hocyyFz3IE67uqpk0yP9"
+      }
+    },
+    {
+      "side": "project",
+      "route": "/config",
+      "query": {},
+      "status": 200,
+      "requestID": "cfb2b73a-2779-4055-b42b-4e1dea2a751f",
+      "summary": {
+        "disabledBrowser": true,
+        "skillMounts": {
+          "dynamic": {
+            "dynamic-builder": {
+              "default/skill/grill-me": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/skill/mounts",
+      "query": {},
+      "status": 200,
+      "requestID": "6122dedd-48ca-4262-bcbc-a69b430b87f6",
+      "summary": {
+        "scope": "project",
+        "active": "dynamic",
+        "agents": [
+          "orchestrator",
+          "universal-build",
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "relation": {
+          "expert_squad_id": "dynamic",
+          "agent_id": "dynamic-builder",
+          "base_role": "build",
+          "ref": "default/skill/grill-me",
+          "source": "default",
+          "name": "grill-me",
+          "manifest_grant": false,
+          "project_override": null,
+          "session_override": null,
+          "effective": false,
+          "enabled": null
+        },
+        "nativeBrowserActions": [
+          "browser_preview",
+          "browser_preview_capture"
+        ],
+        "projectedToolCount": 50
+      }
+    }
+  ],
+  "typedCatalog": [
+    {
+      "side": "project",
+      "status": 200,
+      "requestID": "4e0f21ee-5721-4a81-b223-eccc42a52fbe",
+      "disabled": [
+        "browser"
+      ],
+      "defaultBrowserTools": [],
+      "nativeBrowserActions": [
+        "browser_preview",
+        "browser_preview_capture"
+      ],
+      "browserRefs": [],
+      "retainedToolCount": 33,
+      "operatorGrant": {
+        "kind": "production",
+        "authority": "operator",
+        "source": "default",
+        "ref": "default/skill/grill-me",
+        "agent_ids": [
+          "dynamic-builder"
+        ],
+        "skill": {
+          "name": "grill-me",
+          "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.",
+          "builtin": true,
+          "location": "builtin:grill-me",
+          "required_tools": []
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "status": 200,
+      "requestID": "1955f77c-d9d9-4e59-963d-be8dc1f51d40",
+      "defaultBrowserTools": [
+        "default_mcp_tool__default_mcp_browser_tool_check__813cebb36bb5",
+        "default_mcp_tool__default_mcp_browser_tool_click__9575932c3940",
+        "default_mcp_tool__default_mcp_browser_tool_diagnostics_get__a73cc6c3a80f",
+        "default_mcp_tool__default_mcp_browser_tool_hover__6e999ef0e911",
+        "default_mcp_tool__default_mcp_browser_tool_navigate__e8e09fd0bbb6",
+        "default_mcp_tool__default_mcp_browser_tool_observe__24f9c323dc60",
+        "default_mcp_tool__default_mcp_browser_tool_press_key__875359282976",
+        "default_mcp_tool__default_mcp_browser_tool_screenshot__5e452c497541",
+        "default_mcp_tool__default_mcp_browser_tool_scroll__408b306eb1cf",
+        "default_mcp_tool__default_mcp_browser_tool_select_option__267f1f29d261",
+        "default_mcp_tool__default_mcp_browser_tool_session_create__fc7bf513f2c9",
+        "default_mcp_tool__default_mcp_browser_tool_session_destroy__c959e9e62a35",
+        "default_mcp_tool__default_mcp_browser_tool_type__dd2e3762ab1c",
+        "default_mcp_tool__default_mcp_browser_tool_uncheck__a56aeb4485e6",
+        "default_mcp_tool__default_mcp_browser_tool_viewport_set__242e046d81ca",
+        "default_mcp_tool__default_mcp_browser_tool_wait_for_load__cf0cb2e6a2df",
+        "default_mcp_tool__default_mcp_browser_tool_wait_for_select__6f2d1ae3fbe1"
+      ],
+      "nativeBrowserActions": [
+        "browser_preview",
+        "browser_preview_capture"
+      ],
+      "browserRefs": [
+        "default/mcp/browser/tool/check",
+        "default/mcp/browser/tool/click",
+        "default/mcp/browser/tool/diagnostics_get",
+        "default/mcp/browser/tool/hover",
+        "default/mcp/browser/tool/navigate",
+        "default/mcp/browser/tool/observe",
+        "default/mcp/browser/tool/press_key",
+        "default/mcp/browser/tool/screenshot",
+        "default/mcp/browser/tool/scroll",
+        "default/mcp/browser/tool/select_option",
+        "default/mcp/browser/tool/session_create",
+        "default/mcp/browser/tool/session_destroy",
+        "default/mcp/browser/tool/type",
+        "default/mcp/browser/tool/uncheck",
+        "default/mcp/browser/tool/viewport_set",
+        "default/mcp/browser/tool/wait_for_load",
+        "default/mcp/browser/tool/wait_for_selector"
+      ],
+      "retainedToolCount": 50
+    }
+  ]
+}

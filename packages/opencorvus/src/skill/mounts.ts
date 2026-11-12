@@ -110,6 +110,7 @@ export namespace SkillMount {
       projection_hash: z.string(),
       projected_tool_ids: z.array(z.string()),
       projected_agents: z.array(z.string()),
+      disabled_default_mcp_servers: z.array(z.string()).min(1).optional(),
       virtual_workflows: ExpertSquadVirtualWorkflowsSchema,
       selector_skill_names: z.array(z.string()),
       production_skill_names: z.array(z.string()),
@@ -573,6 +574,9 @@ export namespace SkillMount {
         projection_hash: projection.projectionHash,
         projected_tool_ids: projection.projectedToolIDs,
         projected_agents: projection.projectedAgentIDs,
+        ...(projection.disabledDefaultMcpServers.length > 0
+          ? { disabled_default_mcp_servers: projection.disabledDefaultMcpServers }
+          : {}),
         virtual_workflows: projection.projectedScheduler.virtualWorkflows,
         selector_skill_names: projection.selectorSkillNames,
         production_skill_names: projection.productionSkillNames,

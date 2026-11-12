@@ -9963,6 +9963,7 @@ export type ExpertSquadCatalogResponses = {
       selector_skill_names: Array<string>
     }
     default: string
+    disabled_default_mcp_servers?: Array<string>
     launch_catalog_revision: string
     scope:
       | {
@@ -33108,6 +33109,7 @@ export type SkillSetMountOverrideResponses = {
       skill_mountable: boolean
       skill_tool_available: boolean
     }>
+    disabled_default_mcp_servers?: Array<string>
     matrix: Array<{
       agent_id: string
       base_role: string
@@ -33257,6 +33259,7 @@ export type SkillMountsResponses = {
       skill_mountable: boolean
       skill_tool_available: boolean
     }>
+    disabled_default_mcp_servers?: Array<string>
     matrix: Array<{
       agent_id: string
       base_role: string

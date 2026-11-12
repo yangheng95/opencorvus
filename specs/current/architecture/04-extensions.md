@@ -655,6 +655,9 @@ projection；matrix row 不是第二份执行授权。每个 owner 仍必须拥�
 仍按 platform、required tools 与 permission 独立判定。改变角色名称或 `base_role` 不会继承 mount；例如
 Explore 的只读职责允许读取已授权的方法 Skill；其通用 loader 与其他支持 Skill 的模板同样常驻，
 包声明必须在 Capability Set 展开后同时满足 loader 和 required_tools 的投影闭合。
+设置中的专家团目录与挂载矩阵通过同一能力解析读取可用投影。项目显式禁用包声明的默认 MCP
+连接时，读取结果通过 `disabled_default_mcp_servers` 返回准确连接名，并从设置投影移除其工具、提示和资源。
+其余成员与技能继续可查看和分配，执行轮次仍要求必需连接已启用并完整解析。
 Advanced `source-investigator` 只有在 manifest 显式使用对应 runtime 且 operator 精确挂载后，
 才可通过其真实只读命令/Skill surface 调用项目客户端。
 

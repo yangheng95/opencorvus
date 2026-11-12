@@ -1,0 +1,42 @@
+[
+  {
+    "side": "project",
+    "projectID": "prj_hP5HfqzN9FDNSZ8wNZ3t",
+    "outcomes": [
+      {
+        "entry": "scheduler",
+        "status": "rejected",
+        "error": {
+          "name": "Error",
+          "message": "Active expert squad projects default MCP server default/mcp/browser, which configuration has disabled."
+        }
+      },
+      {
+        "entry": "worker",
+        "status": "rejected",
+        "error": {
+          "name": "Error",
+          "message": "Active expert squad projects default MCP server default/mcp/browser, which configuration has disabled."
+        }
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "projectID": "prj_hwx1iR9RD6iu4Ys5U6dQ",
+    "outcomes": [
+      {
+        "entry": "scheduler",
+        "status": "fulfilled",
+        "agent": "orchestrator",
+        "activeProfile": "dynamic"
+      },
+      {
+        "entry": "worker",
+        "status": "fulfilled",
+        "agent": "dynamic-builder",
+        "activeProfile": "dynamic"
+      }
+    ]
+  }
+]

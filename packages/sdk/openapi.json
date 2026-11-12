@@ -31560,6 +31560,13 @@
                     "default": {
                       "type": "string"
                     },
+                    "disabled_default_mcp_servers": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
                     "launch_catalog_revision": {
                       "pattern": "^[a-f0-9]{64}$",
                       "type": "string"
@@ -115147,6 +115154,13 @@
                       },
                       "type": "array"
                     },
+                    "disabled_default_mcp_servers": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
                     "matrix": {
                       "items": {
                         "additionalProperties": false,
@@ -115791,6 +115805,13 @@
                         ],
                         "type": "object"
                       },
+                      "type": "array"
+                    },
+                    "disabled_default_mcp_servers": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1,
                       "type": "array"
                     },
                     "matrix": {

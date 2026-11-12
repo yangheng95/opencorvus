@@ -2041,6 +2041,8 @@
   "expert_squad.directory_unavailable": "Directory unavailable",
   "expert_squad.catalog_recovery_title": "Catalog unavailable",
   "expert_squad.catalog_unavailable_hint": "Review the current project settings and retry, or expand the details for the cause.",
+  "expert_squad.disabled_connections_title": "Required connections are disabled",
+  "expert_squad.disabled_connections_body": "The active Expert Squad requires {{names}} for task execution.",
   "expert_squad.catalog_recovery_body": "Update each version-mismatched bundled package below. If no candidate appears, open Squad Market and reinstall the exact package from the website.",
   "expert_squad.scope_project": "Project config",
   "expert_squad.scope_pending_title": "Session scope is loading",

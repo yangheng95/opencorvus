@@ -1531,6 +1531,17 @@ export default function ExpertSquadPanel() {
       </Show>
 
       <SettingsPanel class="general-panel expert-squad-panel">
+        <Show when={scopedCatalog()?.disabled_default_mcp_servers}>
+          {(servers) => (
+            <SettingsGroup>
+              <Feedback tone="warning" title={t("expert_squad.disabled_connections_title")}>
+                {t("expert_squad.disabled_connections_body", {
+                  names: new Intl.ListFormat(localeTag()).format(servers()),
+                })}
+              </Feedback>
+            </SettingsGroup>
+          )}
+        </Show>
         <SettingsGroup>
           <Show when={catalogError()}>
             <Feedback

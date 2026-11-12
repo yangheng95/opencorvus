@@ -197,7 +197,17 @@ export namespace PromptProfileResolver {
     prepared: ExpertSquadRegistry.PreparedPackageMcpCapability
   }
 
-  export interface ResolvedSchedulerCapability {
+  interface ResolvedDefaultMcpProjection {
+    defaultMcpTools: ResolvedProviderRef[]
+    defaultMcpPrompts: ResolvedProviderRef[]
+    defaultMcpResources: ResolvedProviderRef[]
+    defaultMcpServers: Record<string, Config.Mcp>
+    disabledDefaultMcpServers: string[]
+  }
+
+  type CapabilityProjectionPurpose = "execution" | "inspection"
+
+  export interface ResolvedSchedulerCapability extends ResolvedDefaultMcpProjection {
     expertSquadID: string
     packageRevision: ResolvedPackageRevision
     identity: ProjectedSchedulerIdentity
@@ -209,10 +219,6 @@ export namespace PromptProfileResolver {
     builtInToolIDs: string[]
     defaultTools: ResolvedProviderRef[]
     packageTools: ResolvedPackageTool[]
-    defaultMcpTools: ResolvedProviderRef[]
-    defaultMcpPrompts: ResolvedProviderRef[]
-    defaultMcpResources: ResolvedProviderRef[]
-    defaultMcpServers: Record<string, Config.Mcp>
     globalMcpTimeout?: number
     packageMcpTools: ResolvedPackageMcpRef[]
     packageMcpPrompts: ResolvedPackageMcpRef[]
@@ -230,7 +236,7 @@ export namespace PromptProfileResolver {
     packageRevision?: ExpertSquadPackageRevision
   }
 
-  export interface ResolvedWorkerCapability {
+  export interface ResolvedWorkerCapability extends ResolvedDefaultMcpProjection {
     expertSquadID: string
     packageRevision: ResolvedPackageRevision
     identity: ProjectedWorkerIdentity
@@ -241,10 +247,6 @@ export namespace PromptProfileResolver {
     builtInToolIDs: string[]
     defaultTools: ResolvedProviderRef[]
     packageTools: ResolvedPackageTool[]
-    defaultMcpTools: ResolvedProviderRef[]
-    defaultMcpPrompts: ResolvedProviderRef[]
-    defaultMcpResources: ResolvedProviderRef[]
-    defaultMcpServers: Record<string, Config.Mcp>
     globalMcpTimeout?: number
     packageMcpTools: ResolvedPackageMcpRef[]
     packageMcpPrompts: ResolvedPackageMcpRef[]
@@ -456,6 +458,7 @@ export namespace PromptProfileResolver {
     builtIn: boolean
     projectionHash: string
     projectedToolIDs: string[]
+    disabledDefaultMcpServers: string[]
     projectedAgentIDs: string[]
     projectedScheduler: ResolvedProjectedScheduler
     projectedAgents: ResolvedProjectedAgent[]
@@ -1113,29 +1116,46 @@ export namespace PromptProfileResolver {
     return { serverName, resourceName: itemName }
   }
 
-  function defaultMcpServersForRefs(config: ConfigLike, refs: readonly string[]): Record<string, Config.Mcp> {
-    const result: Record<string, Config.Mcp> = {}
-    for (const ref of refs) {
+  function resolveDefaultMcpProjection(
+    config: ConfigLike,
+    grants: MaterializedExpertSquadCapabilities,
+    context: string,
+    purpose: CapabilityProjectionPurpose,
+  ): ResolvedDefaultMcpProjection {
+    const tools = resolvedProviderRefs(grants.defaultMcpToolRefs, defaultMcpToolProviderName, context)
+    const prompts = resolvedProviderRefs(grants.defaultMcpPromptRefs, defaultMcpPromptProviderName, context)
+    const resources = resolvedProviderRefs(grants.defaultMcpResourceRefs, defaultMcpResourceProviderName, context)
+    const servers = new Map<string, Config.Mcp>()
+    const disabled = new Set<string>()
+    for (const { ref } of [...tools, ...prompts, ...resources]) {
       const { serverName } = defaultMcpTypedPartsFromRef(ref)
-      const server = config.mcp?.[serverName]
+      if (servers.has(serverName) || disabled.has(serverName)) continue
+      const server = Object.hasOwn(config.mcp ?? {}, serverName) ? config.mcp?.[serverName] : undefined
       if (!server) throw new Error(`Active expert squad projects missing default MCP server default/mcp/${serverName}.`)
-      if (serverName === ComputerMCPBuiltin.ServerName) {
-        result[serverName] = ComputerMCPBuiltin.requireEnabledConfiguredDeclaration(server)
+      if (purpose === "inspection" && server.enabled === false) {
+        disabled.add(serverName)
         continue
       }
-      // Projection reports the configured provider; it does not substitute one.
-      // A squad that names a server configuration has turned off is a real
-      // disagreement, and saying so is the only answer that keeps
-      // configuration, assignment, status and execution describing the same
-      // capability.
+      if (serverName === ComputerMCPBuiltin.ServerName) {
+        servers.set(serverName, ComputerMCPBuiltin.requireEnabledConfiguredDeclaration(server))
+        continue
+      }
       if (!("type" in server)) {
         throw new Error(
           `Active expert squad projects default MCP server default/mcp/${serverName}, which configuration has disabled.`,
         )
       }
-      result[serverName] = Config.Mcp.parse(server)
+      servers.set(serverName, Config.Mcp.parse(server))
     }
-    return result
+    const available = (refs: ResolvedProviderRef[]) =>
+      refs.filter(({ ref }) => servers.has(defaultMcpTypedPartsFromRef(ref).serverName))
+    return {
+      defaultMcpTools: available(tools),
+      defaultMcpPrompts: available(prompts),
+      defaultMcpResources: available(resources),
+      defaultMcpServers: Object.fromEntries(servers),
+      disabledDefaultMcpServers: [...disabled].sort(compareCanonicalStrings),
+    }
   }
 
   function packageMcpKindRefs(
@@ -1397,6 +1417,7 @@ export namespace PromptProfileResolver {
   async function resolveSchedulerCapabilityForContext(
     context: CapabilityResolutionContext,
     config: ConfigLike,
+    purpose: CapabilityProjectionPurpose,
   ): Promise<ResolvedSchedulerCapability> {
     const active = context.active
     const scheduler = active.pkg.manifest.capability_projection.scheduler
@@ -1419,26 +1440,13 @@ export namespace PromptProfileResolver {
     assertProjectableSchedulerDefaultHostTools(defaultTools, "capability_projection.scheduler")
     assertDefaultToolsDoNotRepeatBuiltIns(builtInToolIDs, defaultTools, "capability_projection.scheduler")
     const packageTools = resolvedPackageTools(active, active.builtIn ? [] : grants.packageToolRefs)
-    const defaultMcpTools = resolvedProviderRefs(
-      grants.defaultMcpToolRefs,
-      defaultMcpToolProviderName,
+    const defaultMcp = resolveDefaultMcpProjection(
+      config,
+      grants,
       "capability_projection.scheduler.capability_refs",
+      purpose,
     )
-    const defaultMcpPrompts = resolvedProviderRefs(
-      grants.defaultMcpPromptRefs,
-      defaultMcpPromptProviderName,
-      "capability_projection.scheduler.capability_refs",
-    )
-    const defaultMcpResources = resolvedProviderRefs(
-      grants.defaultMcpResourceRefs,
-      defaultMcpResourceProviderName,
-      "capability_projection.scheduler.capability_refs",
-    )
-    const defaultMcpServers = defaultMcpServersForRefs(config, [
-      ...defaultMcpTools.map((entry) => entry.ref),
-      ...defaultMcpPrompts.map((entry) => entry.ref),
-      ...defaultMcpResources.map((entry) => entry.ref),
-    ])
+    const { defaultMcpTools, defaultMcpPrompts, defaultMcpResources, defaultMcpServers } = defaultMcp
     const globalMcpTimeout = config.experimental?.mcp_timeout
     const packageMcpTools = resolvedPackageMcpRefs(
       active,
@@ -1527,10 +1535,7 @@ export namespace PromptProfileResolver {
       builtInToolIDs,
       defaultTools,
       packageTools,
-      defaultMcpTools,
-      defaultMcpPrompts,
-      defaultMcpResources,
-      defaultMcpServers,
+      ...defaultMcp,
       globalMcpTimeout,
       packageMcpTools,
       packageMcpPrompts,
@@ -1546,7 +1551,7 @@ export namespace PromptProfileResolver {
     input: SchedulerCapabilityInput,
   ): Promise<ResolvedSchedulerCapability> {
     const context = await capabilityResolutionContext(input)
-    return resolveSchedulerCapabilityForContext(context, input.config)
+    return resolveSchedulerCapabilityForContext(context, input.config, "execution")
   }
 
   /** Resolve and materialize the exact immutable package revision selected by
@@ -1590,6 +1595,7 @@ export namespace PromptProfileResolver {
     context: CapabilityResolutionContext
     config: ConfigLike
     agentID: string
+    purpose: CapabilityProjectionPurpose
   }): Promise<ResolvedWorkerCapability> {
     const active = input.context.active
     const projectionEntry = workerProjectionForAgentID(active, input.agentID)
@@ -1638,26 +1644,13 @@ export namespace PromptProfileResolver {
     assertProjectableDefaultHostTools(defaultTools, baseRole, context)
     assertDefaultToolsDoNotRepeatBuiltIns(builtInToolIDs, defaultTools, context)
     const packageTools = resolvedPackageTools(active, active.builtIn ? [] : grants.packageToolRefs)
-    const defaultMcpTools = resolvedProviderRefs(
-      grants.defaultMcpToolRefs,
-      defaultMcpToolProviderName,
+    const defaultMcp = resolveDefaultMcpProjection(
+      input.config,
+      grants,
       `${context}.capability_refs`,
+      input.purpose,
     )
-    const defaultMcpPrompts = resolvedProviderRefs(
-      grants.defaultMcpPromptRefs,
-      defaultMcpPromptProviderName,
-      `${context}.capability_refs`,
-    )
-    const defaultMcpResources = resolvedProviderRefs(
-      grants.defaultMcpResourceRefs,
-      defaultMcpResourceProviderName,
-      `${context}.capability_refs`,
-    )
-    const defaultMcpServers = defaultMcpServersForRefs(input.config, [
-      ...defaultMcpTools.map((entry) => entry.ref),
-      ...defaultMcpPrompts.map((entry) => entry.ref),
-      ...defaultMcpResources.map((entry) => entry.ref),
-    ])
+    const { defaultMcpTools, defaultMcpPrompts, defaultMcpResources, defaultMcpServers } = defaultMcp
     const globalMcpTimeout = input.config.experimental?.mcp_timeout
     const packageMcpTools = resolvedPackageMcpRefs(
       active,
@@ -1734,10 +1727,7 @@ export namespace PromptProfileResolver {
       builtInToolIDs,
       defaultTools,
       packageTools,
-      defaultMcpTools,
-      defaultMcpPrompts,
-      defaultMcpResources,
-      defaultMcpServers,
+      ...defaultMcp,
       globalMcpTimeout,
       packageMcpTools,
       packageMcpPrompts,
@@ -1763,20 +1753,22 @@ export namespace PromptProfileResolver {
       context,
       config: input.config,
       agentID: input.agentID,
+      purpose: "execution",
     })
   }
 
   async function resolvePackageCapabilitySet(
     context: CapabilityResolutionContext,
     config: ConfigLike,
+    purpose: CapabilityProjectionPurpose,
   ): Promise<ResolvedPackageCapabilitySet> {
     const agentIDs = ExpertSquadRegistry.agentProjectionEntries(context.active.pkg.manifest)
       .map((entry) => entry.agentID)
       .sort(compareCanonicalStrings)
     const [scheduler, universalBuild, ...workers] = await Promise.all([
-      resolveSchedulerCapabilityForContext(context, config),
-      resolveWorkerCapabilityForContext({ context, config, agentID: UNIVERSAL_BUILD_AGENT_ID }),
-      ...agentIDs.map((agentID) => resolveWorkerCapabilityForContext({ context, config, agentID })),
+      resolveSchedulerCapabilityForContext(context, config, purpose),
+      resolveWorkerCapabilityForContext({ context, config, agentID: UNIVERSAL_BUILD_AGENT_ID, purpose }),
+      ...agentIDs.map((agentID) => resolveWorkerCapabilityForContext({ context, config, agentID, purpose })),
     ])
     return { context, scheduler, workers, schedulerOnlyWorkers: [universalBuild] }
   }
@@ -1785,7 +1777,7 @@ export namespace PromptProfileResolver {
     input: WorkerCapabilityInput,
   ): Promise<ResolvedWorkerTurnProjection> {
     const context = await capabilityResolutionContext(input)
-    const capabilitySet = await resolvePackageCapabilitySet(context, input.config)
+    const capabilitySet = await resolvePackageCapabilitySet(context, input.config, "execution")
     const workerCapability = [...capabilitySet.schedulerOnlyWorkers, ...capabilitySet.workers].find(
       (worker) => worker.identity.agentID === input.agentID,
     )
@@ -1807,7 +1799,7 @@ export namespace PromptProfileResolver {
     input: SchedulerCapabilityInput,
   ): Promise<ResolvedSchedulerTurnProjection> {
     const context = await capabilityResolutionContext(input)
-    const capabilitySet = await resolvePackageCapabilitySet(context, input.config)
+    const capabilitySet = await resolvePackageCapabilitySet(context, input.config, "execution")
     const skillProjection = await resolveSkillProjectionForContext({
       context,
       config: input.config,
@@ -2583,16 +2575,19 @@ export namespace PromptProfileResolver {
     const capabilitySet =
       input.capabilitySet ??
       (await SkillReadDiagnostics.phase("projection.capabilities", () =>
-        resolvePackageCapabilitySet(input.context, input.config),
+        resolvePackageCapabilitySet(input.context, input.config, "inspection"),
       ))
     const schedulerCapability = capabilitySet.scheduler
     const workerCapabilities = capabilitySet.workers
     const schedulerOnlyWorkerCapabilities = capabilitySet.schedulerOnlyWorkers
-    const productionSkills = mergeProductionSkillGrants(active.pkg.id, [
+    const capabilities = [
       schedulerCapability,
       ...schedulerOnlyWorkerCapabilities,
       ...workerCapabilities,
-    ])
+    ]
+    const productionSkills = mergeProductionSkillGrants(active.pkg.id, capabilities)
+    const disabledDefaultMcpServers = [...new Set(capabilities.flatMap((role) => role.disabledDefaultMcpServers))]
+      .sort(compareCanonicalStrings)
     const selectorPackages = [
       ...getLoadedBuiltInPackages()
         .filter((pkg) => pkg.id !== active.profileID)
@@ -2670,6 +2665,7 @@ export namespace PromptProfileResolver {
         grants: productionSkills.map(canonicalProductionSkillGrant),
       }),
       projectedToolIDs,
+      disabledDefaultMcpServers,
       projectedAgentIDs,
       projectedScheduler,
       projectedAgents,
@@ -3381,7 +3377,7 @@ export namespace PromptProfileResolver {
       defaultSkills,
       defaultSkillsByName: skillInventoryByName(defaultSkills),
     }
-    const activeCapabilitySet = await resolvePackageCapabilitySet(context, input.config)
+    const activeCapabilitySet = await resolvePackageCapabilitySet(context, input.config, "inspection")
     const skillProjection = await resolveSkillProjectionForContext({
       context,
       config: input.config,
@@ -3408,6 +3404,9 @@ export namespace PromptProfileResolver {
       default: DEFAULT_PROMPT_PROFILE_ID,
       scope: input.scope,
       launch_catalog_revision: inventory.revision,
+      ...(skillProjection.disabledDefaultMcpServers.length > 0
+        ? { disabled_default_mcp_servers: skillProjection.disabledDefaultMcpServers }
+        : {}),
       active_agent_projection: await activeAgentProjection({
         capabilitySet: activeCapabilitySet,
         promptProfileActive: active,

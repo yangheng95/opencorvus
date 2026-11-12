@@ -8,6 +8,8 @@ import { PromptProfileResolver } from "../../src/expert-squad/prompt-profile-res
 import { memoryProject } from "../fixture/memory"
 import { Server } from "../../src/server/server"
 import { Instance } from "../../src/project/instance"
+import { Config } from "../../src/config/config"
+import { Session } from "../../src/session"
 
 const suffix = (length: number) => `\n[truncated; original length: ${length} characters]`
 
@@ -124,5 +126,68 @@ test("real project HTTP bootstrap serves VCS and skill mounts alongside an inval
     server.stop(true)
     await Instance.disposeAll()
     await ExpertSquadRegistry.invalidateAvailable()
+  }
+}, 60_000)
+
+test("serves catalog inspection and skill assignment while a required project MCP connection is disabled", async () => {
+  await using project = await memoryProject()
+  const session = await Instance.provide({
+    directory: project.path,
+    async fn() {
+      await Config.updateProjectPatch({ mcp: { browser: { enabled: false } } })
+      return Session.create({ kind: "assistant", title: "Disabled Browser settings" })
+    },
+  })
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: Server.App().fetch, idleTimeout: 0 })
+  const origin = `http://${server.hostname}:${server.port}`
+  const headers = { "x-opencorvus-directory": project.path, "Content-Type": "application/json" }
+  const agentID = "dynamic-builder"
+  const skillRef = "default/skill/grill-me"
+  try {
+    const catalog = await fetch(`${origin}/expert-squad/catalog?sessionID=${session.id}`, { headers })
+    expect(catalog.status).toBe(200)
+    expect(await catalog.json()).toMatchObject({
+      active: { effective: "dynamic" },
+      scope: { kind: "session", sessionID: session.id },
+      disabled_default_mcp_servers: ["browser"],
+      active_agent_projection: {
+        agents: expect.arrayContaining([expect.objectContaining({ agent_id: agentID })]),
+      },
+    })
+
+    const mount = await fetch(`${origin}/skill/mount`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({
+        scope: "project", expertSquadID: "dynamic", agentID, defaultSkillRef: skillRef, override: true,
+      }),
+    })
+    expect(mount.status).toBe(200)
+    expect(await mount.json()).toMatchObject({ scope: "project", disabled_default_mcp_servers: ["browser"] })
+
+    const persisted = await fetch(`${origin}/skill/mounts?sessionID=${session.id}`, { headers })
+    expect(persisted.status).toBe(200)
+    expect(await persisted.json()).toMatchObject({
+      scope: "session",
+      disabled_default_mcp_servers: ["browser"],
+      matrix: expect.arrayContaining([expect.objectContaining({
+        agent_id: agentID,
+        grants: expect.arrayContaining([expect.objectContaining({
+          ref: skillRef, project_override: true, effective: true,
+        })]),
+      })]),
+    })
+
+    await Instance.provide({
+      directory: project.path,
+      async fn() {
+        await expect(PromptProfileResolver.resolveSchedulerTurnProjection({
+          projectDirectory: project.path, config: await Config.get(),
+        })).rejects.toThrow("Active expert squad projects default MCP server default/mcp/browser, which configuration has disabled.")
+      },
+    })
+  } finally {
+    server.stop(true)
+    await Instance.disposeAll()
   }
 }, 60_000)
