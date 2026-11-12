@@ -23,6 +23,7 @@
 
 - MCP 新建、删除、连接和调用使用原始连接名及所属项目。多个连接的名称近似时，授权和工具调用仍指向准确的连接。禁用一个依赖连接后仍可打开专家团设置。
 - 修复编辑器远端 MCP 连接的传输选择，按编辑器声明使用流式 HTTP 或服务器发送事件（SSE）。
+- 多个后端同时读取同一份 MCP 配置时，保留新连接已经确认的授权，避免旧配置操作让它失效。
 - 修复旧配置读取覆盖已保存内容、并发保存回执覆盖新编辑的问题。专家团市场和技能目录刷新后能保留已确认的安装结果和选中目标。
 - 修复文本预览、文件比较、原始文件下载及多步任务附件的错误恢复，改进同名项目、会话和工具标签的区分。更新 Effect 和 XML 解析依赖以修复已公布的漏洞。
 
@@ -48,6 +49,7 @@
 
 - MCP creation, removal, connection, and tool calls use the original connection name and its project. Authorization and tools reach the correct connection when names are similar. Expert Squad settings remain available when a required connection is disabled.
 - Remote MCP connections from editors honor the declared transport, using Streamable HTTP or Server-Sent Events (SSE) as requested.
+- When multiple backends read the same MCP configuration, an older configuration operation no longer invalidates the authorization already confirmed for the new connection.
 - Preserve committed settings when an older read arrives and preserve newer edits when save responses overlap. Expert Squad and skill catalogs retain confirmed installs and the selected item through refresh.
 - Improve recovery for text previews, file comparisons, original downloads, and Mission attachments. Clarify which project, conversation, or tool tab an action targets when names match. Update Effect and the XML parser to address published advisories.
 
