@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [编辑器会话广播已接入连接的命令](records/2026-11/2026-11-12-acp-attached-command-announcement.md)
 - [命令目录与模板使用同一当前定义](records/2026-11/2026-11-12-current-command-projection.md)
 - [连接操作等待当前配置代际结算](records/2026-11/2026-11-12-mcp-peer-runtime-admission.md)
 - [配置写入以真实展开后的候选结算](records/2026-11/2026-11-12-config-write-expanded-projection.md)

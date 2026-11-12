@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [编辑器首次命令通知的真实协议证据](2026-11-12-acp-attached-command-announcement/README.md)
 - [真实命令目录与模板的基线证据](2026-11-12-current-command-projection/README.md)
 - [跨后端配置变更与连接运行证据](2026-11-12-mcp-peer-runtime-admission/README.md)
 - [配置候选展开与连接状态证据](2026-11-12-config-write-expanded-projection/README.md)

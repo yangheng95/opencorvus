@@ -1,0 +1,89 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 34208,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "operation": "new-strict",
+    "side": "strict",
+    "responseSessionID": "ses_-zUPFFndyzz8CVABelD2",
+    "notificationSessionID": "ses_-zUPFFndyzz8CVABelD2",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "strict",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "ed83bafb-a44d-495b-b9f1-d7fd6f046ded",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_strict": "connected"
+    }
+  },
+  {
+    "side": "strict",
+    "route": "/command",
+    "status": 500,
+    "requestID": "046df527-802c-4cfb-8660-7df55fda0614",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "operation": "resume-strict",
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {}
+    }
+  },
+  {
+    "operation": "ordinary-slash-with-strict",
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {}
+    }
+  }
+]

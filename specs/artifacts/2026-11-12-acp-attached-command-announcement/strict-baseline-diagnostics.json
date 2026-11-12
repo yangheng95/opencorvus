@@ -1,0 +1,26 @@
+[
+  {
+    "requestID": "046df527-802c-4cfb-8660-7df55fda0614",
+    "message": "MCP error -32602: MCP error -32602: Invalid arguments for prompt strict_report: Invalid string: must match pattern /^\\d{4}-\\d{2}-\\d{2}$/ at date",
+    "path": "/command",
+    "status": 500,
+    "protocolCode": -32602,
+    "time": "2026-11-12T10:20:07.824Z"
+  },
+  {
+    "requestID": "29d0749f-9277-465e-a474-681291768672",
+    "message": "MCP error -32602: MCP error -32602: Invalid arguments for prompt strict_report: Invalid string: must match pattern /^\\d{4}-\\d{2}-\\d{2}$/ at date",
+    "path": "/command",
+    "status": 500,
+    "protocolCode": -32602,
+    "time": "2026-11-12T10:20:07.87Z"
+  },
+  {
+    "requestID": "a2e9eff0-df61-40e5-bb47-9416c170204d",
+    "message": "MCP error -32602: MCP error -32602: Invalid arguments for prompt strict_report: Invalid string: must match pattern /^\\d{4}-\\d{2}-\\d{2}$/ at date",
+    "path": "/command",
+    "status": 500,
+    "protocolCode": -32602,
+    "time": "2026-11-12T10:20:07.906Z"
+  }
+]
