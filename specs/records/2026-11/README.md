@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [同一连接配置只推进一次凭据代际](2026-11-12-mcp-credential-runtime-settlement.md)
 - [0.1.51 发布](2026-11-12-release-0.1.51.md)
 - [编辑器按声明接入远端连接传输](2026-11-12-acp-remote-mcp-transport.md)
 - [编辑器会话广播已接入连接的命令](2026-11-12-acp-attached-command-announcement.md)

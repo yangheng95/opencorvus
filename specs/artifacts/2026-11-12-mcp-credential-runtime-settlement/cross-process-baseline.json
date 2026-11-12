@@ -1,0 +1,196 @@
+{
+  "facts": {
+    "peerPreparation": {
+      "side": "b",
+      "pid": 17312,
+      "timeout": 16000
+    },
+    "writerRevisionChangedOnCommit": true,
+    "writerRevisionChangedAgainAfterPeer": true,
+    "writerBeforePeer": 200,
+    "peerAfterRelease": 200,
+    "writerAfterPeer": 500
+  },
+  "requests": [
+    {
+      "label": "writer-current-before",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "d13f7717-69a2-4350-a021-2b7b60b5150e",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "peer-current-before",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "3a155014-3dfb-4128-a992-a956fb473af3",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "control-before",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "4db95aa0-0e62-491f-9550-03bb2d6854db",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the alternate note",
+          "template": "Use the alternate note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "alternate http report",
+          "template": "Read the alternate http report."
+        }
+      ]
+    },
+    {
+      "label": "writer-saved-new-timeout",
+      "peer": "a",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "dc0584aa-b459-4cc8-a0fb-222cae82fbd5",
+      "data": {
+        "timeout": 16000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "writer-reconnected-before-peer",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "6ce34c38-8b4e-4579-8624-e9ca1c8d6811",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "peer-joined-after-release",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "a99a74fa-a3ab-4e3f-bafc-1908123cb298",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "writer-read-after-peer",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 500,
+      "requestID": "cfb93f47-cee2-49f3-b1a4-5bfb3a703f9a",
+      "data": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "label": "writer-config-after-peer",
+      "peer": "a",
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "06e6a886-0857-4763-9366-c465ea6cac13",
+      "data": {
+        "timeout": 16000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "writer-status-after-peer",
+      "peer": "a",
+      "side": "project",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "0b551129-f9dd-413d-872c-061edd78dc02",
+      "data": {
+        "status": "failed",
+        "error": "MCP OAuth credential snapshot changed; retry connection"
+      }
+    },
+    {
+      "label": "control-after-peer",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "9e3a11ed-a722-43ad-afe7-52e31a7e720d",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the alternate note",
+          "template": "Use the alternate note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "alternate http report",
+          "template": "Read the alternate http report."
+        }
+      ]
+    }
+  ]
+}
