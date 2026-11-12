@@ -1,0 +1,122 @@
+[
+  {
+    "kind": "normal",
+    "written": {
+      "host": "peer",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "651d4124-3187-40f1-85b5-655488d1d209",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/normal"
+        ]
+      ]
+    },
+    "first": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "575810d7-9522-424b-b835-bbd8bc75e9ea",
+      "data": []
+    },
+    "retry": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "fb5d658b-3b27-44ae-bd52-f2f423a4bfe0",
+      "data": [
+        {
+          "uri": "mcp://review/project/normal",
+          "description": "/project/normal"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "padded",
+    "written": {
+      "host": "peer",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "6fa8f759-99fd-4966-9273-b76b72dccb28",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/normal"
+        ]
+      ]
+    },
+    "first": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "39da45e8-96bc-4224-847a-e7d330c68a16",
+      "data": []
+    },
+    "retry": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "fc5e52fd-5951-4026-833e-69a675b88aa9",
+      "data": [
+        {
+          "uri": "mcp://review/project/padded",
+          "description": "/project/padded"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "normal",
+    "written": {
+      "host": "peer",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "ef0c4bd7-ac8e-4087-9789-175bc5dab384",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/normal"
+        ]
+      ]
+    },
+    "first": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "39084351-9268-45fe-8eba-7ffeab1e5c96",
+      "data": []
+    },
+    "retry": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "f920b38e-cccb-4e92-a314-cde059122bad",
+      "data": [
+        {
+          "uri": "mcp://review/project/normal",
+          "description": "/project/normal"
+        }
+      ]
+    }
+  }
+]

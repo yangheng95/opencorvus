@@ -1,0 +1,214 @@
+{
+  "connectWrite": {
+    "host": "peer",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "9ffe9cff-098d-4628-9cf2-dfb4f9c6f7fa",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/project/padded"
+      ]
+    ]
+  },
+  "actions": [
+    {
+      "path": "/mcp/connect",
+      "requestName": "review-tools",
+      "status": 500,
+      "requestID": "04b51298-db3a-417c-9726-cc36fc27d063",
+      "data": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "path": "/mcp/connect",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "b7b529dd-5dc0-412a-86ae-2ab1236edf1d",
+      "data": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "706b71a6-5a22-4a7f-b229-a3cae119ae85",
+      "data": true
+    },
+    {
+      "path": "/mcp/connect",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "e35beea5-273b-4536-8be6-ac9e971acb86",
+      "data": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "082e2ac0-7935-4824-a0d4-52a30e049945",
+      "data": true
+    }
+  ],
+  "afterInitial": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "requestID": "da31dbc2-0829-4543-88bf-230e3ea738aa",
+    "data": {
+      "review-tools": {
+        "status": "disconnected"
+      }
+    }
+  },
+  "afterRetry": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "55c25078-ee28-45b0-8e09-ad2e1be6f220",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "f52d92b4-ebbe-409b-898a-4c19828ce000",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    }
+  ],
+  "disconnectWrite": {
+    "host": "peer",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "67b0928e-b166-47a4-ba75-4f2f94547cdb",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/project/normal"
+      ]
+    ]
+  },
+  "afterDisconnect": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "requestID": "a304fc15-1319-4455-b516-be94a193fa2e",
+    "data": {
+      "review-tools": {
+        "status": "disconnected"
+      }
+    }
+  },
+  "ordinaryManualDisconnect": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "requestID": "84a0f6a6-29c3-42cc-b4ec-58c3805c0301",
+    "data": {
+      "review-tools": {
+        "status": "disabled",
+        "reason": "manual_disconnect"
+      }
+    }
+  },
+  "protocol": [
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "write": {
+    "host": "peer",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "d18058d4-9601-4e3b-a17a-0bf4e289bceb",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/project/normal"
+      ]
+    ]
+  },
+  "disconnect": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/disconnect",
+    "method": "POST",
+    "requestName": "review-tools",
+    "status": 200,
+    "requestID": "6b13a488-4a3e-4bb6-86bc-6ae6a12be5cb",
+    "data": true
+  },
+  "after": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "795e1ae0-6932-4f01-ba98-9915577f29f2",
+      "data": {
+        "review-tools": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "3716fc18-d24a-407d-846a-de9dcf8d61b3",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    }
+  ]
+}

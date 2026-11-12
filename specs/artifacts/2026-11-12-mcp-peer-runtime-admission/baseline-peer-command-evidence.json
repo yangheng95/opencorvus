@@ -1,0 +1,90 @@
+{
+  "before": {
+    "host": "reader",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "f600d9ec-2d42-4c06-bac2-f953bab2cf89",
+    "data": [
+      {
+        "name": "peer-inventory:read_endpoint",
+        "description": "/project/normal",
+        "template": "/project/normal"
+      }
+    ]
+  },
+  "write": {
+    "host": "peer",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "7092ef3b-2b16-4482-8d4e-869722b6ea9f",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/project/normal"
+      ]
+    ]
+  },
+  "immediate": {
+    "host": "reader",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 404,
+    "requestID": "7cc04d4d-4940-48c6-9170-92034ed03004",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "MCP server not found: peer-inventory"
+      }
+    }
+  },
+  "resources": {
+    "warm": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "7689c81f-9570-4887-a98a-dfd3a2dc1141",
+      "data": [
+        {
+          "uri": "mcp://review/project/padded",
+          "description": "/project/padded"
+        }
+      ]
+    },
+    "after": {
+      "host": "reader",
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 200,
+      "requestID": "e61b07d2-a421-474d-93d1-bfab5b737c78",
+      "data": [
+        {
+          "uri": "mcp://review/project/padded",
+          "description": "/project/padded"
+        }
+      ]
+    }
+  },
+  "later": {
+    "host": "reader",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "bfa729f1-9fa2-4cf8-9ff7-741bb2b6c687",
+    "data": [
+      {
+        "name": "peer-inventory:read_endpoint",
+        "description": "/project/normal",
+        "template": "/project/padded"
+      }
+    ]
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "write": {
+    "status": 200,
+    "requestID": "64a8085a-d4ef-4db2-913a-df9aa46cbfa2",
+    "url": "http://127.0.0.1:39938/project/dot"
+  },
+  "initial": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/connect",
+      "method": "POST",
+      "requestName": "peer-global-review",
+      "status": 500,
+      "requestID": "f3dd5ce7-e96b-42f6-b50d-8fa8fd2cd029",
+      "data": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/connect",
+      "method": "POST",
+      "requestName": "peer-global-review",
+      "status": 200,
+      "requestID": "42b661ed-9c4a-43ff-9488-2fd7d8bdcd14",
+      "data": true
+    }
+  ],
+  "retry": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/connect",
+      "method": "POST",
+      "requestName": "peer-global-review",
+      "status": 200,
+      "requestID": "a60b57f2-2d50-46fc-81a1-3f5e478dde73",
+      "data": true
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/connect",
+      "method": "POST",
+      "requestName": "peer-global-review",
+      "status": 200,
+      "requestID": "41649a78-e00c-410a-b69a-f2e7e244a796",
+      "data": true
+    }
+  ],
+  "reads": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "11fda9fd-74f2-413a-8d1c-3e89b40eb434",
+      "data": {
+        "peer-global-review": {
+          "status": "connected"
+        },
+        "review-tools": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        },
+        "browser": {
+          "status": "disconnected",
+          "scope": "execution"
+        },
+        "computer": {
+          "status": "disconnected",
+          "scope": "execution"
+        }
+      }
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "99077bb2-1687-4cc0-9872-85eb7bef17e3",
+      "data": {
+        "peer-global-review": {
+          "status": "connected"
+        },
+        "review-tools": {
+          "status": "disconnected"
+        },
+        "browser": {
+          "status": "disconnected",
+          "scope": "execution"
+        },
+        "computer": {
+          "status": "disconnected",
+          "scope": "execution"
+        }
+      }
+    }
+  ],
+  "restore": {
+    "status": 200,
+    "requestID": "24675c29-250a-4aa1-ac64-4e2777790fbe"
+  }
+}

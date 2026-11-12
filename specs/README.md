@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [连接操作等待当前配置代际结算](records/2026-11/2026-11-12-mcp-peer-runtime-admission.md)
 - [配置写入以真实展开后的候选结算](records/2026-11/2026-11-12-config-write-expanded-projection.md)
 - [新增 MCP 连接保留原始名称](records/2026-11/2026-11-12-mcp-add-exact-name.md)
 - [项目禁用连接时保留专家团和技能设置](records/2026-11/2026-11-12-squad-catalog-disabled-mcp.md)

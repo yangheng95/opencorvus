@@ -1,0 +1,46 @@
+{
+  "remove": {
+    "host": "peer",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "f6542f55-ce5b-42a4-83cb-1cdc60bdca76",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/project/normal"
+      ]
+    ]
+  },
+  "readbacks": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "1e62d114-25c6-45c5-b54b-538d026dd195",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/normal"
+        ]
+      ]
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "16122a03-af5e-473a-a105-cf83664952a2",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/alternate/normal"
+        ]
+      ]
+    }
+  ]
+}

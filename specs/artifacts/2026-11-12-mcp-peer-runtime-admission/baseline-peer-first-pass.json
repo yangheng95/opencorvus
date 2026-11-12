@@ -1,0 +1,118 @@
+{
+  "warm": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/connect",
+      "method": "POST",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "7202077e-c871-4950-8245-c99279ca1f50",
+      "data": true
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/connect",
+      "method": "POST",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "8ae9a3dc-b9fc-451f-8926-582a5c1ffdb2",
+      "data": true
+    }
+  ],
+  "write": {
+    "host": "peer",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "55c97f13-8f96-4412-ae59-505217cc4a71",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/project/padded"
+      ]
+    ]
+  },
+  "immediate": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/connect",
+    "method": "POST",
+    "requestName": "review-tools",
+    "status": 500,
+    "requestID": "39d9a009-e1fd-4136-9b6a-074f41392a0d",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  "after": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "369a456e-78d2-461e-b09b-c4b187db8c60",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/padded"
+        ]
+      ]
+    },
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "732cf177-669b-4d75-8d26-c618ec320ee3",
+      "data": {
+        "review-tools": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "593c7e58-34ee-468b-a703-a0524e1b8c4b",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    }
+  ],
+  "retry": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/connect",
+    "method": "POST",
+    "requestName": "review-tools",
+    "status": 200,
+    "requestID": "547a28f1-d06a-4f2f-a6c9-eddcdf7dad9f",
+    "data": true
+  },
+  "final": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "requestID": "21a5c847-3272-4edf-b82d-83d96205c2c7",
+    "data": {
+      "review-tools": {
+        "status": "connected"
+      }
+    }
+  }
+}

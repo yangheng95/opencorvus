@@ -1,0 +1,338 @@
+{
+  "write": {
+    "host": "peer",
+    "side": "alternate",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "1e8280b2-bc25-4b68-9791-7a670ff9d049",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/alternate/padded"
+      ]
+    ]
+  },
+  "initial": {
+    "host": "reader",
+    "side": "alternate",
+    "route": "/mcp/auth",
+    "method": "POST",
+    "requestName": "review-tools",
+    "status": 200,
+    "requestID": "cfe5e7db-2879-4f1c-9cac-f1fc53947292",
+    "data": {
+      "authorizationUrl": ""
+    }
+  },
+  "retry": {
+    "host": "reader",
+    "side": "alternate",
+    "route": "/mcp/auth",
+    "method": "POST",
+    "requestName": "review-tools",
+    "status": 200,
+    "requestID": "43818164-f205-4317-b665-3995f8fdbaf7",
+    "data": {
+      "authorizationUrl": ""
+    }
+  },
+  "status": {
+    "host": "reader",
+    "side": "alternate",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "requestID": "52258235-b44c-48ec-ace1-2618d3b37323",
+    "data": {
+      "review-tools": {
+        "status": "connected"
+      }
+    }
+  },
+  "restore": {
+    "host": "peer",
+    "side": "alternate",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "81cbe37f-46da-4b7e-9dcc-c66feb907d8c",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/alternate/normal"
+      ]
+    ]
+  },
+  "series": [
+    {
+      "kind": "padded",
+      "write": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "c5fcd82b-70d3-4f98-9a11-18395fc0977e",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/padded"
+          ]
+        ]
+      },
+      "first": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/auth",
+        "method": "POST",
+        "requestName": "review-tools",
+        "status": 500,
+        "requestID": "6f3a9bb9-7d36-454b-9c68-c90a485ed993",
+        "data": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+          }
+        }
+      },
+      "observed": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "requestID": "db8ca5e2-317d-4726-a76f-a9c883cf3347",
+        "data": {
+          "review-tools": {
+            "status": "disconnected"
+          }
+        }
+      }
+    },
+    {
+      "kind": "normal",
+      "write": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "4ff149a3-a631-46fb-bf43-59434a14d2fd",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/normal"
+          ]
+        ]
+      },
+      "first": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/auth",
+        "method": "POST",
+        "requestName": "review-tools",
+        "status": 200,
+        "requestID": "d736bbe4-d47f-4dbb-8524-e0dc5e790e4e",
+        "data": {
+          "authorizationUrl": ""
+        }
+      },
+      "observed": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "requestID": "abe523dd-aab2-4b9b-ac15-42ed1b445d0e",
+        "data": {
+          "review-tools": {
+            "status": "connected"
+          }
+        }
+      }
+    },
+    {
+      "kind": "padded",
+      "write": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "0f1c81eb-f5ad-47c2-9d1a-66046be10630",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/padded"
+          ]
+        ]
+      },
+      "first": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/auth",
+        "method": "POST",
+        "requestName": "review-tools",
+        "status": 200,
+        "requestID": "ba23ed64-3c64-4444-b9a5-01ab184e4e78",
+        "data": {
+          "authorizationUrl": ""
+        }
+      },
+      "observed": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "requestID": "e76431f7-316d-4dba-b009-2fb03500020e",
+        "data": {
+          "review-tools": {
+            "status": "connected"
+          }
+        }
+      }
+    },
+    {
+      "kind": "normal",
+      "write": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "4c14d519-3769-4c54-bb00-431640a6620c",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/normal"
+          ]
+        ]
+      },
+      "first": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/auth",
+        "method": "POST",
+        "requestName": "review-tools",
+        "status": 200,
+        "requestID": "34425f01-17f5-42c9-8a3b-b6de242fc46f",
+        "data": {
+          "authorizationUrl": ""
+        }
+      },
+      "observed": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "requestID": "14dede71-7a88-4bbd-a4a0-c2205990ae76",
+        "data": {
+          "review-tools": {
+            "status": "connected"
+          }
+        }
+      }
+    },
+    {
+      "kind": "padded",
+      "write": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "bae38b2e-e154-4f11-843f-7e57b8265f2d",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/padded"
+          ]
+        ]
+      },
+      "first": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/auth",
+        "method": "POST",
+        "requestName": "review-tools",
+        "status": 200,
+        "requestID": "4afd9303-96c7-4c5f-bf83-e773075f7b22",
+        "data": {
+          "authorizationUrl": ""
+        }
+      },
+      "observed": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "requestID": "ffaaa09a-28a8-483f-8784-604d936b4827",
+        "data": {
+          "review-tools": {
+            "status": "connected"
+          }
+        }
+      }
+    },
+    {
+      "kind": "normal",
+      "write": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "3195876b-924b-4037-9279-21a6fa2d2964",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/normal"
+          ]
+        ]
+      },
+      "first": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/auth",
+        "method": "POST",
+        "requestName": "review-tools",
+        "status": 200,
+        "requestID": "3b0190b0-aac5-4b79-a106-777479dbf815",
+        "data": {
+          "authorizationUrl": ""
+        }
+      },
+      "observed": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "requestID": "d7bf34ec-4c78-4c40-abf6-ce3214bf7f6a",
+        "data": {
+          "review-tools": {
+            "status": "connected"
+          }
+        }
+      }
+    }
+  ],
+  "seriesRestore": {
+    "host": "peer",
+    "side": "alternate",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "7125a99f-af4f-4ed2-b859-7ecd7eb08927",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/alternate/normal"
+      ]
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "requestID": "39d9a009-e1fd-4136-9b6a-074f41392a0d",
+    "method": "POST",
+    "path": "/mcp/connect",
+    "status": 500,
+    "message": "MCP server review-tools configuration changed before connection started"
+  },
+  {
+    "requestID": "04b51298-db3a-417c-9726-cc36fc27d063",
+    "method": "POST",
+    "path": "/mcp/connect",
+    "status": 500,
+    "message": "MCP server review-tools configuration changed before connection started"
+  },
+  {
+    "requestID": "6f3a9bb9-7d36-454b-9c68-c90a485ed993",
+    "method": "POST",
+    "path": "/mcp/auth",
+    "status": 500,
+    "message": "MCP server review-tools configuration changed before OAuth startup"
+  },
+  {
+    "requestID": "f3dd5ce7-e96b-42f6-b50d-8fa8fd2cd029",
+    "method": "POST",
+    "path": "/mcp/connect",
+    "status": 500,
+    "message": "MCP server peer-global-review configuration changed before connection started"
+  }
+]
