@@ -652,6 +652,7 @@ export const RunCommand = cmd({
                     command: args.command,
                     arguments: message,
                     variant: args.variant,
+                    parts: files.length ? files : undefined,
                   },
                   { signal: requestAbort.signal },
                 ),

@@ -1,0 +1,95 @@
+{
+  "mode": "attached",
+  "command": true,
+  "title": "attached command attachment",
+  "outcome": {
+    "exit": 0,
+    "signal": null
+  },
+  "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+  "events": [
+    {
+      "type": "file",
+      "timestamp": 1794485879250,
+      "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+      "part": {
+        "id": "prt_g0ValDs3t02OJpNVeEUr",
+        "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+        "messageID": "msg_g0ValDs3O00xWF8gUhT7",
+        "orderKey": "v1:0001794485878933:0000000000000031:0000000000000000:part:prt_g0ValDs3t02OJpNVeEUr",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "panel.png",
+        "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+      }
+    },
+    {
+      "type": "step_start",
+      "timestamp": 1794485879500,
+      "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+      "part": {
+        "id": "prt_g0ValDsCr00wQxEaYjhU",
+        "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+        "messageID": "msg_g0ValDs5e00cM4Jd5zQY",
+        "orderKey": "v1:0001794485879485:0000000000000031:0000000000000000:part:prt_g0ValDsCr00wQxEaYjhU",
+        "type": "step-start"
+      }
+    },
+    {
+      "type": "text_delta",
+      "timestamp": 1794485879558,
+      "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+      "messageID": "msg_g0ValDs5e00cM4Jd5zQY",
+      "partID": "prt_g0ValDsDF008OdDZgljV",
+      "partType": "text",
+      "field": "text",
+      "delta": "The selected local command reached the stream.",
+      "value": "The selected local command reached the stream."
+    },
+    {
+      "type": "text",
+      "timestamp": 1794485879587,
+      "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+      "part": {
+        "id": "prt_g0ValDsDF008OdDZgljV",
+        "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+        "messageID": "msg_g0ValDs5e00cM4Jd5zQY",
+        "orderKey": "v1:0001794485879509:0000000000000031:0000000000000000:part:prt_g0ValDsDF008OdDZgljV",
+        "type": "text",
+        "text": "The selected local command reached the stream.",
+        "time": {
+          "start": 1794485879509,
+          "end": 1794485879518
+        }
+      }
+    },
+    {
+      "type": "step_finish",
+      "timestamp": 1794485879587,
+      "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+      "part": {
+        "id": "prt_g0ValDsDS00MIe142Ihm",
+        "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+        "messageID": "msg_g0ValDs5e00cM4Jd5zQY",
+        "orderKey": "v1:0001794485879575:0000000000000031:0000000000000000:part:prt_g0ValDsDS00MIe142Ihm",
+        "type": "step-finish",
+        "reason": "stop",
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        }
+      }
+    }
+  ],
+  "stderr": ""
+}

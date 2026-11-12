@@ -1,0 +1,249 @@
+[
+  {
+    "mode": "local",
+    "command": false,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "local ordinary attachment",
+    "sessionID": "ses_-zUPEmGCSzzXPfO4L4vp",
+    "messages": [
+      {
+        "id": "msg_g0ValDjgk00eNzQ5GZw4",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b300\\\\project\\\\archive-review\\\\panel.png\"}"
+          },
+          {
+            "type": "file",
+            "filename": "panel.png",
+            "mime": "image/png",
+            "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          },
+          {
+            "type": "text",
+            "text": "\"local ordinary image\"\n"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValDjuE0015zNGPNj8",
+        "role": "assistant",
+        "parentID": "msg_g0ValDjgk00eNzQ5GZw4",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "quickCheck": "ok"
+  },
+  {
+    "mode": "local",
+    "command": true,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "local command attachment",
+    "sessionID": "ses_-zUPEmElnzzYrLACoebF",
+    "messages": [
+      {
+        "id": "msg_g0ValDl7e00GC84XCeO5",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-21."
+          },
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b300\\\\project\\\\archive-review\\\\panel.png\"}"
+          },
+          {
+            "type": "file",
+            "filename": "panel.png",
+            "mime": "image/png",
+            "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValDlJf00D3fUE989i",
+        "role": "assistant",
+        "parentID": "msg_g0ValDl7e00GC84XCeO5",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "quickCheck": "ok"
+  },
+  {
+    "mode": "attached",
+    "command": false,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "attached ordinary attachment",
+    "sessionID": "ses_-zUPEmGj4zzkNmIp10e2",
+    "requestID": "1400fe6b-e5dc-475a-95ba-21165e33a686",
+    "messages": [
+      {
+        "id": "msg_g0ValDjGk00V81rIicdk",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b300\\\\project\\\\archive-review\\\\panel.png\"}"
+          },
+          {
+            "type": "file",
+            "filename": "panel.png",
+            "mime": "image/png",
+            "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          },
+          {
+            "type": "text",
+            "text": "\"attached ordinary image\"\n"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValDjN500fTyqTQZx1",
+        "role": "assistant",
+        "parentID": "msg_g0ValDjGk00V81rIicdk",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "attachmentDownload": {
+      "requestID": "6c76e15d-14c4-42d6-99e5-ee81903f3b1f",
+      "bytes": 100,
+      "type": "image/png"
+    }
+  },
+  {
+    "mode": "attached",
+    "command": true,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "attached command attachment",
+    "sessionID": "ses_-zUPEmFdwzzn1mnlr7F2",
+    "requestID": "b70a6225-72dd-42bd-9ec6-e3db8416d89a",
+    "messages": [
+      {
+        "id": "msg_g0ValDkLy000trkwYwzX",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-22."
+          },
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b300\\\\project\\\\archive-review\\\\panel.png\"}"
+          },
+          {
+            "type": "file",
+            "filename": "panel.png",
+            "mime": "image/png",
+            "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValDkOr00ZWs45NH37",
+        "role": "assistant",
+        "parentID": "msg_g0ValDkLy000trkwYwzX",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "attachmentDownload": {
+      "requestID": "b81e24d4-1e14-4902-a287-e178dcda7005",
+      "bytes": 100,
+      "type": "image/png"
+    }
+  },
+  {
+    "mode": "attached",
+    "command": true,
+    "projectID": "prj_hwHEigjgmRvzA8cQmkqs",
+    "title": "Prepare a local CLI attachment review.",
+    "sessionID": "ses_hZ7qDBYcGyQosd6BwU6Z",
+    "requestID": "f40164fc-7393-4b0f-b59b-1a32f8cf4c3e",
+    "messages": [
+      {
+        "id": "msg_7d7bd5a3-c772-4289-aa8a-54961d143451",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Prepare a local CLI attachment review."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValDnxK00RjLQ7YWwY",
+        "role": "assistant",
+        "parentID": "msg_7d7bd5a3-c772-4289-aa8a-54961d143451",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValDs3O00xWF8gUhT7",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-23."
+          },
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b300\\\\project\\\\archive-review\\\\panel.png\"}"
+          },
+          {
+            "type": "file",
+            "filename": "panel.png",
+            "mime": "image/png",
+            "url": "/attachment/prj_hwHEigjgmRvzA8cQmkqs/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0ValDs5e00cM4Jd5zQY",
+        "role": "assistant",
+        "parentID": "msg_g0ValDs3O00xWF8gUhT7",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ],
+    "attachmentDownload": {
+      "requestID": "65eb4d41-73d1-420b-9d29-679ac0de465f",
+      "bytes": 100,
+      "type": "image/png"
+    }
+  }
+]

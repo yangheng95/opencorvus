@@ -13,6 +13,7 @@ import { Identifier } from "../../src/id/id"
 import { MCP } from "../../src/mcp"
 import { Instance } from "../../src/project/instance"
 import { serverErrorResponse } from "../../src/server/error-handler"
+import { Server } from "../../src/server/server"
 import { AppRoutes } from "../../src/server/routes/app"
 import { McpRoutes } from "../../src/server/routes/mcp"
 import { SessionRoutes } from "../../src/server/routes/session"
@@ -24,6 +25,7 @@ import { WriteTool } from "../../src/tool/write"
 import { Tool } from "../../src/tool/tool"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { startControlledStreamingProvider } from "../fixture/controlled-streaming-provider"
+import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
 
 const model = { providerID: "session-attachment-contract", modelID: "session-prompt-owner-model" }
 const resourceURI = "reports://public/input"
@@ -481,6 +483,78 @@ test("public command keeps its explicit Session attachment project binding", asy
     )
     await completed(response, errors, provider)
     await storedFile({ sessionID: session.id, messageID, projectID: session.projectID, bytes, mime: ref.mime })
+  })
+}, 60_000)
+
+test("run --command --file preserves the attachment in the attached Session and emits its file event", async () => {
+  await scope(async ({ session, directory, provider }) => {
+    const filename = "inspection.wav"
+    await fs.writeFile(path.join(directory, filename), wav)
+    const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch: Server.App().fetch })
+    const child = Bun.spawn(
+      [
+        process.execPath,
+        "run",
+        "--no-env-file",
+        `--tsconfig-override=${path.resolve(import.meta.dir, "../../tsconfig.json")}`,
+        path.resolve(import.meta.dir, "../../src/index.ts"),
+        "run",
+        "--command",
+        "attachment-contract",
+        "--file",
+        filename,
+        "--attach",
+        server.url.origin,
+        "--dir",
+        directory,
+        "--session",
+        session.id,
+        "--model",
+        `${model.providerID}/${model.modelID}`,
+        "--format",
+        "json",
+      ],
+      {
+        cwd: directory,
+        env: currentTestChildEnvironment({ OPENCORVUS_RUN_STALL_TIMEOUT_MS: "12000" }),
+        stdin: "ignore",
+        stdout: "pipe",
+        stderr: "pipe",
+      },
+    )
+    const deadline = setTimeout(() => child.kill(), 30_000)
+    try {
+      const [exit, stdout, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+      ])
+      expect(exit, stderr || stdout).toBe(0)
+      const events = stdout.trim().split(/\r?\n/).map((line) =>
+        JSON.parse(line) as { type: string; sessionID: string; part: Message.Part },
+      )
+      const attachment = events.find(({ type }) => type === "file")
+      expect(attachment).toMatchObject({
+        sessionID: session.id,
+        part: { type: "file", filename, mime: "audio/wav" },
+      })
+      expect(events.find(({ type }) => type === "text")).toMatchObject({
+        sessionID: session.id,
+        part: { type: "text", text: expect.stringMatching(/^provider reply \d+$/) },
+      })
+      const stored = await storedFile({
+        sessionID: session.id,
+        messageID: attachment!.part.messageID,
+        projectID: session.projectID,
+        bytes: wav,
+        mime: "audio/wav",
+      })
+      expect(attachment?.part).toMatchObject({ url: stored.file.url })
+      expect(provider.promptRequests().at(-1)?.body).toMatchObject({ model: model.modelID, stream: true })
+    } finally {
+      clearTimeout(deadline)
+      await server.stop(true)
+    }
   })
 }, 60_000)
 
