@@ -1,0 +1,227 @@
+{
+  "live": [
+    {
+      "direction": "editor-to-agent",
+      "method": "session/new",
+      "id": "a7025f3a-10ff-4350-bccb-8236ddce8faf",
+      "session": null,
+      "prompt": null
+    },
+    {
+      "direction": "agent-to-editor",
+      "id": "a7025f3a-10ff-4350-bccb-8236ddce8faf",
+      "stopReason": null,
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR"
+    },
+    {
+      "direction": "editor-to-agent",
+      "method": "session/prompt",
+      "id": "94917ce0-a00b-484c-86e5-0b767796b8a4",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "prompt": [
+        {
+          "type": "text",
+          "text": "First boundary review message."
+        }
+      ]
+    },
+    {
+      "direction": "editor-to-agent",
+      "method": "session/cancel",
+      "id": null,
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "prompt": null
+    },
+    {
+      "direction": "agent-to-editor",
+      "id": "94917ce0-a00b-484c-86e5-0b767796b8a4",
+      "stopReason": "cancelled",
+      "session": null
+    },
+    {
+      "direction": "editor-to-agent",
+      "method": "session/prompt",
+      "id": "4af0ed8b-d056-4c25-a365-32dfc68a0099",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "prompt": [
+        {
+          "type": "text",
+          "text": "Second boundary review message."
+        }
+      ]
+    },
+    {
+      "direction": "agent-to-editor",
+      "type": "agent_thought_chunk",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "messageId": null,
+      "content": {
+        "type": "text",
+        "text": "Checking the persisted message boundary."
+      }
+    },
+    {
+      "direction": "agent-to-editor",
+      "type": "agent_message_chunk",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "messageId": null,
+      "content": {
+        "type": "text",
+        "text": "The second review "
+      }
+    },
+    {
+      "direction": "agent-to-editor",
+      "type": "agent_message_chunk",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "messageId": null,
+      "content": {
+        "type": "text",
+        "text": "reached the stream."
+      }
+    },
+    {
+      "direction": "agent-to-editor",
+      "id": "4af0ed8b-d056-4c25-a365-32dfc68a0099",
+      "stopReason": "end_turn",
+      "session": null
+    }
+  ],
+  "replay": [
+    {
+      "direction": "editor-to-agent",
+      "method": "session/load",
+      "id": "d61fe1c0-d019-4ce8-85b8-bdf25bc07298",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "prompt": null
+    },
+    {
+      "direction": "agent-to-editor",
+      "type": "user_message_chunk",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "messageId": null,
+      "content": {
+        "type": "text",
+        "text": "First boundary review message."
+      }
+    },
+    {
+      "direction": "agent-to-editor",
+      "type": "user_message_chunk",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "messageId": null,
+      "content": {
+        "type": "text",
+        "text": "Second boundary review message."
+      }
+    },
+    {
+      "direction": "agent-to-editor",
+      "type": "agent_thought_chunk",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "messageId": null,
+      "content": {
+        "type": "text",
+        "text": "Checking the persisted message boundary."
+      }
+    },
+    {
+      "direction": "agent-to-editor",
+      "type": "agent_message_chunk",
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "messageId": null,
+      "content": {
+        "type": "text",
+        "text": "The second review reached the stream."
+      }
+    },
+    {
+      "direction": "agent-to-editor",
+      "id": "d61fe1c0-d019-4ce8-85b8-bdf25bc07298",
+      "stopReason": null,
+      "session": "ses_-zUPDgnrNzzlgqeNK9hR"
+    }
+  ],
+  "stream": [
+    {
+      "event": "listening"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "model": "local",
+      "stream": true
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "model": "local",
+      "stream": true,
+      "latestText": "First boundary review message."
+    },
+    {
+      "event": "held-without-message-content",
+      "occurrence": 2
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1
+    },
+    {
+      "event": "held-stream-closed",
+      "occurrence": 2,
+      "completed": false
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "model": "local",
+      "stream": true
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "model": "local",
+      "stream": true,
+      "latestText": "First boundary review message."
+    },
+    {
+      "event": "held-without-message-content",
+      "occurrence": 4
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3
+    },
+    {
+      "event": "held-stream-finished",
+      "occurrence": 4
+    },
+    {
+      "event": "held-stream-closed",
+      "occurrence": 4,
+      "completed": true
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "model": "local",
+      "stream": true,
+      "latestText": "Second boundary review message."
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "model": "local",
+      "stream": true
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6
+    }
+  ]
+}

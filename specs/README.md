@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [编辑器协议用持久身份区分内容分段](records/2026-11/2026-11-13-acp-content-message-identity.md)
 - [目录成员实际变化后刷新当前文件搜索](records/2026-11/2026-11-13-explorer-search-observed-directory-change.md)
 - [资源管理器按当前规范化查询读取](records/2026-11/2026-11-13-explorer-search-stable-query-source.md)
 - [在资源管理器中恢复历史目录读取](records/2026-11/2026-11-12-explorer-history-folder-retry.md)

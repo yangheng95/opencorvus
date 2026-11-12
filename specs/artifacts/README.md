@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [ACP 消息身份的真实 Windows Zed 记录](2026-11-13-acp-content-message-identity/README.md)
 - [外部移动后文件搜索的真实桌面记录](2026-11-13-explorer-search-observed-directory-change/README.md)
 - [资源管理器查询发布的桌面记录](2026-11-13-explorer-search-stable-query-source/README.md)
 - [历史目录在资源管理器中的读取记录](2026-11-12-explorer-history-folder-retry/README.md)

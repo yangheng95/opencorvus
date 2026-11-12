@@ -1,0 +1,72 @@
+{
+  "status": 200,
+  "requestID": "ccf65c72-40bb-42d6-adc4-3bb0ac2bfa6d",
+  "session": "ses_-zUPDgnrNzzlgqeNK9hR",
+  "messages": [
+    {
+      "id": "msg_g0VamJM8r00Z6FVg7f2X",
+      "role": "user",
+      "parent": null,
+      "finish": null,
+      "error": null,
+      "parts": [
+        {
+          "type": "text",
+          "text": "First boundary review message.",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VamJO0e00icq2m9ex9",
+      "role": "assistant",
+      "parent": "msg_g0VamJM8r00Z6FVg7f2X",
+      "finish": "error",
+      "error": "MessageAbortedError",
+      "parts": []
+    },
+    {
+      "id": "msg_g0VamJRWe00NSSgVh5z8",
+      "role": "user",
+      "parent": null,
+      "finish": null,
+      "error": null,
+      "parts": [
+        {
+          "type": "text",
+          "text": "Second boundary review message.",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VamJjl70006650Va4E",
+      "role": "assistant",
+      "parent": "msg_g0VamJRWe00NSSgVh5z8",
+      "finish": "stop",
+      "error": null,
+      "parts": [
+        {
+          "type": "step-start",
+          "text": null,
+          "reason": null
+        },
+        {
+          "type": "reasoning",
+          "text": "Checking the persisted message boundary.",
+          "reason": null
+        },
+        {
+          "type": "text",
+          "text": "The second review reached the stream.",
+          "reason": null
+        },
+        {
+          "type": "step-finish",
+          "text": null,
+          "reason": "stop"
+        }
+      ]
+    }
+  ]
+}
