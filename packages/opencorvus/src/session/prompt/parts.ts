@@ -1,6 +1,7 @@
 import path from "path"
 import os from "os"
 import fs from "fs/promises"
+import { LOCAL_DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
 import { Filesystem } from "../../util/filesystem"
 import { Identifier } from "../../id/id"
 import { Message } from "../message"
@@ -76,7 +77,7 @@ export async function resolvePromptParts(
         type: "file",
         url: pathToFileURL(filepath).href,
         filename: name,
-        mime: stats.isDirectory() ? "application/x-directory" : "text/plain",
+        mime: stats.isDirectory() ? LOCAL_DIRECTORY_REFERENCE_MIME : "text/plain",
       }
     }),
   )
@@ -521,7 +522,7 @@ export async function materializeUserMessage(
                 const s = Filesystem.stat(filepath)
 
                 if (s?.isDirectory()) {
-                  part.mime = "application/x-directory"
+                  part.mime = LOCAL_DIRECTORY_REFERENCE_MIME
                 }
 
                 if (Filesystem.isTextLikeMime(part.mime)) {
@@ -603,7 +604,7 @@ export async function materializeUserMessage(
                   return pieces
                 }
 
-                if (part.mime === "application/x-directory") {
+                if (part.mime === LOCAL_DIRECTORY_REFERENCE_MIME) {
                   const args = { filePath: filepath }
                   const listCtx: Tool.Context = {
                     sessionID: input.sessionID,

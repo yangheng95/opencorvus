@@ -2,7 +2,7 @@ import { isDecodableText } from "@opencorvus-ai/util/text-mime"
 import { BusEvent } from "@/bus/bus-event"
 import { createHash } from "node:crypto"
 import z from "zod"
-import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
+import { DIRECTORY_REFERENCE_MIME, LOCAL_DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { APICallError, convertToModelMessages, LoadAPIKeyError, type ModelMessage, type UIMessage } from "ai"
 import { RangeSchema } from "./range"
@@ -1270,7 +1270,7 @@ export namespace Message {
           // Binary file parts are only forwarded when the target model declares
           // the capability to handle them â€” otherwise the AI SDK / provider
           // conversion layer throws UnsupportedFunctionalityError at runtime.
-          if (part.type === "file" && part.mime !== "application/x-directory") {
+          if (part.type === "file" && part.mime !== LOCAL_DIRECTORY_REFERENCE_MIME) {
             if (options.stripMedia) {
               userMessage.parts.push({
                 type: "text",

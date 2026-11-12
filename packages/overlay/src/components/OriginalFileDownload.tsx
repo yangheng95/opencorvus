@@ -12,9 +12,16 @@ import { Feedback } from "./ui/Feedback"
 
 type OriginalSource = { url: string; authority: ApiAuthority }
 type OriginalContent = { href: string; focusOrigin?: HTMLButtonElement }
+type DownloadActionLabel = { text: string; accessibleName: string }
 
 /** Download the original bytes through the same authorized resource cache as previews. */
-export function OriginalFileDownload(props: { url: string; name: string; displayLabel?: string; authority?: ApiAuthority }) {
+export function OriginalFileDownload(props: {
+  url: string
+  name: string
+  displayLabel?: string
+  authority?: ApiAuthority
+  actionLabel?: DownloadActionLabel
+}) {
   const authed = () => props.url.startsWith("/")
   const cached = authed() ? peekResourceObjectUrl(props.url) : undefined
   const [original, { refetch }] = createResource<OriginalContent | undefined, OriginalSource, HTMLButtonElement>(
@@ -66,13 +73,20 @@ export function OriginalFileDownload(props: { url: string; name: string; display
           name={props.name}
           displayLabel={props.displayLabel ?? props.name}
           focusOrigin={authed() ? original()?.focusOrigin : undefined}
+          actionLabel={props.actionLabel}
         />
       </Show>
     </Show>
   )
 }
 
-export function DownloadLink(props: { href: string; name: string; displayLabel?: string; focusOrigin?: HTMLButtonElement }) {
+export function DownloadLink(props: {
+  href: string
+  name: string
+  displayLabel?: string
+  focusOrigin?: HTMLButtonElement
+  actionLabel?: DownloadActionLabel
+}) {
   let link: HTMLAnchorElement | undefined
   onMount(() => {
     const origin = props.focusOrigin
@@ -81,9 +95,10 @@ export function DownloadLink(props: { href: string; name: string; displayLabel?:
   })
   return (
     <a ref={link} class="msg-file-download" href={props.href} download={props.name}
-      aria-label={props.displayLabel ? t("file.download_named", { name: props.displayLabel }) : undefined}
+      aria-label={props.actionLabel?.accessibleName ??
+        (props.displayLabel ? t("file.download_named", { name: props.displayLabel }) : undefined)}
       target="_blank" rel="noopener noreferrer">
-      {t("file.download")}
+      {props.actionLabel?.text ?? t("file.download")}
     </a>
   )
 }

@@ -4289,6 +4289,14 @@ item with an explanation; supported desktop hosts use the native picker. File
 selection continues through the ordinary HTML file input in both hosts. The
 menu and handler share that capability declaration; no recursive browser folder
 upload or alternative directory reference protocol is introduced.
+Historical folder cards open the referenced project directory in the existing
+Explorer. Command file URLs use the server's path syntax, and stored directory
+references read the versioned manifest through the authorized attachment cache.
+Explorer resolves and expands the actual directory rows, then reads the target
+listing. The request belongs to the active connection, conversation selection,
+and project. A later Explorer action takes precedence while a reveal is pending.
+Folders outside the current project receive a localized explanation on their
+card. A stored manifest can be downloaded separately as the original reference.
 Workspace opening and anonymous Project conversion share one directory-selection
 UI action. It selects the existing manualWorkspacePathEntry path dialog on
 browser hosts and the native picker on supported desktop hosts. Conversion names

@@ -1,6 +1,11 @@
 import { isDecodableText } from "@opencorvus-ai/util/text-mime"
-import { SCREENSHOT_BROWSER_THUMBNAIL_VARIANT } from "@opencorvus-ai/transport-protocol"
-import { createResource, createSignal, Show, Switch, Match, lazy, Suspense } from "solid-js"
+import {
+  DIRECTORY_REFERENCE_MIME,
+  DirectoryReferenceManifestSchema,
+  LOCAL_DIRECTORY_REFERENCE_MIME,
+  SCREENSHOT_BROWSER_THUMBNAIL_VARIANT,
+} from "@opencorvus-ai/transport-protocol"
+import { createResource, createSignal, Show, Switch, Match, lazy, Suspense, onCleanup } from "solid-js"
 import {
   captureApiAuthority,
   fetchResourceAsObjectUrl,
@@ -10,15 +15,17 @@ import {
 } from "../services/api"
 import { localeTag, t } from "../utils/i18n"
 import { PreviewableImage } from "./ImagePreview"
-import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
+import { attachmentImagePreviewUrl, isStoredAttachmentUrl } from "../utils/attachment-resource"
 import { Disclosure } from "./ui/Disclosure"
 import { createResourceTextRead, ResourceTextDownload, ResourceTextPreview } from "./ResourceTextPreview"
 import { DownloadLink, OriginalFileDownload } from "./OriginalFileDownload"
 import { formatErrorDetails } from "../utils/error-details"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
-import { fileEditorReserved, openSourceFileEditor } from "../services/file-workbench"
+import { fileEditorReserved, openSourceFileEditor, revealFileExplorerFolder } from "../services/file-workbench"
+import { activeDirectory } from "../services/workspace"
 import { boardStore, selectedConversationDirectory } from "../store/board"
+import { projectDirectoryKey } from "../utils/project-directory"
 import { serverFileUrlPath } from "../utils/server-path"
 
 const LazyPdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
@@ -44,6 +51,7 @@ function PdfContent(props: { url: string; name: string }) {
 //     cache in services/api (see fetchResourceAsObjectUrl)
 //
 // Renderer dispatch by MIME:
+//   directory references → project Explorer from user-message history
 //   image/*             → <img>
 //   video/*             → <video controls>
 //   audio/*             → <audio controls>
@@ -131,11 +139,16 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   const authed = () => needsAuthedFetch(url())
   const thumbnail = () => props.presentation === "thumbnail" || props.presentation === "composer-thumbnail"
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
+  const folderReference = () => props.presentation === "thumbnail" &&
+    (mimeOf(props.part) === LOCAL_DIRECTORY_REFERENCE_MIME || mimeOf(props.part) === DIRECTORY_REFERENCE_MIME)
   const historicalText = () => props.presentation === "thumbnail" && url() && kind() === "other" &&
     isDecodableText(mimeOf(props.part), props.part.filename)
 
   return (
     <Switch fallback={<FallbackDownload url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />}>
+      <Match when={folderReference()}>
+        <FolderReference url={url()} name={name()} label={label()} stored={mimeOf(props.part) === DIRECTORY_REFERENCE_MIME} />
+      </Match>
       <Match when={historicalText() && /^file:/i.test(url())}>
         <LocalTextReference url={url()} name={name()} label={label()} />
       </Match>
@@ -182,6 +195,101 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
         <PdfAttachment url={url()} name={name()} displayLabel={props.displayLabel} authed={authed()} compact={props.presentation === "thumbnail"} />
       </Match>
     </Switch>
+  )
+}
+
+function FolderReference(props: { url: string; name: string; label: string; stored: boolean }) {
+  const [opening, setOpening] = createSignal(false)
+  const [failure, setFailure] = createSignal<{ kind: "outside-project" } | { kind: "read"; cause: unknown }>()
+  let mounted = true
+  onCleanup(() => { mounted = false })
+
+  async function open(origin: HTMLButtonElement) {
+    const directory = selectedConversationDirectory()
+    if (!directory || opening()) return
+    const explorerDirectory = activeDirectory().trim()
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const url = props.url
+    const stored = props.stored
+    const ownsSource = () => mounted && props.url === url && boardStore.selectEpoch === selectionEpoch &&
+      isApiAuthorityCurrent(authority)
+    setFailure(undefined)
+    if (projectDirectoryKey(explorerDirectory) !== projectDirectoryKey(directory)) {
+      setFailure({ kind: "outside-project" })
+      return
+    }
+    setOpening(true)
+    try {
+      const result = await revealFileExplorerFolder({
+        directory: explorerDirectory,
+        authority,
+        selectionEpoch,
+        origin,
+        onUnavailable(cause) {
+          if (ownsSource()) setFailure({ kind: "read", cause })
+        },
+      }, async () => {
+        if (!stored) return serverFileUrlPath(url, directory)
+        if (!isStoredAttachmentUrl(url)) throw new TypeError("Invalid stored folder reference URL")
+        const href = await fetchResourceAsObjectUrl(url, { authority })
+        const manifest = await (await fetch(href)).json()
+        return DirectoryReferenceManifestSchema.parse(manifest).path
+      }, () => ownsSource() && projectDirectoryKey(activeDirectory()) === projectDirectoryKey(directory))
+      if (ownsSource() && result === "outside-project") setFailure({ kind: result })
+    } catch (cause) {
+      if (ownsSource()) setFailure({ kind: "read", cause })
+    } finally {
+      if (mounted) setOpening(false)
+    }
+  }
+
+  return (
+    <>
+      <div class="msg-file-chip msg-folder-reference">
+        <span class="msg-file-chip__name" title={props.label}>{props.label}</span>
+        <div class="msg-folder-reference__actions">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            tone="neutral"
+            disabled={!selectedConversationDirectory()}
+            aria-busy={opening() || undefined}
+            aria-label={t("file.open_folder_named", { name: props.label })}
+            onClick={(event) => void open(event.currentTarget)}
+          >
+            {t("file.open_folder")}
+          </Button>
+          <Show when={props.stored && isStoredAttachmentUrl(props.url)}>
+            <OriginalFileDownload
+              url={props.url}
+              name={props.name}
+              displayLabel={props.label}
+              actionLabel={{
+                text: t("file.download_folder_reference"),
+                accessibleName: t("file.download_folder_reference_named", { name: props.label }),
+              }}
+            />
+          </Show>
+        </div>
+      </div>
+      <Show when={failure()}>
+        {(error) => {
+          const details = () => {
+            const current = error()
+            return current.kind === "read" ? formatErrorDetails(current.cause) : undefined
+          }
+          return (
+            <Feedback tone="error" details={details()}>
+              {error().kind === "outside-project"
+                ? t("file.folder_outside_project")
+                : t("file.load_failed", { name: props.label })}
+            </Feedback>
+          )
+        }}
+      </Show>
+    </>
   )
 }
 

@@ -14,6 +14,7 @@ import {
   type ApiAuthority,
 } from "./api"
 import { projectScopedPath } from "./project-directory"
+import { projectDirectoryKey } from "../utils/project-directory"
 import { isAbsoluteServerPath, normalizeProjectFilePath } from "../utils/server-path"
 import { relativePathFrom } from "../utils/tool"
 
@@ -59,6 +60,44 @@ export interface FileDeleteResult {
 export interface FileOperationScope {
   directory: string
   authority?: ApiAuthority
+}
+
+export interface FileExplorerFolderRequest {
+  directory: string
+  authority: ApiAuthority
+  selectionEpoch: number
+  path: string
+  origin: HTMLButtonElement
+  onUnavailable: (error?: unknown) => void
+}
+
+const [fileExplorerFolderRequest, setFileExplorerFolderRequest] = createSignal<FileExplorerFolderRequest>()
+export { fileExplorerFolderRequest }
+let folderRequestSequence = 0
+
+export async function revealFileExplorerFolder(
+  scope: Omit<FileExplorerFolderRequest, "path">,
+  resolvePath: () => string | Promise<string>,
+  ownsSource: () => boolean,
+): Promise<"requested" | "outside-project" | "superseded"> {
+  const sequence = ++folderRequestSequence
+  setFileExplorerFolderRequest(undefined)
+  const target = await resolvePath()
+  if (sequence !== folderRequestSequence || !ownsSource()) return "superseded"
+  if (!isAbsoluteServerPath(target)) throw new TypeError("Invalid absolute folder reference")
+  const path = relativePathFrom(scope.directory, target)
+  if (!path && projectDirectoryKey(scope.directory) !== projectDirectoryKey(target)) return "outside-project"
+  setFileExplorerFolderRequest({ ...scope, path })
+  return "requested"
+}
+
+export function completeFileExplorerFolderRequest(request: FileExplorerFolderRequest): void {
+  if (fileExplorerFolderRequest() === request) setFileExplorerFolderRequest(undefined)
+}
+
+export function cancelFileExplorerFolderReveal(): void {
+  folderRequestSequence += 1
+  setFileExplorerFolderRequest(undefined)
 }
 
 export type FileRefreshState =

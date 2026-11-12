@@ -1212,7 +1212,13 @@ export type HostPermission = "granted" | "denied" | "default" | "unsupported"
 /** Composer attachment cardinality is one shared client/server data contract. */
 export const COMPOSER_FILE_ATTACHMENT_LIMIT = 10
 export const COMPOSER_FOLDER_ATTACHMENT_LIMIT = 3
+export const LOCAL_DIRECTORY_REFERENCE_MIME = "application/x-directory"
 export const DIRECTORY_REFERENCE_MIME = "application/vnd.opencorvus.directory-reference+json"
+export const DirectoryReferenceManifestSchema = z.object({
+  version: z.literal(1),
+  kind: z.literal("directory"),
+  path: z.string().min(1),
+}).strict()
 
 export interface BrowserPreviewNativeBounds {
   x: number

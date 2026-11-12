@@ -23,9 +23,12 @@ import { boardStore } from "../store/board"
 import { workLedgerProject } from "../services/work-ledger"
 import { showAppDialog } from "../services/app-dialog"
 import {
+  cancelFileExplorerFolderReveal,
   collectFileRefreshReceipts,
+  completeFileExplorerFolderRequest,
   copyFileItem,
   fileEditorReserved,
+  fileExplorerFolderRequest,
   FileEditorAdmissionError,
   createFileItem,
   deleteFileItem,
@@ -36,6 +39,7 @@ import {
   uploadDroppedFiles,
   type FileCopyResult,
   type FileDeleteResult,
+  type FileExplorerFolderRequest,
   type FileMoveResult,
   type FileNode,
   type FileListingNode,
@@ -120,6 +124,7 @@ type ExplorerDropStatus = "move" | "upload" | "invalid"
 
 export interface FileExplorerPanelProps {
   active?: Accessor<boolean>
+  folderRevealVisible?: Accessor<boolean>
   directory?: Accessor<string>
 }
 
@@ -473,7 +478,8 @@ function ExplorerActionFeedback(props: { feedback: ExplorerFeedback; dataUI?: st
 
 export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [query, setQuery] = createSignal("")
-  const deferredQuery = createDeferred(() => query().trim())
+  const deferredSearch = createDeferred(() => query().trim())
+  const deferredQuery = () => query().trim() && deferredSearch()
   const [expandedPaths, setExpandedPaths] = createSignal(new Set<string>([""]))
   const [childrenByPath, setChildrenByPath] = createSignal(new Map<string, FileListingNode[]>())
   const [loadingPaths, setLoadingPaths] = createSignal(new Set<string>())
@@ -965,6 +971,60 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   const rowByKey = createMemo(() => new Map(rows().map((row) => [row.key, row])))
   const rowKeys = createMemo(() => rows().map((row) => row.key))
+  const folderRevealVisible = () => active() && (props.folderRevealVisible?.() ?? true)
+
+  function cancelFolderReveal(): void {
+    if (folderRevealVisible()) cancelFileExplorerFolderReveal()
+  }
+
+  async function revealFolder(request: FileExplorerFolderRequest): Promise<void> {
+    const ownsReveal = () => fileExplorerFolderRequest() === request && folderRevealVisible() &&
+      ownsExplorerOperation(request)
+    if (!ownsReveal()) return
+    pendingFocus = undefined
+    setQuery("")
+    const ancestors = [""]
+    let target: FileListingNode | undefined
+    const windows = isWindowsPath(request.directory)
+    for (const segment of request.path.split("/").filter(Boolean)) {
+      const parent = ancestors.at(-1)!
+      const result = await loadDirectory(parent, { required: true, scope: request })
+      if (!ownsReveal() || result.status !== "loaded") return
+      const expected = joinExplorerPath(parent, segment)
+      target = childrenByPath().get(parent)?.find((node) => node.directoryTarget &&
+        (windows ? node.path.toLowerCase() === expected.toLowerCase() : node.path === expected))
+      if (!target) {
+        const missing = await loadDirectory(request.path, { required: true, scope: request })
+        if (ownsReveal() && missing.status !== "retired") {
+          request.onUnavailable(missing.status === "failed" ? missing.error : undefined)
+        }
+        return
+      }
+      ancestors.push(target.path)
+    }
+    const result = await loadDirectory(ancestors.at(-1)!, { required: true, scope: request })
+    if (!ownsReveal() || result.status === "retired") return
+    batch(() => {
+      setExpandedPaths((paths) => new Set([...paths, ...ancestors]))
+      if (target) setSingleSelection(selectionFromNode(target))
+      else clearSelection()
+    })
+    if (document.activeElement !== request.origin) return
+    const row = target && rows().find((entry) => entry.kind === "node" && entry.node.path === target.path)
+    if (row) focusRow(row, request.origin)
+    else searchInput?.focus({ preventScroll: true })
+  }
+
+  createEffect(on([fileExplorerFolderRequest, folderRevealVisible], ([request, visible]) => {
+    if (!request || !visible) return
+    onCleanup(() => completeFileExplorerFolderRequest(request))
+    void revealFolder(request)
+      .catch((error) => {
+        if (fileExplorerFolderRequest() === request && ownsExplorerOperation(request)) request.onUnavailable(error)
+      })
+      .finally(() => completeFileExplorerFolderRequest(request))
+  }))
+
   const focusedVirtualRows = createMemo(() => {
     const index = rowKeys().indexOf(focusedRowKey() ?? "")
     return index < 0 ? [] : [index]
@@ -2346,6 +2406,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       aria-label={t("explorer.title")}
       data-uploading={uploading() ? "true" : "false"}
       style={explorerPanelStyle()}
+      on:pointerdown={{ handleEvent: cancelFolderReveal, capture: true }}
+      on:keydown={{ handleEvent: cancelFolderReveal, capture: true }}
     >
       <input
         ref={(node) => {

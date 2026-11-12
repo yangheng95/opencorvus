@@ -7,7 +7,7 @@ import z from "zod"
 import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { lazy } from "../../util/lazy"
-import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
+import { DIRECTORY_REFERENCE_MIME, DirectoryReferenceManifestSchema } from "@opencorvus-ai/transport-protocol"
 import { WORK_ARTIFACT_PROFILE_IDS, WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
 import { NamedError } from "@opencorvus-ai/util/error"
 
@@ -144,7 +144,9 @@ export const AttachmentRoutes = lazy(() =>
         if (!info.isDirectory()) return c.json({ message: "Directory reference path is not a directory" }, 400)
         const filename = path.basename(canonicalPath)
         if (!filename) return c.json({ message: "Directory reference path has no display name" }, 400)
-        const manifest = Buffer.from(JSON.stringify({ version: 1, kind: "directory", path: canonicalPath }), "utf8")
+        const manifest = Buffer.from(JSON.stringify(
+          DirectoryReferenceManifestSchema.parse({ version: 1, kind: "directory", path: canonicalPath }),
+        ), "utf8")
         const reference = await AttachmentStore.write(Instance.project.id, manifest, DIRECTORY_REFERENCE_MIME, filename)
         return c.json(DirectoryReference.parse({ ...reference, kind: "folder", path: canonicalPath }))
       },

@@ -1,4 +1,5 @@
 import { afterEach, expect, test } from "bun:test"
+import { DIRECTORY_REFERENCE_MIME, DirectoryReferenceManifestSchema } from "@opencorvus-ai/transport-protocol"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { ConfigPaths } from "../../src/config/paths"
@@ -73,8 +74,10 @@ test("cold attachment capture returns each project's exact bytes and original fi
 test("cold directory capture returns the canonical local-directory manifest", async () => {
   await using project = await memoryProject("directory-capture-identity")
   await configure(project.path)
-  const directory = path.join(project.path, "选择目录（原件）")
-  await fs.mkdir(directory)
+  const relative = "archive folder/选择目录（原件）"
+  const directory = path.join(project.path, relative)
+  await fs.mkdir(directory, { recursive: true })
+  await fs.writeFile(path.join(directory, "memo.txt"), "original folder contents")
   const canonical = await fs.realpath(directory)
   const response = await request(project.path, "/attachment/directory-reference", {
     method: "POST",
@@ -83,10 +86,23 @@ test("cold directory capture returns the canonical local-directory manifest", as
   })
   expect(response.status).toBe(200)
   const reference = await response.json()
-  expect(reference).toMatchObject({ kind: "folder", path: canonical, filename: path.basename(canonical) })
+  expect(reference).toMatchObject({
+    kind: "folder",
+    path: canonical,
+    filename: path.basename(canonical),
+    mime: DIRECTORY_REFERENCE_MIME,
+  })
   const manifest = await request(project.path, reference.url)
   expect(manifest.status).toBe(200)
-  expect(await manifest.json()).toEqual({ version: 1, kind: "directory", path: canonical })
+  const original = await manifest.text()
+  const expected = { version: 1, kind: "directory", path: canonical }
+  expect(original).toBe(JSON.stringify(expected))
+  expect(DirectoryReferenceManifestSchema.parse(JSON.parse(original))).toEqual(expected)
+  const contents = await request(project.path, `/file?${new URLSearchParams({ path: relative })}`)
+  expect(contents.status).toBe(200)
+  expect(await contents.json()).toMatchObject([
+    { name: "memo.txt", path: path.join(relative, "memo.txt"), type: "file" },
+  ])
 })
 
 test("executable conversation creation retains its explicit unavailable-model error", async () => {

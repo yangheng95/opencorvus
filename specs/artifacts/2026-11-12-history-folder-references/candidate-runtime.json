@@ -1,0 +1,304 @@
+{
+  "isolatedService": "http://127.0.0.1:40042/ui/",
+  "historicalRows": {
+    "session": {
+      "rows": 1,
+      "identical": true
+    },
+    "message": {
+      "rows": 8,
+      "identical": true
+    },
+    "part": {
+      "rows": 23,
+      "identical": true
+    }
+  },
+  "persistedAndOriginals": {
+    "history": {
+      "requestID": "797c6cd1-d91a-46b3-9a83-341533ae1426",
+      "matchesBaseline": true,
+      "messages": [
+        "msg_db79457f629a4bd891",
+        "msg_9ddd07931789e92904"
+      ]
+    },
+    "originals": [
+      {
+        "name": "notes archive",
+        "status": 200,
+        "requestID": "3c78004c-fdef-4cd9-80ea-7e925ab51f70",
+        "bytes": 156,
+        "matchesBaseline": true
+      },
+      {
+        "name": "second folder",
+        "status": 200,
+        "requestID": "0e047b04-a5a8-4730-bb3e-f74d536870a1",
+        "bytes": 174,
+        "matchesBaseline": true
+      },
+      {
+        "name": "external records",
+        "status": 200,
+        "requestID": "308fdefe-5c35-4946-a6f7-6f98879d649b",
+        "bytes": 134,
+        "matchesBaseline": true
+      },
+      {
+        "name": "archive-review",
+        "status": 200,
+        "requestID": "160dcbb8-4ffa-465e-9c5d-cd6603089bcd",
+        "bytes": 141,
+        "matchesBaseline": true
+      }
+    ],
+    "recreated": {
+      "requestID": "97164ca7-4e7e-4a27-ac99-4e77a97f5469",
+      "status": 200,
+      "name": "notes archive",
+      "bytes": 156
+    }
+  },
+  "desktop": {
+    "stored": {
+      "status": 200,
+      "requestID": "92f09123-6f60-4e71-b0d4-ce67e1cf3cb6",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "file": {
+      "status": 200,
+      "requestID": "e6ee3c86-2cd8-461d-9587-79fb48036ac4",
+      "url": "http://127.0.0.1:40042/file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive%2Fmemo.txt",
+      "body": {
+        "type": "text",
+        "content": "Owned folder review record.\r\n",
+        "revision": "ead255b27f90692f87917057a8bff456f1ce98304f08a15c2135c90f36b12f59",
+        "resourceID": "9af9953554b1b8f8afd84d3c13edc638043604cf64c730f9a346966ca221a984"
+      }
+    },
+    "nested": {
+      "status": 200,
+      "requestID": "f52e0895-03ae-4539-b1b4-f040f7088737",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=reference+branch%2Fsecond+folder",
+      "body": [
+        {
+          "name": "checklist.txt",
+          "path": "reference branch\\second folder\\checklist.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\reference branch\\second folder\\checklist.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "download": {
+      "name": "notes archive.json",
+      "bytes": 156,
+      "matchesOriginal": true
+    },
+    "root": {
+      "status": 200,
+      "requestID": "67676c24-2392-4053-908d-b6eb9bea5eac",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=",
+      "body": [
+        {
+          "name": ".opencorvus",
+          "path": ".opencorvus",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\.opencorvus",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": "notes archive",
+          "path": "notes archive",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": "reference branch",
+          "path": "reference branch",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\reference branch",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\.gitattributes",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\.gitignore",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "missing": {
+      "status": 404,
+      "requestID": "743ab81f-5322-45a1-b986-c28bf865608a",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes archive",
+          "message": "Directory entry not found: notes archive"
+        }
+      }
+    },
+    "command": {
+      "status": 200,
+      "requestID": "0f1663fd-1fe5-4b2f-9581-1adb5026750f",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "finalBundle": "/ui/assets/main-l4sP3MBz.js",
+    "finalNested": {
+      "status": 200,
+      "requestID": "e6a1ff80-1982-4715-9dec-544fd2206f01",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=reference+branch%2Fsecond+folder",
+      "body": [
+        {
+          "name": "checklist.txt",
+          "path": "reference branch\\second folder\\checklist.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\reference branch\\second folder\\checklist.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "finalZhCommand": {
+      "status": 200,
+      "requestID": "67e5e31c-9770-4fd9-b2aa-94177de5de5b",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "finalZhFile": {
+      "status": 200,
+      "requestID": "ed458d6a-5337-4113-987c-74beffe0fd53",
+      "url": "http://127.0.0.1:40042/file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive%2Fmemo.txt",
+      "body": {
+        "type": "text",
+        "content": "Owned folder review record.\r\n",
+        "revision": "ead255b27f90692f87917057a8bff456f1ce98304f08a15c2135c90f36b12f59",
+        "resourceID": "9af9953554b1b8f8afd84d3c13edc638043604cf64c730f9a346966ca221a984"
+      }
+    },
+    "manualSearch": {
+      "status": 200,
+      "requestID": "8e3f3724-8299-4b4d-b3d8-d45892f87caa",
+      "url": "http://127.0.0.1:40042/find/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&query=checklist&type=file&limit=81",
+      "body": [
+        "reference branch\\second folder\\checklist.txt"
+      ]
+    },
+    "finalZhMissing": {
+      "status": 404,
+      "requestID": "51c335cd-fad1-4108-92b1-707763be55c1",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes archive",
+          "message": "Directory entry not found: notes archive"
+        }
+      }
+    },
+    "finalZhRecovered": {
+      "status": 200,
+      "requestID": "5b8ff0d4-ac55-418f-a81e-7bb479bac430",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "finalZhDownload": {
+      "name": "notes archive.json",
+      "bytes": 156,
+      "matchesOriginal": true
+    },
+    "finalZhStored": {
+      "status": 200,
+      "requestID": "f8574969-b756-4132-934c-2504576bf007",
+      "url": "http://127.0.0.1:40042/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b306%5Cproject%5Carchive-review&path=notes+archive",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    }
+  },
+  "baselineModelRequests": {
+    "initialConversation": {
+      "route": "/v1/chat/completions",
+      "model": "acp-review/local",
+      "stream": true
+    },
+    "command": {
+      "route": "/v1/chat/completions",
+      "model": "acp-review/local",
+      "stream": true
+    },
+    "storedReference": {
+      "route": "/v1/chat/completions",
+      "model": "acp-review/local",
+      "stream": true
+    },
+    "scopeSamples": {
+      "route": "/v1/chat/completions",
+      "model": "acp-review/local",
+      "stream": true
+    }
+  }
+}

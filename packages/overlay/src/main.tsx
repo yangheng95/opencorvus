@@ -77,6 +77,8 @@ import {
   closeFileEditor,
   hasUnsavedFileChanges,
   fileEditorRevealRevision,
+  fileExplorerFolderRequest,
+  completeFileExplorerFolderRequest,
   fileWorkbenchOpen,
   fileEditorReserved,
   openFileReference,
@@ -2748,6 +2750,16 @@ function OverlayRoot() {
     }),
   )
 
+  createEffect(on(fileExplorerFolderRequest, (request) => {
+    if (!request) return
+    if (request.selectionEpoch !== boardStore.selectEpoch || !isApiAuthorityCurrent(request.authority) ||
+      request.directory !== activeDirectory().trim()) {
+      completeFileExplorerFolderRequest(request)
+      return
+    }
+    openRightDockPanel("explorer")
+  }))
+
   createEffect(() => {
     if (!settingsHydrated()) return
     // Read layout only after the theme owner has applied the current scale.
@@ -3250,7 +3262,11 @@ function OverlayRoot() {
             data-active={String(selectedCenterWorkbenchTab()?.id === "explorer")}
           >
             <div id="solidFileExplorerMount" class="center-workbench-activity sidebar-explorer-panel">
-              <FileExplorerPanel active={() => isCenterWorkbenchPanelOpen("explorer")} directory={activeDirectory} />
+              <FileExplorerPanel
+                active={() => isCenterWorkbenchPanelOpen("explorer")}
+                folderRevealVisible={() => rightDockOpen() && selectedCenterWorkbenchTab()?.id === "explorer"}
+                directory={activeDirectory}
+              />
             </div>
           </TabPanel>
           <TabPanel
