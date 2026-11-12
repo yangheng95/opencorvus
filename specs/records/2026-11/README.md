@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [编辑器按声明接入远端连接传输](2026-11-12-acp-remote-mcp-transport.md)
 - [编辑器会话广播已接入连接的命令](2026-11-12-acp-attached-command-announcement.md)
 - [命令目录与模板使用同一当前定义](2026-11-12-current-command-projection.md)
 - [连接操作等待当前配置代际结算](2026-11-12-mcp-peer-runtime-admission.md)

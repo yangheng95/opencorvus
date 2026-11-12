@@ -1,0 +1,405 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 11104,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "operation": "sse-control",
+    "side": "alternate",
+    "responseSessionID": "ses_-zUPFCguWzzgNHIGMCb4",
+    "notificationSessionID": "ses_-zUPFCguWzzgNHIGMCb4",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note"
+      },
+      {
+        "name": "editor_sse:remote_report",
+        "description": "alternate sse report"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "762fd472-5bb9-491e-a4c2-e75f31323ae1",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_sse": "connected"
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "status": 200,
+    "requestID": "e969b447-9a50-499f-a2cb-b3e6a4b9828b",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_sse:remote_report",
+        "description": "alternate sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the alternate sse report."
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/config",
+    "status": 200,
+    "requestID": "bee4b01a-68c7-4558-b5df-cdd3eae04c7e",
+    "data": {
+      "editor_sse": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/alternate/sse"
+      }
+    }
+  },
+  {
+    "operation": "base-project",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFCgo5zzyDGmxaCPO",
+    "notificationSessionID": "ses_-zUPFCgo5zzyDGmxaCPO",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "c3384874-8c77-4eba-a118-ed0c968e2e86",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "2c611f3b-9941-43d3-9f99-42039caa54a9",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "3da174ea-39eb-45bb-8bb1-9a1790672d3c",
+    "data": {}
+  },
+  {
+    "operation": "http-new",
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {
+        "details": "MCP server editor_http failed to attach with status failed: MCP OAuth connection failed"
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "9260ba10-bb82-4699-9b87-f5c015c9e56b",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "failed"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "313665d7-6d91-4455-a1e4-7d6b89e7c085",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "operation": "http-load",
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {
+        "details": "MCP server editor_http failed to attach with status failed: MCP OAuth connection failed"
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "8bfe835a-9c1b-4419-a9a7-d242c1e827cf",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "failed"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "5d53391a-c42d-449c-9c7d-296c5219171c",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "operation": "http-fork",
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {
+        "details": "MCP server editor_http failed to attach with status failed: MCP OAuth connection failed"
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "460d8b6c-9537-4bc5-b086-d257e1e1cd05",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "failed"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "bb2cca63-f940-428e-ac64-6dc15472f2f9",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "operation": "http-resume",
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {
+        "details": "MCP server editor_http failed to attach with status failed: MCP OAuth connection failed"
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "62e39a77-1a7a-46fd-b4fa-8154eee00a9b",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "failed"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "a96d688d-0763-4a10-b5a7-15ae8af9335a",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "operation": "direct-project-api-control",
+    "status": 200,
+    "requestID": "e72a05a6-5048-4612-aca4-c1669129000c",
+    "data": {
+      "browser": {
+        "status": "disabled",
+        "scope": "execution"
+      },
+      "computer": {
+        "status": "disabled",
+        "scope": "execution"
+      },
+      "editor_sse": {
+        "status": "connected"
+      },
+      "editor_http_direct": {
+        "status": "connected"
+      }
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "status": 200,
+    "requestID": "3328bbff-03e9-4802-aabb-5b7716878860",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http_direct:remote_report",
+        "description": "alternate http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the alternate http report."
+      },
+      {
+        "name": "editor_sse:remote_report",
+        "description": "alternate sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the alternate sse report."
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/config",
+    "status": 200,
+    "requestID": "5ac9d407-7603-4851-a079-b09c5421848a",
+    "data": {
+      "editor_sse": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/alternate/sse"
+      },
+      "editor_http_direct": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/alternate/http"
+      }
+    }
+  }
+]
