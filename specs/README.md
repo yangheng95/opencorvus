@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [编辑器历史使用持久会话分页](records/2026-11/2026-11-13-acp-session-history-pagination.md)
 - [编辑器附件保留原文件名](records/2026-11/2026-11-13-acp-file-uri-display-name.md)
 - [编辑器协议用持久身份区分内容分段](records/2026-11/2026-11-13-acp-content-message-identity.md)
 - [目录成员实际变化后刷新当前文件搜索](records/2026-11/2026-11-13-explorer-search-observed-directory-change.md)

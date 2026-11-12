@@ -1,0 +1,17 @@
+{
+  "request": {
+    "jsonrpc": "2.0",
+    "id": "91b0b6e7-91da-4825-b26d-09c3a0189145",
+    "method": "session/list",
+    "params": {}
+  },
+  "reply": {
+    "jsonrpc": "2.0",
+    "id": "91b0b6e7-91da-4825-b26d-09c3a0189145",
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {}
+    }
+  }
+}
