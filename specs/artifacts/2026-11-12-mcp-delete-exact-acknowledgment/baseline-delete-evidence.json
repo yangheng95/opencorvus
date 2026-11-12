@@ -1,0 +1,224 @@
+{
+  "actions": [
+    {
+      "project": "project",
+      "names": [
+        "alpha-review",
+        "shared-review"
+      ],
+      "receipt": {
+        "time": "2026-11-12T05:52:23.413Z",
+        "stage": "substituted",
+        "route": "/mcp",
+        "method": "DELETE",
+        "round": "baseline-stale-targets",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b283\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "721dc45c-6207-4152-93f1-caeb5bf5fced",
+        "status": 200,
+        "bytes": 932,
+        "deliveredBytes": 1029
+      },
+      "original": {
+        "configuredNames": [],
+        "mcp": {},
+        "username": "isolated-review"
+      },
+      "browserReply": {
+        "mcp": {
+          "alpha-review": {
+            "type": "remote",
+            "transport": "streamable-http",
+            "url": "http://127.0.0.1:39904/mcp"
+          }
+        },
+        "validSchema": true
+      },
+      "readback": {
+        "id": "a9133045-637d-477b-a3db-ec42f0e680dc",
+        "status": {}
+      }
+    },
+    {
+      "project": "alternate",
+      "names": [
+        "beta-review",
+        "shared-review"
+      ],
+      "receipt": {
+        "time": "2026-11-12T05:52:53.935Z",
+        "stage": "substituted",
+        "route": "/mcp",
+        "method": "DELETE",
+        "round": "baseline-invalid-map",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b283\\candidate-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "f5f38600-a359-4c49-97d3-d78bb9eb5db8",
+        "status": 200,
+        "bytes": 932,
+        "deliveredBytes": 932
+      },
+      "original": {
+        "configuredNames": [],
+        "mcp": {},
+        "username": "isolated-review"
+      },
+      "browserReply": {
+        "mcp": [],
+        "validSchema": false
+      },
+      "readback": {
+        "id": "c277078a-412e-414b-8bbb-985ee2facc63",
+        "status": {}
+      }
+    }
+  ],
+  "projects": [
+    {
+      "side": "project",
+      "requestID": "ac940188-de47-46d3-98b9-bf94ba979ee8",
+      "status": {},
+      "config": {
+        "username": "isolated-review",
+        "mcp": {}
+      }
+    },
+    {
+      "side": "alternate",
+      "requestID": "3591e0ea-036b-4082-a1fe-ce1442096dfa",
+      "status": {},
+      "config": {
+        "username": "isolated-review",
+        "mcp": {}
+      }
+    }
+  ],
+  "protocol": [
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:30.921Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:30.934Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:30.942Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.017Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.020Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.023Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.102Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.105Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.109Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.192Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.194Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 2872,
+      "port": 39904,
+      "scope": "public",
+      "time": "2026-11-12T05:51:31.198Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ]
+}

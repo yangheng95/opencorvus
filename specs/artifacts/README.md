@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [批量删除精确回执的桌面与项目证据](2026-11-12-mcp-delete-exact-acknowledgment/README.md)
 - [新增 MCP 确切回执的桌面与实际请求](2026-11-12-mcp-add-exact-acknowledgment/README.md)
 - [MCP 操作回执和状态核对的实际证据](2026-11-12-mcp-mutation-reply-description/README.md)
 - [内置 MCP 所有权与项目发现的实际证据](2026-11-12-mcp-execution-owned-project-discovery/README.md)

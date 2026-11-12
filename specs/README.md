@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [批量删除 MCP 回执核对已确认的精确目标](records/2026-11/2026-11-12-mcp-delete-exact-acknowledgment.md)
 - [新增 MCP 回执必须包含所提交服务的有效状态](records/2026-11/2026-11-12-mcp-add-exact-acknowledgment.md)
 - [MCP 操作按收到的回执描述状态核对](records/2026-11/2026-11-12-mcp-mutation-reply-description.md)
 - [项目发现尊重内置 MCP 的执行所有权](records/2026-11/2026-11-12-mcp-execution-owned-project-discovery.md)
