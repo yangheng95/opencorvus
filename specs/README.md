@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [全图预览的键盘操作菜单](records/2026-11/2026-11-12-image-preview-actions-menu.md)
 - [全图预览保留原图的四角和尺寸](records/2026-11/2026-11-12-image-preview-full-frame.md)
 - [命令行执行已注册命令时保留文件](records/2026-11/2026-11-12-cli-command-attachments.md)
 - [编辑器斜杠命令保留随请求提交的上下文](records/2026-11/2026-11-12-acp-command-context.md)
