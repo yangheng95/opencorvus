@@ -36,6 +36,13 @@ function ownerKey(kind: HostSessionRuntimeKind, sessionID: string): string {
   return `${kind}:${sessionID}`
 }
 
+function projectServerOwnerID(sessionID: string, serverName: string): string {
+  const prefix = `session:${sessionID}`
+  if (serverName === serverName.trimEnd()) return `${prefix}:mcp:${serverName}`
+  // Owner IDs are normalized. Reserve a separate segment for names with trailing whitespace.
+  return `${prefix}:mcp-exact:${encodeURIComponent(serverName)}`
+}
+
 function connectionOwner(kind: HostSessionRuntimeKind, sessionID: string, ownerID: string): MCP.ScopedConnectionOwner {
   const owners = connectionOwners()
   const key = ownerKey(kind, sessionID)
@@ -193,7 +200,7 @@ export namespace HostSessionMcpRuntime {
     const owner = connectionOwner(
       `mcp:${input.serverName}`,
       input.sessionID,
-      `session:${input.sessionID}:mcp:${input.serverName}`,
+      projectServerOwnerID(input.sessionID, input.serverName),
     )
     return {
       owner,

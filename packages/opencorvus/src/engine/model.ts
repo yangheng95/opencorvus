@@ -1050,7 +1050,7 @@ export const SessionBoardEnvelope = z.object({
   ),
 })
 
-export const SessionPendingPermission = PermissionRequest.extend({ orderKey: z.string().min(1) })
+export const SessionPendingPermission = PermissionRequest.safeExtend({ orderKey: z.string().min(1) })
 
 export const SessionPendingQuestion = QuestionRequest.extend({
   orderKey: z.string().min(1),

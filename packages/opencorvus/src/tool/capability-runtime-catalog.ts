@@ -32,6 +32,7 @@ import {
   type CapabilitySetDescriptor,
 } from "@/capability/descriptor"
 import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
 import { harnessGrantedRefs, type HarnessGrantSet } from "@/capability/harness-projection"
 import { resolveCapabilityCaller } from "@/capability/caller-authority"
 import { Session } from "@/session"
@@ -731,21 +732,23 @@ async function buildRuntimeSnapshot(input: RuntimeInput): Promise<{
     directlyProjectedMcpToolDescriptors = [...projectedMcpChildren.values()]
     const mcpServerDescriptors = Object.keys(input.config.mcp ?? {})
       .sort(compareCanonicalStrings)
-      .map((serverID) =>
-        descriptor({
+      .map((serverID) => {
+        const name = displayMcpName(serverID)
+        const label = name.length > 240 ? `${name.slice(0, 239)}…` : name
+        return descriptor({
           ref: capabilityRef({
             kind: "mcp_server",
             source: "project",
             owner_ref: "mcp-config",
             local_ref: serverID,
           }),
-          name: serverID,
-          description: `Configured Model Context Protocol server ${serverID}.`,
+          name: label,
+          description: `Configured Model Context Protocol server ${label}.`,
           aliases: [],
           search_terms: ["MCP", "Model Context Protocol"],
           behavior: { kind: "unavailable", reason_code: "mcp_server_managed_in_settings" },
-        }),
-      )
+        })
+      })
     const mcpConfigToolDescriptors = mcpCatalog.tool_ids.map((toolID) =>
       descriptorForProjectedRef(
         capabilityRef({

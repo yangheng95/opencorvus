@@ -1,0 +1,173 @@
+{
+  "sqlite": "ok",
+  "verifiedSessions": 4,
+  "records": [
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlJzzNrSZV3Lof",
+      "provider": " review-tools ",
+      "tool": "_review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/padded"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlJzzNrSZV3Lof",
+      "provider": " review-tools ",
+      "tool": "_review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/padded"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlJzzNrSZV3Lof",
+      "provider": "review-tools",
+      "tool": "review-tools_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/normal"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlJzzNrSZV3Lof",
+      "provider": "review-tools",
+      "tool": "review-tools_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/normal"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlJzzNrSZV3Lof",
+      "provider": "review-tools ",
+      "tool": "review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/trailing"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlJzzNrSZV3Lof",
+      "provider": "review-tools ",
+      "tool": "review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/trailing"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlPzzs0V6ajhA8",
+      "provider": " review-tools ",
+      "tool": "_review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/padded"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlPzzs0V6ajhA8",
+      "provider": " review-tools ",
+      "tool": "_review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/padded"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlPzzs0V6ajhA8",
+      "provider": "review-tools",
+      "tool": "review-tools_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/normal"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlPzzs0V6ajhA8",
+      "provider": "review-tools",
+      "tool": "review-tools_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/normal"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlPzzs0V6ajhA8",
+      "provider": "review-tools ",
+      "tool": "review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/trailing"
+    },
+    {
+      "side": "alternate",
+      "session": "ses_-zUPFxIlPzzs0V6ajhA8",
+      "provider": "review-tools ",
+      "tool": "review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/alternate/trailing"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxIlvzzVEZwFnHOC",
+      "provider": "",
+      "tool": "_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/empty"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxIlvzzVEZwFnHOC",
+      "provider": " review-tools ",
+      "tool": "_review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/padded"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxIlvzzVEZwFnHOC",
+      "provider": "review-tools",
+      "tool": "review-tools_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/normal"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxIlvzzVEZwFnHOC",
+      "provider": "review-tools ",
+      "tool": "review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/trailing"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxImAzzPTm3l7pA6",
+      "provider": "",
+      "tool": "_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/empty"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxImAzzPTm3l7pA6",
+      "provider": " review-tools ",
+      "tool": "_review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/padded"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxImAzzPTm3l7pA6",
+      "provider": "review-tools",
+      "tool": "review-tools_identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/normal"
+    },
+    {
+      "side": "project",
+      "session": "ses_-zUPFxImAzzPTm3l7pA6",
+      "provider": "review-tools ",
+      "tool": "review-tools__identify",
+      "terminal": "execution_succeeded",
+      "endpoint": "/project/trailing"
+    }
+  ],
+  "counts": {
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_activity_outcome": 0,
+    "provider_usage_event": 0
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "bundle": "assets/main-DzAqcnvj.js",
+  "viewport": {
+    "width": 1266,
+    "height": 766
+  },
+  "mutations": [
+    {
+      "route": "/mcp//connect",
+      "request": null,
+      "status": 404,
+      "requestID": "e168aa5d-78fb-4a6e-8bad-902008aae600",
+      "body": null
+    },
+    {
+      "route": "/mcp/review-tools%20/connect",
+      "request": null,
+      "status": 200,
+      "requestID": "81492124-fc5a-41c4-af30-69098ae80745",
+      "body": true
+    },
+    {
+      "route": "/mcp/review-tools%20/disconnect",
+      "request": null,
+      "status": 200,
+      "requestID": "c70fcbae-d245-40c8-9c08-c37febf80ccf",
+      "body": true
+    }
+  ],
+  "reads": [
+    {
+      "side": "project",
+      "route": "/mcp/project",
+      "status": 200,
+      "requestID": "166b2a37-fe1f-4287-950e-d0f1ed23e33d",
+      "statuses": {
+        "browser": {
+          "status": "disabled",
+          "scope": "execution"
+        },
+        "computer": {
+          "status": "disabled",
+          "scope": "execution"
+        },
+        "review-tools": {
+          "status": "disconnected"
+        },
+        "review-tools ": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        },
+        " review-tools ": {
+          "status": "disconnected"
+        },
+        "": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "side": "project",
+      "route": "/skill/mounts",
+      "status": 500,
+      "requestID": "cafb6e8f-b62e-4ddf-9861-5b261a086662",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "side": "project",
+      "route": "/chat/capability",
+      "status": 200,
+      "requestID": "41717400-c1d3-4cac-b0c3-29c70e458679",
+      "mcp": {
+        "assigned_server_refs": [],
+        "configured_server_refs": [
+          "",
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      }
+    },
+    {
+      "side": "project",
+      "route": "/work/capability",
+      "status": 200,
+      "requestID": "fb442821-8cf2-4337-bc6a-a93613c4e63f",
+      "mcp": {
+        "assigned_server_refs": [],
+        "configured_server_refs": [
+          "",
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/mcp/project",
+      "status": 200,
+      "requestID": "bbcf2b4e-dc86-40ae-b3c1-38b7a4b0bd06",
+      "statuses": {
+        "browser": {
+          "status": "disabled",
+          "scope": "execution"
+        },
+        "computer": {
+          "status": "disabled",
+          "scope": "execution"
+        },
+        "review-tools": {
+          "status": "disconnected"
+        },
+        "review-tools ": {
+          "status": "disconnected"
+        },
+        " review-tools ": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/skill/mounts",
+      "status": 500,
+      "requestID": "5eee9517-0ea8-404b-ac21-45c898bd002d",
+      "error": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/chat/capability",
+      "status": 200,
+      "requestID": "d02bf588-ac6e-4de3-8ba7-ccabc62fdc8e",
+      "mcp": {
+        "assigned_server_refs": [],
+        "configured_server_refs": [
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/work/capability",
+      "status": 200,
+      "requestID": "9d79ba3e-707d-40ae-9db9-16f3895726ce",
+      "mcp": {
+        "assigned_server_refs": [],
+        "configured_server_refs": [
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      }
+    }
+  ]
+}

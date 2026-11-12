@@ -45,7 +45,8 @@ import {
   type SkillMarketCandidate,
   type SkillMarketDetail,
 } from "../../services/extensions"
-import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, displayMcpName, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
+import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"

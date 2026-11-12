@@ -1,0 +1,146 @@
+{
+  "toolResults": [
+    {
+      "event": "tool-result",
+      "endpoint": "/alternate/padded"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/alternate/normal"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/alternate/trailing"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/empty"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/padded"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/normal"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/trailing"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/alternate/padded"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/alternate/normal"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/alternate/trailing"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/empty"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/padded"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/normal"
+    },
+    {
+      "event": "tool-result",
+      "endpoint": "/project/trailing"
+    }
+  ],
+  "responses": [
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/padded",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/trailing",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/empty",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/trailing",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/padded",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/trailing",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/empty",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "tools/call",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/trailing",
+      "operation": "tools/call",
+      "status": 200
+    }
+  ]
+}

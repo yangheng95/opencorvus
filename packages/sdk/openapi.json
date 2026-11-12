@@ -15051,7 +15051,7 @@
             "type": "string"
           },
           "providerID": {
-            "minLength": 1,
+            "description": "Exact provider identifier. A configured MCP connection may have an empty name.",
             "type": "string"
           },
           "providerKind": {
@@ -18343,7 +18343,7 @@
                   "type": "string"
                 },
                 "providerID": {
-                  "minLength": 1,
+                  "description": "Exact provider identifier. A configured MCP connection may have an empty name.",
                   "type": "string"
                 },
                 "providerKind": {
@@ -105712,7 +105712,7 @@
                             "type": "string"
                           },
                           "providerID": {
-                            "minLength": 1,
+                            "description": "Exact provider identifier. A configured MCP connection may have an empty name.",
                             "type": "string"
                           },
                           "providerKind": {

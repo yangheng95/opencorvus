@@ -1,4 +1,5 @@
 import { createEffect, createMemo, createSignal, For, on, onCleanup, Show } from "solid-js"
+import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
 import { localeTag, t } from "../../utils/i18n"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
@@ -24,6 +25,7 @@ type PermissionLedgerEvent = {
   tool_name: string | null
   effect_class: string | null
   provider_id: string | null
+  provider_kind: string | null
   session_id: string | null
   task_id: string | null
   mode: PermissionMode | null
@@ -34,6 +36,13 @@ type PermissionLedgerEvent = {
   reason: string | null
   metadata?: Record<string, unknown> | null
   time_created: number
+}
+
+function permissionProviderLabel(owner: PermissionLedgerEvent | undefined): string | undefined {
+  if (!owner || owner.provider_id === null) return
+  return owner.provider_kind === "mcp" || owner.provider_kind === "mcp_app"
+    ? displayMcpName(owner.provider_id)
+    : owner.provider_id
 }
 
 function modeOptions(): SegmentedControlOption<PermissionMode>[] {
@@ -507,7 +516,7 @@ export function PermissionsSettingsGroup() {
                                 <dt>{t("permissions.request_id")}</dt>
                                 <dd>{operation.id}</dd>
                                 <dt>{t("permissions.provider")}</dt>
-                                <dd>{operation.owner?.provider_id}</dd>
+                                <dd class="mcp-connection-name">{permissionProviderLabel(operation.owner)}</dd>
                                 <dt>{t("permissions.session")}</dt>
                                 <dd>{operation.owner?.task_id || operation.owner?.session_id}</dd>
                                 <For each={[...operation.events].reverse()}>

@@ -1079,6 +1079,11 @@ MCP tool 完整集合，重复 owner 继续失败关闭。`tool` 与 `mcp_tool` 
 `next_owner_kinds:["call_tool"]`，禁止 generic source merge、kind alias 或隐藏扩展。显式 assignment
 只决定能力投影，不替代 permission；server 与其 tool 必须在同一 snapshot 中一致为 `visible`。
 
+`mcp-config` 的项目服务器引用和工具父引用保留原始配置键，包括空名称与首尾空白。描述标题按
+显示长度限制呈现，执行和授权使用完整引用。通用 Session scoped owner 对尾部空白连接使用
+`mcp-exact` 段和百分号编码，既有规范连接使用 `mcp` 段。权限请求及持久结果中的项目 MCP
+provider ID 是同一原始配置键，`mcp` 与 `mcp_app` 的空字符串代表实际的空名连接。
+
 每个 Conversation Session 拥有独立的 Computer scoped MCP connection owner；不同 Session 不共享
 controller、CUA Driver logical session 或 observation authority，删除 Session 会关闭精确 owner，而 takeover 只关闭
 Computer owner 并保留上文独立的 Browser owner。每次 `observe`

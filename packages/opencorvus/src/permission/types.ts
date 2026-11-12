@@ -36,7 +36,7 @@ export const PermissionRequest = z
     mode: PermissionMode,
     policyRevision: z.string().min(1),
     providerKind: PermissionProviderKind,
-    providerID: z.string().min(1),
+    providerID: z.string().describe("Exact provider identifier. A configured MCP connection may have an empty name."),
     providerDigest: z.string().min(1),
     toolName: z.string().min(1),
     effectClass: z.string().min(1),
@@ -47,6 +47,10 @@ export const PermissionRequest = z
     projectGrantEligible: z.boolean(),
     choices: PermissionDecision.array(),
     timeCreated: z.number().int().positive(),
+  })
+  .superRefine((request, context) => {
+    if (request.providerID.length > 0 || request.providerKind === "mcp" || request.providerKind === "mcp_app") return
+    context.addIssue({ code: "too_small", origin: "string", minimum: 1, inclusive: true, path: ["providerID"] })
   })
   .meta({ ref: "PermissionRequest" })
 export type PermissionRequest = z.infer<typeof PermissionRequest>

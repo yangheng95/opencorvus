@@ -1,5 +1,6 @@
 import { Feedback } from "../ui/Feedback"
 import { isConversationMcpRef } from "@opencorvus-ai/util/conversation-mcp-ref"
+import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
 import { Key } from "@solid-primitives/keyed"
 import { batch, createEffect, createSignal, For, on, Show, onCleanup } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
@@ -10,7 +11,6 @@ import {
   type ConversationCapabilitySettings,
   type ConversationExperience,
 } from "../../services/conversation-capability"
-import { displayMcpName } from "../../services/mcp"
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { Disclosure } from "../ui/Disclosure"

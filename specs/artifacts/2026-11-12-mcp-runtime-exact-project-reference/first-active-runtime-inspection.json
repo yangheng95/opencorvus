@@ -1,0 +1,285 @@
+[
+  {
+    "side": "project",
+    "project": "prj_hnPK6cwvVGOVeXjYIh7e",
+    "configured": [
+      "browser",
+      "computer",
+      "review-tools",
+      "review-tools ",
+      " review-tools ",
+      ""
+    ],
+    "output": [
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\"\"",
+            "ref": ""
+          },
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\"\"",
+            "ref": ""
+          },
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "status": "failed",
+        "error": {
+          "name": "CapabilityOwnerUnavailableError",
+          "message": "Capability owner host-session-mcp:session:ses_-zUPFxImAzzPTm3l7pA6:mcp:review-tools is unavailable: Harness projects MCP Tool capability:mcp_tool:project:host-session-mcp%3Asession%3Ases_-zUPFxImAzzPTm3l7pA6%3Amcp%3Areview-tools:review-tools_identify, but its exact owner inventory does not publish it."
+        },
+        "observedOwners": [
+          {
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp:",
+            "servers": [
+              ""
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp: review-tools",
+            "servers": [
+              " review-tools "
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp:review-tools",
+            "servers": [
+              "review-tools"
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp:review-tools",
+            "servers": [
+              "review-tools "
+            ]
+          }
+        ]
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlvzzVEZwFnHOC",
+        "status": "failed",
+        "error": {
+          "name": "CapabilityOwnerUnavailableError",
+          "message": "Capability owner host-session-mcp:session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:review-tools is unavailable: Harness projects MCP Tool capability:mcp_tool:project:host-session-mcp%3Asession%3Ases_-zUPFxIlvzzVEZwFnHOC%3Amcp%3Areview-tools:review-tools_identify, but its exact owner inventory does not publish it."
+        },
+        "observedOwners": [
+          {
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:",
+            "servers": [
+              ""
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp: review-tools",
+            "servers": [
+              " review-tools "
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:review-tools",
+            "servers": [
+              "review-tools"
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:review-tools",
+            "servers": [
+              "review-tools "
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "project": "prj_hPtHjQ74Jh8FoudfHj3r",
+    "configured": [
+      "browser",
+      "computer",
+      "review-tools",
+      "review-tools ",
+      " review-tools "
+    ],
+    "output": [
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "status": "failed",
+        "error": {
+          "name": "CapabilityOwnerUnavailableError",
+          "message": "Capability owner host-session-mcp:session:ses_-zUPFxIlPzzs0V6ajhA8:mcp:review-tools is unavailable: Harness projects MCP Tool capability:mcp_tool:project:host-session-mcp%3Asession%3Ases_-zUPFxIlPzzs0V6ajhA8%3Amcp%3Areview-tools:review-tools_identify, but its exact owner inventory does not publish it."
+        },
+        "observedOwners": [
+          {
+            "owner": "session:ses_-zUPFxIlPzzs0V6ajhA8:mcp: review-tools",
+            "servers": [
+              " review-tools "
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxIlPzzs0V6ajhA8:mcp:review-tools",
+            "servers": [
+              "review-tools"
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxIlPzzs0V6ajhA8:mcp:review-tools",
+            "servers": [
+              "review-tools "
+            ]
+          }
+        ]
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlJzzNrSZV3Lof",
+        "status": "failed",
+        "error": {
+          "name": "CapabilityOwnerUnavailableError",
+          "message": "Capability owner host-session-mcp:session:ses_-zUPFxIlJzzNrSZV3Lof:mcp:review-tools is unavailable: Harness projects MCP Tool capability:mcp_tool:project:host-session-mcp%3Asession%3Ases_-zUPFxIlJzzNrSZV3Lof%3Amcp%3Areview-tools:review-tools_identify, but its exact owner inventory does not publish it."
+        },
+        "observedOwners": [
+          {
+            "owner": "session:ses_-zUPFxIlJzzNrSZV3Lof:mcp: review-tools",
+            "servers": [
+              " review-tools "
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxIlJzzNrSZV3Lof:mcp:review-tools",
+            "servers": [
+              "review-tools"
+            ]
+          },
+          {
+            "owner": "session:ses_-zUPFxIlJzzNrSZV3Lof:mcp:review-tools",
+            "servers": [
+              "review-tools "
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

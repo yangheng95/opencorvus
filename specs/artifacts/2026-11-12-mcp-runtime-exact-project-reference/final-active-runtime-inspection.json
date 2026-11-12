@@ -1,0 +1,725 @@
+[
+  {
+    "side": "project",
+    "project": "prj_hnPK6cwvVGOVeXjYIh7e",
+    "configured": [
+      "browser",
+      "computer",
+      "review-tools",
+      "review-tools ",
+      " review-tools ",
+      ""
+    ],
+    "output": [
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\"\"",
+            "ref": ""
+          },
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\"\"",
+            "ref": ""
+          },
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\"\"",
+            "ref": ""
+          },
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [
+          {
+            "binding": {
+              "server": "",
+              "tool": "_identify"
+            },
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp:",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/empty"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": " review-tools ",
+              "tool": "_review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp-exact:%20review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/padded"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools",
+              "tool": "review-tools_identify"
+            },
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp:review-tools",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/normal"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools ",
+              "tool": "review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxImAzzPTm3l7pA6:mcp-exact:review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/trailing"
+                }
+              ]
+            }
+          }
+        ],
+        "bindings": [
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxImAzzPTm3l7pA6:mcp:",
+              "local_ref": "_identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": ""
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxImAzzPTm3l7pA6:mcp:review-tools",
+              "local_ref": "review-tools_identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools"
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxImAzzPTm3l7pA6:mcp-exact:%20review-tools%20",
+              "local_ref": "_review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": " review-tools "
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxImAzzPTm3l7pA6:mcp-exact:review-tools%20",
+              "local_ref": "review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools "
+            }
+          }
+        ],
+        "refs": [
+          "",
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlvzzVEZwFnHOC",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\"\"",
+            "ref": ""
+          },
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [
+          {
+            "binding": {
+              "server": "",
+              "tool": "_identify"
+            },
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/empty"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": " review-tools ",
+              "tool": "_review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp-exact:%20review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/padded"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools",
+              "tool": "review-tools_identify"
+            },
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:review-tools",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/normal"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools ",
+              "tool": "review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxIlvzzVEZwFnHOC:mcp-exact:review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/project/trailing"
+                }
+              ]
+            }
+          }
+        ],
+        "bindings": [
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:",
+              "local_ref": "_identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": ""
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlvzzVEZwFnHOC:mcp:review-tools",
+              "local_ref": "review-tools_identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools"
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlvzzVEZwFnHOC:mcp-exact:%20review-tools%20",
+              "local_ref": "_review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": " review-tools "
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlvzzVEZwFnHOC:mcp-exact:review-tools%20",
+              "local_ref": "review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools "
+            }
+          }
+        ],
+        "refs": [
+          "",
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "project": "prj_hPtHjQ74Jh8FoudfHj3r",
+    "configured": [
+      "browser",
+      "computer",
+      "review-tools",
+      "review-tools ",
+      " review-tools "
+    ],
+    "output": [
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [],
+        "bindings": [],
+        "refs": []
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [
+          {
+            "binding": {
+              "server": " review-tools ",
+              "tool": "_review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxIlPzzs0V6ajhA8:mcp-exact:%20review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/alternate/padded"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools",
+              "tool": "review-tools_identify"
+            },
+            "owner": "session:ses_-zUPFxIlPzzs0V6ajhA8:mcp:review-tools",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/alternate/normal"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools ",
+              "tool": "review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxIlPzzs0V6ajhA8:mcp-exact:review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/alternate/trailing"
+                }
+              ]
+            }
+          }
+        ],
+        "bindings": [
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlPzzs0V6ajhA8:mcp:review-tools",
+              "local_ref": "review-tools_identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools"
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlPzzs0V6ajhA8:mcp-exact:%20review-tools%20",
+              "local_ref": "_review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": " review-tools "
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlPzzs0V6ajhA8:mcp-exact:review-tools%20",
+              "local_ref": "review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools "
+            }
+          }
+        ],
+        "refs": [
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlJzzNrSZV3Lof",
+        "status": "resolved",
+        "descriptors": [
+          {
+            "name": "\" review-tools \"",
+            "ref": " review-tools "
+          },
+          {
+            "name": "browser",
+            "ref": "browser"
+          },
+          {
+            "name": "computer",
+            "ref": "computer"
+          },
+          {
+            "name": "review-tools",
+            "ref": "review-tools"
+          },
+          {
+            "name": "\"review-tools \"",
+            "ref": "review-tools "
+          }
+        ],
+        "calls": [
+          {
+            "binding": {
+              "server": " review-tools ",
+              "tool": "_review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxIlJzzNrSZV3Lof:mcp-exact:%20review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/alternate/padded"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools",
+              "tool": "review-tools_identify"
+            },
+            "owner": "session:ses_-zUPFxIlJzzNrSZV3Lof:mcp:review-tools",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/alternate/normal"
+                }
+              ]
+            }
+          },
+          {
+            "binding": {
+              "server": "review-tools ",
+              "tool": "review-tools__identify"
+            },
+            "owner": "session:ses_-zUPFxIlJzzNrSZV3Lof:mcp-exact:review-tools%20",
+            "result": {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "/alternate/trailing"
+                }
+              ]
+            }
+          }
+        ],
+        "bindings": [
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlJzzNrSZV3Lof:mcp:review-tools",
+              "local_ref": "review-tools_identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools"
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlJzzNrSZV3Lof:mcp-exact:%20review-tools%20",
+              "local_ref": "_review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": " review-tools "
+            }
+          },
+          {
+            "tool_ref": {
+              "kind": "mcp_tool",
+              "source": "project",
+              "owner_ref": "host-session-mcp:session:ses_-zUPFxIlJzzNrSZV3Lof:mcp-exact:review-tools%20",
+              "local_ref": "review-tools__identify"
+            },
+            "server_ref": {
+              "kind": "mcp_server",
+              "source": "project",
+              "owner_ref": "mcp-config",
+              "local_ref": "review-tools "
+            }
+          }
+        ],
+        "refs": [
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools",
+          "review-tools "
+        ]
+      }
+    ]
+  }
+]

@@ -16,14 +16,29 @@ export type CapabilityKind = z.infer<typeof CapabilityKind>
 export const CapabilitySource = z.enum(["platform", "project", "package"])
 export type CapabilitySource = z.infer<typeof CapabilitySource>
 
+function refersToProjectMcpConfig(ref: { kind: CapabilityKind; source: CapabilitySource; owner_ref: string }) {
+  return ref.kind === "mcp_server" && ref.source === "project" && ref.owner_ref === "mcp-config"
+}
+
 export const CapabilityRef = z
   .object({
     kind: CapabilityKind,
     source: CapabilitySource,
     owner_ref: z.string().trim().min(1),
-    local_ref: z.string().trim().min(1),
+    local_ref: z.string().describe("Exact configuration key for a project MCP server, otherwise a nonempty identifier."),
   })
   .strict()
+  .overwrite((ref) => refersToProjectMcpConfig(ref) ? ref : { ...ref, local_ref: ref.local_ref.trim() })
+  .superRefine((ref, context) => {
+    if (ref.local_ref.length > 0 || refersToProjectMcpConfig(ref)) return
+    context.addIssue({
+      code: "too_small",
+      origin: "string",
+      minimum: 1,
+      inclusive: true,
+      path: ["local_ref"],
+    })
+  })
   .meta({ ref: "CapabilityRef" })
 export type CapabilityRef = z.infer<typeof CapabilityRef>
 

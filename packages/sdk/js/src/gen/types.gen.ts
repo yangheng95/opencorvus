@@ -4285,6 +4285,9 @@ export type PermissionRequest = {
   projectGrantEligible: boolean
   projectID: string
   providerDigest: string
+  /**
+   * Exact provider identifier. A configured MCP connection may have an empty name.
+   */
   providerID: string
   providerKind:
     | "builtin"
@@ -5287,6 +5290,9 @@ export type SessionConversationConnectionSnapshot = {
     projectGrantEligible: boolean
     projectID: string
     providerDigest: string
+    /**
+     * Exact provider identifier. A configured MCP connection may have an empty name.
+     */
     providerID: string
     providerKind:
       | "builtin"
@@ -30302,6 +30308,9 @@ export type SessionConversationResponses = {
       projectGrantEligible: boolean
       projectID: string
       providerDigest: string
+      /**
+       * Exact provider identifier. A configured MCP connection may have an empty name.
+       */
       providerID: string
       providerKind:
         | "builtin"
