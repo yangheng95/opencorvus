@@ -12043,6 +12043,10 @@
       },
       "MCPStatusDisabled": {
         "properties": {
+          "reason": {
+            "const": "manual_disconnect",
+            "type": "string"
+          },
           "status": {
             "const": "disabled",
             "type": "string"
