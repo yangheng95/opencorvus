@@ -106,6 +106,8 @@ type ExplorerOperationScope = FileOperationScope & { selectionEpoch: number }
 
 type ExplorerFailure = { error: unknown }
 type ExplorerDirectoryFailure = ExplorerFailure & { reveal?: { target: string; notListed?: true } }
+type ExplorerDirectoryReadState = Exclude<FileRefreshState, { status: "loaded" }> |
+  { status: "loaded"; membershipChanged: boolean }
 type ExplorerFailureOperation = Exclude<FileMutationKind, ""> | "open" | "upload" | "load" | "search"
 type ExplorerValidation = "selection" | "directory" | "name" | "copy-target" | "move-target"
 type ExplorerOutcome = {
@@ -774,15 +776,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   function loadDirectory(
     path: string,
     opts: { force?: boolean; required: true; scope?: ExplorerOperationScope },
-  ): Promise<FileRefreshState>
+  ): Promise<ExplorerDirectoryReadState>
   function loadDirectory(
     path: string,
     opts?: { force?: boolean; required?: boolean; scope?: ExplorerOperationScope },
-  ): Promise<FileRefreshState | undefined>
+  ): Promise<ExplorerDirectoryReadState | undefined>
   async function loadDirectory(
     path: string,
     opts?: { force?: boolean; required?: boolean; scope?: ExplorerOperationScope },
-  ): Promise<FileRefreshState | undefined> {
+  ): Promise<ExplorerDirectoryReadState | undefined> {
     const scope = opts?.scope ?? currentOperationScope()
     if (!scope || !ownsExplorerOperation(scope)) return { status: "retired", reason: "scope" }
     const normalizedPath = normalizeExplorerPath(path)
@@ -800,6 +802,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       if (!ownsExplorerOperation(scope)) return { status: "retired", reason: "scope" }
       if (!ownsLoad()) return { status: "retired", reason: "superseded" }
       const normalizedNodes = nodes.map((node) => ({ ...node, path: normalizeExplorerPath(node.path) }))
+      const children = new Map(normalizedNodes.map((node) => [node.path, node]))
+      const previous = childrenByPath().get(normalizedPath)
+      const membershipChanged = previous !== undefined && (previous.length !== children.size || previous.some((node) => {
+        const current = children.get(node.path)
+        return current?.type !== node.type || current.directoryTarget !== node.directoryTarget
+      }))
       batch(() => {
         if (directoryErrors().has(normalizedPath)) {
           returnFocusFromDirectoryFailure((path) => path === normalizedPath)
@@ -810,10 +818,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           })
         }
         setChildrenByPath((prev) => new Map(prev).set(normalizedPath, normalizedNodes))
-        reconcileDirectoryBranches(normalizedPath, normalizedNodes)
-        reconcileDirectorySelection(normalizedPath, normalizedNodes)
+        reconcileDirectoryBranches(normalizedPath, children)
+        reconcileDirectorySelection(normalizedPath, children)
       })
-      return { status: "loaded" }
+      return { status: "loaded", membershipChanged }
     } catch (error) {
       if (!ownsExplorerOperation(scope)) return { status: "retired", reason: "scope", observedFailure: { error } }
       if (!ownsLoad()) return { status: "retired", reason: "superseded", observedFailure: { error } }
@@ -862,14 +870,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     onCleanup(() => window.clearTimeout(timer))
   })
 
-  function refreshActiveDirectoryListings(scope: ExplorerOperationScope): void {
-    batch(() => {
-      for (const path of new Set(["", ...expandedPaths()])) {
-        if (path === "" || childrenByPath().has(path) || directoryErrors().has(path)) {
-          void loadDirectory(path, { force: true, scope })
-        }
-      }
-    })
+  async function refreshActiveDirectoryListings(scope: ExplorerOperationScope): Promise<void> {
+    const acceptedSearch = searchResults.loading ? undefined : currentSearchResult()
+    const reads = batch(() => [...new Set(["", ...expandedPaths()])]
+      .filter((path) => path === "" || childrenByPath().has(path) || directoryErrors().has(path))
+      .map((path) => loadDirectory(path, { force: true, scope })))
+    const results = await Promise.all(reads)
+    if (!acceptedSearch || acceptedSearch.error || searchResults.loading || currentSearchResult() !== acceptedSearch ||
+      commandBusy() || uploading() || !results.some((result) => result?.status === "loaded" && result.membershipChanged)) return
+    await refreshActiveSearchResults(scope, acceptedSearch.source)
   }
 
   createEffect(() => {
@@ -878,7 +887,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const selectionEpoch = boardStore.selectEpoch
     if (!active() || !currentDirectory) return
     const scope = { directory: currentDirectory, authority, selectionEpoch }
-    const interval = window.setInterval(() => refreshActiveDirectoryListings(scope), ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS)
+    const interval = window.setInterval(() => void refreshActiveDirectoryListings(scope), ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS)
     onCleanup(() => window.clearInterval(interval))
   })
 
@@ -935,14 +944,37 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   })
   const currentSearchFailure = createMemo(() => currentSearchResult()?.error ?? null)
   const searchHasMore = () => (currentSearchResult()?.paths.length ?? 0) > SEARCH_LIMIT
+  const rowScopeKey = createMemo(() => JSON.stringify([
+    captureApiAuthority()?.revision ?? null,
+    directory(),
+    boardStore.selectEpoch,
+  ]))
+
+  function searchResultKey(scopeKey: string, path: string): string {
+    return JSON.stringify([scopeKey, "search", "file", path])
+  }
+
+  // Use the accepted search result before the virtual list projects its new rows.
+  createComputed(on(currentSearchResult, (current, previous) => {
+    if (!current || !previous || current.error || current.source !== previous.source) return
+    const key = focusedRowKey()
+    const origin = key ? rowElements.get(key) : undefined
+    if (!origin || origin.ownerDocument.activeElement !== origin) return
+    const scopeKey = rowScopeKey()
+    const ownsFocusedResult = (path: string) => searchResultKey(scopeKey, path) === key
+    if (previous.paths.slice(0, SEARCH_LIMIT).some(ownsFocusedResult) &&
+      !current.paths.slice(0, SEARCH_LIMIT).some(ownsFocusedResult)) {
+      searchInput?.focus({ preventScroll: true })
+    }
+  }))
 
   const rows = createMemo<ExplorerRow[]>(() => {
-    const scopeKey = JSON.stringify([captureApiAuthority()?.revision ?? null, directory(), boardStore.selectEpoch])
+    const scopeKey = rowScopeKey()
     const search = deferredQuery()
     if (search) {
       return (currentSearchResult()?.paths ?? []).slice(0, SEARCH_LIMIT).map((path) => ({
         kind: "search",
-        key: JSON.stringify([scopeKey, "search", "file", path]),
+        key: searchResultKey(scopeKey, path),
         path,
         depth: 0,
       }))
@@ -1080,10 +1112,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return index < 0 ? [] : [index]
   })
   createEffect(() => {
-    if (focusedRowKey() && !rowByKey().has(focusedRowKey()!)) {
-      pendingFocus = undefined
-      setFocusedRowKey(null)
-    }
+    const key = focusedRowKey()
+    if (!key || rowByKey().has(key)) return
+    pendingFocus = undefined
+    setFocusedRowKey(null)
   })
 
   const explorerRowItemSize = () => scaledExplorerRowHeight()
@@ -1182,8 +1214,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return joinExplorerPath(parent, name)
   }
 
-  function reconcileDirectoryBranches(parent: string, nodes: readonly FileListingNode[]): void {
-    const children = new Map(nodes.map((node) => [node.path, node]))
+  function reconcileDirectoryBranches(parent: string, children: ReadonlyMap<string, FileListingNode>): void {
     const retired = (path: string) => {
       const child = directChildPath(parent, path)
       return child !== undefined && children.get(child)?.directoryTarget !== true
@@ -1210,8 +1241,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
   }
 
-  function reconcileDirectorySelection(parent: string, nodes: readonly FileListingNode[]): void {
-    const children = new Map(nodes.map((node) => [node.path, node]))
+  function reconcileDirectorySelection(parent: string, children: ReadonlyMap<string, FileListingNode>): void {
     const covered = (path: string) => directChildPath(parent, path) !== undefined
     const listedChild = (path: string) => children.get(directChildPath(parent, path) ?? "")
     const currentItem = (item: ExplorerSelection): ExplorerSelection | undefined => {
@@ -1585,7 +1615,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   function retryRootDirectory(): void {
     setMutationFeedback(null)
     const scope = currentOperationScope()
-    if (scope) refreshActiveDirectoryListings(scope)
+    if (scope) void refreshActiveDirectoryListings(scope)
   }
 
   function retryReadFromFeedback(button: HTMLButtonElement, retry: () => unknown): void {

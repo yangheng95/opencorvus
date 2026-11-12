@@ -1,0 +1,78 @@
+{
+  "asset": "main-C-nMcDJU.js",
+  "visibleRemovedResult": "external sample original.txt",
+  "afterArrow": {
+    "activeTag": "BODY",
+    "focusedSearch": false,
+    "documentFocused": true
+  },
+  "requests": [
+    {
+      "sentMs": 1749,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "open-project",
+      "receivedMs": 1755,
+      "status": 200,
+      "requestID": "f167cf93-41f0-46c3-9676-8559e8baea89"
+    },
+    {
+      "sentMs": 2160,
+      "route": "/find/file",
+      "query": "external sample",
+      "file": null,
+      "gesture": "initial-query",
+      "receivedMs": 2256,
+      "status": 200,
+      "requestID": "b68c08af-0ab9-40c5-915d-c5e09b76b20f",
+      "paths": [
+        "external sample neighbor.txt",
+        "external sample original.txt"
+      ]
+    },
+    {
+      "sentMs": 16514,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "initial-query",
+      "receivedMs": 16518,
+      "status": 200,
+      "requestID": "e1e8aad3-8a89-481a-8eb5-cde3cfbc6415"
+    },
+    {
+      "sentMs": 16518,
+      "route": "/find/file",
+      "query": "external sample",
+      "file": null,
+      "gesture": "initial-query",
+      "receivedMs": 16646,
+      "status": 200,
+      "requestID": "9a87c411-1b88-43bf-98bf-c02f41012f2e",
+      "paths": [
+        "external sample neighbor.txt"
+      ]
+    },
+    {
+      "sentMs": 31513,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "external-rename-with-row-focus",
+      "receivedMs": 31520,
+      "status": 200,
+      "requestID": "1754108d-79f0-4a9d-a437-837760cf443c"
+    },
+    {
+      "sentMs": 46513,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "external-rename-with-row-focus",
+      "receivedMs": 46518,
+      "status": 200,
+      "requestID": "23eb020c-ea01-427f-a797-f87cc4c397f6"
+    }
+  ]
+}

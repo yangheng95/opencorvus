@@ -1542,6 +1542,10 @@ the current source must supply the result before the page reports no matches.
 The published deferred query retains its source while its normalized value is
 stable. Clearing the input restores the tree immediately. Explicit retries and
 file-change refreshes still read the current source.
+The existing directory refresh batch rereads a settled search once when it
+observes changed membership in an already read directory. A newer query or
+an active file operation owns its own read. If an updated result removes the
+focused search row, focus returns to the search field.
 Ordinary project searches publish actual file and directory paths from one native
 walk. The walk retains project ignore rules and does not recurse through links.
 Empty directories participate in the same index, with their original directory

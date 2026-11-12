@@ -1,0 +1,361 @@
+{
+  "restoredOriginalBytes": {
+    "external sample neighbor.txt": 35,
+    "external sample original.txt": 34
+  },
+  "historyCounts": {
+    "profile-web-baseline": {
+      "session": 0,
+      "message": 0,
+      "part": 0
+    },
+    "profile-web-candidate": {
+      "session": 0,
+      "message": 0,
+      "part": 0
+    }
+  },
+  "desktop": {
+    "english": {
+      "origin": 1794501085641,
+      "gesture": "close-explorer-while-root-in-flight",
+      "requests": [
+        {
+          "sentMs": 71,
+          "route": "/ui/assets/main-4dLVDa0b.js",
+          "query": null,
+          "file": null,
+          "gesture": "open-project",
+          "receivedMs": 197,
+          "status": 200,
+          "requestID": "d8c3a42a-a25f-477c-9907-bda53cace990"
+        },
+        {
+          "sentMs": 2031,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "open-project",
+          "receivedMs": 2040,
+          "status": 200,
+          "requestID": "46a115c5-91f8-4b6b-8f75-c72ed2592759"
+        },
+        {
+          "sentMs": 2465,
+          "route": "/find/file",
+          "query": "external sample",
+          "file": null,
+          "gesture": "initial-query",
+          "receivedMs": 2577,
+          "status": 200,
+          "requestID": "2ea3460e-d062-429d-977f-f8899b0524a7",
+          "paths": [
+            "external sample neighbor.txt",
+            "external sample original.txt"
+          ]
+        },
+        {
+          "sentMs": 16794,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "focused-row-external-rename",
+          "receivedMs": 16797,
+          "status": 200,
+          "requestID": "885369b4-d06f-45c9-bd07-2957c0a695f8"
+        },
+        {
+          "sentMs": 16798,
+          "route": "/find/file",
+          "query": "external sample",
+          "file": null,
+          "gesture": "focused-row-external-rename",
+          "receivedMs": 16897,
+          "status": 200,
+          "requestID": "8f5164d5-6822-40bb-9ff4-f44d3f10db9f",
+          "paths": [
+            "external sample neighbor.txt"
+          ]
+        },
+        {
+          "sentMs": 31782,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "restore-while-neighbor-focused",
+          "receivedMs": 31786,
+          "status": 200,
+          "requestID": "cb5da7bb-0724-4a48-8b02-9a8428840d58"
+        },
+        {
+          "sentMs": 31786,
+          "route": "/find/file",
+          "query": "external sample",
+          "file": null,
+          "gesture": "restore-while-neighbor-focused",
+          "receivedMs": 31877,
+          "status": 200,
+          "requestID": "3c0587c8-8add-44c5-97e6-8a807938948f",
+          "paths": [
+            "external sample neighbor.txt",
+            "external sample original.txt"
+          ]
+        },
+        {
+          "sentMs": 61797,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "unchanged-background-round",
+          "receivedMs": 61800,
+          "status": 200,
+          "requestID": "d502bfba-6362-4d3b-9979-7c80c0f17071"
+        },
+        {
+          "sentMs": 76793,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "directory-read-overlaps-new-input",
+          "receivedMs": 80699,
+          "status": 200,
+          "requestID": "0b369297-66e8-43e3-973c-c6e866d247e7"
+        },
+        {
+          "sentMs": 80534,
+          "route": "/find/file",
+          "query": "relocated",
+          "file": null,
+          "gesture": "directory-read-overlaps-new-input",
+          "receivedMs": 80628,
+          "status": 200,
+          "requestID": "8a06dd73-fa43-40b9-9d44-3845b650cb14",
+          "paths": [
+            "relocated evidence.txt"
+          ]
+        },
+        {
+          "sentMs": 95848,
+          "route": "/file/content",
+          "query": null,
+          "file": "relocated evidence.txt",
+          "gesture": "open-relocated-current-file",
+          "receivedMs": 95863,
+          "status": 200,
+          "requestID": "679e7d1b-ee3b-4af5-9af8-ee0a8ecdfc17"
+        },
+        {
+          "sentMs": 106794,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "close-explorer-while-root-in-flight",
+          "receivedMs": 116659,
+          "status": 200,
+          "requestID": "d9699b55-599b-44b6-b1a0-92e7225d1ad5"
+        },
+        {
+          "sentMs": 117358,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "close-explorer-while-root-in-flight",
+          "receivedMs": 117359,
+          "status": 200,
+          "requestID": "50319c79-4c25-4c8b-820d-fffd91bea7a3"
+        }
+      ],
+      "actions": [
+        {
+          "name": "focused-row-external-rename",
+          "atMs": 9715
+        },
+        {
+          "name": "restore-while-neighbor-focused",
+          "atMs": 26139
+        },
+        {
+          "name": "directory-read-overlaps-new-input",
+          "atMs": 69913
+        },
+        {
+          "name": "close-explorer-while-root-in-flight",
+          "atMs": 105452
+        }
+      ]
+    },
+    "chinese": {
+      "origin": 1794501244057,
+      "gesture": "chinese-explicit-refresh",
+      "requests": [
+        {
+          "sentMs": 59,
+          "route": "/ui/assets/main-4dLVDa0b.js",
+          "query": null,
+          "file": null,
+          "gesture": "open-project",
+          "receivedMs": 162,
+          "status": 200,
+          "requestID": "539e1529-abd5-4b08-a84f-b41d2952be85"
+        },
+        {
+          "sentMs": 2512,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "open-project",
+          "receivedMs": 2515,
+          "status": 200,
+          "requestID": "be64e640-d3fa-400f-92a0-c8041aa31734"
+        },
+        {
+          "sentMs": 13304,
+          "route": "/file",
+          "query": null,
+          "file": "review branch",
+          "gesture": "expand-empty-branch",
+          "receivedMs": 13304,
+          "status": 200,
+          "requestID": "f3ad9de7-9186-4f8c-9824-fec85e512c6c"
+        },
+        {
+          "sentMs": 13974,
+          "route": "/find/file",
+          "query": "newsearchproof",
+          "file": null,
+          "gesture": "initial-real-empty-query",
+          "receivedMs": 14056,
+          "status": 200,
+          "requestID": "2a979175-0e66-498b-84ab-4324fac6e12c",
+          "paths": []
+        },
+        {
+          "sentMs": 17260,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "initial-real-empty-query",
+          "receivedMs": 17264,
+          "status": 200,
+          "requestID": "8034a13e-06e6-4d0b-8839-ed26cabec4c9"
+        },
+        {
+          "sentMs": 17260,
+          "route": "/file",
+          "query": null,
+          "file": "review branch",
+          "gesture": "initial-real-empty-query",
+          "receivedMs": 17265,
+          "status": 200,
+          "requestID": "de3b1990-83f7-4b74-99bf-1979361f9e1c"
+        },
+        {
+          "sentMs": 32261,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "external-add-root-and-expanded-branch",
+          "receivedMs": 32265,
+          "status": 200,
+          "requestID": "22ba4959-4ddc-4d58-899e-34bf9b0bc27a"
+        },
+        {
+          "sentMs": 32261,
+          "route": "/file",
+          "query": null,
+          "file": "review branch",
+          "gesture": "external-add-root-and-expanded-branch",
+          "receivedMs": 32265,
+          "status": 200,
+          "requestID": "ebf4747e-2b96-4a2d-94f9-9fb3a3c12f83"
+        },
+        {
+          "sentMs": 32272,
+          "route": "/find/file",
+          "query": "newsearchproof",
+          "file": null,
+          "gesture": "external-add-root-and-expanded-branch",
+          "receivedMs": 32358,
+          "status": 200,
+          "requestID": "8c66dce2-0ea7-46b2-a6a1-215593163148",
+          "paths": [
+            "newsearchproof a.txt",
+            "review branch\\newsearchproof b.txt"
+          ]
+        },
+        {
+          "sentMs": 62261,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "external-remove-both-with-row-focus",
+          "receivedMs": 62266,
+          "status": 200,
+          "requestID": "465c6fbf-91e9-4f24-ae0d-b1e7bd47f897"
+        },
+        {
+          "sentMs": 62261,
+          "route": "/file",
+          "query": null,
+          "file": "review branch",
+          "gesture": "external-remove-both-with-row-focus",
+          "receivedMs": 62266,
+          "status": 200,
+          "requestID": "0eae2e7c-9af7-4047-b9a8-aca61f29f253"
+        },
+        {
+          "sentMs": 62270,
+          "route": "/find/file",
+          "query": "newsearchproof",
+          "file": null,
+          "gesture": "external-remove-both-with-row-focus",
+          "receivedMs": 62360,
+          "status": 200,
+          "requestID": "d9a66401-8c6d-41b2-beea-7b4fe54116f4",
+          "paths": []
+        },
+        {
+          "sentMs": 78211,
+          "route": "/file",
+          "query": null,
+          "file": "",
+          "gesture": "chinese-explicit-refresh",
+          "receivedMs": 78226,
+          "status": 200,
+          "requestID": "6e60340c-135d-4d40-bf00-5c9f59239ac8"
+        },
+        {
+          "sentMs": 78212,
+          "route": "/file",
+          "query": null,
+          "file": "review branch",
+          "gesture": "chinese-explicit-refresh",
+          "receivedMs": 78227,
+          "status": 200,
+          "requestID": "1e7c1105-622d-4e2c-90a0-3abc36b4d9e5"
+        },
+        {
+          "sentMs": 78212,
+          "route": "/find/file",
+          "query": "newsearchproof",
+          "file": null,
+          "gesture": "chinese-explicit-refresh",
+          "receivedMs": 78307,
+          "status": 200,
+          "requestID": "2ce157f7-4808-4515-b6f7-fdefca8f2823",
+          "paths": []
+        }
+      ],
+      "actions": [
+        {
+          "name": "external-add-root-and-expanded-branch",
+          "atMs": 27039
+        },
+        {
+          "name": "external-remove-both-with-row-focus",
+          "atMs": 54174
+        }
+      ]
+    }
+  }
+}
