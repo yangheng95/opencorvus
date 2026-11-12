@@ -2,6 +2,8 @@
 // configure, connect, disconnect, auth cleanup, and atomic project removal.
 // DOM-rendering is handled by declarative Solid.js components.
 
+import type { McpStatus } from "@opencorvus-ai/sdk"
+import { isMcpConnectionStatus } from "../utils/settings-status-labels"
 import { apiJson, type ApiAuthority } from "./api"
 import type { ConfigRequestOptions } from "./config"
 
@@ -144,13 +146,38 @@ export function buildMcpAddRequest(input: AddMcpInput): McpAddRequest {
   }
 }
 
+export function isMcpServerStatus(value: unknown): value is McpStatus {
+  if (!value || typeof value !== "object" || Array.isArray(value) || !("status" in value)) return false
+  const status = value.status
+  if (typeof status !== "string" || !isMcpConnectionStatus(status)) return false
+  if ("scope" in value && ((status !== "disabled" && status !== "disconnected") || value.scope !== "execution")) return false
+  if (status === "disabled") return !("reason" in value) || value.reason === "manual_disconnect"
+  return status !== "failed" && status !== "needs_client_registration" ||
+    ("error" in value && typeof value.error === "string")
+}
+
+export class InvalidMcpAddReceiptError extends Error {
+  override readonly name = "InvalidMcpAddReceiptError"
+
+  constructor(readonly serverName: string, readonly reason: "missing_target" | "invalid_status") {
+    const detail = reason === "missing_target" ? "did not include" : "included an invalid status for"
+    super(`The MCP add response ${detail} ${JSON.stringify(serverName)}.`)
+  }
+}
+
 export async function addMcpServer(request: McpAddRequest, options: { directory: string; authority: ApiAuthority }): Promise<void> {
-  await apiJson(mcpPath("mcp", options), {
+  const response = await apiJson<unknown>(mcpPath("mcp", options), {
     authority: options.authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(request),
   })
+  if (!response || typeof response !== "object" || Array.isArray(response) || !Object.hasOwn(response, request.name)) {
+    throw new InvalidMcpAddReceiptError(request.name, "missing_target")
+  }
+  if (!isMcpServerStatus((response as Record<string, unknown>)[request.name])) {
+    throw new InvalidMcpAddReceiptError(request.name, "invalid_status")
+  }
 }
 
 export class InvalidMcpConnectionReceiptError extends Error {

@@ -8,6 +8,7 @@ import {
   connectMcp,
   deleteAllMcp,
   disconnectMcp,
+  InvalidMcpAddReceiptError,
   InvalidMcpConnectionReceiptError,
   McpArgumentQuoteError,
   parseMcpArguments,
@@ -97,9 +98,13 @@ describe("MCP overlay service", () => {
     )
   })
 
-  test("adds a project-scoped remote MCP server through the canonical route", async () => {
+  test.each([
+    ["connected", { status: "connected" }],
+    ["failed", { status: "failed", error: "The connection could not be established." }],
+    ["needs_auth", { status: "needs_auth" }],
+  ] as const)("acknowledges a saved remote MCP server with status %s", async (_status, entry) => {
     const requests: TransportRequest[] = []
-    __setHostTransportForTest(fakeTransport((req) => requests.push(req)))
+    __setHostTransportForTest(fakeTransport((req) => requests.push(req), { docs: entry }))
     const authority = captureApiAuthority()
 
     const request = buildMcpAddRequest({
@@ -133,6 +138,18 @@ describe("MCP overlay service", () => {
         timeoutMilliseconds: undefined,
       },
     ])
+  })
+
+  test.each([
+    ["an unrelated target", { other: { status: "connected" } }, "missing_target"],
+    ["the target's incomplete failed status", { docs: { status: "failed" } }, "invalid_status"],
+  ] as const)("a complete add reply with %s reports the exact receipt error", async (_label, body, reason) => {
+    __setHostTransportForTest(fakeTransport(() => {}, body))
+    const authority = captureApiAuthority()
+    const request = buildMcpAddRequest({ name: "docs", type: "local", command: "node" })
+    const error = await addMcpServer(request, { directory: PROJECT_DIR, authority }).catch((cause: unknown) => cause)
+    expect(error).toBeInstanceOf(InvalidMcpAddReceiptError)
+    expect(error).toMatchObject({ serverName: "docs", reason })
   })
 
   test("reports a retired connection before dispatching a project MCP add", async () => {

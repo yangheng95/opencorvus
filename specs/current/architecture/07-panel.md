@@ -5706,6 +5706,9 @@ existing Chat and Work settings controls.
 When a mutation reply needs readback, the notice names any received HTTP
 status before reporting the separately observed project state. A reply that
 cannot confirm the operation uses the shared localized summary.
+An add reply acknowledges the exact submitted server only when its own
+entry carries a valid MCP status. The add receipt and project status read use
+the same status validation. An unconfirmed add retains the submitted draft.
 The management header names the project used for these reads and actions. Its
 directory hint and expandable exact path are derived from that same scope;
 showing the header does not change the request context or select a project.
