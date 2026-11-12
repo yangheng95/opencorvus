@@ -67,9 +67,8 @@ export interface FileExplorerFolderRequest {
   authority: ApiAuthority
   selectionEpoch: number
   path: string
-  origin: HTMLButtonElement
+  origin: HTMLElement
   focusWasOnOrigin: boolean
-  onUnavailable: (error?: unknown) => void
 }
 
 const [fileExplorerFolderRequest, setFileExplorerFolderRequest] = createSignal<FileExplorerFolderRequest>()
@@ -88,12 +87,16 @@ export async function revealFileExplorerFolder(
   if (!isAbsoluteServerPath(target)) throw new TypeError("Invalid absolute folder reference")
   const path = relativePathFrom(scope.directory, target)
   if (!path && projectDirectoryKey(scope.directory) !== projectDirectoryKey(target)) return "outside-project"
-  setFileExplorerFolderRequest({
-    ...scope,
-    path,
-    focusWasOnOrigin: scope.origin.ownerDocument.activeElement === scope.origin,
-  })
+  requestFileExplorerFolder({ ...scope, path })
   return "requested"
+}
+
+export function requestFileExplorerFolder(request: Omit<FileExplorerFolderRequest, "focusWasOnOrigin">): void {
+  folderRequestSequence += 1
+  setFileExplorerFolderRequest({
+    ...request,
+    focusWasOnOrigin: request.origin.ownerDocument.activeElement === request.origin,
+  })
 }
 
 export function completeFileExplorerFolderRequest(request: FileExplorerFolderRequest): void {

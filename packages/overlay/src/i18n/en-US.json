@@ -2240,6 +2240,7 @@
   "explorer.refresh_failed": "Unable to refresh the file list.",
   "explorer.open_failed": "Unable to open the file.",
   "explorer.directory_load_failed": "Unable to load {{path}}",
+  "explorer.directory_not_listed": "The project tree does not list {{path}}.",
   "explorer.error.destination_exists": "The destination already exists: {{path}}",
   "explorer.error.not_found": "The requested file or folder is unavailable: {{path}}",
   "explorer.error.invalid_path": "This path cannot be used: {{path}}",

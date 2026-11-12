@@ -2239,6 +2239,7 @@
   "explorer.refresh_failed": "无法刷新文件列表。",
   "explorer.open_failed": "无法打开文件。",
   "explorer.directory_load_failed": "无法加载 {{path}}",
+  "explorer.directory_not_listed": "项目树中未列出 {{path}}。",
   "explorer.error.destination_exists": "目标已存在：{{path}}",
   "explorer.error.not_found": "请求的文件或文件夹不可用：{{path}}",
   "explorer.error.invalid_path": "无法使用此路径：{{path}}",

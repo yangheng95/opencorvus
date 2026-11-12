@@ -4306,6 +4306,9 @@ listing. The request belongs to the active connection, conversation selection,
 and project. A later Explorer action takes precedence while a reveal is pending.
 When the originating attachment is in a retired Dock tab, the visible Dock tab
 holds the original focus intent until Explorer can focus the resolved row.
+After handoff, directory read failures appear in Explorer's existing feedback,
+including a missing directory with no tree row. Retry uses the same scoped
+reveal to resolve the entire reference and can focus the recovered row.
 Folders outside the current project receive a localized explanation on their
 card. A stored manifest can be downloaded separately as the original reference.
 The local file materializer marks its existing context text parts with a

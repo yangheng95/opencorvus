@@ -233,9 +233,6 @@ function FolderReference(props: { url: string; name: string; label: string; stor
         authority,
         selectionEpoch,
         origin,
-        onUnavailable(cause) {
-          if (ownsSource()) setFailure({ kind: "read", cause })
-        },
       }, async () => {
         if (!stored) return serverFileUrlPath(url, directory)
         if (!isStoredAttachmentUrl(url)) throw new TypeError("Invalid stored folder reference URL")

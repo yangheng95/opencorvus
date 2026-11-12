@@ -35,6 +35,7 @@ import {
   loadFileDirectory,
   moveFileItem,
   openFileEditor,
+  requestFileExplorerFolder,
   selectedFileTarget,
   uploadDroppedFiles,
   type FileCopyResult,
@@ -104,6 +105,7 @@ type FileMutationOperation = {
 type ExplorerOperationScope = FileOperationScope & { selectionEpoch: number }
 
 type ExplorerFailure = { error: unknown }
+type ExplorerDirectoryFailure = ExplorerFailure & { reveal?: { target: string; notListed?: true } }
 type ExplorerFailureOperation = Exclude<FileMutationKind, ""> | "open" | "upload" | "load" | "search"
 type ExplorerValidation = "selection" | "directory" | "name" | "copy-target" | "move-target"
 type ExplorerOutcome = {
@@ -216,7 +218,7 @@ function explorerDirectoryDisplayPath(path: string | undefined): string | undefi
   return path === "" ? t("explorer.root_directory") : path
 }
 
-function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): string {
+function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation, fallback = operationFailureMessage(operation)): string {
   if (error instanceof ApiError && error.body && typeof error.body === "object" && !Array.isArray(error.body)) {
     const body = error.body as { name?: unknown; data?: unknown }
     const data =
@@ -227,7 +229,7 @@ function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): 
       const value = data?.[field]
       return typeof value === "string"
         ? t(key, { path: field === "targetDir" || (field === "path" && operation === "load") ? explorerDirectoryDisplayPath(value) : value })
-        : operationFailureMessage(operation)
+        : fallback
     }
     switch (body.name) {
       case "FileConflictError":
@@ -245,7 +247,7 @@ function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): 
         return summary("explorer.error.invalid_upload_content", "name")
     }
   }
-  return operationFailureMessage(operation)
+  return fallback
 }
 
 function feedbackTone(feedback: ExplorerFeedback): "neutral" | "error" | "warning" | "success" {
@@ -484,7 +486,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [expandedPaths, setExpandedPaths] = createSignal(new Set<string>([""]))
   const [childrenByPath, setChildrenByPath] = createSignal(new Map<string, FileListingNode[]>())
   const [loadingPaths, setLoadingPaths] = createSignal(new Set<string>())
-  const [directoryErrors, setDirectoryErrors] = createSignal(new Map<string, ExplorerFailure>())
+  const [directoryErrors, setDirectoryErrors] = createSignal(new Map<string, ExplorerDirectoryFailure>())
   const [uploadOperation, setUploadOperation] = createSignal<{ token: number; directory: string } | null>(null)
   const [uploadFeedback, setUploadFeedback] = createSignal<ExplorerFeedback | null>(null)
   const [selectedItems, setSelectedItems] = createSignal(new Map<string, ExplorerSelection>())
@@ -819,7 +821,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       if (!normalizedPath) returnFocusFromDirectoryFailure((path) => path !== "")
       setDirectoryErrors((prev) => {
         const next = new Map(prev)
-        next.set(normalizedPath, { error })
+        const target = prev.get(normalizedPath)?.reveal?.target
+        next.set(normalizedPath, target === undefined ? { error } : { error, reveal: { target } })
         return next
       })
       return { status: "failed", error }
@@ -974,14 +977,38 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const rowKeys = createMemo(() => rows().map((row) => row.key))
   const folderRevealVisible = () => active() && (props.folderRevealVisible?.() ?? true)
 
-  function cancelFolderReveal(): void {
+  function cancelFolderReveal(event: Event): void {
+    if (event.target instanceof Element && event.target.closest("[data-explorer-directory-retry]")) return
     if (folderRevealVisible()) cancelFileExplorerFolderReveal()
   }
 
+  function ownsFolderReveal(request: FileExplorerFolderRequest): boolean {
+    return fileExplorerFolderRequest() === request && folderRevealVisible() && ownsExplorerOperation(request)
+  }
+
+  function reportFolderRevealFailure(
+    request: FileExplorerFolderRequest,
+    path: string,
+    result: { status: "failed"; error: unknown } | { status: "loaded" },
+    focusOrigin: Element = request.origin,
+  ): void {
+    if (!ownsFolderReveal(request)) return
+    const failure: ExplorerDirectoryFailure = result.status === "failed"
+      ? { error: result.error, reveal: { target: request.path } }
+      : { error: undefined, reveal: { target: request.path, notListed: true } }
+    setDirectoryErrors((current) => new Map(current).set(path, failure))
+    queueMicrotask(() => {
+      if (!ownsFolderReveal(request) || directoryErrors().get(path) !== failure ||
+        focusOrigin.ownerDocument.activeElement !== focusOrigin) return
+      const retry = explorerElement?.querySelector<HTMLButtonElement>(
+        `[data-explorer-directory-error="${CSS.escape(path)}"] [data-explorer-directory-retry]`,
+      )
+      retry?.focus({ preventScroll: true })
+    })
+  }
+
   async function revealFolder(request: FileExplorerFolderRequest): Promise<void> {
-    const ownsReveal = () => fileExplorerFolderRequest() === request && folderRevealVisible() &&
-      ownsExplorerOperation(request)
-    if (!ownsReveal()) return
+    if (!ownsFolderReveal(request)) return
     pendingFocus = undefined
     const origin = request.origin
     const ownerDocument = origin.ownerDocument
@@ -996,6 +1023,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const restored = ownerDocument.activeElement
       if (restored && dock.contains(restored)) focusOrigin = restored
     }
+    const previous = directoryErrors()
+    let remaining: Map<string, ExplorerDirectoryFailure> | undefined
+    for (const [path, failure] of previous) {
+      if (!failure.reveal || failure.reveal.target === request.path) continue
+      remaining ??= new Map(previous)
+      if (failure.reveal.notListed) remaining.delete(path)
+      else remaining.set(path, { error: failure.error })
+    }
+    if (remaining) setDirectoryErrors(remaining)
     setQuery("")
     const ancestors = [""]
     let target: FileListingNode | undefined
@@ -1003,21 +1039,23 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     for (const segment of request.path.split("/").filter(Boolean)) {
       const parent = ancestors.at(-1)!
       const result = await loadDirectory(parent, { required: true, scope: request })
-      if (!ownsReveal() || result.status !== "loaded") return
+      if (!ownsFolderReveal(request) || result.status === "retired") return
+      if (result.status === "failed") return reportFolderRevealFailure(request, parent, result, focusOrigin)
       const expected = joinExplorerPath(parent, segment)
       target = childrenByPath().get(parent)?.find((node) => node.directoryTarget &&
         (windows ? node.path.toLowerCase() === expected.toLowerCase() : node.path === expected))
       if (!target) {
         const missing = await loadDirectory(request.path, { required: true, scope: request })
-        if (ownsReveal() && missing.status !== "retired") {
-          request.onUnavailable(missing.status === "failed" ? missing.error : undefined)
-        }
+        if (missing.status !== "retired") reportFolderRevealFailure(request, request.path, missing, focusOrigin)
         return
       }
       ancestors.push(target.path)
     }
-    const result = await loadDirectory(ancestors.at(-1)!, { required: true, scope: request })
-    if (!ownsReveal() || result.status === "retired") return
+    const destination = ancestors.at(-1)!
+    const result = await loadDirectory(destination, { required: true, scope: request })
+    if (!ownsFolderReveal(request) || result.status === "retired") return
+    if (result.status === "failed") return reportFolderRevealFailure(request, destination, result, focusOrigin)
+    if (target && !directoryTarget(target.path)) return reportFolderRevealFailure(request, destination, result, focusOrigin)
     batch(() => {
       setExpandedPaths((paths) => new Set([...paths, ...ancestors]))
       if (target) setSingleSelection(selectionFromNode(target))
@@ -1033,9 +1071,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!request || !visible) return
     onCleanup(() => completeFileExplorerFolderRequest(request))
     void revealFolder(request)
-      .catch((error) => {
-        if (fileExplorerFolderRequest() === request && ownsExplorerOperation(request)) request.onUnavailable(error)
-      })
+      .catch((error) => reportFolderRevealFailure(request, request.path, { status: "failed", error }))
       .finally(() => completeFileExplorerFolderRequest(request))
   }))
 
@@ -1062,19 +1098,24 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const searchLoading = createMemo(() => Boolean(deferredQuery()) && searchResults.loading && !currentSearchResult())
   const rootError = createMemo(() => (!deferredQuery() ? (directoryErrors().get("") ?? null) : null))
   const searchError = createMemo(() => (deferredQuery() ? currentSearchFailure() : null))
-  const readRetryPending = () => searchError() ? searchResults.loading : loadingPaths().has("")
+  function directoryReadPending(path: string): boolean {
+    const reveal = directoryErrors().get(path)?.reveal
+    return loadingPaths().has(path) || (!!reveal && fileExplorerFolderRequest()?.path === reveal.target)
+  }
+  const readRetryPending = () => searchError() ? searchResults.loading : directoryReadPending("")
   // Transfer focus before the render removes this feedback and its controls.
   createComputed(on(searchError, (failure, previous) => {
     if (!failure && previous && active() && focusedReadFailure("[data-explorer-search-error]")) {
       searchInput?.focus({ preventScroll: true })
     }
   }))
-  const expandedDirectoryFailurePaths = createMemo(() => {
+  const visibleDirectoryFailurePaths = createMemo(() => {
     if (deferredQuery() || rootError()) return []
     const visibleDirectories = new Set(
       rows().flatMap((row) => (row.kind === "node" && row.expanded ? [row.node.path] : [])),
     )
-    return [...directoryErrors().keys()].filter((path) => path !== "" && visibleDirectories.has(path))
+    return [...directoryErrors()].flatMap(([path, failure]) =>
+      path !== "" && (failure.reveal || visibleDirectories.has(path)) ? [path] : [])
   })
   const explorerPanelStyle = () => ({
     "--file-explorer-row-height": `calc(${FILE_EXPLORER_ROW_HEIGHT_PX}px * var(--ui-scale))`,
@@ -1147,13 +1188,25 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const child = directChildPath(parent, path)
       return child !== undefined && children.get(child)?.directoryTarget !== true
     }
-    returnFocusFromDirectoryFailure(retired)
+    const reveal = fileExplorerFolderRequest()
+    const revealPath = reveal && ownsFolderReveal(reveal) ? reveal.path : undefined
+    const windows = isWindowsPath(directory())
+    const isRequiredRevealRead = (path: string) => {
+      if (revealPath === undefined || !requiredDirectoryLoadTokens.has(path)) return false
+      const requested = windows ? revealPath.toLowerCase() : revealPath
+      const current = windows ? path.toLowerCase() : path
+      return requested === current || isPathOrDescendant(requested, current)
+    }
+    // An explicit reference can still be retried when the tree has no branch for it.
+    const retiredFailure = (path: string) => retired(path) && !directoryErrors().get(path)?.reveal
+    returnFocusFromDirectoryFailure(retiredFailure)
     setExpandedPaths((prev) => new Set([...prev].filter((path) => !retired(path))))
     setChildrenByPath((prev) => new Map([...prev].filter(([path]) => !retired(path))))
-    setDirectoryErrors((prev) => new Map([...prev].filter(([path]) => !retired(path))))
-    setLoadingPaths((prev) => new Set([...prev].filter((path) => !retired(path))))
-    for (const tokens of [directoryLoadTokens, requiredDirectoryLoadTokens]) {
-      for (const path of tokens.keys()) if (retired(path)) tokens.delete(path)
+    setDirectoryErrors((prev) => new Map([...prev].filter(([path]) => !retiredFailure(path))))
+    setLoadingPaths((prev) => new Set([...prev].filter((path) => !retired(path) || isRequiredRevealRead(path))))
+    for (const path of directoryLoadTokens.keys()) if (retired(path)) directoryLoadTokens.delete(path)
+    for (const path of requiredDirectoryLoadTokens.keys()) {
+      if (retired(path) && !isRequiredRevealRead(path)) requiredDirectoryLoadTokens.delete(path)
     }
   }
 
@@ -1538,6 +1591,25 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   function retryReadFromFeedback(button: HTMLButtonElement, retry: () => unknown): void {
     if (document.activeElement === button) searchInput?.focus({ preventScroll: true })
     void retry()
+  }
+
+  function retryDirectoryFailure(path: string, button: HTMLButtonElement): void {
+    if (directoryReadPending(path)) return
+    const reveal = directoryErrors().get(path)?.reveal
+    if (!reveal) {
+      retryReadFromFeedback(button, path ? () => loadDirectory(path, { force: true }) : retryRootDirectory)
+      return
+    }
+    const scope = currentOperationScope()
+    const authority = scope?.authority
+    if (!scope || !authority || !ownsExplorerOperation(scope) || !folderRevealVisible()) return
+    const origin = document.activeElement === button ? searchInput ?? button : button
+    retryReadFromFeedback(button, () => requestFileExplorerFolder({
+      ...scope,
+      authority,
+      path: reveal.target,
+      origin,
+    }))
   }
 
   function updateExpandedPathsAfterMove(previousPath: string, nextPath: string): void {
@@ -2507,7 +2579,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           </div>
         )}
       </Show>
-      <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailurePaths().length > 0 || searchHasMore()}>
+      <Show when={uploading() || uploadFeedback() || mutationFeedback() || visibleDirectoryFailurePaths().length > 0 || searchHasMore()}>
         <div class="file-explorer-feedback-stack">
           <Show when={uploading()}>
             <Feedback class="file-explorer-feedback" tone="info">
@@ -2520,7 +2592,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           <Show when={mutationFeedback()}>
             {(feedback) => <ExplorerActionFeedback feedback={feedback()} dataUI="file-explorer-command-message" />}
           </Show>
-          <For each={expandedDirectoryFailurePaths()}>
+          <For each={visibleDirectoryFailurePaths()}>
             {(path) => (
               <Show when={directoryErrors().get(path)}>
                 {(failure) => (
@@ -2528,7 +2600,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                     class="file-explorer-feedback"
                     tone="error"
                     data-explorer-directory-error={path}
-                    title={t("explorer.directory_load_failed", { path })}
+                    title={failure().reveal ? undefined : t("explorer.directory_load_failed", { path })}
                     details={formatErrorDetails(failure().error) || undefined}
                     actions={
                       <Button
@@ -2536,19 +2608,20 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                         variant="outline"
                         size="sm"
                         tone="neutral"
-                        aria-disabled={loadingPaths().has(path) || undefined}
-                        aria-busy={loadingPaths().has(path) || undefined}
-                        onClick={(event) => {
-                          if (!loadingPaths().has(path)) {
-                            retryReadFromFeedback(event.currentTarget, () => loadDirectory(path, { force: true }))
-                          }
-                        }}
+                        data-explorer-directory-retry={failure().reveal ? "" : undefined}
+                        aria-disabled={directoryReadPending(path) || undefined}
+                        aria-busy={directoryReadPending(path) || undefined}
+                        onClick={(event) => retryDirectoryFailure(path, event.currentTarget)}
                       >
-                        {t(loadingPaths().has(path) ? "common.loading" : "common.retry")}
+                        {t(directoryReadPending(path) ? "common.loading" : "common.retry")}
                       </Button>
                     }
                   >
-                    {fileErrorSummary(failure().error, "load")}
+                    {failure().reveal?.notListed
+                      ? t("explorer.directory_not_listed", { path })
+                      : fileErrorSummary(failure().error, "load", failure().reveal
+                        ? t("explorer.directory_load_failed", { path })
+                        : undefined)}
                   </Feedback>
                 )}
               </Show>
@@ -2603,11 +2676,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                           size="sm"
                           tone="neutral"
                           data-ui={searchError() ? "file-explorer-search-retry" : "file-explorer-retry"}
+                          data-explorer-directory-retry={!searchError() && rootError()?.reveal ? "" : undefined}
                           aria-disabled={readRetryPending() || undefined}
                           aria-busy={readRetryPending() || undefined}
                           onClick={(event) => {
                             if (readRetryPending()) return
-                            retryReadFromFeedback(event.currentTarget, searchError() ? refetchSearch : retryRootDirectory)
+                            if (searchError()) retryReadFromFeedback(event.currentTarget, refetchSearch)
+                            else retryDirectoryFailure("", event.currentTarget)
                           }}
                         >
                           {t(readRetryPending() ? (searchError() ? "common.retrying" : "common.loading") : "common.retry")}

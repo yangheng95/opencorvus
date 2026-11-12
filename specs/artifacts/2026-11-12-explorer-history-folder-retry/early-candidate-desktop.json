@@ -1,0 +1,186 @@
+{
+  "responses": [
+    {
+      "path": "/ui/assets/main-BKi7m9qx.js",
+      "query": {},
+      "status": 200,
+      "requestID": "38294204-9aaa-4484-bfba-1ee880324445"
+    },
+    {
+      "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/conversation",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "tail_limit": "80"
+      },
+      "status": 200,
+      "requestID": "ecd06959-e477-4dd3-a396-11e977327148"
+    },
+    {
+      "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/config",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review"
+      },
+      "status": 200,
+      "requestID": "9944e425-f9ec-466a-af47-f3011ad488fc"
+    },
+    {
+      "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+      "query": {
+        "variant": "screenshot-browser-thumbnail"
+      },
+      "status": 200,
+      "requestID": "a3940e6a-7c39-40bb-9c81-ae4e4ce153d0"
+    },
+    {
+      "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/config",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review"
+      },
+      "status": 200,
+      "requestID": "a9db6845-9e2f-4018-9665-e6a00bbfc207"
+    },
+    {
+      "path": "/session/ses_-zUPEEn0tzzlIJbkt2OE/conversation",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "tail_limit": "2000"
+      },
+      "status": 200,
+      "requestID": "932f4826-0baa-4eda-82b7-44db5f186347"
+    },
+    {
+      "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+      "query": {},
+      "status": 200,
+      "requestID": "0b5f617f-adba-4b3d-b9bb-683beba05cf9"
+    },
+    {
+      "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/a8e386fccb55406987a9255df3a27304fd7cd2582a6730592495f5e6dc4f6e23.directory.json",
+      "query": {},
+      "status": 200,
+      "requestID": "fd457f0a-23f0-4fa5-a379-9e5607a8b731"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "00a7238d-42ec-4edf-90ec-e86eb31ea422"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": "notes archive"
+      },
+      "status": 404,
+      "requestID": "884079ad-a623-4074-8a17-1d2e1c5ba9bf",
+      "error": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes archive",
+          "message": "Directory entry not found: notes archive"
+        }
+      }
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "53944d25-b0c5-425e-a9a5-4686654a8582"
+    },
+    {
+      "path": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ".gitignore"
+      },
+      "status": 200,
+      "requestID": "700c1ce5-8778-4d4a-afee-d9f9fcfa1cdc"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "6f855a5c-7107-44cb-a54f-5f4b780d898c"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "bf050b9c-3841-478d-90d3-90239351f13f"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "9a4adea1-b796-4238-a794-4e6f404c0049"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "6df84e9d-4e13-4838-9aec-4716e8b0acd2"
+    },
+    {
+      "path": "/session/ses_-zUPEEn0tzzlIJbkt2OE/conversation",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "tail_limit": "2000"
+      },
+      "status": 200,
+      "requestID": "73f5ff17-fe0f-424d-93c2-7d4333595460"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "8e7f0025-c86c-437f-81a1-ae6c62497d17"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": "notes archive"
+      },
+      "status": 404,
+      "requestID": "f43b6629-130a-4c32-b9bf-297db089c109",
+      "error": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes archive",
+          "message": "Directory entry not found: notes archive"
+        }
+      }
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "862765bd-7ea1-4aef-afc8-1912883178db"
+    }
+  ]
+}
