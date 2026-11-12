@@ -146,8 +146,12 @@ export function buildMcpAddRequest(input: AddMcpInput): McpAddRequest {
   }
 }
 
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
 export function isMcpServerStatus(value: unknown): value is McpStatus {
-  if (!value || typeof value !== "object" || Array.isArray(value) || !("status" in value)) return false
+  if (!isObjectRecord(value)) return false
   const status = value.status
   if (typeof status !== "string" || !isMcpConnectionStatus(status)) return false
   if ("scope" in value && ((status !== "disabled" && status !== "disconnected") || value.scope !== "execution")) return false
@@ -172,10 +176,10 @@ export async function addMcpServer(request: McpAddRequest, options: { directory:
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(request),
   })
-  if (!response || typeof response !== "object" || Array.isArray(response) || !Object.hasOwn(response, request.name)) {
+  if (!isObjectRecord(response) || !Object.hasOwn(response, request.name)) {
     throw new InvalidMcpAddReceiptError(request.name, "missing_target")
   }
-  if (!isMcpServerStatus((response as Record<string, unknown>)[request.name])) {
+  if (!isMcpServerStatus(response[request.name])) {
     throw new InvalidMcpAddReceiptError(request.name, "invalid_status")
   }
 }
@@ -213,15 +217,36 @@ export async function removeMcpAuth(name: string, options: McpRequestOptions = {
   })
 }
 
+export class InvalidMcpRemovalReceiptError extends Error {
+  override readonly name = "InvalidMcpRemovalReceiptError"
+
+  constructor(
+    readonly reason: "invalid_config" | "invalid_mcp" | "targets_still_configured",
+    readonly remainingNames: readonly string[] = [],
+  ) {
+    super({
+      invalid_config: "The MCP removal response did not contain a project configuration object.",
+      invalid_mcp: "The MCP removal response contained an invalid MCP definitions map.",
+      targets_still_configured: `The MCP removal response still listed these selected names: ${JSON.stringify(remainingNames)}.`,
+    }[reason])
+  }
+}
+
 /**
  * Atomically removes project-owned MCP definitions after backend reference,
  * connection, and credential cleanup.
  */
 export async function deleteAllMcp(options: { directory: string; authority: ApiAuthority; names: readonly string[] }): Promise<void> {
-  await apiJson(mcpPath("mcp", options), {
+  const response = await apiJson<unknown>(mcpPath("mcp", options), {
     authority: options.authority,
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ names: options.names }),
   })
+  if (!isObjectRecord(response)) throw new InvalidMcpRemovalReceiptError("invalid_config")
+  const definitions = response.mcp
+  if (definitions === undefined) return
+  if (!isObjectRecord(definitions)) throw new InvalidMcpRemovalReceiptError("invalid_mcp")
+  const remainingNames = options.names.filter((name) => Object.hasOwn(definitions, name))
+  if (remainingNames.length) throw new InvalidMcpRemovalReceiptError("targets_still_configured", remainingNames)
 }

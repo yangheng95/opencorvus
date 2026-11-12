@@ -1,0 +1,49 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b283-restart",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39902",
+    "pid": 16692
+  },
+  "listenersBefore": [
+    {
+      "LocalPort": 39904,
+      "OwningProcess": 2872
+    },
+    {
+      "LocalPort": 39903,
+      "OwningProcess": 20224
+    },
+    {
+      "LocalPort": 39902,
+      "OwningProcess": 16692
+    },
+    {
+      "LocalPort": 19876,
+      "OwningProcess": 16692
+    }
+  ],
+  "shutdown": [
+    {
+      "url": "http://127.0.0.1:39902/shutdown",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:39903/__review_shutdown",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:39904/__review_shutdown",
+      "status": 200
+    }
+  ],
+  "processIDsExited": [
+    32824,
+    16692,
+    20224,
+    2872
+  ],
+  "remainingListeners": [],
+  "remainingProcessIDs": []
+}

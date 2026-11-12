@@ -10,6 +10,7 @@ import {
   disconnectMcp,
   InvalidMcpAddReceiptError,
   InvalidMcpConnectionReceiptError,
+  InvalidMcpRemovalReceiptError,
   McpArgumentQuoteError,
   parseMcpArguments,
   removeMcpAuth,
@@ -280,7 +281,14 @@ describe("MCP overlay service", () => {
 
   test("uses canonical project-scoped connection, auth, and removal routes", async () => {
     const requests: TransportRequest[] = []
-    __setHostTransportForTest(fakeTransport((req) => requests.push(req), true))
+    __setHostTransportForTest({
+      ...fakeTransport(() => {}),
+      async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
+        requests.push(request)
+        const body = request.path === "mcp" ? { mcp: {} } : true
+        return { status: 200, ok: true, headers: {}, body: body as T }
+      },
+    })
     setMcp({ docs: { status: "connected" }, filesystem: { status: "connected" } })
     const authority = captureApiAuthority()
 
@@ -300,6 +308,38 @@ describe("MCP overlay service", () => {
       value: { names: ["docs", " filesystem ", ""] },
     })
     expect(requests.map((request) => request.authority)).toEqual([authority, authority, authority, authority])
+  })
+
+  test.each([
+    { username: "project-review" },
+    { mcp: { filesystem: { enabled: false }, other: { type: "local", command: ["node", "probe.js"] } } },
+  ])("acknowledges a project configuration with the selected names removed: %j", async (config) => {
+    __setHostTransportForTest(fakeTransport(() => {}, config))
+    const authority = captureApiAuthority()
+
+    await expect(deleteAllMcp({ directory: PROJECT_DIR, authority, names: [" filesystem ", ""] })).resolves.toBeUndefined()
+  })
+
+  test.each([
+    { response: true, reason: "invalid_config", remainingNames: [] },
+    { response: { mcp: [] }, reason: "invalid_mcp", remainingNames: [] },
+    { response: { mcp: null }, reason: "invalid_mcp", remainingNames: [] },
+    {
+      response: { mcp: { " filesystem ": { enabled: false }, "": { enabled: false }, other: { enabled: false } } },
+      reason: "targets_still_configured",
+      remainingNames: [" filesystem ", ""],
+    },
+  ])("reports the precise removal receipt error $reason", async ({ response, reason, remainingNames }) => {
+    __setHostTransportForTest(fakeTransport(() => {}, response))
+    const authority = captureApiAuthority()
+    const result = await deleteAllMcp({
+      directory: PROJECT_DIR,
+      authority,
+      names: ["docs", " filesystem ", ""],
+    }).catch((cause: unknown) => cause)
+
+    expect(result).toBeInstanceOf(InvalidMcpRemovalReceiptError)
+    expect(result).toMatchObject({ reason, remainingNames })
   })
 
   test("a complete connection error retains its HTTP status and request identity", async () => {

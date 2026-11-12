@@ -5728,7 +5728,9 @@ validation message.
 Bulk removal confirms the exact project directory and server names it will
 send. The delete request retains those stored names verbatim and validates
 each against the project's own configuration keys.
-An interrupted bulk removal reply uses the same scoped readback as connection
+The bulk removal reply acknowledges the request when the returned project
+configuration omits its MCP map or that map has none of the selected names as
+own keys. An unconfirmed reply uses the same scoped readback as connection
 actions. The notice reports which targets appear in the accepted current
 project status map and retains the original diagnostic. The action sends one
 delete request. The server settles physical cleanup separately from status observation.
