@@ -9769,7 +9769,7 @@ export class Auth3 extends HeyApiClient {
   /**
    * Start MCP OAuth
    *
-   * Start OAuth authentication flow for a Model Context Protocol (MCP) server.
+   * Start OAuth authentication flow for a Model Context Protocol (MCP) server. Accept-Language selects the callback page language.
    */
   public start<ThrowOnError extends boolean = false>(
     parameters: {

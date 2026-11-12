@@ -26,46 +26,63 @@ function escapeHTMLText(value: string): string {
     .replaceAll("'", "&#39;")
 }
 
-const HTML_SUCCESS = `<!DOCTYPE html>
-<html>
-<head>
-  <title>OpenCorvus - Authorization Successful</title>
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #1a1a2e; color: #eee; }
-    .container { text-align: center; padding: 2rem; }
-    h1 { color: #4ade80; margin-bottom: 1rem; }
-    p { color: #aaa; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Authorization Successful</h1>
-    <p>You can close this window and return to OpenCorvus.</p>
-  </div>
-  <script>setTimeout(() => window.close(), 2000);</script>
-</body>
-</html>`
+export type OAuthPageLocale = "en-US" | "zh-CN"
 
-const HTML_ERROR = (error: string) => `<!DOCTYPE html>
-<html>
+export function oauthPageLocale(language?: string | null): OAuthPageLocale | undefined {
+  const primary = language?.split(",", 1)[0]?.split(";", 1)[0]?.trim().toLowerCase().split("-", 1)[0]
+  if (primary === "zh") return "zh-CN"
+  if (primary === "en") return "en-US"
+}
+
+const pageCopy = {
+  "en-US": {
+    success: "Authorization Successful",
+    failure: "Authorization Failed",
+    returnToApp: "You can close this window and return to OpenCorvus.",
+    failed: "An error occurred during authorization.",
+    details: "Technical details",
+  },
+  "zh-CN": {
+    success: "授权成功",
+    failure: "授权失败",
+    returnToApp: "你可以关闭此窗口并返回 OpenCorvus。",
+    failed: "授权过程中发生错误。",
+    details: "技术详情",
+  },
+} satisfies Record<OAuthPageLocale, Record<string, string>>
+
+function callbackPage(locale: OAuthPageLocale, error?: string, status?: number): Response {
+  const copy = pageCopy[locale]
+  const failed = error !== undefined
+  const title = failed ? copy.failure : copy.success
+  const description = failed ? copy.failed : copy.returnToApp
+  return new Response(`<!DOCTYPE html>
+<html lang="${locale}">
 <head>
-  <title>OpenCorvus - Authorization Failed</title>
+  <meta charset="utf-8">
+  <title>OpenCorvus - ${title}</title>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #1a1a2e; color: #eee; }
     .container { text-align: center; padding: 2rem; }
-    h1 { color: #f87171; margin-bottom: 1rem; }
+    h1 { color: ${failed ? "#f87171" : "#4ade80"}; margin-bottom: 1rem; }
     p { color: #aaa; }
     .error { color: #fca5a5; font-family: monospace; margin-top: 1rem; padding: 1rem; background: rgba(248,113,113,0.1); border-radius: 0.5rem; }
+    summary { cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Authorization Failed</h1>
-    <p>An error occurred during authorization.</p>
-    <div class="error">${escapeHTMLText(error)}</div>
+    <h1>${title}</h1>
+    <p>${description}</p>
+    ${failed ? `<details><summary>${copy.details}</summary><div class="error">${escapeHTMLText(error)}</div></details>` : ""}
   </div>
+  ${failed ? "" : "<script>setTimeout(() => window.close(), 2000);</script>"}
 </body>
-</html>`
+</html>`, {
+    status: status ?? (failed ? 400 : 200),
+    headers: { "Content-Type": "text/html; charset=utf-8", "Content-Language": locale },
+  })
+}
 
 /**
  * A project's durable owner of OAuth flows.
@@ -200,6 +217,10 @@ export namespace McpOAuthCallback {
     const code = url.searchParams.get("code")
     const state = url.searchParams.get("state")
     const error = url.searchParams.get("error")
+    // The state prefix selects display language only. The full opaque state
+    // still determines ownership and is never reconstructed from this prefix.
+    const locale = oauthPageLocale(state?.split(".", 1)[0]) ?? oauthPageLocale(req.headers.get("accept-language")) ?? "en-US"
+    const page = (details?: string, status?: number) => callbackPage(locale, details, status)
     const callbackOwner = state ? pendingAuths.get(pendingAuthKey(state)) : undefined
     const correlationID = callbackOwner?.correlationID ?? crypto.randomUUID()
 
@@ -211,10 +232,7 @@ export namespace McpOAuthCallback {
         "oauth callback missing state parameter",
         oauthCallbackMissingStateLogFields({ path: url.pathname, correlationID }),
       )
-      return new Response(HTML_ERROR(errorMsg), {
-        status: 400,
-        headers: { "Content-Type": "text/html" },
-      })
+      return page(errorMsg)
     }
 
     // Arrival of the exact callback commits this local waiter to the listener's
@@ -239,10 +257,7 @@ export namespace McpOAuthCallback {
       const ownerError = error instanceof Error ? error : new Error(String(error))
       log.error("oauth callback could not resolve its flow", { correlationID, error: ownerError.message })
       settleLocally(state, callbackOwner, (pending) => pending.reject(ownerError))
-      return new Response(HTML_ERROR(ownerError.message), {
-        status: 500,
-        headers: { "Content-Type": "text/html" },
-      })
+      return page(ownerError.message, 500)
     }
 
     if (!durableOwner) {
@@ -252,24 +267,18 @@ export namespace McpOAuthCallback {
         oauthCallbackInvalidStateLogFields({ pendingCount: pendingAuths.size, correlationID }),
       )
       settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(errorMsg)))
-      return new Response(HTML_ERROR(errorMsg), {
-        status: 400,
-        headers: { "Content-Type": "text/html" },
-      })
+      return page(errorMsg)
     }
 
     if ("terminal" in durableOwner) {
       if (durableOwner.terminal.outcome === "connected") {
         const status = { status: "connected" as const }
         settleLocally(state, callbackOwner, (pending) => pending.resolve(status))
-        return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
+        return page()
       }
       const terminalError = McpAuth.oauthCallbackTerminalMessage(durableOwner.terminal.outcome)
       settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(terminalError)))
-      return new Response(HTML_ERROR(terminalError), {
-        status: 400,
-        headers: { "Content-Type": "text/html" },
-      })
+      return page(terminalError)
     }
 
     await afterOwnerResolutionForTest?.()
@@ -284,14 +293,11 @@ export namespace McpOAuthCallback {
           oauthState: state,
         })
         settleLocally(state, callbackOwner, (pending) => pending.resolve(status))
-        return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
+        return page()
       } catch (finishError) {
         const error = finishError instanceof Error ? finishError : new Error(String(finishError))
         settleLocally(state, callbackOwner, (pending) => pending.reject(error))
-        return new Response(HTML_ERROR(error.message), {
-          status: 400,
-          headers: { "Content-Type": "text/html" },
-        })
+        return page(error.message)
       }
     }
 
@@ -299,48 +305,36 @@ export namespace McpOAuthCallback {
       const abandonment = await abandonDurableOwner(durableOwner, state, "provider_rejected", correlationID)
       if (abandonment instanceof Error) {
         settleLocally(state, callbackOwner, (pending) => pending.reject(abandonment))
-        return new Response(HTML_ERROR(abandonment.message), {
-          status: 500,
-          headers: { "Content-Type": "text/html" },
-        })
+        return page(abandonment.message, 500)
       }
       if (abandonment.outcome === "joined") {
         settleLocally(state, callbackOwner, (pending) => pending.resolve(abandonment.status))
-        return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
+        return page()
       }
       if (abandonment.outcome === "terminal") {
-        return projectTerminalResponse(state, callbackOwner, abandonment.terminal)
+        return projectTerminalResponse(state, callbackOwner, abandonment.terminal, page)
       }
       const terminalError = McpAuth.oauthCallbackTerminalMessage("provider_rejected")
       settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(terminalError)))
-      return new Response(HTML_ERROR(terminalError), {
-        status: 400,
-        headers: { "Content-Type": "text/html" },
-      })
+      return page(terminalError)
     }
 
     if (!code) {
       const abandonment = await abandonDurableOwner(durableOwner, state, "missing_code", correlationID)
       if (abandonment instanceof Error) {
         settleLocally(state, callbackOwner, (pending) => pending.reject(abandonment))
-        return new Response(HTML_ERROR(abandonment.message), {
-          status: 500,
-          headers: { "Content-Type": "text/html" },
-        })
+        return page(abandonment.message, 500)
       }
       if (abandonment.outcome === "joined") {
         settleLocally(state, callbackOwner, (pending) => pending.resolve(abandonment.status))
-        return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
+        return page()
       }
       if (abandonment.outcome === "terminal") {
-        return projectTerminalResponse(state, callbackOwner, abandonment.terminal)
+        return projectTerminalResponse(state, callbackOwner, abandonment.terminal, page)
       }
       const terminalError = McpAuth.oauthCallbackTerminalMessage("missing_code")
       settleLocally(state, callbackOwner, (pending) => pending.reject(new Error(terminalError)))
-      return new Response(HTML_ERROR(terminalError), {
-        status: 400,
-        headers: { "Content-Type": "text/html" },
-      })
+      return page(terminalError)
     }
 
     try {
@@ -356,15 +350,10 @@ export namespace McpOAuthCallback {
       settleLocally(state, callbackOwner, (pending) =>
         pending.reject(finishError instanceof Error ? finishError : new Error(errorMsg)),
       )
-      return new Response(HTML_ERROR(errorMsg), {
-        status: 400,
-        headers: { "Content-Type": "text/html" },
-      })
+      return page(errorMsg)
     }
 
-    return new Response(HTML_SUCCESS, {
-      headers: { "Content-Type": "text/html" },
-    })
+    return page()
   }
 
   /** Resolve the exact project owner from the one durable MCP auth store. */
@@ -678,18 +667,16 @@ export namespace McpOAuthCallback {
     state: string,
     pending: PendingAuth | undefined,
     terminal: McpAuth.OAuthCallbackTerminal,
+    page: (error?: string) => Response,
   ): Response {
     if (terminal.outcome === "connected") {
       const status = { status: "connected" as const }
       settleLocally(state, pending, (current) => current.resolve(status))
-      return new Response(HTML_SUCCESS, { headers: { "Content-Type": "text/html" } })
+      return page()
     }
     const message = McpAuth.oauthCallbackTerminalMessage(terminal.outcome)
     settleLocally(state, pending, (current) => current.reject(new Error(message)))
-    return new Response(HTML_ERROR(message), {
-      status: 400,
-      headers: { "Content-Type": "text/html" },
-    })
+    return page(message)
   }
 
   function settleLocally(

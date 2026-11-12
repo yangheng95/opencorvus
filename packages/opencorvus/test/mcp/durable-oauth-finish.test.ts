@@ -14,6 +14,7 @@ import { McpOAuthCallback } from "@/mcp/oauth-callback"
 import { McpOAuthProvider } from "@/mcp/oauth-provider"
 import { McpDebugCommand } from "@/cli/cmd/mcp"
 import { Filesystem } from "@/util/filesystem"
+import { Server } from "@/server/server"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 import { currentTestChildEnvironment } from "../fixture/current-test-child-environment"
 import {
@@ -267,6 +268,54 @@ describe("MCP OAuth finish from durable facts", () => {
         },
       })
     } finally {
+      await Instance.disposeAll()
+      await server.stop(true)
+    }
+  }, 30_000)
+
+  test("a protected project reports the exact authorization requirement and retains the callback language", async () => {
+    const serverName = " protected review "
+    await using project = await memoryProject()
+    const { server } = startOAuthMcpServer({ requireAuthentication: true })
+    try {
+      await Instance.provide({
+        directory: project.path,
+        fn: () => Config.updateProjectPatch({
+          mcp: {
+            [serverName]: {
+              type: "remote",
+              transport: "streamable-http",
+              url: `http://127.0.0.1:${server.port}/mcp`,
+              oauth: { clientId: CLIENT_ID, issuer: `http://127.0.0.1:${server.port}` },
+            },
+          },
+        }),
+      })
+      const headers = { "x-opencorvus-directory": project.path }
+      const app = Server.App()
+      const response = await app.request(`/mcp/${encodeURIComponent(serverName)}/connect`, { method: "POST", headers })
+      expect(response.status).toBe(409)
+      expect(await response.json()).toEqual({
+        name: "MCPAuthorizationRequiredError",
+        data: { mcpName: serverName, message: `MCP server ${serverName} requires authorization` },
+      })
+      const status = await app.request("/mcp/project", { headers })
+      expect(await status.json()).toEqual({ [serverName]: { status: "needs_auth" } })
+
+      const authorization = await app.request(`/mcp/${encodeURIComponent(serverName)}/auth`, {
+        method: "POST",
+        headers: { ...headers, "Accept-Language": "zh-CN" },
+      })
+      expect(authorization.status).toBe(200)
+      const authorize = new URL((await authorization.json() as { authorizationUrl: string }).authorizationUrl)
+      const callback = new URL(authorize.searchParams.get("redirect_uri")!)
+      callback.searchParams.set("state", authorize.searchParams.get("state")!)
+      callback.searchParams.set("error", "access_denied")
+      const declined = await fetch(callback, { headers: { "Accept-Language": "en-US" } })
+      expect({ status: declined.status, language: declined.headers.get("content-language") })
+        .toEqual({ status: 400, language: "zh-CN" })
+    } finally {
+      Server.resetProjectRoutesAppForTest()
       await Instance.disposeAll()
       await server.stop(true)
     }

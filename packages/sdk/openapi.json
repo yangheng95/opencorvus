@@ -11975,6 +11975,34 @@
         ],
         "type": "string"
       },
+      "MCPAuthorizationRequiredError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "mcpName": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "mcpName",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "MCPAuthorizationRequiredError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "MCPExecutionConnectionRequiredError": {
         "properties": {
           "data": {
@@ -90081,7 +90109,7 @@
         ]
       },
       "post": {
-        "description": "Start OAuth authentication flow for a Model Context Protocol (MCP) server.",
+        "description": "Start OAuth authentication flow for a Model Context Protocol (MCP) server. Accept-Language selects the callback page language.",
         "operationId": "mcp.auth.start",
         "parameters": [
           {
@@ -90621,11 +90649,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MCPExecutionConnectionRequiredError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/MCPAuthorizationRequiredError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MCPExecutionConnectionRequiredError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "MCP connection is managed by its session or task"
+            "description": "MCP authorization is required or the connection is managed by its session or task"
           },
           "500": {
             "content": {

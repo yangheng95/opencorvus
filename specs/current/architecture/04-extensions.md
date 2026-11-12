@@ -905,6 +905,9 @@ pending 和 finishing 分别以 `revoked` 和 `exchange_uncertain` 结算。历�
 不会授予任何连接凭据。旧回调可按 exact state 定位需要升级的 Project，进入该项目后只从当前键
 恢复活动流程，已结算的回调继续使用同一 state 和 callback generation 的终态。项目删除在同一次
 凭据清理中移除该项目的历史材料和当前凭据。
+通过界面启动的授权在原有不透明 state 内携带展示语言前缀和同长度随机部分。完整 state 仍精确往返并用于
+授权状态和终态核对。展示前缀只选择回调 HTML（HyperText Markup Language，超文本标记语言）及
+`Content-Language`，未指定展示语言时使用浏览器语言。
 每个 OAuth provider connection admission 都通过 store lock 为 absent 或 upgrade-era material entry 初始化一个 non-empty revision；
 初始化不 supersede/clear flow，但此后所有 refresh/client/token writes 都携带该 exact revision。显式 remove 之后，已捕获的 legacy
 refresh writer 不能以 `expectedRevision=undefined` 复活 credential。

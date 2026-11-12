@@ -147,6 +147,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "PluginServiceDuplicateIDError") return 500
   if (err.name === "MCPOAuthStateError") return 400
   if (err.name === "MCPExecutionConnectionRequiredError") return 409
+  if (err.name === "MCPAuthorizationRequiredError") return 409
   if (err.name === "McpAppHostForbiddenError") return 403
   if (err.name === "ExpertSquadPackageError") return 400
   if (err.name === "ExpertSquadCatalogCursorInvalidError") return 400

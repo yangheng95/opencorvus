@@ -404,7 +404,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/mcp/{name}/auth` | Start MCP OAuth Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.start` |
 | POST | `/mcp/{name}/auth/authenticate` | Authenticate MCP OAuth Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.authenticate` |
 | POST | `/mcp/{name}/auth/callback` | Complete MCP OAuth Body: `code`, `state`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MCPOAuthStateError`, `NotFoundError`, `UnknownError`. | `mcp.auth.callback` |
-| POST | `/mcp/{name}/connect` | (no summary) Errors: `LogFileNotFoundError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`, `UnknownError`. | `mcp.connect` |
+| POST | `/mcp/{name}/connect` | (no summary) Errors: `LogFileNotFoundError`, `MCPAuthorizationRequiredError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`, `UnknownError`. | `mcp.connect` |
 | POST | `/mcp/{name}/disconnect` | (no summary) Errors: `LogFileNotFoundError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`. | `mcp.disconnect` |
 
 ### Permission

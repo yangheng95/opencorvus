@@ -3,6 +3,7 @@ import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
 import z from "zod"
 import { MCP } from "../../mcp"
+import { oauthPageLocale } from "../../mcp/oauth-callback"
 import { Config } from "../../config/config"
 import { badRequestBody, badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
@@ -119,7 +120,7 @@ export const McpRoutes = lazy(() => {
         "/:name/auth",
         describeRoute({
           summary: "Start MCP OAuth",
-          description: "Start OAuth authentication flow for a Model Context Protocol (MCP) server.",
+          description: "Start OAuth authentication flow for a Model Context Protocol (MCP) server. Accept-Language selects the callback page language.",
           operationId: "mcp.auth.start",
           responses: {
             200: {
@@ -144,7 +145,7 @@ export const McpRoutes = lazy(() => {
           if (!supportsOAuth) {
             return c.json(badRequestBody(`MCP server ${name} does not support OAuth`), 400)
           }
-          const result = await MCP.startAuth(name)
+          const result = await MCP.startAuth(name, oauthPageLocale(c.req.header("accept-language")))
           return c.json(result)
         },
       )
@@ -252,7 +253,17 @@ export const McpRoutes = lazy(() => {
               },
             },
             ...errors(404),
-            409: executionConnectionRequired,
+            409: {
+              description: "MCP authorization is required or the connection is managed by its session or task",
+              content: {
+                "application/json": {
+                  schema: resolver(z.union([
+                    MCP.AuthorizationRequiredError.Schema,
+                    MCP.ExecutionConnectionRequiredError.Schema,
+                  ])),
+                },
+              },
+            },
             500: namedErrorResponse("MCP connection failed", "UnknownError"),
           },
         }),

@@ -14,6 +14,7 @@ import {
   McpArgumentQuoteError,
   parseMcpArguments,
   removeMcpAuth,
+  startMcpAuthorization,
 } from "../src/services/mcp"
 import { appStore, setMcp } from "../src/store/app"
 import { loadMcpStatus, loadProjectMcpStatus } from "../src/services/extensions"
@@ -292,7 +293,7 @@ describe("MCP overlay service", () => {
     setMcp({ docs: { status: "connected" }, filesystem: { status: "connected" } })
     const authority = captureApiAuthority()
 
-    await connectMcp("docs", { directory: PROJECT_DIR, authority })
+    expect(await connectMcp("docs", { directory: PROJECT_DIR, authority })).toBe("connected")
     await disconnectMcp("docs", { directory: PROJECT_DIR, authority })
     await removeMcpAuth("docs", { directory: PROJECT_DIR })
     await deleteAllMcp({ directory: PROJECT_DIR, authority, names: ["docs", " filesystem ", ""] })
@@ -355,6 +356,48 @@ describe("MCP overlay service", () => {
     const error = await connectMcp("docs", { directory: PROJECT_DIR, authority }).catch((cause: unknown) => cause)
     expect(error).toBeInstanceOf(ApiError)
     expect(error).toMatchObject({ status: 500, requestID, body, method: "POST" })
+  })
+
+  test("returns the exact connection's authorization requirement", async () => {
+    const name = " docs "
+    const body = { name: "MCPAuthorizationRequiredError", data: { mcpName: name, message: "Authorization required" } }
+    __setHostTransportForTest({
+      ...fakeTransport(() => {}),
+      async request<T>(): Promise<TransportResponse<T>> {
+        return { status: 409, ok: false, headers: {}, body: body as T }
+      },
+    })
+
+    expect(await connectMcp(name, { directory: PROJECT_DIR, authority: captureApiAuthority() })).toBe("needs_auth")
+  })
+
+  test("returns the prepared browser address from the exact scoped authorization request", async () => {
+    const requests: TransportRequest[] = []
+    const url = "https://identity.example.test/authorize?state=fixture"
+    __setHostTransportForTest(fakeTransport((request) => requests.push(request), { authorizationUrl: url }))
+    const authority = captureApiAuthority()
+
+    expect(await startMcpAuthorization(" docs ", { directory: PROJECT_DIR, authority })).toEqual({ kind: "authorize", url })
+    expect(requests[0]).toMatchObject({
+      method: "POST",
+      path: "mcp/%20docs%20/auth",
+      query: { directory: PROJECT_DIR },
+      authority,
+    })
+  })
+
+  test("an empty authorization address represents an already connected server", async () => {
+    __setHostTransportForTest(fakeTransport(() => {}, { authorizationUrl: "" }))
+
+    expect(await startMcpAuthorization("docs", { directory: PROJECT_DIR, authority: captureApiAuthority() }))
+      .toEqual({ kind: "connected" })
+  })
+
+  test("an unusable authorization address reports a fixed diagnostic", async () => {
+    __setHostTransportForTest(fakeTransport(() => {}, { authorizationUrl: "file:///fixture" }))
+
+    await expect(startMcpAuthorization("docs", { directory: PROJECT_DIR, authority: captureApiAuthority() }))
+      .rejects.toThrow("The MCP authorization response contained an unusable external address.")
   })
 
   test.each([["connect", connectMcp], ["disconnect", disconnectMcp]] as const)(

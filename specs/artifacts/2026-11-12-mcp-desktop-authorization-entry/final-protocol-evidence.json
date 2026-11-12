@@ -1,0 +1,177 @@
+{
+  "browser": {
+    "receipts": [
+      {
+        "side": "project",
+        "route": "/mcp/review-oauth/connect",
+        "status": 409,
+        "requestID": "467fa92a-dcc9-4d0d-ba78-197a37894924",
+        "body": {
+          "name": "MCPAuthorizationRequiredError",
+          "data": {
+            "mcpName": "review-oauth",
+            "message": "MCP server review-oauth requires authorization"
+          }
+        }
+      },
+      {
+        "side": "project",
+        "route": "/mcp/review-oauth/auth",
+        "status": 200,
+        "requestID": "23256e48-bd21-4a9d-b587-2bcbea389458"
+      },
+      {
+        "side": "project",
+        "route": "/mcp/review-oauth/auth",
+        "status": 200,
+        "requestID": "916ae61d-4948-4fc4-ba8f-07f341859670"
+      },
+      {
+        "side": "alternate",
+        "route": "/mcp/review-oauth/connect",
+        "status": 409,
+        "requestID": "01b121ec-7aff-494f-8bc6-61cae5218270",
+        "body": {
+          "name": "MCPAuthorizationRequiredError",
+          "data": {
+            "mcpName": "review-oauth",
+            "message": "MCP server review-oauth requires authorization"
+          }
+        }
+      },
+      {
+        "side": "alternate",
+        "route": "/mcp/review-oauth/auth",
+        "status": 200,
+        "requestID": "79bd3506-edd6-47a2-a0de-816c4157fd8c"
+      }
+    ],
+    "cancel": {
+      "side": "project",
+      "requestID": "b28adf84-722c-4b66-9ec9-e0bece9a6394",
+      "statuses": {
+        "review-oauth": {
+          "status": "needs_auth"
+        }
+      }
+    },
+    "afterDecline": {
+      "side": "project",
+      "requestID": "4c22133d-c351-4b01-9ef5-64b44bc8987a",
+      "statuses": {
+        "review-oauth": {
+          "status": "needs_auth"
+        }
+      }
+    },
+    "declineCallback": {
+      "status": 400,
+      "language": "en-US"
+    },
+    "approveCallback": {
+      "status": 200,
+      "language": "zh-CN"
+    },
+    "finalStates": [
+      {
+        "side": "project",
+        "requestID": "d6bb7ae3-818e-418f-88b9-d328a0bd15b8",
+        "statuses": {
+          "review-oauth": {
+            "status": "needs_auth"
+          }
+        }
+      },
+      {
+        "side": "alternate",
+        "requestID": "a18b16a7-b429-44a8-a1b5-61a5485779be",
+        "statuses": {
+          "review-oauth": {
+            "status": "connected"
+          }
+        }
+      }
+    ]
+  },
+  "facts": [
+    {
+      "side": "project",
+      "activeToken": false,
+      "terminal": "provider_rejected"
+    },
+    {
+      "side": "alternate",
+      "activeToken": true,
+      "terminal": "connected"
+    }
+  ],
+  "protocol": [
+    {
+      "kind": "approval-presented",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:00:05.712Z"
+    },
+    {
+      "kind": "authorization-declined",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:00:15.177Z"
+    },
+    {
+      "kind": "approval-presented",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:01:09.250Z"
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:01:17.540Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:01:17.627Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:01:17.691Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:01:17.702Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 27512,
+      "port": 39911,
+      "scope": "oauth",
+      "time": "2026-11-12T07:01:17.712Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ],
+  "connectErrorSchemaValidated": true
+}

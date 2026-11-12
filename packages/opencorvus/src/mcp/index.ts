@@ -32,7 +32,7 @@ import { Project } from "../project/project"
 import { createInstanceState } from "../project/instance-state"
 import { Installation } from "../installation"
 import { McpOAuthProvider, McpOAuthTokenCommitUncertainError } from "./oauth-provider"
-import { McpOAuthCallback, type CallbackResolution } from "./oauth-callback"
+import { McpOAuthCallback, type CallbackResolution, type OAuthPageLocale } from "./oauth-callback"
 import { oauthAuthorizationLogFields, oauthConnectionFailureLogFields } from "./oauth-log"
 import { McpAuth } from "./auth"
 import { BrowserMCPBuiltin } from "./browser/builtin"
@@ -163,6 +163,11 @@ export namespace MCP {
 
   export const ExecutionConnectionRequiredError = NamedError.create(
     "MCPExecutionConnectionRequiredError",
+    z.object({ mcpName: z.string(), message: z.string() }),
+  )
+
+  export const AuthorizationRequiredError = NamedError.create(
+    "MCPAuthorizationRequiredError",
     z.object({ mcpName: z.string(), message: z.string() }),
   )
 
@@ -4069,12 +4074,17 @@ export namespace MCP {
       await ensureConfiguredConnections(s, { [name]: mcp })
       const status = s.status[name]
       const current = (await Config.get()).mcp?.[name]
-      const connected =
+      const ownsStatus =
         current &&
         mcpConfigIdentity(current) === ownerIdentity &&
         s.durableGeneration[name] === ownerGeneration &&
+        s.statusIdentity[name] === identity
+      if (ownsStatus && status?.status === "needs_auth") {
+        throw new AuthorizationRequiredError({ mcpName: name, message: `MCP server ${name} requires authorization` })
+      }
+      const connected =
+        ownsStatus &&
         status?.status === "connected" &&
-        s.statusIdentity[name] === identity &&
         s.connections[name]?.configIdentity === identity &&
         s.connections[name]?.ownerGeneration === ownerGeneration
       if (!connected) {
@@ -4360,6 +4370,7 @@ export namespace MCP {
   async function startAuthFlow(
     mcpName: string,
     pendingPolicy: "supersede" | "reject" = "supersede",
+    pageLocale?: OAuthPageLocale,
   ): Promise<{ authorizationUrl: string; flow?: PendingOAuthFlow }> {
     const cfg = await Config.get()
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
@@ -4415,9 +4426,10 @@ export namespace MCP {
 
     // Generate and store a cryptographically secure state parameter BEFORE creating the provider
     // The SDK will call provider.state() to read this value
-    const oauthState = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+    const stateNonce = Array.from(crypto.getRandomValues(new Uint8Array(32)))
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("")
+    const oauthState = pageLocale ? `${pageLocale}.${stateNonce}` : stateNonce
     const correlationID = crypto.randomUUID()
     const authKey = mcpAuthKey(mcpName)
     const flowKey = oauthFlowKey(authKey)
@@ -4616,8 +4628,8 @@ export namespace MCP {
     return businessResult!
   }
 
-  export async function startAuth(mcpName: string): Promise<{ authorizationUrl: string }> {
-    const result = await startAuthFlow(mcpName)
+  export async function startAuth(mcpName: string, pageLocale?: OAuthPageLocale): Promise<{ authorizationUrl: string }> {
+    const result = await startAuthFlow(mcpName, "supersede", pageLocale)
     return { authorizationUrl: result.authorizationUrl }
   }
 

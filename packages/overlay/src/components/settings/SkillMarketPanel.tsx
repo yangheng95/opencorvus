@@ -45,7 +45,7 @@ import {
   type SkillMarketCandidate,
   type SkillMarketDetail,
 } from "../../services/extensions"
-import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
@@ -668,7 +668,7 @@ function SharedResourceManagementPanel(props: {
   }
 
   async function handleMcpConnection(name: string, disconnect: boolean) {
-    if (loading()) return
+    if (loading() || mcpActionRequest) return
     const directory = currentDirectory()
     if (!directory) return
     const owner = { directory, authority: captureApiAuthority() }
@@ -677,9 +677,9 @@ function SharedResourceManagementPanel(props: {
     setLoading(true)
     setNotice(undefined)
     try {
-      const observation = await readMcpStatusAfterMutation(owner, current, () =>
-        (disconnect ? disconnectMcp : connectMcp)(name, owner),
-      )
+      const observation = await readMcpStatusAfterMutation(owner, current, async () => {
+        await (disconnect ? disconnectMcp(name, owner) : connectMcp(name, owner))
+      })
       if (!observation || !current()) return
       const { status, receiptFailure } = observation
       if (receiptFailure) {
@@ -705,6 +705,47 @@ function SharedResourceManagementPanel(props: {
         }
       }
       if (status) notifyResourceChange()
+    } catch (error) {
+      if (current()) setPanelError(error)
+    } finally {
+      if (current()) {
+        mcpActionRequest = undefined
+        setLoading(false)
+      }
+    }
+  }
+
+  async function handleMcpAuthorization(name: string, displayName: string, trigger: HTMLButtonElement) {
+    if (loading() || mcpActionRequest) return
+    const directory = currentDirectory()
+    if (!directory) return
+    const owner = { directory, authority: captureApiAuthority() }
+    mcpActionRequest = owner
+    const current = () => mcpActionRequest === owner && ownsMcpScope(owner)
+    setLoading(true)
+    setNotice(undefined)
+    try {
+      const authorization = await startMcpAuthorization(name, owner)
+      if (!current()) return
+      if (authorization.kind === "connected") {
+        if (await refreshMcpStatus(owner)) notifyResourceChange()
+        return
+      }
+      setLoading(false)
+      const canOpen = () => current() && mcpStatusCurrent() && mcp()[name]?.status === "needs_auth"
+      await showAppDialog({
+        title: t("mcp.authorize_server", { name: displayName }),
+        message: t("mcp.authorization_body", { directory }),
+        okLabel: t("llm.auth_open_page"),
+        cancel: true,
+        openingGuard: canOpen,
+        returnFocusTarget: () => current() && trigger.isConnected ? trigger : null,
+        onConfirm: async () => {
+          if (!canOpen()) throw new Error(t("mcp.authorization_scope_changed"))
+          if (!await nativeOpen(authorization.url)) throw new Error(t("llm.auth_open_failed"))
+        },
+        confirmErrorSummary: () => t(canOpen() ? "llm.auth_open_failed" : "mcp.authorization_scope_changed"),
+      })
     } catch (error) {
       if (current()) setPanelError(error)
     } finally {
@@ -1914,7 +1955,9 @@ function SharedResourceManagementPanel(props: {
                         if (executionOwned()) return t("mcp.status.execution_owned")
                         return value && "error" in value ? value.error : undefined
                       }
-                      const controllable = () => !executionOwned() && ["connected", "disabled", "disconnected", "failed"].includes(status() || "")
+                      const needsAuthorization = () => status() === "needs_auth"
+                      const controllable = () => !executionOwned() &&
+                        (needsAuthorization() || ["connected", "disabled", "disconnected", "failed"].includes(status() || ""))
                       const action = () => status() === "connected" ? "mcp.disconnect" : "mcp.connect"
                       return (
                         <SettingsRow
@@ -1935,10 +1978,16 @@ function SharedResourceManagementPanel(props: {
                                   tone="neutral"
                                   aria-disabled={loading() || undefined}
                                   aria-busy={loading() || undefined}
-                                  aria-label={t(`${action()}_server`, { name: displayName() })}
-                                  onClick={() => void handleMcpConnection(name(), status() === "connected")}
+                                  aria-label={t(needsAuthorization() ? "mcp.authorize_server" : `${action()}_server`, { name: displayName() })}
+                                  onClick={(event) => {
+                                    if (needsAuthorization()) {
+                                      void handleMcpAuthorization(name(), displayName(), event.currentTarget)
+                                    } else {
+                                      void handleMcpConnection(name(), status() === "connected")
+                                    }
+                                  }}
                                 >
-                                  {t(action())}
+                                  {t(needsAuthorization() ? "mcp.authorize" : action())}
                                 </Button>
                               </Show>
                             </>

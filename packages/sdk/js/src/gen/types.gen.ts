@@ -3265,6 +3265,14 @@ export type LocalEnvironmentConfig = {
  */
 export type LogLevel = "DEBUG" | "INFO" | "WARN" | "ERROR"
 
+export type McpAuthorizationRequiredError = {
+  data: {
+    mcpName: string
+    message: string
+  }
+  name: "MCPAuthorizationRequiredError"
+}
+
 export type McpExecutionConnectionRequiredError = {
   data: {
     mcpName: string
@@ -25110,9 +25118,9 @@ export type McpConnectErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * MCP connection is managed by its session or task
+   * MCP authorization is required or the connection is managed by its session or task
    */
-  409: McpExecutionConnectionRequiredError
+  409: McpAuthorizationRequiredError | McpExecutionConnectionRequiredError
   /**
    * MCP connection failed
    */

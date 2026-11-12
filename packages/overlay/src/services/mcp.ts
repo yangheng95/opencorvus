@@ -3,8 +3,10 @@
 // DOM-rendering is handled by declarative Solid.js components.
 
 import type { McpStatus } from "@opencorvus-ai/sdk"
+import { externalUrl } from "../utils/external-url"
+import { localeTag } from "../utils/i18n"
 import { isMcpConnectionStatus } from "../utils/settings-status-labels"
-import { apiJson, type ApiAuthority } from "./api"
+import { apiJson, ApiError, type ApiAuthority } from "./api"
 import type { ConfigRequestOptions } from "./config"
 
 export type RemoteMcpTransport = "streamable-http" | "sse"
@@ -201,13 +203,43 @@ async function changeMcpConnection(name: string, action: "connect" | "disconnect
 }
 
 /** Connects a configured MCP server by name. */
-export function connectMcp(name: string, options: McpRequestOptions = {}): Promise<void> {
-  return changeMcpConnection(name, "connect", options)
+export async function connectMcp(name: string, options: McpRequestOptions = {}): Promise<"connected" | "needs_auth"> {
+  try {
+    await changeMcpConnection(name, "connect", options)
+    return "connected"
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 409 && isObjectRecord(error.body) &&
+      error.body.name === "MCPAuthorizationRequiredError" && isObjectRecord(error.body.data) &&
+      error.body.data.mcpName === name && typeof error.body.data.message === "string") {
+      return "needs_auth"
+    }
+    throw error
+  }
 }
 
 /** Disconnects an active MCP connection by name. */
 export function disconnectMcp(name: string, options: McpRequestOptions = {}): Promise<void> {
   return changeMcpConnection(name, "disconnect", options)
+}
+
+export async function startMcpAuthorization(
+  name: string,
+  options: { directory: string; authority: ApiAuthority },
+): Promise<{ kind: "connected" } | { kind: "authorize"; url: string }> {
+  const response = await apiJson<unknown>(mcpPath(`mcp/${encodeURIComponent(name)}/auth`, options), {
+    authority: options.authority,
+    method: "POST",
+    headers: { "Accept-Language": localeTag() },
+  })
+  if (isObjectRecord(response) && typeof response.authorizationUrl === "string") {
+    if (response.authorizationUrl === "") return { kind: "connected" }
+    try {
+      return { kind: "authorize", url: externalUrl(response.authorizationUrl).href }
+    } catch {
+      throw new Error("The MCP authorization response contained an unusable external address.")
+    }
+  }
+  throw new Error("The MCP authorization response did not contain a valid address.")
 }
 
 /** Removes stored OAuth/auth credentials for an MCP server by name. */

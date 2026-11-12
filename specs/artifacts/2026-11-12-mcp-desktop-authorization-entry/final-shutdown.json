@@ -1,0 +1,45 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b285-localized",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39910",
+    "pid": 30320
+  },
+  "listenersBefore": [
+    {
+      "LocalPort": 39911,
+      "OwningProcess": 27512
+    },
+    {
+      "LocalPort": 39910,
+      "OwningProcess": 30320
+    },
+    {
+      "LocalPort": 19876,
+      "OwningProcess": 30320
+    }
+  ],
+  "shutdown": [
+    {
+      "url": "http://127.0.0.1:39910/shutdown",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:39911/__review_shutdown",
+      "status": 200
+    }
+  ],
+  "processIDsExited": [
+    28396,
+    16852,
+    34356,
+    15220,
+    17292,
+    24552,
+    30320,
+    27512
+  ],
+  "remainingListeners": [],
+  "remainingProcessIDs": []
+}

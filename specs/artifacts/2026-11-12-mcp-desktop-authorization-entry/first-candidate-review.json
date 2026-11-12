@@ -1,0 +1,39 @@
+{
+  "receipts": [
+    {
+      "side": "project",
+      "route": "/mcp/review-oauth/connect",
+      "status": 409,
+      "requestID": "c37dfe0a-f286-4058-9a36-f21a860f9b5a"
+    },
+    {
+      "side": "project",
+      "route": "/mcp/review-oauth/auth",
+      "status": 200,
+      "requestID": "9e69644c-ce4a-4c61-89bf-a1cb820ca945"
+    },
+    {
+      "side": "alternate",
+      "route": "/mcp/review-oauth/connect",
+      "status": 409,
+      "requestID": "236baadf-0497-4859-85d3-7ee3a94e5cac"
+    },
+    {
+      "side": "alternate",
+      "route": "/mcp/review-oauth/auth",
+      "status": 200,
+      "requestID": "12e6fd1a-ac2b-4de3-8938-acbc2524d0f3"
+    }
+  ],
+  "primary": {
+    "side": "project",
+    "requestID": "66484c3b-90d1-45be-8536-3ebb7241bdc1",
+    "statuses": {
+      "review-oauth": {
+        "status": "needs_auth"
+      }
+    }
+  },
+  "localBrowserOpened": true,
+  "localConsentWasClosedWithoutSubmitting": true
+}
