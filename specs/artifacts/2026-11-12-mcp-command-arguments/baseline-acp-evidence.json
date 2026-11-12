@@ -1,0 +1,186 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 22096,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "operation": "attach-strict-prompt",
+    "side": "project",
+    "responseSessionID": "ses_-zUPF1B8yzzNLPSOqew2",
+    "notificationSessionID": "ses_-zUPF1B8yzzNLPSOqew2",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note"
+      },
+      {
+        "name": "editor_strict:strict_report",
+        "description": "A report with a required date and optional scope"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "59d769a0-1ef1-4514-9f97-df7a80829728",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_strict": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 500,
+    "requestID": "863cf4bc-6baa-472f-aef8-af4c100d60b9",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "6f129193-3bdd-4e3d-ae91-37735efc2621",
+    "data": {
+      "editor_strict": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39976/mcp"
+      }
+    }
+  },
+  {
+    "operation": "public-valid-arguments",
+    "status": 500,
+    "requestID": "3cfa7fc4-43d4-482a-9e56-20d977db1f6a",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "operation": "public-optional-omitted",
+    "status": 500,
+    "requestID": "a71a06f3-f92d-4841-b234-eccc28cfeef8",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "operation": "public-missing-required",
+    "status": 500,
+    "requestID": "d0a54196-3b5c-4708-a8a3-5f37ab6138b7",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "operation": "public-invalid-value",
+    "status": 500,
+    "requestID": "1c001150-cc19-4f3f-82cf-d3c6b05af566",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "operation": "editor-valid-arguments",
+    "error": {
+      "code": -32603,
+      "message": "Internal error: OpenCorvus prompt request failed",
+      "data": {
+        "sessionID": "ses_-zUPF1B8yzzNLPSOqew2",
+        "inputMessageID": "msg_g0Vakyp5j00fjYM96srQ",
+        "error": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+          }
+        }
+      }
+    }
+  },
+  {
+    "operation": "editor-ordinary-command",
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    }
+  },
+  {
+    "operation": "durable-conversation",
+    "status": 200,
+    "requestID": "f2da634d-081f-4596-86ee-e0a87889d58f",
+    "data": [
+      {
+        "id": "msg_g0Vakyp6P00Q9NZ2glPC",
+        "role": "user",
+        "text": [
+          "Use the strict-project note."
+        ]
+      },
+      {
+        "id": "msg_g0VakypAs00tMVr2Gyce",
+        "role": "assistant",
+        "parentID": "msg_g0Vakyp6P00Q9NZ2glPC",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      }
+    ]
+  }
+]

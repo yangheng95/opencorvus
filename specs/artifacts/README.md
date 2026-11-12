@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [远端提示命令参数的真实基线](2026-11-12-mcp-command-arguments/README.md)
 - [共享连接凭据代际的真实跨进程基线](2026-11-12-mcp-credential-runtime-settlement/README.md)
 - [0.1.51 发布证据](2026-11-12-release-0.1.51/README.md) · 原生、官网和正式包日志
 - [编辑器远端传输的真实协议证据](2026-11-12-acp-remote-mcp-transport/README.md)

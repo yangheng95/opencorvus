@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [远端命令按声明接收实际参数](records/2026-11/2026-11-12-mcp-command-arguments.md)
 - [同一连接配置只推进一次凭据代际](records/2026-11/2026-11-12-mcp-credential-runtime-settlement.md)
 - [0.1.51 发布](records/2026-11/2026-11-12-release-0.1.51.md) · 版本准入与公开交付
 - [编辑器按声明接入远端连接传输](records/2026-11/2026-11-12-acp-remote-mcp-transport.md)

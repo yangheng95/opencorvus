@@ -1,0 +1,22 @@
+# 远端命令按声明接收实际参数
+
+## Recall
+
+- 用户要求本人持续按批调查，先完成根因及影响并落盘，再实施、真实桌面截图复核、聚焦正向验收、按范围提交和正常上游同步。未委托。上一批 `0dce976b5` 已推送，原有 177 项工作区状态逐项一致。工作分支另有并行提交的版本说明，进入推送前核对完整待推集合。
+- 已读 `AGENTS.md`、`04-extensions.md`、`05-config.md`、双语命令文档、[当前命令目录](2026-11-12-current-command-projection.md)与[编辑器命令通知](2026-11-12-acp-attached-command-announcement.md)。全仓检查 `Command.Info/get/list/catalog`、`SessionCommand.CommandInput` 与模板处理、公开命令路由、Agent Client Protocol（ACP，智能体客户端协议）、命令行 `run --command`、软件开发工具包（SDK）生成与 `command.list` 消费、Model Context Protocol（MCP，模型上下文协议）提示绑定和其参数错误。当前 Overlay 命令面板消费自身应用操作，检索路径没有直接消费公开命令模板的桌面页面。
+- 官方 MCP 合同以 `prompts/list` 公开提示和参数声明，调用 `prompts/get` 传入实际参数。无效参数使用 JSON-RPC（JSON Remote Procedure Call，JSON 远程过程调用）`-32602`。[MCP 提示协议](https://modelcontextprotocol.io/specification/2025-11-25/server/prompts)
+
+## 修改前证据
+
+真实 `opencorvus acp` 接入实际本机远端 `editor_strict`，首条会话通知成功广播 `editor_strict:strict_report`。声明要求日期，范围可选。公开目录返回 500 `863cf4bc-6baa-472f-aef8-af4c100d60b9`。真实 Session（会话）入口提交有效日期和带引号的范围返回 500 `3cfa7fc4-43d4-482a-9e56-20d977db1f6a`，只给有效日期返回 500 `a71a06f3-f92d-4841-b234-eccc28cfeef8`。缺失日期、日期格式非法和 ACP 有效斜杠参数也失败。实际协议记录每次收到的是 `{date:"$1",scope:"$2"}`。同一会话的普通 `/review-note` 正常进入匿名本地流式模型并持久化成功回复。真实英文桌面中连接已建立，Chrome 原生页面显示公开目录错误。[实际协议、接口与截图](../../artifacts/2026-11-12-mcp-command-arguments/README.md)
+
+## 根因和影响
+
+`Command` 把远端提示定义转成一个先向服务端提交固定位置字符串的 `template` getter，`SessionCommand` 在远端已经拒绝后才会使用用户真实参数做本地替换。`Command.list` 同样访问该 getter，一个必须校验参数的远端定义便使普通命令目录整体失败。代码中仅有的生产 `Command.get` 调用是 Session 命令执行，公开路由、ACP 和命令行通过它到达真实运行路径。ACP `Command.catalog` 只读取元数据，能够正确发现该项。独立 Task（任务）和 Mission（多步任务）与固定作用域的提示消费不经过这个 Session 命令模板。没有发现调度、恢复或终态异常。
+
+公开目录需要保留静态命令模板与无参数远端命令的实际模板。带参数远端命令的准确内容取决于用户输入，目录使用其名称、说明、要求和现有位置提示，`template` 对该远端类型可缺省。这是软件开发工具包和文档可见的契约变化。保留现有精确项目和连接代际，保留真实传输错误与读取中途换源的 409。服务返回非文本消息的消费方式、权限、用户附件与其他模板语法沿用当前合同。
+
+## 实施与验收
+
+- 将静态模板和绑定的远端定义作为同一命令目录的明确变体。执行远端命令时使用已有引号及位置规则映射真实命名参数，最后一个声明参数接收其余输入，可选参数可省略。向同一当前 MCP 提示读取一次实际正文。缺必填项和实际协议拒绝转为明确参数错误，公开响应为 400，ACP 为 `invalidParams`。现有连接或定义变更按现有 409 结算。公开目录直接投影带参数提示的声明，避免用虚构值读取。无需新增端点或持久格式。
+- 通过真实公开接口、官方 ACP 客户端和隔离本地流式模型验证准确日期及引号参数、缺可选参数、缺必填参数、服务端非法值、普通命令与连接中途变化。实际桌面双语查看连接，Chrome 原生界面读取新公开目录，逐张人工复核。运行聚焦正向合同并同步接口生成、双语命令文档、类型和路由检查。验证结束按范围提交、合并并正常推送。
