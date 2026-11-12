@@ -1,0 +1,21 @@
+# 新增 MCP 连接保留原始名称
+
+## Recall
+
+- 用户要求本人持续迭代。每批并行调查用户界面、功能及缺陷，先落盘根因与影响，随后实施、真实桌面交互和截图复核、聚焦正向测试、范围提交、合并上游与普通推送。本人独立完成。开始时 `06dff67fe` 已正常推送，与上游 0/0，原 177 条工作区状态逐行一致。
+- 已读 `AGENTS.md`、`04-extensions.md`、`05-config.md`、`07-panel.md`、[新增草稿归属](2026-11-12-mcp-add-draft-ownership.md)、[新增确切回执](2026-11-12-mcp-add-exact-acknowledgment.md)、[项目连接分配](2026-11-12-mcp-assignment-name-validation.md)、[项目执行引用](2026-11-12-mcp-runtime-exact-project-reference.md)和[精确操作路由](2026-11-12-mcp-exact-operation-routes.md)。全仓查 `buildMcpAddRequest`、`ConfigureRequest`、`ConfigureInput`、`MCP.configure`、`writeMcpConfigEntry`、`mcp.add`、`assertMcpServerAttached`、`displayMcpName`、项目状态和配置写后恢复。已查连接服务、配置事务、公开路由、桌面表单、命令行、生成客户端、Agent Client Protocol（ACP，智能体客户端协议）、声明和项目凭据路径。触及路径中的测试为服务、验证器或运行合同。
+- 验收目标是同一项目的 `review-tools` 与 `" review-tools "` 从创建、项目配置、回执到连接动作都保持独立，另一同名项目独立。原名中至少有一个非空白字符，空值和全空白继续返回原字段错误。保留同一个准确名称更新已有配置的契约。双语桌面、真实连接协议、重启和作用域读回。使用独立可见 Chrome、两个隔离项目和本机匿名协议服务，无外部 Provider 或模型请求。
+
+## 修改前证据、根因与影响
+
+两个同名 `archive-review` 项目各有一个 `review-tools`，分别指向 `/project/normal` 与 `/alternate/normal`。主项目英文 Model Context Protocol（MCP，模型上下文协议）连接页输入 `" review-tools "` 和 `/project/padded`。浏览器真实提交正文却为 `name:"review-tools"`，响应 200 `c4ddcda2-6fcc-413c-812a-f218f5cd0b46`。表单关闭，列表仍只有一项。实际项目配置文件中 `review-tools` 的地址已被覆盖。点击现有行的 Connect 返回 200 `7d551389-7a7d-4ae5-a561-1b9233ed443b`，本地 `/project/padded` 收到初始化、完成通知和工具列表请求。另一个项目保持原地址。随后向另一项目直接提交原始 `name:" review-tools "` 和 `/alternate/padded`，真实 200 `815447cc-74a8-4c12-a324-b2a524992fbc`，该项目的普通名称也被覆盖。已通过原名更新恢复两个独立测试项目的原地址与连接状态。[实拍、请求和协议证据](../../artifacts/2026-11-12-mcp-add-exact-name/README.md)
+
+表单保留用户输入，`buildMcpAddRequest` 在传输前调用 `input.name.trim()` 并使用返回值。直接请求绕开此步骤仍经过公开 `MCP.ConfigureRequest` 的 `.trim().min(1)`，`ConfigureInput` 和 `MCP.configure` 也从同一 schema 解析。裁剪后的 `parsed.name` 被原子配置写入、连接资源控制、状态投影和凭据 staging（暂存）共同作为目标。旧的严格回执校验核对发送的名称，因此桌面把已经裁剪的同名回执当作有效。旧服务合同测试直接使用带空格输入并期望裁剪后的请求，遗漏了两条独立名称的情况。
+
+同名覆盖会更换连接地址或命令，受影响的现有授权和使用者仍引用原名称，后续可访问被覆盖后的服务。若配置含静态凭据，同一项目和裁剪后名称也用于凭据事务。该影响由生产调用路径确认，本次基线未使用凭据或模型。ACP 保留客户端传入的原名并按同名读取 `sdk.mcp.add` 回执，服务端裁剪可导致配置落盘后会话附加检查报错。命令行交互直接把输入名称作为配置文件键，已能保留原值。项目配置、控制和既有 OAuth（Open Authorization，开放授权）操作已使用准确名称。此前覆盖的旧值无法从现有记录可靠反推，修复前已受影响的设置由配置所有者根据原意恢复。现有 Chat（对话）和 Work（通用工作）分配要求非空且首尾无空白，项目连接管理和其他具名运行面可继续使用这些已存在的名字。本批涉及名称到配置目标的映射，未观察到调度、恢复或终态异常，未启动 Task、Mission 或模型轮次。
+
+## 实施与验收
+
+- 表单服务发送原始字符串，用裁剪结果仅判断是否为空。公开创建 schema 校验至少有一个非空白字符并保留原字符串，沿用名称字段的 `too_small` 错误。配置、状态、凭据事务和工具路径继续使用同一精确键。同一准确键的更新仍走现有原子写入。公开文档和生成 SDK（Software Development Kit，软件开发工具包）说明原始键及非空白约束。无需数据库或配置格式迁移。
+- 带首尾空白时，在现名称字段下显示随界面语言变化的说明，告知原样保存和 Chat/Work 当前分配条件。通知沿用列表的引号显示规则。正常输入保留现有表单结构和行为。
+- 聚焦前端服务测试覆盖原样提交与确切回执，后端真实路由测试覆盖普通与带空格名称的独立持久配置、同名更新和全空白字段错误。用现凭据提交、重启与归属测试确认共用事务。候选英文桌面新增后核对原连接和新连接，中文另一项目用实际页面交互验证两项；独立读回精确请求、协议端点和重启状态。运行类型、构建、双语、API（Application Programming Interface，应用程序编程接口）生成、文档与架构检查。关停本人启动的隔离资源，范围提交和正常同步。

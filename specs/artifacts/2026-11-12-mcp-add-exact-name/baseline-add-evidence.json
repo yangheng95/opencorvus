@@ -1,0 +1,256 @@
+{
+  "before": [
+    {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "4ccf3fbc-8d4b-4b81-b206-b918eda181f8",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/normal",
+          "status": "disconnected"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+      "status": 200,
+      "requestID": "1c9a116e-ac7e-472b-a204-508129c7a08e",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/alternate/normal",
+          "status": "disconnected"
+        }
+      ]
+    }
+  ],
+  "desktop": {
+    "typedName": " review-tools ",
+    "requests": [
+      {
+        "requestName": "review-tools",
+        "url": "http://127.0.0.1:39930/project/padded",
+        "status": 200,
+        "requestID": "c4ddcda2-6fcc-413c-812a-f218f5cd0b46",
+        "connections": [
+          {
+            "name": "review-tools",
+            "status": "disconnected"
+          },
+          {
+            "name": "browser",
+            "status": "disconnected"
+          },
+          {
+            "name": "computer",
+            "status": "disconnected"
+          }
+        ]
+      }
+    ],
+    "readback": [
+      {
+        "side": "project",
+        "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+        "status": 200,
+        "requestID": "28095636-1844-46cc-a019-72943a2884ea",
+        "connections": [
+          {
+            "name": "review-tools",
+            "url": "http://127.0.0.1:39930/project/padded",
+            "status": "disconnected"
+          }
+        ]
+      },
+      {
+        "side": "alternate",
+        "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+        "status": 200,
+        "requestID": "687accbb-0d5a-4269-b1c1-c1805af51988",
+        "connections": [
+          {
+            "name": "review-tools",
+            "url": "http://127.0.0.1:39930/alternate/normal",
+            "status": "disconnected"
+          }
+        ]
+      }
+    ]
+  },
+  "direct": {
+    "side": "alternate",
+    "requestName": " review-tools ",
+    "url": "http://127.0.0.1:39930/alternate/padded",
+    "status": 200,
+    "requestID": "815447cc-74a8-4c12-a324-b2a524992fbc",
+    "connections": [
+      {
+        "name": "review-tools",
+        "status": "connected"
+      },
+      {
+        "name": "browser",
+        "status": "disconnected"
+      },
+      {
+        "name": "computer",
+        "status": "disconnected"
+      }
+    ]
+  },
+  "afterDirect": [
+    {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "cea4cde8-947f-43ee-baae-f165571e38fb",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/padded",
+          "status": "disconnected"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+      "status": 200,
+      "requestID": "dc9c6f81-b746-4076-b7cc-2f87a54cf030",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/alternate/padded",
+          "status": "connected"
+        }
+      ]
+    }
+  ],
+  "connect": {
+    "requests": [
+      {
+        "requestName": "review-tools",
+        "status": 200,
+        "requestID": "7d551389-7a7d-4ae5-a561-1b9233ed443b"
+      }
+    ],
+    "readback": {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "0bbb2693-996f-4fde-a912-986df62ca60f",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/padded",
+          "status": "connected"
+        }
+      ]
+    }
+  },
+  "protocol": [
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/padded",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/padded",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/padded",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/normal",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/alternate/normal",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ],
+  "restored": [
+    {
+      "side": "project",
+      "projectID": "prj_hXG13Qyoduy4i6n9JhOR",
+      "status": 200,
+      "requestID": "a14d57f4-dafd-424e-b09c-080914ec3acc",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/project/normal",
+          "status": "connected"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "projectID": "prj_hRCmK3JBEgXfiOCFC4GU",
+      "status": 200,
+      "requestID": "a07c7f30-55b8-46d7-afae-b2b8a40dcd40",
+      "connections": [
+        {
+          "name": "review-tools",
+          "url": "http://127.0.0.1:39930/alternate/normal",
+          "status": "connected"
+        }
+      ]
+    }
+  ]
+}

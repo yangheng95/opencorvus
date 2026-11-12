@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [新增 MCP 连接保留原始名称](records/2026-11/2026-11-12-mcp-add-exact-name.md)
 - [项目禁用连接时保留专家团和技能设置](records/2026-11/2026-11-12-squad-catalog-disabled-mcp.md)
 - [连接操作通过请求体传递原始名称](records/2026-11/2026-11-12-mcp-exact-operation-routes.md)
 - [执行目录和授权保留项目连接原始名称](records/2026-11/2026-11-12-mcp-runtime-exact-project-reference.md)
