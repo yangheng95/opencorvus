@@ -1,0 +1,21 @@
+{
+  "directSessionID": "ses_-zUPEYOyozzhrfzg2k3z",
+  "webSessionID": "ses_hY8ig1tvTOI7oZDcRX6S",
+  "webHistoryRequestID": "34f5db40-2e3f-4e32-8a2e-a42b357ce8b9",
+  "explicitImage": {
+    "requestID": "9fa576b0-c927-4e47-9a9b-e5bd4a1d585c",
+    "bytes": 100,
+    "sourceMatchesStreamApiAndDownload": true
+  },
+  "explicitShell": {
+    "requestID": "6bb34a22-5581-4065-8305-e9edd6f28189",
+    "sessionID": "ses_-zUPEXNYOzzdqbzmU0WB",
+    "inputMessageID": "msg_34302e843b4441e88d",
+    "result": "explicit-shell-ok\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "state": "completed"
+  },
+  "databaseQuickCheck": {
+    "baseline": "ok",
+    "candidate": "ok"
+  }
+}

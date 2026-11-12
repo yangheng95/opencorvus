@@ -63,13 +63,12 @@ export namespace Command {
     }),
   )
 
+  export const templatePlaceholder = /\$(ARGUMENTS|\d+)/g
+
   export function hints(template: string): string[] {
-    const result: string[] = []
-    const numbered = template.match(/\$\d+/g)
-    if (numbered) {
-      for (const match of [...new Set(numbered)].sort()) result.push(match)
-    }
-    if (template.includes("$ARGUMENTS")) result.push("$ARGUMENTS")
+    const matches: string[] = template.match(templatePlaceholder) ?? []
+    const result = [...new Set(matches.filter((marker) => marker !== "$ARGUMENTS"))].sort()
+    if (matches.includes("$ARGUMENTS")) result.push("$ARGUMENTS")
     return result
   }
 

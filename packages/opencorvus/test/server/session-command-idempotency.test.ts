@@ -1,10 +1,11 @@
 import { afterEach, describe, expect, spyOn, test } from "bun:test"
 import { Hono } from "hono"
 import path from "node:path"
-import { readFile } from "node:fs/promises"
+import { writeFile } from "node:fs/promises"
 import { Config } from "../../src/config/config"
 import { Identifier } from "../../src/id/id"
 import { ComputerMCPBuiltin } from "../../src/mcp/computer/builtin"
+import { Plugin } from "../../src/plugin"
 import { Instance } from "../../src/project/instance"
 import { Provider, type Provider as ProviderType } from "../../src/provider/provider"
 import { serverErrorResponse } from "../../src/server/error-handler"
@@ -45,7 +46,7 @@ afterEach(async () => {
 })
 
 describe("public Session command identity", () => {
-  test("a replayed command converges on the first occurrence and runs its template substitution once", async () => {
+  test("a replayed command keeps one expanded input with literal arguments and its declared file", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -53,18 +54,23 @@ describe("public Session command identity", () => {
         await Config.updateProjectPatch({
           mcp: { [ComputerMCPBuiltin.ServerName]: { ...ComputerMCPBuiltin.localConfig(), enabled: false } },
         })
-        const effectFile = path.join(project.path, "command-substitution-effect.txt").replaceAll("\\", "/")
+        const filename = "declared source.txt"
+        await writeFile(path.join(project.path, filename), "Contents of the declared command file.\n")
         await Config.updateProjectPatch({
           command: {
             "replay-probe": {
-              template: `Reply with the substitution marker.\n\n!\`bun -e "require('fs').appendFileSync('${effectFile}','ran;')"\``,
+              template: "Read @$1 now. Details <$2>. Entire <$ARGUMENTS>.",
               agent: "chat",
             },
           },
         })
         const session = await Session.create({ kind: "assistant", title: "Command replay identity" })
         const messageID = Identifier.ascending("message")
+        const details = "Keep $$ and $& with $ARGUMENTS"
+        const argumentsText = `"${filename}" ${details}`
         let physicalTurns = 0
+        const hooks = spyOn(Plugin, "trigger")
+        const preparations = () => hooks.mock.calls.filter(([hook]) => hook === "command.execute.before").length
         const provider = spyOn(Provider, "getModel").mockResolvedValue(providerModel())
         const processor = spyOn(SessionProcessor, "create").mockImplementation((input: any) => {
           const assistant = input.assistantMessage
@@ -95,7 +101,7 @@ describe("public Session command identity", () => {
           const body = {
             messageID,
             command: "replay-probe",
-            arguments: "",
+            arguments: argumentsText,
             model: `${model.providerID}/${model.modelID}`,
           }
           const send = () =>
@@ -109,20 +115,18 @@ describe("public Session command identity", () => {
 
           const firstResponse = await send()
           const first = (await firstResponse.json()) as any
-          const substitutionRuns = async () =>
-            ((await readFile(effectFile, "utf8").catch(() => "")).match(/ran;/g) ?? []).length
           expect({
             status: firstResponse.status,
             parentID: first.info.parentID,
             role: first.info.role,
             physicalTurns,
-            substitutionRuns: await substitutionRuns(),
+            preparations: preparations(),
           }).toEqual({
             status: 200,
             parentID: messageID,
             role: "assistant",
             physicalTurns: 1,
-            substitutionRuns: 1,
+            preparations: 1,
           })
 
           const retryResponse = await send()
@@ -131,14 +135,23 @@ describe("public Session command identity", () => {
             status: retryResponse.status,
             sameAssistant: retry.info.id === first.info.id,
             physicalTurns,
-            substitutionRuns: await substitutionRuns(),
+            preparations: preparations(),
           }).toEqual({
             status: 200,
             sameAssistant: true,
             physicalTurns: 1,
-            substitutionRuns: 1,
+            preparations: 1,
           })
+          const messages = await Session.messages({ sessionID: session.id })
+          const input = messages.find(({ info }) => info.id === messageID)
+          expect(input?.parts).toMatchObject([
+            { type: "text", text: `Read @${filename} now. Details <${details}>. Entire <${argumentsText}>.` },
+            { type: "text" },
+            { type: "text", text: expect.stringContaining("Contents of the declared command file.") },
+            { type: "file", filename, mime: "text/plain" },
+          ])
         } finally {
+          hooks.mockRestore()
           processor.mockRestore()
           provider.mockRestore()
         }

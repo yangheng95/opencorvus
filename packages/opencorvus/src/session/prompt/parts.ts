@@ -15,7 +15,6 @@ import { MCP } from "../../mcp"
 import { decodeMcpResourceBlob } from "../../mcp/resource-content"
 import { ReadTool } from "../../tool/read"
 import { FileTime } from "../../file/time"
-import { ConfigMarkdown } from "../../config/markdown"
 import { EffectiveConfig } from "../../config/effective"
 import type { Config } from "../../config/config"
 import { CapabilityRules } from "@/capability/rules"
@@ -61,21 +60,10 @@ function requireByteMaterializationProjectID(input: PromptInput, context: string
 
 export async function resolvePromptParts(
   template: string,
-  opts?: { config?: Config.Info },
+  filenames: readonly string[],
 ): Promise<PromptInput["parts"]> {
-  const parts: PromptInput["parts"] = [
-    {
-      type: "text",
-      text: template,
-    },
-  ]
-  const files = ConfigMarkdown.files(template)
-  const seen = new Set<string>()
-  await Promise.all(
-    files.map(async (match) => {
-      const name = match[1]
-      if (seen.has(name)) return
-      seen.add(name)
+  const files = await Promise.all(
+    [...new Set(filenames)].map(async (name): Promise<Extract<PromptInput["parts"][number], { type: "file" }>> => {
       const filepath = name.startsWith("~/")
         ? path.join(os.homedir(), name.slice(2))
         : path.resolve(Instance.worktree, name)
@@ -84,25 +72,15 @@ export async function resolvePromptParts(
         throw new Error(`Prompt file reference ${JSON.stringify(name)} does not exist at ${filepath}`, { cause: error })
       })
 
-      if (stats.isDirectory()) {
-        parts.push({
-          type: "file",
-          url: pathToFileURL(filepath).href,
-          filename: name,
-          mime: "application/x-directory",
-        })
-        return
-      }
-
-      parts.push({
+      return {
         type: "file",
         url: pathToFileURL(filepath).href,
         filename: name,
-        mime: "text/plain",
-      })
+        mime: stats.isDirectory() ? "application/x-directory" : "text/plain",
+      }
     }),
   )
-  return parts
+  return [{ type: "text", text: template }, ...files]
 }
 
 export type UserMessagePersistenceHooks = {

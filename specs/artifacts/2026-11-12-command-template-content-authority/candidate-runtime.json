@@ -1,0 +1,233 @@
+{
+  "sessionID": "ses_-zUPEYOyozzhrfzg2k3z",
+  "createRequestID": "b887c5ef-4cfc-4e19-bb31-216691ad5b20",
+  "permissions": [
+    {
+      "permission": "bash",
+      "pattern": "*",
+      "action": "deny"
+    },
+    {
+      "permission": "write",
+      "pattern": "*",
+      "action": "deny"
+    }
+  ],
+  "turns": [
+    {
+      "name": "replacement-sequences",
+      "command": "review-literal",
+      "argument": "Keep $$, $&, and $ARGUMENTS intact",
+      "requestID": "bb19fbec-3c9b-443e-8218-5b19ca01ba24",
+      "replyID": "msg_g0ValRb6x00qGwjx5H3n",
+      "inputMessageID": "msg_205b471cbf8741bc96",
+      "finish": "stop",
+      "userText": [
+        "Argument body: <Keep $$, $&, and $ARGUMENTS intact>"
+      ],
+      "files": [],
+      "literalInput": "/review-literal Keep $$, $&, and $ARGUMENTS intact",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Argument body: <Keep $$, $&, and $ARGUMENTS intact>"
+        ]
+      }
+    },
+    {
+      "name": "mixed-placeholders",
+      "command": "review-mixed",
+      "argument": "Show the text $ARGUMENTS literally",
+      "requestID": "89e66649-b6d3-4489-a1e1-faf24496fd1e",
+      "replyID": "msg_g0ValRbW500NqoemFWo9",
+      "inputMessageID": "msg_08d16517a2614c2d91",
+      "finish": "stop",
+      "userText": [
+        "Position <Show the text $ARGUMENTS literally>, full <Show the text $ARGUMENTS literally>"
+      ],
+      "files": [],
+      "literalInput": "/review-mixed Show the text $ARGUMENTS literally",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Position <Show the text $ARGUMENTS literally>, full <Show the text $ARGUMENTS literally>"
+        ]
+      }
+    },
+    {
+      "name": "argument-shell-marker",
+      "command": "review-literal",
+      "argument": "!`echo argument-shell-ok`",
+      "requestID": "3fcb3417-dcda-4421-aea1-4d64d5526999",
+      "replyID": "msg_g0ValRble00D8KGf1uIN",
+      "inputMessageID": "msg_b03f958ca39f4bae85",
+      "finish": "stop",
+      "userText": [
+        "Argument body: <!`echo argument-shell-ok`>"
+      ],
+      "files": [],
+      "literalInput": "/review-literal !`echo argument-shell-ok`",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Argument body: <!`echo argument-shell-ok`>"
+        ]
+      }
+    },
+    {
+      "name": "remote-shell-marker",
+      "command": "editor_strict:strict_report",
+      "argument": "2026-11-26 \"!`echo remote-shell-ok`\"",
+      "requestID": "4cfb0f48-1b0f-4b8e-9d95-b96d3b3060ed",
+      "replyID": "msg_g0ValRc0k00wwnHVAKjx",
+      "inputMessageID": "msg_86706cf05c89429c97",
+      "finish": "stop",
+      "userText": [
+        "Read the 2026-11-26 report for !`echo remote-shell-ok`."
+      ],
+      "files": [],
+      "literalInput": "/editor_strict:strict_report 2026-11-26 \"!`echo remote-shell-ok`\"",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Read the 2026-11-26 report for !`echo remote-shell-ok`."
+        ]
+      }
+    },
+    {
+      "name": "declared-shell-marker",
+      "command": "review-static",
+      "argument": "",
+      "requestID": "9987c47c-6800-4a4a-98c0-acede7d41ec0",
+      "replyID": "msg_g0ValRcHs00FyQhdgXzZ",
+      "inputMessageID": "msg_f24300e136124974a1",
+      "finish": "stop",
+      "userText": [
+        "Declared shell: !`echo declared-shell-ok`"
+      ],
+      "files": [],
+      "literalInput": "/review-static",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Declared shell: !`echo declared-shell-ok`"
+        ]
+      }
+    },
+    {
+      "name": "argument-file-marker",
+      "command": "review-literal",
+      "argument": "Review @reference.txt now",
+      "requestID": "d16cf80c-f022-4f54-96f3-9cea552247cb",
+      "replyID": "msg_g0ValRcWw00AtL0Fo2Fs",
+      "inputMessageID": "msg_997a2e37cfc0479d91",
+      "finish": "stop",
+      "userText": [
+        "Argument body: <Review @reference.txt now>"
+      ],
+      "files": [],
+      "literalInput": "/review-literal Review @reference.txt now",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Argument body: <Review @reference.txt now>"
+        ]
+      }
+    },
+    {
+      "name": "remote-file-marker",
+      "command": "editor_strict:strict_report",
+      "argument": "2026-11-27 \"note @reference.txt to review\"",
+      "requestID": "0a61846f-2635-4076-a135-7787057040b1",
+      "replyID": "msg_g0ValRcjm00icSWsyYyn",
+      "inputMessageID": "msg_aca5e3f8041244afb4",
+      "finish": "stop",
+      "userText": [
+        "Read the 2026-11-27 report for note @reference.txt to review."
+      ],
+      "files": [],
+      "literalInput": "/editor_strict:strict_report 2026-11-27 \"note @reference.txt to review\"",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Read the 2026-11-27 report for note @reference.txt to review."
+        ]
+      }
+    },
+    {
+      "name": "authored-file-marker",
+      "command": "review-files",
+      "argument": "\"second sample.txt\" resume the review",
+      "requestID": "734d7a56-62f6-4b9b-83d6-48000a3977f9",
+      "replyID": "msg_g0ValRcy7003d3vKd5ok",
+      "inputMessageID": "msg_22ba7c12ead4434cb1",
+      "finish": "stop",
+      "userText": [
+        "Read @reference.txt and @second sample.txt now. Next: resume the review.",
+        "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b304\\\\project\\\\archive-review\\\\reference.txt\"}",
+        "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review\\reference.txt</path>\n<type>file</type>\n<content>1: Owned command template attachment.\n\n(End of file - total 1 lines)\n</content>",
+        "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b304\\\\project\\\\archive-review\\\\second sample.txt\"}",
+        "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review\\second sample.txt</path>\n<type>file</type>\n<content>1: Owned parameterized command file.\n\n(End of file - total 1 lines)\n</content>"
+      ],
+      "files": [
+        {
+          "filename": "reference.txt",
+          "mime": "text/plain",
+          "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/reference.txt"
+        },
+        {
+          "filename": "second sample.txt",
+          "mime": "text/plain",
+          "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/second%20sample.txt"
+        }
+      ],
+      "literalInput": "/review-files \"second sample.txt\" resume the review",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Read @reference.txt and @second sample.txt now. Next: resume the review.",
+          "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b304\\\\project\\\\archive-review\\\\reference.txt\"}",
+          "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review\\reference.txt</path>\n<type>file</type>\n<content>1: Owned command template attachment.\n\n(End of file - total 1 lines)\n</content>",
+          "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b304\\\\project\\\\archive-review\\\\second sample.txt\"}",
+          "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review\\second sample.txt</path>\n<type>file</type>\n<content>1: Owned parameterized command file.\n\n(End of file - total 1 lines)\n</content>"
+        ]
+      }
+    },
+    {
+      "name": "explicit-image",
+      "command": "review-literal",
+      "argument": "Attached explicit image",
+      "requestID": "6e46b55d-fefd-4410-b500-2300ac2563c7",
+      "replyID": "msg_g0ValRdDe00bCdlnNJuc",
+      "inputMessageID": "msg_d6eb034bdd454406a2",
+      "finish": "stop",
+      "userText": [
+        "Argument body: <Attached explicit image>"
+      ],
+      "files": [
+        {
+          "filename": "panel-small.png",
+          "mime": "image/png",
+          "url": "/attachment/prj_hzo8ufEFZEN9CdNPK6My/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+        }
+      ],
+      "literalInput": "/review-literal Attached explicit image",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": [
+          "Argument body: <Attached explicit image>"
+        ]
+      }
+    }
+  ],
+  "historyRequestID": "a1fbb054-9ac5-46ff-ae20-96bd3948a21b"
+}

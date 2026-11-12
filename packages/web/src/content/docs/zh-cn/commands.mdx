@@ -37,7 +37,9 @@ OpenCorvus 为 session prompt 提供 slash 命令系统，包括 ACP `session/pr
 }
 ```
 
-`$ARGUMENTS` 会被替换为用户在命令名后输入的内容。
+`$ARGUMENTS` 按原样插入用户输入的参数文本。模板也可使用 `$1` 等位置参数，最后一个位置占位符接收其余参数。
+
+本地模板中声明的 `@file` 引用会带上指定文件。为单次请求提供文件时，可显式添加附件。
 
 ## Markdown 形式
 
@@ -51,7 +53,7 @@ OpenCorvus 为 session prompt 提供 slash 命令系统，包括 ACP `session/pr
 
 ## 命令中的权限
 
-自定义命令与直接 prompt 走同一权限系统。模板里若触发 `bash` 或 `write`，依然受 [Permissions](../permissions/) 约束。
+命令模板与远端提示的正文作为文本交给助手，内联 Shell 标记也保留在文本中。可使用显式 Shell 操作直接执行命令，也可请助手在当前[权限](../permissions/)下调用工具。
 
 ## Snapshot 与 `/undo`
 

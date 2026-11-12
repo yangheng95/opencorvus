@@ -5,7 +5,6 @@ import { parseFrontmatter, stringifyFrontmatter } from "../util/frontmatter"
 
 export namespace ConfigMarkdown {
   export const FILE_REGEX = /(?<![\w`])@(\.?[^\s`,.]*(?:\.[^\s`,.]+)*)/g
-  export const SHELL_REGEX = /!`([^`]+)`/g
 
   type Range = readonly [start: number, end: number]
 
@@ -71,10 +70,6 @@ export namespace ConfigMarkdown {
     return Array.from(template.matchAll(FILE_REGEX)).filter((match) => {
       return match.index === undefined || !isInsideRange(codeRanges, match.index)
     })
-  }
-
-  export function shell(template: string) {
-    return Array.from(template.matchAll(SHELL_REGEX))
   }
 
   export function parseText(template: string, source: string) {

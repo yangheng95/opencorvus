@@ -8,7 +8,6 @@ import { resolveAgentModelRef } from "../agent/model"
 import { Bus } from "../bus"
 import { Plugin } from "../plugin"
 import { Command } from "../command"
-import { $ } from "bun"
 import { ConfigMarkdown } from "../config/markdown"
 import { EffectiveConfig } from "../config/effective"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -36,29 +35,24 @@ export namespace SessionCommand {
     parts: PromptInput.shape.parts.optional(),
   })
   export type CommandInput = z.infer<typeof CommandInput>
-  const bashRegex = /!`([^`]+)`/g
   const argsRegex = /(?:\[Image\s+\d+\]|"[^"]*"|'[^']*'|[^\s"']+)/gi
-  const placeholderRegex = /\$(\d+)/g
   const quoteTrimRegex = /^["']|["']$/g
 
-  function substituteStaticArguments(template: string, args: string[], raw: string) {
-    const placeholders = template.match(placeholderRegex) ?? []
-    let last = 0
-    for (const item of placeholders) {
-      const value = Number(item.slice(1))
-      if (value > last) last = value
+  function renderStaticTemplate(template: string, args: string[], raw: string) {
+    const placeholders = [...template.matchAll(Command.templatePlaceholder)]
+    let lastPosition = 0
+    for (const [, parameter] of placeholders) {
+      if (parameter !== "ARGUMENTS") lastPosition = Math.max(lastPosition, Number(parameter))
     }
-    const withArgs = template.replaceAll(placeholderRegex, (_, index) => {
-      const position = Number(index)
-      const argIndex = position - 1
-      if (argIndex >= args.length) return ""
-      if (position === last) return args.slice(argIndex).join(" ")
-      return args[argIndex]
+    const substitute = (value: string) => value.replaceAll(Command.templatePlaceholder, (_, parameter) => {
+      if (parameter === "ARGUMENTS") return raw
+      const position = Number(parameter)
+      if (position === lastPosition) return args.slice(position - 1).join(" ")
+      return args[position - 1] ?? ""
     })
-    if (placeholders.length === 0 && !template.includes("$ARGUMENTS") && raw.trim()) {
-      return withArgs + "\n\n" + raw
-    }
-    return withArgs.replaceAll("$ARGUMENTS", raw)
+    const files = ConfigMarkdown.files(template).map(([, filename]) => substitute(filename)).filter(Boolean)
+    const text = placeholders.length === 0 && raw.trim() ? template + "\n\n" + raw : substitute(template)
+    return { text, files }
   }
 
   async function readMcpTemplate(cmd: Command.McpDefinition, args: string[], raw: string) {
@@ -119,26 +113,10 @@ export namespace SessionCommand {
     const raw = input.arguments.match(argsRegex) ?? []
     const args = raw.map((arg) => arg.replace(quoteTrimRegex, ""))
 
-    let template =
+    const template =
       cmd.source === "mcp"
-        ? await readMcpTemplate(cmd, args, input.arguments)
-        : substituteStaticArguments(cmd.template, args, input.arguments)
-
-    const shell = ConfigMarkdown.shell(template)
-    if (shell.length > 0) {
-      const results = await Promise.all(
-        shell.map(async ([, cmd]) => {
-          try {
-            return await $`${{ raw: cmd }}`.quiet().nothrow().text()
-          } catch (error) {
-            return `Error executing command: ${error instanceof Error ? error.message : String(error)}`
-          }
-        }),
-      )
-      let index = 0
-      template = template.replace(bashRegex, () => results[index++])
-    }
-    template = template.trim()
+        ? { text: await readMcpTemplate(cmd, args, input.arguments), files: [] }
+        : renderStaticTemplate(cmd.template, args, input.arguments)
 
     // Single model resolver (spec §13.1). Deliberately normalizes the old
     // ad-hoc order (cmd.model > cmd.agent.model > input.model > default) to
@@ -169,7 +147,7 @@ export namespace SessionCommand {
       }
       throw e
     }
-    const templateParts = await resolvePromptParts(template, { config })
+    const templateParts = await resolvePromptParts(template.text.trim(), template.files)
     const parts = [...templateParts, ...(input.parts ?? [])]
 
     await Plugin.trigger(

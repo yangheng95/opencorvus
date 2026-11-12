@@ -37,7 +37,9 @@ Define commands in [config](../config/) under `command`:
 }
 ```
 
-`$ARGUMENTS` is replaced with whatever the user types after the command name.
+`$ARGUMENTS` inserts the user's argument text literally. The template can also use numbered arguments such as `$1`. The last numbered placeholder takes the remaining arguments.
+
+An `@file` reference declared in a local template includes the named file. To include a file with an individual request, attach it explicitly.
 
 ## Markdown-defined commands
 
@@ -51,7 +53,7 @@ Connected Model Context Protocol (MCP) servers can provide project commands. Sup
 
 ## Permissions in commands
 
-Custom commands run through the same permission system as direct prompts. If your command's template ends up triggering `bash` or `write`, [Permissions](../permissions/) still apply.
+Command templates and remote prompt responses provide text to the assistant. Inline shell notation stays in that text. Use the explicit shell action to run a command directly, or ask the assistant to use a tool under the current [permissions](../permissions/).
 
 ## Snapshots & `/undo`
 

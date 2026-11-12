@@ -541,6 +541,7 @@ test("ACP announces command input hints after attaching project connections and 
 test("ACP registered commands preserve embedded context and canonical image bytes in the same turn", async () => {
   await using env = await environment()
   const cwd = env.project.path
+  await fs.writeFile(path.join(cwd, "host-reference.txt"), "Local sample referenced by the remote text.\n")
   const { sessionId } = await env.client.newSession({
     cwd,
     mcpServers: [
@@ -555,10 +556,12 @@ test("ACP registered commands preserve embedded context and canonical image byte
   const image =
     "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg=="
   const notes = "# Inspection notes\n\nValve A42 was inspected.\n"
+  const scope = "reference @host-reference.txt and !`echo mcp-data`"
+  const remoteText = `Read the 2026-11-20 report for ${scope}.`
   const response = await env.client.prompt({
     sessionId,
     prompt: [
-      { type: "text", text: "/editor_report:editor_report 2026-11-20" },
+      { type: "text", text: `/editor_report:editor_report 2026-11-20 "${scope}"` },
       { type: "resource", resource: { uri: "file:///notes.md", text: notes } },
       { type: "image", mimeType: "image/png", uri: "file:///panel.png", data: image },
     ],
@@ -568,7 +571,7 @@ test("ACP registered commands preserve embedded context and canonical image byte
   expect(input.info.role).toBe("user")
   expect(reply.info).toMatchObject({ role: "assistant", parentID: input.info.id, finish: "stop" })
   expect(input.parts).toEqual([
-    expect.objectContaining({ type: "text", text: "Read the 2026-11-20 report for all topics." }),
+    expect.objectContaining({ type: "text", text: remoteText }),
     expect.objectContaining({ type: "text", text: notes }),
     expect.objectContaining({ type: "file", filename: "panel.png", mime: "image/png" }),
   ])
@@ -583,7 +586,7 @@ test("ACP registered commands preserve embedded context and canonical image byte
     return update.sessionUpdate === "user_message_chunk" ? [update.content] : []
   })
   expect(restored).toMatchObject([
-    { type: "text", text: "Read the 2026-11-20 report for all topics." },
+    { type: "text", text: remoteText },
     { type: "text", text: notes },
     { type: "image", mimeType: "image/png", data: image },
   ])
