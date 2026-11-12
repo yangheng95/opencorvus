@@ -1967,6 +1967,7 @@
   "settings.product.mcp": "Available connections",
   "settings.product.mcp_description": "Choose the connections {{product}} can use.",
   "settings.product.mcp_toggle": "Assign MCP connection {{name}} to {{product}}",
+  "settings.product.mcp_name_unassignable": "Assignment requires a nonempty name without leading or trailing whitespace.",
   "settings.product.mcp_unassigned": "Not assigned to {{product}}.",
   "settings.product.mcp_assigned_runtime": "Assigned to {{product}}. Connection status is managed in MCP Connections.",
   "settings.read_only": "Read only",

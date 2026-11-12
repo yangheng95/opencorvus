@@ -1,4 +1,5 @@
 import { Feedback } from "../ui/Feedback"
+import { isConversationMcpRef } from "@opencorvus-ai/util/conversation-mcp-ref"
 import { Key } from "@solid-primitives/keyed"
 import { batch, createEffect, createSignal, For, on, Show, onCleanup } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
@@ -9,6 +10,7 @@ import {
   type ConversationCapabilitySettings,
   type ConversationExperience,
 } from "../../services/conversation-capability"
+import { displayMcpName } from "../../services/mcp"
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { Disclosure } from "../ui/Disclosure"
@@ -293,26 +295,28 @@ export default function ConversationCapabilityPanel(props: {
                       >
                         <For each={current().mcp.configured_server_refs}>
                           {(serverID) => {
+                            const assignable = isConversationMcpRef(serverID)
+                            const name = displayMcpName(serverID)
                             const assigned = () => current().mcp.assigned_server_refs.includes(serverID)
                             return (
                               <SettingsRow
-                                title={serverID}
+                                title={<span class="mcp-connection-name">{name}</span>}
                                 desc={
-                                  assigned()
-                                    ? t("settings.product.mcp_assigned_runtime", { product: productLabel() })
-                                    : t("settings.product.mcp_unassigned", { product: productLabel() })
+                                  !assignable ? t("settings.product.mcp_name_unassignable")
+                                    : assigned() ? t("settings.product.mcp_assigned_runtime", { product: productLabel() })
+                                      : t("settings.product.mcp_unassigned", { product: productLabel() })
                                 }
-                                actions={
+                                actions={assignable && (
                                   <Checkbox
                                     checked={assigned()}
                                     readOnly={assignmentLocked()}
                                     aria-label={t("settings.product.mcp_toggle", {
-                                      name: serverID,
+                                      name,
                                       product: productLabel(),
                                     })}
                                     onChange={(checked) => toggleMcp(serverID, checked)}
                                   />
-                                }
+                                )}
                               />
                             )
                           }}

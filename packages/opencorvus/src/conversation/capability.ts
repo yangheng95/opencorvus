@@ -12,6 +12,7 @@ import { WORK_DEFAULT_CAPABILITY_ASSIGNMENT } from "@/work/harness"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { createHarnessGrantSet, harnessLeafAccess } from "@/capability/harness-projection"
 import { capabilityRef, CapabilityRefCodec, type CapabilityRef } from "@opencorvus-ai/util/capability-ref"
+import { isConversationMcpRef } from "@opencorvus-ai/util/conversation-mcp-ref"
 import { canonicalDigestSource, compareCanonicalStrings } from "@/util/canonical-digest"
 
 const CHAT_AGENT_ID = "chat" as const
@@ -41,7 +42,16 @@ export namespace ConversationCapability {
   export const Update = z
     .discriminatedUnion("kind", [
       z.object({ kind: z.literal("skill"), ref: z.string().trim().min(1), assigned: z.boolean() }).strict(),
-      z.object({ kind: z.literal("mcp_server"), ref: z.string().trim().min(1), assigned: z.boolean() }).strict(),
+      z.object({
+        kind: z.literal("mcp_server"),
+        ref: z.string()
+          .min(1, { abort: true })
+          .refine(isConversationMcpRef, {
+            message: "An MCP assignment requires a connection name without leading or trailing whitespace.",
+          })
+          .describe("Exact connection name without leading or trailing whitespace."),
+        assigned: z.boolean(),
+      }).strict(),
     ])
     .meta({ ref: "ConversationCapabilityUpdate" })
   export type Update = z.output<typeof Update>

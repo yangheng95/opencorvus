@@ -12,6 +12,10 @@ import type { ConfigRequestOptions } from "./config"
 export type RemoteMcpTransport = "streamable-http" | "sse"
 export type RemoteMcpCredentialType = "none" | "query" | "bearer" | "header"
 
+export function displayMcpName(name: string): string {
+  return name && name === name.trim() ? name : JSON.stringify(name)
+}
+
 export type AddMcpInput = {
   name: string
 } & (

@@ -838,6 +838,9 @@ export type ConversationCapabilityUpdate =
   | {
       assigned: boolean
       kind: "mcp_server"
+      /**
+       * Exact connection name without leading or trailing whitespace.
+       */
       ref: string
     }
 

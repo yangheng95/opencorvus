@@ -45,7 +45,7 @@ import {
   type SkillMarketCandidate,
   type SkillMarketDetail,
 } from "../../services/extensions"
-import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, displayMcpName, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
@@ -1939,10 +1939,7 @@ function SharedResourceManagementPanel(props: {
                   <Key each={mcpEntries()} by={(entry) => entry[0]}>
                     {(entry) => {
                       const name = () => entry()[0]
-                      const displayName = () => {
-                        const exact = name()
-                        return exact && exact === exact.trim() ? exact : JSON.stringify(exact)
-                      }
+                      const displayName = () => displayMcpName(name())
                       const connection = () => entry()[1]
                       const status = () => connection()?.status
                       const executionOwned = () => {
@@ -1962,7 +1959,7 @@ function SharedResourceManagementPanel(props: {
                       return (
                         <SettingsRow
                           class="extension-settings-row"
-                          title={displayName()}
+                          title={<span class="mcp-connection-name">{displayName()}</span>}
                           desc={detail() || undefined}
                           interactive={!executionOwned()}
                           actions={

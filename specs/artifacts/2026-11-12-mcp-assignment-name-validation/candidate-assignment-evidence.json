@@ -1,0 +1,346 @@
+{
+  "bundle": "assets/main-Dj5T2Vtt.js",
+  "desktop": [
+    {
+      "side": "project",
+      "route": "/chat/capability",
+      "request": {
+        "kind": "mcp_server",
+        "ref": "review-tools",
+        "assigned": false
+      },
+      "status": 200,
+      "mcp": {
+        "assigned_server_refs": [],
+        "configured_server_refs": [
+          "",
+          "  ",
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools"
+        ]
+      }
+    },
+    {
+      "side": "project",
+      "route": "/chat/capability",
+      "request": {
+        "kind": "mcp_server",
+        "ref": "review-tools",
+        "assigned": true
+      },
+      "status": 200,
+      "mcp": {
+        "assigned_server_refs": [
+          "review-tools"
+        ],
+        "configured_server_refs": [
+          "",
+          "  ",
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools"
+        ]
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/work/capability",
+      "request": {
+        "kind": "mcp_server",
+        "ref": "review-tools",
+        "assigned": false
+      },
+      "status": 200,
+      "mcp": {
+        "assigned_server_refs": [],
+        "configured_server_refs": [
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools"
+        ]
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/work/capability",
+      "request": {
+        "kind": "mcp_server",
+        "ref": "review-tools",
+        "assigned": true
+      },
+      "status": 200,
+      "mcp": {
+        "assigned_server_refs": [
+          "review-tools"
+        ],
+        "configured_server_refs": [
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools"
+        ]
+      }
+    }
+  ],
+  "readback": [
+    {
+      "experience": "chat",
+      "project": "prj_hdORMkXga2gCbHmr0FHI",
+      "status": 200,
+      "requestID": "1d38fdaa-ba57-47af-93a2-5022d1802ca2",
+      "assigned": [
+        "review-tools"
+      ],
+      "configured": [
+        "",
+        "  ",
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "chat": {
+          "skill_refs": [],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    },
+    {
+      "experience": "work",
+      "project": "prj_hdORMkXga2gCbHmr0FHI",
+      "status": 200,
+      "requestID": "f62d34a5-d1a8-4181-bc68-b02ef19ca353",
+      "assigned": [],
+      "configured": [
+        "",
+        "  ",
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "chat": {
+          "skill_refs": [],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    },
+    {
+      "experience": "chat",
+      "project": "prj_hjHRVPiekChdpbymYJDi",
+      "status": 200,
+      "requestID": "54482155-26a1-4de5-b38d-7567b58455f3",
+      "assigned": [],
+      "configured": [
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "work": {
+          "skill_refs": [
+            "work-artifacts"
+          ],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    },
+    {
+      "experience": "work",
+      "project": "prj_hjHRVPiekChdpbymYJDi",
+      "status": 200,
+      "requestID": "58e9851a-9319-403f-b043-57955e2c353a",
+      "assigned": [
+        "review-tools"
+      ],
+      "configured": [
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "work": {
+          "skill_refs": [
+            "work-artifacts"
+          ],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    }
+  ],
+  "directErrors": [
+    {
+      "experience": "chat",
+      "project": "prj_hdORMkXga2gCbHmr0FHI",
+      "request": {
+        "kind": "mcp_server",
+        "ref": "",
+        "assigned": true
+      },
+      "status": 400,
+      "requestID": "ec510e85-d3ed-439d-9f94-111803e4eae7",
+      "result": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "too_small",
+            "path": [
+              "ref"
+            ],
+            "message": "Too small: expected string to have >=1 characters"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "experience": "chat",
+      "project": "prj_hdORMkXga2gCbHmr0FHI",
+      "request": {
+        "kind": "mcp_server",
+        "ref": "  ",
+        "assigned": true
+      },
+      "status": 400,
+      "requestID": "c5ccaea0-2765-4328-8df0-25fcaa59f3b7",
+      "result": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "custom",
+            "path": [
+              "ref"
+            ],
+            "message": "An MCP assignment requires a connection name without leading or trailing whitespace."
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "experience": "chat",
+      "project": "prj_hdORMkXga2gCbHmr0FHI",
+      "request": {
+        "kind": "mcp_server",
+        "ref": " review-tools ",
+        "assigned": true
+      },
+      "status": 400,
+      "requestID": "73d453bc-f262-4496-91dd-a19cdeb38c5d",
+      "result": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "custom",
+            "path": [
+              "ref"
+            ],
+            "message": "An MCP assignment requires a connection name without leading or trailing whitespace."
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "experience": "work",
+      "project": "prj_hjHRVPiekChdpbymYJDi",
+      "request": {
+        "kind": "mcp_server",
+        "ref": " review-tools ",
+        "assigned": true
+      },
+      "status": 400,
+      "requestID": "fc4e8a35-d31c-4c77-9627-f58cdd9868e0",
+      "result": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "custom",
+            "path": [
+              "ref"
+            ],
+            "message": "An MCP assignment requires a connection name without leading or trailing whitespace."
+          }
+        ],
+        "success": false
+      }
+    }
+  ],
+  "rejectedWritesLeftCanonicalBytesIntact": true,
+  "openAPI": {
+    "status": 200,
+    "schema": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "skill"
+            },
+            "ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "assigned": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "ref",
+            "assigned"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "const": "mcp_server"
+            },
+            "ref": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact connection name without leading or trailing whitespace."
+            },
+            "assigned": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "ref",
+            "assigned"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

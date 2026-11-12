@@ -1966,6 +1966,7 @@
   "settings.product.mcp": "可用连接",
   "settings.product.mcp_description": "选择允许 {{product}} 使用的连接。",
   "settings.product.mcp_toggle": "将 MCP 连接 {{name}} 分配给 {{product}}",
+  "settings.product.mcp_name_unassignable": "只有名称非空且首尾没有空白的连接才可分配。",
   "settings.product.mcp_unassigned": "未分配给 {{product}}。",
   "settings.product.mcp_assigned_runtime": "已分配给 {{product}}。连接状态在 MCP 连接中管理。",
   "settings.read_only": "只读",

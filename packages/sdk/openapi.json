@@ -2601,6 +2601,7 @@
                 "type": "string"
               },
               "ref": {
+                "description": "Exact connection name without leading or trailing whitespace.",
                 "minLength": 1,
                 "type": "string"
               }

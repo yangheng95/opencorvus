@@ -330,6 +330,10 @@ button.s-row:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.mcp-connection-name {
+  white-space: break-spaces;
+}
+
 .s-row-meta {
   font-size: var(--ui-font-caption);
   color: var(--text-muted);

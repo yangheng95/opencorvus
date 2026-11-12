@@ -104,6 +104,59 @@ describe("native conversation capability routes", () => {
     )
   }, 90_000)
 
+  test("validates native MCP assignments against the original connection reference", async () => {
+    await using project = await memoryProject()
+    await Instance.provide({
+      directory: project.path,
+      fn: () => Config.updateProjectPatch({
+        mcp: {
+          "review-tools": { enabled: false },
+          " review-tools ": { enabled: false },
+          "": { enabled: false },
+        },
+      }),
+    })
+    const headers = {
+      "content-type": "application/json",
+      "x-opencorvus-directory": project.path,
+    }
+    const update = (experience: "chat" | "work", ref: string) => Server.App().request(`/${experience}/capability`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ kind: "mcp_server", ref, assigned: true }),
+    })
+    for (const experience of ["chat", "work"] as const) {
+      const padded = await update(experience, " review-tools ")
+      expect(padded.status).toBe(400)
+      expect(await padded.json()).toEqual({
+        success: false,
+        data: { message: "Request validation failed" },
+        error: [{
+          code: "custom",
+          path: ["ref"],
+          message: "An MCP assignment requires a connection name without leading or trailing whitespace.",
+        }],
+      })
+
+      const empty = await update(experience, "")
+      expect(empty.status).toBe(400)
+      expect(await empty.json()).toMatchObject({
+        success: false,
+        error: [{ code: "too_small", path: ["ref"] }],
+      })
+
+      const exact = await update(experience, "review-tools")
+      expect(exact.status).toBe(200)
+      expect(await exact.json()).toMatchObject({
+        agent_id: experience,
+        mcp: {
+          assigned_server_refs: ["review-tools"],
+          configured_server_refs: ["", " review-tools ", "browser", "computer", "review-tools"],
+        },
+      })
+    }
+  }, 90_000)
+
   test("projects explicitly assigned Browser and Computer tool catalogs into Work", async () => {
     await using project = await memoryProject()
     const headers = {

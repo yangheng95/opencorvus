@@ -210,6 +210,11 @@ owners rather than one generic mount service:
 - `SessionLoop` finally applies switches and effective permission before
   exposing Tools.
 
+Native assignment writes validate the original MCP connection name. An assignment
+requires a nonempty name without leading or trailing whitespace, so the persisted
+reference identifies the same connection the caller selected. The settings inventory
+retains exact configured names and explains the assignment requirement on affected rows.
+
 This is already the correct ownership shape. The missing infrastructure is a
 shared typed metadata catalog and one explicit projection contract that makes
 these owners interoperable without replacing them.
