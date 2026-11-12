@@ -1,0 +1,384 @@
+{
+  "observedQueries": {
+    "typing": [
+      "Shared"
+    ],
+    "trailing-space": [],
+    "replace": [
+      "candidate-alternate",
+      "Archive control record"
+    ],
+    "clear-queued": [
+      null
+    ],
+    "zh-cut": [
+      "归档百分比_50%"
+    ],
+    "zh-retry": [
+      "归档百分比_50%"
+    ]
+  },
+  "typed": {
+    "time": "2026-11-12T01:23:23.445Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "typing",
+    "directory": null,
+    "search": "Shared",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "e10213f0-c50a-4eff-bd74-de56eaf528c9",
+    "status": 200,
+    "bytes": 828,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hKAnXLDhF8yIGGer9zMy",
+        "sessionID": "ses_hKAnXLDhF8yIGGer9zMy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446588297
+      },
+      {
+        "kind": "chat",
+        "id": "ses_h0xC17r7U7FPHEbRS1iB",
+        "sessionID": "ses_h0xC17r7U7FPHEbRS1iB",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446587547
+      }
+    ]
+  },
+  "retired": {
+    "time": "2026-11-12T01:23:37.596Z",
+    "stage": "client-disconnected",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "replace",
+    "directory": null,
+    "search": "candidate-alternate",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "e35b4406-6111-4437-b070-805cfe5ffe07",
+    "status": 200,
+    "bytes": 821,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hf581TvSSzy1nHhl58R7",
+        "sessionID": "ses_hf581TvSSzy1nHhl58R7",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+        "title": "Normal Work deletion",
+        "archived": 1794446588568
+      },
+      {
+        "kind": "chat",
+        "id": "ses_hKAnXLDhF8yIGGer9zMy",
+        "sessionID": "ses_hKAnXLDhF8yIGGer9zMy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446588297
+      }
+    ]
+  },
+  "replaced": {
+    "time": "2026-11-12T01:23:37.873Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "replace",
+    "directory": null,
+    "search": "Archive control record",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "3ad3aa70-26fe-4f84-a6ff-bb36cdf8a9d8",
+    "status": 200,
+    "bytes": 425,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hOfH7AXR5gnZFNBOyeBB",
+        "sessionID": "ses_hOfH7AXR5gnZFNBOyeBB",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+        "title": "Archive control record kept",
+        "archived": 1794446588435
+      }
+    ]
+  },
+  "cleared": {
+    "time": "2026-11-12T01:23:38.133Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "clear-queued",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "3a8e35ae-ea44-4fbc-b3fb-d676f6c6e3d8",
+    "status": 200,
+    "bytes": 2006,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hGlcmnE3BYiDorWYsyu5",
+        "sessionID": "ses_hGlcmnE3BYiDorWYsyu5",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+        "title": "归档百分比_50%",
+        "archived": 1794446588709
+      },
+      {
+        "kind": "chat",
+        "id": "ses_hf581TvSSzy1nHhl58R7",
+        "sessionID": "ses_hf581TvSSzy1nHhl58R7",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+        "title": "Normal Work deletion",
+        "archived": 1794446588568
+      },
+      {
+        "kind": "chat",
+        "id": "ses_hOfH7AXR5gnZFNBOyeBB",
+        "sessionID": "ses_hOfH7AXR5gnZFNBOyeBB",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+        "title": "Archive control record kept",
+        "archived": 1794446588435
+      },
+      {
+        "kind": "chat",
+        "id": "ses_hKAnXLDhF8yIGGer9zMy",
+        "sessionID": "ses_hKAnXLDhF8yIGGer9zMy",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446588297
+      },
+      {
+        "kind": "chat",
+        "id": "ses_h0xC17r7U7FPHEbRS1iB",
+        "sessionID": "ses_h0xC17r7U7FPHEbRS1iB",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+        "title": "Shared archive receipt review",
+        "archived": 1794446587547
+      }
+    ]
+  },
+  "empty": {
+    "time": "2026-11-12T01:23:38.619Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "no-results",
+    "directory": null,
+    "search": "No results archive 268",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "9b5e62c4-9848-4f8b-9c9f-efbb53f1ef2b",
+    "status": 200,
+    "bytes": 29,
+    "items": []
+  },
+  "cut": {
+    "time": "2026-11-12T01:23:47.952Z",
+    "stage": "truncated",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "zh-cut",
+    "directory": null,
+    "search": "归档百分比_50%",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "330c2697-0ce5-41a2-a1ed-a9878d786458",
+    "status": 200,
+    "bytes": 417,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hGlcmnE3BYiDorWYsyu5",
+        "sessionID": "ses_hGlcmnE3BYiDorWYsyu5",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+        "title": "归档百分比_50%",
+        "archived": 1794446588709
+      }
+    ],
+    "deliveredBytes": 12
+  },
+  "retried": {
+    "time": "2026-11-12T01:23:55.347Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "zh-retry",
+    "directory": null,
+    "search": "归档百分比_50%",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "32af79aa-21b8-4cea-8782-b029c0e1e3f3",
+    "status": 200,
+    "bytes": 417,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hGlcmnE3BYiDorWYsyu5",
+        "sessionID": "ses_hGlcmnE3BYiDorWYsyu5",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+        "title": "归档百分比_50%",
+        "archived": 1794446588709
+      }
+    ]
+  },
+  "checks": [
+    {
+      "search": "Shared",
+      "requestID": "45df19f5-4d3a-4b12-8207-c9e4afcfb102",
+      "items": [
+        [
+          "ses_hKAnXLDhF8yIGGer9zMy",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+          "Shared archive receipt review",
+          1794446588297
+        ],
+        [
+          "ses_h0xC17r7U7FPHEbRS1iB",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+          "Shared archive receipt review",
+          1794446587547
+        ]
+      ]
+    },
+    {
+      "search": "candidate-alternate",
+      "requestID": "2fad50b1-b11a-4aa3-968d-c7ee8c7f40b7",
+      "items": [
+        [
+          "ses_hf581TvSSzy1nHhl58R7",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+          "Normal Work deletion",
+          1794446588568
+        ],
+        [
+          "ses_hKAnXLDhF8yIGGer9zMy",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+          "Shared archive receipt review",
+          1794446588297
+        ]
+      ]
+    },
+    {
+      "search": "Archive control record",
+      "requestID": "e94ac5c8-adef-4097-89a5-a8cafe4a359e",
+      "items": [
+        [
+          "ses_hOfH7AXR5gnZFNBOyeBB",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+          "Archive control record kept",
+          1794446588435
+        ]
+      ]
+    },
+    {
+      "search": null,
+      "requestID": "d1a47d32-51fa-43b8-bfd3-4752df1bb87f",
+      "items": [
+        [
+          "ses_hGlcmnE3BYiDorWYsyu5",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+          "归档百分比_50%",
+          1794446588709
+        ],
+        [
+          "ses_hf581TvSSzy1nHhl58R7",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+          "Normal Work deletion",
+          1794446588568
+        ],
+        [
+          "ses_hOfH7AXR5gnZFNBOyeBB",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+          "Archive control record kept",
+          1794446588435
+        ],
+        [
+          "ses_hKAnXLDhF8yIGGer9zMy",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+          "Shared archive receipt review",
+          1794446588297
+        ],
+        [
+          "ses_h0xC17r7U7FPHEbRS1iB",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+          "Shared archive receipt review",
+          1794446587547
+        ]
+      ]
+    },
+    {
+      "search": "No results archive 268",
+      "requestID": "9d0f1496-3dbc-44c8-b8d3-49cfbfebb4f9",
+      "items": []
+    },
+    {
+      "search": "归档百分比_50%",
+      "requestID": "451b2d43-0eea-4829-bd3a-7240465465b4",
+      "items": [
+        [
+          "ses_hGlcmnE3BYiDorWYsyu5",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+          "归档百分比_50%",
+          1794446588709
+        ]
+      ]
+    }
+  ],
+  "exactSessions": [
+    {
+      "requestID": "4ad562da-e8ff-4788-b2c5-fe73be2b8390",
+      "id": "ses_h0xC17r7U7FPHEbRS1iB",
+      "projectID": "prj_hK5RE7i5SW2wlDMv0lEC",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+      "title": "Shared archive receipt review",
+      "created": 1794446587432,
+      "updated": 1794446587549,
+      "archived": 1794446587547
+    },
+    {
+      "requestID": "b7b91667-1b7e-4c19-9230-6d601d1f942b",
+      "id": "ses_hKAnXLDhF8yIGGer9zMy",
+      "projectID": "prj_hG538HzzeJU3wlev1fCA",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+      "title": "Shared archive receipt review",
+      "created": 1794446588208,
+      "updated": 1794446588298,
+      "archived": 1794446588297
+    },
+    {
+      "requestID": "059324d4-0204-49c4-bac4-819c159fb293",
+      "id": "ses_hOfH7AXR5gnZFNBOyeBB",
+      "projectID": "prj_hK5RE7i5SW2wlDMv0lEC",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+      "title": "Archive control record kept",
+      "created": 1794446588337,
+      "updated": 1794446588435,
+      "archived": 1794446588435
+    },
+    {
+      "requestID": "6082f8aa-cd59-42a6-9914-e6002f27ca9f",
+      "id": "ses_hf581TvSSzy1nHhl58R7",
+      "projectID": "prj_hG538HzzeJU3wlev1fCA",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-alternate\\archive-review",
+      "title": "Normal Work deletion",
+      "created": 1794446588478,
+      "updated": 1794446588568,
+      "archived": 1794446588568
+    },
+    {
+      "requestID": "d426ed68-db00-4f43-b0ab-97ce2f8b1600",
+      "id": "ses_hGlcmnE3BYiDorWYsyu5",
+      "projectID": "prj_hK5RE7i5SW2wlDMv0lEC",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b268\\candidate-project\\archive-review",
+      "title": "归档百分比_50%",
+      "created": 1794446588607,
+      "updated": 1794446588709,
+      "archived": 1794446588709
+    }
+  ]
+}

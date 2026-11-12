@@ -6018,9 +6018,13 @@ the same lifecycle condition as the Task stop action, including when the
 occurrence has no current runtime activity.
 
 Settings Archive passes its current search to the existing archived Work Ledger
-reader. Search runs over the complete archive before cursor pagination; it does
-not filter only the loaded rows. Query replacement and API authority changes
-retire the previous request, rows and cursor through the existing request owner.
+reader. Search runs over the complete archive before cursor pagination. The
+effective search trims surrounding whitespace. Query replacement and API
+authority changes immediately retire the previous request, rows and cursor.
+Nonempty input changes use the command palette's Work Ledger search delay;
+the initial read, a connection change and clearing the search read immediately.
+The result count reflects accepted rows and stays hidden while the new query
+awaits its first result or has a read error before accepting any rows.
 Active and archived Work Ledger list requests keep the standard read deadline
 even when their caller provides a cancellation signal. Timeout preserves its
 diagnostic and the existing read error recovery; query replacement still retires

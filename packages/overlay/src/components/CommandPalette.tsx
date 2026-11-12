@@ -25,6 +25,7 @@ import { activeDirectory, browseDirectory, closeProject } from "../services/work
 import { matchesSearchParts, matchesSearchTerms } from "../services/text-search"
 import { conversationExperienceIcon, conversationExperienceLabel } from "../services/conversation-experience"
 import {
+  WORK_LEDGER_SEARCH_DELAY_MS,
   loadWorkLedger,
   workLedgerProject,
   type WorkLedgerChatRow,
@@ -66,7 +67,6 @@ const COMMAND_PALETTE_INPUT_ID = "commandPaletteInput"
 const COMMAND_PALETTE_LISTBOX_ID = "commandPaletteListbox"
 const RECENT_COMMAND_LIMIT = 9
 const LEDGER_PAGE_SIZE = 12
-const SEARCH_DELAY_MS = 150
 
 type PaletteLedgerRow = WorkLedgerProjectRow | WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
 type LedgerSearch = { query: string; authority: ApiAuthority; controller: AbortController }
@@ -381,7 +381,7 @@ export function CommandPalette(props: {
         }
         const search = { query, authority, controller: new AbortController() }
         ledgerSearch = search
-        const timer = setTimeout(() => void loadLedger(search), query ? SEARCH_DELAY_MS : 0)
+        const timer = setTimeout(() => void loadLedger(search), query ? WORK_LEDGER_SEARCH_DELAY_MS : 0)
         onCleanup(() => {
           clearTimeout(timer)
           search.controller.abort()

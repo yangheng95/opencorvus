@@ -22,6 +22,8 @@ import { projectDirectoryKey } from "../utils/project-directory"
 import { DEFAULT_REQUEST_TIMEOUT_MILLISECONDS } from "./host-transport"
 import type { BoardSource } from "../store/board"
 
+export const WORK_LEDGER_SEARCH_DELAY_MS = 150
+
 export type WorkLedgerItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerKind = WorkLedgerItemRow["kind"]

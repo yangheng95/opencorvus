@@ -1,12 +1,18 @@
 import { Feedback } from "../ui/Feedback"
-import { For, Show, createEffect, createMemo, createSignal, onCleanup, untrack, type JSX } from "solid-js"
+import { For, Show, batch, createEffect, createMemo, createSignal, on, onCleanup, type JSX } from "solid-js"
 import {
   ApiAuthorityChangedError,
   captureApiAuthority,
   isApiAuthorityCurrent,
   type ApiAuthority,
 } from "../../services/api"
-import { loadArchivedWorkLedger, workLedgerProject, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
+import {
+  WORK_LEDGER_SEARCH_DELAY_MS,
+  loadArchivedWorkLedger,
+  workLedgerProject,
+  type WorkLedgerCursor,
+  type WorkLedgerItemRow,
+} from "../../services/work-ledger"
 import { archiveRowKey } from "../../services/archive-row-key"
 import { ArchiveStateUnconfirmedError } from "../../services/archive-state"
 import { showAppDialog } from "../../services/app-dialog"
@@ -94,6 +100,7 @@ function archivedAt(row: WorkLedgerItemRow): number {
 
 export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => Promise<void> }) {
   const [search, setSearch] = createSignal("")
+  const query = createMemo(() => search().trim())
   const [rows, setRows] = createSignal<WorkLedgerItemRow[]>([])
   const [nextCursor, setNextCursor] = createSignal<WorkLedgerCursor | null>(null)
   const [loading, setLoading] = createSignal(false)
@@ -223,7 +230,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     if (append) setFailure(undefined)
     try {
       const result = await readPages({
-        search: search().trim(),
+        search: query(),
         cursor,
         retainedTail,
         signal: requestController.signal,
@@ -390,7 +397,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     setLoading(true)
     try {
       const result = await readPages({
-        search: search().trim(),
+        search: query(),
         cursor: null,
         retainedTail,
         signal: requestController.signal,
@@ -454,25 +461,33 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     }
   }
 
-  createEffect(() => {
-    captureApiAuthority()
-    setUnconfirmedDeletions(new Map())
-  })
-  createEffect(() => {
-    captureApiAuthority()
-    // Query replacement retires the current page and its cursor with the same request owner.
-    search()
-    requestGeneration += 1
-    controller?.abort()
-    controller = undefined
-    setRows([])
-    setNextCursor(null)
-    setBusyID("")
-    setLoading(false)
-    setFailure(undefined)
-    setCommittedAction(undefined)
-    untrack(() => void load("initial"))
-  })
+  createEffect(on(
+    [() => captureApiAuthority().revision, query],
+    ([revision, term], previous) => {
+      // Retire the previous result and cursor as soon as the effective query changes.
+      requestGeneration += 1
+      controller?.abort()
+      controller = undefined
+      setRows([])
+      setNextCursor(null)
+      setBusyID("")
+      setFailure(undefined)
+      setCommittedAction(undefined)
+      const sameAuthority = revision === previous?.[0]
+      if (!sameAuthority) setUnconfirmedDeletions(new Map())
+      const readFirstPage = () => batch(() => {
+        setLoading(false)
+        void load("initial")
+      })
+      if (sameAuthority && term) {
+        setLoading(true)
+        const timer = setTimeout(readFirstPage, WORK_LEDGER_SEARCH_DELAY_MS)
+        onCleanup(() => clearTimeout(timer))
+      } else {
+        readFirstPage()
+      }
+    },
+  ))
   onCleanup(() => {
     requestGeneration += 1
     controller?.abort()
@@ -532,12 +547,16 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
           </span>
         }
         description={t("archive.description")}
-        actions={<Badge tone="muted">{rows().length.toLocaleString(localeTag())}</Badge>}
+        actions={
+          <Show when={rows().length > 0 || (!loading() && !panelFailure())}>
+            <Badge tone="muted">{rows().length.toLocaleString(localeTag())}</Badge>
+          </Show>
+        }
       >
         <Show when={rows().length > 0} fallback={
           <Show when={panelFailure()} fallback={
             <SettingsEmpty>
-              {loading() ? t("common.loading") : search().trim() ? t("archive.no_results") : t("archive.empty")}
+              {loading() ? t("common.loading") : query() ? t("archive.no_results") : t("archive.empty")}
             </SettingsEmpty>
           }>
             {(current) => (
