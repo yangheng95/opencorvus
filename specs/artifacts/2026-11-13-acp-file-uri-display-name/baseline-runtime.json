@@ -1,0 +1,90 @@
+{
+  "protocol": 1,
+  "model": "acp-review/local",
+  "providerRequest": "4593d2f3-6542-4491-8b4a-150c855e35d1",
+  "createRequest": "8501cb88-e866-4cb6-b308-5e1b7c0ac7e7",
+  "sessionId": "ses_hVNnG8xu0xZs0nIJnOmF",
+  "input": "msg_g0VamQcqo001GqO3csM2",
+  "reply": "msg_g0VamQcu000DZHdf7IsK",
+  "stopReason": "end_turn",
+  "historyRequest": "4f687bde-8cf6-4dd7-8900-dd2971cfa0ca",
+  "imageUri": "file:///C:/Users/Public/opencorvus-review-20261113-b314/baseline/editor-filename-review/%E8%A7%86%E5%9B%BE%2050%25%20%231.png",
+  "blobUri": "zed://file/?path=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261113-b314%5Cbaseline%5Ceditor-filename-review%5C%E8%AE%A1%E5%88%92+50%25+%231.txt",
+  "saved": [
+    {
+      "mime": "image/png",
+      "filename": "%E8%A7%86%E5%9B%BE%2050%25%20%231.png",
+      "downloadName": "%E8%A7%86%E5%9B%BE%2050%25%20%231.png",
+      "requestID": "9e80eab2-eafb-448a-8795-f693355865db",
+      "bytes": 100,
+      "url": "/attachment/prj_hCmRbOUdNyQcyZdD3FOg/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+    },
+    {
+      "mime": "text/plain",
+      "filename": "C:\\Users\\Public\\opencorvus-review-20261113-b314\\baseline\\editor-filename-review\\计划 50% #1.txt",
+      "downloadName": "C:\\Users\\Public\\opencorvus-review-20261113-b314\\baseline\\editor-filename-review\\计划 50% #1.txt",
+      "requestID": "ee9c3538-57d6-4aaa-b2cb-2160bbea7961",
+      "bytes": 31,
+      "url": "/attachment/prj_hCmRbOUdNyQcyZdD3FOg/b405ed02bc9626d6fa3c1d018f3c22deb3e34911db27f7462f4cef9cfab31dea.txt"
+    }
+  ],
+  "explicitLabel": "保留 %20 标签.txt",
+  "selection": "<path>C:\\Users\\Public\\opencorvus-review-20261113-b314\\baseline\\editor-filename-review\\source notes.txt</path>\n<type>file</type>\n<content>2: Only the second source row is selected.\n\n(Showing lines 2-2 of 3. Use offset=3 to continue.)\n</content>",
+  "editorSession": "ses_-zUPDZMggzzygAlAwHJe",
+  "replay": [
+    {
+      "messageId": "msg_g0VamQdL600UPk9fhA51",
+      "content": {
+        "text": "Inspect the editor filenames.",
+        "type": "text"
+      }
+    },
+    {
+      "messageId": "msg_g0VamQdL600UPk9fhA51",
+      "content": {
+        "type": "image",
+        "mimeType": "image/png",
+        "bytes": 100
+      }
+    },
+    {
+      "messageId": "msg_g0VamQdL600UPk9fhA51",
+      "content": {
+        "resource": {
+          "mimeType": "text/plain",
+          "text": "原始附件名称和正文。\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261113-b314/baseline/editor-filename-review/%E8%AE%A1%E5%88%92%2050%25%20%231.txt"
+        },
+        "type": "resource"
+      }
+    },
+    {
+      "messageId": "msg_g0VamQdL600UPk9fhA51",
+      "content": {
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\Public\\\\opencorvus-review-20261113-b314\\\\baseline\\\\editor-filename-review\\\\source notes.txt\",\"offset\":2,\"limit\":1}",
+        "type": "text"
+      }
+    },
+    {
+      "messageId": "msg_g0VamQdL600UPk9fhA51",
+      "content": {
+        "text": "<path>C:\\Users\\Public\\opencorvus-review-20261113-b314\\baseline\\editor-filename-review\\source notes.txt</path>\n<type>file</type>\n<content>2: Only the second source row is selected.\n\n(Showing lines 2-2 of 3. Use offset=3 to continue.)\n</content>",
+        "type": "text"
+      }
+    },
+    {
+      "messageId": "msg_g0VamQdL600UPk9fhA51",
+      "content": {
+        "mimeType": "text/plain",
+        "name": "保留 %20 标签.txt",
+        "uri": "file:///C:/Users/Public/opencorvus-review-20261113-b314/baseline/editor-filename-review/source%20notes.txt?start=2&end=2",
+        "type": "resource_link"
+      }
+    }
+  ],
+  "expectedNames": [
+    "视图 50% #1.png",
+    "计划 50% #1.txt"
+  ],
+  "target": "http://127.0.0.1:40078/ui/?sessionID=ses_hVNnG8xu0xZs0nIJnOmF&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261113-b314%5Cbaseline%5Ceditor-filename-review&experience=chat"
+}

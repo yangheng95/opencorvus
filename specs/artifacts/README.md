@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [ACP 附件文件名的 Windows 验收](2026-11-13-acp-file-uri-display-name/README.md)
 - [ACP 消息身份的真实 Windows Zed 记录](2026-11-13-acp-content-message-identity/README.md)
 - [外部移动后文件搜索的真实桌面记录](2026-11-13-explorer-search-observed-directory-change/README.md)
 - [资源管理器查询发布的桌面记录](2026-11-13-explorer-search-stable-query-source/README.md)
