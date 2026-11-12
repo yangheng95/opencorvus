@@ -102,7 +102,8 @@ For `edit` permissions, after client approval, ACP calls `connection.writeTextFi
 `session/new` and `session/load` accept an `mcpServers` list:
 
 - Local processes (`command`, `args`, `env`)
-- Remote HTTP/SSE (`url`, `headers`)
+- Remote Streamable HTTP (`type: "http"`, `url`, `headers`)
+- Remote server-sent events (`type: "sse"`, `url`, `headers`)
 
 ACP calls `sdk.mcp.add()` to register each server into the internal opencorvus instance.
 

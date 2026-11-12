@@ -1,0 +1,149 @@
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "sse", "method": "GET", "headerAccepted": true, "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 202}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "sse", "method": "GET", "headerAccepted": true, "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse", "method": "GET", "headerAccepted": true, "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 202}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "sse", "method": "GET", "headerAccepted": true, "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse", "method": "GET", "headerAccepted": true, "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "project", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "project", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "GET", "headerAccepted": true, "status": 405}
+{"event": "request", "side": "alternate", "endpoint": "sse", "method": "GET", "headerAccepted": true, "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "initialize", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "notifications/initialized", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/list", "status": 200}
+{"event": "request", "side": "alternate", "endpoint": "sse-message", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 202}
+{"event": "request", "side": "alternate", "endpoint": "http", "method": "POST", "headerAccepted": true, "operation": "prompts/get", "status": 200}

@@ -1,0 +1,23 @@
+{
+  "disconnect": {
+    "status": 200,
+    "requestID": "19ae0528-45ea-4b0c-98cc-33d99d678ce5"
+  },
+  "connect": {
+    "status": 200,
+    "requestID": "83ada7c3-81a2-417b-9893-5dd335095fae"
+  },
+  "readback": {
+    "status": 200,
+    "requestID": "4c68d228-4a9e-40e9-9e2c-66c70293decb",
+    "data": [
+      {
+        "name": "editor_http:remote_report",
+        "source": "mcp",
+        "description": "project http report",
+        "hints": [],
+        "template": "Read the project http report."
+      }
+    ]
+  }
+}

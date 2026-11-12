@@ -102,7 +102,8 @@ ACP 通过 `connection.requestPermission()` 转发持久的 `permission.asked` �
 `session/new` / `session/load` 参数可含 `mcpServers` 列表：
 
 - 本地进程（`command` + `args` + `env`）
-- 远程 HTTP/SSE（`url` + `headers`）
+- 远程 Streamable HTTP（`type: "http"`、`url`、`headers`）
+- 远程服务器发送事件（`type: "sse"`、`url`、`headers`）
 
 会话建立后自动调 `sdk.mcp.add()` 注册到内部 opencorvus 实例。
 

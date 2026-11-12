@@ -9,6 +9,8 @@ import {
   type Client,
   type SessionNotification,
 } from "@agentclientprotocol/sdk"
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js"
 import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
 import { ACP } from "@/acp/agent"
 import { ConfigPaths } from "@/config/paths"
@@ -498,6 +500,77 @@ test("ACP announces newly attached prompt commands and executes the selected loc
   expect(user?.parts).toEqual(
     expect.arrayContaining([expect.objectContaining({ type: "text", text: "Selected command input" })]),
   )
+}, 60_000)
+
+test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {
+  const servers = new Set<McpServer>()
+  const requests: Array<{ method: string; operation: string; header: string | null }> = []
+  const remote = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    async fetch(request) {
+      if (request.method !== "POST") return new Response(null, { status: 405, headers: { Allow: "POST" } })
+      const header = request.headers.get("x-review-transport")
+      if (header !== "editor-http") return new Response(null, { status: 403 })
+      const body = (await request.clone().json()) as { method: string }
+      requests.push({ method: request.method, operation: body.method, header })
+      const server = new McpServer({ name: "editor-http-report", version: "1.0.0" })
+      servers.add(server)
+      server.registerPrompt("read_report", { description: "Read the HTTP report" }, async () => ({
+        messages: [{ role: "user", content: { type: "text", text: "Current HTTP report." } }],
+      }))
+      const transport = new WebStandardStreamableHTTPServerTransport({
+        sessionIdGenerator: undefined,
+        enableJsonResponse: true,
+      })
+      await server.connect(transport)
+      return transport.handleRequest(request)
+    },
+  })
+  const notification = Promise.withResolvers<SessionNotification>()
+  try {
+    await using env = await environment({
+      sessionUpdate(update) {
+        if (update.update.sessionUpdate === "available_commands_update") notification.resolve(update)
+      },
+    })
+    const directory = env.project.path
+    const name = "editor_http"
+    const session = await env.client.newSession({
+      cwd: directory,
+      mcpServers: [
+        { type: "http", name, url: remote.url.href, headers: [{ name: "X-Review-Transport", value: "editor-http" }] },
+      ],
+    })
+    const update = await withTimeout(notification.promise, 10_000, "HTTP command announcement")
+    expect(update).toMatchObject({
+      sessionId: session.sessionId,
+      update: {
+        availableCommands: expect.arrayContaining([{ name: `${name}:read_report`, description: "Read the HTTP report" }]),
+      },
+    })
+    const config = await env.sdk.config.get({ directory }, { throwOnError: true })
+    expect(config.data?.mcp?.[name]).toMatchObject({ type: "remote", transport: "streamable-http", url: remote.url.href })
+    const status = await env.sdk.mcp.status({ directory }, { throwOnError: true })
+    expect(status.data?.[name]).toMatchObject({ status: "connected" })
+    const commands = await env.sdk.command.list({ directory }, { throwOnError: true })
+    expect(commands.data).toContainEqual({
+      name: `${name}:read_report`,
+      source: "mcp",
+      description: "Read the HTTP report",
+      hints: [],
+      template: "Current HTTP report.",
+    })
+    expect(requests).toEqual(
+      expect.arrayContaining([
+        { method: "POST", operation: "initialize", header: "editor-http" },
+        { method: "POST", operation: "prompts/get", header: "editor-http" },
+      ]),
+    )
+  } finally {
+    for (const server of servers) await server.close()
+    await remote.stop(true)
+  }
 }, 60_000)
 
 test("public initialization projects a cancelled actual reply as false", async () => {

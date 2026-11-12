@@ -1,0 +1,26 @@
+[
+  {
+    "time": "2026-11-12T10:38:29.424Z",
+    "message": "found",
+    "transport": null,
+    "error": null
+  },
+  {
+    "time": "2026-11-12T10:38:29.474Z",
+    "message": "connected",
+    "transport": "StreamableHTTP",
+    "error": null
+  },
+  {
+    "time": "2026-11-12T10:38:29.475Z",
+    "message": "create() successfully created client",
+    "transport": null,
+    "error": null
+  },
+  {
+    "time": "2026-11-12T10:38:29.501Z",
+    "message": "failed to get prompts",
+    "transport": null,
+    "error": "MCP OAuth credential snapshot changed; retry connection"
+  }
+]

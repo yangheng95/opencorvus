@@ -1,0 +1,863 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 29532,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "operation": "http-reattach-new",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "notificationSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "e6cc6336-699e-4009-b65a-9a6ecb2191f8",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "26e51d47-c807-4bd9-9d2b-6202e51ad036",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "6625db16-ebbf-4a1c-8ffb-5b942dca9164",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "operation": "mixed-transport-load",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "notificationSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report"
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "a37f6c15-aca2-4461-8683-26c82f128b1a",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "connected",
+      "editor_project_sse": "connected",
+      "editor_stdio": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "e0f441b5-da9f-470c-901d-f93d20c6925f",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project sse report."
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project editor report."
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "08a35460-2165-47a0-b3a3-bdf8627a7c60",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      },
+      "editor_project_sse": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/sse"
+      },
+      "editor_stdio": {
+        "type": "local"
+      }
+    }
+  },
+  {
+    "operation": "sse-control",
+    "side": "alternate",
+    "responseSessionID": "ses_-zUPFALRnzzGarY0d1dc",
+    "notificationSessionID": "ses_-zUPFALRnzzGarY0d1dc",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note"
+      },
+      {
+        "name": "editor_http_direct:remote_report",
+        "description": "alternate http report"
+      },
+      {
+        "name": "editor_sse:remote_report",
+        "description": "alternate sse report"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "26f5504f-460c-477a-81ce-be1a2fd57df9",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_sse": "connected",
+      "editor_http_direct": "connected"
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "status": 200,
+    "requestID": "7a5f4e86-ca80-412e-b59a-4234a301efb1",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http_direct:remote_report",
+        "description": "alternate http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the alternate http report."
+      },
+      {
+        "name": "editor_sse:remote_report",
+        "description": "alternate sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the alternate sse report."
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/config",
+    "status": 200,
+    "requestID": "ab913271-2e55-4cb6-9e29-644a5cc14050",
+    "data": {
+      "editor_sse": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/alternate/sse"
+      },
+      "editor_http_direct": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/alternate/http"
+      }
+    }
+  },
+  {
+    "operation": "http-load",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "notificationSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_http_load:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report"
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "c6b4eac4-5be7-4d20-8bab-28bf521b507c",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "connected",
+      "editor_project_sse": "connected",
+      "editor_stdio": "connected",
+      "editor_http_load": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "ad43001e-e433-4a02-bd9c-74d3dd67601a",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_http_load:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project sse report."
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project editor report."
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "b1ac71b6-afa7-4240-90dc-b4a61240357c",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      },
+      "editor_project_sse": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/sse"
+      },
+      "editor_stdio": {
+        "type": "local"
+      },
+      "editor_http_load": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "operation": "http-fork",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFALIfzzxN6Zi9Cew",
+    "notificationSessionID": "ses_-zUPFALIfzzxN6Zi9Cew",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_http_fork:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_http_load:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report"
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "29ee75da-6f84-43d6-bad2-494faac28514",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "connected",
+      "editor_project_sse": "connected",
+      "editor_stdio": "connected",
+      "editor_http_load": "connected",
+      "editor_http_fork": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "cc1eadfa-9a2f-4cfa-a4d6-3108f09f8fca",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_http_fork:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_http_load:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project sse report."
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project editor report."
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "0b57da69-d977-442c-81b7-847e6138c52d",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      },
+      "editor_project_sse": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/sse"
+      },
+      "editor_stdio": {
+        "type": "local"
+      },
+      "editor_http_load": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      },
+      "editor_http_fork": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "operation": "http-resume",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "notificationSessionID": "ses_-zUPFALmbzz4aIVhLU3M",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_http_fork:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_http_load:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_http_resume:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report"
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "30891ea4-ed22-4272-ad21-a81ae5bb5ddb",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "connected",
+      "editor_project_sse": "connected",
+      "editor_stdio": "connected",
+      "editor_http_load": "connected",
+      "editor_http_fork": "connected",
+      "editor_http_resume": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "e3132204-a050-4fec-a78f-15074eac4525",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_http_fork:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_http_load:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_http_resume:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      },
+      {
+        "name": "editor_project_sse:remote_report",
+        "description": "project sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project sse report."
+      },
+      {
+        "name": "editor_stdio:editor_report",
+        "description": "Editor report from project",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project editor report."
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "cc326b91-a48f-4ccc-8f08-8e00d5b08872",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      },
+      "editor_project_sse": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39960/project/sse"
+      },
+      "editor_stdio": {
+        "type": "local"
+      },
+      "editor_http_load": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      },
+      "editor_http_fork": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      },
+      "editor_http_resume": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39960/project/http"
+      }
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "afb7cff5-a1d4-40e3-bbcd-6194ba7038ed",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_sse": "connected",
+      "editor_http_direct": "connected"
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "status": 200,
+    "requestID": "29e97029-5d3b-48ca-8195-51a52006aa63",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http_direct:remote_report",
+        "description": "alternate http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the alternate http report."
+      },
+      {
+        "name": "editor_sse:remote_report",
+        "description": "alternate sse report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the alternate sse report."
+      }
+    ]
+  }
+]

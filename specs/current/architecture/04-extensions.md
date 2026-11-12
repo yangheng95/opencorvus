@@ -1236,7 +1236,8 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 模型及 variant 由会话返回的 `configOptions` 中唯一 `model` select 选项声明，
 通过 `setSessionConfigOption` 更新并返回完整当前选项；值须属于实际投影的模型目录。
 不再提供旧的 model setter 或平行模型状态。MCP（Model Context Protocol，模型上下文协议）
-入站配置支持 stdio、声明的 HTTP/SSE 传输；SDK 新增的 MCP-over-ACP 类型返回
+入站配置支持 stdio、`type: "http"` 对应的 Streamable HTTP 和 `type: "sse"` 对应的事件流端点。
+SDK 新增的 MCP-over-ACP 类型返回
 `RequestError.invalidParams`。
 
 普通提示和注册命令共用 `acp/prompt-response.ts`，以本次请求的 input Message ID
