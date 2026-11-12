@@ -1,0 +1,303 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 9760,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "operation": "create",
+    "side": "project",
+    "responseSessionID": "ses_-zUPEqC4XzzOZWEa4QSy",
+    "notificationSessionID": "ses_-zUPEqC4XzzOZWEa4QSy",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "input": {
+          "hint": "[arguments]"
+        }
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "input": {
+          "hint": "[arguments]"
+        }
+      },
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note"
+      },
+      {
+        "name": "review-date",
+        "description": "Review the date in the project note",
+        "input": {
+          "hint": "[arguments]"
+        }
+      },
+      {
+        "name": "editor_strict:strict_report",
+        "description": "A report with a required date and optional scope",
+        "input": {
+          "hint": "<date> [scope]"
+        }
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "5a1a8267-92d2-400c-8712-6d5253476cba",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_strict": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "d74a6e34-659d-41dc-b4de-083e6bc01e3f",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "review-date",
+        "description": "Review the date in the project note",
+        "source": "command",
+        "hints": [
+          "$1"
+        ]
+      },
+      {
+        "name": "editor_strict:strict_report",
+        "description": "A report with a required date and optional scope",
+        "source": "mcp",
+        "hints": [
+          "$1",
+          "$2"
+        ]
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "84761478-4d6a-44b7-941b-2e09db6a09b5",
+    "data": {
+      "editor_strict": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39992/mcp"
+      }
+    }
+  },
+  {
+    "operation": "ordinary-image",
+    "prompt": [
+      {
+        "type": "text",
+        "text": "Compare the attached blue panel image."
+      },
+      {
+        "type": "image",
+        "mimeType": "image/png",
+        "data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg=="
+      }
+    ],
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    }
+  },
+  {
+    "operation": "local-command-with-image",
+    "prompt": [
+      {
+        "type": "text",
+        "text": "/review-date 2026-11-19"
+      },
+      {
+        "type": "image",
+        "mimeType": "image/png",
+        "data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg=="
+      }
+    ],
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    }
+  },
+  {
+    "operation": "remote-command-with-embedded-text",
+    "prompt": [
+      {
+        "type": "text",
+        "text": "/editor_strict:strict_report 2026-11-20"
+      },
+      {
+        "type": "resource",
+        "resource": {
+          "uri": "file:///maintenance-notes.md",
+          "mimeType": "text/markdown",
+          "text": "Water valve A42 was inspected."
+        }
+      }
+    ],
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    }
+  },
+  {
+    "operation": "durable-conversation",
+    "sessionID": "ses_-zUPEqC4XzzOZWEa4QSy",
+    "status": 200,
+    "requestID": "d188940c-dccb-4000-9e4a-5988c0c88070",
+    "data": [
+      {
+        "id": "msg_g0Val9o2D00Rv3ldPmrs",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Compare the attached blue panel image."
+          },
+          {
+            "type": "file",
+            "filename": "image",
+            "mime": "image/png",
+            "url": "/attachment/prj_hmcpnO5WWl3TuFTBHpgS/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0Val9o9U008NjfMGndw",
+        "role": "assistant",
+        "parentID": "msg_g0Val9o2D00Rv3ldPmrs",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0Val9oWh00wNZEa3qDk",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-19."
+          },
+          {
+            "type": "file",
+            "filename": "image",
+            "mime": "image/png",
+            "url": "/attachment/prj_hmcpnO5WWl3TuFTBHpgS/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0Val9oc000rXBJH34Bu",
+        "role": "assistant",
+        "parentID": "msg_g0Val9oWh00wNZEa3qDk",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0Val9op300CBs5nRgWO",
+        "role": "user",
+        "parts": [
+          {
+            "type": "text",
+            "text": "Read the 2026-11-20 report for all topics."
+          },
+          {
+            "type": "text",
+            "text": "Water valve A42 was inspected."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0Val9otR002LWD9LmGC",
+        "role": "assistant",
+        "parentID": "msg_g0Val9op300CBs5nRgWO",
+        "finish": "stop",
+        "parts": [
+          {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,300 @@
+[
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "b8e76a53-cb6c-4a6f-af46-4570fce7c4b4",
+      "method": "initialize",
+      "params": {
+        "protocolVersion": 1,
+        "clientCapabilities": {
+          "fs": {
+            "readTextFile": true,
+            "writeTextFile": true
+          },
+          "terminal": true,
+          "session": {
+            "compaction": {},
+            "configOptions": {
+              "boolean": {}
+            },
+            "notices": {}
+          },
+          "auth": {
+            "terminal": true
+          },
+          "elicitation": {
+            "form": {},
+            "url": {}
+          },
+          "_meta": {
+            "terminal_output": true,
+            "terminal-auth": true
+          }
+        },
+        "clientInfo": {
+          "name": "zed",
+          "title": "Zed",
+          "version": "1.28.1+stable.390.e8bc16acee5ae1937600d571d441c4b5d7b0d288"
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "b8e76a53-cb6c-4a6f-af46-4570fce7c4b4",
+      "result": {
+        "protocolVersion": 1,
+        "agentCapabilities": {
+          "loadSession": true,
+          "mcpCapabilities": {
+            "http": true,
+            "sse": true
+          },
+          "promptCapabilities": {
+            "embeddedContext": true,
+            "image": true
+          },
+          "sessionCapabilities": {
+            "fork": {},
+            "list": {},
+            "resume": {}
+          }
+        },
+        "authMethods": [
+          {
+            "description": "Run `opencorvus auth login` in the terminal",
+            "name": "Login with opencorvus",
+            "id": "opencorvus-login",
+            "_meta": {
+              "terminal-auth": {
+                "command": "opencorvus",
+                "args": [
+                  "auth",
+                  "login"
+                ],
+                "label": "OpenCorvus Login"
+              }
+            }
+          }
+        ],
+        "agentInfo": {
+          "name": "OpenCorvus",
+          "version": "local"
+        }
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "354a93d4-ff3e-439d-9f42-303f4cd1078f",
+      "method": "session/load",
+      "params": {
+        "mcpServers": [],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b299\\project\\archive-review",
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5"
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "user_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "Read the 2026-11-20 report for all topics."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "user_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "# Test inventory notes\n\nWater valve A42 was inspected.\n"
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "agent_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "user_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "Use the strict-project note for 2026-11-19."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "available_commands_update",
+          "availableCommands": [
+            {
+              "name": "init",
+              "description": "create/update AGENTS.md",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "review",
+              "description": "review changes [commit|branch|pr], defaults to uncommitted",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "review-note",
+              "description": "Review the strict-project note"
+            },
+            {
+              "name": "review-date",
+              "description": "Review the date in the project note",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "editor_strict:strict_report",
+              "description": "A report with a required date and optional scope",
+              "input": {
+                "hint": "<date> [scope]"
+              }
+            },
+            {
+              "name": "compact",
+              "description": "compact the session"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "user_message_chunk",
+          "content": {
+            "type": "image",
+            "mimeType": "image/png",
+            "data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAqElEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a++8vc+nv9EVP5zUfnPReU/F5X/XFT+c1H5z0XlPxeV/1xU/nNR+c9F5T8Xlf9cVP5zUfnPReU/F5X/XFT+c1H5z0XlPxeV/1xU/nNR+c9F5T8Xlf9cVP5zUfnPReU/F5X/XFT+c1H5z0XlPxf/CKvYAjJ/eUfUAAAAAElFTkSuQmCC",
+            "uri": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b299/project/archive-review/panel.png"
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "agent_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "354a93d4-ff3e-439d-9f42-303f4cd1078f",
+      "result": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "configOptions": [
+          {
+            "id": "model",
+            "name": "Model",
+            "category": "model",
+            "type": "select",
+            "currentValue": "acp-review/local",
+            "options": [
+              {
+                "value": "acp-review/local",
+                "name": "acp-review/Isolated ACP review"
+              }
+            ]
+          }
+        ],
+        "modes": {
+          "availableModes": [
+            {
+              "id": "coding",
+              "name": "coding",
+              "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+            }
+          ],
+          "currentModeId": "coding"
+        },
+        "_meta": {
+          "opencorvus": {
+            "modelId": "acp-review/local",
+            "variant": null,
+            "availableVariants": []
+          }
+        }
+      }
+    }
+  }
+]

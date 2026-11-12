@@ -199,7 +199,6 @@ import type {
   FileMoveErrors,
   FileMoveResponses,
   FilePartInput,
-  FilePartSource,
   FileReadErrors,
   FileReadResponses,
   FileReadSourceErrors,
@@ -12896,16 +12895,7 @@ export class Session4 extends HeyApiClient {
       command: string
       messageID: string
       model?: string
-      parts?: Array<{
-        filename?: string
-        id?: string
-        mime: string
-        orderKey?: string
-        presentation?: "attachment-index"
-        source?: FilePartSource
-        type: "file"
-        url: string
-      }>
+      parts?: Array<TextPartInput | FilePartInput>
       variant?: string
     },
     options?: Options<never, ThrowOnError>,

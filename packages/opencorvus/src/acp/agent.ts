@@ -1552,16 +1552,25 @@ export namespace ACP {
         defaultModeID: primarySurface.defaultModeID,
       })
 
+      const cmd = (() => {
+        const text = params.prompt
+          .filter((part) => part.type === "text")
+          .map((part) => part.text)
+          .join("")
+          .trim()
+        if (!text.startsWith("/")) return
+
+        const [name, ...rest] = text.slice(1).split(/\s+/)
+        return { name, args: rest.join(" ").trim() }
+      })()
+
       const parts: Array<
         { type: "text"; text: string } | { type: "file"; url: string; filename: string; mime: string }
       > = []
       for (const part of params.prompt) {
         switch (part.type) {
           case "text":
-            parts.push({
-              type: "text" as const,
-              text: part.text,
-            })
+            if (!cmd) parts.push({ type: "text", text: part.text })
             break
           case "image": {
             const parsed = parseUri(part.uri ?? "")
@@ -1631,19 +1640,6 @@ export namespace ACP {
 
       log.info("parts", { parts })
 
-      const cmd = (() => {
-        const text = parts
-          .filter((p): p is { type: "text"; text: string } => p.type === "text")
-          .map((p) => p.text)
-          .join("")
-          .trim()
-
-        if (!text.startsWith("/")) return
-
-        const [name, ...rest] = text.slice(1).split(/\s+/)
-        return { name, args: rest.join(" ").trim() }
-      })()
-
       if (!cmd) {
         const inputMessageID = Identifier.ascending("message")
         const response = await this.sdk.session.prompt({
@@ -1670,6 +1666,7 @@ export namespace ACP {
           messageID: inputMessageID,
           command: cmd.name,
           arguments: cmd.args,
+          ...(parts.length ? { parts } : {}),
           model: model.providerID + "/" + model.modelID,
           agent,
           directory,

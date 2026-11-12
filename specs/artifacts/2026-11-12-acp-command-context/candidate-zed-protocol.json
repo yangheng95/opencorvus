@@ -1,0 +1,308 @@
+[
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "aad26fcc-6bb0-45b4-9448-2253d91fd22d",
+      "method": "initialize",
+      "params": {
+        "protocolVersion": 1,
+        "clientCapabilities": {
+          "fs": {
+            "readTextFile": true,
+            "writeTextFile": true
+          },
+          "terminal": true,
+          "session": {
+            "compaction": {},
+            "configOptions": {
+              "boolean": {}
+            },
+            "notices": {}
+          },
+          "auth": {
+            "terminal": true
+          },
+          "elicitation": {
+            "form": {},
+            "url": {}
+          },
+          "_meta": {
+            "terminal_output": true,
+            "terminal-auth": true
+          }
+        },
+        "clientInfo": {
+          "name": "zed",
+          "title": "Zed",
+          "version": "1.28.1+stable.390.e8bc16acee5ae1937600d571d441c4b5d7b0d288"
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "aad26fcc-6bb0-45b4-9448-2253d91fd22d",
+      "result": {
+        "protocolVersion": 1,
+        "agentCapabilities": {
+          "loadSession": true,
+          "mcpCapabilities": {
+            "http": true,
+            "sse": true
+          },
+          "promptCapabilities": {
+            "embeddedContext": true,
+            "image": true
+          },
+          "sessionCapabilities": {
+            "fork": {},
+            "list": {},
+            "resume": {}
+          }
+        },
+        "authMethods": [
+          {
+            "description": "Run `opencorvus auth login` in the terminal",
+            "name": "Login with opencorvus",
+            "id": "opencorvus-login",
+            "_meta": {
+              "terminal-auth": {
+                "command": "opencorvus",
+                "args": [
+                  "auth",
+                  "login"
+                ],
+                "label": "OpenCorvus Login"
+              }
+            }
+          }
+        ],
+        "agentInfo": {
+          "name": "OpenCorvus",
+          "version": "local"
+        }
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "3a87d994-8e36-4452-b639-626e03eab456",
+      "method": "session/new",
+      "params": {
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b299\\project\\archive-review",
+        "mcpServers": []
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "3a87d994-8e36-4452-b639-626e03eab456",
+      "result": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "configOptions": [
+          {
+            "id": "model",
+            "name": "Model",
+            "category": "model",
+            "type": "select",
+            "currentValue": "acp-review/local",
+            "options": [
+              {
+                "value": "acp-review/local",
+                "name": "acp-review/Isolated ACP review"
+              }
+            ]
+          }
+        ],
+        "modes": {
+          "availableModes": [
+            {
+              "id": "coding",
+              "name": "coding",
+              "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+            }
+          ],
+          "currentModeId": "coding"
+        },
+        "_meta": {
+          "opencorvus": {
+            "modelId": "acp-review/local",
+            "variant": null,
+            "availableVariants": []
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "available_commands_update",
+          "availableCommands": [
+            {
+              "name": "init",
+              "description": "create/update AGENTS.md",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "review",
+              "description": "review changes [commit|branch|pr], defaults to uncommitted",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "review-note",
+              "description": "Review the strict-project note"
+            },
+            {
+              "name": "review-date",
+              "description": "Review the date in the project note",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "editor_strict:strict_report",
+              "description": "A report with a required date and optional scope",
+              "input": {
+                "hint": "<date> [scope]"
+              }
+            },
+            {
+              "name": "compact",
+              "description": "compact the session"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "1b399cb1-f265-48f1-aa36-77a5d63951ad",
+      "method": "session/prompt",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "prompt": [
+          {
+            "type": "text",
+            "text": "/editor_strict:strict_report 2026-11-20 "
+          },
+          {
+            "type": "resource",
+            "resource": {
+              "text": "# Test inventory notes\n\nWater valve A42 was inspected.\n",
+              "uri": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b299/project/archive-review/maintenance-notes.md"
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "agent_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "1b399cb1-f265-48f1-aa36-77a5d63951ad",
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "183125d2-082a-45f2-bcf0-ca9711efae57",
+      "method": "session/prompt",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "prompt": [
+          {
+            "type": "text",
+            "text": "/review-date 2026-11-19 "
+          },
+          {
+            "type": "image",
+            "data": "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAqElEQVR4Ae3AA6AkWZbG8f937o3IzKdyS2Oubdu2bdu2bdu2bWmMnpZKr54yMyLu+Xa3anqmhztr1a++8vc+nv9EVP5zUfnPReU/F5X/XFT+c1H5z0XlPxeV/1xU/nNR+c9F5T8Xlf9cVP5zUfnPReU/F5X/XFT+c1H5z0XlPxeV/1xU/nNR+c9F5T8Xlf9cVP5zUfnPReU/F5X/XFT+c1H5z0XlPxf/CKvYAjJ/eUfUAAAAAElFTkSuQmCC",
+            "mimeType": "image/png",
+            "uri": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b299/project/archive-review/panel.png"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEpp2Zzzu15zDbYg5",
+        "update": {
+          "sessionUpdate": "agent_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "183125d2-082a-45f2-bcf0-ca9711efae57",
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    }
+  }
+]

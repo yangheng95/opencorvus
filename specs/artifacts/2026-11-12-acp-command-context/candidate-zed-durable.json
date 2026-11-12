@@ -1,0 +1,69 @@
+{
+  "sessionID": "ses_-zUPEpp2Zzzu15zDbYg5",
+  "status": 200,
+  "requestID": "3be12eb8-0cac-4cfa-afff-e847d5666311",
+  "data": [
+    {
+      "info": {
+        "id": "msg_g0ValAEfE00GHQRezqQn",
+        "role": "user"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "Read the 2026-11-20 report for all topics."
+        },
+        {
+          "type": "text",
+          "text": "# Test inventory notes\n\nWater valve A42 was inspected.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "id": "msg_g0ValAEkN00kPDWn5ZkN",
+        "role": "assistant",
+        "parentID": "msg_g0ValAEfE00GHQRezqQn",
+        "finish": "stop"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "The selected local command reached the stream."
+        }
+      ]
+    },
+    {
+      "info": {
+        "id": "msg_g0ValAInf00JU6EM5kld",
+        "role": "user"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "Use the strict-project note for 2026-11-19."
+        },
+        {
+          "type": "file",
+          "mime": "image/png",
+          "url": "/attachment/prj_hmcpnO5WWl3TuFTBHpgS/4411abfaa068881451cce6410bdc6b721aa8befa99b24d6d79201c43ff00afd9.png",
+          "filename": "panel.png"
+        }
+      ]
+    },
+    {
+      "info": {
+        "id": "msg_g0ValAIqf00ncH3hCgCX",
+        "role": "assistant",
+        "parentID": "msg_g0ValAInf00JU6EM5kld",
+        "finish": "stop"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "The selected local command reached the stream."
+        }
+      ]
+    }
+  ]
+}

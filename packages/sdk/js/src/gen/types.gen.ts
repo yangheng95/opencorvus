@@ -29685,16 +29685,7 @@ export type SessionCommandData = {
      */
     messageID: string
     model?: string
-    parts?: Array<{
-      filename?: string
-      id?: string
-      mime: string
-      orderKey?: string
-      presentation?: "attachment-index"
-      source?: FilePartSource
-      type: "file"
-      url: string
-    }>
+    parts?: Array<TextPartInput | FilePartInput>
     variant?: string
   }
   path: {

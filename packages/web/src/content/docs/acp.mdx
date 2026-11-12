@@ -89,6 +89,10 @@ Commands with declared inputs include an editor hint. A remote prompt can show `
 and an optional scope. Project templates with argument placeholders show `[arguments]` for free text. Editors that
 use this field can keep the command in the input box while the user fills in its arguments.
 
+When a user attaches an image or embeds a resource with a registered slash command, the command text supplies the
+arguments and the attached content becomes part of the conversation input. For example, mentioning a project file
+after a report date passes the file contents to the conversation and sends the date to the remote report prompt.
+
 ### Authentication
 
 :::caution

@@ -103128,40 +103128,10 @@
                     "items": {
                       "oneOf": [
                         {
-                          "properties": {
-                            "filename": {
-                              "type": "string"
-                            },
-                            "id": {
-                              "type": "string"
-                            },
-                            "mime": {
-                              "type": "string"
-                            },
-                            "orderKey": {
-                              "type": "string"
-                            },
-                            "presentation": {
-                              "const": "attachment-index",
-                              "type": "string"
-                            },
-                            "source": {
-                              "$ref": "#/components/schemas/FilePartSource"
-                            },
-                            "type": {
-                              "const": "file",
-                              "type": "string"
-                            },
-                            "url": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "type",
-                            "mime",
-                            "url"
-                          ],
-                          "type": "object"
+                          "$ref": "#/components/schemas/TextPartInput"
+                        },
+                        {
+                          "$ref": "#/components/schemas/FilePartInput"
                         }
                       ]
                     },

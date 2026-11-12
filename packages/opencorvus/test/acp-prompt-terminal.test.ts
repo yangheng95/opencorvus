@@ -22,6 +22,7 @@ import { Server } from "@/server/server"
 import { SessionControl } from "@/session/control"
 import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
+import { AttachmentStore } from "@/storage/attachment-store"
 import { withTimeout } from "@/util/await-with-timeout"
 import { Bus } from "@/bus"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -123,6 +124,8 @@ async function environment(options: {
               id,
               {
                 name: id,
+                attachment: true,
+                modalities: { input: ["text", "image"], output: ["text"] },
                 limit: { context: 100000, output: 1000 },
               },
             ]),
@@ -523,6 +526,57 @@ test("ACP announces command input hints after attaching project connections and 
     await expect(env.client.prompt({ sessionId, prompt: [{ type: "text", text: `/${promptName} ${argument}` }] }))
       .rejects.toMatchObject({ code: -32602, data: { error: { name: "CommandArgumentsError", data: { command: promptName, reason } } } })
   }
+}, 60_000)
+
+test("ACP registered commands preserve embedded context and canonical image bytes in the same turn", async () => {
+  await using env = await environment()
+  const cwd = env.project.path
+  const { sessionId } = await env.client.newSession({
+    cwd,
+    mcpServers: [
+      {
+        name: "editor_report",
+        command: process.execPath,
+        args: [path.join(import.meta.dir, "fixture/acp-editor-mcp.ts"), "Report with attached context"],
+        env: [],
+      },
+    ],
+  })
+  const image =
+    "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg=="
+  const notes = "# Inspection notes\n\nValve A42 was inspected.\n"
+  const response = await env.client.prompt({
+    sessionId,
+    prompt: [
+      { type: "text", text: "/editor_report:editor_report 2026-11-20" },
+      { type: "resource", resource: { uri: "file:///notes.md", text: notes } },
+      { type: "image", mimeType: "image/png", uri: "file:///panel.png", data: image },
+    ],
+  })
+  expect(response.stopReason).toBe("end_turn")
+  const [input, reply] = await env.messages(sessionId)
+  expect(input.info.role).toBe("user")
+  expect(reply.info).toMatchObject({ role: "assistant", parentID: input.info.id, finish: "stop" })
+  expect(input.parts).toEqual([
+    expect.objectContaining({ type: "text", text: "Read the 2026-11-20 report for all topics." }),
+    expect.objectContaining({ type: "text", text: notes }),
+    expect.objectContaining({ type: "file", filename: "panel.png", mime: "image/png" }),
+  ])
+  const file = input.parts.find((part) => part.type === "file")!
+  const { data: session } = await env.sdk.session.get({ sessionID: sessionId, directory: cwd }, { throwOnError: true })
+  const stored = await AttachmentStore.readVerifiedReference({ projectID: session.projectID, url: file.url, mime: file.mime })
+  expect(stored.bytes).toEqual(Buffer.from(image, "base64"))
+
+  const cursor = env.updates.length
+  await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
+  const restored = env.updates.slice(cursor).flatMap(({ update }) => {
+    return update.sessionUpdate === "user_message_chunk" ? [update.content] : []
+  })
+  expect(restored).toMatchObject([
+    { type: "text", text: "Read the 2026-11-20 report for all topics." },
+    { type: "text", text: notes },
+    { type: "image", mimeType: "image/png", data: image },
+  ])
 }, 60_000)
 
 test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {

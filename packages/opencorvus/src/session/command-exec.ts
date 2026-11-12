@@ -16,7 +16,7 @@ import { Session } from "."
 import { SessionPromptState } from "./prompt/state"
 import { sessionLifecycleOrderKey } from "./status"
 import { resolvePromptParts } from "./prompt/parts"
-import type { PromptInput } from "./prompt/schema"
+import { PromptInput } from "./prompt/schema"
 import { ProjectMemory } from "@/memory/project-memory"
 
 export namespace SessionCommand {
@@ -33,18 +33,7 @@ export namespace SessionCommand {
     /** Caller-owned durable facts merged onto the input Message (never part
      *  of the public route schema). */
     extra: z.record(z.string(), z.any()).optional(),
-    parts: z
-      .array(
-        z.discriminatedUnion("type", [
-          Message.FilePart.omit({
-            messageID: true,
-            sessionID: true,
-          }).partial({
-            id: true,
-          }),
-        ]),
-      )
-      .optional(),
+    parts: PromptInput.shape.parts.optional(),
   })
   export type CommandInput = z.infer<typeof CommandInput>
   const bashRegex = /!`([^`]+)`/g
