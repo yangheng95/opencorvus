@@ -1,0 +1,23 @@
+{
+  "publishedTemplateType": "string",
+  "examples": [
+    {
+      "side": "alternate",
+      "requestID": "7f4b1912-16a2-4830-888e-dc5beffba42b",
+      "status": 200,
+      "local": {
+        "name": "review-owned-command",
+        "source": "command",
+        "template": "isolated project command",
+        "hints": []
+      },
+      "remote": {
+        "name": "review-public:isolated-instructions",
+        "source": "mcp",
+        "description": "Isolated MCP discovery prompt",
+        "template": {},
+        "hints": []
+      }
+    }
+  ]
+}

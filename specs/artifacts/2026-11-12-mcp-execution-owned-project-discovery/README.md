@@ -6,3 +6,8 @@
 - [从项目页面点击 Computer 后的实际错误](02-baseline-computer-connect-error.png)
 - [现有 Chat 分配入口列出平台声明](03-baseline-chat-assignments.png)
 - [两项目的发现路由、桌面回执、适配器原因和协议记录](baseline-ownership-evidence.json)
+
+## 命令回执对照
+
+- [公开字符串契约与真实远程空对象回执](command-serialization-before.json)
+- [并行请求后项目实例租约错误和后端退出](command-serialization-exit.json)

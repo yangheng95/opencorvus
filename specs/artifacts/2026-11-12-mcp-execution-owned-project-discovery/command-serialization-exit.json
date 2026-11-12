@@ -1,0 +1,32 @@
+{
+  "process": 13512,
+  "listenerClosed": true,
+  "events": [
+    {
+      "time": "2026-11-12T05:08:04.238Z",
+      "event": "unhandled rejection",
+      "type": "Error",
+      "cause": "Cannot access instance context through a closed instance cache lease: c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-iteration-20261112-b280\\candidate-alternate\\archive-review"
+    },
+    {
+      "time": "2026-11-12T05:08:04.239Z",
+      "event": "uncaught exception",
+      "type": "Error",
+      "cause": "Cannot access instance context through a closed instance cache lease: c:\\users\\hengu\\appdata\\local\\temp\\opencorvus-iteration-20261112-b280\\candidate-alternate\\archive-review"
+    }
+  ],
+  "commandRequests": [
+    {
+      "time": "2026-11-12T05:08:03.552Z",
+      "requestID": "37c1e06d-da9d-496c-b763-fc35c6fcb9d7",
+      "status": "started",
+      "statusCode": null
+    },
+    {
+      "time": "2026-11-12T05:08:04.234Z",
+      "requestID": "37c1e06d-da9d-496c-b763-fc35c6fcb9d7",
+      "status": "completed",
+      "statusCode": 200
+    }
+  ]
+}
