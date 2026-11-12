@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [命令面板等价输入的真实桌面与请求](2026-11-12-command-palette-equivalent-input-focus/README.md)
 - [归档搜索桌面和真实查询](2026-11-12-archive-search-request-coalescing/README.md)
 - [归档永久删除的桌面和正式回执](2026-11-12-archive-permanent-delete-receipt/README.md)
 - [定时规则可读性证据](2026-11-12-scheduled-recurrence-readable-details/README.md)

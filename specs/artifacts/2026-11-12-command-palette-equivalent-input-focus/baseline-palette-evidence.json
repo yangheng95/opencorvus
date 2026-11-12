@@ -1,0 +1,246 @@
+{
+  "receipts": [
+    {
+      "time": "2026-11-12T01:28:17.965Z",
+      "stage": "delivered",
+      "route": "/work-ledger",
+      "method": "GET",
+      "round": "search-shared",
+      "directory": null,
+      "search": "Shared focus",
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "0652240a-d606-4219-b60e-d7d94ec73375",
+      "status": 200,
+      "bytes": 4425,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hbfEMaPzQ9afiq08nnBD",
+          "sessionID": "ses_hbfEMaPzQ9afiq08nnBD",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 14"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hUehG5IzvBsxEN6il671",
+          "sessionID": "ses_hUehG5IzvBsxEN6il671",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 13"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hAT2cUpmg8c69sNHBchV",
+          "sessionID": "ses_hAT2cUpmg8c69sNHBchV",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 12"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hD6vTil17NRpDDSmy326",
+          "sessionID": "ses_hD6vTil17NRpDDSmy326",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 11"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hwPXkLIehRiliQwr7Jtx",
+          "sessionID": "ses_hwPXkLIehRiliQwr7Jtx",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 10"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hYrlG9Td3y7CjA9KkpTu",
+          "sessionID": "ses_hYrlG9Td3y7CjA9KkpTu",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 09"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h4CP4CF6SrtQe93lA1OH",
+          "sessionID": "ses_h4CP4CF6SrtQe93lA1OH",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 08"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h34GWqWmQKpaVxymWzXe",
+          "sessionID": "ses_h34GWqWmQKpaVxymWzXe",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 07"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hIMAxX81CDpzEazAPoX9",
+          "sessionID": "ses_hIMAxX81CDpzEazAPoX9",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 06"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h5TYh9pu2519OgE8dTP0",
+          "sessionID": "ses_h5TYh9pu2519OgE8dTP0",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 05"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hXSKkvuhMZxH9UdWsCSa",
+          "sessionID": "ses_hXSKkvuhMZxH9UdWsCSa",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 04"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hKqu2P2jNQNPLNTM2NZU",
+          "sessionID": "ses_hKqu2P2jNQNPLNTM2NZU",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 03"
+        }
+      ],
+      "nextCursor": {
+        "pinned": false,
+        "updated": 1794446882606,
+        "rowKey": "chat:ses_hKqu2P2jNQNPLNTM2NZU"
+      }
+    },
+    {
+      "time": "2026-11-12T01:28:25.378Z",
+      "stage": "delivered",
+      "route": "/work-ledger",
+      "method": "GET",
+      "round": "space",
+      "directory": null,
+      "search": "Shared focus",
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "f92b3651-a50f-454c-8c43-52a518d0476a",
+      "status": 200,
+      "bytes": 4425,
+      "items": [
+        {
+          "kind": "chat",
+          "id": "ses_hbfEMaPzQ9afiq08nnBD",
+          "sessionID": "ses_hbfEMaPzQ9afiq08nnBD",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 14"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hUehG5IzvBsxEN6il671",
+          "sessionID": "ses_hUehG5IzvBsxEN6il671",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 13"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hAT2cUpmg8c69sNHBchV",
+          "sessionID": "ses_hAT2cUpmg8c69sNHBchV",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 12"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hD6vTil17NRpDDSmy326",
+          "sessionID": "ses_hD6vTil17NRpDDSmy326",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 11"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hwPXkLIehRiliQwr7Jtx",
+          "sessionID": "ses_hwPXkLIehRiliQwr7Jtx",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 10"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hYrlG9Td3y7CjA9KkpTu",
+          "sessionID": "ses_hYrlG9Td3y7CjA9KkpTu",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 09"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h4CP4CF6SrtQe93lA1OH",
+          "sessionID": "ses_h4CP4CF6SrtQe93lA1OH",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 08"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h34GWqWmQKpaVxymWzXe",
+          "sessionID": "ses_h34GWqWmQKpaVxymWzXe",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 07"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hIMAxX81CDpzEazAPoX9",
+          "sessionID": "ses_hIMAxX81CDpzEazAPoX9",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 06"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_h5TYh9pu2519OgE8dTP0",
+          "sessionID": "ses_h5TYh9pu2519OgE8dTP0",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 05"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hXSKkvuhMZxH9UdWsCSa",
+          "sessionID": "ses_hXSKkvuhMZxH9UdWsCSa",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review",
+          "title": "Shared focus 04"
+        },
+        {
+          "kind": "chat",
+          "id": "ses_hKqu2P2jNQNPLNTM2NZU",
+          "sessionID": "ses_hKqu2P2jNQNPLNTM2NZU",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-project\\archive-review",
+          "title": "Shared focus 03"
+        }
+      ],
+      "nextCursor": {
+        "pinned": false,
+        "updated": 1794446882606,
+        "rowKey": "chat:ses_hKqu2P2jNQNPLNTM2NZU"
+      }
+    }
+  ],
+  "highlighted": {
+    "requestID": "881d3014-3265-4929-b659-50ca11b31825",
+    "id": "ses_hAT2cUpmg8c69sNHBchV",
+    "title": "Shared focus 12",
+    "projectID": "prj_h7PAuGW6zGeyFqVGAw4M",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review"
+  },
+  "entered": {
+    "requestID": "6a085391-b266-47e3-8f46-1a8327f98aa8",
+    "id": "ses_hbfEMaPzQ9afiq08nnBD",
+    "title": "Shared focus 14",
+    "projectID": "prj_h7PAuGW6zGeyFqVGAw4M",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b269\\baseline-alternate\\archive-review"
+  },
+  "pages": [
+    {
+      "requestID": "cd146ec6-15b5-4f52-a208-c8ec0a11d5bc",
+      "rows": 12,
+      "cursor": {
+        "pinned": false,
+        "updated": 1794446882606,
+        "rowKey": "chat:ses_hKqu2P2jNQNPLNTM2NZU"
+      }
+    },
+    {
+      "requestID": "2d7c26a7-dde6-4f22-96cd-544bca2a0008",
+      "rows": 2,
+      "cursor": null
+    }
+  ]
+}
