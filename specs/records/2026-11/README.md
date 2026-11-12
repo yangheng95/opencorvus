@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目发现尊重内置 MCP 的执行所有权](2026-11-12-mcp-execution-owned-project-discovery.md)
 - [手动断开和配置禁用的 MCP 状态](2026-11-12-mcp-manual-disconnect-status.md)
 - [默认启用 OAuth 的公共远程 MCP 连接](2026-11-12-mcp-public-remote-default-oauth.md)
 - [新增 MCP 表单用当前语言指出需要修正的字段](2026-11-12-mcp-add-field-validation.md)

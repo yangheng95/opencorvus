@@ -1,0 +1,259 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b280-initial",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39892",
+    "pid": 24692
+  },
+  "setup": [
+    {
+      "side": "project",
+      "configID": "a04d34f4-f114-42f0-935f-3f918454ca66",
+      "addID": "81e8d425-9b83-4dfc-baad-60612d7dc37b",
+      "status": {
+        "browser": {
+          "status": "disabled"
+        },
+        "computer": {
+          "status": "disconnected"
+        },
+        "review-public": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "configID": "6a293f5b-d772-4ca5-b062-c70f64f41160",
+      "addID": "b3ba5f6e-0c5a-4f75-81de-adaac864a438",
+      "status": {
+        "browser": {
+          "status": "disabled"
+        },
+        "computer": {
+          "status": "disconnected"
+        },
+        "review-public": {
+          "status": "connected"
+        }
+      }
+    }
+  ],
+  "baseline": [
+    {
+      "side": "project",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 500,
+      "id": "318f3449-7d91-4ce0-beec-0d3d4e6f8fa3",
+      "value": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 500,
+      "id": "67949c49-0549-48a7-8f98-cd63cc5370ec",
+      "value": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 500,
+      "id": "48e08cc6-3906-449d-a7a0-c578ed08ecc6",
+      "value": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/experimental/resource",
+      "method": "GET",
+      "status": 500,
+      "id": "b967e75a-2706-46e4-8fbf-a3afda9c8b56",
+      "value": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    }
+  ],
+  "control": {
+    "side": "project",
+    "route": "/mcp/computer/connect",
+    "method": "POST",
+    "status": 500,
+    "id": "648d0339-7236-4969-8081-bcb63cb51b40",
+    "value": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  "status": {
+    "side": "project",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "id": "3b86a182-3b37-4fe3-82a2-60f4a1e86cbd",
+    "value": {
+      "browser": {
+        "status": "disabled"
+      },
+      "computer": {
+        "status": "failed",
+        "error": "Local MCP startup failed (diagnostic ID: a9969ee3-9f54-4d3f-8b3e-feec4ddceaa9)"
+      },
+      "review-public": {
+        "status": "connected"
+      }
+    }
+  },
+  "desktop": {
+    "time": "2026-11-12T04:57:47.689Z",
+    "stage": "delivered",
+    "route": "/mcp/computer/connect",
+    "method": "POST",
+    "round": "baseline-desktop-computer",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b280\\candidate-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "23d97e6c-96bb-4914-a1bc-039986e8ec2b",
+    "status": 500,
+    "bytes": 112,
+    "error": {
+      "name": "UnknownError"
+    }
+  },
+  "errors": [
+    {
+      "id": "318f3449-7d91-4ce0-beec-0d3d4e6f8fa3",
+      "route": "/experimental/resource",
+      "status": 500,
+      "adapter": "computer",
+      "diagnostic": "eab50546-a548-4e61-be2b-57530991b6e1",
+      "cause": "Computer MCP adapter requires one host-owned runtime authority"
+    },
+    {
+      "id": "67949c49-0549-48a7-8f98-cd63cc5370ec",
+      "route": "/command",
+      "status": 500,
+      "adapter": "computer",
+      "diagnostic": "eab50546-a548-4e61-be2b-57530991b6e1",
+      "cause": "Computer MCP adapter requires one host-owned runtime authority"
+    },
+    {
+      "id": "48e08cc6-3906-449d-a7a0-c578ed08ecc6",
+      "route": "/command",
+      "status": 500,
+      "adapter": "computer",
+      "diagnostic": "2b645282-f0d7-4e22-b150-2766920d2115",
+      "cause": "Computer MCP adapter requires one host-owned runtime authority"
+    },
+    {
+      "id": "b967e75a-2706-46e4-8fbf-a3afda9c8b56",
+      "route": "/experimental/resource",
+      "status": 500,
+      "adapter": "computer",
+      "diagnostic": "2b645282-f0d7-4e22-b150-2766920d2115",
+      "cause": "Computer MCP adapter requires one host-owned runtime authority"
+    },
+    {
+      "id": "648d0339-7236-4969-8081-bcb63cb51b40",
+      "route": "/mcp/computer/connect",
+      "status": 500,
+      "adapter": "computer",
+      "diagnostic": "a9969ee3-9f54-4d3f-8b3e-feec4ddceaa9",
+      "cause": "Computer MCP adapter requires one host-owned runtime authority"
+    },
+    {
+      "id": "23d97e6c-96bb-4914-a1bc-039986e8ec2b",
+      "route": "/mcp/computer/connect",
+      "status": 500,
+      "adapter": "computer",
+      "diagnostic": "d4ae59f2-7f98-433e-a5e6-f5b49b77f461",
+      "cause": "Computer MCP adapter requires one host-owned runtime authority"
+    }
+  ],
+  "protocol": [
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T04:56:41.745Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T04:56:41.760Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T04:56:41.769Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T04:56:41.947Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T04:56:41.951Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T04:56:41.957Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ]
+}

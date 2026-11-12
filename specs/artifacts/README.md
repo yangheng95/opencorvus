@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [内置 MCP 所有权与项目发现的实际证据](2026-11-12-mcp-execution-owned-project-discovery/README.md)
 - [手动断开状态的桌面与连接证据](2026-11-12-mcp-manual-disconnect-status/README.md)
 - [默认 OAuth 连接的真实协议与桌面验收](2026-11-12-mcp-public-remote-default-oauth/README.md)
 - [新增连接字段验证的真实桌面与请求](2026-11-12-mcp-add-field-validation/README.md)
