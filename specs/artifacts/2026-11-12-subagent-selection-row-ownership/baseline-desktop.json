@@ -1,0 +1,129 @@
+{
+  "bundle": "/ui/assets/main-BCw_L4Xx.js",
+  "parent": {
+    "requestID": "43a4ede2-bdc8-4153-af15-8f80b898c817",
+    "status": 200,
+    "agents": [
+      {
+        "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_66bf0800557a166e65",
+        "inputMessageID": "msg_66bf0800557a166e65",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz900UaTNCFwxM",
+        "inputMessageID": "msg_g0VallCz900UaTNCFwxM",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "unobserved"
+      },
+      {
+        "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_f81f39b0cbc472c383",
+        "inputMessageID": "msg_f81f39b0cbc472c383",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz9023CirQuu46",
+        "inputMessageID": "msg_g0VallCz9023CirQuu46",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "unobserved"
+      },
+      {
+        "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_5e3afc14430f2fd0be",
+        "inputMessageID": "msg_5e3afc14430f2fd0be",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz904zdDhmRZpp",
+        "inputMessageID": "msg_g0VallCz904zdDhmRZpp",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "unobserved"
+      },
+      {
+        "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_d459461390f37cdabe",
+        "inputMessageID": "msg_d459461390f37cdabe",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz906eZWs8391D",
+        "inputMessageID": "msg_g0VallCz906eZWs8391D",
+        "agentID": "chat",
+        "stage": "assistant",
+        "status": "unobserved"
+      }
+    ]
+  },
+  "error": {
+    "entries": [
+      {
+        "service": "overlay:runtime",
+        "level": "error",
+        "message": "work-ledger.select-chat",
+        "extra": {
+          "message": "Cannot read properties of undefined (reading 'status')",
+          "details": "TypeError: Cannot read properties of undefined (reading 'status')\n    at get status (http://127.0.0.1:40048/ui/assets/main-BCw_L4Xx.js:280:35775)\n    at get data-status (http://127.0.0.1:40048/ui/assets/main-BCw_L4Xx.js:172:56095)\n    at Array.hn (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:12111)\n    at In (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:23315)\n    at Object.fn (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:22964)\n    at on (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:7259)\n    at Q (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:7190)\n    at Ne (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:7986)\n    at sn (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:8407)\n    at http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:8268",
+          "diagnosticID": "runtime:work-ledger.select-chat",
+          "title": "Error",
+          "diagnosticMessage": "Cannot read properties of undefined (reading 'status')",
+          "diagnosticDetails": "source: work-ledger.select-chat\n\nTypeError: Cannot read properties of undefined (reading 'status')\n    at get status (http://127.0.0.1:40048/ui/assets/main-BCw_L4Xx.js:280:35775)\n    at get data-status (http://127.0.0.1:40048/ui/assets/main-BCw_L4Xx.js:172:56095)\n    at Array.hn (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:12111)\n    at In (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:23315)\n    at Object.fn (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:22964)\n    at on (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:7259)\n    at Q (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:7190)\n    at Ne (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:7986)\n    at sn (http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:8407)\n    at http://127.0.0.1:40048/ui/assets/CommandMenuSurface-BIQZ10qC.js:1:8268"
+        }
+      }
+    ]
+  },
+  "old": {
+    "requestID": "04e0a6a5-2488-4a8b-8385-c72b85b0d9f2",
+    "status": 200,
+    "agents": [
+      {
+        "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+        "executionID": "msg_c9bc81c9d381450dfd",
+        "agentID": "chat",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+        "executionID": "msg_20f8386e8bdb3296d8",
+        "agentID": "chat",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+        "executionID": "msg_959d47fbe3e37b0bd5",
+        "agentID": "chat",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+        "executionID": "msg_f88261601213d5f7a1",
+        "agentID": "chat",
+        "status": "idle"
+      }
+    ]
+  },
+  "switch": {
+    "requestID": "d5adc3da-bcc3-445c-b412-88df5873511f",
+    "status": 200,
+    "diagnostic": "Cannot read properties of undefined (reading 'status')"
+  }
+}

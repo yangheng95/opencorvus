@@ -1,0 +1,230 @@
+{
+  "persisted": [
+    {
+      "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+      "parentID": null,
+      "projectID": "prj_hlYSyoC72yAIiA4kPrZX",
+      "roles": [
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user",
+        "assistant"
+      ],
+      "assistantFinishes": [
+        "stop",
+        "stop",
+        "stop",
+        "stop"
+      ]
+    },
+    {
+      "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+      "parentID": "ses_hPgNkWRtZas3iYoiWDKM",
+      "projectID": "prj_hlYSyoC72yAIiA4kPrZX",
+      "roles": [
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user",
+        "assistant"
+      ],
+      "assistantFinishes": [
+        "stop",
+        "stop",
+        "stop",
+        "stop"
+      ]
+    },
+    {
+      "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+      "parentID": null,
+      "projectID": "prj_hlYSyoC72yAIiA4kPrZX",
+      "roles": [
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user",
+        "assistant",
+        "user",
+        "assistant"
+      ],
+      "assistantFinishes": [
+        "stop",
+        "stop",
+        "stop",
+        "stop"
+      ]
+    }
+  ],
+  "projected": {
+    "parent": {
+      "requestID": "674c2770-ab70-4274-9770-888560241538",
+      "sessions": [
+        {
+          "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "parentSessionID": null,
+          "executionID": "msg_66bf0800557a166e65",
+          "inputMessageID": "msg_66bf0800557a166e65",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz900UaTNCFwxM",
+          "inputMessageID": "msg_g0VallCz900UaTNCFwxM",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "parentSessionID": null,
+          "executionID": "msg_f81f39b0cbc472c383",
+          "inputMessageID": "msg_f81f39b0cbc472c383",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz9023CirQuu46",
+          "inputMessageID": "msg_g0VallCz9023CirQuu46",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "parentSessionID": null,
+          "executionID": "msg_5e3afc14430f2fd0be",
+          "inputMessageID": "msg_5e3afc14430f2fd0be",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz904zdDhmRZpp",
+          "inputMessageID": "msg_g0VallCz904zdDhmRZpp",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "parentSessionID": null,
+          "executionID": "msg_d459461390f37cdabe",
+          "inputMessageID": "msg_d459461390f37cdabe",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz906eZWs8391D",
+          "inputMessageID": "msg_g0VallCz906eZWs8391D",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        }
+      ]
+    },
+    "child": {
+      "requestID": "f79ee0c3-ff75-4389-a10e-48a61f187182",
+      "sessions": [
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz900UaTNCFwxM",
+          "inputMessageID": "msg_g0VallCz900UaTNCFwxM",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz9023CirQuu46",
+          "inputMessageID": "msg_g0VallCz9023CirQuu46",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz904zdDhmRZpp",
+          "inputMessageID": "msg_g0VallCz904zdDhmRZpp",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz906eZWs8391D",
+          "inputMessageID": "msg_g0VallCz906eZWs8391D",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "unobserved"
+        }
+      ]
+    },
+    "old": {
+      "requestID": "a88b47f2-0ec2-4d29-9b5a-c5b39cba548f",
+      "sessions": [
+        {
+          "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+          "parentSessionID": null,
+          "executionID": "msg_c9bc81c9d381450dfd",
+          "inputMessageID": "msg_c9bc81c9d381450dfd",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+          "parentSessionID": null,
+          "executionID": "msg_20f8386e8bdb3296d8",
+          "inputMessageID": "msg_20f8386e8bdb3296d8",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+          "parentSessionID": null,
+          "executionID": "msg_959d47fbe3e37b0bd5",
+          "inputMessageID": "msg_959d47fbe3e37b0bd5",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+          "parentSessionID": null,
+          "executionID": "msg_f88261601213d5f7a1",
+          "inputMessageID": "msg_f88261601213d5f7a1",
+          "agentID": "chat",
+          "stage": "assistant",
+          "status": "idle"
+        }
+      ]
+    }
+  },
+  "forkRequestID": "e31e9d7e-5018-4350-98f0-c56b103cfffc",
+  "selectionRequestID": "0874d567-4ba3-48e0-a4fb-3a14e3e6124a"
+}

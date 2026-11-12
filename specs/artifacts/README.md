@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [已存分叉会话选择异常的真实基线](2026-11-12-subagent-selection-row-ownership/README.md)
 - [本地文件捕获上下文的真实基线](2026-11-12-materialized-file-context/README.md)
 - [历史文件夹引用的真实基线](2026-11-12-history-folder-references/README.md)
 - [历史本地文本文件引用的桌面证据](2026-11-12-history-local-file-reference/README.md)
