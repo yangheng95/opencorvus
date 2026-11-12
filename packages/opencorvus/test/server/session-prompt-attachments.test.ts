@@ -1,5 +1,6 @@
 import { afterEach, expect, test } from "bun:test"
 import { Hono } from "hono"
+import z from "zod"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
@@ -12,6 +13,7 @@ import { Identifier } from "../../src/id/id"
 import { MCP } from "../../src/mcp"
 import { Instance } from "../../src/project/instance"
 import { serverErrorResponse } from "../../src/server/error-handler"
+import { AppRoutes } from "../../src/server/routes/app"
 import { McpRoutes } from "../../src/server/routes/mcp"
 import { SessionRoutes } from "../../src/server/routes/session"
 import { Session } from "../../src/session"
@@ -30,7 +32,10 @@ type FileInput = Omit<Message.FilePart, "id" | "messageID" | "sessionID">
 
 afterEach(resetMemoryDatabase)
 
-function resourceServer(contents: ReadResourceResult["contents"], includePrompt = false) {
+function resourceServer(
+  contents: ReadResourceResult["contents"],
+  prompt?: { description: string; render: (subject: string) => string | Promise<string> },
+) {
   const servers = new Set<McpServer>()
   const reads: string[] = []
   const http = Bun.serve({
@@ -44,10 +49,14 @@ function resourceServer(contents: ReadResourceResult["contents"], includePrompt 
         reads.push(uri.href)
         return { contents }
       })
-      if (includePrompt) {
-        server.registerPrompt("public-instructions", { description: "Prepare the public input." }, async () => ({
-          messages: [{ role: "user", content: { type: "text", text: "Read the public report." } }],
-        }))
+      if (prompt) {
+        server.registerPrompt(
+          "public-instructions",
+          { description: prompt.description, argsSchema: { subject: z.string() } },
+          async ({ subject }) => ({
+            messages: [{ role: "user", content: { type: "text", text: await prompt.render(subject) } }],
+          }),
+        )
       }
       const transport = new WebStandardStreamableHTTPServerTransport({
         sessionIdGenerator: undefined,
@@ -69,7 +78,10 @@ function resourceServer(contents: ReadResourceResult["contents"], includePrompt 
 
 test("project MCP discovery returns shared resources and commands with execution-owned declarations", async () => {
   await using project = await memoryProject()
-  const resources = resourceServer([{ uri: resourceURI, text: "Public report." }], true)
+  const resources = resourceServer([{ uri: resourceURI, text: "Public report." }], {
+    description: "Prepare the public input.",
+    render: (subject) => `Read the public report about ${subject}.`,
+  })
   try {
     await Instance.provide({
       directory: project.path,
@@ -90,12 +102,13 @@ test("project MCP discovery returns shared resources and commands with execution
             expect.objectContaining({
               name: "public_inputs:public-instructions",
               source: "mcp",
-              template: "Read the public report.",
+              template: "Read the public report about $1.",
+              hints: ["$1"],
             }),
           ]),
         )
         const prompt = await Command.get("public_inputs:public-instructions")
-        expect(await prompt?.template).toBe("Read the public report.")
+        expect(await prompt.template).toBe("Read the public report about $1.")
         expect(await MCP.status()).toMatchObject({
           browser: { status: "disabled", scope: "execution" },
           computer: { status: "disconnected", scope: "execution" },
@@ -120,6 +133,91 @@ test("project MCP discovery returns shared resources and commands with execution
   } finally {
     await Instance.disposeAll()
     await resources.close()
+  }
+}, 30_000)
+
+test("project commands follow configuration edits and reject a prompt read across connection replacement", async () => {
+  await using project = await memoryProject()
+  const entered = Promise.withResolvers<void>()
+  const release = Promise.withResolvers<void>()
+  const original = resourceServer([], {
+    description: "Original endpoint",
+    async render(subject) {
+      entered.resolve()
+      await release.promise
+      return `Original template: ${subject}`
+    },
+  })
+  const replacement = resourceServer([], {
+    description: "Replacement endpoint",
+    render: (subject) => `Replacement template: ${subject}`,
+  })
+  const name = "public_inputs:public-instructions"
+  const remote = (url: string) => ({ type: "remote", url, transport: "streamable-http", oauth: false }) as const
+  try {
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const app = AppRoutes()
+        await Config.updateProjectPatch({
+          mcp: { public_inputs: remote(original.url) },
+          command: { old_report: { template: "Old report" }, local_report: { template: "Initial local report" } },
+        })
+        const inFlight = app.request("/command")
+        await entered.promise
+        await Config.updateProjectPatch({
+          mcp: { public_inputs: remote(replacement.url) },
+          command: {
+            old_report: null,
+            local_report: { template: "Current local report" },
+            new_report: { template: "New report" },
+          },
+        })
+        release.resolve()
+        const conflict = await inFlight
+        expect(conflict.status).toBe(409)
+        expect(await conflict.json()).toMatchObject({ name: "CommandProjectionChangedError", data: { command: name } })
+
+        const current = await app.request("/command")
+        expect(current.status).toBe(200)
+        const commands = (await current.json()) as Command.Info[]
+        expect(commands).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ name: "local_report", template: "Current local report" }),
+            expect.objectContaining({ name: "new_report", template: "New report" }),
+            {
+              name,
+              source: "mcp",
+              description: "Replacement endpoint",
+              hints: ["$1"],
+              template: "Replacement template: $1",
+            },
+          ]),
+        )
+
+        await MCP.disconnect("public_inputs")
+        const disconnected = await app.request("/command")
+        expect(disconnected.status).toBe(200)
+        const remaining = (await disconnected.json()) as Command.Info[]
+        expect(remaining.map((command) => command.name)).toEqual(["init", "review", "local_report", "new_report"])
+
+        const session = await Session.create({ kind: "assistant", title: "Command projection contract" })
+        const missing = await app.request(`/session/${session.id}/command`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messageID: Identifier.ascending("message"), command: "old_report", arguments: "" }),
+        })
+        expect(missing.status).toBe(404)
+        expect(await missing.json()).toMatchObject({
+          name: "NotFoundError",
+          data: { message: "Command not found: old_report" },
+        })
+      },
+    })
+  } finally {
+    release.resolve()
+    await Instance.disposeAll()
+    await Promise.all([original.close(), replacement.close()])
   }
 }, 30_000)
 

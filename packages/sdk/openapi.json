@@ -27983,6 +27983,33 @@
             },
             "description": "List of commands"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "CommandProjectionChangedError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Command changed while its template was being read"
+          },
           "500": {
             "content": {
               "application/json": {
@@ -103509,12 +103536,32 @@
                         "data"
                       ],
                       "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "CommandProjectionChangedError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
                   ]
                 }
               }
             },
-            "description": "Mission authority conflict, or the message identity is already bound to another public Session execution"
+            "description": "Mission authority conflict, public Session execution conflict, or the command changed during template lookup"
           }
         },
         "summary": "Send command",

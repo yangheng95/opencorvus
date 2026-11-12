@@ -86,7 +86,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/command` | List commands Errors: `UnknownError`. | `command.list` |
+| GET | `/command` | List commands Errors: `CommandProjectionChangedError`, `UnknownError`. | `command.list` |
 | GET | `/config` | Get configuration Errors: `AuthReadError`, `NonCanonicalConfigFileError`. | `config.get` |
 | PATCH | `/config` | Update configuration (JSON Merge Patch) Errors: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `config.update` |
 | GET | `/config/prompt` | List prompt catalog Errors: `AuthReadError`. | `config.prompt` |
@@ -202,7 +202,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | PATCH | `/session/{sessionID}` | Update session Body: `time`, `title`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`. | `session.update` |
 | POST | `/session/{sessionID}/abort` | Abort session Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `session.abort` |
 | GET | `/session/{sessionID}/children` | Get session children Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.children` |
-| POST | `/session/{sessionID}/command` | Send command Body: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionExecutionBusyError`, `PublicSessionPromptIdentityConflictError`. | `session.command` |
+| POST | `/session/{sessionID}/command` | Send command Body: `agent`, `arguments`, `command`, `messageID`, `model`, `parts`, `variant`; Errors: `BadRequestError`, `CommandProjectionChangedError`, `LogFileNotFoundError`, `MissionSessionAuthorityError`, `NotFoundError`, `PublicSessionExecutionBusyError`, `PublicSessionPromptIdentityConflictError`. | `session.command` |
 | GET | `/session/{sessionID}/config` | Get session effective configuration Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `session.config.get` |
 | PATCH | `/session/{sessionID}/config` | Update session configuration overlay Body: `agent`, `expert_squads`, `model`, `prompt`, `prompt_profile`, `runtime_templates`, `skill_mounts`; Errors: `AuthReadError`, `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskPackageRevisionBindingError`, `TaskPromptProfileImmutableError`. | `session.config.update` |
 | GET | `/session/{sessionID}/conversation` | Hydrate session conversation state Errors: `LogFileNotFoundError`, `NotFoundError`. | `session.conversation` |

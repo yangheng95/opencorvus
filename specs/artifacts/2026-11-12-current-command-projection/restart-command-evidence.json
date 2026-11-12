@@ -1,0 +1,76 @@
+[
+  {
+    "side": "project",
+    "route": "/config",
+    "method": "GET",
+    "status": 200,
+    "requestID": "2e8a0143-d8d3-493b-bfb3-5bf1740fa79c",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/padded",
+      "commands": {
+        "review-added": {
+          "template": "New project note template",
+          "description": "New project note"
+        }
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "9e38f579-df64-45b7-8eac-9c04e9ee184c",
+    "data": [
+      {
+        "name": "review-added",
+        "source": "command",
+        "description": "New project note",
+        "template": "New project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/padded",
+        "template": "/project/padded"
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/config",
+    "method": "GET",
+    "status": 200,
+    "requestID": "bfa61d95-0569-4470-b739-0b4554fd7a77",
+    "data": {
+      "connection": "http://127.0.0.1:39948/alternate/normal",
+      "commands": {
+        "review-note": {
+          "template": "Original alternate note template",
+          "description": "Original alternate note"
+        }
+      }
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "9becf9b5-8146-4d08-a2d2-eda525b34f56",
+    "data": [
+      {
+        "name": "review-note",
+        "source": "command",
+        "description": "Original alternate note",
+        "template": "Original alternate note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/alternate/normal",
+        "template": "/alternate/normal"
+      }
+    ]
+  }
+]

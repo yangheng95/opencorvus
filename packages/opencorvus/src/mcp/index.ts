@@ -4148,6 +4148,45 @@ export namespace MCP {
     })
   }
 
+  function bindProjectPrompt(s: McpState, connection: McpConnection, prompt: PromptInfo, timeout: number) {
+    const clientName = connection.key
+    const definition = JSON.stringify(canonicalConfigValue(prompt))
+    const generation = connection.listChangeGeneration
+
+    async function assertCurrent() {
+      const currentConnection = async () =>
+        exactConnectedRuntime(s, clientName, (await Config.get()).mcp?.[clientName])?.connection
+      const stale = () => new CatalogBindingStaleError([`prompt_binding.${clientName}.${prompt.name}`])
+      if ((await currentConnection()) !== connection) throw stale()
+      if (connection.listChangeGeneration !== generation) {
+        await refreshConnectionCapabilityInventory(connection, timeout, "prompt")
+        if ((await currentConnection()) !== connection) throw stale()
+      }
+      const currentPrompt = connection.capabilitySnapshot.prompt_definitions.find((entry) => entry.name === prompt.name)
+      if (JSON.stringify(canonicalConfigValue(currentPrompt)) !== definition) throw stale()
+    }
+
+    return {
+      ...prompt,
+      client: clientName,
+      async read(args?: Record<string, string>) {
+        await assertCurrent()
+        try {
+          return await connection.client.getPrompt({ name: prompt.name, arguments: args }, mcpRequestOptions(timeout))
+        } catch (error) {
+          log.error("failed to get prompt from MCP server", {
+            clientName,
+            promptName: prompt.name,
+            error: errorMessage(error),
+          })
+          throw error
+        } finally {
+          await assertCurrent()
+        }
+      },
+    }
+  }
+
   async function promptsForConfig(config: NonNullable<Config.Info["mcp"]>, defaultTimeout: number | undefined) {
     const s = await state()
     await ensureConfiguredConnections(s, config)
@@ -4164,22 +4203,20 @@ export namespace MCP {
           return values.map((prompt) => ({
             serverID: clientName,
             capabilityName: prompt.name,
-            value: { prompt, clientName },
+            value: bindProjectPrompt(s, runtime.connection, prompt, timeout),
           }))
         }),
       )
     ).flat()
-    const prompts = Object.fromEntries(
+    return Object.fromEntries(
       projectMcpRuntimeNames({ ownerRef: "mcp-config", separator: ":", capabilities: inventories }).map(
-        ({ runtimeName, value }) => [runtimeName, { ...value.prompt, client: value.clientName }],
+        ({ runtimeName, value }) => [runtimeName, value],
       ),
-    ) as Record<string, PromptInfo & { client: string }>
-
-    return prompts
+    )
   }
 
-  export async function prompts() {
-    const cfg = await Config.getForProjectRuntime()
+  export async function prompts(configSnapshot?: Config.Info) {
+    const cfg = configSnapshot ?? (await Config.getForProjectRuntime())
     return promptsForConfig((cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, cfg.experimental?.mcp_timeout)
   }
 
@@ -4230,36 +4267,6 @@ export namespace MCP {
       exactConfiguredServers((configSnapshot.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, serverIDs),
       configSnapshot.experimental?.mcp_timeout,
     )
-  }
-
-  export async function getPrompt(clientName: string, name: string, args?: Record<string, string>) {
-    const cfg = await Config.getForProjectRuntime()
-    const s = await state()
-    const runtime = exactConnectedRuntime(s, clientName, cfg.mcp?.[clientName])
-
-    if (!runtime) {
-      log.warn("client not found for prompt", {
-        clientName,
-      })
-      throw mcpNotFound(clientName)
-    }
-
-    try {
-      return await runtime.client.getPrompt(
-        {
-          name: name,
-          arguments: args,
-        },
-        mcpRequestOptions(effectiveTimeout(runtime.mcp, cfg.experimental?.mcp_timeout)),
-      )
-    } catch (error) {
-      log.error("failed to get prompt from MCP server", {
-        clientName,
-        promptName: name,
-        error: errorMessage(error),
-      })
-      throw error
-    }
   }
 
   export async function readResource(clientName: string, resourceUri: string) {

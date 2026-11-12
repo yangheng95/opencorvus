@@ -2144,10 +2144,11 @@ export const SessionRoutes = lazy(() =>
           },
           ...errors(400, 404),
           409: namedErrorResponse(
-            "Mission authority conflict, or the message identity is already bound to another public Session execution",
+            "Mission authority conflict, public Session execution conflict, or the command changed during template lookup",
             "MissionSessionAuthorityError",
             "PublicSessionExecutionBusyError",
             "PublicSessionPromptIdentityConflictError",
+            "CommandProjectionChangedError",
           ),
         },
       }),

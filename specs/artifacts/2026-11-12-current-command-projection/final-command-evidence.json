@@ -1,0 +1,396 @@
+[
+  {
+    "label": "initial-main",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "5809f282-9096-43f6-819f-def4d947d802",
+    "data": [
+      {
+        "name": "review-note",
+        "source": "command",
+        "description": "Original project note",
+        "template": "Original project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/normal",
+        "template": "/project/normal"
+      }
+    ]
+  },
+  {
+    "label": "initial-alternate",
+    "side": "alternate",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "b877d190-e627-4e4a-a101-d1df17ac082a",
+    "data": [
+      {
+        "name": "review-note",
+        "source": "command",
+        "description": "Original alternate note",
+        "template": "Original alternate note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/alternate/normal",
+        "template": "/alternate/normal"
+      }
+    ]
+  },
+  {
+    "label": "save-project-update",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "750845d3-34c9-4645-9bb0-8d876f9d8e9c",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/padded",
+      "commands": {
+        "review-note": {
+          "template": "Current project note template",
+          "description": "Current project note"
+        },
+        "review-added": {
+          "template": "New project note template",
+          "description": "New project note"
+        }
+      }
+    }
+  },
+  {
+    "label": "immediate-project-command",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "10a60ab6-8715-4d3d-b5a9-ffef3ae4cfdb",
+    "data": [
+      {
+        "name": "review-note",
+        "source": "command",
+        "description": "Current project note",
+        "template": "Current project note template"
+      },
+      {
+        "name": "review-added",
+        "source": "command",
+        "description": "New project note",
+        "template": "New project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/padded",
+        "template": "/project/padded"
+      }
+    ]
+  },
+  {
+    "label": "alternate-after-save",
+    "side": "alternate",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "23136269-1b07-4833-8e65-d25637adfff5",
+    "data": [
+      {
+        "name": "review-note",
+        "source": "command",
+        "description": "Original alternate note",
+        "template": "Original alternate note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/alternate/normal",
+        "template": "/alternate/normal"
+      }
+    ]
+  },
+  {
+    "label": "save-project-delete",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "8d737030-897d-42d1-9fff-405b1de36a7e",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/padded",
+      "commands": {
+        "review-added": {
+          "template": "New project note template",
+          "description": "New project note"
+        }
+      }
+    }
+  },
+  {
+    "label": "immediate-project-delete",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "80c75d32-180e-4266-8be8-da136044413f",
+    "data": [
+      {
+        "name": "review-added",
+        "source": "command",
+        "description": "New project note",
+        "template": "New project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/padded",
+        "template": "/project/padded"
+      }
+    ]
+  },
+  {
+    "label": "project-command-after-ui-disconnect",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "d92b5614-83b8-4b2d-93ff-60a0d10f41e3",
+    "data": [
+      {
+        "name": "review-added",
+        "source": "command",
+        "description": "New project note",
+        "template": "New project note template"
+      }
+    ]
+  },
+  {
+    "label": "english-desktop-disconnect",
+    "route": "/mcp/disconnect",
+    "status": 200,
+    "requestID": "777b873b-aacd-4eeb-b5ea-33f545de3eef",
+    "data": true
+  },
+  {
+    "label": "chinese-desktop-reconnect",
+    "route": "/mcp/connect",
+    "status": 200,
+    "requestID": "40a84af7-b337-41a3-9e1f-3a25846d34b1",
+    "data": true
+  },
+  {
+    "label": "project-command-after-ui-reconnect",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "4ea45670-2586-447a-beb4-78ddb9b14dae",
+    "data": [
+      {
+        "name": "review-added",
+        "source": "command",
+        "description": "New project note",
+        "template": "New project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/padded",
+        "template": "/project/padded"
+      }
+    ]
+  },
+  {
+    "label": "configure-held-list-endpoint",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "5039308a-fd29-4894-ab00-787480f7c3b1",
+    "data": {
+      "connection": "http://127.0.0.1:39952/project/held",
+      "commands": {
+        "review-added": {
+          "template": "New project note template",
+          "description": "New project note"
+        }
+      }
+    }
+  },
+  {
+    "label": "old-prompt-reached-protocol",
+    "pending": true,
+    "promptCount": 1
+  },
+  {
+    "label": "replace-held-list-endpoint",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "d288a6a4-e346-47af-8822-54278add089c",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/trailing",
+      "commands": {
+        "review-added": {
+          "template": "New project note template",
+          "description": "New project note"
+        }
+      }
+    }
+  },
+  {
+    "label": "in-flight-list-conflict",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 409,
+    "requestID": "ada1dea1-fad7-4bc1-9994-c72ceaac16c5",
+    "data": {
+      "name": "CommandProjectionChangedError",
+      "data": {
+        "command": "review-commands:read_endpoint",
+        "message": "Command \"review-commands:read_endpoint\" changed while its template was being read."
+      }
+    }
+  },
+  {
+    "label": "retry-list-replacement",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "58556ec4-da66-4b27-bbcd-4793bd00e96e",
+    "data": [
+      {
+        "name": "review-added",
+        "source": "command",
+        "description": "New project note",
+        "template": "New project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/trailing",
+        "template": "/project/trailing"
+      }
+    ]
+  },
+  {
+    "label": "configure-held-session-endpoint",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "e8035c3d-713b-433d-a465-ffa5b0a40a3d",
+    "data": {
+      "connection": "http://127.0.0.1:39952/project/held",
+      "commands": {
+        "review-added": {
+          "template": "New project note template",
+          "description": "New project note"
+        }
+      }
+    }
+  },
+  {
+    "label": "old-prompt-reached-protocol",
+    "pending": true,
+    "promptCount": 2
+  },
+  {
+    "label": "replace-held-session-endpoint",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "b183990b-e809-4821-8f5e-e4f4beab341c",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/padded",
+      "commands": {
+        "review-added": {
+          "template": "New project note template",
+          "description": "New project note"
+        }
+      }
+    }
+  },
+  {
+    "label": "in-flight-session-command-conflict",
+    "side": "project",
+    "route": "/session/ses_hafvEDOJj6P3wkGPALdQ/command",
+    "method": "POST",
+    "status": 409,
+    "requestID": "0a377c46-8cb6-4cc0-9cc1-9e4a8ba50ed0",
+    "data": {
+      "name": "CommandProjectionChangedError",
+      "data": {
+        "command": "review-commands:read_endpoint",
+        "message": "Command \"review-commands:read_endpoint\" changed while its template was being read."
+      }
+    }
+  },
+  {
+    "label": "unknown-session-command",
+    "side": "project",
+    "route": "/session/ses_hafvEDOJj6P3wkGPALdQ/command",
+    "method": "POST",
+    "status": 404,
+    "requestID": "b4e810e7-2772-4ceb-9da4-cfec5497b359",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Command not found: review-note"
+      }
+    }
+  },
+  {
+    "label": "main-final",
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "6ddd2711-553f-496b-b6b2-338ba4e5c26f",
+    "data": [
+      {
+        "name": "review-added",
+        "source": "command",
+        "description": "New project note",
+        "template": "New project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/padded",
+        "template": "/project/padded"
+      }
+    ]
+  },
+  {
+    "label": "alternate-final",
+    "side": "alternate",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "f7ff3994-1e7f-4ca9-a3f0-f9e7b6364779",
+    "data": [
+      {
+        "name": "review-note",
+        "source": "command",
+        "description": "Original alternate note",
+        "template": "Original alternate note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/alternate/normal",
+        "template": "/alternate/normal"
+      }
+    ]
+  }
+]

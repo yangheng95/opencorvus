@@ -620,6 +620,7 @@ export function AppRoutes() {
               },
             },
           },
+          409: namedErrorResponse("Command changed while its template was being read", "CommandProjectionChangedError"),
           500: namedErrorResponse("Command list failed", "UnknownError"),
         },
       }),

@@ -8541,6 +8541,15 @@ export type CommandListData = {
 
 export type CommandListErrors = {
   /**
+   * Command changed while its template was being read
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "CommandProjectionChangedError"
+  }
+  /**
    * Command list failed
    */
   500: {
@@ -29697,7 +29706,7 @@ export type SessionCommandErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Mission authority conflict, or the message identity is already bound to another public Session execution
+   * Mission authority conflict, public Session execution conflict, or the command changed during template lookup
    */
   409:
     | {
@@ -29717,6 +29726,12 @@ export type SessionCommandErrors = {
           [key: string]: unknown
         }
         name: "PublicSessionPromptIdentityConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "CommandProjectionChangedError"
       }
 }
 
