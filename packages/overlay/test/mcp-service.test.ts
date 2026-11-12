@@ -232,7 +232,7 @@ describe("MCP overlay service", () => {
     await connectMcp("browser", { directory: PROJECT_DIR, authority })
     await disconnectMcp("browser", { directory: PROJECT_DIR, authority })
     await removeMcpAuth("browser", { directory: PROJECT_DIR })
-    await deleteAllMcp({ directory: PROJECT_DIR, names: ["browser", "filesystem"] })
+    await deleteAllMcp({ directory: PROJECT_DIR, authority, names: ["browser", " filesystem ", ""] })
 
     expect(requests.map((request) => [request.method, request.path, request.query?.directory])).toEqual([
       ["POST", "mcp/browser/connect", PROJECT_DIR],
@@ -242,9 +242,9 @@ describe("MCP overlay service", () => {
     ])
     expect(requests[3].body).toEqual({
       kind: "json",
-      value: { names: ["browser", "filesystem"] },
+      value: { names: ["browser", " filesystem ", ""] },
     })
-    expect(requests.slice(0, 2).map((request) => request.authority)).toEqual([authority, authority])
+    expect(requests.map((request) => request.authority)).toEqual([authority, authority, authority, authority])
   })
 
   test.each([["connect", connectMcp], ["disconnect", disconnectMcp]] as const)(

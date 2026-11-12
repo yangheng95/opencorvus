@@ -47,6 +47,7 @@ import {
 } from "../../services/extensions"
 import { addMcpServer, connectMcp, disconnectMcp, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
+import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
 import {
   isMcpConnectionStatus,
@@ -567,26 +568,58 @@ function SharedResourceManagementPanel(props: {
     }
   }
 
-  async function handleDeleteAllMcp() {
-    if (loading()) return
+  async function handleDeleteAllMcp(trigger: HTMLButtonElement) {
+    if (loading() || mcpActionRequest) return
     const directory = currentDirectory()
     if (!directory) return
     const names = mcpEntries().map(([name]) => name)
     if (names.length === 0) return
-    const authority = captureApiAuthority()
-    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
-    if (!(await nativeConfirm(t("mcp.delete_all_confirm", { count: names.length }), { okTone: "danger" }))) return
-    if (!current() || loading()) return
-    setLoading(true)
+    const owner = { directory, authority: captureApiAuthority() }
+    mcpActionRequest = owner
+    const current = () => mcpActionRequest === owner && ownsMcpScope(owner)
+    const ownsConfirmation = () => current() && !loading() && trigger.isConnected
+    const count = new Intl.NumberFormat(localeTag()).format(names.length)
+    const message = [
+      t("mcp.delete_all_confirm"),
+      "",
+      t("mcp.delete_all_project"),
+      directory,
+      "",
+      t("mcp.delete_all_targets", { count }),
+      ...names.map((name) => JSON.stringify(name)),
+    ].join("\n")
     try {
-      await deleteAllMcp({ directory, isCurrentDirectory: sourceMatchesDirectory, names })
+      const decision = await showAppDialog({
+        title: t("mcp.delete_all_title"),
+        message,
+        kind: "warning",
+        cancel: true,
+        okTone: "danger",
+        okLabel: t("mcp.delete_all_title"),
+        openingGuard: ownsConfirmation,
+        returnFocusTarget: () => {
+          if (!ownsMcpScope(owner) || !trigger.isConnected) return null
+          return loading() || mcpEntries().length === 0 ? mcpStatusHeading ?? null : trigger
+        },
+      })
+      if (!decision.confirmed || !ownsConfirmation()) return
+      setLoading(true)
+      setNotice(undefined)
+      await deleteAllMcp({ ...owner, names })
       if (!current()) return
-      await reloadCurrentPanel({ directory })
+      const status = await refreshMcpStatus(owner)
+      if (!current()) return
+      if (status && Object.keys(status).length === 0 && document.activeElement === trigger) {
+        mcpStatusHeading?.focus({ preventScroll: true })
+      }
       notifyResourceChange()
     } catch (e) {
       if (current()) setPanelError(e)
     } finally {
-      if (current()) setLoading(false)
+      if (current()) {
+        mcpActionRequest = undefined
+        setLoading(false)
+      }
     }
   }
 
@@ -1582,8 +1615,9 @@ function SharedResourceManagementPanel(props: {
                 data-ui="tool-panel-action"
                 title={t("mcp.delete_all")}
                 aria-label={t("mcp.delete_all")}
-                disabled={loading() || mcpEntries().length === 0}
-                onClick={() => runPanelAction(t("mcp.delete_all"), handleDeleteAllMcp)}
+                aria-disabled={loading() || mcpEntries().length === 0 || undefined}
+                aria-busy={loading() || undefined}
+                onClick={(event) => void handleDeleteAllMcp(event.currentTarget)}
               >
                 <Icon name="cancel" />
                 <span class="tool-panel-action-label">{t("mcp.delete_all")}</span>

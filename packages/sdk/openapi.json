@@ -11980,7 +11980,7 @@
         "properties": {
           "names": {
             "items": {
-              "minLength": 1,
+              "description": "Exact server names as stored in the project configuration.",
               "type": "string"
             },
             "minItems": 1,

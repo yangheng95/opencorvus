@@ -1,0 +1,210 @@
+{
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b274\\candidate-identity\\identically-named-workspace-with-a-long-path-for-review\\archive-review",
+  "before": {
+    "status": 200,
+    "requestID": "f730c1b4-3753-4a23-bf6b-f954d9808139",
+    "value": {
+      "review-tools": {
+        "status": "disabled"
+      },
+      " review-tools ": {
+        "status": "disabled"
+      },
+      "": {
+        "status": "disabled"
+      },
+      "  ": {
+        "status": "disabled"
+      }
+    }
+  },
+  "beforeConfig": {
+    "review-tools": {
+      "enabled": false
+    },
+    " review-tools ": {
+      "enabled": false
+    },
+    "": {
+      "enabled": false
+    },
+    "  ": {
+      "enabled": false
+    }
+  },
+  "padded": {
+    "names": [
+      " review-tools "
+    ],
+    "status": 200,
+    "requestID": "98e649a1-0e2d-4cc5-89c0-e0a73c1c8261",
+    "value": {
+      "mcp": {
+        "review-tools": {
+          "enabled": false
+        },
+        "": {
+          "enabled": false
+        },
+        "  ": {
+          "enabled": false
+        }
+      },
+      "terminal": {
+        "default_profile_id": "powershell",
+        "profiles": {
+          "powershell": {
+            "label": "Windows PowerShell",
+            "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "pwsh": {
+            "label": "PowerShell",
+            "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "cmd": {
+            "label": "Command Prompt",
+            "command": "C:\\WINDOWS\\system32\\cmd.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "command-prompt"
+          },
+          "git-bash": {
+            "label": "Git Bash",
+            "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "bash"
+          }
+        }
+      },
+      "$schema": "https://opencorvus.ai/config.json"
+    }
+  },
+  "afterPadded": {
+    "status": 200,
+    "requestID": "c2a387d5-11c1-49a5-916b-36d93e8b413c",
+    "value": {
+      "review-tools": {
+        "status": "disabled"
+      },
+      "": {
+        "status": "disabled"
+      },
+      "  ": {
+        "status": "disabled"
+      }
+    }
+  },
+  "afterPaddedConfig": {
+    "review-tools": {
+      "enabled": false
+    },
+    "": {
+      "enabled": false
+    },
+    "  ": {
+      "enabled": false
+    }
+  },
+  "blanks": {
+    "names": [
+      "",
+      "  "
+    ],
+    "status": 200,
+    "requestID": "b53ade33-92a9-400e-aca8-3712652c9941",
+    "value": {
+      "mcp": {
+        "review-tools": {
+          "enabled": false
+        }
+      },
+      "terminal": {
+        "default_profile_id": "powershell",
+        "profiles": {
+          "powershell": {
+            "label": "Windows PowerShell",
+            "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "pwsh": {
+            "label": "PowerShell",
+            "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "cmd": {
+            "label": "Command Prompt",
+            "command": "C:\\WINDOWS\\system32\\cmd.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "command-prompt"
+          },
+          "git-bash": {
+            "label": "Git Bash",
+            "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "bash"
+          }
+        }
+      },
+      "$schema": "https://opencorvus.ai/config.json"
+    }
+  },
+  "afterBlanks": {
+    "status": 200,
+    "requestID": "09106565-e894-42bd-9c74-3ebcec82a435",
+    "value": {
+      "review-tools": {
+        "status": "disabled"
+      }
+    }
+  },
+  "afterBlanksConfig": {
+    "review-tools": {
+      "enabled": false
+    }
+  }
+}

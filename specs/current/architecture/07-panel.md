@@ -5708,6 +5708,9 @@ The add-server draft belongs to the selected project and connection. An
 accepted add reply clears the form when it still matches the submitted draft.
 Later edits remain in the form with a separate acknowledgment of the submitted
 server. An action from a retired scope cannot update the current form.
+Bulk removal confirms the exact project directory and server names it will
+send. The delete request retains those stored names verbatim and validates
+each against the project's own configuration keys.
 Project MCP management links to the active project's Chat and Work assignment
 sections using the existing settings tabs and their localized product labels.
 The settings host owns the one-shot focus handoff until the assignment section

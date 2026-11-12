@@ -2756,7 +2756,7 @@ export namespace MCP {
 
   export const RemoveConfiguredInput = z
     .object({
-      names: z.array(z.string().trim().min(1)).min(1),
+      names: z.array(z.string().describe("Exact server names as stored in the project configuration.")).min(1),
     })
     .strict()
     .meta({ ref: "MCPRemoveConfiguredInput" })
@@ -2901,7 +2901,7 @@ export namespace MCP {
     const updated = await Config.updateProjectPatchAtomic(async (currentProject) => {
       const projectMcp = (currentProject.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
       for (const name of names) {
-        if (projectMcp[name]) {
+        if (Object.hasOwn(projectMcp, name)) {
           committedDefinitions.add(name)
           continue
         }
@@ -2909,7 +2909,7 @@ export namespace MCP {
           retryNames.add(name)
           continue
         }
-        if (!effectiveMcp[name] && (await McpAuth.get(mcpAuthKey(name)))) {
+        if (!Object.hasOwn(effectiveMcp, name) && (await McpAuth.get(mcpAuthKey(name)))) {
           retryNames.add(name)
           continue
         }

@@ -2,8 +2,7 @@
 // configure, connect, disconnect, auth cleanup, and atomic project removal.
 // DOM-rendering is handled by declarative Solid.js components.
 
-import { appStore } from "../store/app"
-import { apiJson } from "./api"
+import { apiJson, type ApiAuthority } from "./api"
 import type { ConfigRequestOptions } from "./config"
 
 export type RemoteMcpTransport = "streamable-http" | "sse"
@@ -184,12 +183,11 @@ export async function removeMcpAuth(name: string, options: McpRequestOptions = {
  * Atomically removes project-owned MCP definitions after backend reference,
  * connection, and credential cleanup.
  */
-export async function deleteAllMcp(options: McpRequestOptions & { names?: readonly string[] } = {}): Promise<void> {
-  const names = options.names ? [...options.names] : Object.keys(appStore.mcp ?? {})
-  if (names.length === 0) return
+export async function deleteAllMcp(options: { directory: string; authority: ApiAuthority; names: readonly string[] }): Promise<void> {
   await apiJson(mcpPath("mcp", options), {
+    authority: options.authority,
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ names }),
+    body: JSON.stringify({ names: options.names }),
   })
 }
