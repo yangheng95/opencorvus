@@ -1,4 +1,5 @@
 import z from "zod"
+import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js"
 import { Identifier } from "../id/id"
 import { Message } from "./message"
 import { PrimaryAssistantRegistry } from "../agent/primary-assistant-registry"
@@ -51,6 +52,58 @@ export namespace SessionCommand {
   const placeholderRegex = /\$(\d+)/g
   const quoteTrimRegex = /^["']|["']$/g
 
+  function substituteStaticArguments(template: string, args: string[], raw: string) {
+    const placeholders = template.match(placeholderRegex) ?? []
+    let last = 0
+    for (const item of placeholders) {
+      const value = Number(item.slice(1))
+      if (value > last) last = value
+    }
+    const withArgs = template.replaceAll(placeholderRegex, (_, index) => {
+      const position = Number(index)
+      const argIndex = position - 1
+      if (argIndex >= args.length) return ""
+      if (position === last) return args.slice(argIndex).join(" ")
+      return args[argIndex]
+    })
+    if (placeholders.length === 0 && !template.includes("$ARGUMENTS") && raw.trim()) {
+      return withArgs + "\n\n" + raw
+    }
+    return withArgs.replaceAll("$ARGUMENTS", raw)
+  }
+
+  async function readMcpTemplate(cmd: Command.McpDefinition, args: string[], raw: string) {
+    const missing = cmd.arguments.filter((arg, index) => arg.required && index >= args.length).map((arg) => arg.name)
+    if (missing.length > 0) {
+      throw new Command.ArgumentsError({
+        command: cmd.name,
+        reason: "missing_required",
+        missing,
+        message: `Command ${JSON.stringify(cmd.name)} requires ${missing.map((name) => JSON.stringify(name)).join(", ")}.`,
+      })
+    }
+    const values = Object.fromEntries(
+      cmd.arguments.slice(0, args.length).map((arg, index) => [
+        arg.name,
+        index === cmd.arguments.length - 1 ? args.slice(index).join(" ") : args[index],
+      ]),
+    )
+    try {
+      const template = await cmd.readTemplate(values)
+      return cmd.arguments.length === 0 && raw.trim() ? template + "\n\n" + raw : template
+    } catch (error) {
+      if (!(error instanceof McpError) || error.code !== ErrorCode.InvalidParams) throw error
+      throw new Command.ArgumentsError(
+        {
+          command: cmd.name,
+          reason: "invalid",
+          message: `The MCP server rejected the input for command ${JSON.stringify(cmd.name)}.`,
+        },
+        { cause: error },
+      )
+    }
+  }
+
   export async function command(
     input: CommandInput,
     prompt: (input: PromptInput) => Promise<Message.WithParts>,
@@ -77,28 +130,10 @@ export namespace SessionCommand {
     const raw = input.arguments.match(argsRegex) ?? []
     const args = raw.map((arg) => arg.replace(quoteTrimRegex, ""))
 
-    const templateCommand = await cmd.template
-
-    const placeholders = templateCommand.match(placeholderRegex) ?? []
-    let last = 0
-    for (const item of placeholders) {
-      const value = Number(item.slice(1))
-      if (value > last) last = value
-    }
-
-    const withArgs = templateCommand.replaceAll(placeholderRegex, (_, index) => {
-      const position = Number(index)
-      const argIndex = position - 1
-      if (argIndex >= args.length) return ""
-      if (position === last) return args.slice(argIndex).join(" ")
-      return args[argIndex]
-    })
-    const usesArgumentsPlaceholder = templateCommand.includes("$ARGUMENTS")
-    let template = withArgs.replaceAll("$ARGUMENTS", input.arguments)
-
-    if (placeholders.length === 0 && !usesArgumentsPlaceholder && input.arguments.trim()) {
-      template = template + "\n\n" + input.arguments
-    }
+    let template =
+      cmd.source === "mcp"
+        ? await readMcpTemplate(cmd, args, input.arguments)
+        : substituteStaticArguments(cmd.template, args, input.arguments)
 
     const shell = ConfigMarkdown.shell(template)
     if (shell.length > 0) {

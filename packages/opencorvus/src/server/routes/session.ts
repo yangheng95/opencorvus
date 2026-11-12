@@ -40,6 +40,7 @@ import { Todo } from "../../session/todo"
 import { TodoStore } from "../../session/todo-store"
 import { EngineService, SessionDeleteResult } from "@/task-api"
 import { Snapshot } from "@/snapshot"
+import { Command } from "@/command"
 import { Log } from "../../util/log"
 import { AuthReadUnavailableResponse, BAD_REQUEST_SCHEMA, badRequestBody, errors, namedErrorResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
@@ -2142,7 +2143,11 @@ export const SessionRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404),
+          ...errors(404),
+          400: {
+            description: "Invalid command request or arguments",
+            content: { "application/json": { schema: resolver(z.union([BAD_REQUEST_SCHEMA, Command.ArgumentsError.Schema])) } },
+          },
           409: namedErrorResponse(
             "Mission authority conflict, public Session execution conflict, or the command changed during template lookup",
             "MissionSessionAuthorityError",

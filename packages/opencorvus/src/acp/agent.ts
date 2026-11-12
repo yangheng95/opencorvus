@@ -1668,6 +1668,13 @@ export namespace ACP {
           agent,
           directory,
         })
+        const invalidArguments = Command.ArgumentsError.Schema.safeParse(response.error)
+        if (invalidArguments.success) {
+          throw RequestError.invalidParams(
+            { sessionID, inputMessageID, error: invalidArguments.data },
+            invalidArguments.data.data.message,
+          )
+        }
         await sendUsageUpdate(this.connection, this.sdk, sessionID, directory)
         return acpPromptResponse({ sessionID, inputMessageID, response })
       }

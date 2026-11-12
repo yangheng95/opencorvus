@@ -500,6 +500,21 @@ test("ACP announces newly attached prompt commands and executes the selected loc
   expect(user?.parts).toEqual(
     expect.arrayContaining([expect.objectContaining({ type: "text", text: "Selected command input" })]),
   )
+
+  const promptName = "editor_new:editor_report"
+  for (const [argument, expected] of [
+    ['2026-11-12 "field guide"', "Read the 2026-11-12 report for field guide."],
+    ["2026-11-13", "Read the 2026-11-13 report for all topics."],
+  ]) {
+    const response = await env.client.prompt({ sessionId, prompt: [{ type: "text", text: `/${promptName} ${argument}` }] })
+    expect(response).toMatchObject({ stopReason: "end_turn" })
+    const input = (await env.messages(sessionId)).filter((message) => message.info.role === "user").at(-1)
+    expect(input?.parts).toEqual(expect.arrayContaining([expect.objectContaining({ type: "text", text: expected })]))
+  }
+  for (const [argument, reason] of [["", "missing_required"], ["tomorrow", "invalid"]]) {
+    await expect(env.client.prompt({ sessionId, prompt: [{ type: "text", text: `/${promptName} ${argument}` }] }))
+      .rejects.toMatchObject({ code: -32602, data: { error: { name: "CommandArgumentsError", data: { command: promptName, reason } } } })
+  }
 }, 60_000)
 
 test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {
@@ -558,6 +573,7 @@ test("ACP HTTP attachment initializes a Streamable HTTP server with the declared
       name: `${name}:read_report`,
       source: "mcp",
       description: "Read the HTTP report",
+      arguments: [],
       hints: [],
       template: "Current HTTP report.",
     })

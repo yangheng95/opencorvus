@@ -43,6 +43,12 @@ Define commands in [config](../config/) under `command`:
 
 You can also define commands as markdown files under `<runtime-root>/config/commands/<name>.md` or `.opencorvus/commands/<name>.md`. The frontmatter holds metadata (description, agent, model); the body is the prompt template. The runtime root follows [Environment variables](../reference/env/).
 
+## Model Context Protocol prompts
+
+Connected Model Context Protocol (MCP) servers can provide project commands. Supply arguments in the order declared by the prompt. Quote a value that contains spaces, as in `/archive:daily_report 2026-11-12 "research summary"`. The last declared argument receives the remaining input, and optional trailing arguments can be omitted.
+
+`GET /command` lists the declared arguments of remote prompts. Parameterless remote prompts also provide `template`. The server validates the actual values when the command runs. Missing required values and rejected values return `CommandArgumentsError`.
+
 ## Permissions in commands
 
 Custom commands run through the same permission system as direct prompts. If your command's template ends up triggering `bash` or `write`, [Permissions](../permissions/) still apply.

@@ -1532,41 +1532,143 @@
         "type": "object"
       },
       "Command": {
-        "properties": {
-          "agent": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "hints": {
-            "items": {
-              "type": "string"
+        "anyOf": [
+          {
+            "properties": {
+              "agent": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "hints": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "model": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "source": {
+                "enum": [
+                  "command",
+                  "skill"
+                ],
+                "type": "string"
+              },
+              "template": {
+                "type": "string"
+              }
             },
-            "type": "array"
+            "required": [
+              "name",
+              "hints",
+              "template"
+            ],
+            "type": "object"
           },
-          "model": {
-            "type": "string"
+          {
+            "properties": {
+              "agent": {
+                "type": "string"
+              },
+              "arguments": {
+                "items": {
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "description": {
+                "type": "string"
+              },
+              "hints": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "model": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "source": {
+                "const": "mcp",
+                "type": "string"
+              },
+              "template": {
+                "description": "Template text for a remote prompt that takes no arguments",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "hints",
+              "source",
+              "arguments"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "CommandArgumentsError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "command": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "missing": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "reason": {
+                "enum": [
+                  "missing_required",
+                  "invalid"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "command",
+              "reason",
+              "message"
+            ],
+            "type": "object"
           },
           "name": {
-            "type": "string"
-          },
-          "source": {
-            "enum": [
-              "command",
-              "mcp",
-              "skill"
-            ],
-            "type": "string"
-          },
-          "template": {
+            "const": "CommandArgumentsError",
             "type": "string"
           }
         },
         "required": [
           "name",
-          "template",
-          "hints"
+          "data"
         ],
         "type": "object"
       },
@@ -103415,11 +103517,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CommandArgumentsError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid command request or arguments"
           },
           "404": {
             "content": {

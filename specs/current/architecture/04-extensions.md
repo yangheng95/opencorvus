@@ -1250,6 +1250,8 @@ SDK 新增的 MCP-over-ACP 类型返回
 JSON-RPC（JavaScript Object Notation 远程过程调用）`RequestError`。
 usage 使用规范 `tokens.total`，不重算总量。未知命令返回 invalidParams；
 内置 compact 必须以 summarize 的实际 boolean 结果确认完成。
+项目命令目录投影远端提示声明的参数，参数化提示在执行时向同一实际连接发送用户输入。缺失必填值和远端参数拒绝
+通过公开 `CommandArgumentsError` 结算，ACP 将该错误投影为 `invalidParams`。无参数的远端命令可在目录中返回实际模板。
 流式消息和工具通知沿现有订阅传输，不为错误结果伪造消息。
 
 文件：`agent.ts` · `prompt-response.ts` · `session.ts` · `types.ts`（README 存于目录内）。

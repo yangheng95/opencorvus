@@ -102,13 +102,14 @@ test("project MCP discovery returns shared resources and commands with execution
             expect.objectContaining({
               name: "public_inputs:public-instructions",
               source: "mcp",
-              template: "Read the public report about $1.",
+              arguments: [{ name: "subject", required: true }],
               hints: ["$1"],
             }),
           ]),
         )
         const prompt = await Command.get("public_inputs:public-instructions")
-        expect(await prompt.template).toBe("Read the public report about $1.")
+        if (prompt.source !== "mcp") throw new Error("Expected a bound MCP command")
+        expect(await prompt.readTemplate({ subject: "inventory" })).toBe("Read the public report about inventory.")
         expect(await MCP.status()).toMatchObject({
           browser: { status: "disabled", scope: "execution" },
           computer: { status: "disconnected", scope: "execution" },
@@ -163,7 +164,14 @@ test("project commands follow configuration edits and reject a prompt read acros
           mcp: { public_inputs: remote(original.url) },
           command: { old_report: { template: "Old report" }, local_report: { template: "Initial local report" } },
         })
-        const inFlight = app.request("/command")
+        const session = await Session.create({ kind: "assistant", title: "Command projection contract" })
+        const commandRoute = `/session/${session.id}/command`
+        const sendCommand = (command: string, args: string) => app.request(commandRoute, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ messageID: Identifier.ascending("message"), command, arguments: args }),
+        })
+        const inFlight = sendCommand(name, "in-flight report")
         await entered.promise
         await Config.updateProjectPatch({
           mcp: { public_inputs: remote(replacement.url) },
@@ -189,11 +197,14 @@ test("project commands follow configuration edits and reject a prompt read acros
               name,
               source: "mcp",
               description: "Replacement endpoint",
+              arguments: [{ name: "subject", required: true }],
               hints: ["$1"],
-              template: "Replacement template: $1",
             },
           ]),
         )
+        const prompt = await Command.get(name)
+        if (prompt.source !== "mcp") throw new Error("Expected the replacement MCP command")
+        expect(await prompt.readTemplate({ subject: "replacement report" })).toBe("Replacement template: replacement report")
 
         await MCP.disconnect("public_inputs")
         const disconnected = await app.request("/command")
@@ -201,12 +212,7 @@ test("project commands follow configuration edits and reject a prompt read acros
         const remaining = (await disconnected.json()) as Command.Info[]
         expect(remaining.map((command) => command.name)).toEqual(["init", "review", "local_report", "new_report"])
 
-        const session = await Session.create({ kind: "assistant", title: "Command projection contract" })
-        const missing = await app.request(`/session/${session.id}/command`, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ messageID: Identifier.ascending("message"), command: "old_report", arguments: "" }),
-        })
+        const missing = await sendCommand("old_report", "")
         expect(missing.status).toBe(404)
         expect(await missing.json()).toMatchObject({
           name: "NotFoundError",

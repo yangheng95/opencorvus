@@ -421,14 +421,42 @@ export type CodingCliProfileList = {
   profiles: Array<CodingCliProfile>
 }
 
-export type Command = {
-  agent?: string
-  description?: string
-  hints: Array<string>
-  model?: string
-  name: string
-  source?: "command" | "mcp" | "skill"
-  template: string
+export type Command =
+  | {
+      agent?: string
+      description?: string
+      hints: Array<string>
+      model?: string
+      name: string
+      source?: "command" | "skill"
+      template: string
+    }
+  | {
+      agent?: string
+      arguments: Array<{
+        description?: string
+        name: string
+        required?: boolean
+      }>
+      description?: string
+      hints: Array<string>
+      model?: string
+      name: string
+      source: "mcp"
+      /**
+       * Template text for a remote prompt that takes no arguments
+       */
+      template?: string
+    }
+
+export type CommandArgumentsError = {
+  data: {
+    command: string
+    message: string
+    missing?: Array<string>
+    reason: "missing_required" | "invalid"
+  }
+  name: "CommandArgumentsError"
 }
 
 export type CompactionContinuationMissingError = {
@@ -29686,9 +29714,9 @@ export type SessionCommandData = {
 
 export type SessionCommandErrors = {
   /**
-   * Bad request
+   * Invalid command request or arguments
    */
-  400: BadRequestError
+  400: BadRequestError | CommandArgumentsError
   /**
    * Not found
    */

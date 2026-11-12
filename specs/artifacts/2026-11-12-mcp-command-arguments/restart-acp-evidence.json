@@ -1,0 +1,212 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 32028,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "operation": "resume-durable-session",
+    "side": "project",
+    "responseSessionID": "ses_-zUPEz1ZizzdBdceO1Lm",
+    "notificationSessionID": "ses_-zUPEz1ZizzdBdceO1Lm",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note"
+      },
+      {
+        "name": "editor_strict:strict_report",
+        "description": "A report with a required date and optional scope"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "fb0c9c88-fc2f-4eea-9ab1-5e4dafe3a2b1",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_strict": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "a88f90e4-e0d8-41e7-9283-74da4dfd47cd",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_strict:strict_report",
+        "description": "A report with a required date and optional scope",
+        "source": "mcp",
+        "hints": [
+          "$1",
+          "$2"
+        ]
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "deddbcd3-b385-4c2e-88a3-d8c6b43e3ccd",
+    "data": {
+      "editor_strict": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39976/mcp"
+      }
+    }
+  },
+  {
+    "operation": "restored-command-definition",
+    "status": 200,
+    "requestID": "33f8b5cb-3177-44e4-9645-4f0fb0533a11",
+    "definition": {
+      "name": "editor_strict:strict_report",
+      "source": "mcp",
+      "description": "A report with a required date and optional scope",
+      "arguments": [
+        {
+          "name": "date",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "required": false
+        }
+      ],
+      "hints": [
+        "$1",
+        "$2"
+      ]
+    }
+  },
+  {
+    "operation": "durable-conversation",
+    "status": 200,
+    "requestID": "b434f782-d74d-4415-a46a-e38f0b4e1963",
+    "data": [
+      {
+        "id": "msg_b297-valid-direct",
+        "role": "user",
+        "text": [
+          "Read the 2026-11-12 report for research summary."
+        ]
+      },
+      {
+        "id": "msg_g0Val0yZU00OsOw9YmxD",
+        "role": "assistant",
+        "parentID": "msg_b297-valid-direct",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_b297-optional-omitted",
+        "role": "user",
+        "text": [
+          "Read the 2026-11-13 report for all topics."
+        ]
+      },
+      {
+        "id": "msg_g0Val0ymc00zb7om77g3",
+        "role": "assistant",
+        "parentID": "msg_b297-optional-omitted",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_g0Val0yu700sefW4sJuY",
+        "role": "user",
+        "text": [
+          "Read the 2026-11-14 report for weekly inventory."
+        ]
+      },
+      {
+        "id": "msg_g0Val0yx000Kk0XRa2mB",
+        "role": "assistant",
+        "parentID": "msg_g0Val0yu700sefW4sJuY",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_g0Val0z4R006ejGJhBLT",
+        "role": "user",
+        "text": [
+          "Use the strict-project note."
+        ]
+      },
+      {
+        "id": "msg_g0Val0z7000PXIUzo5ET",
+        "role": "assistant",
+        "parentID": "msg_g0Val0z4R006ejGJhBLT",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      }
+    ]
+  }
+]

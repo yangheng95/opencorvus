@@ -1,0 +1,101 @@
+[
+  {
+    "label": "catalog-with-declared-arguments",
+    "route": "/command",
+    "status": 200,
+    "requestID": "2d8493f7-26c9-4241-a565-916565fc32c2",
+    "data": [
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note",
+        "source": "command",
+        "template": "Use the strict-project note.",
+        "hints": []
+      },
+      {
+        "name": "editor_strict:strict_report",
+        "source": "mcp",
+        "description": "A report with a required date and optional scope",
+        "arguments": [
+          {
+            "name": "date",
+            "required": true
+          },
+          {
+            "name": "scope",
+            "required": false
+          }
+        ],
+        "hints": [
+          "$1",
+          "$2"
+        ]
+      }
+    ]
+  },
+  {
+    "label": "write-controlled-endpoint",
+    "route": "/config",
+    "status": 200,
+    "requestID": "aac6a2bf-1794-46ac-ac80-73d8c6642128",
+    "data": {
+      "url": "http://127.0.0.1:39978/mcp"
+    }
+  },
+  {
+    "label": "in-flight-argument-command",
+    "route": "/session/ses_-zUPEz1ZizzdBdceO1Lm/command",
+    "status": 409,
+    "requestID": "2986de4e-ae4e-4a9b-9ddc-539a6261d11f",
+    "data": {
+      "name": "CommandProjectionChangedError",
+      "data": {
+        "command": "editor_strict:strict_report",
+        "message": "Command \"editor_strict:strict_report\" changed while its template was being read."
+      }
+    }
+  },
+  {
+    "label": "replace-controlled-endpoint",
+    "route": "/config",
+    "status": 200,
+    "requestID": "38cbe029-7f35-4405-b575-9a9c5b1484dd",
+    "data": {
+      "url": "http://127.0.0.1:39976/mcp"
+    }
+  },
+  {
+    "label": "catalog-after-connection-replacement",
+    "route": "/command",
+    "status": 200,
+    "requestID": "7cb4a790-b9a8-47f8-92a9-7cdc24e918a9",
+    "data": [
+      {
+        "name": "review-note",
+        "description": "Review the strict-project note",
+        "source": "command",
+        "template": "Use the strict-project note.",
+        "hints": []
+      },
+      {
+        "name": "editor_strict:strict_report",
+        "source": "mcp",
+        "description": "A report with a required date and optional scope",
+        "arguments": [
+          {
+            "name": "date",
+            "required": true
+          },
+          {
+            "name": "scope",
+            "required": false
+          }
+        ],
+        "hints": [
+          "$1",
+          "$2"
+        ]
+      }
+    ]
+  }
+]

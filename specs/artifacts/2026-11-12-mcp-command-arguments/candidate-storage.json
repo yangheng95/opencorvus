@@ -1,0 +1,103 @@
+{
+  "quickCheck": "ok",
+  "sessionID": "ses_-zUPEz1ZizzdBdceO1Lm",
+  "projectID": "prj_hMCsffr3BtV3Qqhy3Pcs",
+  "kind": "assistant",
+  "messages": [
+    {
+      "id": "msg_b297-valid-direct",
+      "role": "user",
+      "text": [
+        "Read the 2026-11-12 report for research summary."
+      ]
+    },
+    {
+      "id": "msg_g0Val0yZU00OsOw9YmxD",
+      "role": "assistant",
+      "parentID": "msg_b297-valid-direct",
+      "finish": "stop",
+      "text": [
+        "The selected local command reached the stream."
+      ]
+    },
+    {
+      "id": "msg_b297-optional-omitted",
+      "role": "user",
+      "text": [
+        "Read the 2026-11-13 report for all topics."
+      ]
+    },
+    {
+      "id": "msg_g0Val0ymc00zb7om77g3",
+      "role": "assistant",
+      "parentID": "msg_b297-optional-omitted",
+      "finish": "stop",
+      "text": [
+        "The selected local command reached the stream."
+      ]
+    },
+    {
+      "id": "msg_g0Val0yu700sefW4sJuY",
+      "role": "user",
+      "text": [
+        "Read the 2026-11-14 report for weekly inventory."
+      ]
+    },
+    {
+      "id": "msg_g0Val0yx000Kk0XRa2mB",
+      "role": "assistant",
+      "parentID": "msg_g0Val0yu700sefW4sJuY",
+      "finish": "stop",
+      "text": [
+        "The selected local command reached the stream."
+      ]
+    },
+    {
+      "id": "msg_g0Val0z4R006ejGJhBLT",
+      "role": "user",
+      "text": [
+        "Use the strict-project note."
+      ]
+    },
+    {
+      "id": "msg_g0Val0z7000PXIUzo5ET",
+      "role": "assistant",
+      "parentID": "msg_g0Val0z4R006ejGJhBLT",
+      "finish": "stop",
+      "text": [
+        "The selected local command reached the stream."
+      ]
+    }
+  ],
+  "providerOutcomes": [
+    {
+      "assistantID": "msg_g0Val0yZU00OsOw9YmxD",
+      "requestID": "act_g0Val0yi500xW1uPhSTF",
+      "outcomeID": "prt_hoTpYRWsoQd560FYkVs8",
+      "outcome": "done",
+      "attempt_count": 1
+    },
+    {
+      "assistantID": "msg_g0Val0ymc00zb7om77g3",
+      "requestID": "act_g0Val0yrM00VYAqv8rDE",
+      "outcomeID": "prt_hrEZMq3ScX6KyR6ER0bm",
+      "outcome": "done",
+      "attempt_count": 1
+    },
+    {
+      "assistantID": "msg_g0Val0yx000Kk0XRa2mB",
+      "requestID": "act_g0Val0z1I008UoMe8eQP",
+      "outcomeID": "prt_hiLYP8X6jZ11Btokh3tG",
+      "outcome": "done",
+      "attempt_count": 1
+    },
+    {
+      "assistantID": "msg_g0Val0z7000PXIUzo5ET",
+      "requestID": "act_g0Val0zB700EGNpvObKo",
+      "outcomeID": "prt_hjhiNUhuLXCN7W58fK5h",
+      "outcome": "done",
+      "attempt_count": 1
+    }
+  ],
+  "engineTasks": 0
+}

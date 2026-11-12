@@ -23,26 +23,44 @@ export namespace Command {
     ),
   }
 
-  export const Info = z
-    .object({
-      name: z.string(),
-      description: z.string().optional(),
-      agent: z.string().optional(),
-      model: z.string().optional(),
-      source: z.enum(["command", "mcp", "skill"]).optional(),
-      template: z.string(),
-      hints: z.array(z.string()),
-    })
-    .meta({
-      ref: "Command",
-    })
+  const Metadata = z.object({
+    name: z.string(),
+    description: z.string().optional(),
+    agent: z.string().optional(),
+    model: z.string().optional(),
+    hints: z.array(z.string()),
+  })
+  const LocalInfo = Metadata.extend({ source: z.enum(["command", "skill"]).optional(), template: z.string() })
+  const PromptArgument = z.object({
+    name: z.string(),
+    description: z.string().optional(),
+    required: z.boolean().optional(),
+  })
+  const McpInfo = Metadata.extend({
+    source: z.literal("mcp"),
+    arguments: z.array(PromptArgument),
+    template: z.string().optional().describe("Template text for a remote prompt that takes no arguments"),
+  })
+  export const Info = z.union([LocalInfo, McpInfo]).meta({ ref: "Command" })
 
   export type Info = z.infer<typeof Info>
-  type Definition = Omit<Info, "template"> & { template: Promise<string> | string }
+  export type McpDefinition = Omit<z.infer<typeof McpInfo>, "template"> & {
+    readTemplate(args: Record<string, string>): Promise<string>
+  }
+  type Definition = z.infer<typeof LocalInfo> | McpDefinition
 
   export const ProjectionChangedError = NamedError.create(
     "CommandProjectionChangedError",
     z.object({ command: z.string(), message: z.string() }),
+  )
+  export const ArgumentsError = NamedError.create(
+    "CommandArgumentsError",
+    z.object({
+      command: z.string(),
+      reason: z.enum(["missing_required", "invalid"]),
+      missing: z.array(z.string()).optional(),
+      message: z.string(),
+    }),
   )
 
   export function hints(template: string): string[] {
@@ -98,13 +116,13 @@ export namespace Command {
       }
     }
     for (const [name, prompt] of entries(await MCP.prompts(cfg))) {
-      const placeholders = prompt.arguments?.map((_, i) => `$${i + 1}`) ?? []
+      const argumentsInfo = prompt.arguments ?? []
       result[name] = {
         name,
         source: "mcp",
         description: prompt.description,
-        get template() {
-          const args = Object.fromEntries(prompt.arguments?.map((argument, i) => [argument.name, placeholders[i]]) ?? [])
+        arguments: argumentsInfo,
+        readTemplate(args) {
           return prompt.read(args).then(
             (template) =>
               template.messages.map((message) => (message.content.type === "text" ? message.content.text : "")).join("\n"),
@@ -117,7 +135,7 @@ export namespace Command {
             },
           )
         },
-        hints: placeholders,
+        hints: argumentsInfo.map((_, i) => `$${i + 1}`),
       }
     }
 
@@ -137,7 +155,12 @@ export namespace Command {
   export async function list(): Promise<Info[]> {
     const available = objectValues(await definitions())
     const settled = await Promise.allSettled(
-      available.map(async ({ template, ...command }) => ({ ...command, template: await template })),
+      available.map(async (definition) => {
+        if (definition.source !== "mcp") return { ...definition }
+        const { readTemplate, ...command } = definition
+        if (command.arguments.length === 0) return { ...command, template: await readTemplate({}) }
+        return command
+      }),
     )
     return settled.map((result) => {
       if (result.status === "rejected") throw result.reason

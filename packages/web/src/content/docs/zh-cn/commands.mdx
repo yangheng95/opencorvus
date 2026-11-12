@@ -43,6 +43,12 @@ OpenCorvus 为 session prompt 提供 slash 命令系统，包括 ACP `session/pr
 
 也可放在 `<runtime-root>/config/commands/<name>.md` 或 `.opencorvus/commands/<name>.md`。frontmatter 写元信息（description / agent / model），正文是 prompt 模板。runtime root 遵循[环境变量](../reference/env/)。
 
+## 模型上下文协议提示
+
+已连接的 Model Context Protocol（MCP，模型上下文协议）服务可以提供项目命令。按提示声明的顺序提供参数。包含空格的值可用引号包裹，例如 `/archive:daily_report 2026-11-12 "research summary"`。最后一个声明参数接收其余输入，末尾的可选参数可以省略。
+
+`GET /command` 列出远端提示声明的参数。无参数的远端提示还提供 `template`。命令执行时由服务验证实际参数。缺少必填项或服务拒绝参数会返回 `CommandArgumentsError`。
+
 ## 命令中的权限
 
 自定义命令与直接 prompt 走同一权限系统。模板里若触发 `bash` 或 `write`，依然受 [Permissions](../permissions/) 约束。
