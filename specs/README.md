@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [用量刷新保留已确认报表并遵守读取期限](records/2026-11/2026-11-12-usage-refresh-confirmed-report.md)
 - [对话快照读取期限和重试诊断](records/2026-11/2026-11-12-conversation-snapshot-read-deadline.md)
 - [命令面板等价输入的结果和键盘选项](records/2026-11/2026-11-12-command-palette-equivalent-input-focus.md)
 - [归档搜索请求合并与结果计数](records/2026-11/2026-11-12-archive-search-request-coalescing.md)

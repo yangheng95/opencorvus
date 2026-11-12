@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [用量刷新前后的真实桌面与请求](2026-11-12-usage-refresh-confirmed-report/README.md)
 - [对话快照读取的真实桌面和请求](2026-11-12-conversation-snapshot-read-deadline/README.md)
 - [命令面板等价输入的真实桌面与请求](2026-11-12-command-palette-equivalent-input-focus/README.md)
 - [归档搜索桌面和真实查询](2026-11-12-archive-search-request-coalescing/README.md)
