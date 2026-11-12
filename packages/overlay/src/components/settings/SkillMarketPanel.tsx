@@ -316,7 +316,7 @@ function SharedResourceManagementPanel(props: {
   const [loading, setLoading] = createSignal(false)
   const [mcpStatusRead, setMcpStatusRead] = createSignal<McpStatusRead>()
   let mcpReadRequest: McpReadScope | undefined
-  let mcpConnectionRequest: McpReadScope | undefined
+  let mcpActionRequest: McpReadScope | undefined
   let mcpReadFeedback: HTMLDivElement | undefined
   let mcpStatusHeading: HTMLSpanElement | undefined
   const [skillDragActive, setSkillDragActive] = createSignal(false)
@@ -595,8 +595,8 @@ function SharedResourceManagementPanel(props: {
     const directory = currentDirectory()
     if (!directory) return
     const owner = { directory, authority: captureApiAuthority() }
-    mcpConnectionRequest = owner
-    const current = () => mcpConnectionRequest === owner && ownsMcpScope(owner)
+    mcpActionRequest = owner
+    const current = () => mcpActionRequest === owner && ownsMcpScope(owner)
     setLoading(true)
     setNotice(undefined)
     try {
@@ -633,7 +633,7 @@ function SharedResourceManagementPanel(props: {
       if (current()) setPanelError(error)
     } finally {
       if (current()) {
-        mcpConnectionRequest = undefined
+        mcpActionRequest = undefined
         setLoading(false)
       }
     }
@@ -871,7 +871,7 @@ function SharedResourceManagementPanel(props: {
     onCleanup(() => {
       interval.dispose()
       mcpReadRequest = undefined
-      mcpConnectionRequest = undefined
+      mcpActionRequest = undefined
     })
   })
 
@@ -904,49 +904,77 @@ function SharedResourceManagementPanel(props: {
     args: "",
   }
   const [mcpForm, setMcpForm] = createStore({ ...initialMcpForm })
+  const mcpDraftValid = () => {
+    if (!mcpForm.name.trim()) return false
+    if (mcpForm.type === "local") return Boolean(mcpForm.command.trim())
+    if (!mcpForm.url.trim()) return false
+    if (mcpForm.credentialType === "none") return true
+    return Boolean(mcpForm.credentialSecret.trim()) &&
+      (mcpForm.credentialType === "bearer" || Boolean(mcpForm.credentialName.trim()))
+  }
 
   function closeAndClearMcpForm() {
     setShowAddMcp(false)
     setMcpForm(initialMcpForm)
   }
 
-  createEffect(on(() => mcpPanelActive() ? selectedDirectory() : undefined, closeAndClearMcpForm, { defer: true }))
+  createEffect(on(
+    () => mcpPanelActive() ? [selectedDirectory(), captureApiAuthority().revision] as const : undefined,
+    closeAndClearMcpForm,
+    { defer: true },
+  ))
 
   async function handleAddMcp() {
-    if (loading()) return
+    if (loading() || !mcpDraftValid()) return
     const directory = currentDirectory()
     if (!directory) return
-    const authority = captureApiAuthority()
-    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
+    const owner = { directory, authority: captureApiAuthority() }
+    const submitted = { ...mcpForm }
+    mcpActionRequest = owner
+    const current = () => mcpActionRequest === owner && ownsMcpScope(owner)
     setLoading(true)
     setNotice(undefined)
     try {
       const request =
-        mcpForm.type === "remote"
+        submitted.type === "remote"
           ? {
-              name: mcpForm.name,
+              name: submitted.name,
               type: "remote" as const,
-              transport: mcpForm.transport,
-              url: mcpForm.url,
-              credentialType: mcpForm.credentialType,
-              credentialName: mcpForm.credentialName,
-              credentialSecret: mcpForm.credentialSecret,
+              transport: submitted.transport,
+              url: submitted.url,
+              credentialType: submitted.credentialType,
+              credentialName: submitted.credentialName,
+              credentialSecret: submitted.credentialSecret,
             }
           : {
-              name: mcpForm.name,
+              name: submitted.name,
               type: "local" as const,
-              command: mcpForm.command,
-              args: mcpForm.args,
+              command: submitted.command,
+              args: submitted.args,
             }
-      await addMcpServer(request, { directory, isCurrentDirectory: sourceMatchesDirectory })
+      await addMcpServer(request, owner)
       if (!current()) return
-      closeAndClearMcpForm()
-      await reloadCurrentPanel({ directory })
-      notifyResourceChange()
+      const draftMatches = Object.entries(submitted).every(([key, value]) => mcpForm[key as keyof typeof submitted] === value)
+      if (draftMatches) {
+        closeAndClearMcpForm()
+      } else {
+        const name = submitted.name.trim()
+        setPanelNotice("mcp.earlier_add_saved", {
+          tone: "success",
+          origin: "mcp-add",
+          directory,
+          vars: () => ({ name }),
+        })
+      }
+      await refreshMcpStatus(owner)
+      if (current()) notifyResourceChange()
     } catch (e) {
       if (current()) setPanelError(e, undefined, { origin: "mcp-add", directory })
     } finally {
-      if (current()) setLoading(false)
+      if (current()) {
+        mcpActionRequest = undefined
+        setLoading(false)
+      }
     }
   }
 
@@ -966,6 +994,7 @@ function SharedResourceManagementPanel(props: {
             const value = current()
             const directory = value.directory
             if (location === "panel" || !panelActive() || directory === undefined) return
+            if (location === "mcp-add" && value.tone === "success") return
             queueMicrotask(() => {
               if (
                 element?.isConnected &&
@@ -1567,6 +1596,7 @@ function SharedResourceManagementPanel(props: {
             <Show when={showAddMcp()}>
               <form
                 class="config-inline-form"
+                spellcheck={false}
                 onSubmit={(event) => {
                   event.preventDefault()
                   void handleAddMcp()
@@ -1679,17 +1709,9 @@ function SharedResourceManagementPanel(props: {
                     variant="solid"
                     size="md"
                     tone="accent"
-                    disabled={
-                      loading() ||
-                      !mcpForm.name.trim() ||
-                      (mcpForm.type === "remote"
-                        ? !mcpForm.url.trim() ||
-                          (mcpForm.credentialType !== "none" &&
-                            (!mcpForm.credentialSecret.trim() ||
-                              ((mcpForm.credentialType === "query" || mcpForm.credentialType === "header") &&
-                                !mcpForm.credentialName.trim())))
-                        : !mcpForm.command.trim())
-                    }
+                    disabled={!mcpDraftValid()}
+                    aria-disabled={loading() || undefined}
+                    aria-busy={loading() || undefined}
                   >
                     {t("mcp.add_action")}
                   </Button>

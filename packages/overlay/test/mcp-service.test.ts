@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { captureApiAuthority, configure } from "../src/services/api"
+import { captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import {
@@ -78,7 +78,7 @@ describe("MCP overlay service", () => {
         transport: "streamable-http",
         url: "https://mcp.example.com/api",
       },
-      { directory: PROJECT_DIR },
+      { directory: PROJECT_DIR, authority },
     )
 
     expect(requests).toEqual([
@@ -104,6 +104,22 @@ describe("MCP overlay service", () => {
         timeoutMilliseconds: undefined,
       },
     ])
+  })
+
+  test("reports a retired connection before dispatching a project MCP add", async () => {
+    __setHostTransportForTest(fakeTransport(() => {}))
+    const authority = captureApiAuthority()
+    renewApiAuthority()
+
+    await expect(addMcpServer(
+      { name: "files", type: "local", command: "node" },
+      { directory: PROJECT_DIR, authority },
+    )).rejects.toMatchObject({
+      name: "ApiAuthorityChangedError",
+      outcome: { phase: "before_dispatch" },
+      expectedRevision: authority.revision,
+      currentRevision: captureApiAuthority().revision,
+    })
   })
 
   test("builds the user-owned query credential request", () => {

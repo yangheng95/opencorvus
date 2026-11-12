@@ -1,0 +1,280 @@
+{
+  "actions": [
+    {
+      "request": {
+        "time": "2026-11-12T02:58:35.413Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-first",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "draft-first",
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-first-process.jsonl"
+        ]
+      },
+      "receipt": {
+        "time": "2026-11-12T02:58:36.008Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-first",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "bb76ff04-e84f-4557-839f-bccd82f72b18",
+        "status": 200,
+        "bytes": 111,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "draft-first": {
+            "status": "connected"
+          }
+        }
+      },
+      "process": {
+        "pid": 15824,
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-project\\archive-review",
+        "at": 1794452315834
+      }
+    },
+    {
+      "request": {
+        "time": "2026-11-12T02:59:09.446Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-next",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "draft-next",
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-next-process.jsonl"
+        ]
+      },
+      "receipt": {
+        "time": "2026-11-12T02:59:09.854Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-next",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "486bbe23-b2af-4d31-ae73-6d9186a9da00",
+        "status": 200,
+        "bytes": 147,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "draft-first": {
+            "status": "connected"
+          },
+          "draft-next": {
+            "status": "connected"
+          }
+        }
+      },
+      "process": {
+        "pid": 28040,
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-project\\archive-review",
+        "at": 1794452349840
+      }
+    },
+    {
+      "request": {
+        "time": "2026-11-12T02:59:50.616Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-retired",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "draft-retired",
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-retired-process.jsonl"
+        ]
+      },
+      "receipt": {
+        "time": "2026-11-12T02:59:57.955Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-retired",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "27d713b0-a237-44ae-8588-d374b7afda35",
+        "status": 200,
+        "bytes": 113,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "draft-retired": {
+            "status": "connected"
+          }
+        }
+      },
+      "process": {
+        "pid": 10848,
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-alternate\\archive-review",
+        "at": 1794452391000
+      }
+    },
+    {
+      "request": {
+        "time": "2026-11-12T03:00:26.771Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-scope",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "draft-scope-check",
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-scope-process.jsonl"
+        ]
+      },
+      "receipt": {
+        "time": "2026-11-12T03:00:37.955Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-scope",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "5c10a663-f0c5-4058-9b5d-fdf2f3e8c60b",
+        "status": 200,
+        "bytes": 156,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "draft-retired": {
+            "status": "connected"
+          },
+          "draft-scope-check": {
+            "status": "connected"
+          }
+        }
+      },
+      "process": {
+        "pid": 21012,
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-alternate\\archive-review",
+        "at": 1794452427209
+      }
+    }
+  ],
+  "projectChecks": [
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-project\\archive-review",
+      "requestID": "2aad8afa-0d7f-45b5-aa33-9dc7ec7ef578",
+      "status": {
+        "draft-first": {
+          "status": "connected"
+        },
+        "draft-next": {
+          "status": "connected"
+        }
+      },
+      "definitions": {
+        "draft-first": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-first-process.jsonl"
+          ]
+        },
+        "draft-next": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-next-process.jsonl"
+          ]
+        }
+      }
+    },
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-alternate\\archive-review",
+      "requestID": "efe8ca6b-5fe9-4b86-ad00-9239ffb314ac",
+      "status": {
+        "draft-retired": {
+          "status": "connected"
+        },
+        "draft-scope-check": {
+          "status": "connected"
+        }
+      },
+      "definitions": {
+        "draft-retired": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-retired-process.jsonl"
+          ]
+        },
+        "draft-scope-check": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\final-scope-process.jsonl"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -5704,7 +5704,10 @@ showing the header does not change the request context or select a project.
 Without a project, this page offers the existing workspace folder selection
 instead of showing project management controls. Confirmation keeps the page and
 renders the newly selected project; cancellation keeps the selection prompt.
-The add-server draft belongs to the selected project.
+The add-server draft belongs to the selected project and connection. An
+accepted add reply clears the form when it still matches the submitted draft.
+Later edits remain in the form with a separate acknowledgment of the submitted
+server. An action from a retired scope cannot update the current form.
 Project MCP management links to the active project's Chat and Work assignment
 sections using the existing settings tabs and their localized product labels.
 The settings host owns the one-shot focus handoff until the assignment section
