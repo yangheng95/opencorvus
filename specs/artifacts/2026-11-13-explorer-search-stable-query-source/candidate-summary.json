@@ -1,0 +1,92 @@
+{
+  "unchangedHistoricalRows": {
+    "session": 4,
+    "message": 28,
+    "part": 82
+  },
+  "matchingOriginalBytes": {
+    "inspection notes.txt": 101,
+    "notes archive/memo.txt": 23,
+    "sample panel.png": 100
+  },
+  "temporaryFileRemoved": true,
+  "dispatchOrderByGesture": {
+    "baseline": {
+      "fast-inspection": [
+        "i",
+        "i",
+        "in",
+        "in",
+        "in",
+        "in",
+        "in",
+        "in",
+        "inspect",
+        "inspect",
+        "inspect",
+        "inspect",
+        "inspection"
+      ],
+      "fast-sample": [
+        "s",
+        "s",
+        "sa",
+        "sa",
+        "sa",
+        "sa",
+        "sa",
+        "sample"
+      ],
+      "trailing-space": [
+        "sample",
+        "sample",
+        "sample"
+      ],
+      "equivalent-query-held": [
+        "sample"
+      ]
+    },
+    "candidate-desktop-english": {
+      "fast-inspection": [
+        "i",
+        "inspection"
+      ],
+      "fast-sample": [
+        "s",
+        "sample"
+      ],
+      "switch-to-inspection-held": [
+        "inspection"
+      ],
+      "return-to-sample-held": [
+        "sample"
+      ],
+      "exact-empty": [
+        "zzb311nomatch"
+      ],
+      "current-query-connection-reset": [
+        "inspection"
+      ],
+      "explicit-retry": [
+        "inspection"
+      ],
+      "file-created-refresh": [
+        "inspection"
+      ],
+      "manual-refresh-after-cleanup": [
+        "inspection"
+      ],
+      "independent-conversation": [
+        "inspection"
+      ],
+      "independent-new-query": [
+        "inspection"
+      ]
+    },
+    "candidate-desktop-chinese": {
+      "chinese-inspection": [
+        "inspection"
+      ]
+    }
+  }
+}

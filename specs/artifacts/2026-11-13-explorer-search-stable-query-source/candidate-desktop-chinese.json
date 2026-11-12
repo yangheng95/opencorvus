@@ -1,0 +1,62 @@
+{
+  "origin": 1794499805506,
+  "gesture": "chinese-equivalent-edit",
+  "requests": [
+    {
+      "sentMs": 50,
+      "route": "/ui/assets/main-D25M82Rn.js",
+      "query": null,
+      "file": null,
+      "gesture": "open-project",
+      "receivedMs": 148,
+      "status": 200,
+      "requestID": "c4ad5bee-1f6e-417e-bd42-c6646d9cfa62"
+    },
+    {
+      "sentMs": 12068,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "open-project",
+      "receivedMs": 12072,
+      "status": 200,
+      "requestID": "46845e96-98a6-4039-8708-af11cce93698"
+    },
+    {
+      "sentMs": 12527,
+      "route": "/find/file",
+      "query": "inspection",
+      "file": null,
+      "gesture": "chinese-inspection",
+      "receivedMs": 12616,
+      "status": 200,
+      "requestID": "58321cb6-510e-493c-8316-9894165f5dc7",
+      "paths": [
+        "inspection notes.txt"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "name": "chinese-inspection",
+      "phase": "start",
+      "atMs": 12485
+    },
+    {
+      "name": "chinese-inspection",
+      "phase": "complete",
+      "atMs": 12510
+    },
+    {
+      "name": "chinese-equivalent-edit",
+      "keys": [
+        "Home",
+        "Space",
+        "End",
+        "Space",
+        "Backspace"
+      ],
+      "atMs": 13201
+    }
+  ]
+}

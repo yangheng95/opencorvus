@@ -482,7 +482,7 @@ function ExplorerActionFeedback(props: { feedback: ExplorerFeedback; dataUI?: st
 export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [query, setQuery] = createSignal("")
   const deferredSearch = createDeferred(() => query().trim())
-  const deferredQuery = () => query().trim() && deferredSearch()
+  const deferredQuery = createMemo(() => query().trim() && deferredSearch())
   const [expandedPaths, setExpandedPaths] = createSignal(new Set<string>([""]))
   const [childrenByPath, setChildrenByPath] = createSignal(new Map<string, FileListingNode[]>())
   const [loadingPaths, setLoadingPaths] = createSignal(new Set<string>())
