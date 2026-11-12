@@ -1,0 +1,31 @@
+{
+  "sessionID": "ses_-zUPFEPWEzzznzfbU1wG",
+  "status": 200,
+  "requestID": "0d705562-da62-4c39-b55f-6cc0fcafcc55",
+  "messages": [
+    {
+      "role": "user",
+      "id": "msg_g0VaklagW00z3v0nmCAv",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "local"
+      },
+      "text": [
+        "Use the strict-project note."
+      ]
+    },
+    {
+      "role": "assistant",
+      "id": "msg_g0Vaklakd00qESNBsVCZ",
+      "parentID": "msg_g0VaklagW00z3v0nmCAv",
+      "finish": "stop",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "local"
+      },
+      "text": [
+        "The selected local command reached the stream."
+      ]
+    }
+  ]
+}

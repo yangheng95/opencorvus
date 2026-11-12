@@ -1,0 +1,995 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 31980,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "operation": "new",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFEX2yzzThur3i87c",
+    "notificationSessionID": "ses_-zUPFEX2yzzThur3i87c",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "fc9a9df5-1d62-497d-b662-cf52f26cab55",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_new": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "7cbbe618-6a68-47ab-aa24-2c108cde4890",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the new editor report."
+      }
+    ]
+  },
+  {
+    "operation": "new-control",
+    "side": "alternate",
+    "responseSessionID": "ses_-zUPFEWjizzazyzuaeSl",
+    "notificationSessionID": "ses_-zUPFEWjizzazyzuaeSl",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "48942519-e40d-42dd-b2ee-940aa7d7ec58",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled"
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "status": 200,
+    "requestID": "539b2d0f-dd9a-4d98-82e3-cc74fc1a744f",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note",
+        "source": "command",
+        "hints": []
+      }
+    ]
+  },
+  {
+    "operation": "load",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFEX2yzzThur3i87c",
+    "notificationSessionID": "ses_-zUPFEX2yzzThur3i87c",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load"
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "46f07c74-763a-4e36-a036-cec174df3611",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_new": "connected",
+      "editor_load": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "d7123afd-dd93-4afe-ae30-c1e26dabcb35",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the load editor report."
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the new editor report."
+      }
+    ]
+  },
+  {
+    "operation": "fork",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFEWahzzg1YQKE4Me",
+    "notificationSessionID": "ses_-zUPFEWahzzg1YQKE4Me",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork"
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load"
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "349f3549-1ebf-4541-9e7b-c9b558824369",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_new": "connected",
+      "editor_load": "connected",
+      "editor_fork": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "aae08c52-4627-4f2b-941f-525af6b533b9",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the fork editor report."
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the load editor report."
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the new editor report."
+      }
+    ]
+  },
+  {
+    "operation": "resume",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFEX2yzzThur3i87c",
+    "notificationSessionID": "ses_-zUPFEX2yzzThur3i87c",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork"
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load"
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new"
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "bce6401e-6616-4d8d-bb4a-d03b4f17c6c2",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_new": "connected",
+      "editor_load": "connected",
+      "editor_fork": "connected",
+      "editor_resume": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "47a7fb98-dd3f-4b3f-b89e-21e313ef5a97",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the fork editor report."
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the load editor report."
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the new editor report."
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the resume editor report."
+      }
+    ]
+  },
+  {
+    "operation": "parallel-alternate",
+    "side": "alternate",
+    "responseSessionID": "ses_-zUPFEWLEzzt7HeJDrY2",
+    "notificationSessionID": "ses_-zUPFEWLEzzt7HeJDrY2",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note"
+      },
+      {
+        "name": "editor_alternate_parallel:editor_report",
+        "description": "Editor report from alternate_parallel"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "operation": "parallel-project",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFEWLJzzkLkiKNL3g",
+    "notificationSessionID": "ses_-zUPFEWLJzzkLkiKNL3g",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork"
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load"
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new"
+      },
+      {
+        "name": "editor_project_parallel:editor_report",
+        "description": "Editor report from project_parallel"
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "bac6ad45-579c-4b55-8dd3-50d6cfe42f56",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_alternate_parallel": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "4bf119c8-167c-4aa1-bac4-e5b259eee298",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_new": "connected",
+      "editor_load": "connected",
+      "editor_fork": "connected",
+      "editor_resume": "connected",
+      "editor_project_parallel": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "c1e1afd9-472d-4962-9bf7-c1575300ab84",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the fork editor report."
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the load editor report."
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the new editor report."
+      },
+      {
+        "name": "editor_project_parallel:editor_report",
+        "description": "Editor report from project_parallel",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project_parallel editor report."
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the resume editor report."
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "status": 200,
+    "requestID": "60d4ace6-30bb-491d-abba-daf1edb1c707",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_alternate_parallel:editor_report",
+        "description": "Editor report from alternate_parallel",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the alternate_parallel editor report."
+      }
+    ]
+  },
+  {
+    "operation": "parallel-project-second",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFEW6AzzqLn9MjlBE",
+    "notificationSessionID": "ses_-zUPFEW6AzzqLn9MjlBE",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork"
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load"
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new"
+      },
+      {
+        "name": "editor_project_parallel:editor_report",
+        "description": "Editor report from project_parallel"
+      },
+      {
+        "name": "editor_project_second:editor_report",
+        "description": "Editor report from project_second"
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "operation": "parallel-project-first",
+    "side": "project",
+    "responseSessionID": "ses_-zUPFEW6Ezz8AZiAOn6O",
+    "notificationSessionID": "ses_-zUPFEW6Ezz8AZiAOn6O",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork"
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load"
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new"
+      },
+      {
+        "name": "editor_project_first:editor_report",
+        "description": "Editor report from project_first"
+      },
+      {
+        "name": "editor_project_parallel:editor_report",
+        "description": "Editor report from project_parallel"
+      },
+      {
+        "name": "editor_project_second:editor_report",
+        "description": "Editor report from project_second"
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "40271169-abd5-4ed9-8a6c-f68bfd97b74f",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_new": "connected",
+      "editor_load": "connected",
+      "editor_fork": "connected",
+      "editor_resume": "connected",
+      "editor_project_parallel": "connected",
+      "editor_project_second": "connected",
+      "editor_project_first": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "d4c97d84-e3cb-4a1f-b4ec-512a46d8719b",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_new": "connected",
+      "editor_load": "connected",
+      "editor_fork": "connected",
+      "editor_resume": "connected",
+      "editor_project_parallel": "connected",
+      "editor_project_second": "connected",
+      "editor_project_first": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "f1c6f6ee-2dbd-4951-9de4-aba249967336",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the fork editor report."
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the load editor report."
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the new editor report."
+      },
+      {
+        "name": "editor_project_first:editor_report",
+        "description": "Editor report from project_first",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project_first editor report."
+      },
+      {
+        "name": "editor_project_parallel:editor_report",
+        "description": "Editor report from project_parallel",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project_parallel editor report."
+      },
+      {
+        "name": "editor_project_second:editor_report",
+        "description": "Editor report from project_second",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project_second editor report."
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the resume editor report."
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "78f90d1f-efb6-421e-ab61-d11c1fd62aa0",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_fork:editor_report",
+        "description": "Editor report from fork",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the fork editor report."
+      },
+      {
+        "name": "editor_load:editor_report",
+        "description": "Editor report from load",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the load editor report."
+      },
+      {
+        "name": "editor_new:editor_report",
+        "description": "Editor report from new",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the new editor report."
+      },
+      {
+        "name": "editor_project_first:editor_report",
+        "description": "Editor report from project_first",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project_first editor report."
+      },
+      {
+        "name": "editor_project_parallel:editor_report",
+        "description": "Editor report from project_parallel",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project_parallel editor report."
+      },
+      {
+        "name": "editor_project_second:editor_report",
+        "description": "Editor report from project_second",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the project_second editor report."
+      },
+      {
+        "name": "editor_resume:editor_report",
+        "description": "Editor report from resume",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the resume editor report."
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "route": "/command",
+    "status": 200,
+    "requestID": "4ddf20cc-33e9-4e75-a8d4-30717e438b6e",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the alternate note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_alternate_parallel:editor_report",
+        "description": "Editor report from alternate_parallel",
+        "source": "mcp",
+        "hints": [],
+        "template": "Use the alternate_parallel editor report."
+      }
+    ]
+  }
+]

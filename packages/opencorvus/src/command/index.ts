@@ -130,6 +130,10 @@ export namespace Command {
     return available[name]
   }
 
+  export async function catalog(): Promise<Pick<Info, "name" | "description">[]> {
+    return objectValues(await definitions()).map(({ name, description }) => ({ name, description }))
+  }
+
   export async function list(): Promise<Info[]> {
     const available = objectValues(await definitions())
     const settled = await Promise.allSettled(

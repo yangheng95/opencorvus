@@ -31,7 +31,11 @@ afterEach(async () => {
 
 // Actual ACP JSON-RPC, product HTTP routes and Session/Provider processing.
 // The local streamed participant controls finish/error facts; this is not external-model or UI acceptance.
-async function environment(options: { requestPermission?: Client["requestPermission"]; permissionMode?: "ask" } = {}) {
+async function environment(options: {
+  requestPermission?: Client["requestPermission"]
+  permissionMode?: "ask"
+  sessionUpdate?: (update: SessionNotification) => void
+} = {}) {
   const project = await memoryProject()
   const requests: Array<{ model: string; stream: boolean }> = []
   const updates: SessionNotification[] = []
@@ -146,6 +150,7 @@ async function environment(options: { requestPermission?: Client["requestPermiss
       ({
         async sessionUpdate(update) {
           updates.push(update)
+          options.sessionUpdate?.(update)
         },
         requestPermission: options.requestPermission ?? (async () => ({ outcome: { outcome: "cancelled" } })),
       }) as Client,
@@ -437,6 +442,62 @@ test("ACP exposes a real HTTP missing-session error and an invalid command", asy
   await expect(
     env.client.prompt({ sessionId, prompt: [{ type: "text", text: "This Session was deleted" }] }),
   ).rejects.toMatchObject({ code: -32603, data: { sessionID: sessionId, error: { name: "NotFoundError" } } })
+}, 60_000)
+
+test("ACP announces newly attached prompt commands and executes the selected local command", async () => {
+  let notification = Promise.withResolvers<SessionNotification>()
+  await using env = await environment({
+    sessionUpdate(update) {
+      if (update.update.sessionUpdate === "available_commands_update") notification.resolve(update)
+    },
+  })
+  const cwd = env.project.path
+  const descriptions = {
+    editor_new: "New session report",
+    editor_load: "Loaded session report",
+    editor_fork: "Forked session report",
+    editor_resume: "Resumed session report",
+  }
+  const attached = (name: keyof typeof descriptions) => [
+    {
+      name,
+      command: process.execPath,
+      args: [path.join(import.meta.dir, "fixture/acp-editor-mcp.ts"), descriptions[name]],
+      env: [],
+    },
+  ]
+  const expected = [
+    { name: "init", description: "create/update AGENTS.md" },
+    { name: "review", description: "review changes [commit|branch|pr], defaults to uncommitted" },
+    { name: "inspect", description: "Owned ACP command" },
+  ]
+  const prompts: typeof expected = []
+  async function announce(name: keyof typeof descriptions, start: () => Promise<unknown>) {
+    notification = Promise.withResolvers<SessionNotification>()
+    const response = await start()
+    const update = await withTimeout(notification.promise, 10_000, `${name} command announcement`)
+    prompts.push({ name: `${name}:editor_report`, description: descriptions[name] })
+    prompts.sort((left, right) => left.name.localeCompare(right.name))
+    expect(response).toMatchObject({ sessionId: update.sessionId })
+    expect(update.update).toEqual({
+      sessionUpdate: "available_commands_update",
+      availableCommands: [...expected, ...prompts, { name: "compact", description: "compact the session" }],
+    })
+    return update.sessionId
+  }
+
+  const sessionId = await announce("editor_new", () => env.client.newSession({ cwd, mcpServers: attached("editor_new") }))
+  await announce("editor_load", () => env.client.loadSession({ cwd, sessionId, mcpServers: attached("editor_load") }))
+  await announce("editor_fork", () => env.client.unstable_forkSession({ cwd, sessionId, mcpServers: attached("editor_fork") }))
+  await announce("editor_resume", () => env.client.resumeSession({ cwd, sessionId, mcpServers: attached("editor_resume") }))
+
+  const reply = await env.client.prompt({ sessionId, prompt: [{ type: "text", text: "/inspect Selected command input" }] })
+  expect(reply).toMatchObject({ stopReason: "end_turn" })
+  expect(env.requests).toContainEqual({ model: "normal", stream: true })
+  const user = (await env.messages(sessionId)).find((message) => message.info.role === "user")
+  expect(user?.parts).toEqual(
+    expect.arrayContaining([expect.objectContaining({ type: "text", text: "Selected command input" })]),
+  )
 }, 60_000)
 
 test("public initialization projects a cancelled actual reply as false", async () => {

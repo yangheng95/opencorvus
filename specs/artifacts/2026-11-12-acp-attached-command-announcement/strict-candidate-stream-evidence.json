@@ -1,0 +1,27 @@
+[
+  {
+    "event": "stream-request",
+    "route": "/v1/chat/completions",
+    "model": "local",
+    "stream": true,
+    "userText": [
+      "Use the strict-project note."
+    ]
+  },
+  {
+    "event": "stream-request",
+    "route": "/v1/chat/completions",
+    "model": "local",
+    "stream": true,
+    "userText": []
+  },
+  {
+    "event": "stream-request",
+    "route": "/v1/chat/completions",
+    "model": "local",
+    "stream": true,
+    "userText": [
+      "Use the strict-project note."
+    ]
+  }
+]

@@ -37,6 +37,7 @@ import { Identifier } from "../id/id"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
 import { Installation } from "@/installation"
 import { Message, Todo } from "@/session"
+import { Command } from "@/command"
 import { Config } from "@/config/config"
 import { Instance } from "@/project/instance"
 import { z } from "zod"
@@ -1334,6 +1335,10 @@ export namespace ACP {
         })
     }
 
+    private loadCommandCatalog(directory: string) {
+      return Instance.provide({ directory, fn: Command.catalog })
+    }
+
     private async loadSessionMode(
       params: LoadSessionRequest,
       input: { model: { providerID: string; modelID: string }; primarySurface: AcpPrimarySurface },
@@ -1354,26 +1359,6 @@ export namespace ACP {
         availableModes: input.primarySurface.availableModes,
         currentModeId: this.sessionManager.get(sessionId).modeId,
       }
-
-      const commands = await this.config.sdk.command
-        .list(
-          {
-            directory,
-          },
-          { throwOnError: true },
-        )
-        .then((resp) => resp.data!)
-
-      const availableCommands = commands.map((command) => ({
-        name: command.name,
-        description: command.description ?? "",
-      }))
-      const names = new Set(availableCommands.map((c) => c.name))
-      if (!names.has("compact"))
-        availableCommands.push({
-          name: "compact",
-          description: "compact the session",
-        })
 
       const mcpServers: Record<string, Config.Mcp> = {}
       for (const server of params.mcpServers) {
@@ -1419,6 +1404,12 @@ export namespace ACP {
           assertMcpServerAttached(key, response)
         }),
       )
+
+      const commands = await this.loadCommandCatalog(directory)
+      const availableCommands = commands.map(({ name, description }) => ({ name, description: description ?? "" }))
+      if (!availableCommands.some(({ name }) => name === "compact")) {
+        availableCommands.push({ name: "compact", description: "compact the session" })
+      }
 
       setTimeout(() => {
         this.connection.sessionUpdate({
@@ -1665,15 +1656,13 @@ export namespace ACP {
         return acpPromptResponse({ sessionID, inputMessageID, response })
       }
 
-      const command = await this.config.sdk.command
-        .list({ directory }, { throwOnError: true })
-        .then((x) => x.data!.find((c) => c.name === cmd.name))
-      if (command) {
+      const commands = await this.loadCommandCatalog(directory)
+      if (commands.some(({ name }) => name === cmd.name)) {
         const inputMessageID = Identifier.ascending("message")
         const response = await this.sdk.session.command({
           sessionID,
           messageID: inputMessageID,
-          command: command.name,
+          command: cmd.name,
           arguments: cmd.args,
           model: model.providerID + "/" + model.modelID,
           agent,

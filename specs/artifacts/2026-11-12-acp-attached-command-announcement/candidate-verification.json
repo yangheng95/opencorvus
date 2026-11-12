@@ -1,0 +1,35 @@
+{
+  "candidate": {
+    "sqlite": "ok",
+    "sessions": 7,
+    "projects": 2,
+    "messages": 0,
+    "counts": {
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_activity_outcome": 0,
+      "provider_usage_event": 0
+    }
+  },
+  "strictCandidate": {
+    "sqlite": "ok",
+    "sessions": 1,
+    "projects": 1,
+    "messages": 2,
+    "counts": {
+      "engine_task": 0,
+      "provider_activity_request": 1,
+      "provider_activity_outcome": 1,
+      "provider_usage_event": 3
+    }
+  },
+  "editorNotifications": {
+    "candidate": 9,
+    "restart": 2,
+    "strict": 1
+  },
+  "httpResponses": {
+    "200": 28,
+    "500": 1
+  }
+}
