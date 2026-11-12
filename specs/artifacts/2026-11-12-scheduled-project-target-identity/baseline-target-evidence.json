@@ -1,0 +1,251 @@
+{
+  "seeds": [
+    {
+      "key": "english",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-project\\archive-review",
+      "input": {
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hwcdl7MAGzz9wgTYo8z1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "prompt": "Check this project only.",
+        "requestID": "iteration-b264-baseline-english"
+      },
+      "receipt": {
+        "id": "atm_h5YpXrLWgU2NVoI9SrsQ",
+        "revisionId": "atm_h5YpXrLWgU2NVoI9SrsQ",
+        "name": "Weekly project check-in",
+        "nextRun": 4070908800000
+      },
+      "requestID": "97be4efd-7cb2-4af0-b13b-2cb3d5b3901a"
+    },
+    {
+      "key": "chinese",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-alternate\\archive-review",
+      "input": {
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hZfaBIE99UznxlELztjZ"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "prompt": "Check this project only.",
+        "requestID": "iteration-b264-baseline-chinese"
+      },
+      "receipt": {
+        "id": "atm_hqhVDA7KPt5e0urfb1vv",
+        "revisionId": "atm_hqhVDA7KPt5e0urfb1vv",
+        "name": "Weekly project check-in",
+        "nextRun": 4070908800000
+      },
+      "requestID": "32cd8638-f3e5-4aa8-9f41-bb7bcb66680d"
+    }
+  ],
+  "list": {
+    "requestID": "481e7e25-88dc-4f5e-a870-55273f7cac04",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_h5YpXrLWgU2NVoI9SrsQ",
+        "revisionId": "atm_h5YpXrLWgU2NVoI9SrsQ",
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hwcdl7MAGzz9wgTYo8z1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Check this project only.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hqhVDA7KPt5e0urfb1vv",
+        "revisionId": "atm_hqhVDA7KPt5e0urfb1vv",
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hZfaBIE99UznxlELztjZ"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Check this project only.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hYKlKCGRQSblZ6NL04t9",
+        "revisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+        "name": "Unrelated future project schedule",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hwcdl7MAGzz9wgTYo8z1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Keep this independent task and its delivery.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "discovery": {
+    "requestID": "1e097b9e-ed3e-4644-b14d-075e5146fe3f",
+    "status": 200,
+    "body": {
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-project\\archive-review",
+      "defaultDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-project\\archive-review",
+      "projects": [
+        {
+          "id": "prj_hwcdl7MAGzz9wgTYo8z1",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-project\\archive-review",
+          "name": "archive-review",
+          "marker": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-project\\archive-review\\.opencorvus"
+        },
+        {
+          "id": "prj_hZfaBIE99UznxlELztjZ",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-alternate\\archive-review",
+          "name": "archive-review",
+          "marker": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-alternate\\archive-review\\.opencorvus"
+        }
+      ]
+    }
+  },
+  "pairs": [
+    {
+      "row": {
+        "id": "atm_h5YpXrLWgU2NVoI9SrsQ",
+        "revisionId": "atm_h5YpXrLWgU2NVoI9SrsQ",
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hwcdl7MAGzz9wgTYo8z1"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Check this project only.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "project": {
+        "id": "prj_hwcdl7MAGzz9wgTYo8z1",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-project\\archive-review",
+        "name": "archive-review",
+        "marker": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-project\\archive-review\\.opencorvus"
+      },
+      "fires": {
+        "requestID": "f07d8e23-ef94-45c3-903d-cb419c432e4c",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_ae2833d1e9ecfcf5f1d484f688bc1d88",
+            "automationId": "atm_h5YpXrLWgU2NVoI9SrsQ",
+            "automationRevisionId": "atm_h5YpXrLWgU2NVoI9SrsQ",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794442020380,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "d9f76e9b-20c7-43bd-b944-87481301e22a",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "row": {
+        "id": "atm_hqhVDA7KPt5e0urfb1vv",
+        "revisionId": "atm_hqhVDA7KPt5e0urfb1vv",
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hZfaBIE99UznxlELztjZ"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Check this project only.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "project": {
+        "id": "prj_hZfaBIE99UznxlELztjZ",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-alternate\\archive-review",
+        "name": "archive-review",
+        "marker": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b263\\candidate-alternate\\archive-review\\.opencorvus"
+      },
+      "fires": {
+        "requestID": "4ce4efea-6837-4953-93d8-1d2acd49dff3",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_b4c471e4c634b10d89e81df55cbdcbf1",
+            "automationId": "atm_hqhVDA7KPt5e0urfb1vv",
+            "automationRevisionId": "atm_hqhVDA7KPt5e0urfb1vv",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794442020398,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "0910e9d9-4f81-44f5-9d7f-4d57075bfc42",
+        "status": 200,
+        "body": []
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [同名定时任务的项目辨认与确认](2026-11-12-scheduled-project-target-identity.md)
 - [定时任务删除回执与确认交互](2026-11-12-automation-delete-receipt.md)
 - [定时任务编辑回执中断后的原版本确认](2026-11-12-automation-edit-receipt.md)
 - [新建定时任务回执中断后的原定义确认](2026-11-12-automation-create-receipt.md)
