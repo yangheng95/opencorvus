@@ -6363,6 +6363,8 @@ export class Agents extends HeyApiClient {
 export class Automations extends HeyApiClient {
   /**
    * List scheduled automations
+   *
+   * The bound conversation’s live title and directory are included in targetSession when available. The target retains the exact scheduled identity.
    */
   public list<ThrowOnError extends boolean = false>(options?: Options<never, ThrowOnError>) {
     return (options?.client ?? this.client).get<

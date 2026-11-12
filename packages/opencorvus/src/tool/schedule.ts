@@ -201,7 +201,7 @@ export async function executeScheduleToolInput(
     case "list": {
       const automations = AutomationService.list()
       return result(`${automations.length} scheduled automations`, {
-        automations: automations.map((automation) => ({
+        automations: automations.map(({ targetSession: _targetSession, ...automation }) => ({
           ...automation,
           prompt: automation.prompt.slice(0, 200),
           lastRun: automation.lastRun ? new Date(automation.lastRun).toISOString() : null,

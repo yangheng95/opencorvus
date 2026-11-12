@@ -80227,6 +80227,7 @@
     },
     "/global/automations": {
       "get": {
+        "description": "The bound conversation’s live title and directory are included in targetSession when available. The target retains the exact scheduled identity.",
         "operationId": "global.automations.list",
         "responses": {
           "200": {
@@ -80370,6 +80371,33 @@
                             "type": "object"
                           }
                         ]
+                      },
+                      "targetSession": {
+                        "anyOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "directory": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "title",
+                              "directory"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
                       }
                     },
                     "required": [
@@ -80377,6 +80405,7 @@
                       "revisionId",
                       "name",
                       "target",
+                      "targetSession",
                       "recurrence",
                       "executionMode",
                       "model",
@@ -81107,6 +81136,33 @@
                           "type": "object"
                         }
                       ]
+                    },
+                    "targetSession": {
+                      "anyOf": [
+                        {
+                          "additionalProperties": false,
+                          "properties": {
+                            "directory": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "title": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "title",
+                            "directory"
+                          ],
+                          "type": "object"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -81114,6 +81170,7 @@
                     "revisionId",
                     "name",
                     "target",
+                    "targetSession",
                     "recurrence",
                     "executionMode",
                     "model",
@@ -81129,7 +81186,7 @@
                 }
               }
             },
-            "description": "Updated scheduled automation"
+            "description": "Updated scheduled automation with live metadata for its bound conversation when available"
           },
           "400": {
             "content": {

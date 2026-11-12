@@ -335,6 +335,7 @@ test("automation service sends the full lifecycle through global target-aware HT
 })
 
 const pausedDefinition: AutomationView = {
+  targetSession: null,
   id: "atm_original",
   revisionId: "atm_paused",
   name: "Original scheduled task",

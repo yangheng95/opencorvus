@@ -380,6 +380,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const target = selected()?.target
     return target?.scope === "project" ? target.projectIds : []
   })
+  const detailSessionID = createMemo(() => {
+    const target = selected()?.target
+    return target?.scope === "session" ? target.sessionId : undefined
+  })
   const selectedRunState = createMemo(() => {
     const state = runState()
     return state && state.automationID === selectedID() && isApiAuthorityCurrent(state.authority)
@@ -396,20 +400,42 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const searchQuery = () => search().trim().toLocaleLowerCase()
   const projectSearchIncomplete = () => Boolean(searchQuery()) && projectRead().status !== "ready" &&
     scopedAutomations().some(({ target }) => target.scope === "project")
+  const sessionTitles = createMemo(() => {
+    const owners = new Map<string, Set<string>>()
+    for (const { targetSession } of automations()) {
+      if (!targetSession) continue
+      const matches = owners.get(targetSession.title) ?? new Set<string>()
+      matches.add(targetSession.id)
+      owners.set(targetSession.title, matches)
+    }
+    return owners
+  })
   const filteredAutomations = createMemo(() => {
     const query = searchQuery()
     if (!query) return scopedAutomations()
     const matches = (value: string | undefined) => value?.toLocaleLowerCase().includes(query)
-    return scopedAutomations().filter(({ name, prompt, recurrence, target }) =>
-      [name, prompt, recurrenceSummary(recurrence)].some(matches) ||
-      (target.scope === "project" && target.projectIds.some((id) => {
+    return scopedAutomations().filter(({ name, prompt, recurrence, target, targetSession }) => {
+      if ([name, prompt, recurrenceSummary(recurrence)].some(matches)) return true
+      if (target.scope === "session") {
+        return [target.sessionId, targetSession?.title, targetSession?.directory].some(matches)
+      }
+      return target.scope === "project" && target.projectIds.some((id) => {
         const project = projectsByID().get(id)
         return [id, project?.name, project?.directory].some(matches)
-      })),
-    )
+      })
+    })
   })
-  function targetLabel(target: AutomationTarget): string {
-    if (target.scope !== "project") return t(`automations.scope.${target.scope}`)
+  function targetLabel({ target, targetSession }: AutomationView): string {
+    if (target.scope === "session") {
+      if (!targetSession) return t("automations.session_target_with_id", {
+        name: t("automations.session_target_unavailable"), session: target.sessionId,
+      })
+      const { title } = targetSession
+      if (!title.trim()) return t("automations.session_target_exact", { session: target.sessionId })
+      return (sessionTitles().get(title)?.size ?? 0) > 1
+        ? t("automations.session_target_with_id", { name: title, session: target.sessionId }) : title
+    }
+    if (target.scope === "global") return t("automations.scope.global")
     return projectListFormat().format(target.projectIds.map((id) => {
       const project = projectsByID().get(id)
       if (!project) return id
@@ -418,9 +444,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }))
   }
   function deletionLabel(automation: AutomationView): string {
-    return automation.target.scope === "project"
-      ? t("automations.delete_named_in_target", { name: automation.name, target: targetLabel(automation.target) })
-      : t("automations.delete_named", { name: automation.name })
+    return automation.target.scope === "global"
+      ? t("automations.delete_named", { name: automation.name })
+      : t("automations.delete_named_in_target", { name: automation.name, target: targetLabel(automation) })
   }
   const filtersActive = createMemo(() => Boolean(search().trim()) || filter() !== "all" || scopeFilter() !== "all")
   const initialLoadError = createMemo(() => {
@@ -552,7 +578,16 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (target?.scope === "session") return target.sessionId
     return draftSessionID()
   })
-  const sessionTargetTitle = createMemo(() => workLedgerSessionExecution(sessionTargetID())?.title?.trim())
+  const openedSessionTarget = createMemo(() => {
+    const opened = editOwner()?.definition
+    return opened?.target.scope === "session" && opened.target.sessionId === sessionTargetID() ? opened : undefined
+  })
+  const sessionTargetTitle = createMemo(() => {
+    const opened = openedSessionTarget()
+    return opened ? opened.targetSession?.title : workLedgerSessionExecution(sessionTargetID())?.title
+  })
+  const missingOpenedSession = () => openedSessionTarget()?.targetSession === null
+  const validSessionTarget = () => Boolean(sessionTargetID()) && !missingOpenedSession()
   function resetForm(automation?: AutomationView): void {
     const recurrence = automation ? parseAutomationRecurrence(automation.recurrence) : null
     const zone = recurrence?.timeZone ?? browserTimeZone()
@@ -953,6 +988,16 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         return project ? `${project.name}\n${project.directory}` : id
       })
       message = `${message}\n\n${t("automations.project_targets")}\n${targets.join("\n\n")}`
+    } else if (automation.target.scope === "session") {
+      const { sessionId } = automation.target
+      const { targetSession } = automation
+      const targetLines = [
+        t("automations.linked_conversation"),
+        targetSession?.title || t("automations.session_target_unavailable"),
+        t("automations.session_target_exact", { session: sessionId }),
+        targetSession?.directory,
+      ].filter(Boolean)
+      message = `${message}\n\n${targetLines.join("\n")}`
     }
     try {
       const decision = await showAppDialog({
@@ -1297,7 +1342,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           <span class="automation-list-item__copy">
                             <span class="automation-list-item__top">
                               <strong title={automation.name}>{automation.name}</strong>
-                              <span title={targetLabel(automation.target)}>{targetLabel(automation.target)}</span>
+                              <span title={targetLabel(automation)}>{targetLabel(automation)}</span>
                             </span>
                             <span class="automation-list-item__timing">
                               <span class="automation-list-item__next">
@@ -1524,6 +1569,21 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </section>
                       </Show>
 
+                      <Show when={detailSessionID()}>
+                        {(sessionId) => (
+                          <section class="automation-target-summary">
+                            <h4>{t("automations.linked_conversation")}</h4>
+                            <ul class="automation-target-summary-list">
+                              <li>
+                                <strong>{automation().targetSession?.title || t("automations.session_target_unavailable")}</strong>
+                                <small>{t("automations.session_target_exact", { session: sessionId() })}</small>
+                                <Show when={automation().targetSession}>{(session) => <small>{session().directory}</small>}</Show>
+                              </li>
+                            </ul>
+                          </section>
+                        )}
+                      </Show>
+
                       <section class="automation-prompt">
                         <h4>{t("automations.prompt")}</h4>
                         <p>{automation().prompt}</p>
@@ -1703,11 +1763,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   <Show when={scope() === "session"}>
                     <div
                       class="automation-session-target automation-field-wide"
-                      data-valid={String(Boolean(sessionTargetID()))}
+                      data-valid={String(validSessionTarget())}
                     >
-                      <Icon name={sessionTargetID() ? "check" : "info-circle"} />
+                      <Icon name={validSessionTarget() ? "check" : "info-circle"} />
                       <div>
-                        <strong>{sessionTargetTitle() || t("automations.session_target")}</strong>
+                        <strong>{sessionTargetTitle() || t(missingOpenedSession()
+                          ? "automations.session_target_unavailable" : "automations.session_target")}</strong>
                         <span>
                           {sessionTargetID()
                             ? t("automations.session_target_exact", { session: sessionTargetID() })

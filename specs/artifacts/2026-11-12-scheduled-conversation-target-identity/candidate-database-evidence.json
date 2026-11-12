@@ -1,0 +1,56 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 2,
+    "automation_definition_tombstone": 0,
+    "automation_fire": 2,
+    "automation_fire_frontier": 2,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 1,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_usage_event": 0
+  },
+  "targets": [
+    [
+      "atm_hCQwczySDqMYlxX6vLgA",
+      "atm_hCQwczySDqMYlxX6vLgA",
+      1,
+      "ses_hxQjyJP5r39j1duQ83g4",
+      "session",
+      "active"
+    ],
+    [
+      "atm_hSp40Cfo9Gvrk0FtLBbL",
+      "atm_hSp40Cfo9Gvrk0FtLBbL",
+      1,
+      "ses_hsDIU888UeYL49ugQyV7",
+      "session",
+      "active"
+    ]
+  ],
+  "liveSessions": [
+    [
+      "ses_hsDIU888UeYL49ugQyV7",
+      "Project handoff conversation",
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b265\\candidate-project\\archive-review",
+      "prj_hikyX3qq45VRd5Hr6EWE"
+    ]
+  ],
+  "frontier": [
+    [
+      "atm_hCQwczySDqMYlxX6vLgA",
+      "atm_hCQwczySDqMYlxX6vLgA",
+      "cal_automation_0648d1fd6b87976e609c4b7a901f12e9",
+      4070908800000
+    ],
+    [
+      "atm_hSp40Cfo9Gvrk0FtLBbL",
+      "atm_hSp40Cfo9Gvrk0FtLBbL",
+      "cal_automation_e5c6df13a42b11ce7346a1c07f6b91ad",
+      4070908800000
+    ]
+  ]
+}

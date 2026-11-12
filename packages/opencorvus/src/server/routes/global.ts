@@ -91,6 +91,7 @@ const AutomationView = z
     revisionId: z.string(),
     name: z.string(),
     target: AutomationTarget,
+    targetSession: z.object({ id: z.string(), title: z.string(), directory: z.string() }).strict().nullable(),
     recurrence: z.string(),
     executionMode: z.enum(["local", "worktree"]),
     model: z.object({ providerID: z.string(), modelID: z.string() }).nullable(),
@@ -269,6 +270,7 @@ export const GlobalRoutes = lazy(() =>
       "/automations",
       describeRoute({
         summary: "List scheduled automations",
+        description: "The bound conversation’s live title and directory are included in targetSession when available. The target retains the exact scheduled identity.",
         operationId: "global.automations.list",
         responses: {
           200: {
@@ -327,7 +329,7 @@ export const GlobalRoutes = lazy(() =>
         operationId: "global.automations.update",
         responses: {
           200: {
-            description: "Updated scheduled automation",
+            description: "Updated scheduled automation with live metadata for its bound conversation when available",
             content: { "application/json": { schema: resolver(AutomationView) } },
           },
           ...errors(400, 404),

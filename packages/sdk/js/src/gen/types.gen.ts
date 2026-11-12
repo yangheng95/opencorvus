@@ -21573,6 +21573,11 @@ export type GlobalAutomationsListResponses = {
       | {
           scope: "global"
         }
+    targetSession: {
+      directory: string
+      id: string
+      title: string
+    } | null
   }>
 }
 
@@ -21777,7 +21782,7 @@ export type GlobalAutomationsUpdateError = GlobalAutomationsUpdateErrors[keyof G
 
 export type GlobalAutomationsUpdateResponses = {
   /**
-   * Updated scheduled automation
+   * Updated scheduled automation with live metadata for its bound conversation when available
    */
   200: {
     executionMode: "local" | "worktree"
@@ -21808,6 +21813,11 @@ export type GlobalAutomationsUpdateResponses = {
       | {
           scope: "global"
         }
+    targetSession: {
+      directory: string
+      id: string
+      title: string
+    } | null
   }
 }
 

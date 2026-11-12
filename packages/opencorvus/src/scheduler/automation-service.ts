@@ -105,6 +105,7 @@ export type AutomationView = {
   revisionId: string
   name: string
   target: AutomationTarget
+  targetSession: { id: string; title: string; directory: string } | null
   recurrence: string
   executionMode: "local" | "worktree"
   model: { providerID: string; modelID: string } | null
@@ -385,14 +386,12 @@ export namespace AutomationService {
   }
 
   export function list(): AutomationView[] {
-    const rows = Database.use((db) =>
-      currentAutomationDefinitionsInTransaction(db).filter((row) => row.kind !== "delay"),
-    )
-      .map((row) => Database.use((db) => projectAutomationInTransaction(db, row)))
+    return Database.use((db) => currentAutomationDefinitionsInTransaction(db)
+      .filter((row) => row.kind !== "delay")
+      .map((row) => view(db, projectAutomationInTransaction(db, row))))
       .sort(
-        (left, right) => (left.next_run ?? Infinity) - (right.next_run ?? Infinity) || left.id.localeCompare(right.id),
+        (left, right) => (left.nextRun ?? Infinity) - (right.nextRun ?? Infinity) || left.id.localeCompare(right.id),
       )
-    return rows.map(view)
   }
 
   /** Read the exact active one-shot wake facts for known runtime owners.
@@ -559,17 +558,28 @@ export namespace AutomationService {
     })
   }
 
-  function view(row: AutomationRow): AutomationView {
+  function sessionTargetView(db: Database.TxOrDb, target: AutomationTarget): AutomationView["targetSession"] {
+    if (target.scope !== "session") return null
+    try {
+      const { id, title, directory } = Session.readLiveInTransaction(db, { sessionID: target.sessionId })
+      return { id, title, directory }
+    } catch (error) {
+      if (error instanceof NotFoundError) return null
+      throw error
+    }
+  }
+
+  function view(db: Database.TxOrDb, row: AutomationRow): AutomationView {
     if (row.kind === "delay" || !row.recurrence) {
       throw new Error(`Automation ${row.id} is not a public recurring automation`)
     }
+    const target = targetForRevision(db, { revisionID: row.revision_id, scope: row.scope, sessionID: row.session_id })
     return {
       id: row.id,
       revisionId: row.revision_id,
       name: row.name,
-      target: Database.use((db) =>
-        targetForRevision(db, { revisionID: row.revision_id, scope: row.scope, sessionID: row.session_id }),
-      ),
+      target,
+      targetSession: sessionTargetView(db, target),
       recurrence: row.recurrence,
       executionMode: row.execution_mode,
       model:
@@ -765,7 +775,7 @@ export namespace AutomationService {
 
   export async function update(input: UpdateAutomationInput, requestID: string = randomUUID()): Promise<AutomationView> {
     const row = await updateAutomation(input, { kind: "http", requestID })
-    return view(Database.use((db) => projectAutomationInTransaction(db, row)))
+    return Database.use((db) => view(db, projectAutomationInTransaction(db, row)))
   }
 
   export async function updateFromTool(

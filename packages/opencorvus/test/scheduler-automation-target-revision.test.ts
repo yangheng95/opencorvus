@@ -40,7 +40,11 @@ test("real HTTP scope edits project the exact physical revision and survive data
   await using second = await memoryProject("target-revision-http-second")
   const firstID = await register(first.path)
   const secondID = await register(second.path)
-  const session = await Instance.provide({ directory: first.path, fn: () => Session.create({ kind: "root" }) })
+  const session = await Instance.provide({ directory: first.path, fn: () => Session.create({ kind: "root", title: "First project conversation" }) })
+  const otherSession = await Instance.provide({
+    directory: second.path,
+    fn: () => Session.create({ kind: "root", title: "Second project conversation" }),
+  })
   const app = new Hono().onError(serverErrorResponse).route("/global", GlobalRoutes())
   const server = Bun.serve({
     hostname: "127.0.0.1",
@@ -65,6 +69,7 @@ test("real HTTP scope edits project the exact physical revision and survive data
       { scope: "project", projectIds: [secondID, firstID] },
       { scope: "project", projectIds: [secondID] },
       { scope: "session", sessionId: session.id },
+      { scope: "session", sessionId: otherSession.id },
       { scope: "project", projectIds: [firstID] },
       { scope: "global" },
       { scope: "project", projectIds: [firstID, secondID] },
@@ -73,11 +78,34 @@ test("real HTTP scope edits project the exact physical revision and survive data
       const renamed = await request(route, "PATCH", { expectedRevisionId: updated.revisionId, name: `scope ${target.scope}` })
       current = renamed
       const list = await request("/global/automations")
+      const listed = list.find((item: any) => item.id === created.id)
       expect({
         updated: updated.target,
         renamed: renamed.target,
-        listed: list.find((item: any) => item.id === created.id).target,
+        listed: listed.target,
       }).toEqual({ updated: target, renamed: target, listed: target })
+      const targetInfo = target.scope === "session"
+        ? [session, otherSession].find((item) => item.id === target.sessionId)
+        : undefined
+      const targetSession = targetInfo ? { id: targetInfo.id, title: targetInfo.title, directory: targetInfo.directory } : null
+      expect([updated.targetSession, renamed.targetSession, listed.targetSession]).toEqual([targetSession, targetSession, targetSession])
+      if (targetInfo?.id === otherSession.id) {
+        const title = "Updated second project conversation"
+        await Instance.provide({ directory: second.path, fn: () => Session.setTitle({ sessionID: otherSession.id, title }) })
+        const changed = (await request("/global/automations")).find((item: any) => item.id === created.id)
+        expect(changed).toMatchObject({
+          revisionId: renamed.revisionId, target, targetSession: { id: otherSession.id, title, directory: otherSession.directory },
+        })
+        const removed = await Instance.provide({
+          directory: second.path,
+          fn: () => Database.immediateTransaction((db) => Session.deleteExactTreeInProject(db, {
+            sessionID: otherSession.id, projectID: secondID, expectedSessionIDs: [otherSession.id],
+          })),
+        })
+        expect(removed).toBe(1)
+        const missing = (await request("/global/automations")).find((item: any) => item.id === created.id)
+        expect(missing).toMatchObject({ revisionId: renamed.revisionId, target, targetSession: null })
+      }
       expect(latestMembership(created.id).projects).toEqual(target.scope === "project" ? target.projectIds : [])
     }
     await Instance.disposeAll()
@@ -86,6 +114,7 @@ test("real HTTP scope edits project the exact physical revision and survive data
     const reopened = await request("/global/automations")
     expect(reopened.find((item: any) => item.id === created.id)).toMatchObject({
       target: { scope: "project", projectIds: [firstID, secondID] },
+      targetSession: null,
       status: "paused",
     })
   } finally {

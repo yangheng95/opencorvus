@@ -1,0 +1,298 @@
+{
+  "restarted": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b265-final",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39819",
+    "pid": 9472
+  },
+  "stopped": {
+    "occurrence": "iteration-b265-candidate",
+    "apiPort": 39819,
+    "proxyPort": 39820,
+    "apiStopped": true,
+    "proxyStopped": true,
+    "processesExited": true,
+    "listenersClosed": true
+  },
+  "reads": [
+    {
+      "time": "2026-11-12T00:34:21.520Z",
+      "stage": "delivered",
+      "route": "/global/automations",
+      "method": "GET",
+      "round": "initial",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "df237de8-fe66-41c6-a439-610ecddcf3a1",
+      "status": 200,
+      "bytes": 1109,
+      "items": [
+        {
+          "id": "atm_hCQwczySDqMYlxX6vLgA",
+          "revisionId": "atm_hCQwczySDqMYlxX6vLgA",
+          "name": "Scheduled handoff",
+          "status": "active",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_hxQjyJP5r39j1duQ83g4"
+          },
+          "targetSession": null,
+          "nextRun": 4070908800000
+        },
+        {
+          "id": "atm_hSp40Cfo9Gvrk0FtLBbL",
+          "revisionId": "atm_hSp40Cfo9Gvrk0FtLBbL",
+          "name": "Scheduled handoff",
+          "status": "active",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_hsDIU888UeYL49ugQyV7"
+          },
+          "targetSession": {
+            "id": "ses_hsDIU888UeYL49ugQyV7",
+            "title": "Project handoff conversation",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b265\\candidate-project\\archive-review"
+          },
+          "nextRun": 4070908800000
+        }
+      ]
+    },
+    {
+      "time": "2026-11-12T00:34:31.923Z",
+      "stage": "delivered",
+      "route": "/global/automations",
+      "method": "GET",
+      "round": "final-chinese",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "bf5fd7fc-934f-4ead-a56a-c06e562ec4eb",
+      "status": 200,
+      "bytes": 1109,
+      "items": [
+        {
+          "id": "atm_hCQwczySDqMYlxX6vLgA",
+          "revisionId": "atm_hCQwczySDqMYlxX6vLgA",
+          "name": "Scheduled handoff",
+          "status": "active",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_hxQjyJP5r39j1duQ83g4"
+          },
+          "targetSession": null,
+          "nextRun": 4070908800000
+        },
+        {
+          "id": "atm_hSp40Cfo9Gvrk0FtLBbL",
+          "revisionId": "atm_hSp40Cfo9Gvrk0FtLBbL",
+          "name": "Scheduled handoff",
+          "status": "active",
+          "target": {
+            "scope": "session",
+            "sessionId": "ses_hsDIU888UeYL49ugQyV7"
+          },
+          "targetSession": {
+            "id": "ses_hsDIU888UeYL49ugQyV7",
+            "title": "Project handoff conversation",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b265\\candidate-project\\archive-review"
+          },
+          "nextRun": 4070908800000
+        }
+      ]
+    }
+  ],
+  "schedules": {
+    "requestID": "77eef611-6868-4671-a7ef-b0c7e3936fc1",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_hCQwczySDqMYlxX6vLgA",
+        "revisionId": "atm_hCQwczySDqMYlxX6vLgA",
+        "name": "Scheduled handoff",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_hxQjyJP5r39j1duQ83g4"
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the original conversation scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hSp40Cfo9Gvrk0FtLBbL",
+        "revisionId": "atm_hSp40Cfo9Gvrk0FtLBbL",
+        "name": "Scheduled handoff",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_hsDIU888UeYL49ugQyV7"
+        },
+        "targetSession": {
+          "id": "ses_hsDIU888UeYL49ugQyV7",
+          "title": "Project handoff conversation",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b265\\candidate-project\\archive-review"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the original conversation scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "details": [
+    {
+      "item": {
+        "id": "atm_hSp40Cfo9Gvrk0FtLBbL",
+        "revisionId": "atm_hSp40Cfo9Gvrk0FtLBbL",
+        "name": "Scheduled handoff",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_hsDIU888UeYL49ugQyV7"
+        },
+        "targetSession": {
+          "id": "ses_hsDIU888UeYL49ugQyV7",
+          "title": "Project handoff conversation",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b265\\candidate-project\\archive-review"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the original conversation scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "session": {
+        "requestID": "d55d0217-e5af-440b-9301-387d1b2a8578",
+        "status": 200,
+        "body": {
+          "session": {
+            "id": "ses_hsDIU888UeYL49ugQyV7",
+            "slug": "happy-comet",
+            "projectID": "prj_hikyX3qq45VRd5Hr6EWE",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b265\\candidate-project\\archive-review",
+            "title": "Project handoff conversation",
+            "version": "local",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "iteration-b265-candidate-chat-first",
+                "model": null
+              },
+              "conversation": {
+                "experience": "chat",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794443437732,
+              "updated": 1794443437876
+            }
+          }
+        }
+      },
+      "fires": {
+        "requestID": "adb34ea1-3e9a-45c5-9d38-4c84cb673feb",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_e5c6df13a42b11ce7346a1c07f6b91ad",
+            "automationId": "atm_hSp40Cfo9Gvrk0FtLBbL",
+            "automationRevisionId": "atm_hSp40Cfo9Gvrk0FtLBbL",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794443437957,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "750314a5-847c-43e0-bc16-b0cc1ee64bab",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "item": {
+        "id": "atm_hCQwczySDqMYlxX6vLgA",
+        "revisionId": "atm_hCQwczySDqMYlxX6vLgA",
+        "name": "Scheduled handoff",
+        "target": {
+          "scope": "session",
+          "sessionId": "ses_hxQjyJP5r39j1duQ83g4"
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the original conversation scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "session": {
+        "requestID": "10f4dc06-8da7-4a1b-87c6-bfe6e5237a76",
+        "status": 404,
+        "body": {
+          "name": "NotFoundError",
+          "data": {
+            "message": "Session not found: ses_hxQjyJP5r39j1duQ83g4"
+          }
+        }
+      },
+      "fires": {
+        "requestID": "fcff5e73-5253-4c7f-a4e2-428bb0d34c7b",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_0648d1fd6b87976e609c4b7a901f12e9",
+            "automationId": "atm_hCQwczySDqMYlxX6vLgA",
+            "automationRevisionId": "atm_hCQwczySDqMYlxX6vLgA",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794443438888,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "77a6e6ac-9c6b-4b94-9766-61b9d9ae0f25",
+        "status": 200,
+        "body": []
+      }
+    }
+  ]
+}
