@@ -1,0 +1,123 @@
+{
+  "origin": 1794500241705,
+  "gesture": "manual-refresh-repairs-stale-result",
+  "requests": [
+    {
+      "sentMs": 76,
+      "route": "/ui/assets/main-D25M82Rn.js",
+      "query": null,
+      "file": null,
+      "gesture": "open-project",
+      "receivedMs": 183,
+      "status": 200,
+      "requestID": "afd45eb7-7f0e-4e1b-b170-a85da8bcbe6f"
+    },
+    {
+      "sentMs": 9854,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "open-project",
+      "receivedMs": 9859,
+      "status": 200,
+      "requestID": "451ccc77-c455-4f6b-b2f3-05e862fe67e4"
+    },
+    {
+      "sentMs": 10267,
+      "route": "/find/file",
+      "query": "external sample",
+      "file": null,
+      "gesture": "initial-external-search",
+      "receivedMs": 10364,
+      "status": 200,
+      "requestID": "6637cc75-f642-436e-842e-d65c5cd96281",
+      "paths": [
+        "external sample neighbor.txt",
+        "external sample original.txt"
+      ]
+    },
+    {
+      "sentMs": 24616,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "external-move",
+      "receivedMs": 24620,
+      "status": 200,
+      "requestID": "0abea761-c5af-472a-b4c5-19263d83af78"
+    },
+    {
+      "sentMs": 39605,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "external-move",
+      "receivedMs": 39609,
+      "status": 200,
+      "requestID": "1ad63529-a006-4825-825a-ec1c4b608f6b"
+    },
+    {
+      "sentMs": 54615,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "return-after-external-rename",
+      "receivedMs": 54619,
+      "status": 200,
+      "requestID": "1af06644-1a22-4bb3-934e-06e876a24315"
+    },
+    {
+      "sentMs": 65401,
+      "route": "/file/content",
+      "query": null,
+      "file": "external sample original.txt",
+      "gesture": "open-stale-result",
+      "receivedMs": 65403,
+      "status": 404,
+      "requestID": "b2707d72-a5c2-4fa5-b92f-71095993e983"
+    },
+    {
+      "sentMs": 69618,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "open-stale-result",
+      "receivedMs": 69621,
+      "status": 200,
+      "requestID": "e1df4437-0edb-40be-8ecd-b2af644a05bf"
+    },
+    {
+      "sentMs": 82079,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "manual-refresh-repairs-stale-result",
+      "receivedMs": 82095,
+      "status": 200,
+      "requestID": "fc0b45d1-6638-41bb-a76d-702aac74621c"
+    },
+    {
+      "sentMs": 82079,
+      "route": "/find/file",
+      "query": "external sample",
+      "file": null,
+      "gesture": "manual-refresh-repairs-stale-result",
+      "receivedMs": 82176,
+      "status": 200,
+      "requestID": "d6175405-4e09-4d41-830e-84f803d39444",
+      "paths": [
+        "external sample neighbor.txt"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "name": "leave-project-tab",
+      "atMs": 11018
+    },
+    {
+      "name": "return-to-project-tab",
+      "atMs": 39989
+    }
+  ]
+}

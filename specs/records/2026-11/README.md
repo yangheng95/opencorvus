@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [目录成员实际变化后刷新当前文件搜索](2026-11-13-explorer-search-observed-directory-change.md)
 - [资源管理器按当前规范化查询读取](2026-11-13-explorer-search-stable-query-source.md)
 - [在资源管理器中恢复历史目录读取](2026-11-12-explorer-history-folder-retry.md)
 - [让成员会话使用现有历史附件操作](2026-11-12-member-conversation-attachment-actions.md)
