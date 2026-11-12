@@ -1,0 +1,146 @@
+{
+  "before": {
+    "checks": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-project\\archive-review",
+        "requestID": "b07ad7de-3acc-4e24-8319-e26a5f4d859b",
+        "status": {
+          "alpha-files": {
+            "status": "connected"
+          },
+          "shared-tools": {
+            "status": "disabled"
+          }
+        },
+        "definitions": {
+          "alpha-files": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-project-primary.jsonl"
+            ]
+          },
+          "shared-tools": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-project-shared.jsonl"
+            ],
+            "enabled": false
+          }
+        }
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-alternate\\archive-review",
+        "requestID": "9a0f58f6-9cb8-4ef3-9536-703eed4e4f57",
+        "status": {
+          "beta-index": {
+            "status": "disconnected"
+          },
+          "shared-tools": {
+            "status": "disabled"
+          }
+        },
+        "definitions": {
+          "beta-index": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-alternate-primary.jsonl"
+            ]
+          },
+          "shared-tools": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-alternate-shared.jsonl"
+            ],
+            "enabled": false
+          }
+        }
+      }
+    ],
+    "pid": 33328,
+    "processAlive": true
+  },
+  "request": {
+    "time": "2026-11-12T03:24:33.994Z",
+    "stage": "request-body",
+    "route": "/mcp",
+    "method": "DELETE",
+    "round": "delete-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "names": [
+      "alpha-files",
+      "shared-tools"
+    ]
+  },
+  "receipt": {
+    "time": "2026-11-12T03:24:34.181Z",
+    "stage": "truncated",
+    "route": "/mcp",
+    "method": "DELETE",
+    "round": "delete-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "a959be38-2ca8-4637-9ab8-fa8eee253214",
+    "status": 200,
+    "bytes": 903,
+    "target": {
+      "mcp": {},
+      "$schema": "https://opencorvus.ai/config.json"
+    },
+    "deliveredBytes": 12
+  },
+  "checks": [
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-project\\archive-review",
+      "requestID": "7ffc53c1-5615-4993-b2c2-015322fccde6",
+      "status": {},
+      "definitions": {}
+    },
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-alternate\\archive-review",
+      "requestID": "aeebbc47-510e-4558-a030-f4145aedfb2b",
+      "status": {
+        "beta-index": {
+          "status": "disconnected"
+        },
+        "shared-tools": {
+          "status": "disabled"
+        }
+      },
+      "definitions": {
+        "beta-index": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-alternate-primary.jsonl"
+          ]
+        },
+        "shared-tools": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\baseline-alternate-shared.jsonl"
+          ],
+          "enabled": false
+        }
+      }
+    }
+  ],
+  "processExited": true
+}
