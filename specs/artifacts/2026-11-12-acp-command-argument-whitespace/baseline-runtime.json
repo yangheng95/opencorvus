@@ -1,0 +1,59 @@
+{
+  "sessionID": "ses_-zUPEe1BwzznzsbttfES",
+  "historyRequestID": "f2a5028d-9f13-4ed8-8a3f-35784bb65d68",
+  "turns": [
+    {
+      "rpcID": "b6161835-0c60-4e75-a39a-785e59e15912",
+      "prompt": [
+        {
+          "type": "text",
+          "text": "/editor_strict:strict_report 2026-11-21 \"field  guide\""
+        }
+      ],
+      "stopReason": "end_turn",
+      "inputMessageID": "msg_g0ValM4W2006EWy0O24s",
+      "replyMessageID": "msg_g0ValM4Zg00Fmsnhbsjf",
+      "finish": "stop",
+      "expanded": [
+        "Read the 2026-11-21 report for field guide."
+      ],
+      "literalInput": "/editor_strict:strict_report 2026-11-21 \"field guide\"",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": "Read the 2026-11-21 report for field guide."
+      }
+    },
+    {
+      "rpcID": "06108fbe-e968-4bee-88ca-b6398ed3af00",
+      "prompt": [
+        {
+          "type": "text",
+          "text": "/review-literal alpha  beta\nnext   line"
+        }
+      ],
+      "stopReason": "end_turn",
+      "inputMessageID": "msg_g0ValM73a00r5rkYoZlS",
+      "replyMessageID": "msg_g0ValM75g00gY7HqRwHQ",
+      "finish": "stop",
+      "expanded": [
+        "Argument body: <alpha beta next line>"
+      ],
+      "literalInput": "/review-literal alpha beta next line",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": "Argument body: <alpha beta next line>"
+      }
+    }
+  ],
+  "remote": {
+    "event": "prompt-request",
+    "name": "strict_report",
+    "arguments": {
+      "date": "2026-11-21",
+      "scope": "field guide"
+    }
+  },
+  "databaseQuickCheck": "ok"
+}
