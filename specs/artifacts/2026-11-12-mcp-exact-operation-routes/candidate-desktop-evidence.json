@@ -1,0 +1,216 @@
+{
+  "bundle": "assets/main-quk-fkXB.js",
+  "viewport": {
+    "width": 1266,
+    "height": 766
+  },
+  "mutations": [
+    {
+      "path": "/mcp/connect",
+      "side": "project",
+      "name": "",
+      "status": 200,
+      "requestID": "3dff28a1-24d6-4da0-a6a3-4b7170962c6e",
+      "body": true
+    },
+    {
+      "path": "/mcp/connect",
+      "side": "project",
+      "name": ".",
+      "status": 200,
+      "requestID": "5a74c825-67af-4479-8c66-d5d08c68f790",
+      "body": true
+    },
+    {
+      "path": "/mcp/connect",
+      "side": "project",
+      "name": "..",
+      "status": 200,
+      "requestID": "1e3c3372-5fe1-4777-a150-a70ec4d0c152",
+      "body": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "side": "project",
+      "name": "..",
+      "status": 200,
+      "requestID": "09460418-62b3-4ef6-a334-1f64fa15f1e6",
+      "body": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "side": "project",
+      "name": ".",
+      "status": 200,
+      "requestID": "568425a4-212a-4b80-81e9-eb4555abe916",
+      "body": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "side": "project",
+      "name": "",
+      "status": 200,
+      "requestID": "b371cfee-a362-4a74-a134-eeeea52af70f",
+      "body": true
+    },
+    {
+      "path": "/mcp/auth",
+      "side": "alternate",
+      "name": "",
+      "status": 200,
+      "requestID": "492e7280-9276-4db5-922a-66a7efb0f62f",
+      "authorizationPrepared": true
+    }
+  ],
+  "callback": {
+    "status": 200,
+    "language": "zh-CN",
+    "path": "/mcp/oauth/callback"
+  },
+  "independentReads": [
+    {
+      "phase": "connected",
+      "results": [
+        {
+          "side": "project",
+          "status": 200,
+          "requestID": "910bda50-0542-42b6-b599-ad0a1a904900",
+          "body": {
+            "": {
+              "status": "connected"
+            },
+            ".": {
+              "status": "connected"
+            },
+            "..": {
+              "status": "connected"
+            },
+            "segment/name": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "review-tools ": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "review-tools": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            }
+          }
+        },
+        {
+          "side": "alternate",
+          "status": 200,
+          "requestID": "adbdf8ec-b526-4782-8d9e-ceab52aa5c8d",
+          "body": {
+            "": {
+              "status": "needs_auth"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "restored",
+      "results": [
+        {
+          "side": "project",
+          "status": 200,
+          "requestID": "b0074978-e92c-4628-afd2-d6ca36616a63",
+          "body": {
+            "": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            ".": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "..": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "segment/name": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "review-tools ": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "review-tools": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            }
+          }
+        },
+        {
+          "side": "alternate",
+          "status": 200,
+          "requestID": "aeca05b7-c3ee-4117-9573-6fea85709905",
+          "body": {
+            "": {
+              "status": "needs_auth"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "browser-authorized",
+      "results": [
+        {
+          "side": "project",
+          "status": 200,
+          "requestID": "1d060b95-37ab-4121-83c4-ff5f57cbfe34",
+          "body": {
+            "": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            ".": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "..": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "segment/name": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "review-tools ": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            },
+            "review-tools": {
+              "status": "disabled",
+              "reason": "manual_disconnect"
+            }
+          }
+        },
+        {
+          "side": "alternate",
+          "status": 200,
+          "requestID": "5b4f63c3-d73f-42aa-aba2-6ffc68c52156",
+          "body": {
+            "": {
+              "status": "connected"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

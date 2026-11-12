@@ -13,6 +13,10 @@ const executionConnectionRequired = {
   content: { "application/json": { schema: resolver(MCP.ExecutionConnectionRequiredError.Schema) } },
 }
 
+const ConnectionName = z.strictObject({
+  name: z.string().describe("Exact MCP server name as stored in the configuration."),
+})
+
 export const McpRoutes = lazy(() => {
   const app = new Hono()
   return (
@@ -117,7 +121,7 @@ export const McpRoutes = lazy(() => {
       )
       // === auth ===
       .post(
-        "/:name/auth",
+        "/auth",
         describeRoute({
           summary: "Start MCP OAuth",
           description: "Start OAuth authentication flow for a Model Context Protocol (MCP) server. Accept-Language selects the callback page language.",
@@ -139,18 +143,19 @@ export const McpRoutes = lazy(() => {
             500: namedErrorResponse("MCP OAuth start failed", "UnknownError"),
           },
         }),
+        validator("json", ConnectionName),
         async (c) => {
-          const name = c.req.param("name")
+          const { name } = c.req.valid("json")
           const supportsOAuth = await MCP.supportsOAuth(name)
           if (!supportsOAuth) {
-            return c.json(badRequestBody(`MCP server ${name} does not support OAuth`), 400)
+            return c.json(badRequestBody(`MCP server ${JSON.stringify(name)} does not support OAuth`), 400)
           }
           const result = await MCP.startAuth(name, oauthPageLocale(c.req.header("accept-language")))
           return c.json(result)
         },
       )
       .post(
-        "/:name/auth/callback",
+        "/auth/callback",
         describeRoute({
           summary: "Complete MCP OAuth",
           description:
@@ -172,20 +177,19 @@ export const McpRoutes = lazy(() => {
         }),
         validator(
           "json",
-          z.object({
+          ConnectionName.extend({
             code: z.string().describe("Authorization code from OAuth callback"),
             state: z.string().describe("OAuth state parameter from OAuth callback"),
           }),
         ),
         async (c) => {
-          const name = c.req.param("name")
-          const { code, state } = c.req.valid("json")
+          const { name, code, state } = c.req.valid("json")
           const status = await MCP.finishAuthCallback(name, code, state)
           return c.json(status)
         },
       )
       .post(
-        "/:name/auth/authenticate",
+        "/auth/authenticate",
         describeRoute({
           summary: "Authenticate MCP OAuth",
           description: "Start OAuth flow and wait for callback (opens browser)",
@@ -203,18 +207,19 @@ export const McpRoutes = lazy(() => {
             500: namedErrorResponse("MCP OAuth completion failed", "UnknownError"),
           },
         }),
+        validator("json", ConnectionName),
         async (c) => {
-          const name = c.req.param("name")
+          const { name } = c.req.valid("json")
           const supportsOAuth = await MCP.supportsOAuth(name)
           if (!supportsOAuth) {
-            return c.json(badRequestBody(`MCP server ${name} does not support OAuth`), 400)
+            return c.json(badRequestBody(`MCP server ${JSON.stringify(name)} does not support OAuth`), 400)
           }
           const status = await MCP.authenticate(name)
           return c.json(status)
         },
       )
       .delete(
-        "/:name/auth",
+        "/auth",
         describeRoute({
           summary: "Remove MCP OAuth",
           description: "Remove OAuth credentials for an MCP server",
@@ -228,18 +233,19 @@ export const McpRoutes = lazy(() => {
                 },
               },
             },
-            ...errors(404, 500),
+            ...errors(400, 404, 500),
           },
         }),
+        validator("json", ConnectionName),
         async (c) => {
-          const name = c.req.param("name")
+          const { name } = c.req.valid("json")
           await MCP.removeAuth(name)
           return c.json({ success: true as const })
         },
       )
       // === connection ===
       .post(
-        "/:name/connect",
+        "/connect",
         describeRoute({
           description: "Connect an MCP server",
           operationId: "mcp.connect",
@@ -252,7 +258,7 @@ export const McpRoutes = lazy(() => {
                 },
               },
             },
-            ...errors(404),
+            ...errors(400, 404),
             409: {
               description: "MCP authorization is required or the connection is managed by its session or task",
               content: {
@@ -267,15 +273,15 @@ export const McpRoutes = lazy(() => {
             500: namedErrorResponse("MCP connection failed", "UnknownError"),
           },
         }),
-        validator("param", z.object({ name: z.string() })),
+        validator("json", ConnectionName),
         async (c) => {
-          const { name } = c.req.valid("param")
+          const { name } = c.req.valid("json")
           await MCP.connect(name)
           return c.json(true)
         },
       )
       .post(
-        "/:name/disconnect",
+        "/disconnect",
         describeRoute({
           description: "Disconnect an MCP server",
           operationId: "mcp.disconnect",
@@ -288,13 +294,13 @@ export const McpRoutes = lazy(() => {
                 },
               },
             },
-            ...errors(404),
+            ...errors(400, 404),
             409: executionConnectionRequired,
           },
         }),
-        validator("param", z.object({ name: z.string() })),
+        validator("json", ConnectionName),
         async (c) => {
-          const { name } = c.req.valid("param")
+          const { name } = c.req.valid("json")
           await MCP.disconnect(name)
           return c.json(true)
         },

@@ -1,0 +1,55 @@
+{
+  "status": 200,
+  "routes": [
+    {
+      "method": "post",
+      "path": "/mcp/connect",
+      "operationId": "mcp.connect",
+      "fields": [
+        "name"
+      ]
+    },
+    {
+      "method": "post",
+      "path": "/mcp/disconnect",
+      "operationId": "mcp.disconnect",
+      "fields": [
+        "name"
+      ]
+    },
+    {
+      "method": "post",
+      "path": "/mcp/auth",
+      "operationId": "mcp.auth.start",
+      "fields": [
+        "name"
+      ]
+    },
+    {
+      "method": "delete",
+      "path": "/mcp/auth",
+      "operationId": "mcp.auth.remove",
+      "fields": [
+        "name"
+      ]
+    },
+    {
+      "method": "post",
+      "path": "/mcp/auth/authenticate",
+      "operationId": "mcp.auth.authenticate",
+      "fields": [
+        "name"
+      ]
+    },
+    {
+      "method": "post",
+      "path": "/mcp/auth/callback",
+      "operationId": "mcp.auth.callback",
+      "fields": [
+        "name",
+        "code",
+        "state"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+{
+  "restart": [
+    {
+      "phase": "before-reconnect",
+      "results": [
+        {
+          "side": "project",
+          "status": 200,
+          "requestID": "a74d7a16-8195-4958-88d4-4eb570d82c98",
+          "body": {
+            "": {
+              "status": "disconnected"
+            },
+            ".": {
+              "status": "disconnected"
+            },
+            "..": {
+              "status": "disconnected"
+            },
+            "segment/name": {
+              "status": "disconnected"
+            },
+            "review-tools ": {
+              "status": "disconnected"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        },
+        {
+          "side": "alternate",
+          "status": 200,
+          "requestID": "4f876653-974a-40ae-9a88-6989059b6f10",
+          "body": {
+            "": {
+              "status": "disconnected"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "reconnect",
+      "response": {
+        "side": "alternate",
+        "path": "/mcp/connect",
+        "method": "POST",
+        "name": "",
+        "status": 200,
+        "requestID": "760752ad-b80f-4403-afff-a49cd1786eaf",
+        "body": true
+      },
+      "results": [
+        {
+          "side": "project",
+          "status": 200,
+          "requestID": "ca0899a5-9755-46d5-a7c6-d262330b0f73",
+          "body": {
+            "": {
+              "status": "disconnected"
+            },
+            ".": {
+              "status": "disconnected"
+            },
+            "..": {
+              "status": "disconnected"
+            },
+            "segment/name": {
+              "status": "disconnected"
+            },
+            "review-tools ": {
+              "status": "disconnected"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        },
+        {
+          "side": "alternate",
+          "status": 200,
+          "requestID": "e1fa5301-a663-4f8b-92f9-82f6b4c2bdb2",
+          "body": {
+            "": {
+              "status": "connected"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "cleanup",
+      "responses": [
+        {
+          "side": "alternate",
+          "path": "/mcp/auth",
+          "method": "DELETE",
+          "name": "",
+          "status": 200,
+          "requestID": "f4ca9172-ded5-4e7b-a474-ce31fef79a4f",
+          "body": {
+            "success": true
+          }
+        },
+        {
+          "side": "alternate",
+          "path": "/mcp/disconnect",
+          "method": "POST",
+          "name": "",
+          "status": 200,
+          "requestID": "29f0b4f4-567f-452f-9ef8-d3588b07f693",
+          "body": true
+        },
+        {
+          "side": "alternate",
+          "path": "/mcp/connect",
+          "method": "POST",
+          "name": "",
+          "status": 409,
+          "requestID": "abd13276-417d-4e77-89aa-84983833ff4d",
+          "body": {
+            "name": "MCPAuthorizationRequiredError",
+            "data": {
+              "mcpName": "",
+              "message": "MCP server  requires authorization"
+            }
+          }
+        }
+      ],
+      "results": [
+        {
+          "side": "project",
+          "status": 200,
+          "requestID": "ed5399e5-01ed-4e76-940c-524c206282da",
+          "body": {
+            "": {
+              "status": "disconnected"
+            },
+            ".": {
+              "status": "disconnected"
+            },
+            "..": {
+              "status": "disconnected"
+            },
+            "segment/name": {
+              "status": "disconnected"
+            },
+            "review-tools ": {
+              "status": "disconnected"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        },
+        {
+          "side": "alternate",
+          "status": 200,
+          "requestID": "c01ec53a-89b6-40f1-8ed0-401914d26fae",
+          "body": {
+            "": {
+              "status": "needs_auth"
+            },
+            "review-tools": {
+              "status": "disconnected"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "consentProtocol": [
+    {
+      "kind": "listening"
+    },
+    {
+      "kind": "authorization-required",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "kind": "authorization-required",
+      "method": "POST",
+      "status": 401
+    },
+    {
+      "kind": "approval-presented"
+    },
+    {
+      "kind": "authorization-issued"
+    },
+    {
+      "kind": "token-exchange",
+      "status": 200
+    },
+    {
+      "kind": "protocol",
+      "method": "POST",
+      "operation": "initialize"
+    },
+    {
+      "kind": "response",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "protocol",
+      "method": "POST",
+      "operation": "notifications/initialized"
+    },
+    {
+      "kind": "response",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "protocol",
+      "method": "GET"
+    },
+    {
+      "kind": "protocol",
+      "method": "POST",
+      "operation": "tools/list"
+    },
+    {
+      "kind": "response",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "protocol",
+      "method": "POST",
+      "operation": "initialize"
+    },
+    {
+      "kind": "response",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "protocol",
+      "method": "POST",
+      "operation": "notifications/initialized"
+    },
+    {
+      "kind": "response",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "protocol",
+      "method": "GET"
+    },
+    {
+      "kind": "protocol",
+      "method": "POST",
+      "operation": "tools/list"
+    },
+    {
+      "kind": "response",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-required",
+      "method": "POST",
+      "status": 401
+    }
+  ]
+}

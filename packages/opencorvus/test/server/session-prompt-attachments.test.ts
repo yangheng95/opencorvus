@@ -104,7 +104,11 @@ test("project MCP discovery returns shared resources and commands with execution
 
         const app = new Hono().route("/mcp", McpRoutes()).onError(serverErrorResponse)
         for (const [name, operation] of [["computer", "connect"], ["browser", "disconnect"]]) {
-          const response = await app.request(`/mcp/${name}/${operation}`, { method: "POST" })
+          const response = await app.request(`/mcp/${operation}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name }),
+          })
           expect(response.status).toBe(409)
           expect(await response.json()).toMatchObject({
             name: "MCPExecutionConnectionRequiredError",

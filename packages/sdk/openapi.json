@@ -89954,49 +89954,7 @@
         ]
       }
     },
-    "/mcp/project": {
-      "get": {
-        "description": "Get live status for MCP server definitions owned by the current project.",
-        "operationId": "mcp.project.status",
-        "parameters": [
-          {
-            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
-            "in": "query",
-            "name": "directory",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "$ref": "#/components/schemas/MCPStatus"
-                  },
-                  "propertyNames": {
-                    "type": "string"
-                  },
-                  "type": "object"
-                }
-              }
-            },
-            "description": "Project-owned MCP server status"
-          }
-        },
-        "summary": "Get project-owned MCP status",
-        "x-codeSamples": [
-          {
-            "lang": "js",
-            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.mcp.project.status({\n  ...\n})"
-          }
-        ]
-      }
-    },
-    "/mcp/{name}/auth": {
+    "/mcp/auth": {
       "delete": {
         "description": "Remove OAuth credentials for an MCP server",
         "operationId": "mcp.auth.remove",
@@ -90009,16 +89967,28 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "path",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "description": "Exact MCP server name as stored in the configuration.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -90038,6 +90008,16 @@
               }
             },
             "description": "OAuth credentials removed"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
           },
           "404": {
             "content": {
@@ -90121,16 +90101,28 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "path",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "description": "Exact MCP server name as stored in the configuration.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -90249,7 +90241,7 @@
         ]
       }
     },
-    "/mcp/{name}/auth/authenticate": {
+    "/mcp/auth/authenticate": {
       "post": {
         "description": "Start OAuth flow and wait for callback (opens browser)",
         "operationId": "mcp.auth.authenticate",
@@ -90262,16 +90254,28 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "path",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "description": "Exact MCP server name as stored in the configuration.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -90381,7 +90385,7 @@
         ]
       }
     },
-    "/mcp/{name}/auth/callback": {
+    "/mcp/auth/callback": {
       "post": {
         "description": "Complete OAuth authentication for a Model Context Protocol (MCP) server using the authorization code.",
         "operationId": "mcp.auth.callback",
@@ -90394,23 +90398,20 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "path",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
+                "additionalProperties": false,
                 "properties": {
                   "code": {
                     "description": "Authorization code from OAuth callback",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "Exact MCP server name as stored in the configuration.",
                     "type": "string"
                   },
                   "state": {
@@ -90419,6 +90420,7 @@
                   }
                 },
                 "required": [
+                  "name",
                   "code",
                   "state"
                 ],
@@ -90561,7 +90563,7 @@
         ]
       }
     },
-    "/mcp/{name}/connect": {
+    "/mcp/connect": {
       "post": {
         "description": "Connect an MCP server",
         "operationId": "mcp.connect",
@@ -90574,16 +90576,28 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "path",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "description": "Exact MCP server name as stored in the configuration.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -90594,6 +90608,16 @@
               }
             },
             "description": "MCP server connected successfully"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
           },
           "404": {
             "content": {
@@ -90699,7 +90723,7 @@
         ]
       }
     },
-    "/mcp/{name}/disconnect": {
+    "/mcp/disconnect": {
       "post": {
         "description": "Disconnect an MCP server",
         "operationId": "mcp.disconnect",
@@ -90712,16 +90736,28 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "path",
-            "name": "name",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "description": "Exact MCP server name as stored in the configuration.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {
@@ -90732,6 +90768,16 @@
               }
             },
             "description": "MCP server disconnected successfully"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
           },
           "404": {
             "content": {
@@ -90799,6 +90845,48 @@
           {
             "lang": "js",
             "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.mcp.disconnect({\n  ...\n})"
+          }
+        ]
+      }
+    },
+    "/mcp/project": {
+      "get": {
+        "description": "Get live status for MCP server definitions owned by the current project.",
+        "operationId": "mcp.project.status",
+        "parameters": [
+          {
+            "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+            "in": "query",
+            "name": "directory",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "$ref": "#/components/schemas/MCPStatus"
+                  },
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Project-owned MCP server status"
+          }
+        },
+        "summary": "Get project-owned MCP status",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.mcp.project.status({\n  ...\n})"
           }
         ]
       }

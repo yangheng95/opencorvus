@@ -58,6 +58,21 @@ function mcpPath(path: string, options: McpRequestOptions = {}): string {
   return directory ? `${path}?directory=${encodeURIComponent(directory)}` : path
 }
 
+function mcpNamedRequest(
+  path: "mcp/connect" | "mcp/disconnect" | "mcp/auth",
+  method: "POST" | "DELETE",
+  name: string,
+  options: McpRequestOptions,
+  headers?: Record<string, string>,
+): Promise<unknown> {
+  return apiJson(mcpPath(path, options), {
+    authority: options.authority,
+    method,
+    headers: { "Content-Type": "application/json", ...headers },
+    body: JSON.stringify({ name }),
+  })
+}
+
 export class McpArgumentQuoteError extends Error {
   override readonly name = "McpArgumentQuoteError"
 
@@ -195,10 +210,7 @@ export class InvalidMcpConnectionReceiptError extends Error {
 }
 
 async function changeMcpConnection(name: string, action: "connect" | "disconnect", options: McpRequestOptions): Promise<void> {
-  const result = await apiJson<unknown>(mcpPath(`mcp/${encodeURIComponent(name)}/${action}`, options), {
-    authority: options.authority,
-    method: "POST",
-  })
+  const result = await mcpNamedRequest(`mcp/${action}`, "POST", name, options)
   if (result !== true) throw new InvalidMcpConnectionReceiptError(action, name)
 }
 
@@ -226,11 +238,7 @@ export async function startMcpAuthorization(
   name: string,
   options: { directory: string; authority: ApiAuthority },
 ): Promise<{ kind: "connected" } | { kind: "authorize"; url: string }> {
-  const response = await apiJson<unknown>(mcpPath(`mcp/${encodeURIComponent(name)}/auth`, options), {
-    authority: options.authority,
-    method: "POST",
-    headers: { "Accept-Language": localeTag() },
-  })
+  const response = await mcpNamedRequest("mcp/auth", "POST", name, options, { "Accept-Language": localeTag() })
   if (isObjectRecord(response) && typeof response.authorizationUrl === "string") {
     if (response.authorizationUrl === "") return { kind: "connected" }
     try {
@@ -244,9 +252,7 @@ export async function startMcpAuthorization(
 
 /** Removes stored OAuth/auth credentials for an MCP server by name. */
 export async function removeMcpAuth(name: string, options: McpRequestOptions = {}): Promise<void> {
-  await apiJson(mcpPath(`mcp/${encodeURIComponent(name)}/auth`, options), {
-    method: "DELETE",
-  })
+  await mcpNamedRequest("mcp/auth", "DELETE", name, options)
 }
 
 export class InvalidMcpRemovalReceiptError extends Error {

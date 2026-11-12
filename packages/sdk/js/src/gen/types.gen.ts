@@ -24830,8 +24830,13 @@ export type McpAddResponses = {
 
 export type McpAddResponse = McpAddResponses[keyof McpAddResponses]
 
-export type McpProjectStatusData = {
-  body?: never
+export type McpAuthRemoveData = {
+  body: {
+    /**
+     * Exact MCP server name as stored in the configuration.
+     */
+    name: string
+  }
   path?: never
   query?: {
     /**
@@ -24839,35 +24844,14 @@ export type McpProjectStatusData = {
      */
     directory?: string
   }
-  url: "/mcp/project"
-}
-
-export type McpProjectStatusResponses = {
-  /**
-   * Project-owned MCP server status
-   */
-  200: {
-    [key: string]: McpStatus
-  }
-}
-
-export type McpProjectStatusResponse = McpProjectStatusResponses[keyof McpProjectStatusResponses]
-
-export type McpAuthRemoveData = {
-  body?: never
-  path: {
-    name: string
-  }
-  query?: {
-    /**
-     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
-     */
-    directory?: string
-  }
-  url: "/mcp/{name}/auth"
+  url: "/mcp/auth"
 }
 
 export type McpAuthRemoveErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
   /**
    * Not found
    */
@@ -24904,17 +24888,20 @@ export type McpAuthRemoveResponses = {
 export type McpAuthRemoveResponse = McpAuthRemoveResponses[keyof McpAuthRemoveResponses]
 
 export type McpAuthStartData = {
-  body?: never
-  path: {
+  body: {
+    /**
+     * Exact MCP server name as stored in the configuration.
+     */
     name: string
   }
+  path?: never
   query?: {
     /**
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
   }
-  url: "/mcp/{name}/auth"
+  url: "/mcp/auth"
 }
 
 export type McpAuthStartErrors = {
@@ -24966,17 +24953,20 @@ export type McpAuthStartResponses = {
 export type McpAuthStartResponse = McpAuthStartResponses[keyof McpAuthStartResponses]
 
 export type McpAuthAuthenticateData = {
-  body?: never
-  path: {
+  body: {
+    /**
+     * Exact MCP server name as stored in the configuration.
+     */
     name: string
   }
+  path?: never
   query?: {
     /**
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
   }
-  url: "/mcp/{name}/auth/authenticate"
+  url: "/mcp/auth/authenticate"
 }
 
 export type McpAuthAuthenticateErrors = {
@@ -25029,20 +25019,22 @@ export type McpAuthCallbackData = {
      */
     code: string
     /**
+     * Exact MCP server name as stored in the configuration.
+     */
+    name: string
+    /**
      * OAuth state parameter from OAuth callback
      */
     state: string
   }
-  path: {
-    name: string
-  }
+  path?: never
   query?: {
     /**
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
   }
-  url: "/mcp/{name}/auth/callback"
+  url: "/mcp/auth/callback"
 }
 
 export type McpAuthCallbackErrors = {
@@ -25096,20 +25088,27 @@ export type McpAuthCallbackResponses = {
 export type McpAuthCallbackResponse = McpAuthCallbackResponses[keyof McpAuthCallbackResponses]
 
 export type McpConnectData = {
-  body?: never
-  path: {
+  body: {
+    /**
+     * Exact MCP server name as stored in the configuration.
+     */
     name: string
   }
+  path?: never
   query?: {
     /**
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
   }
-  url: "/mcp/{name}/connect"
+  url: "/mcp/connect"
 }
 
 export type McpConnectErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
   /**
    * Not found
    */
@@ -25153,20 +25152,27 @@ export type McpConnectResponses = {
 export type McpConnectResponse = McpConnectResponses[keyof McpConnectResponses]
 
 export type McpDisconnectData = {
-  body?: never
-  path: {
+  body: {
+    /**
+     * Exact MCP server name as stored in the configuration.
+     */
     name: string
   }
+  path?: never
   query?: {
     /**
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
   }
-  url: "/mcp/{name}/disconnect"
+  url: "/mcp/disconnect"
 }
 
 export type McpDisconnectErrors = {
+  /**
+   * Bad request
+   */
+  400: BadRequestError
   /**
    * Not found
    */
@@ -25199,6 +25205,29 @@ export type McpDisconnectResponses = {
 }
 
 export type McpDisconnectResponse = McpDisconnectResponses[keyof McpDisconnectResponses]
+
+export type McpProjectStatusData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
+     */
+    directory?: string
+  }
+  url: "/mcp/project"
+}
+
+export type McpProjectStatusResponses = {
+  /**
+   * Project-owned MCP server status
+   */
+  200: {
+    [key: string]: McpStatus
+  }
+}
+
+export type McpProjectStatusResponse = McpProjectStatusResponses[keyof McpProjectStatusResponses]
 
 export type MissionListData = {
   body?: never

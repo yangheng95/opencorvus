@@ -1,0 +1,71 @@
+{
+  "anonymousToolLists": {
+    "/project/slash": 3,
+    "/project/empty": 3,
+    "/project/dot": 3,
+    "/project/dotdot": 3,
+    "/project/trailing": 2,
+    "/project/normal": 2
+  },
+  "finalSdkProvider": [
+    {
+      "kind": "listening"
+    },
+    {
+      "kind": "authorization-required",
+      "status": 401
+    },
+    {
+      "kind": "authorization-required",
+      "status": 401
+    },
+    {
+      "kind": "authorization-required",
+      "status": 401
+    },
+    {
+      "kind": "authorization-issued"
+    },
+    {
+      "kind": "token-exchange",
+      "status": 200
+    },
+    {
+      "kind": "protocol",
+      "operation": "initialize"
+    },
+    {
+      "kind": "response",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "protocol",
+      "operation": "notifications/initialized"
+    },
+    {
+      "kind": "response",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "protocol"
+    },
+    {
+      "kind": "protocol",
+      "operation": "tools/list"
+    },
+    {
+      "kind": "response",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-required",
+      "status": 401
+    },
+    {
+      "kind": "shutdown"
+    }
+  ]
+}

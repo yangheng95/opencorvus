@@ -273,8 +273,7 @@ describe("MCP OAuth finish from durable facts", () => {
     }
   }, 30_000)
 
-  test("a protected project reports the exact authorization requirement and retains the callback language", async () => {
-    const serverName = " protected review "
+  test.each([" protected review ", ""])("a protected project reports the exact authorization requirement for %j", async (serverName) => {
     await using project = await memoryProject()
     const { server } = startOAuthMcpServer({ requireAuthentication: true })
     try {
@@ -291,9 +290,10 @@ describe("MCP OAuth finish from durable facts", () => {
           },
         }),
       })
-      const headers = { "x-opencorvus-directory": project.path }
+      const headers = { "x-opencorvus-directory": project.path, "Content-Type": "application/json" }
       const app = Server.App()
-      const response = await app.request(`/mcp/${encodeURIComponent(serverName)}/connect`, { method: "POST", headers })
+      const body = JSON.stringify({ name: serverName })
+      const response = await app.request("/mcp/connect", { method: "POST", headers, body })
       expect(response.status).toBe(409)
       expect(await response.json()).toEqual({
         name: "MCPAuthorizationRequiredError",
@@ -302,9 +302,10 @@ describe("MCP OAuth finish from durable facts", () => {
       const status = await app.request("/mcp/project", { headers })
       expect(await status.json()).toEqual({ [serverName]: { status: "needs_auth" } })
 
-      const authorization = await app.request(`/mcp/${encodeURIComponent(serverName)}/auth`, {
+      const authorization = await app.request("/mcp/auth", {
         method: "POST",
         headers: { ...headers, "Accept-Language": "zh-CN" },
+        body,
       })
       expect(authorization.status).toBe(200)
       const authorize = new URL((await authorization.json() as { authorizationUrl: string }).authorizationUrl)
@@ -314,6 +315,58 @@ describe("MCP OAuth finish from durable facts", () => {
       const declined = await fetch(callback, { headers: { "Accept-Language": "en-US" } })
       expect({ status: declined.status, language: declined.headers.get("content-language") })
         .toEqual({ status: 400, language: "zh-CN" })
+    } finally {
+      Server.resetProjectRoutesAppForTest()
+      await Instance.disposeAll()
+      await server.stop(true)
+    }
+  }, 30_000)
+
+  test("project connection requests preserve empty and dot names in their bodies", async () => {
+    await using project = await memoryProject()
+    const { server } = startOAuthMcpServer()
+    try {
+      const remote = {
+        type: "remote", transport: "streamable-http", url: `http://127.0.0.1:${server.port}/mcp`, oauth: false,
+      } as const
+      await Instance.provide({
+        directory: project.path,
+        fn: () => Config.updateProjectPatch({ mcp: { "": remote, ".": remote, "..": remote } }),
+      })
+      const app = Server.App()
+      const headers = { "x-opencorvus-directory": project.path, "Content-Type": "application/json" }
+      const request = (path: string, body: object, method = "POST") =>
+        app.request(path, { method, headers, body: JSON.stringify(body) })
+      const read = async () => {
+        const response = await app.request("/mcp/project", { headers })
+        expect(response.status).toBe(200)
+        return await response.json() as Record<string, MCP.Status>
+      }
+      for (const name of ["", ".", ".."]) {
+        const connected = await request("/mcp/connect", { name })
+        expect(connected.status).toBe(200)
+        expect(await connected.json()).toBe(true)
+        expect((await read())[name]).toEqual({ status: "connected" })
+
+        const disconnected = await request("/mcp/disconnect", { name })
+        expect(disconnected.status).toBe(200)
+        expect(await disconnected.json()).toBe(true)
+        expect((await read())[name]).toEqual({ status: "disabled", reason: "manual_disconnect" })
+      }
+      const unsupported = await request("/mcp/auth/authenticate", { name: ".." })
+      expect(unsupported.status).toBe(400)
+      expect(await unsupported.json()).toMatchObject({
+        data: { message: 'MCP server ".." does not support OAuth' },
+      })
+      const cleared = await request("/mcp/auth", { name: "" }, "DELETE")
+      expect(cleared.status).toBe(200)
+      expect(await cleared.json()).toEqual({ success: true })
+
+      const missing = await request("/mcp/connect", {})
+      expect(missing.status).toBe(400)
+      expect(await missing.json()).toMatchObject({
+        success: false, error: [{ code: "invalid_type", path: ["name"] }],
+      })
     } finally {
       Server.resetProjectRoutesAppForTest()
       await Instance.disposeAll()

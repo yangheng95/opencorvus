@@ -1071,6 +1071,9 @@ Harness 中精确的 `default/mcp/computer/tool/*` refs 投影同一组平台工
 项目 MCP 连接的接入和发现只接纳项目所有的连接。保留名 `browser` 和 `computer` 在项目、有效及被动目录状态中报告
 `scope: execution`，其 `disabled` 或 `disconnected` 来自配置声明。项目 Connect/Disconnect 返回具名
 `MCPExecutionConnectionRequiredError` 409，执行连接仍由已获准的 Session 或 Task owner 建立。
+公开连接及授权操作在 `/mcp/connect`、`/mcp/disconnect`、`/mcp/auth`、`/mcp/auth/authenticate`、
+`/mcp/auth/callback` 的 JSON 请求体接受精确 `name`，空字符串表示真实的空名。手动完成授权另携带
+`code` 和 `state`，浏览器本地 redirect 仍由 `/mcp/oauth/callback` broker 按 state 管理。
 公开命令列表在请求租约内结算所有本地与 MCP 提示模板后发布字符串。单条命令执行按需等待同一提示解析，
 模板读取错误由当前请求所有者结算。
 

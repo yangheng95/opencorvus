@@ -293,21 +293,17 @@ describe("MCP overlay service", () => {
     setMcp({ docs: { status: "connected" }, filesystem: { status: "connected" } })
     const authority = captureApiAuthority()
 
-    expect(await connectMcp("docs", { directory: PROJECT_DIR, authority })).toBe("connected")
-    await disconnectMcp("docs", { directory: PROJECT_DIR, authority })
-    await removeMcpAuth("docs", { directory: PROJECT_DIR })
+    expect(await connectMcp("", { directory: PROJECT_DIR, authority })).toBe("connected")
+    await disconnectMcp("..", { directory: PROJECT_DIR, authority })
+    await removeMcpAuth("segment/name", { directory: PROJECT_DIR, authority })
     await deleteAllMcp({ directory: PROJECT_DIR, authority, names: ["docs", " filesystem ", ""] })
 
-    expect(requests.map((request) => [request.method, request.path, request.query?.directory])).toEqual([
-      ["POST", "mcp/docs/connect", PROJECT_DIR],
-      ["POST", "mcp/docs/disconnect", PROJECT_DIR],
-      ["DELETE", "mcp/docs/auth", PROJECT_DIR],
-      ["DELETE", "mcp", PROJECT_DIR],
+    expect(requests.map((request) => [request.method, request.path, request.query?.directory, request.body])).toEqual([
+      ["POST", "mcp/connect", PROJECT_DIR, { kind: "json", value: { name: "" } }],
+      ["POST", "mcp/disconnect", PROJECT_DIR, { kind: "json", value: { name: ".." } }],
+      ["DELETE", "mcp/auth", PROJECT_DIR, { kind: "json", value: { name: "segment/name" } }],
+      ["DELETE", "mcp", PROJECT_DIR, { kind: "json", value: { names: ["docs", " filesystem ", ""] } }],
     ])
-    expect(requests[3].body).toEqual({
-      kind: "json",
-      value: { names: ["docs", " filesystem ", ""] },
-    })
     expect(requests.map((request) => request.authority)).toEqual([authority, authority, authority, authority])
   })
 
@@ -380,9 +376,10 @@ describe("MCP overlay service", () => {
     expect(await startMcpAuthorization(" docs ", { directory: PROJECT_DIR, authority })).toEqual({ kind: "authorize", url })
     expect(requests[0]).toMatchObject({
       method: "POST",
-      path: "mcp/%20docs%20/auth",
+      path: "mcp/auth",
       query: { directory: PROJECT_DIR },
       authority,
+      body: { kind: "json", value: { name: " docs " } },
     })
   })
 
@@ -409,7 +406,10 @@ describe("MCP overlay service", () => {
       const error = await change("files", { directory: PROJECT_DIR, authority }).catch((cause: unknown) => cause)
       expect(error).toBeInstanceOf(InvalidMcpConnectionReceiptError)
       expect(error).toMatchObject({ action, serverName: "files" })
-      expect(requests[0]).toMatchObject({ method: "POST", path: `mcp/files/${action}`, query: { directory: PROJECT_DIR }, authority })
+      expect(requests[0]).toMatchObject({
+        method: "POST", path: `mcp/${action}`, query: { directory: PROJECT_DIR }, authority,
+        body: { kind: "json", value: { name: "files" } },
+      })
     },
   )
 })

@@ -399,13 +399,13 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | DELETE | `/mcp` | Remove project MCP servers Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.remove` |
 | GET | `/mcp` | Get MCP status | `mcp.status` |
 | POST | `/mcp` | Add MCP server Body: `config`, `credentialSecret`, `name`; Errors: `BadRequestError`. | `mcp.add` |
+| DELETE | `/mcp/auth` | Remove MCP OAuth Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.remove` |
+| POST | `/mcp/auth` | Start MCP OAuth Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.start` |
+| POST | `/mcp/auth/authenticate` | Authenticate MCP OAuth Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.authenticate` |
+| POST | `/mcp/auth/callback` | Complete MCP OAuth Body: `code`, `name`, `state`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MCPOAuthStateError`, `NotFoundError`, `UnknownError`. | `mcp.auth.callback` |
+| POST | `/mcp/connect` | (no summary) Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MCPAuthorizationRequiredError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`, `UnknownError`. | `mcp.connect` |
+| POST | `/mcp/disconnect` | (no summary) Body: `name`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`. | `mcp.disconnect` |
 | GET | `/mcp/project` | Get project-owned MCP status | `mcp.project.status` |
-| DELETE | `/mcp/{name}/auth` | Remove MCP OAuth Errors: `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.remove` |
-| POST | `/mcp/{name}/auth` | Start MCP OAuth Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.start` |
-| POST | `/mcp/{name}/auth/authenticate` | Authenticate MCP OAuth Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.authenticate` |
-| POST | `/mcp/{name}/auth/callback` | Complete MCP OAuth Body: `code`, `state`; Errors: `BadRequestError`, `LogFileNotFoundError`, `MCPOAuthStateError`, `NotFoundError`, `UnknownError`. | `mcp.auth.callback` |
-| POST | `/mcp/{name}/connect` | (no summary) Errors: `LogFileNotFoundError`, `MCPAuthorizationRequiredError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`, `UnknownError`. | `mcp.connect` |
-| POST | `/mcp/{name}/disconnect` | (no summary) Errors: `LogFileNotFoundError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`. | `mcp.disconnect` |
 
 ### Permission
 
