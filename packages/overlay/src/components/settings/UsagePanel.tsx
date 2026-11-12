@@ -1,11 +1,12 @@
 import { Disclosure } from "../ui/Disclosure"
 import { Feedback } from "../ui/Feedback"
-import { For, Show, createEffect, createMemo, createSignal, createUniqueId, onCleanup } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, createUniqueId, onCleanup, untrack } from "solid-js"
 
 import type { OfficialUsageSource, UsagePeriod, UsageStatistics } from "@opencorvus-ai/sdk"
 import type { KeyboardDelegate } from "@kobalte/core"
 import { createListState } from "@kobalte/core"
 
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { USAGE_PERIODS, UsagePeriodMismatchError, UsageServerVersionError, UsageTimeZoneMismatchError, loadUsageStatistics, userTimeZone } from "../../services/usage"
 import { useDisclosure } from "../../solid/disclosure"
 import { formatErrorDetails } from "../../utils/error-details"
@@ -411,37 +412,69 @@ function usageReadHelp(cause: unknown): string | undefined {
   if (cause instanceof UsageTimeZoneMismatchError) return t("usage.time_zone_mismatch")
 }
 
+type UsageRead = {
+  period: UsagePeriod
+  timeZone: string
+  authority: ApiAuthority
+  controller?: AbortController
+  cancelled?: boolean
+  data?: UsageStatistics
+  failure?: { cause: unknown }
+}
+
 export default function UsagePanel() {
   const [period, setPeriod] = createSignal<UsagePeriod>("year")
   const [revision, setRevision] = createSignal(0)
-  const [data, setData] = createSignal<UsageStatistics>()
-  const [loading, setLoading] = createSignal(true)
-  const [failure, setFailure] = createSignal<{ cause: unknown }>()
+  const [read, setRead] = createSignal<UsageRead>()
   const officialSourcesDisclosure = useDisclosure()
   const timeZone = userTimeZone()
   let refreshButton: HTMLButtonElement | undefined
+  let retryTrigger: HTMLButtonElement | undefined
+
+  const currentRead = createMemo(() => {
+    const result = read()
+    if (result?.period === period() && result.timeZone === timeZone && isApiAuthorityCurrent(result.authority)) return result
+  })
+  const data = () => currentRead()?.data
+  const loading = () => {
+    const result = currentRead()
+    return !result || !!result.controller
+  }
+  const failure = () => currentRead()?.failure
+  const cancelled = () => currentRead()?.cancelled
 
   const refreshUsage = (retryButton?: HTMLButtonElement) => {
     if (loading()) return
-    if (retryButton && document.activeElement === retryButton) refreshButton?.focus()
+    retryTrigger = document.activeElement === retryButton ? retryButton : undefined
     setRevision((value) => value + 1)
   }
 
+  const cancelUsage = () => {
+    const current = currentRead()
+    if (!current?.controller) return
+    const { controller, ...previous } = current
+    controller.abort()
+    retryTrigger = undefined
+    setRead({ ...previous, cancelled: true })
+  }
+
   createEffect(() => {
-    const requestedPeriod = period()
+    const scope = { period: period(), timeZone, authority: captureApiAuthority() }
     revision()
+    const previous = untrack(currentRead)
     const controller = new AbortController()
-    setLoading(true)
-    setFailure(undefined)
-    setData(undefined)
-    loadUsageStatistics({ period: requestedPeriod, timeZone, signal: controller.signal })
-      .then((result) => setData(result))
-      .catch((reason) => {
-        if (controller.signal.aborted) return
-        setFailure({ cause: reason })
+    const ownsRead = () => !controller.signal.aborted && isApiAuthorityCurrent(scope.authority)
+    if (!previous) retryTrigger = undefined
+    setRead({ ...scope, data: previous?.data, failure: previous?.failure, controller })
+    loadUsageStatistics({ ...scope, signal: controller.signal })
+      .then((result) => {
+        if (!ownsRead()) return
+        if (retryTrigger && document.activeElement === retryTrigger) refreshButton?.focus({ preventScroll: true })
+        retryTrigger = undefined
+        setRead({ ...scope, data: result })
       })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false)
+      .catch((cause) => {
+        if (ownsRead()) setRead({ ...scope, data: previous?.data, failure: { cause } })
       })
     onCleanup(() => controller.abort())
   })
@@ -470,7 +503,7 @@ export default function UsagePanel() {
           <Feedback
             tone="error"
             class="usage-error"
-            title={t("usage.load_failed")}
+            title={t(data() ? "usage.refresh_failed" : "usage.load_failed")}
             details={formatErrorDetails(current().cause)}
             actions={
               <Button
@@ -478,13 +511,16 @@ export default function UsagePanel() {
                 variant="outline"
                 size="sm"
                 tone="neutral"
+                aria-disabled={loading() || undefined}
+                aria-busy={loading() || undefined}
                 onClick={(event) => refreshUsage(event.currentTarget)}
               >
-                {t("usage.retry")}
+                {t(loading() ? "common.retrying" : "usage.retry")}
               </Button>
             }
           >
-            {usageReadHelp(current().cause)}
+            <Show when={data()}><p>{t("usage.last_confirmed_report")}</p></Show>
+            <Show when={usageReadHelp(current().cause)}>{(help) => <p>{help()}</p>}</Show>
           </Feedback>
         )}
       </Show>
@@ -524,6 +560,12 @@ export default function UsagePanel() {
               <span>{dateRange(resolved())}</span>
               <span>{resolved().timeZone}</span>
               <span>{comparisonLabel(resolved().comparison.tokensPercent)}</span>
+              <Show when={loading() && !failure()}>
+                <span role="status">{t("usage.refreshing_previous")}</span>
+              </Show>
+              <Show when={cancelled()}>
+                <span role="status">{t(failure() ? "usage.read_cancelled" : "usage.refresh_cancelled")}</span>
+              </Show>
             </div>
           </>
         )}
@@ -550,13 +592,11 @@ export default function UsagePanel() {
               variant="ghost"
               size="icon"
               tone="neutral"
-              aria-label={t("usage.refresh")}
-              title={t("usage.refresh")}
-              aria-disabled={loading() || undefined}
-              aria-busy={loading() || undefined}
-              onClick={() => refreshUsage()}
+              aria-label={t(loading() ? "usage.cancel_read" : "usage.refresh")}
+              title={t(loading() ? "usage.cancel_read" : "usage.refresh")}
+              onClick={() => loading() ? cancelUsage() : refreshUsage()}
             >
-              <Icon name={loading() ? "loading" : "refresh"} class={loading() ? "is-spinning" : undefined} />
+              <Icon name={loading() ? "close" : "refresh"} />
             </Button>
           </div>
         </header>
@@ -575,6 +615,9 @@ export default function UsagePanel() {
             <Icon name="loading" class="is-spinning" />
             <span>{t("usage.loading")}</span>
           </div>
+        </Show>
+        <Show when={cancelled() && !data()}>
+          <div class="usage-loading" role="status">{t("usage.read_cancelled")}</div>
         </Show>
       </section>
 

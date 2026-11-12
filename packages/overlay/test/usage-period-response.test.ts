@@ -9,13 +9,18 @@ import { loadUsageStatistics, UsagePeriodMismatchError, UsageTimeZoneMismatchErr
 
 afterEach(() => __setHostTransportForTest(undefined))
 
-function usageResponse(body: unknown) {
+function usageResponse(body: unknown, firstReadWaitsForAbort = false) {
   const requests: Array<Pick<TransportRequest, "path" | "query">> = []
   __setHostTransportForTest({
     kind: "browser",
     capabilities: HOST_CAPABILITIES.browser,
     async request<T>(request: TransportRequest): Promise<TransportResponse<T>> {
       requests.push({ path: request.path, query: request.query })
+      if (firstReadWaitsForAbort && requests.length === 1) {
+        const signal = request.signal
+        if (!signal) throw new Error("Usage read requires a cancellation signal")
+        return new Promise((_, reject) => signal.addEventListener("abort", () => reject(signal.reason), { once: true }))
+      }
       return { status: 200, ok: true, headers: {}, body: body as T }
     },
     openStream() {
@@ -57,4 +62,20 @@ test("the normalized requested time-zone identifier preserves a matching usage r
   const requests = usageResponse(accepted)
   expect(await loadUsageStatistics({ period: "day", timeZone: "  Etc/UTC  " })).toEqual(accepted)
   expect(requests).toEqual([{ path: "global/usage", query: { period: "day", timeZone: "Etc/UTC" } }])
+})
+
+test("canceling a usage read preserves the caller reason and allows a new read of the same range", async () => {
+  const caller = new AbortController()
+  const accepted = { period: "day", timeZone: "Asia/Shanghai", current: { start: 1, end: 2 }, buckets: [] }
+  const requests = usageResponse(accepted, true)
+  const scope = { period: "day", timeZone: "Asia/Shanghai" } as const
+  const result = loadUsageStatistics({ ...scope, signal: caller.signal })
+  const reason = new DOMException("The usage read was canceled", "AbortError")
+  caller.abort(reason)
+  expect(await result.catch((cause: unknown) => cause)).toBe(reason)
+  expect(await loadUsageStatistics({ ...scope, signal: new AbortController().signal })).toEqual(accepted)
+  expect(requests).toEqual([
+    { path: "global/usage", query: scope },
+    { path: "global/usage", query: scope },
+  ])
 })

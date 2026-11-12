@@ -1,0 +1,385 @@
+{
+  "accepted": [
+    {
+      "time": "2026-11-12T02:11:49.277Z",
+      "round": "today",
+      "stage": "delivered",
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "e73b54c8-59bc-421f-9df1-bcf0f0d104f4",
+      "status": 200,
+      "start": 1794412800000,
+      "end": 1794499200000,
+      "buckets": 24,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    },
+    {
+      "time": "2026-11-12T02:12:16.256Z",
+      "round": "refresh-late",
+      "stage": "delivered",
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "f9bffc2b-6e96-49fb-aa76-31a0e3aa6a8e",
+      "status": 200,
+      "start": 1794412800000,
+      "end": 1794499200000,
+      "buckets": 24,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    },
+    {
+      "time": "2026-11-12T02:12:36.967Z",
+      "round": "refresh-retry",
+      "stage": "delivered",
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "cd7949c9-f86c-49de-9d51-a8cbfcea6d9e",
+      "status": 200,
+      "start": 1794412800000,
+      "end": 1794499200000,
+      "buckets": 24,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    },
+    {
+      "time": "2026-11-12T02:12:51.059Z",
+      "round": "switch-to-week",
+      "stage": "delivered",
+      "period": "week",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "65362dc9-59bb-42a9-82d6-d08aaf0e5138",
+      "status": 200,
+      "start": 1794153600000,
+      "end": 1794758400000,
+      "buckets": 7,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    },
+    {
+      "time": "2026-11-12T02:13:02.859Z",
+      "round": "month-after-cancel",
+      "stage": "delivered",
+      "period": "month",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "10bbbda7-a6c4-4353-81d2-0abe20a89b14",
+      "status": 200,
+      "start": 1793462400000,
+      "end": 1796054400000,
+      "buckets": 30,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    },
+    {
+      "time": "2026-11-12T02:13:16.465Z",
+      "round": "zh-today",
+      "stage": "delivered",
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "fad29cfd-610f-4352-b844-75881c802032",
+      "status": 200,
+      "start": 1794412800000,
+      "end": 1794499200000,
+      "buckets": 24,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    },
+    {
+      "time": "2026-11-12T02:13:17.224Z",
+      "round": "zh-refresh-retry",
+      "stage": "delivered",
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "1fda974f-5bb5-41b8-bf3b-dc04d43a8e13",
+      "status": 200,
+      "start": 1794412800000,
+      "end": 1794499200000,
+      "buckets": 24,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    }
+  ],
+  "lateHeld": {
+    "time": "2026-11-12T02:11:59.985Z",
+    "round": "refresh-late",
+    "stage": "held",
+    "period": "day",
+    "timeZone": "Asia/Shanghai",
+    "requestID": "f9bffc2b-6e96-49fb-aa76-31a0e3aa6a8e",
+    "status": 200,
+    "start": 1794412800000,
+    "end": 1794499200000,
+    "buckets": 24,
+    "calls": 0,
+    "total": 0,
+    "costUSD": 0
+  },
+  "elapsedBeforeAcceptance": 16271,
+  "cancellations": [
+    {
+      "receipt": {
+        "time": "2026-11-12T02:12:26.716Z",
+        "round": "explicit-cancel",
+        "stage": "client-disconnected",
+        "period": "day",
+        "timeZone": "Asia/Shanghai",
+        "requestID": "51fdda84-3c66-43d5-ba81-3e17003e9092",
+        "status": 200,
+        "start": 1794412800000,
+        "end": 1794499200000,
+        "buckets": 24,
+        "calls": 0,
+        "total": 0,
+        "costUSD": 0
+      },
+      "duration": 115
+    },
+    {
+      "receipt": {
+        "time": "2026-11-12T02:12:50.680Z",
+        "round": "switch-to-week",
+        "stage": "client-disconnected",
+        "period": "day",
+        "timeZone": "Asia/Shanghai",
+        "requestID": "faaf1ea7-565b-4792-b198-7667dad595ad",
+        "status": 200,
+        "start": 1794412800000,
+        "end": 1794499200000,
+        "buckets": 24,
+        "calls": 0,
+        "total": 0,
+        "costUSD": 0
+      },
+      "duration": 20
+    },
+    {
+      "receipt": {
+        "time": "2026-11-12T02:12:51.594Z",
+        "round": "cancel-new-month",
+        "stage": "client-disconnected",
+        "period": "month",
+        "timeZone": "Asia/Shanghai",
+        "requestID": "2621a9e3-84e8-4aec-8b1e-2ccc8a9ea1b0",
+        "status": 200,
+        "start": 1793462400000,
+        "end": 1796054400000,
+        "buckets": 30,
+        "calls": 0,
+        "total": 0,
+        "costUSD": 0
+      },
+      "duration": 273
+    }
+  ],
+  "truncated": [
+    {
+      "time": "2026-11-12T02:12:26.952Z",
+      "round": "refresh-cut",
+      "stage": "truncated",
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "e5256046-ad17-4b55-90eb-24afddc660a8",
+      "status": 200,
+      "deliveredBytes": 12,
+      "start": 1794412800000,
+      "end": 1794499200000,
+      "buckets": 24,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    },
+    {
+      "time": "2026-11-12T02:13:16.646Z",
+      "round": "zh-refresh-cut",
+      "stage": "truncated",
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "requestID": "384e9df2-04dd-433f-b99e-c6dec12c2336",
+      "status": 200,
+      "deliveredBytes": 12,
+      "start": 1794412800000,
+      "end": 1794499200000,
+      "buckets": 24,
+      "calls": 0,
+      "total": 0,
+      "costUSD": 0
+    }
+  ],
+  "checks": [
+    {
+      "requestID": "803346bd-2ed4-43d7-9ee4-5b3ccf515e2e",
+      "summary": {
+        "period": "day",
+        "timeZone": "Asia/Shanghai",
+        "grain": "hour",
+        "start": 1794412800000,
+        "end": 1794499200000,
+        "summary": {
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0,
+          "averageTokensPerCall": 0,
+          "billing": {
+            "pricedTokens": 0,
+            "unpricedTokens": 0,
+            "unknownTokens": 0,
+            "percent": null
+          }
+        },
+        "buckets": 24,
+        "official": [
+          {
+            "id": "openai-organization",
+            "status": "unconfigured"
+          },
+          {
+            "id": "anthropic-organization",
+            "status": "unconfigured"
+          },
+          {
+            "id": "openrouter-account",
+            "status": "unconfigured"
+          },
+          {
+            "id": "aws-bedrock-control-plane",
+            "status": "requires_configuration"
+          },
+          {
+            "id": "azure-openai-control-plane",
+            "status": "requires_configuration"
+          },
+          {
+            "id": "vertex-ai-control-plane",
+            "status": "requires_configuration"
+          }
+        ]
+      }
+    },
+    {
+      "requestID": "24f80f3c-061f-4ffa-b420-fde558a5735f",
+      "summary": {
+        "period": "week",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "start": 1794153600000,
+        "end": 1794758400000,
+        "summary": {
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0,
+          "averageTokensPerCall": 0,
+          "billing": {
+            "pricedTokens": 0,
+            "unpricedTokens": 0,
+            "unknownTokens": 0,
+            "percent": null
+          }
+        },
+        "buckets": 7,
+        "official": [
+          {
+            "id": "openai-organization",
+            "status": "unconfigured"
+          },
+          {
+            "id": "anthropic-organization",
+            "status": "unconfigured"
+          },
+          {
+            "id": "openrouter-account",
+            "status": "unconfigured"
+          },
+          {
+            "id": "aws-bedrock-control-plane",
+            "status": "requires_configuration"
+          },
+          {
+            "id": "azure-openai-control-plane",
+            "status": "requires_configuration"
+          },
+          {
+            "id": "vertex-ai-control-plane",
+            "status": "requires_configuration"
+          }
+        ]
+      }
+    },
+    {
+      "requestID": "c1b3edca-c8ec-4dd0-bfe4-81f6564f5642",
+      "summary": {
+        "period": "month",
+        "timeZone": "Asia/Shanghai",
+        "grain": "day",
+        "start": 1793462400000,
+        "end": 1796054400000,
+        "summary": {
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "reasoning": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          },
+          "costUSD": 0,
+          "calls": 0,
+          "averageTokensPerCall": 0,
+          "billing": {
+            "pricedTokens": 0,
+            "unpricedTokens": 0,
+            "unknownTokens": 0,
+            "percent": null
+          }
+        },
+        "buckets": 30,
+        "official": [
+          {
+            "id": "openai-organization",
+            "status": "unconfigured"
+          },
+          {
+            "id": "anthropic-organization",
+            "status": "unconfigured"
+          },
+          {
+            "id": "openrouter-account",
+            "status": "unconfigured"
+          },
+          {
+            "id": "aws-bedrock-control-plane",
+            "status": "requires_configuration"
+          },
+          {
+            "id": "azure-openai-control-plane",
+            "status": "requires_configuration"
+          },
+          {
+            "id": "vertex-ai-control-plane",
+            "status": "requires_configuration"
+          }
+        ]
+      }
+    }
+  ]
+}

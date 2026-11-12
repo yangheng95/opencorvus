@@ -5815,6 +5815,12 @@ The usage reader checks that each response identifies the requested period
 and time zone before its aggregate can be presented. A different or missing
 identity uses the existing localized failure and retry surface, keeping the
 selected period and the original time-zone request.
+Refreshing the same usage scope retains the last confirmed report and marks it
+while the new read is pending, canceled or fails. Its original dates stay
+visible. A new period or API authority retires the previous report and cancels
+its active read. The refresh control offers explicit cancellation while reading
+the complete report, including any configured official sources. A retry keeps
+its diagnostic and button until the current scope accepts a new report.
 Its server identity uses compact inline chrome above the existing overview;
 the measured total has the primary typographic weight. Composition and Provider
 sections follow one vertical reading column when the canonical call count is

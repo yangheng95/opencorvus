@@ -1,6 +1,6 @@
 import type { UsagePeriod, UsageStatistics } from "@opencorvus-ai/sdk"
 
-import { ApiError, apiJson } from "./api"
+import { ApiError, apiJson, type ApiAuthority } from "./api"
 
 export type { UsagePeriod, UsageStatistics }
 
@@ -54,6 +54,7 @@ export async function loadUsageStatistics(input: {
   period: UsagePeriod
   timeZone?: string
   signal?: AbortSignal
+  authority?: ApiAuthority
 }): Promise<UsageStatistics> {
   const timeZone = (input.timeZone ?? userTimeZone()).trim()
   const query = new URLSearchParams({
@@ -61,7 +62,7 @@ export async function loadUsageStatistics(input: {
     timeZone,
   })
   try {
-    const result = await apiJson<UsageStatistics>(`/global/usage?${query}`, { signal: input.signal })
+    const result = await apiJson<UsageStatistics>(`/global/usage?${query}`, { signal: input.signal, authority: input.authority })
     if (result?.period !== input.period) throw new UsagePeriodMismatchError(input.period, result?.period)
     if (result.timeZone !== timeZone) throw new UsageTimeZoneMismatchError(timeZone, result.timeZone)
     return result
