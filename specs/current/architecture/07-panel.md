@@ -5703,6 +5703,9 @@ disconnect. Configuration-disabled rows use their standard disabled label.
 Execution-owned declarations identify their session or task scope on the
 project connection list. Their assignment remains accessible from the
 existing Chat and Work settings controls.
+When a mutation reply needs readback, the notice names any received HTTP
+status before reporting the separately observed project state. A reply that
+cannot confirm the operation uses the shared localized summary.
 The management header names the project used for these reads and actions. Its
 directory hint and expandable exact path are derived from that same scope;
 showing the header does not change the request context or select a project.

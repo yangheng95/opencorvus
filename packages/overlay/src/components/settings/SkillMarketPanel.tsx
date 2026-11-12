@@ -12,7 +12,7 @@ import { createStore } from "solid-js/store"
 import { Key } from "@solid-primitives/keyed"
 import type { McpProjectStatusResponse, SkillInstalledResponse } from "@opencorvus-ai/sdk"
 import { localeTag, t } from "../../utils/i18n"
-import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
+import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
   activeDirectory,
   pathRevealFailureText,
@@ -247,6 +247,11 @@ type SkillLibraryRead = SkillInventoryScope & {
 }
 
 const MCP_STATUS_REFRESH_INTERVAL_MS = 1_000
+
+function mcpReplySummary(cause: unknown): string {
+  if (cause instanceof ApiError) return t("mcp.reply_http_error", { status: cause.status })
+  return t("mcp.reply_unconfirmed")
+}
 
 interface FormSelectOption extends SelectFieldOption {}
 
@@ -629,6 +634,7 @@ function SharedResourceManagementPanel(props: {
           setPanelNotice(remaining.length ? "mcp.delete_targets_still_listed" : "mcp.delete_targets_absent", {
             tone: "warning",
             vars: () => ({
+              reply: mcpReplySummary(receiptFailure.cause),
               directory,
               count: new Intl.NumberFormat(localeTag()).format(names.length),
               remaining: new Intl.ListFormat(localeTag()).format(remaining.map((name) => JSON.stringify(name))),
@@ -639,7 +645,7 @@ function SharedResourceManagementPanel(props: {
           const reason = mcpReadFailure()?.error ?? new Error("Current project MCP status was unavailable.")
           setPanelNotice("mcp.delete_targets_unconfirmed", {
             tone: "warning",
-            vars: () => ({ directory }),
+            vars: () => ({ reply: mcpReplySummary(receiptFailure.cause), directory }),
             details: formatErrorDetails(new AggregateError(
               [receiptFailure.cause, reason],
               "The project MCP deletion reply and state could not be read",
@@ -682,6 +688,7 @@ function SharedResourceManagementPanel(props: {
           setPanelNotice("mcp.connection_state_observed", {
             tone: observed.status === (disconnect ? "disabled" : "connected") ? "success" : "warning",
             vars: () => ({
+              reply: mcpReplySummary(receiptFailure.cause),
               name,
               directory,
               status: mcpConnectionStatusLabel(observed.status, observed),
@@ -692,7 +699,7 @@ function SharedResourceManagementPanel(props: {
           const reason = mcpReadFailure()?.error ?? new Error(`Current project MCP status did not identify ${name}.`)
           setPanelNotice("mcp.connection_state_unconfirmed", {
             tone: "warning",
-            vars: () => ({ name, directory }),
+            vars: () => ({ reply: mcpReplySummary(receiptFailure.cause), name, directory }),
             details: formatErrorDetails(new AggregateError([receiptFailure.cause, reason], "MCP connection state could not be read")),
           })
         }
@@ -1056,10 +1063,11 @@ function SharedResourceManagementPanel(props: {
       if (receiptFailure) {
         if (status) {
           const observed = Object.hasOwn(status, name) ? status[name] : undefined
-          setPanelNotice(observed ? "mcp.add_state_observed" : "mcp.add_state_absent", {
+          setPanelNotice(observed ? "mcp.connection_state_observed" : "mcp.add_state_absent", {
             ...noticeOwner,
             tone: "warning",
             vars: () => ({
+              reply: mcpReplySummary(receiptFailure.cause),
               name,
               directory,
               status: observed
@@ -1073,7 +1081,7 @@ function SharedResourceManagementPanel(props: {
           setPanelNotice("mcp.add_state_unconfirmed", {
             ...noticeOwner,
             tone: "warning",
-            vars: () => ({ name, directory }),
+            vars: () => ({ reply: mcpReplySummary(receiptFailure.cause), name, directory }),
             details: formatErrorDetails(new AggregateError(
               [receiptFailure.cause, reason],
               "The project MCP add reply and state could not be read",

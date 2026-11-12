@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
+import { ApiError, captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import {
@@ -264,25 +264,40 @@ describe("MCP overlay service", () => {
   test("uses canonical project-scoped connection, auth, and removal routes", async () => {
     const requests: TransportRequest[] = []
     __setHostTransportForTest(fakeTransport((req) => requests.push(req), true))
-    setMcp({ browser: { status: "connected" }, filesystem: { status: "connected" } })
+    setMcp({ docs: { status: "connected" }, filesystem: { status: "connected" } })
     const authority = captureApiAuthority()
 
-    await connectMcp("browser", { directory: PROJECT_DIR, authority })
-    await disconnectMcp("browser", { directory: PROJECT_DIR, authority })
-    await removeMcpAuth("browser", { directory: PROJECT_DIR })
-    await deleteAllMcp({ directory: PROJECT_DIR, authority, names: ["browser", " filesystem ", ""] })
+    await connectMcp("docs", { directory: PROJECT_DIR, authority })
+    await disconnectMcp("docs", { directory: PROJECT_DIR, authority })
+    await removeMcpAuth("docs", { directory: PROJECT_DIR })
+    await deleteAllMcp({ directory: PROJECT_DIR, authority, names: ["docs", " filesystem ", ""] })
 
     expect(requests.map((request) => [request.method, request.path, request.query?.directory])).toEqual([
-      ["POST", "mcp/browser/connect", PROJECT_DIR],
-      ["POST", "mcp/browser/disconnect", PROJECT_DIR],
-      ["DELETE", "mcp/browser/auth", PROJECT_DIR],
+      ["POST", "mcp/docs/connect", PROJECT_DIR],
+      ["POST", "mcp/docs/disconnect", PROJECT_DIR],
+      ["DELETE", "mcp/docs/auth", PROJECT_DIR],
       ["DELETE", "mcp", PROJECT_DIR],
     ])
     expect(requests[3].body).toEqual({
       kind: "json",
-      value: { names: ["browser", " filesystem ", ""] },
+      value: { names: ["docs", " filesystem ", ""] },
     })
     expect(requests.map((request) => request.authority)).toEqual([authority, authority, authority, authority])
+  })
+
+  test("a complete connection error retains its HTTP status and request identity", async () => {
+    const body = { name: "UnknownError", data: { message: "The server did not connect." } }
+    const requestID = "connect-diagnostic-receipt"
+    __setHostTransportForTest({
+      ...fakeTransport(() => {}),
+      async request<T>(): Promise<TransportResponse<T>> {
+        return { status: 500, ok: false, headers: { "x-opencorvus-request-id": requestID }, body: body as T }
+      },
+    })
+    const authority = captureApiAuthority()
+    const error = await connectMcp("docs", { directory: PROJECT_DIR, authority }).catch((cause: unknown) => cause)
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error).toMatchObject({ status: 500, requestID, body, method: "POST" })
   })
 
   test.each([["connect", connectMcp], ["disconnect", disconnectMcp]] as const)(
