@@ -1,0 +1,217 @@
+{
+  "initial": [
+    {
+      "side": "project",
+      "requestID": "574069e9-3cee-417e-afcd-c1b3fce1074c",
+      "statuses": {
+        "review-oauth": {
+          "status": "disconnected"
+        },
+        " review-oauth ": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "requestID": "a66df8b7-4340-4146-b592-a3b79690c74a",
+      "statuses": {
+        "review-oauth": {
+          "status": "disconnected"
+        }
+      }
+    }
+  ],
+  "starts": [
+    {
+      "name": "review-oauth",
+      "side": "project",
+      "status": 200,
+      "requestID": "01e37d86-c27e-4830-8d11-3038e94a9be9"
+    },
+    {
+      "name": "review-oauth",
+      "side": "alternate",
+      "status": 200,
+      "requestID": "164d13e0-a2cb-49e1-9650-f0ff381b8dfc"
+    },
+    {
+      "name": " review-oauth ",
+      "side": "project",
+      "status": 200,
+      "requestID": "1dcb334c-eee1-453c-8846-b70baad0b45a"
+    }
+  ],
+  "durableKeys": [
+    "prj_hMxZSh77dhOtfVSjETOw:review-oauth",
+    "prj_h6buSQVnyrqkE7adEM7T:review-oauth"
+  ],
+  "originalTerminal": "superseded",
+  "aliasReplacedPrimary": true,
+  "otherStayedPending": true,
+  "callbacks": [
+    {
+      "name": "review-oauth",
+      "side": "project",
+      "status": 400,
+      "superseded": true
+    },
+    {
+      "name": " review-oauth ",
+      "side": "project",
+      "status": 200,
+      "superseded": false
+    },
+    {
+      "name": "review-oauth",
+      "side": "alternate",
+      "status": 200,
+      "superseded": false
+    }
+  ],
+  "status": [
+    {
+      "side": "project",
+      "requestID": "a8521c69-c8a1-43f8-905c-483194e81713",
+      "statuses": {
+        "review-oauth": {
+          "status": "connected"
+        },
+        " review-oauth ": {
+          "status": "needs_auth"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "requestID": "f8d601cf-5954-4cff-b63e-22c0e546d7d8",
+      "statuses": {
+        "review-oauth": {
+          "status": "connected"
+        }
+      }
+    }
+  ],
+  "final": {
+    "prj_hMxZSh77dhOtfVSjETOw:review-oauth": {
+      "hasTokens": true,
+      "terminals": [
+        "superseded",
+        "connected"
+      ]
+    },
+    "prj_h6buSQVnyrqkE7adEM7T:review-oauth": {
+      "hasTokens": true,
+      "terminals": [
+        "connected"
+      ]
+    }
+  },
+  "authRemoval": {
+    "requestedName": " review-oauth ",
+    "status": 200,
+    "requestID": "aa3e3587-8a07-4246-b49d-ed5b5350efc7",
+    "primaryStoredTokenBefore": true,
+    "primaryStoredTokenAfter": false,
+    "otherStoredTokenPreserved": true
+  },
+  "protocol": [
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.321Z"
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.327Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.399Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.455Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.464Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.475Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.506Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.571Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.613Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.617Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.624Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ]
+}

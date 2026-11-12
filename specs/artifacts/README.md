@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [MCP 授权确切连接名的真实桌面与协议证据](2026-11-12-mcp-oauth-exact-connection-name/README.md)
 - [批量删除精确回执的桌面与项目证据](2026-11-12-mcp-delete-exact-acknowledgment/README.md)
 - [新增 MCP 确切回执的桌面与实际请求](2026-11-12-mcp-add-exact-acknowledgment/README.md)
 - [MCP 操作回执和状态核对的实际证据](2026-11-12-mcp-mutation-reply-description/README.md)
