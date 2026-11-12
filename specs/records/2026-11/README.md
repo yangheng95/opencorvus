@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [定时规则摘要与精确下次运行](2026-11-12-scheduled-recurrence-readable-details.md)
 - [定时任务绑定会话的可见身份](2026-11-12-scheduled-conversation-target-identity.md)
 - [同名定时任务的项目辨认与确认](2026-11-12-scheduled-project-target-identity.md)
 - [定时任务删除回执与确认交互](2026-11-12-automation-delete-receipt.md)

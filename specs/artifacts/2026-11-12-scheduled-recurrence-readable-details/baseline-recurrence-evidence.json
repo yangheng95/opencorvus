@@ -1,0 +1,494 @@
+{
+  "setup": {
+    "project": {
+      "id": "prj_h9Vad2Pbzf89vFt0Pbkd",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b266\\baseline-project\\archive-review",
+      "time": {
+        "created": 1794444064147,
+        "updated": 1794444064147
+      },
+      "sandboxes": []
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b266\\baseline-project\\archive-review",
+    "seeds": [
+      {
+        "key": "daily",
+        "input": {
+          "name": "Daily London plan",
+          "recurrence": "DTSTART;TZID=Europe/London:20990101T093000\nRRULE:FREQ=DAILY",
+          "prompt": "Review the saved schedule.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_h9Vad2Pbzf89vFt0Pbkd"
+            ]
+          },
+          "requestID": "iteration-b266-baseline-daily"
+        },
+        "receipt": {
+          "id": "atm_heXKPKzxXr5RBERgeJq9",
+          "revisionId": "atm_heXKPKzxXr5RBERgeJq9",
+          "name": "Daily London plan",
+          "nextRun": 4070943000000
+        },
+        "requestID": "2feafafd-04df-4a92-9486-387dc5402e52"
+      },
+      {
+        "key": "weekdays",
+        "input": {
+          "name": "Weekday Shanghai plan",
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T173000\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+          "prompt": "Review the saved schedule.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_h9Vad2Pbzf89vFt0Pbkd"
+            ]
+          },
+          "requestID": "iteration-b266-baseline-weekdays"
+        },
+        "receipt": {
+          "id": "atm_hq2VIWnqsSPHrlsfThX9",
+          "revisionId": "atm_hq2VIWnqsSPHrlsfThX9",
+          "name": "Weekday Shanghai plan",
+          "nextRun": 4071288600000
+        },
+        "requestID": "7f225d98-c91d-4e5f-8e7f-eab41718ac0a"
+      },
+      {
+        "key": "weekly",
+        "input": {
+          "name": "Friday New York plan",
+          "recurrence": "DTSTART;TZID=America/New_York:20990102T160000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+          "prompt": "Review the saved schedule.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_h9Vad2Pbzf89vFt0Pbkd"
+            ]
+          },
+          "requestID": "iteration-b266-baseline-weekly"
+        },
+        "receipt": {
+          "id": "atm_hKrbaGQtfo0InmvO1ggc",
+          "revisionId": "atm_hKrbaGQtfo0InmvO1ggc",
+          "name": "Friday New York plan",
+          "nextRun": 4071070800000
+        },
+        "requestID": "9706f400-63c9-4559-a443-7300d5a4ea05"
+      },
+      {
+        "key": "once",
+        "input": {
+          "name": "One future occurrence",
+          "recurrence": "DTSTART:20990106T091500Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "prompt": "Review the saved schedule.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_h9Vad2Pbzf89vFt0Pbkd"
+            ]
+          },
+          "requestID": "iteration-b266-baseline-once"
+        },
+        "receipt": {
+          "id": "atm_hALn06B6IRud6tWv5ZYj",
+          "revisionId": "atm_hALn06B6IRud6tWv5ZYj",
+          "name": "One future occurrence",
+          "nextRun": 4071374100000
+        },
+        "requestID": "f2a1de17-1b99-4191-9007-bd7346d2c7ca"
+      },
+      {
+        "key": "advanced",
+        "input": {
+          "name": "Finite schedule with exceptions",
+          "recurrence": "DTSTART;TZID=America/New_York:20990102T083045\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=6\nEXDATE;TZID=America/New_York:20990102T083045\nEXDATE;TZID=America/New_York:20990105T083045",
+          "prompt": "Review the saved schedule.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_h9Vad2Pbzf89vFt0Pbkd"
+            ]
+          },
+          "requestID": "iteration-b266-baseline-advanced"
+        },
+        "receipt": {
+          "id": "atm_htBhdnLXkBwRYez4qYHB",
+          "revisionId": "atm_htBhdnLXkBwRYez4qYHB",
+          "name": "Finite schedule with exceptions",
+          "nextRun": 4071475845000
+        },
+        "requestID": "72c49151-ad96-4756-bdb4-a885ef609ca3"
+      }
+    ]
+  },
+  "list": {
+    "requestID": "55390cdf-d61f-49fd-b9b3-c5e19e25e45b",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_heXKPKzxXr5RBERgeJq9",
+        "revisionId": "atm_heXKPKzxXr5RBERgeJq9",
+        "name": "Daily London plan",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=Europe/London:20990101T093000\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070943000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hKrbaGQtfo0InmvO1ggc",
+        "revisionId": "atm_hKrbaGQtfo0InmvO1ggc",
+        "name": "Friday New York plan",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=America/New_York:20990102T160000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071070800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hq2VIWnqsSPHrlsfThX9",
+        "revisionId": "atm_hq2VIWnqsSPHrlsfThX9",
+        "name": "Weekday Shanghai plan",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T173000\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071288600000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hALn06B6IRud6tWv5ZYj",
+        "revisionId": "atm_hALn06B6IRud6tWv5ZYj",
+        "name": "One future occurrence",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART:20990106T091500Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071374100000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_htBhdnLXkBwRYez4qYHB",
+        "revisionId": "atm_htBhdnLXkBwRYez4qYHB",
+        "name": "Finite schedule with exceptions",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=America/New_York:20990102T083045\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=6\nEXDATE:20990102T133045Z,20990105T133045Z",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071475845000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "details": [
+    {
+      "key": "daily",
+      "row": {
+        "id": "atm_heXKPKzxXr5RBERgeJq9",
+        "revisionId": "atm_heXKPKzxXr5RBERgeJq9",
+        "name": "Daily London plan",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=Europe/London:20990101T093000\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070943000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "f3401185-e534-4f0e-a5a0-b4d97ed5f932",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_1b3dfd34493c72c50c59929cde379527",
+            "automationId": "atm_heXKPKzxXr5RBERgeJq9",
+            "automationRevisionId": "atm_heXKPKzxXr5RBERgeJq9",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070943000000,
+            "startedAt": 1794444064232,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "c93defdf-9ef3-467b-b1eb-126d4ac79928",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "key": "weekdays",
+      "row": {
+        "id": "atm_hq2VIWnqsSPHrlsfThX9",
+        "revisionId": "atm_hq2VIWnqsSPHrlsfThX9",
+        "name": "Weekday Shanghai plan",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T173000\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071288600000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "2cec7f73-b51b-490d-b5ae-faaece830b7a",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_76e9fd504cbc129312536a13ea785413",
+            "automationId": "atm_hq2VIWnqsSPHrlsfThX9",
+            "automationRevisionId": "atm_hq2VIWnqsSPHrlsfThX9",
+            "origin": "scheduled",
+            "scheduledDueAt": 4071288600000,
+            "startedAt": 1794444064242,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "2d42d64b-6256-4e3b-8dfe-ec6dda28d404",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "key": "weekly",
+      "row": {
+        "id": "atm_hKrbaGQtfo0InmvO1ggc",
+        "revisionId": "atm_hKrbaGQtfo0InmvO1ggc",
+        "name": "Friday New York plan",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=America/New_York:20990102T160000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071070800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "8676b140-11c2-4c07-905d-51b86ee20abe",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_2ccfdf76ab6459c919ed45c84cd7e46f",
+            "automationId": "atm_hKrbaGQtfo0InmvO1ggc",
+            "automationRevisionId": "atm_hKrbaGQtfo0InmvO1ggc",
+            "origin": "scheduled",
+            "scheduledDueAt": 4071070800000,
+            "startedAt": 1794444064249,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "0b52d516-4fbb-434d-a203-97855bd95abd",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "key": "once",
+      "row": {
+        "id": "atm_hALn06B6IRud6tWv5ZYj",
+        "revisionId": "atm_hALn06B6IRud6tWv5ZYj",
+        "name": "One future occurrence",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART:20990106T091500Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071374100000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "94665e4e-74cb-40bf-913a-81ffade6c188",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_98c4263ebe94fd46d3d5b3d4d931bea3",
+            "automationId": "atm_hALn06B6IRud6tWv5ZYj",
+            "automationRevisionId": "atm_hALn06B6IRud6tWv5ZYj",
+            "origin": "scheduled",
+            "scheduledDueAt": 4071374100000,
+            "startedAt": 1794444064256,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "eb4477a6-33a9-4b55-a843-bed0e0c77741",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "key": "advanced",
+      "row": {
+        "id": "atm_htBhdnLXkBwRYez4qYHB",
+        "revisionId": "atm_htBhdnLXkBwRYez4qYHB",
+        "name": "Finite schedule with exceptions",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_h9Vad2Pbzf89vFt0Pbkd"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART;TZID=America/New_York:20990102T083045\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=6\nEXDATE:20990102T133045Z,20990105T133045Z",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the saved schedule.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071475845000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "bf5acfb5-bc0f-48fc-9896-539ea0c8387b",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_18e2a41a1265299978b60b982e81f30e",
+            "automationId": "atm_htBhdnLXkBwRYez4qYHB",
+            "automationRevisionId": "atm_htBhdnLXkBwRYez4qYHB",
+            "origin": "scheduled",
+            "scheduledDueAt": 4071475845000,
+            "startedAt": 1794444064263,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "fa25f4a7-57e8-498e-80e8-3042d605b98b",
+        "status": 200,
+        "body": []
+      }
+    }
+  ]
+}
