@@ -1,0 +1,32 @@
+[
+  {
+    "side": "project",
+    "project": "prj_hnPK6cwvVGOVeXjYIh7e",
+    "status": "failed",
+    "error": {
+      "name": "ZodError",
+      "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"local_ref\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  }\n]",
+      "issues": [
+        {
+          "origin": "string",
+          "code": "too_small",
+          "minimum": 1,
+          "inclusive": true,
+          "path": [
+            "local_ref"
+          ],
+          "message": "Too small: expected string to have >=1 characters"
+        }
+      ]
+    }
+  },
+  {
+    "side": "alternate",
+    "project": "prj_hPtHjQ74Jh8FoudfHj3r",
+    "status": "failed",
+    "error": {
+      "name": "CapabilityCatalogContractError",
+      "message": "Capability catalog contains duplicate reference capability:mcp_server:project:mcp-config:review-tools."
+    }
+  }
+]

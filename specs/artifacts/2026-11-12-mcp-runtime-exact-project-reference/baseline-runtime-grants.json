@@ -1,0 +1,175 @@
+[
+  {
+    "side": "project",
+    "projectID": "prj_hnPK6cwvVGOVeXjYIh7e",
+    "configured": [
+      "review-tools",
+      " review-tools ",
+      "",
+      "browser",
+      "computer"
+    ],
+    "observations": [
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "includeMcpTools": true,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "includeMcpTools": true,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "includeMcpTools": true,
+        "status": "failed",
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"local_ref\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  }\n]",
+          "issues": [
+            {
+              "origin": "string",
+              "code": "too_small",
+              "minimum": 1,
+              "inclusive": true,
+              "path": [
+                "local_ref"
+              ],
+              "message": "Too small: expected string to have >=1 characters"
+            }
+          ]
+        }
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxImAzzPTm3l7pA6",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlvzzVEZwFnHOC",
+        "includeMcpTools": true,
+        "status": "failed",
+        "error": {
+          "name": "ZodError",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"local_ref\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  }\n]",
+          "issues": [
+            {
+              "origin": "string",
+              "code": "too_small",
+              "minimum": 1,
+              "inclusive": true,
+              "path": [
+                "local_ref"
+              ],
+              "message": "Too small: expected string to have >=1 characters"
+            }
+          ]
+        }
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlvzzVEZwFnHOC",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      }
+    ]
+  },
+  {
+    "side": "alternate",
+    "projectID": "prj_hPtHjQ74Jh8FoudfHj3r",
+    "configured": [
+      "review-tools",
+      " review-tools ",
+      "browser",
+      "computer"
+    ],
+    "observations": [
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "includeMcpTools": true,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "chat",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "includeMcpTools": true,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "work",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "includeMcpTools": true,
+        "status": "failed",
+        "error": {
+          "name": "Error",
+          "message": "Harness grants contain duplicate capability reference capability:mcp_server:project:mcp-config:review-tools."
+        }
+      },
+      {
+        "agentID": "coding",
+        "sessionID": "ses_-zUPFxIlPzzs0V6ajhA8",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlJzzNrSZV3Lof",
+        "includeMcpTools": true,
+        "status": "failed",
+        "error": {
+          "name": "Error",
+          "message": "Harness grants contain duplicate capability reference capability:mcp_server:project:mcp-config:review-tools."
+        }
+      },
+      {
+        "agentID": "mission",
+        "sessionID": "ses_-zUPFxIlJzzNrSZV3Lof",
+        "includeMcpTools": false,
+        "status": "resolved",
+        "mcpRefs": []
+      }
+    ]
+  }
+]

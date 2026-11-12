@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [执行目录和授权保留项目连接原始名称](records/2026-11/2026-11-12-mcp-runtime-exact-project-reference.md)
 - [连接分配校验请求中的原始名称](records/2026-11/2026-11-12-mcp-assignment-name-validation.md)
 - [MCP 连接行提供桌面授权入口](records/2026-11/2026-11-12-mcp-desktop-authorization-entry.md)
 - [MCP 授权必须绑定项目中的确切连接名称](records/2026-11/2026-11-12-mcp-oauth-exact-connection-name.md)
