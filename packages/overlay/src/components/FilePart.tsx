@@ -76,6 +76,7 @@ export type MessageFilePart = {
 }
 
 export type FilePartPresentation = "content" | "thumbnail" | "composer-thumbnail"
+export type FilePartMessageRole = "user" | "assistant"
 
 export function messageAttachmentDisplayLabel(
   part: MessageFilePart,
@@ -130,7 +131,12 @@ function compactFileType(name: string, mime: string): string {
   return mime
 }
 
-export function FilePart(props: { part: MessageFilePart; presentation?: FilePartPresentation; displayLabel?: string }) {
+export function FilePart(props: {
+  part: MessageFilePart
+  presentation?: FilePartPresentation
+  messageRole?: FilePartMessageRole
+  displayLabel?: string
+}) {
   const url = () => props.part.url || ""
   const name = () => props.part.filename || url() || "file"
   const label = () => props.displayLabel ?? name()
@@ -139,9 +145,10 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   const authed = () => needsAuthedFetch(url())
   const thumbnail = () => props.presentation === "thumbnail" || props.presentation === "composer-thumbnail"
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
-  const folderReference = () => props.presentation === "thumbnail" &&
+  const userHistory = () => props.messageRole === "user"
+  const folderReference = () => userHistory() &&
     (mimeOf(props.part) === LOCAL_DIRECTORY_REFERENCE_MIME || mimeOf(props.part) === DIRECTORY_REFERENCE_MIME)
-  const historicalText = () => props.presentation === "thumbnail" && url() && kind() === "other" &&
+  const historicalText = () => userHistory() && url() && kind() === "other" &&
     isDecodableText(mimeOf(props.part), props.part.filename)
 
   return (

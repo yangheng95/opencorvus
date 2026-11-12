@@ -54,6 +54,7 @@ import { projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
+import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
@@ -982,6 +983,19 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       ownsExplorerOperation(request)
     if (!ownsReveal()) return
     pendingFocus = undefined
+    const origin = request.origin
+    const ownerDocument = origin.ownerDocument
+    let focusOrigin: Element = origin
+    const dock = origin.closest<HTMLElement>("#rightDock")
+    const focused = ownerDocument.activeElement
+    // The attachment can sit inside the Dock tab that Explorer just replaced.
+    // Reserve focus on the visible Dock tab before waiting for directory reads.
+    if (request.focusWasOnOrigin && dock && origin.closest('[data-workbench-view][data-active="false"]') &&
+      (focused === origin || focused === ownerDocument.body)) {
+      restoreRightDockFocus(dock, origin)
+      const restored = ownerDocument.activeElement
+      if (restored && dock.contains(restored)) focusOrigin = restored
+    }
     setQuery("")
     const ancestors = [""]
     let target: FileListingNode | undefined
@@ -1009,9 +1023,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       if (target) setSingleSelection(selectionFromNode(target))
       else clearSelection()
     })
-    if (document.activeElement !== request.origin) return
+    if (ownerDocument.activeElement !== focusOrigin) return
     const row = target && rows().find((entry) => entry.kind === "node" && entry.node.path === target.path)
-    if (row) focusRow(row, request.origin)
+    if (row) focusRow(row, focusOrigin)
     else searchInput?.focus({ preventScroll: true })
   }
 

@@ -251,6 +251,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
       parts={userPartPartition().body}
       attachmentParts={props.node.parts}
       filePresentation={isUser() ? "thumbnail" : "content"}
+      fileMessageRole={isUser() ? "user" : "assistant"}
       collapsedContextMessageIDs={props.node.collapsedContextMessageIDs}
       depth={props.depth}
       streaming={props.node.status === "running"}
@@ -333,7 +334,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
                 <Show when={userPartPartition().images.length > 0}>
                   <div class="chat-bubble__image-strip" data-ui="message-image-attachment-strip">
                     <For each={userPartPartition().images}>
-                      {(part) => <FilePart part={part} presentation="thumbnail" displayLabel={messageAttachmentDisplayLabel(part, props.node.parts)} />}
+                      {(part) => <FilePart part={part} presentation="thumbnail" messageRole="user" displayLabel={messageAttachmentDisplayLabel(part, props.node.parts)} />}
                     </For>
                   </div>
                 </Show>

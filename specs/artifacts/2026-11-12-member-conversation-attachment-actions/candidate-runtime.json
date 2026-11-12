@@ -1,0 +1,359 @@
+{
+  "equalHistoricalRows": {
+    "session": 4,
+    "message": 28,
+    "part": 82
+  },
+  "downloadBytesEqualToOriginals": {
+    "text": 55,
+    "folderReference": 156,
+    "image": 100
+  },
+  "isolatedParticipant": [
+    {
+      "route": "/v1/chat/completions",
+      "model": "local",
+      "stream": true
+    },
+    {
+      "route": "/v1/chat/completions",
+      "model": "local",
+      "stream": true
+    }
+  ],
+  "earlyCandidate": {
+    "bundle": "/ui/assets/main-CBBR7Nat.js",
+    "child": {
+      "requestID": "1232e903-ef07-4b7e-a84a-6bcd414a8f98",
+      "status": 200,
+      "sessions": [
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz900UaTNCFwxM",
+          "agentID": "coding",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz9023CirQuu46",
+          "agentID": "coding",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz904zdDhmRZpp",
+          "agentID": "coding",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_g0VallCz906eZWs8391D",
+          "agentID": "coding",
+          "status": "unobserved"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_836c1c83-e386-4994-b9dc-b6084f0d5b2b",
+          "agentID": "coding",
+          "status": "idle"
+        },
+        {
+          "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+          "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+          "executionID": "msg_d712e6f9-f41f-4e62-bb1f-30c6365ffa9e",
+          "agentID": "coding",
+          "status": "idle"
+        }
+      ],
+      "keys": [
+        "board",
+        "pendingQuestions",
+        "resolvedQuestions",
+        "pendingPermissions",
+        "transcript",
+        "events",
+        "view",
+        "turnArtifacts",
+        "agentView",
+        "history"
+      ]
+    },
+    "textRead": {
+      "status": 200,
+      "requestID": "bbc525ab-fb7d-4069-8d9b-798463641c96",
+      "content": "Recorded attachment text.\r\nMember transcript fixture.\r\n"
+    },
+    "textDownload": {
+      "name": "member notes.txt",
+      "bytes": 55,
+      "matchesOriginal": true
+    },
+    "folderDownload": {
+      "name": "notes archive.json",
+      "bytes": 156,
+      "matchesOriginal": true
+    },
+    "storedFolder": {
+      "status": 200,
+      "requestID": "6a5ed4c1-f44f-491e-846c-7a6e2e539582",
+      "path": "/file",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "beforeFocusFix": {
+      "tag": "BODY",
+      "isBody": true,
+      "role": null
+    },
+    "localFile": {
+      "status": 200,
+      "requestID": "ec9bbf44-de04-46d3-8b08-7d35f8c40072",
+      "path": "/file/source-content",
+      "body": {
+        "type": "text",
+        "content": "Daily summary\r\nValve A42 photographed.\r\nScope is limited to the east wing.\r\nFollow-up after review.\r\n"
+      }
+    },
+    "imageDownload": {
+      "name": "sample panel.png",
+      "bytes": 100,
+      "matchesOriginal": true
+    },
+    "localFolder": {
+      "status": 200,
+      "requestID": "8c6d3884-ee9c-49a5-9a59-45e4ee36a67f",
+      "path": "/file",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    }
+  },
+  "finalCandidate": {
+    "responses": [
+      {
+        "path": "/ui/assets/main-C8FxTOq6.js",
+        "query": "",
+        "status": 200,
+        "requestID": "fc8bd049-121b-4f47-b006-414d6043ae0c"
+      },
+      {
+        "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/conversation",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&tail_limit=80",
+        "status": 200,
+        "requestID": "12b3921a-2a60-451d-8b72-bb822e96a778"
+      },
+      {
+        "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/config",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review",
+        "status": 200,
+        "requestID": "bfb71022-ef6b-4da8-91a4-36f36158bce2"
+      },
+      {
+        "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+        "query": "?variant=screenshot-browser-thumbnail",
+        "status": 200,
+        "requestID": "437df12f-f47f-4263-b7f4-61befd27cfc1"
+      },
+      {
+        "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/config",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review",
+        "status": 200,
+        "requestID": "c38c34d8-2d77-4a18-9833-dff2b98744e9"
+      },
+      {
+        "path": "/session/ses_-zUPEEn0tzzlIJbkt2OE/conversation",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&tail_limit=2000",
+        "status": 200,
+        "requestID": "629f44ab-a61f-4895-838a-9f24b6956644"
+      },
+      {
+        "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+        "query": "",
+        "status": 200,
+        "requestID": "6ce7c3f9-58f7-455c-8a25-e8cf16fc0c09"
+      },
+      {
+        "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/a8e386fccb55406987a9255df3a27304fd7cd2582a6730592495f5e6dc4f6e23.directory.json",
+        "query": "",
+        "status": 200,
+        "requestID": "05fc4db8-69ce-4ffe-8d76-6fe0f43385d7"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=",
+        "status": 200,
+        "requestID": null
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=notes+archive",
+        "status": 200,
+        "requestID": null
+      },
+      {
+        "path": "/file/content",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=notes+archive%2Fmemo.txt",
+        "status": 200,
+        "requestID": null
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=",
+        "status": 200,
+        "requestID": "ab8cc61f-661d-4d87-a13d-64e8d7a851ec"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=notes+archive",
+        "status": 200,
+        "requestID": "24356b83-41ae-42fc-97e5-2a68374e84d9"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=",
+        "status": 200,
+        "requestID": "750bfdc6-4557-4b98-bcff-158ca88b428f"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=notes+archive",
+        "status": 200,
+        "requestID": "a1bd7f86-1e84-4c45-bef4-baac23f7efc3"
+      },
+      {
+        "path": "/session/ses_-zUPEEn0tzzlIJbkt2OE/conversation",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&tail_limit=2000",
+        "status": 200,
+        "requestID": "86575aad-0d8b-4ae8-b81d-bfef1c7e964a"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=",
+        "status": 200,
+        "requestID": "5d52a8b4-5046-47c3-857f-7883e8f8bf3b"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=notes+archive",
+        "status": 200,
+        "requestID": "6b86809b-1721-4a9e-a99a-70d3daa55ef0"
+      },
+      {
+        "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/d2e6ba08cbfb9e74a25deea70b6ae0fecb7c66c716f1b356b694c61c1e0c3942.txt",
+        "query": "",
+        "status": 200,
+        "requestID": "47a42ad8-0398-4e71-86ff-a353d242b15d"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=",
+        "status": 200,
+        "requestID": "73d229d2-1ab6-46f5-a24f-0c9205971974"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=notes+archive",
+        "status": 200,
+        "requestID": "2b07a0c7-ef51-4e1c-a034-00b4c3f9bb9b"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=in&type=file&limit=81",
+        "status": 200,
+        "requestID": "de6019b5-9598-4b1b-b94d-981e224b3f94"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=inspe&type=file&limit=81",
+        "status": 200,
+        "requestID": "fc2dbc7e-635b-4ca1-a3a3-59acb40acb16"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=inspection&type=file&limit=81",
+        "status": 200,
+        "requestID": "aa7116ef-6e31-413a-ae29-1e42071a92ff"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=in&type=file&limit=81",
+        "status": 200,
+        "requestID": "02ce2569-9eda-4fae-88dc-17e204e80919"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=inspe&type=file&limit=81",
+        "status": 200,
+        "requestID": "1746e329-a75b-4ab0-8271-4b112dc0d485"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=in&type=file&limit=81",
+        "status": 200,
+        "requestID": "e914798b-f227-4a2f-853f-35050512c1ed"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=inspe&type=file&limit=81",
+        "status": 200,
+        "requestID": "e1e24e9a-e8e9-4864-bee6-645f244004f5"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=in&type=file&limit=81",
+        "status": 200,
+        "requestID": "799d8db5-177a-4255-945d-54d60fde8bea"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=inspe&type=file&limit=81",
+        "status": 200,
+        "requestID": "677e6386-87d9-4cb8-9fdf-91862769a682"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=inspe&type=file&limit=81",
+        "status": 200,
+        "requestID": "2064933e-bda1-408c-82d2-89d66f319957"
+      },
+      {
+        "path": "/find/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&query=inspe&type=file&limit=81",
+        "status": 200,
+        "requestID": "8b02208d-c075-43a8-b0f1-6f6f947cbf77"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=",
+        "status": 200,
+        "requestID": "f0ab183b-b45a-4acd-862f-64be8f6b75f9"
+      },
+      {
+        "path": "/file",
+        "query": "?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&path=notes+archive",
+        "status": 200,
+        "requestID": "f9eb335e-7bc4-4707-922c-3172f9bfe6cf"
+      }
+    ]
+  }
+}

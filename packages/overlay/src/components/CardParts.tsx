@@ -10,7 +10,13 @@ import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
 import { PermissionRequestContent } from "./PermissionRequestContent"
 import { QuestionRequestContent } from "./QuestionRequestContent"
-import { FilePart, messageAttachmentDisplayLabel, type FilePartPresentation, type MessageFilePart } from "./FilePart"
+import {
+  FilePart,
+  messageAttachmentDisplayLabel,
+  type FilePartMessageRole,
+  type FilePartPresentation,
+  type MessageFilePart,
+} from "./FilePart"
 import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
 import { selectedConversationDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
@@ -90,6 +96,7 @@ function RenderableCardPart(props: {
   streaming?: boolean
   streamingTextPart?: any
   filePresentation?: FilePartPresentation
+  fileMessageRole?: FilePartMessageRole
   renderNestedCard: (node: CardNode, depth: number) => JSX.Element
 }) {
   const part = () => props.part
@@ -117,7 +124,12 @@ function RenderableCardPart(props: {
         </div>
       </Match>
       <Match when={part()?.type === "file"}>
-        <FilePart part={part()} presentation={props.filePresentation} displayLabel={props.attachmentLabel(part())} />
+        <FilePart
+          part={part()}
+          presentation={props.filePresentation}
+          messageRole={part().fileMessageRole ?? props.fileMessageRole}
+          displayLabel={props.attachmentLabel(part())}
+        />
       </Match>
       <Match when={part()?.type === "interactive-artifact"}>
         <InteractiveArtifactPart part={part()} />
@@ -167,6 +179,7 @@ interface PartCollectionProps {
   streamingTextPart?: any
   collapseWorkDetails?: boolean
   filePresentation?: FilePartPresentation
+  fileMessageRole?: FilePartMessageRole
   renderNestedCard: (node: CardNode, depth: number) => JSX.Element
   turnArtifacts?: NonNullable<CardNode["turnArtifacts"]>
 }
@@ -250,6 +263,7 @@ function BodyParts(props: PartCollectionProps) {
                     streaming={props.streaming}
                     streamingTextPart={props.streamingTextPart}
                     filePresentation={props.filePresentation}
+                    fileMessageRole={props.fileMessageRole}
                     renderNestedCard={props.renderNestedCard}
                   />
                 )}
@@ -391,6 +405,7 @@ function ExecutionEventRun(props: PartCollectionProps) {
                           depth={props.depth}
                           streaming={props.streaming}
                           filePresentation={props.filePresentation}
+                          fileMessageRole={props.fileMessageRole}
                           renderNestedCard={props.renderNestedCard}
                         />
                       }>

@@ -546,6 +546,8 @@ export function projectSubagentConversationCard(
   const failedMessageIDs = new Set(messageFailures.map((failure) => failure.messageID))
   const parts: any[] = []
   for (const [index, message] of messages.entries()) {
+    const role = message.info.role
+    const fileMessageRole = role === "user" || role === "assistant" ? role : undefined
     if (index > 0 || failedMessageIDs.has(message.messageID)) {
       parts.push({
         type: "boundary",
@@ -560,6 +562,7 @@ export function projectSubagentConversationCard(
         ...part,
         messageID: String(part.messageID || message.messageID),
         sessionID: String(part.sessionID || message.sessionID),
+        ...(part.type === "file" ? { fileMessageRole } : {}),
       })
     }
   }

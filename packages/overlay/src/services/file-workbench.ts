@@ -68,6 +68,7 @@ export interface FileExplorerFolderRequest {
   selectionEpoch: number
   path: string
   origin: HTMLButtonElement
+  focusWasOnOrigin: boolean
   onUnavailable: (error?: unknown) => void
 }
 
@@ -76,7 +77,7 @@ export { fileExplorerFolderRequest }
 let folderRequestSequence = 0
 
 export async function revealFileExplorerFolder(
-  scope: Omit<FileExplorerFolderRequest, "path">,
+  scope: Omit<FileExplorerFolderRequest, "path" | "focusWasOnOrigin">,
   resolvePath: () => string | Promise<string>,
   ownsSource: () => boolean,
 ): Promise<"requested" | "outside-project" | "superseded"> {
@@ -87,7 +88,11 @@ export async function revealFileExplorerFolder(
   if (!isAbsoluteServerPath(target)) throw new TypeError("Invalid absolute folder reference")
   const path = relativePathFrom(scope.directory, target)
   if (!path && projectDirectoryKey(scope.directory) !== projectDirectoryKey(target)) return "outside-project"
-  setFileExplorerFolderRequest({ ...scope, path })
+  setFileExplorerFolderRequest({
+    ...scope,
+    path,
+    focusWasOnOrigin: scope.origin.ownerDocument.activeElement === scope.origin,
+  })
   return "requested"
 }
 
