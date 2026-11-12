@@ -1,0 +1,137 @@
+{
+  "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+  "createdRequestID": "9687df3b-d1ff-4670-9feb-bb9b61b23a3d",
+  "historyRequestID": "b6aad4ac-cff1-4d07-a520-2b102017b8f5",
+  "model": {
+    "providerID": "acp-review",
+    "modelID": "local"
+  },
+  "occurrences": [
+    {
+      "key": "range",
+      "messageID": "msg_c9bc81c9d381450dfd",
+      "requestID": "155e78e7-f68c-443d-ba39-b8b95fc50d98",
+      "finish": "stop",
+      "parts": [
+        {
+          "id": "prt_g0ValhfnV00tIjT3h8Zo",
+          "orderKey": "v1:0001794492981634:0000000000000031:0000000000000000:part:prt_g0ValhfnV00tIjT3h8Zo",
+          "type": "text",
+          "text": "Review only the selected inspection lines.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+            "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+          }
+        },
+        {
+          "id": "prt_g0ValhfnV01DLMSIAlpN",
+          "orderKey": "v1:0001794492981636:0000000000000031:0000000000000000:part:prt_g0ValhfnV01DLMSIAlpN",
+          "type": "text",
+          "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\inspection notes.txt\",\"offset\":2,\"limit\":2}"
+        },
+        {
+          "id": "prt_g0ValhfnV02dN0yCMQ8V",
+          "orderKey": "v1:0001794492981637:0000000000000031:0000000000000000:part:prt_g0ValhfnV02dN0yCMQ8V",
+          "type": "text",
+          "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\inspection notes.txt</path>\n<type>file</type>\n<content>2: Valve A42 photographed.\n3: Scope is limited to the east wing.\n\n(Showing lines 2-3 of 4. Use offset=4 to continue.)\n</content>"
+        },
+        {
+          "id": "prt_g0ValhfnV03XCT3ywoei",
+          "orderKey": "v1:0001794492981638:0000000000000031:0000000000000000:part:prt_g0ValhfnV03XCT3ywoei",
+          "type": "file",
+          "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/inspection%20notes.txt?start=2&end=3",
+          "filename": "inspection notes.txt",
+          "mime": "text/plain"
+        }
+      ]
+    },
+    {
+      "key": "folder",
+      "messageID": "msg_20f8386e8bdb3296d8",
+      "requestID": "a861ae2c-4010-4607-a4fe-b37ae2dcdb73",
+      "finish": "stop",
+      "parts": [
+        {
+          "id": "prt_g0Valhg2f00GVvqWMcvi",
+          "orderKey": "v1:0001794492982567:0000000000000031:0000000000000000:part:prt_g0Valhg2f00GVvqWMcvi",
+          "type": "text",
+          "text": "Review the referenced notes archive.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+            "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+          }
+        },
+        {
+          "id": "prt_g0Valhg2f01ekkTVKVSR",
+          "orderKey": "v1:0001794492982568:0000000000000031:0000000000000000:part:prt_g0Valhg2f01ekkTVKVSR",
+          "type": "text",
+          "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\notes archive\"}"
+        },
+        {
+          "id": "prt_g0Valhg2f02iHNl6tXWL",
+          "orderKey": "v1:0001794492982569:0000000000000031:0000000000000000:part:prt_g0Valhg2f02iHNl6tXWL",
+          "type": "text",
+          "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive</path>\n<type>directory</type>\n<entries>\nmemo.txt\n\n(1 entries)\n</entries>"
+        },
+        {
+          "id": "prt_g0Valhg2f03ut4LyH5Gh",
+          "orderKey": "v1:0001794492982570:0000000000000031:0000000000000000:part:prt_g0Valhg2f03ut4LyH5Gh",
+          "type": "file",
+          "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/notes%20archive",
+          "filename": "notes archive",
+          "mime": "application/x-directory"
+        }
+      ]
+    },
+    {
+      "key": "binary",
+      "messageID": "msg_959d47fbe3e37b0bd5",
+      "requestID": "254f3899-171d-491c-b656-ecd8c54d2640",
+      "finish": "stop",
+      "parts": [
+        {
+          "id": "prt_g0ValhgDJ00tFxNNJL0n",
+          "orderKey": "v1:0001794492983228:0000000000000031:0000000000000000:part:prt_g0ValhgDJ00tFxNNJL0n",
+          "type": "text",
+          "text": "Review the attached panel image.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+            "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+          }
+        },
+        {
+          "id": "prt_g0ValhgDJ01olIusSWBs",
+          "orderKey": "v1:0001794492983229:0000000000000031:0000000000000000:part:prt_g0ValhgDJ01olIusSWBs",
+          "type": "text",
+          "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\sample panel.png\"}"
+        },
+        {
+          "id": "prt_g0ValhgDJ02UKouBE0l9",
+          "orderKey": "v1:0001794492983230:0000000000000031:0000000000000000:part:prt_g0ValhgDJ02UKouBE0l9",
+          "type": "file",
+          "url": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+          "filename": "sample panel.png",
+          "mime": "image/png"
+        }
+      ]
+    },
+    {
+      "key": "control",
+      "messageID": "msg_f88261601213d5f7a1",
+      "requestID": "cede6992-dfa2-49dd-8a04-511266d56fe0",
+      "finish": "stop",
+      "parts": [
+        {
+          "id": "prt_g0ValhgNL00RSfy4XB7q",
+          "orderKey": "v1:0001794492983849:0000000000000031:0000000000000000:part:prt_g0ValhgNL00RSfy4XB7q",
+          "type": "text",
+          "text": "Host-provided file context (not a model tool call): this sentence was typed directly by the user.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+            "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+          }
+        }
+      ]
+    }
+  ]
+}

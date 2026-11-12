@@ -1,0 +1,70 @@
+{
+  "range": {
+    "model": "acp-review/local",
+    "stream": true,
+    "route": "/v1/chat/completions",
+    "content": [
+      {
+        "type": "text",
+        "text": "Review only the selected inspection lines."
+      },
+      {
+        "type": "text",
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\inspection notes.txt\",\"offset\":2,\"limit\":2}"
+      },
+      {
+        "type": "text",
+        "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\inspection notes.txt</path>\n<type>file</type>\n<content>2: Valve A42 photographed.\n3: Scope is limited to the east wing.\n\n(Showing lines 2-3 of 4. Use offset=4 to continue.)\n</content>"
+      }
+    ]
+  },
+  "folder": {
+    "model": "acp-review/local",
+    "stream": true,
+    "route": "/v1/chat/completions",
+    "content": [
+      {
+        "type": "text",
+        "text": "Review the referenced notes archive."
+      },
+      {
+        "type": "text",
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\notes archive\"}"
+      },
+      {
+        "type": "text",
+        "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive</path>\n<type>directory</type>\n<entries>\nmemo.txt\n\n(1 entries)\n</entries>"
+      }
+    ]
+  },
+  "binary": {
+    "model": "acp-review/local",
+    "stream": true,
+    "route": "/v1/chat/completions",
+    "content": [
+      {
+        "type": "text",
+        "text": "Review the attached panel image."
+      },
+      {
+        "type": "text",
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\sample panel.png\"}"
+      },
+      {
+        "type": "image_url",
+        "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg=="
+      }
+    ]
+  },
+  "control": {
+    "model": "acp-review/local",
+    "stream": true,
+    "route": "/v1/chat/completions",
+    "content": [
+      {
+        "type": "text",
+        "text": "Host-provided file context (not a model tool call): this sentence was typed directly by the user."
+      }
+    ]
+  }
+}
