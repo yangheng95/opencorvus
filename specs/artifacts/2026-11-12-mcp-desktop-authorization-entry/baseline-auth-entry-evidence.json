@@ -1,0 +1,33 @@
+{
+  "uiConnect": {
+    "status": 500,
+    "requestID": "ee78df71-f13c-464e-ae83-5f984d392b05"
+  },
+  "status": [
+    {
+      "side": "project",
+      "requestID": "dcd4cc6b-5d5d-4770-a2f3-9f7685171bbf",
+      "statuses": {
+        "review-oauth": {
+          "status": "needs_auth"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "requestID": "eb61951e-809c-4253-84d3-68e7d4f784ec",
+      "statuses": {
+        "review-oauth": {
+          "status": "disconnected"
+        }
+      }
+    }
+  ],
+  "authorizedStart": {
+    "status": 200,
+    "requestID": "004a9877-8692-4533-a387-77425133cad4",
+    "issuer": "http://127.0.0.1:39911",
+    "path": "/authorize",
+    "statePresent": true
+  }
+}

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [MCP 连接行提供桌面授权入口](records/2026-11/2026-11-12-mcp-desktop-authorization-entry.md)
 - [MCP 授权必须绑定项目中的确切连接名称](records/2026-11/2026-11-12-mcp-oauth-exact-connection-name.md)
 - [批量删除 MCP 回执核对已确认的精确目标](records/2026-11/2026-11-12-mcp-delete-exact-acknowledgment.md)
 - [新增 MCP 回执必须包含所提交服务的有效状态](records/2026-11/2026-11-12-mcp-add-exact-acknowledgment.md)
