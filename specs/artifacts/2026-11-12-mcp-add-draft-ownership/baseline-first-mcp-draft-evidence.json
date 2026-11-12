@@ -1,0 +1,83 @@
+{
+  "actions": [
+    {
+      "request": {
+        "time": "2026-11-12T02:47:25.358Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-first",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "draft-first",
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\baseline-first-process.jsonl"
+        ]
+      },
+      "receipt": {
+        "time": "2026-11-12T02:47:25.948Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "add-first",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "e949b50d-5f94-4828-a793-5c1033f2e576",
+        "status": 200,
+        "bytes": 111,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "draft-first": {
+            "status": "connected"
+          }
+        }
+      },
+      "process": {
+        "pid": 35124,
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\baseline-project\\archive-review",
+        "at": 1794451645772
+      }
+    }
+  ],
+  "projectChecks": [
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\baseline-project\\archive-review",
+      "requestID": "30a15515-7b04-4c20-8417-25405b31c5f6",
+      "status": {
+        "draft-first": {
+          "status": "connected"
+        }
+      },
+      "definitions": {
+        "draft-first": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\baseline-first-process.jsonl"
+          ]
+        }
+      }
+    },
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b273\\baseline-alternate\\archive-review",
+      "requestID": "4dcd0f20-dfc8-4e2e-b4e9-203c159112d7",
+      "status": {},
+      "definitions": {}
+    }
+  ]
+}

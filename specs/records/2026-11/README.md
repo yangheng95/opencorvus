@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [新增 MCP 连接保留提交期间的草稿](2026-11-12-mcp-add-draft-ownership.md)
 - [MCP 连接回执中断后核对原项目状态](2026-11-12-mcp-connection-status-after-interrupted-receipt.md)
 - [用量刷新保留已确认报表并可取消](2026-11-12-usage-refresh-confirmed-report.md)
 - [对话快照读取期限和重试诊断](2026-11-12-conversation-snapshot-read-deadline.md)
