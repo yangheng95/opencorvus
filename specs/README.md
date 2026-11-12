@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [新增 MCP 表单用当前语言指出需要修正的字段](records/2026-11/2026-11-12-mcp-add-field-validation.md)
 - [新增 MCP 回执中断后保留草稿和当前项目观察结果](records/2026-11/2026-11-12-mcp-add-interrupted-receipt.md)
 - [批量删除 MCP 回执中断后读取原项目状态](records/2026-11/2026-11-12-mcp-bulk-delete-interrupted-receipt.md)
 - [批量删除 MCP 连接按精确项目与名称确认](records/2026-11/2026-11-12-mcp-bulk-delete-exact-targets.md)
