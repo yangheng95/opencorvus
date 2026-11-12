@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { pathToFileURL } from "node:url"
 import {
   AgentSideConnection,
   ClientSideConnection,
@@ -620,6 +621,58 @@ test("ACP registered commands preserve embedded context and canonical image byte
   const [forkedInput, forkedReply] = await env.messages(forked.sessionId)
   expect(forkedReply.info).toMatchObject({ role: "assistant", parentID: forkedInput.info.id, finish: "stop" })
   expect(replayedUserContent(forkCursor, forked.sessionId)).toMatchObject(userContent(forkedInput.info.id))
+}, 60_000)
+
+test("ACP file attachments preserve display names and source selections", async () => {
+  await using env = await environment()
+  const cwd = env.project.path
+  const sessionId = await env.create("normal")
+  const imageName = "视图 %20 #1.png"
+  const image =
+    "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg=="
+  const notesName = "计划 50% #1.txt"
+  const notes = "Original attached text.\n"
+  const editorUri = new URL("zed://file/")
+  editorUri.searchParams.set("path", path.join(cwd, notesName))
+  const sourcePath = path.join(cwd, "source notes.txt")
+  await fs.writeFile(sourcePath, "First source row.\nSecond source row.\nThird source row.\n")
+  const source = pathToFileURL(sourcePath)
+  source.searchParams.set("start", "2")
+  source.searchParams.set("end", "2")
+  const explicitName = "保留 %20 标签.txt"
+
+  expect(await env.client.prompt({ sessionId, prompt: [
+    { type: "text", text: "Read the attached files." },
+    { type: "image", mimeType: "image/png", data: image, uri: `file:///editor/${encodeURIComponent(imageName)}?side=client` },
+    { type: "resource", resource: { mimeType: "text/plain", uri: editorUri.href, blob: Buffer.from(notes).toString("base64") } },
+    { type: "resource_link", name: explicitName, mimeType: "text/plain", uri: source.href },
+  ] })).toMatchObject({ stopReason: "end_turn" })
+  const [input, reply] = await env.messages(sessionId)
+  expect(reply.info).toMatchObject({ role: "assistant", parentID: input.info.id, finish: "stop" })
+  const files = input.parts.filter((part) => part.type === "file")
+  expect(files.map(({ filename, mime }) => ({ filename, mime }))).toEqual([
+    { filename: imageName, mime: "image/png" },
+    { filename: notesName, mime: "text/plain" },
+    { filename: explicitName, mime: "text/plain" },
+  ])
+  expect(files[2].url).toBe(source.href)
+  expect(input.parts).toContainEqual(expect.objectContaining({ type: "text", text: expect.stringContaining("2: Second source row.") }))
+  const { data: session } = await env.sdk.session.get({ sessionID: sessionId, directory: cwd }, { throwOnError: true })
+  for (const [file, original] of [[files[0], Buffer.from(image, "base64")], [files[1], Buffer.from(notes)]] as const) {
+    const stored = await AttachmentStore.readVerifiedReference({ projectID: session.projectID, url: file.url, mime: file.mime })
+    expect(stored.bytes).toEqual(original)
+  }
+
+  const cursor = env.updates.length
+  await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
+  const replay = env.updates.slice(cursor).flatMap(({ update }) =>
+    update.sessionUpdate === "user_message_chunk" ? [update] : [],
+  )
+  expect(replay).toEqual(expect.arrayContaining([
+    expect.objectContaining({ messageId: input.info.id, content: expect.objectContaining({ type: "image", data: image }) }),
+    expect.objectContaining({ messageId: input.info.id, content: expect.objectContaining({ type: "resource", resource: expect.objectContaining({ text: notes }) }) }),
+    expect.objectContaining({ messageId: input.info.id, content: expect.objectContaining({ type: "resource_link", name: explicitName, uri: source.href }) }),
+  ]))
 }, 60_000)
 
 test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {

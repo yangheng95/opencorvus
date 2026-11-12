@@ -29,7 +29,8 @@ import {
 } from "@agentclientprotocol/sdk"
 
 import { Log } from "../util/log"
-import { pathToFileURL } from "bun"
+import { posix } from "node:path"
+import { pathToFileURL } from "node:url"
 import { ACPSessionManager } from "./session"
 import { acpCompactionResponse, acpPromptResponse } from "./prompt-response"
 import type { ACPConfig, ACPSessionState } from "./types"
@@ -1789,39 +1790,24 @@ export namespace ACP {
     uri: string,
   ): { type: "file"; url: string; filename: string; mime: string } | { type: "text"; text: string } {
     try {
-      if (uri.startsWith("file://")) {
-        const path = uri.slice(7)
-        const name = path.split("/").pop() || path
+      let fileUri = uri
+      if (uri.startsWith("zed://")) {
+        const editorPath = new URL(uri).searchParams.get("path")
+        if (editorPath) fileUri = pathToFileURL(editorPath).href
+      }
+      if (fileUri.startsWith("file://")) {
+        const pathname = new URL(fileUri).pathname
         return {
           type: "file",
-          url: uri,
-          filename: name,
+          url: fileUri,
+          filename: decodeURIComponent(posix.basename(pathname)),
           mime: "text/plain",
         }
       }
-      if (uri.startsWith("zed://")) {
-        const url = new URL(uri)
-        const path = url.searchParams.get("path")
-        if (path) {
-          const name = path.split("/").pop() || path
-          return {
-            type: "file",
-            url: pathToFileURL(path).href,
-            filename: name,
-            mime: "text/plain",
-          }
-        }
-      }
-      return {
-        type: "text",
-        text: uri,
-      }
     } catch {
-      return {
-        type: "text",
-        text: uri,
-      }
+      // A URI that cannot be interpreted as a file remains literal text.
     }
+    return { type: "text", text: uri }
   }
 
   function isHttpUri(uri: string): boolean {

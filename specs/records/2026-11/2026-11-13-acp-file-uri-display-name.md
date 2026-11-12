@@ -4,7 +4,7 @@
 
 - 用户要求本人独立持续分批调查，落盘根因及影响后实施，真实 Windows 桌面交互和逐张截图复核，聚焦正向检查、范围提交、合并上游及普通推送。第 313 批 `4832e25db` 已推送，主分支同步，177 项原有工作区状态逐行一致。
 - 已读 `AGENTS.md`、[扩展架构](../../current/architecture/04-extensions.md)、[数据架构](../../current/architecture/02-data.md)、[斜杠命令上下文](2026-11-12-acp-command-context.md) 和 [消息身份](2026-11-13-acp-content-message-identity.md)。全仓查 `parseUri`、`fileURLToPath`、文件名及 URI（Uniform Resource Identifier，统一资源标识符）解析、`resource_link`、`SessionPrompt` 文件输入物化、`AttachmentStore.write`、原件响应、`FilePart`、当前命令与协议重载测试。`parseUri` 只有 Agent Client Protocol（ACP，智能体客户端协议）提示入口的三个内容类型调用点。检索路径未见界面自动化测试。
-- 验收真实已发布基线和候选开发界面，使用官方软件开发工具包通过实际进程传入图片、Zed 的路径引用及显式名称，核对持久数据、原始字节、浏览器下载和编辑器会话重载。使用隔离的实际流式 `acp-review/local`，未使用外部凭据。[ACP 内容块](https://agentclientprotocol.com/protocol/v1/content) · [文件 URI 标准](https://www.rfc-editor.org/rfc/rfc8089.html#section-4) · [通用 URI 编码语义](https://www.rfc-editor.org/rfc/rfc3986.html#section-2.4)
+- 验收已推送基线和候选开发界面，使用官方软件开发工具包通过实际进程传入图片、Zed 的路径引用及显式名称，核对持久数据、原始字节、浏览器下载和编辑器会话重载。使用隔离的实际流式 `acp-review/local`，未使用外部凭据。[ACP 内容块](https://agentclientprotocol.com/protocol/v1/content) · [文件 URI 标准](https://www.rfc-editor.org/rfc/rfc8089.html#section-4) · [通用 URI 编码语义](https://www.rfc-editor.org/rfc/rfc3986.html#section-2.4)
 
 ## 修改前现象、根因和影响
 
@@ -20,3 +20,10 @@
 
 - 对 `zed://` 查询参数使用现有路径转文件 URI 的步骤，再与 `file://` 共用标准 URL 路径解析。分离最后一个路径段后只对显示名称执行一次解码，保留实际读取 URI 与查询、显式资源名称、消息身份和字节合同。无效 URI 沿解析器的原错误/字面文本处理，名称解析不发起文件读取。
 - 用实际 ACP 进程和公开网页复测图片预览、文本展开和两次浏览器下载，逐张复核。核对图片与文本原件字节、浏览器建议文件名、原件响应和公开历史。确认字面 `%20`、非本机路径语法的嵌入字节、显式链接名称与行范围，ACP 原生会话重载携带原图和正文。运行聚焦 ACP 和附件测试、后端类型、文档及架构索引检查，完成正常上游同步与推送。
+
+## 实际结果
+
+- 候选 `/session/.../message` `c3175e23-d0e3-4679-9b7d-7176b627c623` 持久化 `视图 50% #1.png`、`计划 50% #1.txt`。公开原件请求 `fd967995-5d27-484b-bdcd-cabdf2fd5d34` 与 `eae22f89-f4a6-4c1d-bb5e-78ea85c06b7a` 分别返回正确名称和 100、31 字节。逐字节比对通过。两次真实浏览器下载均使用相同正确名称及原始字节。
+- 人工核对候选桌面的图片预览标题、文本名称和正文、捕获的第二行与完整三行的当前源文件。显式链接 `保留 %20 标签.txt` 在消息和文件预览中保留字面值。实际页面获取的界面资源请求 `6e4e2683-22cf-4d3b-96a5-716d9e8bb6ac` 返回 200。
+- 官方客户端实际提交的原生编辑器会话 `ses_-zUPDYH3XzzTqB1WYZlp` 返回 `end_turn`，重载得到持久用户身份、原图、文本及明确资源名称，模型投影为 `acp-review/local`。流式参与者实际接收到 `model=local`、`stream=true`。跨入口重载限制按前文记录。
+- `bun test './test/acp-prompt-terminal.test.ts' './test/acp-prompt-response.test.ts' './test/server/attachment-download.test.ts'` 在 `packages/opencorvus` 通过 35 项和 162 个断言。后端类型、接口文档与架构索引检查通过。隔离浏览器、协议进程和本机模型均已正常退出。[候选实拍、浏览器下载和公开持久记录](../../artifacts/2026-11-13-acp-file-uri-display-name/README.md)
