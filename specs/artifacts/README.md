@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [历史目录在资源管理器中的读取记录](2026-11-12-explorer-history-folder-retry/README.md)
 - [成员会话历史附件操作的真实基线](2026-11-12-member-conversation-attachment-actions/README.md)
 - [已存分叉会话选择异常的真实基线](2026-11-12-subagent-selection-row-ownership/README.md)
 - [本地文件捕获上下文的真实基线](2026-11-12-materialized-file-context/README.md)

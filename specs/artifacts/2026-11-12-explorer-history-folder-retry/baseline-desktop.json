@@ -1,0 +1,141 @@
+{
+  "responses": [
+    {
+      "path": "/ui/assets/main-C8FxTOq6.js",
+      "query": {},
+      "status": 200,
+      "requestID": "cff0bc56-986c-4619-9f86-34014cb723d1"
+    },
+    {
+      "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/conversation",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "tail_limit": "80"
+      },
+      "status": 200,
+      "requestID": "3c56f56e-1acd-4e51-9325-1cd21cef82c6"
+    },
+    {
+      "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/config",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review"
+      },
+      "status": 200,
+      "requestID": "d7932791-b4d4-445d-b296-88c3337421e2"
+    },
+    {
+      "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+      "query": {
+        "variant": "screenshot-browser-thumbnail"
+      },
+      "status": 200,
+      "requestID": "3b599357-5d10-4efe-912e-44b99172db50"
+    },
+    {
+      "path": "/session/ses_hPgNkWRtZas3iYoiWDKM/config",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review"
+      },
+      "status": 200,
+      "requestID": "d716670e-0ed6-4a4c-8057-36aa7103e4a9"
+    },
+    {
+      "path": "/session/ses_-zUPEEn0tzzlIJbkt2OE/conversation",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "tail_limit": "2000"
+      },
+      "status": 200,
+      "requestID": "21a6704d-9836-4ad5-b085-c648120a6e0e"
+    },
+    {
+      "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/a8e386fccb55406987a9255df3a27304fd7cd2582a6730592495f5e6dc4f6e23.directory.json",
+      "query": {},
+      "status": 200,
+      "requestID": "f3d8cc13-53c3-4cd6-8a44-25acb15ca21a"
+    },
+    {
+      "path": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+      "query": {},
+      "status": 200,
+      "requestID": "7eb077e8-9a70-4194-83e0-da4b8c12cfc5"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "e94ccdee-5309-4098-8c99-4c13f767a10c"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": "notes archive"
+      },
+      "status": 404,
+      "requestID": "91536d51-2885-4bb5-90dc-dade915fffb9",
+      "error": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes archive",
+          "message": "Directory entry not found: notes archive"
+        }
+      }
+    },
+    {
+      "path": "/session/ses_-zUPEEn0tzzlIJbkt2OE/conversation",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "tail_limit": "2000"
+      },
+      "status": 200,
+      "requestID": "468ae866-312f-4935-b843-91d2375b7a20"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "bc4acc17-a1bb-4cc1-a7e1-f8994240396a"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": ""
+      },
+      "status": 200,
+      "requestID": "876f4c38-6886-4ca4-b8f8-dddbc6a7daf8"
+    },
+    {
+      "path": "/file",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "path": "notes archive"
+      },
+      "status": 404,
+      "requestID": "098d0fbf-d6c6-4ab3-b598-825b4c51f963",
+      "error": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes archive",
+          "message": "Directory entry not found: notes archive"
+        }
+      }
+    },
+    {
+      "path": "/session/ses_-zUPEEn0tzzlIJbkt2OE/conversation",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+        "tail_limit": "2000"
+      },
+      "status": 200,
+      "requestID": "7c1c57c0-3d0f-41ae-8e03-b98eb22fbe4e"
+    }
+  ]
+}
