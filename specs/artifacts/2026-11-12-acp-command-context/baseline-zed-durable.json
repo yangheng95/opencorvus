@@ -1,0 +1,59 @@
+{
+  "sessionID": "ses_-zUPEs1AKzzAJxHGh1Ss",
+  "status": 200,
+  "requestID": "30cb5ef4-da43-40ff-b9ef-76a23a493397",
+  "data": [
+    {
+      "info": {
+        "id": "msg_g0Val84Qt006LFqM3Aar",
+        "role": "user"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "Read the 2026-11-20 report for # Test inventory notes Water valve A42 was inspected.."
+        }
+      ]
+    },
+    {
+      "info": {
+        "id": "msg_g0Val84VA00p5KdoikH9",
+        "role": "assistant",
+        "parentID": "msg_g0Val84Qt006LFqM3Aar",
+        "finish": "stop"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "The selected local command reached the stream."
+        }
+      ]
+    },
+    {
+      "info": {
+        "id": "msg_g0Val8O5e00FDBBxyRE0",
+        "role": "user"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "Use the strict-project note for 2026-11-19."
+        }
+      ]
+    },
+    {
+      "info": {
+        "id": "msg_g0Val8O80001DamwjHsa",
+        "role": "assistant",
+        "parentID": "msg_g0Val8O5e00FDBBxyRE0",
+        "finish": "stop"
+      },
+      "parts": [
+        {
+          "type": "text",
+          "text": "The selected local command reached the stream."
+        }
+      ]
+    }
+  ]
+}
