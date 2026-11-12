@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [手动断开状态的桌面与连接证据](2026-11-12-mcp-manual-disconnect-status/README.md)
 - [默认 OAuth 连接的真实协议与桌面验收](2026-11-12-mcp-public-remote-default-oauth/README.md)
 - [新增连接字段验证的真实桌面与请求](2026-11-12-mcp-add-field-validation/README.md)
 - [新增连接回执中断的真实桌面与项目证据](2026-11-12-mcp-add-interrupted-receipt/README.md)
