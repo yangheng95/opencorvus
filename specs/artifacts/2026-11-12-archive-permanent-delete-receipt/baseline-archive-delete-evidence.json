@@ -1,0 +1,307 @@
+{
+  "setup": [
+    {
+      "key": "first",
+      "experience": "chat",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-project\\archive-review",
+      "creation": {
+        "status": 201,
+        "body": {
+          "session": {
+            "id": "ses_hWuzzCp6wINc6Q11acTy",
+            "slug": "clever-wizard",
+            "version": "local",
+            "projectID": "prj_hnN1xuGtDZbt6EPnmy9Q",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-project\\archive-review",
+            "title": "Chat",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "iteration-b267-baseline-first",
+                "model": null
+              },
+              "conversation": {
+                "experience": "chat",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794445000077,
+              "updated": 1794445000077
+            }
+          }
+        },
+        "requestID": "88d9fd47-f031-4435-a642-7d8fbe39f04f"
+      },
+      "title": {
+        "status": 200,
+        "body": {
+          "session": {
+            "id": "ses_hWuzzCp6wINc6Q11acTy",
+            "slug": "clever-wizard",
+            "projectID": "prj_hnN1xuGtDZbt6EPnmy9Q",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-project\\archive-review",
+            "title": "Shared archive receipt review",
+            "version": "local",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "iteration-b267-baseline-first",
+                "model": null
+              },
+              "conversation": {
+                "experience": "chat",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794445000077,
+              "updated": 1794445000149
+            }
+          }
+        },
+        "requestID": "75d33640-eeaf-46c3-8e66-19a60a64adb7"
+      },
+      "archive": {
+        "status": 200,
+        "body": {
+          "session": {
+            "id": "ses_hWuzzCp6wINc6Q11acTy",
+            "slug": "clever-wizard",
+            "projectID": "prj_hnN1xuGtDZbt6EPnmy9Q",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-project\\archive-review",
+            "title": "Shared archive receipt review",
+            "version": "local",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "iteration-b267-baseline-first",
+                "model": null
+              },
+              "conversation": {
+                "experience": "chat",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794445000077,
+              "updated": 1794445000202,
+              "archived": 1794445000201
+            }
+          }
+        },
+        "requestID": "7c732a5e-0c41-40a3-aedf-a6c45c895030"
+      }
+    },
+    {
+      "key": "second",
+      "experience": "work",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-alternate\\archive-review",
+      "creation": {
+        "status": 201,
+        "body": {
+          "session": {
+            "id": "ses_hjHGFqPEuQqoINJOP3E9",
+            "slug": "proud-engine",
+            "version": "local",
+            "projectID": "prj_hR6hzx1aQolYPh2KZTkU",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-alternate\\archive-review",
+            "title": "Work",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "iteration-b267-baseline-second",
+                "model": null
+              },
+              "conversation": {
+                "experience": "work",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794445000876,
+              "updated": 1794445000876
+            }
+          }
+        },
+        "requestID": "45b3d87f-ae2f-49b7-a188-3795b721086e"
+      },
+      "title": {
+        "status": 200,
+        "body": {
+          "session": {
+            "id": "ses_hjHGFqPEuQqoINJOP3E9",
+            "slug": "proud-engine",
+            "projectID": "prj_hR6hzx1aQolYPh2KZTkU",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-alternate\\archive-review",
+            "title": "Shared archive receipt review",
+            "version": "local",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "iteration-b267-baseline-second",
+                "model": null
+              },
+              "conversation": {
+                "experience": "work",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794445000876,
+              "updated": 1794445000931
+            }
+          }
+        },
+        "requestID": "ae06ff27-2025-485c-8abc-84caac93f84d"
+      },
+      "archive": {
+        "status": 200,
+        "body": {
+          "session": {
+            "id": "ses_hjHGFqPEuQqoINJOP3E9",
+            "slug": "proud-engine",
+            "projectID": "prj_hR6hzx1aQolYPh2KZTkU",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-alternate\\archive-review",
+            "title": "Shared archive receipt review",
+            "version": "local",
+            "kind": "assistant",
+            "metadata": {
+              "projectConversationCreation": {
+                "version": 1,
+                "requestID": "iteration-b267-baseline-second",
+                "model": null
+              },
+              "conversation": {
+                "experience": "work",
+                "surface": "right-sidebar"
+              }
+            },
+            "time": {
+              "created": 1794445000876,
+              "updated": 1794445000976,
+              "archived": 1794445000975
+            }
+          }
+        },
+        "requestID": "c65d5383-2ca1-4a9f-bc62-834726798478"
+      }
+    }
+  ],
+  "interrupted": {
+    "time": "2026-11-12T00:57:06.030Z",
+    "stage": "truncated",
+    "route": "/coding/chat/session/ses_hWuzzCp6wINc6Q11acTy",
+    "method": "DELETE",
+    "round": "baseline-archive-delete-committed",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-project\\archive-review",
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "1e27fdef-8919-4048-9b2e-a520cabfd668",
+    "status": 200,
+    "bytes": 206,
+    "target": {
+      "ok": true,
+      "status": "physically_deleted",
+      "sessionID": "ses_hWuzzCp6wINc6Q11acTy",
+      "sessionHistoryRetained": false,
+      "authorizationAuditRetained": true,
+      "cleanupOperationID": "cal_h6B3TG9Tx1ULSHHi6Xiq",
+      "residue": []
+    },
+    "deliveredBytes": 12
+  },
+  "replay": {
+    "time": "2026-11-12T00:57:14.591Z",
+    "stage": "delivered",
+    "route": "/coding/chat/session/ses_hWuzzCp6wINc6Q11acTy",
+    "method": "DELETE",
+    "round": "baseline-archive-delete-repeat",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-project\\archive-review",
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "fd8c7365-e753-4fdc-8372-1e0d9a918d01",
+    "status": 200,
+    "bytes": 206,
+    "target": {
+      "ok": true,
+      "status": "physically_deleted",
+      "sessionID": "ses_hWuzzCp6wINc6Q11acTy",
+      "sessionHistoryRetained": false,
+      "authorizationAuditRetained": true,
+      "cleanupOperationID": "cal_h6B3TG9Tx1ULSHHi6Xiq",
+      "residue": []
+    }
+  },
+  "archive": {
+    "requestID": "6a414356-e7ca-463a-aad8-9f5c172cf8eb",
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "kind": "chat",
+          "experience": "work",
+          "id": "ses_hjHGFqPEuQqoINJOP3E9",
+          "sessionID": "ses_hjHGFqPEuQqoINJOP3E9",
+          "title": "Shared archive receipt review",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-alternate\\archive-review",
+          "created": 1794445000876,
+          "started": 1794445000876,
+          "updated": 1794445000976,
+          "pinned": false,
+          "archived": 1794445000975,
+          "status": "idle"
+        }
+      ],
+      "nextCursor": null
+    }
+  },
+  "removedGet": {
+    "requestID": "f848b855-b15f-4866-89c1-e6b2d665e37d",
+    "status": 404,
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Session not found: ses_hWuzzCp6wINc6Q11acTy"
+      }
+    }
+  },
+  "retainedGet": {
+    "requestID": "5680536d-8e68-47d8-b94b-c6c173d43b9c",
+    "status": 200,
+    "body": {
+      "session": {
+        "id": "ses_hjHGFqPEuQqoINJOP3E9",
+        "slug": "proud-engine",
+        "projectID": "prj_hR6hzx1aQolYPh2KZTkU",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\baseline-alternate\\archive-review",
+        "title": "Shared archive receipt review",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "iteration-b267-baseline-second",
+            "model": null
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794445000876,
+          "updated": 1794445000976,
+          "archived": 1794445000975
+        }
+      }
+    }
+  }
+}

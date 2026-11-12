@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [归档永久删除的目标确认与回执恢复](records/2026-11/2026-11-12-archive-permanent-delete-receipt.md)
 - [定时规则摘要与精确下次运行](records/2026-11/2026-11-12-scheduled-recurrence-readable-details.md)
 - [定时任务绑定会话的可见身份](records/2026-11/2026-11-12-scheduled-conversation-target-identity.md)
 - [同名定时任务的项目辨认与确认](records/2026-11/2026-11-12-scheduled-project-target-identity.md)

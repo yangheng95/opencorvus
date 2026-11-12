@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [归档永久删除的桌面和正式回执](2026-11-12-archive-permanent-delete-receipt/README.md)
 - [定时规则可读性证据](2026-11-12-scheduled-recurrence-readable-details/README.md)
 - [定时任务绑定会话的桌面证据](2026-11-12-scheduled-conversation-target-identity/README.md)
 - [同名定时任务的项目辨认证据](2026-11-12-scheduled-project-target-identity/README.md)
