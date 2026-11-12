@@ -6,3 +6,4 @@
 - [确认框显示有无首尾空白的精确键](02-baseline-oauth-alias-exact-targets.png)
 - [中文连接页的错行状态](03-baseline-oauth-alias-zh.png)
 - [去敏授权启动、回调、状态、持久事实和凭据清理](baseline-oauth-name-evidence.json)
+- [真实旧版本升级输入的去敏收据](baseline-upgrade-input-evidence.json)
