@@ -1,0 +1,55 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_usage_event": 0
+  },
+  "control": {
+    "id": "ses_hHdJoY6ZXyDlSPyFgP9O",
+    "project_id": "prj_hcUZXYtnJZPTUsG4YST9",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+    "title": "Archive control record kept",
+    "time_created": 1794445906680,
+    "time_archived": null
+  },
+  "completedManifests": [
+    {
+      "operationID": "cal_h5LElWdgEHAtXZe62StL",
+      "projectID": "prj_hjrTyOqPfJgtx5J3eTnn",
+      "rootSessionID": "ses_hPSL7mREmBrrk8g3AluP",
+      "rootIdentity": {
+        "kind": "assistant",
+        "conversationExperience": "work"
+      },
+      "sessionIDs": [
+        "ses_hPSL7mREmBrrk8g3AluP"
+      ]
+    },
+    {
+      "operationID": "cal_h6kKBNOfN9S53M8F8bPk",
+      "projectID": "prj_hjrTyOqPfJgtx5J3eTnn",
+      "rootSessionID": "ses_hbYKvVmv5zgDStNbk3F8",
+      "rootIdentity": {
+        "kind": "assistant",
+        "conversationExperience": "work"
+      },
+      "sessionIDs": [
+        "ses_hbYKvVmv5zgDStNbk3F8"
+      ]
+    },
+    {
+      "operationID": "cal_hrmYmfGR3xSo29R9gbil",
+      "projectID": "prj_hcUZXYtnJZPTUsG4YST9",
+      "rootSessionID": "ses_hHxeJQTbT5hx6SLhW50I",
+      "rootIdentity": {
+        "kind": "assistant",
+        "conversationExperience": "chat"
+      },
+      "sessionIDs": [
+        "ses_hHxeJQTbT5hx6SLhW50I"
+      ]
+    }
+  ]
+}

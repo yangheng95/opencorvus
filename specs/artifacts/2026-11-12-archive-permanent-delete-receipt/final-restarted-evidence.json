@@ -1,0 +1,347 @@
+{
+  "identities": [
+    {
+      "experience": "chat",
+      "id": "ses_hHxeJQTbT5hx6SLhW50I",
+      "projectID": "prj_hcUZXYtnJZPTUsG4YST9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+      "title": "Shared archive receipt review",
+      "created": 1794445905542,
+      "archived": 1794445905717
+    },
+    {
+      "experience": "work",
+      "id": "ses_hbYKvVmv5zgDStNbk3F8",
+      "projectID": "prj_hjrTyOqPfJgtx5J3eTnn",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-alternate\\archive-review",
+      "title": "Shared archive receipt review",
+      "created": 1794445906492,
+      "archived": 1794445906628
+    },
+    {
+      "experience": "chat",
+      "id": "ses_hHdJoY6ZXyDlSPyFgP9O",
+      "projectID": "prj_hcUZXYtnJZPTUsG4YST9",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+      "title": "Archive control record kept",
+      "created": 1794445906680,
+      "archived": 1794445906823
+    },
+    {
+      "experience": "work",
+      "id": "ses_hPSL7mREmBrrk8g3AluP",
+      "projectID": "prj_hjrTyOqPfJgtx5J3eTnn",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-alternate\\archive-review",
+      "title": "Normal Work deletion",
+      "created": 1794445906917,
+      "archived": 1794445907052
+    }
+  ],
+  "receipts": [
+    {
+      "label": "chat",
+      "truncated": {
+        "time": "2026-11-12T01:12:33.954Z",
+        "stage": "truncated",
+        "route": "/coding/chat/session/ses_hHxeJQTbT5hx6SLhW50I",
+        "method": "DELETE",
+        "round": "chat-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+        "search": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "834f6a8c-e23e-4971-bbf7-16ea15abebba",
+        "status": 200,
+        "bytes": 206,
+        "target": {
+          "ok": true,
+          "status": "physically_deleted",
+          "sessionID": "ses_hHxeJQTbT5hx6SLhW50I",
+          "sessionHistoryRetained": false,
+          "authorizationAuditRetained": true,
+          "cleanupOperationID": "cal_hrmYmfGR3xSo29R9gbil",
+          "residue": []
+        },
+        "deliveredBytes": 12
+      },
+      "retry": {
+        "time": "2026-11-12T01:12:52.528Z",
+        "stage": "delivered",
+        "route": "/coding/chat/session/ses_hHxeJQTbT5hx6SLhW50I",
+        "method": "DELETE",
+        "round": "chat-retry",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+        "search": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "6a5b59d5-553e-4b01-bb16-337ed398d93b",
+        "status": 200,
+        "bytes": 206,
+        "target": {
+          "ok": true,
+          "status": "physically_deleted",
+          "sessionID": "ses_hHxeJQTbT5hx6SLhW50I",
+          "sessionHistoryRetained": false,
+          "authorizationAuditRetained": true,
+          "cleanupOperationID": "cal_hrmYmfGR3xSo29R9gbil",
+          "residue": []
+        }
+      }
+    },
+    {
+      "label": "work",
+      "truncated": {
+        "time": "2026-11-12T01:12:42.398Z",
+        "stage": "truncated",
+        "route": "/coding/work/session/ses_hbYKvVmv5zgDStNbk3F8",
+        "method": "DELETE",
+        "round": "work-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-alternate\\archive-review",
+        "search": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "3cf40e69-f6c0-4079-80ea-ecc6d24d1198",
+        "status": 200,
+        "bytes": 206,
+        "target": {
+          "ok": true,
+          "status": "physically_deleted",
+          "sessionID": "ses_hbYKvVmv5zgDStNbk3F8",
+          "sessionHistoryRetained": false,
+          "authorizationAuditRetained": true,
+          "cleanupOperationID": "cal_h6kKBNOfN9S53M8F8bPk",
+          "residue": []
+        },
+        "deliveredBytes": 12
+      },
+      "retry": {
+        "time": "2026-11-12T01:13:02.550Z",
+        "stage": "delivered",
+        "route": "/coding/work/session/ses_hbYKvVmv5zgDStNbk3F8",
+        "method": "DELETE",
+        "round": "work-retry",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-alternate\\archive-review",
+        "search": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "a5aa21ee-6411-419a-bf6d-8f0e3dbd7a3a",
+        "status": 200,
+        "bytes": 206,
+        "target": {
+          "ok": true,
+          "status": "physically_deleted",
+          "sessionID": "ses_hbYKvVmv5zgDStNbk3F8",
+          "sessionHistoryRetained": false,
+          "authorizationAuditRetained": true,
+          "cleanupOperationID": "cal_h6kKBNOfN9S53M8F8bPk",
+          "residue": []
+        }
+      }
+    }
+  ],
+  "normalReceipt": {
+    "time": "2026-11-12T01:13:09.911Z",
+    "stage": "delivered",
+    "route": "/coding/work/session/ses_hPSL7mREmBrrk8g3AluP",
+    "method": "DELETE",
+    "round": "normal-work",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-alternate\\archive-review",
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "b3fd1d0d-bba6-4c72-8081-71ca73160f25",
+    "status": 200,
+    "bytes": 206,
+    "target": {
+      "ok": true,
+      "status": "physically_deleted",
+      "sessionID": "ses_hPSL7mREmBrrk8g3AluP",
+      "sessionHistoryRetained": false,
+      "authorizationAuditRetained": true,
+      "cleanupOperationID": "cal_h5LElWdgEHAtXZe62StL",
+      "residue": []
+    }
+  },
+  "searchNone": {
+    "time": "2026-11-12T01:12:51.905Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "search-none",
+    "directory": null,
+    "search": "Unmatched archive review",
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "71e64172-740c-424c-8e73-15e75a4c7864",
+    "status": 200,
+    "bytes": 29,
+    "items": []
+  },
+  "clearSearch": {
+    "time": "2026-11-12T01:13:02.253Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "clear-search",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "3843181b-8b14-47fd-b279-dab670b6eee6",
+    "status": 200,
+    "bytes": 809,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hPSL7mREmBrrk8g3AluP",
+        "sessionID": "ses_hPSL7mREmBrrk8g3AluP",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-alternate\\archive-review",
+        "title": "Normal Work deletion",
+        "archived": 1794445907052
+      },
+      {
+        "kind": "chat",
+        "id": "ses_hHdJoY6ZXyDlSPyFgP9O",
+        "sessionID": "ses_hHdJoY6ZXyDlSPyFgP9O",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+        "title": "Archive control record kept",
+        "archived": 1794445906823
+      }
+    ]
+  },
+  "stillArchived": {
+    "time": "2026-11-12T01:13:09.922Z",
+    "stage": "delivered",
+    "route": "/work-ledger/archive",
+    "method": "GET",
+    "round": "normal-work",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "7bf0b0f3-52b1-4824-87db-3a6ae6d39636",
+    "status": 200,
+    "bytes": 421,
+    "items": [
+      {
+        "kind": "chat",
+        "id": "ses_hHdJoY6ZXyDlSPyFgP9O",
+        "sessionID": "ses_hHdJoY6ZXyDlSPyFgP9O",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+        "title": "Archive control record kept",
+        "archived": 1794445906823
+      }
+    ]
+  },
+  "removed": [
+    {
+      "requestID": "e7114164-4db4-40ce-babe-4f007432dbb1",
+      "status": 404,
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Session not found: ses_hHxeJQTbT5hx6SLhW50I"
+        }
+      }
+    },
+    {
+      "requestID": "7f8c9249-6839-471d-ae4a-5d08a40ac186",
+      "status": 404,
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Session not found: ses_hbYKvVmv5zgDStNbk3F8"
+        }
+      }
+    },
+    {
+      "requestID": "db9f79c5-32c4-42c5-b152-a1479d9dde23",
+      "status": 404,
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Session not found: ses_hPSL7mREmBrrk8g3AluP"
+        }
+      }
+    }
+  ],
+  "controlGet": {
+    "requestID": "44343577-1b1c-4040-af5d-ea3c14e59709",
+    "status": 200,
+    "body": {
+      "session": {
+        "id": "ses_hHdJoY6ZXyDlSPyFgP9O",
+        "slug": "nimble-rocket",
+        "projectID": "prj_hcUZXYtnJZPTUsG4YST9",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b267\\final-project\\archive-review",
+        "title": "Archive control record kept",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "iteration-b267-final-control",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794445906680,
+          "updated": 1794445993970
+        }
+      }
+    }
+  },
+  "archive": {
+    "requestID": "41034986-0d7d-4827-9276-b9ee161e2604",
+    "status": 200,
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  },
+  "restartReplay": [
+    {
+      "requestID": "d32e8203-b248-47c3-b1b8-06ff9ac34cef",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "status": "physically_deleted",
+        "sessionID": "ses_hHxeJQTbT5hx6SLhW50I",
+        "sessionHistoryRetained": false,
+        "authorizationAuditRetained": true,
+        "cleanupOperationID": "cal_hrmYmfGR3xSo29R9gbil",
+        "residue": []
+      }
+    },
+    {
+      "requestID": "a4b11814-90a3-43c0-bb54-2ccf5d14ebcc",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "status": "physically_deleted",
+        "sessionID": "ses_hbYKvVmv5zgDStNbk3F8",
+        "sessionHistoryRetained": false,
+        "authorizationAuditRetained": true,
+        "cleanupOperationID": "cal_h6kKBNOfN9S53M8F8bPk",
+        "residue": []
+      }
+    },
+    {
+      "requestID": "12d8c1a9-94a6-4d72-a7a9-1a0e7992f115",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "status": "physically_deleted",
+        "sessionID": "ses_hPSL7mREmBrrk8g3AluP",
+        "sessionHistoryRetained": false,
+        "authorizationAuditRetained": true,
+        "cleanupOperationID": "cal_h5LElWdgEHAtXZe62StL",
+        "residue": []
+      }
+    }
+  ]
+}

@@ -9,6 +9,8 @@ import {
 import { loadArchivedWorkLedger, workLedgerProject, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
 import { archiveRowKey } from "../../services/archive-row-key"
 import { ArchiveStateUnconfirmedError } from "../../services/archive-state"
+import { showAppDialog } from "../../services/app-dialog"
+import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { restoreArchivedWork } from "../../services/restore-archived-work"
 import { deleteMission } from "../../services/mission"
 import { deleteTask } from "../../services/task"
@@ -18,7 +20,6 @@ import { formatErrorDetails, reportError, reportSuccess, runPostCommitUiEffect }
 import { detailStamp } from "../../utils/time"
 import { localeTag, t } from "../../utils/i18n"
 import { projectLedgerDisplayName } from "../../utils/project-directory"
-import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon, type IconName } from "../ui/Icon"
@@ -26,7 +27,6 @@ import { SearchField } from "../ui/SearchField"
 import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from "./layout"
 
 const ARCHIVE_PAGE_SIZE = 100
-const DELETE_CONFIRM_WINDOW_MS = 3_000
 
 type ArchiveRead = "initial" | "append" | "refresh"
 
@@ -34,6 +34,8 @@ type ArchiveFailure = {
   operation: ArchiveRead | "restore" | "delete"
   cause: unknown
 }
+
+type UnconfirmedDeletion = { row: WorkLedgerItemRow; authority: ApiAuthority; cause: unknown }
 
 function archiveFailureSummary({ operation, cause }: ArchiveFailure): string {
   if (cause instanceof ArchiveStateUnconfirmedError) return t("archive.restore_unconfirmed")
@@ -72,15 +74,15 @@ function archiveProjectName(row: WorkLedgerItemRow): string {
   })
 }
 
-function archiveActionText(
-  key: "archive.open_item" | "archive.restore" | "archive.delete_permanently" | "archive.delete_confirm",
-  row: WorkLedgerItemRow,
-): string {
+function archiveProjectContext(row: WorkLedgerItemRow): string {
   const name = archiveProjectName(row)
-  const project = row.directory
+  return row.directory
     ? t("archive.action_project_directory", { project: name, directory: row.directory })
     : name
-  return t(key, { title: row.title || row.id, project })
+}
+
+function archiveActionText(key: "archive.open_item" | "archive.restore" | "archive.delete_permanently", row: WorkLedgerItemRow): string {
+  return t(key, { title: row.title || row.id, project: archiveProjectContext(row) })
 }
 
 function archivedAt(row: WorkLedgerItemRow): number {
@@ -97,6 +99,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const [loading, setLoading] = createSignal(false)
   const [busyID, setBusyID] = createSignal("")
   const [failure, setFailure] = createSignal<ArchiveFailure>()
+  const [unconfirmedDeletions, setUnconfirmedDeletions] = createSignal(new Map<string, UnconfirmedDeletion>())
   const [committedAction, setCommittedAction] = createSignal<{ action: "restore" | "delete"; title: string }>()
   let requestGeneration = 0
   let controller: AbortController | undefined
@@ -117,16 +120,21 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     return current?.operation === "append" ? undefined : current
   }
   const hasRefreshFailure = createMemo(() => panelFailure()?.operation === "refresh")
+  const deletionUnconfirmed = (row: WorkLedgerItemRow) => unconfirmedDeletions().has(archiveRowKey(row))
+
+  const reportArchiveError = (id: string, title: string, cause: unknown) => {
+    reportError({
+      id,
+      title,
+      message: cause instanceof Error ? cause.message : String(cause),
+      details: formatErrorDetails(cause),
+    })
+  }
 
   const recordFailure = (id: string, operation: ArchiveFailure["operation"], cause: unknown) => {
     const failure = { operation, cause }
     setFailure(failure)
-    reportError({
-      id,
-      title: archiveFailureSummary(failure),
-      message: cause instanceof Error ? cause.message : String(cause),
-      details: formatErrorDetails(cause),
-    })
+    reportArchiveError(id, archiveFailureSummary(failure), cause)
   }
 
   const readPages = async (input: {
@@ -173,14 +181,18 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     previousFocus: HTMLElement | null,
     committed: boolean,
     ownsAction: () => boolean,
+    failureFocus?: () => HTMLElement | undefined,
   ) => {
     queueMicrotask(() => {
       if (!ownsAction()) return
       const active = document.activeElement
       if (active !== previousFocus && active !== document.body) return
-      if (!committed && previousFocus?.isConnected) {
-        previousFocus.focus({ preventScroll: true })
-        return
+      if (!committed) {
+        const target = failureFocus?.() ?? previousFocus
+        if (target?.isConnected) {
+          target.focus({ preventScroll: true })
+          return
+        }
       }
       const currentRows = rows()
       const nextRow = currentRows[Math.min(previousIndex, Math.max(0, currentRows.length - 1))]
@@ -267,19 +279,41 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     </Button>
   )
 
-  const runRowAction = async (row: WorkLedgerItemRow, action: "restore" | "delete") => {
-    if (busyID() || loading()) return
+  const retryDeletion = (rowKey: string) => (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      tone="neutral"
+      data-archive-delete-retry={rowKey}
+      aria-disabled={loading() || !!busyID() || undefined}
+      aria-busy={busyID() === rowKey || undefined}
+      onClick={(event) => {
+        const pending = unconfirmedDeletions().get(rowKey)
+        if (pending) void runRowAction(pending.row, "delete", { authority: pending.authority, trigger: event.currentTarget })
+      }}
+    >
+      <Icon name="refresh" />{busyID() === rowKey ? t("common.retrying") : t("archive.retry_delete")}
+    </Button>
+  )
+
+  const runRowAction = async (
+    row: WorkLedgerItemRow,
+    action: "restore" | "delete",
+    { authority = captureApiAuthority(), trigger }: { authority?: ApiAuthority; trigger?: HTMLButtonElement } = {},
+  ) => {
+    if (busyID() || loading() || !isApiAuthorityCurrent(authority)) return
     const rowKey = archiveRowKey(row)
+    const pending = unconfirmedDeletions().get(rowKey)
     const previousIndex = Math.max(
       0,
       rows().findIndex((item) => archiveRowKey(item) === rowKey),
     )
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const previousFocus = trigger ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null)
     const retainedTail = rows().filter((item) => archiveRowKey(item) !== rowKey).at(-1)
     controller?.abort()
     controller = undefined
     const generation = ++requestGeneration
-    const authority = captureApiAuthority()
     const ownsAction = () => ownsRequest(generation, authority)
     setBusyID(rowKey)
     setFailure(undefined)
@@ -317,9 +351,19 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       committed = true
     } catch (cause) {
       if (!ownsAction() || cause instanceof ApiAuthorityChangedError) return
-      recordFailure(`settings:archive:${action}:${row.kind}:${row.id}`, action, cause)
+      const id = `settings:archive:${action}:${row.kind}:${row.id}`
+      const uncertain = action === "delete" && (pending || isUncertainMutationReceipt(cause))
+      if (uncertain) {
+        const diagnostic = pending ? new AggregateError([pending.cause, cause], "Archive deletion retry failed") : cause
+        setUnconfirmedDeletions((current) => new Map(current).set(rowKey, { row, authority, cause: diagnostic }))
+        reportArchiveError(id, t("archive.delete_unconfirmed"), diagnostic)
+      } else {
+        recordFailure(id, action, cause)
+      }
       setBusyID("")
-      focusAfterAction(rowKey, previousIndex, previousFocus, false, ownsAction)
+      const retryButton = uncertain ? () => Array.from(panelElement?.querySelectorAll<HTMLButtonElement>("[data-archive-delete-retry]") ?? [])
+        .find((element) => element.dataset.archiveDeleteRetry === rowKey) : undefined
+      focusAfterAction(rowKey, previousIndex, previousFocus, false, ownsAction, retryButton)
       return
     }
 
@@ -329,6 +373,13 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         title: "Archive row reconciliation after committed mutation",
       },
       () => {
+        if (pending) {
+          setUnconfirmedDeletions((current) => {
+            const next = new Map(current)
+            next.delete(rowKey)
+            return next
+          })
+        }
         setCommittedAction({ action, title: row.title || row.id })
         setRows((current) => current.filter((item) => archiveRowKey(item) !== rowKey))
       },
@@ -375,6 +426,38 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     }
   }
 
+  const confirmRowDeletion = async (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => {
+    const authority = captureApiAuthority()
+    const generation = requestGeneration
+    const ownsConfirmation = () => ownsRequest(generation, authority) && !busyID() && !loading() &&
+      trigger.isConnected && !deletionUnconfirmed(row)
+    const message = [
+      t("archive.delete_confirm", { title: row.title || row.id }),
+      "",
+      `${kindLabel(row)} · ${archiveProjectName(row)}`,
+      row.directory,
+    ].join("\n")
+    try {
+      const result = await showAppDialog({
+        title: t("archive.delete_confirm_title"),
+        message,
+        kind: "warning",
+        cancel: true,
+        okTone: "danger",
+        okLabel: t("archive.delete_confirm_title"),
+        openingGuard: ownsConfirmation,
+        returnFocusTarget: () => ownsConfirmation() ? trigger : null,
+      })
+      if (result.confirmed && ownsConfirmation()) await runRowAction(row, "delete", { authority, trigger })
+    } catch (cause) {
+      if (ownsConfirmation()) recordFailure(`settings:archive:delete:${row.kind}:${row.id}`, "delete", cause)
+    }
+  }
+
+  createEffect(() => {
+    captureApiAuthority()
+    setUnconfirmedDeletions(new Map())
+  })
   createEffect(() => {
     captureApiAuthority()
     // Query replacement retires the current page and its cursor with the same request owner.
@@ -407,6 +490,26 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
           </Feedback>
         )}
       </Show>
+      <For each={Array.from(unconfirmedDeletions().keys())}>
+        {(rowKey) => (
+          <Show when={unconfirmedDeletions().get(rowKey)}>
+            {(entry) => (
+              <Feedback
+                tone="warning"
+                title={t("archive.delete_unconfirmed")}
+                details={formatErrorDetails(entry().cause)}
+                actions={retryDeletion(rowKey)}
+              >
+                {t("archive.delete_target", {
+                  title: entry().row.title || entry().row.id,
+                  kind: kindLabel(entry().row),
+                  project: archiveProjectContext(entry().row),
+                })}
+              </Feedback>
+            )}
+          </Show>
+        )}
+      </For>
       <Show when={rows().length > 0 && panelFailure()}>
         {(current) => (
           <ArchiveFailureFeedback
@@ -469,6 +572,9 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                     <span>{kindLabel(row)}</span>
                     <span class="archive-row-project">{archiveProjectName(row)}</span>
                     <span>{t("archive.archived_at", { time: detailStamp(archivedAt(row)) })}</span>
+                    <Show when={deletionUnconfirmed(row)}>
+                      <span>{t("archive.delete_unconfirmed")}</span>
+                    </Show>
                     <span class="archive-row-directory">{row.directory}</span>
                   </>
                 }
@@ -481,7 +587,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       tone="neutral"
                       aria-label={archiveActionText("archive.open_item", row)}
                       data-archive-action="open"
-                      disabled={!!busyID() || loading()}
+                      disabled={!!busyID() || loading() || deletionUnconfirmed(row)}
                       onClick={(event) => void props.onOpenItem(row, event.currentTarget)}
                     >
                       {t("archive.open")}
@@ -496,27 +602,25 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       data-archive-action="restore"
                       title={archiveActionText("archive.restore", row)}
                       aria-label={archiveActionText("archive.restore", row)}
-                      disabled={!!busyID() || loading()}
+                      disabled={!!busyID() || loading() || deletionUnconfirmed(row)}
                       onClick={() => void runRowAction(row, "restore")}
                     >
                       <Icon name="archive-restore" />
                     </Button>
-                    <ArmedConfirmButton
+                    <Button
                       type="button"
                       variant="ghost"
                       size="icon"
                       tone="danger"
                       data-ui="archive-delete"
                       data-archive-action="delete"
-                      disabled={!!busyID() || loading()}
-                      label={archiveActionText("archive.delete_permanently", row)}
-                      armedDescription={archiveActionText("archive.delete_confirm", row)}
-                      confirmWindowMs={DELETE_CONFIRM_WINDOW_MS}
-                      onConfirm={() => void runRowAction(row, "delete")}
-                      confirmChildren={<Icon name="check" size="compact" />}
+                      disabled={!!busyID() || loading() || deletionUnconfirmed(row)}
+                      title={archiveActionText("archive.delete_permanently", row)}
+                      aria-label={archiveActionText("archive.delete_permanently", row)}
+                      onClick={(event) => void confirmRowDeletion(row, event.currentTarget)}
                     >
                       <Icon name="delete" />
-                    </ArmedConfirmButton>
+                    </Button>
                   </>
                 }
               />

@@ -5990,7 +5990,14 @@ If Open still owned focus when Settings closed, the accepted exact archived
 item transfers focus to its read-only notice. A later user focus change or
 replacement selection retires that handoff. Ordinary Settings dismissal keeps
 its original return focus.
-Restore and permanent deletion remain separate existing actions.
+Restore and permanent deletion have separate actions. The shared confirmation
+dialog identifies the archived record by title, work kind, project and directory.
+It binds the confirmation to the current query, row and API authority. An
+uncertain deletion keeps the original diagnostics and offers an explicit retry
+for the same row and connection. Pending deletions are kept per row while the
+page is mounted on that connection. Search, pagination and other row actions
+leave them intact. The domain's existing deletion receipt or cleanup replay
+settles the matching pending deletion before the archive refresh.
 
 The Chat/Work, Task and Mission archive/restore endpoints use the existing
 Project identity context independently of execution-model initialization.
@@ -6047,8 +6054,9 @@ Row-action settlement can move focus only while it remains on the original
 control or has returned to the document body after the control was disabled or
 removed. If another control has focus, the action leaves it there. A successful
 action otherwise moves focus to the surviving row at the same position (or the
-last row), or to the section heading if no row remains. A failed mutation returns
-focus to the original control if it is still connected.
+last row), or to the section heading if no row remains. An unconfirmed deletion
+offers focus to its retry action. A definitive failure returns focus to the
+original control when it is still connected.
 
 The shared Work Ledger candidate reader matches the owning Project's current
 custom name for Chat/Work, Mission and Task records as well as their existing
