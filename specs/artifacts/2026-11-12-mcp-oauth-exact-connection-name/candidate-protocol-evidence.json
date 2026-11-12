@@ -1,0 +1,597 @@
+{
+  "assignments": [
+    {
+      "side": "project",
+      "mode": "chat",
+      "requestID": "a000d10b-fcd4-4ecd-9f57-2820fa434835",
+      "assigned": [
+        "review-oauth"
+      ],
+      "configured": [
+        " pending-oauth ",
+        " review-oauth ",
+        "browser",
+        "computer",
+        "pending-oauth",
+        "review-oauth"
+      ]
+    },
+    {
+      "side": "alternate",
+      "mode": "work",
+      "requestID": "a2a143d4-a7c8-4614-a5c3-5dd3e17dcdab",
+      "assigned": [
+        "review-oauth"
+      ],
+      "configured": [
+        "browser",
+        "computer",
+        "review-oauth"
+      ]
+    }
+  ],
+  "protocol": [
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:39.853Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:39.962Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.054Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.128Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.210Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.287Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.321Z"
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.327Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.399Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.455Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.464Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.475Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.506Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.571Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.613Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.617Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:04:40.624Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:58.991Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.038Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.064Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.131Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.167Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.171Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.175Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.268Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:12:59.309Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:21:48.226Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:21:48.242Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:21:48.249Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:21:48.256Z"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.423Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.445Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.558Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.614Z",
+      "status": 401,
+      "method": "POST"
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.657Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.770Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.839Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.844Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:22:59.851Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-issued",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:23:45.106Z"
+    },
+    {
+      "kind": "token-exchange",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:23:45.344Z",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:23:45.404Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:23:45.409Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:23:45.417Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:24:08.187Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:24:08.194Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:24:08.205Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.646Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.658Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.661Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.664Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.674Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.679Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.681Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.686Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:20.693Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "authorization-required",
+      "pid": 16612,
+      "port": 39907,
+      "scope": "oauth",
+      "time": "2026-11-12T06:26:49.138Z",
+      "status": 401,
+      "method": "POST"
+    }
+  ],
+  "protocolTotals": {
+    "initialize": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "notifications/initialized": [
+      202,
+      202,
+      202,
+      202,
+      202,
+      202,
+      202,
+      202,
+      202,
+      202
+    ],
+    "tools/list": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ]
+  }
+}

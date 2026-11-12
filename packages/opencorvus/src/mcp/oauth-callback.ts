@@ -159,7 +159,7 @@ export namespace McpOAuthCallback {
   let brokersStopping = false
   let brokerStop: Promise<void> | undefined
   // The pending owner key is project-scoped for MCP auth flows
-  // (`projectID:mcpName`) so two active projects can authenticate the same
+  // credential scope so two active projects can authenticate the same
   // server name without sharing callback cancellation state.
   const pendingAuths = new Map<string, PendingAuth>()
   const mcpNameToState = new Map<string, string>()

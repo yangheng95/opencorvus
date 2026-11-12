@@ -39,7 +39,7 @@ test("a real post-persist failure retains the committed definition and promotes 
         failure = error
       }
       Config.TestHooks.beforeProjectRuntimeSettlement = undefined
-      const entry = await McpAuth.get(`${Instance.project.id}:${name}`)
+      const entry = await McpAuth.get(McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: name }))
       expect({
         name: failure instanceof Error ? failure.name : null,
         causes: failure instanceof AggregateError ? failure.errors.map((error) => error.message) : [],

@@ -80,7 +80,7 @@ export namespace McpAuth {
   })
   export type OAuthFinishingOccurrence = z.infer<typeof OAuthFinishingOccurrence>
 
-  export const Entry = z.object({
+  const CredentialEntry = z.object({
     tokens: Tokens.optional(),
     clientInfo: ClientInfo.optional(),
     staticCredential: StaticCredential.optional(),
@@ -137,6 +137,21 @@ export namespace McpAuth {
      * another backend on the same data root visible here.
      */
     revision: z.string().optional(),
+  })
+  const LegacyCredentialArchive = CredentialEntry.pick({
+    tokens: true,
+    clientInfo: true,
+    tokenClientInfo: true,
+    staticCredential: true,
+    stagedStaticCredential: true,
+    serverUrl: true,
+    credentialIdentity: true,
+    clientCallbackGeneration: true,
+    clientCallbackRedirectUrl: true,
+  })
+  export const Entry = CredentialEntry.extend({
+    legacyOwnerRetired: z.literal(true).optional(),
+    legacyCredentialArchive: LegacyCredentialArchive.optional(),
   })
   export type Entry = z.infer<typeof Entry>
 
@@ -213,15 +228,26 @@ export namespace McpAuth {
     }
   }
 
+  const SCOPED_KEY_VERSION = ":2:"
+
+  export function projectScopePrefix(projectID: string): string {
+    const id = projectID.trim()
+    if (!id || id.includes(":")) throw new Error("MCP auth scoped key requires a valid projectID")
+    return `${SCOPED_KEY_VERSION}${id}:`
+  }
+
   export function scopedKey(input: { projectID: string; mcpName: string }): string {
-    const projectID = input.projectID.trim()
-    const mcpName = input.mcpName.trim()
-    if (!projectID) throw new Error("MCP auth scoped key requires a projectID")
-    if (!mcpName) throw new Error("MCP auth scoped key requires an mcpName")
-    return `${projectID}:${mcpName}`
+    return projectScopePrefix(input.projectID) + input.mcpName
   }
 
   export function parseScopedKey(authKey: string): { projectID: string; mcpName: string } | undefined {
+    if (!authKey.startsWith(SCOPED_KEY_VERSION)) return undefined
+    const separator = authKey.indexOf(":", SCOPED_KEY_VERSION.length)
+    if (separator <= SCOPED_KEY_VERSION.length) return undefined
+    return { projectID: authKey.slice(SCOPED_KEY_VERSION.length, separator), mcpName: authKey.slice(separator + 1) }
+  }
+
+  function parseLegacyScopedKey(authKey: string): { projectID: string; mcpName: string } | undefined {
     const separator = authKey.indexOf(":")
     if (separator <= 0 || separator === authKey.length - 1) return undefined
     return { projectID: authKey.slice(0, separator), mcpName: authKey.slice(separator + 1) }
@@ -366,8 +392,76 @@ export namespace McpAuth {
   }
 
   export function hasCredentialOrFlowMaterial(entry: Entry): boolean {
-    const { revision: _revision, oauthCallbackTerminals: _oauthCallbackTerminals, ...material } = entry
+    const {
+      revision: _revision,
+      oauthCallbackTerminals: _oauthCallbackTerminals,
+      legacyOwnerRetired: _legacyOwnerRetired,
+      ...material
+    } = entry
     return Object.values(material).some((value) => value !== undefined)
+  }
+
+  type ScopedCredentialDefinition = { mcpName: string; serverUrl: string; credentialIdentity: string }
+
+  function matchesCredentialBinding(
+    stored: Pick<Entry, "serverUrl" | "credentialIdentity">,
+    definition: ScopedCredentialDefinition,
+  ): boolean {
+    return stored.serverUrl === definition.serverUrl && stored.credentialIdentity === definition.credentialIdentity
+  }
+
+  export async function migrateProjectNames(
+    projectID: string,
+    definitions: readonly ScopedCredentialDefinition[],
+    assertAdmission: () => Promise<void>,
+  ): Promise<void> {
+    const legacyEntries = (data: Record<string, Entry>) =>
+      Object.entries(data).flatMap(([authKey, entry]) => {
+        const scope = parseLegacyScopedKey(authKey)
+        if (scope?.projectID !== projectID || entry.legacyOwnerRetired) return []
+        return [{ authKey, entry, normalizedName: scope.mcpName }]
+      })
+    if (!legacyEntries(await all()).length) return
+    for (let attempt = 0; attempt < EXACT_MUTATION_ATTEMPTS; attempt += 1) {
+      await waitForExactMutationRetry(attempt)
+      try {
+        await mutate(async () => {
+          await assertAdmission()
+          const data = await all()
+          const entries = legacyEntries(data)
+          if (!entries.length) return
+          const now = Date.now()
+          for (const { authKey, entry, normalizedName } of entries) {
+            const { stagedStaticCredential, ...active } = entry
+            const hasActiveMaterial = hasCredentialOrFlowMaterial(active)
+            const matches = definitions.filter((definition) =>
+              definition.mcpName.trim() === normalizedName &&
+              (!hasActiveMaterial || matchesCredentialBinding(active, definition)) &&
+              (!stagedStaticCredential || matchesCredentialBinding(stagedStaticCredential, definition)),
+            )
+            const targetKey = matches.length === 1 ? scopedKey({ projectID, mcpName: matches[0].mcpName }) : undefined
+            if (targetKey && !Object.hasOwn(data, targetKey)) {
+              data[targetKey] = entry
+              delete data[authKey]
+              continue
+            }
+            const archive = LegacyCredentialArchive.parse(entry)
+            terminalizeActiveFlow(entry, now, "revoked")
+            data[authKey] = {
+              legacyOwnerRetired: true,
+              ...(Object.keys(archive).length ? { legacyCredentialArchive: archive } : {}),
+              oauthCallbackTerminals: retainCallbackTerminals(entry, now),
+              revision: crypto.randomUUID(),
+            }
+          }
+          await Filesystem.writeAtomic(filepath(), JSON.stringify(data, null, 2), 0o600)
+        })
+        return
+      } catch (error) {
+        if (!legacyEntries(await all()).length) return
+        if (attempt === EXACT_MUTATION_ATTEMPTS - 1) throw error
+      }
+    }
   }
 
   export async function set(
@@ -474,7 +568,8 @@ export namespace McpAuth {
           await afterProjectRemovalReadForTest?.()
           const now = Date.now()
           for (const [authKey, current] of Object.entries(data)) {
-            if (parseScopedKey(authKey)?.projectID !== projectID) continue
+            const scope = parseScopedKey(authKey) ?? parseLegacyScopedKey(authKey)
+            if (scope?.projectID !== projectID) continue
             const entry = structuredClone(current)
             terminalizeActiveFlow(entry, now, "revoked")
             const terminals = retainCallbackTerminals(entry, now)
@@ -485,6 +580,7 @@ export namespace McpAuth {
             data[authKey] = Entry.parse({
               oauthCallbackTerminals: terminals,
               revision: crypto.randomUUID(),
+              ...(parseLegacyScopedKey(authKey) ? { legacyOwnerRetired: true } : {}),
             })
           }
           await Filesystem.writeAtomic(filepath(), JSON.stringify(data, null, 2), 0o600)
@@ -504,7 +600,9 @@ export namespace McpAuth {
           continue
         }
         const residue = Object.entries(current).some(
-          ([authKey, entry]) => parseScopedKey(authKey)?.projectID === projectID && hasCredentialOrFlowMaterial(entry),
+          ([authKey, entry]) =>
+            (parseScopedKey(authKey) ?? parseLegacyScopedKey(authKey))?.projectID === projectID &&
+            hasCredentialOrFlowMaterial(entry),
         )
         if (!residue) return
         if (attempt === EXACT_MUTATION_ATTEMPTS - 1) throw error
@@ -1062,7 +1160,7 @@ export namespace McpAuth {
     oauthState: string,
     callbackGeneration: string,
   ): Promise<
-    { authKey: string; projectID: string; mcpName: string; phase: "pending" | "finishing"; entry: Entry } | undefined
+    { authKey: string; projectID: string; phase: "pending" | "finishing"; entry: Entry } | undefined
   > {
     for (const [authKey, entry] of Object.entries(await all())) {
       const phase =
@@ -1072,9 +1170,10 @@ export namespace McpAuth {
             ? ("finishing" as const)
             : undefined
       if (!phase || entry.callbackGeneration !== callbackGeneration) continue
-      const scope = parseScopedKey(authKey)
+      // The legacy key can only route to the Project that will migrate it.
+      const scope = parseScopedKey(authKey) ?? parseLegacyScopedKey(authKey)
       if (!scope) continue
-      return { authKey, ...scope, phase, entry }
+      return { authKey, projectID: scope.projectID, phase, entry }
     }
     return undefined
   }
@@ -1089,13 +1188,11 @@ export namespace McpAuth {
   export async function findOAuthCallbackTerminal(
     oauthState: string,
     callbackGeneration: string,
-  ): Promise<{ authKey: string; projectID: string; mcpName: string; terminal: OAuthCallbackTerminal } | undefined> {
+  ): Promise<OAuthCallbackTerminal | undefined> {
     for (const [authKey, entry] of Object.entries(await all())) {
       const terminal = entry.oauthCallbackTerminals?.[oauthState]
       if (!terminal || terminal.callbackGeneration !== callbackGeneration) continue
-      const scope = parseScopedKey(authKey)
-      if (!scope) continue
-      return { authKey, ...scope, terminal }
+      if (parseScopedKey(authKey) || parseLegacyScopedKey(authKey)) return terminal
     }
     return undefined
   }

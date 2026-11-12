@@ -1898,6 +1898,10 @@ function SharedResourceManagementPanel(props: {
                   <Key each={mcpEntries()} by={(entry) => entry[0]}>
                     {(entry) => {
                       const name = () => entry()[0]
+                      const displayName = () => {
+                        const exact = name()
+                        return exact && exact === exact.trim() ? exact : JSON.stringify(exact)
+                      }
                       const connection = () => entry()[1]
                       const status = () => connection()?.status
                       const executionOwned = () => {
@@ -1915,7 +1919,7 @@ function SharedResourceManagementPanel(props: {
                       return (
                         <SettingsRow
                           class="extension-settings-row"
-                          title={name()}
+                          title={displayName()}
                           desc={detail() || undefined}
                           interactive={!executionOwned()}
                           actions={
@@ -1931,7 +1935,7 @@ function SharedResourceManagementPanel(props: {
                                   tone="neutral"
                                   aria-disabled={loading() || undefined}
                                   aria-busy={loading() || undefined}
-                                  aria-label={t(`${action()}_server`, { name: name() })}
+                                  aria-label={t(`${action()}_server`, { name: displayName() })}
                                   onClick={() => void handleMcpConnection(name(), status() === "connected")}
                                 >
                                   {t(action())}

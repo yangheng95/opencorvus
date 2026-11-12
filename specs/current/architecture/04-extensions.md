@@ -893,11 +893,18 @@ listener 或 monitor；stop 完成后下一次显式 ensure 才能重新启动 b
 `mcp-auth.json` 是 flow、PKCE（Proof Key for Code Exchange，授权码交换证明密钥）、dynamic client 与 credential 的唯一
 事实源。pending state 同时绑定 authorize-time server URL、OAuth client credential identity、callback generation 与完整 redirect URI；dynamic client registration
 使用独立的 client callback binding，不能被后来 state 写入伪装成已为新 URI 注册。callback broker 按 exact state 扫描
-store，解析 canonical `projectID:mcpName`，从 SQLite Project owner 映射 worktree，再通过
+store，解析活动键 `:2:<projectID>:<exact mcpName>`，从 SQLite Project owner 映射 worktree，再通过
 `runWithInitializedIndependentProject` 进入该 Project；不扫描 active Instance，也没有 process-local Project authority
 registration。升级前没有 generation 的 pending state/verifier/client facts 在首个 broker generation 下原子结算，token
 与 static credential 保留。token commit 同时快照它实际使用的 dynamic client；broker rotation 可删除仅供未来 authorize
 使用的旧 client registration，但 refresh token 仍使用该 token snapshot，直至 token set 本身被 invalidate。
+活动键的名称精确往返。项目首次进入 MCP 状态时，在当前配置读准入及凭据锁内原子升级旧键。旧
+活动和预写材料均能完整绑定到同一唯一配置时，保留原代际、材料和回调状态。存在多个可能所有者、
+缺少可证实绑定或当前键已有数据时，原凭据留在同一文件的历史归档字段，当前连接独立重新授权；
+pending 和 finishing 分别以 `revoked` 和 `exchange_uncertain` 结算。历史字段只保存数据，
+不会授予任何连接凭据。旧回调可按 exact state 定位需要升级的 Project，进入该项目后只从当前键
+恢复活动流程，已结算的回调继续使用同一 state 和 callback generation 的终态。项目删除在同一次
+凭据清理中移除该项目的历史材料和当前凭据。
 每个 OAuth provider connection admission 都通过 store lock 为 absent 或 upgrade-era material entry 初始化一个 non-empty revision；
 初始化不 supersede/clear flow，但此后所有 refresh/client/token writes 都携带该 exact revision。显式 remove 之后，已捕获的 legacy
 refresh writer 不能以 `expectedRevision=undefined` 复活 credential。

@@ -1,0 +1,40 @@
+{
+  "connectID": "83f0e140-2879-47b9-b7ef-c54e245f4b3b",
+  "callbackStatus": 400,
+  "comparison": {
+    "historicalTokenPreserved": true,
+    "archivedCredentialNotActive": true,
+    "otherTokenRetained": true,
+    "otherRevisionRetained": true,
+    "pendingTerminal": "revoked"
+  },
+  "states": [
+    {
+      "side": "project",
+      "requestID": "32a9ccb9-37f5-4763-8f6e-bcdb04ed0852",
+      "statuses": {
+        "review-oauth": {
+          "status": "disconnected"
+        },
+        " review-oauth ": {
+          "status": "disconnected"
+        },
+        "pending-oauth": {
+          "status": "disconnected"
+        },
+        " pending-oauth ": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "requestID": "d72b4536-85d3-476e-8ac3-439592c656ea",
+      "statuses": {
+        "review-oauth": {
+          "status": "connected"
+        }
+      }
+    }
+  ]
+}

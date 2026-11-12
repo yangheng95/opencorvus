@@ -53,7 +53,7 @@ describe("MCP configure commits the credential before the definition", () => {
             instance: Instance.projectGeneration,
             durable: Project.occurrence(projectID)?.generation,
           },
-          credential: (await McpAuth.get(`${projectID}:${SERVER}`))?.staticCredential?.secret,
+          credential: (await McpAuth.get(McpAuth.scopedKey({ projectID, mcpName: SERVER })))?.staticCredential?.secret,
         }).toEqual({
           generations: {
             instance: recreatedGeneration,
@@ -87,7 +87,7 @@ describe("MCP configure commits the credential before the definition", () => {
           const result = await configure
           expect({
             result: result instanceof Error ? result.message : result,
-            credential: await McpAuth.get(`${projectID}:${SERVER}`),
+            credential: await McpAuth.get(McpAuth.scopedKey({ projectID, mcpName: SERVER })),
           }).toEqual({
             result: expect.stringContaining("MCP Project owner changed while staging"),
             credential: undefined,
@@ -107,7 +107,7 @@ describe("MCP configure commits the credential before the definition", () => {
       fn: async () => {
         await MCP.configure(SERVER, remoteConfig(), "old-secret")
         const before = await Config.getProject()
-        const authKey = `${Instance.project.id}:${SERVER}`
+        const authKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
         const oldGeneration = Instance.projectGeneration
         const recreatedGeneration = crypto.randomUUID()
         Database.use((db) => {
@@ -173,7 +173,7 @@ describe("MCP configure commits the credential before the definition", () => {
         }
         expect({
           definition: (await Config.getProject()).mcp?.[SERVER],
-          secret: (await McpAuth.get(`${Instance.project.id}:${SERVER}`))?.staticCredential?.secret,
+          secret: (await McpAuth.get(McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })))?.staticCredential?.secret,
         }).toEqual({ definition: remoteConfig(), secret: "previous-secret" })
       },
     })
@@ -187,7 +187,7 @@ describe("MCP configure commits the credential before the definition", () => {
         // The exact durable state a crash between the credential write and the
         // definition commit leaves behind: a credential for a name no
         // definition declares.
-        const authKey = `${Instance.project.id}:${SERVER}`
+        const authKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
         await McpAuth.stageStaticCredential(authKey, "orphaned-secret", URL, "identity-from-dead-configure")
         await McpAuth.promoteStagedStaticCredential(authKey, {
           serverUrl: URL,
@@ -216,7 +216,7 @@ describe("MCP configure commits the credential before the definition", () => {
       fn: async () => {
         // A fully committed configure with its active secret...
         await MCP.configure(SERVER, remoteConfig(), "previous-secret")
-        const key = `${Instance.project.id}:${SERVER}`
+        const key = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
         expect((await McpAuth.get(key))?.staticCredential?.secret).toBe("previous-secret")
 
         // ...then a reconfigure toward a different identity dies after
@@ -256,7 +256,7 @@ describe("MCP configure commits the credential before the definition", () => {
     await Instance.provide({
       directory: project.path,
       fn: async () => {
-        const authKey = `${Instance.project.id}:${SERVER}`
+        const authKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
         await MCP.configure(SERVER, remoteConfig(), "previous-secret")
 
         // A normal, uninterrupted reconfigure toward a DIFFERENT credential
@@ -285,7 +285,7 @@ describe("MCP configure commits the credential before the definition", () => {
       directory: project.path,
       fn: async () => {
         await MCP.configure(SERVER, remoteConfig(), "previous-secret")
-        const key = `${Instance.project.id}:${SERVER}`
+        const key = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
         const identity = (await McpAuth.get(key))!.credentialIdentity!
         // The durable state of a configure that died after its definition
         // commit but before promotion. No further config commit follows.
@@ -316,8 +316,8 @@ describe("MCP configure commits the credential before the definition", () => {
       directory: project.path,
       fn: async () => {
         await MCP.configure(SERVER, remoteConfig(), "previous-secret")
-        const authKey = `${Instance.project.id}:${SERVER}`
-        const orphanKey = `${Instance.project.id}:interrupted-orphan`
+        const authKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
+        const orphanKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: "interrupted-orphan" })
         await McpAuth.set(orphanKey, { staticCredential: { secret: "orphan-secret" } }, URL)
         const orphanLease = await McpAuth.ensureRevision(orphanKey)
         const replacement = { ...remoteConfig(), credential: { type: "header" as const, name: "X-Committed-Key" } }
@@ -357,8 +357,8 @@ describe("MCP configure commits the credential before the definition", () => {
       directory: project.path,
       fn: async () => {
         await MCP.configure(SERVER, remoteConfig(), "AUDIT_SYNTHETIC_A")
-        const authKey = `${Instance.project.id}:${SERVER}`
-        const orphanKey = `${Instance.project.id}:interrupted-orphan`
+        const authKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })
+        const orphanKey = McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: "interrupted-orphan" })
         await McpAuth.set(orphanKey, { staticCredential: { secret: "AUDIT_SYNTHETIC_ORPHAN" } }, URL)
         const orphanLease = await McpAuth.ensureRevision(orphanKey)
         const interrupted = { ...remoteConfig(), credential: { type: "header" as const, name: "X-Interrupted" } }
@@ -436,7 +436,7 @@ describe("MCP configure commits the credential before the definition", () => {
         await apply()
         expect({
           status: (await MCP.projectStatus())[SERVER],
-          credential: (await McpAuth.get(`${Instance.project.id}:${SERVER}`))?.staticCredential?.secret,
+          credential: (await McpAuth.get(McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })))?.staticCredential?.secret,
         }).toEqual({ status: { status: "disabled" }, credential: "AUDIT_SYNTHETIC_PREPARED_SOURCE" })
       },
     })
@@ -449,7 +449,7 @@ describe("MCP configure commits the credential before the definition", () => {
       fn: async () => {
         await MCP.configure(SERVER, remoteConfig(), "live-secret")
         expect((await Config.getProject()).mcp?.[SERVER]).toMatchObject({ type: "remote", url: URL })
-        const { credentials } = await McpAuth.readForUrl(`${Instance.project.id}:${SERVER}`, URL)
+        const { credentials } = await McpAuth.readForUrl(McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER }), URL)
         expect(credentials?.staticCredential?.secret).toBe("live-secret")
       },
     })

@@ -318,7 +318,7 @@ describe("MCP OAuth finish from durable facts", () => {
               observedUsername,
               canonicalUsername: (await Config.getProject()).username,
               status,
-              credential: await McpAuth.get(`${Instance.project.id}:${SERVER}`),
+              credential: await McpAuth.get(McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: SERVER })),
             }).toMatchObject({
               error: "ConfigGenerationReentrantMutationError",
               observedUsername: "credential-generation",

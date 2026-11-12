@@ -1455,7 +1455,7 @@ export namespace MCP {
     projectID: string,
     oauthState: string,
   ): { mcpName: string; finish: PendingOAuthFinish } | undefined {
-    const prefix = `${projectID}:`
+    const prefix = McpAuth.projectScopePrefix(projectID)
     for (const finish of pendingOAuthFinishes.values()) {
       if (finish.root === Global.Path.root && finish.oauthState === oauthState && finish.authKey.startsWith(prefix)) {
         return { mcpName: finish.authKey.slice(prefix.length), finish }
@@ -2308,16 +2308,25 @@ export namespace MCP {
 
   const stateSource = createInstanceState(
     async () => {
+      const cfg = await Config.get()
+      const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+      await McpAuth.migrateProjectNames(
+        Instance.project.id,
+        Object.entries(config).flatMap(([mcpName, definition]) => {
+          const credentialIdentity = configuredCredentialIdentity(definition)
+          if (!credentialIdentity || !("url" in definition)) return []
+          return [{ mcpName, serverUrl: definition.url, credentialIdentity }]
+        }),
+        () => assertProjectOccurrenceCurrent("migrating MCP credential names"),
+      )
       // A configure that died between its definition commit and its promotion
       // left a staged secret; settling it here is what makes startup — not an
       // arbitrary later config commit — the crash owner, and it runs before
       // any status or connection is projected from the configuration below.
       await settleStagedCredentials({
-        projectAuthPrefix: `${Instance.project.id}:`,
+        projectAuthPrefix: McpAuth.projectScopePrefix(Instance.project.id),
         definitions: ((await Config.getProject()).mcp ?? {}) as NonNullable<Config.Info["mcp"]>,
       })
-      const cfg = await Config.get()
-      const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
       const clients: Record<string, MCPClient> = {}
       const connections: Record<string, McpConnection> = {}
       const status: Record<string, Status> = {}
@@ -2383,7 +2392,7 @@ export namespace MCP {
       await Promise.all([...connections].map((connection) => closeConnection(connection.key, connection)))
       for (const key of Object.keys(state.connections)) delete state.connections[key]
       for (const key of Object.keys(state.clients)) delete state.clients[key]
-      const projectAuthPrefix = `${state.projectID}:`
+      const projectAuthPrefix = McpAuth.projectScopePrefix(state.projectID)
       for (const [key, flow] of pendingOAuthFlows) {
         if (flow.root === Global.Path.root && flow.authKey.startsWith(projectAuthPrefix)) pendingOAuthFlows.delete(key)
       }
@@ -3131,7 +3140,7 @@ export namespace MCP {
     // its stage. The pending runtime transition can be older than that file;
     // only the current canonical definitions may retire credential facts.
     const definitions = (await Config.get()).mcp ?? {}
-    const projectAuthPrefix = `${s.projectID}:`
+    const projectAuthPrefix = McpAuth.projectScopePrefix(s.projectID)
     for (const [key, flow] of pendingOAuthFlows) {
       if (flow.root !== Global.Path.root || !flow.authKey.startsWith(projectAuthPrefix)) continue
       const name = flow.authKey.slice(projectAuthPrefix.length)
@@ -4792,13 +4801,14 @@ export namespace MCP {
         const claim = registerOAuthTerminalClaim(projectID, oauthState)
         try {
           const resolution = await inProject("resolve the OAuth callback's flow", async () => {
+            await state()
             const existingFinish = capturedOAuthFinish(claim)
             if (existingFinish) {
               const entry = await McpAuth.get(McpAuth.scopedKey({ projectID, mcpName: existingFinish.mcpName }))
               if (!entry?.revision) return undefined
               return { mcpName: existingFinish.mcpName, phase: "finishing" as const, revision: entry.revision }
             }
-            const prefix = `${projectID}:`
+            const prefix = McpAuth.projectScopePrefix(projectID)
             const entries = Object.entries(await McpAuth.all())
             const concurrentFinish = capturedOAuthFinish(claim)
             if (concurrentFinish) {
@@ -4927,8 +4937,8 @@ export namespace MCP {
       }
     }
     if (!scope) {
-      const settled = await McpAuth.findOAuthCallbackTerminal(oauthState, callbackGeneration)
-      return settled ? { terminal: settled.terminal } : undefined
+      const terminal = await McpAuth.findOAuthCallbackTerminal(oauthState, callbackGeneration)
+      return terminal ? { terminal } : undefined
     }
     const capturedRevision = scope.entry.revision
     if (!capturedRevision) return undefined
@@ -4947,7 +4957,10 @@ export namespace MCP {
     }
     const authority = durableFlowAuthority(project.worktree, project.id)
     const resolution = await authority.resolveState(oauthState)
-    if (!resolution) return undefined
+    if (!resolution) {
+      const terminal = await McpAuth.findOAuthCallbackTerminal(oauthState, callbackGeneration)
+      return terminal ? { terminal } : undefined
+    }
     return {
       authority,
       resolution,
@@ -5203,6 +5216,7 @@ export namespace MCP {
     oauthState: string,
     authKey: string,
   ): Promise<Status> {
+    await state()
     const completed = await McpAuth.getOAuthCallbackTerminal(authKey, oauthState)
     if (completed) return statusFromOAuthTerminal(completed)
     const finishingRevision = await McpAuth.get(authKey).then((entry) =>
@@ -5396,6 +5410,7 @@ export namespace MCP {
     const cfg = await Config.get()
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     requireMcpEntry(config, mcpName)
+    await state()
     await removeStoredAuth(mcpName)
   }
 
@@ -5414,8 +5429,19 @@ export namespace MCP {
    * Check if an MCP server has stored OAuth tokens.
    */
   export async function hasStoredTokens(mcpName: string): Promise<boolean> {
+    await state()
     const entry = await McpAuth.get(mcpAuthKey(mcpName))
     return !!entry?.tokens
+  }
+
+  export async function projectAuthEntries(): Promise<Map<string, McpAuth.Entry>> {
+    await state()
+    const prefix = McpAuth.projectScopePrefix(Instance.project.id)
+    return new Map(
+      Object.entries(await McpAuth.all()).flatMap(([key, entry]) =>
+        key.startsWith(prefix) ? [[key.slice(prefix.length), entry]] as const : [],
+      ),
+    )
   }
 
   export type AuthStatus = "authenticated" | "expired" | "not_authenticated"

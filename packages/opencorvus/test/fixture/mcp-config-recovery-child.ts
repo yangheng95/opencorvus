@@ -63,7 +63,7 @@ async function peerRuntimeRace(credential = false) {
     await peerEntered.promise
     if (credential) {
       await MCP.configure(name, replacement, "AUDIT_SYNTHETIC_B")
-      const entry = await McpAuth.get(`${Instance.project.id}:${name}`)
+      const entry = await McpAuth.get(McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: name }))
       return {
         available: !!entry?.staticCredential,
         matchesB: entry?.staticCredential?.secret === "AUDIT_SYNTHETIC_B",
@@ -129,7 +129,7 @@ if (action === "setup") {
             action === "b" ? "AUDIT_SYNTHETIC_B" : "AUDIT_SYNTHETIC_A",
           )
         else await MCP.status()
-        const entry = await McpAuth.get(`${Instance.project.id}:${name}`)
+        const entry = await McpAuth.get(McpAuth.scopedKey({ projectID: Instance.project.id, mcpName: name }))
         return {
           available: !!entry?.staticCredential,
           matchesA: entry?.staticCredential?.secret === "AUDIT_SYNTHETIC_A",

@@ -1,0 +1,173 @@
+{
+  "initial": [
+    {
+      "side": "project",
+      "requestID": "f4a00033-63b8-429e-8d92-5cafaea7b9bf",
+      "statuses": {
+        "review-oauth": {
+          "status": "disconnected"
+        },
+        " review-oauth ": {
+          "status": "disconnected"
+        },
+        "pending-oauth": {
+          "status": "disconnected"
+        },
+        " pending-oauth ": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "requestID": "a552a8e3-7333-4867-b17e-aad50faa3663",
+      "statuses": {
+        "review-oauth": {
+          "status": "disconnected"
+        }
+      }
+    }
+  ],
+  "restored": true,
+  "reconnects": [
+    {
+      "side": "project",
+      "name": "review-oauth",
+      "http": 200,
+      "ack": true,
+      "requestID": "76b2d8e4-f15a-460f-b82b-b7d8632d501b"
+    },
+    {
+      "side": "project",
+      "name": " review-oauth ",
+      "http": 200,
+      "ack": true,
+      "requestID": "9626a4a5-cb09-4d33-b5b4-9217e8298fcf"
+    },
+    {
+      "side": "alternate",
+      "name": "review-oauth",
+      "http": 200,
+      "ack": true,
+      "requestID": "718903c6-ce0c-4481-a06e-8b7f9b97b629"
+    }
+  ],
+  "states": [
+    {
+      "side": "project",
+      "requestID": "122f1539-2909-4bed-a5d4-f86d2eb06e10",
+      "statuses": {
+        "review-oauth": {
+          "status": "connected"
+        },
+        " review-oauth ": {
+          "status": "connected"
+        },
+        "pending-oauth": {
+          "status": "disconnected"
+        },
+        " pending-oauth ": {
+          "status": "disconnected"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "requestID": "a9db0202-a59d-4870-94ff-ab117527bbc1",
+      "statuses": {
+        "review-oauth": {
+          "status": "connected"
+        }
+      }
+    }
+  ],
+  "duplicate": {
+    "status": 200,
+    "exchangesBefore": 5,
+    "exchangesAfter": 5
+  },
+  "logout": {
+    "requestID": "f5a367ff-b34b-412d-ac62-ac2f7b747c66",
+    "status": 200,
+    "facts": {
+      "paddedTokenCleared": true,
+      "normalRetained": true,
+      "otherRetained": true
+    },
+    "reconnect": {
+      "side": "project",
+      "name": " review-oauth ",
+      "http": 500,
+      "ack": false,
+      "requestID": "5f6d1a5f-e791-4c0c-a3c9-61e85730955d"
+    },
+    "states": [
+      {
+        "side": "project",
+        "requestID": "d43dc7e7-ad37-4831-8317-7888a8b1796b",
+        "statuses": {
+          "review-oauth": {
+            "status": "connected"
+          },
+          " review-oauth ": {
+            "status": "needs_auth"
+          },
+          "pending-oauth": {
+            "status": "disconnected"
+          },
+          " pending-oauth ": {
+            "status": "disconnected"
+          }
+        }
+      },
+      {
+        "side": "alternate",
+        "requestID": "783cf41a-778b-4757-9893-cf9e259b4c92",
+        "statuses": {
+          "review-oauth": {
+            "status": "connected"
+          }
+        }
+      }
+    ]
+  },
+  "manual": {
+    "disconnect": {
+      "side": "project",
+      "requestID": "4d9eac9f-da54-43ea-bba7-ea7ebdb1d7aa",
+      "statuses": {
+        "review-oauth": {
+          "status": "connected"
+        },
+        " review-oauth ": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        },
+        "pending-oauth": {
+          "status": "disconnected"
+        },
+        " pending-oauth ": {
+          "status": "disconnected"
+        }
+      }
+    },
+    "reconnect": {
+      "side": "project",
+      "requestID": "ba3cf91c-3b1e-475f-9a1a-5bbb8a965caf",
+      "statuses": {
+        "review-oauth": {
+          "status": "connected"
+        },
+        " review-oauth ": {
+          "status": "connected"
+        },
+        "pending-oauth": {
+          "status": "disconnected"
+        },
+        " pending-oauth ": {
+          "status": "disconnected"
+        }
+      }
+    }
+  }
+}

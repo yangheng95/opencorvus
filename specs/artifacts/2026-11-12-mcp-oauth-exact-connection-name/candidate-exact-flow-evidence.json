@@ -1,0 +1,57 @@
+{
+  "starts": [
+    {
+      "name": "review-oauth",
+      "requestID": "f11e66a1-53a3-49c9-bb8f-72ae83404ca7"
+    },
+    {
+      "name": " review-oauth ",
+      "requestID": "1f9bea5a-c225-4f1c-9ca4-72d483efcee8"
+    }
+  ],
+  "parallelOwners": true,
+  "first": {
+    "side": "project",
+    "requestID": "ea75adb2-bbd1-4f44-90af-7fdc981a96a2",
+    "statuses": {
+      "review-oauth": {
+        "status": "needs_auth"
+      },
+      " review-oauth ": {
+        "status": "connected"
+      },
+      "pending-oauth": {
+        "status": "disconnected"
+      },
+      " pending-oauth ": {
+        "status": "disconnected"
+      }
+    }
+  },
+  "both": {
+    "side": "project",
+    "requestID": "926307a5-e32c-489c-8b1f-7fb70b02f66c",
+    "statuses": {
+      "review-oauth": {
+        "status": "connected"
+      },
+      " review-oauth ": {
+        "status": "connected"
+      },
+      "pending-oauth": {
+        "status": "disconnected"
+      },
+      " pending-oauth ": {
+        "status": "disconnected"
+      }
+    }
+  },
+  "callbacks": [
+    200,
+    200,
+    200
+  ],
+  "successfulExchangesBeforeDuplicate": 5,
+  "successfulExchangesAfterDuplicate": 5,
+  "separateTokens": true
+}

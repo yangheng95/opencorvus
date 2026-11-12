@@ -5700,6 +5700,8 @@ read is unavailable, it retains the write and read diagnostics and points to
 the existing automatic status reads.
 The row and readback notice use the runtime reason to label a manual
 disconnect. Configuration-disabled rows use their standard disabled label.
+Connection rows quote exact empty names and names with leading or trailing
+whitespace so configured names remain visually distinct.
 Execution-owned declarations identify their session or task scope on the
 project connection list. Their assignment remains accessible from the
 existing Chat and Work settings controls.

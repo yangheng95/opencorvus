@@ -1,0 +1,41 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b284-final",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39906",
+    "pid": 28372
+  },
+  "listenersBefore": [
+    {
+      "LocalPort": 39907,
+      "OwningProcess": 16612
+    },
+    {
+      "LocalPort": 39906,
+      "OwningProcess": 28372
+    },
+    {
+      "LocalPort": 19876,
+      "OwningProcess": 28372
+    }
+  ],
+  "shutdown": [
+    {
+      "url": "http://127.0.0.1:39906/shutdown",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:39907/__review_shutdown",
+      "status": 200
+    }
+  ],
+  "processIDsExited": [
+    3960,
+    20900,
+    28372,
+    16612
+  ],
+  "remainingListeners": [],
+  "remainingProcessIDs": []
+}
