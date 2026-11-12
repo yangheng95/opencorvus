@@ -4297,6 +4297,12 @@ listing. The request belongs to the active connection, conversation selection,
 and project. A later Explorer action takes precedence while a reveal is pending.
 Folders outside the current project receive a localized explanation on their
 card. A stored manifest can be downloaded separately as the original reference.
+The local file materializer marks its existing context text parts with a
+versioned capture identity. The transcript presents adjacent parts from one
+capture in a localized native disclosure. Its complete original text remains
+readable in chronological order, and the file or folder card keeps its current
+navigation. The provider and editor replay continue to receive the same text
+and file parts. Older text without capture metadata retains its normal rendering.
 Workspace opening and anonymous Project conversion share one directory-selection
 UI action. It selects the existing manualWorkspacePathEntry path dialog on
 browser hosts and the native picker on supported desktop hosts. Conversion names

@@ -1,5 +1,10 @@
 import { Index, Switch, Match, Show, createMemo, type JSX } from "solid-js"
 import { Key } from "@solid-primitives/keyed"
+import {
+  LOCAL_FILE_CONTEXT_METADATA_KEY,
+  LocalFileContextMetadataSchema,
+  type LocalFileContextMetadata,
+} from "@opencorvus-ai/transport-protocol"
 import type { CardNode } from "../store/card-tree"
 import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
@@ -21,6 +26,7 @@ import {
 } from "../utils/message-part"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
+import { Disclosure } from "./ui/Disclosure"
 import { InteractiveArtifactPart } from "./InteractiveArtifactPart"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
 import { partitionCardMessageRuns } from "../utils/card-message-run"
@@ -165,48 +171,93 @@ interface PartCollectionProps {
   turnArtifacts?: NonNullable<CardNode["turnArtifacts"]>
 }
 
-type CitationRenderRun = { kind: "source"; parts: ReturnType<typeof sourceParts> } | { kind: "part"; parts: any[] }
+type FileContextRenderRun = {
+  kind: "file-context"
+  capture: LocalFileContextMetadata
+  messageID?: string
+  parts: { text: string }[]
+}
+type BodyRenderRun =
+  | { kind: "source"; parts: ConversationSourcePart[] }
+  | { kind: "part"; parts: any[] }
+  | FileContextRenderRun
 
 function sourceParts(parts: any[]) {
   return parts.filter(isConversationSourcePart)
 }
 
-function citationRenderRuns(parts: any[]): CitationRenderRun[] {
-  const runs: CitationRenderRun[] = []
+function bodyRenderRuns(parts: any[]): BodyRenderRun[] {
+  const runs: BodyRenderRun[] = []
   for (const part of parts) {
-    const kind: CitationRenderRun["kind"] = isConversationSourcePart(part) ? "source" : "part"
     const previous = runs.at(-1)
-    if (previous?.kind === kind) previous.parts.push(part)
-    else runs.push({ kind, parts: [part] } as CitationRenderRun)
+    if (isConversationSourcePart(part)) {
+      if (previous?.kind === "source") previous.parts.push(part)
+      else runs.push({ kind: "source", parts: [part] })
+      continue
+    }
+    if (part?.type === "text" && part.kind === "context" && part.source === "system" && typeof part.text === "string") {
+      const capture = LocalFileContextMetadataSchema.safeParse(part.metadata?.[LOCAL_FILE_CONTEXT_METADATA_KEY])
+      if (capture.success) {
+        if (previous?.kind === "file-context" && previous.messageID === part.messageID &&
+          previous.capture.captureID === capture.data.captureID && previous.capture.kind === capture.data.kind) {
+          previous.parts.push(part)
+        } else {
+          runs.push({ kind: "file-context", capture: capture.data, messageID: part.messageID, parts: [part] })
+        }
+        continue
+      }
+    }
+    if (previous?.kind === "part") previous.parts.push(part)
+    else runs.push({ kind: "part", parts: [part] })
   }
   return runs
 }
 
-function CitationAwareBodyParts(props: PartCollectionProps) {
+function BodyParts(props: PartCollectionProps) {
   return (
-    <Index each={citationRenderRuns(props.parts)}>
-      {(run) => (
-        <Show
-          when={run().kind === "source"}
-          fallback={
-            <Index each={run().parts}>
-              {(part) => (
-                <RenderableCardPart
-                  part={part()}
-                  attachmentLabel={props.attachmentLabel}
-                  depth={props.depth}
-                  streaming={props.streaming}
-                  streamingTextPart={props.streamingTextPart}
-                  filePresentation={props.filePresentation}
-                  renderNestedCard={props.renderNestedCard}
-                />
+    <Index each={bodyRenderRuns(props.parts)}>
+      {(run) => {
+        const fileContext = () => {
+          const current = run()
+          if (current.kind === "file-context") return current
+        }
+        return (
+          <Switch>
+            <Match when={run().kind === "source"}>
+              <SourceParts sources={sourceParts(run().parts)} contextSources={props.contextSources} />
+            </Match>
+            <Match when={fileContext()}>
+              {(context) => (
+                <Disclosure.Root class="msg-local-file-context" variant="surface">
+                  <Disclosure.Trigger indicatorPosition="end">
+                    {t(context().capture.kind === "directory" ? "chat.captured_folder_context" : "chat.captured_file_context")}
+                  </Disclosure.Trigger>
+                  <Disclosure.Content class="msg-local-file-context__content">
+                    <Index each={context().parts}>
+                      {(part) => <pre class="msg-local-file-context__text">{part().text}</pre>}
+                    </Index>
+                  </Disclosure.Content>
+                </Disclosure.Root>
               )}
-            </Index>
-          }
-        >
-          <SourceParts sources={sourceParts(run().parts)} contextSources={props.contextSources} />
-        </Show>
-      )}
+            </Match>
+            <Match when={run().kind === "part"}>
+              <Index each={run().parts}>
+                {(part) => (
+                  <RenderableCardPart
+                    part={part()}
+                    attachmentLabel={props.attachmentLabel}
+                    depth={props.depth}
+                    streaming={props.streaming}
+                    streamingTextPart={props.streamingTextPart}
+                    filePresentation={props.filePresentation}
+                    renderNestedCard={props.renderNestedCard}
+                  />
+                )}
+              </Index>
+            </Match>
+          </Switch>
+        )
+      }}
     </Index>
   )
 }
@@ -412,16 +463,12 @@ function ChronologicalCollapsedParts(props: PartCollectionProps & { runs: Messag
   return (
     <Index each={runs()}>
       {(run) => (
-        <Show when={run().kind === "execution"} fallback={<CitationAwareBodyParts {...props} parts={run().parts} />}>
+        <Show when={run().kind === "execution"} fallback={<BodyParts {...props} parts={run().parts} />}>
           <ExecutionOverview {...props} parts={run().parts} />
         </Show>
       )}
     </Index>
   )
-}
-
-function BodyParts(props: PartCollectionProps) {
-  return <CitationAwareBodyParts {...props} />
 }
 
 function PartCollection(props: PartCollectionProps) {

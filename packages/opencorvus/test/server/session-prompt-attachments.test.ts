@@ -7,6 +7,11 @@ import { pathToFileURL } from "node:url"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js"
 import type { ReadResourceResult } from "@modelcontextprotocol/sdk/types.js"
+import {
+  LOCAL_DIRECTORY_REFERENCE_MIME,
+  LOCAL_FILE_CONTEXT_METADATA_KEY,
+  LocalFileContextMetadataSchema,
+} from "@opencorvus-ai/transport-protocol"
 import { Command } from "../../src/command"
 import { Config } from "../../src/config/config"
 import { Identifier } from "../../src/id/id"
@@ -387,6 +392,65 @@ async function storedFile(input: {
   expect(verified.reference.size).toBe(input.bytes.length)
   return { saved, file }
 }
+
+test("local file context groups preserve exact public text order and streaming input", async () => {
+  await scope(async ({ session, directory, errors, provider, send, body }) => {
+    const textPath = path.join(directory, "inspection notes.txt")
+    const folderPath = path.join(directory, "notes archive")
+    const binaryPath = path.join(directory, "owned recording.wav")
+    await fs.writeFile(textPath, "First line\nRecorded valve A42.\nEast wing only.\nLast line.\n")
+    await fs.mkdir(folderPath)
+    await fs.writeFile(path.join(folderPath, "memo.txt"), "Archive receipt.\n")
+    await fs.writeFile(binaryPath, wav)
+    const textURL = pathToFileURL(textPath)
+    textURL.searchParams.set("start", "2")
+    textURL.searchParams.set("end", "3")
+    const folderURL = pathToFileURL(folderPath).href
+    const files: FileInput[] = [
+      { type: "file", filename: "inspection notes.txt", mime: "text/plain", url: textURL.href },
+      { type: "file", filename: "notes archive", mime: LOCAL_DIRECTORY_REFERENCE_MIME, url: folderURL },
+      { type: "file", filename: "owned recording.wav", mime: "audio/wav", url: pathToFileURL(binaryPath).href },
+    ]
+    const input = body(files)
+    const literal = "Host-provided file context (not a model tool call): a sentence typed by the user."
+    const response = await send({ ...input, parts: [{ type: "text", text: literal }, ...files] })
+    const result = await completed(response, errors, provider)
+    expect(result.info.parentID).toBe(input.messageID)
+    const saved = await MessageStore.get({ sessionID: session.id, messageID: String(input.messageID) })
+    const context = { type: "text", kind: "context", source: "system" }
+    const label = (args: { filePath: string; offset?: number; limit?: number }) =>
+      `Host-provided file context (not a model tool call): ${JSON.stringify(args)}`
+    expect(saved.parts).toMatchObject([
+      { type: "text", text: literal },
+      { ...context, text: label({ filePath: textPath, offset: 2, limit: 2 }) },
+      { ...context, text: expect.stringContaining("2: Recorded valve A42.\n3: East wing only.") },
+      { type: "file", url: textURL.href },
+      { ...context, text: label({ filePath: folderPath }) },
+      { ...context, text: expect.stringContaining("<entries>\nmemo.txt\n") },
+      { type: "file", url: folderURL },
+      { ...context, text: label({ filePath: binaryPath }) },
+      { type: "file", filename: "owned recording.wav", mime: "audio/wav" },
+    ])
+    const markers = saved.parts.flatMap((part) => part.type === "text" && part.kind === "context"
+      ? [LocalFileContextMetadataSchema.parse(part.metadata?.[LOCAL_FILE_CONTEXT_METADATA_KEY])]
+      : [],
+    )
+    expect(markers.map((item) => item.kind)).toEqual(["file", "file", "directory", "directory", "file"])
+    expect(markers.map((item) => item.captureID)).toEqual([
+      markers[0]!.captureID,
+      markers[0]!.captureID,
+      markers[2]!.captureID,
+      markers[2]!.captureID,
+      markers[4]!.captureID,
+    ])
+    expect(new Set(markers.map((item) => item.captureID)).size).toBe(3)
+    const request = provider.promptRequests().at(-1)!.body as { messages: { role: string; content: unknown }[] }
+    const streamed = request.messages.filter((message) => message.role === "user").at(-1)
+    expect(streamed?.content).toEqual(saved.parts.flatMap((part) =>
+      part.type === "text" ? [{ type: "text", text: part.text }] : [],
+    ))
+  })
+}, 30_000)
 
 for (const representation of ["canonical", "data", "file"] as const) {
   test(`public Session ${representation} attachment persists exact bytes through the real streaming processor`, async () => {

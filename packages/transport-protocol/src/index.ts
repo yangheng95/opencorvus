@@ -1220,6 +1220,14 @@ export const DirectoryReferenceManifestSchema = z.object({
   path: z.string().min(1),
 }).strict()
 
+export const LOCAL_FILE_CONTEXT_METADATA_KEY = "local_file_context"
+export const LocalFileContextMetadataSchema = z.object({
+  version: z.literal(1),
+  captureID: z.string().min(1),
+  kind: z.enum(["file", "directory"]),
+}).strict()
+export type LocalFileContextMetadata = z.infer<typeof LocalFileContextMetadataSchema>
+
 export interface BrowserPreviewNativeBounds {
   x: number
   y: number

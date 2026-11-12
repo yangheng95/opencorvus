@@ -1,7 +1,12 @@
 import path from "path"
 import os from "os"
 import fs from "fs/promises"
-import { LOCAL_DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
+import {
+  LOCAL_DIRECTORY_REFERENCE_MIME,
+  LOCAL_FILE_CONTEXT_METADATA_KEY,
+  LocalFileContextMetadataSchema,
+  type LocalFileContextMetadata,
+} from "@opencorvus-ai/transport-protocol"
 import { Filesystem } from "../../util/filesystem"
 import { Identifier } from "../../id/id"
 import { Message } from "../message"
@@ -39,8 +44,26 @@ import { assertSessionDeletionAdmissionInTransaction } from "../deletion-cleanup
 
 const log = Log.create({ service: "session.prompt" })
 
-function hostFileContextLabel(args: Record<string, unknown>) {
-  return `Host-provided file context (not a model tool call): ${JSON.stringify(args)}`
+function localFileContextParts(
+  owner: { messageID: string; sessionID: string },
+  kind: LocalFileContextMetadata["kind"],
+  args: { filePath: string; offset?: number; limit?: number },
+  output?: string,
+): Omit<Message.TextPart, "id">[] {
+  const captureID = crypto.randomUUID()
+  const capture = LocalFileContextMetadataSchema.parse({ version: 1, captureID, kind })
+  const context = {
+    ...owner,
+    type: "text" as const,
+    kind: "context" as const,
+    source: "system" as const,
+    metadata: { [LOCAL_FILE_CONTEXT_METADATA_KEY]: capture },
+  }
+  const description = {
+    ...context,
+    text: `Host-provided file context (not a model tool call): ${JSON.stringify(args)}`,
+  }
+  return output === undefined ? [description] : [description, { ...context, text: output }]
 }
 
 function parseFileRangeLine(value: string, name: string): number {
@@ -529,6 +552,7 @@ export async function materializeUserMessage(
                   part.mime = "text/plain"
                 }
 
+                const contextOwner = { messageID: info.id, sessionID: input.sessionID }
                 if (part.mime === "text/plain") {
                   let offset: number | undefined = undefined
                   let limit: number | undefined = undefined
@@ -548,15 +572,6 @@ export async function materializeUserMessage(
                     }
                   }
                   const args = { filePath: filepath, offset, limit }
-
-                  const pieces: Draft<Message.Part>[] = [
-                    {
-                      messageID: info.id,
-                      sessionID: input.sessionID,
-                      type: "text",
-                      text: hostFileContextLabel(args),
-                    },
-                  ]
 
                   const t = await ReadTool.init()
                   const model = await Provider.getModel(info.model.providerID, info.model.modelID, { config })
@@ -578,12 +593,7 @@ export async function materializeUserMessage(
                       `Host-provided file context ${filepath} exceeds one complete read and has no model tool recovery path. Request an explicit start/end range.`,
                     )
                   }
-                  pieces.push({
-                    messageID: info.id,
-                    sessionID: input.sessionID,
-                    type: "text",
-                    text: result.output,
-                  })
+                  const pieces: Draft<Message.Part>[] = localFileContextParts(contextOwner, "file", args, result.output)
                   if (result.attachments?.length) {
                     pieces.push(
                       ...result.attachments.map((attachment) => ({
@@ -624,18 +634,7 @@ export async function materializeUserMessage(
                     )
                   }
                   return [
-                    {
-                      messageID: info.id,
-                      sessionID: input.sessionID,
-                      type: "text",
-                      text: hostFileContextLabel(args),
-                    },
-                    {
-                      messageID: info.id,
-                      sessionID: input.sessionID,
-                      type: "text",
-                      text: result.output,
-                    },
+                    ...localFileContextParts(contextOwner, "directory", args, result.output),
                     {
                       ...part,
                       messageID: info.id,
@@ -660,12 +659,7 @@ export async function materializeUserMessage(
                 )
                 FileTime.read(input.sessionID, filepath, bytes)
                 return [
-                  {
-                    messageID: info.id,
-                    sessionID: input.sessionID,
-                    type: "text",
-                    text: hostFileContextLabel({ filePath: filepath }),
-                  },
+                  ...localFileContextParts(contextOwner, "file", { filePath: filepath }),
                   {
                     id: part.id,
                     messageID: info.id,

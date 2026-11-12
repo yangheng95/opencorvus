@@ -994,15 +994,32 @@
 }
 
 .msg-pdf-attachment.oc-disclosure,
-.msg-text-attachment.oc-disclosure {
+.msg-text-attachment.oc-disclosure,
+.msg-local-file-context.oc-disclosure {
   margin-block: var(--ui-gap-xs);
   border: var(--oc-border-width) solid var(--border);
   background: var(--surface-inset);
 }
 
 .msg-pdf-attachment > .oc-disclosure__trigger,
-.msg-text-attachment > .oc-disclosure__trigger {
+.msg-text-attachment > .oc-disclosure__trigger,
+.msg-local-file-context > .oc-disclosure__trigger {
   padding: var(--ui-gap-sm) var(--ui-gap-md);
+}
+
+.msg-local-file-context__content {
+  display: grid;
+  gap: var(--ui-gap-sm);
+  padding: var(--ui-gap-xs) var(--ui-gap-md) var(--ui-gap-md);
+}
+
+.msg-local-file-context__text {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+  color: var(--text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .msg-pdf-attachment__type,

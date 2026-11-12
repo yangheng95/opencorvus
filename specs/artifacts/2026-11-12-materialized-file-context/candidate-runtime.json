@@ -1,0 +1,352 @@
+{
+  "desktopService": "http://127.0.0.1:40050/ui/",
+  "historicalRows": {
+    "session": {
+      "rows": 2,
+      "identical": true
+    },
+    "message": {
+      "rows": 8,
+      "identical": true
+    },
+    "part": {
+      "rows": 24,
+      "identical": true
+    }
+  },
+  "desktop": {
+    "bundle": "/ui/assets/main-DXtM8rDR.js",
+    "currentFile": {
+      "status": 200,
+      "requestID": "a8abe932-831c-4520-96ba-51adbd334f06",
+      "path": "/file/source-content",
+      "body": {
+        "type": "text",
+        "content": "Daily summary\r\nValve A42 photographed.\r\nScope is limited to the east wing.\r\nFollow-up after review.\r\n"
+      }
+    },
+    "folder": {
+      "status": 200,
+      "requestID": "d70e4149-f216-4d8d-8432-93229f5ae964",
+      "path": "/file",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "finalBundle": "/ui/assets/main-BCw_L4Xx.js",
+    "finalCurrentFile": {
+      "status": 200,
+      "requestID": "6f015571-d42f-425c-ada7-e969295c59c0",
+      "path": "/file/source-content",
+      "body": {
+        "type": "text",
+        "content": "Daily summary\r\nValve A42 photographed.\r\nScope is limited to the east wing.\r\nFollow-up after review.\r\n"
+      }
+    },
+    "finalFolder": {
+      "status": 200,
+      "requestID": "5915f51b-d738-4201-86ab-a2eefa17f74a",
+      "path": "/file",
+      "body": [
+        {
+          "name": "memo.txt",
+          "path": "notes archive\\memo.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive\\memo.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    "imageDownload": {
+      "filename": "sample panel.png",
+      "bytes": 100,
+      "matchesOriginal": true
+    }
+  },
+  "newOccurrences": {
+    "sessionID": "ses_hEJoJeUWv6LysnOCRKsh",
+    "createdRequestID": "17060936-d1fc-4e2a-8435-9f32bd428097",
+    "historyRequestID": "1067a366-c95d-419f-ab9c-c3ecf6d0c1a2",
+    "model": {
+      "providerID": "acp-review",
+      "modelID": "local"
+    },
+    "occurrences": [
+      {
+        "key": "range",
+        "messageID": "msg_ff486f470fd3d9bb16",
+        "requestID": "7e8c4a06-5e55-4e8d-8d27-2886f86ba33a",
+        "finish": "stop",
+        "parts": [
+          {
+            "id": "prt_g0ValmA1l006SM7RVOvo",
+            "orderKey": "v1:0001794494051149:0000000000000031:0000000000000000:part:prt_g0ValmA1l006SM7RVOvo",
+            "type": "text",
+            "text": "Review only the selected inspection lines.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+              "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+            }
+          },
+          {
+            "id": "prt_g0ValmA1l015NynLZXQm",
+            "orderKey": "v1:0001794494051152:0000000000000031:0000000000000000:part:prt_g0ValmA1l015NynLZXQm",
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\inspection notes.txt\",\"offset\":2,\"limit\":2}",
+            "kind": "context",
+            "source": "system",
+            "metadata": {
+              "local_file_context": {
+                "version": 1,
+                "captureID": "b364289f-9364-4963-8ac1-8afc6083cc3f",
+                "kind": "file"
+              }
+            }
+          },
+          {
+            "id": "prt_g0ValmA1l02eK1CK9g4O",
+            "orderKey": "v1:0001794494051153:0000000000000031:0000000000000000:part:prt_g0ValmA1l02eK1CK9g4O",
+            "type": "text",
+            "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\inspection notes.txt</path>\n<type>file</type>\n<content>2: Valve A42 photographed.\n3: Scope is limited to the east wing.\n\n(Showing lines 2-3 of 4. Use offset=4 to continue.)\n</content>",
+            "kind": "context",
+            "source": "system",
+            "metadata": {
+              "local_file_context": {
+                "version": 1,
+                "captureID": "b364289f-9364-4963-8ac1-8afc6083cc3f",
+                "kind": "file"
+              }
+            }
+          },
+          {
+            "id": "prt_g0ValmA1l03FSI578Ys4",
+            "orderKey": "v1:0001794494051154:0000000000000031:0000000000000000:part:prt_g0ValmA1l03FSI578Ys4",
+            "type": "file",
+            "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/inspection%20notes.txt?start=2&end=3",
+            "filename": "inspection notes.txt",
+            "mime": "text/plain"
+          }
+        ]
+      },
+      {
+        "key": "folder",
+        "messageID": "msg_b9a4ec0129ebbe6754",
+        "requestID": "6649f334-1375-4384-9a20-a6c76eda4fa1",
+        "finish": "stop",
+        "parts": [
+          {
+            "id": "prt_g0ValmAJR0061G7GagZ8",
+            "orderKey": "v1:0001794494052239:0000000000000031:0000000000000000:part:prt_g0ValmAJR0061G7GagZ8",
+            "type": "text",
+            "text": "Review the referenced notes archive.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+              "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+            }
+          },
+          {
+            "id": "prt_g0ValmAJR013FIlRTxQf",
+            "orderKey": "v1:0001794494052240:0000000000000031:0000000000000000:part:prt_g0ValmAJR013FIlRTxQf",
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\notes archive\"}",
+            "kind": "context",
+            "source": "system",
+            "metadata": {
+              "local_file_context": {
+                "version": 1,
+                "captureID": "6acf23d5-2f99-4a59-8a47-8aa2bbc92ba4",
+                "kind": "directory"
+              }
+            }
+          },
+          {
+            "id": "prt_g0ValmAJR02LZtoBfc6P",
+            "orderKey": "v1:0001794494052241:0000000000000031:0000000000000000:part:prt_g0ValmAJR02LZtoBfc6P",
+            "type": "text",
+            "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive</path>\n<type>directory</type>\n<entries>\nmemo.txt\n\n(1 entries)\n</entries>",
+            "kind": "context",
+            "source": "system",
+            "metadata": {
+              "local_file_context": {
+                "version": 1,
+                "captureID": "6acf23d5-2f99-4a59-8a47-8aa2bbc92ba4",
+                "kind": "directory"
+              }
+            }
+          },
+          {
+            "id": "prt_g0ValmAJR0323SgckC8e",
+            "orderKey": "v1:0001794494052242:0000000000000031:0000000000000000:part:prt_g0ValmAJR0323SgckC8e",
+            "type": "file",
+            "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/notes%20archive",
+            "filename": "notes archive",
+            "mime": "application/x-directory"
+          }
+        ]
+      },
+      {
+        "key": "binary",
+        "messageID": "msg_e9357a5ad178224b93",
+        "requestID": "95008e8e-8c91-4e64-853c-5af0a0daf535",
+        "finish": "stop",
+        "parts": [
+          {
+            "id": "prt_g0ValmAVm00eUQa1TohM",
+            "orderKey": "v1:0001794494053004:0000000000000031:0000000000000000:part:prt_g0ValmAVm00eUQa1TohM",
+            "type": "text",
+            "text": "Review the attached panel image.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+              "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+            }
+          },
+          {
+            "id": "prt_g0ValmAVm018DphYjRoZ",
+            "orderKey": "v1:0001794494053005:0000000000000031:0000000000000000:part:prt_g0ValmAVm018DphYjRoZ",
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\sample panel.png\"}",
+            "kind": "context",
+            "source": "system",
+            "metadata": {
+              "local_file_context": {
+                "version": 1,
+                "captureID": "2d04ed95-150d-4285-b83f-0c4014a7cac7",
+                "kind": "file"
+              }
+            }
+          },
+          {
+            "id": "prt_g0ValmAVm02iBOm1U4Rg",
+            "orderKey": "v1:0001794494053006:0000000000000031:0000000000000000:part:prt_g0ValmAVm02iBOm1U4Rg",
+            "type": "file",
+            "url": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+            "filename": "sample panel.png",
+            "mime": "image/png"
+          }
+        ]
+      },
+      {
+        "key": "control",
+        "messageID": "msg_e2fdc3a08a450cfd0f",
+        "requestID": "19ff6e78-cdfc-426e-93d5-61f6f1dbdd01",
+        "finish": "stop",
+        "parts": [
+          {
+            "id": "prt_g0ValmAhA00rGWuNN1n2",
+            "orderKey": "v1:0001794494053710:0000000000000031:0000000000000000:part:prt_g0ValmAhA00rGWuNN1n2",
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): this sentence was typed directly by the user.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496.json",
+              "catalog_snapshot_hash": "2534633b62ab10f72aecafdf1c5962d785d71b5f23ce6123f6e7c597cdf1e496"
+            }
+          }
+        ]
+      }
+    ],
+    "oldHistory": {
+      "sessionID": "ses_h67e6M4UmqDija1LZeLJ",
+      "requestID": "60056d81-83f4-4be4-aca7-a36476f602ec",
+      "exact": true,
+      "image": {
+        "requestID": "ffd0ffe2-80a8-47b4-a15a-e01aa5a9e1b6",
+        "bytes": 100,
+        "matchesOriginal": true
+      }
+    }
+  },
+  "fork": {
+    "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+    "requestID": "e31e9d7e-5018-4350-98f0-c56b103cfffc",
+    "historyRequestID": "b3c229af-f212-4f35-ab62-ce9c6ed4aad9",
+    "renumberedParts": [
+      {
+        "partID": "prt_g0VallCz901qUwj5nHU5",
+        "marker": {
+          "version": 1,
+          "captureID": "bc8b0c96-ddad-4f38-a8fa-2d144e29650c",
+          "kind": "file"
+        },
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\inspection notes.txt\",\"offset\":2,\"limit\":2}"
+      },
+      {
+        "partID": "prt_g0VallCz9029Wky6OTGC",
+        "marker": {
+          "version": 1,
+          "captureID": "bc8b0c96-ddad-4f38-a8fa-2d144e29650c",
+          "kind": "file"
+        },
+        "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\inspection notes.txt</path>\n<type>file</type>\n<content>2: Valve A42 photographed.\n3: Scope is limited to the east wing.\n\n(Showing lines 2-3 of 4. Use offset=4 to continue.)\n</content>"
+      },
+      {
+        "partID": "prt_g0VallCz908tCmT4M8P2",
+        "marker": {
+          "version": 1,
+          "captureID": "98a00546-65ca-4483-842a-ea68229eaf63",
+          "kind": "directory"
+        },
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\notes archive\"}"
+      },
+      {
+        "partID": "prt_g0VallCz909lnyeFWB1h",
+        "marker": {
+          "version": 1,
+          "captureID": "98a00546-65ca-4483-842a-ea68229eaf63",
+          "kind": "directory"
+        },
+        "text": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive</path>\n<type>directory</type>\n<entries>\nmemo.txt\n\n(1 entries)\n</entries>"
+      },
+      {
+        "partID": "prt_g0VallCz90Ff7bty2fsm",
+        "marker": {
+          "version": 1,
+          "captureID": "14b76a84-f6bd-489f-aa31-3ba0298efc4f",
+          "kind": "file"
+        },
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-iteration-20261112-b307\\\\project\\\\context-review\\\\sample panel.png\"}"
+      }
+    ],
+    "groupsRetained": true
+  },
+  "modelComparison": {
+    "requests": {
+      "range": {
+        "model": "acp-review/local",
+        "stream": true,
+        "requests": 2,
+        "exactBaselineContent": true,
+        "items": 3
+      },
+      "folder": {
+        "model": "acp-review/local",
+        "stream": true,
+        "requests": 2,
+        "exactBaselineContent": true,
+        "items": 3
+      },
+      "binary": {
+        "model": "acp-review/local",
+        "stream": true,
+        "requests": 2,
+        "exactBaselineContent": true,
+        "items": 3
+      },
+      "control": {
+        "model": "acp-review/local",
+        "stream": true,
+        "requests": 2,
+        "exactBaselineContent": true,
+        "items": 1
+      }
+    },
+    "localOrganizerReplies": 10
+  }
+}
