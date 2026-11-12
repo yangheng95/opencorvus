@@ -1,0 +1,201 @@
+{
+  "slow": [
+    {
+      "held": {
+        "time": "2026-11-12T01:42:46.095Z",
+        "stage": "held",
+        "route": "/export/session/ses_hgeraepFIZSuk8MmM9m0",
+        "method": "GET",
+        "round": "find-long",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "374e5b89-3766-4ad9-ad18-755b43d71e88",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hgeraepFIZSuk8MmM9m0",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794447705956,
+              "updated": 1794447706037
+            }
+          },
+          "messages": 0
+        }
+      },
+      "cancelled": {
+        "time": "2026-11-12T01:43:02.388Z",
+        "stage": "client-disconnected",
+        "route": "/export/session/ses_hgeraepFIZSuk8MmM9m0",
+        "method": "GET",
+        "round": "find-long",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "374e5b89-3766-4ad9-ad18-755b43d71e88",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hgeraepFIZSuk8MmM9m0",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794447705956,
+              "updated": 1794447706037
+            }
+          },
+          "messages": 0
+        }
+      },
+      "waited": 16293
+    },
+    {
+      "held": {
+        "time": "2026-11-12T01:43:17.646Z",
+        "stage": "held",
+        "route": "/export/session/ses_hgeraepFIZSuk8MmM9m0",
+        "method": "GET",
+        "round": "export-long",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "1e2cc6bb-87dc-4bf8-a140-16290aadddfc",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hgeraepFIZSuk8MmM9m0",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794447705956,
+              "updated": 1794447706037
+            }
+          },
+          "messages": 0
+        }
+      },
+      "cancelled": {
+        "time": "2026-11-12T01:43:34.040Z",
+        "stage": "client-disconnected",
+        "route": "/export/session/ses_hgeraepFIZSuk8MmM9m0",
+        "method": "GET",
+        "round": "export-long",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "1e2cc6bb-87dc-4bf8-a140-16290aadddfc",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hgeraepFIZSuk8MmM9m0",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794447705956,
+              "updated": 1794447706037
+            }
+          },
+          "messages": 0
+        }
+      },
+      "waited": 16394
+    }
+  ],
+  "cut": {
+    "time": "2026-11-12T01:44:00.530Z",
+    "stage": "truncated",
+    "route": "/export/session/ses_h4TkgUAezSIe0j4RG95d",
+    "method": "GET",
+    "round": "find-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-alternate\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "75dbebd1-fc53-4a2a-ba60-92e935214528",
+    "status": 200,
+    "bytes": 148,
+    "target": {
+      "session": {
+        "id": "ses_h4TkgUAezSIe0j4RG95d",
+        "title": "Work deadline control",
+        "time": {
+          "created": 1794447706745,
+          "updated": 1794447706800
+        }
+      },
+      "messages": 0
+    },
+    "deliveredBytes": 12
+  },
+  "retry": {
+    "time": "2026-11-12T01:44:13.803Z",
+    "stage": "delivered",
+    "route": "/export/session/ses_h4TkgUAezSIe0j4RG95d",
+    "method": "GET",
+    "round": "find-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-alternate\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "3e35f4f4-fa45-48f1-b902-3f0b30f1f0d4",
+    "status": 200,
+    "bytes": 148,
+    "target": {
+      "session": {
+        "id": "ses_h4TkgUAezSIe0j4RG95d",
+        "title": "Work deadline control",
+        "time": {
+          "created": 1794447706745,
+          "updated": 1794447706800
+        }
+      },
+      "messages": 0
+    }
+  },
+  "validations": [
+    {
+      "requestID": "cf9ad90f-df9c-459d-b28c-5900b25e0be7",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-project\\archive-review",
+      "projectID": "prj_hOREmznCwNCwYYOAufYu",
+      "body": {
+        "session": {
+          "id": "ses_hgeraepFIZSuk8MmM9m0",
+          "title": "Conversation deadline review",
+          "time": {
+            "created": 1794447705956,
+            "updated": 1794447706037
+          }
+        },
+        "messages": []
+      }
+    },
+    {
+      "requestID": "f511794a-7ba6-4e0f-a668-a4b6752c5181",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\baseline-alternate\\archive-review",
+      "projectID": "prj_h2MSPLMjui5N8jnJ2T8y",
+      "body": {
+        "session": {
+          "id": "ses_h4TkgUAezSIe0j4RG95d",
+          "title": "Work deadline control",
+          "time": {
+            "created": 1794447706745,
+            "updated": 1794447706800
+          }
+        },
+        "messages": []
+      }
+    }
+  ]
+}

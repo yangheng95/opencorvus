@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [对话快照读取期限和重试诊断](records/2026-11/2026-11-12-conversation-snapshot-read-deadline.md)
 - [命令面板等价输入的结果和键盘选项](records/2026-11/2026-11-12-command-palette-equivalent-input-focus.md)
 - [归档搜索请求合并与结果计数](records/2026-11/2026-11-12-archive-search-request-coalescing.md)
 - [归档永久删除的目标确认与回执恢复](records/2026-11/2026-11-12-archive-permanent-delete-receipt.md)
