@@ -46,7 +46,19 @@ import {
   type SkillMarketDetail,
 } from "../../services/extensions"
 import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
-import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, isMcpConfigurationProjectionError, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import {
+  addMcpServer,
+  buildMcpAddRequest,
+  connectMcp,
+  disconnectMcp,
+  deleteAllMcp,
+  isMcpConfigurationProjectionError,
+  isMcpConnectionConfigurationChanged,
+  startMcpAuthorization,
+  McpArgumentQuoteError,
+  type RemoteMcpCredentialType,
+  type RemoteMcpTransport,
+} from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
@@ -668,6 +680,17 @@ function SharedResourceManagementPanel(props: {
     }
   }
 
+  async function reportMcpConnectionError(error: unknown, name: string, owner: McpReadScope, current: () => boolean) {
+    if (!current()) return
+    const configurationChanged = isMcpConnectionConfigurationChanged(error, name)
+    if (configurationChanged) {
+      const status = await refreshMcpStatus(owner)
+      if (!current()) return
+      if (status) notifyResourceChange()
+    }
+    setPanelError(error, configurationChanged ? "mcp.connection_configuration_changed" : undefined)
+  }
+
   async function handleMcpConnection(name: string, disconnect: boolean) {
     if (loading() || mcpActionRequest) return
     const directory = currentDirectory()
@@ -707,7 +730,7 @@ function SharedResourceManagementPanel(props: {
       }
       if (status) notifyResourceChange()
     } catch (error) {
-      if (current()) setPanelError(error)
+      await reportMcpConnectionError(error, name, owner, current)
     } finally {
       if (current()) {
         mcpActionRequest = undefined
@@ -748,7 +771,7 @@ function SharedResourceManagementPanel(props: {
         confirmErrorSummary: () => t(canOpen() ? "llm.auth_open_failed" : "mcp.authorization_scope_changed"),
       })
     } catch (error) {
-      if (current()) setPanelError(error)
+      await reportMcpConnectionError(error, name, owner, current)
     } finally {
       if (current()) {
         mcpActionRequest = undefined

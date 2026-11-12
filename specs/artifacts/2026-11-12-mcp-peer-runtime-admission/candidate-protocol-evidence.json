@@ -1,0 +1,270 @@
+{
+  "reports": [
+    {
+      "port": 39938,
+      "requests": 90,
+      "groups": [
+        {
+          "endpoint": "/alternate/dot",
+          "operation": "initialize",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/alternate/dot",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 1
+        },
+        {
+          "endpoint": "/alternate/dot",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/alternate/normal",
+          "operation": "initialize",
+          "status": 200,
+          "count": 7
+        },
+        {
+          "endpoint": "/alternate/normal",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 7
+        },
+        {
+          "endpoint": "/alternate/normal",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 7
+        },
+        {
+          "endpoint": "/alternate/padded",
+          "operation": "initialize",
+          "status": 200,
+          "count": 5
+        },
+        {
+          "endpoint": "/alternate/padded",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 5
+        },
+        {
+          "endpoint": "/alternate/padded",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 5
+        },
+        {
+          "endpoint": "/project/dot",
+          "operation": "initialize",
+          "status": 200,
+          "count": 7
+        },
+        {
+          "endpoint": "/project/dot",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 7
+        },
+        {
+          "endpoint": "/project/dot",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 7
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "initialize",
+          "status": 200,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "initialize",
+          "status": 200,
+          "count": 6
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 6
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 6
+        }
+      ]
+    },
+    {
+      "port": 39944,
+      "requests": 32,
+      "groups": [
+        {
+          "endpoint": "/project/normal",
+          "operation": "initialize",
+          "status": 200,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "prompts/get",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "prompts/list",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "resources/list",
+          "status": 200,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/normal",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "initialize",
+          "status": 200,
+          "count": 3
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 3
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "prompts/get",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "resources/list",
+          "status": 200,
+          "count": 4
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 3
+        }
+      ]
+    },
+    {
+      "port": 39946,
+      "requests": 6,
+      "groups": [
+        {
+          "endpoint": "/alternate/padded",
+          "operation": "initialize",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/alternate/padded",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 1
+        },
+        {
+          "endpoint": "/alternate/padded",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "initialize",
+          "status": 200,
+          "count": 1
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "notifications/initialized",
+          "status": 202,
+          "count": 1
+        },
+        {
+          "endpoint": "/project/padded",
+          "operation": "tools/list",
+          "status": 200,
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "earlierSlowConnections": [
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "event": "protocol",
+      "endpoint": "/project/padded",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ]
+}

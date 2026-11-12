@@ -1,0 +1,66 @@
+{
+  "observations": {
+    "project": {
+      "address": "http://127.0.0.1:39938/project/normal",
+      "initial": "disconnected",
+      "final": "connected"
+    },
+    "alternate": {
+      "address": "http://127.0.0.1:39938/alternate/normal",
+      "initial": "disconnected",
+      "final": "connected"
+    }
+  },
+  "sent": [
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "70a64d91-ab96-45aa-9212-c786250301a7"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "e255a0c8-0443-4c42-a2ec-fe53ae88267e"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "5bff8eb6-b228-41a0-ae7f-75b91ee0936d"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "c60108e6-a663-4f90-8000-937ccad62f10"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "d5385356-deff-4acc-8283-3341bf930b38"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "bde7ae00-1af8-4688-8617-7f327b157220"
+    }
+  ]
+}

@@ -1710,6 +1710,7 @@
   "mcp.name": "名称 *",
   "mcp.name_whitespace_hint": "名称首尾的空白会原样保存。分配给对话或通用工作时，名称首尾须无空白。",
   "mcp.configuration_projection_changed": "变量或文件引用会改变连接。请修改名称或设置后重试。",
+  "mcp.connection_configuration_changed": "操作期间连接设置发生变化。请重试。",
   "mcp.none": "尚未配置 MCP 服务",
   "mcp.remote_url": "远程地址 *",
   "mcp.remote_url_invalid": "请输入带协议的完整地址。",

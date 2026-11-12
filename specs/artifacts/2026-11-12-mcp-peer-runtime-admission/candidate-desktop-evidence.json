@@ -1,0 +1,335 @@
+{
+  "bundle": "./assets/main-DS99HgM-.js",
+  "actions": [
+    {
+      "path": "/mcp/connect",
+      "method": "POST",
+      "name": "review-tools",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-project\\archive-review",
+      "status": 200,
+      "requestID": "143f8007-d263-468c-a87e-a5552faae6be",
+      "time": 1794476972742,
+      "data": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "method": "POST",
+      "name": "review-tools",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-project\\archive-review",
+      "status": 200,
+      "requestID": "86fc22d3-94b4-4fda-a2e9-e724ea50a0eb",
+      "time": 1794476973394,
+      "data": true
+    },
+    {
+      "path": "/mcp/connect",
+      "method": "POST",
+      "name": "review-tools",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-project\\archive-review",
+      "status": 409,
+      "requestID": "09ab4db8-7a2f-4a1d-b4e4-6bad2ad7f03b",
+      "time": 1794476991903,
+      "data": {
+        "name": "MCPConnectionConfigurationChangedError",
+        "data": {
+          "mcpName": "review-tools",
+          "message": "MCP server \"review-tools\" configuration changed while the connection was starting."
+        }
+      }
+    },
+    {
+      "path": "/mcp/connect",
+      "method": "POST",
+      "name": "review-tools",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-project\\archive-review",
+      "status": 200,
+      "requestID": "49e79c51-4f8c-4dfa-87f8-e913ddeddad4",
+      "time": 1794476998361,
+      "data": true
+    },
+    {
+      "path": "/mcp/connect",
+      "method": "POST",
+      "name": "review-tools",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-alternate\\archive-review",
+      "status": 409,
+      "requestID": "aa91934e-a0de-4282-a660-2df77d1761e4",
+      "time": 1794477014419,
+      "data": {
+        "name": "MCPConnectionConfigurationChangedError",
+        "data": {
+          "mcpName": "review-tools",
+          "message": "MCP server \"review-tools\" configuration changed while the connection was starting."
+        }
+      }
+    },
+    {
+      "path": "/mcp/connect",
+      "method": "POST",
+      "name": "review-tools",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-alternate\\archive-review",
+      "status": 200,
+      "requestID": "f32ec8c5-de06-417c-a91c-818c65447f2d",
+      "time": 1794477033073,
+      "data": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "method": "POST",
+      "name": "review-tools",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-alternate\\archive-review",
+      "status": 200,
+      "requestID": "94053c94-51de-43da-8143-05b23e4c469e",
+      "time": 1794477033745,
+      "data": true
+    }
+  ],
+  "english": {
+    "writes": [
+      {
+        "host": "peer",
+        "side": "project",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "e5fd8e0c-d486-4218-889b-dc8a30a4c921",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/project/padded"
+          ]
+        ]
+      },
+      {
+        "host": "peer",
+        "side": "project",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "4bca8809-8ae9-4fb3-93dd-1614255f8597",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/project/normal"
+          ]
+        ]
+      }
+    ],
+    "connected": {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "fe040d97-4a00-441e-b32e-b6b10fbb2be2",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    },
+    "manual": {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "d640041e-da20-48c6-9c9b-467f748422df",
+      "data": {
+        "review-tools": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        }
+      }
+    },
+    "conflict": {
+      "side": "project",
+      "reset": 200,
+      "held": {
+        "host": "peer",
+        "side": "project",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "a01c5b5b-ce82-434b-a3e5-d6562f2717f2",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39946/project/padded"
+          ]
+        ]
+      },
+      "write": {
+        "host": "peer",
+        "side": "project",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "2307521c-96e8-465b-8efd-3d63c0060299",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/project/dot"
+          ]
+        ]
+      },
+      "read": {
+        "host": "reader",
+        "side": "project",
+        "route": "/config",
+        "method": "GET",
+        "status": 200,
+        "requestID": "a518824d-d286-4cce-b107-2ff874376a2b",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/project/dot"
+          ]
+        ]
+      },
+      "released": 200
+    },
+    "statusRead": {
+      "path": "/mcp/project",
+      "method": "GET",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-project\\archive-review",
+      "status": 200,
+      "requestID": "74f2dd47-49dc-4aac-aa9e-72c39a96da90",
+      "time": 1794476991914,
+      "data": {
+        "review-tools": {
+          "status": "disconnected"
+        }
+      }
+    },
+    "retry": {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "6dee440c-c76a-440d-b994-3170187a6efe",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    }
+  },
+  "chinese": {
+    "conflict": {
+      "side": "alternate",
+      "reset": 200,
+      "held": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "9d9c836b-9ff7-4859-8e63-26bcf22f77ab",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39946/alternate/padded"
+          ]
+        ]
+      },
+      "write": {
+        "host": "peer",
+        "side": "alternate",
+        "route": "/config",
+        "method": "PATCH",
+        "status": 200,
+        "requestID": "8fb61da6-102a-4598-bf7e-53c8b21254b0",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/dot"
+          ]
+        ]
+      },
+      "read": {
+        "host": "reader",
+        "side": "alternate",
+        "route": "/config",
+        "method": "GET",
+        "status": 200,
+        "requestID": "178861f0-1306-49e5-bd40-c7a1e1d085d6",
+        "data": [
+          [
+            "review-tools",
+            "http://127.0.0.1:39938/alternate/dot"
+          ]
+        ]
+      },
+      "released": 200
+    },
+    "statusRead": {
+      "path": "/mcp/project",
+      "method": "GET",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b292\\candidate-alternate\\archive-review",
+      "status": 200,
+      "requestID": "c1ef42ec-e02d-4371-8d56-45d53de6a2e6",
+      "time": 1794477014430,
+      "data": {
+        "review-tools": {
+          "status": "disconnected"
+        }
+      }
+    },
+    "retry": {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "87253794-f374-4eb0-93e4-a21157ef6447",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    },
+    "manualWrite": {
+      "host": "peer",
+      "side": "alternate",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "3e2c6254-bb74-4d0f-95ae-7a4c79a309f8",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/alternate/normal"
+        ]
+      ]
+    },
+    "manual": {
+      "host": "reader",
+      "side": "alternate",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "0597a71b-cc62-41eb-8b6e-77d97f3f3503",
+      "data": {
+        "review-tools": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        }
+      }
+    }
+  },
+  "otherProject": {
+    "host": "reader",
+    "side": "project",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "requestID": "d98184ce-d769-4c18-a8f1-f7ce09734f90",
+    "data": {
+      "review-tools": {
+        "status": "connected"
+      }
+    }
+  }
+}

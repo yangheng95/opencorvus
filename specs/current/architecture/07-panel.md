@@ -5715,6 +5715,8 @@ existing Chat and Work settings controls.
 When a mutation reply needs readback, the notice names any received HTTP
 status before reporting the separately observed project state. A reply that
 cannot confirm the operation uses the shared localized summary.
+An exact connection configuration conflict reads the current project status,
+offers a localized retry message, and keeps the received diagnostic in the details.
 An add reply acknowledges the exact submitted server only when its own
 entry carries a valid MCP status. The add receipt and project status read use
 the same status validation. An unconfirmed add retains the submitted draft.

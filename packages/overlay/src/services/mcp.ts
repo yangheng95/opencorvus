@@ -177,6 +177,17 @@ export function isMcpConfigurationProjectionError(error: unknown): boolean {
   )
 }
 
+export function isMcpConnectionConfigurationChanged(error: unknown, name: string): boolean {
+  return (
+    error instanceof ApiError &&
+    error.status === 409 &&
+    isObjectRecord(error.body) &&
+    error.body.name === "MCPConnectionConfigurationChangedError" &&
+    isObjectRecord(error.body.data) &&
+    error.body.data.mcpName === name
+  )
+}
+
 export function isMcpServerStatus(value: unknown): value is McpStatus {
   if (!isObjectRecord(value)) return false
   const status = value.status

@@ -400,11 +400,11 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/mcp` | Get MCP status | `mcp.status` |
 | POST | `/mcp` | Add MCP server 请求体: `config`, `credentialSecret`, `name`; 错误: `BadRequestError`. | `mcp.add` |
 | DELETE | `/mcp/auth` | Remove MCP OAuth 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.remove` |
-| POST | `/mcp/auth` | Start MCP OAuth 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.start` |
-| POST | `/mcp/auth/authenticate` | Authenticate MCP OAuth 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `mcp.auth.authenticate` |
+| POST | `/mcp/auth` | Start MCP OAuth 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MCPConnectionConfigurationChangedError`, `NotFoundError`, `UnknownError`. | `mcp.auth.start` |
+| POST | `/mcp/auth/authenticate` | Authenticate MCP OAuth 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MCPConnectionConfigurationChangedError`, `NotFoundError`, `UnknownError`. | `mcp.auth.authenticate` |
 | POST | `/mcp/auth/callback` | Complete MCP OAuth 请求体: `code`, `name`, `state`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MCPOAuthStateError`, `NotFoundError`, `UnknownError`. | `mcp.auth.callback` |
-| POST | `/mcp/connect` | （无说明） 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MCPAuthorizationRequiredError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`, `UnknownError`. | `mcp.connect` |
-| POST | `/mcp/disconnect` | （无说明） 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`. | `mcp.disconnect` |
+| POST | `/mcp/connect` | （无说明） 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MCPAuthorizationRequiredError`, `MCPConnectionConfigurationChangedError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`, `UnknownError`. | `mcp.connect` |
+| POST | `/mcp/disconnect` | （无说明） 请求体: `name`; 错误: `BadRequestError`, `LogFileNotFoundError`, `MCPConnectionConfigurationChangedError`, `MCPExecutionConnectionRequiredError`, `NotFoundError`. | `mcp.disconnect` |
 | GET | `/mcp/project` | Get project-owned MCP status | `mcp.project.status` |
 
 ### Permission

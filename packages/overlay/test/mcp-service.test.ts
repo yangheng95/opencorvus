@@ -11,6 +11,7 @@ import {
   InvalidMcpAddReceiptError,
   InvalidMcpConnectionReceiptError,
   InvalidMcpRemovalReceiptError,
+  isMcpConnectionConfigurationChanged,
   McpArgumentQuoteError,
   parseMcpArguments,
   removeMcpAuth,
@@ -365,6 +366,20 @@ describe("MCP overlay service", () => {
     })
 
     expect(await connectMcp(name, { directory: PROJECT_DIR, authority: captureApiAuthority() })).toBe("needs_auth")
+  })
+
+  test("identifies the exact connection configuration conflict", async () => {
+    const name = " docs "
+    const body = { name: "MCPConnectionConfigurationChangedError", data: { mcpName: name, message: "Configuration changed" } }
+    __setHostTransportForTest({
+      ...fakeTransport(() => {}),
+      async request<T>(): Promise<TransportResponse<T>> {
+        return { status: 409, ok: false, headers: {}, body: body as T }
+      },
+    })
+    const error = await connectMcp(name, { directory: PROJECT_DIR, authority: captureApiAuthority() }).catch((cause: unknown) => cause)
+    expect(error).toMatchObject({ status: 409, body })
+    expect(isMcpConnectionConfigurationChanged(error, name)).toBe(true)
   })
 
   test("returns the prepared browser address from the exact scoped authorization request", async () => {

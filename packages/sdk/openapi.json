@@ -12004,6 +12004,34 @@
         ],
         "type": "object"
       },
+      "MCPConnectionConfigurationChangedError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "mcpName": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "mcpName",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "MCPConnectionConfigurationChangedError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "MCPExecutionConnectionRequiredError": {
         "properties": {
           "data": {
@@ -90213,6 +90241,16 @@
             },
             "description": "Not found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPConnectionConfigurationChangedError"
+                }
+              }
+            },
+            "description": "MCP configuration changed during the operation"
+          },
           "500": {
             "content": {
               "application/json": {
@@ -90356,6 +90394,16 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPConnectionConfigurationChangedError"
+                }
+              }
+            },
+            "description": "MCP configuration changed during the operation"
           },
           "500": {
             "content": {
@@ -90689,12 +90737,15 @@
                     },
                     {
                       "$ref": "#/components/schemas/MCPExecutionConnectionRequiredError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MCPConnectionConfigurationChangedError"
                     }
                   ]
                 }
               }
             },
-            "description": "MCP authorization is required or the connection is managed by its session or task"
+            "description": "MCP configuration changed, authorization is required, or execution owns the connection"
           },
           "500": {
             "content": {
@@ -90843,11 +90894,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MCPExecutionConnectionRequiredError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/MCPExecutionConnectionRequiredError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MCPConnectionConfigurationChangedError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "MCP connection is managed by its session or task"
+            "description": "MCP configuration changed or execution owns the connection"
           }
         },
         "x-codeSamples": [

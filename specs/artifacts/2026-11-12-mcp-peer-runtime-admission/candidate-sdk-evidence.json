@@ -1,0 +1,297 @@
+{
+  "observations": {
+    "oauth": {
+      "start": 200,
+      "authenticate": 200
+    },
+    "resources": [
+      {
+        "status": 200,
+        "uri": "mcp://review/project/normal"
+      },
+      {
+        "status": 200,
+        "uri": "mcp://review/project/padded"
+      },
+      {
+        "status": 200,
+        "uri": "mcp://review/project/normal"
+      }
+    ],
+    "global": [
+      {
+        "side": "project",
+        "state": {
+          "status": "connected"
+        }
+      },
+      {
+        "side": "alternate",
+        "state": {
+          "status": "connected"
+        }
+      }
+    ]
+  },
+  "sent": [
+    {
+      "source": "writer",
+      "side": "project",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "fe0b488e-bdb8-410e-a5e6-be68f132ffb9"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "65ac3a7b-2bda-4cef-b6c7-ec0c9cd688a1"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "4453e22e-a7a5-4fc1-937e-30acf63bb3ed"
+    },
+    {
+      "source": "writer",
+      "side": "project",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "4c4aa4c8-0dd2-40cb-b40d-17ab15c11229"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/disconnect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "298c777b-d43f-4444-aca5-3b846d1ebbd1"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "3ea64f78-5366-4da3-912f-defe095b570c"
+    },
+    {
+      "source": "writer",
+      "side": "alternate",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "6e716806-0672-4787-af1e-b58eb6c3d596"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/auth",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "ae60fac9-2a34-42fb-9dc7-603b9059b9e6"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "c276008c-dfe9-4a1f-b809-e7acbdeeafa7"
+    },
+    {
+      "source": "writer",
+      "side": "alternate",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "e7d4dc62-10d9-4ca4-844c-009d933c67ad"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/auth/authenticate",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "a4f97097-a795-4f0e-9fd0-1cd53cace5f5"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "a39a475a-5449-4a2a-a725-c2c0c151fc1e"
+    },
+    {
+      "source": "writer",
+      "side": "project",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "peer-inventory",
+      "status": 200,
+      "requestID": "95d31082-9955-47c6-8df9-e9359243a093"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/experimental/resource",
+      "status": 200,
+      "requestID": "109321b0-baa1-4441-bb0b-9fa988597cdc"
+    },
+    {
+      "source": "writer",
+      "side": "project",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "peer-inventory",
+      "status": 200,
+      "requestID": "1c22d59a-bbd7-49cb-8f72-e41ec36ab0bd"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/experimental/resource",
+      "status": 200,
+      "requestID": "5a0ea5f8-bbca-4a05-9b4b-95518ec874a4"
+    },
+    {
+      "source": "writer",
+      "side": "project",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "peer-inventory",
+      "status": 200,
+      "requestID": "a2288b3d-d1f1-4460-a883-e707a126e123"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/experimental/resource",
+      "status": 200,
+      "requestID": "04e3a659-a692-4164-b721-f0304187ad84"
+    },
+    {
+      "source": "writer",
+      "side": "global",
+      "method": "PATCH",
+      "path": "/global/config",
+      "name": "peer-global-review",
+      "status": 200,
+      "requestID": "8c9d2172-38f0-46a4-81fb-ef8d51ca6a4c"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "peer-global-review",
+      "status": 200,
+      "requestID": "a958eb18-285b-4c61-8658-8138c7e5b43b"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "peer-global-review",
+      "status": 200,
+      "requestID": "18cfbd5a-fd10-405f-8a22-433f06067984"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "51476c69-03e3-42f8-89bf-d147d1018ef4"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "e847ad80-7ca3-4646-89dc-d5c27191b74f"
+    },
+    {
+      "source": "writer",
+      "side": "global",
+      "method": "PATCH",
+      "path": "/global/config",
+      "name": "peer-global-review",
+      "status": 200,
+      "requestID": "f6a62547-093e-4732-a0da-68283172905f"
+    },
+    {
+      "source": "writer",
+      "side": "project",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "peer-inventory",
+      "status": 200,
+      "requestID": "64b449b0-f804-4eaf-87b3-bfa01469bb70"
+    },
+    {
+      "source": "writer",
+      "side": "alternate",
+      "method": "PATCH",
+      "path": "/config",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "c3d1153f-6fe3-4ad5-8034-863af39c03c8"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "d57f539e-635b-4d5f-8599-f69934b43153"
+    },
+    {
+      "source": "reader",
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "3d7f2f48-c271-4775-ad15-c643e03eba60"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-tools",
+      "status": 200,
+      "requestID": "1ecf5968-ad1a-49cc-9ea7-917cb8a7e953"
+    },
+    {
+      "source": "reader",
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "fd9f8d76-e7ee-47ac-a087-81ce61632927"
+    }
+  ]
+}

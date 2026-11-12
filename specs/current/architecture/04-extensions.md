@@ -1081,6 +1081,8 @@ Harness 中精确的 `default/mcp/computer/tool/*` refs 投影同一组平台工
 公开连接及授权操作在 `/mcp/connect`、`/mcp/disconnect`、`/mcp/auth`、`/mcp/auth/authenticate`、
 `/mcp/auth/callback` 的 JSON 请求体接受精确 `name`，空字符串表示真实的空名。手动完成授权另携带
 `code` 和 `state`，浏览器本地 redirect 仍由 `/mcp/oauth/callback` broker 按 state 管理。
+连接、断开、授权启动及当前项目提示和资源读取先等待本项目已观察配置的运行态结算。
+具名操作以同一精确连接配置和代际执行，遇到操作中的配置更换返回 `MCPConnectionConfigurationChangedError`。
 公开命令列表在请求租约内结算所有本地与 MCP 提示模板后发布字符串。单条命令执行按需等待同一提示解析，
 模板读取错误由当前请求所有者结算。
 

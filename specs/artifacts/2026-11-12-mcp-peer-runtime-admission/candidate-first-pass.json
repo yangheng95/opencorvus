@@ -1,0 +1,182 @@
+{
+  "writes": [
+    {
+      "host": "peer",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "a6b74a85-72eb-4a5a-b9a6-96ceb4d5067c",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/padded"
+        ]
+      ]
+    },
+    {
+      "host": "peer",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "6545a580-517f-416f-89b1-224761a7858d",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/normal"
+        ]
+      ]
+    }
+  ],
+  "first": [
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "22a5c062-dfbb-47e0-89ce-bec5a2b96ef9",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "b09de017-67a1-4c11-afad-14619193be79",
+      "data": {
+        "review-tools": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        }
+      }
+    }
+  ],
+  "conflict": {
+    "held": {
+      "host": "peer",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "07ad7dac-b978-4fb5-9447-7d62157546eb",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39946/project/padded"
+        ]
+      ]
+    },
+    "write": {
+      "host": "peer",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "3b94a081-3f03-485e-85ce-7e747c8391d1",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/dot"
+        ]
+      ]
+    },
+    "observed": {
+      "host": "reader",
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "6acdc51b-5743-449b-b131-7e1c526bee84",
+      "data": [
+        [
+          "review-tools",
+          "http://127.0.0.1:39938/project/dot"
+        ]
+      ]
+    },
+    "release": 200,
+    "state": {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "93b923eb-efde-4d77-9c55-e3712da4f9af",
+      "data": {
+        "review-tools": {
+          "status": "disconnected"
+        }
+      }
+    },
+    "retry": {
+      "host": "reader",
+      "side": "project",
+      "route": "/mcp/project",
+      "method": "GET",
+      "status": 200,
+      "requestID": "b51e23bf-8847-4b4d-a653-b9969647e783",
+      "data": {
+        "review-tools": {
+          "status": "connected"
+        }
+      }
+    }
+  },
+  "desktop": [
+    {
+      "path": "/mcp/connect",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "652ed47a-ada7-4dbe-99da-a4d199246ef7",
+      "data": true
+    },
+    {
+      "path": "/mcp/disconnect",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "35704521-c8de-4d1a-a71e-855d9529678b",
+      "data": true
+    },
+    {
+      "path": "/mcp/connect",
+      "requestName": "review-tools",
+      "status": 409,
+      "requestID": "03da9d1f-e297-4ee0-b58f-b9319aee7e38",
+      "data": {
+        "name": "MCPConnectionConfigurationChangedError",
+        "data": {
+          "mcpName": "review-tools",
+          "message": "MCP server \"review-tools\" configuration changed while the connection was starting."
+        }
+      }
+    },
+    {
+      "path": "/mcp/connect",
+      "requestName": "review-tools",
+      "status": 200,
+      "requestID": "8c65e2ff-d6c6-4802-b0cf-dd9d9c7f2967",
+      "data": true
+    }
+  ],
+  "restore": {
+    "host": "peer",
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "ca81f436-a0a1-4174-aeca-819c744559ac",
+    "data": [
+      [
+        "review-tools",
+        "http://127.0.0.1:39938/project/normal"
+      ]
+    ]
+  }
+}

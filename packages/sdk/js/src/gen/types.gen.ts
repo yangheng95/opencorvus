@@ -3276,6 +3276,14 @@ export type McpAuthorizationRequiredError = {
   name: "MCPAuthorizationRequiredError"
 }
 
+export type McpConnectionConfigurationChangedError = {
+  data: {
+    mcpName: string
+    message: string
+  }
+  name: "MCPConnectionConfigurationChangedError"
+}
+
 export type McpExecutionConnectionRequiredError = {
   data: {
     mcpName: string
@@ -24930,6 +24938,10 @@ export type McpAuthStartErrors = {
         name: "LogFileNotFoundError"
       }
   /**
+   * MCP configuration changed during the operation
+   */
+  409: McpConnectionConfigurationChangedError
+  /**
    * MCP OAuth start failed
    */
   500: {
@@ -24994,6 +25006,10 @@ export type McpAuthAuthenticateErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * MCP configuration changed during the operation
+   */
+  409: McpConnectionConfigurationChangedError
   /**
    * MCP OAuth completion failed
    */
@@ -25130,9 +25146,9 @@ export type McpConnectErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * MCP authorization is required or the connection is managed by its session or task
+   * MCP configuration changed, authorization is required, or execution owns the connection
    */
-  409: McpAuthorizationRequiredError | McpExecutionConnectionRequiredError
+  409: McpAuthorizationRequiredError | McpExecutionConnectionRequiredError | McpConnectionConfigurationChangedError
   /**
    * MCP connection failed
    */
@@ -25194,9 +25210,9 @@ export type McpDisconnectErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * MCP connection is managed by its session or task
+   * MCP configuration changed or execution owns the connection
    */
-  409: McpExecutionConnectionRequiredError
+  409: McpExecutionConnectionRequiredError | McpConnectionConfigurationChangedError
 }
 
 export type McpDisconnectError = McpDisconnectErrors[keyof McpDisconnectErrors]

@@ -171,6 +171,11 @@ export namespace MCP {
     z.object({ mcpName: z.string(), message: z.string() }),
   )
 
+  export const ConnectionConfigurationChangedError = NamedError.create(
+    "MCPConnectionConfigurationChangedError",
+    z.object({ mcpName: z.string(), message: z.string() }),
+  )
+
   type MCPClient = Client
   export type AppToolBinding = {
     serverID: string
@@ -4043,18 +4048,40 @@ export namespace MCP {
     }
   }
 
+  async function settledProjectConnection(name: string) {
+    const cfg = await Config.getForProjectRuntime()
+    const s = await state()
+    const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+    const mcp = requireMcpEntry(config, name)
+    const ownerIdentity = mcpConfigIdentity(mcp)
+    const ownerGeneration = s.durableGeneration[name]
+    const changed = (stage: string) =>
+      new ConnectionConfigurationChangedError({
+        mcpName: name,
+        message: `MCP server ${JSON.stringify(name)} configuration changed ${stage}.`,
+      })
+    if (ownerGeneration === undefined || s.durableIdentity[name] !== ownerIdentity) {
+      throw changed("before the operation started")
+    }
+    const assertCurrent = async (stage: string) => {
+      const current = (await Config.get()).mcp?.[name]
+      if (
+        !current ||
+        mcpConfigIdentity(current) !== ownerIdentity ||
+        s.durableGeneration[name] !== ownerGeneration ||
+        s.durableIdentity[name] !== ownerIdentity
+      ) {
+        throw changed(stage)
+      }
+    }
+    return { cfg, s, mcp, ownerIdentity, ownerGeneration, assertCurrent }
+  }
+
   export async function connect(name: string) {
     requireProjectConnectionOwner(name)
-    const s = await state()
+    const { s, mcp, ownerGeneration, ownerIdentity, assertCurrent } = await settledProjectConnection(name)
     return withRuntimeControl(s, name, async () => {
-      const ownerGeneration = s.durableGeneration[name]
-      const cfg = await Config.get()
-      const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
-      const mcp = requireMcpEntry(config, name)
-      const ownerIdentity = mcpConfigIdentity(mcp)
-      if (s.durableGeneration[name] !== ownerGeneration || s.durableIdentity[name] !== ownerIdentity) {
-        throw new Error(`MCP server ${name} configuration changed before connection started`)
-      }
+      await assertCurrent("before connection started")
       if (!isMcpConfigured(mcp)) throw mcpNotFound(name)
 
       const enabledMcp = { ...mcp, enabled: true } as Config.Mcp
@@ -4063,30 +4090,19 @@ export namespace MCP {
         (connection) => connection.configIdentity === identity && connection.ownerGeneration === ownerGeneration,
       )
       await Promise.all(ownedCleanup.map((connection) => settleConnectionCleanup(s, name, connection)))
-      const currentAfterCleanup = (await Config.get()).mcp?.[name]
-      if (
-        !currentAfterCleanup ||
-        mcpConfigIdentity(currentAfterCleanup) !== ownerIdentity ||
-        s.durableGeneration[name] !== ownerGeneration
-      ) {
-        throw new Error(`MCP server ${name} configuration changed while prior cleanup was settling`)
-      }
+      await assertCurrent("while prior cleanup was settling")
       s.runtimeConnectionOverrides[name] = {
         ownerIdentity,
-        ownerGeneration: ownerGeneration!,
+        ownerGeneration,
         config: enabledMcp,
       }
       if (!s.connections[name] && !s.connecting[name] && s.statusIdentity[name] === identity) {
         s.status[name] = { status: "disconnected" }
       }
       await ensureConfiguredConnections(s, { [name]: mcp })
+      await assertCurrent("while the connection was starting")
       const status = s.status[name]
-      const current = (await Config.get()).mcp?.[name]
-      const ownsStatus =
-        current &&
-        mcpConfigIdentity(current) === ownerIdentity &&
-        s.durableGeneration[name] === ownerGeneration &&
-        s.statusIdentity[name] === identity
+      const ownsStatus = s.statusIdentity[name] === identity
       if (ownsStatus && status?.status === "needs_auth") {
         throw new AuthorizationRequiredError({ mcpName: name, message: `MCP server ${name} requires authorization` })
       }
@@ -4105,23 +4121,14 @@ export namespace MCP {
 
   export async function disconnect(name: string) {
     requireProjectConnectionOwner(name)
-    const s = await state()
-    const ownerGeneration = s.durableGeneration[name]
-    const cfg = await Config.get()
-    const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
-    const configured = requireMcpEntry(config, name)
-    const ownerIdentity = mcpConfigIdentity(configured)
-    if (s.durableGeneration[name] !== ownerGeneration || s.durableIdentity[name] !== ownerIdentity) return
+    const { s, mcp, ownerGeneration, ownerIdentity, assertCurrent } = await settledProjectConnection(name)
     return withRuntimeControl(s, name, async () => {
-      const owner = (await Config.get()).mcp?.[name]
-      if (!owner || mcpConfigIdentity(owner) !== ownerIdentity || s.durableGeneration[name] !== ownerGeneration) return
-      const runtimeEntry = effectiveRuntimeMcp(s, name, owner)
+      await assertCurrent("before disconnect started")
+      const runtimeEntry = effectiveRuntimeMcp(s, name, mcp)
       const runtimeIdentity = mcpConfigIdentity(runtimeEntry)
       const pending = s.connecting[name]
       if (pending) await pending
-      const current = (await Config.get()).mcp?.[name]
-      if (!current || mcpConfigIdentity(current) !== ownerIdentity || s.durableGeneration[name] !== ownerGeneration)
-        return
+      await assertCurrent("while the active connection was settling")
       const completed = s.connections[name]
       if (completed?.configIdentity === runtimeIdentity && completed.ownerGeneration === ownerGeneration)
         queueConnectionCleanup(s, name, completed)
@@ -4135,9 +4142,7 @@ export namespace MCP {
       const override = s.runtimeConnectionOverrides[name]
       if (override?.ownerIdentity === ownerIdentity && override.ownerGeneration === ownerGeneration)
         delete s.runtimeConnectionOverrides[name]
-      const latest = (await Config.get()).mcp?.[name]
-      if (!latest || mcpConfigIdentity(latest) !== ownerIdentity || s.durableGeneration[name] !== ownerGeneration)
-        return
+      await assertCurrent("while disconnect was settling")
       s.status[name] = disconnected
       s.statusIdentity[name] = ownerIdentity
     })
@@ -4174,7 +4179,7 @@ export namespace MCP {
   }
 
   export async function prompts() {
-    const cfg = await Config.get()
+    const cfg = await Config.getForProjectRuntime()
     return promptsForConfig((cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, cfg.experimental?.mcp_timeout)
   }
 
@@ -4216,7 +4221,7 @@ export namespace MCP {
   }
 
   export async function resources() {
-    const cfg = await Config.get()
+    const cfg = await Config.getForProjectRuntime()
     return resourcesForConfig((cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>, cfg.experimental?.mcp_timeout)
   }
 
@@ -4228,7 +4233,7 @@ export namespace MCP {
   }
 
   export async function getPrompt(clientName: string, name: string, args?: Record<string, string>) {
-    const cfg = await Config.get()
+    const cfg = await Config.getForProjectRuntime()
     const s = await state()
     const runtime = exactConnectedRuntime(s, clientName, cfg.mcp?.[clientName])
 
@@ -4258,7 +4263,7 @@ export namespace MCP {
   }
 
   export async function readResource(clientName: string, resourceUri: string) {
-    const cfg = await Config.get()
+    const cfg = await Config.getForProjectRuntime()
     const s = await state()
     const runtime = exactConnectedRuntime(s, clientName, cfg.mcp?.[clientName])
 
@@ -4380,9 +4385,8 @@ export namespace MCP {
     pendingPolicy: "supersede" | "reject" = "supersede",
     pageLocale?: OAuthPageLocale,
   ): Promise<{ authorizationUrl: string; flow?: PendingOAuthFlow }> {
-    const cfg = await Config.get()
-    const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
-    const mcpConfig = requireMcpEntry(config, mcpName)
+    const { cfg, s, mcp: mcpConfig, ownerGeneration, assertCurrent: assertCurrentOAuthOwner } =
+      await settledProjectConnection(mcpName)
 
     if (!isMcpConfigured(mcpConfig)) {
       throw new Error(`MCP server ${mcpName} is disabled or missing configuration`)
@@ -4394,22 +4398,6 @@ export namespace MCP {
 
     if (mcpConfig.oauth === false) {
       throw new Error(`MCP server ${mcpName} has OAuth explicitly disabled`)
-    }
-    const s = await state()
-    const ownerIdentity = mcpConfigIdentity(mcpConfig)
-    const ownerGeneration = s.durableGeneration[mcpName]
-    if (s.durableIdentity[mcpName] !== ownerIdentity || ownerGeneration === undefined) {
-      throw new Error(`MCP server ${mcpName} configuration changed before OAuth startup`)
-    }
-    const assertCurrentOAuthOwner = async (stage: string) => {
-      const current = (await Config.get()).mcp?.[mcpName]
-      if (
-        !current ||
-        mcpConfigIdentity(current) !== ownerIdentity ||
-        s.durableGeneration[mcpName] !== ownerGeneration
-      ) {
-        throw new Error(`MCP server ${mcpName} configuration changed ${stage}`)
-      }
     }
     await Promise.all(
       [...(s.connectionCleanupPending.get(mcpName) ?? [])].map((connection) =>
@@ -4424,8 +4412,8 @@ export namespace MCP {
     // reports auth is needed, the separately constructed authorization
     // provider below cannot expose that old token/client pair to the new flow.
     const preflight = await add(mcpName, mcpConfig)
-    if (preflight.status[mcpName]?.status === "connected") return { authorizationUrl: "" }
     await assertCurrentOAuthOwner("after OAuth connection preflight")
+    if (preflight.status[mcpName]?.status === "connected") return { authorizationUrl: "" }
 
     // Join or own the one authenticated callback broker for this data root.
     // Flow ownership remains exclusively in the durable credential store.

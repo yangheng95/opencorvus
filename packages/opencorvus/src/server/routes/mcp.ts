@@ -8,9 +8,9 @@ import { Config } from "../../config/config"
 import { badRequestBody, badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
 
-const executionConnectionRequired = {
-  description: "MCP connection is managed by its session or task",
-  content: { "application/json": { schema: resolver(MCP.ExecutionConnectionRequiredError.Schema) } },
+const connectionConfigurationChanged = {
+  description: "MCP configuration changed during the operation",
+  content: { "application/json": { schema: resolver(MCP.ConnectionConfigurationChangedError.Schema) } },
 }
 
 const ConnectionName = z.strictObject({
@@ -149,6 +149,7 @@ export const McpRoutes = lazy(() => {
               },
             },
             ...errors(400, 404),
+            409: connectionConfigurationChanged,
             500: namedErrorResponse("MCP OAuth start failed", "UnknownError"),
           },
         }),
@@ -213,6 +214,7 @@ export const McpRoutes = lazy(() => {
               },
             },
             ...errors(400, 404),
+            409: connectionConfigurationChanged,
             500: namedErrorResponse("MCP OAuth completion failed", "UnknownError"),
           },
         }),
@@ -269,12 +271,13 @@ export const McpRoutes = lazy(() => {
             },
             ...errors(400, 404),
             409: {
-              description: "MCP authorization is required or the connection is managed by its session or task",
+              description: "MCP configuration changed, authorization is required, or execution owns the connection",
               content: {
                 "application/json": {
                   schema: resolver(z.union([
                     MCP.AuthorizationRequiredError.Schema,
                     MCP.ExecutionConnectionRequiredError.Schema,
+                    MCP.ConnectionConfigurationChangedError.Schema,
                   ])),
                 },
               },
@@ -304,7 +307,17 @@ export const McpRoutes = lazy(() => {
               },
             },
             ...errors(400, 404),
-            409: executionConnectionRequired,
+            409: {
+              description: "MCP configuration changed or execution owns the connection",
+              content: {
+                "application/json": {
+                  schema: resolver(z.union([
+                    MCP.ExecutionConnectionRequiredError.Schema,
+                    MCP.ConnectionConfigurationChangedError.Schema,
+                  ])),
+                },
+              },
+            },
           },
         }),
         validator("json", ConnectionName),

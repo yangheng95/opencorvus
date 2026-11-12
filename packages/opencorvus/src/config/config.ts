@@ -2026,7 +2026,7 @@ export namespace Config {
 
   const pendingPeerTransitions = new Map<string, RuntimeTransition>()
   const queuedPeerTargets = new Map<string, Info>()
-  const pendingPeerSettlements = new Map<string, Promise<void>>()
+  const pendingPeerSettlements = new Map<string, Promise<void | { error: unknown }>>()
   const writerRetryDirectories = new Set<string>()
   const loadedProjectConfigs = new Set<string>()
   let peerConvergenceMonitor: ReturnType<typeof setInterval> | undefined
@@ -2233,6 +2233,7 @@ export namespace Config {
           directory,
           error: error instanceof Error ? error.message : String(error),
         })
+        return { error }
       })
       .finally(() => {
         if (pendingPeerSettlements.get(directory) === settlement) pendingPeerSettlements.delete(directory)
@@ -2281,6 +2282,19 @@ export namespace Config {
 
   async function currentProjectState(): Promise<LoadedState> {
     return withConfigGenerationRead(() => currentProjectStateUnderGenerationOwner())
+  }
+
+  /** Join the current Project's runtime transition outside configuration and catalog owners. */
+  export async function getForProjectRuntime(): Promise<Info> {
+    const directory = ProjectInstanceContext.use().directory
+    while (true) {
+      const { config } = await currentProjectState()
+      const pending = pendingPeerTransitions.get(directory)
+      if (!pending) return config
+      schedulePendingPeerTransition(directory)
+      const result = await pendingPeerSettlements.get(directory)
+      if (result && pendingPeerTransitions.get(directory) === pending) throw result.error
+    }
   }
 
   async function convergeLoadedPeerStates(): Promise<void> {
