@@ -1,0 +1,119 @@
+{
+  "result": {
+    "project": [
+      {
+        "name": "review-isolated",
+        "initial": "connected",
+        "final": "connected"
+      },
+      {
+        "name": "review-literal",
+        "initial": "connected",
+        "final": "connected"
+      },
+      {
+        "name": "global-isolated",
+        "initial": "connected",
+        "final": "connected"
+      }
+    ],
+    "alternate": [
+      {
+        "name": "review-isolated",
+        "initial": "connected",
+        "final": "connected"
+      },
+      {
+        "name": "authored-isolated",
+        "initial": "connected",
+        "final": "connected"
+      },
+      {
+        "name": "review-file",
+        "initial": "connected",
+        "final": "connected"
+      },
+      {
+        "name": "global-isolated",
+        "initial": "connected",
+        "final": "connected"
+      }
+    ]
+  },
+  "sent": [
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/config",
+      "status": 200,
+      "requestID": "69019e16-cdb3-43ad-8938-60612622875c"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "9356008d-8724-40ca-90b3-eba42217065d"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp",
+      "name": "review-{env:OPENCORVUS_BROWSER_MODE}",
+      "status": 400,
+      "requestID": "29eba023-c621-47ea-a0f7-1654e319c061"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp",
+      "name": "review-isolated",
+      "status": 400,
+      "requestID": "295287c7-aee3-4047-86ce-ea1af60f13f8"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "cbe8c906-41fb-4cee-8ce6-6e10ac78ee0a"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/config",
+      "status": 200,
+      "requestID": "ecd3f849-6e20-4723-ab63-932ae5954a46"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "178bc017-9cc0-40dc-a59b-4967aa4b1b2e"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp",
+      "name": "review-{file:missing-synthetic.txt}",
+      "status": 400,
+      "requestID": "1ca5cebd-c218-4d09-983e-4e0db4ae28c0"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp",
+      "name": "review-isolated",
+      "status": 400,
+      "requestID": "c478858e-c8d5-4524-9a46-d15da11ffd68"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "1e107d47-29db-4b67-b6f1-d7c4ad72e6f4"
+    }
+  ]
+}

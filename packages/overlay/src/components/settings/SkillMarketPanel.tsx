@@ -46,7 +46,7 @@ import {
   type SkillMarketDetail,
 } from "../../services/extensions"
 import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
-import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, isMcpConfigurationProjectionError, startMcpAuthorization, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
@@ -1139,7 +1139,8 @@ function SharedResourceManagementPanel(props: {
         setMcpDraftError({ field: "args", quote: e.quote })
         mcpArgumentsInput?.focus()
       } else {
-        setPanelError(e, undefined, noticeOwner)
+        const key = isMcpConfigurationProjectionError(e) ? "mcp.configuration_projection_changed" : undefined
+        setPanelError(e, key, noticeOwner)
       }
     } finally {
       if (current()) {

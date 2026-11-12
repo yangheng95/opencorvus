@@ -828,7 +828,8 @@ OpenCorvus 作为 client / host 接入外部或 package-scoped MCP server，并�
 内部 projected-agent runtime。Browser MCP 的 Playwright Page 是浏览、截图、诊断和用户观看的唯一页面事实源。
 
 `POST /mcp` 将请求中的连接原名用作项目配置、连接状态和凭据事务的同一个键。新增或更新要求
-名称至少含一个非空白字符，首尾空白参与名称匹配。相同原名更新现有条目。
+名称至少含一个非空白字符，首尾空白参与名称匹配。相同原名更新现有条目。事务提交前比较实际配置
+展开与该次字面补丁的预期结果，返回 `mcp_configuration_projection_changed` 表示无法按原值保存。
 
 Local MCP form arguments preserve the authored argument sequence, including an
 explicit empty single- or double-quoted argument. Quoted fragments join within

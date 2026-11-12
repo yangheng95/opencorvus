@@ -1709,6 +1709,7 @@
   "mcp.delete_targets_unconfirmed": "{{reply}} 首次核对 {{directory}} 失败。当前列表见服务连接区。",
   "mcp.name": "名称 *",
   "mcp.name_whitespace_hint": "名称首尾的空白会原样保存。分配给对话或通用工作时，名称首尾须无空白。",
+  "mcp.configuration_projection_changed": "变量或文件引用会改变连接。请修改名称或设置后重试。",
   "mcp.none": "尚未配置 MCP 服务",
   "mcp.remote_url": "远程地址 *",
   "mcp.remote_url_invalid": "请输入带协议的完整地址。",

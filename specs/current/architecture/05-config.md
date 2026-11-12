@@ -28,6 +28,9 @@ Session/Task 的 `config.changed` 则始终携带精确 `sessionID`，只刷新�
 Windows 的大小写等价与 POSIX 的大小写语义；不另建目录身份或配置来源。project、独立资源、
 inline 和 managed 的覆盖语义保持。
 
+项目与全局写入保留配置的作者文本，通过读取使用的 JSONC 解析和引用展开生成实际候选。权限迁移、候选校验、
+写入回执和运行态结算采用同一候选。对必须保留字面值的写入，持久事务在提交前校验对应字段的完整投影。
+
 **字段分组**（来源：`src/config/config.ts` 的 ConfigSchema）：
 
 ```

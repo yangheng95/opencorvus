@@ -9941,7 +9941,7 @@ export class Mcp extends HeyApiClient {
   /**
    * Add MCP server
    *
-   * Dynamically add a new Model Context Protocol (MCP) server to the system.
+   * Add or update a project Model Context Protocol (MCP) server using its exact name and literal settings. Configuration references that would change the submitted definition return a bad request.
    */
   public add<ThrowOnError extends boolean = false>(
     parameters: {

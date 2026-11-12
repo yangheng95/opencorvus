@@ -1710,6 +1710,7 @@
   "mcp.delete_targets_unconfirmed": "{{reply}} The first status check for {{directory}} failed. See Server connections for the current list.",
   "mcp.name": "Name *",
   "mcp.name_whitespace_hint": "Leading and trailing whitespace is kept. Remove it to assign this connection to Chat or Work.",
+  "mcp.configuration_projection_changed": "A variable or file reference would change this connection. Edit the name or settings and try again.",
   "mcp.none": "No MCP servers configured",
   "mcp.remote_url": "Remote URL *",
   "mcp.remote_url_invalid": "Enter a complete address including its scheme.",

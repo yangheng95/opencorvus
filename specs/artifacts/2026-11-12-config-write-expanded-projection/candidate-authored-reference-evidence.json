@@ -1,0 +1,50 @@
+{
+  "project": {
+    "scope": "alternate",
+    "route": "/config",
+    "status": 200,
+    "requestID": "10a91d02-1f80-4d6b-b38a-60444be67c46",
+    "username": "isolated"
+  },
+  "global": {
+    "scope": "global",
+    "route": "/global/config",
+    "status": 200,
+    "requestID": "9894b061-a43c-4d30-a793-5425d438905e",
+    "username": "isolated"
+  },
+  "raw": [
+    "{file:review-mode.txt}",
+    "{env:OPENCORVUS_BROWSER_MODE}"
+  ],
+  "connected": [
+    {
+      "side": "project",
+      "status": 200,
+      "requestID": "1fb7c3bd-9fe7-47ee-993f-1bb0ff4a7020",
+      "global": "connected"
+    },
+    {
+      "side": "alternate",
+      "status": 200,
+      "requestID": "f5cef291-4547-4fd3-9ff0-03f2e8381cbc",
+      "global": "connected",
+      "project": "connected"
+    }
+  ],
+  "restore": [
+    {
+      "scope": "alternate",
+      "route": "/config",
+      "status": 200,
+      "requestID": "bc40d20f-6685-46c7-80c1-adb0bf1eac19",
+      "username": "isolated"
+    },
+    {
+      "scope": "global",
+      "route": "/global/config",
+      "status": 200,
+      "requestID": "8e2dccee-f4ec-4d26-966d-59931265ed15"
+    }
+  ]
+}

@@ -47,7 +47,8 @@ export const McpRoutes = lazy(() => {
         "/",
         describeRoute({
           summary: "Add MCP server",
-          description: "Dynamically add a new Model Context Protocol (MCP) server to the system.",
+          description:
+            "Add or update a project Model Context Protocol (MCP) server using its exact name and literal settings. Configuration references that would change the submitted definition return a bad request.",
           operationId: "mcp.add",
           responses: {
             200: {
@@ -68,8 +69,16 @@ export const McpRoutes = lazy(() => {
             return c.json(badRequestBody(input.error.issues.map((issue) => issue.message).join("; ")), 400)
           }
           const { name, config, credentialSecret } = input.data
-          const result = await MCP.configure(name, config, credentialSecret)
-          return c.json(result.status)
+          try {
+            const result = await MCP.configure(name, config, credentialSecret)
+            return c.json(result.status)
+          } catch (error) {
+            if (!(error instanceof Config.LiteralPatchProjectionError)) throw error
+            return c.json(
+              badRequestBody(error.message, [{ code: "mcp_configuration_projection_changed", message: error.message }]),
+              400,
+            )
+          }
         },
       )
       .get(

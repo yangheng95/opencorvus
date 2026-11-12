@@ -1,0 +1,345 @@
+{
+  "bundle": "./assets/main-D3t0z7G7.js",
+  "initial": [
+    {
+      "side": "project",
+      "name": "review-isolated",
+      "status": 200,
+      "requestID": "b5db681a-52d9-4fd7-a4c0-a4a6abd390eb",
+      "result": true
+    },
+    {
+      "side": "alternate",
+      "name": "review-isolated",
+      "status": 200,
+      "requestID": "faa7a1a0-4153-42cb-bf9b-7ff19a0449ad",
+      "result": true
+    },
+    {
+      "side": "alternate",
+      "name": "authored-isolated",
+      "status": 200,
+      "requestID": "49c4cf64-0b29-4e09-9f07-490a19904b3f",
+      "result": true
+    },
+    {
+      "side": "project",
+      "name": "global-isolated",
+      "status": 200,
+      "requestID": "fd948fa2-bf2c-467a-8540-2dc4123e30f3",
+      "result": true
+    },
+    {
+      "side": "alternate",
+      "name": "global-isolated",
+      "status": 200,
+      "requestID": "933b73bf-f6d2-478e-8ec1-b137a622dbcb",
+      "result": true
+    }
+  ],
+  "desktop": [
+    {
+      "name": "review-{env:OPENCORVUS_BROWSER_MODE}",
+      "url": "http://127.0.0.1:39934/project/padded",
+      "status": 400,
+      "requestID": "6ee18d7d-4d61-4dfd-abde-87f0bccccb10",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b291\\candidate-project\\archive-review",
+      "result": {
+        "data": {
+          "message": "A configuration reference would change the submitted values."
+        },
+        "error": [
+          {
+            "code": "mcp_configuration_projection_changed",
+            "message": "A configuration reference would change the submitted values."
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "name": "review-literal",
+      "url": "http://127.0.0.1:39934/project/padded",
+      "status": 200,
+      "requestID": "f0a5fe81-ea3a-477b-8fcb-13466c020018",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b291\\candidate-project\\archive-review",
+      "result": [
+        [
+          "global-isolated",
+          "connected"
+        ],
+        [
+          "review-isolated",
+          "connected"
+        ],
+        [
+          "review-literal",
+          "connected"
+        ],
+        [
+          "browser",
+          "disconnected"
+        ],
+        [
+          "computer",
+          "disconnected"
+        ]
+      ]
+    },
+    {
+      "name": "review-{file:review-mode.txt}",
+      "url": "http://127.0.0.1:39934/alternate/padded",
+      "status": 400,
+      "requestID": "ca350973-cc60-40df-beb7-7dfbbbcc23c7",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b291\\candidate-alternate\\archive-review",
+      "result": {
+        "data": {
+          "message": "A configuration reference would change the submitted values."
+        },
+        "error": [
+          {
+            "code": "mcp_configuration_projection_changed",
+            "message": "A configuration reference would change the submitted values."
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "name": "review-file",
+      "url": "http://127.0.0.1:39934/alternate/padded",
+      "status": 200,
+      "requestID": "d95254c7-4703-401b-aeb1-a663f91c4e38",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b291\\candidate-alternate\\archive-review",
+      "result": [
+        [
+          "global-isolated",
+          "connected"
+        ],
+        [
+          "review-isolated",
+          "connected"
+        ],
+        [
+          "authored-isolated",
+          "connected"
+        ],
+        [
+          "review-file",
+          "connected"
+        ],
+        [
+          "browser",
+          "disconnected"
+        ],
+        [
+          "computer",
+          "disconnected"
+        ]
+      ]
+    }
+  ],
+  "english": {
+    "rejected": {
+      "side": "project",
+      "projectID": "prj_hv4LgPpQk8mvk3RkO3fB",
+      "authored": [
+        [
+          "review-isolated",
+          "http://127.0.0.1:39934/project/normal"
+        ]
+      ],
+      "reads": [
+        {
+          "route": "/config",
+          "status": 200,
+          "requestID": "8cddba30-4e01-49ce-9623-dc0ff0ce43bf",
+          "connections": [
+            [
+              "review-isolated",
+              "http://127.0.0.1:39934/project/normal"
+            ]
+          ]
+        },
+        {
+          "route": "/mcp/project",
+          "status": 200,
+          "requestID": "40239348-d0a0-4956-8ef3-dcb5e3242a42",
+          "connections": [
+            [
+              "review-isolated",
+              "connected"
+            ]
+          ]
+        }
+      ]
+    },
+    "saved": {
+      "side": "project",
+      "projectID": "prj_hv4LgPpQk8mvk3RkO3fB",
+      "authored": [
+        [
+          "review-isolated",
+          "http://127.0.0.1:39934/project/normal"
+        ],
+        [
+          "review-literal",
+          "http://127.0.0.1:39934/project/padded"
+        ]
+      ],
+      "reads": [
+        {
+          "route": "/config",
+          "status": 200,
+          "requestID": "239f0caa-8a80-43f3-b222-ba732bf842aa",
+          "connections": [
+            [
+              "review-isolated",
+              "http://127.0.0.1:39934/project/normal"
+            ],
+            [
+              "review-literal",
+              "http://127.0.0.1:39934/project/padded"
+            ]
+          ]
+        },
+        {
+          "route": "/mcp/project",
+          "status": 200,
+          "requestID": "dec2208f-00fe-44c3-ba11-eb2b3cd9f550",
+          "connections": [
+            [
+              "review-isolated",
+              "connected"
+            ],
+            [
+              "review-literal",
+              "connected"
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "chinese": {
+    "rejected": {
+      "side": "alternate",
+      "projectID": "prj_h54Q5cpMOqPMU9rDUxth",
+      "authored": [
+        [
+          "review-isolated",
+          "http://127.0.0.1:39934/alternate/normal"
+        ],
+        [
+          "authored-{env:OPENCORVUS_BROWSER_MODE}",
+          "http://127.0.0.1:39934/alternate/dot"
+        ]
+      ],
+      "reads": [
+        {
+          "route": "/config",
+          "status": 200,
+          "requestID": "5a9b85dd-2adb-4209-996c-e2dca76becae",
+          "connections": [
+            [
+              "review-isolated",
+              "http://127.0.0.1:39934/alternate/normal"
+            ],
+            [
+              "authored-isolated",
+              "http://127.0.0.1:39934/alternate/dot"
+            ]
+          ]
+        },
+        {
+          "route": "/mcp/project",
+          "status": 200,
+          "requestID": "0c3f093d-81b8-4e13-99dc-c582ce5fd347",
+          "connections": [
+            [
+              "review-isolated",
+              "connected"
+            ],
+            [
+              "authored-isolated",
+              "connected"
+            ]
+          ]
+        }
+      ]
+    },
+    "saved": {
+      "side": "alternate",
+      "projectID": "prj_h54Q5cpMOqPMU9rDUxth",
+      "authored": [
+        [
+          "review-isolated",
+          "http://127.0.0.1:39934/alternate/normal"
+        ],
+        [
+          "authored-{env:OPENCORVUS_BROWSER_MODE}",
+          "http://127.0.0.1:39934/alternate/dot"
+        ],
+        [
+          "review-file",
+          "http://127.0.0.1:39934/alternate/padded"
+        ]
+      ],
+      "reads": [
+        {
+          "route": "/config",
+          "status": 200,
+          "requestID": "dde31d25-4a5c-4509-b8b7-a15c59d7dcb4",
+          "connections": [
+            [
+              "review-isolated",
+              "http://127.0.0.1:39934/alternate/normal"
+            ],
+            [
+              "authored-isolated",
+              "http://127.0.0.1:39934/alternate/dot"
+            ],
+            [
+              "review-file",
+              "http://127.0.0.1:39934/alternate/padded"
+            ]
+          ]
+        },
+        {
+          "route": "/mcp/project",
+          "status": 200,
+          "requestID": "38283b5a-f8a3-4e76-8c3d-7f40b2b642b5",
+          "connections": [
+            [
+              "review-isolated",
+              "connected"
+            ],
+            [
+              "authored-isolated",
+              "connected"
+            ],
+            [
+              "review-file",
+              "connected"
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "global": [
+    {
+      "side": "project",
+      "status": 200,
+      "requestID": "02382212-01c1-4bf1-8ba9-c29e7a1d3ad7",
+      "global": "connected"
+    },
+    {
+      "side": "alternate",
+      "status": 200,
+      "requestID": "5c682143-3db6-47ac-a6b0-35255875c408",
+      "global": "connected",
+      "project": "connected"
+    }
+  ]
+}

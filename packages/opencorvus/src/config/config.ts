@@ -2496,6 +2496,14 @@ export namespace Config {
 
   export type ProjectMergePatch = Record<string, unknown>
 
+  export class LiteralPatchProjectionError extends Error {
+    override readonly name = "LiteralPatchProjectionError"
+
+    constructor(options?: ErrorOptions) {
+      super("A configuration reference would change the submitted values.", options)
+    }
+  }
+
   // Catalog/reference readers may read Config while retaining their owners.
   // A writer must acquire those owners before excluding Config readers, or a
   // Skill projection and a concurrent Project initialization form a cycle.
@@ -2520,6 +2528,7 @@ export namespace Config {
 
   async function writeProjectPatch(
     patch: ProjectMergePatch | ((currentProject: Source) => ProjectMergePatch | Promise<ProjectMergePatch>),
+    literalField?: keyof Source,
   ) {
     return withConfigMutationAuthority(async () => {
       const projectDirectory = ProjectInstanceContext.use().directory
@@ -2527,6 +2536,7 @@ export namespace Config {
       let transition: { before: Info; after: Info } | undefined
       await fs.mkdir(path.dirname(target), { recursive: true })
       return writeConfigFile(target, patch, {
+        literalField,
         resolve: resolveProjectCandidate,
         async commit(merged, _appliedPatch, persist) {
           assertProjectOwnedConfigSource(merged, target, { projectOwnedSource: "project" })
@@ -2590,8 +2600,9 @@ export namespace Config {
 
   export async function updateProjectPatchAtomic(
     resolve: (currentProject: Source) => ProjectMergePatch | Promise<ProjectMergePatch>,
+    options?: { literalField: keyof Source },
   ) {
-    return writeProjectPatch(resolve)
+    return writeProjectPatch(resolve, options?.literalField)
   }
 
   export async function update(config: Info) {
@@ -2660,7 +2671,7 @@ export namespace Config {
 
   async function migratePermissionText(text: string, filepath: string) {
     const legacy = migrateLegacyPermissionConfig(await ConfigPaths.parseText(text, filepath))
-    if (!legacy.migration) return { text }
+    if (!legacy.migration) return { text, source: legacy.config }
     const canonical = legacy.config as Record<string, unknown>
     let updated = text
     for (const field of ["permission_mode", "permission_migration"] as const) {
@@ -2679,7 +2690,7 @@ export namespace Config {
         }),
       )
     }
-    return { text: updated, migration: legacy.migration }
+    return { text: updated, source: legacy.config, migration: legacy.migration }
   }
 
   // RFC 7396-compatible deep merge: null values in the source delete the
@@ -2796,6 +2807,7 @@ export namespace Config {
     filepath: string,
     config: unknown | ((existing: Source) => unknown | Promise<unknown>),
     hooks: {
+      literalField?: keyof Source
       resolve(source: Source): Promise<Info>
       validate?(merged: Source, appliedPatch: unknown): Promise<void>
       commit?(merged: Source, appliedPatch: unknown, persist: () => Promise<void>): Promise<void>
@@ -2813,24 +2825,41 @@ export namespace Config {
         throw new JsonError({ path: filepath }, { cause: err })
       })
 
-      const normalize = async (text: string) => {
-        const source = parseConfig(text, filepath)
-        return parseSourceLayer(source, filepath, await hooks.resolve(source))
-      }
-      const existing = await normalize(before)
+      const normalize = async (source: Source) => parseSourceLayer(source, filepath, await hooks.resolve(source))
+      const existing = await normalize(parseConfig(before, filepath))
       const appliedPatch = typeof config === "function" ? await config(existing) : config
+      const literalField = hooks.literalField
+      const expectedLiteral = literalField === undefined
+        ? undefined
+        : mergeWithNullDelete(
+            await ConfigPaths.parseText(before, filepath),
+            JSON.parse(JSON.stringify(appliedPatch)),
+          )[literalField]
+      const prepare = async (text: string) => {
+        // The projected source drives both the text migration and runtime settlement.
+        const candidate = await migratePermissionText(text, filepath).catch((cause) => {
+          if (literalField !== undefined) throw new LiteralPatchProjectionError({ cause })
+          throw cause
+        })
+        const source = candidate.source as Source
+        if (literalField !== undefined && !isDeepStrictEqual(source[literalField], expectedLiteral)) {
+          throw new LiteralPatchProjectionError()
+        }
+        return { text: candidate.text, merged: await normalize(source) }
+      }
+
       if (filepath.endsWith(".jsonc")) {
-        let updated = (await migratePermissionText(patchJsonc(before, appliedPatch), filepath)).text
-        let merged = await normalize(updated)
-        if (Object.keys(merged).length > 0 && !merged.$schema) {
-          updated = applyEdits(
-            updated,
-            modify(updated, ["$schema"], CONFIG_SCHEMA_URL, {
-              formattingOptions: { tabSize: 2, insertSpaces: true },
+        let candidate = await prepare(patchJsonc(before, appliedPatch))
+        if (Object.keys(candidate.merged).length > 0 && !candidate.merged.$schema) {
+          const updated = applyEdits(
+            candidate.text,
+            modify(candidate.text, ["$schema"], CONFIG_SCHEMA_URL, {
+              formattingOptions: { insertSpaces: true, tabSize: 2 },
             }),
           )
-          merged = await normalize(updated)
+          candidate = await prepare(updated)
         }
+        const { text: updated, merged } = candidate
         const persist = () => Filesystem.writeAtomic(filepath, updated)
         if (hooks?.commit) await hooks.commit(merged, appliedPatch, persist)
         else {
@@ -2842,8 +2871,7 @@ export namespace Config {
       }
       const writable = mergeWithNullDelete(existing, appliedPatch)
       if (Object.keys(writable).length > 0 && !writable.$schema) writable.$schema = CONFIG_SCHEMA_URL
-      const serialized = (await migratePermissionText(JSON.stringify(writable, null, 2), filepath)).text
-      const merged = await normalize(serialized)
+      const { text: serialized, merged } = await prepare(JSON.stringify(writable, null, 2))
       const persist = () => Filesystem.writeAtomic(filepath, serialized)
       if (hooks?.commit) await hooks.commit(merged, appliedPatch, persist)
       else {

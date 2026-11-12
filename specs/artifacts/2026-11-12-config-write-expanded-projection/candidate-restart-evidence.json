@@ -1,0 +1,143 @@
+{
+  "result": {
+    "project": [
+      {
+        "name": "review-isolated",
+        "initial": "disconnected",
+        "final": "connected"
+      },
+      {
+        "name": "review-literal",
+        "initial": "disconnected",
+        "final": "connected"
+      },
+      {
+        "name": "global-isolated",
+        "initial": "disconnected",
+        "final": "connected"
+      }
+    ],
+    "alternate": [
+      {
+        "name": "review-isolated",
+        "initial": "disconnected",
+        "final": "connected"
+      },
+      {
+        "name": "authored-isolated",
+        "initial": "disconnected",
+        "final": "connected"
+      },
+      {
+        "name": "review-file",
+        "initial": "disconnected",
+        "final": "connected"
+      },
+      {
+        "name": "global-isolated",
+        "initial": "disconnected",
+        "final": "connected"
+      }
+    ]
+  },
+  "sent": [
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/config",
+      "status": 200,
+      "requestID": "22eb97b7-3543-4f25-b4d4-72f907c39901"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "8d5cdb42-5e8a-4b9e-925b-35d0bd622e9f"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-isolated",
+      "status": 200,
+      "requestID": "52200764-3e2e-4bb7-8fba-10f9a2b69b33"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-literal",
+      "status": 200,
+      "requestID": "374d885f-3fb4-4065-a0a0-cc3437b0437c"
+    },
+    {
+      "side": "project",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "global-isolated",
+      "status": 200,
+      "requestID": "428e75b1-204a-4ca0-bc3e-784d7d1bce5c"
+    },
+    {
+      "side": "project",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "04565261-4ab3-4ef8-8f96-9e3a1b27fb63"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/config",
+      "status": 200,
+      "requestID": "7c750b0f-0064-41bb-838a-bcbdf1bc6a54"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "a87882c6-c666-4996-9898-f6a46dfa3e8d"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-isolated",
+      "status": 200,
+      "requestID": "ca52d197-be01-4d27-a154-1faf464b849e"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "authored-isolated",
+      "status": 200,
+      "requestID": "2b5ffa93-3c9e-410c-afb1-ae03458b5304"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "review-file",
+      "status": 200,
+      "requestID": "d2cf81f0-f392-4cc5-9dd1-9628a4a924fd"
+    },
+    {
+      "side": "alternate",
+      "method": "POST",
+      "path": "/mcp/connect",
+      "name": "global-isolated",
+      "status": 200,
+      "requestID": "50c59c46-ad4c-4f18-a266-ac49f676b3c0"
+    },
+    {
+      "side": "alternate",
+      "method": "GET",
+      "path": "/mcp",
+      "status": 200,
+      "requestID": "2a4cdafd-2ae2-4bdb-adcf-9aec7b7db66d"
+    }
+  ]
+}

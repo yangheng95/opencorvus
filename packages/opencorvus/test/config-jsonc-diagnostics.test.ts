@@ -236,11 +236,11 @@ describe.serial("Config JSONC diagnostic projection", () => {
       })
     })
 
-    test(`${scope} writer preserves literal references while its reader expands them`, async () => {
+    test(`${scope} writer and reader use the same projection of authored references`, async () => {
       const username = `{env:${envName}}`
       const instructions = [`{file:${valueFilename}}`]
       await writeFile(configFile(scope), JSON.stringify({ username, instructions }))
-      await writeConfig(scope, { autoupdate: false })
+      const written = await writeConfig(scope, { autoupdate: false })
       const persisted = JSON.parse(await readFile(configFile(scope), "utf8"))
       const effective = await readConfig(scope)
       expect({
@@ -249,6 +249,7 @@ describe.serial("Config JSONC diagnostic projection", () => {
           instructions: persisted.instructions,
           autoupdate: persisted.autoupdate,
         },
+        written: { username: written.username, instructions: written.instructions, autoupdate: written.autoupdate },
         effective: {
           username: effective.username,
           instructions: effective.instructions,
@@ -256,6 +257,7 @@ describe.serial("Config JSONC diagnostic projection", () => {
         },
       }).toEqual({
         persisted: { username, instructions, autoupdate: false },
+        written: { username: sampleValue, instructions: [sampleValue], autoupdate: false },
         effective: { username: sampleValue, instructions: [sampleValue], autoupdate: false },
       })
     })

@@ -5729,6 +5729,8 @@ accepted add reply clears the form when it still matches the submitted draft.
 The form submits the authored name verbatim. When the name has leading or
 trailing whitespace, the field explains that those characters will be saved
 and describes the current Chat and Work assignment requirement.
+A configuration projection error keeps the submitted draft and explains why
+the reference would change the requested name or settings.
 Later edits remain in the form with a separate acknowledgment of the submitted
 server. An action from a retired scope cannot update the current form.
 An interrupted add reply keeps the form and uses the same scoped readback as

@@ -2858,11 +2858,10 @@ export namespace MCP {
           )
         }
         try {
-          await Config.updateProjectPatchAtomic(() => ({
-            mcp: {
-              [parsed.name]: parsed.config,
-            },
-          }))
+          await Config.updateProjectPatchAtomic(
+            () => ({ mcp: { [parsed.name]: parsed.config } }),
+            { literalField: "mcp" },
+          )
         } catch (error) {
           if (error instanceof Config.ProjectConfigCommittedReconcileError) {
             const committed = error.config.mcp?.[parsed.name]

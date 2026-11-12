@@ -167,6 +167,16 @@ function isObjectRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value)
 }
 
+export function isMcpConfigurationProjectionError(error: unknown): boolean {
+  return (
+    error instanceof ApiError &&
+    error.status === 400 &&
+    isObjectRecord(error.body) &&
+    Array.isArray(error.body.error) &&
+    error.body.error.some((issue: unknown) => isObjectRecord(issue) && issue.code === "mcp_configuration_projection_changed")
+  )
+}
+
 export function isMcpServerStatus(value: unknown): value is McpStatus {
   if (!isObjectRecord(value)) return false
   const status = value.status
