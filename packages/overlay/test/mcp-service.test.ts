@@ -70,7 +70,8 @@ describe("MCP overlay service", () => {
   test("publishes project statuses with their actual diagnostics", async () => {
     const body = {
       active: { status: "connected" },
-      paused: { status: "disabled" },
+      paused: { status: "disabled", reason: "manual_disconnect" },
+      configuredOff: { status: "disabled" },
       idle: { status: "disconnected" },
       starting: { status: "connecting" },
       signIn: { status: "needs_auth" },

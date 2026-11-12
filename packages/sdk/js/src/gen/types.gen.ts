@@ -3287,6 +3287,7 @@ export type McpStatusConnecting = {
 }
 
 export type McpStatusDisabled = {
+  reason?: "manual_disconnect"
   status: "disabled"
 }
 

@@ -151,7 +151,7 @@ export const McpListCommand = cmd({
             }
           } else if (status.status === "disabled") {
             statusIcon = "○"
-            statusText = "disabled"
+            statusText = status.reason === "manual_disconnect" ? "disconnected manually" : "disabled"
           } else if (status.status === "disconnected") {
             statusIcon = "○"
             statusText = "disconnected"

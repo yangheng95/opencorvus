@@ -274,6 +274,7 @@ function isProjectMcpStatus(value: unknown): boolean {
   if (!value || typeof value !== "object" || !("status" in value)) return false
   const status = value.status
   if (typeof status !== "string" || !isMcpConnectionStatus(status)) return false
+  if (status === "disabled") return !("reason" in value) || value.reason === "manual_disconnect"
   return status !== "failed" && status !== "needs_client_registration" ||
     ("error" in value && typeof value.error === "string")
 }

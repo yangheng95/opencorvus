@@ -205,6 +205,7 @@ export namespace MCP {
       z
         .object({
           status: z.literal("disabled"),
+          reason: z.literal("manual_disconnect").optional(),
         })
         .meta({
           ref: "MCPStatusDisabled",
@@ -4104,7 +4105,8 @@ export namespace MCP {
       const completed = s.connections[name]
       if (completed?.configIdentity === runtimeIdentity && completed.ownerGeneration === ownerGeneration)
         queueConnectionCleanup(s, name, completed)
-      s.status[name] = { status: "disabled" }
+      const disconnected: Status = { status: "disabled", reason: "manual_disconnect" }
+      s.status[name] = disconnected
       s.statusIdentity[name] = runtimeIdentity
       const ownedConnections = [...(s.connectionCleanupPending.get(name) ?? [])].filter(
         (connection) => connection.configIdentity === runtimeIdentity && connection.ownerGeneration === ownerGeneration,
@@ -4116,7 +4118,7 @@ export namespace MCP {
       const latest = (await Config.get()).mcp?.[name]
       if (!latest || mcpConfigIdentity(latest) !== ownerIdentity || s.durableGeneration[name] !== ownerGeneration)
         return
-      s.status[name] = { status: "disabled" }
+      s.status[name] = disconnected
       s.statusIdentity[name] = ownerIdentity
     })
   }

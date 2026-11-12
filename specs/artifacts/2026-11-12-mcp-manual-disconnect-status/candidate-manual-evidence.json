@@ -1,0 +1,416 @@
+{
+  "seed": [
+    {
+      "name": "manual-demo",
+      "definition": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39890/mcp"
+      },
+      "status": "connected",
+      "requestID": "bd64b2fd-1160-4867-8dc9-62a32b5da6a9",
+      "body": {
+        "browser": {
+          "status": "disconnected"
+        },
+        "computer": {
+          "status": "disconnected"
+        },
+        "manual-demo": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "name": "configured-off",
+      "definition": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39890/mcp",
+        "enabled": false
+      },
+      "status": "disabled",
+      "requestID": "e41b049c-7c9c-4d2f-8256-d10bae0fdbf7",
+      "body": {
+        "browser": {
+          "status": "disconnected"
+        },
+        "computer": {
+          "status": "disconnected"
+        },
+        "manual-demo": {
+          "status": "connected"
+        },
+        "configured-off": {
+          "status": "disabled"
+        }
+      }
+    }
+  ],
+  "controls": [
+    {
+      "time": "2026-11-12T04:46:58.155Z",
+      "stage": "delivered",
+      "route": "/mcp/manual-demo/connect",
+      "method": "POST",
+      "round": "initial-connect",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b279\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "c3ab3017-2151-4102-896b-79a81eda73d9",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    },
+    {
+      "time": "2026-11-12T04:47:04.749Z",
+      "stage": "delivered",
+      "route": "/mcp/manual-demo/disconnect",
+      "method": "POST",
+      "round": "manual-english",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b279\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "0017f39b-0ed1-4d54-a84c-46c8f4676e0e",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    },
+    {
+      "time": "2026-11-12T04:48:22.888Z",
+      "stage": "delivered",
+      "route": "/mcp/manual-demo/connect",
+      "method": "POST",
+      "round": "before-cut-connect",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b279\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "76960ae9-4678-42e8-9473-4eb171c850b0",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    },
+    {
+      "time": "2026-11-12T04:48:31.086Z",
+      "stage": "truncated",
+      "route": "/mcp/manual-demo/disconnect",
+      "method": "POST",
+      "round": "manual-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b279\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "a6a55214-987c-4034-95ca-0e410f79ea64",
+      "status": 200,
+      "bytes": 4,
+      "target": true,
+      "deliveredBytes": 3
+    },
+    {
+      "time": "2026-11-12T04:48:48.285Z",
+      "stage": "delivered",
+      "route": "/mcp/manual-demo/connect",
+      "method": "POST",
+      "round": "final-connect",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b279\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "e5dbd7a2-44f7-41ed-be22-07379942a4a9",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    }
+  ],
+  "readback": {
+    "time": "2026-11-12T04:48:31.129Z",
+    "stage": "delivered",
+    "route": "/mcp/project",
+    "method": "GET",
+    "round": "manual-observe",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b279\\candidate-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "419f84a0-dde4-48b0-a0b8-43a5b6d4be64",
+    "status": 200,
+    "bytes": 170,
+    "target": {
+      "manual-demo": {
+        "status": "disabled",
+        "reason": "manual_disconnect"
+      },
+      "configured-off": {
+        "status": "disabled"
+      },
+      "browser": {
+        "status": "disabled"
+      },
+      "computer": {
+        "status": "disabled"
+      }
+    }
+  },
+  "desktop": {
+    "checks": [
+      {
+        "label": "passive-discovery",
+        "side": "project",
+        "route": "/experimental/resource",
+        "requestID": "8cdc84f9-71e0-452d-a071-55c1e8cf3658",
+        "status": 500,
+        "body": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+          }
+        }
+      },
+      {
+        "label": "manual-after-passive",
+        "side": "project",
+        "route": "/mcp/project",
+        "requestID": "2bb7a5f6-496d-41ae-8156-a2809c5accdf",
+        "status": 200,
+        "body": {
+          "manual-demo": {
+            "status": "disabled",
+            "reason": "manual_disconnect"
+          },
+          "configured-off": {
+            "status": "disabled"
+          }
+        }
+      },
+      {
+        "label": "passive-discovery-isolated",
+        "side": "project",
+        "route": "/experimental/resource",
+        "requestID": "3b33e387-2ff9-4e9b-913e-cfc004c12d9c",
+        "status": 200,
+        "body": {}
+      },
+      {
+        "label": "manual-after-successful-passive",
+        "side": "project",
+        "route": "/mcp/project",
+        "requestID": "2356ff5c-9274-4cfb-b1ef-9b5ccd326d4a",
+        "status": 200,
+        "body": {
+          "manual-demo": {
+            "status": "disabled",
+            "reason": "manual_disconnect"
+          },
+          "configured-off": {
+            "status": "disabled"
+          },
+          "browser": {
+            "status": "disabled"
+          },
+          "computer": {
+            "status": "disabled"
+          }
+        }
+      },
+      {
+        "label": "final-reconnected",
+        "side": "project",
+        "route": "/mcp/project",
+        "requestID": "a857734e-577c-49b2-b7d6-b8f2cc7c9f88",
+        "status": 200,
+        "body": {
+          "manual-demo": {
+            "status": "connected"
+          },
+          "configured-off": {
+            "status": "disabled"
+          },
+          "browser": {
+            "status": "disabled"
+          },
+          "computer": {
+            "status": "disabled"
+          }
+        }
+      },
+      {
+        "label": "other-project",
+        "side": "alternate",
+        "route": "/mcp/project",
+        "requestID": "12045118-95e1-4d89-adbc-3b420f656779",
+        "status": 200,
+        "body": {}
+      }
+    ],
+    "isolation": {
+      "status": 200,
+      "requestID": "796df1d7-05d7-4535-892f-d2974ea25e94",
+      "definitions": {
+        "browser": {
+          "enabled": false
+        },
+        "computer": {
+          "enabled": false
+        }
+      }
+    }
+  },
+  "definitions": {
+    "manual-demo": {
+      "type": "remote",
+      "url": "http://127.0.0.1:39890/mcp",
+      "transport": "streamable-http"
+    },
+    "configured-off": {
+      "type": "remote",
+      "url": "http://127.0.0.1:39890/mcp",
+      "transport": "streamable-http",
+      "enabled": false
+    },
+    "browser": {
+      "enabled": false
+    },
+    "computer": {
+      "enabled": false
+    }
+  },
+  "alternateDefinitions": {},
+  "protocol": [
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:44:54.057Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:44:54.067Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:44:54.075Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:46:58.135Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:46:58.143Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:46:58.151Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:48:22.877Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:48:22.880Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:48:22.885Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:48:48.274Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:48:48.276Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 7216,
+      "port": 39890,
+      "scope": "primary",
+      "time": "2026-11-12T04:48:48.282Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ],
+  "discoveryFault": {
+    "requestID": "8cdc84f9-71e0-452d-a071-55c1e8cf3658",
+    "status": 500,
+    "adapter": "computer",
+    "diagnosticID": "417422e9-b956-4666-9ace-c328dd684b56",
+    "cause": "Computer MCP adapter requires one host-owned runtime authority"
+  }
+}

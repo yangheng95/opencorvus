@@ -5698,6 +5698,8 @@ triggers one explicit read of the original project's connection status. The
 notice identifies the server and project and reports the observed state. If the
 read is unavailable, it retains the write and read diagnostics and points to
 the existing automatic status reads.
+The row and readback notice use the runtime reason to label a manual
+disconnect. Configuration-disabled rows use their standard disabled label.
 The management header names the project used for these reads and actions. Its
 directory hint and expandable exact path are derived from that same scope;
 showing the header does not change the request context or select a project.

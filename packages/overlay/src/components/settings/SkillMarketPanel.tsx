@@ -68,11 +68,6 @@ import { SettingsProjectScope } from "./SettingsProjectScope"
 
 type SkillItem = SkillInstalledResponse[number]
 
-interface McpItem {
-  status?: string
-  error?: string
-}
-
 interface WebkitFileSystemEntry {
   isFile: boolean
   isDirectory: boolean
@@ -381,7 +376,7 @@ function SharedResourceManagementPanel(props: {
   }
   const poolSkills = createMemo(() => (skillInventoryCurrent() ? (appStore.skills as SkillItem[]) : []))
   const mcp = createMemo(
-    (): Record<string, McpItem> => (mcpPanelActive() ? { ...(appStore.mcp as Record<string, McpItem>) } : {}),
+    (): McpProjectStatusResponse => (mcpPanelActive() ? { ...appStore.mcp } : {}),
   )
 
   function ownsMcpScope(owner: McpReadScope): boolean {
@@ -682,11 +677,15 @@ function SharedResourceManagementPanel(props: {
       if (!observation || !current()) return
       const { status, receiptFailure } = observation
       if (receiptFailure) {
-        const observed = status && Object.hasOwn(status, name) ? status[name]?.status : undefined
-        if (observed && isMcpConnectionStatus(observed)) {
+        const observed = status && Object.hasOwn(status, name) ? status[name] : undefined
+        if (observed && isMcpConnectionStatus(observed.status)) {
           setPanelNotice("mcp.connection_state_observed", {
-            tone: observed === (disconnect ? "disabled" : "connected") ? "success" : "warning",
-            vars: () => ({ name, directory, status: mcpConnectionStatusLabel(observed) }),
+            tone: observed.status === (disconnect ? "disabled" : "connected") ? "success" : "warning",
+            vars: () => ({
+              name,
+              directory,
+              status: mcpConnectionStatusLabel(observed.status, observed.status === "disabled" ? observed.reason : undefined),
+            }),
             details: formatErrorDetails(receiptFailure.cause),
           })
         } else {
@@ -1056,11 +1055,17 @@ function SharedResourceManagementPanel(props: {
       const { status, receiptFailure } = observation
       if (receiptFailure) {
         if (status) {
-          const observed = Object.hasOwn(status, name) ? status[name].status : undefined
+          const observed = Object.hasOwn(status, name) ? status[name] : undefined
           setPanelNotice(observed ? "mcp.add_state_observed" : "mcp.add_state_absent", {
             ...noticeOwner,
             tone: "warning",
-            vars: () => ({ name, directory, status: observed ? mcpConnectionStatusLabel(observed) : "" }),
+            vars: () => ({
+              name,
+              directory,
+              status: observed
+                ? mcpConnectionStatusLabel(observed.status, observed.status === "disabled" ? observed.reason : undefined)
+                : "",
+            }),
             details: formatErrorDetails(receiptFailure.cause),
           })
         } else {
@@ -1885,9 +1890,16 @@ function SharedResourceManagementPanel(props: {
                   <Key each={mcpEntries()} by={(entry) => entry[0]}>
                     {(entry) => {
                       const name = () => entry()[0]
-                      const status = () => entry()[1]?.status
-                      const label = () => mcpConnectionStatusOrDisabledLabel(status())
-                      const detail = () => entry()[1]?.error || ""
+                      const connection = () => entry()[1]
+                      const status = () => connection()?.status
+                      const label = () => {
+                        const value = connection()
+                        return mcpConnectionStatusOrDisabledLabel(value?.status, value?.status === "disabled" ? value.reason : undefined)
+                      }
+                      const detail = () => {
+                        const value = connection()
+                        return value && "error" in value ? value.error : undefined
+                      }
                       const controllable = () => ["connected", "disabled", "disconnected", "failed"].includes(status() || "")
                       const action = () => status() === "connected" ? "mcp.disconnect" : "mcp.connect"
                       return (

@@ -237,6 +237,41 @@ describe("MCP OAuth finish from durable facts", () => {
     }
   }, 30_000)
 
+  test("a manually disconnected remote reports its origin through passive discovery until explicitly reconnected", async () => {
+    await using project = await memoryProject()
+    const { server } = startOAuthMcpServer()
+    try {
+      await Instance.provide({
+        directory: project.path,
+        fn: async () => {
+          const remote = {
+            type: "remote",
+            transport: "streamable-http",
+            url: `http://127.0.0.1:${server.port}/mcp`,
+          } as const
+          const configuredDisabled = "configured-disabled"
+          await Config.updateProjectPatch({
+            mcp: { [SERVER]: remote, [configuredDisabled]: { ...remote, enabled: false } },
+          })
+          await MCP.connect(SERVER)
+          await MCP.disconnect(SERVER)
+          await MCP.resourcesForServers(await Config.get(), [SERVER, configuredDisabled])
+          expect(await MCP.projectStatus()).toEqual({
+            [SERVER]: { status: "disabled", reason: "manual_disconnect" },
+            [configuredDisabled]: { status: "disabled" },
+          })
+          expect((await MCP.status())[SERVER]).toEqual({ status: "disabled", reason: "manual_disconnect" })
+
+          await MCP.connect(SERVER)
+          expect((await MCP.projectStatus())[SERVER]).toEqual({ status: "connected" })
+        },
+      })
+    } finally {
+      await Instance.disposeAll()
+      await server.stop(true)
+    }
+  }, 30_000)
+
   for (const admission of ["connection", "authorization"] as const) {
     test(`${admission} credential admission retains its canonical generation`, async () => {
       await using project = await memoryProject()

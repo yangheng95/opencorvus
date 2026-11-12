@@ -997,6 +997,8 @@ re-authorization; neither discovery nor a resource URL supplies a guessed bindin
 verifier, finishing occurrence and terminal receipts remain in the same durable owner.
 连接模式从一次持久读取同时取得凭据代际和匹配 URL 与配置身份的材料。代际存在且材料为空时可继续匿名协议请求。
 代际撤销或已选令牌与客户端材料变化时走本地连接失败，项目配置身份仍在披露前独立核对。远端授权挑战沿用 SDK 授权错误。
+手动断开在同一运行时状态中发布 `disabled` 与 `reason: manual_disconnect`，保持自动接入抑制并允许显式重连。
+配置禁用投影 `disabled`，运行时来源随连接状态或项目配置代际更新。
 
 只有仍为 `pending` 的 provider rejection 和 missing-code callback 才能在一个 store write 中同时 abandon state/verifier 并
 发布 terminal；若 code finish 在其后抢先 spend，先加入 callback receipt 捕获的同 runtime operation；若 peer process 已将 exact

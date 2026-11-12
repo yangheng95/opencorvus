@@ -1,3 +1,4 @@
+import type { McpStatusDisabled } from "@opencorvus-ai/sdk"
 import { t } from "./i18n"
 
 export type SettingsStatusTone = "ok" | "warn" | "bad" | "accent" | "muted" | "neutral"
@@ -82,7 +83,8 @@ export function channelConfigurationStatusToneFromString(status: string): Settin
   return channelConfigurationStatusTone(channelConfigurationStatusFromString(status))
 }
 
-export function mcpConnectionStatusLabel(status: McpConnectionStatus): string {
+export function mcpConnectionStatusLabel(status: McpConnectionStatus, reason?: McpStatusDisabled["reason"]): string {
+  if (status === "disabled" && reason === "manual_disconnect") return t("mcp.status.manual_disconnect")
   return t(`mcp.status.${status}`)
 }
 
@@ -90,8 +92,11 @@ export function mcpConnectionStatusLabelFromString(status: string): string {
   return mcpConnectionStatusLabel(mcpConnectionStatusFromString(status))
 }
 
-export function mcpConnectionStatusOrDisabledLabel(status: string | null | undefined): string {
-  return mcpConnectionStatusLabel(mcpConnectionStatusOrDisabled(status))
+export function mcpConnectionStatusOrDisabledLabel(
+  status: string | null | undefined,
+  reason?: McpStatusDisabled["reason"],
+): string {
+  return mcpConnectionStatusLabel(mcpConnectionStatusOrDisabled(status), reason)
 }
 
 export function mcpConnectionStatusTone(status: McpConnectionStatus): SettingsStatusTone {
