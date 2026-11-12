@@ -1,0 +1,359 @@
+{
+  "facts": {
+    "legacyMigration": {
+      "status": 200,
+      "preservedRevision": true,
+      "definitionVersion": 1
+    },
+    "peerPreparation": {
+      "side": "b",
+      "pid": 30788,
+      "timeout": 16000
+    },
+    "writerRevisionAdvanced": true,
+    "peerReusedWriterRevision": true,
+    "writerAfterPeer": 200,
+    "peerAfterRelease": 200
+  },
+  "returned": {
+    "status": 200,
+    "writer": 200,
+    "peer": 200,
+    "control": 200,
+    "distinctFromOriginal": true,
+    "distinctFromIntermediate": true
+  },
+  "desktop": {
+    "disconnect": {
+      "status": 200,
+      "requestID": "9e6ee975-f786-490e-97b6-dbd8d9275e30"
+    },
+    "connect": {
+      "status": 200,
+      "requestID": "7808645d-81c8-4283-a682-2300778bc7df"
+    },
+    "unchangedRevisionAfterManual": true
+  },
+  "requests": [
+    {
+      "label": "candidate-writer-initial",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "d5d126f5-bda0-4ae4-8c35-b355c9ad51d6",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-peer-initial",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "486f738d-1042-4439-a270-f5ef70afc14d",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-control-initial",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "325eeb4f-02db-47d0-9f49-20f7baab4b68",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the alternate note",
+          "template": "Use the alternate note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "alternate http report",
+          "template": "Read the alternate http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-writer-saves",
+      "peer": "a",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "04759012-6cb6-45b4-9452-c330147cb5c2",
+      "data": {
+        "timeout": 16000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "candidate-writer-before-peer",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "c360369b-e813-4a18-a9dc-2890c5a2b343",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-peer-after-release",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "4bb1219d-8896-4f5a-a934-767457f8956d",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-writer-after-peer",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "85a278f4-55b6-4228-a301-4d35824c758c",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-parallel-a",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "5ffeaf00-0e67-47f5-bd35-b552a309bc0d",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-parallel-b",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "13d965a4-8d1f-4b2e-82de-716916f16a29",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-parallel-control-b",
+      "peer": "b",
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "efe8f2ab-f946-4936-8190-bea65879c9f5",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the alternate note",
+          "template": "Use the alternate note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "alternate http report",
+          "template": "Read the alternate http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-return-to-original-timeout",
+      "peer": "a",
+      "side": "project",
+      "route": "/config",
+      "method": "PATCH",
+      "status": 200,
+      "requestID": "2d35d815-7877-43c3-b910-cffb3e63f4fb",
+      "data": {
+        "timeout": 15000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "candidate-return-control",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "5f4d7a2c-5362-49b5-9e71-4f5cf6b55eef",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the alternate note",
+          "template": "Use the alternate note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "alternate http report",
+          "template": "Read the alternate http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-return-writer",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "5e287cc1-8ce3-4f7a-9d71-36b7cc88e6d3",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "candidate-return-peer",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "6d471d5f-81b0-4752-bc9b-3431edba3845",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "observer-during-writer-manual-disconnect",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "55840fe0-6213-4495-990b-5ef0d9a3ad69",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "writer-after-manual-connect",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "7c0bcdd3-5b8d-42b3-9017-dafc1bc98dc9",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    }
+  ]
+}

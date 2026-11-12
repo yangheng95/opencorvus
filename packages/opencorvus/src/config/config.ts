@@ -2061,7 +2061,7 @@ export namespace Config {
 
   async function prepareProjectRuntimeTransition(
     transition: RuntimeTransition,
-    options: { resetDerivedCaches?: boolean } = {},
+    options: { resetDerivedCaches?: boolean; ownsTransition?: () => boolean } = {},
   ): Promise<() => Promise<void>> {
     const [{ MCP }, { Provider }, { NativeAgentRegistryLifecycle }, { ChannelSupervisor }] = await Promise.all([
       import("@/mcp"),
@@ -2072,6 +2072,7 @@ export namespace Config {
     const reconcileMcp = await MCP.prepareProjectConfigReconciliation({
       before: transition.before,
       after: transition.after,
+      ownsTransition: options.ownsTransition,
     })
     return async () => {
       const resetDerivedCaches = options.resetDerivedCaches !== false
@@ -2194,7 +2195,9 @@ export namespace Config {
           // State admission may wait behind a Config writer's catalog owner.
           // Complete it before claiming the runtime turn that writer must join.
           await TestHooks.beforePeerRuntimePreparation?.({ directory, config: pending.after })
-          const apply = await prepareProjectRuntimeTransition(pending)
+          const apply = await prepareProjectRuntimeTransition(pending, {
+            ownsTransition: () => pendingPeerTransitions.get(directory) === pending,
+          })
           await using _owner = await Lock.write(projectRuntimeSettlementKey(directory))
           if (pendingPeerTransitions.get(directory) !== pending) return false
           await TestHooks.beforePeerRuntimeSettlement?.({ directory, config: pending.after })

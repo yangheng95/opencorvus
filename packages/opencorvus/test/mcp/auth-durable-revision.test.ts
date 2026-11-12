@@ -65,6 +65,44 @@ describe("MCP credential lease generation", () => {
     expect(await McpAuth.revision(AUTH_KEY)).toBe(second)
   })
 
+  test("settling one runtime definition preserves its successor lease across another observation", async () => {
+    const url = "https://example.test"
+    const token = { issuer: "https://issuer.fixture.test", accessToken: "runtime-test-token" }
+    const before = { version: 1 as const, digest: "a".repeat(64) }
+    const after = { version: 1 as const, digest: "b".repeat(64) }
+    const original = await McpAuth.beginCredentialLease(AUTH_KEY, url)
+    await McpAuth.updateTokens(AUTH_KEY, token, url, original)
+    await McpAuth.updateOAuthState(AUTH_KEY, "original-flow", original)
+
+    expect(await McpAuth.ensureRevision(AUTH_KEY, async () => before)).toBe(original)
+    expect(await McpAuth.get(AUTH_KEY)).toMatchObject({
+      revision: original,
+      runtimeDefinition: before,
+      oauthState: "original-flow",
+      tokens: token,
+    })
+
+    const runtime = { definition: after, isCurrent: async () => true }
+    const committed = await McpAuth.invalidate(AUTH_KEY, undefined, runtime)
+    expect(committed).toEqual(expect.any(String))
+    expect(await McpAuth.ensureRevision(AUTH_KEY, async () => after)).toBe(committed)
+    await expect(McpAuth.updateCodeVerifier(AUTH_KEY, "expired-verifier", original)).rejects.toThrow(
+      `MCP auth lease was revoked: ${AUTH_KEY}`,
+    )
+    const successor = await McpAuth.beginCredentialLease(AUTH_KEY, url, undefined, async () => after)
+    await McpAuth.updateOAuthState(AUTH_KEY, "successor-flow", successor)
+    expect(await McpAuth.invalidate(AUTH_KEY, undefined, runtime)).toBe(successor)
+    await McpAuth.updateCodeVerifier(AUTH_KEY, "successor-verifier", successor)
+    expect(await McpAuth.get(AUTH_KEY)).toMatchObject({
+      revision: successor,
+      runtimeDefinition: after,
+      oauthState: "successor-flow",
+      codeVerifier: "successor-verifier",
+      tokens: token,
+      oauthCallbackTerminals: { "original-flow": { outcome: "revoked" } },
+    })
+  })
+
   test("a peer's revoke through the shared store is visible to a later reader", async () => {
     const held = await McpAuth.beginCredentialLease(AUTH_KEY, "https://example.test")
     await McpAuth.updateTokens(

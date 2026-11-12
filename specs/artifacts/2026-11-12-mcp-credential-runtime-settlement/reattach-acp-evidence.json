@@ -1,0 +1,140 @@
+[
+  {
+    "operation": "initialize",
+    "childPID": 19192,
+    "agent": {
+      "name": "OpenCorvus",
+      "version": "local"
+    },
+    "capabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 500,
+    "requestID": "df1f3069-2611-4afe-b60c-f3904815e199",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "4830d163-b38b-4c4d-a415-d9fd0c6646b2",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "sse",
+        "url": "http://127.0.0.1:39964/project/http"
+      }
+    }
+  },
+  {
+    "operation": "first-corrected-reattach",
+    "side": "project",
+    "responseSessionID": "ses_-zUPF3HrRzzzvNAqZ4V8",
+    "notificationSessionID": "ses_-zUPF3HrRzzzvNAqZ4V8",
+    "commands": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md"
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted"
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note"
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report"
+      },
+      {
+        "name": "compact",
+        "description": "compact the session"
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/mcp",
+    "status": 200,
+    "requestID": "1c213fde-f668-4403-8351-4d826ac74892",
+    "data": {
+      "browser": "disabled",
+      "computer": "disabled",
+      "editor_http": "connected"
+    }
+  },
+  {
+    "side": "project",
+    "route": "/command",
+    "status": 200,
+    "requestID": "e2eb7262-84ed-4e82-ab09-cca4a0a4ea03",
+    "data": [
+      {
+        "name": "init",
+        "description": "create/update AGENTS.md",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review",
+        "description": "review changes [commit|branch|pr], defaults to uncommitted",
+        "source": "command",
+        "hints": [
+          "$ARGUMENTS"
+        ]
+      },
+      {
+        "name": "review-note",
+        "description": "Review the project note",
+        "source": "command",
+        "hints": []
+      },
+      {
+        "name": "editor_http:remote_report",
+        "description": "project http report",
+        "source": "mcp",
+        "hints": [],
+        "template": "Read the project http report."
+      }
+    ]
+  },
+  {
+    "side": "project",
+    "route": "/config",
+    "status": 200,
+    "requestID": "c83145ae-4fac-4597-b6eb-a5a8310b96f1",
+    "data": {
+      "editor_http": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39964/project/http"
+      }
+    }
+  }
+]

@@ -918,6 +918,9 @@ pending 和 finishing 分别以 `revoked` 和 `exchange_uncertain` 结算。历�
 每个 OAuth provider connection admission 都通过 store lock 为 absent 或 upgrade-era material entry 初始化一个 non-empty revision；
 初始化不 supersede/clear flow，但此后所有 refresh/client/token writes 都携带该 exact revision。显式 remove 之后，已捕获的 legacy
 refresh writer 不能以 `expectedRevision=undefined` 复活 credential。
+项目凭据记录中的 `runtimeDefinition` v1 绑定准确的规范化连接定义。旧记录首次入场时在同一锁内补齐绑定，保留仍适用的
+凭据、授权和代际。项目连接入场、授权租约和配置结算读取同一绑定。连接定义真正变化时推进代际，重复结算同一目标复用
+现有代际。结算在凭据锁内核对当前定义与所属配置过渡，撤销的本地等待按准确 state 清理。
 OAuth provider 的 authority 显式分成 `connection` 与 `authorization`。普通 startup/admission 的 connection provider 只读取或
 刷新已存在的 credential；没有有效 token 时在第一个 interactive SDK boundary 返回 `UnauthorizedError` 并投影 `needs_auth`，
 不能 dynamic-register client、读写 state/PKCE verifier 或 redirect，也不能借用另一个 pending occurrence。只有显式 authorize、

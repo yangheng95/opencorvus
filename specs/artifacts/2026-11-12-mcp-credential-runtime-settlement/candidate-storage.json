@@ -1,0 +1,33 @@
+{
+  "shared": {
+    "sqlite": "ok",
+    "sessions": 0,
+    "zeroActivityTables": {
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_activity_outcome": 0,
+      "provider_usage_event": 0
+    },
+    "versionOneRecords": 4,
+    "scopeCounts": {
+      "peer-review": 2,
+      "global-peer-review": 2
+    }
+  },
+  "editorReattachment": {
+    "sqlite": "ok",
+    "sessions": 1,
+    "zeroActivityTables": {
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_activity_outcome": 0,
+      "provider_usage_event": 0
+    },
+    "versionOneRecords": 1,
+    "scopeCounts": {
+      "editor_http": 1
+    }
+  }
+}

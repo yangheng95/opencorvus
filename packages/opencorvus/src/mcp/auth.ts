@@ -80,6 +80,9 @@ export namespace McpAuth {
   })
   export type OAuthFinishingOccurrence = z.infer<typeof OAuthFinishingOccurrence>
 
+  const RuntimeDefinition = z.object({ version: z.literal(1), digest: z.string().regex(/^[0-9a-f]{64}$/) })
+  export type RuntimeDefinition = z.infer<typeof RuntimeDefinition>
+
   const CredentialEntry = z.object({
     tokens: Tokens.optional(),
     clientInfo: ClientInfo.optional(),
@@ -129,14 +132,16 @@ export namespace McpAuth {
      * presents its generation with every write of that flow, so it must stay
      * stable across the flow's own writes — an OAuth exchange is several
      * store writes under one captured generation. `beginCredentialLease`,
-     * explicit `invalidate`, and broker rotation of an unspent pending flow
-     * mint; ordinary writes preserve. The empty generation
+     * explicit `invalidate`, a changed runtime definition, and broker rotation
+     * of an unspent pending flow mint revisions. Ordinary writes preserve the
+     * current revision. The empty generation
      * is never handed out as a lease, so a value captured before a removal
      * can never match anything after recreation. Keeping the generation in
      * the file rather than in memory is what makes a revoke performed by
      * another backend on the same data root visible here.
      */
     revision: z.string().optional(),
+    runtimeDefinition: RuntimeDefinition.optional(),
   })
   const LegacyCredentialArchive = CredentialEntry.pick({
     tokens: true,
@@ -184,31 +189,42 @@ export namespace McpAuth {
   /**
    * Ensure every OAuth provider admission captures a real durable revision.
    *
-   * Upgrade-era token/client entries may predate revisions, and a completely
-   * fresh connection may have no entry yet. Minting here is not a revoke and
-   * does not clear or supersede any flow facts; it only gives every later
-   * provider write a compare-and-swap owner. An explicit remove after this
-   * admission can therefore never be undone by a stale refresh writer.
+   * First binding preserves an existing lease. A genuinely different definition
+   * retires the previous lease and active flow before admitting the new one.
    */
-  export async function ensureRevision(authKey: string, assertAdmission?: () => Promise<void>): Promise<Revision> {
+  export async function ensureRevision(
+    authKey: string,
+    admit?: () => Promise<RuntimeDefinition | void>,
+  ): Promise<Revision> {
     const candidate = crypto.randomUUID()
     let result: Revision | undefined
+    let written: { revision: Revision; runtimeDefinition?: RuntimeDefinition } | undefined
     try {
       await mutate(async () => {
-        await assertAdmission?.()
+        const definition = (await admit?.()) ?? undefined
         const data = await all()
         const current = data[authKey]
-        if (current?.revision) {
+        if (current?.revision && (!definition || sameFact(current.runtimeDefinition, definition))) {
           result = current.revision
           return
         }
-        result = candidate
-        data[authKey] = Entry.parse({ ...(current ?? {}), revision: candidate })
+        const entry = structuredClone(current ?? {})
+        // An unbound record predates definition ownership. Preserve the
+        // credential and active lease when admitting its canonical definition.
+        const changed = definition && current?.runtimeDefinition && !sameFact(current.runtimeDefinition, definition)
+        if (changed) terminalizeActiveFlow(entry, Date.now(), "revoked")
+        result = changed || !current?.revision ? candidate : current.revision
+        written = { revision: result, runtimeDefinition: definition ?? current?.runtimeDefinition }
+        data[authKey] = Entry.parse({ ...entry, ...written })
         await Filesystem.writeAtomic(filepath(), JSON.stringify(data, null, 2), 0o600)
       })
     } catch (error) {
-      const current = await get(authKey)
-      if (current?.revision === candidate) return candidate
+      if (written) {
+        const current = await get(authKey)
+        if (current?.revision === written.revision && sameFact(current.runtimeDefinition, written.runtimeDefinition)) {
+          return written.revision
+        }
+      }
       throw error
     }
     if (!result) throw new Error(`MCP auth revision admission did not settle: ${authKey}`)
@@ -341,12 +357,13 @@ export namespace McpAuth {
         }
       }
       const next = update(current ? structuredClone(current) : undefined)
-      // A write preserves the generation: the holder's captured revision must
-      // stay valid across every write of its own flow. `ensureRevision` only
-      // initializes a missing generation; after that, only an explicit
-      // revocation/removal owner mints a new one.
-      if (next) data[authKey] = Entry.parse({ ...next, revision: current?.revision })
-      else delete data[authKey]
+      // A lease keeps its revision and definition through its own writes.
+      // Admission and retirement own changes to those facts.
+      if (next) {
+        data[authKey] = Entry.parse({ ...next, revision: current?.revision, runtimeDefinition: current?.runtimeDefinition })
+      } else {
+        delete data[authKey]
+      }
       await Filesystem.writeAtomic(filepath(), JSON.stringify(data, null, 2), 0o600)
     })
   }
@@ -394,6 +411,7 @@ export namespace McpAuth {
   export function hasCredentialOrFlowMaterial(entry: Entry): boolean {
     const {
       revision: _revision,
+      runtimeDefinition: _runtimeDefinition,
       oauthCallbackTerminals: _oauthCallbackTerminals,
       legacyOwnerRetired: _legacyOwnerRetired,
       ...material
@@ -684,13 +702,13 @@ export namespace McpAuth {
     authKey: string,
     serverUrl?: string,
     credentialIdentity?: string,
-    assertAdmission?: () => Promise<void>,
+    admit?: () => Promise<RuntimeDefinition | void>,
     pendingPolicy: "supersede" | "reject" = "supersede",
   ): Promise<Revision> {
     const generation = crypto.randomUUID()
     try {
       await mutate(async () => {
-        await assertAdmission?.()
+        const definition = (await admit?.()) ?? undefined
         const data = await all()
         const current = data[authKey]
         const now = Date.now()
@@ -717,6 +735,7 @@ export namespace McpAuth {
           ...retained,
           ...(serverUrl ? { serverUrl } : {}),
           ...(credentialIdentity ? { credentialIdentity } : {}),
+          ...(definition ? { runtimeDefinition: definition } : {}),
           revision: generation,
         })
         await Filesystem.writeAtomic(filepath(), JSON.stringify(data, null, 2), 0o600)
@@ -737,24 +756,38 @@ export namespace McpAuth {
    * on, in this process and in every peer backend reading the same store. A key
    * with no entry has nothing to revoke — no lease over it can exist, because
    * the empty generation is never handed out.
+   * Configuration settlement supplies the current definition so another
+   * observer of that definition joins the revision already written for it.
    */
-  export async function invalidate(authKey: string, assertAdmission?: () => Promise<void>): Promise<void> {
+  export async function invalidate(
+    authKey: string,
+    assertAdmission?: () => Promise<void>,
+    runtime?: { definition: RuntimeDefinition; isCurrent: () => Promise<boolean> },
+  ): Promise<Revision | undefined> {
     const revision = crypto.randomUUID()
+    let result: Revision | undefined
     try {
       await mutate(async () => {
         await assertAdmission?.()
+        if (runtime && !(await runtime.isCurrent())) return
         const data = await all()
         const current = data[authKey]
         if (!current) return
+        if (runtime && sameFact(current.runtimeDefinition, runtime.definition)) {
+          result = current.revision
+          return
+        }
         const entry = structuredClone(current)
         terminalizeActiveFlow(entry, Date.now(), "revoked")
-        data[authKey] = Entry.parse({ ...entry, revision })
+        data[authKey] = Entry.parse({ ...entry, ...(runtime ? { runtimeDefinition: runtime.definition } : {}), revision })
         await Filesystem.writeAtomic(filepath(), JSON.stringify(data, null, 2), 0o600)
+        result = revision
       })
     } catch (error) {
-      if ((await get(authKey))?.revision === revision) return
+      if ((await get(authKey))?.revision === revision) return revision
       throw error
     }
+    return result
   }
 
   /**

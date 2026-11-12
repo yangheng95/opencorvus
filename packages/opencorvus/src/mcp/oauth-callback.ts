@@ -809,10 +809,10 @@ export namespace McpOAuthCallback {
     )
   }
 
-  export function cancelPending(mcpName: string): void {
+  export function cancelPending(mcpName: string, expectedState?: string): void {
     const mcpKey = pendingMcpKey(mcpName)
     const oauthState = mcpNameToState.get(mcpKey)
-    if (!oauthState) return
+    if (!oauthState || (expectedState !== undefined && oauthState !== expectedState)) return
     const stateKey = pendingAuthKey(oauthState)
     const pending = pendingAuths.get(stateKey)
     if (pending?.phase === "waiting") {

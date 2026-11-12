@@ -1,0 +1,218 @@
+{
+  "facts": {
+    "mainRevisionPreserved": true,
+    "globalRevisionsPreserved": true,
+    "connected": true,
+    "projectReads": true
+  },
+  "requests": [
+    {
+      "label": "restart-writer-project",
+      "peer": "a",
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "3428fba6-25fa-4219-9ddc-9540ced83817",
+      "data": {
+        "timeout": 15000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "restart-writer-alternate",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "0aa53d03-2300-4d06-866c-b3888e6792e4",
+      "data": {
+        "timeout": 15000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "restart-writer-project",
+      "peer": "a",
+      "side": "project",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "e061cd2b-c5b6-4d1b-82f9-886244fd03e3",
+      "data": {
+        "status": "disconnected"
+      }
+    },
+    {
+      "label": "restart-writer-alternate",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "53653fe5-9dde-4dc4-97ac-c408de8642cf",
+      "data": {
+        "status": "disconnected"
+      }
+    },
+    {
+      "label": "restart-writer-alternate",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "f43c13cc-4b8b-4b84-93e7-6667878a3169",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the alternate note",
+          "template": "Use the alternate note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "alternate http report",
+          "template": "Read the alternate http report."
+        }
+      ]
+    },
+    {
+      "label": "restart-writer-project",
+      "peer": "a",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "b29794a0-e6da-4098-87f4-2fc9f8717cfb",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "restart-peer-project",
+      "peer": "b",
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "b5cd0847-4fdd-4358-9102-2fa717749f2e",
+      "data": {
+        "timeout": 15000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "restart-peer-alternate",
+      "peer": "b",
+      "side": "alternate",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "172a8a3d-c670-4fff-954f-813a8162784b",
+      "data": {
+        "timeout": 15000,
+        "transport": "streamable-http"
+      }
+    },
+    {
+      "label": "restart-peer-project",
+      "peer": "b",
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "d29d84b4-94eb-4c9b-94e9-2ca575dfd621",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the project note",
+          "template": "Use the project note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "project http report",
+          "template": "Read the project http report."
+        }
+      ]
+    },
+    {
+      "label": "restart-peer-alternate",
+      "peer": "b",
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "e25c8ec4-530d-42b7-932c-96cfc3dda4b6",
+      "data": [
+        {
+          "name": "review-note",
+          "description": "Review the alternate note",
+          "template": "Use the alternate note."
+        },
+        {
+          "name": "peer-review:remote_report",
+          "description": "alternate http report",
+          "template": "Read the alternate http report."
+        }
+      ]
+    },
+    {
+      "label": "restart-post-read-status",
+      "peer": "a",
+      "side": "project",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "76c73c7e-da4f-4da2-bea3-069602c07c8e",
+      "data": {
+        "status": "connected"
+      }
+    },
+    {
+      "label": "restart-post-read-status",
+      "peer": "a",
+      "side": "alternate",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "1c2cdd3a-f4fa-47de-b0b6-ae1f8a651c45",
+      "data": {
+        "status": "connected"
+      }
+    },
+    {
+      "label": "restart-post-read-status",
+      "peer": "b",
+      "side": "project",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "3b13b896-9398-4c9b-bd83-43dd48342095",
+      "data": {
+        "status": "connected"
+      }
+    },
+    {
+      "label": "restart-post-read-status",
+      "peer": "b",
+      "side": "alternate",
+      "route": "/mcp",
+      "method": "GET",
+      "status": 200,
+      "requestID": "7e96a91e-4398-4bbc-aa66-c9b903634346",
+      "data": {
+        "status": "connected"
+      }
+    }
+  ]
+}
