@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [历史消息中的本地文本文件引用可阅读](2026-11-12-history-local-file-reference.md)
 - [注册命令模板保留文本与主机操作的权限边界](2026-11-12-command-template-content-authority.md)
 - [编辑器斜杠命令保留参数内部空白](2026-11-12-acp-command-argument-whitespace.md)
 - [全图预览的键盘操作菜单](2026-11-12-image-preview-actions-menu.md)

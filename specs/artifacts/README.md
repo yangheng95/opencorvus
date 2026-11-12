@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [历史本地文本文件引用的桌面证据](2026-11-12-history-local-file-reference/README.md)
 - [注册命令模板文本与主机操作的基线](2026-11-12-command-template-content-authority/README.md)
 - [编辑器斜杠命令参数空白的实际证据](2026-11-12-acp-command-argument-whitespace/README.md)
 - [全图预览操作菜单的桌面证据](2026-11-12-image-preview-actions-menu/README.md)
