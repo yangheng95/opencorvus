@@ -1,0 +1,483 @@
+{
+  "origin": 1794499292261,
+  "gesture": "equivalent-query-held",
+  "requests": [
+    {
+      "sentMs": 76,
+      "route": "/ui/assets/main-WipNTHGm.js",
+      "query": null,
+      "file": null,
+      "gesture": "open-project",
+      "receivedMs": 167,
+      "status": 200,
+      "requestID": "8cfc71da-f1d1-4c29-932b-10385eb4b889"
+    },
+    {
+      "sentMs": 6018,
+      "route": "/file",
+      "query": null,
+      "file": "",
+      "gesture": "open-project",
+      "receivedMs": 6024,
+      "status": 200,
+      "requestID": "dd1bc502-f569-4420-b37e-da078b86fd80"
+    },
+    {
+      "sentMs": 31149,
+      "route": "/find/file",
+      "query": "i",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31244,
+      "status": 200,
+      "requestID": "ddf8ea63-1ee9-436d-89e8-e02c3e034fac",
+      "pathCount": 26,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".gitattributes",
+        "notes archive\\memo.txt",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json"
+      ]
+    },
+    {
+      "sentMs": 31151,
+      "route": "/find/file",
+      "query": "i",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31332,
+      "status": 200,
+      "requestID": "577f3c31-e04c-483f-834d-ba27390ca995",
+      "pathCount": 26,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".gitattributes",
+        "notes archive\\memo.txt",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json"
+      ]
+    },
+    {
+      "sentMs": 31154,
+      "route": "/find/file",
+      "query": "in",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31245,
+      "status": 200,
+      "requestID": "b10ef6c3-ea8e-4705-bcfd-168e35b31077",
+      "pathCount": 24,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json"
+      ]
+    },
+    {
+      "sentMs": 31156,
+      "route": "/find/file",
+      "query": "in",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31332,
+      "status": 200,
+      "requestID": "6b680d62-c45f-462d-ae85-a9deafa51492",
+      "pathCount": 24,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json"
+      ]
+    },
+    {
+      "sentMs": 31160,
+      "route": "/find/file",
+      "query": "in",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31437,
+      "status": 200,
+      "requestID": "d685d35b-813c-43d0-8933-ec171fe084d4",
+      "pathCount": 24,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json"
+      ]
+    },
+    {
+      "sentMs": 31163,
+      "route": "/find/file",
+      "query": "in",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31535,
+      "status": 200,
+      "requestID": "0158451f-deb0-422f-8831-58bc3b0a7837",
+      "pathCount": 24,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json"
+      ]
+    },
+    {
+      "sentMs": 31166,
+      "route": "/find/file",
+      "query": "in",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31634,
+      "status": 200,
+      "requestID": "02988ee7-7b42-450b-9830-5844b6a9de9f",
+      "pathCount": 24,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json"
+      ]
+    },
+    {
+      "sentMs": 31168,
+      "route": "/find/file",
+      "query": "in",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31720,
+      "status": 200,
+      "requestID": "f610c8fa-1dd2-4b2d-90e4-eb135dcefe3f",
+      "pathCount": 24,
+      "firstPaths": [
+        "inspection notes.txt",
+        ".gitignore",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json"
+      ]
+    },
+    {
+      "sentMs": 31170,
+      "route": "/find/file",
+      "query": "inspect",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31246,
+      "status": 200,
+      "requestID": "c2615648-fe77-400c-9ab5-47a1ea852105",
+      "paths": [
+        "inspection notes.txt"
+      ]
+    },
+    {
+      "sentMs": 31173,
+      "route": "/find/file",
+      "query": "inspect",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31333,
+      "status": 200,
+      "requestID": "0bf81145-d67a-4428-be97-f5070c7b733d",
+      "paths": [
+        "inspection notes.txt"
+      ]
+    },
+    {
+      "sentMs": 31175,
+      "route": "/find/file",
+      "query": "inspect",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31437,
+      "status": 200,
+      "requestID": "61f64ed2-37e4-4110-89e5-9214156a5ab6",
+      "paths": [
+        "inspection notes.txt"
+      ]
+    },
+    {
+      "sentMs": 31178,
+      "route": "/find/file",
+      "query": "inspect",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31535,
+      "status": 200,
+      "requestID": "0240f3a6-6b4a-4747-aee1-db3507acc16f",
+      "paths": [
+        "inspection notes.txt"
+      ]
+    },
+    {
+      "sentMs": 31187,
+      "route": "/find/file",
+      "query": "inspection",
+      "file": null,
+      "gesture": "fast-inspection",
+      "receivedMs": 31246,
+      "status": 200,
+      "requestID": "39d836d6-03d0-496a-be0a-8feaba94717e",
+      "paths": [
+        "inspection notes.txt"
+      ]
+    },
+    {
+      "sentMs": 32232,
+      "route": "/find/file",
+      "query": "s",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32326,
+      "status": 200,
+      "requestID": "176c9364-d776-4ee6-b472-250985359e2b",
+      "pathCount": 65,
+      "firstPaths": [
+        "sample panel.png",
+        "inspection notes.txt",
+        "notes archive\\memo.txt",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json"
+      ]
+    },
+    {
+      "sentMs": 32234,
+      "route": "/find/file",
+      "query": "s",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32423,
+      "status": 200,
+      "requestID": "ddbac129-dcee-49b9-ad77-eedb2f53c5ff",
+      "pathCount": 65,
+      "firstPaths": [
+        "sample panel.png",
+        "inspection notes.txt",
+        "notes archive\\memo.txt",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json"
+      ]
+    },
+    {
+      "sentMs": 32237,
+      "route": "/find/file",
+      "query": "sa",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32327,
+      "status": 200,
+      "requestID": "cd7a838d-29cc-4ec4-af51-fcc1e82e179c",
+      "pathCount": 62,
+      "firstPaths": [
+        "sample panel.png",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json",
+        "notes archive\\memo.txt"
+      ]
+    },
+    {
+      "sentMs": 32239,
+      "route": "/find/file",
+      "query": "sa",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32424,
+      "status": 200,
+      "requestID": "6fdab70b-abaf-4244-8101-e57d83b83035",
+      "pathCount": 62,
+      "firstPaths": [
+        "sample panel.png",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json",
+        "notes archive\\memo.txt"
+      ]
+    },
+    {
+      "sentMs": 32242,
+      "route": "/find/file",
+      "query": "sa",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32519,
+      "status": 200,
+      "requestID": "d00a72c2-b989-4f59-bb86-1b8c89595e7c",
+      "pathCount": 62,
+      "firstPaths": [
+        "sample panel.png",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json",
+        "notes archive\\memo.txt"
+      ]
+    },
+    {
+      "sentMs": 32245,
+      "route": "/find/file",
+      "query": "sa",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32616,
+      "status": 200,
+      "requestID": "d90fb4fb-d9a9-43a1-8cb7-a021de6f6449",
+      "pathCount": 62,
+      "firstPaths": [
+        "sample panel.png",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json",
+        "notes archive\\memo.txt"
+      ]
+    },
+    {
+      "sentMs": 32248,
+      "route": "/find/file",
+      "query": "sa",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32766,
+      "status": 200,
+      "requestID": "3394791e-e718-4abe-8aee-d4e365f8da97",
+      "pathCount": 62,
+      "firstPaths": [
+        "sample panel.png",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\Dyyiajnn.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\bwkvk7OZ.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\KnhTeCp4.json",
+        ".opencorvus\\.r\\project\\cache\\session-diffs\\prj_hlYSyoC72yAIiA4kPrZX\\gCRwZ10A.json",
+        "notes archive\\memo.txt"
+      ]
+    },
+    {
+      "sentMs": 32254,
+      "route": "/find/file",
+      "query": "sample",
+      "file": null,
+      "gesture": "fast-sample",
+      "receivedMs": 32327,
+      "status": 200,
+      "requestID": "489f36b8-d1a7-47df-b9a6-ddd0fddb4a76",
+      "paths": [
+        "sample panel.png"
+      ]
+    },
+    {
+      "sentMs": 56636,
+      "route": "/find/file",
+      "query": "sample",
+      "file": null,
+      "gesture": "trailing-space",
+      "receivedMs": 56727,
+      "status": 200,
+      "requestID": "763f0aeb-980d-4343-9eb9-a287b51fe2b7",
+      "paths": [
+        "sample panel.png"
+      ]
+    },
+    {
+      "sentMs": 56839,
+      "route": "/find/file",
+      "query": "sample",
+      "file": null,
+      "gesture": "trailing-space",
+      "receivedMs": 56931,
+      "status": 200,
+      "requestID": "1b9bb4cf-e260-4bda-aff6-710bb2a8af38",
+      "paths": [
+        "sample panel.png"
+      ]
+    },
+    {
+      "sentMs": 57039,
+      "route": "/find/file",
+      "query": "sample",
+      "file": null,
+      "gesture": "trailing-space",
+      "receivedMs": 57131,
+      "status": 200,
+      "requestID": "dc8ed769-e2c0-45a7-a690-540dc62c7608",
+      "paths": [
+        "sample panel.png"
+      ]
+    },
+    {
+      "sentMs": 92377,
+      "route": "/find/file",
+      "query": "sample",
+      "file": null,
+      "gesture": "equivalent-query-held",
+      "receivedMs": 93017,
+      "status": 200,
+      "requestID": "d9cc5734-baa6-4617-8873-ff18e36985f9",
+      "paths": [
+        "sample panel.png"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "name": "fast-inspection",
+      "phase": "start",
+      "atMs": 31130
+    },
+    {
+      "name": "fast-inspection",
+      "phase": "complete",
+      "atMs": 31178
+    },
+    {
+      "name": "fast-sample",
+      "phase": "start",
+      "atMs": 32217
+    },
+    {
+      "name": "fast-sample",
+      "phase": "complete",
+      "atMs": 32248
+    },
+    {
+      "name": "trailing-space",
+      "phase": "start",
+      "atMs": 56629,
+      "keys": [
+        "Space",
+        "Space",
+        "Backspace"
+      ]
+    },
+    {
+      "name": "trailing-space",
+      "phase": "complete",
+      "atMs": 57234
+    },
+    {
+      "name": "equivalent-query-held",
+      "key": "Space",
+      "atMs": 92370
+    }
+  ]
+}
