@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [新增连接回执中断的真实桌面与项目证据](2026-11-12-mcp-add-interrupted-receipt/README.md)
 - [批量删除回执中断的真实桌面与项目状态](2026-11-12-mcp-bulk-delete-interrupted-receipt/README.md)
 - [批量删除确认、真实回执和精确名称](2026-11-12-mcp-bulk-delete-exact-targets/README.md)
 - [新增 MCP 表单的真实桌面与回执](2026-11-12-mcp-add-draft-ownership/README.md)
