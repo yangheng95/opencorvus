@@ -1,0 +1,79 @@
+{
+  "browserReads": [
+    {
+      "status": 200,
+      "path": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/second sample.txt",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review",
+      "requestID": "a65ea3da-ae60-41ef-af55-4a7dffcb8809",
+      "body": {
+        "type": "text",
+        "content": "Owned parameterized command file.\r\n"
+      }
+    },
+    {
+      "status": 200,
+      "path": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/second sample.txt",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review",
+      "requestID": "615d6d7e-b8a1-49a5-b7d1-9396b0f26bb6",
+      "body": {
+        "type": "text",
+        "content": "Owned parameterized command file.\r\nUpdated on disk during the isolated reference review.\r\n"
+      }
+    },
+    {
+      "status": 200,
+      "path": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/reference.txt",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review",
+      "requestID": "0e3f3f7e-a5b8-4fe4-890f-441440f5591f",
+      "body": {
+        "type": "text",
+        "content": "Owned command template attachment.\r\n"
+      }
+    },
+    {
+      "status": 404,
+      "path": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/reference.txt",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review",
+      "requestID": "c4555839-e859-439d-bf35-2550ae7e7ece",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/reference.txt",
+          "message": "File entry not found: C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/reference.txt"
+        }
+      }
+    },
+    {
+      "status": 200,
+      "path": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/reference.txt",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review",
+      "requestID": "569385d9-532c-4d43-9d4a-7e788a13aa93",
+      "body": {
+        "type": "text",
+        "content": "Owned command template attachment.\r\n"
+      }
+    },
+    {
+      "status": 200,
+      "path": "second sample.txt",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b304\\project\\archive-review",
+      "requestID": "32d3e020-5261-4cd5-8aa4-a386ebe415b7",
+      "body": {
+        "type": "text",
+        "content": "Owned parameterized command file.\r\nUpdated on disk during the isolated reference review.\r\n",
+        "revision": "1dab6ab3eaacc6c0ab48a299459242c4f58a1dad117f1f2d5f68ef73cb3274ec",
+        "resourceID": "600b0b402aac2b635006c4ee4e42aa2bddb83eb8bd6034cbb0678ecc6fd1b079"
+      }
+    }
+  ],
+  "downloadedCurrentFileBytes": 90,
+  "downloadedStoredImageBytes": 100,
+  "allHistoryMessageAndPartRowsIdentical": true,
+  "temporarySampleEditsRestored": true,
+  "historyAndModelCounts": {
+    "session": 3,
+    "message": 40,
+    "engine_task": 0,
+    "provider_activity_request": 19
+  }
+}

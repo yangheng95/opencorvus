@@ -1,0 +1,56 @@
+{
+  "sessionID": "ses_hY8ig1tvTOI7oZDcRX6S",
+  "historyRequestID": "f39f4f87-9f83-4b4a-be94-02c4291ea5a6",
+  "historyMessages": 20,
+  "parts": [
+    {
+      "id": "prt_g0ValS1kP03dkWD54zcu",
+      "messageID": "msg_444de752439e4c419e",
+      "sessionID": "ses_hY8ig1tvTOI7oZDcRX6S",
+      "mime": "text/plain",
+      "filename": "reference.txt",
+      "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/reference.txt"
+    },
+    {
+      "id": "prt_g0ValS1kP0675we2gQrj",
+      "messageID": "msg_444de752439e4c419e",
+      "sessionID": "ses_hY8ig1tvTOI7oZDcRX6S",
+      "mime": "text/plain",
+      "filename": "second sample.txt",
+      "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b304/project/archive-review/second%20sample.txt"
+    },
+    {
+      "id": "prt_g0ValS20X014Jh2MO5JD",
+      "messageID": "msg_e2e63b241a1e457693",
+      "sessionID": "ses_hY8ig1tvTOI7oZDcRX6S",
+      "mime": "image/png",
+      "filename": "panel-small.png",
+      "url": "/attachment/prj_hzo8ufEFZEN9CdNPK6My/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+    }
+  ],
+  "reads": [
+    {
+      "filename": "reference.txt",
+      "requestID": "64b89d68-91cc-42c9-bf61-e5c83e2754cb",
+      "text": "Owned command template attachment.\r\n",
+      "bytes": 36
+    },
+    {
+      "filename": "second sample.txt",
+      "requestID": "f3e724a2-921e-4d92-ad99-0df54bf31d1b",
+      "text": "Owned parameterized command file.\r\nUpdated on disk during the isolated reference review.\r\n",
+      "bytes": 90
+    }
+  ],
+  "storedImage": {
+    "requestID": "3d8c82d3-7c97-45d8-b597-f8e86552d818",
+    "bytes": 100
+  },
+  "databaseQuickCheck": "ok",
+  "counts": {
+    "session": 3,
+    "message": 40,
+    "engine_task": 0,
+    "provider_activity_request": 19
+  }
+}

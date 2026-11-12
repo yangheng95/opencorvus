@@ -375,6 +375,10 @@ text filenames with octet-stream metadata use ResourceTextPreview as File previe
 artifacts; other formats retain FilePart media or original-download presentation.
 History preserves its existing image, PDF and media presentation priority,
 including SVG images, before choosing decodable text for other file types.
+Historical text `FilePart` entries with a server `file:` URL are current-file
+references. Their localized read action opens the existing read-only file
+workbench with the selected conversation's server authority and exact path.
+The historical message text retains the contents captured during execution.
 Composer capture resolves the Windows .ts source/transport-stream ambiguity
 before upload: only octet-stream, video/mp2t or video/vnd.dlna.mpeg-tts metadata
 on a .ts file enters complete-byte strict UTF-8 and standard binary-control-byte

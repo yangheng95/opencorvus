@@ -1,6 +1,25 @@
 import { expect, test } from "bun:test"
-import { classifyProjectPathInput, normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath } from "../src/utils/server-path"
+import { classifyProjectPathInput, normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath, serverFileUrlPath } from "../src/utils/server-path"
 import { projectDirectoryKey } from "../src/utils/project-directory"
+
+test.each([
+  ["file:///C:/Repo/second%20sample.txt", "C:/Repo", "C:/Repo/second sample.txt"],
+  ["file://host/share/Repo/100%25%20Ready%23.txt", "//host/share/Repo", "//host/share/Repo/100% Ready#.txt"],
+  ["file:///repo/%E8%B5%84%E6%96%99%20%2520.txt", "/repo", "/repo/资料 %20.txt"],
+  ["file://localhost/repo/notes%5Cname.txt?start=3&end=4", "/repo", "/repo/notes\\name.txt"],
+])("server file URL %s retains the path for %s", (url, directory, expected) => {
+  expect(serverFileUrlPath(url, directory)).toBe(expected)
+})
+
+test.each([
+  ["https://host/repo/file.txt", "/repo"],
+  ["file://host/repo/file.txt", "/repo"],
+  ["file:///C:/Repo/path%5Cname.txt", "C:/Repo"],
+  ["file:///repo/path%2Fname.txt", "/repo"],
+  ["file:///repo/file.txt", "C:/Repo"],
+])("invalid server file URL %s for %s has an explicit type error", (url, directory) => {
+  expect(() => serverFileUrlPath(url, directory)).toThrow(TypeError)
+})
 
 test.each([
   ["C:/repo", "notes/guide.md", "photo.png", "notes/photo.png"],

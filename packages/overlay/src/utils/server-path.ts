@@ -9,6 +9,23 @@ export function isWindowsPath(path: string): boolean {
   return /^(?:[A-Za-z]:[\\/]|\\\\[^\\]|\/\/[^/])/.test(path)
 }
 
+/** Convert a persisted file URL using the server's path syntax. */
+export function serverFileUrlPath(value: string, directory: string): string {
+  const url = new URL(value)
+  const windows = isWindowsPath(directory)
+  const escapedSeparator = windows ? /%(?:2f|5c)/i : /%2f/i
+  if (url.protocol !== "file:" || escapedSeparator.test(url.pathname) || (!windows && url.hostname)) {
+    throw new TypeError("Invalid server file URL")
+  }
+  const pathname = decodeURIComponent(url.pathname)
+  if (pathname.includes("\0")) throw new TypeError("Invalid server file URL")
+  if (!windows) return pathname
+  if (url.hostname) return `//${url.hostname}${pathname}`
+  const absolute = pathname.slice(1)
+  if (!WINDOWS_DRIVE_PREFIX.exec(absolute)?.[2]) throw new TypeError("Invalid Windows file URL")
+  return absolute
+}
+
 export function pathWithForwardSeparators(path: string, serverPath: string): string {
   return isWindowsPath(serverPath) ? path.replaceAll("\\", "/") : path
 }

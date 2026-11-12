@@ -4,6 +4,7 @@ import { createResource, createSignal, Show, Switch, Match, lazy, Suspense } fro
 import {
   captureApiAuthority,
   fetchResourceAsObjectUrl,
+  isApiAuthorityCurrent,
   peekResourceObjectUrl,
   resolveResourceUrl,
 } from "../services/api"
@@ -16,6 +17,9 @@ import { DownloadLink, OriginalFileDownload } from "./OriginalFileDownload"
 import { formatErrorDetails } from "../utils/error-details"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
+import { fileEditorReserved, openSourceFileEditor } from "../services/file-workbench"
+import { boardStore, selectedConversationDirectory } from "../store/board"
+import { serverFileUrlPath } from "../utils/server-path"
 
 const LazyPdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
 
@@ -127,10 +131,15 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   const authed = () => needsAuthedFetch(url())
   const thumbnail = () => props.presentation === "thumbnail" || props.presentation === "composer-thumbnail"
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
+  const historicalText = () => props.presentation === "thumbnail" && url() && kind() === "other" &&
+    isDecodableText(mimeOf(props.part), props.part.filename)
 
   return (
     <Switch fallback={<FallbackDownload url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />}>
-      <Match when={props.presentation === "thumbnail" && url() && kind() === "other" && isDecodableText(mimeOf(props.part), props.part.filename)}>
+      <Match when={historicalText() && /^file:/i.test(url())}>
+        <LocalTextReference url={url()} name={name()} label={label()} />
+      </Match>
+      <Match when={historicalText()}>
         <TextAttachment url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />
       </Match>
       <Match when={kind() === "image" && url() && authed()}>
@@ -173,6 +182,56 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
         <PdfAttachment url={url()} name={name()} displayLabel={props.displayLabel} authed={authed()} compact={props.presentation === "thumbnail"} />
       </Match>
     </Switch>
+  )
+}
+
+function LocalTextReference(props: { url: string; name: string; label: string }) {
+  const [opening, setOpening] = createSignal(false)
+  const [failure, setFailure] = createSignal<{ cause: unknown }>()
+
+  async function open() {
+    const directory = selectedConversationDirectory()
+    if (!directory || opening() || fileEditorReserved()) return
+    const authority = captureApiAuthority()
+    const epoch = boardStore.selectEpoch
+    const url = props.url
+    setFailure(undefined)
+    setOpening(true)
+    try {
+      const path = serverFileUrlPath(url, directory)
+      await openSourceFileEditor(path, { directory, authority }, undefined, props.name)
+    } catch (cause) {
+      if (isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch && props.url === url) setFailure({ cause })
+    } finally {
+      setOpening(false)
+    }
+  }
+
+  return (
+    <>
+      <div class="msg-file-chip">
+        <span class="msg-file-chip__name" title={props.label}>{props.label}</span>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          tone="neutral"
+          disabled={!selectedConversationDirectory() || fileEditorReserved()}
+          aria-busy={opening() || undefined}
+          aria-label={`${t("chat.source_open_current_file")}: ${props.label}`}
+          onClick={() => void open()}
+        >
+          {t("chat.source_open_current_file")}
+        </Button>
+      </div>
+      <Show when={failure()}>
+        {(error) => (
+          <Feedback tone="error" details={formatErrorDetails(error().cause)}>
+            {t("file.load_failed", { name: props.label })}
+          </Feedback>
+        )}
+      </Show>
+    </>
   )
 }
 
