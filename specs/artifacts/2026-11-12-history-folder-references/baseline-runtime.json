@@ -1,0 +1,54 @@
+{
+  "sessionID": "ses_h8tmUgakwpilVA6QuUw8",
+  "command": {
+    "finish": "stop",
+    "part": {
+      "id": "prt_g0ValYBDo03AWY0hk5VX",
+      "sessionID": "ses_h8tmUgakwpilVA6QuUw8",
+      "messageID": "msg_17952d67dee846fea7",
+      "orderKey": "v1:0001794490719146:0000000000000031:0000000000000000:part:prt_g0ValYBDo03AWY0hk5VX",
+      "type": "file",
+      "mime": "application/x-directory",
+      "filename": "notes archive",
+      "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b306/project/archive-review/notes%20archive"
+    },
+    "historyRequestID": "93e9021f-75a9-49a2-acdc-5c76165a527d",
+    "requestID": "57071149-1df8-4452-bc4f-f09d33bcc305",
+    "capturedText": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive</path>\n<type>directory</type>\n<entries>\nmemo.txt\n\n(1 entries)\n</entries>"
+  },
+  "manifest": {
+    "finish": "stop",
+    "historyRequestID": "c5441de3-fea4-4b71-8df5-6af32b4e0f82",
+    "readRequestID": "7c7fa60a-8d1d-4f1d-8fc1-e9b5b9d5cfe6",
+    "body": {
+      "version": 1,
+      "kind": "directory",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive"
+    },
+    "promptRequestID": "fe74534f-39b9-4b7e-946d-ad0c81afe68c",
+    "createRequestID": "d0637d4f-771f-42fc-a024-b21eeb01b034",
+    "part": {
+      "id": "prt_g0ValYrLT01PeTdDaDJm",
+      "sessionID": "ses_h8tmUgakwpilVA6QuUw8",
+      "messageID": "msg_db79457f629a4bd891",
+      "orderKey": "v1:0001794490881068:0000000000000031:0000000000000000:part:prt_g0ValYrLT01PeTdDaDJm",
+      "type": "file",
+      "mime": "application/vnd.opencorvus.directory-reference+json",
+      "filename": "notes archive",
+      "url": "/attachment/prj_hIDxP9KYEr5c2dBqPS39/085a2fd6a8b1f262433752551a42f6c80d4b87728481fe3f11dbe67feda4c1bf.directory.json",
+      "presentation": "attachment-index"
+    }
+  },
+  "listing": {
+    "path": "notes archive",
+    "requestID": "d54c73f4-671f-4006-a005-44e434f11caa",
+    "items": {
+      "name": "memo.txt",
+      "path": "notes archive\\memo.txt",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b306\\project\\archive-review\\notes archive\\memo.txt",
+      "type": "file",
+      "ignored": false,
+      "directoryTarget": false
+    }
+  }
+}
