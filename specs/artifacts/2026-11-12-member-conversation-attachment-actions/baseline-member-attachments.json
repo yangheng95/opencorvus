@@ -1,0 +1,115 @@
+{
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review",
+  "parent": "ses_hPgNkWRtZas3iYoiWDKM",
+  "child": "ses_-zUPEEn0tzzlIJbkt2OE",
+  "historyRequestID": "33099d50-51f6-403e-a90d-c10bea9309a7",
+  "prompt": {
+    "messageID": "msg_d712e6f9-f41f-4e62-bb1f-30c6365ffa9e",
+    "requestID": "6a27249a-a6a6-49e5-b088-b3fca6696ba9",
+    "finish": "stop"
+  },
+  "folder": {
+    "captureRequestID": "4965701c-0338-459a-ab7c-7977c27ebc51",
+    "readRequestID": "67aa1814-1ff2-4783-a7c2-4dfc91ab0c03",
+    "reference": {
+      "sha": "a8e386fccb55406987a9255df3a27304fd7cd2582a6730592495f5e6dc4f6e23",
+      "url": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/a8e386fccb55406987a9255df3a27304fd7cd2582a6730592495f5e6dc4f6e23.directory.json",
+      "mime": "application/vnd.opencorvus.directory-reference+json",
+      "size": 156,
+      "filename": "notes archive",
+      "kind": "folder",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive"
+    },
+    "body": {
+      "version": 1,
+      "kind": "directory",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b307\\project\\context-review\\notes archive"
+    }
+  },
+  "text": {
+    "captureRequestID": "e97c0a5f-67d7-49bb-911f-41e7d37da1b6",
+    "readRequestID": "d255bdcd-af47-402d-b58c-ef8d999aa22d",
+    "reference": {
+      "sha": "d2e6ba08cbfb9e74a25deea70b6ae0fecb7c66c716f1b356b694c61c1e0c3942",
+      "url": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/d2e6ba08cbfb9e74a25deea70b6ae0fecb7c66c716f1b356b694c61c1e0c3942.txt",
+      "mime": "text/plain",
+      "size": 55,
+      "filename": "member notes.txt"
+    },
+    "body": "Recorded attachment text.\r\nMember transcript fixture.\r\n"
+  },
+  "authored": [
+    {
+      "messageID": "msg_g0VallCz900UaTNCFwxM",
+      "role": "user",
+      "part": {
+        "id": "prt_g0VallCz903Rihmhd9F7",
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "messageID": "msg_g0VallCz900UaTNCFwxM",
+        "orderKey": "v1:0001794493824193:0000000000000031:0000000000000000:part:prt_g0VallCz903Rihmhd9F7",
+        "type": "file",
+        "mime": "text/plain",
+        "filename": "inspection notes.txt",
+        "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/inspection%20notes.txt?start=2&end=3"
+      }
+    },
+    {
+      "messageID": "msg_g0VallCz9023CirQuu46",
+      "role": "user",
+      "part": {
+        "id": "prt_g0VallCz90AFrApimViQ",
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "messageID": "msg_g0VallCz9023CirQuu46",
+        "orderKey": "v1:0001794493824200:0000000000000031:0000000000000000:part:prt_g0VallCz90AFrApimViQ",
+        "type": "file",
+        "mime": "application/x-directory",
+        "filename": "notes archive",
+        "url": "file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/notes%20archive"
+      }
+    },
+    {
+      "messageID": "msg_g0VallCz904zdDhmRZpp",
+      "role": "user",
+      "part": {
+        "id": "prt_g0VallCz90GU5i64Pd3e",
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "messageID": "msg_g0VallCz904zdDhmRZpp",
+        "orderKey": "v1:0001794493824207:0000000000000031:0000000000000000:part:prt_g0VallCz90GU5i64Pd3e",
+        "type": "file",
+        "mime": "image/png",
+        "filename": "sample panel.png",
+        "url": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+      }
+    },
+    {
+      "messageID": "msg_d712e6f9-f41f-4e62-bb1f-30c6365ffa9e",
+      "role": "user",
+      "part": {
+        "id": "prt_g0ValvYsr01qiLTVnkme",
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "messageID": "msg_d712e6f9-f41f-4e62-bb1f-30c6365ffa9e",
+        "orderKey": "v1:0001794496291653:0000000000000031:0000000000000000:part:prt_g0ValvYsr01qiLTVnkme",
+        "type": "file",
+        "mime": "application/vnd.opencorvus.directory-reference+json",
+        "filename": "notes archive",
+        "url": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/a8e386fccb55406987a9255df3a27304fd7cd2582a6730592495f5e6dc4f6e23.directory.json",
+        "presentation": "attachment-index"
+      }
+    },
+    {
+      "messageID": "msg_d712e6f9-f41f-4e62-bb1f-30c6365ffa9e",
+      "role": "user",
+      "part": {
+        "id": "prt_g0ValvYsr02T0QhrDlpr",
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "messageID": "msg_d712e6f9-f41f-4e62-bb1f-30c6365ffa9e",
+        "orderKey": "v1:0001794496291654:0000000000000031:0000000000000000:part:prt_g0ValvYsr02T0QhrDlpr",
+        "type": "file",
+        "mime": "text/plain",
+        "filename": "member notes.txt",
+        "url": "/attachment/prj_hlYSyoC72yAIiA4kPrZX/d2e6ba08cbfb9e74a25deea70b6ae0fecb7c66c716f1b356b694c61c1e0c3942.txt",
+        "presentation": "attachment-index"
+      }
+    }
+  ]
+}

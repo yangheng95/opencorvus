@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [让成员会话使用现有历史附件操作](2026-11-12-member-conversation-attachment-actions.md)
 - [会话切换时用同一活动记录驱动子会话行](2026-11-12-subagent-selection-row-ownership.md)
 - [在会话中标示本地文件捕获上下文](2026-11-12-materialized-file-context.md)
 - [从历史文件夹引用打开项目资源管理器](2026-11-12-history-folder-references.md)

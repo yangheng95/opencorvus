@@ -1,0 +1,71 @@
+{
+  "child": {
+    "requestID": "8a7f2035-9def-495d-98ca-47fcac435152",
+    "status": 200,
+    "sessions": [
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz900UaTNCFwxM",
+        "agentID": "coding",
+        "status": "unobserved"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz9023CirQuu46",
+        "agentID": "coding",
+        "status": "unobserved"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz904zdDhmRZpp",
+        "agentID": "coding",
+        "status": "unobserved"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_g0VallCz906eZWs8391D",
+        "agentID": "coding",
+        "status": "unobserved"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_836c1c83-e386-4994-b9dc-b6084f0d5b2b",
+        "agentID": "coding",
+        "status": "idle"
+      },
+      {
+        "sessionID": "ses_-zUPEEn0tzzlIJbkt2OE",
+        "parentSessionID": "ses_hPgNkWRtZas3iYoiWDKM",
+        "executionID": "msg_d712e6f9-f41f-4e62-bb1f-30c6365ffa9e",
+        "agentID": "coding",
+        "status": "idle"
+      }
+    ],
+    "keys": [
+      "board",
+      "pendingQuestions",
+      "resolvedQuestions",
+      "pendingPermissions",
+      "transcript",
+      "events",
+      "view",
+      "turnArtifacts",
+      "agentView",
+      "history"
+    ]
+  },
+  "localDownloads": {
+    "diagnostics": [
+      "Not allowed to load local resource: file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/inspection%20notes.txt?start=2&end=3",
+      "Not allowed to load local resource: file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261112-b307/project/context-review/notes%20archive"
+    ],
+    "windowURLs": [
+      "http://127.0.0.1:40054/ui/?sessionID=ses_hPgNkWRtZas3iYoiWDKM&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261112-b307%5Cproject%5Ccontext-review&experience=chat"
+    ]
+  }
+}
