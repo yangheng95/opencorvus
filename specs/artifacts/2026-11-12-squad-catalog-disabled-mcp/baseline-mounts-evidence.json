@@ -1,0 +1,189 @@
+[
+  {
+    "side": "project",
+    "route": "/config",
+    "query": {},
+    "status": 200,
+    "requestID": "bd6c83af-4b34-4495-9d02-094084826f91",
+    "shape": {
+      "profile": "dynamic",
+      "browserEnabled": false
+    }
+  },
+  {
+    "side": "project",
+    "route": "/mcp/project",
+    "query": {},
+    "status": 200,
+    "requestID": "2da96765-2c92-4256-8d79-c46284ea8b97",
+    "shape": {
+      "browser": {
+        "status": "disabled",
+        "scope": "execution"
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/skill/mounts",
+    "query": {},
+    "status": 500,
+    "requestID": "685c6fb7-e17b-4d0d-8ff8-793e9f58c585",
+    "shape": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/skill/mounts",
+    "query": {
+      "expertSquadID": "base"
+    },
+    "status": 500,
+    "requestID": "96c56d9c-d323-4c13-8ca5-6f60f5a63419",
+    "shape": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/skill/mounts",
+    "query": {
+      "sessionID": "ses_hocyyFz3IE67uqpk0yP9"
+    },
+    "status": 500,
+    "requestID": "43294ed4-ddbc-4696-a108-073bb06694c9",
+    "shape": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "side": "project",
+    "route": "/skill/installed",
+    "query": {},
+    "status": 200,
+    "requestID": "c5e69e83-6c98-42bc-aa2c-ebdc115525b5",
+    "shape": {
+      "length": 6
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/config",
+    "query": {},
+    "status": 200,
+    "requestID": "b6e9be24-6907-4cc9-983b-a56a4b666259",
+    "shape": {
+      "profile": "dynamic"
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/mcp/project",
+    "query": {},
+    "status": 200,
+    "requestID": "31ea4f09-dce8-4033-93e0-72e9dc4187c5",
+    "shape": {}
+  },
+  {
+    "side": "alternate",
+    "route": "/skill/mounts",
+    "query": {},
+    "status": 200,
+    "requestID": "e7a384a4-8922-498a-a803-b18fe1c525a0",
+    "shape": {
+      "keys": [
+        "scope",
+        "active_profile",
+        "projection_hash",
+        "projected_tool_ids",
+        "projected_agents",
+        "virtual_workflows",
+        "selector_skill_names",
+        "production_skill_names",
+        "projected_skill_names",
+        "skills",
+        "agents",
+        "matrix",
+        "unmounted_count"
+      ],
+      "agents": 4,
+      "tools": 50
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/skill/mounts",
+    "query": {
+      "expertSquadID": "base"
+    },
+    "status": 200,
+    "requestID": "8f0d0fed-eed0-4e1a-b9b3-d0532c2e8549",
+    "shape": {
+      "keys": [
+        "scope",
+        "active_profile",
+        "projection_hash",
+        "projected_tool_ids",
+        "projected_agents",
+        "virtual_workflows",
+        "selector_skill_names",
+        "production_skill_names",
+        "projected_skill_names",
+        "skills",
+        "agents",
+        "matrix",
+        "unmounted_count"
+      ],
+      "agents": 6,
+      "tools": 60
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/skill/mounts",
+    "query": {
+      "sessionID": "ses_hlzHNWo8xJuVY7FTleh6"
+    },
+    "status": 200,
+    "requestID": "5ed01b6b-e71f-4a81-bdad-7d6922b884fe",
+    "shape": {
+      "keys": [
+        "scope",
+        "active_profile",
+        "projection_hash",
+        "projected_tool_ids",
+        "projected_agents",
+        "virtual_workflows",
+        "selector_skill_names",
+        "production_skill_names",
+        "projected_skill_names",
+        "skills",
+        "agents",
+        "matrix",
+        "unmounted_count"
+      ],
+      "agents": 4,
+      "tools": 50
+    }
+  },
+  {
+    "side": "alternate",
+    "route": "/skill/installed",
+    "query": {},
+    "status": 200,
+    "requestID": "6be0c9d3-162c-46c8-a505-5b7790003863",
+    "shape": {
+      "length": 6
+    }
+  }
+]

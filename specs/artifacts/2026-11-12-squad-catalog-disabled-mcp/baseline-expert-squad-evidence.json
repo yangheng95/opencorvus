@@ -1,0 +1,91 @@
+{
+  "catalog": [
+    {
+      "side": "project",
+      "route": "/expert-squad/catalog",
+      "query": {},
+      "status": 500,
+      "requestID": "302aa821-9389-40fb-8a21-352d15b3daf7",
+      "data": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "side": "project",
+      "route": "/expert-squad/catalog",
+      "query": {
+        "sessionID": "ses_hocyyFz3IE67uqpk0yP9"
+      },
+      "status": 500,
+      "requestID": "6c5f373a-3d56-42c4-971b-a626b83d8a73",
+      "data": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/expert-squad/catalog",
+      "query": {},
+      "status": 200,
+      "requestID": "98a12e51-270f-4aa4-9e04-42c3742d1436",
+      "data": {
+        "active": "dynamic",
+        "scope": "project",
+        "agents": [
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "toolCount": 50
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/expert-squad/catalog",
+      "query": {
+        "sessionID": "ses_hlzHNWo8xJuVY7FTleh6"
+      },
+      "status": 200,
+      "requestID": "6343695d-42b0-447d-ba9d-f4e509852103",
+      "data": {
+        "active": "dynamic",
+        "scope": "session",
+        "agents": [
+          "dynamic-builder",
+          "dynamic-generalist"
+        ],
+        "toolCount": 50
+      }
+    }
+  ],
+  "mutation": {
+    "request": {
+      "scope": "project",
+      "expertSquadID": "dynamic",
+      "agentID": "dynamic-builder",
+      "defaultSkillRef": "default/skill/grill-me",
+      "override": true
+    },
+    "result": {
+      "status": 500,
+      "requestID": "dc428f4f-34c3-4a47-b8cb-ae4d5a9df512",
+      "payload": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      },
+      "sourceIntact": true
+    }
+  },
+  "healthyAgent": {
+    "id": "dynamic-builder",
+    "skillToolAvailable": true
+  },
+  "healthySkill": "default/skill/grill-me"
+}
