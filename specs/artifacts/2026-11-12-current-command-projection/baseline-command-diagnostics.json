@@ -1,0 +1,23 @@
+[
+  {
+    "requestID": "1c2fc11d-873b-4f24-8706-f49c139a4b53",
+    "method": "GET",
+    "path": "/command",
+    "status": 404,
+    "message": "NotFoundError: MCP server not found: review-commands"
+  },
+  {
+    "requestID": "16d8bc6c-e65d-4393-b66d-0953373cb45e",
+    "method": "POST",
+    "path": "/session/ses_hafvEDOJj6P3wkGPALdQ/command",
+    "status": 500,
+    "message": "undefined is not an object (evaluating 'cmd.agent')"
+  },
+  {
+    "requestID": "c54ca3bc-8e64-4589-a5f6-5ba418893987",
+    "method": "GET",
+    "path": "/command",
+    "status": 404,
+    "message": "NotFoundError: MCP server not found: review-commands"
+  }
+]

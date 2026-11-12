@@ -1,0 +1,39 @@
+{
+  "write": {
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "800f48e1-d641-460e-8699-6f265bbe5764",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/padded",
+      "commands": {
+        "review-added": {
+          "template": "Added project command template",
+          "description": "Added project command"
+        }
+      }
+    }
+  },
+  "read": {
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 200,
+    "requestID": "fbfd2c94-7212-48a0-8c51-79529d90a339",
+    "data": [
+      {
+        "name": "review-note",
+        "source": "command",
+        "description": "Original project note",
+        "template": "Original project note template"
+      },
+      {
+        "name": "review-commands:read_endpoint",
+        "source": "mcp",
+        "description": "/project/normal",
+        "template": "/project/padded"
+      }
+    ]
+  }
+}

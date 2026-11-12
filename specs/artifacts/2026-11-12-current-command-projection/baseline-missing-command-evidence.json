@@ -1,0 +1,37 @@
+{
+  "missingIdentity": {
+    "side": "project",
+    "route": "/session/ses_hafvEDOJj6P3wkGPALdQ/command",
+    "method": "POST",
+    "status": 400,
+    "requestID": "67dd0201-b87b-4a85-8580-dfa0626eee12",
+    "data": {
+      "data": {
+        "message": "Request validation failed"
+      },
+      "error": [
+        {
+          "code": "invalid_type",
+          "path": [
+            "messageID"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        }
+      ],
+      "success": false
+    }
+  },
+  "unknown": {
+    "side": "project",
+    "route": "/session/ses_hafvEDOJj6P3wkGPALdQ/command",
+    "method": "POST",
+    "status": 500,
+    "requestID": "16d8bc6c-e65d-4393-b66d-0953373cb45e",
+    "data": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  }
+}

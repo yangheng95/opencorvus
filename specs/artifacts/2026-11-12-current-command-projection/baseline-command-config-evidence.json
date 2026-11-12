@@ -1,0 +1,185 @@
+{
+  "before": [
+    {
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "2e070880-40b7-4ade-b1a4-7f4e1b7ac6f3",
+      "data": [
+        {
+          "name": "review-note",
+          "source": "command",
+          "description": "Original project note",
+          "template": "Original project note template"
+        },
+        {
+          "name": "review-commands:read_endpoint",
+          "source": "mcp",
+          "description": "/project/normal",
+          "template": "/project/normal"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "92709e63-8372-4b49-b598-a7f8ff993ad7",
+      "data": [
+        {
+          "name": "review-note",
+          "source": "command",
+          "description": "Original alternate note",
+          "template": "Original alternate note template"
+        },
+        {
+          "name": "review-commands:read_endpoint",
+          "source": "mcp",
+          "description": "/alternate/normal",
+          "template": "/alternate/normal"
+        }
+      ]
+    }
+  ],
+  "config": [
+    {
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "d9fbce5f-fb0a-495c-8de4-2dda6bfc6aa8",
+      "data": {
+        "connection": "http://127.0.0.1:39948/project/normal",
+        "commands": {
+          "review-note": {
+            "template": "Original project note template",
+            "description": "Original project note"
+          }
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "6abeb456-b02f-4834-8595-c23794603c5c",
+      "data": {
+        "connection": "http://127.0.0.1:39948/alternate/normal",
+        "commands": {
+          "review-note": {
+            "template": "Original alternate note template",
+            "description": "Original alternate note"
+          }
+        }
+      }
+    }
+  ],
+  "write": {
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "042a237b-9962-471e-891f-951947e71f83",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/padded",
+      "commands": {
+        "review-note": {
+          "template": "Updated project note template",
+          "description": "Updated project note"
+        },
+        "review-added": {
+          "template": "Added project command template",
+          "description": "Added project command"
+        }
+      }
+    }
+  },
+  "cold": {
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 404,
+    "requestID": "1c2fc11d-873b-4f24-8706-f49c139a4b53",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "MCP server not found: review-commands"
+      }
+    }
+  },
+  "resource": {
+    "side": "project",
+    "route": "/experimental/resource",
+    "method": "GET",
+    "status": 200,
+    "requestID": "02ed1565-29fd-4e99-8953-49309394d8c8",
+    "data": {
+      "client:cmV2aWV3LWNvbW1hbmRz:uri:bWNwOi8vcmV2aWV3L3Byb2plY3QvcGFkZGVk": {
+        "name": "read_endpoint",
+        "uri": "mcp://review/project/padded",
+        "description": "/project/padded",
+        "client": "review-commands"
+      }
+    }
+  },
+  "warm": [
+    {
+      "side": "project",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "94628449-6220-462c-bf68-9ad3bfa6434c",
+      "data": [
+        {
+          "name": "review-note",
+          "source": "command",
+          "description": "Original project note",
+          "template": "Original project note template"
+        },
+        {
+          "name": "review-commands:read_endpoint",
+          "source": "mcp",
+          "description": "/project/normal",
+          "template": "/project/padded"
+        }
+      ]
+    },
+    {
+      "side": "alternate",
+      "route": "/command",
+      "method": "GET",
+      "status": 200,
+      "requestID": "0a39ce73-f429-4de8-a8c7-880d6fcb9df9",
+      "data": [
+        {
+          "name": "review-note",
+          "source": "command",
+          "description": "Original alternate note",
+          "template": "Original alternate note template"
+        },
+        {
+          "name": "review-commands:read_endpoint",
+          "source": "mcp",
+          "description": "/alternate/normal",
+          "template": "/alternate/normal"
+        }
+      ]
+    }
+  ],
+  "authored": {
+    "commands": {
+      "review-note": {
+        "description": "Updated project note",
+        "template": "Updated project note template"
+      },
+      "review-added": {
+        "description": "Added project command",
+        "template": "Added project command template"
+      }
+    },
+    "mcp": "http://127.0.0.1:39948/project/padded"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "restore": {
+    "side": "project",
+    "route": "/config",
+    "method": "PATCH",
+    "status": 200,
+    "requestID": "15f909b9-73d7-4e8a-9ed6-b08488582abe",
+    "data": {
+      "connection": "http://127.0.0.1:39948/project/normal",
+      "commands": {
+        "review-note": {
+          "template": "Original project note template",
+          "description": "Original project note"
+        }
+      }
+    }
+  },
+  "readback": [
+    {
+      "side": "project",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "1dda3211-9677-4ce7-a19a-0e00ac50d9d4",
+      "data": {
+        "connection": "http://127.0.0.1:39948/project/normal",
+        "commands": {
+          "review-note": {
+            "template": "Original project note template",
+            "description": "Original project note"
+          }
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/config",
+      "method": "GET",
+      "status": 200,
+      "requestID": "fccbdb5b-9d79-49f1-895b-ce5e4103c8a0",
+      "data": {
+        "connection": "http://127.0.0.1:39948/alternate/normal",
+        "commands": {
+          "review-note": {
+            "template": "Original alternate note template",
+            "description": "Original alternate note"
+          }
+        }
+      }
+    }
+  ]
+}

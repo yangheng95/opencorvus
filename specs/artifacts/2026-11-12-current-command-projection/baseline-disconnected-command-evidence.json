@@ -1,0 +1,28 @@
+{
+  "status": {
+    "side": "project",
+    "route": "/mcp/project",
+    "method": "GET",
+    "status": 200,
+    "requestID": "8bc1eacb-4bb9-41a1-8575-e04cd3fee4fa",
+    "data": {
+      "review-commands": {
+        "status": "disabled",
+        "reason": "manual_disconnect"
+      }
+    }
+  },
+  "commands": {
+    "side": "project",
+    "route": "/command",
+    "method": "GET",
+    "status": 404,
+    "requestID": "c54ca3bc-8e64-4589-a5f6-5ba418893987",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "MCP server not found: review-commands"
+      }
+    }
+  }
+}
