@@ -1,4 +1,32 @@
+import type { ExportSessionResponse } from "@opencorvus-ai/sdk"
 import { isConversationSourcePart } from "../utils/conversation-source"
+import { apiJson, mergeAbortSignals, type ApiAuthority } from "./api"
+import { DEFAULT_REQUEST_TIMEOUT_MILLISECONDS } from "./host-transport"
+import { directoryScopedPath, taskScopedPath } from "./task-path"
+
+type SnapshotRequest = { authority: ApiAuthority; signal: AbortSignal }
+export type ConversationSearchTarget = { kind: "session" | "task"; id: string; directory: string }
+
+function loadSnapshot<T>(path: string, request: SnapshotRequest): Promise<T> {
+  const deadline = AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT_MILLISECONDS)
+  return apiJson<T>(path, { authority: request.authority, signal: mergeAbortSignals(request.signal, deadline) })
+}
+
+export function loadConversationSessionExport(sessionID: string, directory: string, request: SnapshotRequest) {
+  const path = directoryScopedPath(`export/session/${encodeURIComponent(sessionID)}`, directory, "loadConversationSessionExport")
+  return loadSnapshot<ExportSessionResponse>(path, request)
+}
+
+export async function loadConversationSearchSnapshot(
+  target: ConversationSearchTarget,
+  request: SnapshotRequest,
+): Promise<ConversationSearchSnapshot> {
+  if (target.kind === "session") {
+    return readConversationSnapshot(await loadConversationSessionExport(target.id, target.directory, request), target.id)
+  }
+  const path = taskScopedPath(target.id, target.directory, "/transcript")
+  return readTaskConversationSnapshot(await loadSnapshot<unknown>(path, request))
+}
 
 export class ConversationExportError extends Error {
   constructor(readonly code: "INVALID_CONVERSATION_EXPORT" | "CONVERSATION_EXPORT_IDENTITY_MISMATCH", readonly field: string) {

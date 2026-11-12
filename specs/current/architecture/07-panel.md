@@ -3865,9 +3865,13 @@ projected again after Kobalte's native clear request; an accepted null selection
 keeps the existing clear behavior. Value-null command and conversation search
 surfaces retain their own query and Escape handlers.
 Conversation search reads the selected Task transcript or Chat session export.
+Search and conversation download use the standard read deadline alongside their
+explicit close or selection cancellation. Both use the same session export
+reader for the selected project and session.
 Only a successfully validated snapshot supplies result counts and empty states.
 A read failure keeps the typed query and shows a localized Retry action with
-the original diagnostic; locating a result can fail independently of that read.
+the original diagnostic, which remains visible during the retry. Locating a
+result can fail independently of that read.
 Chat export keeps the conversation title visible. A separate status announces
 the read and browser download handoff; an export failure remains inspectable
 with its original diagnostic until the next export or conversation change.

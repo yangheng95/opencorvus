@@ -1,0 +1,407 @@
+{
+  "timeouts": [
+    {
+      "held": {
+        "time": "2026-11-12T01:54:10.109Z",
+        "stage": "held",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "find-timeout",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "57c658c2-9eef-4ce2-aaea-3b1d3657a752",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "settled": {
+        "time": "2026-11-12T01:54:25.127Z",
+        "stage": "client-disconnected",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "find-timeout",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "57c658c2-9eef-4ce2-aaea-3b1d3657a752",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "waited": 15018
+    },
+    {
+      "held": {
+        "time": "2026-11-12T01:54:54.712Z",
+        "stage": "held",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "export-timeout",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "63532878-fc17-443f-acd9-e671d28b4ca4",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "settled": {
+        "time": "2026-11-12T01:55:09.725Z",
+        "stage": "client-disconnected",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "export-timeout",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "63532878-fc17-443f-acd9-e671d28b4ca4",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "waited": 15013
+    }
+  ],
+  "cancellations": [
+    {
+      "held": {
+        "time": "2026-11-12T01:54:45.196Z",
+        "stage": "held",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "find-explicit-close",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "59d7de27-4c64-42e1-8e9c-2d330c17fcbe",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "settled": {
+        "time": "2026-11-12T01:54:45.237Z",
+        "stage": "client-disconnected",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "find-explicit-close",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "59d7de27-4c64-42e1-8e9c-2d330c17fcbe",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "waited": 41
+    },
+    {
+      "held": {
+        "time": "2026-11-12T01:56:02.342Z",
+        "stage": "held",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "export-owner-change",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "29d0807c-aade-40dd-a1a3-b86099e38c84",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "settled": {
+        "time": "2026-11-12T01:56:02.476Z",
+        "stage": "client-disconnected",
+        "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+        "method": "GET",
+        "round": "export-owner-change",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "29d0807c-aade-40dd-a1a3-b86099e38c84",
+        "status": 200,
+        "bytes": 155,
+        "target": {
+          "session": {
+            "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+            "title": "Conversation deadline review",
+            "time": {
+              "created": 1794448414155,
+              "updated": 1794448414232
+            }
+          },
+          "messages": 0
+        }
+      },
+      "waited": 134
+    }
+  ],
+  "findRetry": {
+    "time": "2026-11-12T01:54:44.600Z",
+    "stage": "delivered",
+    "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+    "method": "GET",
+    "round": "find-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "807c4754-ce73-44e6-9b74-44a54df7ad9d",
+    "status": 200,
+    "bytes": 155,
+    "target": {
+      "session": {
+        "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+        "title": "Conversation deadline review",
+        "time": {
+          "created": 1794448414155,
+          "updated": 1794448414232
+        }
+      },
+      "messages": 0
+    }
+  },
+  "exportRetry": {
+    "time": "2026-11-12T01:55:42.358Z",
+    "stage": "delivered",
+    "route": "/export/session/ses_hEb3GuOmQc8b3qzqmQ4o",
+    "method": "GET",
+    "round": "export-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "901be17f-ece7-4e16-98ba-1afbfde80ae7",
+    "status": 200,
+    "bytes": 155,
+    "target": {
+      "session": {
+        "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+        "title": "Conversation deadline review",
+        "time": {
+          "created": 1794448414155,
+          "updated": 1794448414232
+        }
+      },
+      "messages": 0
+    }
+  },
+  "workCut": {
+    "time": "2026-11-12T01:56:22.064Z",
+    "stage": "truncated",
+    "route": "/export/session/ses_h6gkeL8ruOMgmRVMtixH",
+    "method": "GET",
+    "round": "zh-cut",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-alternate\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "df10dd27-9ac8-4860-944d-448675ea5950",
+    "status": 200,
+    "bytes": 148,
+    "target": {
+      "session": {
+        "id": "ses_h6gkeL8ruOMgmRVMtixH",
+        "title": "Work deadline control",
+        "time": {
+          "created": 1794448414939,
+          "updated": 1794448414993
+        }
+      },
+      "messages": 0
+    },
+    "deliveredBytes": 12
+  },
+  "workRetry": {
+    "time": "2026-11-12T01:56:22.650Z",
+    "stage": "delivered",
+    "route": "/export/session/ses_h6gkeL8ruOMgmRVMtixH",
+    "method": "GET",
+    "round": "zh-retry",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-alternate\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "a9b1caca-0748-4ff8-a856-328711a5a67a",
+    "status": 200,
+    "bytes": 148,
+    "target": {
+      "session": {
+        "id": "ses_h6gkeL8ruOMgmRVMtixH",
+        "title": "Work deadline control",
+        "time": {
+          "created": 1794448414939,
+          "updated": 1794448414993
+        }
+      },
+      "messages": 0
+    }
+  },
+  "chatExport": {
+    "requestID": "b6300f87-553b-4732-a7c0-5bb53b97e580",
+    "status": 200,
+    "body": {
+      "session": {
+        "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+        "title": "Conversation deadline review",
+        "time": {
+          "created": 1794448414155,
+          "updated": 1794448414232
+        }
+      },
+      "messages": []
+    }
+  },
+  "workExport": {
+    "requestID": "27695c07-8739-4705-9850-b9c22b79e7cf",
+    "status": 200,
+    "body": {
+      "session": {
+        "id": "ses_h6gkeL8ruOMgmRVMtixH",
+        "title": "Work deadline control",
+        "time": {
+          "created": 1794448414939,
+          "updated": 1794448414993
+        }
+      },
+      "messages": []
+    }
+  },
+  "wrongProject": {
+    "requestID": "6bac96a6-191b-47ce-890f-fbb9abefa4f2",
+    "status": 404,
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Session not found: ses_hEb3GuOmQc8b3qzqmQ4o"
+      }
+    }
+  },
+  "download": {
+    "filename": "Conversation deadline review - ses_hEb3GuOmQc8b3qzqmQ4o.json",
+    "content": {
+      "session": {
+        "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+        "title": "Conversation deadline review",
+        "time": {
+          "created": 1794448414155,
+          "updated": 1794448414232
+        }
+      },
+      "messages": []
+    }
+  },
+  "exactSessions": [
+    {
+      "requestID": "d4099f25-1c61-4a2d-a6dc-88c637b84858",
+      "id": "ses_hEb3GuOmQc8b3qzqmQ4o",
+      "title": "Conversation deadline review",
+      "projectID": "prj_hZzwCvhpdPZpgrmYhc7a",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-project\\archive-review",
+      "created": 1794448414155,
+      "updated": 1794448414232,
+      "archived": null
+    },
+    {
+      "requestID": "b443a2e4-7980-4aac-bc73-06b0b3abd7e7",
+      "id": "ses_h6gkeL8ruOMgmRVMtixH",
+      "title": "Work deadline control",
+      "projectID": "prj_hTdutRXUKxOcx1a965aJ",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b270\\final-alternate\\archive-review",
+      "created": 1794448414939,
+      "updated": 1794448414993,
+      "archived": null
+    }
+  ]
+}

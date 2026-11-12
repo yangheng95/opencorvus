@@ -4,9 +4,8 @@ import { ComboboxControl } from "./ui/ComboboxControl"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { SourceSearchContext, sourceLabel } from "./SourceParts"
-import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
-import { directoryScopedPath, taskScopedPath } from "../services/task-path"
-import { readConversationSnapshot, readTaskConversationSnapshot, type ConversationSearchSnapshot } from "../services/conversation-snapshot"
+import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { loadConversationSearchSnapshot, type ConversationSearchSnapshot, type ConversationSearchTarget } from "../services/conversation-snapshot"
 import { findConversationMessages, type ConversationSearchHit } from "../services/conversation-search"
 import { loadOlderConversationHistory, ownsConversationHistory } from "../services/conversation"
 import { renderedConversationCardTargetForMessage } from "../services/tree-writer"
@@ -22,13 +21,13 @@ import { conversationSourceExcerptKey, isConversationSourcePart } from "../utils
 
 type ConversationSearchRead =
   | { kind: "idle" }
-  | { kind: "loading"; retry: boolean }
+  | { kind: "loading"; previousFailure?: string }
   | { kind: "ready"; snapshot: ConversationSearchSnapshot }
   | { kind: "failed"; details: string }
 
 export function ConversationSearchDialog(props: {
   open: boolean
-  target: () => { kind: "session" | "task"; id: string; directory: string } | null
+  target: () => ConversationSearchTarget | null
   onClose: () => void
   returnFocusTarget: () => HTMLElement | null
 }) {
@@ -47,13 +46,11 @@ export function ConversationSearchDialog(props: {
     const accepted = snapshot()
     return accepted ? findConversationMessages(accepted, query()) : []
   })
-  const usesRetryAction = () => {
-    const current = read()
-    return current.kind === "failed" || (current.kind === "loading" && current.retry)
-  }
+  const readFailureDetails = (current: ConversationSearchRead) =>
+    current.kind === "failed" ? current.details : current.kind === "loading" ? current.previousFailure : undefined
   const feedback = createMemo(() => {
-    const current = read(), failedLocate = locateError()
-    if (current.kind === "failed") return { key: "chat.search_failed" as const, details: current.details }
+    const details = readFailureDetails(read()), failedLocate = locateError()
+    if (details !== undefined) return { key: "chat.search_failed" as const, details }
     if (failedLocate) return { key: "chat.search_unavailable" as const, details: failedLocate.details }
   })
   const status = () => {
@@ -90,16 +87,11 @@ export function ConversationSearchDialog(props: {
       isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch &&
       props.target()?.kind === target.kind && props.target()?.id === target.id && props.target()?.directory === target.directory
     ownsSnapshot = owns
-    setRead({ kind: "loading", retry: usesRetryAction() })
+    setRead({ kind: "loading", previousFailure: readFailureDetails(read()) })
     setLocateError(undefined)
     try {
-      const path = target.kind === "task"
-        ? taskScopedPath(target.id, target.directory, "/transcript")
-        : directoryScopedPath(`export/session/${encodeURIComponent(target.id)}`, target.directory, "conversationSearch")
-      const exported = await apiJson<unknown>(path, { authority, signal: request.signal })
-      if (owns()) setRead({ kind: "ready", snapshot: target.kind === "task"
-        ? readTaskConversationSnapshot(exported)
-        : readConversationSnapshot(exported, target.id) })
+      const snapshot = await loadConversationSearchSnapshot(target, { authority, signal: request.signal })
+      if (owns()) setRead({ kind: "ready", snapshot })
     } catch (cause) {
       if (owns()) {
         const details = formatErrorDetails(cause)
@@ -205,9 +197,9 @@ export function ConversationSearchDialog(props: {
     </Feedback>}</Show>
     <div class="cmdk-footer conversation-search-footer">
       <div role="status" aria-live="polite">{status()}</div>
-      <Button class="conversation-search-reload" type="button" variant="ghost" size="sm" tone="neutral" aria-disabled={read().kind === "loading" || !!locating()} onClick={() => {
+      <Button class="conversation-search-reload" type="button" variant="ghost" size="sm" tone="neutral" aria-disabled={read().kind === "loading" || !!locating()} aria-busy={read().kind === "loading" || undefined} onClick={() => {
         if (read().kind !== "loading" && !locating()) void load()
-      }}>{t(usesRetryAction() ? "common.retry" : "common.refresh")}</Button>
+      }}>{t(readFailureDetails(read()) === undefined ? "common.refresh" : "common.retry")}</Button>
       <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={props.onClose}>{t("common.close")}</Button>
     </div>
   </Dialog>

@@ -1,5 +1,4 @@
 import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, type JSX } from "solid-js"
-import type { ExportSessionResponse } from "@opencorvus-ai/sdk"
 import { AppDialogHost } from "./AppDialogHost"
 import { CommandPalette } from "./CommandPalette"
 import { ConnectionBadge } from "./ConnectionBadge"
@@ -31,16 +30,16 @@ import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { ArchiveStateUnconfirmedError } from "../services/archive-state"
-import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { showAppDialog } from "../services/app-dialog"
 import { activeDirectory } from "../services/workspace"
-import { directoryScopedPath } from "../services/task-path"
 import { downloadBlob } from "../services/file-download"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Popover } from "./ui/Popover"
 import { Tooltip } from "./ui/Tooltip"
 import { getLocale, localeTag, t } from "../utils/i18n"
 import { conversationExport, type ConversationExportFormat } from "../services/conversation-export"
+import { loadConversationSessionExport } from "../services/conversation-snapshot"
 import { ConversationSearchDialog } from "./ConversationSearchDialog"
 import { useHotkey } from "../solid/hotkey"
 import { debugCopyFailureMessage } from "../utils/debug-info"
@@ -252,9 +251,7 @@ function ChatViewTitle(props: {
     clearExportFeedbackTimer()
     setExportState(request)
     try {
-      const exported = await apiJson<ExportSessionResponse>(directoryScopedPath(
-        `export/session/${encodeURIComponent(row.sessionID)}`, row.directory, "exportConversation",
-      ), { authority, signal: request.controller.signal })
+      const exported = await loadConversationSessionExport(row.sessionID, row.directory, { authority, signal: request.controller.signal })
       if (!ownsExport()) return
       const file = conversationExport(exported, {
         sessionID: row.sessionID, format, locale: getLocale(), labels: {
