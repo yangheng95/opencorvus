@@ -1,0 +1,120 @@
+{
+  "actions": [
+    {
+      "action": "connect",
+      "receipt": {
+        "time": "2026-11-12T02:19:40.706Z",
+        "stage": "truncated",
+        "route": "/mcp/receipt-review/connect",
+        "method": "POST",
+        "round": "connect-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "31507c45-6dab-4c22-9126-13e8417452be",
+        "status": 200,
+        "bytes": 4,
+        "target": true,
+        "deliveredBytes": 3
+      },
+      "poll": {
+        "time": "2026-11-12T02:19:41.531Z",
+        "stage": "delivered",
+        "route": "/mcp/project",
+        "method": "GET",
+        "round": "connect-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "958b0750-6dc8-4354-9e55-ce2375b451b4",
+        "status": 200,
+        "bytes": 41,
+        "target": {
+          "receipt-review": {
+            "status": "connected"
+          }
+        }
+      }
+    },
+    {
+      "action": "disconnect",
+      "receipt": {
+        "time": "2026-11-12T02:20:05.329Z",
+        "stage": "truncated",
+        "route": "/mcp/receipt-review/disconnect",
+        "method": "POST",
+        "round": "disconnect-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "b49dc241-6615-427d-a925-4315a7777cca",
+        "status": 200,
+        "bytes": 4,
+        "target": true,
+        "deliveredBytes": 3
+      },
+      "poll": {
+        "time": "2026-11-12T02:20:05.518Z",
+        "stage": "delivered",
+        "route": "/mcp/project",
+        "method": "GET",
+        "round": "disconnect-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "6bd5c0c1-ca09-454f-84b6-67be895ca54f",
+        "status": 200,
+        "bytes": 40,
+        "target": {
+          "receipt-review": {
+            "status": "disabled"
+          }
+        }
+      }
+    }
+  ],
+  "connected": {
+    "pid": 21096,
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-project\\archive-review",
+    "parentPID": 25760,
+    "started": 1794449980648,
+    "alive": true
+  },
+  "disconnected": {
+    "pid": 21096,
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-project\\archive-review",
+    "parentPID": 25760,
+    "started": 1794449980648,
+    "alive": false
+  },
+  "checks": [
+    {
+      "requestID": "862a7d09-97a3-4d5c-b490-fa5da325a59d",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-project\\archive-review",
+      "body": {
+        "receipt-review": {
+          "status": "disabled"
+        }
+      },
+      "enabled": false
+    },
+    {
+      "requestID": "1a8998af-b3aa-48ca-b3d6-2d273520ba46",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b272\\baseline-alternate\\archive-review",
+      "body": {
+        "receipt-review": {
+          "status": "disabled"
+        }
+      },
+      "enabled": false
+    }
+  ]
+}

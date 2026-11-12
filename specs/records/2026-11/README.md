@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [MCP 连接回执中断后核对原项目状态](2026-11-12-mcp-connection-status-after-interrupted-receipt.md)
 - [用量刷新保留已确认报表并可取消](2026-11-12-usage-refresh-confirmed-report.md)
 - [对话快照读取期限和重试诊断](2026-11-12-conversation-snapshot-read-deadline.md)
 - [命令面板等价输入的结果和键盘选项](2026-11-12-command-palette-equivalent-input-focus.md)
