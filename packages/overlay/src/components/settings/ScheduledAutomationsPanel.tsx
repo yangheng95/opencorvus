@@ -45,7 +45,7 @@ import { closeConfigDialog } from "../../services/config-dialog-control"
 import { workLedgerSessionExecution } from "../../services/work-ledger"
 import { localeTag, t } from "../../utils/i18n"
 import { randomUUID } from "../../utils/random-id"
-import { projectLedgerDisplayName } from "../../utils/project-directory"
+import { projectDirectoryHints, projectLedgerDisplayName } from "../../utils/project-directory"
 import { matchesSearchTerms } from "../../services/text-search"
 import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "../ui/Badge"
@@ -284,6 +284,17 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const creating = () => creationRequestID() !== undefined
   const [projectRead, setProjectRead] = createSignal<AutomationProjectRead>({ status: "reading" })
   const projects = () => projectRead().projects ?? []
+  const projectsByID = createMemo(() => {
+    const entries = new Map<string, { name: string; directory: string }>()
+    for (const project of projects()) {
+      if (project.id && !entries.has(project.id)) {
+        entries.set(project.id, { name: projectOptionLabel(project), directory: project.directory })
+      }
+    }
+    return entries
+  })
+  const projectHints = createMemo(() => projectDirectoryHints([...projectsByID().values()]))
+  const projectListFormat = createMemo(() => new Intl.ListFormat(localeTag(), { style: "short" }))
   const projectReadIssue = createMemo(() => {
     const state = projectRead()
     return state.status === "failed" || state.status === "retrying" ? state : undefined
@@ -378,17 +389,39 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const acceptedRunItems = () => selectedRunState()?.items
   const runsByID = createMemo(() => new Map((acceptedRunItems() ?? []).map((run) => [run.id, run])))
   const runIDs = createMemo(() => [...runsByID().keys()])
+  const scopedAutomations = createMemo(() => automations().filter((automation) =>
+    (filter() === "all" || automation.status === filter()) &&
+    (scopeFilter() === "all" || automation.target.scope === scopeFilter()),
+  ))
+  const searchQuery = () => search().trim().toLocaleLowerCase()
+  const projectSearchIncomplete = () => Boolean(searchQuery()) && projectRead().status !== "ready" &&
+    scopedAutomations().some(({ target }) => target.scope === "project")
   const filteredAutomations = createMemo(() => {
-    const query = search().trim().toLocaleLowerCase()
-    return automations().filter((automation) => {
-      if (filter() !== "all" && automation.status !== filter()) return false
-      if (scopeFilter() !== "all" && automation.target.scope !== scopeFilter()) return false
-      if (!query) return true
-      return [automation.name, automation.prompt, recurrenceSummary(automation.recurrence)].some((value) =>
-        value.toLocaleLowerCase().includes(query),
-      )
-    })
+    const query = searchQuery()
+    if (!query) return scopedAutomations()
+    const matches = (value: string | undefined) => value?.toLocaleLowerCase().includes(query)
+    return scopedAutomations().filter(({ name, prompt, recurrence, target }) =>
+      [name, prompt, recurrenceSummary(recurrence)].some(matches) ||
+      (target.scope === "project" && target.projectIds.some((id) => {
+        const project = projectsByID().get(id)
+        return [id, project?.name, project?.directory].some(matches)
+      })),
+    )
   })
+  function targetLabel(target: AutomationTarget): string {
+    if (target.scope !== "project") return t(`automations.scope.${target.scope}`)
+    return projectListFormat().format(target.projectIds.map((id) => {
+      const project = projectsByID().get(id)
+      if (!project) return id
+      const hint = projectHints().get(project.directory)
+      return hint ? t("automations.project_target_with_hint", { name: project.name, directory: hint }) : project.name
+    }))
+  }
+  function deletionLabel(automation: AutomationView): string {
+    return automation.target.scope === "project"
+      ? t("automations.delete_named_in_target", { name: automation.name, target: targetLabel(automation.target) })
+      : t("automations.delete_named", { name: automation.name })
+  }
   const filtersActive = createMemo(() => Boolean(search().trim()) || filter() !== "all" || scopeFilter() !== "all")
   const initialLoadError = createMemo(() => {
     const problem = error()
@@ -913,10 +946,18 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   async function confirmRemoveAutomation(automation: AutomationView): Promise<void> {
     const authority = captureApiAuthority()
     const owns = () => !disposed && props.active && !busyAction() && isApiAuthorityCurrent(authority)
+    let message = t("automations.delete_confirm", { name: automation.name })
+    if (automation.target.scope === "project") {
+      const targets = automation.target.projectIds.map((id) => {
+        const project = projectsByID().get(id)
+        return project ? `${project.name}\n${project.directory}` : id
+      })
+      message = `${message}\n\n${t("automations.project_targets")}\n${targets.join("\n\n")}`
+    }
     try {
       const decision = await showAppDialog({
         title: t("automations.delete"),
-        message: t("automations.delete_confirm", { name: automation.name }),
+        message,
         kind: "warning",
         cancel: true,
         okTone: "danger",
@@ -1219,7 +1260,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                 when={filteredAutomations().length > 0}
                 fallback={
                   <SettingsEmpty>
-                    <span>{filtersActive() ? t("automations.filtered_empty") : t("automations.empty")}</span>
+                    <span role="status">
+                      {projectSearchIncomplete()
+                        ? t(projectRead().status === "failed" ? "automations.project_search_incomplete" : "automations.project_targets_loading")
+                        : t(filtersActive() ? "automations.filtered_empty" : "automations.empty")}
+                    </span>
                     <Show when={filtersActive()}>
                       <Button
                         type="button"
@@ -1251,16 +1296,18 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           <Icon name={automation.status === "active" ? "run" : "scheduled"} />
                           <span class="automation-list-item__copy">
                             <span class="automation-list-item__top">
-                              <strong>{automation.name}</strong>
-                              <span>
-                                {t(`automations.scope.${automation.target.scope}`)} ·{" "}
+                              <strong title={automation.name}>{automation.name}</strong>
+                              <span title={targetLabel(automation.target)}>{targetLabel(automation.target)}</span>
+                            </span>
+                            <span class="automation-list-item__timing">
+                              <span class="automation-list-item__next">
+                                {deletionNeedsRetry(automation.id) ? t("automations.deletion_unconfirmed") : automation.status === "active"
+                                  ? t("automations.next_run", { value: nextRunValue(automation) })
+                                  : nextRunValue(automation)}
+                              </span>
+                              <span class="automation-list-item__rule" title={recurrenceSummary(automation.recurrence)}>
                                 {recurrenceSummary(automation.recurrence)}
                               </span>
-                            </span>
-                            <span class="automation-list-item__next">
-                              {deletionNeedsRetry(automation.id) ? t("automations.deletion_unconfirmed") : automation.status === "active"
-                                ? t("automations.next_run", { value: nextRunValue(automation) })
-                                : nextRunValue(automation)}
                             </span>
                           </span>
                         </SettingsRow>
@@ -1270,8 +1317,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           variant="ghost"
                           size="mini"
                           tone="danger"
-                          title={t("automations.delete_named", { name: automation.name })}
-                          aria-label={t("automations.delete_named", { name: automation.name })}
+                          title={deletionLabel(automation)}
+                          aria-label={deletionLabel(automation)}
                           disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
                           onClick={() => void confirmRemoveAutomation(automation)}
                         >
@@ -1464,10 +1511,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           <ul class="automation-target-summary-list">
                             <For each={detailProjectIDs()}>
                               {(id) => {
-                                const project = () => projects().find((item) => item.id === id)
+                                const project = () => projectsByID().get(id)
                                 return (
                                   <li>
-                                    <strong>{project() ? projectOptionLabel(project()!) : id}</strong>
+                                    <strong>{project()?.name ?? id}</strong>
                                     <Show when={project()}>{(value) => <small>{value().directory}</small>}</Show>
                                   </li>
                                 )

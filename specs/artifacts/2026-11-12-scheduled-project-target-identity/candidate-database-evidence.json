@@ -1,0 +1,63 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 4,
+    "automation_definition_tombstone": 1,
+    "automation_fire": 4,
+    "automation_fire_frontier": 3,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  },
+  "tombstone": [
+    [
+      "atm_he4NrrTEAqPHapjbnY4c",
+      2
+    ]
+  ],
+  "targets": [
+    [
+      "atm_hQCvHnFEM63gh7xtrI0U",
+      "prj_hanBsvwsBfUBreYIKSpL",
+      0
+    ],
+    [
+      "atm_hQCvHnFEM63gh7xtrI0U",
+      "prj_hUNC8PNQzdpRK2LOm1WV",
+      1
+    ],
+    [
+      "atm_hQhJ2odKqGuSnhW9hwn8",
+      "prj_hUNC8PNQzdpRK2LOm1WV",
+      0
+    ],
+    [
+      "atm_he4NrrTEAqPHapjbnY4c",
+      "prj_hanBsvwsBfUBreYIKSpL",
+      0
+    ]
+  ],
+  "frontier": [
+    [
+      "atm_hQCvHnFEM63gh7xtrI0U",
+      "atm_hQCvHnFEM63gh7xtrI0U",
+      "cal_automation_cd2ceacfaccaa5ddd384984b7bd0764c",
+      4070908800000
+    ],
+    [
+      "atm_hQhJ2odKqGuSnhW9hwn8",
+      "atm_hQhJ2odKqGuSnhW9hwn8",
+      "cal_automation_da3e80ca459c2c1b5fc88b8cbc6e0cf3",
+      4070908800000
+    ],
+    [
+      "atm_hhwi4uMnt65tSF8K8RHt",
+      "atm_hhwi4uMnt65tSF8K8RHt",
+      "cal_automation_f2d0e4e589d68752302e48b25467e242",
+      4070908800000
+    ]
+  ]
+}

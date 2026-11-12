@@ -139,7 +139,8 @@
   background: var(--ui-list-hover-bg);
 }
 
-.automation-list-item__top {
+.automation-list-item__top,
+.automation-list-item__timing {
   display: flex;
   align-items: center;
   min-width: 0;
@@ -157,7 +158,9 @@
   white-space: nowrap;
 }
 
-.automation-list-item__top > span {
+.automation-list-item__top > span,
+.automation-list-item__rule,
+.automation-list-item__next {
   flex: 0 1 auto;
   overflow: hidden;
   color: var(--text-muted);
@@ -166,12 +169,8 @@
   white-space: nowrap;
 }
 
-.automation-list-item__next {
-  overflow: hidden;
-  color: var(--text-muted);
-  font-size: var(--ui-font-body);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.automation-list-item__rule {
+  color: var(--text-soft);
 }
 
 .automation-suggestions {

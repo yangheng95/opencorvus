@@ -1,0 +1,419 @@
+{
+  "setup": {
+    "projects": {
+      "first": {
+        "id": "prj_hUNC8PNQzdpRK2LOm1WV",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-project\\archive-review"
+      },
+      "second": {
+        "id": "prj_hanBsvwsBfUBreYIKSpL",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-alternate\\archive-review"
+      }
+    },
+    "records": {
+      "first": {
+        "input": {
+          "name": "Weekly project check-in",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hUNC8PNQzdpRK2LOm1WV"
+            ]
+          },
+          "prompt": "Review the scheduled scope.",
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "requestID": "iteration-b264-candidate-first"
+        },
+        "receipt": {
+          "id": "atm_hQhJ2odKqGuSnhW9hwn8",
+          "revisionId": "atm_hQhJ2odKqGuSnhW9hwn8",
+          "name": "Weekly project check-in",
+          "nextRun": 4070908800000
+        },
+        "requestID": "09788338-91f2-4d2f-9565-d05372c55e47"
+      },
+      "second": {
+        "input": {
+          "name": "Weekly project check-in",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hanBsvwsBfUBreYIKSpL"
+            ]
+          },
+          "prompt": "Review the scheduled scope.",
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "requestID": "iteration-b264-candidate-second"
+        },
+        "receipt": {
+          "id": "atm_he4NrrTEAqPHapjbnY4c",
+          "revisionId": "atm_he4NrrTEAqPHapjbnY4c",
+          "name": "Weekly project check-in",
+          "nextRun": 4070908800000
+        },
+        "requestID": "9657b4c2-ff99-47f2-83d8-160268681ffa"
+      },
+      "joint": {
+        "input": {
+          "name": "Joint project review",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hanBsvwsBfUBreYIKSpL",
+              "prj_hUNC8PNQzdpRK2LOm1WV"
+            ]
+          },
+          "prompt": "Review the scheduled scope.",
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "requestID": "iteration-b264-candidate-joint"
+        },
+        "receipt": {
+          "id": "atm_hQCvHnFEM63gh7xtrI0U",
+          "revisionId": "atm_hQCvHnFEM63gh7xtrI0U",
+          "name": "Joint project review",
+          "nextRun": 4070908800000
+        },
+        "requestID": "190e8c3a-67c1-4b34-afdd-7d10100e95f6"
+      },
+      "global": {
+        "input": {
+          "name": "Global schedule review",
+          "target": {
+            "scope": "global"
+          },
+          "prompt": "Review the scheduled scope.",
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "requestID": "iteration-b264-candidate-global"
+        },
+        "receipt": {
+          "id": "atm_hhwi4uMnt65tSF8K8RHt",
+          "revisionId": "atm_hhwi4uMnt65tSF8K8RHt",
+          "name": "Global schedule review",
+          "nextRun": 4070908800000
+        },
+        "requestID": "f14b38c5-056d-49a4-8d7e-0b8370cefacc"
+      }
+    }
+  },
+  "discover": {
+    "time": "2026-11-12T00:14:08.045Z",
+    "stage": "truncated",
+    "route": "/global/projects/discover",
+    "method": "GET",
+    "round": "project-discovery-delayed",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "1e9e972a-dc8f-4472-8a33-e9b5d1c5a41b",
+    "status": 200,
+    "bytes": 900,
+    "projects": [
+      {
+        "id": "prj_hUNC8PNQzdpRK2LOm1WV",
+        "name": "archive-review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-project\\archive-review"
+      },
+      {
+        "id": "prj_hanBsvwsBfUBreYIKSpL",
+        "name": "archive-review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-alternate\\archive-review"
+      }
+    ],
+    "deliveredBytes": 12
+  },
+  "retry": {
+    "time": "2026-11-12T00:14:14.943Z",
+    "stage": "delivered",
+    "route": "/global/projects/discover",
+    "method": "GET",
+    "round": "project-discovery-retry",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "99a5a10d-2662-43cb-8e03-9e4100b0deff",
+    "status": 200,
+    "bytes": 900,
+    "projects": [
+      {
+        "id": "prj_hUNC8PNQzdpRK2LOm1WV",
+        "name": "archive-review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-project\\archive-review"
+      },
+      {
+        "id": "prj_hanBsvwsBfUBreYIKSpL",
+        "name": "archive-review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-alternate\\archive-review"
+      }
+    ]
+  },
+  "afterNavigation": {
+    "time": "2026-11-12T00:14:37.805Z",
+    "stage": "delivered",
+    "route": "/global/projects/discover",
+    "method": "GET",
+    "round": "project-discovery-retry",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "9fa556fb-013c-4166-b4e3-fde30fbc58a5",
+    "status": 200,
+    "bytes": 900,
+    "projects": [
+      {
+        "id": "prj_hUNC8PNQzdpRK2LOm1WV",
+        "name": "archive-review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-project\\archive-review"
+      },
+      {
+        "id": "prj_hanBsvwsBfUBreYIKSpL",
+        "name": "archive-review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b264\\candidate-alternate\\archive-review"
+      }
+    ]
+  },
+  "deletion": {
+    "time": "2026-11-12T00:14:52.366Z",
+    "stage": "delivered",
+    "route": "/global/automations/atm_he4NrrTEAqPHapjbnY4c",
+    "method": "DELETE",
+    "round": "delete-selected-alternate-project",
+    "directory": null,
+    "search": null,
+    "expectedRevisionId": "atm_he4NrrTEAqPHapjbnY4c",
+    "operationRequestID": "e0b23dd9-c2fd-43a7-8f04-aababd1d97f8",
+    "requestID": "028f7f8b-2b0d-4b33-8f76-9f37acfff66a",
+    "status": 200,
+    "bytes": 66,
+    "target": {
+      "id": "atm_he4NrrTEAqPHapjbnY4c",
+      "name": "Weekly project check-in"
+    }
+  },
+  "list": {
+    "requestID": "4affded3-a5ec-446e-8c4f-51fd411637b9",
+    "status": 200,
+    "body": [
+      {
+        "id": "atm_hhwi4uMnt65tSF8K8RHt",
+        "revisionId": "atm_hhwi4uMnt65tSF8K8RHt",
+        "name": "Global schedule review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the scheduled scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hQCvHnFEM63gh7xtrI0U",
+        "revisionId": "atm_hQCvHnFEM63gh7xtrI0U",
+        "name": "Joint project review",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hanBsvwsBfUBreYIKSpL",
+            "prj_hUNC8PNQzdpRK2LOm1WV"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the scheduled scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      {
+        "id": "atm_hQhJ2odKqGuSnhW9hwn8",
+        "revisionId": "atm_hQhJ2odKqGuSnhW9hwn8",
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hUNC8PNQzdpRK2LOm1WV"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the scheduled scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "records": [
+    {
+      "key": "first",
+      "row": {
+        "id": "atm_hQhJ2odKqGuSnhW9hwn8",
+        "revisionId": "atm_hQhJ2odKqGuSnhW9hwn8",
+        "name": "Weekly project check-in",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hUNC8PNQzdpRK2LOm1WV"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the scheduled scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "4c6a31cf-fb63-4cb2-82ce-251da3c33c2e",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_da3e80ca459c2c1b5fc88b8cbc6e0cf3",
+            "automationId": "atm_hQhJ2odKqGuSnhW9hwn8",
+            "automationRevisionId": "atm_hQhJ2odKqGuSnhW9hwn8",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794442432429,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "27446e7a-31b3-4346-9ea0-7d313accb7eb",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "key": "joint",
+      "row": {
+        "id": "atm_hQCvHnFEM63gh7xtrI0U",
+        "revisionId": "atm_hQCvHnFEM63gh7xtrI0U",
+        "name": "Joint project review",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hanBsvwsBfUBreYIKSpL",
+            "prj_hUNC8PNQzdpRK2LOm1WV"
+          ]
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the scheduled scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "296483f5-d864-4323-9332-b6bdbf13fcd6",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_cd2ceacfaccaa5ddd384984b7bd0764c",
+            "automationId": "atm_hQCvHnFEM63gh7xtrI0U",
+            "automationRevisionId": "atm_hQCvHnFEM63gh7xtrI0U",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794442432442,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "e7469c0e-7159-4fd1-b030-fd1992053675",
+        "status": 200,
+        "body": []
+      }
+    },
+    {
+      "key": "global",
+      "row": {
+        "id": "atm_hhwi4uMnt65tSF8K8RHt",
+        "revisionId": "atm_hhwi4uMnt65tSF8K8RHt",
+        "name": "Global schedule review",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the scheduled scope.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "fires": {
+        "requestID": "9f0d8b85-fa3b-4be0-ade6-797c5b4c179c",
+        "status": 200,
+        "body": [
+          {
+            "fireId": "cal_automation_f2d0e4e589d68752302e48b25467e242",
+            "automationId": "atm_hhwi4uMnt65tSF8K8RHt",
+            "automationRevisionId": "atm_hhwi4uMnt65tSF8K8RHt",
+            "origin": "scheduled",
+            "scheduledDueAt": 4070908800000,
+            "startedAt": 1794442432447,
+            "completedAt": null,
+            "state": "scheduled",
+            "attemptCount": 0,
+            "retryAt": null,
+            "error": null,
+            "runs": []
+          }
+        ]
+      },
+      "runs": {
+        "requestID": "ad1b409a-2ff0-43ea-8787-724d8341f30f",
+        "status": 200,
+        "body": []
+      }
+    }
+  ],
+  "deleted": {
+    "requestID": "5e80b218-b301-4da0-b148-880cde8d1189",
+    "status": 404,
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Automation not found: atm_he4NrrTEAqPHapjbnY4c"
+      }
+    }
+  }
+}

@@ -2018,6 +2018,11 @@ request ID and connection for an explicit retry of an uncertain deletion. The
 original diagnostics and retry action remain visible while a retry settles.
 Definitive revision conflicts offer a fresh read. An exact accepted receipt
 retires the selected definition from the visible list before the list refresh.
+The list, project search, details and deletion confirmation resolve the exact
+scheduled revision's project IDs from the same discovery result. List labels use
+the shared directory hints for same-name projects. Search includes the project
+name, path and ID, and reports incomplete project discovery for an unresolved
+query. Deletion confirmation shows the full project paths in target order.
 Pause and Resume validate the definition ID, new revision and requested status
 in the write receipt. An uncertain receipt reads the same definition from the
 current list on the same connection, without replaying the write. The result
