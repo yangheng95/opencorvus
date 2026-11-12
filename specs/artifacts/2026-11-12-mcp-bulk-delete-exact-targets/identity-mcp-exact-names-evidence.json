@@ -1,0 +1,189 @@
+{
+  "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b274\\identity-project\\identically-named-workspace-with-a-long-path-for-review\\archive-review",
+  "before": {
+    "status": 200,
+    "requestID": "66d85ce5-1111-4d2b-899b-954f03dc8c4e",
+    "value": {
+      "review-tools": {
+        "status": "disabled"
+      },
+      " review-tools ": {
+        "status": "disabled"
+      },
+      "": {
+        "status": "disabled"
+      },
+      "  ": {
+        "status": "disabled"
+      }
+    }
+  },
+  "beforeConfig": {
+    "review-tools": {
+      "enabled": false
+    },
+    " review-tools ": {
+      "enabled": false
+    },
+    "": {
+      "enabled": false
+    },
+    "  ": {
+      "enabled": false
+    }
+  },
+  "padded": {
+    "names": [
+      " review-tools "
+    ],
+    "status": 200,
+    "requestID": "be719254-b80f-4a77-bc8a-f513a43693a4",
+    "value": {
+      "mcp": {
+        " review-tools ": {
+          "enabled": false
+        },
+        "": {
+          "enabled": false
+        },
+        "  ": {
+          "enabled": false
+        }
+      },
+      "terminal": {
+        "default_profile_id": "powershell",
+        "profiles": {
+          "powershell": {
+            "label": "Windows PowerShell",
+            "command": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "pwsh": {
+            "label": "PowerShell",
+            "command": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+            "args": [
+              "-NoLogo"
+            ],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "powershell"
+          },
+          "cmd": {
+            "label": "Command Prompt",
+            "command": "C:\\WINDOWS\\system32\\cmd.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "command-prompt"
+          },
+          "git-bash": {
+            "label": "Git Bash",
+            "command": "C:\\Program Files\\Git\\bin\\bash.exe",
+            "args": [],
+            "env": {
+              "TERM": "xterm-256color",
+              "COLORTERM": "truecolor"
+            },
+            "icon": "bash"
+          }
+        }
+      },
+      "$schema": "https://opencorvus.ai/config.json"
+    }
+  },
+  "afterPadded": {
+    "status": 200,
+    "requestID": "e1bc4dfd-2662-4ea5-9b3a-441903baf27f",
+    "value": {
+      " review-tools ": {
+        "status": "disabled"
+      },
+      "": {
+        "status": "disabled"
+      },
+      "  ": {
+        "status": "disabled"
+      }
+    }
+  },
+  "afterPaddedConfig": {
+    " review-tools ": {
+      "enabled": false
+    },
+    "": {
+      "enabled": false
+    },
+    "  ": {
+      "enabled": false
+    }
+  },
+  "blanks": {
+    "names": [
+      "",
+      "  "
+    ],
+    "status": 400,
+    "requestID": "c47b8ab6-cde2-4faf-98e6-df5fcda4b3e7",
+    "value": {
+      "data": {
+        "message": "Request validation failed"
+      },
+      "error": [
+        {
+          "code": "too_small",
+          "path": [
+            "names",
+            0
+          ],
+          "message": "Too small: expected string to have >=1 characters"
+        },
+        {
+          "code": "too_small",
+          "path": [
+            "names",
+            1
+          ],
+          "message": "Too small: expected string to have >=1 characters"
+        }
+      ],
+      "success": false
+    }
+  },
+  "afterBlanks": {
+    "status": 200,
+    "requestID": "5676a0a1-56cc-4f16-8b4f-997583d88330",
+    "value": {
+      " review-tools ": {
+        "status": "disabled"
+      },
+      "": {
+        "status": "disabled"
+      },
+      "  ": {
+        "status": "disabled"
+      }
+    }
+  },
+  "afterBlanksConfig": {
+    " review-tools ": {
+      "enabled": false
+    },
+    "": {
+      "enabled": false
+    },
+    "  ": {
+      "enabled": false
+    }
+  }
+}

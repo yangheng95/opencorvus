@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [批量删除 MCP 连接按精确项目与名称确认](records/2026-11/2026-11-12-mcp-bulk-delete-exact-targets.md)
 - [新增 MCP 连接保留提交期间的草稿](records/2026-11/2026-11-12-mcp-add-draft-ownership.md)
 - [MCP 连接回执中断后核对原项目状态](records/2026-11/2026-11-12-mcp-connection-status-after-interrupted-receipt.md)
 - [用量刷新保留已确认报表并可取消](records/2026-11/2026-11-12-usage-refresh-confirmed-report.md)
