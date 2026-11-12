@@ -1716,6 +1716,8 @@
   "mcp.configured_status": "服务连接",
   "mcp.configured_status_help": "当前项目已配置 MCP 服务的连接状态。",
   "mcp.status_read_failed": "无法读取连接状态，正在自动重试。",
+  "mcp.connection_state_observed": "回执中断后已核对 {{directory}} 中的 {{name}}，当前状态为{{status}}。",
+  "mcp.connection_state_unconfirmed": "{{directory}} 中的 {{name}} 回执中断。请查看「服务连接」自动读取的当前状态。",
   "mcp.transport": "传输方式",
   "mcp.transport.sse": "SSE",
   "mcp.transport.streamable_http": "Streamable HTTP",

@@ -8,6 +8,7 @@ import {
   connectMcp,
   deleteAllMcp,
   disconnectMcp,
+  InvalidMcpConnectionReceiptError,
   parseMcpArguments,
   removeMcpAuth,
 } from "../src/services/mcp"
@@ -16,12 +17,12 @@ import { loadMcpStatus, loadProjectMcpStatus } from "../src/services/extensions"
 
 const PROJECT_DIR = "C:/Users/example/project"
 
-function fakeTransport(capture: (req: TransportRequest) => void): HostTransport {
+function fakeTransport(capture: (req: TransportRequest) => void, body: unknown = {}): HostTransport {
   return {
     kind: "tauri",
     async request<T>(req: TransportRequest): Promise<TransportResponse<T>> {
       capture(req)
-      return { status: 200, ok: true, headers: {}, body: {} as T }
+      return { status: 200, ok: true, headers: {}, body: body as T }
     },
     openStream() {
       throw new Error("openStream not used")
@@ -208,11 +209,12 @@ describe("MCP overlay service", () => {
 
   test("uses canonical project-scoped connection, auth, and removal routes", async () => {
     const requests: TransportRequest[] = []
-    __setHostTransportForTest(fakeTransport((req) => requests.push(req)))
+    __setHostTransportForTest(fakeTransport((req) => requests.push(req), true))
     setMcp({ browser: { status: "connected" }, filesystem: { status: "connected" } })
+    const authority = captureApiAuthority()
 
-    await connectMcp("browser", { directory: PROJECT_DIR })
-    await disconnectMcp("browser", { directory: PROJECT_DIR })
+    await connectMcp("browser", { directory: PROJECT_DIR, authority })
+    await disconnectMcp("browser", { directory: PROJECT_DIR, authority })
     await removeMcpAuth("browser", { directory: PROJECT_DIR })
     await deleteAllMcp({ directory: PROJECT_DIR, names: ["browser", "filesystem"] })
 
@@ -226,5 +228,19 @@ describe("MCP overlay service", () => {
       kind: "json",
       value: { names: ["browser", "filesystem"] },
     })
+    expect(requests.slice(0, 2).map((request) => request.authority)).toEqual([authority, authority])
   })
+
+  test.each([["connect", connectMcp], ["disconnect", disconnectMcp]] as const)(
+    "a %s response without an affirmative acknowledgment reports the exact receipt error",
+    async (action, change) => {
+      const requests: TransportRequest[] = []
+      __setHostTransportForTest(fakeTransport((request) => requests.push(request), false))
+      const authority = captureApiAuthority()
+      const error = await change("files", { directory: PROJECT_DIR, authority }).catch((cause: unknown) => cause)
+      expect(error).toBeInstanceOf(InvalidMcpConnectionReceiptError)
+      expect(error).toMatchObject({ action, serverName: "files" })
+      expect(requests[0]).toMatchObject({ method: "POST", path: `mcp/files/${action}`, query: { directory: PROJECT_DIR }, authority })
+    },
+  )
 })

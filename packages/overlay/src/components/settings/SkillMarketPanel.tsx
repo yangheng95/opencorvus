@@ -46,8 +46,11 @@ import {
   type SkillMarketDetail,
 } from "../../services/extensions"
 import { addMcpServer, connectMcp, disconnectMcp, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import type { ConversationExperience } from "../../services/conversation-capability"
 import {
+  isMcpConnectionStatus,
+  mcpConnectionStatusLabel,
   mcpConnectionStatusOrDisabledLabel,
   mcpConnectionStatusOrDisabledTone,
 } from "../../utils/settings-status-labels"
@@ -313,6 +316,7 @@ function SharedResourceManagementPanel(props: {
   const [loading, setLoading] = createSignal(false)
   const [mcpStatusRead, setMcpStatusRead] = createSignal<McpStatusRead>()
   let mcpReadRequest: McpReadScope | undefined
+  let mcpConnectionRequest: McpReadScope | undefined
   let mcpReadFeedback: HTMLDivElement | undefined
   let mcpStatusHeading: HTMLSpanElement | undefined
   const [skillDragActive, setSkillDragActive] = createSignal(false)
@@ -395,27 +399,26 @@ function SharedResourceManagementPanel(props: {
     return read?.status === "failed" && ownsMcpScope(read) ? read : undefined
   })
 
-  async function refreshMcpStatus(options: { directory?: string; background?: boolean } = {}): Promise<boolean> {
+  async function refreshMcpStatus(options: { directory?: string; authority?: ApiAuthority; background?: boolean } = {}): Promise<Record<string, McpItem> | undefined> {
     const directory = options.directory ?? currentDirectory()
-    const owner = { directory, authority: captureApiAuthority() }
-    if (!directory || !ownsMcpScope(owner)) return false
-    if (options.background && mcpReadRequest && ownsMcpScope(mcpReadRequest)) return false
+    const owner = { directory, authority: options.authority ?? captureApiAuthority() }
+    if (!directory || !ownsMcpScope(owner)) return
+    if (options.background && mcpReadRequest && ownsMcpScope(mcpReadRequest)) return
     mcpReadRequest = owner
     const current = () => mcpReadRequest === owner && ownsMcpScope(owner)
     try {
-      await loadProjectMcpStatus({
+      const status = await loadProjectMcpStatus({
         ...owner,
         isCurrentDirectory: (candidate) => candidate === directory && current(),
       })
-      if (!current()) return false
+      if (!current()) return
       if (mcpReadFailure() && mcpReadFeedback?.contains(document.activeElement)) {
         mcpStatusHeading?.focus({ preventScroll: true })
       }
       setMcpStatusRead({ ...owner, status: "ready" })
-      return true
+      return status
     } catch (error) {
       if (current()) setMcpStatusRead({ ...owner, status: "failed", error })
-      return false
     } finally {
       if (mcpReadRequest === owner) mcpReadRequest = undefined
     }
@@ -591,18 +594,48 @@ function SharedResourceManagementPanel(props: {
     if (loading()) return
     const directory = currentDirectory()
     if (!directory) return
-    const authority = captureApiAuthority()
-    const current = () => isApiAuthorityCurrent(authority) && sourceMatchesDirectory(directory)
+    const owner = { directory, authority: captureApiAuthority() }
+    mcpConnectionRequest = owner
+    const current = () => mcpConnectionRequest === owner && ownsMcpScope(owner)
     setLoading(true)
     setNotice(undefined)
     try {
-      await (disconnect ? disconnectMcp : connectMcp)(name, { directory })
+      let receiptFailure: { cause: unknown } | undefined
+      try {
+        await (disconnect ? disconnectMcp : connectMcp)(name, owner)
+      } catch (error) {
+        if (!current()) return
+        if (!isUncertainMutationReceipt(error)) throw error
+        receiptFailure = { cause: error }
+      }
       if (!current()) return
-      if (await refreshMcpStatus({ directory })) notifyResourceChange()
+      const status = await refreshMcpStatus(owner)
+      if (!current()) return
+      if (receiptFailure) {
+        const observed = status && Object.hasOwn(status, name) ? status[name]?.status : undefined
+        if (observed && isMcpConnectionStatus(observed)) {
+          setPanelNotice("mcp.connection_state_observed", {
+            tone: observed === (disconnect ? "disabled" : "connected") ? "success" : "warning",
+            vars: () => ({ name, directory, status: mcpConnectionStatusLabel(observed) }),
+            details: formatErrorDetails(receiptFailure.cause),
+          })
+        } else {
+          const reason = mcpReadFailure()?.error ?? new Error(`Current project MCP status did not identify ${name}.`)
+          setPanelNotice("mcp.connection_state_unconfirmed", {
+            tone: "warning",
+            vars: () => ({ name, directory }),
+            details: formatErrorDetails(new AggregateError([receiptFailure.cause, reason], "MCP connection state could not be read")),
+          })
+        }
+      }
+      if (status) notifyResourceChange()
     } catch (error) {
       if (current()) setPanelError(error)
     } finally {
-      if (current()) setLoading(false)
+      if (current()) {
+        mcpConnectionRequest = undefined
+        setLoading(false)
+      }
     }
   }
 
@@ -838,6 +871,7 @@ function SharedResourceManagementPanel(props: {
     onCleanup(() => {
       interval.dispose()
       mcpReadRequest = undefined
+      mcpConnectionRequest = undefined
     })
   })
 

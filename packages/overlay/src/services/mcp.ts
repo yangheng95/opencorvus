@@ -146,18 +146,30 @@ export async function addMcpServer(input: AddMcpInput, options: McpRequestOption
   })
 }
 
-/** Connects a configured MCP server by name. */
-export async function connectMcp(name: string, options: McpRequestOptions = {}): Promise<void> {
-  await apiJson(mcpPath(`mcp/${encodeURIComponent(name)}/connect`, options), {
+export class InvalidMcpConnectionReceiptError extends Error {
+  override readonly name = "InvalidMcpConnectionReceiptError"
+
+  constructor(readonly action: "connect" | "disconnect", readonly serverName: string) {
+    super(`MCP ${action} returned an invalid acknowledgment for ${serverName}.`)
+  }
+}
+
+async function changeMcpConnection(name: string, action: "connect" | "disconnect", options: McpRequestOptions): Promise<void> {
+  const result = await apiJson<unknown>(mcpPath(`mcp/${encodeURIComponent(name)}/${action}`, options), {
+    authority: options.authority,
     method: "POST",
   })
+  if (result !== true) throw new InvalidMcpConnectionReceiptError(action, name)
+}
+
+/** Connects a configured MCP server by name. */
+export function connectMcp(name: string, options: McpRequestOptions = {}): Promise<void> {
+  return changeMcpConnection(name, "connect", options)
 }
 
 /** Disconnects an active MCP connection by name. */
-export async function disconnectMcp(name: string, options: McpRequestOptions = {}): Promise<void> {
-  await apiJson(mcpPath(`mcp/${encodeURIComponent(name)}/disconnect`, options), {
-    method: "POST",
-  })
+export function disconnectMcp(name: string, options: McpRequestOptions = {}): Promise<void> {
+  return changeMcpConnection(name, "disconnect", options)
 }
 
 /** Removes stored OAuth/auth credentials for an MCP server by name. */

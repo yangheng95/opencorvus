@@ -1717,6 +1717,8 @@
   "mcp.configured_status": "Server connections",
   "mcp.configured_status_help": "Connection state for MCP servers configured in the current project.",
   "mcp.status_read_failed": "Could not read connection status. Retrying automatically.",
+  "mcp.connection_state_observed": "Checked {{name}} in {{directory}} after an interrupted reply. The current state is {{status}}.",
+  "mcp.connection_state_unconfirmed": "The connection reply for {{name}} in {{directory}} was interrupted. See Server connections as it checks the current state.",
   "mcp.transport": "Transport",
   "mcp.transport.sse": "SSE",
   "mcp.transport.streamable_http": "Streamable HTTP",
