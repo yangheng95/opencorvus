@@ -1,0 +1,183 @@
+{
+  "initial": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+    "definition": {
+      "name": "notice-review",
+      "config": {
+        "type": "remote",
+        "transport": "streamable-http",
+        "url": "http://127.0.0.1:39897/mcp"
+      }
+    },
+    "requestID": "fecf2f17-38ad-443f-b315-d8c0a4a963d6",
+    "status": 200,
+    "result": {
+      "notice-review": {
+        "status": "connected"
+      },
+      "browser": {
+        "status": "disconnected",
+        "scope": "execution"
+      },
+      "computer": {
+        "status": "disconnected",
+        "scope": "execution"
+      }
+    }
+  },
+  "actions": [
+    {
+      "time": "2026-11-12T05:22:27.040Z",
+      "stage": "delivered",
+      "route": "/mcp/notice-review/disconnect",
+      "method": "POST",
+      "round": "baseline-disconnect",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "9ead481b-6ae6-4f54-ba17-5f3690b46fce",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    },
+    {
+      "time": "2026-11-12T05:22:31.902Z",
+      "stage": "delivered",
+      "route": "/mcp/notice-review/connect",
+      "method": "POST",
+      "round": "baseline-http-error",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "5d00b7fc-343e-4255-8863-aa88c093bc56",
+      "status": 500,
+      "bytes": 112,
+      "error": {
+        "name": "UnknownError"
+      }
+    },
+    {
+      "time": "2026-11-12T05:23:54.035Z",
+      "stage": "delivered",
+      "route": "/mcp/notice-review/connect",
+      "method": "POST",
+      "round": "baseline-recover",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "0ca8694c-8d9c-4788-9e3b-04893aaa7cad",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    },
+    {
+      "time": "2026-11-12T05:24:00.095Z",
+      "stage": "truncated",
+      "route": "/mcp/notice-review/disconnect",
+      "method": "POST",
+      "round": "baseline-transport-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "22ab18bf-e007-4e3d-b992-77b56766e31c",
+      "status": 200,
+      "bytes": 4,
+      "target": true,
+      "deliveredBytes": 3
+    }
+  ],
+  "readbacks": [
+    {
+      "time": "2026-11-12T05:22:31.915Z",
+      "stage": "delivered",
+      "route": "/mcp/project",
+      "method": "GET",
+      "round": "baseline-http-error",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "f96dedf5-7c7e-42bd-8515-75ef3e8aa70a",
+      "status": 200,
+      "bytes": 75,
+      "target": {
+        "notice-review": {
+          "status": "failed"
+        }
+      }
+    },
+    {
+      "time": "2026-11-12T05:24:00.185Z",
+      "stage": "delivered",
+      "route": "/mcp/project",
+      "method": "GET",
+      "round": "baseline-after-cut",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "6c538884-2ad8-409d-b1eb-0d26319a9369",
+      "status": 200,
+      "bytes": 68,
+      "target": {
+        "notice-review": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        }
+      }
+    }
+  ],
+  "outage": [
+    {
+      "kind": "unavailable",
+      "pid": 32340,
+      "port": 39897,
+      "scope": "public",
+      "time": "2026-11-12T05:22:31.895Z",
+      "method": "POST",
+      "status": 503
+    }
+  ],
+  "projects": [
+    {
+      "side": "project",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-project\\archive-review",
+      "requestID": "7809c9f8-3725-4a7b-be50-1d775212276a",
+      "value": {
+        "notice-review": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        }
+      },
+      "definitions": {
+        "notice-review": {
+          "type": "remote",
+          "transport": "streamable-http",
+          "url": "http://127.0.0.1:39897/mcp"
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b281\\candidate-alternate\\archive-review",
+      "requestID": "2dd8e617-4b4d-4673-8a0e-382f29f7c313",
+      "value": {},
+      "definitions": {}
+    }
+  ],
+  "serverError": {
+    "requestID": "5d00b7fc-343e-4255-8863-aa88c093bc56",
+    "status": 500,
+    "message": "MCP server notice-review failed to connect: MCP OAuth connection failed"
+  }
+}
