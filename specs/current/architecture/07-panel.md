@@ -859,6 +859,10 @@ same real Session callback used by article/header clicks. Pointer and keyboard
 activation share that control; nested Handoff disclosure and content actions
 retain their own propagation guards. The existing main subagent selection and
 Dock tab remain the sole navigation owners.
+The Dock list, selector and progress cards use identity and latest activity
+from their owning child Session row. The selected conversation's projection
+supplies these rows by Session identity and retires them together on a source
+change. Live activity updates replace the row's activity for the same Session.
 
 ## File comparison evidence
 
@@ -4085,7 +4089,8 @@ Conversation Agent navigation distinguishes saved message observations from
 observed execution states through the shared transport status contract.
 An `unobserved` record is neutral, labelled as having no recorded execution
 status, with its retained record identity, recorded time and an explanation that
-only message or Session records are available.
+only message or Session records are available. The shared status indicator uses
+the neutral file icon for this state.
 It remains locatable and readable. Actual prepared or queued evidence still owns
 `pending`, and exact lifecycle facts own running, idle and terminal presentation.
 Hydration and live identity creation share the neutral default; reconciliation

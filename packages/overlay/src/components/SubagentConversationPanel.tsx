@@ -1,5 +1,4 @@
 import {
-  For,
   Show,
   createEffect,
   createMemo,
@@ -10,6 +9,7 @@ import {
   untrack,
   type Accessor,
 } from "solid-js"
+import { Key } from "@solid-primitives/keyed"
 import { boardStore } from "../store/board"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import {
@@ -37,10 +37,8 @@ import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { revealConversationSource } from "../utils/conversation-source-navigation"
 import { t } from "../utils/i18n"
 import {
-  isSubagentActivityRecord,
-  subagentSessionRecords,
-  subagentSessionIdentity,
-  type SubagentSessionIdentity as AgentOption,
+  subagentSessionRows,
+  type SubagentSessionRow,
 } from "../utils/subagent-presentation"
 import { isAgentActivityTerminalStatus, type AgentActivityRecord } from "../utils/agent-activity"
 import { ConversationCard } from "./ConversationCard"
@@ -224,33 +222,28 @@ export function SubagentConversationPanel(props: {
     if (readingPositions.size > MAX_REMEMBERED_READING_POSITIONS)
       readingPositions.delete(readingPositions.keys().next().value!)
   }
-  const records = createMemo(() =>
-    conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
+  const sessionRows = createMemo(() =>
+    subagentSessionRows(conversationAgentRecordsForSource(boardStore.selectedSource)),
   )
-  // One entry per Session, newest occurrence. Scanning the raw list instead would
-  // repeat a Session that ran more than once and would answer a lookup with its
-  // oldest occurrence, carrying that occurrence's stale status and target.
-  const sessionRecords = createMemo(() => subagentSessionRecords(records()))
-  const agentOptions = createMemo<AgentOption[]>(
-    () => sessionRecords().map((record) => subagentSessionIdentity(record, sessionRecords())),
+  const agentOptions = createMemo<SubagentSessionRow[]>(
+    sessionRows,
     undefined,
     {
       equals: (previous, next) =>
         previous.length === next.length &&
         previous.every(
-          (option, index) => option.sessionID === next[index]?.sessionID && option.label === next[index]?.label,
+          (option, index) => option.sessionID === next[index]?.sessionID && option.label === next[index]?.label &&
+            option.activity.status === next[index]?.activity.status,
         ),
     },
   )
   const selectedOption = createMemo(
     () => agentOptions().find((option) => option.sessionID === props.sessionID().trim()) ?? null,
   )
-  const recordForSession = (sessionID: string) =>
-    sessionRecords().find((candidate) => candidate.sessionID === sessionID)
   const selectedRecord = createMemo(() => {
     const sessionID = props.sessionID().trim()
     if (!sessionID) return undefined
-    return recordForSession(sessionID)
+    return sessionRows().find((row) => row.sessionID === sessionID)?.activity
   })
   const [showAgentList, setShowAgentList] = createSignal(false)
   const showingList = createMemo(() => showAgentList() || !selectedRecord())
@@ -465,7 +458,7 @@ export function SubagentConversationPanel(props: {
           }}
         >
           <Icon name="nav-back" size="compact" />
-          {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
+          {t("subagent.conversation.all_agents", { count: sessionRows().length })}
         </Button>
         <SelectControl
           options={agentOptions()}
@@ -481,7 +474,7 @@ export function SubagentConversationPanel(props: {
           renderValue={(record) => (record ? <SubagentSessionIdentity identity={record} /> : "")}
           renderOptionLabel={(record) => <SubagentSessionIdentity identity={record} />}
           renderOptionDescription={(option) =>
-            t(`agent_rail.status.${recordForSession(option.sessionID)?.status ?? "unobserved"}`)
+            t(`agent_rail.status.${option.activity.status}`)
           }
         />
       </div>
@@ -539,12 +532,11 @@ export function SubagentConversationPanel(props: {
       <Show when={showingList()}>
         <div class="subagent-conversation-panel__list" aria-label={t("right_dock.tool.subagent")}>
           <div class="subagent-conversation-panel__list-heading">
-            {t("subagent.conversation.all_agents", { count: sessionRecords().length })}
+            {t("subagent.conversation.all_agents", { count: sessionRows().length })}
           </div>
-          <For each={sessionRecords().map((record) => record.sessionID)}>
-            {(sessionID) => {
-              const candidate = () => recordForSession(sessionID)!
-              const identity = () => agentOptions().find((option) => option.sessionID === sessionID)!
+          <Key each={sessionRows()} by="sessionID">
+            {(row) => {
+              const status = () => row().activity.status
               return (
                 <Button
                   type="button"
@@ -552,29 +544,29 @@ export function SubagentConversationPanel(props: {
                   size="control"
                   tone="neutral"
                   class="oc-navigation-row subagent-conversation-panel__agent-row"
-                  data-active={String(sessionID === props.sessionID())}
+                  data-active={String(row().sessionID === props.sessionID())}
                   onClick={(event) => {
                     const origin = event.currentTarget
-                    selectAgent(sessionID)
+                    selectAgent(row().sessionID)
                     focusAfterNavigation(origin)
                   }}
                 >
                   <StatusIndicator
-                    status={candidate().status}
-                    label={t(`agent_rail.status.${candidate().status}`)}
+                    status={status()}
+                    label={t(`agent_rail.status.${status()}`)}
                     aria-hidden="true"
                   />
                   <span class="subagent-conversation-panel__agent-name">
-                    <SubagentSessionIdentity identity={identity()} />
+                    <SubagentSessionIdentity identity={row()} />
                   </span>
                   <span class="subagent-conversation-panel__agent-status">
-                    {t(`agent_rail.status.${candidate().status}`)}
+                    {t(`agent_rail.status.${status()}`)}
                   </span>
                 </Button>
               )
             }}
-          </For>
-          <Show when={sessionRecords().length === 0}>
+          </Key>
+          <Show when={sessionRows().length === 0}>
             <p>{t("subagent.conversation.no_selection")}</p>
           </Show>
         </div>

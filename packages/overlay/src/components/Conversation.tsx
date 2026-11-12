@@ -41,7 +41,9 @@ import {
   subagentGridItemForSession,
   subagentProgressCardID,
   subagentSessionIDFromProgressCardID,
+  subagentSessionRows,
   type SubagentConversationItem,
+  type SubagentSessionRow,
 } from "../utils/subagent-presentation"
 import { SubagentProgressGrid } from "./SubagentProgressGrid"
 import { ConversationCard } from "./ConversationCard"
@@ -146,6 +148,7 @@ function equalConversationItems(
 
 function VirtualizedConversationItem(props: {
   item: () => SubagentConversationItem
+  subagentRows: () => ReadonlyMap<string, SubagentSessionRow>
   onOpenSubagentConversation: (sessionID: string) => void
 }) {
   const item = createMemo(props.item)
@@ -166,7 +169,11 @@ function VirtualizedConversationItem(props: {
         >
           {(grid) => (
             <div class="subagent-progress-grid-anchor" data-card-id={grid().id}>
-              <SubagentProgressGrid sessionIDs={grid().sessionIDs} onOpen={props.onOpenSubagentConversation} />
+              <SubagentProgressGrid
+                sessionIDs={grid().sessionIDs}
+                rows={props.subagentRows}
+                onOpen={props.onOpenSubagentConversation}
+              />
             </div>
           )}
         </Show>
@@ -188,6 +195,7 @@ function VirtualizedConversationCards(props: {
   const [focusedItemID, setFocusedItemID] = createSignal<string | null>(null)
 
   const records = createMemo(() => conversationAgentRecordsForSource(boardStore.selectedSource))
+  const subagentRows = createMemo(() => new Map(subagentSessionRows(records()).map((row) => [row.sessionID, row])))
   const items = createMemo(
     on([publishedCardTreeVersion, records], () =>
       buildSubagentConversationItems({
@@ -433,6 +441,7 @@ function VirtualizedConversationCards(props: {
               return (
                 <VirtualizedConversationItem
                   item={currentItem}
+                  subagentRows={subagentRows}
                   onOpenSubagentConversation={props.onOpenSubagentConversation}
                 />
               )

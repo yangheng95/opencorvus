@@ -1,15 +1,11 @@
-import { For, Show, Switch, Match, createMemo } from "solid-js"
-import { boardStore, selectedTaskDirectory } from "../store/board"
-import {
-  conversationAgentRecordForSourceSession,
-  conversationAgentRecordsForSource,
-} from "../store/conversation-agents"
+import { For, Show, Switch, Match, createMemo, type Accessor } from "solid-js"
+import { Key } from "@solid-primitives/keyed"
+import { selectedTaskDirectory } from "../store/board"
 import {
   subagentProgressCardID,
   subagentProgressEvents,
-  isSubagentActivityRecord,
-  subagentSessionIdentity,
   type SubagentProgressEvent,
+  type SubagentSessionRow,
 } from "../utils/subagent-presentation"
 import { normalizeAgentRole } from "../utils/message"
 import { stageAccent } from "../utils/card-color"
@@ -101,19 +97,11 @@ function SubagentProgressEventRow(props: { event: SubagentProgressEvent }) {
   )
 }
 
-function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: string) => void }) {
-  const record = createMemo(() => {
-    const item = conversationAgentRecordForSourceSession(boardStore.selectedSource, props.sessionID)
-    if (!item) throw new Error(`subagent progress card missing activity record for ${props.sessionID}`)
-    return item
-  })
+function SubagentProgressCard(props: { row: Accessor<SubagentSessionRow>; onOpen: (sessionID: string) => void }) {
+  const identity = props.row
+  const record = () => identity().activity
+  const sessionID = () => identity().sessionID
   const role = createMemo(() => normalizeAgentRole(record().stage))
-  const identity = createMemo(() =>
-    subagentSessionIdentity(
-      record(),
-      conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
-    ),
-  )
   const events = createMemo(() =>
     subagentProgressEvents({
       record: record(),
@@ -129,13 +117,13 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
   )
   const inputPreview = () => String(record().inputPreview?.text || "").trim()
 
-  const open = () => props.onOpen(props.sessionID)
+  const open = () => props.onOpen(sessionID())
 
   return (
     <article
       class="subagent-progress-card"
-      data-card-id={subagentProgressCardID(props.sessionID)}
-      data-session-id={props.sessionID}
+      data-card-id={subagentProgressCardID(sessionID())}
+      data-session-id={sessionID()}
       data-status={record().status}
       data-agent={role()}
       style={{ "--card-stage": stageAccent(role()) }}
@@ -172,7 +160,7 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
       >
         <Show when={inputPreview()}>
           {(preview) => (
-            <DelegatedContextDisclosure id={`delegated-context:subagent:${props.sessionID}`}>
+            <DelegatedContextDisclosure id={`delegated-context:subagent:${sessionID()}`}>
               <StaticTextPart text={preview()} />
             </DelegatedContextDisclosure>
           )}
@@ -193,12 +181,23 @@ function SubagentProgressCard(props: { sessionID: string; onOpen: (sessionID: st
   )
 }
 
-export function SubagentProgressGrid(props: { sessionIDs: string[]; onOpen: (sessionID: string) => void }) {
+export function SubagentProgressGrid(props: {
+  sessionIDs: string[]
+  rows: Accessor<ReadonlyMap<string, SubagentSessionRow>>
+  onOpen: (sessionID: string) => void
+}) {
+  const rows = createMemo(() => {
+    const bySession = props.rows()
+    return props.sessionIDs.flatMap((sessionID) => {
+      const row = bySession.get(sessionID)
+      return row ? [row] : []
+    })
+  })
   return (
     <section class="subagent-progress-grid" aria-label={t("subagent.progress.grid_label")}>
-      <For each={props.sessionIDs}>
-        {(sessionID) => <SubagentProgressCard sessionID={sessionID} onOpen={props.onOpen} />}
-      </For>
+      <Key each={rows()} by="sessionID">
+        {(row) => <SubagentProgressCard row={row} onOpen={props.onOpen} />}
+      </Key>
     </section>
   )
 }

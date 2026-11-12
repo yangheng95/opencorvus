@@ -90,6 +90,7 @@ export function isSubagentActivityRecord(record: AgentActivityRecord): boolean {
 export function subagentSessionRecords(records: readonly AgentActivityRecord[]): AgentActivityRecord[] {
   const bySession = new Map<string, AgentActivityRecord>()
   for (const record of records) {
+    if (!isSubagentActivityRecord(record)) continue
     const current = bySession.get(record.sessionID)
     if (!current) {
       bySession.set(record.sessionID, record)
@@ -125,6 +126,16 @@ export function subagentSessionIdentity(
   }
 }
 
+export interface SubagentSessionRow extends SubagentSessionIdentity {
+  activity: AgentActivityRecord
+}
+
+/** One snapshot supplies the row key, display identity and latest activity. */
+export function subagentSessionRows(records: readonly AgentActivityRecord[]): SubagentSessionRow[] {
+  const sessions = subagentSessionRecords(records)
+  return sessions.map((activity) => ({ ...subagentSessionIdentity(activity, sessions), activity }))
+}
+
 export function subagentProgressCardID(sessionID: string): string {
   const value = String(sessionID || "").trim()
   if (!value) throw new Error("subagent progress card requires a sessionID")
@@ -146,7 +157,7 @@ export function buildSubagentConversationItems(input: {
   cards: Record<string, CardNode>
   records: AgentActivityRecord[]
 }): SubagentConversationItem[] {
-  const records = subagentSessionRecords(input.records.filter(isSubagentActivityRecord))
+  const records = subagentSessionRecords(input.records)
   const recordsBySession = new Map(records.map((record) => [record.sessionID, record]))
   const timeline: TimelineEntry[] = []
   const appendCard = (cardID: string) => {

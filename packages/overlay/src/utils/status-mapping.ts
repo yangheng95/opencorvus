@@ -1,6 +1,7 @@
 import type { IconName } from "../components/ui/Icon"
 
 const STATUS_ICON_NAME: Record<string, IconName> = {
+  unobserved: "file-document",
   idle: "status-idle",
   pending: "status-idle",
   queued: "status-queued",
