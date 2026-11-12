@@ -1,0 +1,157 @@
+{
+  "sessionID": "ses_-zUPEuL7zzzVgH0crdVk",
+  "before": {
+    "requestID": [
+      "e75baf6c-e6f1-4b8c-8755-190313cc8c57"
+    ],
+    "sessionID": "ses_-zUPEuL7zzzVgH0crdVk",
+    "status": 200,
+    "data": [
+      {
+        "id": "msg_g0Val5phQ00mK8ifqX20",
+        "role": "user",
+        "text": [
+          "Read the 2026-11-16 report for field inventory."
+        ]
+      },
+      {
+        "id": "msg_g0Val5pnA00dO4fS7L7o",
+        "role": "assistant",
+        "parentID": "msg_g0Val5phQ00mK8ifqX20",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_g0Val5vtB00WH6lqcYRc",
+        "role": "user",
+        "text": [
+          "Use the strict-project note for 2026-11-17."
+        ]
+      },
+      {
+        "id": "msg_g0Val5vv400bCAyaoWDF",
+        "role": "assistant",
+        "parentID": "msg_g0Val5vtB00WH6lqcYRc",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_g0Val5y6l00D9WGyY4DY",
+        "role": "user",
+        "text": [
+          "Use the strict-project note."
+        ]
+      },
+      {
+        "id": "msg_g0Val5y8a00KU3Or14l7",
+        "role": "assistant",
+        "parentID": "msg_g0Val5y6l00D9WGyY4DY",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      }
+    ]
+  },
+  "after": {
+    "status": 200,
+    "requestID": "ca626067-ec45-491e-8552-022c2adfc736",
+    "data": [
+      {
+        "id": "msg_g0Val5phQ00mK8ifqX20",
+        "role": "user",
+        "text": [
+          "Read the 2026-11-16 report for field inventory."
+        ]
+      },
+      {
+        "id": "msg_g0Val5pnA00dO4fS7L7o",
+        "role": "assistant",
+        "parentID": "msg_g0Val5phQ00mK8ifqX20",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_g0Val5vtB00WH6lqcYRc",
+        "role": "user",
+        "text": [
+          "Use the strict-project note for 2026-11-17."
+        ]
+      },
+      {
+        "id": "msg_g0Val5vv400bCAyaoWDF",
+        "role": "assistant",
+        "parentID": "msg_g0Val5vtB00WH6lqcYRc",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_g0Val5y6l00D9WGyY4DY",
+        "role": "user",
+        "text": [
+          "Use the strict-project note."
+        ]
+      },
+      {
+        "id": "msg_g0Val5y8a00KU3Or14l7",
+        "role": "assistant",
+        "parentID": "msg_g0Val5y6l00D9WGyY4DY",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      },
+      {
+        "id": "msg_g0Val6X2J00DnX0P2JyI",
+        "role": "user",
+        "text": [
+          "Read the 2026-11-18 report for all topics."
+        ]
+      },
+      {
+        "id": "msg_g0Val6X5U00q2GswxJvE",
+        "role": "assistant",
+        "parentID": "msg_g0Val6X2J00DnX0P2JyI",
+        "finish": "stop",
+        "text": [
+          "The selected local command reached the stream."
+        ]
+      }
+    ]
+  },
+  "quickCheck": "ok",
+  "providerOutcomes": [
+    {
+      "assistantID": "msg_g0Val5pnA00dO4fS7L7o",
+      "requestID": "act_g0Val5pvE00vFN1FLvLR",
+      "outcome": "done",
+      "attempt_count": 1
+    },
+    {
+      "assistantID": "msg_g0Val5vv400bCAyaoWDF",
+      "requestID": "act_g0Val5w0X00qkAHacTFd",
+      "outcome": "done",
+      "attempt_count": 1
+    },
+    {
+      "assistantID": "msg_g0Val5y8a00KU3Or14l7",
+      "requestID": "act_g0Val5yDx00s9d4XrFLV",
+      "outcome": "done",
+      "attempt_count": 1
+    },
+    {
+      "assistantID": "msg_g0Val6X5U00q2GswxJvE",
+      "requestID": "act_g0Val6XJj00VvZcfIAr6",
+      "outcome": "done",
+      "attempt_count": 1
+    }
+  ]
+}

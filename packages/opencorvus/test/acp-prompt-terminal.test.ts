@@ -109,7 +109,10 @@ async function environment(options: {
       model: "acp-terminal/normal",
       small_model: "acp-terminal/normal",
       enabled_providers: ["acp-terminal"],
-      command: { inspect: { template: "$ARGUMENTS", description: "Owned ACP command" } },
+      command: {
+        inspect: { template: "$ARGUMENTS", description: "Owned ACP command" },
+        "review-note": { template: "Review the note.", description: "Review the project note" },
+      },
       provider: {
         "acp-terminal": {
           npm: "@ai-sdk/openai-compatible",
@@ -446,7 +449,7 @@ test("ACP exposes a real HTTP missing-session error and an invalid command", asy
   ).rejects.toMatchObject({ code: -32603, data: { sessionID: sessionId, error: { name: "NotFoundError" } } })
 }, 60_000)
 
-test("ACP announces newly attached prompt commands and executes the selected local command", async () => {
+test("ACP announces command input hints after attaching project connections and executes the selected commands", async () => {
   let notification = Promise.withResolvers<SessionNotification>()
   await using env = await environment({
     sessionUpdate(update) {
@@ -469,16 +472,21 @@ test("ACP announces newly attached prompt commands and executes the selected loc
     },
   ]
   const expected = [
-    { name: "init", description: "create/update AGENTS.md" },
-    { name: "review", description: "review changes [commit|branch|pr], defaults to uncommitted" },
-    { name: "inspect", description: "Owned ACP command" },
+    { name: "init", description: "create/update AGENTS.md", input: { hint: "[arguments]" } },
+    {
+      name: "review",
+      description: "review changes [commit|branch|pr], defaults to uncommitted",
+      input: { hint: "[arguments]" },
+    },
+    { name: "inspect", description: "Owned ACP command", input: { hint: "[arguments]" } },
+    { name: "review-note", description: "Review the project note" },
   ]
   const prompts: typeof expected = []
   async function announce(name: keyof typeof descriptions, start: () => Promise<unknown>) {
     notification = Promise.withResolvers<SessionNotification>()
     const response = await start()
     const update = await withTimeout(notification.promise, 10_000, `${name} command announcement`)
-    prompts.push({ name: `${name}:editor_report`, description: descriptions[name] })
+    prompts.push({ name: `${name}:editor_report`, description: descriptions[name], input: { hint: "<date> [scope]" } })
     prompts.sort((left, right) => left.name.localeCompare(right.name))
     expect(response).toMatchObject({ sessionId: update.sessionId })
     expect(update.update).toEqual({

@@ -1,0 +1,345 @@
+[
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "77c40be2-6baa-4c06-bdd4-cd64ba66a055",
+      "method": "initialize",
+      "params": {
+        "protocolVersion": 1,
+        "clientCapabilities": {
+          "fs": {
+            "readTextFile": true,
+            "writeTextFile": true
+          },
+          "terminal": true,
+          "session": {
+            "compaction": {},
+            "configOptions": {
+              "boolean": {}
+            },
+            "notices": {}
+          },
+          "auth": {
+            "terminal": true
+          },
+          "elicitation": {
+            "form": {},
+            "url": {}
+          },
+          "_meta": {
+            "terminal_output": true,
+            "terminal-auth": true
+          }
+        },
+        "clientInfo": {
+          "name": "zed",
+          "title": "Zed",
+          "version": "1.28.1+stable.390.e8bc16acee5ae1937600d571d441c4b5d7b0d288"
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "77c40be2-6baa-4c06-bdd4-cd64ba66a055",
+      "result": {
+        "protocolVersion": 1,
+        "agentCapabilities": {
+          "loadSession": true,
+          "mcpCapabilities": {
+            "http": true,
+            "sse": true
+          },
+          "promptCapabilities": {
+            "embeddedContext": true,
+            "image": true
+          },
+          "sessionCapabilities": {
+            "fork": {},
+            "list": {},
+            "resume": {}
+          }
+        },
+        "authMethods": [
+          {
+            "description": "Run `opencorvus auth login` in the terminal",
+            "name": "Login with opencorvus",
+            "id": "opencorvus-login",
+            "_meta": {
+              "terminal-auth": {
+                "command": "opencorvus",
+                "args": [
+                  "auth",
+                  "login"
+                ],
+                "label": "OpenCorvus Login"
+              }
+            }
+          }
+        ],
+        "agentInfo": {
+          "name": "OpenCorvus",
+          "version": "local"
+        }
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "568529d9-5916-4f73-b2eb-c742f1f0368f",
+      "method": "session/new",
+      "params": {
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b298\\project\\archive-review",
+        "mcpServers": []
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "568529d9-5916-4f73-b2eb-c742f1f0368f",
+      "result": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "configOptions": [
+          {
+            "id": "model",
+            "name": "Model",
+            "category": "model",
+            "type": "select",
+            "currentValue": "acp-review/local",
+            "options": [
+              {
+                "value": "acp-review/local",
+                "name": "acp-review/Isolated ACP review"
+              }
+            ]
+          }
+        ],
+        "modes": {
+          "availableModes": [
+            {
+              "id": "coding",
+              "name": "coding",
+              "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+            }
+          ],
+          "currentModeId": "coding"
+        },
+        "_meta": {
+          "opencorvus": {
+            "modelId": "acp-review/local",
+            "variant": null,
+            "availableVariants": []
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "update": {
+          "sessionUpdate": "available_commands_update",
+          "availableCommands": [
+            {
+              "name": "init",
+              "description": "create/update AGENTS.md",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "review",
+              "description": "review changes [commit|branch|pr], defaults to uncommitted",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "review-note",
+              "description": "Review the strict-project note"
+            },
+            {
+              "name": "review-date",
+              "description": "Review the date in the project note",
+              "input": {
+                "hint": "[arguments]"
+              }
+            },
+            {
+              "name": "editor_strict:strict_report",
+              "description": "A report with a required date and optional scope",
+              "input": {
+                "hint": "<date> [scope]"
+              }
+            },
+            {
+              "name": "compact",
+              "description": "compact the session"
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "a903695f-7ee4-4166-bc68-37ad8f991cc8",
+      "method": "session/prompt",
+      "params": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "prompt": [
+          {
+            "type": "text",
+            "text": "/editor_strict:strict_report 2026-11-16 \"field inventory\""
+          }
+        ]
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "update": {
+          "sessionUpdate": "agent_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "a903695f-7ee4-4166-bc68-37ad8f991cc8",
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "36ec25f7-df91-48c4-84cf-7f4a064175a7",
+      "method": "session/prompt",
+      "params": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "prompt": [
+          {
+            "type": "text",
+            "text": "/review-date 2026-11-17"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "update": {
+          "sessionUpdate": "agent_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "36ec25f7-df91-48c4-84cf-7f4a064175a7",
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    }
+  },
+  {
+    "direction": "editor-to-agent",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "0fe92d50-5e44-483b-8938-55a57a0c5ca6",
+      "method": "session/prompt",
+      "params": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "prompt": [
+          {
+            "type": "text",
+            "text": "/review-note"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "method": "session/update",
+      "params": {
+        "sessionId": "ses_-zUPEuL7zzzVgH0crdVk",
+        "update": {
+          "sessionUpdate": "agent_message_chunk",
+          "content": {
+            "type": "text",
+            "text": "The selected local command reached the stream."
+          }
+        }
+      }
+    }
+  },
+  {
+    "direction": "agent-to-editor",
+    "data": {
+      "jsonrpc": "2.0",
+      "id": "0fe92d50-5e44-483b-8938-55a57a0c5ca6",
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    }
+  }
+]

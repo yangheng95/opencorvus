@@ -85,6 +85,9 @@ Zed 按需 spawn `opencorvus acp`，通过 stdin/stdout 通信（`src/acp/README
 | `usage_update`              | prompt 完成后更新 token 与成本               |
 | `available_commands_update` | 会话的项目连接接入后推送当前斜杠命令            |
 
+声明了输入的命令会向编辑器提供参数提示。远端提示可显示 `<date> [scope]`，表示日期必填、范围可选。
+使用参数占位符的项目模板会显示 `[arguments]`，可输入自由文本。支持此字段的编辑器可在用户填写参数时将命令保留在输入框内。
+
 ### 认证
 
 :::caution

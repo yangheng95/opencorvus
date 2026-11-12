@@ -2,6 +2,7 @@ import {
   RequestError,
   type Agent as ACPAgent,
   type AgentSideConnection,
+  type AvailableCommand,
   type AuthenticateRequest,
   type AuthMethod,
   type CancelNotification,
@@ -1406,7 +1407,12 @@ export namespace ACP {
       )
 
       const commands = await this.loadCommandCatalog(directory)
-      const availableCommands = commands.map(({ name, description }) => ({ name, description: description ?? "" }))
+      const availableCommands = commands.map(({ name, description, hints, arguments: args }): AvailableCommand => {
+        const command = { name, description: description ?? "" }
+        const placeholders = args?.map(({ name, required }) => (required ? `<${name}>` : `[${name}]`))
+        const hint = placeholders?.join(" ") ?? (hints.length > 0 ? "[arguments]" : "")
+        return hint ? { ...command, input: { hint } } : command
+      })
       if (!availableCommands.some(({ name }) => name === "compact")) {
         availableCommands.push({ name: "compact", description: "compact the session" })
       }

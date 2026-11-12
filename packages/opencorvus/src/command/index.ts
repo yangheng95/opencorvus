@@ -148,8 +148,13 @@ export namespace Command {
     return available[name]
   }
 
-  export async function catalog(): Promise<Pick<Info, "name" | "description">[]> {
-    return objectValues(await definitions()).map(({ name, description }) => ({ name, description }))
+  export async function catalog() {
+    return objectValues(await definitions()).map((definition) => ({
+      name: definition.name,
+      description: definition.description,
+      hints: definition.hints,
+      arguments: definition.source === "mcp" ? definition.arguments : undefined,
+    }))
   }
 
   export async function list(): Promise<Info[]> {

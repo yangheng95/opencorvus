@@ -1252,6 +1252,8 @@ usage 使用规范 `tokens.total`，不重算总量。未知命令返回 invalid
 内置 compact 必须以 summarize 的实际 boolean 结果确认完成。
 项目命令目录投影远端提示声明的参数，参数化提示在执行时向同一实际连接发送用户输入。缺失必填值和远端参数拒绝
 通过公开 `CommandArgumentsError` 结算，ACP 将该错误投影为 `invalidParams`。无参数的远端命令可在目录中返回实际模板。
+会话新建、加载、派生和恢复的命令通知使用同一份目录声明。ACP 以 `input.hint` 表达远端具名输入或静态模板的自由文本输入，
+让编辑器在用户填写参数时保留命令。该投影只读取命令元数据。
 流式消息和工具通知沿现有订阅传输，不为错误结果伪造消息。
 
 文件：`agent.ts` · `prompt-response.ts` · `session.ts` · `types.ts`（README 存于目录内）。
