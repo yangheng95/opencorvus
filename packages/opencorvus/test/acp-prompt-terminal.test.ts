@@ -397,10 +397,32 @@ for (const entry of ["prompt", "command"] as const) {
     expect(failed.info).toMatchObject({ finish: "error", error: { name: "MessageAbortedError" } })
     expect(typeof failed.info.time.completed).toBe("number")
     await env.client.setSessionConfigOption({ sessionId, configId: "model", value: "acp-terminal/normal" })
+    const liveCursor = env.updates.length
     expect(
       await env.client.prompt({ sessionId, prompt: [{ type: "text", text: "independent turn after cancellation" }] }),
     ).toMatchObject({ stopReason: "end_turn" })
-    expect((await env.messages(sessionId)).find((m) => m.info.id === failed.info.id)).toEqual(failed)
+    const messages = await env.messages(sessionId)
+    expect(messages.find((m) => m.info.id === failed.info.id)).toEqual(failed)
+    const reply = messages.at(-1)!
+    const live = env.updates.slice(liveCursor).flatMap(({ update }) =>
+      update.sessionUpdate === "agent_message_chunk" ? [update] : [],
+    )
+    expect(live).toMatchObject([{
+      sessionUpdate: "agent_message_chunk",
+      messageId: reply.info.id,
+      content: { type: "text", text: "Actual partial output" },
+    }])
+
+    const replayCursor = env.updates.length
+    await env.client.loadSession({ cwd: env.project.path, sessionId, mcpServers: [] })
+    const replayedUsers = env.updates.slice(replayCursor).flatMap(({ update }) =>
+      update.sessionUpdate === "user_message_chunk" ? [update] : [],
+    )
+    const [firstUser, secondUser] = messages.filter((message) => message.info.role === "user")
+    expect(replayedUsers).toMatchObject([
+      { messageId: firstUser.info.id, content: { type: "text", text: "cancellable input" } },
+      { messageId: secondUser.info.id, content: { type: "text", text: "independent turn after cancellation" } },
+    ])
   }, 60_000)
 }
 
@@ -582,14 +604,22 @@ test("ACP registered commands preserve embedded context and canonical image byte
 
   const cursor = env.updates.length
   await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
-  const restored = env.updates.slice(cursor).flatMap(({ update }) => {
-    return update.sessionUpdate === "user_message_chunk" ? [update.content] : []
+  const replayedUserContent = (from: number, ownerSessionID: string) => env.updates.slice(from).flatMap((notification) => {
+    if (notification.sessionId !== ownerSessionID || notification.update.sessionUpdate !== "user_message_chunk") return []
+    return [notification.update]
   })
-  expect(restored).toMatchObject([
-    { type: "text", text: remoteText },
-    { type: "text", text: notes },
-    { type: "image", mimeType: "image/png", data: image },
-  ])
+  const userContent = (messageId: string) => [
+    { messageId, content: { type: "text", text: remoteText } },
+    { messageId, content: { type: "text", text: notes } },
+    { messageId, content: { type: "image", mimeType: "image/png", data: image } },
+  ]
+  expect(replayedUserContent(cursor, sessionId)).toMatchObject(userContent(input.info.id))
+
+  const forkCursor = env.updates.length
+  const forked = await env.client.unstable_forkSession({ cwd, sessionId, mcpServers: [] })
+  const [forkedInput, forkedReply] = await env.messages(forked.sessionId)
+  expect(forkedReply.info).toMatchObject({ role: "assistant", parentID: forkedInput.info.id, finish: "stop" })
+  expect(replayedUserContent(forkCursor, forked.sessionId)).toMatchObject(userContent(forkedInput.info.id))
 }, 60_000)
 
 test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {

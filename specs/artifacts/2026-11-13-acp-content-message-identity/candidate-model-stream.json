@@ -1,0 +1,37 @@
+[
+  {
+    "event": "stream-request",
+    "occurrence": 3,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "First boundary review message.",
+      "Second boundary review message.",
+      "Third boundary review message."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 3,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 5,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "First boundary review message.",
+      "Second boundary review message.",
+      "Third boundary review message.",
+      "Fork boundary review message."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 5,
+    "operation": "conversation"
+  }
+]

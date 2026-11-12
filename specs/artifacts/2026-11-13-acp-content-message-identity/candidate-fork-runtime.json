@@ -1,0 +1,198 @@
+{
+  "protocol": 1,
+  "model": "acp-review/local",
+  "original": "ses_-zUPDgnrNzzlgqeNK9hR",
+  "fork": "ses_-zUPDbhvqzzncLE3Jpbs",
+  "initialOriginal": {
+    "requestID": "52a15e04-13ca-4eae-8927-c9b9b65796bd",
+    "messages": [
+      {
+        "id": "msg_g0VamJM8r00Z6FVg7f2X",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "First boundary review message."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VamJO0e00icq2m9ex9",
+        "role": "assistant",
+        "parentId": "msg_g0VamJM8r00Z6FVg7f2X",
+        "finish": "error",
+        "content": []
+      },
+      {
+        "id": "msg_g0VamJRWe00NSSgVh5z8",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Second boundary review message."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VamJjl70006650Va4E",
+        "role": "assistant",
+        "parentId": "msg_g0VamJRWe00NSSgVh5z8",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "reasoning",
+            "text": "Checking the persisted message boundary."
+          },
+          {
+            "type": "text",
+            "text": "The second review reached the stream."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VamMLC800CrOCNMuss",
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Third boundary review message."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VamMLDl00su5dBo7AN",
+        "role": "assistant",
+        "parentId": "msg_g0VamMLC800CrOCNMuss",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "reasoning",
+            "text": "Checking the same durable identity across chunks."
+          },
+          {
+            "type": "text",
+            "text": "The third boundary reply arrived in two pieces."
+          }
+        ]
+      }
+    ]
+  },
+  "forked": {
+    "requestID": "eafedff1-178a-4133-901f-8b998ccff2e9",
+    "ids": [
+      "msg_g0VamOI4A00iK3RTVqMm",
+      "msg_g0VamOI4A01FWdRboalf",
+      "msg_g0VamOI4A02cy6h3q8UZ",
+      "msg_g0VamOI4A03w1wct2x0w",
+      "msg_g0VamOI4A04hEPzyBHVf",
+      "msg_g0VamOI4A05BPdhiTipd"
+    ],
+    "content": [
+      {
+        "kind": "user_message_chunk",
+        "messageId": "msg_g0VamOI4A00iK3RTVqMm",
+        "content": {
+          "text": "First boundary review message.",
+          "type": "text"
+        }
+      },
+      {
+        "kind": "user_message_chunk",
+        "messageId": "msg_g0VamOI4A02cy6h3q8UZ",
+        "content": {
+          "text": "Second boundary review message.",
+          "type": "text"
+        }
+      },
+      {
+        "kind": "agent_thought_chunk",
+        "messageId": "msg_g0VamOI4A03w1wct2x0w",
+        "content": {
+          "text": "Checking the persisted message boundary.",
+          "type": "text"
+        }
+      },
+      {
+        "kind": "agent_message_chunk",
+        "messageId": "msg_g0VamOI4A03w1wct2x0w",
+        "content": {
+          "text": "The second review reached the stream.",
+          "type": "text"
+        }
+      },
+      {
+        "kind": "user_message_chunk",
+        "messageId": "msg_g0VamOI4A04hEPzyBHVf",
+        "content": {
+          "text": "Third boundary review message.",
+          "type": "text"
+        }
+      },
+      {
+        "kind": "agent_thought_chunk",
+        "messageId": "msg_g0VamOI4A05BPdhiTipd",
+        "content": {
+          "text": "Checking the same durable identity across chunks.",
+          "type": "text"
+        }
+      },
+      {
+        "kind": "agent_message_chunk",
+        "messageId": "msg_g0VamOI4A05BPdhiTipd",
+        "content": {
+          "text": "The third boundary reply arrived in two pieces.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "mediaInput": {
+    "requestID": "f9e89ba9-6047-41c7-8201-64df68edb25f",
+    "messageId": "msg_g0VamOIBh00f3qL44pX3",
+    "replyId": "msg_g0VamOIED00sZ3HBI216",
+    "finish": "stop",
+    "attachmentName": "sample%20panel.png",
+    "bytes": 100,
+    "downloadID": "21e22a6a-aae6-4960-ba5d-5e428a1a06ab",
+    "stopReason": "end_turn"
+  },
+  "live": [
+    {
+      "kind": "agent_thought_chunk",
+      "messageId": "msg_g0VamOIED00sZ3HBI216",
+      "content": {
+        "text": "Checking the same durable identity across chunks.",
+        "type": "text"
+      }
+    },
+    {
+      "kind": "agent_message_chunk",
+      "messageId": "msg_g0VamOIED00sZ3HBI216",
+      "content": {
+        "text": "The third boundary reply ",
+        "type": "text"
+      }
+    },
+    {
+      "kind": "agent_message_chunk",
+      "messageId": "msg_g0VamOIED00sZ3HBI216",
+      "content": {
+        "text": "arrived in two pieces.",
+        "type": "text"
+      }
+    }
+  ],
+  "restoredImage": {
+    "kind": "user_message_chunk",
+    "messageId": "msg_g0VamOIBh00f3qL44pX3",
+    "content": {
+      "type": "image",
+      "mimeType": "image/png",
+      "bytes": 100
+    }
+  },
+  "unchangedOriginal": {
+    "requestID": "de5e82fd-8ef0-4228-93d4-bc24565e5942",
+    "messages": 6
+  }
+}

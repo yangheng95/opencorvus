@@ -1,0 +1,97 @@
+{
+  "wire": [
+    {
+      "method": "session/load",
+      "id": "1d77f22c-afa4-4963-b4fc-0f8624cce0ef",
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR"
+    },
+    {
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "sessionUpdate": "user_message_chunk",
+      "messageId": "msg_g0VamJM8r00Z6FVg7f2X",
+      "content": {
+        "type": "text",
+        "text": "First boundary review message."
+      }
+    },
+    {
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "sessionUpdate": "user_message_chunk",
+      "messageId": "msg_g0VamJRWe00NSSgVh5z8",
+      "content": {
+        "type": "text",
+        "text": "Second boundary review message."
+      }
+    },
+    {
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "sessionUpdate": "agent_thought_chunk",
+      "messageId": "msg_g0VamJjl70006650Va4E",
+      "content": {
+        "type": "text",
+        "text": "Checking the persisted message boundary."
+      }
+    },
+    {
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "sessionUpdate": "agent_message_chunk",
+      "messageId": "msg_g0VamJjl70006650Va4E",
+      "content": {
+        "type": "text",
+        "text": "The second review reached the stream."
+      }
+    },
+    {
+      "replyTo": "1d77f22c-afa4-4963-b4fc-0f8624cce0ef",
+      "stopReason": null,
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR"
+    },
+    {
+      "method": "session/prompt",
+      "id": "96089b75-fa9b-464a-93d1-b0ff92be68ea",
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR"
+    },
+    {
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "sessionUpdate": "agent_thought_chunk",
+      "messageId": "msg_g0VamMLDl00su5dBo7AN",
+      "content": {
+        "type": "text",
+        "text": "Checking the same durable identity across chunks."
+      }
+    },
+    {
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "sessionUpdate": "agent_message_chunk",
+      "messageId": "msg_g0VamMLDl00su5dBo7AN",
+      "content": {
+        "type": "text",
+        "text": "The third boundary reply "
+      }
+    },
+    {
+      "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+      "sessionUpdate": "agent_message_chunk",
+      "messageId": "msg_g0VamMLDl00su5dBo7AN",
+      "content": {
+        "type": "text",
+        "text": "arrived in two pieces."
+      }
+    },
+    {
+      "replyTo": "96089b75-fa9b-464a-93d1-b0ff92be68ea",
+      "stopReason": "end_turn",
+      "sessionId": null
+    }
+  ],
+  "originalPersistence": {
+    "sessionId": "ses_-zUPDgnrNzzlgqeNK9hR",
+    "matchedMessageIds": [
+      "msg_g0VamJM8r00Z6FVg7f2X",
+      "msg_g0VamJO0e00icq2m9ex9",
+      "msg_g0VamJRWe00NSSgVh5z8",
+      "msg_g0VamJjl70006650Va4E"
+    ],
+    "matchingParts": 6
+  }
+}

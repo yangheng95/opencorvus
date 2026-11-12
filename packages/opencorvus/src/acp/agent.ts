@@ -568,6 +568,7 @@ export namespace ACP {
                 sessionId,
                 update: {
                   sessionUpdate: "agent_message_chunk",
+                  messageId: message.info.id,
                   content: {
                     type: "text",
                     text: props.delta,
@@ -586,6 +587,7 @@ export namespace ACP {
                 sessionId,
                 update: {
                   sessionUpdate: "agent_thought_chunk",
+                  messageId: message.info.id,
                   content: {
                     type: "text",
                     text: props.delta,
@@ -979,6 +981,7 @@ export namespace ACP {
       log.debug("process message", message)
       if (message.info.role !== "assistant" && message.info.role !== "user") return
       const sessionId = message.info.sessionID as string
+      const messageId = message.info.id
 
       for (const rawPart of message.parts) {
         const part = rawPart as Record<string, unknown>
@@ -1146,6 +1149,7 @@ export namespace ACP {
                 sessionId,
                 update: {
                   sessionUpdate: message.info.role === "user" ? "user_message_chunk" : "agent_message_chunk",
+                  messageId,
                   content: {
                     type: "text",
                     text: textStr,
@@ -1181,6 +1185,7 @@ export namespace ACP {
                 sessionId,
                 update: {
                   sessionUpdate: messageChunk,
+                  messageId,
                   content: { type: "resource_link", uri: replayUrl, name: filename, mimeType: mime },
                 },
               })
@@ -1194,6 +1199,7 @@ export namespace ACP {
                 sessionId,
                 update: {
                   sessionUpdate: messageChunk,
+                  messageId,
                   content: { type: "resource_link", uri: replayUrl, name: filename, mimeType: mime },
                 },
               })
@@ -1213,6 +1219,7 @@ export namespace ACP {
                 sessionId,
                 update: {
                   sessionUpdate: messageChunk,
+                  messageId,
                   content: {
                     type: "image",
                     mimeType: effectiveMime,
@@ -1238,6 +1245,7 @@ export namespace ACP {
                   sessionId,
                   update: {
                     sessionUpdate: messageChunk,
+                    messageId,
                     content: { type: "resource", resource },
                   },
                 })
@@ -1257,6 +1265,7 @@ export namespace ACP {
                 sessionId,
                 update: {
                   sessionUpdate: "agent_thought_chunk",
+                  messageId,
                   content: {
                     type: "text",
                     text: textStr,
