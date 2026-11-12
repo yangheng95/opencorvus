@@ -6439,11 +6439,14 @@ export class Automations extends HeyApiClient {
 
   /**
    * Delete a scheduled automation
+   *
+   * Reuse requestID and expectedRevisionId to recover the accepted deletion receipt.
    */
   public delete<ThrowOnError extends boolean = false>(
     parameters: {
       id: string
       expectedRevisionId: string
+      requestID?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -6454,6 +6457,7 @@ export class Automations extends HeyApiClient {
           args: [
             { in: "path", key: "id" },
             { in: "query", key: "expectedRevisionId" },
+            { in: "query", key: "requestID" },
           ],
         },
       ],

@@ -191,6 +191,14 @@ export type AutomationCreationUnavailableError = {
   name: "AutomationCreationUnavailableError"
 }
 
+export type AutomationDeletionConflictError = {
+  data: {
+    automationID: string
+    message: string
+  }
+  name: "AutomationDeletionConflictError"
+}
+
 export type AutomationManualRunPendingError = {
   data: {
     automationID: string
@@ -21654,6 +21662,7 @@ export type GlobalAutomationsDeleteData = {
   }
   query: {
     expectedRevisionId: string
+    requestID?: string
   }
   url: "/global/automations/{id}"
 }
@@ -21680,9 +21689,9 @@ export type GlobalAutomationsDeleteErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Observed definition changed or its execution is running
+   * Observed definition changed, its execution is running, or the deletion request belongs to another revision
    */
-  409: AutomationRevisionConflictError | AutomationRunningConflictError
+  409: AutomationRevisionConflictError | AutomationRunningConflictError | AutomationDeletionConflictError
 }
 
 export type GlobalAutomationsDeleteError = GlobalAutomationsDeleteErrors[keyof GlobalAutomationsDeleteErrors]

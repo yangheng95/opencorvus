@@ -1,0 +1,271 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b263-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39812",
+    "pid": 35740
+  },
+  "rounds": {
+    "english": {
+      "time": "2026-11-11T23:58:27.220Z",
+      "stage": "truncated",
+      "route": "/global/automations/atm_huSixR8pRuaJV8DReTSU",
+      "method": "DELETE",
+      "round": "english-interrupted-delete",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": "atm_huSixR8pRuaJV8DReTSU",
+      "operationRequestID": "492a9ad2-e150-4561-b461-89a580d0dafd",
+      "requestID": "2851be48-e82a-4220-912a-1d51f692ed98",
+      "status": 200,
+      "bytes": 88,
+      "target": {
+        "id": "atm_huSixR8pRuaJV8DReTSU",
+        "name": "Future project schedule selected for deletion"
+      },
+      "deliveredBytes": 12
+    },
+    "englishRetry": {
+      "time": "2026-11-11T23:58:40.224Z",
+      "stage": "delivered",
+      "route": "/global/automations/atm_huSixR8pRuaJV8DReTSU",
+      "method": "DELETE",
+      "round": "english-retry-delete",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": "atm_huSixR8pRuaJV8DReTSU",
+      "operationRequestID": "492a9ad2-e150-4561-b461-89a580d0dafd",
+      "requestID": "0346ae63-a2d6-4d95-89c6-661747f97a4f",
+      "status": 200,
+      "bytes": 88,
+      "target": {
+        "id": "atm_huSixR8pRuaJV8DReTSU",
+        "name": "Future project schedule selected for deletion"
+      }
+    },
+    "chineseConflict": {
+      "time": "2026-11-11T23:59:17.324Z",
+      "stage": "delivered",
+      "route": "/global/automations/atm_hqbn66571dIbZkzh7saz",
+      "method": "DELETE",
+      "round": "chinese-delete-version-conflict",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": "atm_hqbn66571dIbZkzh7saz",
+      "operationRequestID": "15bccad5-583d-4597-accb-8124e0a2a1bf",
+      "requestID": "e7fcbd56-e664-4bd0-982c-b3989179afde",
+      "status": 409,
+      "bytes": 380,
+      "error": {
+        "name": "AutomationRevisionConflictError",
+        "automationID": "atm_hqbn66571dIbZkzh7saz",
+        "expectedRevisionId": "atm_hqbn66571dIbZkzh7saz",
+        "currentRevisionId": "atm_hvy1Ilv0bl5N5Cs8Wzxt"
+      }
+    },
+    "chineseRead": {
+      "time": "2026-11-11T23:59:23.442Z",
+      "stage": "delivered",
+      "route": "/global/automations",
+      "method": "GET",
+      "round": "chinese-review-current",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "75367309-f188-4522-bff8-1916c569d3df",
+      "status": 200,
+      "bytes": 915,
+      "items": [
+        {
+          "id": "atm_hqbn66571dIbZkzh7saz",
+          "revisionId": "atm_hvy1Ilv0bl5N5Cs8Wzxt",
+          "name": "另一连接更新后的定时任务",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hZfaBIE99UznxlELztjZ"
+            ]
+          },
+          "nextRun": 4070908800000
+        },
+        {
+          "id": "atm_hYKlKCGRQSblZ6NL04t9",
+          "revisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "name": "Unrelated future project schedule",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hwcdl7MAGzz9wgTYo8z1"
+            ]
+          },
+          "nextRun": 4070908800000
+        }
+      ]
+    },
+    "chinese": {
+      "time": "2026-11-11T23:59:30.929Z",
+      "stage": "delivered",
+      "route": "/global/automations/atm_hqbn66571dIbZkzh7saz",
+      "method": "DELETE",
+      "round": "chinese-delete-normal-receipt",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": "atm_hvy1Ilv0bl5N5Cs8Wzxt",
+      "operationRequestID": "1be297df-dfe0-4884-899b-f74869225336",
+      "requestID": "890d7aeb-7b80-4e26-be4b-d04e3addb509",
+      "status": 200,
+      "bytes": 79,
+      "target": {
+        "id": "atm_hqbn66571dIbZkzh7saz",
+        "name": "另一连接更新后的定时任务"
+      }
+    },
+    "interruptedList": {
+      "time": "2026-11-11T23:59:30.939Z",
+      "stage": "truncated",
+      "route": "/global/automations",
+      "method": "GET",
+      "round": "chinese-post-delete-list-cut",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "0397c2cb-3ea9-421d-871b-3bbb1652b1e7",
+      "status": 200,
+      "bytes": 462,
+      "items": [
+        {
+          "id": "atm_hYKlKCGRQSblZ6NL04t9",
+          "revisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "name": "Unrelated future project schedule",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hwcdl7MAGzz9wgTYo8z1"
+            ]
+          },
+          "nextRun": 4070908800000
+        }
+      ],
+      "deliveredBytes": 12
+    },
+    "listRetry": {
+      "time": "2026-11-11T23:59:36.812Z",
+      "stage": "delivered",
+      "route": "/global/automations",
+      "method": "GET",
+      "round": "chinese-refresh-list",
+      "directory": null,
+      "search": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "61816019-ec88-42cb-875f-f566ce521be7",
+      "status": 200,
+      "bytes": 462,
+      "items": [
+        {
+          "id": "atm_hYKlKCGRQSblZ6NL04t9",
+          "revisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "name": "Unrelated future project schedule",
+          "status": "active",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hwcdl7MAGzz9wgTYo8z1"
+            ]
+          },
+          "nextRun": 4070908800000
+        }
+      ]
+    }
+  },
+  "writer": {
+    "status": 200,
+    "requestID": "0d8295c6-612e-49c6-86b1-102cc9988775",
+    "input": {
+      "requestID": "iteration-b263-competing-editor",
+      "expectedRevisionId": "atm_hqbn66571dIbZkzh7saz",
+      "name": "另一连接更新后的定时任务"
+    },
+    "body": {
+      "id": "atm_hqbn66571dIbZkzh7saz",
+      "revisionId": "atm_hvy1Ilv0bl5N5Cs8Wzxt",
+      "name": "另一连接更新后的定时任务",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hZfaBIE99UznxlELztjZ"
+        ]
+      },
+      "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "保留原始定时任务指令。",
+      "status": "active",
+      "lastRun": null,
+      "nextRun": 4070908800000,
+      "failureCount": 0,
+      "lastError": null
+    }
+  },
+  "current": {
+    "list": {
+      "status": 200,
+      "requestID": "1933dcf9-d52b-4709-8fc8-11a0902c36cf",
+      "body": [
+        {
+          "id": "atm_hYKlKCGRQSblZ6NL04t9",
+          "revisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "name": "Unrelated future project schedule",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hwcdl7MAGzz9wgTYo8z1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Keep this independent task and its delivery.",
+          "status": "active",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    "fires": {
+      "status": 200,
+      "requestID": "ce591575-b1c0-4905-bb61-80e915de75c3",
+      "body": [
+        {
+          "fireId": "cal_automation_4f51782a63fbabcab70bad2049fb3910",
+          "automationId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "automationRevisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "origin": "scheduled",
+          "scheduledDueAt": 4070908800000,
+          "startedAt": 1794441450950,
+          "completedAt": null,
+          "state": "scheduled",
+          "attemptCount": 0,
+          "retryAt": null,
+          "error": null,
+          "runs": []
+        }
+      ]
+    },
+    "runs": {
+      "status": 200,
+      "requestID": "6a69f8b2-f45f-4773-b459-1cd2caa97afe",
+      "body": []
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 4,
+    "automation_definition_tombstone": 2,
+    "automation_fire": 4,
+    "automation_fire_frontier": 1,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_usage_event": 0,
+    "permission_ledger": 0
+  },
+  "deletions": [
+    [
+      "atm_hLIZtJX9Nvk5x5DN1M61",
+      "atm_hqbn66571dIbZkzh7saz",
+      "atm_hvy1Ilv0bl5N5Cs8Wzxt",
+      2,
+      "另一连接更新后的定时任务",
+      "prj_hZfaBIE99UznxlELztjZ",
+      3,
+      null
+    ],
+    [
+      "atm_h4SWptkmFTd1uXVYMMp5",
+      "atm_huSixR8pRuaJV8DReTSU",
+      "atm_huSixR8pRuaJV8DReTSU",
+      1,
+      "Future project schedule selected for deletion",
+      "prj_hwcdl7MAGzz9wgTYo8z1",
+      2,
+      null
+    ]
+  ],
+  "projectFires": [
+    [
+      "atm_hYKlKCGRQSblZ6NL04t9",
+      "atm_hYKlKCGRQSblZ6NL04t9",
+      1,
+      "prj_hwcdl7MAGzz9wgTYo8z1",
+      "cal_automation_4f51782a63fbabcab70bad2049fb3910",
+      4070908800000,
+      "scheduled"
+    ],
+    [
+      "atm_hqbn66571dIbZkzh7saz",
+      "atm_hqbn66571dIbZkzh7saz",
+      1,
+      "prj_hZfaBIE99UznxlELztjZ",
+      "cal_automation_d3ba2e32690457ca2310dedd7e70f770",
+      4070908800000,
+      "scheduled"
+    ],
+    [
+      "atm_hqbn66571dIbZkzh7saz",
+      "atm_hvy1Ilv0bl5N5Cs8Wzxt",
+      2,
+      "prj_hZfaBIE99UznxlELztjZ",
+      "cal_automation_25574862268171e296598b466ce57c5b",
+      4070908800000,
+      "scheduled"
+    ],
+    [
+      "atm_huSixR8pRuaJV8DReTSU",
+      "atm_huSixR8pRuaJV8DReTSU",
+      1,
+      "prj_hwcdl7MAGzz9wgTYo8z1",
+      "cal_automation_0ead48fde8bbbf5e60b08c43fec2ce87",
+      4070908800000,
+      "scheduled"
+    ]
+  ],
+  "retainedFrontier": [
+    [
+      "atm_hYKlKCGRQSblZ6NL04t9",
+      "atm_hYKlKCGRQSblZ6NL04t9",
+      "cal_automation_4f51782a63fbabcab70bad2049fb3910",
+      4070908800000
+    ]
+  ]
+}

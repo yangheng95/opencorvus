@@ -2012,6 +2012,12 @@ request ID with changed details and deleting its definition have distinct errors
 Explicit status changes and deletion use the observed physical revision ID.
 Revision conflicts retain authored input and explain an explicit fresh read.
 Automation public shapes derive from the canonical generated SDK operation types.
+The list and detail use the shared app dialog to confirm the named scheduled
+task. After confirmation, the panel retains the definition, observed revision,
+request ID and connection for an explicit retry of an uncertain deletion. The
+original diagnostics and retry action remain visible while a retry settles.
+Definitive revision conflicts offer a fresh read. An exact accepted receipt
+retires the selected definition from the visible list before the list refresh.
 Pause and Resume validate the definition ID, new revision and requested status
 in the write receipt. An uncertain receipt reads the same definition from the
 current list on the same connection, without replaying the write. The result

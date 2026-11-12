@@ -8,7 +8,7 @@ import {
   type AutomationRecurrenceInput,
 } from "../src/services/automation-recurrence"
 import {
-  AutomationSaveUnconfirmedError,
+  AutomationWriteUnconfirmedError,
   AutomationStatusUnconfirmedError,
   changeAutomationStatus,
   createAutomation,
@@ -260,6 +260,9 @@ test("automation service sends the full lifecycle through global target-aware HT
         const revisionId = status === "paused" ? "atm_revision_paused" : "atm_revision_resumed"
         return { status: 200, ok: true, headers: {}, body: { id: "atm_1", status, revisionId } as T }
       }
+      if (request.method === "DELETE" && request.path === "global/automations/atm_1") {
+        return { status: 200, ok: true, headers: {}, body: { id: "atm_1", name: "Morning review" } as T }
+      }
       const body =
         request.path === "project/current"
           ? { id: "prj_1" }
@@ -299,7 +302,8 @@ test("automation service sends the full lifecycle through global target-aware HT
     .toMatchObject({ id: "atm_1", status: "active", revisionId: "atm_revision_resumed" })
   expect(await runAutomationNow("atm_1")).toEqual([run])
   expect(await listAutomationRuns("atm_1")).toEqual([run])
-  await deleteAutomation("atm_1", "atm_revision_resumed")
+  expect(await deleteAutomation({ id: "atm_1", revisionId: "atm_revision_resumed", name: input.name }, "confirmed-delete"))
+    .toEqual({ id: "atm_1", name: input.name })
 
   expect(requests.map(({ path, method }) => `${method} ${path}`)).toEqual([
     "GET global/automations",
@@ -327,7 +331,7 @@ test("automation service sends the full lifecycle through global target-aware HT
     body: { kind: "json", value: { requestID: expect.any(String) } },
     timeoutMilliseconds: null,
   })
-  expect(requests[7]?.query).toEqual({ expectedRevisionId: "atm_revision_resumed" })
+  expect(requests[7]?.query).toEqual({ expectedRevisionId: "atm_revision_resumed", requestID: "confirmed-delete" })
 })
 
 const pausedDefinition: AutomationView = {
@@ -373,7 +377,7 @@ test("repeating a scheduled save carries its original request ID and accepts the
   configure({ serverUrl: server.url.origin })
   try {
     const error = await createAutomation(input).catch((cause) => cause)
-    expect(error).toBeInstanceOf(AutomationSaveUnconfirmedError)
+    expect(error).toBeInstanceOf(AutomationWriteUnconfirmedError)
     expect(error.errors).toEqual([expect.objectContaining({ status: 503, requestID: "create-interrupted" })])
     expect(await createAutomation(input)).toEqual(receipt)
     expect(requests).toEqual([input, input])
@@ -406,10 +410,45 @@ test("repeating an interrupted edit uses its original request ID and observed re
   configure({ serverUrl: server.url.origin })
   try {
     const error = await editAutomation(receipt.id, input).catch((cause) => cause)
-    expect(error).toBeInstanceOf(AutomationSaveUnconfirmedError)
+    expect(error).toBeInstanceOf(AutomationWriteUnconfirmedError)
     expect(error.errors).toEqual([expect.objectContaining({ status: 503, requestID: "edit-interrupted" })])
     expect(await editAutomation(receipt.id, input)).toEqual(receipt)
     expect(requests).toEqual([input, input])
+  } finally {
+    await server.stop(true)
+  }
+})
+
+test("an explicitly repeated deletion confirms the original task and observed revision", async () => {
+  const target = pausedDefinition
+  const receipt = { id: target.id, name: target.name }
+  const requests: { method: string; path: string; query: object }[] = []
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    fetch(request) {
+      const url = new URL(request.url)
+      requests.push({ method: request.method, path: url.pathname, query: Object.fromEntries(url.searchParams) })
+      if (requests.length === 1) {
+        return Response.json({ message: "Deletion receipt interrupted" }, {
+          status: 503, headers: { "x-opencorvus-request-id": "deletion-interrupted" },
+        })
+      }
+      return Response.json(receipt)
+    },
+  })
+  configure({ serverUrl: server.url.origin })
+  try {
+    const requestID = "original-deletion-request"
+    const error = await deleteAutomation(target, requestID).catch((cause) => cause)
+    expect(error).toBeInstanceOf(AutomationWriteUnconfirmedError)
+    expect(error.errors).toEqual([expect.objectContaining({ status: 503, requestID: "deletion-interrupted" })])
+    expect(await deleteAutomation(target, requestID)).toEqual(receipt)
+    const expected = {
+      method: "DELETE", path: `/global/automations/${target.id}`,
+      query: { expectedRevisionId: target.revisionId, requestID },
+    }
+    expect(requests).toEqual([expected, expected])
   } finally {
     await server.stop(true)
   }

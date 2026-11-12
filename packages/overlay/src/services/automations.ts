@@ -13,6 +13,7 @@ import { randomUUID } from "../utils/random-id"
 import type {
   GlobalAutomationsCreateData,
   GlobalAutomationsCreateResponse,
+  GlobalAutomationsDeleteData,
   GlobalAutomationsDeleteResponses,
   GlobalAutomationsListResponses,
   GlobalAutomationsRunResponses,
@@ -41,20 +42,20 @@ export function listAutomations(signal?: AbortSignal, authority?: ApiAuthority):
   return apiJson<AutomationView[]>(automationPath(), { signal, authority })
 }
 
-export class AutomationSaveUnconfirmedError extends AggregateError {
-  override readonly name = "AutomationSaveUnconfirmedError"
+export class AutomationWriteUnconfirmedError extends AggregateError {
+  override readonly name = "AutomationWriteUnconfirmedError"
 
   constructor(cause: unknown) {
-    super([cause], "The scheduled task save receipt could not be confirmed.")
+    super([cause], "The scheduled task write receipt could not be confirmed.")
   }
 }
 
-async function confirmAutomationSave<T>(authority: ApiAuthority, write: () => Promise<T>): Promise<T> {
+async function confirmAutomationWrite<T>(authority: ApiAuthority, write: () => Promise<T>): Promise<T> {
   try {
     return await write()
   } catch (cause) {
     if (!isApiAuthorityCurrent(authority) || !isUncertainMutationReceipt(cause)) throw cause
-    throw new AutomationSaveUnconfirmedError(cause)
+    throw new AutomationWriteUnconfirmedError(cause)
   }
 }
 
@@ -62,7 +63,7 @@ export function createAutomation(
   input: AutomationInput,
   authority = captureApiAuthority(),
 ): Promise<GlobalAutomationsCreateResponse> {
-  return confirmAutomationSave(authority, async () => {
+  return confirmAutomationWrite(authority, async () => {
     const receipt = await apiJson<GlobalAutomationsCreateResponse>(automationPath(), {
       authority,
       method: "POST",
@@ -94,7 +95,7 @@ export function editAutomation(
   input: AutomationUpdate & { requestID: string },
   authority = captureApiAuthority(),
 ): Promise<AutomationView> {
-  return confirmAutomationSave(authority, async () => {
+  return confirmAutomationWrite(authority, async () => {
     const receipt = await updateAutomation(id, input, authority)
     if (
       receipt?.id !== id || typeof receipt.revisionId !== "string" || !receipt.revisionId.trim() ||
@@ -185,11 +186,20 @@ export function listAutomationRuns(id: string, signal?: AbortSignal): Promise<Au
 }
 
 export function deleteAutomation(
-  id: string,
-  expectedRevisionId: string,
+  { id, revisionId, name }: Pick<AutomationView, "id" | "revisionId" | "name">,
+  requestID: string,
+  authority = captureApiAuthority(),
 ): Promise<GlobalAutomationsDeleteResponses[200]> {
-  const query = new URLSearchParams({ expectedRevisionId })
-  return apiJson(`${automationPath(`/${encodeURIComponent(id)}`)}?${query}`, { method: "DELETE" })
+  const input = { expectedRevisionId: revisionId, requestID } satisfies GlobalAutomationsDeleteData["query"]
+  const query = new URLSearchParams(input)
+  return confirmAutomationWrite(authority, async () => {
+    const receipt = await apiJson<GlobalAutomationsDeleteResponses[200]>(
+      `${automationPath(`/${encodeURIComponent(id)}`)}?${query}`,
+      { method: "DELETE", authority },
+    )
+    if (receipt?.id !== id || receipt.name !== name) throw new Error("The scheduled task deletion receipt is invalid.")
+    return receipt
+  })
 }
 
 export async function resolveAutomationProjectID(directory: string): Promise<string> {

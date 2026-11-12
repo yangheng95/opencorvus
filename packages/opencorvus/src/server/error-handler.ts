@@ -138,6 +138,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "AutomationCreationConflictError") return 409
   if (err.name === "AutomationCreationUnavailableError") return 410
   if (err.name === "AutomationUpdateConflictError") return 409
+  if (err.name === "AutomationDeletionConflictError") return 409
   if (err.name === "AutomationUpdateUnavailableError") return 410
   if (err.name === "InvalidAutomationRecurrenceError") return 400
   if (err.name === "FileInvalidPathError") return 400

@@ -986,6 +986,8 @@ Automation target membership 属于 exact physical definition revision。当前�
 
 公开 Automation 更新以定义和请求标识派生另一独立命名空间内的物理版本 ID。原观察版与相邻的已接收版共同验证规范化后的完整定义输入。首次写继续以当前物理版本和执行租约为准，同一写事务先检查已接收版本，再追加版本和更新 Fire 权威。原样重放读取已接收版本，保留后续定义及各版目标。使用已绑定标识更换版本或输入返回 409，原定义已删除返回 410。Tool 更新仍按工具调用身份及其已接收输入确认。
 
+公开 Automation 删除以定义和请求标识派生独立命名空间内的删除记录 ID。重放从相邻不可变定义版本校验原观察版，并用同一原名称与定义 ID 回执。复用同一请求身份更换观察版返回 409。第一次删除依据当前版本和执行租约，同一事务记录删除并清除投递前沿。Tool 删除及内部终态继续使用各自的来源和现有删除记录。
+
 Automation physical attempt 在同一 writer transaction 冻结 exact lease ID、lease-grant ordinal 与 admission-time expiry；三者必须精确匹配 acquisition/renewal 时追加的 immutable `engine_control_activation_lease_grant`，attempt 对 lease/grant 的 retained foreign key 防止历史权限成为 orphan。后续 lease release 或 renewal 不改写既有 grant。Live admission 以 `(time_activated DESC, id DESC)` 选择 current lease，并冻结当时 latest grant ordinal；后续 grant renewal 保留原 attempt 的 immutable admission，不按 mutable live expiry 重新解释历史授权。
 
 ## Trace — 统一运行追踪（横切）

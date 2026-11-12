@@ -14,7 +14,7 @@ import {
   type AutomationWeekday,
 } from "../../services/automation-recurrence"
 import {
-  AutomationSaveUnconfirmedError,
+  AutomationWriteUnconfirmedError,
   AutomationStatusUnconfirmedError,
   changeAutomationStatus,
   createAutomation,
@@ -38,6 +38,7 @@ import {
   type AutomationProjectTarget,
 } from "../../services/automation-project-targets"
 import { loadDiscoveredProjects, type DiscoveredProject } from "../../services/workspace"
+import { showAppDialog } from "../../services/app-dialog"
 import { loadProviderInfo } from "../../services/config-load"
 import { connectedModelOptions, type ConnectedModelOption } from "../../services/llm"
 import { closeConfigDialog } from "../../services/config-dialog-control"
@@ -46,7 +47,6 @@ import { localeTag, t } from "../../utils/i18n"
 import { randomUUID } from "../../utils/random-id"
 import { projectLedgerDisplayName } from "../../utils/project-directory"
 import { matchesSearchTerms } from "../../services/text-search"
-import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
@@ -65,7 +65,8 @@ type AutomationError = {
   messageKey: string
   details?: string
   retry?: () => void
-  source?: "list-load" | "status-check"
+  source?: "list-load" | "status-check" | "delete-check" | "delete-retry"
+  automationID?: string
   tone?: "warning"
 }
 type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean; retained?: boolean }
@@ -393,9 +394,22 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const problem = error()
     return automations().length === 0 && problem?.source === "list-load" ? problem : null
   })
-  const feedbackRetryPending = () => error()?.source !== undefined && loading()
+  const feedbackRetryPending = () => error()?.source === "delete-retry" ? Boolean(busyAction()) : error()?.source !== undefined && loading()
   const statusNeedsCheck = () => error()?.source === "status-check"
   const checkingStatus = () => statusNeedsCheck() && loading()
+  function deletionNeedsRetry(id: string): boolean {
+    const problem = error()
+    return problem?.source === "delete-retry" && problem.automationID === id
+  }
+  function feedbackRetryLabel(source: AutomationError["source"]): string {
+    if (feedbackRetryPending()) return "common.retrying"
+    switch (source) {
+      case "status-check": return "automations.check_status"
+      case "delete-check": return "automations.review_latest"
+      case "delete-retry": return "automations.retry_delete"
+      default: return "common.retry"
+    }
+  }
   function clearFilters(): void {
     if (busyAction()) return
     setSearch("")
@@ -532,27 +546,30 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setError(null)
   }
 
-  async function load(preferredID?: string, options: { background?: boolean; statusCheck?: AutomationError } = {}): Promise<void> {
-    const statusCheck = options.statusCheck
+  async function load(
+    preferredID?: string,
+    { background, confirmation, authority }: { background?: boolean; confirmation?: AutomationError; authority?: ApiAuthority } = {},
+  ): Promise<void> {
     listRequest?.abort()
     const request = new AbortController()
     listRequest = request
-    if (!options.background) {
+    const owns = () => !request.signal.aborted && (!authority || isApiAuthorityCurrent(authority))
+    if (!background) {
       setLoading(true)
-      if (!statusCheck && error()?.source !== "list-load") setError(null)
+      if (!confirmation && error()?.source !== "list-load") setError(null)
     }
     try {
-      const items = await listAutomations(request.signal)
-      if (request.signal.aborted) return
-      if (options.background) {
+      const items = await listAutomations(request.signal, authority)
+      if (!owns()) return
+      if (background) {
         setAutomations(items)
       } else {
-        const hadRetryFocus = Boolean(statusCheck || initialLoadError()) && document.activeElement === errorRetryButton
+        const hadRetryFocus = Boolean(confirmation || initialLoadError()) && document.activeElement === errorRetryButton
         const nextID = preferredID && items.some((item) => item.id === preferredID) ? preferredID : ""
         batch(() => {
           setAutomations(items)
           setSelectedID(nextID)
-          if (statusCheck || error()?.source === "list-load") setError(null)
+          if (confirmation || error()?.source === "list-load") setError(null)
           setLoading(false)
         })
         if (hadRetryFocus) {
@@ -561,19 +578,19 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         }
       }
     } catch (cause) {
-      if (!request.signal.aborted) {
-        if (statusCheck) {
-          setError({ ...statusCheck, details: [statusCheck.details, formatErrorDetails(cause)].filter(Boolean).join("\n\n") })
-        } else if (!options.background || !statusNeedsCheck()) {
+      if (owns()) {
+        if (confirmation) {
+          setError({ ...confirmation, details: [confirmation.details, formatErrorDetails(cause)].filter(Boolean).join("\n\n") })
+        } else if (!background || !error()?.source || error()?.source === "list-load") {
           setError({
             ...automationFailure(cause, "automations.error.list_load_failed"),
-            retry: () => void load(preferredID),
+            retry: () => void load(preferredID, { authority }),
             source: "list-load",
           })
         }
       }
     } finally {
-      if (!request.signal.aborted && !options.background) setLoading(false)
+      if (!request.signal.aborted && !background) setLoading(false)
     }
   }
 
@@ -818,7 +835,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       if (!owns()) return
       const missingEditTarget = current && cause instanceof ApiError && cause.status === 404 &&
         cause.path === `/global/automations/${encodeURIComponent(current.id)}`
-      const messageKey = cause instanceof AutomationSaveUnconfirmedError
+      const messageKey = cause instanceof AutomationWriteUnconfirmedError
         ? current ? "automations.error.edit_unconfirmed" : "automations.error.creation_unconfirmed"
         : missingEditTarget ? "automations.error.edit_target_missing" : "automations.error.save_failed"
       showFormError(automationFailure(cause, messageKey))
@@ -882,7 +899,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         tone: "warning",
         retry: () => {
           if (!disposed && selectedID() === current.id && isApiAuthorityCurrent(authority)) {
-            void load(current.id, { statusCheck: problem })
+            void load(current.id, { confirmation: problem, authority })
           }
         },
       }
@@ -893,33 +910,77 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
   }
 
-  async function removeSelected(): Promise<void> {
-    const automation = selected()
-    if (!automation) return
-    await removeAutomation(automation)
+  async function confirmRemoveAutomation(automation: AutomationView): Promise<void> {
+    const authority = captureApiAuthority()
+    const owns = () => !disposed && props.active && !busyAction() && isApiAuthorityCurrent(authority)
+    try {
+      const decision = await showAppDialog({
+        title: t("automations.delete"),
+        message: t("automations.delete_confirm", { name: automation.name }),
+        kind: "warning",
+        cancel: true,
+        okTone: "danger",
+        okLabel: t("automations.delete"),
+        openingGuard: owns,
+      })
+      if (decision.confirmed && owns()) await removeAutomation(automation, randomUUID(), authority)
+    } catch (cause) {
+      if (owns()) setError(automationFailure(cause, "automations.error.delete_failed"))
+    }
   }
 
-  async function removeAutomation(automation: AutomationView): Promise<void> {
-    if (busyAction()) return
-    const { id, revisionId } = automation
+  async function removeAutomation(
+    automation: AutomationView,
+    requestID: string,
+    authority: ApiAuthority,
+    previous?: AutomationError,
+  ): Promise<void> {
+    if (busyAction() || disposed || !isApiAuthorityCurrent(authority)) return
+    const { id } = automation
     const removingSelected = selectedID() === id
     const active = document.activeElement
     const removingFocusedRow = active instanceof HTMLElement && Boolean(active.closest(".automation-list-row"))
+    const removingFromRetry = active === errorRetryButton
     if (removingFocusedRow) rememberListFocus()
     const owner: AutomationMutationOwner = { kind: "action", id, operation: "delete" }
+    const owns = () => !disposed && mutationOwner() === owner && isApiAuthorityCurrent(authority)
     setMutationOwner(owner)
-    setError(null)
+    if (!previous) setError(null)
     try {
-      await deleteAutomation(id, revisionId)
-      if (removingSelected) {
-        setSelectedID("")
-        setCreationRequestID(undefined)
-        setEditOwner(null)
-      }
-      await load()
-      if (removingSelected || removingFocusedRow) focusListReturn()
+      await deleteAutomation(automation, requestID, authority)
+      if (!owns()) return
+      batch(() => {
+        setAutomations((items) => items.filter((item) => item.id !== id))
+        if (removingSelected) setSelectedID("")
+      })
+      await load(undefined, { authority })
+      if (owns() && (removingSelected || removingFocusedRow || removingFromRetry)) focusListReturn()
     } catch (cause) {
-      setError(automationFailure(cause, "automations.error.delete_failed"))
+      if (!owns()) return
+      const details = [previous?.details, formatErrorDetails(cause)].filter(Boolean).join("\n\n")
+      const name = automationErrorName(cause)
+      if (cause instanceof AutomationWriteUnconfirmedError) {
+        const problem: AutomationError = {
+          messageKey: "automations.error.delete_unconfirmed", details, source: "delete-retry", automationID: id, tone: "warning",
+          retry: () => void removeAutomation(automation, requestID, authority, error() ?? undefined),
+        }
+        setError(problem)
+        focusAfterRender(() => errorRetryButton)
+      } else if (name === "AutomationRevisionConflictError" || name === "NotFoundError") {
+        const problem: AutomationError = {
+          messageKey: name === "NotFoundError" ? "automations.error.delete_unavailable" : "automations.error.delete_revision_conflict",
+          details, source: "delete-check", tone: "warning",
+          retry: () => {
+            if (!disposed && isApiAuthorityCurrent(authority)) {
+              void load(removingSelected ? id : undefined, { confirmation: error() ?? problem, authority })
+            }
+          },
+        }
+        setError(problem)
+        focusAfterRender(() => errorRetryButton)
+      } else {
+        setError({ ...automationFailure(cause, "automations.error.delete_failed"), details })
+      }
     } finally {
       if (mutationOwner() === owner) setMutationOwner(null)
     }
@@ -1114,8 +1175,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         }}
                       >
                         <Icon name="refresh" />
-                        {t(feedbackRetryPending() ? "common.retrying"
-                          : problem().source === "status-check" ? "automations.check_status" : "common.retry")}
+                        {t(feedbackRetryLabel(problem().source))}
                       </Button>
                     )}
                   </Show>
@@ -1185,7 +1245,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           interactive
                           customContent
                           data-selected={String(selectedID() === automation.id)}
-                          disabled={loading() || Boolean(busyAction())}
+                          disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
                           onClick={() => selectAutomation(automation.id)}
                         >
                           <Icon name={automation.status === "active" ? "run" : "scheduled"} />
@@ -1198,25 +1258,25 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                               </span>
                             </span>
                             <span class="automation-list-item__next">
-                              {automation.status === "active"
+                              {deletionNeedsRetry(automation.id) ? t("automations.deletion_unconfirmed") : automation.status === "active"
                                 ? t("automations.next_run", { value: nextRunValue(automation) })
                                 : nextRunValue(automation)}
                             </span>
                           </span>
                         </SettingsRow>
-                        <ArmedConfirmButton
+                        <Button
+                          type="button"
                           class="automation-list-delete"
                           variant="ghost"
                           size="mini"
                           tone="danger"
-                          label={t("automations.delete")}
-                          armedDescription={t("automations.delete_confirm")}
-                          confirmChildren={t("automations.delete_confirm")}
-                          disabled={loading() || Boolean(busyAction())}
-                          onConfirm={() => void removeAutomation(automation)}
+                          title={t("automations.delete_named", { name: automation.name })}
+                          aria-label={t("automations.delete_named", { name: automation.name })}
+                          disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
+                          onClick={() => void confirmRemoveAutomation(automation)}
                         >
                           <Icon name="delete" />
-                        </ArmedConfirmButton>
+                        </Button>
                       </div>
                     )}
                   </For>
@@ -1296,8 +1356,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         <div>
                           <div class="automation-detail-heading">
                             <h3>{automation().name}</h3>
-                            <Badge tone={statusNeedsCheck() ? "neutral" : statusTone(automation().status)}>
-                              {t(statusNeedsCheck() ? "automations.status.unconfirmed" : `automations.status.${automation().status}`)}
+                            <Badge tone={statusNeedsCheck() || deletionNeedsRetry(automation().id) ? "neutral" : statusTone(automation().status)}>
+                              {t(deletionNeedsRetry(automation().id) ? "automations.deletion_unconfirmed"
+                                : statusNeedsCheck() ? "automations.status.unconfirmed" : `automations.status.${automation().status}`)}
                             </Badge>
                           </div>
                           <p>{recurrenceSummary(automation().recurrence)}</p>
@@ -1309,7 +1370,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-run-now"
-                            disabled={Boolean(busyAction()) || checkingStatus()}
+                            disabled={Boolean(busyAction()) || checkingStatus() || deletionNeedsRetry(automation().id)}
                             title={hasUnconfirmedRun(automation().id) ? t("automations.retry_run_hint") : undefined}
                             onClick={() => void performRun(automation().id)}
                           >
@@ -1323,7 +1384,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-edit"
-                            disabled={Boolean(busyAction()) || checkingStatus()}
+                            disabled={Boolean(busyAction()) || checkingStatus() || deletionNeedsRetry(automation().id)}
                             onClick={beginEdit}
                           >
                             <Icon name="edit" />
@@ -1335,24 +1396,22 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             size="sm"
                             tone="neutral"
                             data-ui="automation-status"
-                            disabled={Boolean(busyAction()) || statusNeedsCheck()}
+                            disabled={Boolean(busyAction()) || statusNeedsCheck() || deletionNeedsRetry(automation().id)}
                             onClick={() => void performStatusChange(automation())}
                           >
                             {automation().status === "active" ? t("automations.pause") : t("automations.resume")}
                           </Button>
-                          <ArmedConfirmButton
+                          <Button
+                            type="button"
                             variant="ghost"
                             size="sm"
                             tone="danger"
-                            label={t("automations.delete")}
-                            armedDescription={t("automations.delete_confirm")}
-                            disabled={Boolean(busyAction()) || checkingStatus()}
-                            onConfirm={() => void removeSelected()}
-                            confirmChildren={t("automations.delete_confirm")}
+                            disabled={Boolean(busyAction()) || checkingStatus() || deletionNeedsRetry(automation().id)}
+                            onClick={() => void confirmRemoveAutomation(automation())}
                           >
                             <Icon name="delete" />
                             {t("automations.delete")}
-                          </ArmedConfirmButton>
+                          </Button>
                         </div>
                       </header>
 
@@ -1369,7 +1428,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </Show>
                         <div>
                           <span>{t("automations.next")}</span>
-                          <strong>{statusNeedsCheck() ? t("automations.status.unconfirmed") : nextRunValue(automation())}</strong>
+                          <strong>{statusNeedsCheck() || deletionNeedsRetry(automation().id)
+                            ? t("automations.status.unconfirmed") : nextRunValue(automation())}</strong>
                         </div>
                         <div>
                           <span>{t("automations.last")}</span>

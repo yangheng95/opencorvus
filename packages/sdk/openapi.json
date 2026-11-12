@@ -717,6 +717,34 @@
         ],
         "type": "object"
       },
+      "AutomationDeletionConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "automationID": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "automationID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AutomationDeletionConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "AutomationManualRunPendingError": {
         "properties": {
           "data": {
@@ -80638,6 +80666,7 @@
     },
     "/global/automations/{id}": {
       "delete": {
+        "description": "Reuse requestID and expectedRevisionId to recover the accepted deletion receipt.",
         "operationId": "global.automations.delete",
         "parameters": [
           {
@@ -80645,6 +80674,15 @@
             "name": "expectedRevisionId",
             "required": true,
             "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "requestID",
+            "schema": {
+              "maxLength": 200,
               "minLength": 1,
               "type": "string"
             }
@@ -80753,12 +80791,15 @@
                     },
                     {
                       "$ref": "#/components/schemas/AutomationRunningConflictError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AutomationDeletionConflictError"
                     }
                   ]
                 }
               }
             },
-            "description": "Observed definition changed or its execution is running"
+            "description": "Observed definition changed, its execution is running, or the deletion request belongs to another revision"
           }
         },
         "summary": "Delete a scheduled automation",

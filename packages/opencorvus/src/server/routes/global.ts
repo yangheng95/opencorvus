@@ -49,6 +49,7 @@ import { MissionSkillCatalog } from "@/mission-skill/catalog"
 import { Skill } from "@/skill/skill"
 import {
   AutomationCreationConflictError,
+  AutomationDeletionConflictError,
   AutomationCreationUnavailableError,
   AutomationRevisionConflictError,
   AutomationUpdateConflictError,
@@ -415,6 +416,7 @@ export const GlobalRoutes = lazy(() =>
       "/automations/:id",
       describeRoute({
         summary: "Delete a scheduled automation",
+        description: "Reuse requestID and expectedRevisionId to recover the accepted deletion receipt.",
         operationId: "global.automations.delete",
         responses: {
           200: {
@@ -425,19 +427,29 @@ export const GlobalRoutes = lazy(() =>
           },
           ...errors(400, 404),
           409: {
-            description: "Observed definition changed or its execution is running",
+            description: "Observed definition changed, its execution is running, or the deletion request belongs to another revision",
             content: {
               "application/json": {
                 schema: resolver(
-                  z.union([AutomationRevisionConflictError.Schema, AutomationRunningConflictError.Schema]),
+                  z.union([
+                    AutomationRevisionConflictError.Schema,
+                    AutomationRunningConflictError.Schema,
+                    AutomationDeletionConflictError.Schema,
+                  ]),
                 ),
               },
             },
           },
         },
       }),
-      validator("query", z.object({ expectedRevisionId: z.string().min(1) })),
-      (c) => c.json(AutomationService.remove(c.req.param("id"), c.req.valid("query").expectedRevisionId)),
+      validator("query", z.object({
+        expectedRevisionId: z.string().min(1),
+        requestID: z.string().trim().min(1).max(200).optional(),
+      })),
+      (c) => {
+        const { expectedRevisionId, requestID } = c.req.valid("query")
+        return c.json(AutomationService.remove(c.req.param("id"), expectedRevisionId, requestID))
+      },
     )
     .post(
       "/chat",

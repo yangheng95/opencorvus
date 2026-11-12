@@ -1,0 +1,109 @@
+{
+  "stopped": {
+    "occurrence": "iteration-b263-candidate",
+    "apiPort": 39812,
+    "proxyPort": 39813,
+    "apiStopped": true,
+    "proxyStopped": true,
+    "processesExited": true,
+    "listenersClosed": true
+  },
+  "restarted": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b263-restart",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39812",
+    "pid": 33272
+  },
+  "english": {
+    "status": 200,
+    "requestID": "ecaea544-120c-4dde-a609-f3f35e997de3",
+    "body": {
+      "id": "atm_huSixR8pRuaJV8DReTSU",
+      "name": "Future project schedule selected for deletion"
+    }
+  },
+  "chinese": {
+    "status": 200,
+    "requestID": "986e6572-3052-4e5a-9690-dd326a179177",
+    "body": {
+      "id": "atm_hqbn66571dIbZkzh7saz",
+      "name": "另一连接更新后的定时任务"
+    }
+  },
+  "wrongRevision": {
+    "status": 409,
+    "requestID": "2dff968f-273b-4c49-8118-35efd7bd60f0",
+    "body": {
+      "name": "AutomationDeletionConflictError",
+      "data": {
+        "message": "This scheduled task deletion request is bound to a different revision.",
+        "automationID": "atm_hqbn66571dIbZkzh7saz"
+      }
+    }
+  },
+  "separate": {
+    "status": 404,
+    "requestID": "7e5eb33c-a3a6-48b6-9051-9791d937db0a",
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Automation not found: atm_huSixR8pRuaJV8DReTSU"
+      }
+    }
+  },
+  "current": {
+    "list": {
+      "status": 200,
+      "requestID": "fc8f857a-ade8-4289-9167-9a0680b6f875",
+      "body": [
+        {
+          "id": "atm_hYKlKCGRQSblZ6NL04t9",
+          "revisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "name": "Unrelated future project schedule",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hwcdl7MAGzz9wgTYo8z1"
+            ]
+          },
+          "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+          "executionMode": "local",
+          "model": null,
+          "reasoningEffort": null,
+          "prompt": "Keep this independent task and its delivery.",
+          "status": "active",
+          "lastRun": null,
+          "nextRun": 4070908800000,
+          "failureCount": 0,
+          "lastError": null
+        }
+      ]
+    },
+    "fires": {
+      "status": 200,
+      "requestID": "45ed5d19-f250-435f-b1df-62502b60a744",
+      "body": [
+        {
+          "fireId": "cal_automation_4f51782a63fbabcab70bad2049fb3910",
+          "automationId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "automationRevisionId": "atm_hYKlKCGRQSblZ6NL04t9",
+          "origin": "scheduled",
+          "scheduledDueAt": 4070908800000,
+          "startedAt": 1794441450950,
+          "completedAt": null,
+          "state": "scheduled",
+          "attemptCount": 0,
+          "retryAt": null,
+          "error": null,
+          "runs": []
+        }
+      ]
+    },
+    "runs": {
+      "status": 200,
+      "requestID": "0e5d3db4-43c4-482e-8312-ac244ef7b8ab",
+      "body": []
+    }
+  }
+}

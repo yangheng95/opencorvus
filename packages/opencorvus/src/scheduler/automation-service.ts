@@ -272,6 +272,9 @@ export const AutomationUpdateConflictError = NamedError.create(
 export const AutomationUpdateUnavailableError = NamedError.create(
   "AutomationUpdateUnavailableError", AutomationMutationRequestErrorData,
 )
+export const AutomationDeletionConflictError = NamedError.create(
+  "AutomationDeletionConflictError", AutomationMutationRequestErrorData,
+)
 
 /**
  * AutomationService polls due automations and executes them with lease-based claims.
@@ -333,12 +336,11 @@ export namespace AutomationService {
     db: Database.TxOrDb,
     row: typeof AutomationTable.$inferSelect,
     now: number,
-    causation?: ScheduleToolCausation,
+    identity?: { id: string; causation?: ScheduleToolCausation },
   ) {
+    const causation = identity?.causation
     if (causation) assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
-    const id = causation
-      ? Identifier.deterministic("automation", `automation-tombstone-v1\0${causation.occurrence.toolPartID}`)
-      : Identifier.ascending("automation")
+    const id = identity?.id ?? Identifier.ascending("automation")
     db.insert(AutomationDefinitionTombstoneTable)
       .values({
         id,
@@ -1358,6 +1360,11 @@ export namespace AutomationService {
     db: Database.TxOrDb,
     tombstone: typeof AutomationDefinitionTombstoneTable.$inferSelect,
   ): { id: string; name: string } {
+    const definition = definitionBeforeTombstone(db, tombstone)
+    return { id: definition.definition_id, name: definition.name }
+  }
+
+  function definitionBeforeTombstone(db: Database.TxOrDb, tombstone: typeof AutomationDefinitionTombstoneTable.$inferSelect) {
     const definition = db
       .select()
       .from(AutomationTable)
@@ -1369,7 +1376,7 @@ export namespace AutomationService {
       )
       .get()
     if (!definition) throw new Error(`Automation tombstone ${tombstone.id} has no terminated definition`)
-    return { id: definition.definition_id, name: definition.name }
+    return definition
   }
 
   function assertMutationDefinitionInTransaction(db: Database.TxOrDb, id: string, expectedRevisionId: string) {
@@ -1396,8 +1403,8 @@ export namespace AutomationService {
     return latest
   }
 
-  export function remove(id: string, expectedRevisionId: string): { id: string; name: string } {
-    return removeAutomation(id, expectedRevisionId)
+  export function remove(id: string, expectedRevisionId: string, requestID: string = randomUUID()): { id: string; name: string } {
+    return removeAutomation(id, expectedRevisionId, { kind: "http", requestID })
   }
 
   export function removeFromTool(
@@ -1405,31 +1412,43 @@ export namespace AutomationService {
     expectedRevisionId: string,
     causation: ScheduleToolCausation,
   ): { id: string; name: string } {
-    return removeAutomation(id, expectedRevisionId, causation)
+    return removeAutomation(id, expectedRevisionId, { kind: "tool", causation })
   }
 
   function removeAutomation(
     id: string,
     expectedRevisionId: string,
-    causation?: ScheduleToolCausation,
+    source: AutomationDefinitionWriteSource,
   ): { id: string; name: string } {
+    const causation = source.kind === "tool" ? source.causation : undefined
+    const tombstoneID = Identifier.deterministic("automation", source.kind === "tool"
+      ? `automation-tombstone-v1\0${source.causation.occurrence.toolPartID}`
+      : JSON.stringify(["automation-http-delete-v1", id, source.requestID]))
     return Database.immediateTransaction((db) => {
-      if (causation) {
-        assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
-        const tombstone = db
-          .select()
-          .from(AutomationDefinitionTombstoneTable)
-          .where(eq(AutomationDefinitionTombstoneTable.tool_part_id, causation.occurrence.toolPartID))
-          .get()
-        if (tombstone) {
+      if (causation) assertScheduledToolOccurrenceInTransaction(db, causation.occurrence)
+      const tombstone = db.select().from(AutomationDefinitionTombstoneTable)
+        .where(causation
+          ? eq(AutomationDefinitionTombstoneTable.tool_part_id, causation.occurrence.toolPartID)
+          : eq(AutomationDefinitionTombstoneTable.id, tombstoneID)).get()
+      if (tombstone) {
+        if (causation) {
           if (tombstone.definition_id !== id || tombstone.tool_input_digest !== causation.inputDigest) {
             throw scheduledToolOccurrenceConflict(causation.occurrence, "changed its Automation delete input")
           }
           return deletionReceiptInTransaction(db, tombstone)
         }
+        const definition = definitionBeforeTombstone(db, tombstone)
+        if (definition.definition_id !== id || definition.kind !== "recurring" ||
+          definition.id !== expectedRevisionId || tombstone.tool_part_id !== null) {
+          throw new AutomationDeletionConflictError({
+            message: "This scheduled task deletion request is bound to a different revision.",
+            automationID: id,
+          })
+        }
+        return { id, name: definition.name }
       }
       const latest = assertMutationDefinitionInTransaction(db, id, expectedRevisionId)
-      appendAutomationTombstoneInTransaction(db, latest, Date.now(), causation)
+      appendAutomationTombstoneInTransaction(db, latest, Date.now(), { id: tombstoneID, causation })
       return { id, name: latest.name }
     })
   }
