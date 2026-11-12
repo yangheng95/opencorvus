@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [配置候选展开与连接状态证据](2026-11-12-config-write-expanded-projection/README.md)
 - [新增 MCP 连接名称与覆盖证据](2026-11-12-mcp-add-exact-name/README.md)
 - [禁用 Browser 后的专家团与技能设置基线](2026-11-12-squad-catalog-disabled-mcp/README.md)
 - [连接操作地址的桌面与服务基线](2026-11-12-mcp-exact-operation-routes/README.md)

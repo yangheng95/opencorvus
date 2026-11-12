@@ -1,0 +1,477 @@
+{
+  "normalConfigure": {
+    "connected": {
+      "side": "alternate",
+      "name": "authored-isolated",
+      "status": 200,
+      "requestID": "b857ebf4-9782-41fb-bb15-e6d90bab2733",
+      "result": true
+    },
+    "before": {
+      "side": "alternate",
+      "projectID": "prj_h54Q5cpMOqPMU9rDUxth",
+      "authored": [
+        [
+          "review-isolated",
+          "http://127.0.0.1:39934/alternate/normal"
+        ],
+        [
+          "authored-{env:OPENCORVUS_BROWSER_MODE}",
+          "http://127.0.0.1:39934/alternate/dot"
+        ]
+      ],
+      "reads": [
+        {
+          "route": "/config",
+          "status": 200,
+          "requestID": "2ce3c473-1e88-4b06-88da-59740e35fdb9",
+          "connections": [
+            [
+              "review-isolated",
+              "http://127.0.0.1:39934/alternate/normal"
+            ],
+            [
+              "authored-isolated",
+              "http://127.0.0.1:39934/alternate/dot"
+            ]
+          ]
+        },
+        {
+          "route": "/mcp/project",
+          "status": 200,
+          "requestID": "1a6697db-628a-489a-b44e-17a21d2d910c",
+          "connections": [
+            [
+              "review-isolated",
+              "disconnected"
+            ],
+            [
+              "authored-isolated",
+              "connected"
+            ]
+          ]
+        }
+      ]
+    },
+    "add": {
+      "side": "alternate",
+      "name": "fresh-review",
+      "url": "http://127.0.0.1:39934/alternate/slash",
+      "status": 200,
+      "requestID": "93c37422-69dd-42fe-be0b-ebc83a454853",
+      "result": [
+        [
+          "review-isolated",
+          "disconnected"
+        ],
+        [
+          "authored-isolated",
+          "disconnected"
+        ],
+        [
+          "fresh-review",
+          "connected"
+        ],
+        [
+          "browser",
+          "disconnected"
+        ],
+        [
+          "computer",
+          "disconnected"
+        ]
+      ]
+    },
+    "after": {
+      "side": "alternate",
+      "projectID": "prj_h54Q5cpMOqPMU9rDUxth",
+      "authored": [
+        [
+          "review-isolated",
+          "http://127.0.0.1:39934/alternate/normal"
+        ],
+        [
+          "authored-{env:OPENCORVUS_BROWSER_MODE}",
+          "http://127.0.0.1:39934/alternate/dot"
+        ],
+        [
+          "fresh-review",
+          "http://127.0.0.1:39934/alternate/slash"
+        ]
+      ],
+      "reads": [
+        {
+          "route": "/config",
+          "status": 200,
+          "requestID": "59cb945c-bcf9-437b-9a59-dc40725717ef",
+          "connections": [
+            [
+              "review-isolated",
+              "http://127.0.0.1:39934/alternate/normal"
+            ],
+            [
+              "authored-isolated",
+              "http://127.0.0.1:39934/alternate/dot"
+            ]
+          ]
+        },
+        {
+          "route": "/mcp/project",
+          "status": 200,
+          "requestID": "cd100da1-42e7-4645-bbe8-3abc3da74e8f",
+          "connections": [
+            [
+              "review-isolated",
+              "disconnected"
+            ],
+            [
+              "authored-isolated",
+              "disconnected"
+            ],
+            [
+              "fresh-review",
+              "connected"
+            ]
+          ]
+        }
+      ]
+    },
+    "cleanup": {
+      "side": "alternate",
+      "name": "fresh-review",
+      "status": 200,
+      "requestID": "5aff8b8b-a4c4-4849-b265-30192d4eb9c2"
+    }
+  },
+  "projectPatch": {
+    "connected": {
+      "side": "alternate",
+      "name": "authored-isolated",
+      "status": 200,
+      "requestID": "43cb6796-5ba2-44ac-9e91-e8896a25967f",
+      "result": true
+    },
+    "patch": {
+      "scope": "alternate",
+      "route": "/config",
+      "patch": {
+        "autoupdate": false
+      },
+      "status": 200,
+      "requestID": "38a6dc79-a290-46f9-9b84-27e661b2472d",
+      "effective": false
+    },
+    "after": {
+      "side": "alternate",
+      "projectID": "prj_h54Q5cpMOqPMU9rDUxth",
+      "authored": [
+        [
+          "review-isolated",
+          "http://127.0.0.1:39934/alternate/normal"
+        ],
+        [
+          "authored-{env:OPENCORVUS_BROWSER_MODE}",
+          "http://127.0.0.1:39934/alternate/dot"
+        ]
+      ],
+      "reads": [
+        {
+          "route": "/config",
+          "status": 200,
+          "requestID": "1d7dcbeb-ab66-428d-80f7-4ce6a4a76c12",
+          "connections": [
+            [
+              "review-isolated",
+              "http://127.0.0.1:39934/alternate/normal"
+            ],
+            [
+              "authored-isolated",
+              "http://127.0.0.1:39934/alternate/dot"
+            ]
+          ]
+        },
+        {
+          "route": "/mcp/project",
+          "status": 200,
+          "requestID": "67028b74-5a74-4751-9831-d01e7994c019",
+          "connections": [
+            [
+              "review-isolated",
+              "disconnected"
+            ],
+            [
+              "authored-isolated",
+              "disconnected"
+            ]
+          ]
+        }
+      ]
+    },
+    "restore": {
+      "scope": "alternate",
+      "route": "/config",
+      "patch": {
+        "autoupdate": null
+      },
+      "status": 200,
+      "requestID": "fd5388d1-7cd4-4c70-8b6b-546113003618"
+    }
+  },
+  "globalPatch": {
+    "connected": {
+      "side": "alternate",
+      "name": "authored-isolated",
+      "status": 200,
+      "requestID": "b4f0f648-2875-414b-8f29-34709ae3ff63",
+      "result": true
+    },
+    "patch": {
+      "scope": "global",
+      "route": "/global/config",
+      "patch": {
+        "autoupdate": false
+      },
+      "status": 200,
+      "requestID": "7c9aff6c-6d07-4ac4-8a92-ffb2aa986cd8",
+      "effective": false
+    },
+    "after": [
+      {
+        "side": "project",
+        "projectID": "prj_hv4LgPpQk8mvk3RkO3fB",
+        "authored": [
+          [
+            "review-isolated",
+            "http://127.0.0.1:39934/project/normal"
+          ]
+        ],
+        "reads": [
+          {
+            "route": "/config",
+            "status": 200,
+            "requestID": "8864502a-b59f-4837-b0db-19e7e61f0ae6",
+            "connections": [
+              [
+                "review-isolated",
+                "http://127.0.0.1:39934/project/normal"
+              ]
+            ]
+          },
+          {
+            "route": "/mcp/project",
+            "status": 200,
+            "requestID": "fcafd808-5c91-497b-b7d8-fef30be2e433",
+            "connections": [
+              [
+                "review-isolated",
+                "disconnected"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "side": "alternate",
+        "projectID": "prj_h54Q5cpMOqPMU9rDUxth",
+        "authored": [
+          [
+            "review-isolated",
+            "http://127.0.0.1:39934/alternate/normal"
+          ],
+          [
+            "authored-{env:OPENCORVUS_BROWSER_MODE}",
+            "http://127.0.0.1:39934/alternate/dot"
+          ]
+        ],
+        "reads": [
+          {
+            "route": "/config",
+            "status": 200,
+            "requestID": "3433bcc0-5441-47dc-9a26-b41f8182819a",
+            "connections": [
+              [
+                "review-isolated",
+                "http://127.0.0.1:39934/alternate/normal"
+              ],
+              [
+                "authored-isolated",
+                "http://127.0.0.1:39934/alternate/dot"
+              ]
+            ]
+          },
+          {
+            "route": "/mcp/project",
+            "status": 200,
+            "requestID": "465884f3-a714-46b2-b98d-ddfb56128a58",
+            "connections": [
+              [
+                "review-isolated",
+                "disconnected"
+              ],
+              [
+                "authored-isolated",
+                "connected"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "restore": {
+      "scope": "global",
+      "route": "/global/config",
+      "patch": {
+        "autoupdate": null
+      },
+      "status": 200,
+      "requestID": "0389395e-c471-4eb2-b067-8d0b3bd006f2"
+    }
+  },
+  "globalPeerSourceChange": {
+    "connected": [
+      {
+        "side": "project",
+        "name": "global-isolated",
+        "status": 500,
+        "requestID": "7d791263-86e8-4970-98b0-1643b1caea8e",
+        "result": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+          }
+        }
+      },
+      {
+        "side": "alternate",
+        "name": "global-isolated",
+        "status": 500,
+        "requestID": "db76155c-fc23-459e-b993-bba3222f23f7",
+        "result": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+          }
+        }
+      }
+    ],
+    "before": [
+      {
+        "side": "project",
+        "status": 200,
+        "requestID": "4a0684d5-5920-4b03-9af6-ea2348fdca5b",
+        "global": "disconnected"
+      },
+      {
+        "side": "alternate",
+        "status": 200,
+        "requestID": "60611806-fbdc-4c1d-8fd4-9175f8cad62d",
+        "global": "disconnected",
+        "project": "connected"
+      }
+    ],
+    "patch": {
+      "scope": "global",
+      "route": "/global/config",
+      "patch": {
+        "autoupdate": false
+      },
+      "status": 200,
+      "requestID": "e3c6ba80-6f5c-4aa3-824d-1510a0a5925a",
+      "effective": false
+    },
+    "after": [
+      {
+        "side": "project",
+        "status": 200,
+        "requestID": "13285c8a-c8b4-4962-80f5-eeb8abd8a595",
+        "global": "disconnected"
+      },
+      {
+        "side": "alternate",
+        "status": 200,
+        "requestID": "a947902a-b8d2-43b4-8d27-621e9f1b5b39",
+        "global": "disconnected",
+        "project": "connected"
+      }
+    ],
+    "authored": [
+      "global-{env:OPENCORVUS_BROWSER_MODE}"
+    ],
+    "restore": {
+      "scope": "global",
+      "route": "/global/config",
+      "patch": {
+        "autoupdate": null
+      },
+      "status": 200,
+      "requestID": "9781f2fe-0346-434b-90bb-fe65cc7056c0"
+    }
+  },
+  "globalAuthored": {
+    "connected": [
+      {
+        "side": "project",
+        "name": "global-isolated",
+        "status": 200,
+        "requestID": "c1e3d642-7c7e-4f26-8188-6b49dc5e129b",
+        "result": true
+      },
+      {
+        "side": "alternate",
+        "name": "global-isolated",
+        "status": 200,
+        "requestID": "9350b9a5-168d-4807-b788-c6c420b250fa",
+        "result": true
+      }
+    ],
+    "before": [
+      {
+        "side": "project",
+        "status": 200,
+        "requestID": "b11db463-acdf-4da8-b5ff-94479e76cf0c",
+        "global": "connected"
+      },
+      {
+        "side": "alternate",
+        "status": 200,
+        "requestID": "9ea1ebf1-f7e4-46a6-8051-9cf05f9dd611",
+        "global": "connected",
+        "project": "disconnected"
+      }
+    ],
+    "patch": {
+      "scope": "global",
+      "route": "/global/config",
+      "patch": {
+        "autoupdate": false
+      },
+      "status": 200,
+      "requestID": "0396fa53-c555-4bb9-b328-57562396567e",
+      "effective": false
+    },
+    "after": [
+      {
+        "side": "project",
+        "status": 200,
+        "requestID": "b3fc4e5e-d671-41ba-9296-4c7aecdeae88",
+        "global": "disconnected"
+      },
+      {
+        "side": "alternate",
+        "status": 200,
+        "requestID": "47cc6be7-c654-49c9-9569-be9fff2bc918",
+        "global": "disconnected",
+        "project": "disconnected"
+      }
+    ],
+    "restore": {
+      "scope": "global",
+      "route": "/global/config",
+      "patch": {
+        "autoupdate": null
+      },
+      "status": 200,
+      "requestID": "c10800a2-eabd-4653-a3ef-679788e1bc01"
+    }
+  }
+}
