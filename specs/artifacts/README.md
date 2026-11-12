@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [全图预览边角裁切基线](2026-11-12-image-preview-full-frame/README.md)
 - [命令行斜杠命令附件基线](2026-11-12-cli-command-attachments/README.md)
 - [编辑器斜杠命令附件的真实基线](2026-11-12-acp-command-context/README.md)
 - [编辑器命令选择与参数提示](2026-11-12-acp-slash-input/README.md)
