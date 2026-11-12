@@ -1,0 +1,267 @@
+{
+  "browserDefault": {
+    "side": "alternate",
+    "id": "95278737-0f59-40c1-97e0-57f1e9dae71a",
+    "browserType": "local",
+    "computerType": "local"
+  },
+  "configuredReceipt": {
+    "side": "project",
+    "id": "ba6dc408-65b9-4557-8f07-6a44c0790dae",
+    "status": 200,
+    "computer": {
+      "status": "disconnected",
+      "scope": "execution"
+    }
+  },
+  "projects": [
+    {
+      "side": "project",
+      "resources": {
+        "side": "project",
+        "route": "/experimental/resource",
+        "method": "GET",
+        "status": 200,
+        "id": "7ee28a8c-5053-441b-9a06-87937a78e520",
+        "value": {
+          "client:cmV2aWV3LXB1YmxpYw:uri:bWVtbzovL2lzb2xhdGVkLW93bmVkL2Rpc2NvdmVyeQ": {
+            "name": "isolated-note",
+            "uri": "memo://isolated-owned/discovery",
+            "description": "Isolated MCP discovery note",
+            "mimeType": "text/plain",
+            "client": "review-public"
+          }
+        }
+      },
+      "commands": {
+        "side": "project",
+        "route": "/command",
+        "method": "GET",
+        "status": 200,
+        "id": "cf448716-8b41-48a0-b1ee-0dfeb6ff123c",
+        "value": [
+          {
+            "name": "init",
+            "source": "command",
+            "description": "create/update AGENTS.md"
+          },
+          {
+            "name": "review",
+            "source": "command",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted"
+          },
+          {
+            "name": "review-owned-command",
+            "source": "command"
+          },
+          {
+            "name": "review-public:isolated-instructions",
+            "source": "mcp",
+            "description": "Isolated MCP discovery prompt"
+          }
+        ],
+        "localTemplate": "isolated project command",
+        "remoteTemplate": "actual isolated MCP prompt",
+        "repeatID": "5b265ad6-19d6-404d-8b71-32566cf11dfc"
+      },
+      "controls": [
+        {
+          "side": "project",
+          "route": "/mcp/computer/connect",
+          "method": "POST",
+          "status": 409,
+          "id": "a3d94271-abf3-42b7-9a40-436d3b90d801",
+          "value": {
+            "name": "MCPExecutionConnectionRequiredError",
+            "data": {
+              "mcpName": "computer",
+              "message": "MCP server computer is managed by its session or task runtime."
+            }
+          }
+        },
+        {
+          "side": "project",
+          "route": "/mcp/browser/disconnect",
+          "method": "POST",
+          "status": 409,
+          "id": "099f22fb-4c6a-4ced-b72d-1a0687541f11",
+          "value": {
+            "name": "MCPExecutionConnectionRequiredError",
+            "data": {
+              "mcpName": "browser",
+              "message": "MCP server browser is managed by its session or task runtime."
+            }
+          }
+        }
+      ],
+      "effective": {
+        "side": "project",
+        "route": "/mcp",
+        "method": "GET",
+        "status": 200,
+        "id": "06ad0f60-64c6-44bb-93e3-f51d2050e203",
+        "value": {
+          "browser": {
+            "status": "disabled",
+            "scope": "execution"
+          },
+          "computer": {
+            "status": "disconnected",
+            "scope": "execution"
+          },
+          "review-public": {
+            "status": "connected"
+          }
+        }
+      },
+      "project": {
+        "side": "project",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "id": "93a2a1f1-0e9d-414e-91b2-d7706197ac8e",
+        "value": {
+          "browser": {
+            "status": "disabled",
+            "scope": "execution"
+          },
+          "computer": {
+            "status": "disconnected",
+            "scope": "execution"
+          },
+          "review-public": {
+            "status": "connected"
+          }
+        }
+      }
+    },
+    {
+      "side": "alternate",
+      "resources": {
+        "side": "alternate",
+        "route": "/experimental/resource",
+        "method": "GET",
+        "status": 200,
+        "id": "2afdd9a0-ab4a-4f91-a40f-2d71749a2c20",
+        "value": {
+          "client:cmV2aWV3LXB1YmxpYw:uri:bWVtbzovL2lzb2xhdGVkLW93bmVkL2Rpc2NvdmVyeQ": {
+            "name": "isolated-note",
+            "uri": "memo://isolated-owned/discovery",
+            "description": "Isolated MCP discovery note",
+            "mimeType": "text/plain",
+            "client": "review-public"
+          }
+        }
+      },
+      "commands": {
+        "side": "alternate",
+        "route": "/command",
+        "method": "GET",
+        "status": 200,
+        "id": "fbf8bbd7-f68d-4dcc-bbba-1cb18a8842da",
+        "value": [
+          {
+            "name": "init",
+            "source": "command",
+            "description": "create/update AGENTS.md"
+          },
+          {
+            "name": "review",
+            "source": "command",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted"
+          },
+          {
+            "name": "review-owned-command",
+            "source": "command"
+          },
+          {
+            "name": "review-public:isolated-instructions",
+            "source": "mcp",
+            "description": "Isolated MCP discovery prompt"
+          }
+        ],
+        "localTemplate": "isolated project command",
+        "remoteTemplate": "actual isolated MCP prompt",
+        "repeatID": "82fcba73-796f-4e59-ae60-487d013ea4b3"
+      },
+      "controls": [
+        {
+          "side": "alternate",
+          "route": "/mcp/computer/connect",
+          "method": "POST",
+          "status": 409,
+          "id": "f83f4143-7420-464d-95ae-abcf26260bab",
+          "value": {
+            "name": "MCPExecutionConnectionRequiredError",
+            "data": {
+              "mcpName": "computer",
+              "message": "MCP server computer is managed by its session or task runtime."
+            }
+          }
+        },
+        {
+          "side": "alternate",
+          "route": "/mcp/browser/disconnect",
+          "method": "POST",
+          "status": 409,
+          "id": "521347c6-47b1-43cb-b50e-646799c6a888",
+          "value": {
+            "name": "MCPExecutionConnectionRequiredError",
+            "data": {
+              "mcpName": "browser",
+              "message": "MCP server browser is managed by its session or task runtime."
+            }
+          }
+        }
+      ],
+      "effective": {
+        "side": "alternate",
+        "route": "/mcp",
+        "method": "GET",
+        "status": 200,
+        "id": "2d2d653a-ee0a-4823-b9fd-496015baf02b",
+        "value": {
+          "review-public": {
+            "status": "connected"
+          },
+          "browser": {
+            "status": "disconnected",
+            "scope": "execution"
+          },
+          "computer": {
+            "status": "disconnected",
+            "scope": "execution"
+          }
+        }
+      },
+      "project": {
+        "side": "alternate",
+        "route": "/mcp/project",
+        "method": "GET",
+        "status": 200,
+        "id": "bcc0ed9a-452d-48ff-9b14-e43e611c654f",
+        "value": {
+          "review-public": {
+            "status": "connected"
+          }
+        }
+      }
+    }
+  ],
+  "admissions": [
+    {
+      "time": "2026-11-12T05:15:20.306Z",
+      "key": "review-public",
+      "type": "remote"
+    },
+    {
+      "time": "2026-11-12T05:15:20.622Z",
+      "key": "review-public",
+      "type": "remote"
+    }
+  ],
+  "health": {
+    "status": 200,
+    "requestID": "3be4d659-3956-42f9-bd97-9d8ff345ba6e"
+  }
+}

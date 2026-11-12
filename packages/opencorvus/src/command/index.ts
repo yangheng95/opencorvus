@@ -29,17 +29,15 @@ export namespace Command {
       agent: z.string().optional(),
       model: z.string().optional(),
       source: z.enum(["command", "mcp", "skill"]).optional(),
-      // workaround for zod not supporting async functions natively so we use getters
-      // https://zod.dev/v4/changelog?id=zfunction
-      template: z.promise(z.string()).or(z.string()),
+      template: z.string(),
       hints: z.array(z.string()),
     })
     .meta({
       ref: "Command",
     })
 
-  // for some reason zod is inferring `string` for z.promise(z.string()).or(z.string()) so we have to manually override it
-  export type Info = Omit<z.infer<typeof Info>, "template"> & { template: Promise<string> | string }
+  export type Info = z.infer<typeof Info>
+  type Definition = Omit<Info, "template"> & { template: Promise<string> | string }
 
   export function hints(template: string): string[] {
     const result: string[] = []
@@ -59,7 +57,7 @@ export namespace Command {
   const state = createInstanceState(async () => {
     const cfg = await Config.get()
 
-    const result: Record<string, Info> = {
+    const result: Record<string, Definition> = {
       [Default.INIT]: {
         name: Default.INIT,
         description: "create/update AGENTS.md",
@@ -99,22 +97,10 @@ export namespace Command {
         source: "mcp",
         description: prompt.description,
         get template() {
-          // since a getter can't be async we need to manually return a promise here
-          return new Promise<string>(async (resolve, reject) => {
-            const template = await MCP.getPrompt(
-              prompt.client,
-              prompt.name,
-              prompt.arguments
-                ? // substitute each argument with $1, $2, etc.
-                  Object.fromEntries(prompt.arguments?.map((argument, i) => [argument.name, `$${i + 1}`]))
-                : {},
-            ).catch(reject)
-            resolve(
-              template?.messages
-                .map((message) => (message.content.type === "text" ? message.content.text : ""))
-                .join("\n") || "",
-            )
-          })
+          const args = Object.fromEntries(prompt.arguments?.map((argument, i) => [argument.name, `$${i + 1}`]) ?? [])
+          return MCP.getPrompt(prompt.client, prompt.name, args).then((template) =>
+            template.messages.map((message) => (message.content.type === "text" ? message.content.text : "")).join("\n"),
+          )
         },
         hints: prompt.arguments?.map((_, i) => `$${i + 1}`) ?? [],
       }
@@ -127,7 +113,14 @@ export namespace Command {
     return state().then((x) => x[name])
   }
 
-  export async function list() {
-    return state().then((x) => objectValues(x))
+  export async function list(): Promise<Info[]> {
+    const definitions = objectValues(await state())
+    const settled = await Promise.allSettled(
+      definitions.map(async ({ template, ...command }) => ({ ...command, template: await template })),
+    )
+    return settled.map((result) => {
+      if (result.status === "rejected") throw result.reason
+      return result.value
+    })
   }
 }

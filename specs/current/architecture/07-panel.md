@@ -5700,6 +5700,9 @@ read is unavailable, it retains the write and read diagnostics and points to
 the existing automatic status reads.
 The row and readback notice use the runtime reason to label a manual
 disconnect. Configuration-disabled rows use their standard disabled label.
+Execution-owned declarations identify their session or task scope on the
+project connection list. Their assignment remains accessible from the
+existing Chat and Work settings controls.
 The management header names the project used for these reads and actions. Its
 directory hint and expandable exact path are derived from that same scope;
 showing the header does not change the request context or select a project.

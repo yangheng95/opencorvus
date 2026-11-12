@@ -72,6 +72,8 @@ describe("MCP overlay service", () => {
       active: { status: "connected" },
       paused: { status: "disabled", reason: "manual_disconnect" },
       configuredOff: { status: "disabled" },
+      browser: { status: "disabled", scope: "execution" },
+      computer: { status: "disconnected", scope: "execution" },
       idle: { status: "disconnected" },
       starting: { status: "connecting" },
       signIn: { status: "needs_auth" },

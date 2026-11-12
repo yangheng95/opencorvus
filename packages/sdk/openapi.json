@@ -11975,6 +11975,34 @@
         ],
         "type": "string"
       },
+      "MCPExecutionConnectionRequiredError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "mcpName": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "mcpName",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "MCPExecutionConnectionRequiredError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "MCPRemoveConfiguredInput": {
         "additionalProperties": false,
         "properties": {
@@ -12047,6 +12075,10 @@
             "const": "manual_disconnect",
             "type": "string"
           },
+          "scope": {
+            "const": "execution",
+            "type": "string"
+          },
           "status": {
             "const": "disabled",
             "type": "string"
@@ -12059,6 +12091,10 @@
       },
       "MCPStatusDisconnected": {
         "properties": {
+          "scope": {
+            "const": "execution",
+            "type": "string"
+          },
           "status": {
             "const": "disconnected",
             "type": "string"
@@ -90581,6 +90617,16 @@
             },
             "description": "Not found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPExecutionConnectionRequiredError"
+                }
+              }
+            },
+            "description": "MCP connection is managed by its session or task"
+          },
           "500": {
             "content": {
               "application/json": {
@@ -90701,6 +90747,16 @@
               }
             },
             "description": "Not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPExecutionConnectionRequiredError"
+                }
+              }
+            },
+            "description": "MCP connection is managed by its session or task"
           }
         },
         "x-codeSamples": [

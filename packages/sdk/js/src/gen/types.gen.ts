@@ -3265,6 +3265,14 @@ export type LocalEnvironmentConfig = {
  */
 export type LogLevel = "DEBUG" | "INFO" | "WARN" | "ERROR"
 
+export type McpExecutionConnectionRequiredError = {
+  data: {
+    mcpName: string
+    message: string
+  }
+  name: "MCPExecutionConnectionRequiredError"
+}
+
 export type McpRemoveConfiguredInput = {
   names: Array<string>
 }
@@ -3288,10 +3296,12 @@ export type McpStatusConnecting = {
 
 export type McpStatusDisabled = {
   reason?: "manual_disconnect"
+  scope?: "execution"
   status: "disabled"
 }
 
 export type McpStatusDisconnected = {
+  scope?: "execution"
   status: "disconnected"
 }
 
@@ -25100,6 +25110,10 @@ export type McpConnectErrors = {
         name: "LogFileNotFoundError"
       }
   /**
+   * MCP connection is managed by its session or task
+   */
+  409: McpExecutionConnectionRequiredError
+  /**
    * MCP connection failed
    */
   500: {
@@ -25152,6 +25166,10 @@ export type McpDisconnectErrors = {
         }
         name: "LogFileNotFoundError"
       }
+  /**
+   * MCP connection is managed by its session or task
+   */
+  409: McpExecutionConnectionRequiredError
 }
 
 export type McpDisconnectError = McpDisconnectErrors[keyof McpDisconnectErrors]

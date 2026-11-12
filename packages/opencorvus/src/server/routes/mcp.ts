@@ -7,6 +7,11 @@ import { Config } from "../../config/config"
 import { badRequestBody, badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
 import { lazy } from "../../util/lazy"
 
+const executionConnectionRequired = {
+  description: "MCP connection is managed by its session or task",
+  content: { "application/json": { schema: resolver(MCP.ExecutionConnectionRequiredError.Schema) } },
+}
+
 export const McpRoutes = lazy(() => {
   const app = new Hono()
   return (
@@ -247,6 +252,7 @@ export const McpRoutes = lazy(() => {
               },
             },
             ...errors(404),
+            409: executionConnectionRequired,
             500: namedErrorResponse("MCP connection failed", "UnknownError"),
           },
         }),
@@ -272,6 +278,7 @@ export const McpRoutes = lazy(() => {
               },
             },
             ...errors(404),
+            409: executionConnectionRequired,
           },
         }),
         validator("param", z.object({ name: z.string() })),

@@ -1,0 +1,314 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b280-visual",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39892",
+    "pid": 19964
+  },
+  "desktopControls": [
+    {
+      "time": "2026-11-12T05:15:46.657Z",
+      "stage": "delivered",
+      "route": "/mcp/review-public/disconnect",
+      "method": "POST",
+      "round": "external-disconnect",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b280\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "ebbc0c48-0f60-4182-80be-d05e59e5196e",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    },
+    {
+      "time": "2026-11-12T05:16:03.465Z",
+      "stage": "delivered",
+      "route": "/mcp/review-public/connect",
+      "method": "POST",
+      "round": "external-connect",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b280\\candidate-project\\archive-review",
+      "search": null,
+      "cursor": null,
+      "expectedRevisionId": null,
+      "operationRequestID": null,
+      "requestID": "451d905c-b9d6-4954-b79b-61c43c1a6484",
+      "status": 200,
+      "bytes": 4,
+      "target": true
+    }
+  ],
+  "reads": [
+    {
+      "label": "alternate-still-connected",
+      "side": "alternate",
+      "route": "/mcp/project",
+      "status": 200,
+      "id": "a9ca5173-5eb5-4cc9-a703-c11c3657075d",
+      "value": {
+        "review-public": {
+          "status": "connected"
+        }
+      }
+    },
+    {
+      "label": "primary-stopped",
+      "side": "project",
+      "route": "/mcp/project",
+      "status": 200,
+      "id": "62730177-6c08-4d64-aac4-182f5a3d673a",
+      "value": {
+        "browser": {
+          "status": "disabled",
+          "scope": "execution"
+        },
+        "computer": {
+          "status": "disconnected",
+          "scope": "execution"
+        },
+        "review-public": {
+          "status": "disabled",
+          "reason": "manual_disconnect"
+        }
+      }
+    },
+    {
+      "label": "primary-reconnected",
+      "side": "project",
+      "route": "/mcp/project",
+      "status": 200,
+      "id": "8c4baf3b-c2a4-4fbf-b3ca-c67ceb9a11c8",
+      "value": {
+        "browser": {
+          "status": "disabled",
+          "scope": "execution"
+        },
+        "computer": {
+          "status": "disconnected",
+          "scope": "execution"
+        },
+        "review-public": {
+          "status": "connected"
+        }
+      }
+    }
+  ],
+  "requestPeriods": [
+    {
+      "requestID": "cf448716-8b41-48a0-b1ee-0dfeb6ff123c",
+      "started": "2026-11-12T05:15:20.629Z",
+      "completed": "2026-11-12T05:15:20.648Z"
+    },
+    {
+      "requestID": "5b265ad6-19d6-404d-8b71-32566cf11dfc",
+      "started": "2026-11-12T05:15:20.656Z",
+      "completed": "2026-11-12T05:15:20.662Z"
+    },
+    {
+      "requestID": "fbf8bbd7-f68d-4dcc-bbba-1cb18a8842da",
+      "started": "2026-11-12T05:15:20.301Z",
+      "completed": "2026-11-12T05:15:20.652Z"
+    },
+    {
+      "requestID": "82fcba73-796f-4e59-ae60-487d013ea4b3",
+      "started": "2026-11-12T05:15:20.676Z",
+      "completed": "2026-11-12T05:15:20.682Z"
+    }
+  ],
+  "protocol": [
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.341Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.348Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.354Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.619Z",
+      "method": "POST",
+      "operation": "resources/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.630Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.633Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.637Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.639Z",
+      "method": "POST",
+      "operation": "prompts/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.644Z",
+      "method": "POST",
+      "operation": "prompts/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.646Z",
+      "method": "POST",
+      "operation": "prompts/get",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.651Z",
+      "method": "POST",
+      "operation": "prompts/get",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.661Z",
+      "method": "POST",
+      "operation": "prompts/get",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.669Z",
+      "method": "POST",
+      "operation": "resources/list",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:15:20.681Z",
+      "method": "POST",
+      "operation": "prompts/get",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:16:03.452Z",
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:16:03.456Z",
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 19260,
+      "port": 39894,
+      "scope": "public",
+      "time": "2026-11-12T05:16:03.462Z",
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ],
+  "admissions": [
+    {
+      "time": "2026-11-12T05:15:20.306Z",
+      "key": "review-public",
+      "type": "remote"
+    },
+    {
+      "time": "2026-11-12T05:15:20.622Z",
+      "key": "review-public",
+      "type": "remote"
+    },
+    {
+      "time": "2026-11-12T05:16:03.440Z",
+      "key": "review-public",
+      "type": "remote"
+    }
+  ],
+  "health": {
+    "requestID": "cee44638-e956-414a-8b8c-4059567c9b08",
+    "status": 200,
+    "process": 19964
+  }
+}

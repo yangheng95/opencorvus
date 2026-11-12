@@ -6,11 +6,13 @@ import { pathToFileURL } from "node:url"
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js"
 import type { ReadResourceResult } from "@modelcontextprotocol/sdk/types.js"
+import { Command } from "../../src/command"
 import { Config } from "../../src/config/config"
 import { Identifier } from "../../src/id/id"
 import { MCP } from "../../src/mcp"
 import { Instance } from "../../src/project/instance"
 import { serverErrorResponse } from "../../src/server/error-handler"
+import { McpRoutes } from "../../src/server/routes/mcp"
 import { SessionRoutes } from "../../src/server/routes/session"
 import { Session } from "../../src/session"
 import { Message } from "../../src/session/message"
@@ -28,7 +30,7 @@ type FileInput = Omit<Message.FilePart, "id" | "messageID" | "sessionID">
 
 afterEach(resetMemoryDatabase)
 
-function resourceServer(contents: ReadResourceResult["contents"]) {
+function resourceServer(contents: ReadResourceResult["contents"], includePrompt = false) {
   const servers = new Set<McpServer>()
   const reads: string[] = []
   const http = Bun.serve({
@@ -42,6 +44,11 @@ function resourceServer(contents: ReadResourceResult["contents"]) {
         reads.push(uri.href)
         return { contents }
       })
+      if (includePrompt) {
+        server.registerPrompt("public-instructions", { description: "Prepare the public input." }, async () => ({
+          messages: [{ role: "user", content: { type: "text", text: "Read the public report." } }],
+        }))
+      }
       const transport = new WebStandardStreamableHTTPServerTransport({
         sessionIdGenerator: undefined,
         enableJsonResponse: true,
@@ -59,6 +66,58 @@ function resourceServer(contents: ReadResourceResult["contents"]) {
     },
   }
 }
+
+test("project MCP discovery returns shared resources and commands with execution-owned declarations", async () => {
+  await using project = await memoryProject()
+  const resources = resourceServer([{ uri: resourceURI, text: "Public report." }], true)
+  try {
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        await Config.updateProjectPatch({
+          mcp: {
+            browser: { enabled: false },
+            public_inputs: { type: "remote", url: resources.url, transport: "streamable-http" },
+          },
+          command: { local_report: { template: "Review the local report." } },
+        })
+        expect(Object.values(await MCP.resources())).toMatchObject([
+          { name: "public-input", uri: resourceURI, client: "public_inputs" },
+        ])
+        expect(await Command.list()).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ name: "local_report", source: "command", template: "Review the local report." }),
+            expect.objectContaining({
+              name: "public_inputs:public-instructions",
+              source: "mcp",
+              template: "Read the public report.",
+            }),
+          ]),
+        )
+        const prompt = await Command.get("public_inputs:public-instructions")
+        expect(await prompt?.template).toBe("Read the public report.")
+        expect(await MCP.status()).toMatchObject({
+          browser: { status: "disabled", scope: "execution" },
+          computer: { status: "disconnected", scope: "execution" },
+          public_inputs: { status: "connected" },
+        })
+
+        const app = new Hono().route("/mcp", McpRoutes()).onError(serverErrorResponse)
+        for (const [name, operation] of [["computer", "connect"], ["browser", "disconnect"]]) {
+          const response = await app.request(`/mcp/${name}/${operation}`, { method: "POST" })
+          expect(response.status).toBe(409)
+          expect(await response.json()).toMatchObject({
+            name: "MCPExecutionConnectionRequiredError",
+            data: { mcpName: name },
+          })
+        }
+      },
+    })
+  } finally {
+    await Instance.disposeAll()
+    await resources.close()
+  }
+}, 30_000)
 
 async function scope(
   run: (input: {

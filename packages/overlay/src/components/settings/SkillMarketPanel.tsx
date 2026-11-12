@@ -684,7 +684,7 @@ function SharedResourceManagementPanel(props: {
             vars: () => ({
               name,
               directory,
-              status: mcpConnectionStatusLabel(observed.status, observed.status === "disabled" ? observed.reason : undefined),
+              status: mcpConnectionStatusLabel(observed.status, observed),
             }),
             details: formatErrorDetails(receiptFailure.cause),
           })
@@ -1063,7 +1063,7 @@ function SharedResourceManagementPanel(props: {
               name,
               directory,
               status: observed
-                ? mcpConnectionStatusLabel(observed.status, observed.status === "disabled" ? observed.reason : undefined)
+                ? mcpConnectionStatusLabel(observed.status, observed)
                 : "",
             }),
             details: formatErrorDetails(receiptFailure.cause),
@@ -1892,25 +1892,29 @@ function SharedResourceManagementPanel(props: {
                       const name = () => entry()[0]
                       const connection = () => entry()[1]
                       const status = () => connection()?.status
-                      const label = () => {
+                      const executionOwned = () => {
                         const value = connection()
-                        return mcpConnectionStatusOrDisabledLabel(value?.status, value?.status === "disabled" ? value.reason : undefined)
+                        return value && "scope" in value && value.scope === "execution"
                       }
+                      const label = () => mcpConnectionStatusOrDisabledLabel(status(), connection())
                       const detail = () => {
                         const value = connection()
+                        if (executionOwned()) return t("mcp.status.execution_owned")
                         return value && "error" in value ? value.error : undefined
                       }
-                      const controllable = () => ["connected", "disabled", "disconnected", "failed"].includes(status() || "")
+                      const controllable = () => !executionOwned() && ["connected", "disabled", "disconnected", "failed"].includes(status() || "")
                       const action = () => status() === "connected" ? "mcp.disconnect" : "mcp.connect"
                       return (
                         <SettingsRow
                           class="extension-settings-row"
                           title={name()}
                           desc={detail() || undefined}
-                          interactive
+                          interactive={!executionOwned()}
                           actions={
                             <>
-                              <Badge tone={mcpConnectionStatusOrDisabledTone(status())}>{label()}</Badge>
+                              <Show when={!executionOwned() || status() === "disabled"}>
+                                <Badge tone={mcpConnectionStatusOrDisabledTone(status())}>{label()}</Badge>
+                              </Show>
                               <Show when={controllable()}>
                                 <Button
                                   type="button"

@@ -161,6 +161,11 @@ export namespace MCP {
     }),
   )
 
+  export const ExecutionConnectionRequiredError = NamedError.create(
+    "MCPExecutionConnectionRequiredError",
+    z.object({ mcpName: z.string(), message: z.string() }),
+  )
+
   type MCPClient = Client
   export type AppToolBinding = {
     serverID: string
@@ -206,6 +211,7 @@ export namespace MCP {
         .object({
           status: z.literal("disabled"),
           reason: z.literal("manual_disconnect").optional(),
+          scope: z.literal("execution").optional(),
         })
         .meta({
           ref: "MCPStatusDisabled",
@@ -213,6 +219,7 @@ export namespace MCP {
       z
         .object({
           status: z.literal("disconnected"),
+          scope: z.literal("execution").optional(),
         })
         .meta({
           ref: "MCPStatusDisconnected",
@@ -1515,9 +1522,17 @@ export namespace MCP {
       (entry as { enabled?: unknown }).enabled === false
     )
   }
-  function builtinConfigForDisabledOverride(name: string, entry: McpEntry): Config.Mcp | undefined {
-    if (!isMcpDisabledOverride(entry)) return
-    if (name === BrowserMCPBuiltin.ServerName) return BrowserMCPBuiltin.localConfig()
+  function isExecutionOwnedServer(name: string) {
+    return name === BrowserMCPBuiltin.ServerName || name === ComputerMCPBuiltin.ServerName
+  }
+
+  function requireProjectConnectionOwner(name: string) {
+    if (isExecutionOwnedServer(name)) {
+      throw new ExecutionConnectionRequiredError({
+        mcpName: name,
+        message: `MCP server ${name} is managed by its session or task runtime.`,
+      })
+    }
   }
 
   function errorMessage(error: unknown) {
@@ -2522,8 +2537,9 @@ export namespace MCP {
     waitForStarted = true,
     independent = false,
   ) {
+    const projectEntries = entries(config).filter(([key]) => !isExecutionOwnedServer(key))
     const tasks: Promise<void>[] = []
-    for (const [key, configuredMcp] of entries(config)) {
+    for (const [key, configuredMcp] of projectEntries) {
       const configuredIdentity = mcpConfigIdentity(configuredMcp)
       if (state.durableIdentity[key] !== configuredIdentity) continue
       const mcp = effectiveRuntimeMcp(state, key, configuredMcp)
@@ -2607,11 +2623,11 @@ export namespace MCP {
       )
     }
     if (waitForStarted) await Promise.all(tasks)
-    if (assertSucceeded && waitForStarted) assertConfiguredConnectionsSucceeded(state, config)
+    if (assertSucceeded && waitForStarted) assertConfiguredConnectionsSucceeded(state, projectEntries)
   }
 
-  function assertConfiguredConnectionsSucceeded(state: McpState, config: NonNullable<Config.Info["mcp"]>) {
-    for (const [key, configuredMcp] of entries(config)) {
+  function assertConfiguredConnectionsSucceeded(state: McpState, projectEntries: [string, McpEntry][]) {
+    for (const [key, configuredMcp] of projectEntries) {
       if (state.durableIdentity[key] !== mcpConfigIdentity(configuredMcp)) continue
       const mcp = effectiveRuntimeMcp(state, key, configuredMcp)
       if (!isMcpConfigured(mcp) || mcp.enabled === false) continue
@@ -2706,6 +2722,7 @@ export namespace MCP {
   }
 
   export async function add(name: string, mcp: Config.Mcp) {
+    requireProjectConnectionOwner(name)
     const s = await state()
     const durableIdentity = s.durableIdentity[name]
     const durableGeneration = s.durableGeneration[name]
@@ -2873,7 +2890,7 @@ export namespace MCP {
         }
         await ensureConfiguredConnections(s, { [parsed.name]: parsed.config }, false)
         return {
-          status: s.status,
+          status: catalogStatusProjection(s, (await Config.get()).mcp),
         }
       }),
     )
@@ -3246,22 +3263,7 @@ export namespace MCP {
 
   export async function projectStatus() {
     const project = await Config.getProject()
-    const config = (project.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
-    const s = await state()
-    const result: Record<string, Status> = {}
-    for (const [name, configuredEntry] of entries(config)) {
-      const entry = effectiveRuntimeMcp(s, name, configuredEntry)
-      if (isMcpDisabledOverride(entry) || (isMcpConfigured(entry) && entry.enabled === false)) {
-        result[name] = { status: "disabled" }
-        continue
-      }
-      if (!isMcpConfigured(entry)) continue
-      result[name] =
-        s.statusIdentity[name] === mcpConfigIdentity(entry)
-          ? (s.status[name] ?? { status: "disconnected" })
-          : { status: "disconnected" }
-    }
-    return result
+    return catalogStatusProjection(await state(), project.mcp as Config.Info["mcp"])
   }
 
   async function create(key: string, mcp: Config.Mcp, options: CreateOptions) {
@@ -3644,24 +3646,24 @@ export namespace MCP {
     }
   }
 
-  async function catalogStatusProjection(s: McpState, cfg: Config.Info) {
-    const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
+  function catalogStatusProjection(s: McpState | undefined, config: Record<string, McpEntry> = {}) {
     const result: Record<string, Status> = {}
 
     // Include all configured MCPs from config, not just connected ones
     for (const [key, configuredMcp] of entries(config)) {
-      const mcp = effectiveRuntimeMcp(s, key, configuredMcp)
-      if (isMcpDisabledOverride(mcp)) {
-        result[key] = { status: "disabled" }
+      const mcp = s ? effectiveRuntimeMcp(s, key, configuredMcp) : configuredMcp
+      if (isExecutionOwnedServer(key)) {
+        result[key] =
+          mcp.enabled === false ? { status: "disabled", scope: "execution" } : { status: "disconnected", scope: "execution" }
         continue
       }
-      if (!isMcpConfigured(mcp)) continue
       if (mcp.enabled === false) {
         result[key] = { status: "disabled" }
         continue
       }
+      if (!isMcpConfigured(mcp)) continue
       result[key] =
-        s.statusIdentity[key] === mcpConfigIdentity(mcp)
+        s && s.statusIdentity[key] === mcpConfigIdentity(mcp)
           ? (s.status[key] ?? { status: "disconnected" })
           : { status: "disconnected" }
     }
@@ -3670,7 +3672,7 @@ export namespace MCP {
   }
 
   export async function status() {
-    return catalogStatusProjection(await state(), await Config.get())
+    return catalogStatusProjection(await state(), (await Config.get()).mcp)
   }
 
   export interface CatalogSnapshot {
@@ -3779,17 +3781,7 @@ export namespace MCP {
     const cfg = configInput ?? (await Config.get())
     const config = (cfg.mcp ?? {}) as NonNullable<Config.Info["mcp"]>
     const observedState = existing ? await existing.state : undefined
-    const statuses = observedState
-      ? await catalogStatusProjection(observedState, cfg)
-      : Object.fromEntries(
-          entries(config).flatMap(([key, mcp]) => {
-            if (isMcpDisabledOverride(mcp)) return [[key, { status: "disabled" as const }]]
-            if (!isMcpConfigured(mcp)) return []
-            return [
-              [key, mcp.enabled === false ? { status: "disabled" as const } : { status: "disconnected" as const }],
-            ]
-          }),
-        )
+    const statuses = catalogStatusProjection(observedState, config)
     const orderedStatuses = Object.fromEntries(
       Object.entries(statuses)
         .sort(([left], [right]) => compareCanonicalStrings(left, right))
@@ -4030,6 +4022,7 @@ export namespace MCP {
   }
 
   export async function connect(name: string) {
+    requireProjectConnectionOwner(name)
     const s = await state()
     return withRuntimeControl(s, name, async () => {
       const ownerGeneration = s.durableGeneration[name]
@@ -4040,10 +4033,9 @@ export namespace MCP {
       if (s.durableGeneration[name] !== ownerGeneration || s.durableIdentity[name] !== ownerIdentity) {
         throw new Error(`MCP server ${name} configuration changed before connection started`)
       }
-      const mcpToConnect = isMcpConfigured(mcp) ? mcp : builtinConfigForDisabledOverride(name, mcp)
-      if (!mcpToConnect) throw mcpNotFound(name)
+      if (!isMcpConfigured(mcp)) throw mcpNotFound(name)
 
-      const enabledMcp = { ...mcpToConnect, enabled: true } as Config.Mcp
+      const enabledMcp = { ...mcp, enabled: true } as Config.Mcp
       const identity = mcpConfigIdentity(enabledMcp)
       const ownedCleanup = [...(s.connectionCleanupPending.get(name) ?? [])].filter(
         (connection) => connection.configIdentity === identity && connection.ownerGeneration === ownerGeneration,
@@ -4085,6 +4077,7 @@ export namespace MCP {
   }
 
   export async function disconnect(name: string) {
+    requireProjectConnectionOwner(name)
     const s = await state()
     const ownerGeneration = s.durableGeneration[name]
     const cfg = await Config.get()
