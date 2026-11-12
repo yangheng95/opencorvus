@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "version": "0.1.50",
+  "version": "0.1.51",
   "name": "opencorvus",
   "type": "module",
   "license": "MIT",
@@ -115,7 +115,7 @@
     "decimal.js": "10.5.0",
     "diff": "catalog:",
     "drizzle-orm": "1.0.0-beta.20",
-    "effect": "4.0.0-beta.83",
+    "effect": "catalog:",
     "fuzzysort": "3.1.0",
     "gitlab-ai-provider": "6.20.1",
     "glob": "14.0.2",

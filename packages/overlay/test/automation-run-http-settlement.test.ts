@@ -31,9 +31,14 @@ for (const kind of ["browser", "tauri"] as const) {
       completedAt: startedAt + 17_000,
       error: null,
     }
-    let received: { method?: string; path?: string } | undefined
+    let received: { method?: string; path?: string; requestID: string; pendingIDs: string[] } | undefined
+    const storage = new Map<string, string>()
+    const priorWindow = Object.getOwnPropertyDescriptor(globalThis, "window")
     const server = createServer(async (request, response) => {
-      received = { method: request.method, path: request.url }
+      const chunks = []
+      for await (const chunk of request) chunks.push(chunk)
+      const { requestID } = JSON.parse(Buffer.concat(chunks).toString()) as { requestID: string }
+      received = { method: request.method, path: request.url, requestID, pendingIDs: [...storage.values()] }
       await new Promise(resolve => setTimeout(resolve, 17_000))
       response.setHeader("Content-Type", "application/json")
       response.end(JSON.stringify([receipt]))
@@ -43,13 +48,27 @@ for (const kind of ["browser", "tauri"] as const) {
     const address = server.address()
     if (!address || typeof address === "string") throw new Error("TCP listener receipt required")
     try {
+      Object.defineProperty(globalThis, "window", {
+        configurable: true,
+        value: {
+          sessionStorage: {
+            getItem: (key: string) => storage.get(key) ?? null,
+            setItem: (key: string, value: string) => storage.set(key, value),
+            removeItem: (key: string) => storage.delete(key),
+          },
+        },
+      })
       configure({ serverUrl: `http://127.0.0.1:${address.port}`, directory: "", password: "" })
       __setHostTransportForTest(createTauriTransport(kind))
       const runs = await runAutomationNow("atm_long")
-      expect(received).toEqual({ method: "POST", path: "/global/automations/atm_long/run" })
+      expect(received).toMatchObject({ method: "POST", path: "/global/automations/atm_long/run" })
+      expect(received?.requestID).toMatch(/^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i)
+      expect(received?.pendingIDs).toEqual([received?.requestID])
       expect(runs).toEqual([receipt])
       expect(Date.now() - startedAt).toBeGreaterThanOrEqual(17_000)
     } finally {
+      if (priorWindow) Object.defineProperty(globalThis, "window", priorWindow)
+      else Reflect.deleteProperty(globalThis, "window")
       __setHostTransportForTest(undefined)
       configure({ serverUrl: "http://127.0.0.1:7878", directory: "", password: "" })
       await new Promise<void>((resolve, reject) => {

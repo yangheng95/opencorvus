@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [0.1.51 发布](records/2026-11/2026-11-12-release-0.1.51.md) · 版本准入与公开交付
 - [编辑器按声明接入远端连接传输](records/2026-11/2026-11-12-acp-remote-mcp-transport.md)
 - [编辑器会话广播已接入连接的命令](records/2026-11/2026-11-12-acp-attached-command-announcement.md)
 - [命令目录与模板使用同一当前定义](records/2026-11/2026-11-12-current-command-projection.md)

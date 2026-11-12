@@ -4,6 +4,56 @@
 
 ## 未发布
 
+## 0.1.51 - 2026-11-12
+
+### zh-CN
+
+#### 新增
+
+- 定时任务详情显示实际绑定的项目和会话，以及完整的高级时间规则。侧栏显示当前会话的本地文本草稿，并支持从键盘重命名。
+- 桌面版支持为模型上下文协议（MCP）连接授权。编辑器连接可以看到当前项目和已接入服务提供的命令。
+
+#### 调整
+
+- 新建对话、工作和多步任务，以及继续任务和手动运行定时任务时，应用按已接纳的请求恢复结果。网络响应中断后，重试可取回原结果，减少重复创建和执行。
+- 定时任务编辑、启停、删除和归档操作会核对实际目标与最新结果。网络暂时中断时，应用保留可确认的状态并提供重读入口。
+- 搜索、资源管理器、用量和模型目录刷新时，保留最近一次确认的内容、阅读位置或键盘选择，并区分读取失败与真正的空结果。
+
+#### 修复
+
+- MCP 新建、删除、连接和调用使用原始连接名及所属项目。多个连接的名称近似时，授权和工具调用仍指向准确的连接。禁用一个依赖连接后仍可打开专家团设置。
+- 修复旧配置读取覆盖已保存内容、并发保存回执覆盖新编辑的问题。专家团市场和技能目录刷新后能保留已确认的安装结果和选中目标。
+- 修复文本预览、文件比较、原始文件下载及多步任务附件的错误恢复，改进同名项目、会话和工具标签的区分。更新 Effect 和 XML 解析依赖以修复已公布的漏洞。
+
+#### 升级影响与已知限制
+
+- 数据库会自动从版本 10 升级到 13，保留已有记录，并新增全局对话和工作创建、多步任务草稿创建及任务跟进请求的回执记录。
+- macOS 安装包使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Scheduled task details show the bound project and conversation and the complete advanced schedule. The conversation sidebar shows local text drafts and supports keyboard renaming.
+- The desktop app supports authorization for Model Context Protocol (MCP) connections. Editors can see commands from the current project and its attached services.
+
+#### Changed
+
+- Starting a chat, work item, or Mission, following up on a task, and running a schedule manually can recover the result of an accepted request. Retrying after an interrupted response can retrieve that result and reduce duplicate work.
+- Scheduled task edits, status changes, deletions, and archive actions verify the target and current result. If the response is interrupted, the app retains confirmed state and offers a fresh read.
+- Search, Explorer, usage, and model catalogs retain recently confirmed content, reading position, or keyboard selection during refresh. They distinguish a failed read from an empty result.
+
+#### Fixed
+
+- MCP creation, removal, connection, and tool calls use the original connection name and its project. Authorization and tools reach the correct connection when names are similar. Expert Squad settings remain available when a required connection is disabled.
+- Preserve committed settings when an older read arrives and preserve newer edits when save responses overlap. Expert Squad and skill catalogs retain confirmed installs and the selected item through refresh.
+- Improve recovery for text previews, file comparisons, original downloads, and Mission attachments. Clarify which project, conversation, or tool tab an action targets when names match. Update Effect and the XML parser to address published advisories.
+
+#### Upgrade impact and known limitations
+
+- The database automatically upgrades from version 10 to 13, retaining existing records and adding receipts for global Chat and Work creation, Mission draft creation, and task follow-up requests.
+- macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
+
 ## 0.1.50 - 2026-11-10
 
 ### zh-CN

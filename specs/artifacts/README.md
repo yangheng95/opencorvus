@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.51 发布证据](2026-11-12-release-0.1.51/README.md) · 原生、官网和正式包日志
 - [编辑器远端传输的真实协议证据](2026-11-12-acp-remote-mcp-transport/README.md)
 - [编辑器首次命令通知的真实协议证据](2026-11-12-acp-attached-command-announcement/README.md)
 - [真实命令目录与模板的基线证据](2026-11-12-current-command-projection/README.md)

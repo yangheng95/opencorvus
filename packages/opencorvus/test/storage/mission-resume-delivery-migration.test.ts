@@ -12,7 +12,7 @@ import {
 import { DATABASE_MIGRATIONS } from "@/storage/migrations"
 import { migrateSchema, schemaVersion } from "@/storage/schema-migration"
 
-test("version ten preserves historical no-delivery receipts and user data through automatic migration, backup and reopen", () => {
+test("version ten and the current schema preserve historical no-delivery receipts through migration, backup and reopen", () => {
   const root = process.env.OPENCORVUS_TEST_PROCESS_ROOT
   if (!root) throw Error("Migration requires the isolated repository runner")
   const directory = fs.mkdtempSync(path.join(root, "resume-delivery-migration-")),
@@ -126,15 +126,15 @@ test("version ten preserves historical no-delivery receipts and user data throug
       task: query("SELECT * FROM engine_task"),
       session: query("SELECT * FROM session"),
     }
-    const migrate = () =>
+    const migrate = (migrations = DATABASE_MIGRATIONS) =>
       migrateSchema({
         sqlite,
         databasePath,
-        migrations: DATABASE_MIGRATIONS,
-        currentDDL: DATABASE_MIGRATIONS.at(-1)!.ddl,
+        migrations,
+        currentDDL: migrations.at(-1)!.ddl,
         validate() {},
       })
-    const receipt = migrate()
+    const receipt = migrate(DATABASE_MIGRATIONS.slice(0, 10))
     expect({ from: receipt.from, to: receipt.to, version: schemaVersion(sqlite) }).toEqual({
       from: 9,
       to: 10,
@@ -148,7 +148,6 @@ test("version ten preserves historical no-delivery receipts and user data throug
     expect(
       MissionTaskResumeReceiptSchema.parse(JSON.parse(query("SELECT payload FROM engine_artifact")[0].payload)),
     ).toEqual(old)
-    expect({ from: migrate().from, to: migrate().to }).toEqual({ from: 10, to: 10 })
     const backup = new SQLite(receipt.backupPath!, { readonly: true })
     try {
       expect(backup.query("SELECT payload FROM engine_artifact").get()).toEqual({ payload })
@@ -156,6 +155,15 @@ test("version ten preserves historical no-delivery receipts and user data throug
     } finally {
       backup.close(true)
     }
+    const target = DATABASE_MIGRATIONS.at(-1)!.version
+    const upgrade = migrate()
+    expect({ from: upgrade.from, to: upgrade.to, version: schemaVersion(sqlite) }).toEqual({
+      from: 10,
+      to: target,
+      version: target,
+    })
+    const repeat = migrate()
+    expect({ from: repeat.from, to: repeat.to }).toEqual({ from: target, to: target })
     expect(() =>
       migrateSchema({
         sqlite,
@@ -168,8 +176,12 @@ test("version ten preserves historical no-delivery receipts and user data throug
     sqlite.close(true)
     const reopened = new SQLite(databasePath, { readonly: true })
     try {
-      expect(schemaVersion(reopened)).toBe(10)
-      expect(reopened.query("SELECT payload FROM engine_artifact").get()).toEqual({ payload })
+      expect(schemaVersion(reopened)).toBe(target)
+      expect({
+        receipt: reopened.query("SELECT * FROM engine_artifact").all(),
+        task: reopened.query("SELECT * FROM engine_task").all(),
+        session: reopened.query("SELECT * FROM session").all(),
+      }).toEqual(before)
     } finally {
       reopened.close(true)
     }
