@@ -7,6 +7,7 @@
 
 import type {
   GlobalSkillMarketSearchResponse,
+  McpProjectStatusResponse,
   SkillMountsResponse,
   SkillSetMountOverrideData,
   SkillUpdateData,
@@ -14,6 +15,7 @@ import type {
 } from "@opencorvus-ai/sdk"
 import { appStore, setSkills, setMcp, setSkillMounts } from "../store/app"
 import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+import { isMcpConnectionStatus } from "../utils/settings-status-labels"
 
 // ── Types ──
 
@@ -268,12 +270,22 @@ export async function loadMcpStatus(options: DirectoryOwnedRequestOptions = {}):
   return mcp
 }
 
-export async function loadProjectMcpStatus(options: DirectoryOwnedRequestOptions = {}): Promise<Record<string, any>> {
+function isProjectMcpStatus(value: unknown): boolean {
+  if (!value || typeof value !== "object" || !("status" in value)) return false
+  const status = value.status
+  if (typeof status !== "string" || !isMcpConnectionStatus(status)) return false
+  return status !== "failed" && status !== "needs_client_registration" ||
+    ("error" in value && typeof value.error === "string")
+}
+
+export async function loadProjectMcpStatus(options: DirectoryOwnedRequestOptions = {}): Promise<McpProjectStatusResponse> {
   options = { ...options, authority: options.authority ?? captureApiAuthority() }
-  const mcp = await apiJson(directoryOwnedPath("mcp/project", options), { authority: options.authority })
+  const mcp = await apiJson<McpProjectStatusResponse>(directoryOwnedPath("mcp/project", options), { authority: options.authority })
   if (!mcp || typeof mcp !== "object" || Array.isArray(mcp)) {
     throw new Error("mcp/project returned a non-object payload")
   }
+  const invalid = Object.entries(mcp).find(([, status]) => !isProjectMcpStatus(status))
+  if (invalid) throw new Error(`mcp/project returned an invalid status for ${JSON.stringify(invalid[0])}`)
   if (ownsDirectoryRequest(options)) setMcp(mcp, { kind: "project", directory: options.directory?.trim() || "", authority: options.authority! })
   return mcp
 }

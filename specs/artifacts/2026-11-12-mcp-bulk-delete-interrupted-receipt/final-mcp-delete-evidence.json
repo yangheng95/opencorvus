@@ -1,0 +1,146 @@
+{
+  "before": {
+    "checks": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project\\archive-review",
+        "requestID": "219e55e9-22bc-4c63-912f-980f28bb62d7",
+        "status": {
+          "alpha-files": {
+            "status": "connected"
+          },
+          "shared-tools": {
+            "status": "disabled"
+          }
+        },
+        "definitions": {
+          "alpha-files": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project-primary.jsonl"
+            ]
+          },
+          "shared-tools": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project-shared.jsonl"
+            ],
+            "enabled": false
+          }
+        }
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-alternate\\archive-review",
+        "requestID": "56a96af4-0957-44a3-8278-429798c22240",
+        "status": {
+          "beta-index": {
+            "status": "disconnected"
+          },
+          "shared-tools": {
+            "status": "disabled"
+          }
+        },
+        "definitions": {
+          "beta-index": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-alternate-primary.jsonl"
+            ]
+          },
+          "shared-tools": {
+            "type": "local",
+            "command": [
+              "C:\\Program Files\\nodejs\\node.exe",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-alternate-shared.jsonl"
+            ],
+            "enabled": false
+          }
+        }
+      }
+    ],
+    "pid": 24788,
+    "processAlive": true
+  },
+  "request": {
+    "time": "2026-11-12T03:39:39.081Z",
+    "stage": "request-body",
+    "route": "/mcp",
+    "method": "DELETE",
+    "round": "delete-double-final",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "names": [
+      "alpha-files",
+      "shared-tools"
+    ]
+  },
+  "receipt": {
+    "time": "2026-11-12T03:39:39.204Z",
+    "stage": "truncated",
+    "route": "/mcp",
+    "method": "DELETE",
+    "round": "delete-double-final",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "a692808a-96bf-4627-ac09-9ebc1584b561",
+    "status": 200,
+    "bytes": 903,
+    "target": {
+      "mcp": {},
+      "$schema": "https://opencorvus.ai/config.json"
+    },
+    "deliveredBytes": 12
+  },
+  "checks": [
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project\\archive-review",
+      "requestID": "ffa16f5e-a42c-4758-b712-f9e8d646997a",
+      "status": {},
+      "definitions": {}
+    },
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-alternate\\archive-review",
+      "requestID": "1cb885f8-f050-4c1a-b159-00221a1f9cd2",
+      "status": {
+        "beta-index": {
+          "status": "disconnected"
+        },
+        "shared-tools": {
+          "status": "disabled"
+        }
+      },
+      "definitions": {
+        "beta-index": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-alternate-primary.jsonl"
+          ]
+        },
+        "shared-tools": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-alternate-shared.jsonl"
+          ],
+          "enabled": false
+        }
+      }
+    }
+  ],
+  "processExited": true
+}

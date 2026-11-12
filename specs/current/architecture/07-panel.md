@@ -5711,6 +5711,10 @@ server. An action from a retired scope cannot update the current form.
 Bulk removal confirms the exact project directory and server names it will
 send. The delete request retains those stored names verbatim and validates
 each against the project's own configuration keys.
+An interrupted bulk removal reply uses the same scoped readback as connection
+actions. The notice reports which targets appear in the accepted current
+project status map and retains the original diagnostic. The action sends one
+delete request. The server settles physical cleanup separately from status observation.
 Project MCP management links to the active project's Chat and Work assignment
 sections using the existing settings tabs and their localized product labels.
 The settings host owns the one-shot focus handoff until the assignment section

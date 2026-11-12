@@ -425,6 +425,20 @@ function SharedResourceManagementPanel(props: {
     }
   }
 
+  async function readMcpStatusAfterMutation(owner: McpReadScope, current: () => boolean, write: () => Promise<void>) {
+    let receiptFailure: { cause: unknown } | undefined
+    try {
+      await write()
+    } catch (error) {
+      if (!current()) return
+      if (!isUncertainMutationReceipt(error)) throw error
+      receiptFailure = { cause: error }
+    }
+    if (!current()) return
+    const status = await refreshMcpStatus(owner)
+    if (current()) return { status, receiptFailure }
+  }
+
   function notifyResourceChange() {
     props.onResourcesChanged?.()
   }
@@ -605,14 +619,37 @@ function SharedResourceManagementPanel(props: {
       if (!decision.confirmed || !ownsConfirmation()) return
       setLoading(true)
       setNotice(undefined)
-      await deleteAllMcp({ ...owner, names })
-      if (!current()) return
-      const status = await refreshMcpStatus(owner)
-      if (!current()) return
+      const observation = await readMcpStatusAfterMutation(owner, current, () => deleteAllMcp({ ...owner, names }))
+      if (!observation || !current()) return
+      const { status, receiptFailure } = observation
+      if (receiptFailure) {
+        if (status) {
+          const remaining = names.filter((name) => Object.hasOwn(status, name))
+          setPanelNotice(remaining.length ? "mcp.delete_targets_still_listed" : "mcp.delete_targets_absent", {
+            tone: "warning",
+            vars: () => ({
+              directory,
+              count: new Intl.NumberFormat(localeTag()).format(names.length),
+              remaining: new Intl.ListFormat(localeTag()).format(remaining.map((name) => JSON.stringify(name))),
+            }),
+            details: formatErrorDetails(receiptFailure.cause),
+          })
+        } else {
+          const reason = mcpReadFailure()?.error ?? new Error("Current project MCP status was unavailable.")
+          setPanelNotice("mcp.delete_targets_unconfirmed", {
+            tone: "warning",
+            vars: () => ({ directory }),
+            details: formatErrorDetails(new AggregateError(
+              [receiptFailure.cause, reason],
+              "The project MCP deletion reply and state could not be read",
+            )),
+          })
+        }
+      }
       if (status && Object.keys(status).length === 0 && document.activeElement === trigger) {
         mcpStatusHeading?.focus({ preventScroll: true })
       }
-      notifyResourceChange()
+      if (!receiptFailure || status) notifyResourceChange()
     } catch (e) {
       if (current()) setPanelError(e)
     } finally {
@@ -633,17 +670,11 @@ function SharedResourceManagementPanel(props: {
     setLoading(true)
     setNotice(undefined)
     try {
-      let receiptFailure: { cause: unknown } | undefined
-      try {
-        await (disconnect ? disconnectMcp : connectMcp)(name, owner)
-      } catch (error) {
-        if (!current()) return
-        if (!isUncertainMutationReceipt(error)) throw error
-        receiptFailure = { cause: error }
-      }
-      if (!current()) return
-      const status = await refreshMcpStatus(owner)
-      if (!current()) return
+      const observation = await readMcpStatusAfterMutation(owner, current, () =>
+        (disconnect ? disconnectMcp : connectMcp)(name, owner),
+      )
+      if (!observation || !current()) return
+      const { status, receiptFailure } = observation
       if (receiptFailure) {
         const observed = status && Object.hasOwn(status, name) ? status[name]?.status : undefined
         if (observed && isMcpConnectionStatus(observed)) {

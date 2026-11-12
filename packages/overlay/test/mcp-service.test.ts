@@ -66,6 +66,33 @@ describe("MCP overlay service", () => {
     ])
   })
 
+  test("publishes project statuses with their actual diagnostics", async () => {
+    const body = {
+      active: { status: "connected" },
+      paused: { status: "disabled" },
+      idle: { status: "disconnected" },
+      starting: { status: "connecting" },
+      signIn: { status: "needs_auth" },
+      broken: { status: "failed", error: "the protocol process exited" },
+      setup: { status: "needs_client_registration", error: "registration is required" },
+    }
+    __setHostTransportForTest(fakeTransport(() => {}, body))
+    const authority = captureApiAuthority()
+
+    expect(await loadProjectMcpStatus({ directory: PROJECT_DIR, authority })).toEqual(body)
+    expect(appStore.mcp).toEqual(body)
+    expect(appStore.mcpReadScope).toEqual({ kind: "project", directory: PROJECT_DIR, authority })
+  })
+
+  test("reports the exact project entry with an invalid status receipt", async () => {
+    __setHostTransportForTest(fakeTransport(() => {}, { "bad result": { status: "failed" } }))
+    const authority = captureApiAuthority()
+
+    await expect(loadProjectMcpStatus({ directory: PROJECT_DIR, authority })).rejects.toThrow(
+      'mcp/project returned an invalid status for "bad result"',
+    )
+  })
+
   test("adds a project-scoped remote MCP server through the canonical route", async () => {
     const requests: TransportRequest[] = []
     __setHostTransportForTest(fakeTransport((req) => requests.push(req)))

@@ -1,0 +1,55 @@
+{
+  "delete": {
+    "time": "2026-11-12T03:39:39.204Z",
+    "stage": "truncated",
+    "route": "/mcp",
+    "method": "DELETE",
+    "round": "delete-double-final",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "a692808a-96bf-4627-ac09-9ebc1584b561",
+    "status": 200,
+    "bytes": 903,
+    "target": {
+      "mcp": {},
+      "$schema": "https://opencorvus.ai/config.json"
+    },
+    "deliveredBytes": 12
+  },
+  "readCut": {
+    "time": "2026-11-12T03:39:39.293Z",
+    "stage": "truncated",
+    "route": "/mcp/project",
+    "method": "GET",
+    "round": "delete-double-final",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "9a41da09-9e78-4476-9f81-c7745c954bc8",
+    "status": 200,
+    "bytes": 2,
+    "target": {},
+    "deliveredBytes": 1
+  },
+  "readRecovered": {
+    "time": "2026-11-12T03:39:51.485Z",
+    "stage": "delivered",
+    "route": "/mcp/project",
+    "method": "GET",
+    "round": "final-read-recovered",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b275\\final-project\\archive-review",
+    "search": null,
+    "cursor": null,
+    "expectedRevisionId": null,
+    "operationRequestID": null,
+    "requestID": "fcd05dd8-7bcc-4c84-9928-c91e21ed603c",
+    "status": 200,
+    "bytes": 2,
+    "target": {}
+  }
+}
