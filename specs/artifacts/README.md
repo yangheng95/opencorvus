@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [连接操作地址的桌面与服务基线](2026-11-12-mcp-exact-operation-routes/README.md)
 - [项目连接运行引用的基线证据](2026-11-12-mcp-runtime-exact-project-reference/README.md)
 - [连接分配原始名称的桌面证据](2026-11-12-mcp-assignment-name-validation/README.md)
 - [MCP 桌面授权入口的实拍和真实协议](2026-11-12-mcp-desktop-authorization-entry/README.md)

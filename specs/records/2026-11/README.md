@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [连接操作通过请求体传递原始名称](2026-11-12-mcp-exact-operation-routes.md)
 - [执行目录和授权保留项目连接原始名称](2026-11-12-mcp-runtime-exact-project-reference.md)
 - [连接分配校验请求中的原始名称](2026-11-12-mcp-assignment-name-validation.md)
 - [MCP 连接行提供桌面授权入口](2026-11-12-mcp-desktop-authorization-entry.md)

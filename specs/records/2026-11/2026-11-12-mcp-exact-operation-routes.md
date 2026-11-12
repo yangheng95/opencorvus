@@ -1,0 +1,19 @@
+# 连接操作通过请求体传递原始名称
+
+## Recall
+
+- 用户要求持续按批调查、先落盘根因与影响，再本人实现和复核真实桌面、运行聚焦正向检查、提交、合并和正常推送。本次独立工作。上一批 `910b0b360` 已推送，主分支与上游 0/0，原 177 条工作区状态逐行一致。
+- 已读 `04-extensions.md`、`07-panel.md`、[执行引用](2026-11-12-mcp-runtime-exact-project-reference.md)、[OAuth 名称归属](2026-11-12-mcp-oauth-exact-connection-name.md)、[桌面授权](2026-11-12-mcp-desktop-authorization-entry.md) 和连接回执记录。全仓查 `/mcp/{name}`、`/:name`、`mcp.connect`、`mcp.disconnect`、`mcp.auth.*`、`removeMcpAuth`、`mcpPath`、`McpRoutes`、本地 OAuth redirect、调用方、SDK（软件开发工具包）与两语言生成接口文档。已读前端网络 authority（权限上下文）、后端路由、MCP 六个操作、配置原始键和相关正向测试。当前范围没有界面自动化测试。
+- 验收以两个同名隔离项目、真实桌面、软件开发工具包生成的请求、公开服务、匿名本地 MCP（Model Context Protocol，模型上下文协议）及本地 OAuth（Open Authorization，开放授权）端点为证。主项目空名、点号、双点、斜杠、尾部空格和普通名各保留原始身份，另项目的空名完成真正授权和重启读回。无用户进程、真实模型或外部凭据操作。
+
+## 修改前证据和根因
+
+实际开发 `/ui/` 显示主项目六条确切连接。英文鼠标操作 `.` 真实 POST `/mcp/connect` 404 `f56205e3-4622-4907-aafa-2cdaf9197b96`，`..` 真实 POST `/connect` 404 `764f4356-4d3b-4d9a-9703-f6d6748e99b2`，`""` 真实 POST `/mcp//connect` 404 `ef6b4daf-f308-491a-9aa2-d50ccc5b6588`。`segment/name` 的 `/mcp/segment%2Fname/connect` 返回 200 `2ba23fd2-0eb2-436c-a00b-703948a30475`，实际连接行变绿，随后明确断开。另一同名项目有自己空名的本地 OAuth 服务，中文页面点连接也报真实 404 `c9b16a0d-6f1a-47df-babb-9f5e57e286d0`。在两项目用真实 HTTP（Hypertext Transfer Protocol，超文本传输协议）对这些不能表示的名称调用断开、开始授权、等待授权、提交回调和清除授权共二十次，均在业务入口前返回 404。独立公开状态读取保留各项目所有原始名称。[实拍和请求](../../artifacts/2026-11-12-mcp-exact-operation-routes/README.md)
+
+界面用 `encodeURIComponent(name)` 拼接 `/mcp/<name>/<action>`。空字符串不会产生路由要求的段，`.` 和 `..` 即使百分号编码也会被 URL（Uniform Resource Locator，统一资源定位符）解析成路径导航。后端所有六个操作从路径取 `name`，因此前端以外的调用方也遇到同一身份表示问题。MCP 真实状态、持久凭据、精确执行和前批公开授权结果校验已支持原始名称，无法补回请求构造时丢失的名称。新项目配置可以通过手写 JSONC（JSON with Comments，带注释的 JavaScript 对象表示法）拥有空名，点号和双点满足现添加表单的非空检查。
+
+## 影响及方案
+
+- 将六个操作移到现 `/mcp` 下固定动作路径，以严格请求体传 `name` 字符串，明确空值有效、字段缺失为 400。固定路径为 `/mcp/connect`、`/mcp/disconnect`、`/mcp/auth`（POST 开始、DELETE 清除）、`/mcp/auth/authenticate`、`/mcp/auth/callback`（POST 手工完成）。继续使用同一 `MCP` 实现、现目录 authority、具名授权错误、已配置连接 404 和结果结构。官方软件开发工具包的操作 ID 保持，生成客户端调用参数由 `path.name` 迁至 `body.name`，外部旧请求需要更新。发布的文档应直接说明请求字段。现删除连接 `DELETE /mcp` 已使用 JSON 请求体，同样的 DELETE 请求合同适用于清除单个授权。浏览器授权服务实际回调固定 `GET /mcp/oauth/callback`，继续由 broker 持有并通过已有 state 识别精确连接。
+- 前端三个调用点通过一个具名请求函数传原始 `name`、项目目录、原 API authority 和必要语言标头。正常连接与断开、读取或未确认恢复、本地化确认窗、异步授权、配置、数据和模型执行保持已有语义。改动范围限公开连接操作的地址和请求体、绑定调用方、正向测试、生成接口和架构说明。基线 HTTP 失败发生于路径匹配前，没有进入调度、任务、多步任务或会话执行。无持久格式变化。测试配置首次遗漏预注册 client 的 issuer，在隔离文件按真实验证错误补齐后重跑，两项目使用同一真实会话请求身份创建。
+- 先通过实际接口检查准确项目和每个原始名称、缺失名称错误及授权不支持的结构化 400，再用真实本地 OAuth 端点核对具名挑战、开始、回调和授权清理。等待授权操作需要服务直接打开系统浏览器，本批以普通连接的正式验证错误覆盖其入口，并以独立隔离窗口实际覆盖浏览器授权流程。真实 `/ui/` 英文空名、点号、双点连接与恢复，中文另项目打开本地 OAuth 并完成，再以独立读回和截图确认。验证聚焦测试、应用类型、实际前端构建、SDK、文档、运行范围与干净提交。
