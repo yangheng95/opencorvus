@@ -9,6 +9,7 @@ import {
   deleteAllMcp,
   disconnectMcp,
   InvalidMcpConnectionReceiptError,
+  McpArgumentQuoteError,
   parseMcpArguments,
   removeMcpAuth,
 } from "../src/services/mcp"
@@ -145,13 +146,15 @@ describe("MCP overlay service", () => {
     })
   })
 
-  test("reports an unterminated command argument as a draft validation error", () => {
-    expect(() => buildMcpAddRequest({
-      name: "files",
-      type: "local",
-      command: "node",
-      args: '"unclosed',
-    })).toThrow("MCP arguments contain an unterminated quote")
+  test.each(["'", '"'] as const)("reports the unclosed %s quote in a command argument", (quote) => {
+    let failure: unknown
+    try {
+      buildMcpAddRequest({ name: "files", type: "local", command: "node", args: quote + "unclosed" })
+    } catch (error) {
+      failure = error
+    }
+    expect(failure).toBeInstanceOf(McpArgumentQuoteError)
+    expect(failure).toMatchObject({ quote, message: "MCP arguments contain an unterminated quote" })
   })
 
   test("builds the user-owned query credential request", () => {

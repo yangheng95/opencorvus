@@ -45,7 +45,7 @@ import {
   type SkillMarketCandidate,
   type SkillMarketDetail,
 } from "../../services/extensions"
-import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, McpArgumentQuoteError, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
@@ -974,6 +974,15 @@ function SharedResourceManagementPanel(props: {
     args: "",
   }
   const [mcpForm, setMcpForm] = createStore({ ...initialMcpForm })
+  const [mcpDraftError, setMcpDraftError] = createSignal<
+    { field: "remote-url" } | { field: "args"; quote: McpArgumentQuoteError["quote"] }
+  >()
+  let mcpRemoteUrlInput: HTMLInputElement | undefined
+  let mcpArgumentsInput: HTMLInputElement | undefined
+  const mcpArgsError = () => {
+    const error = mcpDraftError()
+    return error?.field === "args" ? error : undefined
+  }
   const mcpDraftValid = () => {
     if (!mcpForm.name.trim()) return false
     if (mcpForm.type === "local") return Boolean(mcpForm.command.trim())
@@ -986,6 +995,7 @@ function SharedResourceManagementPanel(props: {
   function closeAndClearMcpForm() {
     setShowAddMcp(false)
     setMcpForm(initialMcpForm)
+    setMcpDraftError(undefined)
   }
 
   createEffect(on(
@@ -996,6 +1006,11 @@ function SharedResourceManagementPanel(props: {
 
   async function handleAddMcp() {
     if (loading() || !mcpDraftValid()) return
+    if (mcpForm.type === "remote" && mcpRemoteUrlInput?.validity.typeMismatch) {
+      setMcpDraftError({ field: "remote-url" })
+      mcpRemoteUrlInput.focus()
+      return
+    }
     const directory = currentDirectory()
     if (!directory) return
     const owner = { directory, authority: captureApiAuthority() }
@@ -1063,7 +1078,13 @@ function SharedResourceManagementPanel(props: {
       }
       if (!receiptFailure || status) notifyResourceChange()
     } catch (e) {
-      if (current()) setPanelError(e, undefined, noticeOwner)
+      if (!current()) return
+      if (e instanceof McpArgumentQuoteError) {
+        setMcpDraftError({ field: "args", quote: e.quote })
+        mcpArgumentsInput?.focus()
+      } else {
+        setPanelError(e, undefined, noticeOwner)
+      }
     } finally {
       if (current()) {
         mcpActionRequest = undefined
@@ -1692,6 +1713,7 @@ function SharedResourceManagementPanel(props: {
               <form
                 class="config-inline-form"
                 spellcheck={false}
+                noValidate
                 onSubmit={(event) => {
                   event.preventDefault()
                   void handleAddMcp()
@@ -1713,7 +1735,10 @@ function SharedResourceManagementPanel(props: {
                     value={mcpForm.type}
                     options={mcpTypeOptions()}
                     ariaLabel={t("mcp.type")}
-                    onChange={(value) => setMcpForm("type", value as any)}
+                    onChange={(value) => {
+                      setMcpDraftError(undefined)
+                      setMcpForm("type", value as "remote" | "local")
+                    }}
                     optionData={(option) => ({ "data-value": option.value })}
                   />
                 </TextField.Root>
@@ -1728,15 +1753,22 @@ function SharedResourceManagementPanel(props: {
                       optionData={(option) => ({ "data-value": option.value })}
                     />
                   </TextField.Root>
-                  <TextField.Root as="label">
+                  <TextField.Root as="label" invalid={mcpDraftError()?.field === "remote-url"}>
                     <TextField.Label>{t("mcp.remote_url")}</TextField.Label>
                     {/* Fixed remote MCP URL example. */}
                     <TextField.Input
+                      ref={mcpRemoteUrlInput}
                       type="url"
                       value={mcpForm.url}
                       placeholder="https://example.com/mcp"
-                      onInput={(e) => setMcpForm("url", e.currentTarget.value)}
+                      onInput={(e) => {
+                        setMcpDraftError(undefined)
+                        setMcpForm("url", e.currentTarget.value)
+                      }}
                     />
+                    <Show when={mcpDraftError()?.field === "remote-url"}>
+                      <TextField.ErrorMessage role="alert">{t("mcp.remote_url_invalid")}</TextField.ErrorMessage>
+                    </Show>
                   </TextField.Root>
                   <TextField.Root>
                     <TextField.Label>{t("mcp.credential.type")}</TextField.Label>
@@ -1783,15 +1815,26 @@ function SharedResourceManagementPanel(props: {
                       onInput={(e) => setMcpForm("command", e.currentTarget.value)}
                     />
                   </TextField.Root>
-                  <TextField.Root as="label">
+                  <TextField.Root as="label" invalid={Boolean(mcpArgsError())}>
                     <TextField.Label>{t("mcp.arguments")}</TextField.Label>
                     {/* Fixed command-line argument example. */}
                     <TextField.Input
+                      ref={mcpArgumentsInput}
                       type="text"
                       value={mcpForm.args}
                       placeholder="-y @modelcontextprotocol/server-filesystem C:\repo"
-                      onInput={(e) => setMcpForm("args", e.currentTarget.value)}
+                      onInput={(e) => {
+                        setMcpDraftError(undefined)
+                        setMcpForm("args", e.currentTarget.value)
+                      }}
                     />
+                    <Show when={mcpArgsError()}>
+                      {(error) => (
+                        <TextField.ErrorMessage role="alert">
+                          {t("mcp.arguments_unclosed_quote", { quote: error().quote })}
+                        </TextField.ErrorMessage>
+                      )}
+                    </Show>
                   </TextField.Root>
                 </Show>
                 {renderNotice("mcp-add")}

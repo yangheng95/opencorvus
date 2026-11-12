@@ -54,6 +54,14 @@ function mcpPath(path: string, options: McpRequestOptions = {}): string {
   return directory ? `${path}?directory=${encodeURIComponent(directory)}` : path
 }
 
+export class McpArgumentQuoteError extends Error {
+  override readonly name = "McpArgumentQuoteError"
+
+  constructor(readonly quote: "'" | '"') {
+    super("MCP arguments contain an unterminated quote")
+  }
+}
+
 export function parseMcpArguments(input: string): string[] {
   const args: string[] = []
   let current = ""
@@ -86,7 +94,7 @@ export function parseMcpArguments(input: string): string[] {
     started = true
   }
 
-  if (quote) throw new Error("MCP arguments contain an unterminated quote")
+  if (quote) throw new McpArgumentQuoteError(quote)
   if (started) args.push(current)
   return args
 }

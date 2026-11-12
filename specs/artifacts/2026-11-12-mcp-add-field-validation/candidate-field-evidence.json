@@ -1,0 +1,228 @@
+{
+  "receipts": [
+    {
+      "input": {
+        "time": "2026-11-12T04:14:07.086Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "valid-remote",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "url-review",
+        "type": "remote"
+      },
+      "receipt": {
+        "time": "2026-11-12T04:14:07.291Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "valid-remote",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-project\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "e7dbd3fb-53b8-4062-98f2-b0ce5c0672ba",
+        "status": 200,
+        "bytes": 111,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "url-review": {
+            "status": "needs_auth"
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "time": "2026-11-12T04:20:05.908Z",
+        "stage": "request-body",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "valid-local",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "name": "args-review",
+        "type": "local",
+        "command": [
+          "C:\\Program Files\\nodejs\\node.exe",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\local-mcp-review.mjs",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-valid-process.jsonl"
+        ]
+      },
+      "receipt": {
+        "time": "2026-11-12T04:20:06.330Z",
+        "stage": "delivered",
+        "route": "/mcp",
+        "method": "POST",
+        "round": "valid-local",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-alternate\\archive-review",
+        "search": null,
+        "cursor": null,
+        "expectedRevisionId": null,
+        "operationRequestID": null,
+        "requestID": "ea916fe3-1d47-499d-bc2c-4293179dcd0e",
+        "status": 200,
+        "bytes": 111,
+        "target": {
+          "browser": {
+            "status": "disconnected"
+          },
+          "computer": {
+            "status": "disconnected"
+          },
+          "args-review": {
+            "status": "connected"
+          }
+        }
+      }
+    }
+  ],
+  "localProcess": {
+    "pid": 4232,
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-alternate\\archive-review",
+    "at": 1794457206310
+  },
+  "projects": [
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-project\\archive-review",
+      "requestID": "12ff7b56-af5a-4f1f-b3ca-2ee53417670f",
+      "status": {
+        "url-review": {
+          "status": "needs_auth"
+        },
+        "url-review-debug": {
+          "status": "needs_auth"
+        },
+        "url-review-unauth": {
+          "status": "connected"
+        }
+      },
+      "definitions": {
+        "url-review": {
+          "type": "remote",
+          "transport": "streamable-http",
+          "url": "http://127.0.0.1:39882/mcp"
+        },
+        "url-review-debug": {
+          "type": "remote",
+          "transport": "streamable-http",
+          "url": "http://127.0.0.1:39883/mcp"
+        },
+        "url-review-unauth": {
+          "type": "remote",
+          "transport": "streamable-http",
+          "url": "http://127.0.0.1:39883/mcp",
+          "oauth": false
+        }
+      }
+    },
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-alternate\\archive-review",
+      "requestID": "a6ea52ae-f114-43ec-8034-f573c143580f",
+      "status": {
+        "args-review": {
+          "status": "connected"
+        }
+      },
+      "definitions": {
+        "args-review": {
+          "type": "local",
+          "command": [
+            "C:\\Program Files\\nodejs\\node.exe",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\local-mcp-review.mjs",
+            "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261112-b277\\candidate-valid-process.jsonl"
+          ]
+        }
+      }
+    }
+  ],
+  "independent": [
+    {
+      "name": "url-review-debug",
+      "port": 39883,
+      "status": "needs_auth",
+      "requestID": "7fe792bf-c690-46be-9a2a-8e393076e978",
+      "trace": [
+        {
+          "time": "2026-11-12T04:16:39.899Z",
+          "message": "found"
+        },
+        {
+          "time": "2026-11-12T04:16:39.951Z",
+          "message": "mcp server requires authentication",
+          "transport": "StreamableHTTP"
+        }
+      ]
+    },
+    {
+      "name": "url-review-unauth",
+      "port": 39883,
+      "status": "connected",
+      "oauth": false,
+      "requestID": "974b89f2-2c37-453c-8c01-ae08af329c8e",
+      "trace": [
+        {
+          "time": "2026-11-12T04:16:58.882Z",
+          "message": "found"
+        },
+        {
+          "time": "2026-11-12T04:16:58.896Z",
+          "message": "connected",
+          "transport": "StreamableHTTP"
+        },
+        {
+          "time": "2026-11-12T04:16:58.906Z",
+          "message": "create() successfully created client",
+          "toolCount": 1
+        }
+      ]
+    }
+  ],
+  "remoteProtocol": [
+    {
+      "kind": "response",
+      "pid": 2688,
+      "port": 39883,
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2688,
+      "port": 39883,
+      "method": "POST",
+      "operation": "initialize",
+      "status": 200
+    },
+    {
+      "kind": "response",
+      "pid": 2688,
+      "port": 39883,
+      "method": "POST",
+      "operation": "notifications/initialized",
+      "status": 202
+    },
+    {
+      "kind": "response",
+      "pid": 2688,
+      "port": 39883,
+      "method": "POST",
+      "operation": "tools/list",
+      "status": 200
+    }
+  ]
+}

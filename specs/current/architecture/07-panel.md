@@ -5711,6 +5711,9 @@ server. An action from a retired scope cannot update the current form.
 An interrupted add reply keeps the form and uses the same scoped readback as
 connection actions. The notice names the submitted server and reports its
 current list status. A complete reply owns confirmation of the original add.
+Local argument quote errors and the native remote URL format check focus their
+own field and show a localized correction. Editing that field clears its
+validation message.
 Bulk removal confirms the exact project directory and server names it will
 send. The delete request retains those stored names verbatim and validates
 each against the project's own configuration keys.
