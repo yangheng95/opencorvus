@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [连接分配校验请求中的原始名称](2026-11-12-mcp-assignment-name-validation.md)
 - [MCP 连接行提供桌面授权入口](2026-11-12-mcp-desktop-authorization-entry.md)
 - [MCP 授权必须绑定项目中的确切连接名称](2026-11-12-mcp-oauth-exact-connection-name.md)
 - [批量删除 MCP 回执核对已确认的精确目标](2026-11-12-mcp-delete-exact-acknowledgment.md)

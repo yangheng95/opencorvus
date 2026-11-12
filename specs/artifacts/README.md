@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [连接分配原始名称的桌面证据](2026-11-12-mcp-assignment-name-validation/README.md)
 - [MCP 桌面授权入口的实拍和真实协议](2026-11-12-mcp-desktop-authorization-entry/README.md)
 - [MCP 授权确切连接名的真实桌面与协议证据](2026-11-12-mcp-oauth-exact-connection-name/README.md)
 - [批量删除精确回执的桌面与项目证据](2026-11-12-mcp-delete-exact-acknowledgment/README.md)

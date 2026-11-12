@@ -1,0 +1,174 @@
+{
+  "requests": [
+    {
+      "side": "project",
+      "route": "/chat/capability",
+      "request": {
+        "kind": "mcp_server",
+        "ref": " review-tools ",
+        "assigned": true
+      },
+      "status": 200,
+      "requestID": "abe7b3dc-7d45-43d1-b677-2c33d04ec3b8",
+      "mcp": {
+        "assigned_server_refs": [
+          "review-tools"
+        ],
+        "configured_server_refs": [
+          "",
+          "  ",
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools"
+        ]
+      }
+    },
+    {
+      "side": "project",
+      "route": "/chat/capability",
+      "request": {
+        "kind": "mcp_server",
+        "ref": "",
+        "assigned": true
+      },
+      "status": 400,
+      "requestID": "766a6073-f671-45b7-9fed-5b34ac1bb075",
+      "error": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "too_small",
+            "path": [
+              "ref"
+            ],
+            "message": "Too small: expected string to have >=1 characters"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "side": "alternate",
+      "route": "/work/capability",
+      "request": {
+        "kind": "mcp_server",
+        "ref": " review-tools ",
+        "assigned": true
+      },
+      "status": 200,
+      "requestID": "a3bc69e7-d2f4-4f0a-b6ba-5fcc4ce23a6f",
+      "mcp": {
+        "assigned_server_refs": [
+          "review-tools"
+        ],
+        "configured_server_refs": [
+          " review-tools ",
+          "browser",
+          "computer",
+          "review-tools"
+        ]
+      }
+    }
+  ],
+  "readback": [
+    {
+      "experience": "chat",
+      "project": "prj_hdORMkXga2gCbHmr0FHI",
+      "status": 200,
+      "requestID": null,
+      "assigned": [
+        "review-tools"
+      ],
+      "configured": [
+        "",
+        "  ",
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "chat": {
+          "skill_refs": [],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    },
+    {
+      "experience": "work",
+      "project": "prj_hdORMkXga2gCbHmr0FHI",
+      "status": 200,
+      "requestID": null,
+      "assigned": [],
+      "configured": [
+        "",
+        "  ",
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "chat": {
+          "skill_refs": [],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    },
+    {
+      "experience": "chat",
+      "project": "prj_hjHRVPiekChdpbymYJDi",
+      "status": 200,
+      "requestID": null,
+      "assigned": [],
+      "configured": [
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "work": {
+          "skill_refs": [
+            "work-artifacts"
+          ],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    },
+    {
+      "experience": "work",
+      "project": "prj_hjHRVPiekChdpbymYJDi",
+      "status": 200,
+      "requestID": null,
+      "assigned": [
+        "review-tools"
+      ],
+      "configured": [
+        " review-tools ",
+        "browser",
+        "computer",
+        "review-tools"
+      ],
+      "persisted": {
+        "work": {
+          "skill_refs": [
+            "work-artifacts"
+          ],
+          "mcp_server_refs": [
+            "review-tools"
+          ]
+        }
+      }
+    }
+  ]
+}

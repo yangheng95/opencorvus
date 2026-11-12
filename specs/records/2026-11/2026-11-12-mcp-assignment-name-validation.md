@@ -1,0 +1,21 @@
+# 连接分配校验请求中的原始名称
+
+## Recall
+
+- 用户要求持续分批体验界面、功能和缺陷，本人独立工作。先完成根因和影响规格，再验证真实桌面、本人逐张复核、聚焦正向测试、范围提交、合并上游与普通推送。没有使用子 agent。开始时上游 `98db81d93`，原 177 条工作区状态逐行核对一致。
+- 已读 `04-extensions.md`、`05-config.md`、`07-panel.md`、`17-code-work-agent-platform.md` 相关段落、[连接授权精确归属](2026-11-12-mcp-oauth-exact-connection-name.md)、[入口](2026-11-10-mcp-assignment-navigation.md)、[保存焦点](2026-11-10-capability-assignment-save-focus.md)和[保存核对](2026-11-09-capability-assignment-confirmation.md)。全仓查 `configured_server_refs`、`mcp_server_refs`、`primary_assistant_capabilities`、`ConversationCapability.Update`、`ConversationCapabilityInvalidAssignmentError`、`mcp-config`、`CapabilityRef` 构造、声明和消费、连接页名称显示、两语字符串及测试。读取同一 `ConversationCapabilityRoutes` 下 Chat/Work 入口、服务、配置文件迁移及展开语义、正常与恢复轮次的授权入口。相关测试是接口或运行合同，未发现本批路径内的用户界面自动化。
+- 本批验收为明确拒绝无法由当前分配合同保留原名的请求，页面同时说明原因。已支持的连接应能在英文 Chat（对话）和中文 Work（通用工作）中取消和恢复，并经真实响应及两个同名项目的持久文件读回。保留既有已分配名称及键盘操作。只访问隔离服务、配置和本地窗口，模型及外部凭据不参与本批验收。
+
+## 修改前证据、根因与影响
+
+真实 Windows 桌面 `/ui/` 基线显示两个同名项目 `archive-review` 的实际项目设置。主项目 Chat 的清单有 `""`、`"  "`、`" review-tools "`、`"review-tools"` 和两个内置项，管理页有引号，但分配页渲染两个无名行与两个视觉相同的 `review-tools`。点击带首尾空格的行，`PATCH /chat/capability` 发送原始 `ref:" review-tools "`，实际 200 `abe7b3dc-7d45-43d1-b677-2c33d04ec3b8` 把 `"review-tools"` 分配给 Chat。点击空名发送 `ref:""`，实际 400 `766a6073-f671-45b7-9fed-5b34ac1bb075` 含 `too_small`。另一项目 Work 的中文分配页复现相同错配，实际 200 `a3bc69e7-d2f4-4f0a-b6ba-5fcc4ce23a6f`。四次独立读取与两份 canonical 项目文件一致，原生产品和项目边界仍独立。基线实拍及响应见[证据](../../artifacts/2026-11-12-mcp-assignment-name-validation/README.md)。
+
+直接根因为共用请求解析器在校验前 trim（裁剪首尾空白），令原始名字在原子写事务前变成另一可用名称。第二次解析无法恢复已经丢掉的身份。设置清单取配置的原始键，已分配值和配置中 `primary_assistant_capabilities` 用裁剪后的引用；完整回执忠实呈现错配，既有保存核对和连接授权修复无法拦截错误提交。显示上普通字符串排版合并空白，且该组件未复用连接设置现有引号。
+
+本批守住原子授权写入的现有能力范围。持久配置继续解释已存引用的既有规范形式；直接把 `.trim().min(1)` 移除会改变旧项目手写引用的有效授权。配置读取还支持环境变量和文件替换，迁移不能把替换结果持久化为名称或固定变量当前值。精确名称可以由连接管理、状态、认证和配置原始键识别，现有原生对话分配和运行授权尚不能挂载不可保留的空值及首尾空白名称。支持其完整挂载需独立验证版本化配置迁移和共享运行引用，这个缺口在分配页明示。不能将历史规范名分配猜测为意图分配有空白的另一项。
+
+共享执行路径已初查。普通 Chat/Work 从同一 `harnessGrants` 读取项目分配；Mission 和普通自定义 Session 由 `SessionLoop.resolveOccurrenceHarnessGrants` 走配置原始键；Task 的编排器和执行者优先取得已绑定的 `RuntimeContract.harnessGrants`，由 `PromptProfileResolver` 生成项目和包引用；权限续跑与正常轮次共用同一授权入口并验证 occurrence（执行轮次）绑定。项目运行目录的 consumer 以 `local_ref` 查找精确连接。通用 `CapabilityRef` 目前裁剪并拒绝空值，可影响上述入口，是否已造成实际执行、重试、队列或终态故障尚未知。本批复现止于设置、公开路由与实际持久化，未启动执行轮次，不能声称上述运行路径已通过。执行授权、调度、会话历史、数据结构、版本和发布不在此次修复范围。
+
+## 实施和验收
+
+用同一个可移植名称判定区分可无损传递给当前原生对话授权的连接。公开更新 schema 对不能无损使用的原始名称返回既有验证错误合同，避免静默更改请求中的名称；Skill（技能）的解析规则维持其现有合同。两设置页调用同一判定，保留原名称、复用连接页的引号显示并保留可见空白。不可操作行用双语解释替代开关，正常行仍走原复选框、同一项目和产品的保存及焦点逻辑。新增聚焦接口合同应检查含首尾空白和空值的结构化错误，以及原样引用成功指向准确连接。检查发布的请求 schema、文档、双语字典、类型和真实构建。最终保存前后同视口图片、核对持久状态、关停自有服务并正常提交和同步。
