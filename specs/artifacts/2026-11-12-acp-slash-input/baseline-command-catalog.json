@@ -1,0 +1,43 @@
+{
+  "requestID": [
+    "ffeaa829-a2e1-46b3-a4c6-60766482c297"
+  ],
+  "status": 200,
+  "commands": [
+    {
+      "name": "review-note",
+      "description": "Review the strict-project note",
+      "source": "command",
+      "template": "Use the strict-project note.",
+      "hints": []
+    },
+    {
+      "name": "review-date",
+      "description": "Review the date in the project note",
+      "source": "command",
+      "template": "Use the strict-project note for $1.",
+      "hints": [
+        "$1"
+      ]
+    },
+    {
+      "name": "editor_strict:strict_report",
+      "source": "mcp",
+      "description": "A report with a required date and optional scope",
+      "arguments": [
+        {
+          "name": "date",
+          "required": true
+        },
+        {
+          "name": "scope",
+          "required": false
+        }
+      ],
+      "hints": [
+        "$1",
+        "$2"
+      ]
+    }
+  ]
+}
