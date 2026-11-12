@@ -1953,8 +1953,11 @@ retaining the original instant and existing browser time-zone semantics.
 List, detail and run-history timestamps name the same formatter's resolved time
 zone, distinguishing displayed instants from the recurrence's wall-clock zone.
 List, detail and search share one localized recurrence summary built from the existing
-calendar parser. Basic frequency and weekday names use current translations;
-advanced expressions retain their complete authored rule as technical content.
+calendar parser. Basic frequency, weekday names and wall-clock times use the
+current interface locale and keep the rule's time zone. An advanced recurrence
+has a concise summary and a disclosure with the complete stored rule. Search
+also reads the technical rule and the basic clock in its authored format.
+The next scheduled instant displays seconds when it falls outside a whole minute.
 The machine calendar service owns parsing, serialization and edit comparison,
 without a parallel hard-coded English presentation export.
 

@@ -12,6 +12,7 @@ import {
   parseAutomationRecurrence,
   type AutomationRecurrencePreset,
   type AutomationWeekday,
+  type ParsedAutomationRecurrence,
 } from "../../services/automation-recurrence"
 import {
   AutomationWriteUnconfirmedError,
@@ -50,6 +51,7 @@ import { matchesSearchTerms } from "../../services/text-search"
 import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "../ui/Badge"
 import { Button } from "../ui/Button"
+import { Disclosure } from "../ui/Disclosure"
 import { Icon } from "../ui/Icon"
 import { ListboxItem, ListboxRoot } from "../ui/Listbox"
 import { ComboboxControl } from "../ui/ComboboxControl"
@@ -192,11 +194,11 @@ function selectOption<T extends string>(options: SelectOption<T>[], value: T): S
   return options.find((option) => option.value === value) ?? options[0]
 }
 
-function formatTimestamp(value: number | null): string {
+function formatTimestamp(value: number | null, timeStyle: "short" | "medium" = "short"): string {
   if (!value) return t("automations.never")
   const formatter = new Intl.DateTimeFormat(localeTag(), {
     dateStyle: "medium",
-    timeStyle: "short",
+    timeStyle,
   })
   return t("automations.timestamp_with_zone", {
     value: formatter.format(new Date(value)),
@@ -205,17 +207,22 @@ function formatTimestamp(value: number | null): string {
 }
 
 function nextRunValue(automation: AutomationView): string {
-  return automation.status === "paused" ? t("automations.automatic_paused") : formatTimestamp(automation.nextRun)
+  if (automation.status === "paused") return t("automations.automatic_paused")
+  const { nextRun } = automation
+  return formatTimestamp(nextRun, nextRun !== null && nextRun % 60_000 !== 0 ? "medium" : "short")
 }
 
-function recurrenceSummary(recurrence: string): string {
-  const parsed = parseAutomationRecurrence(recurrence)
-  if (parsed.preset === "custom") return parsed.customRule
+function recurrenceSummary(parsed: ParsedAutomationRecurrence): string {
+  if (parsed.preset === "custom") return t("automations.recurrence.advanced_summary")
   const schedule =
     parsed.preset === "weekly"
       ? `${t("automations.recurrence.weekly")} (${t(`automations.weekday.${parsed.weekday}`)})`
       : t(`automations.recurrence.${parsed.preset}`)
-  return t("automations.recurrence.summary", { schedule, time: parsed.time, timeZone: parsed.timeZone })
+  const [hour, minute] = parsed.time.split(":").map(Number)
+  // Format the rule's wall clock as a local-language clock, without converting its zone.
+  const time = new Intl.DateTimeFormat(localeTag(), { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
+    .format(Date.UTC(2000, 0, 1, hour, minute))
+  return t("automations.recurrence.summary", { schedule, time, timeZone: parsed.timeZone })
 }
 
 function statusTone(status: AutomationView["status"]): BadgeTone {
@@ -376,6 +383,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let errorFeedbackElement: HTMLDivElement | undefined
   let errorRetryButton: HTMLButtonElement | undefined
   const selected = createMemo(() => automations().find((automation) => automation.id === selectedID()) ?? null)
+  const selectedRecurrence = createMemo(() => {
+    const definition = selected()
+    return definition ? parseAutomationRecurrence(definition.recurrence) : undefined
+  })
   const detailProjectIDs = createMemo(() => {
     const target = selected()?.target
     return target?.scope === "project" ? target.projectIds : []
@@ -415,7 +426,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (!query) return scopedAutomations()
     const matches = (value: string | undefined) => value?.toLocaleLowerCase().includes(query)
     return scopedAutomations().filter(({ name, prompt, recurrence, target, targetSession }) => {
-      if ([name, prompt, recurrenceSummary(recurrence)].some(matches)) return true
+      const parsed = parseAutomationRecurrence(recurrence)
+      const wallTime = parsed.preset === "custom" ? undefined : parsed.time
+      if ([name, prompt, recurrenceSummary(parsed), recurrence, wallTime].some(matches)) return true
       if (target.scope === "session") {
         return [target.sessionId, targetSession?.title, targetSession?.directory].some(matches)
       }
@@ -1327,50 +1340,54 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               >
                 <div class="automations-rows">
                   <For each={filteredAutomations()}>
-                    {(automation) => (
-                      <div class="automation-list-row">
-                        <SettingsRow
-                          as="button"
-                          class="automation-list-item"
-                          interactive
-                          customContent
-                          data-selected={String(selectedID() === automation.id)}
-                          disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
-                          onClick={() => selectAutomation(automation.id)}
-                        >
-                          <Icon name={automation.status === "active" ? "run" : "scheduled"} />
-                          <span class="automation-list-item__copy">
-                            <span class="automation-list-item__top">
-                              <strong title={automation.name}>{automation.name}</strong>
-                              <span title={targetLabel(automation)}>{targetLabel(automation)}</span>
-                            </span>
-                            <span class="automation-list-item__timing">
-                              <span class="automation-list-item__next">
-                                {deletionNeedsRetry(automation.id) ? t("automations.deletion_unconfirmed") : automation.status === "active"
-                                  ? t("automations.next_run", { value: nextRunValue(automation) })
-                                  : nextRunValue(automation)}
+                    {(automation) => {
+                      const parsed = parseAutomationRecurrence(automation.recurrence)
+                      const summary = createMemo(() => recurrenceSummary(parsed))
+                      return (
+                        <div class="automation-list-row">
+                          <SettingsRow
+                            as="button"
+                            class="automation-list-item"
+                            interactive
+                            customContent
+                            data-selected={String(selectedID() === automation.id)}
+                            disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
+                            onClick={() => selectAutomation(automation.id)}
+                          >
+                            <Icon name={automation.status === "active" ? "run" : "scheduled"} />
+                            <span class="automation-list-item__copy">
+                              <span class="automation-list-item__top">
+                                <strong title={automation.name}>{automation.name}</strong>
+                                <span title={targetLabel(automation)}>{targetLabel(automation)}</span>
                               </span>
-                              <span class="automation-list-item__rule" title={recurrenceSummary(automation.recurrence)}>
-                                {recurrenceSummary(automation.recurrence)}
+                              <span class="automation-list-item__timing">
+                                <span class="automation-list-item__next">
+                                  {deletionNeedsRetry(automation.id) ? t("automations.deletion_unconfirmed") : automation.status === "active"
+                                    ? t("automations.next_run", { value: nextRunValue(automation) })
+                                    : nextRunValue(automation)}
+                                </span>
+                                <span class="automation-list-item__rule" title={summary()}>
+                                  {summary()}
+                                </span>
                               </span>
                             </span>
-                          </span>
-                        </SettingsRow>
-                        <Button
-                          type="button"
-                          class="automation-list-delete"
-                          variant="ghost"
-                          size="mini"
-                          tone="danger"
-                          title={deletionLabel(automation)}
-                          aria-label={deletionLabel(automation)}
-                          disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
-                          onClick={() => void confirmRemoveAutomation(automation)}
-                        >
-                          <Icon name="delete" />
-                        </Button>
-                      </div>
-                    )}
+                          </SettingsRow>
+                          <Button
+                            type="button"
+                            class="automation-list-delete"
+                            variant="ghost"
+                            size="mini"
+                            tone="danger"
+                            title={deletionLabel(automation)}
+                            aria-label={deletionLabel(automation)}
+                            disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
+                            onClick={() => void confirmRemoveAutomation(automation)}
+                          >
+                            <Icon name="delete" />
+                          </Button>
+                        </div>
+                      )
+                    }}
                   </For>
                 </div>
               </Show>
@@ -1453,7 +1470,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                                 : statusNeedsCheck() ? "automations.status.unconfirmed" : `automations.status.${automation().status}`)}
                             </Badge>
                           </div>
-                          <p>{recurrenceSummary(automation().recurrence)}</p>
+                          <Show when={selectedRecurrence()}>{(parsed) => <p>{recurrenceSummary(parsed())}</p>}</Show>
                         </div>
                         <div class="automation-detail-actions">
                           <Button
@@ -1520,7 +1537,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </Show>
                         <div>
                           <span>{t("automations.next")}</span>
-                          <strong>{statusNeedsCheck() || deletionNeedsRetry(automation().id)
+                          <strong class="automation-detail-next-run">{statusNeedsCheck() || deletionNeedsRetry(automation().id)
                             ? t("automations.status.unconfirmed") : nextRunValue(automation())}</strong>
                         </div>
                         <div>
@@ -1549,6 +1566,15 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           <strong>{automation().failureCount}</strong>
                         </div>
                       </div>
+
+                      <Show when={selectedRecurrence()?.preset === "custom"}>
+                        <Disclosure.Root variant="surface">
+                          <Disclosure.Trigger>{t("automations.recurrence.rule_details")}</Disclosure.Trigger>
+                          <Disclosure.Content>
+                            <pre class="automation-recurrence-rule">{automation().recurrence}</pre>
+                          </Disclosure.Content>
+                        </Disclosure.Root>
+                      </Show>
 
                       <Show when={detailProjectIDs().length > 0}>
                         <section class="automation-target-summary">

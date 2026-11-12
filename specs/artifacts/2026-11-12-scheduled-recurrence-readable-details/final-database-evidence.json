@@ -1,0 +1,86 @@
+{
+  "sqlite": "ok",
+  "counts": {
+    "automation": 5,
+    "automation_definition_tombstone": 0,
+    "automation_fire": 5,
+    "automation_fire_frontier": 5,
+    "automation_fire_attempt": 0,
+    "automation_run": 0,
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_usage_event": 0
+  },
+  "rules": [
+    [
+      "atm_h34xaYYoFZ5nwyQGN7hq",
+      "atm_h34xaYYoFZ5nwyQGN7hq",
+      1,
+      "DTSTART;TZID=America/New_York:20990102T083045\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=6\nEXDATE:20990102T133045Z,20990105T133045Z",
+      "prj_hJF72aUTMVfQ2bmnXgCL",
+      4071475845000,
+      "cal_automation_784d8d18dca6e6e7d78373fa150aa124"
+    ],
+    [
+      "atm_hOoMtNjYCdBb4VpWDFdS",
+      "atm_hOoMtNjYCdBb4VpWDFdS",
+      1,
+      "DTSTART;TZID=Asia/Shanghai:20990105T173000\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR",
+      "prj_hJF72aUTMVfQ2bmnXgCL",
+      4071288600000,
+      "cal_automation_ee31e5fc43062c13e8863e3608b6b6a8"
+    ],
+    [
+      "atm_hPAH7oE4l4hQMb46ugPK",
+      "atm_hPAH7oE4l4hQMb46ugPK",
+      1,
+      "DTSTART:20990106T091500Z\nRRULE:FREQ=DAILY;COUNT=1",
+      "prj_hJF72aUTMVfQ2bmnXgCL",
+      4071374100000,
+      "cal_automation_603609cc631a23425c88dd741a828959"
+    ],
+    [
+      "atm_hcYob0LwwS85P7VdQyl7",
+      "atm_hcYob0LwwS85P7VdQyl7",
+      1,
+      "DTSTART;TZID=America/New_York:20990102T160000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+      "prj_hJF72aUTMVfQ2bmnXgCL",
+      4071070800000,
+      "cal_automation_607ef88fdec12ad59465f8bc6b5ce958"
+    ],
+    [
+      "atm_hyegFJlCpBq2F1viopQ0",
+      "atm_hyegFJlCpBq2F1viopQ0",
+      1,
+      "DTSTART;TZID=Europe/London:20990101T093000\nRRULE:FREQ=DAILY",
+      "prj_hJF72aUTMVfQ2bmnXgCL",
+      4070943000000,
+      "cal_automation_7b5ffb1502ddef06494b90070e2da5ca"
+    ]
+  ],
+  "candidate": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b266-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39823",
+    "pid": 2068
+  },
+  "candidateStopped": {
+    "occurrence": "iteration-b266-candidate",
+    "apiPort": 39823,
+    "proxyPort": 39824,
+    "apiStopped": true,
+    "proxyStopped": true,
+    "processesExited": true,
+    "listenersClosed": true
+  },
+  "final": {
+    "schemaVersion": 1,
+    "occurrenceID": "iteration-b266-final",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:39823",
+    "pid": 20640
+  }
+}

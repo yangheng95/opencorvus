@@ -173,6 +173,11 @@
   color: var(--text-soft);
 }
 
+.automation-list-item__next {
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+
 .automation-suggestions {
   display: grid;
   gap: var(--ui-gap-xs);
@@ -343,11 +348,27 @@
   white-space: nowrap;
 }
 
+.automation-metadata-grid .automation-detail-next-run {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 .automation-target-summary,
 .automation-prompt,
 .automation-history {
   display: grid;
   gap: var(--ui-gap-lg);
+}
+
+.automation-recurrence-rule {
+  margin: 0;
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .automation-target-summary h4,
