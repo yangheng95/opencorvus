@@ -504,17 +504,27 @@ test("ACP announces command input hints after attaching project connections and 
   await announce("editor_fork", () => env.client.unstable_forkSession({ cwd, sessionId, mcpServers: attached("editor_fork") }))
   await announce("editor_resume", () => env.client.resumeSession({ cwd, sessionId, mcpServers: attached("editor_resume") }))
 
-  const reply = await env.client.prompt({ sessionId, prompt: [{ type: "text", text: "/inspect Selected command input" }] })
+  const literal = "Selected  command input\nnext\tline"
+  const reply = await env.client.prompt({
+    sessionId,
+    prompt: [
+      { type: "text", text: "/inspect \tSelected  command " },
+      { type: "text", text: "input\nnext\tline" },
+    ],
+  })
   expect(reply).toMatchObject({ stopReason: "end_turn" })
   expect(env.requests).toContainEqual({ model: "normal", stream: true })
   const user = (await env.messages(sessionId)).find((message) => message.info.role === "user")
+  expect(user?.info).toMatchObject({
+    extra: { project_memory_user_input: { surface: "session.command", literalText: `/inspect ${literal}` } },
+  })
   expect(user?.parts).toEqual(
-    expect.arrayContaining([expect.objectContaining({ type: "text", text: "Selected command input" })]),
+    expect.arrayContaining([expect.objectContaining({ type: "text", text: literal })]),
   )
 
   const promptName = "editor_new:editor_report"
   for (const [argument, expected] of [
-    ['2026-11-12 "field guide"', "Read the 2026-11-12 report for field guide."],
+    ['2026-11-12 "field  guide"', "Read the 2026-11-12 report for field  guide."],
     ["2026-11-13", "Read the 2026-11-13 report for all topics."],
   ]) {
     const response = await env.client.prompt({ sessionId, prompt: [{ type: "text", text: `/${promptName} ${argument}` }] })

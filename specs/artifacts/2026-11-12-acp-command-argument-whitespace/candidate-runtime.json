@@ -1,0 +1,81 @@
+{
+  "sessionID": "ses_-zUPEcSfyzztpGXDA7QS",
+  "historyRequestID": "34a8e193-69e7-4fea-a4e1-4bd5ceeedd56",
+  "turns": [
+    {
+      "rpcID": "a90d4332-ad8f-4a0a-82d1-9088c2431e33",
+      "prompt": [
+        {
+          "type": "text",
+          "text": "/editor_strict:strict_report 2026-11-22 \"field  guide\""
+        }
+      ],
+      "stopReason": "end_turn",
+      "inputMessageID": "msg_g0ValNcQA00k7WtTdA1y",
+      "replyMessageID": "msg_g0ValNcUv00s6Ls5iyqc",
+      "finish": "stop",
+      "expanded": [
+        "Read the 2026-11-22 report for field  guide."
+      ],
+      "literalInput": "/editor_strict:strict_report 2026-11-22 \"field  guide\"",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": "Read the 2026-11-22 report for field  guide."
+      }
+    },
+    {
+      "rpcID": "4e25f460-d527-4c3c-824f-0cd6cdfd0f1a",
+      "prompt": [
+        {
+          "type": "text",
+          "text": "/review-literal alpha  beta\nnext   line"
+        }
+      ],
+      "stopReason": "end_turn",
+      "inputMessageID": "msg_g0ValNdtM00jxw2BXXiH",
+      "replyMessageID": "msg_g0ValNdwI0072QK7i90b",
+      "finish": "stop",
+      "expanded": [
+        "Argument body: <alpha  beta\nnext   line>"
+      ],
+      "literalInput": "/review-literal alpha  beta\nnext   line",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": "Argument body: <alpha  beta\nnext   line>"
+      }
+    },
+    {
+      "rpcID": "29f712c1-141d-4905-9557-93a3dbbba949",
+      "prompt": [
+        {
+          "type": "text",
+          "text": "/review-note"
+        }
+      ],
+      "stopReason": "end_turn",
+      "inputMessageID": "msg_g0ValNfp200aAQoOv7CC",
+      "replyMessageID": "msg_g0ValNfrX00kDgI0yCyP",
+      "finish": "stop",
+      "expanded": [
+        "Use the strict-project note."
+      ],
+      "literalInput": "/review-note",
+      "observedStream": {
+        "model": "local",
+        "stream": true,
+        "text": "Use the strict-project note."
+      }
+    }
+  ],
+  "remote": {
+    "event": "prompt-request",
+    "name": "strict_report",
+    "arguments": {
+      "date": "2026-11-22",
+      "scope": "field  guide"
+    }
+  },
+  "databaseQuickCheck": "ok"
+}

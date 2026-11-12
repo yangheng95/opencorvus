@@ -1560,8 +1560,9 @@ export namespace ACP {
           .trim()
         if (!text.startsWith("/")) return
 
-        const [name, ...rest] = text.slice(1).split(/\s+/)
-        return { name, args: rest.join(" ").trim() }
+        const separator = /\s+/.exec(text)
+        if (!separator) return { name: text.slice(1), args: "" }
+        return { name: text.slice(1, separator.index), args: text.slice(separator.index + separator[0].length) }
       })()
 
       const parts: Array<
