@@ -98,15 +98,13 @@ describe("MCP overlay service", () => {
     __setHostTransportForTest(fakeTransport((req) => requests.push(req)))
     const authority = captureApiAuthority()
 
-    await addMcpServer(
-      {
-        name: "docs",
-        type: "remote",
-        transport: "streamable-http",
-        url: "https://mcp.example.com/api",
-      },
-      { directory: PROJECT_DIR, authority },
-    )
+    const request = buildMcpAddRequest({
+      name: " docs ",
+      type: "remote",
+      transport: "streamable-http",
+      url: "https://mcp.example.com/api",
+    })
+    await addMcpServer(request, { directory: PROJECT_DIR, authority })
 
     expect(requests).toEqual([
       {
@@ -138,15 +136,22 @@ describe("MCP overlay service", () => {
     const authority = captureApiAuthority()
     renewApiAuthority()
 
-    await expect(addMcpServer(
-      { name: "files", type: "local", command: "node" },
-      { directory: PROJECT_DIR, authority },
-    )).rejects.toMatchObject({
+    const request = buildMcpAddRequest({ name: "files", type: "local", command: "node" })
+    await expect(addMcpServer(request, { directory: PROJECT_DIR, authority })).rejects.toMatchObject({
       name: "ApiAuthorityChangedError",
       outcome: { phase: "before_dispatch" },
       expectedRevision: authority.revision,
       currentRevision: captureApiAuthority().revision,
     })
+  })
+
+  test("reports an unterminated command argument as a draft validation error", () => {
+    expect(() => buildMcpAddRequest({
+      name: "files",
+      type: "local",
+      command: "node",
+      args: '"unclosed',
+    })).toThrow("MCP arguments contain an unterminated quote")
   })
 
   test("builds the user-owned query credential request", () => {

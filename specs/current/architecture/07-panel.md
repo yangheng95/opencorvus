@@ -5708,6 +5708,9 @@ The add-server draft belongs to the selected project and connection. An
 accepted add reply clears the form when it still matches the submitted draft.
 Later edits remain in the form with a separate acknowledgment of the submitted
 server. An action from a retired scope cannot update the current form.
+An interrupted add reply keeps the form and uses the same scoped readback as
+connection actions. The notice names the submitted server and reports its
+current list status. A complete reply owns confirmation of the original add.
 Bulk removal confirms the exact project directory and server names it will
 send. The delete request retains those stored names verbatim and validates
 each against the project's own configuration keys.

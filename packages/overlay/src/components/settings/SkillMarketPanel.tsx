@@ -10,7 +10,7 @@ import { Feedback } from "../ui/Feedback"
 import { createEffect, createSignal, createMemo, For, on, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Key } from "@solid-primitives/keyed"
-import type { SkillInstalledResponse } from "@opencorvus-ai/sdk"
+import type { McpProjectStatusResponse, SkillInstalledResponse } from "@opencorvus-ai/sdk"
 import { localeTag, t } from "../../utils/i18n"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
@@ -45,7 +45,7 @@ import {
   type SkillMarketCandidate,
   type SkillMarketDetail,
 } from "../../services/extensions"
-import { addMcpServer, connectMcp, disconnectMcp, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
+import { addMcpServer, buildMcpAddRequest, connectMcp, disconnectMcp, deleteAllMcp, type RemoteMcpCredentialType, type RemoteMcpTransport } from "../../services/mcp"
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
@@ -400,7 +400,7 @@ function SharedResourceManagementPanel(props: {
     return read?.status === "failed" && ownsMcpScope(read) ? read : undefined
   })
 
-  async function refreshMcpStatus(options: { directory?: string; authority?: ApiAuthority; background?: boolean } = {}): Promise<Record<string, McpItem> | undefined> {
+  async function refreshMcpStatus(options: { directory?: string; authority?: ApiAuthority; background?: boolean } = {}): Promise<McpProjectStatusResponse | undefined> {
     const directory = options.directory ?? currentDirectory()
     const owner = { directory, authority: options.authority ?? captureApiAuthority() }
     if (!directory || !ownsMcpScope(owner)) return
@@ -425,7 +425,12 @@ function SharedResourceManagementPanel(props: {
     }
   }
 
-  async function readMcpStatusAfterMutation(owner: McpReadScope, current: () => boolean, write: () => Promise<void>) {
+  async function readMcpStatusAfterMutation(
+    owner: McpReadScope,
+    current: () => boolean,
+    write: () => Promise<void>,
+    onReceipt?: () => void,
+  ) {
     let receiptFailure: { cause: unknown } | undefined
     try {
       await write()
@@ -435,6 +440,7 @@ function SharedResourceManagementPanel(props: {
       receiptFailure = { cause: error }
     }
     if (!current()) return
+    if (!receiptFailure) onReceipt?.()
     const status = await refreshMcpStatus(owner)
     if (current()) return { status, receiptFailure }
   }
@@ -994,16 +1000,17 @@ function SharedResourceManagementPanel(props: {
     if (!directory) return
     const owner = { directory, authority: captureApiAuthority() }
     const submitted = { ...mcpForm }
+    const noticeOwner = { origin: "mcp-add" as const, directory }
     mcpActionRequest = owner
     const current = () => mcpActionRequest === owner && ownsMcpScope(owner)
     setLoading(true)
     setNotice(undefined)
     try {
-      const request =
+      const request = buildMcpAddRequest(
         submitted.type === "remote"
           ? {
               name: submitted.name,
-              type: "remote" as const,
+              type: "remote",
               transport: submitted.transport,
               url: submitted.url,
               credentialType: submitted.credentialType,
@@ -1012,28 +1019,51 @@ function SharedResourceManagementPanel(props: {
             }
           : {
               name: submitted.name,
-              type: "local" as const,
+              type: "local",
               command: submitted.command,
               args: submitted.args,
-            }
-      await addMcpServer(request, owner)
-      if (!current()) return
-      const draftMatches = Object.entries(submitted).every(([key, value]) => mcpForm[key as keyof typeof submitted] === value)
-      if (draftMatches) {
-        closeAndClearMcpForm()
-      } else {
-        const name = submitted.name.trim()
-        setPanelNotice("mcp.earlier_add_saved", {
-          tone: "success",
-          origin: "mcp-add",
-          directory,
-          vars: () => ({ name }),
-        })
+            },
+      )
+      const { name } = request
+      const observation = await readMcpStatusAfterMutation(owner, current, () => addMcpServer(request, owner), () => {
+        const draftMatches = Object.entries(submitted).every(([key, value]) => mcpForm[key as keyof typeof submitted] === value)
+        if (draftMatches) {
+          closeAndClearMcpForm()
+        } else {
+          setPanelNotice("mcp.earlier_add_saved", {
+            ...noticeOwner,
+            tone: "success",
+            vars: () => ({ name }),
+          })
+        }
+      })
+      if (!observation || !current()) return
+      const { status, receiptFailure } = observation
+      if (receiptFailure) {
+        if (status) {
+          const observed = Object.hasOwn(status, name) ? status[name].status : undefined
+          setPanelNotice(observed ? "mcp.add_state_observed" : "mcp.add_state_absent", {
+            ...noticeOwner,
+            tone: "warning",
+            vars: () => ({ name, directory, status: observed ? mcpConnectionStatusLabel(observed) : "" }),
+            details: formatErrorDetails(receiptFailure.cause),
+          })
+        } else {
+          const reason = mcpReadFailure()?.error ?? new Error("Current project MCP status was unavailable.")
+          setPanelNotice("mcp.add_state_unconfirmed", {
+            ...noticeOwner,
+            tone: "warning",
+            vars: () => ({ name, directory }),
+            details: formatErrorDetails(new AggregateError(
+              [receiptFailure.cause, reason],
+              "The project MCP add reply and state could not be read",
+            )),
+          })
+        }
       }
-      await refreshMcpStatus(owner)
-      if (current()) notifyResourceChange()
+      if (!receiptFailure || status) notifyResourceChange()
     } catch (e) {
-      if (current()) setPanelError(e, undefined, { origin: "mcp-add", directory })
+      if (current()) setPanelError(e, undefined, noticeOwner)
     } finally {
       if (current()) {
         mcpActionRequest = undefined
@@ -1058,7 +1088,7 @@ function SharedResourceManagementPanel(props: {
             const value = current()
             const directory = value.directory
             if (location === "panel" || !panelActive() || directory === undefined) return
-            if (location === "mcp-add" && value.tone === "success") return
+            if (location === "mcp-add" && value.tone !== "error") return
             queueMicrotask(() => {
               if (
                 element?.isConnected &&

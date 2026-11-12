@@ -136,8 +136,7 @@ export function buildMcpAddRequest(input: AddMcpInput): McpAddRequest {
   }
 }
 
-export async function addMcpServer(input: AddMcpInput, options: McpRequestOptions = {}): Promise<void> {
-  const request = buildMcpAddRequest(input)
+export async function addMcpServer(request: McpAddRequest, options: { directory: string; authority: ApiAuthority }): Promise<void> {
   await apiJson(mcpPath("mcp", options), {
     authority: options.authority,
     method: "POST",

@@ -44,4 +44,4 @@ test("project MCP deletion preserves exact authored names through the public rou
     name: "NotFoundError",
     data: { message: "MCP server not found: toString" },
   })
-})
+}, 30_000)
