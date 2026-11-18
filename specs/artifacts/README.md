@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [图片缩放锚点的 Windows 验收](2026-11-19-image-preview-zoom-anchor/README.md)
 - [ACP 资源链接媒体类型的 Windows 验收](2026-11-19-acp-linked-resource-media-type/README.md)
 - [ACP 会话模型作用域的 Windows 验收](2026-11-19-acp-session-model-scope/README.md)
 - [ACP 历史分页的真实 Windows Zed 验收](2026-11-13-acp-session-history-pagination/README.md)
