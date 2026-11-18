@@ -1,0 +1,731 @@
+{
+  "capabilities": {
+    "loadSession": true,
+    "mcpCapabilities": {
+      "http": true,
+      "sse": true
+    },
+    "promptCapabilities": {
+      "embeddedContext": true,
+      "image": true
+    },
+    "sessionCapabilities": {
+      "fork": {},
+      "list": {},
+      "resume": {}
+    }
+  },
+  "providerRequest": "f832019c-22b4-465a-b20a-f280474f4bc9",
+  "native": {
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    },
+    "sessionID": "ses_-zUOdg6gCzzg0NfK2qHQ",
+    "requestID": "f8297e4b-d8f8-49b0-9446-56ae45b8b839",
+    "messages": [
+      {
+        "id": "msg_g0VbMJtMN00sbdyqXm8Z",
+        "role": "user",
+        "time": {
+          "created": 1795034038345
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Native embedded empty content."
+          },
+          {
+            "type": "file",
+            "filename": "empty packet.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin"
+          },
+          {
+            "type": "text",
+            "text": ""
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJtQs00wwRMyNVQt",
+        "role": "assistant",
+        "parentID": "msg_g0VbMJtMN00sbdyqXm8Z",
+        "finish": "stop",
+        "time": {
+          "created": 1795034038598,
+          "completed": 1795034041123
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "empty packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+        "downloadID": "adcc689f-b158-4181-a9d5-8833f186b7d3"
+      }
+    ]
+  },
+  "command": {
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    },
+    "sessionID": "ses_-zUOdg5sRzzQPN6XV6AF",
+    "requestID": "35022070-1e5e-4247-9eee-e178a6109519",
+    "messages": [
+      {
+        "id": "msg_g0VbMJu8y00JGCSZqim8",
+        "role": "user",
+        "time": {
+          "created": 1795034041375
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Registered command."
+          },
+          {
+            "type": "file",
+            "filename": "empty packet.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin"
+          },
+          {
+            "type": "text",
+            "text": ""
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJuBq0058Ec9upLh",
+        "role": "assistant",
+        "parentID": "msg_g0VbMJu8y00JGCSZqim8",
+        "finish": "stop",
+        "time": {
+          "created": 1795034041510,
+          "completed": 1795034043477
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "empty packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+        "downloadID": "39bc1df2-c0f7-4054-8744-1e8367e054ac"
+      }
+    ]
+  },
+  "control": {
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    },
+    "sessionID": "ses_-zUOdg5GWzzI3m2CtZBC",
+    "requestID": "53780d6c-5c53-4e13-be84-f12ccc8e2faa",
+    "messages": [
+      {
+        "id": "msg_g0VbMJul500N0YrncxVI",
+        "role": "user",
+        "time": {
+          "created": 1795034043709
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Nonempty binary control."
+          },
+          {
+            "type": "file",
+            "filename": "nonempty control.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1.bin"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJunN00Bt21T3VyI",
+        "role": "assistant",
+        "parentID": "msg_g0VbMJul500N0YrncxVI",
+        "finish": "stop",
+        "time": {
+          "created": 1795034043837,
+          "completed": 1795034045815
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "nonempty control.bin",
+        "mime": "application/octet-stream",
+        "bytes": 1,
+        "base64": "Kg==",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1.bin",
+        "downloadID": "49234ca3-c5bc-4541-936f-10602d7d5ddb"
+      }
+    ]
+  },
+  "web": {
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    },
+    "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "requestID": "f78fb279-9372-4fc3-b43c-a2bea17674f1",
+    "messages": [
+      {
+        "id": "msg_g0VbMJvOF00UubAdLt2I",
+        "role": "user",
+        "time": {
+          "created": 1795034046135
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Visible editor attachments."
+          },
+          {
+            "type": "file",
+            "filename": "empty packet.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin"
+          },
+          {
+            "type": "text",
+            "text": ""
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJvPY00vm8rvho0m",
+        "role": "assistant",
+        "parentID": "msg_g0VbMJvOF00UubAdLt2I",
+        "finish": "stop",
+        "time": {
+          "created": 1795034046204,
+          "completed": 1795034047233
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "empty packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+        "downloadID": "a91609f5-67de-4fcc-8a64-083bf2b31381"
+      }
+    ]
+  },
+  "canonical": {
+    "sessionID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "requestID": "754c2c7e-3e0f-4bf1-805c-fc1045f0f278",
+    "messages": [
+      {
+        "id": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+        "role": "user",
+        "time": {
+          "created": 1795034047512
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Public canonical files."
+          },
+          {
+            "type": "file",
+            "filename": "empty packet.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin"
+          },
+          {
+            "type": "file",
+            "filename": "empty note.txt",
+            "mime": "text/plain",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJvnF00amGzxtoCA",
+        "role": "assistant",
+        "parentID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+        "finish": "stop",
+        "time": {
+          "created": 1795034047673,
+          "completed": 1795034049984
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "empty packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+        "downloadID": "b4512d45-fd39-499d-a559-1316177846bf"
+      },
+      {
+        "filename": "empty note.txt",
+        "mime": "text/plain",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt",
+        "downloadID": "b0901552-8d97-4c1c-a0d3-3c4cd63a2f16"
+      }
+    ]
+  },
+  "load": {
+    "result": {
+      "sessionId": "ses_-zUOdg4HuzznhLZkQhY9",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Empty resource review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": [
+      {
+        "sessionId": "ses_-zUOdg4HuzznhLZkQhY9",
+        "messageID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+        "content": {
+          "text": "Inspect zero-byte resources. Public canonical files.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg4HuzznhLZkQhY9",
+        "messageID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+        "content": {
+          "resource": {
+            "blob": "",
+            "mimeType": "application/octet-stream",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b321/candidate/empty-resource-review/empty%20packet.bin"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg4HuzznhLZkQhY9",
+        "messageID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+        "content": {
+          "resource": {
+            "mimeType": "text/plain",
+            "text": "",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b321/candidate/empty-resource-review/empty%20note.txt"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg4HuzznhLZkQhY9",
+        "messageID": "msg_g0VbMJvnF00amGzxtoCA",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "fork": {
+    "result": {
+      "sessionId": "ses_-zUOdg3XtzzrgF6Qu7Xp",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Empty resource review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": [
+      {
+        "sessionId": "ses_-zUOdg3XtzzrgF6Qu7Xp",
+        "messageID": "msg_g0VbMJwS700NiZ3kmKtj",
+        "content": {
+          "text": "Inspect zero-byte resources. Public canonical files.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg3XtzzrgF6Qu7Xp",
+        "messageID": "msg_g0VbMJwS700NiZ3kmKtj",
+        "content": {
+          "resource": {
+            "blob": "",
+            "mimeType": "application/octet-stream",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b321/candidate/empty-resource-review/empty%20packet.bin"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg3XtzzrgF6Qu7Xp",
+        "messageID": "msg_g0VbMJwS700NiZ3kmKtj",
+        "content": {
+          "resource": {
+            "mimeType": "text/plain",
+            "text": "",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b321/candidate/empty-resource-review/empty%20note.txt"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg3XtzzrgF6Qu7Xp",
+        "messageID": "msg_g0VbMJwS701AvcNsG6Qh",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "resume": {
+    "result": {
+      "sessionId": "ses_-zUOdg4HuzznhLZkQhY9",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Empty resource review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": []
+  },
+  "followup": {
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    },
+    "sessionID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "requestID": "26e1e546-3d01-421d-8d1a-a8f9ecaad9de",
+    "messages": [
+      {
+        "id": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+        "role": "user",
+        "time": {
+          "created": 1795034047512
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Public canonical files."
+          },
+          {
+            "type": "file",
+            "filename": "empty packet.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin"
+          },
+          {
+            "type": "file",
+            "filename": "empty note.txt",
+            "mime": "text/plain",
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJvnF00amGzxtoCA",
+        "role": "assistant",
+        "parentID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+        "finish": "stop",
+        "time": {
+          "created": 1795034047673,
+          "completed": 1795034049984
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJwZV00jB7dGuJ62",
+        "role": "user",
+        "time": {
+          "created": 1795034050692
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Following history operations."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJwdq002J0T7OsWu",
+        "role": "assistant",
+        "parentID": "msg_g0VbMJwZV00jB7dGuJ62",
+        "finish": "stop",
+        "time": {
+          "created": 1795034050934,
+          "completed": 1795034052159
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "empty packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+        "downloadID": "12932236-a443-4d26-823b-3734060c4a98"
+      },
+      {
+        "filename": "empty note.txt",
+        "mime": "text/plain",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt",
+        "downloadID": "55f70273-18a9-4609-ac22-84dd7508cdc4"
+      }
+    ]
+  },
+  "nativeReplay": {
+    "result": {
+      "sessionId": "ses_-zUOdg6gCzzg0NfK2qHQ",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Empty resource review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": [
+      {
+        "sessionId": "ses_-zUOdg6gCzzg0NfK2qHQ",
+        "messageID": "msg_g0VbMJtMN00sbdyqXm8Z",
+        "content": {
+          "text": "Inspect zero-byte resources. Native embedded empty content.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg6gCzzg0NfK2qHQ",
+        "messageID": "msg_g0VbMJtMN00sbdyqXm8Z",
+        "content": {
+          "resource": {
+            "blob": "",
+            "mimeType": "application/octet-stream",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b321/candidate/empty-resource-review/empty%20packet.bin"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg6gCzzg0NfK2qHQ",
+        "messageID": "msg_g0VbMJtMN00sbdyqXm8Z",
+        "content": {
+          "text": "",
+          "type": "text"
+        }
+      },
+      {
+        "sessionId": "ses_-zUOdg6gCzzg0NfK2qHQ",
+        "messageID": "msg_g0VbMJtQs00wwRMyNVQt",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "target": "http://127.0.0.1:40120/ui/?sessionID=ses_hrWnoSsnJvXxyoCuGJtL&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b321%5Ccandidate%5Cempty-resource-review&experience=chat",
+  "status": {
+    "requestID": "4bd9ccd5-f27b-46e1-a227-50a4371a6d55",
+    "data": {
+      "ses_-zUOdg6gCzzg0NfK2qHQ": {
+        "type": "idle"
+      },
+      "ses_-zUOdg5sRzzQPN6XV6AF": {
+        "type": "idle"
+      },
+      "ses_-zUOdg5GWzzI3m2CtZBC": {
+        "type": "idle"
+      },
+      "ses_hrWnoSsnJvXxyoCuGJtL": {
+        "type": "idle"
+      },
+      "ses_-zUOdg4HuzznhLZkQhY9": {
+        "type": "idle"
+      }
+    }
+  }
+}

@@ -55,6 +55,7 @@ import type {
 import { renderToolFailureCause } from "@/session/tool-failure-cause"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { decodeDataUrlBase64, decodeRawBase64Payload } from "@/session/text-mime"
+import { decodeMcpResourceBlob } from "@/mcp/resource-content"
 import { durablePendingPermissionsForSession } from "@/permission/pending-projection"
 
 type ModeOption = { id: string; name: string; description?: string }
@@ -784,7 +785,7 @@ export namespace ACP {
         // Replay the same history snapshot used to restore the exact Primary identity.
         for (const msg of messages) {
           log.debug("replay message", msg)
-          await this.processMessage(msg)
+          await this.processMessage(msg, directory)
         }
 
         await sendUsageUpdate(this.connection, this.sdk, sessionId, directory, messages)
@@ -886,7 +887,7 @@ export namespace ACP {
 
         for (const msg of messages) {
           log.debug("replay message", msg)
-          await this.processMessage(msg)
+          await this.processMessage(msg, directory)
         }
 
         await sendUsageUpdate(this.connection, this.sdk, sessionId, directory, messages)
@@ -945,7 +946,7 @@ export namespace ACP {
       }
     }
 
-    private async processMessage(message: SessionMessageResponse) {
+    private async processMessage(message: SessionMessageResponse, directory: string) {
       log.debug("process message", message)
       if (message.info.role !== "assistant" && message.info.role !== "user") return
       const sessionId = message.info.sessionID as string
@@ -1111,7 +1112,7 @@ export namespace ACP {
           }
         } else if (part["type"] === "text") {
           const textStr = part["text"] as string | undefined
-          if (textStr) {
+          if (typeof textStr === "string") {
             await this.connection
               .sessionUpdate({
                 sessionId,
@@ -1129,38 +1130,42 @@ export namespace ACP {
               })
           }
         } else if (part["type"] === "file") {
-          // Replay file attachments as appropriate ACP content blocks.
-          // OpenCorvus stores files internally as { type: "file", url, filename, mime }.
-          // We convert these back to ACP blocks based on the URL scheme and MIME type:
-          // - file:// URLs → resource_link
-          // - data: URLs with image/* → image block
-          // - data: URLs with text/* or application/json → resource with text
-          // - data: URLs with other types → resource with blob
+          // Read canonical originals directly; an empty resource is valid even
+          // though the separate inline-media data URL contract requires bytes.
           const url = part["url"] as string | undefined
           const filename = (part["filename"] as string | undefined) ?? "file"
           const mime = (part["mime"] as string | undefined) || "application/octet-stream"
           const messageChunk = message.info.role === "user" ? "user_message_chunk" : "agent_message_chunk"
 
           const storedAttachment = url ? AttachmentStore.nameFromUrl(url) : undefined
-          const replayUrl = storedAttachment ? await AttachmentStore.dataUrlFromReference(url!, mime) : url
-          if (storedAttachment && !replayUrl) {
-            throw new Error(`ACP replay attachment ${url} is not resolvable`)
+          let decodedBytes: Buffer | undefined
+          let effectiveMime = mime
+          if (storedAttachment) {
+            const snapshot = await Instance.provide({
+              directory,
+              fn: () => AttachmentStore.readVerifiedReference({ projectID: Instance.project.id, url: url!, mime }),
+            })
+            decodedBytes = snapshot.bytes
+          } else if (url?.startsWith("data:")) {
+            const payload = decodeDataUrlBase64(url, `ACP replay file URL ${filename}`)
+            decodedBytes = decodeRawBase64Payload(payload, `ACP replay file URL ${filename}`)
+            effectiveMime = url.slice("data:".length, url.indexOf(",")).split(";")[0] || mime
           }
 
-          if (replayUrl && (replayUrl.startsWith("http://") || replayUrl.startsWith("https://"))) {
+          if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
             await this.connection
               .sessionUpdate({
                 sessionId,
                 update: {
                   sessionUpdate: messageChunk,
                   messageId,
-                  content: { type: "resource_link", uri: replayUrl, name: filename, mimeType: mime },
+                  content: { type: "resource_link", uri: url, name: filename, mimeType: mime },
                 },
               })
               .catch((err) => {
                 log.error("failed to send remote resource_link to ACP", { error: err })
               })
-          } else if (replayUrl && replayUrl.startsWith("file://")) {
+          } else if (url && url.startsWith("file://")) {
             // Local file reference - send as resource_link
             await this.connection
               .sessionUpdate({
@@ -1168,19 +1173,14 @@ export namespace ACP {
                 update: {
                   sessionUpdate: messageChunk,
                   messageId,
-                  content: { type: "resource_link", uri: replayUrl, name: filename, mimeType: mime },
+                  content: { type: "resource_link", uri: url, name: filename, mimeType: mime },
                 },
               })
               .catch((err) => {
                 log.error("failed to send resource_link to ACP", { error: err })
               })
-          } else if (replayUrl && replayUrl.startsWith("data:")) {
-            // Embedded content - parse data URL and send as appropriate block type
-            const base64Data = decodeDataUrlBase64(replayUrl, `ACP replay file URL ${filename}`)
-            const dataMime = replayUrl.slice("data:".length, replayUrl.indexOf(",")).split(";")[0]
-            const decodedBytes = decodeRawBase64Payload(base64Data, `ACP replay file URL ${filename}`)
-            const effectiveMime = dataMime || mime
-
+          } else if (decodedBytes !== undefined) {
+            const base64Data = decodedBytes.toString("base64")
             if (effectiveMime.startsWith("image/")) {
               // Image - send as image block
               await this.connection.sessionUpdate({
@@ -1221,8 +1221,7 @@ export namespace ACP {
                   log.error("failed to send resource to ACP", { error: err })
                 })
             }
-          }
-          if (!replayUrl || !/^data:|^file:\/\/|^https?:\/\//.test(replayUrl)) {
+          } else {
             throw new Error(`ACP replay file URL ${url ?? "<missing>"} is not supported`)
           }
         } else if (part["type"] === "reasoning") {
@@ -1592,19 +1591,23 @@ export namespace ACP {
 
           case "resource": {
             const resource = part.resource
-            if ("text" in resource && resource.text) {
+            if ("text" in resource && typeof resource.text === "string") {
               parts.push({
                 type: "text",
                 text: resource.text,
               })
-            } else if ("blob" in resource && resource.blob) {
-              // Binary resource (PDFs, etc.): store as file part with data URL
+            } else if ("blob" in resource && typeof resource.blob === "string") {
               const parsed = parseUri(resource.uri ?? "")
               const filename = parsed.type === "file" ? parsed.filename : "file"
               const mime = resource.mimeType ?? "application/octet-stream"
+              const bytes = decodeMcpResourceBlob(resource.blob, `ACP embedded resource ${resource.uri}`)
+              const { data: reference } = await this.sdk.attachment.create(
+                { directory, filename, body: new Blob([bytes], { type: mime }) },
+                { headers: { "Content-Type": mime }, throwOnError: true },
+              )
               parts.push({
                 type: "file",
-                url: `data:${mime};base64,${resource.blob}`,
+                url: reference.url,
                 filename,
                 mime,
               })

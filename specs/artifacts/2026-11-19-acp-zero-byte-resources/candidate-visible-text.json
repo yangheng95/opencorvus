@@ -1,0 +1,364 @@
+{
+  "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+  "requestID": "e60c16ca-0634-4b5b-bc83-e90592f76fdd",
+  "history": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795034046135
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Visible editor attachments.\n\n"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "08b750d0e7c3ca9e37bd5ef71e37af8ce21c7212e5ccbf41c6ed84ccb02ecb87"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795034046135:0000000000000030:0000000000000000:message:msg_g0VbMJvOF00UubAdLt2I",
+        "id": "msg_g0VbMJvOF00UubAdLt2I",
+        "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbMJvOS007yubWUUc5",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMJvOF00UubAdLt2I",
+          "orderKey": "v1:0001795034046138:0000000000000031:0000000000000000:part:prt_g0VbMJvOS007yubWUUc5",
+          "type": "text",
+          "text": "Inspect zero-byte resources. Visible editor attachments.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hJza4bVnFivpgBsxdUfI/527f7ac392b50e084327ad12af93e75da30cd62750df792842a074c110c86896.json",
+            "catalog_snapshot_hash": "527f7ac392b50e084327ad12af93e75da30cd62750df792842a074c110c86896"
+          }
+        },
+        {
+          "id": "prt_g0VbMJvOS01u8iVHCGqf",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMJvOF00UubAdLt2I",
+          "orderKey": "v1:0001795034046140:0000000000000031:0000000000000000:part:prt_g0VbMJvOS01u8iVHCGqf",
+          "type": "file",
+          "mime": "application/octet-stream",
+          "filename": "empty packet.bin",
+          "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin"
+        },
+        {
+          "id": "prt_g0VbMJvOS02NwV1rNvbB",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMJvOF00UubAdLt2I",
+          "orderKey": "v1:0001795034046141:0000000000000031:0000000000000000:part:prt_g0VbMJvOS02NwV1rNvbB",
+          "type": "text",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795034046204,
+          "completed": 1795034047233
+        },
+        "parentID": "msg_g0VbMJvOF00UubAdLt2I",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMJvOF00UubAdLt2I"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795034046204:0000000000000030:0000000000000000:message:msg_g0VbMJvPY00vm8rvho0m",
+        "id": "msg_g0VbMJvPY00vm8rvho0m",
+        "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbMJvZv00FrHtvRI3s",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMJvPY00vm8rvho0m",
+          "orderKey": "v1:0001795034046847:0000000000000031:0000000000000000:part:prt_g0VbMJvZv00FrHtvRI3s",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbMJvaX007dwWGhOMR",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMJvPY00vm8rvho0m",
+          "orderKey": "v1:0001795034046885:0000000000000031:0000000000000000:part:prt_g0VbMJvaX007dwWGhOMR",
+          "type": "reasoning",
+          "text": "Checking the supplied file context.",
+          "time": {
+            "start": 1795034046885,
+            "end": 1795034047028
+          }
+        },
+        {
+          "id": "prt_g0VbMJvcu00fqsY0JbTl",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMJvPY00vm8rvho0m",
+          "orderKey": "v1:0001795034047033:0000000000000031:0000000000000000:part:prt_g0VbMJvcu00fqsY0JbTl",
+          "type": "text",
+          "text": "The local stream completed.",
+          "time": {
+            "start": 1795034047033,
+            "end": 1795034047200
+          }
+        },
+        {
+          "id": "prt_g0VbMJvfh00EQP8ZfSJI",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMJvPY00vm8rvho0m",
+          "orderKey": "v1:0001795034047205:0000000000000031:0000000000000000:part:prt_g0VbMJvfh00EQP8ZfSJI",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795034155931
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Display the original empty text file."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "5e37a53ee0cd0e22f3d792f1db5525f703f9f55e96ec2060485ed0f2f17eff1b"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795034155931:0000000000000030:0000000000000000:message:msg_3866d27fd56e4ac997c02b3f7dc061db",
+        "id": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+        "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbMKNxN002iQKANELK",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+          "orderKey": "v1:0001795034155935:0000000000000031:0000000000000000:part:prt_g0VbMKNxN002iQKANELK",
+          "type": "text",
+          "text": "Inspect zero-byte resources. Display the original empty text file.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hJza4bVnFivpgBsxdUfI/527f7ac392b50e084327ad12af93e75da30cd62750df792842a074c110c86896.json",
+            "catalog_snapshot_hash": "527f7ac392b50e084327ad12af93e75da30cd62750df792842a074c110c86896"
+          }
+        },
+        {
+          "id": "prt_g0VbMKNxN013Op3I6j6a",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+          "orderKey": "v1:0001795034155937:0000000000000031:0000000000000000:part:prt_g0VbMKNxN013Op3I6j6a",
+          "type": "file",
+          "mime": "text/plain",
+          "filename": "empty note.txt",
+          "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795034156014,
+          "completed": 1795034157060
+        },
+        "parentID": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+        "acceptedInputMessageIDs": [
+          "msg_3866d27fd56e4ac997c02b3f7dc061db"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795034156014:0000000000000030:0000000000000000:message:msg_g0VbMKNyg00CMM3nwSPf",
+        "id": "msg_g0VbMKNyg00CMM3nwSPf",
+        "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbMKO9100VsfNM1AbJ",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMKNyg00CMM3nwSPf",
+          "orderKey": "v1:0001795034156655:0000000000000031:0000000000000000:part:prt_g0VbMKO9100VsfNM1AbJ",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbMKO9P00dFG90Dwa4",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMKNyg00CMM3nwSPf",
+          "orderKey": "v1:0001795034156679:0000000000000031:0000000000000000:part:prt_g0VbMKO9P00dFG90Dwa4",
+          "type": "reasoning",
+          "text": "Checking the supplied file context.",
+          "time": {
+            "start": 1795034156679,
+            "end": 1795034156826
+          }
+        },
+        {
+          "id": "prt_g0VbMKOBp00bBtb9qgoK",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMKNyg00CMM3nwSPf",
+          "orderKey": "v1:0001795034156829:0000000000000031:0000000000000000:part:prt_g0VbMKOBp00bBtb9qgoK",
+          "type": "text",
+          "text": "The local stream completed.",
+          "time": {
+            "start": 1795034156829,
+            "end": 1795034157013
+          }
+        },
+        {
+          "id": "prt_g0VbMKOEv00T2vvTUMQ2",
+          "sessionID": "ses_hrWnoSsnJvXxyoCuGJtL",
+          "messageID": "msg_g0VbMKNyg00CMM3nwSPf",
+          "orderKey": "v1:0001795034157021:0000000000000031:0000000000000000:part:prt_g0VbMKOEv00T2vvTUMQ2",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    }
+  ]
+}

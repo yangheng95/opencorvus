@@ -1,0 +1,574 @@
+[
+  {
+    "eventID": "pev_g0VbMJtxO00XDyKlSdsy",
+    "aggregateID": "ses_-zUOdg6gCzzg0NfK2qHQ",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJtMN00sbdyqXm8Z",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJtzb00wDOvskq4D",
+    "aggregateID": "ses_-zUOdg6gCzzg0NfK2qHQ",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJtMN00sbdyqXm8Z",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJu5v00HXUc0pLB7",
+    "aggregateID": "ses_-zUOdg6gCzzg0NfK2qHQ",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJtMN00sbdyqXm8Z",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJuaJ0072eAOgzen",
+    "aggregateID": "ses_-zUOdg5sRzzQPN6XV6AF",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJu8y00JGCSZqim8",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJubU00RzNazo2zB",
+    "aggregateID": "ses_-zUOdg5sRzzQPN6XV6AF",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJu8y00JGCSZqim8",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJuhy00RnSIYpkpA",
+    "aggregateID": "ses_-zUOdg5sRzzQPN6XV6AF",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJu8y00JGCSZqim8",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJvBt00qyYRSyVkO",
+    "aggregateID": "ses_-zUOdg5GWzzI3m2CtZBC",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJul500N0YrncxVI",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJvDJ006NnOLi7Gt",
+    "aggregateID": "ses_-zUOdg5GWzzI3m2CtZBC",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJul500N0YrncxVI",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJvJd00R2553fPu0",
+    "aggregateID": "ses_-zUOdg5GWzzI3m2CtZBC",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJul500N0YrncxVI",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJvZ8003OAW2ciS5",
+    "aggregateID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJvOF00UubAdLt2I",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJva200aBJNwtAVD",
+    "aggregateID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJvOF00UubAdLt2I",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJvgT00HCdUPuUS1",
+    "aggregateID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJvOF00UubAdLt2I",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJwGP00pOEW8nd9W",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJwHt00RAw80xD11",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJwOo00ln33ApBhx",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_a83b1d9eb69b4459a6b83dfc79b39f80",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJwpb00tOv5Th0Tq",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJwZV00jB7dGuJ62",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJwrQ00MhZCW3cO7",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJwZV00jB7dGuJ62",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMJwxo00BHc8Hr05m",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJwZV00jB7dGuJ62",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK0Gj003BgSL3K4g",
+    "aggregateID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_c5566c5c2f194342a44fbef884bd5f9f",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK0Il00eavaaSb5N",
+    "aggregateID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_c5566c5c2f194342a44fbef884bd5f9f",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK0Pi005N9Ctkkzf",
+    "aggregateID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_c5566c5c2f194342a44fbef884bd5f9f",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK0eg00Ml9NIjheW",
+    "aggregateID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_0c76491ced7a477aa00c7c21ba2f5c2b",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK0iT00IHctEYRuI",
+    "aggregateID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_0c76491ced7a477aa00c7c21ba2f5c2b",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK0sO00bHTkoPDOq",
+    "aggregateID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_0c76491ced7a477aa00c7c21ba2f5c2b",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK0yb00CZihw7KPQ",
+    "aggregateID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_3cd1c107ce704a3e9e411d14b265c11e",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK10D0057zssPVCX",
+    "aggregateID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_3cd1c107ce704a3e9e411d14b265c11e",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK16z00uV7t557cm",
+    "aggregateID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_3cd1c107ce704a3e9e411d14b265c11e",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK1LP00q1Rdj0HMZ",
+    "aggregateID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_c86865bdf932492dab5fae04d13e3fc7",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK1NE004FMxIER5y",
+    "aggregateID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_c86865bdf932492dab5fae04d13e3fc7",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMK1Ua007Ua3R9cv3",
+    "aggregateID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_c86865bdf932492dab5fae04d13e3fc7",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKO7o00MOV7ehvki",
+    "aggregateID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKO95007LWmWhieH",
+    "aggregateID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKOFq00x56S2eWYG",
+    "aggregateID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKY0C006BmUCQcSM",
+    "aggregateID": "ses_hrWnoSsnJvXxyoCuGJtL",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_3866d27fd56e4ac997c02b3f7dc061db",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKY0K00xBVXFZRMo",
+    "aggregateID": "ses_-zUOdg5GWzzI3m2CtZBC",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJul500N0YrncxVI",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKY0O00GdbCPdcWN",
+    "aggregateID": "ses_-zUOdg5sRzzQPN6XV6AF",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJu8y00JGCSZqim8",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKY0S005Hcd4bHcr",
+    "aggregateID": "ses_-zUOdg6gCzzg0NfK2qHQ",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJtMN00sbdyqXm8Z",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKY0W00eIBZO8xBC",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMJwZV00jB7dGuJ62",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKY0g00yWjo4ryBI",
+    "aggregateID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_0c76491ced7a477aa00c7c21ba2f5c2b",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKY0k00tzkOQCC3l",
+    "aggregateID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_c86865bdf932492dab5fae04d13e3fc7",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKZrU00ePkWPb6eh",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMKZQ600abDDr2LBl",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKZt9006fC6i002f",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMKZQ600abDDr2LBl",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKZzH00VO6rWahLq",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMKZQ600abDDr2LBl",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "eventID": "pev_g0VbMKrhg00SehQP2jbb",
+    "aggregateID": "ses_-zUOdg4HuzznhLZkQhY9",
+    "type": "agent.execution.lifecycle",
+    "projectID": null,
+    "sessionID": null,
+    "payload": {
+      "inputMessageID": "msg_g0VbMKZQ600abDDr2LBl",
+      "status": {
+        "type": "idle"
+      }
+    }
+  }
+]

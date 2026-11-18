@@ -1,0 +1,288 @@
+[
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review",
+    "sessionID": "ses_-zUOdg0HmzzBsaj0Iixa",
+    "projectID": "prj_hJza4bVnFivpgBsxdUfI",
+    "file": {
+      "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+      "mime": "application/octet-stream",
+      "size": 0,
+      "filename": "empty-resource-review.bin"
+    },
+    "bytes": 0,
+    "turns": [
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795034063000,
+            "completed": 1795034065416
+          },
+          "parentID": "msg_c5566c5c2f194342a44fbef884bd5f9f",
+          "acceptedInputMessageIDs": [
+            "msg_c5566c5c2f194342a44fbef884bd5f9f"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795034063000:0000000000000030:0000000000000000:message:msg_g0VbMJzmS004Td2YoAbP",
+          "id": "msg_g0VbMJzmS004Td2YoAbP",
+          "sessionID": "ses_-zUOdg0HmzzBsaj0Iixa",
+          "resolvedRole": "coding",
+          "channel": "assistant",
+          "agentID": "coding",
+          "sessionAgentID": "coding",
+          "originSource": ""
+        },
+        "requestID": "f863e37f-0c26-4a8b-967e-2bd21b285a2c"
+      },
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795034065766,
+            "completed": 1795034067187
+          },
+          "parentID": "msg_0c76491ced7a477aa00c7c21ba2f5c2b",
+          "acceptedInputMessageIDs": [
+            "msg_0c76491ced7a477aa00c7c21ba2f5c2b"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\empty-resource-review"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795034065766:0000000000000030:0000000000000000:message:msg_g0VbMK0V400s5F5VOxkF",
+          "id": "msg_g0VbMK0V400s5F5VOxkF",
+          "sessionID": "ses_-zUOdg0HmzzBsaj0Iixa",
+          "resolvedRole": "coding",
+          "channel": "assistant",
+          "agentID": "coding",
+          "sessionAgentID": "coding",
+          "originSource": ""
+        },
+        "requestID": "6c35bcbe-8ac3-49cb-8a8e-d1857483b63d"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_c5566c5c2f194342a44fbef884bd5f9f",
+        "role": "user",
+        "files": [
+          {
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+            "mime": "application/octet-stream",
+            "filename": "empty-resource-review.bin"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMJzmS004Td2YoAbP",
+        "role": "assistant",
+        "parentID": "msg_c5566c5c2f194342a44fbef884bd5f9f",
+        "finish": "stop",
+        "files": []
+      },
+      {
+        "id": "msg_0c76491ced7a477aa00c7c21ba2f5c2b",
+        "role": "user",
+        "files": [
+          {
+            "url": "/attachment/prj_hJza4bVnFivpgBsxdUfI/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+            "mime": "application/octet-stream",
+            "filename": "empty-resource-review.bin"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMK0V400s5F5VOxkF",
+        "role": "assistant",
+        "parentID": "msg_0c76491ced7a477aa00c7c21ba2f5c2b",
+        "finish": "stop",
+        "files": []
+      }
+    ]
+  },
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\independent-project",
+    "sessionID": "ses_-zUOdfzxozzDvPFtCYfR",
+    "projectID": "prj_hwMjY3kmYM74u4cfAmA0",
+    "file": {
+      "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "url": "/attachment/prj_hwMjY3kmYM74u4cfAmA0/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+      "mime": "application/octet-stream",
+      "size": 0,
+      "filename": "independent-project.bin"
+    },
+    "bytes": 0,
+    "turns": [
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795034064387,
+            "completed": 1795034068093
+          },
+          "parentID": "msg_3cd1c107ce704a3e9e411d14b265c11e",
+          "acceptedInputMessageIDs": [
+            "msg_3cd1c107ce704a3e9e411d14b265c11e"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\independent-project",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\independent-project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795034064387:0000000000000030:0000000000000000:message:msg_g0VbMK08p00oHoevt0Ib",
+          "id": "msg_g0VbMK08p00oHoevt0Ib",
+          "sessionID": "ses_-zUOdfzxozzDvPFtCYfR",
+          "resolvedRole": "coding",
+          "channel": "assistant",
+          "agentID": "coding",
+          "sessionAgentID": "coding",
+          "originSource": ""
+        },
+        "requestID": "008e7289-a238-4d77-a685-7f1fcc631536"
+      },
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795034068448,
+            "completed": 1795034069562
+          },
+          "parentID": "msg_c86865bdf932492dab5fae04d13e3fc7",
+          "acceptedInputMessageIDs": [
+            "msg_c86865bdf932492dab5fae04d13e3fc7"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\independent-project",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\candidate\\independent-project"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795034068448:0000000000000030:0000000000000000:message:msg_g0VbMK1CK00aDyPN9vKD",
+          "id": "msg_g0VbMK1CK00aDyPN9vKD",
+          "sessionID": "ses_-zUOdfzxozzDvPFtCYfR",
+          "resolvedRole": "coding",
+          "channel": "assistant",
+          "agentID": "coding",
+          "sessionAgentID": "coding",
+          "originSource": ""
+        },
+        "requestID": "2432dcd9-58e1-4354-9fcf-b61cd77485e1"
+      }
+    ],
+    "messages": [
+      {
+        "id": "msg_3cd1c107ce704a3e9e411d14b265c11e",
+        "role": "user",
+        "files": [
+          {
+            "url": "/attachment/prj_hwMjY3kmYM74u4cfAmA0/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+            "mime": "application/octet-stream",
+            "filename": "independent-project.bin"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMK08p00oHoevt0Ib",
+        "role": "assistant",
+        "parentID": "msg_3cd1c107ce704a3e9e411d14b265c11e",
+        "finish": "stop",
+        "files": []
+      },
+      {
+        "id": "msg_c86865bdf932492dab5fae04d13e3fc7",
+        "role": "user",
+        "files": [
+          {
+            "url": "/attachment/prj_hwMjY3kmYM74u4cfAmA0/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+            "mime": "application/octet-stream",
+            "filename": "independent-project.bin"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMK1CK00aDyPN9vKD",
+        "role": "assistant",
+        "parentID": "msg_c86865bdf932492dab5fae04d13e3fc7",
+        "finish": "stop",
+        "files": []
+      }
+    ]
+  }
+]

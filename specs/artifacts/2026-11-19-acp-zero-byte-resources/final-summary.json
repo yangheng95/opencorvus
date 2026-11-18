@@ -1,0 +1,46 @@
+{
+  "baseline": {
+    "counts": {
+      "session": 7,
+      "message": 22,
+      "part": 62,
+      "session_prompt_owner": 0,
+      "engine_task": 0,
+      "event_occurrence": 208,
+      "event_job_fire": 0
+    },
+    "lifecycle": {
+      "streaming": 22,
+      "idle": 19
+    },
+    "assistantFinishes": {
+      "stop": 11
+    }
+  },
+  "candidate": {
+    "counts": {
+      "session": 9,
+      "message": 32,
+      "part": 98,
+      "session_prompt_owner": 0,
+      "engine_task": 0,
+      "event_occurrence": 229,
+      "event_job_fire": 0
+    },
+    "lifecycle": {
+      "streaming": 24,
+      "idle": 20
+    },
+    "assistantFinishes": {
+      "stop": 16
+    }
+  },
+  "model": {
+    "requests": 64,
+    "completed": 64,
+    "actualRequestContract": {
+      "('local', True)": 64
+    },
+    "lastEvent": "shutdown"
+  }
+}

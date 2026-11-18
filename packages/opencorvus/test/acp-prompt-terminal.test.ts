@@ -672,11 +672,15 @@ for (const entry of ["prompt", "command"] as const) {
       { filename: "untyped packet.bin", bytes: Buffer.from([0, 255, 13, 10, 41]), mimeType: undefined },
       { filename: "nullable packet.bin", bytes: Buffer.from([0, 255, 13, 10, 42]), mimeType: null },
       { filename: "declared note.txt", bytes: Buffer.from("The editor supplied this text.\n"), mimeType: "text/plain" },
+      { filename: "empty packet.bin", bytes: Buffer.alloc(0), mimeType: undefined },
+      { filename: "nullable empty.bin", bytes: Buffer.alloc(0), mimeType: null },
+      { filename: "empty note.txt", bytes: Buffer.alloc(0), mimeType: "text/plain" },
     ]
     expect(await env.client.prompt({
       sessionId,
       prompt: [
         { type: "text", text: entry === "command" ? "/inspect Inspect these resources." : "Inspect these resources." },
+        { type: "resource", resource: { uri: "file:///editor/empty-context.txt", text: "" } },
         ...resources.map((resource) => ({
           type: "resource" as const,
           resource: {
@@ -689,6 +693,7 @@ for (const entry of ["prompt", "command"] as const) {
     })).toMatchObject({ stopReason: "end_turn" })
     const [input, reply] = await env.messages(sessionId)
     expect(reply.info).toMatchObject({ role: "assistant", parentID: input.info.id, finish: "stop" })
+    expect(input.parts).toContainEqual(expect.objectContaining({ type: "text", text: "" }))
     const files = input.parts.filter((part) => part.type === "file")
     expect(files.map(({ filename, mime }) => ({ filename, mime }))).toEqual(resources.map((resource) => ({
       filename: resource.filename,
@@ -718,8 +723,72 @@ for (const entry of ["prompt", "command"] as const) {
         }),
       }),
     }))))
+    expect(env.updates.slice(cursor)).toContainEqual(expect.objectContaining({
+      sessionId,
+      update: expect.objectContaining({
+        sessionUpdate: "user_message_chunk", messageId: input.info.id, content: { type: "text", text: "" },
+      }),
+    }))
   }, 60_000)
 }
+
+test("ACP loads, forks and resumes canonical empty originals with their real message identities", async () => {
+  await using env = await environment()
+  const cwd = env.project.path
+  const sessionId = await env.create("normal")
+  const files = []
+  for (const filename of ["empty packet.bin", "empty note.txt"]) {
+    const mime = filename.endsWith(".txt") ? "text/plain" : "application/octet-stream"
+    const { data: reference } = await env.sdk.attachment.create(
+      { directory: cwd, filename, body: new Blob([], { type: mime }) },
+      { headers: { "Content-Type": mime }, throwOnError: true },
+    )
+    expect(reference).toMatchObject({ size: 0, mime, filename })
+    files.push({ type: "file" as const, url: reference.url, mime, filename })
+  }
+  await env.sdk.session.prompt({
+    sessionID: sessionId, directory: cwd, messageID: Identifier.ascending("message"),
+    model: { providerID: "acp-terminal", modelID: "normal" },
+    parts: [{ type: "text", text: "Inspect the original empty files." }, { type: "text", text: "" }, ...files],
+  }, { throwOnError: true })
+  const [input, reply] = await env.messages(sessionId)
+  expect(reply.info).toMatchObject({ parentID: input.info.id, finish: "stop" })
+
+  const verifyReplay = (from: number, ownerID: string, messageID: string) => {
+    const replay = env.updates.slice(from).flatMap(({ sessionId, update }) =>
+      sessionId === ownerID && update.sessionUpdate === "user_message_chunk" ? [update] : [],
+    )
+    expect(replay).toEqual(expect.arrayContaining([
+      expect.objectContaining({ messageId: messageID, content: { type: "text", text: "" } }),
+      expect.objectContaining({ messageId: messageID, content: {
+        type: "resource", resource: expect.objectContaining({ mimeType: "application/octet-stream", blob: "" }),
+      } }),
+      expect.objectContaining({ messageId: messageID, content: {
+        type: "resource", resource: expect.objectContaining({ mimeType: "text/plain", text: "" }),
+      } }),
+    ]))
+  }
+  const cursor = env.updates.length
+  await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
+  verifyReplay(cursor, sessionId, input.info.id)
+  const forkCursor = env.updates.length
+  const forked = await env.client.unstable_forkSession({ cwd, sessionId, mcpServers: [] })
+  const [forkedInput, forkedReply] = await env.messages(forked.sessionId)
+  expect(forkedReply.info).toMatchObject({ parentID: forkedInput.info.id, finish: "stop" })
+  verifyReplay(forkCursor, forked.sessionId, forkedInput.info.id)
+  for (const ownerID of [sessionId, forked.sessionId]) {
+    const { data: owner } = await env.sdk.session.get({ sessionID: ownerID, directory: cwd }, { throwOnError: true })
+    for (const part of (await env.messages(ownerID))[0].parts.filter((part) => part.type === "file")) {
+      const stored = await AttachmentStore.readVerifiedReference({ projectID: owner.projectID, url: part.url, mime: part.mime })
+      expect(stored.bytes).toEqual(Buffer.alloc(0))
+    }
+    await env.client.resumeSession({ cwd, sessionId: ownerID, mcpServers: [] })
+    expect(await env.client.prompt({ sessionId: ownerID, prompt: [{ type: "text", text: "Continue this exact session." }] }))
+      .toMatchObject({ stopReason: "end_turn" })
+    const [nextInput, nextReply] = (await env.messages(ownerID)).slice(-2)
+    expect(nextReply.info).toMatchObject({ parentID: nextInput.info.id, finish: "stop" })
+  }
+}, 60_000)
 
 test("ACP session initialization uses the saved root model through actual streamed turns", async () => {
   await using env = await environment()
