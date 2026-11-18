@@ -1,0 +1,98 @@
+[
+  {
+    "event": "stream-request",
+    "occurrence": 3,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 3,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 6,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input.",
+      "Read the saved session model. Resumed input."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 6,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 8,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input.",
+      "Read the saved session model. Resumed input.",
+      "Read the saved session model. Forked input."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 8,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 10,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 10,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 12,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input.",
+      "Read the saved session model. Resumed input."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 12,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 14,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input.",
+      "Read the saved session model. Resumed input.",
+      "Read the saved session model. Forked input."
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 14,
+    "operation": "conversation"
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "projectionRequest": "8445d2c7-a94c-4d53-b327-51b62445b40f",
+  "projectedModels": [
+    "acp-review/local",
+    "acp-review/scoped"
+  ],
+  "id": "ses_-zUOeEQR8zzn8xOjvutH",
+  "fork": "ses_-zUOeEPU2zzGkMxpaNkZ",
+  "createdModel": "acp-review/local",
+  "saved": {
+    "requestID": "b482709c-5d15-4a12-a099-c26d41223647",
+    "model": "acp-review/scoped",
+    "origin": "session"
+  },
+  "loadedModel": "acp-review/local",
+  "loadedPrompt": {
+    "stopReason": "end_turn",
+    "requestID": "e052e920-cbdf-422f-9f81-fefda02ee71b",
+    "input": {
+      "id": "msg_g0VbLlZe600MNuPfXykP",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "local"
+      }
+    },
+    "reply": {
+      "id": "msg_g0VbLlZgO00reDFkafzP",
+      "parentID": "msg_g0VbLlZe600MNuPfXykP",
+      "providerID": "acp-review",
+      "modelID": "local",
+      "finish": "stop"
+    }
+  },
+  "resumedModel": "acp-review/local",
+  "resumedPrompt": {
+    "stopReason": "end_turn",
+    "requestID": "6d4fbf1b-7763-4cdd-975a-26c04c5ada28",
+    "input": {
+      "id": "msg_g0VbLlaFW00ecA6DQJ11",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "local"
+      }
+    },
+    "reply": {
+      "id": "msg_g0VbLlaGs00XmxnfK5HM",
+      "parentID": "msg_g0VbLlaFW00ecA6DQJ11",
+      "providerID": "acp-review",
+      "modelID": "local",
+      "finish": "stop"
+    }
+  },
+  "forkedModel": "acp-review/local",
+  "forkPrompt": {
+    "stopReason": "end_turn",
+    "requestID": "297406ae-1a1f-4b1d-aae8-ba2fb16f6819",
+    "input": {
+      "id": "msg_g0VbLlabk00QK4S21dm2",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "local"
+      }
+    },
+    "reply": {
+      "id": "msg_g0VbLlacg001zm0jUHR1",
+      "parentID": "msg_g0VbLlabk00QK4S21dm2",
+      "providerID": "acp-review",
+      "modelID": "local",
+      "finish": "stop"
+    }
+  },
+  "finalConfig": {
+    "requestID": "cf1cc13e-726d-482b-8bb1-eb03fd2c5a83",
+    "model": "acp-review/scoped",
+    "origin": "session"
+  },
+  "forkConfig": {
+    "requestID": "36101da4-f053-423b-b831-beb276a10857",
+    "id": "ses_-zUOeEPU2zzGkMxpaNkZ",
+    "parentID": "ses_-zUOeEQR8zzn8xOjvutH"
+  }
+}

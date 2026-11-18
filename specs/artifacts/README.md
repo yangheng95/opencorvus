@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [ACP 会话模型作用域的 Windows 验收](2026-11-19-acp-session-model-scope/README.md)
 - [ACP 历史分页的真实 Windows Zed 验收](2026-11-13-acp-session-history-pagination/README.md)
 - [ACP 附件文件名的 Windows 验收](2026-11-13-acp-file-uri-display-name/README.md)
 - [ACP 消息身份的真实 Windows Zed 记录](2026-11-13-acp-content-message-identity/README.md)
