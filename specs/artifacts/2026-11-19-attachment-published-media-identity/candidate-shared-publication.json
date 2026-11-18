@@ -1,0 +1,92 @@
+[
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay",
+    "firstMime": "text/plain",
+    "secondMime": "application/octet-stream",
+    "first": {
+      "status": 200,
+      "requestID": "6831c097-3f78-46b3-9c70-3233ea419856",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "text/plain",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "repeat": {
+      "status": 200,
+      "requestID": "3cb0265a-a6e3-4dd5-9f7e-092aed281f49",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "text/plain",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "conflict": {
+      "status": 409,
+      "requestID": "54247f40-58e7-4e4f-a377-6c67e6b87169",
+      "error": {
+        "name": "AttachmentMediaTypeConflictError",
+        "data": {
+          "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+          "publishedMime": "text/plain",
+          "requestedMime": "application/octet-stream",
+          "message": "Attachment /attachment/prj_hvI7xZdWkbHcNh1WZvhb/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat is already published as text/plain; requested application/octet-stream."
+        }
+      }
+    },
+    "original": {
+      "status": 200,
+      "bytes": 35,
+      "equalsOriginal": true
+    }
+  },
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-independent",
+    "firstMime": "application/octet-stream",
+    "secondMime": "text/plain",
+    "first": {
+      "status": 200,
+      "requestID": "6bae16fa-5a4a-4c45-918b-d4e287c638be",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_h7e6VMdz0Iydx21s3qEA/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "application/octet-stream",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "repeat": {
+      "status": 200,
+      "requestID": "9d4d1aa9-2288-4d4e-9ad7-3b8ccb8fa3dd",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_h7e6VMdz0Iydx21s3qEA/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "application/octet-stream",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "conflict": {
+      "status": 409,
+      "requestID": "2045ba4a-d721-4533-a5a4-7cb3971857d0",
+      "error": {
+        "name": "AttachmentMediaTypeConflictError",
+        "data": {
+          "url": "/attachment/prj_h7e6VMdz0Iydx21s3qEA/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+          "publishedMime": "application/octet-stream",
+          "requestedMime": "text/plain",
+          "message": "Attachment /attachment/prj_h7e6VMdz0Iydx21s3qEA/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat is already published as application/octet-stream; requested text/plain."
+        }
+      }
+    },
+    "original": {
+      "status": 200,
+      "bytes": 35,
+      "equalsOriginal": true
+    }
+  }
+]

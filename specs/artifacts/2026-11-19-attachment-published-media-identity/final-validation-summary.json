@@ -1,0 +1,54 @@
+{
+  "batch": 323,
+  "date": "2026-11-19",
+  "focused": {
+    "tests": 56,
+    "assertions": 314,
+    "files": 7
+  },
+  "sdkGeneration": "passed; nine materializing operations describe the named media conflict",
+  "types": [
+    "backend passed",
+    "SDK passed",
+    "frontend passed"
+  ],
+  "checks": [
+    "353 API operations / 26 groups",
+    "6 route rules / 36 files",
+    "20 architecture documents",
+    "3229 keys / 2 locales",
+    "CSS passed",
+    "frontend build and rendererSurface passed"
+  ],
+  "desktop": "Actual owned Chrome, native file picker, three uploads with named 409; concise English and Chinese summaries, full Chinese details, original readable after retry",
+  "downloadBefore": {
+    "filename": "frozen-reference.dat",
+    "bytes": 102,
+    "equalsOriginal": true
+  },
+  "downloadAfter": {
+    "filename": "frozen-reference.dat",
+    "bytes": 102,
+    "equalsOriginal": true
+  },
+  "model": {
+    "requests": 22,
+    "completed": 22,
+    "allExactLocalStream": true
+  },
+  "ownedShutdown": {
+    "candidateACPExit": 0,
+    "modelExit": 0,
+    "browser": "closed normally",
+    "ports": {
+      "40130": "closed",
+      "40132": "closed",
+      "40134": "closed"
+    }
+  },
+  "limits": [
+    "No external model or credentials; scripted local participant validates transport and lifecycle only",
+    "No automatic reconstruction of metadata overwritten by earlier releases",
+    "Original HTTP media headers, SVG derivation, and webpage-role ACP loading require independent investigation"
+  ]
+}

@@ -4,9 +4,55 @@ import { createOpenCorvusClient } from "@opencorvus-ai/sdk"
 import { Instance } from "../../src/project/instance"
 import { AttachmentRoutes } from "../../src/server/routes/attachment"
 import { AttachmentStore } from "../../src/storage/attachment-store"
+import { serverErrorResponse } from "../../src/server/error-handler"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterAll(resetMemoryDatabase)
+
+test("a public media conflict returns its named 409 while the published original remains usable", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const app = new Hono().onError(serverErrorResponse).route("/attachment", AttachmentRoutes())
+      const server = Bun.serve({
+        hostname: "127.0.0.1", port: 0,
+        fetch: (request) => Instance.provide({ directory: project.path, fn: () => app.fetch(request) }),
+      })
+      try {
+        const sdk = createOpenCorvusClient({ baseUrl: server.url.toString(), directory: project.path })
+        const bytes = Buffer.from("Public published original bytes.\n")
+        const upload = (mime: string) => sdk.attachment.create(
+          { filename: "original.dat", body: new Blob([new Uint8Array(bytes)], { type: mime }) },
+          { headers: { "Content-Type": mime }, throwOnError: false },
+        )
+        const first = await upload("text/plain")
+        expect(first.response.status).toBe(200)
+        const original = first.data!
+        const conflict = await upload("application/octet-stream")
+        expect(conflict.response.status).toBe(409)
+        expect(conflict.error).toEqual({
+          name: "AttachmentMediaTypeConflictError",
+          data: {
+            url: original.url, publishedMime: "text/plain", requestedMime: "application/octet-stream",
+            message: `Attachment ${original.url} is already published as text/plain; requested application/octet-stream.`,
+          },
+        })
+        const repeated = await upload("text/plain")
+        expect(repeated.response.status).toBe(200)
+        expect(repeated.data).toEqual(original)
+        expect(await AttachmentStore.readVerifiedReference({
+          projectID: Instance.project.id, url: original.url, mime: original.mime,
+        })).toEqual({ reference: original, bytes })
+        const downloaded = await fetch(new URL(original.url, server.url))
+        expect(downloaded.status).toBe(200)
+        expect(Buffer.from(await downloaded.arrayBuffer())).toEqual(bytes)
+      } finally {
+        await server.stop(true)
+      }
+    },
+  })
+})
 
 const inputs = [
   {

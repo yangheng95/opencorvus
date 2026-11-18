@@ -144,6 +144,16 @@ export namespace AttachmentStore {
     }),
   )
 
+  export const MediaTypeConflictError = NamedError.create(
+    "AttachmentMediaTypeConflictError",
+    z.object({
+      url: z.string(),
+      publishedMime: z.string(),
+      requestedMime: z.string(),
+      message: z.string(),
+    }),
+  )
+
   export const TestHooks: {
     afterVerifiedBlobStat?: (input: { projectID: string; name: string; abs: string }) => void | Promise<void>
   } = {}
@@ -273,34 +283,38 @@ export namespace AttachmentStore {
     }
   }
 
-  async function validatePublishedPair(input: {
+  async function inspectPublishedPair(input: {
     projectID: string
     name: string
     abs: string
     metadataAbs: string
     sha: string
-    mime: string
     size: number
-  }): Promise<boolean> {
-    let bytes: Buffer
-    let metadataText: string
-    try {
-      ;[bytes, metadataText] = await Promise.all([fs.readFile(input.abs), fs.readFile(input.metadataAbs, "utf8")])
-    } catch (error) {
-      if (hasNodeErrorCode(error, "ENOENT") || hasNodeErrorCode(error, "ENOTDIR")) return false
-      throw error
-    }
-    const actualSha = crypto.createHash("sha256").update(bytes).digest("hex")
-    if (bytes.byteLength !== input.size || actualSha !== input.sha) return false
-    try {
-      const canonical = parseReferenceMetadata(JSON.parse(metadataText), {
-        projectID: input.projectID,
-        name: input.name,
-        abs: input.abs,
+  }): Promise<{ reference?: Reference; intact: boolean }> {
+    const read = (file: string) =>
+      fs.readFile(file).catch((error) => {
+        if (hasNodeErrorCode(error, "ENOENT") || hasNodeErrorCode(error, "ENOTDIR")) return undefined
+        throw error
       })
-      return canonical.sha === input.sha && canonical.mime === input.mime && canonical.size === input.size
-    } catch {
-      return false
+    const [bytes, metadata] = await Promise.all([read(input.abs), read(input.metadataAbs)])
+    let reference: Reference | undefined
+    if (metadata !== undefined) {
+      try {
+        const canonical = parseReferenceMetadata(JSON.parse(metadata.toString("utf8")), {
+          projectID: input.projectID,
+          name: input.name,
+          abs: input.abs,
+        })
+        if (canonical.sha === input.sha && canonical.size === input.size) reference = canonical
+      } catch {
+        // An incomplete or malformed receipt retains the existing staging repair contract.
+      }
+    }
+    return {
+      reference,
+      intact:
+        reference !== undefined && bytes !== undefined && bytes.byteLength === input.size &&
+        crypto.createHash("sha256").update(bytes).digest("hex") === input.sha,
     }
   }
 
@@ -366,19 +380,17 @@ export namespace AttachmentStore {
     }
     const metadataAbs = metadataPath(abs)
     return await withAttachmentPairLock(abs, async () => {
-      if (
-        await validatePublishedPair({
-          projectID,
-          name,
-          abs,
-          metadataAbs,
-          sha,
-          mime,
-          size: data.byteLength,
+      const published = await inspectPublishedPair({ projectID, name, abs, metadataAbs, sha, size: data.byteLength })
+      if (published.reference && published.reference.mime !== mime) {
+        throw new MediaTypeConflictError({
+          url: reference.url,
+          publishedMime: published.reference.mime,
+          requestedMime: mime,
+          message: `Attachment ${reference.url} is already published as ${published.reference.mime}; requested ${mime}.`,
         })
-      ) {
-        return reference
       }
+      if (published.intact) return reference
+      const publication = published.reference ?? reference
 
       const stagingKey = `.${name}.staging-${randomUUID()}`
       const stagingBlob = path.join(dir, stagingKey)
@@ -387,33 +399,17 @@ export namespace AttachmentStore {
       try {
         await Promise.all([fs.rm(abs, { force: true }), fs.rm(metadataAbs, { force: true })])
         await fs.writeFile(stagingBlob, data, { flag: "wx" })
-        await fs.writeFile(stagingMetadata, JSON.stringify(reference, null, 2), { flag: "wx" })
-        if (
-          !(await validatePublishedPair({
-            projectID,
-            name,
-            abs: stagingBlob,
-            metadataAbs: stagingMetadata,
-            sha,
-            mime,
-            size: data.byteLength,
-          }))
-        ) {
+        await fs.writeFile(stagingMetadata, JSON.stringify(publication, null, 2), { flag: "wx" })
+        const staged = await inspectPublishedPair({
+          projectID, name, abs: stagingBlob, metadataAbs: stagingMetadata, sha, size: data.byteLength,
+        })
+        if (!staged.intact || staged.reference?.mime !== mime) {
           throw new Error(`AttachmentStore.write: staged pair failed integrity validation for ${projectID}/${name}`)
         }
         await fs.rename(stagingBlob, abs)
         await fs.rename(stagingMetadata, metadataAbs)
-        if (
-          !(await validatePublishedPair({
-            projectID,
-            name,
-            abs,
-            metadataAbs,
-            sha,
-            mime,
-            size: data.byteLength,
-          }))
-        ) {
+        const committed = await inspectPublishedPair({ projectID, name, abs, metadataAbs, sha, size: data.byteLength })
+        if (!committed.intact || committed.reference?.mime !== mime) {
           throw new Error(`AttachmentStore.write: published pair failed integrity validation for ${projectID}/${name}`)
         }
         return reference

@@ -128,6 +128,10 @@ export const AttachmentRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(DirectoryReference) } },
           },
           400: { description: "Invalid or non-directory path" },
+          409: {
+            description: "The canonical original is already published with another media type",
+            content: { "application/json": { schema: resolver(AttachmentStore.MediaTypeConflictError.Schema) } },
+          },
         },
       }),
       validator("json", DirectoryReferenceInput),
@@ -170,6 +174,10 @@ export const AttachmentRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(AttachmentReference) } },
           },
           400: { description: "Invalid filename, MIME type, or body" },
+          409: {
+            description: "The canonical original is already published with another media type",
+            content: { "application/json": { schema: resolver(AttachmentStore.MediaTypeConflictError.Schema) } },
+          },
         },
       }),
       validator("query", AttachmentUploadQuery),

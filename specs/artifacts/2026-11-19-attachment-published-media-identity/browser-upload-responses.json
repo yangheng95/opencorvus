@@ -1,0 +1,44 @@
+[
+  {
+    "filename": "frozen-reference.dat",
+    "status": 409,
+    "requestedMime": "application/octet-stream",
+    "body": {
+      "name": "AttachmentMediaTypeConflictError",
+      "data": {
+        "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat",
+        "publishedMime": "text/plain",
+        "requestedMime": "application/octet-stream",
+        "message": "Attachment /attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat is already published as text/plain; requested application/octet-stream."
+      }
+    }
+  },
+  {
+    "filename": "frozen-reference.dat",
+    "status": 409,
+    "requestedMime": "application/octet-stream",
+    "body": {
+      "name": "AttachmentMediaTypeConflictError",
+      "data": {
+        "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat",
+        "publishedMime": "text/plain",
+        "requestedMime": "application/octet-stream",
+        "message": "Attachment /attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat is already published as text/plain; requested application/octet-stream."
+      }
+    }
+  },
+  {
+    "filename": "frozen-reference.dat",
+    "status": 409,
+    "requestedMime": "application/octet-stream",
+    "body": {
+      "name": "AttachmentMediaTypeConflictError",
+      "data": {
+        "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat",
+        "publishedMime": "text/plain",
+        "requestedMime": "application/octet-stream",
+        "message": "Attachment /attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat is already published as text/plain; requested application/octet-stream."
+      }
+    }
+  }
+]

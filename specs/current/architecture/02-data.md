@@ -1100,6 +1100,11 @@ blob；仅未引用、缺少 metadata 且超过 grace period 的未发布孤立 
 重验 metadata 与年龄。metadata 损坏仍保留诊断原件，由正式 reader 报原错误。没有第二个保留
 清单、租约或数据库身份 marker；dedup 返回已验证的不可变 pair，不为 GC 续写时间。已发布而
 不再被引用的原件不自动按年龄清除；清理需要明确删除授权，不能从“数据库未引用”推导。
+有效 publication 回执的媒体身份不接受后来的相同字节请求改写。pair 校验分别返回规范回执
+与字节完整性；在同一发布锁内先比较回执媒体，冲突抛出 `AttachmentMediaTypeConflictError`，
+公共 HTTP 错误为 409，包含原件 URL、已发布/请求 MIME 与诊断。该判断发生在 staging 或删除前，
+即使 blob 缺失或损坏也保留有效回执的媒体；同媒体的字节修复继续使用原发布回执。
+不存在有效回执的未完成/损坏发布保留现有 staging 修复合同。此修正不猜测旧版本已改写记录的原始媒体。
 显式 `db reset` 必须同时删除 SQLite DB/WAL/SHM 与传入 Project 的 `.opencorvus/.r`；它不靠
 项目文件中的数据库身份阻止或修复不完整的 operator reset。Project identity convergence 只使用
 canonical Database rows、嵌入引用和现有 durable owner 检查，不读取文件系统 marker 作为平行事实源。

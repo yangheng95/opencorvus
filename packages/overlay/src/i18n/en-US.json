@@ -403,6 +403,7 @@
   "card.usage_total_tokens": "Total tokens: {{value}}",
   "card.usage_cost": "Cost: {{value}}",
   "chat.attach_upload_failed_title": "Attachment upload failed",
+  "chat.attach_media_type_conflict": "This original is already published as {{publishedMime}} and cannot be changed to {{requestedMime}}.",
   "chat.attach_upload_failed": "Could not store {{name}} in the project attachment index: {{error}}",
   "chat.attach_folder_failed": "Could not reference the selected folder: {{error}}",
   "chat.attachment.remove": "Remove attachment: {{name}}",

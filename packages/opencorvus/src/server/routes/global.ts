@@ -497,6 +497,7 @@ export const GlobalRoutes = lazy(() =>
           409: namedErrorResponse(
             "Global Chat start request identity is already bound to another payload",
             "GlobalChatStartIdentityConflictError",
+            "AttachmentMediaTypeConflictError",
           ),
           410: namedErrorResponse(
             "Previously accepted Global Chat target is no longer retained",

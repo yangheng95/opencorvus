@@ -213,6 +213,7 @@ export const EngineRoutes = lazy(() =>
             "TaskCreationIdentityConflictError",
             "TaskChannelBindingProjectConflictError",
             "TaskPackageRevisionBindingError",
+            "AttachmentMediaTypeConflictError",
           ),
           410: namedErrorResponse(
             "Previously accepted Task target is no longer retained",
@@ -306,6 +307,7 @@ export const EngineRoutes = lazy(() =>
             "GlobalCreationAllocationConflictError",
             "GlobalCreationAcceptedTargetConflictError",
             "TaskPackageRevisionBindingError",
+            "AttachmentMediaTypeConflictError",
           ),
           410: namedErrorResponse(
             "Previously accepted Global Task target is no longer retained",
@@ -1423,6 +1425,7 @@ export const EngineRoutes = lazy(() =>
             "TaskOperatorMessageRequestConflictError",
             "TaskCancellationIncompleteError",
             "TaskPackageRevisionBindingError",
+            "AttachmentMediaTypeConflictError",
           ),
         },
       }),

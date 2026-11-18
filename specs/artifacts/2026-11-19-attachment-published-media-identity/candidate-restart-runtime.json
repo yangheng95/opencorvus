@@ -1,0 +1,962 @@
+{
+  "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+  "load": {
+    "result": {
+      "sessionId": "ses_-zUOdSmuuzz2oF5dRYbC",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Published media identity"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": [
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_a819f8b2f5734e20b56db2c59f02f58b",
+        "content": {
+          "text": "Inspect published media identity. Keep the original published attachment.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_a819f8b2f5734e20b56db2c59f02f58b",
+        "content": {
+          "resource": {
+            "mimeType": "text/plain",
+            "text": "An original publication keeps its declared media identity.\n原始资源的媒体声明保持不变。\n",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b323/candidate/published-type-replay/frozen-reference.dat"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_g0VbMXDBp006kpgf7I5J",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_be147831f5ca4388b21eeece7a495b0f",
+        "content": {
+          "text": "Inspect published media identity. Use the original reference again.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_be147831f5ca4388b21eeece7a495b0f",
+        "content": {
+          "resource": {
+            "mimeType": "text/plain",
+            "text": "An original publication keeps its declared media identity.\n原始资源的媒体声明保持不变。\n",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b323/candidate/published-type-replay/frozen-reference.dat"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_g0VbMXEbE006n3uJuPa9",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_g0VbMXEum006fU18UpXn",
+        "content": {
+          "text": "Inspect published media identity. Continue this same session normally.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "messageID": "msg_g0VbMXEyO00HqvVREbPG",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "fork": {
+    "result": {
+      "sessionId": "ses_-zUOdPqq8zzX13qSx1xV",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Published media identity"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": [
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u00OjAa5PCuv",
+        "content": {
+          "text": "Inspect published media identity. Keep the original published attachment.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u00OjAa5PCuv",
+        "content": {
+          "resource": {
+            "mimeType": "text/plain",
+            "text": "An original publication keeps its declared media identity.\n原始资源的媒体声明保持不变。\n",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b323/candidate/published-type-replay/frozen-reference.dat"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u016ReC1KclO",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u02Rl3avXS2T",
+        "content": {
+          "text": "Inspect published media identity. Use the original reference again.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u02Rl3avXS2T",
+        "content": {
+          "resource": {
+            "mimeType": "text/plain",
+            "text": "An original publication keeps its declared media identity.\n原始资源的媒体声明保持不变。\n",
+            "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b323/candidate/published-type-replay/frozen-reference.dat"
+          },
+          "type": "resource"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u03Nd5wKB52K",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u041MdUcZJeU",
+        "content": {
+          "text": "Inspect published media identity. Continue this same session normally.",
+          "type": "text"
+        }
+      },
+      {
+        "sessionID": "ses_-zUOdPqq8zzX13qSx1xV",
+        "messageID": "msg_g0VbMa99u05lNdhyutEJ",
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "resume": {
+    "result": {
+      "sessionId": "ses_-zUOdSmuuzz2oF5dRYbC",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Published media identity"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": []
+  },
+  "oldReferencePrompt": {
+    "status": 200,
+    "requestID": "e220c84c-4140-48aa-8b49-db097ec6b1c1",
+    "data": {
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795037913049,
+          "completed": 1795037914991
+        },
+        "parentID": "msg_d60f60782aff46f281170884372fde59",
+        "acceptedInputMessageIDs": [
+          "msg_d60f60782aff46f281170884372fde59"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795037913049:0000000000000030:0000000000000000:message:msg_g0VbMa9M100PUZ6V3zH0",
+        "id": "msg_g0VbMa9M100PUZ6V3zH0",
+        "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+        "resolvedRole": "coding",
+        "channel": "assistant",
+        "agentID": "coding",
+        "sessionAgentID": "coding",
+        "originSource": ""
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbMa9lS00uIGI2BFHO",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+          "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+          "orderKey": "v1:0001795037914626:0000000000000031:0000000000000000:part:prt_g0VbMa9lS00uIGI2BFHO",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbMa9li00lJucXCplT",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+          "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+          "orderKey": "v1:0001795037914642:0000000000000031:0000000000000000:part:prt_g0VbMa9li00lJucXCplT",
+          "type": "reasoning",
+          "text": "Checking the supplied file context.",
+          "time": {
+            "start": 1795037914642,
+            "end": 1795037914792
+          }
+        },
+        {
+          "id": "prt_g0VbMa9oH005f6qdLaQa",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+          "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+          "orderKey": "v1:0001795037914802:0000000000000031:0000000000000000:part:prt_g0VbMa9oH005f6qdLaQa",
+          "type": "text",
+          "text": "The local stream completed.",
+          "time": {
+            "start": 1795037914801,
+            "end": 1795037914963
+          }
+        },
+        {
+          "id": "prt_g0VbMa9qx00r6uQlFiBu",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+          "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+          "orderKey": "v1:0001795037914967:0000000000000031:0000000000000000:part:prt_g0VbMa9qx00r6uQlFiBu",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    }
+  },
+  "original": {
+    "status": 200,
+    "requestID": "5af710b9-fc1c-43de-b2a1-fa772c9f07a9",
+    "mime": "application/octet-stream",
+    "disposition": "inline; filename*=UTF-8''frozen-reference.dat",
+    "bytes": 102,
+    "equalsOriginal": true
+  },
+  "history": {
+    "requestID": "514c53d9-27c9-4c80-b10f-f905726085d6",
+    "messages": [
+      {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1795037212716
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "acp-review",
+            "modelID": "local"
+          },
+          "extra": {
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "session.prompt",
+              "literalText": "Inspect published media identity. Keep the original published attachment."
+            },
+            "publicSessionPromptIdentity": {
+              "version": 1,
+              "fingerprint": "53d7f47d0e17d4b12dbde468df9f2b78381b8cf4ec7fa69afc78eb6ebde85152"
+            }
+          },
+          "orderKey": "v1:0001795037212716:0000000000000030:0000000000000000:message:msg_a819f8b2f5734e20b56db2c59f02f58b",
+          "id": "msg_a819f8b2f5734e20b56db2c59f02f58b",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMXDAN00vg4g8Gx6a",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_a819f8b2f5734e20b56db2c59f02f58b",
+            "orderKey": "v1:0001795037212733:0000000000000031:0000000000000000:part:prt_g0VbMXDAN00vg4g8Gx6a",
+            "type": "text",
+            "text": "Inspect published media identity. Keep the original published attachment.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662.json",
+              "catalog_snapshot_hash": "e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662"
+            }
+          },
+          {
+            "id": "prt_g0VbMXDAN01JLkVe9Y9s",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_a819f8b2f5734e20b56db2c59f02f58b",
+            "orderKey": "v1:0001795037212736:0000000000000031:0000000000000000:part:prt_g0VbMXDAN01JLkVe9Y9s",
+            "type": "file",
+            "mime": "text/plain",
+            "filename": "frozen-reference.dat",
+            "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat"
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795037212809,
+            "completed": 1795037215937
+          },
+          "parentID": "msg_a819f8b2f5734e20b56db2c59f02f58b",
+          "acceptedInputMessageIDs": [
+            "msg_a819f8b2f5734e20b56db2c59f02f58b"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795037212809:0000000000000030:0000000000000000:message:msg_g0VbMXDBp006kpgf7I5J",
+          "id": "msg_g0VbMXDBp006kpgf7I5J",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMXDtk00K73MBDX3O",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXDBp006kpgf7I5J",
+            "orderKey": "v1:0001795037215534:0000000000000031:0000000000000000:part:prt_g0VbMXDtk00K73MBDX3O",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VbMXDuM00N363RCUkW",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXDBp006kpgf7I5J",
+            "orderKey": "v1:0001795037215572:0000000000000031:0000000000000000:part:prt_g0VbMXDuM00N363RCUkW",
+            "type": "reasoning",
+            "text": "Checking the supplied file context.",
+            "time": {
+              "start": 1795037215570,
+              "end": 1795037215717
+            }
+          },
+          {
+            "id": "prt_g0VbMXDwn00XEkxOEAEN",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXDBp006kpgf7I5J",
+            "orderKey": "v1:0001795037215722:0000000000000031:0000000000000000:part:prt_g0VbMXDwn00XEkxOEAEN",
+            "type": "text",
+            "text": "The local stream completed.",
+            "time": {
+              "start": 1795037215721,
+              "end": 1795037215886
+            }
+          },
+          {
+            "id": "prt_g0VbMXDzX00ifrtd6YWK",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXDBp006kpgf7I5J",
+            "orderKey": "v1:0001795037215893:0000000000000031:0000000000000000:part:prt_g0VbMXDzX00ifrtd6YWK",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 19,
+              "input": 11,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "unpriced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1795037218109
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "acp-review",
+            "modelID": "local"
+          },
+          "extra": {
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "session.prompt",
+              "literalText": "Inspect published media identity. Use the original reference again."
+            },
+            "publicSessionPromptIdentity": {
+              "version": 1,
+              "fingerprint": "e8f696cc6d27d80b381252bea8cbe43accac5c83ea1b220203f2078775d16720"
+            }
+          },
+          "orderKey": "v1:0001795037218109:0000000000000030:0000000000000000:message:msg_be147831f5ca4388b21eeece7a495b0f",
+          "id": "msg_be147831f5ca4388b21eeece7a495b0f",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMXEZM00EiMurF2GW",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_be147831f5ca4388b21eeece7a495b0f",
+            "orderKey": "v1:0001795037218116:0000000000000031:0000000000000000:part:prt_g0VbMXEZM00EiMurF2GW",
+            "type": "text",
+            "text": "Inspect published media identity. Use the original reference again.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662.json",
+              "catalog_snapshot_hash": "e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662"
+            }
+          },
+          {
+            "id": "prt_g0VbMXEZM01u6E4J2JS4",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_be147831f5ca4388b21eeece7a495b0f",
+            "orderKey": "v1:0001795037218117:0000000000000031:0000000000000000:part:prt_g0VbMXEZM01u6E4J2JS4",
+            "type": "file",
+            "mime": "text/plain",
+            "filename": "frozen-reference.dat",
+            "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat"
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795037218228,
+            "completed": 1795037219404
+          },
+          "parentID": "msg_be147831f5ca4388b21eeece7a495b0f",
+          "acceptedInputMessageIDs": [
+            "msg_be147831f5ca4388b21eeece7a495b0f"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795037218228:0000000000000030:0000000000000000:message:msg_g0VbMXEbE006n3uJuPa9",
+          "id": "msg_g0VbMXEbE006n3uJuPa9",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMXEnj00KYd4BIn2j",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEbE006n3uJuPa9",
+            "orderKey": "v1:0001795037219003:0000000000000031:0000000000000000:part:prt_g0VbMXEnj00KYd4BIn2j",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VbMXEoQ00HOXVEYkLX",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEbE006n3uJuPa9",
+            "orderKey": "v1:0001795037219047:0000000000000031:0000000000000000:part:prt_g0VbMXEoQ00HOXVEYkLX",
+            "type": "reasoning",
+            "text": "Checking the supplied file context.",
+            "time": {
+              "start": 1795037219046,
+              "end": 1795037219169
+            }
+          },
+          {
+            "id": "prt_g0VbMXEqU00ec2utMkV1",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEbE006n3uJuPa9",
+            "orderKey": "v1:0001795037219174:0000000000000031:0000000000000000:part:prt_g0VbMXEqU00ec2utMkV1",
+            "type": "text",
+            "text": "The local stream completed.",
+            "time": {
+              "start": 1795037219174,
+              "end": 1795037219340
+            }
+          },
+          {
+            "id": "prt_g0VbMXEtE00fxUcrS1bs",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEbE006n3uJuPa9",
+            "orderKey": "v1:0001795037219344:0000000000000031:0000000000000000:part:prt_g0VbMXEtE00fxUcrS1bs",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 19,
+              "input": 11,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "unpriced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1795037219470
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "acp-review",
+            "modelID": "local"
+          },
+          "extra": {
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "session.prompt",
+              "literalText": "Inspect published media identity. Continue this same session normally."
+            },
+            "publicSessionPromptIdentity": {
+              "version": 1,
+              "fingerprint": "d5a55dec6cd9282295f1aeca425984a17457c4ad15f58f1017b3312d14cfaf82"
+            }
+          },
+          "orderKey": "v1:0001795037219470:0000000000000030:0000000000000000:message:msg_g0VbMXEum006fU18UpXn",
+          "id": "msg_g0VbMXEum006fU18UpXn",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMXEvG009Dh2j9tws",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEum006fU18UpXn",
+            "orderKey": "v1:0001795037219473:0000000000000031:0000000000000000:part:prt_g0VbMXEvG009Dh2j9tws",
+            "type": "text",
+            "text": "Inspect published media identity. Continue this same session normally.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662.json",
+              "catalog_snapshot_hash": "e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795037219664,
+            "completed": 1795037220748
+          },
+          "parentID": "msg_g0VbMXEum006fU18UpXn",
+          "acceptedInputMessageIDs": [
+            "msg_g0VbMXEum006fU18UpXn"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795037219664:0000000000000030:0000000000000000:message:msg_g0VbMXEyO00HqvVREbPG",
+          "id": "msg_g0VbMXEyO00HqvVREbPG",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMXF9l008JPcUSdK8",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEyO00HqvVREbPG",
+            "orderKey": "v1:0001795037220369:0000000000000031:0000000000000000:part:prt_g0VbMXF9l008JPcUSdK8",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VbMXFAC00NlASSEmc9",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEyO00HqvVREbPG",
+            "orderKey": "v1:0001795037220396:0000000000000031:0000000000000000:part:prt_g0VbMXFAC00NlASSEmc9",
+            "type": "reasoning",
+            "text": "Checking the supplied file context.",
+            "time": {
+              "start": 1795037220396,
+              "end": 1795037220537
+            }
+          },
+          {
+            "id": "prt_g0VbMXFCX00JrBEcHnL6",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEyO00HqvVREbPG",
+            "orderKey": "v1:0001795037220541:0000000000000031:0000000000000000:part:prt_g0VbMXFCX00JrBEcHnL6",
+            "type": "text",
+            "text": "The local stream completed.",
+            "time": {
+              "start": 1795037220541,
+              "end": 1795037220709
+            }
+          },
+          {
+            "id": "prt_g0VbMXFFK00MNRQxYasu",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMXEyO00HqvVREbPG",
+            "orderKey": "v1:0001795037220715:0000000000000031:0000000000000000:part:prt_g0VbMXFFK00MNRQxYasu",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 19,
+              "input": 11,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "unpriced"
+            }
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1795037912935
+          },
+          "agent": "coding",
+          "model": {
+            "providerID": "acp-review",
+            "modelID": "local"
+          },
+          "extra": {
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "session.prompt",
+              "literalText": "Inspect published media identity. Original reference after process restart."
+            },
+            "publicSessionPromptIdentity": {
+              "version": 1,
+              "fingerprint": "dda099e369770f5298cd61e32aba951cefe73de75743d15abb0d63043e3b1ee4"
+            }
+          },
+          "orderKey": "v1:0001795037912935:0000000000000030:0000000000000000:message:msg_d60f60782aff46f281170884372fde59",
+          "id": "msg_d60f60782aff46f281170884372fde59",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMa9KE00FvCebSLJi",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_d60f60782aff46f281170884372fde59",
+            "orderKey": "v1:0001795037912944:0000000000000031:0000000000000000:part:prt_g0VbMa9KE00FvCebSLJi",
+            "type": "text",
+            "text": "Inspect published media identity. Original reference after process restart.",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662.json",
+              "catalog_snapshot_hash": "e0a73411fec7acd1c84e82fb8c7876bc74ca1e9c79e2d67f95e2a6e253586662"
+            }
+          },
+          {
+            "id": "prt_g0VbMa9KE01XxUew0Afz",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_d60f60782aff46f281170884372fde59",
+            "orderKey": "v1:0001795037912946:0000000000000031:0000000000000000:part:prt_g0VbMa9KE01XxUew0Afz",
+            "type": "file",
+            "mime": "text/plain",
+            "filename": "frozen-reference.dat",
+            "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/7d740a2c65de08368a517b70ab49ff652c638c25cddf6f4e130aff55568f8b4b.dat"
+          }
+        ]
+      },
+      {
+        "info": {
+          "author": "coding",
+          "role": "assistant",
+          "time": {
+            "created": 1795037913049,
+            "completed": 1795037914991
+          },
+          "parentID": "msg_d60f60782aff46f281170884372fde59",
+          "acceptedInputMessageIDs": [
+            "msg_d60f60782aff46f281170884372fde59"
+          ],
+          "modelID": "local",
+          "providerID": "acp-review",
+          "agent": "coding",
+          "path": {
+            "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay",
+            "root": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\candidate\\published-type-replay"
+          },
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          },
+          "finish": "stop",
+          "orderKey": "v1:0001795037913049:0000000000000030:0000000000000000:message:msg_g0VbMa9M100PUZ6V3zH0",
+          "id": "msg_g0VbMa9M100PUZ6V3zH0",
+          "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VbMa9lS00uIGI2BFHO",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+            "orderKey": "v1:0001795037914626:0000000000000031:0000000000000000:part:prt_g0VbMa9lS00uIGI2BFHO",
+            "type": "step-start"
+          },
+          {
+            "id": "prt_g0VbMa9li00lJucXCplT",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+            "orderKey": "v1:0001795037914642:0000000000000031:0000000000000000:part:prt_g0VbMa9li00lJucXCplT",
+            "type": "reasoning",
+            "text": "Checking the supplied file context.",
+            "time": {
+              "start": 1795037914642,
+              "end": 1795037914792
+            }
+          },
+          {
+            "id": "prt_g0VbMa9oH005f6qdLaQa",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+            "orderKey": "v1:0001795037914802:0000000000000031:0000000000000000:part:prt_g0VbMa9oH005f6qdLaQa",
+            "type": "text",
+            "text": "The local stream completed.",
+            "time": {
+              "start": 1795037914801,
+              "end": 1795037914963
+            }
+          },
+          {
+            "id": "prt_g0VbMa9qx00r6uQlFiBu",
+            "sessionID": "ses_-zUOdSmuuzz2oF5dRYbC",
+            "messageID": "msg_g0VbMa9M100PUZ6V3zH0",
+            "orderKey": "v1:0001795037914967:0000000000000031:0000000000000000:part:prt_g0VbMa9qx00r6uQlFiBu",
+            "type": "step-finish",
+            "reason": "stop",
+            "cost": 0,
+            "tokens": {
+              "total": 19,
+              "input": 11,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "unpriced"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "target": "http://127.0.0.1:40132/ui/?sessionID=ses_hc0fqzWYRpe69TPwgTZp&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b323%5Ccandidate%5Cpublished-type-replay&experience=chat",
+  "status": {
+    "requestID": "3df7e626-55d6-4fd2-af87-b3d197fc907a",
+    "data": {
+      "ses_-zUOdSmuuzz2oF5dRYbC": {
+        "type": "idle"
+      }
+    }
+  }
+}

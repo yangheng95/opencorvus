@@ -164,6 +164,16 @@ export type AttachmentImageRenditionError = {
   name: "AttachmentImageRenditionError"
 }
 
+export type AttachmentMediaTypeConflictError = {
+  data: {
+    message: string
+    publishedMime: string
+    requestedMime: string
+    url: string
+  }
+  name: "AttachmentMediaTypeConflictError"
+}
+
 export type Auth = OAuth | ApiAuth | WellKnownAuth
 
 export type AuthReadError = {
@@ -7074,7 +7084,13 @@ export type AttachmentCreateErrors = {
    * Invalid filename, MIME type, or body
    */
   400: unknown
+  /**
+   * The canonical original is already published with another media type
+   */
+  409: AttachmentMediaTypeConflictError
 }
+
+export type AttachmentCreateError = AttachmentCreateErrors[keyof AttachmentCreateErrors]
 
 export type AttachmentCreateResponses = {
   /**
@@ -7110,7 +7126,14 @@ export type AttachmentCreateDirectoryReferenceErrors = {
    * Invalid or non-directory path
    */
   400: unknown
+  /**
+   * The canonical original is already published with another media type
+   */
+  409: AttachmentMediaTypeConflictError
 }
+
+export type AttachmentCreateDirectoryReferenceError =
+  AttachmentCreateDirectoryReferenceErrors[keyof AttachmentCreateDirectoryReferenceErrors]
 
 export type AttachmentCreateDirectoryReferenceResponses = {
   /**
@@ -22192,12 +22215,19 @@ export type GlobalChatStartErrors = {
   /**
    * Global Chat start request identity is already bound to another payload
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "GlobalChatStartIdentityConflictError"
-  }
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalChatStartIdentityConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "AttachmentMediaTypeConflictError"
+      }
   /**
    * Previously accepted Global Chat target is no longer retained
    */
@@ -23804,6 +23834,12 @@ export type TaskGlobalCreateErrors = {
           [key: string]: unknown
         }
         name: "TaskPackageRevisionBindingError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "AttachmentMediaTypeConflictError"
       }
   /**
    * Previously accepted Global Task target is no longer retained
@@ -25758,6 +25794,12 @@ export type MissionWakeErrors = {
           [key: string]: unknown
         }
         name: "MissionExecutionWakeInputConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "AttachmentMediaTypeConflictError"
       }
   /**
    * Saved Provider credentials could not be observed safely
@@ -29752,6 +29794,12 @@ export type SessionCommandErrors = {
         }
         name: "CommandProjectionChangedError"
       }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "AttachmentMediaTypeConflictError"
+      }
 }
 
 export type SessionCommandError = SessionCommandErrors[keyof SessionCommandErrors]
@@ -31618,6 +31666,12 @@ export type SessionPromptErrors = {
           [key: string]: unknown
         }
         name: "PublicSessionPromptIdentityConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "AttachmentMediaTypeConflictError"
       }
   /**
    * Saved Provider credentials could not be observed safely
@@ -33826,6 +33880,12 @@ export type TaskCreateErrors = {
           [key: string]: unknown
         }
         name: "TaskPackageRevisionBindingError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "AttachmentMediaTypeConflictError"
       }
   /**
    * Previously accepted Task target is no longer retained
@@ -38925,6 +38985,12 @@ export type TaskMessageErrors = {
           [key: string]: unknown
         }
         name: "TaskPackageRevisionBindingError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "AttachmentMediaTypeConflictError"
       }
 }
 

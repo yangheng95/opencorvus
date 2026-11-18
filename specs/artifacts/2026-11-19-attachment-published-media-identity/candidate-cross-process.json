@@ -1,0 +1,46 @@
+{
+  "first": {
+    "pid": 25176,
+    "mime": "text/plain",
+    "reference": {
+      "sha": "0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d",
+      "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d.dat",
+      "mime": "text/plain",
+      "size": 41,
+      "filename": "cross-process-publication.dat"
+    }
+  },
+  "repeat": {
+    "pid": 10052,
+    "mime": "text/plain",
+    "reference": {
+      "sha": "0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d",
+      "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d.dat",
+      "mime": "text/plain",
+      "size": 41,
+      "filename": "cross-process-publication.dat"
+    }
+  },
+  "conflict": {
+    "pid": 35772,
+    "mime": "application/octet-stream",
+    "error": {
+      "name": "AttachmentMediaTypeConflictError",
+      "data": {
+        "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d.dat",
+        "publishedMime": "text/plain",
+        "requestedMime": "application/octet-stream",
+        "message": "Attachment /attachment/prj_hvI7xZdWkbHcNh1WZvhb/0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d.dat is already published as text/plain; requested application/octet-stream."
+      }
+    }
+  },
+  "publishedMetadata": [
+    {
+      "sha": "0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d",
+      "url": "/attachment/prj_hvI7xZdWkbHcNh1WZvhb/0e3ebb8bd31d23f7457bc6cddee14ca8ea1fc33d898e697d83cf4a9dd8a4fe4d.dat",
+      "mime": "text/plain",
+      "size": 41,
+      "filename": "cross-process-publication.dat"
+    }
+  ]
+}

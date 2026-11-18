@@ -608,6 +608,42 @@
         ],
         "type": "object"
       },
+      "AttachmentMediaTypeConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "publishedMime": {
+                "type": "string"
+              },
+              "requestedMime": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "url",
+              "publishedMime",
+              "requestedMime",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AttachmentMediaTypeConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "Auth": {
         "oneOf": [
           {
@@ -24408,6 +24444,16 @@
           },
           "400": {
             "description": "Invalid filename, MIME type, or body"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentMediaTypeConflictError"
+                }
+              }
+            },
+            "description": "The canonical original is already published with another media type"
           }
         },
         "summary": "Upload a conversation attachment",
@@ -24508,6 +24554,16 @@
           },
           "400": {
             "description": "Invalid or non-directory path"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentMediaTypeConflictError"
+                }
+              }
+            },
+            "description": "The canonical original is already published with another media type"
           }
         },
         "summary": "Reference a local directory",
@@ -82591,24 +82647,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalChatStartIdentityConflictError",
+                          "type": "string"
+                        }
                       },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
                       "type": "object"
                     },
-                    "name": {
-                      "const": "GlobalChatStartIdentityConflictError",
-                      "type": "string"
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "AttachmentMediaTypeConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
@@ -87257,6 +87337,26 @@
                         },
                         "name": {
                           "const": "TaskPackageRevisionBindingError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "AttachmentMediaTypeConflictError",
                           "type": "string"
                         }
                       },
@@ -92737,6 +92837,26 @@
                         },
                         "name": {
                           "const": "MissionExecutionWakeInputConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "AttachmentMediaTypeConflictError",
                           "type": "string"
                         }
                       },
@@ -103646,6 +103766,26 @@
                         "data"
                       ],
                       "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "AttachmentMediaTypeConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
                   ]
                 }
@@ -111003,6 +111143,26 @@
                         "data"
                       ],
                       "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "AttachmentMediaTypeConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
                     }
                   ]
                 }
@@ -117930,6 +118090,26 @@
                         },
                         "name": {
                           "const": "TaskPackageRevisionBindingError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "AttachmentMediaTypeConflictError",
                           "type": "string"
                         }
                       },
@@ -136530,6 +136710,26 @@
                         },
                         "name": {
                           "const": "TaskPackageRevisionBindingError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "AttachmentMediaTypeConflictError",
                           "type": "string"
                         }
                       },

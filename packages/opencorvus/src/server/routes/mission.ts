@@ -692,6 +692,7 @@ export function MissionRoutes() {
             "MissionExecutionClosingError",
             "MissionExecutionWakeClosedError",
             "MissionExecutionWakeInputConflictError",
+            "AttachmentMediaTypeConflictError",
           ),
           503: AuthReadUnavailableResponse,
         },

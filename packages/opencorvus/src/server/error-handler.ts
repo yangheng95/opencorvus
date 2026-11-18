@@ -40,6 +40,7 @@ export function requestID(c: { req: { header(name: string): string | undefined }
 }
 
 export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
+  if (err.name === "AttachmentMediaTypeConflictError") return 409
   if (err.name === "ContinuousGoalError") return 409
   if (err.name === "ChannelIngressOutcomeUnknownError") return 409
   if (err.name === "ChannelIngressProcessingError") return 409

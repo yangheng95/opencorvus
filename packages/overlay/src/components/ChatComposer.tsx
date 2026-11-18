@@ -240,7 +240,22 @@ export interface ChatComposerProps {
 }
 
 function composerDialogErrorMessage(error: unknown): string {
-  if (error instanceof ApiError) return error.summary
+  if (error instanceof ApiError) {
+    const body = error.body
+    if (error.status === 409 && body && typeof body === "object" &&
+      "name" in body && body.name === "AttachmentMediaTypeConflictError" && "data" in body) {
+      const data = body.data
+      if (data && typeof data === "object" &&
+        "publishedMime" in data && typeof data.publishedMime === "string" &&
+        "requestedMime" in data && typeof data.requestedMime === "string") {
+        return t("chat.attach_media_type_conflict", {
+          publishedMime: data.publishedMime,
+          requestedMime: data.requestedMime,
+        })
+      }
+    }
+    return error.summary
+  }
   return error instanceof Error ? error.message : String(error)
 }
 
