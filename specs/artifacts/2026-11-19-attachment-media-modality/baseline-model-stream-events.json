@@ -1,0 +1,266 @@
+[
+  {
+    "event": "listening",
+    "port": 40164,
+    "pid": 32060
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 1,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 1,
+    "baseRevision": 0,
+    "coveredOccurrenceIDs": [
+      "msg_95840bb9960b4e36be3484aa7a30836a"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 1,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 2,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect media declarations. standard.png single media declaration"
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 4983
+      }
+    ],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 2,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 3,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 3,
+    "baseRevision": 1,
+    "coveredOccurrenceIDs": [
+      "msg_8d0d919a6a03499ebc24e7707785022a"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 3,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 4,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect media declarations. capitals.dat single media declaration"
+    ],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 4,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 5,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 5,
+    "baseRevision": 2,
+    "coveredOccurrenceIDs": [
+      "msg_eeb48886232d463bb420cf800186b42f"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 5,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 6,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect media declarations. parameter.raw single media declaration"
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 4983
+      }
+    ],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 6,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 7,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 7,
+    "baseRevision": 3,
+    "coveredOccurrenceIDs": [
+      "msg_40b5480ed88b4ec0abc211becac6aac0"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 7,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 8,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect media declarations. vector.svg single media declaration\n[Attached image/svg+xml: vector.svg (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.svg)]"
+    ],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 8,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 9,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 9,
+    "baseRevision": 4,
+    "coveredOccurrenceIDs": [
+      "msg_ab8db1b1a8b74f8d8210d418ac6a682f"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 9,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 10,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect media declarations. vector-capitals.bin single media declaration\n[Attached Image/SVG+XML; charset=utf-8: vector-capitals.bin (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.bin)]"
+    ],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 10,
+    "operation": "conversation"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 11,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 11,
+    "baseRevision": 5,
+    "coveredOccurrenceIDs": [
+      "msg_60406d2c83f84e8090964a4308bdede6"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 11,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 12,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect media declarations. Five declared images\n[Attached image/svg+xml: vector.svg (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.svg)]\n[Attached Image/SVG+XML; charset=utf-8: vector-capitals.bin (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.bin)]"
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 4983
+      },
+      {
+        "mime": "image/png",
+        "bytes": 4983
+      }
+    ],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 12,
+    "operation": "conversation"
+  }
+]

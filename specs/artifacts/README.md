@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [附件媒体模态验收](2026-11-19-attachment-media-modality/README.md)
 - [附件编码声明验收](2026-11-19-attachment-declared-text-encoding/README.md)
 - [编辑器主助手恢复验收](2026-11-19-acp-persisted-primary-availability/README.md)
 - [按发布媒体显示图片验收](2026-11-19-attachment-image-display/README.md)
