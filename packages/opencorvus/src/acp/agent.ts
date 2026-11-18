@@ -1597,15 +1597,16 @@ export namespace ACP {
                 type: "text",
                 text: resource.text,
               })
-            } else if ("blob" in resource && resource.blob && resource.mimeType) {
+            } else if ("blob" in resource && resource.blob) {
               // Binary resource (PDFs, etc.): store as file part with data URL
               const parsed = parseUri(resource.uri ?? "")
               const filename = parsed.type === "file" ? parsed.filename : "file"
+              const mime = resource.mimeType ?? "application/octet-stream"
               parts.push({
                 type: "file",
-                url: `data:${resource.mimeType};base64,${resource.blob}`,
+                url: `data:${mime};base64,${resource.blob}`,
                 filename,
-                mime: resource.mimeType,
+                mime,
               })
             }
             break

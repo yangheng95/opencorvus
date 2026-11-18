@@ -1,0 +1,50 @@
+{"event":"listening","port":40110,"pid":29272}
+{"event":"stream-request","occurrence":1,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":1,"baseRevision":0,"coveredOccurrenceIDs":["msg_g0VbM16gd00osKPdRTOY"]}
+{"event":"stream-completed","occurrence":1,"operation":"project-memory"}
+{"event":"stream-request","occurrence":2,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Native resource."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":2,"operation":"conversation"}
+{"event":"stream-request","occurrence":3,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":3,"baseRevision":1,"coveredOccurrenceIDs":["msg_g0VbM17Hn00EnHiz98jK"]}
+{"event":"stream-completed","occurrence":3,"operation":"project-memory"}
+{"event":"stream-request","occurrence":4,"operation":"title","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Declared type control."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":4,"operation":"title"}
+{"event":"stream-request","occurrence":5,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Declared type control."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":5,"operation":"conversation"}
+{"event":"stream-request","occurrence":6,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":6,"baseRevision":2,"coveredOccurrenceIDs":["msg_g0VbM17ny00JRdAl5BVX"]}
+{"event":"stream-completed","occurrence":6,"operation":"project-memory"}
+{"event":"stream-request","occurrence":7,"operation":"title","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Registered command."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":7,"operation":"title"}
+{"event":"stream-request","occurrence":8,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Registered command."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":8,"operation":"conversation"}
+{"event":"stream-request","occurrence":9,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":9,"baseRevision":3,"coveredOccurrenceIDs":["msg_g0VbM18IA00OC4RaUzmP"]}
+{"event":"stream-completed","occurrence":9,"operation":"project-memory"}
+{"event":"stream-request","occurrence":10,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Visible chat."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":10,"operation":"conversation"}
+{"event":"stream-request","occurrence":11,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":11,"baseRevision":0,"coveredOccurrenceIDs":["msg_g0VbM24VO00B6EkU0UwJ"]}
+{"event":"stream-completed","occurrence":11,"operation":"project-memory"}
+{"event":"stream-request","occurrence":12,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Native resource."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":12,"operation":"conversation"}
+{"event":"stream-request","occurrence":13,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":13,"baseRevision":1,"coveredOccurrenceIDs":["msg_g0VbM25aQ00H5b3KCb4f"]}
+{"event":"stream-completed","occurrence":13,"operation":"project-memory"}
+{"event":"stream-request","occurrence":14,"operation":"title","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Declared type control."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":14,"operation":"title"}
+{"event":"stream-request","occurrence":15,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Declared type control."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":15,"operation":"conversation"}
+{"event":"stream-request","occurrence":16,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":16,"baseRevision":2,"coveredOccurrenceIDs":["msg_g0VbM26Nm00a537tvAgU"]}
+{"event":"stream-completed","occurrence":16,"operation":"project-memory"}
+{"event":"stream-request","occurrence":17,"operation":"title","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Registered command."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":17,"operation":"title"}
+{"event":"stream-request","occurrence":18,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Registered command."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":18,"operation":"conversation"}
+{"event":"stream-request","occurrence":19,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":19,"baseRevision":3,"coveredOccurrenceIDs":["msg_g0VbM27Kf00Yr7dsZVYu"]}
+{"event":"stream-completed","occurrence":19,"operation":"project-memory"}
+{"event":"stream-request","occurrence":20,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the embedded resource. Visible chat."],"imageInputs":[],"fileInputs":[]}
+{"event":"stream-completed","occurrence":20,"operation":"conversation"}
+{"event":"shutdown"}

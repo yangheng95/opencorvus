@@ -663,6 +663,64 @@ for (const entry of ["prompt", "command"] as const) {
   }, 60_000)
 }
 
+for (const entry of ["prompt", "command"] as const) {
+  test(`ACP ${entry} preserves embedded resources with optional media types`, async () => {
+    await using env = await environment()
+    const sessionId = await env.create("normal")
+    const cwd = env.project.path
+    const resources = [
+      { filename: "untyped packet.bin", bytes: Buffer.from([0, 255, 13, 10, 41]), mimeType: undefined },
+      { filename: "nullable packet.bin", bytes: Buffer.from([0, 255, 13, 10, 42]), mimeType: null },
+      { filename: "declared note.txt", bytes: Buffer.from("The editor supplied this text.\n"), mimeType: "text/plain" },
+    ]
+    expect(await env.client.prompt({
+      sessionId,
+      prompt: [
+        { type: "text", text: entry === "command" ? "/inspect Inspect these resources." : "Inspect these resources." },
+        ...resources.map((resource) => ({
+          type: "resource" as const,
+          resource: {
+            uri: pathToFileURL(path.join(cwd, resource.filename)).href,
+            blob: resource.bytes.toString("base64"),
+            ...(resource.mimeType === undefined ? {} : { mimeType: resource.mimeType }),
+          },
+        })),
+      ],
+    })).toMatchObject({ stopReason: "end_turn" })
+    const [input, reply] = await env.messages(sessionId)
+    expect(reply.info).toMatchObject({ role: "assistant", parentID: input.info.id, finish: "stop" })
+    const files = input.parts.filter((part) => part.type === "file")
+    expect(files.map(({ filename, mime }) => ({ filename, mime }))).toEqual(resources.map((resource) => ({
+      filename: resource.filename,
+      mime: resource.mimeType ?? "application/octet-stream",
+    })))
+    const { data: session } = await env.sdk.session.get({ sessionID: sessionId, directory: cwd }, { throwOnError: true })
+    for (const [index, file] of files.entries()) {
+      const stored = await AttachmentStore.readVerifiedReference({ projectID: session.projectID, url: file.url, mime: file.mime })
+      expect(stored.bytes).toEqual(resources[index].bytes)
+    }
+    expect(env.requests).toContainEqual({ model: "normal", stream: true })
+
+    const cursor = env.updates.length
+    await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
+    const replay = env.updates.slice(cursor).flatMap(({ update }) =>
+      update.sessionUpdate === "user_message_chunk" && update.content.type === "resource" ? [update] : [],
+    )
+    expect(replay).toEqual(expect.arrayContaining(resources.map((resource) => expect.objectContaining({
+      messageId: input.info.id,
+      content: expect.objectContaining({
+        type: "resource",
+        resource: expect.objectContaining({
+          mimeType: resource.mimeType ?? "application/octet-stream",
+          ...(resource.mimeType === "text/plain"
+            ? { text: resource.bytes.toString("utf8") }
+            : { blob: resource.bytes.toString("base64") }),
+        }),
+      }),
+    }))))
+  }, 60_000)
+}
+
 test("ACP session initialization uses the saved root model through actual streamed turns", async () => {
   await using env = await environment()
   const cwd = env.project.path
