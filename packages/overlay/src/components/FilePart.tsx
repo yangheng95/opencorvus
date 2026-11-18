@@ -93,7 +93,7 @@ export function messageAttachmentDisplayLabel(
 }
 
 function mimeOf(part: MessageFilePart): string {
-  return (part.mime || part.mediaType || "").toLowerCase()
+  return (part.mime || part.mediaType || "").split(";", 1)[0].trim().toLowerCase()
 }
 
 function kindOf(part: MessageFilePart): MediaKind {
@@ -103,6 +103,7 @@ function kindOf(part: MessageFilePart): MediaKind {
   if (mime.startsWith("video/")) return "video"
   if (mime.startsWith("audio/")) return "audio"
   if (mime === "application/pdf") return "pdf"
+  if (mime) return "other"
   // MIME-less probes on file extension. Kept narrow — unknown extensions
   // fall through to "other" rather than guess wrong and break <video>.
   if (/^data:image\//i.test(url) || /\.(png|jpe?g|gif|webp|svg|bmp|ico|avif)(\?|$)/i.test(url)) return "image"

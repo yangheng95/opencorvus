@@ -1,0 +1,106 @@
+{
+  "counts": {
+    "session": 1,
+    "message": 2,
+    "part": 10,
+    "session_prompt_owner": 0
+  },
+  "messages": [
+    {
+      "id": "msg_7afc08fd853b450ba5c8d40330c1f95d",
+      "sessionID": "ses_h5iAFuVSXa2Yzv66tKCm",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795035139600
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect declared attachment types. Review the original notes and binary packet using their declared media types."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "24614bb5c518dbc43a03712e70c37f62e0d6d2903c0a8c9cecea94eebc4ead6d"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795035139600:0000000000000030:0000000000000000:message:msg_7afc08fd853b450ba5c8d40330c1f95d"
+      }
+    },
+    {
+      "id": "msg_g0VbMOVsc006PsCj5NLw",
+      "sessionID": "ses_h5iAFuVSXa2Yzv66tKCm",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795035139702,
+          "completed": 1795035140826
+        },
+        "parentID": "msg_7afc08fd853b450ba5c8d40330c1f95d",
+        "acceptedInputMessageIDs": [
+          "msg_7afc08fd853b450ba5c8d40330c1f95d"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b322\\candidate\\declared-type-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b322\\candidate\\declared-type-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795035139702:0000000000000030:0000000000000000:message:msg_g0VbMOVsc006PsCj5NLw"
+      }
+    }
+  ]
+}

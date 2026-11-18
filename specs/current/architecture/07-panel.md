@@ -375,6 +375,11 @@ text filenames with octet-stream metadata use ResourceTextPreview as File previe
 artifacts; other formats retain FilePart media or original-download presentation.
 History preserves its existing image, PDF and media presentation priority,
 including SVG images, before choosing decodable text for other file types.
+FilePart and the user-image partition share one media classifier. An explicit
+MIME type's normalized essence selects the presentation; URL media suffixes
+apply only when that declaration is absent. Original filenames and MIME metadata
+remain intact, so a text or generic binary original with an image, audio or PDF
+suffix uses its declared text review or original-download presentation.
 Historical text `FilePart` entries with a server `file:` URL are current-file
 references. Their localized read action opens the existing read-only file
 workbench with the selected conversation's server authority and exact path.

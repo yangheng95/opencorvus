@@ -1,0 +1,79 @@
+{
+  "baseline": {
+    "counts": {
+      "session": 2,
+      "message": 4,
+      "part": 16,
+      "session_prompt_owner": 0
+    },
+    "assistantFinishes": {
+      "error": 1,
+      "stop": 1
+    }
+  },
+  "candidate": {
+    "counts": {
+      "session": 1,
+      "message": 2,
+      "part": 10,
+      "session_prompt_owner": 0
+    },
+    "assistantFinishes": {
+      "stop": 1
+    }
+  },
+  "model": {
+    "requests": 5,
+    "completed": 5,
+    "actualRequestContract": {
+      "('local', True)": 5
+    },
+    "imageInputs": [
+      [
+        {
+          "mime": "image/png",
+          "bytes": 100
+        }
+      ],
+      [
+        {
+          "mime": "image/png",
+          "bytes": 100
+        }
+      ]
+    ],
+    "lastEvent": "shutdown"
+  },
+  "downloads": [
+    {
+      "sourceName": "service-note.png",
+      "suggestedFilename": "service-note.png",
+      "bytes": 70,
+      "equalsOriginal": true
+    },
+    {
+      "sourceName": "service-note.mp3",
+      "suggestedFilename": "service-note.mp3",
+      "bytes": 70,
+      "equalsOriginal": true
+    },
+    {
+      "sourceName": "service-note.pdf",
+      "suggestedFilename": "service-note.pdf",
+      "bytes": 70,
+      "equalsOriginal": true
+    },
+    {
+      "sourceName": "binary-packet.jpg",
+      "suggestedFilename": "binary-packet.jpg",
+      "bytes": 5,
+      "equalsOriginal": true
+    },
+    {
+      "sourceName": "source.png",
+      "suggestedFilename": "source.png",
+      "bytes": 100,
+      "equalsOriginal": true
+    }
+  ]
+}

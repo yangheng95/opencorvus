@@ -1,0 +1,213 @@
+[
+  {
+    "event": "listening",
+    "port": 40128,
+    "pid": 256
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.png",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.mp3",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.pdf",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "binary-packet.jpg",
+    "mime": "application/octet-stream",
+    "bytes": 5
+  },
+  {
+    "event": "asset-request",
+    "asset": "source.png",
+    "mime": "image/png",
+    "bytes": 100
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 1,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 1,
+    "baseRevision": 0,
+    "coveredOccurrenceIDs": [
+      "msg_126d7488464d41b2b733272a8cf39b5e"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 1,
+    "operation": "project-memory"
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.png",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.mp3",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.pdf",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "binary-packet.jpg",
+    "mime": "application/octet-stream",
+    "bytes": 5
+  },
+  {
+    "event": "asset-request",
+    "asset": "source.png",
+    "mime": "image/png",
+    "bytes": 100
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 2,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 2,
+    "baseRevision": 1,
+    "coveredOccurrenceIDs": [
+      "msg_ba6ae20a0c0d47c7a222f9cd2a9e7ce9"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 2,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 3,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect declared attachment types. Review the original notes and binary packet using their declared media types.\n[Attached text/plain;charset=utf-8: service-note.png (/attachment/prj_hOyDPALPd5nsj0pw81hM/27ed14c0db1471cc98f9699b640a3e821b73fc94eaa09f241b6915c80f82e185.png)]\n[Attached text/plain;charset=utf-8: service-note.mp3 (/attachment/prj_hOyDPALPd5nsj0pw81hM/27ed14c0db1471cc98f9699b640a3e821b73fc94eaa09f241b6915c80f82e185.mp3)]\n[Attached text/plain;charset=utf-8: service-note.pdf (/attachment/prj_hOyDPALPd5nsj0pw81hM/27ed14c0db1471cc98f9699b640a3e821b73fc94eaa09f241b6915c80f82e185.pdf)]"
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 100
+      }
+    ],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 3,
+    "operation": "conversation"
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.png",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.mp3",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "service-note.pdf",
+    "mime": "text/plain;charset=utf-8",
+    "bytes": 70
+  },
+  {
+    "event": "asset-request",
+    "asset": "binary-packet.jpg",
+    "mime": "application/octet-stream",
+    "bytes": 5
+  },
+  {
+    "event": "asset-request",
+    "asset": "source.png",
+    "mime": "image/png",
+    "bytes": 100
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 4,
+    "operation": "project-memory",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [],
+    "imageInputs": [],
+    "fileInputs": []
+  },
+  {
+    "event": "organizer-reply",
+    "occurrence": 4,
+    "baseRevision": 0,
+    "coveredOccurrenceIDs": [
+      "msg_7afc08fd853b450ba5c8d40330c1f95d"
+    ]
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 4,
+    "operation": "project-memory"
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 5,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect declared attachment types. Review the original notes and binary packet using their declared media types.\n[Attached text/plain;charset=utf-8: service-note.png (/attachment/prj_hhr7gkyiPI9ZrQmHjTgZ/27ed14c0db1471cc98f9699b640a3e821b73fc94eaa09f241b6915c80f82e185.png)]\n[Attached text/plain;charset=utf-8: service-note.mp3 (/attachment/prj_hhr7gkyiPI9ZrQmHjTgZ/27ed14c0db1471cc98f9699b640a3e821b73fc94eaa09f241b6915c80f82e185.mp3)]\n[Attached text/plain;charset=utf-8: service-note.pdf (/attachment/prj_hhr7gkyiPI9ZrQmHjTgZ/27ed14c0db1471cc98f9699b640a3e821b73fc94eaa09f241b6915c80f82e185.pdf)]"
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 100
+      }
+    ],
+    "fileInputs": []
+  },
+  {
+    "event": "stream-completed",
+    "occurrence": 5,
+    "operation": "conversation"
+  },
+  {
+    "event": "shutdown"
+  }
+]
