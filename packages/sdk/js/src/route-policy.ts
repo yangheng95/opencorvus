@@ -42,14 +42,14 @@ export const PROJECT_DIRECTORY_BYPASS_PREFIXES = [
 
 /**
  * Global routes that live on a router whose other routes are project-owned.
- * Each one names its own owner in the path — a Project identifier for the
- * ledger pin, the attachment's Project identifier for the blob read — so it
- * resolves without `?directory=`. Their project-owned siblings
+ * A route can name its own owner in the path or read across projects, as the
+ * global session list does. Their project-owned siblings
  * (`PATCH /work-ledger/item/:kind/:itemID/pin`,
  * `POST /attachment/directory-reference`) run inside the named Project, which
  * their Bus publication and attachment store both require.
  */
 const GLOBAL_MIXED_ROUTER_ROUTES = [
+  /^GET \/session\/global$/,
   /^PATCH \/work-ledger\/project\/[^/]+\/pin$/,
   /^GET \/attachment\/[^/]+\/[^/]+$/,
 ] as const

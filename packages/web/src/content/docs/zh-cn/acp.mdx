@@ -59,7 +59,7 @@ Zed 按需 spawn `opencorvus acp`，通过 stdin/stdout 通信（`src/acp/README
 | -------------------------- | ----------------------------------------- |
 | `session/new`              | 新建会话，映射到内部 opencorvus session   |
 | `session/load`             | 加载会话，回放消息历史，恢复模型与 mode   |
-| `listSessions`    | 按更新时间倒序列出，cursor 分页（100/页） |
+| `listSessions`    | 按更新时间倒序列出根会话，每页 100 条。省略工作目录时列出各项目的会话。 |
 | `unstable_forkSession`     | Fork 会话，回放历史                       |
 | `resumeSession`   | 恢复会话（不回放历史）                    |
 | `setSessionConfigOption` | 切换当前模型，支持 variant                |

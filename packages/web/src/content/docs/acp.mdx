@@ -59,7 +59,7 @@ Advertised (`src/acp/agent.ts`): `loadSession: true`; MCP `http`, `sse`; prompt 
 | -------------------------- | ------------------------------------------------------- |
 | `session/new`              | Creates new session                                     |
 | `session/load`             | Loads session, replays history, restores model and mode |
-| `listSessions`    | Lists sessions newest first, 100/page cursor            |
+| `listSessions`    | Lists root sessions newest first, with 100 per page. Omit the working directory to list across projects. |
 | `unstable_forkSession`     | Forks a session, replays history                        |
 | `resumeSession`   | Resumes without replay                                  |
 | `setSessionConfigOption` | Switches model, supports variants                       |

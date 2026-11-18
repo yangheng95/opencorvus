@@ -20,10 +20,12 @@ import { BrowserMCPBuiltin } from "@/mcp/browser/builtin"
 import { ComputerMCPBuiltin } from "@/mcp/computer/builtin"
 import { Provider } from "@/provider/provider"
 import { Server } from "@/server/server"
+import { Session } from "@/session"
 import { SessionControl } from "@/session/control"
 import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
+import { Database } from "@/storage/db"
 import { withTimeout } from "@/util/await-with-timeout"
 import { Bus } from "@/bus"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
@@ -621,6 +623,41 @@ test("ACP registered commands preserve embedded context and canonical image byte
   const [forkedInput, forkedReply] = await env.messages(forked.sessionId)
   expect(forkedReply.info).toMatchObject({ role: "assistant", parentID: forkedInput.info.id, finish: "stop" })
   expect(replayedUserContent(forkCursor, forked.sessionId)).toMatchObject(userContent(forkedInput.info.id))
+}, 60_000)
+
+test("ACP session discovery pages tied timestamps and preserves directory scope", async () => {
+  await using env = await environment()
+  await using other = await memoryProject()
+  const updated = Date.now()
+  const timestamp = new Date(updated).toISOString()
+  const seed = (directory: string, count: number) => Instance.provide({
+    directory,
+    fn: () => Database.immediateTransaction((db) => Array.from({ length: count }, (_, index) => {
+      const session = Session.prepareRootNext({ kind: "assistant", directory: Instance.directory, title: `Thread ${index + 1}` })
+      session.time = { created: updated, updated, ...(index === 0 ? { archived: updated } : {}) }
+      return Session.persistPreparedNextInTransaction(db, session)
+    })),
+  })
+  const primary = await seed(env.project.path, 103)
+  const independent = await seed(other.path, 1)
+  const entry = (session: Session.Info) => ({ sessionId: session.id, cwd: session.directory, title: session.title, updatedAt: timestamp })
+  const byDescendingID = (rows: Session.Info[]) => {
+    const entries = new Map(rows.map((row) => [row.id, entry(row)]))
+    return [...entries.keys()].sort().reverse().map((id) => entries.get(id)!)
+  }
+  const expected = byDescendingID(primary)
+  const first = await env.client.listSessions({ cwd: env.project.path })
+  expect(first.sessions).toEqual(expected.slice(0, 100))
+  expect(first.nextCursor).toEqual(expect.any(String))
+  const second = await env.client.listSessions({ cwd: env.project.path, cursor: first.nextCursor })
+  expect(second.sessions).toEqual(expected.slice(100))
+  expect(await env.client.listSessions({ cwd: other.path })).toEqual({ sessions: independent.map(entry) })
+
+  const global = byDescendingID([...primary, ...independent])
+  const globalFirst = await env.client.listSessions({})
+  expect(globalFirst.sessions).toEqual(global.slice(0, 100))
+  expect(globalFirst.nextCursor).toEqual(expect.any(String))
+  expect((await env.client.listSessions({ cursor: globalFirst.nextCursor })).sessions).toEqual(global.slice(100))
 }, 60_000)
 
 test("ACP file attachments preserve display names and source selections", async () => {

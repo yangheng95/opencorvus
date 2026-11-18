@@ -1236,6 +1236,8 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 
 当前使用官方 `@agentclientprotocol/sdk` 1.4。会话列表和恢复采用稳定的
 `listSessions` / `resumeSession`；分叉仍采用 SDK 的 `unstable_forkSession`。
+`listSessions` 使用全局会话读取的持久分页，按更新时间和会话标识降序列出根会话，包含已归档记录。
+提供工作目录时精确筛选同一目录；省略时读取当前服务内的全局历史。客户端使用返回的 `nextCursor` 继续读取。
 模型及 variant 由会话返回的 `configOptions` 中唯一 `model` select 选项声明，
 通过 `setSessionConfigOption` 更新并返回完整当前选项；值须属于实际投影的模型目录。
 不再提供旧的 model setter 或平行模型状态。MCP（Model Context Protocol，模型上下文协议）

@@ -106,13 +106,6 @@ type AcpSessionListCursor = {
   sessionID: string
 }
 
-type AcpSessionListItem = {
-  id: string
-  time: {
-    updated: number
-  }
-}
-
 function invalidAcpSessionListCursor(cursor: string): RequestError {
   return RequestError.invalidParams(
     { cursor },
@@ -144,25 +137,6 @@ function decodeAcpSessionListCursor(cursor: string): AcpSessionListCursor {
     throw invalidAcpSessionListCursor(cursor)
   }
   return { updated, sessionID }
-}
-
-function encodeAcpSessionListCursor(session: AcpSessionListItem): string {
-  return JSON.stringify({
-    updated: session.time.updated,
-    sessionID: session.id,
-  })
-}
-
-function compareAcpSessionListItems(left: AcpSessionListItem, right: AcpSessionListItem): number {
-  const updated = right.time.updated - left.time.updated
-  if (updated !== 0) return updated
-  return right.id.localeCompare(left.id)
-}
-
-function acpSessionListItemAfterCursor(session: AcpSessionListItem, cursor: AcpSessionListCursor): boolean {
-  return (
-    session.time.updated < cursor.updated || (session.time.updated === cursor.updated && session.id < cursor.sessionID)
-  )
 }
 
 async function toolImageAttachmentContent(attachments: Message.FilePart[] | undefined): Promise<ToolCallContent[]> {
@@ -832,37 +806,30 @@ export namespace ACP {
       try {
         const cursor =
           params.cursor === undefined || params.cursor === null ? undefined : decodeAcpSessionListCursor(params.cursor)
-        const limit = 100
-
-        const sessions = await this.sdk.session
-          .list(
-            {
-              directory: params.cwd ?? undefined,
-              roots: "true",
-            },
-            { throwOnError: true },
-          )
-          .then((x) => x.data ?? [])
-
-        const sorted = sessions.toSorted(compareAcpSessionListItems)
-        const filtered = cursor ? sorted.filter((session) => acpSessionListItemAfterCursor(session, cursor)) : sorted
-        const page = filtered.slice(0, limit)
-
-        const entries: SessionInfo[] = page.map((session) => ({
+        const { data: page, response } = await this.sdk.session.listGlobal(
+          {
+            directory: params.cwd ?? undefined,
+            roots: "true",
+            archived: "true",
+            limit: 100,
+            cursorUpdated: cursor?.updated,
+            cursorSessionID: cursor?.sessionID,
+          },
+          { throwOnError: true },
+        )
+        const sessions: SessionInfo[] = page.map((session) => ({
           sessionId: session.id,
           cwd: session.directory ?? "",
           title: session.title,
           updatedAt: new Date(session.time.updated).toISOString(),
         }))
-
-        const last = page[page.length - 1]
-        const next = filtered.length > limit && last ? encodeAcpSessionListCursor(last) : undefined
-
-        const response: ListSessionsResponse = {
-          sessions: entries,
+        const updated = response.headers.get("x-next-cursor-updated")
+        const sessionID = response.headers.get("x-next-cursor-session-id")
+        if (updated !== null && sessionID !== null) {
+          const next: AcpSessionListCursor = { updated: Number(updated), sessionID }
+          return { sessions, nextCursor: JSON.stringify(next) }
         }
-        if (next) response.nextCursor = next
-        return response
+        return { sessions }
       } catch (e) {
         const error = Message.fromError(e, {
           providerID: "unknown",
