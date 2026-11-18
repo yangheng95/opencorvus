@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [附件文本按原件声明解码](2026-11-19-attachment-declared-text-encoding.md)
 - [编辑器恢复真实主助手身份](2026-11-19-acp-persisted-primary-availability.md)
 - [按发布媒体选择完整图片显示](2026-11-19-attachment-image-display.md)
 - [原件响应遵循已发布媒体](2026-11-19-attachment-response-media.md)

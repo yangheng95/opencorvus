@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [附件文本按原件声明解码](records/2026-11/2026-11-19-attachment-declared-text-encoding.md)
 - [编辑器恢复真实主助手身份](records/2026-11/2026-11-19-acp-persisted-primary-availability.md)
 - [按发布媒体选择完整图片显示](records/2026-11/2026-11-19-attachment-image-display.md)
 - [原件响应遵循已发布媒体](records/2026-11/2026-11-19-attachment-response-media.md)

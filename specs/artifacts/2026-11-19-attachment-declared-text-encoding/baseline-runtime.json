@@ -1,0 +1,548 @@
+{
+  "initialization": {
+    "protocolVersion": 1,
+    "agentCapabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    },
+    "authMethods": [
+      {
+        "description": "Run `opencorvus auth login` in the terminal",
+        "name": "Login with opencorvus",
+        "id": "opencorvus-login"
+      }
+    ],
+    "agentInfo": {
+      "name": "OpenCorvus",
+      "version": "local"
+    }
+  },
+  "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+  "assets": [
+    {
+      "filename": "western-note.txt",
+      "mime": "text/plain; charset=\"windows-1252\"",
+      "expected": "Café € 17\n",
+      "reference": {
+        "sha": "d7f6ade786f233397e536c1bb646adb27513f3db6a32cd982bfd9a7d7c80f2d6",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/d7f6ade786f233397e536c1bb646adb27513f3db6a32cd982bfd9a7d7c80f2d6.txt",
+        "mime": "text/plain; charset=\"windows-1252\"",
+        "size": 10,
+        "filename": "western-note.txt"
+      },
+      "base64": "Q2Fm6SCAIDE3Cg==",
+      "status": 200,
+      "type": "text/plain; charset=\"windows-1252\"",
+      "equalsOriginal": true,
+      "requestID": "985b6a42-3a76-41aa-a300-6da73ac3e84c"
+    },
+    {
+      "filename": "chinese-note.txt",
+      "mime": "text/plain; charset=gb18030",
+      "expected": "中文 27\n",
+      "reference": {
+        "sha": "f520cbf42b286f8e79c18d683e5284c93d6be2157a60f84c61432f893825ded1",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/f520cbf42b286f8e79c18d683e5284c93d6be2157a60f84c61432f893825ded1.txt",
+        "mime": "text/plain; charset=gb18030",
+        "size": 8,
+        "filename": "chinese-note.txt"
+      },
+      "base64": "1tDOxCAyNwo=",
+      "status": 200,
+      "type": "text/plain; charset=gb18030",
+      "equalsOriginal": true,
+      "requestID": "1de5c1f7-6610-48c9-af81-5659b02944f1"
+    },
+    {
+      "filename": "unicode-note.txt",
+      "mime": "text/plain; charset=utf-16be",
+      "expected": "Unicode 中文 37\n",
+      "reference": {
+        "sha": "8757a51aec28afc98242eeffb68a47b4f57aee9bb662d831ae395adb62a7e3bd",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/8757a51aec28afc98242eeffb68a47b4f57aee9bb662d831ae395adb62a7e3bd.txt",
+        "mime": "text/plain; charset=utf-16be",
+        "size": 28,
+        "filename": "unicode-note.txt"
+      },
+      "base64": "AFUAbgBpAGMAbwBkAGUAIE4tZYcAIAAzADcACg==",
+      "status": 200,
+      "type": "text/plain; charset=utf-16be",
+      "equalsOriginal": true,
+      "requestID": "90d68ea2-aa92-4346-9c2a-0b479dc9aa54"
+    },
+    {
+      "filename": "bom-note.txt",
+      "mime": "text/plain",
+      "expected": "BOM 中文 47\n",
+      "reference": {
+        "sha": "01af3bc735783a232faa318fc8119f6dd6d47fc37dbc2ddb416e8ea8fec27f65",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/01af3bc735783a232faa318fc8119f6dd6d47fc37dbc2ddb416e8ea8fec27f65.txt",
+        "mime": "text/plain",
+        "size": 22,
+        "filename": "bom-note.txt"
+      },
+      "base64": "//5CAE8ATQAgAC1Oh2UgADQANwAKAA==",
+      "status": 200,
+      "type": "text/plain",
+      "equalsOriginal": true,
+      "requestID": "50ac337e-ab81-49ae-9e8e-338ddda828c5"
+    },
+    {
+      "filename": "unknown-note.txt",
+      "mime": "text/plain; charset=x-owned-unsupported",
+      "expected": "Unknown declaration 57\n",
+      "reference": {
+        "sha": "7689bf2b66af91317522717e16c3242c60269045a653f5c5f0418717662ef203",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/7689bf2b66af91317522717e16c3242c60269045a653f5c5f0418717662ef203.txt",
+        "mime": "text/plain; charset=x-owned-unsupported",
+        "size": 23,
+        "filename": "unknown-note.txt"
+      },
+      "base64": "VW5rbm93biBkZWNsYXJhdGlvbiA1Nwo=",
+      "status": 200,
+      "type": "text/plain; charset=x-owned-unsupported",
+      "equalsOriginal": true,
+      "requestID": "74813155-9b6c-4e47-8061-cfa3556ee3fb"
+    }
+  ],
+  "load": {
+    "result": {
+      "sessionId": "ses_hGSJScmZOPTGuerdctsb",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Declared attachment encoding review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": [
+      {
+        "text": "Inspect declared attachment encodings. These are original source files for text review.",
+        "type": "text"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=\"windows-1252\"",
+          "text": "Caf� � 17\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/western-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=gb18030",
+          "text": "���� 27\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/chinese-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=utf-16be",
+          "text": "\u0000U\u0000n\u0000i\u0000c\u0000o\u0000d\u0000e\u0000 N-e�\u0000 \u00003\u00007\u0000\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/unicode-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain",
+          "text": "��B\u0000O\u0000M\u0000 \u0000-N�e \u00004\u00007\u0000\n\u0000",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/bom-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=x-owned-unsupported",
+          "text": "Unknown declaration 57\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/unknown-note.txt"
+        },
+        "type": "resource"
+      }
+    ]
+  },
+  "resume": {
+    "result": {
+      "sessionId": "ses_hGSJScmZOPTGuerdctsb",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Declared attachment encoding review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": []
+  },
+  "fork": {
+    "result": {
+      "sessionId": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Declared attachment encoding review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": [
+      {
+        "text": "Inspect declared attachment encodings. These are original source files for text review.",
+        "type": "text"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=\"windows-1252\"",
+          "text": "Caf� � 17\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/western-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=gb18030",
+          "text": "���� 27\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/chinese-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=utf-16be",
+          "text": "\u0000U\u0000n\u0000i\u0000c\u0000o\u0000d\u0000e\u0000 N-e�\u0000 \u00003\u00007\u0000\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/unicode-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain",
+          "text": "��B\u0000O\u0000M\u0000 \u0000-N�e \u00004\u00007\u0000\n\u0000",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/bom-note.txt"
+        },
+        "type": "resource"
+      },
+      {
+        "resource": {
+          "mimeType": "text/plain; charset=x-owned-unsupported",
+          "text": "Unknown declaration 57\n",
+          "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b327/baseline/declared-encoding-review/unknown-note.txt"
+        },
+        "type": "resource"
+      }
+    ]
+  },
+  "history": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795043720322
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect declared attachment encodings. These are original source files for text review."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "ec2b7c80680ee61cdf5133698e354ac83dc7396893637622d0432dcc328725ec"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795043720322:0000000000000030:0000000000000000:message:msg_b70128a420754fceafb8e4c167e34d8c",
+        "id": "msg_b70128a420754fceafb8e4c167e34d8c",
+        "sessionID": "ses_hGSJScmZOPTGuerdctsb"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbMyW5n00pClR0GtQE",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+          "orderKey": "v1:0001795043720340:0000000000000031:0000000000000000:part:prt_g0VbMyW5n00pClR0GtQE",
+          "type": "text",
+          "text": "Inspect declared attachment encodings. These are original source files for text review.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/6effdf966ec75387ecd06f54c9c7e49739aa245ef031ea72e2997c70152d9764.json",
+            "catalog_snapshot_hash": "6effdf966ec75387ecd06f54c9c7e49739aa245ef031ea72e2997c70152d9764"
+          }
+        },
+        {
+          "id": "prt_g0VbMyW5n01D5mictX3t",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+          "orderKey": "v1:0001795043720342:0000000000000031:0000000000000000:part:prt_g0VbMyW5n01D5mictX3t",
+          "type": "file",
+          "mime": "text/plain; charset=\"windows-1252\"",
+          "filename": "western-note.txt",
+          "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/d7f6ade786f233397e536c1bb646adb27513f3db6a32cd982bfd9a7d7c80f2d6.txt"
+        },
+        {
+          "id": "prt_g0VbMyW5n02ZVIZA9XHj",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+          "orderKey": "v1:0001795043720344:0000000000000031:0000000000000000:part:prt_g0VbMyW5n02ZVIZA9XHj",
+          "type": "file",
+          "mime": "text/plain; charset=gb18030",
+          "filename": "chinese-note.txt",
+          "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/f520cbf42b286f8e79c18d683e5284c93d6be2157a60f84c61432f893825ded1.txt"
+        },
+        {
+          "id": "prt_g0VbMyW5n03DwnZxi0uA",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+          "orderKey": "v1:0001795043720346:0000000000000031:0000000000000000:part:prt_g0VbMyW5n03DwnZxi0uA",
+          "type": "file",
+          "mime": "text/plain; charset=utf-16be",
+          "filename": "unicode-note.txt",
+          "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/8757a51aec28afc98242eeffb68a47b4f57aee9bb662d831ae395adb62a7e3bd.txt"
+        },
+        {
+          "id": "prt_g0VbMyW5n04mzqT22A6w",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+          "orderKey": "v1:0001795043720347:0000000000000031:0000000000000000:part:prt_g0VbMyW5n04mzqT22A6w",
+          "type": "file",
+          "mime": "text/plain",
+          "filename": "bom-note.txt",
+          "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/01af3bc735783a232faa318fc8119f6dd6d47fc37dbc2ddb416e8ea8fec27f65.txt"
+        },
+        {
+          "id": "prt_g0VbMyW5n05okAS4CIkM",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+          "orderKey": "v1:0001795043720349:0000000000000031:0000000000000000:part:prt_g0VbMyW5n05okAS4CIkM",
+          "type": "file",
+          "mime": "text/plain; charset=x-owned-unsupported",
+          "filename": "unknown-note.txt",
+          "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/7689bf2b66af91317522717e16c3242c60269045a653f5c5f0418717662ef203.txt"
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795043720422,
+          "completed": 1795043721919
+        },
+        "parentID": "msg_b70128a420754fceafb8e4c167e34d8c",
+        "acceptedInputMessageIDs": [
+          "msg_b70128a420754fceafb8e4c167e34d8c"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795043720422:0000000000000030:0000000000000000:message:msg_g0VbMyW7K00rSL07qA3c",
+        "id": "msg_g0VbMyW7K00rSL07qA3c",
+        "sessionID": "ses_hGSJScmZOPTGuerdctsb"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbMyWPY00lGxjDzRNY",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_g0VbMyW7K00rSL07qA3c",
+          "orderKey": "v1:0001795043721553:0000000000000031:0000000000000000:part:prt_g0VbMyWPY00lGxjDzRNY",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbMyWPx00vrp4MMou5",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_g0VbMyW7K00rSL07qA3c",
+          "orderKey": "v1:0001795043721578:0000000000000031:0000000000000000:part:prt_g0VbMyWPx00vrp4MMou5",
+          "type": "reasoning",
+          "text": "Checking the supplied file context.",
+          "time": {
+            "start": 1795043721577,
+            "end": 1795043721716
+          }
+        },
+        {
+          "id": "prt_g0VbMyWSF0031DDkPHsr",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_g0VbMyW7K00rSL07qA3c",
+          "orderKey": "v1:0001795043721720:0000000000000031:0000000000000000:part:prt_g0VbMyWSF0031DDkPHsr",
+          "type": "text",
+          "text": "The local stream completed.",
+          "time": {
+            "start": 1795043721719,
+            "end": 1795043721890
+          }
+        },
+        {
+          "id": "prt_g0VbMyWV400guqhXJRtR",
+          "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+          "messageID": "msg_g0VbMyW7K00rSL07qA3c",
+          "orderKey": "v1:0001795043721895:0000000000000031:0000000000000000:part:prt_g0VbMyWV400guqhXJRtR",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    }
+  ],
+  "providerRequest": "c76461ae-b00a-40c0-b38f-cbd70966e22d",
+  "target": "http://127.0.0.1:40154/ui/?sessionID=ses_hGSJScmZOPTGuerdctsb&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b327%5Cbaseline%5Cdeclared-encoding-review&experience=chat"
+}
