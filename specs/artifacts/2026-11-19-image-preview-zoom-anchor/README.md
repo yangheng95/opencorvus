@@ -5,5 +5,8 @@
 - [高分辨率图的整图显示](baseline-large-fit.png)：开发页面 `40102/ui/`，原件 4800×3200，初始约 17%，中心圆圈可见。
 - [在中心 Ctrl 滚轮放大一次](baseline-large-wheel-drift.png)：约 42% 时中心圆圈明显移到左侧。截图由本人逐张查看，不以截图比较程序判定。
 - [实际原件](coordinate-grid.svg)：5167 字节，真实浏览器下载名称 `coordinate-grid.svg`，下载内容与项目中的原件逐字节相同。SVG（Scalable Vector Graphics，可缩放矢量图形）中的逻辑网格坐标用于人工辨认查看位置。
+- [基线输入及原件事实](baseline-original.json)：实际页面、指针位置、下载名称和字节。
+- [待视觉验收的候选补丁](candidate.patch)：只有共享图像缩放位置换算及对应架构说明。候选通过类型、语言、样式、构建和文档检查；桌面工具因无法可靠确定当前浏览器 URL 终止本轮操作，尚无候选截图。产品源码已经恢复原状，本补丁未作为已验收产品修复交付。
+- [停机后的只读数据库事实](runtime-counts.json)：两个隔离库的会话、消息和部件均为零；两个服务监听均已释放。
 
 [根因、范围与验收方案](../../records/2026-11/2026-11-19-image-preview-zoom-anchor.md)

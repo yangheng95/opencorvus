@@ -1,0 +1,54 @@
+diff --git a/packages/overlay/src/components/ImagePreview.tsx b/packages/overlay/src/components/ImagePreview.tsx
+index 3e2c94abb..1b3cc2d0e 100644
+--- a/packages/overlay/src/components/ImagePreview.tsx
++++ b/packages/overlay/src/components/ImagePreview.tsx
+@@ -344,23 +344,26 @@ export function ImagePreviewHost() {
+   function applyScale(nextScale: number, anchor?: { x: number; y: number }): void {
+     if (!imageReady()) return
+     const body = bodyRef
++    const image = imageRef
+     const size = imageSize()
+-    const previousScale = scale()
+     const resolvedScale = clampImagePreviewScale(nextScale)
+-    if (!body || size.width <= 0 || size.height <= 0) {
++    if (!body || !image || size.width <= 0 || size.height <= 0) {
+       setScale(resolvedScale)
+       return
+     }
+ 
+-    const anchorX = anchor?.x ?? body.clientWidth / 2
+-    const anchorY = anchor?.y ?? body.clientHeight / 2
+-    const ratioX = (body.scrollLeft + anchorX) / Math.max(1, size.width * previousScale)
+-    const ratioY = (body.scrollTop + anchorY) / Math.max(1, size.height * previousScale)
++    const bodyBounds = body.getBoundingClientRect()
++    const imageBounds = image.getBoundingClientRect()
++    const anchorX = bodyBounds.left + (anchor?.x ?? body.clientLeft + body.clientWidth / 2)
++    const anchorY = bodyBounds.top + (anchor?.y ?? body.clientTop + body.clientHeight / 2)
++    const ratioX = (anchorX - imageBounds.left) / Math.max(1, imageBounds.width)
++    const ratioY = (anchorY - imageBounds.top) / Math.max(1, imageBounds.height)
+ 
+     setScale(resolvedScale)
+     requestAnimationFrame(() => {
+-      body.scrollLeft = ratioX * size.width * resolvedScale - anchorX
+-      body.scrollTop = ratioY * size.height * resolvedScale - anchorY
++      const nextBounds = image.getBoundingClientRect()
++      body.scrollLeft += nextBounds.left + ratioX * nextBounds.width - anchorX
++      body.scrollTop += nextBounds.top + ratioY * nextBounds.height - anchorY
+     })
+   }
+ 
+diff --git a/specs/current/architecture/07-panel.md b/specs/current/architecture/07-panel.md
+index 48c0cd545..444a0b8ac 100644
+--- a/specs/current/architecture/07-panel.md
++++ b/specs/current/architecture/07-panel.md
+@@ -4146,6 +4146,10 @@ parallel image source.
+ The header menu button provides a keyboard entry for copy, width fit,
+ whole-image fit and original size. Its dropdown is mounted inside the dialog.
+ The image's pointer context menu shares the same commands and enabled state.
++Zoom derives the viewed point from the image's actual viewport bounds before
++and after scaling, then adjusts the existing pan container by that displacement.
++Centered stage space and canvas padding are not treated as image coordinates;
++the browser retains its ordinary scroll limits when the image fits the canvas.
+ 
+ Image triggers synchronously open this host with the displayed image identity
+ and canonical resource URL. FilePart and Screenshot Browser do not pre-read the

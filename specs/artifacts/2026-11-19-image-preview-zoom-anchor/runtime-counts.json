@@ -1,0 +1,22 @@
+{
+  "baseline": [
+    {
+      "path": "opencorvus-zed-baseline\\data\\opencorvus.db",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "part": 0
+      }
+    }
+  ],
+  "candidate": [
+    {
+      "path": "opencorvus-zed-candidate\\data\\opencorvus.db",
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "part": 0
+      }
+    }
+  ]
+}
