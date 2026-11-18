@@ -1,0 +1,35 @@
+{
+  "page": "http://127.0.0.1:40104/ui/",
+  "download": {
+    "suggestedFilename": "coordinate-grid.svg",
+    "bytes": 5167,
+    "equalsOriginal": true
+  },
+  "resources": [
+    {
+      "url": "http://127.0.0.1:40104/ui/assets/main-0fxqRynJ.css",
+      "status": 200,
+      "requestID": "927030d3-1ecb-4141-979c-348f5f317366"
+    },
+    {
+      "url": "http://127.0.0.1:40104/ui/assets/main-Dj85Jkx_.js",
+      "status": 200,
+      "requestID": "2453f170-219f-4483-a69f-84ebef076339"
+    },
+    {
+      "url": "http://127.0.0.1:40104/file/content?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b318%5Ccandidate%5Cimage-review&path=coordinate-grid.svg",
+      "status": 200,
+      "requestID": "ec3a6d86-9016-4db1-b63f-fed114084872"
+    }
+  ],
+  "visualReview": {
+    "reviewedBy": "primary agent",
+    "method": "real Windows desktop screenshots and explicit pointer or keyboard input",
+    "centerZoom": "17% to 42% retains the original center marker",
+    "pannedZoom": "drag then 42% to 67% and back retains the chosen marker",
+    "buttons": "42% to 67% and back uses the canvas center",
+    "menu": "Fit image 17%, Fit width 22%, Original size 100%",
+    "focus": "Escape returns to the image entry; Enter reopens it",
+    "locale": "English and Simplified Chinese; keyboard menu selection returns to Fit image"
+  }
+}

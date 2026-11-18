@@ -344,23 +344,26 @@ export function ImagePreviewHost() {
   function applyScale(nextScale: number, anchor?: { x: number; y: number }): void {
     if (!imageReady()) return
     const body = bodyRef
+    const image = imageRef
     const size = imageSize()
-    const previousScale = scale()
     const resolvedScale = clampImagePreviewScale(nextScale)
-    if (!body || size.width <= 0 || size.height <= 0) {
+    if (!body || !image || size.width <= 0 || size.height <= 0) {
       setScale(resolvedScale)
       return
     }
 
-    const anchorX = anchor?.x ?? body.clientWidth / 2
-    const anchorY = anchor?.y ?? body.clientHeight / 2
-    const ratioX = (body.scrollLeft + anchorX) / Math.max(1, size.width * previousScale)
-    const ratioY = (body.scrollTop + anchorY) / Math.max(1, size.height * previousScale)
+    const bodyBounds = body.getBoundingClientRect()
+    const imageBounds = image.getBoundingClientRect()
+    const anchorX = bodyBounds.left + (anchor?.x ?? body.clientLeft + body.clientWidth / 2)
+    const anchorY = bodyBounds.top + (anchor?.y ?? body.clientTop + body.clientHeight / 2)
+    const ratioX = (anchorX - imageBounds.left) / Math.max(1, imageBounds.width)
+    const ratioY = (anchorY - imageBounds.top) / Math.max(1, imageBounds.height)
 
     setScale(resolvedScale)
     requestAnimationFrame(() => {
-      body.scrollLeft = ratioX * size.width * resolvedScale - anchorX
-      body.scrollTop = ratioY * size.height * resolvedScale - anchorY
+      const nextBounds = image.getBoundingClientRect()
+      body.scrollLeft += nextBounds.left + ratioX * nextBounds.width - anchorX
+      body.scrollTop += nextBounds.top + ratioY * nextBounds.height - anchorY
     })
   }
 

@@ -4146,6 +4146,10 @@ parallel image source.
 The header menu button provides a keyboard entry for copy, width fit,
 whole-image fit and original size. Its dropdown is mounted inside the dialog.
 The image's pointer context menu shares the same commands and enabled state.
+Zoom derives the viewed point from the image's actual viewport bounds before
+and after scaling, then adjusts the existing pan container by that displacement.
+Centered stage space and canvas padding are not treated as image coordinates;
+the browser retains its ordinary scroll limits when the image fits the canvas.
 
 Image triggers synchronously open this host with the displayed image identity
 and canonical resource URL. FilePart and Screenshot Browser do not pre-read the
