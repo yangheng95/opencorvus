@@ -7,7 +7,7 @@ import z from "zod"
 import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { lazy } from "../../util/lazy"
-import { DIRECTORY_REFERENCE_MIME, DirectoryReferenceManifestSchema } from "@opencorvus-ai/transport-protocol"
+import { ATTACHMENT_IMAGE_DISPLAY_VARIANT, DIRECTORY_REFERENCE_MIME, DirectoryReferenceManifestSchema } from "@opencorvus-ai/transport-protocol"
 import { WORK_ARTIFACT_PROFILE_IDS, WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
 import { NamedError } from "@opencorvus-ai/util/error"
 
@@ -76,6 +76,15 @@ function imageRenditionHeaders(size: number) {
     "cache-control": "public, max-age=31536000, immutable",
     "x-content-type-options": "nosniff",
   }
+}
+
+async function imageRenditionResponse(projectID: string, name: string, variant: AttachmentStore.ImageRenditionVariant) {
+  const rendition = await AttachmentStore.imageRendition(projectID, name, variant)
+  const body = await fs.readFile(rendition.abs)
+  return new Response(body as unknown as BodyInit, {
+    status: 200,
+    headers: imageRenditionHeaders(rendition.size),
+  })
 }
 
 function isMissingPathError(error: unknown): boolean {
@@ -202,7 +211,7 @@ export const AttachmentRoutes = lazy(() =>
           variant: z
             .string()
             .optional()
-            .meta({ description: "Serve a derived rendition of the attachment instead of the stored bytes." }),
+            .meta({ description: "Select image-display for the published image's display representation, or image-preview / screenshot-browser-thumbnail for a derived rendition." }),
         }),
       ),
       async (c) => {
@@ -212,18 +221,13 @@ export const AttachmentRoutes = lazy(() =>
           return c.text("Not found", 404)
         }
         const variant = c.req.valid("query").variant ?? ""
-        if (variant) {
+        if (variant && variant !== ATTACHMENT_IMAGE_DISPLAY_VARIANT) {
           if (variant !== AttachmentStore.SCREENSHOT_BROWSER_THUMBNAIL_VARIANT && variant !== AttachmentStore.IMAGE_PREVIEW_VARIANT) return c.text("Not found", 404)
           const sourceAbs = AttachmentStore.resolveAbsolute(projectID, name)
           if (!sourceAbs) return c.text("Not found", 404)
           const sourceInfo = await statFileOrMissing(sourceAbs)
           if (!sourceInfo || !sourceInfo.isFile()) return c.text("Not found", 404)
-          const rendition = await AttachmentStore.imageRendition(projectID, name, variant)
-          const body = await fs.readFile(rendition.abs)
-          return new Response(body as unknown as BodyInit, {
-            status: 200,
-            headers: imageRenditionHeaders(rendition.size),
-          })
+          return imageRenditionResponse(projectID, name, variant)
         }
         const abs = AttachmentStore.resolveAbsolute(projectID, name)
         if (!abs) return c.text("Not found", 404)
@@ -233,6 +237,10 @@ export const AttachmentRoutes = lazy(() =>
           projectID,
           url: `/attachment/${projectID}/${name}`,
         })
+        if (variant === ATTACHMENT_IMAGE_DISPLAY_VARIANT &&
+          snapshot.reference.mime.split(";", 1)[0]!.trim().toLowerCase() === "image/svg+xml") {
+          return imageRenditionResponse(projectID, name, AttachmentStore.IMAGE_PREVIEW_VARIANT)
+        }
         return new Response(snapshot.bytes as unknown as BodyInit, {
           status: 200,
           headers: attachmentHeaders(name, snapshot.reference),

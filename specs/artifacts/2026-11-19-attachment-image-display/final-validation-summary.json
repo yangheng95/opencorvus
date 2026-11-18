@@ -1,0 +1,119 @@
+{
+  "batch": 325,
+  "date": "2026-11-19",
+  "focused": {
+    "tests": 17,
+    "assertions": 180,
+    "files": 5
+  },
+  "checks": [
+    "backend/frontend/protocol/SDK typechecks passed",
+    "SDK and OpenAPI generated formally",
+    "353 API operations / 26 groups",
+    "6 route rules / 36 files",
+    "20 architecture documents",
+    "3229 keys / 2 locales",
+    "CSS passed",
+    "frontend build and renderer public surface passed"
+  ],
+  "api": "Image display uses verified publication media; SVG selects existing WebP profile; raster returns original bytes and dimensions; named failure reports the selected profile",
+  "desktop": [
+    "Three original thumbnails and full 100% previews reviewed individually",
+    "Two SVG files and one PNG downloaded with original filenames and bytes",
+    "Chinese locale selected through application settings; SVG reopened and Chinese actions menu reviewed"
+  ],
+  "downloads": [
+    {
+      "filename": "vector-original.dat",
+      "bytes": 349,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "vector-original.png",
+      "bytes": 349,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "raster-original.svg",
+      "bytes": 17078,
+      "equalsOriginal": true
+    }
+  ],
+  "responses": [
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/beca349c82f1756872f093863063cbf988b78f8509798966e918b7ab1f4d507c.png?variant=screenshot-browser-thumbnail",
+      "status": 200,
+      "mime": "image/webp",
+      "length": "1674"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/81cf3b42c88562005c4489652bcc94c588a79d815714ce86bb773f5abd7fad55.svg?variant=screenshot-browser-thumbnail",
+      "status": 200,
+      "mime": "image/webp",
+      "length": "1432"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/24f0f3075c0a1be2d02663532aa47b033307b0046b25839b2f4368b126ecbb45.dat?variant=screenshot-browser-thumbnail",
+      "status": 200,
+      "mime": "image/webp",
+      "length": "2030"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/24f0f3075c0a1be2d02663532aa47b033307b0046b25839b2f4368b126ecbb45.dat?variant=image-display",
+      "status": 200,
+      "mime": "image/webp",
+      "length": "4960"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/24f0f3075c0a1be2d02663532aa47b033307b0046b25839b2f4368b126ecbb45.dat",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "length": "349"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/beca349c82f1756872f093863063cbf988b78f8509798966e918b7ab1f4d507c.png?variant=image-display",
+      "status": 200,
+      "mime": "image/webp",
+      "length": "4776"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/beca349c82f1756872f093863063cbf988b78f8509798966e918b7ab1f4d507c.png",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "length": "349"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/81cf3b42c88562005c4489652bcc94c588a79d815714ce86bb773f5abd7fad55.svg?variant=image-display",
+      "status": 200,
+      "mime": "image/png",
+      "length": "17078"
+    },
+    {
+      "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/81cf3b42c88562005c4489652bcc94c588a79d815714ce86bb773f5abd7fad55.svg",
+      "status": 200,
+      "mime": "image/png",
+      "length": "17078"
+    }
+  ],
+  "model": {
+    "requests": 4,
+    "completed": 4,
+    "allExactLocalStream": true
+  },
+  "ownedShutdown": {
+    "baselineACPExit": 0,
+    "candidateACPExit": 0,
+    "modelExit": 0,
+    "browser": "closed normally",
+    "ports": {
+      "40142": "closed",
+      "40144": "closed",
+      "40146": "closed"
+    }
+  },
+  "limits": [
+    "Scripted local participant only; no external model or credentials",
+    "Existing explicit SVG image-preview profile retains its 4096-pixel bound",
+    "Earlier overwritten historical media receipts and webpage-role ACP loading are separate investigations"
+  ]
+}

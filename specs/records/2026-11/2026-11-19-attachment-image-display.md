@@ -36,4 +36,20 @@
 3. 新增后端正向 HTTP 检查：错名和带参数大小写 SVG 返回实际 WebP、正确尺寸/像素；大于 4096 的错名 PNG 返回原始 PNG 和原尺寸/全部字节；明确二进制 `.svg` 仍按原件合同返回；原下载及重复读取正确。运行相关下载、响应媒体、上传和发布身份检查，类型、语言、样式及普通前端构建，正式 SDK 生成、路由、文档、架构检查。
 4. 候选 `40144/ui/` 实际点击三张缩略图，逐张查看完整图片、原名及缩放；至少一张切中文复核，分别实际下载两件 SVG 和 PNG，核原名及原字节。实际网络响应只作显示地址和媒体证据，不作 DOM（Document Object Model，文档对象模型）/源码/截图自动断言。正常退出自有服务/窗口，采只读库、回执及流式记录，完成范围提交、上游同步和普通推送。
 
-[本批原始证据与验收](../../artifacts/2026-11-19-attachment-image-display/README.md)。本规格在产品修改前提交；候选尚未实施。
+[本批原始证据与验收](../../artifacts/2026-11-19-attachment-image-display/README.md)。以上为实施前方案，已先提交 `e33e2ff8f`；候选结果如下。
+
+实施后精读共享错误字段时，明确新显示请求选择 SVG 的 `image-preview` 规格，故命名错误的 `variant` 仍是实际派生规格 `image-preview`，不是表示选择器 `image-display`。补充对应正向 HTTP 500 名称、字段、请求标识及原件继续可读的检查；不扩大持久格式、错误 enum（枚举）或增加 UI 自动化。
+
+## 实施结果与最终验收
+
+已在唯一传输协议常量面声明 `ATTACHMENT_IMAGE_DISPLAY_VARIANT`，公开原件路由以严格快照的实际媒体选择显示表示，SVG 复用原完整 WebP 规格，其他类型复用原响应。两个明确派生规格和新显示路径共用同一派生响应函数。前端唯一 helper 改为规范原件的 `image-display`，完整删除后缀判断，没有新预读、媒体状态、文件格式或兼容路径。正式生成的 SDK/OpenAPI 只有该参数说明的真实差异；正式 API 文档生成无正文差异。
+
+- 最终在 `packages/opencorvus` 执行 `bun test ./test/server/attachment-image-display.test.ts ./test/server/attachment-response-media.test.ts ./test/server/attachment-download.test.ts ./test/server/attachment-upload.test.ts ./test/attachment-media-identity.test.ts`，17 项、180 断言、5 文件通过。新检查实际上传/读取错名 SVG、带参数大小写 SVG、宽 5000 像素的错名 PNG、明确二进制 `.svg`，验证 WebP 的格式/尺寸/像素、PNG 原始尺寸/字节、重复响应及原下载；另验证新显示请求命名 HTTP 500、所选规格及原件继续可读。没有 UI 自动断言。
+- 后端、前端、协议和 SDK 类型检查通过。正式 SDK 生成通过；前端语言检查两语言 3229 键、样式检查、普通前端构建及渲染器公开面检查通过。`bun run docs:api`、`bun run docs:check` 的 353 操作/26 组、`bun run api:routes-check` 的 6 规则/36 文件、`bun run check:architecture-index` 的 20 文档通过。检索到的 4 项预览 UI 状态自动检查已删除且未运行，其通用传输依赖仍有生产用途，不删除。
+- 新候选服务 `40144/ui/` 的实际公开会话为 `ses_hln3nudxMmyEBrAgEtp0`。本人逐张点击三张缩略图，三张 800×450 图像均完整显示，原名和 100% 缩放正确。两张错名 SVG 的全图分别使用 WebP 4960、4776 字节；错名 PNG 的全图实际使用 `image/png`、17078 字节，和原件相同。实际浏览器响应记录与截图共同证明选择，未用网络文本或自动断言代替视觉验收。
+- 三次实际点击预览下载得到 `vector-original.dat` 349 字节、`vector-original.png` 349 字节、`raster-original.svg` 17078 字节，逐字节等于各自原件，SVG 原件没有被替换成 WebP。第三次下载的原生面板短暂覆盖关闭按钮，按新截图确认并用 Escape 关闭原生面板后再关闭预览；没有操作私人文件、窗口或剪贴板。
+- 本人通过应用设置的语言菜单选简体中文，返回对话再次实际打开 SVG A，完整图案及原名正确，操作菜单的复制、适应宽度、适应图片、原始尺寸均为中文；没有点击复制。英文三张全图、中文全图及菜单截图全部实际呈现并逐张人工查看。
+- 两个隔离库最终均 1 会话、2 消息、8 部件、3 文件部件，提示所有权计数 0；实际轮次正常 stop。4 次模型请求精确 `local` 且全流式，4 次完成。仅使用自有脚本参与者证明数据、传输与运行链路，没有使用外部凭据、GPT-6.1 Sol 或委托 agent。
+- 两个自有 ACP（Agent Client Protocol，编辑器客户端协议）服务和本机模型均正常退出 0，Chrome 正常关闭，40142/40144/40146 已关闭。持久库和回执仅只读采集，原有 177 项工作区改动保留。
+
+SVG 显式 `image-preview` 的既有 4096 像素上限保留；它不是光栅全图的原始尺寸上限。本批不自动恢复旧版已改写的媒体回执，也不处理网页角色 ACP 加载。没有版本变更或发布动作。

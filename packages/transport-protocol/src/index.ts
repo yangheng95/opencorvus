@@ -806,6 +806,7 @@ export function conversationDeferredToolState(value: unknown): ConversationDefer
 
 export const SCREENSHOT_BROWSER_THUMBNAIL_VARIANT = "screenshot-browser-thumbnail" as const
 export const ATTACHMENT_IMAGE_PREVIEW_VARIANT = "image-preview" as const
+export const ATTACHMENT_IMAGE_DISPLAY_VARIANT = "image-display" as const
 
 // ── Conversation message part projection ──
 

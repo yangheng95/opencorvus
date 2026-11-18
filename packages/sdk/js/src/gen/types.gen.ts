@@ -7161,7 +7161,7 @@ export type AttachmentGetData = {
   }
   query?: {
     /**
-     * Serve a derived rendition of the attachment instead of the stored bytes.
+     * Select image-display for the published image's display representation, or image-preview / screenshot-browser-thumbnail for a derived rendition.
      */
     variant?: string
   }

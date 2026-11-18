@@ -512,25 +512,27 @@ types come from the qualified profile registry and use attachment disposition
 for editable Office sources, including direct links in messages; PDF and other safe preview types
 remain inline, while types outside the supported inline set and Office registry,
 including active SVG, remain download-only octet-stream with nosniff.
-Canonical SVG image display selects the explicit `image-preview` rendition:
+Canonical image display requests `image-display`; the server reads the verified
+publication media and selects the existing `image-preview` rendition for SVG:
 lossless WebP, at most 4096 by 4096 pixels, without enlargement. It shares
 AttachmentStore's single image-rendition pipeline and namespace cache with the
-unchanged `screenshot-browser-thumbnail` profile. Originals and metadata remain
+unchanged `screenshot-browser-thumbnail` profile. Raster display returns the
+verified original bytes and dimensions, including sources larger than 4096 pixels;
+filename suffixes do not select a rendition. Originals and metadata remain
 the canonical bytes; derived images are disposable representations. FilePart
 also owns composer thumbnail presentation, using the same image reader.
 Failures inside the shared image-generation pipeline return the named
-`AttachmentImageRenditionError` with HTTP 500, canonical source URL, requested
-variant and a stable explanation. The original native cause remains in server
+`AttachmentImageRenditionError` with HTTP 500, canonical source URL, the selected
+rendition profile and a stable explanation. An SVG `image-display` request selects
+`image-preview`, which is the profile reported by that error. The original native cause remains in server
 diagnostics; public data contains no native message or physical path. Generation
 includes sharp's own source reading and does not classify the input as corrupt.
 Source stat and derived-cache publication errors retain their ordinary storage
 error contract. Upload continues to preserve raw bytes independently of image
 decodability, and original downloads remain the same verified resource.
-Image preview derives its display URL from the stored filename's
-extension; this rendition selection is independent of the verified original's
-HTTP media policy. FilePart, the image
-gallery and the global preview host use that single mapping, including records
-whose optional message MIME is absent. Download reads the authenticated original,
+Image preview requests the canonical `image-display` representation through a
+shared URL helper, including when message MIME is absent. FilePart, the image
+gallery and the global preview host use that single mapping. Download reads the authenticated original,
 retiring pending work on close, request replacement or API authority change;
 it does not save a raster representation under the original SVG filename.
 Explicit Markdown image-file links and path-like image codespans use the shared

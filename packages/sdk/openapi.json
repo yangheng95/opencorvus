@@ -24580,7 +24580,7 @@
         "operationId": "attachment.get",
         "parameters": [
           {
-            "description": "Serve a derived rendition of the attachment instead of the stored bytes.",
+            "description": "Select image-display for the published image's display representation, or image-preview / screenshot-browser-thumbnail for a derived rendition.",
             "in": "query",
             "name": "variant",
             "schema": {

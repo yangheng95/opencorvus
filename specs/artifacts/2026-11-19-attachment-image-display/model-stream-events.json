@@ -1,0 +1,107 @@
+{
+  "summary": {
+    "requests": 4,
+    "completed": 4,
+    "allExactLocalStream": true
+  },
+  "events": [
+    {
+      "event": "listening",
+      "port": 40146,
+      "pid": 28928
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_ed11c6dc36bf4de4a210f1577c8c9d19"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect attachment image identity. Review SVG originals A and B, followed by the PNG original. Keep their original filenames and published media.\n[Attached Image/SVG+XML; charset=utf-8: vector-original.dat (/attachment/prj_hLx91yhdvQzYbvJmBa8C/24f0f3075c0a1be2d02663532aa47b033307b0046b25839b2f4368b126ecbb45.dat)]\n[Attached image/svg+xml: vector-original.png (/attachment/prj_hLx91yhdvQzYbvJmBa8C/beca349c82f1756872f093863063cbf988b78f8509798966e918b7ab1f4d507c.png)]\n[model-image-input] Cropped blank margins for raster-original.svg: original 800x450, model input 730x380. Original attachment remains unchanged."
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 14564
+        }
+      ],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_454ea5f6980c47969cbf0c459a39d2e1"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect attachment image identity. Review SVG originals A and B, followed by the PNG original. Keep their original filenames and published media.\n[Attached Image/SVG+XML; charset=utf-8: vector-original.dat (/attachment/prj_hixHNV9VBXm8HLKW9vN7/24f0f3075c0a1be2d02663532aa47b033307b0046b25839b2f4368b126ecbb45.dat)]\n[Attached image/svg+xml: vector-original.png (/attachment/prj_hixHNV9VBXm8HLKW9vN7/beca349c82f1756872f093863063cbf988b78f8509798966e918b7ab1f4d507c.png)]\n[model-image-input] Cropped blank margins for raster-original.svg: original 800x450, model input 730x380. Original attachment remains unchanged."
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 14564
+        }
+      ],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    }
+  ]
+}

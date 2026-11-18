@@ -1,0 +1,143 @@
+{
+  "counts": {
+    "session": 1,
+    "message": 2,
+    "part": 8,
+    "session_prompt_owner": 0,
+    "event_occurrence": 19
+  },
+  "messages": [
+    {
+      "id": "msg_454ea5f6980c47969cbf0c459a39d2e1",
+      "sessionID": "ses_hln3nudxMmyEBrAgEtp0",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795040050812
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect attachment image identity. Review SVG originals A and B, followed by the PNG original. Keep their original filenames and published media."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "4ce62cc0e5f31f171f2e1576c48f730becd58c951107ca9f00610d4cd9ef7676"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795040050812:0000000000000030:0000000000000000:message:msg_454ea5f6980c47969cbf0c459a39d2e1"
+      }
+    },
+    {
+      "id": "msg_g0VbMj7Vk00T6nCgPtHS",
+      "sessionID": "ses_hln3nudxMmyEBrAgEtp0",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795040050916,
+          "completed": 1795040052088
+        },
+        "parentID": "msg_454ea5f6980c47969cbf0c459a39d2e1",
+        "acceptedInputMessageIDs": [
+          "msg_454ea5f6980c47969cbf0c459a39d2e1"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b325\\candidate\\image-media-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b325\\candidate\\image-media-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795040050916:0000000000000030:0000000000000000:message:msg_g0VbMj7Vk00T6nCgPtHS"
+      }
+    }
+  ],
+  "files": [
+    {
+      "id": "prt_g0VbMj7U801cjgsFwE14",
+      "messageID": "msg_454ea5f6980c47969cbf0c459a39d2e1",
+      "sessionID": "ses_hln3nudxMmyEBrAgEtp0",
+      "part": {
+        "type": "file",
+        "mime": "Image/SVG+XML; charset=utf-8",
+        "filename": "vector-original.dat",
+        "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/24f0f3075c0a1be2d02663532aa47b033307b0046b25839b2f4368b126ecbb45.dat"
+      }
+    },
+    {
+      "id": "prt_g0VbMj7U802khoH0oa6q",
+      "messageID": "msg_454ea5f6980c47969cbf0c459a39d2e1",
+      "sessionID": "ses_hln3nudxMmyEBrAgEtp0",
+      "part": {
+        "type": "file",
+        "mime": "image/svg+xml",
+        "filename": "vector-original.png",
+        "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/beca349c82f1756872f093863063cbf988b78f8509798966e918b7ab1f4d507c.png"
+      }
+    },
+    {
+      "id": "prt_g0VbMj7U803ZACHAM4a1",
+      "messageID": "msg_454ea5f6980c47969cbf0c459a39d2e1",
+      "sessionID": "ses_hln3nudxMmyEBrAgEtp0",
+      "part": {
+        "type": "file",
+        "mime": "image/png",
+        "filename": "raster-original.svg",
+        "url": "/attachment/prj_hixHNV9VBXm8HLKW9vN7/81cf3b42c88562005c4489652bcc94c588a79d815714ce86bb773f5abd7fad55.svg"
+      }
+    }
+  ],
+  "lifecycle": []
+}
