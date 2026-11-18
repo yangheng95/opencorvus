@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [编辑器主助手恢复验收](2026-11-19-acp-persisted-primary-availability/README.md)
 - [按发布媒体显示图片验收](2026-11-19-attachment-image-display/README.md)
 - [原件响应媒体验收](2026-11-19-attachment-response-media/README.md)
 - [已发布附件媒体身份验收](2026-11-19-attachment-published-media-identity/README.md)

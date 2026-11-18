@@ -1,0 +1,991 @@
+{
+  "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+  "rows": [
+    {
+      "identity": "independent-native",
+      "sessionID": "ses_-zUOdBsLTzzsFbHEd26X",
+      "agent": "coding",
+      "finish": "stop",
+      "requestID": "1b918f00-6189-4333-a6fc-5f81c938bcef",
+      "session": {
+        "id": "ses_-zUOdBsLTzzsFbHEd26X",
+        "slug": "swift-squid",
+        "projectID": "prj_hnNu2OopuYqQo54sJWYJ",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+        "title": "Boundary review",
+        "version": "local",
+        "kind": "assistant",
+        "summary": {
+          "additions": 0,
+          "deletions": 0,
+          "files": 0
+        },
+        "time": {
+          "created": 1795041243100,
+          "updated": 1795041245988
+        }
+      },
+      "history": [
+        {
+          "info": {
+            "author": "user",
+            "role": "user",
+            "time": {
+              "created": 1795041243327
+            },
+            "agent": "coding",
+            "model": {
+              "providerID": "acp-review",
+              "modelID": "local"
+            },
+            "extra": {
+              "project_memory_user_input": {
+                "version": 1,
+                "surface": "session.prompt",
+                "literalText": "Inspect restored primary identity. Independent project independent-native control."
+              },
+              "publicSessionPromptIdentity": {
+                "version": 1,
+                "fingerprint": "6ae97290bcc202bca8e9beff15fe44c85222e2abc887bde0ea478ba503fb6429"
+              }
+            },
+            "orderKey": "v1:0001795041243327:0000000000000030:0000000000000000:message:msg_d7cbd4fe7bbf426ab622383f0bdfc899",
+            "id": "msg_d7cbd4fe7bbf426ab622383f0bdfc899",
+            "sessionID": "ses_-zUOdBsLTzzsFbHEd26X"
+          },
+          "parts": [
+            {
+              "id": "prt_g0VbMo7iC003iVkmu789",
+              "sessionID": "ses_-zUOdBsLTzzsFbHEd26X",
+              "messageID": "msg_d7cbd4fe7bbf426ab622383f0bdfc899",
+              "orderKey": "v1:0001795041243335:0000000000000031:0000000000000000:part:prt_g0VbMo7iC003iVkmu789",
+              "type": "text",
+              "text": "Inspect restored primary identity. Independent project independent-native control.",
+              "metadata": {
+                "catalog_snapshot_ref": "/attachment/prj_hnNu2OopuYqQo54sJWYJ/da03226f26be216d3f992f396eea7b1e92b7f9d23bfa861925aaabb9674081b3.json",
+                "catalog_snapshot_hash": "da03226f26be216d3f992f396eea7b1e92b7f9d23bfa861925aaabb9674081b3"
+              }
+            }
+          ]
+        },
+        {
+          "info": {
+            "author": "coding",
+            "role": "assistant",
+            "time": {
+              "created": 1795041243589,
+              "completed": 1795041246003
+            },
+            "parentID": "msg_d7cbd4fe7bbf426ab622383f0bdfc899",
+            "acceptedInputMessageIDs": [
+              "msg_d7cbd4fe7bbf426ab622383f0bdfc899"
+            ],
+            "modelID": "local",
+            "providerID": "acp-review",
+            "agent": "coding",
+            "path": {
+              "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+              "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review"
+            },
+            "cost": 0,
+            "tokens": {
+              "total": 19,
+              "input": 11,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "unpriced"
+            },
+            "finish": "stop",
+            "orderKey": "v1:0001795041243589:0000000000000030:0000000000000000:message:msg_g0VbMo7mP009PnIhab3W",
+            "id": "msg_g0VbMo7mP009PnIhab3W",
+            "sessionID": "ses_-zUOdBsLTzzsFbHEd26X"
+          },
+          "parts": [
+            {
+              "id": "prt_g0VbMo8JP00FgbLjxSGq",
+              "sessionID": "ses_-zUOdBsLTzzsFbHEd26X",
+              "messageID": "msg_g0VbMo7mP009PnIhab3W",
+              "orderKey": "v1:0001795041245635:0000000000000031:0000000000000000:part:prt_g0VbMo8JP00FgbLjxSGq",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VbMo8Jd00L4gEWGAFQ",
+              "sessionID": "ses_-zUOdBsLTzzsFbHEd26X",
+              "messageID": "msg_g0VbMo7mP009PnIhab3W",
+              "orderKey": "v1:0001795041245649:0000000000000031:0000000000000000:part:prt_g0VbMo8Jd00L4gEWGAFQ",
+              "type": "reasoning",
+              "text": "Checking the supplied file context.",
+              "time": {
+                "start": 1795041245649,
+                "end": 1795041245804
+              }
+            },
+            {
+              "id": "prt_g0VbMo8MB00zOeBpub5s",
+              "sessionID": "ses_-zUOdBsLTzzsFbHEd26X",
+              "messageID": "msg_g0VbMo7mP009PnIhab3W",
+              "orderKey": "v1:0001795041245807:0000000000000031:0000000000000000:part:prt_g0VbMo8MB00zOeBpub5s",
+              "type": "text",
+              "text": "The local stream completed.",
+              "time": {
+                "start": 1795041245807,
+                "end": 1795041245978
+              }
+            },
+            {
+              "id": "prt_g0VbMo8Oz00Mi5GLqhq3",
+              "sessionID": "ses_-zUOdBsLTzzsFbHEd26X",
+              "messageID": "msg_g0VbMo7mP009PnIhab3W",
+              "orderKey": "v1:0001795041245982:0000000000000031:0000000000000000:part:prt_g0VbMo8Oz00Mi5GLqhq3",
+              "type": "step-finish",
+              "reason": "stop",
+              "cost": 0,
+              "tokens": {
+                "total": 19,
+                "input": 11,
+                "output": 8,
+                "reasoning": 0,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "billing": {
+                "status": "unpriced"
+              }
+            }
+          ]
+        }
+      ],
+      "operations": {
+        "loadSession": {
+          "result": {
+            "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+            "configOptions": [
+              {
+                "id": "model",
+                "name": "Model",
+                "category": "model",
+                "type": "select",
+                "currentValue": "acp-review/local",
+                "options": [
+                  {
+                    "value": "acp-review/local",
+                    "name": "acp-review/Restored primary identity"
+                  }
+                ]
+              }
+            ],
+            "modes": {
+              "availableModes": [
+                {
+                  "id": "coding",
+                  "name": "coding",
+                  "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+                }
+              ],
+              "currentModeId": "coding"
+            },
+            "_meta": {
+              "opencorvus": {
+                "modelId": "acp-review/local",
+                "variant": null,
+                "availableVariants": []
+              }
+            }
+          }
+        },
+        "resumeSession": {
+          "result": {
+            "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+            "configOptions": [
+              {
+                "id": "model",
+                "name": "Model",
+                "category": "model",
+                "type": "select",
+                "currentValue": "acp-review/local",
+                "options": [
+                  {
+                    "value": "acp-review/local",
+                    "name": "acp-review/Restored primary identity"
+                  }
+                ]
+              }
+            ],
+            "modes": {
+              "availableModes": [
+                {
+                  "id": "coding",
+                  "name": "coding",
+                  "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+                }
+              ],
+              "currentModeId": "coding"
+            },
+            "_meta": {
+              "opencorvus": {
+                "modelId": "acp-review/local",
+                "variant": null,
+                "availableVariants": []
+              }
+            }
+          }
+        },
+        "unstable_forkSession": {
+          "result": {
+            "sessionId": "ses_-zUOdBrYZzzS8WJUX73D",
+            "configOptions": [
+              {
+                "id": "model",
+                "name": "Model",
+                "category": "model",
+                "type": "select",
+                "currentValue": "acp-review/local",
+                "options": [
+                  {
+                    "value": "acp-review/local",
+                    "name": "acp-review/Restored primary identity"
+                  }
+                ]
+              }
+            ],
+            "modes": {
+              "availableModes": [
+                {
+                  "id": "coding",
+                  "name": "coding",
+                  "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+                }
+              ],
+              "currentModeId": "coding"
+            },
+            "_meta": {
+              "opencorvus": {
+                "modelId": "acp-review/local",
+                "variant": null,
+                "availableVariants": []
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "identity": "independent-chat",
+      "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU",
+      "agent": "chat",
+      "finish": "stop",
+      "requestID": "45773f40-fa43-41a2-8bce-a028e5a7cfc7",
+      "session": {
+        "id": "ses_hw5Vm5lwjWk6LRs1aTPU",
+        "slug": "calm-eagle",
+        "projectID": "prj_hnNu2OopuYqQo54sJWYJ",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+        "title": "Inspect restored primary identity. Independent project independent-chat control.",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "62d22f44-27c5-4147-aa7c-7399d1e91d0b",
+            "model": "acp-review/local"
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          },
+          "configOverlay": {
+            "model": "acp-review/local"
+          }
+        },
+        "summary": {
+          "additions": 0,
+          "deletions": 0,
+          "files": 0
+        },
+        "permission": [
+          {
+            "permission": "delegate_agent",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_expert_squad_inspect",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_query_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_query_task_artifacts",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_create_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_wake_mission",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_wake_work",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_send_task_message",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_respond_interaction",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_cancel_task",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_update_checks",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_select_workspace",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_update_goal",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "panel_delete_goal",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "question",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "bash",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "read",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "glob",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "search_code",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "edit",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "write",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "apply_patch",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "todo",
+            "pattern": "*",
+            "action": "allow"
+          },
+          {
+            "permission": "schedule",
+            "pattern": "*",
+            "action": "allow"
+          }
+        ],
+        "time": {
+          "created": 1795041243226,
+          "updated": 1795041244874
+        }
+      },
+      "history": [
+        {
+          "info": {
+            "author": "user",
+            "role": "user",
+            "time": {
+              "created": 1795041243366
+            },
+            "agent": "chat",
+            "model": {
+              "providerID": "acp-review",
+              "modelID": "local"
+            },
+            "tools": {
+              "delegate_agent": true,
+              "panel_expert_squad_inspect": true,
+              "panel_query_task": true,
+              "panel_query_task_artifacts": true,
+              "panel_create_task": true,
+              "panel_wake_mission": true,
+              "panel_wake_work": true,
+              "panel_send_task_message": true,
+              "panel_respond_interaction": true,
+              "panel_cancel_task": true,
+              "panel_update_checks": true,
+              "panel_select_workspace": true,
+              "panel_update_goal": true,
+              "panel_delete_goal": true,
+              "question": true,
+              "bash": true,
+              "read": true,
+              "glob": true,
+              "search_code": true,
+              "edit": true,
+              "write": true,
+              "apply_patch": true,
+              "todo": true,
+              "schedule": true
+            },
+            "extra": {
+              "project_memory_user_input": {
+                "version": 1,
+                "surface": "session.prompt",
+                "literalText": "Inspect restored primary identity. Independent project independent-chat control."
+              },
+              "publicSessionPromptIdentity": {
+                "version": 1,
+                "fingerprint": "89c665ae59749de20fcc4f920af811c811503e4340212ab6553129246c11c2c0"
+              },
+              "surface": "right-sidebar",
+              "source": "right-sidebar-conversation",
+              "experience": "chat"
+            },
+            "orderKey": "v1:0001795041243366:0000000000000030:0000000000000000:message:msg_26ce54b9a21142418c5021ea897ba082",
+            "id": "msg_26ce54b9a21142418c5021ea897ba082",
+            "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU"
+          },
+          "parts": [
+            {
+              "id": "prt_g0VbMo7io00mGIPKRY2y",
+              "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU",
+              "messageID": "msg_26ce54b9a21142418c5021ea897ba082",
+              "orderKey": "v1:0001795041243368:0000000000000031:0000000000000000:part:prt_g0VbMo7io00mGIPKRY2y",
+              "type": "text",
+              "text": "Inspect restored primary identity. Independent project independent-chat control.",
+              "metadata": {
+                "catalog_snapshot_ref": "/attachment/prj_hnNu2OopuYqQo54sJWYJ/e826fc35f84508856ff36eb7eda2413425600a41e88cffefc42d0c15e3455dc3.json",
+                "catalog_snapshot_hash": "e826fc35f84508856ff36eb7eda2413425600a41e88cffefc42d0c15e3455dc3"
+              }
+            }
+          ]
+        },
+        {
+          "info": {
+            "author": "chat",
+            "role": "assistant",
+            "time": {
+              "created": 1795041243400,
+              "completed": 1795041244887
+            },
+            "parentID": "msg_26ce54b9a21142418c5021ea897ba082",
+            "acceptedInputMessageIDs": [
+              "msg_26ce54b9a21142418c5021ea897ba082"
+            ],
+            "modelID": "local",
+            "providerID": "acp-review",
+            "agent": "chat",
+            "path": {
+              "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+              "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review"
+            },
+            "cost": 0,
+            "tokens": {
+              "total": 19,
+              "input": 11,
+              "output": 8,
+              "reasoning": 0,
+              "cache": {
+                "read": 0,
+                "write": 0
+              }
+            },
+            "billing": {
+              "status": "unpriced"
+            },
+            "finish": "stop",
+            "orderKey": "v1:0001795041243400:0000000000000030:0000000000000000:message:msg_g0VbMo7jM007xeOdp68C",
+            "id": "msg_g0VbMo7jM007xeOdp68C",
+            "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU"
+          },
+          "parts": [
+            {
+              "id": "prt_g0VbMo80900iFt6vmvJk",
+              "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU",
+              "messageID": "msg_g0VbMo7jM007xeOdp68C",
+              "orderKey": "v1:0001795041244441:0000000000000031:0000000000000000:part:prt_g0VbMo80900iFt6vmvJk",
+              "type": "step-start"
+            },
+            {
+              "id": "prt_g0VbMo80O00IxE1U0DRu",
+              "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU",
+              "messageID": "msg_g0VbMo7jM007xeOdp68C",
+              "orderKey": "v1:0001795041244457:0000000000000031:0000000000000000:part:prt_g0VbMo80O00IxE1U0DRu",
+              "type": "reasoning",
+              "text": "Checking the supplied file context.",
+              "time": {
+                "start": 1795041244456,
+                "end": 1795041244601
+              }
+            },
+            {
+              "id": "prt_g0VbMo82o00TAozpMxuo",
+              "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU",
+              "messageID": "msg_g0VbMo7jM007xeOdp68C",
+              "orderKey": "v1:0001795041244606:0000000000000031:0000000000000000:part:prt_g0VbMo82o00TAozpMxuo",
+              "type": "text",
+              "text": "The local stream completed.",
+              "time": {
+                "start": 1795041244606,
+                "end": 1795041244859
+              }
+            },
+            {
+              "id": "prt_g0VbMo86z00HQUb32Hxm",
+              "sessionID": "ses_hw5Vm5lwjWk6LRs1aTPU",
+              "messageID": "msg_g0VbMo7jM007xeOdp68C",
+              "orderKey": "v1:0001795041244866:0000000000000031:0000000000000000:part:prt_g0VbMo86z00HQUb32Hxm",
+              "type": "step-finish",
+              "reason": "stop",
+              "cost": 0,
+              "tokens": {
+                "total": 19,
+                "input": 11,
+                "output": 8,
+                "reasoning": 0,
+                "cache": {
+                  "read": 0,
+                  "write": 0
+                }
+              },
+              "billing": {
+                "status": "unpriced"
+              }
+            }
+          ]
+        }
+      ],
+      "operations": {
+        "loadSession": {
+          "error": {
+            "code": -32603,
+            "message": "Internal error",
+            "data": {
+              "details": "ACP current primary assistant \"chat\" is not available"
+            }
+          }
+        },
+        "resumeSession": {
+          "error": {
+            "code": -32603,
+            "message": "Internal error",
+            "data": {
+              "details": "ACP current primary assistant \"chat\" is not available"
+            }
+          }
+        },
+        "unstable_forkSession": {
+          "error": {
+            "code": -32603,
+            "message": "Internal error",
+            "data": {
+              "details": "ACP current primary assistant \"chat\" is not available"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "primaryList": {
+    "sessions": [
+      {
+        "sessionId": "ses_-zUOdDJMTzz3WOzPy7uN",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Explicit hidden primary control",
+        "updatedAt": "2026-11-18T22:28:22.334Z"
+      },
+      {
+        "sessionId": "ses_hvPE3mBMZPKDsLN0zMCI",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Web work role control",
+        "updatedAt": "2026-11-18T22:28:20.809Z"
+      },
+      {
+        "sessionId": "ses_h4lPv1sq8vbTndiFbSCM",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Web chat role control",
+        "updatedAt": "2026-11-18T22:28:19.619Z"
+      },
+      {
+        "sessionId": "ses_-zUOdDKxRzzv3lEj1TME",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Native coding role control",
+        "updatedAt": "2026-11-18T22:28:18.027Z"
+      }
+    ]
+  },
+  "secondaryList": {
+    "sessions": [
+      {
+        "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+        "title": "Boundary review",
+        "updatedAt": "2026-11-18T22:34:05.988Z"
+      },
+      {
+        "sessionId": "ses_hw5Vm5lwjWk6LRs1aTPU",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+        "title": "Inspect restored primary identity. Independent project independent-chat control.",
+        "updatedAt": "2026-11-18T22:34:04.874Z"
+      }
+    ]
+  },
+  "globalList": {
+    "sessions": [
+      {
+        "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+        "title": "Boundary review",
+        "updatedAt": "2026-11-18T22:34:05.988Z"
+      },
+      {
+        "sessionId": "ses_hw5Vm5lwjWk6LRs1aTPU",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\independent-role-review",
+        "title": "Inspect restored primary identity. Independent project independent-chat control.",
+        "updatedAt": "2026-11-18T22:34:04.874Z"
+      },
+      {
+        "sessionId": "ses_-zUOdDJMTzz3WOzPy7uN",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Explicit hidden primary control",
+        "updatedAt": "2026-11-18T22:28:22.334Z"
+      },
+      {
+        "sessionId": "ses_hvPE3mBMZPKDsLN0zMCI",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Web work role control",
+        "updatedAt": "2026-11-18T22:28:20.809Z"
+      },
+      {
+        "sessionId": "ses_h4lPv1sq8vbTndiFbSCM",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Web chat role control",
+        "updatedAt": "2026-11-18T22:28:19.619Z"
+      },
+      {
+        "sessionId": "ses_-zUOdDKxRzzv3lEj1TME",
+        "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\baseline\\role-replay-review",
+        "title": "Native coding role control",
+        "updatedAt": "2026-11-18T22:28:18.027Z"
+      }
+    ]
+  },
+  "updates": [
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "content": {
+          "text": "Checking the supplied file context.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo7mP009PnIhab3W",
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "content": {
+          "text": "The local stream ",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo7mP009PnIhab3W",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "content": {
+          "text": "completed.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo7mP009PnIhab3W",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "content": {
+          "text": "Inspect restored primary identity. Independent project independent-native control.",
+          "type": "text"
+        },
+        "messageId": "msg_d7cbd4fe7bbf426ab622383f0bdfc899",
+        "sessionUpdate": "user_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "content": {
+          "text": "Checking the supplied file context.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo7mP009PnIhab3W",
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo7mP009PnIhab3W",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBsLTzzsFbHEd26X",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBrYZzzS8WJUX73D",
+      "update": {
+        "content": {
+          "text": "Inspect restored primary identity. Independent project independent-native control.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo8RR00jybOl7kA0",
+        "sessionUpdate": "user_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBrYZzzS8WJUX73D",
+      "update": {
+        "content": {
+          "text": "Checking the supplied file context.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo8RR01d2pzTzd6K",
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBrYZzzS8WJUX73D",
+      "update": {
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbMo8RR01d2pzTzd6K",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBrYZzzS8WJUX73D",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOdBrYZzzS8WJUX73D",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    }
+  ]
+}
