@@ -1,0 +1,3567 @@
+{
+  "counts": {
+    "session": 16,
+    "message": 78,
+    "part": 195,
+    "session_prompt_owner": 0,
+    "event_occurrence": 475
+  },
+  "assistantFinish": {
+    "stop": 39
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_hh2iH87O0xEnvNtbfe62",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": {
+        "projectConversationCreation": {
+          "version": 1,
+          "requestID": "3a6e2674-b697-4363-8f51-cc8996c73567",
+          "model": "acp-review/local"
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "model": "acp-review/local"
+        }
+      }
+    },
+    {
+      "id": "ses_hiXNbXbeJdthhSKq2VC9",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": {
+        "projectConversationCreation": {
+          "version": 1,
+          "requestID": "3e89bbc1-1620-4bd5-83f6-1c3d7d457c5b",
+          "model": "acp-review/local"
+        },
+        "conversation": {
+          "experience": "work",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "model": "acp-review/local"
+        }
+      }
+    },
+    {
+      "id": "ses_-zUOdAOm0zzmqoSQne76",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOdAOT5zzNJ0E4P7Kz",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOdAONOzzZpNWR5Qbz",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_hh2iH87O0xEnvNtbfe62",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOdAOHvzzlchPSWhx1",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOdAOE4zzWUgNJkeHD",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_-zUOdAOm0zzmqoSQne76",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOd9jyFzzeHgwkXheO",
+      "projectID": "prj_hDZMBu7jlbsdXcvR7pRI",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_hfAKq6RYcpPVwTSdQY9I",
+      "projectID": "prj_hDZMBu7jlbsdXcvR7pRI",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+      "metadata": {
+        "projectConversationCreation": {
+          "version": 1,
+          "requestID": "448d98d3-5853-49f1-bbb5-b4d62966930d",
+          "model": "acp-review/local"
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "model": "acp-review/local"
+        }
+      }
+    },
+    {
+      "id": "ses_-zUOd9jNAzz2KuvVJtli",
+      "projectID": "prj_hDZMBu7jlbsdXcvR7pRI",
+      "parentID": "ses_hfAKq6RYcpPVwTSdQY9I",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOd9j2wzzZIbQLop4q",
+      "projectID": "prj_hDZMBu7jlbsdXcvR7pRI",
+      "parentID": "ses_-zUOd9jyFzzeHgwkXheO",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOd9I6yzzkrqr0pHlN",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOd9Hz3zzOVboBZJ9O",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_hh2iH87O0xEnvNtbfe62",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOd9HsmzzoquZsabIH",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    },
+    {
+      "id": "ses_-zUOd9Hm4zzH0q3kXavG",
+      "projectID": "prj_hvssTI1uWePlblp90OAu",
+      "parentID": "ses_-zUOdAOm0zzmqoSQne76",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+      "metadata": null
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_g0VbMpZwF000ZvRWvkZu",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041590207
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Native coding control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "83bed7275679a0137a58fed45496de8efdcb9f3650633e58d8a5b3eb43a4a937"
+          }
+        },
+        "orderKey": "v1:0001795041590207:0000000000000030:0000000000000000:message:msg_g0VbMpZwF000ZvRWvkZu"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbWv002k8p1KKtl",
+      "sessionID": "ses_-zUOdAOT5zzNJ0E4P7Kz",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041590207
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Native coding control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "83bed7275679a0137a58fed45496de8efdcb9f3650633e58d8a5b3eb43a4a937"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpbWv00jr5uS7G4N",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+                "messageID": "msg_g0VbMpZwF000ZvRWvkZu",
+                "partID": "prt_g0VbMpZx200GaAhzHFM7",
+                "sha256": "33693b9a643e7bccc73ae86b6ed3751b938c71214f3c89b7bae14c5836f64ff3"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041590207:0000000000000030:0000000000000000:message:msg_g0VbMpbWv002k8p1KKtl"
+      }
+    },
+    {
+      "id": "msg_g0VbMqht300JiHryQ8jR",
+      "sessionID": "ses_-zUOd9I6yzzkrqr0pHlN",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041590207
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Native coding control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "83bed7275679a0137a58fed45496de8efdcb9f3650633e58d8a5b3eb43a4a937"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqht300NaGsXVbTa",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+                "messageID": "msg_g0VbMpZwF000ZvRWvkZu",
+                "partID": "prt_g0VbMpZx200GaAhzHFM7",
+                "sha256": "33693b9a643e7bccc73ae86b6ed3751b938c71214f3c89b7bae14c5836f64ff3"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041590207:0000000000000030:0000000000000000:message:msg_g0VbMqht300JiHryQ8jR"
+      }
+    },
+    {
+      "id": "msg_g0VbMpZyR00dvectB2tL",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041590295,
+          "completed": 1795041592475
+        },
+        "parentID": "msg_g0VbMpZwF000ZvRWvkZu",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpZwF000ZvRWvkZu"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041590295:0000000000000030:0000000000000000:message:msg_g0VbMpZyR00dvectB2tL"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbWv01YjxldcHPx",
+      "sessionID": "ses_-zUOdAOT5zzNJ0E4P7Kz",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041590295,
+          "completed": 1795041592475
+        },
+        "parentID": "msg_g0VbMpbWv002k8p1KKtl",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpbWv002k8p1KKtl"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpbWv03FZgqfVYxm",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+                "messageID": "msg_g0VbMpZyR00dvectB2tL",
+                "partID": "prt_g0VbMpaUA00HV6l7Bkfg",
+                "sha256": "1fd9a6559b3b9542bf38d13dde67623ad7729ea0a101f74b6767f30c9f5ec415"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041590295:0000000000000030:0000000000000000:message:msg_g0VbMpbWv01YjxldcHPx"
+      }
+    },
+    {
+      "id": "msg_g0VbMqht301rXo48ouT3",
+      "sessionID": "ses_-zUOd9I6yzzkrqr0pHlN",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041590295,
+          "completed": 1795041592475
+        },
+        "parentID": "msg_g0VbMqht300JiHryQ8jR",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqht300JiHryQ8jR"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqht303Hn51Rk9Pd",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+                "messageID": "msg_g0VbMpZyR00dvectB2tL",
+                "partID": "prt_g0VbMpaUA00HV6l7Bkfg",
+                "sha256": "1fd9a6559b3b9542bf38d13dde67623ad7729ea0a101f74b6767f30c9f5ec415"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041590295:0000000000000030:0000000000000000:message:msg_g0VbMqht301rXo48ouT3"
+      }
+    },
+    {
+      "id": "msg_g0VbMpacI00I3XG7CpQl",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041592775
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue the existing web chat conversation."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "dcd334d8f07b0bf11ce9ee034820fe5b64635af07c6961359ab08e67f2fa4d52"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795041592775:0000000000000030:0000000000000000:message:msg_g0VbMpacI00I3XG7CpQl"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbcc00X5pu5pelz",
+      "sessionID": "ses_-zUOdAONOzzZpNWR5Qbz",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041592775
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue the existing web chat conversation."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "dcd334d8f07b0bf11ce9ee034820fe5b64635af07c6961359ab08e67f2fa4d52"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpbcc00eaPje20QV",
+            "sources": [
+              {
+                "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+                "messageID": "msg_g0VbMpacI00I3XG7CpQl",
+                "partID": "prt_g0VbMpacR00TNGRIE439",
+                "sha256": "a00053fe5fb2213f42e71d7a2a5ac73b95d66cbb5ca3ed46fcab05b76918050d"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041592775:0000000000000030:0000000000000000:message:msg_g0VbMpbcc00X5pu5pelz"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi0x00lVu7MpvUy",
+      "sessionID": "ses_-zUOd9Hz3zzOVboBZJ9O",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041592775
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue the existing web chat conversation."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "dcd334d8f07b0bf11ce9ee034820fe5b64635af07c6961359ab08e67f2fa4d52"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi0x00YvZeRs37O",
+            "sources": [
+              {
+                "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+                "messageID": "msg_g0VbMpacI00I3XG7CpQl",
+                "partID": "prt_g0VbMpacR00TNGRIE439",
+                "sha256": "a00053fe5fb2213f42e71d7a2a5ac73b95d66cbb5ca3ed46fcab05b76918050d"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041592775:0000000000000030:0000000000000000:message:msg_g0VbMqi0x00lVu7MpvUy"
+      }
+    },
+    {
+      "id": "msg_g0VbMpad000AFs7liYDW",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041592810,
+          "completed": 1795041593771
+        },
+        "parentID": "msg_g0VbMpacI00I3XG7CpQl",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpacI00I3XG7CpQl"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041592810:0000000000000030:0000000000000000:message:msg_g0VbMpad000AFs7liYDW"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbcc01KnjqXmsHF",
+      "sessionID": "ses_-zUOdAONOzzZpNWR5Qbz",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041592810,
+          "completed": 1795041593771
+        },
+        "parentID": "msg_g0VbMpbcc00X5pu5pelz",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpbcc00X5pu5pelz"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpbcc03OGGOqzKyH",
+            "sources": [
+              {
+                "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+                "messageID": "msg_g0VbMpad000AFs7liYDW",
+                "partID": "prt_g0VbMpapI00L9Fd4l5Gc",
+                "sha256": "a65205a5d976152f4dcf010a495c2bf90ecca66016392fd5dda7e425a6bcf81e"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041592810:0000000000000030:0000000000000000:message:msg_g0VbMpbcc01KnjqXmsHF"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi0x01Rg6F76xEd",
+      "sessionID": "ses_-zUOd9Hz3zzOVboBZJ9O",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041592810,
+          "completed": 1795041593771
+        },
+        "parentID": "msg_g0VbMqi0x00lVu7MpvUy",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqi0x00lVu7MpvUy"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi0x03KsYMnNq2d",
+            "sources": [
+              {
+                "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+                "messageID": "msg_g0VbMpad000AFs7liYDW",
+                "partID": "prt_g0VbMpapI00L9Fd4l5Gc",
+                "sha256": "a65205a5d976152f4dcf010a495c2bf90ecca66016392fd5dda7e425a6bcf81e"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041592810:0000000000000030:0000000000000000:message:msg_g0VbMqi0x01Rg6F76xEd"
+      }
+    },
+    {
+      "id": "msg_g0VbMpavv00eBIA8ENH3",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041593994
+        },
+        "agent": "work",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue the existing web work conversation."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "99d228a1d1d732943eba5a9e1b01828f1bb73e917ac401a5ac39c37d0fe0e937"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "work"
+        },
+        "orderKey": "v1:0001795041593994:0000000000000030:0000000000000000:message:msg_g0VbMpavv00eBIA8ENH3"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbi500Li8XJ86fd",
+      "sessionID": "ses_-zUOdAOHvzzlchPSWhx1",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041593994
+        },
+        "agent": "work",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue the existing web work conversation."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "99d228a1d1d732943eba5a9e1b01828f1bb73e917ac401a5ac39c37d0fe0e937"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "work"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpbi500va21Zi0LM",
+            "sources": [
+              {
+                "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+                "messageID": "msg_g0VbMpavv00eBIA8ENH3",
+                "partID": "prt_g0VbMpaw600CYYxLVM5N",
+                "sha256": "585980f89bf4cf56d2b07dff361ddd490af5af187e22b2e02ff6ddd8d86a5d18"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041593994:0000000000000030:0000000000000000:message:msg_g0VbMpbi500Li8XJ86fd"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi7E00TxbKvXkJg",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041593994
+        },
+        "agent": "work",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue the existing web work conversation."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "99d228a1d1d732943eba5a9e1b01828f1bb73e917ac401a5ac39c37d0fe0e937"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "work"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi7E00F5FrCYkuI",
+            "sources": [
+              {
+                "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+                "messageID": "msg_g0VbMpavv00eBIA8ENH3",
+                "partID": "prt_g0VbMpaw600CYYxLVM5N",
+                "sha256": "585980f89bf4cf56d2b07dff361ddd490af5af187e22b2e02ff6ddd8d86a5d18"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041593994:0000000000000030:0000000000000000:message:msg_g0VbMqi7E00TxbKvXkJg"
+      }
+    },
+    {
+      "id": "msg_g0VbMpawc00Padz4NnxB",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "info": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1795041594026,
+          "completed": 1795041595019
+        },
+        "parentID": "msg_g0VbMpavv00eBIA8ENH3",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpavv00eBIA8ENH3"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041594026:0000000000000030:0000000000000000:message:msg_g0VbMpawc00Padz4NnxB"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbi501lxpb8n3NP",
+      "sessionID": "ses_-zUOdAOHvzzlchPSWhx1",
+      "info": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1795041594026,
+          "completed": 1795041595019
+        },
+        "parentID": "msg_g0VbMpbi500Li8XJ86fd",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpbi500Li8XJ86fd"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpbi503hR0gXIKfp",
+            "sources": [
+              {
+                "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+                "messageID": "msg_g0VbMpawc00Padz4NnxB",
+                "partID": "prt_g0VbMpb9X00DbgLLNC23",
+                "sha256": "7a01aeccaa56a1d732b835713287ed87aa8004cbf6f26a16c196173369cf1187"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041594026:0000000000000030:0000000000000000:message:msg_g0VbMpbi501lxpb8n3NP"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi7E01QvaHMG4cd",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1795041594026,
+          "completed": 1795041595019
+        },
+        "parentID": "msg_g0VbMqi7E00TxbKvXkJg",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqi7E00TxbKvXkJg"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi7E035WtUjllyO",
+            "sources": [
+              {
+                "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+                "messageID": "msg_g0VbMpawc00Padz4NnxB",
+                "partID": "prt_g0VbMpb9X00DbgLLNC23",
+                "sha256": "7a01aeccaa56a1d732b835713287ed87aa8004cbf6f26a16c196173369cf1187"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041594026:0000000000000030:0000000000000000:message:msg_g0VbMqi7E01QvaHMG4cd"
+      }
+    },
+    {
+      "id": "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041595177
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Explicit chat primary on a standalone session."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "f4b69a39451d79de3da6cca8a316feb6658bc4f7c8a6902d7ddc77ca3d949406"
+          }
+        },
+        "orderKey": "v1:0001795041595177:0000000000000030:0000000000000000:message:msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14"
+      }
+    },
+    {
+      "id": "msg_g0VbMpblv003FrsIYiHE",
+      "sessionID": "ses_-zUOdAOE4zzWUgNJkeHD",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041595177
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Explicit chat primary on a standalone session."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "f4b69a39451d79de3da6cca8a316feb6658bc4f7c8a6902d7ddc77ca3d949406"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpblv00Ygcxkmm9a",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+                "messageID": "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14",
+                "partID": "prt_g0VbMpbFB00lQZvhiHM3",
+                "sha256": "d53ed8a3fcccb1b3dab2cd8f56472854b7801a552f4bb07bb110d59462073a8a"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041595177:0000000000000030:0000000000000000:message:msg_g0VbMpblv003FrsIYiHE"
+      }
+    },
+    {
+      "id": "msg_g0VbMqiDx00MOUKBjNwO",
+      "sessionID": "ses_-zUOd9Hm4zzH0q3kXavG",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041595177
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Explicit chat primary on a standalone session."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "f4b69a39451d79de3da6cca8a316feb6658bc4f7c8a6902d7ddc77ca3d949406"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqiDx00Lbnbk8iNm",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+                "messageID": "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14",
+                "partID": "prt_g0VbMpbFB00lQZvhiHM3",
+                "sha256": "d53ed8a3fcccb1b3dab2cd8f56472854b7801a552f4bb07bb110d59462073a8a"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041595177:0000000000000030:0000000000000000:message:msg_g0VbMqiDx00MOUKBjNwO"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbFj00x5MXpq66z",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041595211,
+          "completed": 1795041596121
+        },
+        "parentID": "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14",
+        "acceptedInputMessageIDs": [
+          "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041595211:0000000000000030:0000000000000000:message:msg_g0VbMpbFj00x5MXpq66z"
+      }
+    },
+    {
+      "id": "msg_g0VbMpblv01z7cHrQqqJ",
+      "sessionID": "ses_-zUOdAOE4zzWUgNJkeHD",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041595211,
+          "completed": 1795041596121
+        },
+        "parentID": "msg_g0VbMpblv003FrsIYiHE",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpblv003FrsIYiHE"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMpblv03kqC49QC2S",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+                "messageID": "msg_g0VbMpbFj00x5MXpq66z",
+                "partID": "prt_g0VbMpbRJ00iPiM7Bbpp",
+                "sha256": "af8518e8e85479567fee777fe883876a2edc176386b9fa650ccf3d6e4dd0d9e2"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041595211:0000000000000030:0000000000000000:message:msg_g0VbMpblv01z7cHrQqqJ"
+      }
+    },
+    {
+      "id": "msg_g0VbMqiDx010BEOgvkTr",
+      "sessionID": "ses_-zUOd9Hm4zzH0q3kXavG",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041595211,
+          "completed": 1795041596121
+        },
+        "parentID": "msg_g0VbMqiDx00MOUKBjNwO",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqiDx00MOUKBjNwO"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqiDx03ldND7lSFc",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+                "messageID": "msg_g0VbMpbFj00x5MXpq66z",
+                "partID": "prt_g0VbMpbRJ00iPiM7Bbpp",
+                "sha256": "af8518e8e85479567fee777fe883876a2edc176386b9fa650ccf3d6e4dd0d9e2"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041595211:0000000000000030:0000000000000000:message:msg_g0VbMqiDx010BEOgvkTr"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbpr000b9dDORqj",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041597458
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue native-coding with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "207b7d3db41c3ea231d4971a7f7ee1a66925582a0cd68f2146a307b525aea75e"
+          }
+        },
+        "orderKey": "v1:0001795041597458:0000000000000030:0000000000000000:message:msg_g0VbMpbpr000b9dDORqj"
+      }
+    },
+    {
+      "id": "msg_g0VbMqht3020JwL0rG0Q",
+      "sessionID": "ses_-zUOd9I6yzzkrqr0pHlN",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041597458
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue native-coding with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "207b7d3db41c3ea231d4971a7f7ee1a66925582a0cd68f2146a307b525aea75e"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqht305xmMf1IrNY",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+                "messageID": "msg_g0VbMpbpr000b9dDORqj",
+                "partID": "prt_g0VbMpbpy00nRh7SJUbx",
+                "sha256": "d0f13e5310b41ea71be7f9677f982ddc3fea9302d49871acf8cf88c3762aca00"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041597458:0000000000000030:0000000000000000:message:msg_g0VbMqht3020JwL0rG0Q"
+      }
+    },
+    {
+      "id": "msg_g0VbMpbqw00DZyNqnonz",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041597518,
+          "completed": 1795041598416
+        },
+        "parentID": "msg_g0VbMpbpr000b9dDORqj",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpbpr000b9dDORqj"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041597518:0000000000000030:0000000000000000:message:msg_g0VbMpbqw00DZyNqnonz"
+      }
+    },
+    {
+      "id": "msg_g0VbMqht303VW22aw26c",
+      "sessionID": "ses_-zUOd9I6yzzkrqr0pHlN",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041597518,
+          "completed": 1795041598416
+        },
+        "parentID": "msg_g0VbMqht3020JwL0rG0Q",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqht3020JwL0rG0Q"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqht308WHEqxakvS",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+                "messageID": "msg_g0VbMpbqw00DZyNqnonz",
+                "partID": "prt_g0VbMpc2600Kz0D1aRj6",
+                "sha256": "38c9f6fde7bab9ca72f0d0000e3ef2cc82309df31493d22e83c4ec2fe2e0b205"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041597518:0000000000000030:0000000000000000:message:msg_g0VbMqht303VW22aw26c"
+      }
+    },
+    {
+      "id": "msg_g0VbMpc6E00p96pMeoJi",
+      "sessionID": "ses_-zUOdAOT5zzNJ0E4P7Kz",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041598477
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "a3d7e0c9da84182e42a6790d18dd637d558322bb86cadd80addf1b670682c76d"
+          }
+        },
+        "orderKey": "v1:0001795041598477:0000000000000030:0000000000000000:message:msg_g0VbMpc6E00p96pMeoJi"
+      }
+    },
+    {
+      "id": "msg_g0VbMpc7300NIY4lNNX1",
+      "sessionID": "ses_-zUOdAOT5zzNJ0E4P7Kz",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041598517,
+          "completed": 1795041600131
+        },
+        "parentID": "msg_g0VbMpc6E00p96pMeoJi",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpc6E00p96pMeoJi"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041598517:0000000000000030:0000000000000000:message:msg_g0VbMpc7300NIY4lNNX1"
+      }
+    },
+    {
+      "id": "msg_g0VbMpcZE00yJ85Vvjnc",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041600273
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue web-chat with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "2e0109bfbd549b77dc438be93904901edb93ae2f9049236ad738c48540789608"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795041600273:0000000000000030:0000000000000000:message:msg_g0VbMpcZE00yJ85Vvjnc"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi0x02CCjL0z10G",
+      "sessionID": "ses_-zUOd9Hz3zzOVboBZJ9O",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041600273
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue web-chat with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "2e0109bfbd549b77dc438be93904901edb93ae2f9049236ad738c48540789608"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi0x05VKGknzeBS",
+            "sources": [
+              {
+                "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+                "messageID": "msg_g0VbMpcZE00yJ85Vvjnc",
+                "partID": "prt_g0VbMpcZN00qQdNTrAH3",
+                "sha256": "3b1600b72f9251a9e0ad4b8ae47406e8280bcd2ab7c016c7c16cf8ed6308f790"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041600273:0000000000000030:0000000000000000:message:msg_g0VbMqi0x02CCjL0z10G"
+      }
+    },
+    {
+      "id": "msg_g0VbMpcaY00TDjZL7KhK",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041600346,
+          "completed": 1795041601155
+        },
+        "parentID": "msg_g0VbMpcZE00yJ85Vvjnc",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpcZE00yJ85Vvjnc"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041600346:0000000000000030:0000000000000000:message:msg_g0VbMpcaY00TDjZL7KhK"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi0x03hJfVlh2qx",
+      "sessionID": "ses_-zUOd9Hz3zzOVboBZJ9O",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041600346,
+          "completed": 1795041601155
+        },
+        "parentID": "msg_g0VbMqi0x02CCjL0z10G",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqi0x02CCjL0z10G"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi0x08ejnZ2lDwt",
+            "sources": [
+              {
+                "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+                "messageID": "msg_g0VbMpcaY00TDjZL7KhK",
+                "partID": "prt_g0VbMpckF00CsIEa26Tv",
+                "sha256": "7032bbf82b9786cb4c78e6e9e1086f4d3f9bd1b320a4a78e8cb55e94cb201feb"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041600346:0000000000000030:0000000000000000:message:msg_g0VbMqi0x03hJfVlh2qx"
+      }
+    },
+    {
+      "id": "msg_g0VbMpcoM00Mu2a6JhOF",
+      "sessionID": "ses_-zUOdAONOzzZpNWR5Qbz",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041601213
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "be7c811a111ad3b87cbefa3df3271219d49456402316219e01dcf85864b67e38"
+          }
+        },
+        "orderKey": "v1:0001795041601213:0000000000000030:0000000000000000:message:msg_g0VbMpcoM00Mu2a6JhOF"
+      }
+    },
+    {
+      "id": "msg_g0VbMpcpO00Nx60XzbNH",
+      "sessionID": "ses_-zUOdAONOzzZpNWR5Qbz",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041601266,
+          "completed": 1795041602857
+        },
+        "parentID": "msg_g0VbMpcoM00Mu2a6JhOF",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpcoM00Mu2a6JhOF"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041601266:0000000000000030:0000000000000000:message:msg_g0VbMpcpO00Nx60XzbNH"
+      }
+    },
+    {
+      "id": "msg_g0VbMpdHT007AmeU098S",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041603015
+        },
+        "agent": "work",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue web-work with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "9a5b123c3b4420b501da887efb1ee4c908e42ccedda4f704a8d717161026435a"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "work"
+        },
+        "orderKey": "v1:0001795041603015:0000000000000030:0000000000000000:message:msg_g0VbMpdHT007AmeU098S"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi7E02oteYA8AzX",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041603015
+        },
+        "agent": "work",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue web-work with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "9a5b123c3b4420b501da887efb1ee4c908e42ccedda4f704a8d717161026435a"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "work"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi7E05G6pq8Drlf",
+            "sources": [
+              {
+                "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+                "messageID": "msg_g0VbMpdHT007AmeU098S",
+                "partID": "prt_g0VbMpdHb00UkNtIdfTZ",
+                "sha256": "b2d1d3d869eb0b5bd5efd32a04f4ecaf68572ab6f8bd53b9ca4d2b8725f859df"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041603015:0000000000000030:0000000000000000:message:msg_g0VbMqi7E02oteYA8AzX"
+      }
+    },
+    {
+      "id": "msg_g0VbMpdIw00S3wt0kUhE",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "info": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1795041603098,
+          "completed": 1795041603933
+        },
+        "parentID": "msg_g0VbMpdHT007AmeU098S",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpdHT007AmeU098S"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041603098:0000000000000030:0000000000000000:message:msg_g0VbMpdIw00S3wt0kUhE"
+      }
+    },
+    {
+      "id": "msg_g0VbMqi7E03gmT2L1K3U",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1795041603098,
+          "completed": 1795041603933
+        },
+        "parentID": "msg_g0VbMqi7E02oteYA8AzX",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqi7E02oteYA8AzX"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqi7E08C1taJ3XyU",
+            "sources": [
+              {
+                "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+                "messageID": "msg_g0VbMpdIw00S3wt0kUhE",
+                "partID": "prt_g0VbMpdTx00i0lVfh44D",
+                "sha256": "076ea8b0a8aadc87f09b79930e34aae16ad5cb395ecde270035d088984e38056"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041603098:0000000000000030:0000000000000000:message:msg_g0VbMqi7E03gmT2L1K3U"
+      }
+    },
+    {
+      "id": "msg_g0VbMpdXF00vxKLV03Di",
+      "sessionID": "ses_-zUOdAOHvzzlchPSWhx1",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041603996
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "18e10f6127f62a5e71bfd73ac8fcce15aab9abbd493fc8255830adf7aa9768fe"
+          }
+        },
+        "orderKey": "v1:0001795041603996:0000000000000030:0000000000000000:message:msg_g0VbMpdXF00vxKLV03Di"
+      }
+    },
+    {
+      "id": "msg_g0VbMpdYA00KsnqTniuD",
+      "sessionID": "ses_-zUOdAOHvzzlchPSWhx1",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041604042,
+          "completed": 1795041605623
+        },
+        "parentID": "msg_g0VbMpdXF00vxKLV03Di",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpdXF00vxKLV03Di"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041604042:0000000000000030:0000000000000000:message:msg_g0VbMpdYA00KsnqTniuD"
+      }
+    },
+    {
+      "id": "msg_g0VbMpdzq002IrAWtcxi",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041605765
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue standalone-chat with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "41123a4add9a8656109a64e7fb851bcae0b7924a82de282c025bc8b0a325b19f"
+          }
+        },
+        "orderKey": "v1:0001795041605765:0000000000000030:0000000000000000:message:msg_g0VbMpdzq002IrAWtcxi"
+      }
+    },
+    {
+      "id": "msg_g0VbMqiDx02QSPGQJNcJ",
+      "sessionID": "ses_-zUOd9Hm4zzH0q3kXavG",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041605765
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue standalone-chat with the restored primary."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "41123a4add9a8656109a64e7fb851bcae0b7924a82de282c025bc8b0a325b19f"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqiDx05SRXoHTfcx",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+                "messageID": "msg_g0VbMpdzq002IrAWtcxi",
+                "partID": "prt_g0VbMpdzx000rrE9OE1s",
+                "sha256": "0ece901b3d4d3f4795b2315230092845a61db99dc435b172ebbabc345a30d1c2"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041605765:0000000000000030:0000000000000000:message:msg_g0VbMqiDx02QSPGQJNcJ"
+      }
+    },
+    {
+      "id": "msg_g0VbMpe0x00keVgYbh78",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041605827,
+          "completed": 1795041606594
+        },
+        "parentID": "msg_g0VbMpdzq002IrAWtcxi",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpdzq002IrAWtcxi"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041605827:0000000000000030:0000000000000000:message:msg_g0VbMpe0x00keVgYbh78"
+      }
+    },
+    {
+      "id": "msg_g0VbMqiDx03Lf41I30En",
+      "sessionID": "ses_-zUOd9Hm4zzH0q3kXavG",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041605827,
+          "completed": 1795041606594
+        },
+        "parentID": "msg_g0VbMqiDx02QSPGQJNcJ",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqiDx02QSPGQJNcJ"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqiDx08N2uYY5Jgu",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+                "messageID": "msg_g0VbMpe0x00keVgYbh78",
+                "partID": "prt_g0VbMpe9r00WVHGS911o",
+                "sha256": "f94f2cd456b9a29ad7d6ba6b0f0a22d92cbb1baaf215ed38d569e1f107be459b"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041605827:0000000000000030:0000000000000000:message:msg_g0VbMqiDx03Lf41I30En"
+      }
+    },
+    {
+      "id": "msg_g0VbMpeEJ00LskX82NhR",
+      "sessionID": "ses_-zUOdAOE4zzWUgNJkeHD",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041606666
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "ede7891c356b516b99a747f31bc16905d1bee1b5a342ec5b065e8afc893ff0da"
+          }
+        },
+        "orderKey": "v1:0001795041606666:0000000000000030:0000000000000000:message:msg_g0VbMpeEJ00LskX82NhR"
+      }
+    },
+    {
+      "id": "msg_g0VbMpeF600Xb5x2i60K",
+      "sessionID": "ses_-zUOdAOE4zzWUgNJkeHD",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041606704,
+          "completed": 1795041608315
+        },
+        "parentID": "msg_g0VbMpeEJ00LskX82NhR",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMpeEJ00LskX82NhR"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041606704:0000000000000030:0000000000000000:message:msg_g0VbMpeF600Xb5x2i60K"
+      }
+    },
+    {
+      "id": "msg_ea6ef2e105e547428d55f9b86462e439",
+      "sessionID": "ses_-zUOd9jyFzzeHgwkXheO",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041752215
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Independent project independent-native control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "243562f9cc5dcd78dd45947e5c6288aa6a0e76ee4882153bb6586901157f516a"
+          }
+        },
+        "orderKey": "v1:0001795041752215:0000000000000030:0000000000000000:message:msg_ea6ef2e105e547428d55f9b86462e439"
+      }
+    },
+    {
+      "id": "msg_g0VbMqGx400P5CPA0GDW",
+      "sessionID": "ses_-zUOd9j2wzzZIbQLop4q",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041752215
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Independent project independent-native control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "243562f9cc5dcd78dd45947e5c6288aa6a0e76ee4882153bb6586901157f516a"
+          }
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqGx4005jF62nXdo",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOd9jyFzzeHgwkXheO",
+                "messageID": "msg_ea6ef2e105e547428d55f9b86462e439",
+                "partID": "prt_g0VbMqG6400epZEtWgcs",
+                "sha256": "6f050035b184e19b3d682ee0c8e33993b1e9c858c4a878ff1c160c050eb444f2"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041752215:0000000000000030:0000000000000000:message:msg_g0VbMqGx400P5CPA0GDW"
+      }
+    },
+    {
+      "id": "msg_78411a0d2eab4aee810ae4f9c8f14cc7",
+      "sessionID": "ses_hfAKq6RYcpPVwTSdQY9I",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041752261
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Independent project independent-chat control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "2dcfb812b4cbea4e6ac6ca1dab389169387800e563e03886b67b386eed58a7d4"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795041752261:0000000000000030:0000000000000000:message:msg_78411a0d2eab4aee810ae4f9c8f14cc7"
+      }
+    },
+    {
+      "id": "msg_g0VbMqGcr00GmHEB5PGJ",
+      "sessionID": "ses_-zUOd9jNAzz2KuvVJtli",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041752261
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Independent project independent-chat control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "2dcfb812b4cbea4e6ac6ca1dab389169387800e563e03886b67b386eed58a7d4"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqGcr00D1lSu72yk",
+            "sources": [
+              {
+                "sessionID": "ses_hfAKq6RYcpPVwTSdQY9I",
+                "messageID": "msg_78411a0d2eab4aee810ae4f9c8f14cc7",
+                "partID": "prt_g0VbMqG6n00rqSlI6HpM",
+                "sha256": "47c3d2c03142d88ad871dabfa60a6534269e486245491c1ebd5899e7caee61e8"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041752261:0000000000000030:0000000000000000:message:msg_g0VbMqGcr00GmHEB5PGJ"
+      }
+    },
+    {
+      "id": "msg_g0VbMqG7W00KbeHGLyKo",
+      "sessionID": "ses_hfAKq6RYcpPVwTSdQY9I",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041752306,
+          "completed": 1795041753952
+        },
+        "parentID": "msg_78411a0d2eab4aee810ae4f9c8f14cc7",
+        "acceptedInputMessageIDs": [
+          "msg_78411a0d2eab4aee810ae4f9c8f14cc7"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041752306:0000000000000030:0000000000000000:message:msg_g0VbMqG7W00KbeHGLyKo"
+      }
+    },
+    {
+      "id": "msg_g0VbMqGcr01tOF0DnoI1",
+      "sessionID": "ses_-zUOd9jNAzz2KuvVJtli",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041752306,
+          "completed": 1795041753952
+        },
+        "parentID": "msg_g0VbMqGcr00GmHEB5PGJ",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqGcr00GmHEB5PGJ"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqGcr03RSus5qT7r",
+            "sources": [
+              {
+                "sessionID": "ses_hfAKq6RYcpPVwTSdQY9I",
+                "messageID": "msg_g0VbMqG7W00KbeHGLyKo",
+                "partID": "prt_g0VbMqGUe00k9IX5cuZZ",
+                "sha256": "aea68fa066e0d0f0e02fa1676aacbbcbbfe3739ea115b7da97bc75e45ac61489"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041752306:0000000000000030:0000000000000000:message:msg_g0VbMqGcr01tOF0DnoI1"
+      }
+    },
+    {
+      "id": "msg_g0VbMqG9r00LIHWLrtOk",
+      "sessionID": "ses_-zUOd9jyFzzeHgwkXheO",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041752451,
+          "completed": 1795041755312
+        },
+        "parentID": "msg_ea6ef2e105e547428d55f9b86462e439",
+        "acceptedInputMessageIDs": [
+          "msg_ea6ef2e105e547428d55f9b86462e439"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041752451:0000000000000030:0000000000000000:message:msg_g0VbMqG9r00LIHWLrtOk"
+      }
+    },
+    {
+      "id": "msg_g0VbMqGx401FEHsrqmM4",
+      "sessionID": "ses_-zUOd9j2wzzZIbQLop4q",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041752451,
+          "completed": 1795041755312
+        },
+        "parentID": "msg_g0VbMqGx400P5CPA0GDW",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqGx400P5CPA0GDW"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\independent-role-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMqGx403PMEYzq4Sm",
+            "sources": [
+              {
+                "sessionID": "ses_-zUOd9jyFzzeHgwkXheO",
+                "messageID": "msg_g0VbMqG9r00LIHWLrtOk",
+                "partID": "prt_g0VbMqGrJ0052R9a3QRK",
+                "sha256": "0d57590194333791a83694eabf2ff304d49dfd56e61e26af4639463dc5bd1efd"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795041752451:0000000000000030:0000000000000000:message:msg_g0VbMqGx401FEHsrqmM4"
+      }
+    },
+    {
+      "id": "msg_g0VbMqiJn00XydjIQbSL",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041860720
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue native-coding after process restart."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "0623fc5ac4d77cec30ea4eed327f45d953f78c089d0cc0cc7bda6809890346cb"
+          }
+        },
+        "orderKey": "v1:0001795041860720:0000000000000030:0000000000000000:message:msg_g0VbMqiJn00XydjIQbSL"
+      }
+    },
+    {
+      "id": "msg_g0VbMqiLB00gc77EIyuu",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041860785,
+          "completed": 1795041862602
+        },
+        "parentID": "msg_g0VbMqiJn00XydjIQbSL",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqiJn00XydjIQbSL"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041860785:0000000000000030:0000000000000000:message:msg_g0VbMqiLB00gc77EIyuu"
+      }
+    },
+    {
+      "id": "msg_g0VbMqipu00Wo179eitS",
+      "sessionID": "ses_-zUOd9I6yzzkrqr0pHlN",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041862699
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "9c6f4016754e35c073be42dd4bf7378d141be0f2fe9957795095bdb20d401980"
+          }
+        },
+        "orderKey": "v1:0001795041862699:0000000000000030:0000000000000000:message:msg_g0VbMqipu00Wo179eitS"
+      }
+    },
+    {
+      "id": "msg_g0VbMqir200KBWYwkWOw",
+      "sessionID": "ses_-zUOd9I6yzzkrqr0pHlN",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041862760,
+          "completed": 1795041864375
+        },
+        "parentID": "msg_g0VbMqipu00Wo179eitS",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqipu00Wo179eitS"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041862760:0000000000000030:0000000000000000:message:msg_g0VbMqir200KBWYwkWOw"
+      }
+    },
+    {
+      "id": "msg_g0VbMqjIj0036SA8HHMx",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041864485
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue web-chat after process restart."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "1c4ba2418a974ae8eec4addeba03116383e05167e8eefed1e63849bceb3642e7"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795041864485:0000000000000030:0000000000000000:message:msg_g0VbMqjIj0036SA8HHMx"
+      }
+    },
+    {
+      "id": "msg_g0VbMqjJZ00VownoEe2G",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041864530,
+          "completed": 1795041865323
+        },
+        "parentID": "msg_g0VbMqjIj0036SA8HHMx",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqjIj0036SA8HHMx"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041864530:0000000000000030:0000000000000000:message:msg_g0VbMqjJZ00VownoEe2G"
+      }
+    },
+    {
+      "id": "msg_g0VbMqjYJ00Mlts4pr0H",
+      "sessionID": "ses_-zUOd9Hz3zzOVboBZJ9O",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041865456
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "31bc25c1f0090f5a0bed8f1b40c18f5f94bce26a2fc04fd0a6b3fa95e5fec19e"
+          }
+        },
+        "orderKey": "v1:0001795041865456:0000000000000030:0000000000000000:message:msg_g0VbMqjYJ00Mlts4pr0H"
+      }
+    },
+    {
+      "id": "msg_g0VbMqjZV00AXRcYld3g",
+      "sessionID": "ses_-zUOd9Hz3zzOVboBZJ9O",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041865517,
+          "completed": 1795041867183
+        },
+        "parentID": "msg_g0VbMqjYJ00Mlts4pr0H",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqjYJ00Mlts4pr0H"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041865517:0000000000000030:0000000000000000:message:msg_g0VbMqjZV00AXRcYld3g"
+      }
+    },
+    {
+      "id": "msg_g0VbMqk2800qCcDx02Au",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041867300
+        },
+        "agent": "work",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue web-work after process restart."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "f73c8a1e44db89965bb36ad74166b64b2313828ea40a70ec7b82d45d1ba144a1"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "work"
+        },
+        "orderKey": "v1:0001795041867300:0000000000000030:0000000000000000:message:msg_g0VbMqk2800qCcDx02Au"
+      }
+    },
+    {
+      "id": "msg_g0VbMqk3E00PY8PNPDHV",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "info": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1795041867360,
+          "completed": 1795041868181
+        },
+        "parentID": "msg_g0VbMqk2800qCcDx02Au",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqk2800qCcDx02Au"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041867360:0000000000000030:0000000000000000:message:msg_g0VbMqk3E00PY8PNPDHV"
+      }
+    },
+    {
+      "id": "msg_g0VbMqkID00WbjjBD82u",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041868297
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "48bef8567c37c04905df665d8d187b9b3e8aa52284a77c014e0711cab9328c9d"
+          }
+        },
+        "orderKey": "v1:0001795041868297:0000000000000030:0000000000000000:message:msg_g0VbMqkID00WbjjBD82u"
+      }
+    },
+    {
+      "id": "msg_g0VbMqkJL00WLZBnw3yI",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041868359,
+          "completed": 1795041869967
+        },
+        "parentID": "msg_g0VbMqkID00WbjjBD82u",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqkID00WbjjBD82u"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041868359:0000000000000030:0000000000000000:message:msg_g0VbMqkJL00WLZBnw3yI"
+      }
+    },
+    {
+      "id": "msg_g0VbMqklB00aYDgsk608",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041870092
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue standalone-chat after process restart."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "35d3c289c4c9a5db97d71c0dab373a4beeef3d1b21bfbb827fc91f839892ee7b"
+          }
+        },
+        "orderKey": "v1:0001795041870092:0000000000000030:0000000000000000:message:msg_g0VbMqklB00aYDgsk608"
+      }
+    },
+    {
+      "id": "msg_g0VbMqklw00RO9P2vpv4",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795041870132,
+          "completed": 1795041870950
+        },
+        "parentID": "msg_g0VbMqklB00aYDgsk608",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMqklB00aYDgsk608"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041870132:0000000000000030:0000000000000000:message:msg_g0VbMqklw00RO9P2vpv4"
+      }
+    },
+    {
+      "id": "msg_g0VbMql1B00FDwgYPt02",
+      "sessionID": "ses_-zUOd9Hm4zzH0q3kXavG",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795041871085
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Continue this actual standalone fork as coding."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "883b90490d39b79a24efd2063cfe9c2a9916fae1dd3633d47d0d11bd18a0e8c7"
+          }
+        },
+        "orderKey": "v1:0001795041871085:0000000000000030:0000000000000000:message:msg_g0VbMql1B00FDwgYPt02"
+      }
+    },
+    {
+      "id": "msg_g0VbMql2000qiQ478D2u",
+      "sessionID": "ses_-zUOd9Hm4zzH0q3kXavG",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795041871128,
+          "completed": 1795041872743
+        },
+        "parentID": "msg_g0VbMql1B00FDwgYPt02",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMql1B00FDwgYPt02"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795041871128:0000000000000030:0000000000000000:message:msg_g0VbMql2000qiQ478D2u"
+      }
+    },
+    {
+      "id": "msg_g0VbMtX8P00NEzE3LDit",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795042532715
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Save a real coding turn before returning to Chat."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "b0530dec28c8660deaff2289c5704220f6c89820cf1938b1eed5a62eba8eee4b"
+          }
+        },
+        "orderKey": "v1:0001795042532715:0000000000000030:0000000000000000:message:msg_g0VbMtX8P00NEzE3LDit"
+      }
+    },
+    {
+      "id": "msg_g0VbMtXAQ00qqCJ44ErD",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795042532818,
+          "completed": 1795042535088
+        },
+        "parentID": "msg_g0VbMtX8P00NEzE3LDit",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMtX8P00NEzE3LDit"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795042532818:0000000000000030:0000000000000000:message:msg_g0VbMtXAQ00qqCJ44ErD"
+      }
+    },
+    {
+      "id": "msg_g0VbMtXng00dbnPLy1fG",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795042535261
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Return to the Chat role retained in this session history."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "5addc63a79374e9bed3c903f14876c376c8d1d6628277a9841c4dbd91d9a3c59"
+          }
+        },
+        "orderKey": "v1:0001795042535261:0000000000000030:0000000000000000:message:msg_g0VbMtXng00dbnPLy1fG"
+      }
+    },
+    {
+      "id": "msg_g0VbMtXpS00AvBMdgPRL",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795042535362,
+          "completed": 1795042536381
+        },
+        "parentID": "msg_g0VbMtXng00dbnPLy1fG",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMtXng00dbnPLy1fG"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795042535362:0000000000000030:0000000000000000:message:msg_g0VbMtXpS00AvBMdgPRL"
+      }
+    },
+    {
+      "id": "msg_g0VbMtY8g00D04WveWzz",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795042536567
+        },
+        "agent": "work",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect restored primary identity. Return this real fork from coding to its historical Work role."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "e23f4854c7f5b1688e3e36be47c147ecc682704638654c06b71f15786992664b"
+          }
+        },
+        "orderKey": "v1:0001795042536567:0000000000000030:0000000000000000:message:msg_g0VbMtY8g00D04WveWzz"
+      }
+    },
+    {
+      "id": "msg_g0VbMtYA500XbEXYp5ei",
+      "sessionID": "ses_-zUOd9HsmzzoquZsabIH",
+      "info": {
+        "author": "work",
+        "role": "assistant",
+        "time": {
+          "created": 1795042536641,
+          "completed": 1795042537615
+        },
+        "parentID": "msg_g0VbMtY8g00D04WveWzz",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMtY8g00D04WveWzz"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "work",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b326\\candidate\\role-replay-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795042536641:0000000000000030:0000000000000000:message:msg_g0VbMtYA500XbEXYp5ei"
+      }
+    }
+  ],
+  "lifecycle": []
+}

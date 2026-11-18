@@ -825,6 +825,85 @@ test("ACP session initialization uses the saved root model through actual stream
   expect(env.requests).toContainEqual({ model: "scoped", stream: true })
 }, 60_000)
 
+for (const experience of ["chat", "work"] as const) {
+  test(`ACP restores the fixed ${experience} identity and the actual standalone fork through streamed turns`, async () => {
+    await using env = await environment()
+    const cwd = env.project.path
+    const created = await env.sdk.coding[experience].session.create({ directory: cwd, model: "acp-terminal/normal" }, { throwOnError: true })
+    const sessionId = created.data.session.id
+    const expectBoundMode = (state: { modes?: { currentModeId: string; availableModes: Array<{ id: string }> } }) => {
+      expect({ current: state.modes?.currentModeId, choices: state.modes?.availableModes.map((mode) => mode.id) })
+        .toEqual({ current: experience, choices: [experience] })
+    }
+    expectBoundMode(await env.client.loadSession({ cwd, sessionId, mcpServers: [] }))
+    expect(await env.client.prompt({ sessionId, prompt: [{ type: "text", text: "Continue this real conversation." }] }))
+      .toMatchObject({ stopReason: "end_turn" })
+    expectBoundMode(await env.client.loadSession({ cwd, sessionId, mcpServers: [] }))
+    expectBoundMode(await env.client.resumeSession({ cwd, sessionId, mcpServers: [] }))
+    const [input, reply] = await env.messages(sessionId)
+    expect(input.info).toMatchObject({ role: "user", agent: experience })
+    expect(reply.info).toMatchObject({ role: "assistant", agent: experience, parentID: input.info.id, finish: "stop" })
+
+    const modeFailure = await env.client.setSessionMode({ sessionId, modeId: "coding" }).catch((error: unknown) => error)
+    expect(modeFailure).toMatchObject({
+      code: -32602,
+      data: { sessionId, modeId: "coding", availableModeIds: [experience] },
+    })
+    const forked = await env.client.unstable_forkSession({ cwd, sessionId, mcpServers: [] })
+    expect({ current: forked.modes?.currentModeId, choices: forked.modes?.availableModes.map((mode) => mode.id) })
+      .toEqual({ current: experience, choices: ["coding", experience] })
+    const forkInfo = await env.sdk.session.get({ directory: cwd, sessionID: forked.sessionId }, { throwOnError: true })
+    expect(forkInfo.data).toMatchObject({ parentID: sessionId, kind: "assistant" })
+    await env.client.setSessionMode({ sessionId: forked.sessionId, modeId: "coding" })
+    expect(await env.client.prompt({ sessionId: forked.sessionId, prompt: [{ type: "text", text: "Continue the independent fork as coding." }] }))
+      .toMatchObject({ stopReason: "end_turn" })
+    const [forkInput, forkReply] = (await env.messages(forked.sessionId)).slice(-2)
+    expect(forkInput.info).toMatchObject({ role: "user", agent: "coding" })
+    expect(forkReply.info).toMatchObject({ role: "assistant", agent: "coding", parentID: forkInput.info.id, finish: "stop" })
+    const resumedFork = await env.client.resumeSession({ cwd, sessionId: forked.sessionId, mcpServers: [] })
+    expect({ current: resumedFork.modes?.currentModeId, choices: resumedFork.modes?.availableModes.map((mode) => mode.id) })
+      .toEqual({ current: "coding", choices: ["coding", experience] })
+    await env.client.setSessionMode({ sessionId: forked.sessionId, modeId: experience })
+    expect(await env.client.prompt({ sessionId: forked.sessionId, prompt: [{ type: "text", text: "Return to the role retained in this fork's real history." }] }))
+      .toMatchObject({ stopReason: "end_turn" })
+    const [returnedInput, returnedReply] = (await env.messages(forked.sessionId)).slice(-2)
+    expect({ input: returnedInput.info, reply: returnedReply.info }).toMatchObject({
+      input: { role: "user", agent: experience },
+      reply: { role: "assistant", agent: experience, parentID: returnedInput.info.id, finish: "stop" },
+    })
+    expectBoundMode(await env.client.loadSession({ cwd, sessionId, mcpServers: [] }))
+    expect(await env.client.prompt({ sessionId, prompt: [{ type: "text", text: "Continue the unchanged original role." }] }))
+      .toMatchObject({ stopReason: "end_turn" })
+    const [continuedInput, continuedReply] = (await env.messages(sessionId)).slice(-2)
+    expect(continuedInput.info).toMatchObject({ agent: experience })
+    expect(continuedReply.info).toMatchObject({ agent: experience, parentID: continuedInput.info.id, finish: "stop" })
+  }, 60_000)
+}
+
+test("ACP restores a publicly selected hidden primary on a standalone session", async () => {
+  await using env = await environment()
+  const cwd = env.project.path
+  const created = await env.client.newSession({ cwd, mcpServers: [] })
+  expect({ current: created.modes?.currentModeId, choices: created.modes?.availableModes.map((mode) => mode.id) })
+    .toEqual({ current: "coding", choices: ["coding"] })
+  const sessionId = created.sessionId
+  const first = await env.sdk.session.prompt({
+    directory: cwd, sessionID: sessionId, messageID: Identifier.ascending("message"), agent: "chat", model: { providerID: "acp-terminal", modelID: "normal" },
+    parts: [{ type: "text", text: "Use the explicitly requested Chat primary." }],
+  }, { throwOnError: true })
+  expect(first.data.info).toMatchObject({ role: "assistant", agent: "chat", finish: "stop" })
+  const loaded = await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
+  expect({ current: loaded.modes?.currentModeId, choices: loaded.modes?.availableModes.map((mode) => mode.id) })
+    .toEqual({ current: "chat", choices: ["coding", "chat"] })
+  await env.client.setSessionMode({ sessionId, modeId: "coding" })
+  await env.client.setSessionMode({ sessionId, modeId: "chat" })
+  expect(await env.client.prompt({ sessionId, prompt: [{ type: "text", text: "Continue with the restored Chat primary." }] }))
+    .toMatchObject({ stopReason: "end_turn" })
+  const [input, reply] = (await env.messages(sessionId)).slice(-2)
+  expect(input.info).toMatchObject({ role: "user", agent: "chat" })
+  expect(reply.info).toMatchObject({ role: "assistant", agent: "chat", parentID: input.info.id, finish: "stop" })
+}, 60_000)
+
 test("ACP session discovery pages tied timestamps and preserves directory scope", async () => {
   await using env = await environment()
   await using other = await memoryProject()

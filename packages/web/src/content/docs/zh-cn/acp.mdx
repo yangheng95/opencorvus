@@ -65,6 +65,13 @@ Zed 按需 spawn `opencorvus acp`，通过 stdin/stdout 通信（`src/acp/README
 | `setSessionConfigOption` | 切换当前模型，支持 variant                |
 | `setSessionMode`           | 切换当前 agent（仅 primary）              |
 
+加载会话会恢复真实保存的主助手身份，包括在通用模式选择器中隐藏的角色。新建独立会话继续使用项目的可见默认角色。
+普通会话在切换模式或保存新轮次后仍可重新选择真实用户历史中已使用的主助手。
+网页 Chat 或 Work 会话在第一条消息之前即声明各自固定模式，编辑器不能将该会话切换为另一主助手。
+普通派生读取实际目标的身份及保留历史，因此独立派生可切换到其目录提供的 coding 模式。
+模式请求必须选择该会话返回的条目；无效选择会报告真实会话、请求模式及可选标识。
+Task、Mission 和 Control 操作继续使用各自已有的专用入口。
+
 ### 对话
 
 | 方法             | 说明                                                                                              |

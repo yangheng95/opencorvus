@@ -1,0 +1,825 @@
+{
+  "batch": 326,
+  "date": "2026-11-19",
+  "focused": {
+    "tests": 51,
+    "assertions": 319,
+    "files": 4
+  },
+  "checks": [
+    "backend typecheck passed after directory continuity and error projection corrections",
+    "353 API operations / 26 groups",
+    "6 route rules / 36 files",
+    "20 architecture documents"
+  ],
+  "roles": [
+    {
+      "phase": "first",
+      "identity": "native-coding",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "emptyMode": null,
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "fixedSelection": null,
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_g0VbMpZwF000ZvRWvkZu",
+          "agent": "coding"
+        },
+        {
+          "id": "msg_g0VbMpbpr000b9dDORqj",
+          "agent": "coding"
+        }
+      ]
+    },
+    {
+      "phase": "first",
+      "identity": "web-chat",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "emptyMode": {
+        "availableModes": [
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "fixedSelection": {
+        "error": {
+          "code": -32602,
+          "message": "Invalid params: Requested primary assistant is not selectable for this session",
+          "data": {
+            "sessionId": "ses_hh2iH87O0xEnvNtbfe62",
+            "modeId": "coding",
+            "availableModeIds": [
+              "chat"
+            ]
+          }
+        }
+      },
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_g0VbMpacI00I3XG7CpQl",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VbMpcZE00yJ85Vvjnc",
+          "agent": "chat"
+        }
+      ]
+    },
+    {
+      "phase": "first",
+      "identity": "web-work",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "emptyMode": {
+        "availableModes": [
+          {
+            "id": "work",
+            "name": "work",
+            "description": "Right-sidebar Work session for longer multi-step research, analysis, and review-ready deliverables."
+          }
+        ],
+        "currentModeId": "work"
+      },
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "work",
+            "name": "work",
+            "description": "Right-sidebar Work session for longer multi-step research, analysis, and review-ready deliverables."
+          }
+        ],
+        "currentModeId": "work"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "work",
+            "name": "work",
+            "description": "Right-sidebar Work session for longer multi-step research, analysis, and review-ready deliverables."
+          }
+        ],
+        "currentModeId": "work"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "work",
+            "name": "work",
+            "description": "Right-sidebar Work session for longer multi-step research, analysis, and review-ready deliverables."
+          }
+        ],
+        "currentModeId": "work"
+      },
+      "fixedSelection": {
+        "error": {
+          "code": -32602,
+          "message": "Invalid params: Requested primary assistant is not selectable for this session",
+          "data": {
+            "sessionId": "ses_hiXNbXbeJdthhSKq2VC9",
+            "modeId": "coding",
+            "availableModeIds": [
+              "work"
+            ]
+          }
+        }
+      },
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_g0VbMpavv00eBIA8ENH3",
+          "agent": "work"
+        },
+        {
+          "id": "msg_g0VbMpdHT007AmeU098S",
+          "agent": "work"
+        }
+      ]
+    },
+    {
+      "phase": "first",
+      "identity": "standalone-chat",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "emptyMode": null,
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "fixedSelection": null,
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VbMpdzq002IrAWtcxi",
+          "agent": "chat"
+        }
+      ]
+    },
+    {
+      "phase": "restart",
+      "identity": "native-coding",
+      "sessionID": "ses_-zUOdAQ6MzzQjWpJtaFI",
+      "emptyMode": null,
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "fixedSelection": null,
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_g0VbMpZwF000ZvRWvkZu",
+          "agent": "coding"
+        },
+        {
+          "id": "msg_g0VbMpbpr000b9dDORqj",
+          "agent": "coding"
+        },
+        {
+          "id": "msg_g0VbMqiJn00XydjIQbSL",
+          "agent": "coding"
+        }
+      ]
+    },
+    {
+      "phase": "restart",
+      "identity": "web-chat",
+      "sessionID": "ses_hh2iH87O0xEnvNtbfe62",
+      "emptyMode": null,
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "fixedSelection": {
+        "error": {
+          "code": -32602,
+          "message": "Invalid params: Requested primary assistant is not selectable for this session",
+          "data": {
+            "sessionId": "ses_hh2iH87O0xEnvNtbfe62",
+            "modeId": "coding",
+            "availableModeIds": [
+              "chat"
+            ]
+          }
+        }
+      },
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_g0VbMpacI00I3XG7CpQl",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VbMpcZE00yJ85Vvjnc",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VbMqjIj0036SA8HHMx",
+          "agent": "chat"
+        }
+      ]
+    },
+    {
+      "phase": "restart",
+      "identity": "web-work",
+      "sessionID": "ses_hiXNbXbeJdthhSKq2VC9",
+      "emptyMode": null,
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "work",
+            "name": "work",
+            "description": "Right-sidebar Work session for longer multi-step research, analysis, and review-ready deliverables."
+          }
+        ],
+        "currentModeId": "work"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "work",
+            "name": "work",
+            "description": "Right-sidebar Work session for longer multi-step research, analysis, and review-ready deliverables."
+          }
+        ],
+        "currentModeId": "work"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "work",
+            "name": "work",
+            "description": "Right-sidebar Work session for longer multi-step research, analysis, and review-ready deliverables."
+          }
+        ],
+        "currentModeId": "work"
+      },
+      "fixedSelection": {
+        "error": {
+          "code": -32602,
+          "message": "Invalid params: Requested primary assistant is not selectable for this session",
+          "data": {
+            "sessionId": "ses_hiXNbXbeJdthhSKq2VC9",
+            "modeId": "coding",
+            "availableModeIds": [
+              "work"
+            ]
+          }
+        }
+      },
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_g0VbMpavv00eBIA8ENH3",
+          "agent": "work"
+        },
+        {
+          "id": "msg_g0VbMpdHT007AmeU098S",
+          "agent": "work"
+        },
+        {
+          "id": "msg_g0VbMqk2800qCcDx02Au",
+          "agent": "work"
+        }
+      ]
+    },
+    {
+      "phase": "restart",
+      "identity": "standalone-chat",
+      "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+      "emptyMode": null,
+      "loadedMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "resumeMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "forkMode": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          },
+          {
+            "id": "chat",
+            "name": "chat",
+            "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+          }
+        ],
+        "currentModeId": "chat"
+      },
+      "fixedSelection": null,
+      "continuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "forkCodingSelection": {
+        "result": {}
+      },
+      "forkContinuation": {
+        "result": {
+          "stopReason": "end_turn",
+          "usage": {
+            "totalTokens": 19,
+            "inputTokens": 11,
+            "outputTokens": 8
+          },
+          "_meta": {}
+        }
+      },
+      "persistedUsers": [
+        {
+          "id": "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VbMpdzq002IrAWtcxi",
+          "agent": "chat"
+        },
+        {
+          "id": "msg_g0VbMqklB00aYDgsk608",
+          "agent": "chat"
+        }
+      ]
+    }
+  ],
+  "modeReselectBefore": {
+    "stage": "before",
+    "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+    "initialModes": {
+      "availableModes": [
+        {
+          "id": "coding",
+          "name": "coding",
+          "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+        },
+        {
+          "id": "chat",
+          "name": "chat",
+          "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+        }
+      ],
+      "currentModeId": "chat"
+    },
+    "coding": {
+      "result": {}
+    },
+    "reselect": {
+      "error": {
+        "code": -32602,
+        "message": "Invalid params: Requested primary assistant is not selectable for this session",
+        "data": {
+          "sessionId": "ses_-zUOdAOm0zzmqoSQne76",
+          "modeId": "chat",
+          "availableModeIds": [
+            "coding"
+          ]
+        }
+      }
+    }
+  },
+  "modeReselectAfter": {
+    "stage": "after",
+    "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+    "initialModes": {
+      "availableModes": [
+        {
+          "id": "coding",
+          "name": "coding",
+          "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+        },
+        {
+          "id": "chat",
+          "name": "chat",
+          "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+        }
+      ],
+      "currentModeId": "chat"
+    },
+    "coding": {
+      "result": {}
+    },
+    "reselect": {
+      "result": {}
+    }
+  },
+  "roundtrip": "Actual coding prompt, resume with historical Chat still selectable, Chat prompt, coding fork reselected Work and completed; fixed web and independent-project modes reloaded",
+  "desktop": [
+    "Final developer service: actual web Chat and Work preserve their role and show later user and completed assistant",
+    "Actual standalone fork opened in the existing dock shows copied context, coding continuation and the subsequent return to historical Work"
+  ],
+  "model": {
+    "requests": 62,
+    "completed": 62,
+    "operations": {
+      "project-memory": 29,
+      "conversation": 31,
+      "title": 2
+    },
+    "allExactLocalStream": true
+  },
+  "ownedShutdown": {
+    "baselineFirstExit": 0,
+    "baselineRestartExit": 0,
+    "baselineSecondaryExit": 0,
+    "candidateFirstExit": 0,
+    "candidateRestartExit": 0,
+    "candidateSecondaryExit": 0,
+    "modeReselectBeforeExit": 0,
+    "modeReselectAfterExit": 0,
+    "candidateRoundtripExit": 0,
+    "modelProcesses": 2,
+    "modelExit": 0,
+    "browser": "closed normally",
+    "ports": {
+      "40148": "closed",
+      "40150": "closed",
+      "40152": "closed"
+    }
+  },
+  "limits": [
+    "Scripted local participant only; no external model or credentials",
+    "Official ACP SDK over actual stdin/stdout and developer HTTP, no claim of native Zed acceptance",
+    "Task/Mission validation covers their real public identity contracts, not a complete external-model domain workflow",
+    "Persisted fork transcripts include copied assistant facts; their count is not a count of live model requests"
+  ]
+}

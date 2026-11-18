@@ -37,6 +37,8 @@ import type { ACPConfig, ACPSessionState } from "./types"
 import { Provider } from "../provider/provider"
 import { Identifier } from "../id/id"
 import { PrimaryAssistantRegistry } from "@/agent/primary-assistant-registry"
+import { AgentRoleContract } from "@/agent/role-contract"
+import { rightSidebarConversationAgentID } from "@/chat/identity"
 import { Installation } from "@/installation"
 import { Message, Todo } from "@/session"
 import { Command } from "@/command"
@@ -59,7 +61,11 @@ import { decodeMcpResourceBlob } from "@/mcp/resource-content"
 import { durablePendingPermissionsForSession } from "@/permission/pending-projection"
 
 type ModeOption = { id: string; name: string; description?: string }
-type AcpPrimarySurface = { availableModes: ModeOption[]; defaultModeID: string }
+type AcpPrimarySurface = { availableModes: ModeOption[]; selectableModeIDs: string[]; defaultModeID: string }
+
+function selectableAcpModes(surface: AcpPrimarySurface, currentModeID: string): ModeOption[] {
+  return surface.availableModes.filter((mode) => mode.id === currentModeID || surface.selectableModeIDs.includes(mode.id))
+}
 type ModelOption = { modelId: string; name: string }
 type AssistantMessage = Extract<VisibleMessage, { role: "assistant" }>
 
@@ -761,11 +767,11 @@ export namespace ACP {
       const previousState = this.sessionManager.snapshot(sessionId)
 
       try {
-        const [model, primarySurface, messages] = await Promise.all([
+        const [model, messages] = await Promise.all([
           defaultModel(this.config, directory, sessionId),
-          this.loadPrimarySurface(directory),
           this.loadSessionHistory(directory, sessionId),
         ])
+        const primarySurface = await this.loadPrimarySurface(directory, sessionId, messages)
         const modeId = resolvePersistedAcpPrimaryMode({ ...primarySurface, messages })
 
         // Store ACP session state
@@ -849,10 +855,7 @@ export namespace ACP {
       let previousState: ACPSessionState | undefined
 
       try {
-        const [model, primarySurface] = await Promise.all([
-          defaultModel(this.config, directory, params.sessionId),
-          this.loadPrimarySurface(directory),
-        ])
+        const model = await defaultModel(this.config, directory, params.sessionId)
 
         const forked = await this.sdk.session
           .fork(
@@ -871,6 +874,7 @@ export namespace ACP {
         sessionId = forked.id
         previousState = this.sessionManager.snapshot(sessionId)
         const messages = await this.loadSessionHistory(directory, sessionId)
+        const primarySurface = await this.loadPrimarySurface(directory, sessionId, messages)
         const modeId = resolvePersistedAcpPrimaryMode({ ...primarySurface, messages })
         await this.sessionManager.load(sessionId, directory, mcpServers, model, modeId)
 
@@ -912,11 +916,11 @@ export namespace ACP {
       const previousState = this.sessionManager.snapshot(sessionId)
 
       try {
-        const [model, primarySurface, messages] = await Promise.all([
+        const [model, messages] = await Promise.all([
           defaultModel(this.config, directory, sessionId),
-          this.loadPrimarySurface(directory),
           this.loadSessionHistory(directory, sessionId),
         ])
+        const primarySurface = await this.loadPrimarySurface(directory, sessionId, messages)
         const modeId = resolvePersistedAcpPrimaryMode({ ...primarySurface, messages })
         await this.sessionManager.load(sessionId, directory, mcpServers, model, modeId)
 
@@ -1276,21 +1280,46 @@ export namespace ACP {
         })
     }
 
-    private async loadPrimarySurface(directory: string): Promise<AcpPrimarySurface> {
+    private async loadPrimarySurface(
+      directory: string,
+      sessionID?: string,
+      messages?: readonly SessionMessageResponse[],
+    ): Promise<AcpPrimarySurface> {
       return Instance.provide({
         directory,
         fn: async () => {
           const config = await Config.get()
           const primaries = await PrimaryAssistantRegistry.list({ config })
-          const availableModes = primaries
-            .filter((primary) => primary.hidden !== true)
+          const session = sessionID
+            ? await this.sdk.session.get({ sessionID, directory }, { throwOnError: false }).then(({ data, error }) => {
+                if (error !== undefined) {
+                  throw RequestError.internalError({ sessionID, error }, "OpenCorvus session identity request failed")
+                }
+                if (!data) throw new Error(`Session ${sessionID} identity response missing`)
+                return data
+              })
+            : undefined
+          let boundModeID: string | undefined = session ? rightSidebarConversationAgentID(session) : undefined
+          if (session && AgentRoleContract.isRoleID(session.kind)) {
+            const role = AgentRoleContract.get(session.kind)
+            if (role.controlSurface === "primary" && role.sessionKind === session.kind) boundModeID = role.id
+          }
+          const scopedPrimaries = boundModeID ? primaries.filter((primary) => primary.name === boundModeID) : primaries
+          const history = sessionID && boundModeID === undefined
+            ? messages ?? await this.loadSessionHistory(directory, sessionID)
+            : []
+          const usedModeIDs = new Set(history.flatMap((message) => message.info.role === "user" ? [message.info.agent] : []))
+          const availableModes = scopedPrimaries
             .map((primary) => ({
               id: primary.name,
               name: primary.name,
               description: primary.description,
             }))
-          const defaultModeID = await PrimaryAssistantRegistry.defaultID({ config })
-          return { availableModes, defaultModeID }
+          const selectableModeIDs = scopedPrimaries
+            .filter((primary) => boundModeID !== undefined || primary.hidden !== true || usedModeIDs.has(primary.name))
+            .map((primary) => primary.name)
+          const defaultModeID = boundModeID ?? await PrimaryAssistantRegistry.defaultID({ config })
+          return { availableModes, selectableModeIDs, defaultModeID }
         },
       })
     }
@@ -1333,7 +1362,7 @@ export namespace ACP {
       }
       const availableModels = buildAvailableModels(entries, { includeVariants: true })
       const modes = {
-        availableModes: input.primarySurface.availableModes,
+        availableModes: selectableAcpModes(input.primarySurface, this.sessionManager.get(sessionId).modeId),
         currentModeId: this.sessionManager.get(sessionId).modeId,
       }
 
@@ -1499,9 +1528,17 @@ export namespace ACP {
 
     async setSessionMode(params: SetSessionModeRequest): Promise<SetSessionModeResponse | void> {
       const session = this.sessionManager.get(params.sessionId)
-      const primarySurface = await this.loadPrimarySurface(session.cwd)
+      const primarySurface = await this.loadPrimarySurface(session.cwd, session.id)
+      const availableModes = selectableAcpModes(primarySurface, session.modeId)
+      if (!availableModes.some((mode) => mode.id === params.modeId)) {
+        throw RequestError.invalidParams({
+          sessionId: session.id,
+          modeId: params.modeId,
+          availableModeIds: availableModes.map((mode) => mode.id),
+        }, "Requested primary assistant is not selectable for this session")
+      }
       const modeId = resolveAcpPrimaryMode({
-        availableModes: primarySurface.availableModes,
+        availableModes,
         currentModeID: params.modeId,
         defaultModeID: primarySurface.defaultModeID,
       })
@@ -1521,7 +1558,7 @@ export namespace ACP {
       if (typeof session.modeId !== "string" || session.modeId.length === 0) {
         throw new Error(`ACP session ${sessionID} has no initialized primary assistant mode`)
       }
-      const primarySurface = await this.loadPrimarySurface(directory)
+      const primarySurface = await this.loadPrimarySurface(directory, sessionID)
       const agent = resolveAcpPrimaryMode({
         availableModes: primarySurface.availableModes,
         currentModeID: session.modeId,

@@ -65,6 +65,14 @@ Advertised (`src/acp/agent.ts`): `loadSession: true`; MCP `http`, `sse`; prompt 
 | `setSessionConfigOption` | Switches model, supports variants                       |
 | `setSessionMode`           | Switches primary agent                                  |
 
+Loading a session restores its exact saved primary agent, including an agent hidden from the general mode picker.
+New standalone sessions keep the project's visible default, and previously used primary agents stay selectable
+when switching modes or saving new turns. A web Chat or Work session declares its own fixed mode even before
+its first message; the editor cannot switch that session to a different primary. A normal fork
+uses the actual fork's identity and retained history, so an independent fork can switch to an offered coding mode.
+Mode requests must use an entry returned for that session; invalid choices report the session, requested mode,
+and available mode IDs. Task, Mission, and Control operations retain their existing dedicated entry points.
+
 ### Prompting
 
 | Method           | Description                                                                                       |

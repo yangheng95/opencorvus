@@ -1,0 +1,35 @@
+{
+  "stage": "before",
+  "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+  "initialModes": {
+    "availableModes": [
+      {
+        "id": "coding",
+        "name": "coding",
+        "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+      },
+      {
+        "id": "chat",
+        "name": "chat",
+        "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+      }
+    ],
+    "currentModeId": "chat"
+  },
+  "coding": {
+    "result": {}
+  },
+  "reselect": {
+    "error": {
+      "code": -32602,
+      "message": "Invalid params: Requested primary assistant is not selectable for this session",
+      "data": {
+        "sessionId": "ses_-zUOdAOm0zzmqoSQne76",
+        "modeId": "chat",
+        "availableModeIds": [
+          "coding"
+        ]
+      }
+    }
+  }
+}

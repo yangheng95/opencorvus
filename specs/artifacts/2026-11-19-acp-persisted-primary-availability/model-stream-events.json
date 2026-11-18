@@ -1,0 +1,1294 @@
+{
+  "summary": {
+    "requests": 62,
+    "completed": 62,
+    "operations": {
+      "project-memory": 29,
+      "conversation": 31,
+      "title": 2
+    },
+    "allExactLocalStream": true
+  },
+  "events": [
+    {
+      "event": "listening",
+      "port": 40152,
+      "pid": 11016
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMmf7K00zC6RBqSh5"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Native coding control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 1,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMmg1l00vIchnd5nS"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web chat conversation."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 5,
+      "baseRevision": 2,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMmgMX00D2443esI9"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web work conversation."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 7,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 7,
+      "baseRevision": 3,
+      "coveredOccurrenceIDs": [
+        "msg_d1c2ec9c816e4315a31c4dfda97be8c2"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 7,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 8,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 8,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 9,
+      "operation": "title",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Independent project independent-native control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 9,
+      "operation": "title"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 10,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 10,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_d7cbd4fe7bbf426ab622383f0bdfc899",
+        "msg_26ce54b9a21142418c5021ea897ba082"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 10,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 11,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Independent project independent-chat control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 11,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 12,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Independent project independent-native control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 12,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 13,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 13,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpZwF000ZvRWvkZu"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 13,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 14,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Native coding control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 14,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 15,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 15,
+      "baseRevision": 1,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpacI00I3XG7CpQl"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 15,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 16,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web chat conversation."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 16,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 17,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 17,
+      "baseRevision": 2,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpavv00eBIA8ENH3"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 17,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 18,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web work conversation."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 18,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 19,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 19,
+      "baseRevision": 3,
+      "coveredOccurrenceIDs": [
+        "msg_ed4da8c7ad8c4a9ba7d5c01d17ad9c14"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 19,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 20,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 20,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 21,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 21,
+      "baseRevision": 4,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpbpr000b9dDORqj"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 21,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 22,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Native coding control.",
+        "Inspect restored primary identity. Continue native-coding with the restored primary."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 22,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 23,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 23,
+      "baseRevision": 5,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpc6E00p96pMeoJi"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 23,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 24,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Native coding control.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 24,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 25,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 25,
+      "baseRevision": 6,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpcZE00yJ85Vvjnc"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 25,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 26,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web chat conversation.",
+        "Inspect restored primary identity. Continue web-chat with the restored primary."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 26,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 27,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 27,
+      "baseRevision": 7,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpcoM00Mu2a6JhOF"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 27,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 28,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web chat conversation.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 28,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 29,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 29,
+      "baseRevision": 8,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpdHT007AmeU098S"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 29,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 30,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web work conversation.",
+        "Inspect restored primary identity. Continue web-work with the restored primary."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 30,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 31,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 31,
+      "baseRevision": 9,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpdXF00vxKLV03Di"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 31,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 32,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web work conversation.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 32,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 33,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 33,
+      "baseRevision": 10,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpdzq002IrAWtcxi"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 33,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 34,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session.",
+        "Inspect restored primary identity. Continue standalone-chat with the restored primary."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 34,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 35,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 35,
+      "baseRevision": 11,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMpeEJ00LskX82NhR"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 35,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 36,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 36,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 37,
+      "operation": "title",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Independent project independent-native control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 37,
+      "operation": "title"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 38,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 38,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_ea6ef2e105e547428d55f9b86462e439",
+        "msg_78411a0d2eab4aee810ae4f9c8f14cc7"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 38,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 39,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Independent project independent-chat control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 39,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 40,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Independent project independent-native control."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 40,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 41,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 41,
+      "baseRevision": 12,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMqiJn00XydjIQbSL"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 41,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 42,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Native coding control.",
+        "Inspect restored primary identity. Continue native-coding with the restored primary.",
+        "Inspect restored primary identity. Continue native-coding after process restart."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 42,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 43,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 43,
+      "baseRevision": 13,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMqipu00Wo179eitS"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 43,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 44,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Native coding control.",
+        "Inspect restored primary identity. Continue native-coding with the restored primary.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 44,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 45,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 45,
+      "baseRevision": 14,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMqjIj0036SA8HHMx"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 45,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 46,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web chat conversation.",
+        "Inspect restored primary identity. Continue web-chat with the restored primary.",
+        "Inspect restored primary identity. Continue web-chat after process restart."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 46,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 47,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 47,
+      "baseRevision": 15,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMqjYJ00Mlts4pr0H"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 47,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 48,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web chat conversation.",
+        "Inspect restored primary identity. Continue web-chat with the restored primary.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 48,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 49,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 49,
+      "baseRevision": 16,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMqk2800qCcDx02Au"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 49,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 50,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web work conversation.",
+        "Inspect restored primary identity. Continue web-work with the restored primary.",
+        "Inspect restored primary identity. Continue web-work after process restart."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 50,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 51,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 51,
+      "baseRevision": 17,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMqkID00WbjjBD82u"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 51,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 52,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web work conversation.",
+        "Inspect restored primary identity. Continue web-work with the restored primary.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 52,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 53,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 53,
+      "baseRevision": 18,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMqklB00aYDgsk608"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 53,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 54,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session.",
+        "Inspect restored primary identity. Continue standalone-chat with the restored primary.",
+        "Inspect restored primary identity. Continue standalone-chat after process restart."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 54,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 55,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 55,
+      "baseRevision": 19,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMql1B00FDwgYPt02"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 55,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 56,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session.",
+        "Inspect restored primary identity. Continue standalone-chat with the restored primary.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 56,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    },
+    {
+      "event": "listening",
+      "port": 40152,
+      "pid": 31832
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 20,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMtX8P00NEzE3LDit"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session.",
+        "Inspect restored primary identity. Continue standalone-chat with the restored primary.",
+        "Inspect restored primary identity. Continue standalone-chat after process restart.",
+        "Inspect restored primary identity. Save a real coding turn before returning to Chat."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 21,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMtXng00dbnPLy1fG"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Explicit chat primary on a standalone session.",
+        "Inspect restored primary identity. Continue standalone-chat with the restored primary.",
+        "Inspect restored primary identity. Continue standalone-chat after process restart.",
+        "Inspect restored primary identity. Save a real coding turn before returning to Chat.",
+        "Inspect restored primary identity. Return to the Chat role retained in this session history."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 5,
+      "baseRevision": 22,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbMtY8g00D04WveWzz"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect restored primary identity. Continue the existing web work conversation.",
+        "Inspect restored primary identity. Continue web-work with the restored primary.",
+        "Inspect restored primary identity. Continue this actual standalone fork as coding.",
+        "Inspect restored primary identity. Return this real fork from coding to its historical Work role."
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    }
+  ]
+}

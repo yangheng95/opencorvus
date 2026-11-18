@@ -1,0 +1,25 @@
+{
+  "stage": "after",
+  "sessionID": "ses_-zUOdAOm0zzmqoSQne76",
+  "initialModes": {
+    "availableModes": [
+      {
+        "id": "coding",
+        "name": "coding",
+        "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+      },
+      {
+        "id": "chat",
+        "name": "chat",
+        "description": "Right-sidebar Chat session. Uses the project conversation panel and executes tools based on configured permissions."
+      }
+    ],
+    "currentModeId": "chat"
+  },
+  "coding": {
+    "result": {}
+  },
+  "reselect": {
+    "result": {}
+  }
+}
