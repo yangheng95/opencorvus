@@ -1,0 +1,205 @@
+{
+  "providerRequest": "0fb4ad89-832c-4579-b217-01ea7502df80",
+  "model": "acp-review/local",
+  "source": {
+    "uri": "file:///editor/binary%20packet.bin",
+    "bytes": 47,
+    "base64": "AP8NCkVtYmVkZGVkIHJlc291cmNlIHN1cHBsaWVkIGJ5IHRoZSBlZGl0b3IuDQo="
+  },
+  "actual": {
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "624283a7-3a38-4d56-92de-c71a3f4fa1fc",
+    "messages": [
+      {
+        "id": "msg_g0VbM16gd00osKPdRTOY",
+        "role": "user",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the embedded resource. Native resource."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbM16iE00Ym46EJp05",
+        "role": "assistant",
+        "parentID": "msg_g0VbM16gd00osKPdRTOY",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": []
+  },
+  "explicit": {
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "5aca721f-9eca-47be-a56b-82f38c7ea062",
+    "messages": [
+      {
+        "id": "msg_g0VbM17Hn00EnHiz98jK",
+        "role": "user",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the embedded resource. Declared type control."
+          },
+          {
+            "type": "file",
+            "filename": "binary packet.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hlULmbhkKxup9Gw3zdjd/d347fda57ff09ea56723b681e4a619c8113c36a002161f7b9a7814e134c3cc9a.bin"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbM17K600R9E2WPG0y",
+        "role": "assistant",
+        "parentID": "msg_g0VbM17Hn00EnHiz98jK",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "binary packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 47,
+        "equalsOriginal": true,
+        "downloadID": "9bc7eecf-5039-4922-a79d-0cef81f40714"
+      }
+    ]
+  },
+  "command": {
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "c822fcd7-0f58-4e79-af87-aead67c320ec",
+    "messages": [
+      {
+        "id": "msg_g0VbM17ny00JRdAl5BVX",
+        "role": "user",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the embedded resource. Registered command."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbM17pb00FoKAXSV83",
+        "role": "assistant",
+        "parentID": "msg_g0VbM17ny00JRdAl5BVX",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": []
+  },
+  "chat": {
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "33cbaaae-dc52-4edf-b1b0-39ee07038fcf",
+    "messages": [
+      {
+        "id": "msg_g0VbM18IA00OC4RaUzmP",
+        "role": "user",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the embedded resource. Visible chat."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbM18Iu00Nb4r8q4Cz",
+        "role": "assistant",
+        "parentID": "msg_g0VbM18IA00OC4RaUzmP",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": []
+  },
+  "replay": [
+    {
+      "messageId": "msg_g0VbM16gd00osKPdRTOY",
+      "content": {
+        "text": "Inspect the embedded resource. Native resource.",
+        "type": "text"
+      }
+    }
+  ],
+  "target": "http://127.0.0.1:40106/ui/?sessionID=ses_hHSf2LvXrqb9n0MKlMRM&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b319%5Cbaseline%5Cembedded-resource-review&experience=chat"
+}
