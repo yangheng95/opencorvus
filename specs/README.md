@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [原件响应遵循已发布媒体](records/2026-11/2026-11-19-attachment-response-media.md)
 - [已发布原件的媒体身份保持不变](records/2026-11/2026-11-19-attachment-published-media-identity.md)
 - [附件预览使用明确的媒体声明](records/2026-11/2026-11-19-file-part-declared-media-type.md)
 - [编辑器零字节资源与历史原件回放](records/2026-11/2026-11-19-acp-zero-byte-resources.md)
