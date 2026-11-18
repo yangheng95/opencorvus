@@ -35,3 +35,17 @@
 4. 启动独立候选开发服务 `40138/ui/`，公开入口创建真实对话及附件；本人查看消息、展开文本、打开图像预览并实际下载。经真实地址栏打开错名 PNG 应内联显示；错名文本按已声明编码显示。SVG/HTML 直接链接实际下载并验证字节。每个目标区域重新截图并逐张查看；正常退出自有服务和窗口，采只读库及流式日志，范围提交、同步上游和普通推送。
 
 基线证据和后续结果集中于[本批原件响应验收](../../artifacts/2026-11-19-attachment-response-media/README.md)。此文先于产品修改落盘并提交。
+
+## 实施与最终验收
+
+实施前规格提交为 `29092d9c4`。已删除完整的后缀反向映射和 `mimeFromName`；同一 `attachmentHeaders` 从已验证回执读取 MIME，以基础类型选择当前明确内联集合/Office 注册表，保留允许媒体的完整参数。其余类型采用下载处置及通用二进制。规范引用、回执、上传、字节、文件名编码和缓存均沿用既有来源，没有另建媒体猜测或兼容实现。
+
+- `packages/opencorvus` 中 `bun test ./test/server/attachment-response-media.test.ts ./test/server/attachment-download.test.ts ./test/server/attachment-upload.test.ts ./test/attachment-media-identity.test.ts ./test/attachment-publication-retention.test.ts`：18 项、159 断言、5 文件全部通过。新增 HTTP 检查逐一实际上传 16 种声明/后缀组合并各读两次，正向验证具体响应及字节。包含 PNG、大小写、两种字符编码、零字节、SVG、带参数 Office、HTML、脚本、自定义媒体、二进制、JSON、PDF 和音视频。Office/PDF/音视频的部分输入只验证传输身份，不声称原生内容可读。
+- 后端 `bun run typecheck` 通过；根 `bun run docs:check` 的 353 操作/26 组、`bun run api:routes-check` 的 6 规则/36 文件、`bun run check:architecture-index` 的 20 文档通过。公共操作结构未变，SDK/OpenAPI 无须重新生成。没有界面源码或翻译改动，使用前批已构建的同一前端，通过真实开发服务 `/ui/` 验收；没有新增或运行 UI 自动化。
+- 候选 `40138` 九种实际公开 SDK 原始上传全部 200。PNG `.dat` 响应 `image/png` 且内联，UTF-8/Latin-1 文本保留原声明，Office `.jpg` 使用真实 Office 媒体并下载；带大小写及参数的 SVG `.png` 和 HTML `.txt` 为下载用通用二进制。通用二进制、JSON、零字节亦有各自明确结果，所有原字节相同。
+- 本人真实展开网页会话 `ses_hBPF9bqpINnGj0pNSqTZ` 的 90 字节中英文文本，原文完整；打开 640×320 PNG 的 100% 预览，图案、原名和控件正确。实际点击正文下载与图像预览下载，分别保存 `original-note.png` 的 90 字节和 `original-picture.dat` 的 11791 字节，与各自原件逐字节一致。
+- 本人经真实地址栏打开 PNG `.dat` 规范链接，浏览器直接内联显示完整原图，与基线触发下载的行为形成实际对照。再打开声明为 Latin-1 的 `.pdf` 文本，浏览器正确显示 `Café original`。直接打开 SVG 和 HTML 原件各触发实际下载，分别为 346 和 72 字节，保留原名及全部原字节。截图逐张实际呈现并人工查看；原生下载面板显示的内部临时标识不是发布文件名，下载对象给出的建议名和最终保存字节另有实际记录。
+- 两个隔离库最终均为 1 会话、2 消息、7 部件、2 文件部件，提示所有权计数 0，实际模型轮次均 `stop`。只读持久库及完整回执可核对，没有直写消息或历史。4 次本机模型请求均为精确 `local` 且 `stream: true`，4 次完成；不冒称外部模型理解或 GPT-6.1 Sol 验收。
+- 两个自有 ACP（Agent Client Protocol，编辑器客户端协议）服务及本机模型均正常退出 0，自有浏览器正常关闭，40136/40138/40140 已关闭。原有 177 项工作区改动保留，交付仅本批范围。
+
+限制仍为实施前已声明的旧响应缓存，以及前端按文件后缀选择 SVG 派生图的独立问题。此批没有恢复旧版已改写的媒体回执，也没有发布新版本。

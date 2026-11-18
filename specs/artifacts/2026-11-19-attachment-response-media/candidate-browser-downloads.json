@@ -1,0 +1,26 @@
+[
+  {
+    "operation": "chat-text-download",
+    "filename": "original-note.png",
+    "bytes": 90,
+    "equalsOriginal": true
+  },
+  {
+    "operation": "preview-picture-download",
+    "filename": "original-picture.dat",
+    "bytes": 11791,
+    "equalsOriginal": true
+  },
+  {
+    "operation": "direct-svg-download",
+    "filename": "vector-original.png",
+    "bytes": 346,
+    "equalsOriginal": true
+  },
+  {
+    "operation": "direct-html-download",
+    "filename": "html-original.txt",
+    "bytes": 72,
+    "equalsOriginal": true
+  }
+]

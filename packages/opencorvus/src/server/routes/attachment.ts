@@ -32,51 +32,39 @@ const DirectoryReference = AttachmentReference.extend({
   path: z.string().min(1),
 })
 
-const MIME_FROM_EXT: Record<string, string> = {
-  png: "image/png",
-  jpg: "image/jpeg",
-  jpeg: "image/jpeg",
-  webp: "image/webp",
-  gif: "image/gif",
-  bmp: "image/bmp",
-  svg: "image/svg+xml",
-  pdf: "application/pdf",
-  txt: "text/plain; charset=utf-8",
-  md: "text/markdown; charset=utf-8",
-  csv: "text/csv; charset=utf-8",
-  json: "application/json; charset=utf-8",
-  mp3: "audio/mpeg",
-  wav: "audio/wav",
-  weba: "audio/webm",
-  oga: "audio/ogg",
-  mp4: "video/mp4",
-  webm: "video/webm",
-  mov: "video/quicktime",
-  bin: "application/octet-stream",
-  docx: WorkArtifactProfileRegistry.require("office.document@1").mimeTypes[0]!,
-  xlsx: WorkArtifactProfileRegistry.require("office.spreadsheet@1").mimeTypes[0]!,
-  pptx: WorkArtifactProfileRegistry.require("office.presentation@1").mimeTypes[0]!,
-}
-
-function mimeFromName(name: string): string {
-  const ext = path.extname(name).replace(/^\./, "").toLowerCase()
-  return MIME_FROM_EXT[ext] ?? "application/octet-stream"
-}
+const INLINE_SOURCE_MIMES = new Set([
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "image/gif",
+  "image/bmp",
+  "application/pdf",
+  "text/plain",
+  "text/markdown",
+  "text/csv",
+  "application/json",
+  "audio/mpeg",
+  "audio/wav",
+  "audio/webm",
+  "audio/ogg",
+  "video/mp4",
+  "video/webm",
+  "video/quicktime",
+])
 
 const OFFICE_SOURCE_MIMES = new Set(WORK_ARTIFACT_PROFILE_IDS.flatMap((id) => WorkArtifactProfileRegistry.require(id).mimeTypes))
 
 function attachmentHeaders(name: string, reference: AttachmentStore.Reference) {
-  const mime = mimeFromName(name)
-  const disposition = OFFICE_SOURCE_MIMES.has(mime) || mime === "image/svg+xml" ? "attachment" : "inline"
+  const mediaType = reference.mime.split(";", 1)[0]!.trim().toLowerCase()
+  const inline = INLINE_SOURCE_MIMES.has(mediaType)
+  const mime = inline || OFFICE_SOURCE_MIMES.has(mediaType) ? reference.mime : "application/octet-stream"
+  const disposition = inline ? "inline" : "attachment"
   const headers: Record<string, string> = {
     "content-type": mime,
     "content-length": String(reference.size),
     "cache-control": "public, max-age=31536000, immutable",
     "x-content-type-options": "nosniff",
     "content-disposition": `${disposition}; filename*=UTF-8''${encodeURIComponent(reference.filename ?? name).replace(/[!'()*]/g, (character) => `%${character.charCodeAt(0).toString(16).toUpperCase()}`)}`,
-  }
-  if (mime === "image/svg+xml") {
-    headers["content-type"] = "application/octet-stream"
   }
   return headers
 }
@@ -108,9 +96,9 @@ async function statFileOrMissing(abs: string) {
 /**
  * GET /attachment/:projectID/:name
  * Serves a content-addressed attachment previously written by AttachmentStore.
- * Content-Type is derived from the stored file extension, except SVG files:
- * those are served as download-only octet-streams because active SVG can run
- * same-origin script when opened as a top-level document.
+ * Content-Type comes from the verified publication receipt. Only the supported
+ * passive media types are inline; Office sources retain their declared type for
+ * download. Other sources, including active SVG, are download-only octet-streams.
  * 404 when the project or file is unknown — no fallback lookups.
  */
 export const AttachmentRoutes = lazy(() =>

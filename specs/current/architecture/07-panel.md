@@ -505,10 +505,13 @@ selects the published file; current disk existence at the old address does not
 select a resource. Original citation paths, semantic IDs and Tool evidence stay
 unchanged. External paths retain their exact absolute-file contract.
 Canonical attachment HTTP responses read the same verified reference and bytes,
-and retain its filename through RFC 5987 UTF-8 Content-Disposition. Office source
+and use that reference's declared MIME, preserving parameters for supported passive
+preview types and Office sources. Filename extensions do not select response media.
+Responses retain the original filename through RFC 5987 UTF-8 Content-Disposition. Office source
 types come from the qualified profile registry and use attachment disposition
 for editable Office sources, including direct links in messages; PDF and other safe preview types
-remain inline, while active SVG remains download-only octet-stream with nosniff.
+remain inline, while types outside the supported inline set and Office registry,
+including active SVG, remain download-only octet-stream with nosniff.
 Canonical SVG image display selects the explicit `image-preview` rendition:
 lossless WebP, at most 4096 by 4096 pixels, without enlargement. It shares
 AttachmentStore's single image-rendition pipeline and namespace cache with the
@@ -523,8 +526,9 @@ includes sharp's own source reading and does not classify the input as corrupt.
 Source stat and derived-cache publication errors retain their ordinary storage
 error contract. Upload continues to preserve raw bytes independently of image
 decodability, and original downloads remain the same verified resource.
-Image preview derives its display URL from the canonical stored filename's
-media extension, matching the original attachment route. FilePart, the image
+Image preview derives its display URL from the stored filename's
+extension; this rendition selection is independent of the verified original's
+HTTP media policy. FilePart, the image
 gallery and the global preview host use that single mapping, including records
 whose optional message MIME is absent. Download reads the authenticated original,
 retiring pending work on close, request replacement or API authority change;

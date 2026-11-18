@@ -1,0 +1,107 @@
+{
+  "summary": {
+    "requests": 4,
+    "completed": 4,
+    "allExactLocalStream": true
+  },
+  "events": [
+    {
+      "event": "listening",
+      "port": 40140,
+      "pid": 7876
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_6f0424ee6d2f4dbfa9b08b4f200ccfe3"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect download media identity. Show the original picture and text using their published media types.\n[model-image-input] Cropped blank margins for original-picture.dat: original 640x320, model input 560x240. Original attachment remains unchanged.\n[Attached text/plain; charset=utf-8: original-note.png (/attachment/prj_h4TGw6jjvqRFaBlKOAIg/79827c99a506737ae2533b6b853443d034a20440fdf0993150498d36371bd56e.png)]"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 9665
+        }
+      ],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_c10a80192b3d407dbeea16a9089f034d"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect download media identity. Show the original picture and text using their published media types.\n[model-image-input] Cropped blank margins for original-picture.dat: original 640x320, model input 560x240. Original attachment remains unchanged.\n[Attached text/plain; charset=utf-8: original-note.png (/attachment/prj_h6eR22f6YUYHjwXUbJwL/79827c99a506737ae2533b6b853443d034a20440fdf0993150498d36371bd56e.png)]"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 9665
+        }
+      ],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    }
+  ]
+}

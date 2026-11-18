@@ -1,0 +1,72 @@
+{
+  "batch": 324,
+  "date": "2026-11-19",
+  "focused": {
+    "tests": 18,
+    "assertions": 159,
+    "files": 5,
+    "responseMatrix": 16
+  },
+  "checks": [
+    "backend typecheck passed",
+    "353 API operations / 26 groups",
+    "6 route rules / 36 files",
+    "20 architecture documents"
+  ],
+  "runtime": "Nine original media declarations uploaded and fetched over the actual developer server; exact bytes and current header policy recorded",
+  "desktop": [
+    "Actual /ui message text expanded; 100% image preview opened",
+    "Text and picture original download",
+    "Address-bar PNG original rendered inline",
+    "Address-bar Latin-1 text displayed Café correctly",
+    "Address-bar SVG and HTML triggered original downloads"
+  ],
+  "downloads": [
+    {
+      "operation": "chat-text-download",
+      "filename": "original-note.png",
+      "bytes": 90,
+      "equalsOriginal": true
+    },
+    {
+      "operation": "preview-picture-download",
+      "filename": "original-picture.dat",
+      "bytes": 11791,
+      "equalsOriginal": true
+    },
+    {
+      "operation": "direct-svg-download",
+      "filename": "vector-original.png",
+      "bytes": 346,
+      "equalsOriginal": true
+    },
+    {
+      "operation": "direct-html-download",
+      "filename": "html-original.txt",
+      "bytes": 72,
+      "equalsOriginal": true
+    }
+  ],
+  "model": {
+    "requests": 4,
+    "completed": 4,
+    "allExactLocalStream": true
+  },
+  "ownedShutdown": {
+    "baselineACPExit": 0,
+    "candidateACPExit": 0,
+    "modelExit": 0,
+    "browser": "closed normally",
+    "ports": {
+      "40136": "closed",
+      "40138": "closed",
+      "40140": "closed"
+    }
+  },
+  "limits": [
+    "Scripted local participant only; no external model or credentials",
+    "Office and PDF/audio/video test payloads verify transport identity, not native decoding",
+    "Previously cached response headers are not retroactively invalidated",
+    "SVG rendition selection by declared MIME is a separate follow-up"
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "counts": {
+    "session": 1,
+    "message": 2,
+    "part": 7,
+    "session_prompt_owner": 0,
+    "event_occurrence": 18
+  },
+  "messages": [
+    {
+      "id": "msg_6f0424ee6d2f4dbfa9b08b4f200ccfe3",
+      "sessionID": "ses_hJHMd8JKFpeZLjjzzCLs",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795038753897
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect download media identity. Show the original picture and text using their published media types."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "f8f775c8d9c09a71e57ba2f41768ba2133d930365266685864984217acb583f4"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795038753897:0000000000000030:0000000000000000:message:msg_6f0424ee6d2f4dbfa9b08b4f200ccfe3"
+      }
+    },
+    {
+      "id": "msg_g0VbMdg7n00f12Rgpxd7",
+      "sessionID": "ses_hJHMd8JKFpeZLjjzzCLs",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795038754003,
+          "completed": 1795038755166
+        },
+        "parentID": "msg_6f0424ee6d2f4dbfa9b08b4f200ccfe3",
+        "acceptedInputMessageIDs": [
+          "msg_6f0424ee6d2f4dbfa9b08b4f200ccfe3"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b324\\baseline\\download-media-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b324\\baseline\\download-media-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795038754003:0000000000000030:0000000000000000:message:msg_g0VbMdg7n00f12Rgpxd7"
+      }
+    }
+  ],
+  "files": [
+    {
+      "id": "prt_g0VbMdg6901K2YwCj6Ru",
+      "messageID": "msg_6f0424ee6d2f4dbfa9b08b4f200ccfe3",
+      "sessionID": "ses_hJHMd8JKFpeZLjjzzCLs",
+      "part": {
+        "type": "file",
+        "mime": "image/png",
+        "filename": "original-picture.dat",
+        "url": "/attachment/prj_h4TGw6jjvqRFaBlKOAIg/c3b483dfa477419a7165655b95c929a5f337dead259aa26b9a6a759ecbea8231.dat"
+      }
+    },
+    {
+      "id": "prt_g0VbMdg6902qTFg3wx6e",
+      "messageID": "msg_6f0424ee6d2f4dbfa9b08b4f200ccfe3",
+      "sessionID": "ses_hJHMd8JKFpeZLjjzzCLs",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=utf-8",
+        "filename": "original-note.png",
+        "url": "/attachment/prj_h4TGw6jjvqRFaBlKOAIg/79827c99a506737ae2533b6b853443d034a20440fdf0993150498d36371bd56e.png"
+      }
+    }
+  ],
+  "lifecycle": []
+}
