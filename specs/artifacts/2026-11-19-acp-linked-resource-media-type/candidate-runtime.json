@@ -1,0 +1,219 @@
+{
+  "providerRequest": "fa4b1b28-ddf7-47f7-9c19-720ade23bcf9",
+  "model": "acp-review/local",
+  "source": {
+    "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b317/candidate/linked-media-review/inspection",
+    "bytes": 100,
+    "declared": {
+      "type": "resource_link",
+      "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b317/candidate/linked-media-review/inspection",
+      "name": "Inspection capture",
+      "mimeType": "image/png"
+    }
+  },
+  "actual": {
+    "id": "ses_-zUOe8KIUzzZSsgSVKGS",
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "5ce654db-ea45-4f91-aadf-d7678a4688e5",
+    "messages": [
+      {
+        "id": "msg_g0VbLrflO00iABfFOFF0",
+        "role": "user",
+        "agent": "coding",
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the linked media. Native link."
+          },
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\Public\\\\opencorvus-review-20261119-b317\\\\candidate\\\\linked-media-review\\\\inspection\"}"
+          },
+          {
+            "type": "file",
+            "filename": "Inspection capture",
+            "mime": "image/png",
+            "url": "/attachment/prj_hvNFFl7OuTkvZvHDIJdY/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbLrfor00IghBNxBtj",
+        "role": "assistant",
+        "agent": "coding",
+        "parentID": "msg_g0VbLrflO00iABfFOFF0",
+        "modelID": "local",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The linked image reached the actual stream."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "Inspection capture",
+        "mime": "image/png",
+        "bytes": 100,
+        "downloadID": "c94d03f6-3998-40cb-86cd-56486b067cc0",
+        "equalsOriginal": true
+      }
+    ]
+  },
+  "image": {
+    "id": "ses_-zUOe8JUIzz192LLmwm0",
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "14a113f9-5b91-41bf-8195-3915aa6037b1",
+    "messages": [
+      {
+        "id": "msg_g0VbLrgWz00WSwwI3D0R",
+        "role": "user",
+        "agent": "coding",
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the linked media. Explicit image control."
+          },
+          {
+            "type": "file",
+            "filename": "inspection",
+            "mime": "image/png",
+            "url": "/attachment/prj_hvNFFl7OuTkvZvHDIJdY/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbLrgah00cTAXkcyYA",
+        "role": "assistant",
+        "agent": "coding",
+        "parentID": "msg_g0VbLrgWz00WSwwI3D0R",
+        "modelID": "local",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The linked image reached the actual stream."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "inspection",
+        "mime": "image/png",
+        "bytes": 100,
+        "downloadID": "b68904b3-704a-43a0-8561-5cde66034c54",
+        "equalsOriginal": true
+      }
+    ]
+  },
+  "chat": {
+    "id": "ses_hKbz4eDkeYZUIJ0e2KnR",
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "b18dbd0f-968b-459c-b203-4ff0f8a535ca",
+    "messages": [
+      {
+        "id": "msg_g0VbLrhDw00zoUA58MMW",
+        "role": "user",
+        "agent": "chat",
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the linked media. Visible chat."
+          },
+          {
+            "type": "text",
+            "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\Public\\\\opencorvus-review-20261119-b317\\\\candidate\\\\linked-media-review\\\\inspection\"}"
+          },
+          {
+            "type": "file",
+            "filename": "Inspection capture",
+            "mime": "image/png",
+            "url": "/attachment/prj_hvNFFl7OuTkvZvHDIJdY/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbLrhEy00ZN7MSHA0R",
+        "role": "assistant",
+        "agent": "chat",
+        "parentID": "msg_g0VbLrhDw00zoUA58MMW",
+        "modelID": "local",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The linked image reached the actual stream."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "Inspection capture",
+        "mime": "image/png",
+        "bytes": 100,
+        "downloadID": "d533c42c-31e4-4f46-b509-8e13cacd04c2",
+        "equalsOriginal": true
+      }
+    ]
+  },
+  "replay": [
+    {
+      "messageId": "msg_g0VbLrflO00iABfFOFF0",
+      "content": {
+        "text": "Inspect the linked media. Native link.",
+        "type": "text"
+      }
+    },
+    {
+      "messageId": "msg_g0VbLrflO00iABfFOFF0",
+      "content": {
+        "text": "Host-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\Public\\\\opencorvus-review-20261119-b317\\\\candidate\\\\linked-media-review\\\\inspection\"}",
+        "type": "text"
+      }
+    },
+    {
+      "messageId": "msg_g0VbLrflO00iABfFOFF0",
+      "content": {
+        "type": "image",
+        "mimeType": "image/png",
+        "bytes": 100,
+        "equalsOriginal": true
+      }
+    }
+  ],
+  "target": "http://127.0.0.1:40098/ui/?sessionID=ses_hKbz4eDkeYZUIJ0e2KnR&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b317%5Ccandidate%5Clinked-media-review&experience=chat"
+}

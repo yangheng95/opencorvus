@@ -18,3 +18,9 @@
 
 - 在既有本地资源链接映射中同时采用客户端的明确名称及可选媒体类型；不提供媒体类型时继续使用当前文本合同。实际物化和附件写入仍复用公共输入路径。
 - 聚焦正向检查普通提示和注册命令传入无扩展名图片，验证明确 MIME、原件字节、输入与助手父级及协议重载。保留无 MIME 的文本链接读取验证。实际网页打开对应对话，查看图片、预览、下载和原文件，逐张复核。核对实际流式请求携带的图像字节，运行相关 ACP、附件和模型图像输入检查、类型、文档和架构索引，完成范围提交及普通推送。
+
+## 实际结果
+
+- 候选原生会话 `ses_-zUOe8KIUzzZSsgSVKGS` 和网页对话 `ses_hKbz4eDkeYZUIJ0e2KnR` 均返回 `end_turn`。公开历史 `5ce654db-ea45-4f91-aadf-d7678a4688e5`、`b18dbd0f-968b-459c-b203-4ff0f8a535ca` 分别保存正确 `image/png` 文件及独立助手终态。原生用户 `msg_g0VbLrflO00iABfFOFF0` 与助手 `msg_g0VbLrfor00IghBNxBtj` 对应，重载图像仍属于同一持久用户消息，字节为原来的 100 字节。
+- 实际本机流式请求收到 `image/png` 和 100 字节图像。公开原件下载 `d533c42c-31e4-4f46-b509-8e13cacd04c2` 与原文件相同。真实网页显示客户端名称 `Inspection capture`、原图和已完成回复。预览、真实下载均完成，浏览器建议名 `Inspection capture.png`，下载逐字节相同。截图已逐张人工复核。
+- `bun test './test/acp-prompt-terminal.test.ts' './test/acp-prompt-response.test.ts' './test/server/attachment-download.test.ts' './test/session-model-image-input.test.ts'` 从 `packages/opencorvus` 通过 42 项和 208 个断言，包含普通提示和注册命令的声明媒体链接以及无 MIME 的文本上下文。后端类型、接口文档和架构索引通过。专用浏览器、协议服务和本机模型已正常退出。[最终截图与运行证据](../../artifacts/2026-11-19-acp-linked-resource-media-type/README.md)

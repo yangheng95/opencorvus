@@ -625,6 +625,44 @@ test("ACP registered commands preserve embedded context and canonical image byte
   expect(replayedUserContent(forkCursor, forked.sessionId)).toMatchObject(userContent(forkedInput.info.id))
 }, 60_000)
 
+for (const entry of ["prompt", "command"] as const) {
+  test(`ACP ${entry} preserves declared media links and plain text context`, async () => {
+    await using env = await environment()
+    const cwd = env.project.path
+    const sessionId = await env.create("normal")
+    const image = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg==",
+      "base64",
+    )
+    const imagePath = path.join(cwd, "inspection")
+    const notesPath = path.join(cwd, "notes.txt")
+    await fs.writeFile(imagePath, image)
+    await fs.writeFile(notesPath, "The original inspection note.\n")
+    expect(await env.client.prompt({ sessionId, prompt: [
+      { type: "text", text: entry === "command" ? "/inspect Review the linked image." : "Review the linked image." },
+      { type: "resource_link", uri: pathToFileURL(imagePath).href, name: "Inspection capture", mimeType: "image/png" },
+      { type: "resource_link", uri: pathToFileURL(notesPath).href, name: "Inspection note" },
+    ] })).toMatchObject({ stopReason: "end_turn" })
+    const [input, reply] = await env.messages(sessionId)
+    expect(reply.info).toMatchObject({ role: "assistant", parentID: input.info.id, finish: "stop" })
+    const file = input.parts.find((part) => part.type === "file" && part.mime === "image/png")!
+    expect(file).toMatchObject({ type: "file", filename: "Inspection capture", mime: "image/png" })
+    expect(input.parts).toContainEqual(expect.objectContaining({ type: "text", text: expect.stringContaining("The original inspection note.") }))
+    const { data: session } = await env.sdk.session.get({ sessionID: sessionId, directory: cwd }, { throwOnError: true })
+    const stored = await AttachmentStore.readVerifiedReference({ projectID: session.projectID, url: file.url, mime: file.mime })
+    expect(stored.bytes).toEqual(image)
+
+    const cursor = env.updates.length
+    await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
+    const images = env.updates.slice(cursor).flatMap(({ update }) =>
+      update.sessionUpdate === "user_message_chunk" && update.content.type === "image" ? [update] : [],
+    )
+    expect(images).toMatchObject([{
+      messageId: input.info.id, content: { type: "image", mimeType: "image/png", data: image.toString("base64") },
+    }])
+  }, 60_000)
+}
+
 test("ACP session initialization uses the saved root model through actual streamed turns", async () => {
   await using env = await environment()
   const cwd = env.project.path

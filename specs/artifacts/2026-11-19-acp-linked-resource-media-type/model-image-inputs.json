@@ -1,0 +1,66 @@
+[
+  {
+    "event": "stream-request",
+    "occurrence": 3,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect the linked media. Explicit image control."
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 100
+      }
+    ]
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 5,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect the linked media. Native link.\nHost-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\Public\\\\opencorvus-review-20261119-b317\\\\candidate\\\\linked-media-review\\\\inspection\"}"
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 100
+      }
+    ]
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 8,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect the linked media. Explicit image control."
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 100
+      }
+    ]
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 10,
+    "operation": "conversation",
+    "model": "local",
+    "stream": true,
+    "observedInputs": [
+      "Inspect the linked media. Visible chat.\nHost-provided file context (not a model tool call): {\"filePath\":\"C:\\\\Users\\\\Public\\\\opencorvus-review-20261119-b317\\\\candidate\\\\linked-media-review\\\\inspection\"}"
+    ],
+    "imageInputs": [
+      {
+        "mime": "image/png",
+        "bytes": 100
+      }
+    ]
+  }
+]

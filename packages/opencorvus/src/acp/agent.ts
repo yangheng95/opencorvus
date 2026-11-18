@@ -1582,9 +1582,9 @@ export namespace ACP {
 
           case "resource_link":
             const parsed = parseUri(part.uri)
-            // Use the name from resource_link if available
-            if (part.name && parsed.type === "file") {
-              parsed.filename = part.name
+            if (parsed.type === "file") {
+              if (part.name) parsed.filename = part.name
+              if (part.mimeType) parsed.mime = part.mimeType
             }
             parts.push(parsed)
 
