@@ -1,0 +1,117 @@
+{
+  "providerRequest": "f622bbe2-397d-427a-b36a-a96e3300f3d4",
+  "model": "acp-review/local",
+  "source": {
+    "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b317/baseline/linked-media-review/inspection",
+    "bytes": 100,
+    "declared": {
+      "type": "resource_link",
+      "uri": "file:///C:/Users/Public/opencorvus-review-20261119-b317/baseline/linked-media-review/inspection",
+      "name": "Inspection capture",
+      "mimeType": "image/png"
+    }
+  },
+  "actual": {
+    "id": "ses_-zUOe9M7wzzGAoxIwJAX",
+    "outcome": {
+      "error": {
+        "code": -32603,
+        "message": "Internal error: OpenCorvus prompt request failed",
+        "data": {
+          "sessionID": "ses_-zUOe9M7wzzGAoxIwJAX",
+          "inputMessageID": "msg_g0VbLqdvH00cTvQq5mBm",
+          "error": {
+            "name": "UnknownError",
+            "data": {
+              "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+            }
+          }
+        }
+      }
+    },
+    "requestID": "0dc1e170-2938-4dbb-bf0c-ce2e8cedaefc",
+    "messages": [],
+    "originals": []
+  },
+  "image": {
+    "id": "ses_-zUOe9M3wzzFj8Xq9uoX",
+    "outcome": {
+      "result": {
+        "stopReason": "end_turn",
+        "usage": {
+          "totalTokens": 19,
+          "inputTokens": 11,
+          "outputTokens": 8
+        },
+        "_meta": {}
+      }
+    },
+    "requestID": "ee5a8306-d8d2-4f74-aaa0-06fef4dee46f",
+    "messages": [
+      {
+        "id": "msg_g0VbLqdx700bZFBRi1on",
+        "role": "user",
+        "agent": "coding",
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect the linked media. Explicit image control."
+          },
+          {
+            "type": "file",
+            "filename": "inspection",
+            "mime": "image/png",
+            "url": "/attachment/prj_hTjvFGYh4shHzzDvtrpR/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbLqe1c00Wx19IhtXU",
+        "role": "assistant",
+        "agent": "coding",
+        "parentID": "msg_g0VbLqdx700bZFBRi1on",
+        "modelID": "local",
+        "finish": "stop",
+        "content": [
+          {
+            "type": "text",
+            "text": "The linked image reached the actual stream."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "inspection",
+        "mime": "image/png",
+        "bytes": 100,
+        "downloadID": "b44a2f0b-019a-4364-a392-6a9a7637ba70",
+        "equalsOriginal": true
+      }
+    ]
+  },
+  "chat": {
+    "id": "ses_hoeGcauGHBoI73CWmAl7",
+    "outcome": {
+      "error": {
+        "code": -32603,
+        "message": "Internal error: OpenCorvus prompt request failed",
+        "data": {
+          "sessionID": "ses_hoeGcauGHBoI73CWmAl7",
+          "inputMessageID": "msg_g0VbLqeYD00M7sD1NbLB",
+          "error": {
+            "name": "UnknownError",
+            "data": {
+              "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+            }
+          }
+        }
+      }
+    },
+    "requestID": "237500a9-1656-48cc-be20-51a84baa7bd5",
+    "messages": [],
+    "originals": []
+  },
+  "replay": [],
+  "target": "http://127.0.0.1:40096/ui/?sessionID=ses_hoeGcauGHBoI73CWmAl7&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b317%5Cbaseline%5Clinked-media-review&experience=chat"
+}

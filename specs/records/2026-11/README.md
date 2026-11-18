@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [编辑器资源链接保留声明的媒体类型](2026-11-19-acp-linked-resource-media-type.md)
 - [编辑器加载使用会话模型作用域](2026-11-19-acp-session-model-scope.md)
 - [编辑器历史使用持久会话分页](2026-11-13-acp-session-history-pagination.md)
 - [编辑器附件保留原文件名](2026-11-13-acp-file-uri-display-name.md)
