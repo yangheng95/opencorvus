@@ -7057,7 +7057,7 @@ export type QuicknoteCreateResponses = {
 export type QuicknoteCreateResponse = QuicknoteCreateResponses[keyof QuicknoteCreateResponses]
 
 export type AttachmentCreateData = {
-  body?: never
+  body: globalThis.Blob | globalThis.File
   path?: never
   query: {
     /**
@@ -7368,7 +7368,7 @@ export type ChannelAttachmentGetResponses = {
   /**
    * Attachment content
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type ChannelAttachmentGetResponse = ChannelAttachmentGetResponses[keyof ChannelAttachmentGetResponses]
@@ -19506,7 +19506,7 @@ export type FileDownloadResponses = {
   /**
    * Original file bytes with the canonical filename in Content-Disposition
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type FileDownloadResponse = FileDownloadResponses[keyof FileDownloadResponses]
@@ -24415,7 +24415,7 @@ export type LogExportResponses = {
   /**
    * Log support bundle ZIP
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type LogExportResponse = LogExportResponses[keyof LogExportResponses]
@@ -26353,7 +26353,7 @@ export type MissionProjectArchiveResponses = {
   /**
    * ZIP archive
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type MissionProjectArchiveResponse = MissionProjectArchiveResponses[keyof MissionProjectArchiveResponses]
@@ -34470,7 +34470,7 @@ export type TaskReadConversationArtifactResponses = {
   /**
    * Exact immutable Artifact bytes. Content-Range, Content-Type, Content-Disposition, and ETag carry the verified chunk metadata.
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type TaskReadConversationArtifactResponse =
@@ -35963,7 +35963,7 @@ export type BrowserPreviewReadTaskEvidenceArtifactResponses = {
   /**
    * Persisted browser preview region comparison PNG artifact
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type BrowserPreviewReadTaskEvidenceArtifactResponse =
@@ -36019,7 +36019,7 @@ export type BrowserPreviewReadTaskEvidenceCaptureResponses = {
   /**
    * Persisted browser preview PNG screenshot
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type BrowserPreviewReadTaskEvidenceCaptureResponse =
@@ -36214,7 +36214,7 @@ export type TaskBuildObservationContentResponses = {
   /**
    * Exact Git blob byte range
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type TaskBuildObservationContentResponse =
@@ -39640,7 +39640,7 @@ export type TaskProjectArchiveResponses = {
   /**
    * ZIP archive
    */
-  200: Blob | File
+  200: globalThis.Blob | globalThis.File
 }
 
 export type TaskProjectArchiveResponse = TaskProjectArchiveResponses[keyof TaskProjectArchiveResponses]

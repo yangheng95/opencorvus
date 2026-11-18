@@ -852,6 +852,7 @@ export class Attachment extends HeyApiClient {
     parameters: {
       directory?: string
       filename: string
+      body: globalThis.Blob | globalThis.File
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -862,14 +863,21 @@ export class Attachment extends HeyApiClient {
           args: [
             { in: "query", key: "directory" },
             { in: "query", key: "filename" },
+            { key: "body", map: "body" },
           ],
         },
       ],
     )
     return (options?.client ?? this.client).post<AttachmentCreateResponses, AttachmentCreateErrors, ThrowOnError>({
+      bodySerializer: null,
       url: "/attachment",
       ...options,
       ...params,
+      headers: {
+        "Content-Type": "application/octet-stream",
+        ...options?.headers,
+        ...params.headers,
+      },
     })
   }
 

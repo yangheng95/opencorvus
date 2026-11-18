@@ -1,0 +1,7 @@
+{"event":"listening","port":40116,"pid":24780}
+{"event":"stream-request","occurrence":1,"operation":"project-memory","model":"local","stream":true,"observedInputs":[],"imageInputs":[],"fileInputs":[]}
+{"event":"organizer-reply","occurrence":1,"baseRevision":0,"coveredOccurrenceIDs":["msg_g0VbMBUPa00rMSlXIzdL"]}
+{"event":"stream-completed","occurrence":1,"operation":"project-memory"}
+{"event":"stream-request","occurrence":2,"operation":"conversation","model":"local","stream":true,"observedInputs":["Inspect the SDK attachments. Preserve the original names and bytes.\n[Attached text/plain: empty note.txt (/attachment/prj_hYzv58yKqYpW6Y4vqfyh/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt)]"],"imageInputs":[{"mime":"image/png","bytes":100}],"fileInputs":[]}
+{"event":"stream-completed","occurrence":2,"operation":"conversation"}
+{"event":"shutdown"}

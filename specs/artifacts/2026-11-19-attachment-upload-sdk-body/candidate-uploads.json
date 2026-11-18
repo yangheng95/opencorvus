@@ -1,0 +1,111 @@
+{
+  "baseUrl": "http://127.0.0.1:40114",
+  "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b320\\candidate\\attachment-upload-review",
+  "outcomes": [
+    {
+      "source": {
+        "filename": "binary packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 31
+      },
+      "sdk": {
+        "status": 200,
+        "requestID": "6671467b-1007-4ca5-b896-c0ea6d41101c",
+        "reference": {
+          "sha": "7bed45d74a5a8ddce381a0ed9bb4e713824d4ae619badbefc910b63f5a197e1a",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/7bed45d74a5a8ddce381a0ed9bb4e713824d4ae619badbefc910b63f5a197e1a.bin",
+          "mime": "application/octet-stream",
+          "size": 31,
+          "filename": "binary packet.bin"
+        },
+        "download": {
+          "status": 200,
+          "bytes": 31,
+          "equalsOriginal": true,
+          "requestID": "06fec973-58f2-4f6b-b356-a708a084e280"
+        }
+      },
+      "control": {
+        "status": 200,
+        "requestID": "1460506e-2d33-4a68-b56a-ddfd43f47e35",
+        "reference": {
+          "sha": "7bed45d74a5a8ddce381a0ed9bb4e713824d4ae619badbefc910b63f5a197e1a",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/7bed45d74a5a8ddce381a0ed9bb4e713824d4ae619badbefc910b63f5a197e1a.bin",
+          "mime": "application/octet-stream",
+          "size": 31,
+          "filename": "binary packet.bin"
+        }
+      }
+    },
+    {
+      "source": {
+        "filename": "empty note.txt",
+        "mime": "text/plain",
+        "bytes": 0
+      },
+      "sdk": {
+        "status": 200,
+        "requestID": "4a71687c-bb25-4403-a52c-81c1a4d6b0bb",
+        "reference": {
+          "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt",
+          "mime": "text/plain",
+          "size": 0,
+          "filename": "empty note.txt"
+        },
+        "download": {
+          "status": 200,
+          "bytes": 0,
+          "equalsOriginal": true,
+          "requestID": "0bc32683-e2c6-4b71-8e58-6c9fec591b6e"
+        }
+      },
+      "control": {
+        "status": 200,
+        "requestID": "72248bfe-d2ec-41a5-a988-c7d1db0f17d3",
+        "reference": {
+          "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt",
+          "mime": "text/plain",
+          "size": 0,
+          "filename": "empty note.txt"
+        }
+      }
+    },
+    {
+      "source": {
+        "filename": "source.png",
+        "mime": "image/png",
+        "bytes": 100
+      },
+      "sdk": {
+        "status": 200,
+        "requestID": "2faf166b-c72d-42e5-b3d1-f0f06cc7c599",
+        "reference": {
+          "sha": "019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+          "mime": "image/png",
+          "size": 100,
+          "filename": "source.png"
+        },
+        "download": {
+          "status": 200,
+          "bytes": 100,
+          "equalsOriginal": true,
+          "requestID": "874f1429-8cdc-4ad6-933e-1863b6aef5d9"
+        }
+      },
+      "control": {
+        "status": 200,
+        "requestID": "12d36980-c5fd-46e9-beed-087675475e49",
+        "reference": {
+          "sha": "019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+          "mime": "image/png",
+          "size": 100,
+          "filename": "source.png"
+        }
+      }
+    }
+  ]
+}

@@ -250,6 +250,12 @@ const generate = async (input: string, output: string) =>
       {
         name: "@hey-api/typescript",
         exportFromIndex: false,
+        "~resolvers": {
+          string(ctx) {
+            if (ctx.schema.format !== "binary") return
+            return ctx.$.type.or(ctx.$.type("globalThis").attr("Blob"), ctx.$.type("globalThis").attr("File"))
+          },
+        },
       },
       {
         name: "@hey-api/sdk",
@@ -270,12 +276,47 @@ const generate = async (input: string, output: string) =>
     ],
   })
 
+// The pinned parameter template mistakes opaque bodies for empty placeholder
+// objects. Only its own unpopulated body can be removed after binding.
+async function preserveGeneratedBodyArguments(output: string) {
+  const file = path.join(output, "core", "params.gen.ts")
+  const source = await fs.readFile(file, "utf8")
+  const cleanup =
+    /const stripEmptySlots = \(params: Params\) => \{\s*for \(const \[slot, value\] of Object\.entries\(params\)\) \{/
+  const initialization = /const map = buildKeyMap\(fields\);?/
+  const invocation = /stripEmptySlots\(params\);?/
+  if (
+    ![cleanup, initialization, invocation].every(
+      (pattern) => [...source.matchAll(new RegExp(pattern, "g"))].length === 1,
+    )
+  ) {
+    throw new Error("SDK parameter template changed; review explicit request body ownership before generating")
+  }
+  await fs.writeFile(
+    file,
+    source
+      .replace(
+        cleanup,
+        `const stripEmptySlots = (params: Params, initialBody: unknown) => {
+  for (const [slot, value] of Object.entries(params)) {
+    if (slot === "body" && value !== initialBody) continue`,
+      )
+      .replace(
+        initialization,
+        `const initialBody = params.body
+  const map = buildKeyMap(fields)`,
+      )
+      .replace(invocation, "stripEmptySlots(params, initialBody)"),
+  )
+}
+
 // The upstream 0.97.3 fetch template drops the asynchronous cancel result.
 // Keep stream teardown owned by its iterator, including a rejected body cancel.
 async function joinGeneratedStreamCancellation(output: string) {
   const file = path.join(output, "core", "serverSentEvents.gen.ts")
   const source = await fs.readFile(file, "utf8")
-  const handler = /const abortHandler = \(\) => \{\s*try \{\s*reader\.cancel\(\);?\s*\} catch \{\s*\/\/ noop\s*\}\s*\};?/
+  const handler =
+    /const abortHandler = \(\) => \{\s*try \{\s*reader\.cancel\(\);?\s*\} catch \{\s*\/\/ noop\s*\}\s*\};?/
   const release = /signal\.removeEventListener\(['"]abort['"], abortHandler\);?\s*reader\.releaseLock\(\);?/
   if (!handler.test(source) || !release.test(source)) {
     throw new Error("SSE generator cancellation contract changed; review stream ownership before generating")
@@ -283,13 +324,19 @@ async function joinGeneratedStreamCancellation(output: string) {
   await fs.writeFile(
     file,
     source
-      .replace(handler, `let cancellation: Promise<void> | undefined
+      .replace(
+        handler,
+        `let cancellation: Promise<void> | undefined
         const abortHandler = () => {
           cancellation ??= reader.cancel().catch(() => {})
-        }`)
-      .replace(release, `signal.removeEventListener("abort", abortHandler)
+        }`,
+      )
+      .replace(
+        release,
+        `signal.removeEventListener("abort", abortHandler)
           await cancellation
-          reader.releaseLock()`),
+          reader.releaseLock()`,
+      ),
   )
 }
 
@@ -332,6 +379,7 @@ await replaceGeneratedArtifactsAfterSuccessfulBuild({
       await writeFileWithRetry(transactionOpenapi, generatedOpenapi)
       await generate(transactionOpenapi, transactionGen)
       await waitForGeneratedClient(transactionGen)
+      await preserveGeneratedBodyArguments(transactionGen)
       await joinGeneratedStreamCancellation(transactionGen)
 
       const prettierBin = await Bun.resolve("prettier/bin/prettier.cjs", dir)

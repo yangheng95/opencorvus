@@ -1109,6 +1109,10 @@ project-scoped `POST /attachment`，composer 只保留返回的
 `/attachment/<projectID>/<name>` canonical reference。后续 Chat、Mission、Task create
 和 Task follow-up 都只传该 reference，不能在 browser store 或 JSON（JavaScript Object
 Notation，JavaScript 对象表示法）请求体中保留 data URL / base64 bytes。
+该操作的 OpenAPI 同时声明原始二进制请求体；生成 SDK 的 `body` 接受明确的 `Blob` 或 `File`，
+以原字节发送，包括零字节文件。默认媒体类型是通用二进制，明确的 `Content-Type` 保留调用者的媒体声明。
+SDK 参数绑定保留调用者明确提供的整个请求体，仅清理其自身未使用的空占位体。
+二进制格式类型引用 `globalThis.Blob` / `globalThis.File`，与同名领域类型分离。
 公开 Session message 在已验证当前 Project 与 Session lineage 后，以该 Session.projectID 绑定内部字节物化 owner；该字段不进入用户请求 schema 或原始输入身份。普通续聊的 canonical attachment、显式 binary 输入及 MCP blob 共用原 AttachmentStore 校验、存储和公开读取，不根据 URL、文件名或全局当前项目猜测归属。
 全局 New Chat / Work 的空 Composer 和取消 picker 不创建 Project / Session 数据（显式模型偏好由既有 Overlay settings 保存）；一旦 picker 返回真实文件或
 目录、发生拖放或粘贴，实际附件就是首个 durable input，由统一 Composer Project resolver

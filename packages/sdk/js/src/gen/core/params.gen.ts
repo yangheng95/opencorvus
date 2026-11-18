@@ -94,8 +94,9 @@ interface Params {
   query: Record<string, unknown>
 }
 
-const stripEmptySlots = (params: Params) => {
+const stripEmptySlots = (params: Params, initialBody: unknown) => {
   for (const [slot, value] of Object.entries(params)) {
+    if (slot === "body" && value !== initialBody) continue
     if (value && typeof value === "object" && !Array.isArray(value) && !Object.keys(value).length) {
       delete params[slot as Slot]
     }
@@ -110,6 +111,7 @@ export const buildClientParams = (args: ReadonlyArray<unknown>, fields: FieldsCo
     query: Object.create(null),
   }
 
+  const initialBody = params.body
   const map = buildKeyMap(fields)
 
   let config: FieldsConfig[number] | undefined
@@ -163,7 +165,7 @@ export const buildClientParams = (args: ReadonlyArray<unknown>, fields: FieldsCo
     }
   }
 
-  stripEmptySlots(params)
+  stripEmptySlots(params, initialBody)
 
   return params
 }

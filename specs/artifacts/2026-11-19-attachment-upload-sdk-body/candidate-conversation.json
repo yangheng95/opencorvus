@@ -1,0 +1,83 @@
+{
+  "config": {
+    "status": 200,
+    "requestID": "bffc9b63-c7b8-4115-acb3-f4bd1482deea",
+    "beforeModel": "acp-review/local",
+    "afterModel": "acp-review/local"
+  },
+  "providerRequest": "aed80b06-5eef-47cd-aa9b-2deccb1ae8cb",
+  "sessionID": "ses_hpAwLcHYS1f9NOMLQky6",
+  "promptRequest": "a2993ef9-c26a-4af5-8152-f1f564d59544",
+  "historyRequest": "6d45f20c-2fcb-4738-bcb8-42e290809320",
+  "target": "http://127.0.0.1:40114/ui/?sessionID=ses_hpAwLcHYS1f9NOMLQky6&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b320%5Ccandidate%5Cattachment-upload-review&experience=chat",
+  "messages": [
+    {
+      "id": "msg_g0VbMBUPa00rMSlXIzdL",
+      "role": "user",
+      "parts": [
+        {
+          "id": "prt_g0VbMBUPw00c7mM977Yy",
+          "sessionID": "ses_hpAwLcHYS1f9NOMLQky6",
+          "messageID": "msg_g0VbMBUPa00rMSlXIzdL",
+          "orderKey": "v1:0001795032035826:0000000000000031:0000000000000000:part:prt_g0VbMBUPw00c7mM977Yy",
+          "type": "text",
+          "text": "Inspect the SDK attachments. Preserve the original names and bytes.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/2ac6a5f85818da5b59a1521805eed937fb39322e4cf46cf0125827a4150f602b.json",
+            "catalog_snapshot_hash": "2ac6a5f85818da5b59a1521805eed937fb39322e4cf46cf0125827a4150f602b"
+          }
+        },
+        {
+          "id": "prt_g0VbMBUPw01NXJOa4ioN",
+          "sessionID": "ses_hpAwLcHYS1f9NOMLQky6",
+          "messageID": "msg_g0VbMBUPa00rMSlXIzdL",
+          "orderKey": "v1:0001795032035828:0000000000000031:0000000000000000:part:prt_g0VbMBUPw01NXJOa4ioN",
+          "type": "file",
+          "mime": "application/octet-stream",
+          "filename": "binary packet.bin",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/7bed45d74a5a8ddce381a0ed9bb4e713824d4ae619badbefc910b63f5a197e1a.bin"
+        },
+        {
+          "id": "prt_g0VbMBUPx00ZLu2p3iN5",
+          "sessionID": "ses_hpAwLcHYS1f9NOMLQky6",
+          "messageID": "msg_g0VbMBUPa00rMSlXIzdL",
+          "orderKey": "v1:0001795032035829:0000000000000031:0000000000000000:part:prt_g0VbMBUPx00ZLu2p3iN5",
+          "type": "file",
+          "mime": "text/plain",
+          "filename": "empty note.txt",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
+        },
+        {
+          "id": "prt_g0VbMBUPx014OxVbxXqZ",
+          "sessionID": "ses_hpAwLcHYS1f9NOMLQky6",
+          "messageID": "msg_g0VbMBUPa00rMSlXIzdL",
+          "orderKey": "v1:0001795032035830:0000000000000031:0000000000000000:part:prt_g0VbMBUPx014OxVbxXqZ",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "source.png",
+          "url": "/attachment/prj_hYzv58yKqYpW6Y4vqfyh/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png"
+        }
+      ]
+    },
+    {
+      "id": "msg_g0VbMBURV00rRRPSmhYi",
+      "role": "assistant",
+      "parentID": "msg_g0VbMBUPa00rMSlXIzdL",
+      "finish": "stop",
+      "parts": [
+        {
+          "id": "prt_g0VbMBUiN00y6LLKs6AH",
+          "sessionID": "ses_hpAwLcHYS1f9NOMLQky6",
+          "messageID": "msg_g0VbMBURV00rRRPSmhYi",
+          "orderKey": "v1:0001795032036959:0000000000000031:0000000000000000:part:prt_g0VbMBUiN00y6LLKs6AH",
+          "type": "text",
+          "text": "The local stream completed.",
+          "time": {
+            "start": 1795032036959,
+            "end": 1795032037125
+          }
+        }
+      ]
+    }
+  ]
+}

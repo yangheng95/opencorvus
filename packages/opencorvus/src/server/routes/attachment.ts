@@ -158,6 +158,12 @@ export const AttachmentRoutes = lazy(() =>
         description:
           "Store raw attachment bytes in the current project's content-addressed attachment store and return the canonical reference.",
         operationId: "attachment.create",
+        requestBody: {
+          required: true,
+          content: {
+            "application/octet-stream": { schema: { type: "string", format: "binary" } },
+          },
+        },
         responses: {
           200: {
             description: "Stored attachment reference",
