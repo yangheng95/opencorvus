@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [附件预览使用明确的媒体声明](records/2026-11/2026-11-19-file-part-declared-media-type.md)
 - [编辑器零字节资源与历史原件回放](records/2026-11/2026-11-19-acp-zero-byte-resources.md)
 - [附件上传的公开 SDK 接收原始文件请求体](records/2026-11/2026-11-19-attachment-upload-sdk-body.md)
 - [编辑器嵌入资源接受可选媒体类型](records/2026-11/2026-11-19-acp-embedded-resource-optional-mime.md)
