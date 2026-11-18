@@ -1,0 +1,88 @@
+[
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\baseline\\published-type-replay",
+    "firstMime": "text/plain",
+    "secondMime": "application/octet-stream",
+    "first": {
+      "status": 200,
+      "requestID": "147c6cef-6efe-4d91-a062-25c7eb8ca446",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hRv5DcSIxBDSSjMAwsjd/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "text/plain",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "repeat": {
+      "status": 200,
+      "requestID": "196d5a75-ac63-43f5-bde1-597b84c0c9de",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hRv5DcSIxBDSSjMAwsjd/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "text/plain",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "conflict": {
+      "status": 200,
+      "requestID": "84ae063e-bc50-4ea1-838e-4f9969c96dd2",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hRv5DcSIxBDSSjMAwsjd/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "application/octet-stream",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "original": {
+      "status": 200,
+      "bytes": 35,
+      "equalsOriginal": true
+    }
+  },
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b323\\baseline\\published-type-independent",
+    "firstMime": "application/octet-stream",
+    "secondMime": "text/plain",
+    "first": {
+      "status": 200,
+      "requestID": "1f972c3d-68be-4c88-92b0-3343d30405e3",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hOhp7RThLObyJT5ZQDGN/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "application/octet-stream",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "repeat": {
+      "status": 200,
+      "requestID": "b4d5623a-d6db-48b0-af85-72697d101100",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hOhp7RThLObyJT5ZQDGN/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "application/octet-stream",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "conflict": {
+      "status": 200,
+      "requestID": "962196c7-3b44-4859-9bbe-de3345017a7a",
+      "data": {
+        "sha": "c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7",
+        "url": "/attachment/prj_hOhp7RThLObyJT5ZQDGN/c31dded21b45a2dea1186bcdf4c6f52558b0a08f2b84d96d6a7dc3f29f131bd7.dat",
+        "mime": "text/plain",
+        "size": 35,
+        "filename": "shared-publication.dat"
+      }
+    },
+    "original": {
+      "status": 200,
+      "bytes": 35,
+      "equalsOriginal": true
+    }
+  }
+]

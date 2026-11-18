@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [已发布附件媒体身份验收](2026-11-19-attachment-published-media-identity/README.md)
 - [附件明确媒体类型的桌面验收](2026-11-19-file-part-declared-media-type/README.md)
 - [ACP 零字节资源验收](2026-11-19-acp-zero-byte-resources/README.md)
 - [SDK 原始附件上传验收](2026-11-19-attachment-upload-sdk-body/README.md)
