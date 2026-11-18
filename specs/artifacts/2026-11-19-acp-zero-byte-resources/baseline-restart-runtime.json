@@ -1,0 +1,219 @@
+{
+  "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+  "resume": {
+    "result": {
+      "sessionId": "ses_-zUOdi0PTzzkK5wnGnhW",
+      "configOptions": [
+        {
+          "id": "model",
+          "name": "Model",
+          "category": "model",
+          "type": "select",
+          "currentValue": "acp-review/local",
+          "options": [
+            {
+              "value": "acp-review/local",
+              "name": "acp-review/Empty resource review"
+            }
+          ]
+        }
+      ],
+      "modes": {
+        "availableModes": [
+          {
+            "id": "coding",
+            "name": "coding",
+            "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+          }
+        ],
+        "currentModeId": "coding"
+      },
+      "_meta": {
+        "opencorvus": {
+          "modelId": "acp-review/local",
+          "variant": null,
+          "availableVariants": []
+        }
+      }
+    },
+    "updates": []
+  },
+  "load": {
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {
+        "details": "ACP replay file URL empty packet.bin: expected non-empty base64 payload"
+      }
+    },
+    "updates": [
+      {
+        "sessionId": "ses_-zUOdi0PTzzkK5wnGnhW",
+        "messageID": "msg_f73b45a2fac94f4bacd0eb8ef0ab2b5f",
+        "content": {
+          "text": "Inspect zero-byte resources. Public canonical files.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "followup": {
+    "result": {
+      "stopReason": "end_turn",
+      "usage": {
+        "totalTokens": 19,
+        "inputTokens": 11,
+        "outputTokens": 8
+      },
+      "_meta": {}
+    },
+    "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+    "requestID": "517234fc-d7a3-4e03-a1af-cc43ef2e1b46",
+    "messages": [
+      {
+        "id": "msg_f73b45a2fac94f4bacd0eb8ef0ab2b5f",
+        "role": "user",
+        "time": {
+          "created": 1795033585785
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Public canonical files."
+          },
+          {
+            "type": "file",
+            "filename": "empty packet.bin",
+            "mime": "application/octet-stream",
+            "url": "/attachment/prj_hRoOe8ybOHMf4RQMliSm/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin"
+          },
+          {
+            "type": "file",
+            "filename": "empty note.txt",
+            "mime": "text/plain",
+            "url": "/attachment/prj_hRoOe8ybOHMf4RQMliSm/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt"
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMHzhN00YAQloY9zU",
+        "role": "assistant",
+        "parentID": "msg_f73b45a2fac94f4bacd0eb8ef0ab2b5f",
+        "finish": "stop",
+        "time": {
+          "created": 1795033586030,
+          "completed": 1795033588038
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMI0Kv00eDjltCJPN",
+        "role": "user",
+        "time": {
+          "created": 1795033588489
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. Following history operations."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMI0NK0046d1fPRvc",
+        "role": "assistant",
+        "parentID": "msg_g0VbMI0Kv00eDjltCJPN",
+        "finish": "stop",
+        "time": {
+          "created": 1795033588630,
+          "completed": 1795033589440
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMIOzh00dsa0ewmBQ",
+        "role": "user",
+        "time": {
+          "created": 1795033683294
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "Inspect zero-byte resources. After process restart."
+          }
+        ]
+      },
+      {
+        "id": "msg_g0VbMIP1l008P5YvD72A",
+        "role": "assistant",
+        "parentID": "msg_g0VbMIOzh00dsa0ewmBQ",
+        "finish": "stop",
+        "time": {
+          "created": 1795033683393,
+          "completed": 1795033685328
+        },
+        "content": [
+          {
+            "type": "text",
+            "text": "The local stream completed."
+          }
+        ]
+      }
+    ],
+    "originals": [
+      {
+        "filename": "empty packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hRoOe8ybOHMf4RQMliSm/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.bin",
+        "downloadID": "a6e6a823-d58f-4bf6-abf2-93253b6726b2"
+      },
+      {
+        "filename": "empty note.txt",
+        "mime": "text/plain",
+        "bytes": 0,
+        "base64": "",
+        "url": "/attachment/prj_hRoOe8ybOHMf4RQMliSm/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt",
+        "downloadID": "34545544-0cfc-4ced-9747-34189b638128"
+      }
+    ]
+  },
+  "fork": {
+    "error": {
+      "code": -32603,
+      "message": "Internal error",
+      "data": {
+        "details": "ACP replay file URL empty packet.bin: expected non-empty base64 payload"
+      }
+    },
+    "updates": [
+      {
+        "sessionId": "ses_-zUOdhaQszziqztF3ZlL",
+        "messageID": "msg_g0VbMIPZ900hJd16ik3F",
+        "content": {
+          "text": "Inspect zero-byte resources. Public canonical files.",
+          "type": "text"
+        }
+      }
+    ]
+  },
+  "status": {
+    "requestID": "5dec06d2-6b78-439b-81fc-b29d3922ee90",
+    "data": {
+      "ses_-zUOdi0PTzzkK5wnGnhW": {
+        "type": "idle"
+      }
+    }
+  }
+}

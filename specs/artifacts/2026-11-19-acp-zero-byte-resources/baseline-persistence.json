@@ -1,0 +1,816 @@
+{
+  "counts": {
+    "session": 7,
+    "message": 22,
+    "part": 62,
+    "session_prompt_owner": 0,
+    "engine_task": 0,
+    "event_occurrence": 208,
+    "event_job_fire": 0
+  },
+  "sessions": [
+    [
+      "ses_-zUOdi2w5zzTiiqKKZWi",
+      "prj_hRoOe8ybOHMf4RQMliSm",
+      "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+    ],
+    [
+      "ses_-zUOdi2CWzzIDGXbDQ3G",
+      "prj_hRoOe8ybOHMf4RQMliSm",
+      "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+    ],
+    [
+      "ses_-zUOdi1P4zz67YbbpfEO",
+      "prj_hRoOe8ybOHMf4RQMliSm",
+      "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+    ],
+    [
+      "ses_hZqCzLUaPShAjG3MEzEg",
+      "prj_hRoOe8ybOHMf4RQMliSm",
+      "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+    ],
+    [
+      "ses_-zUOdi0PTzzkK5wnGnhW",
+      "prj_hRoOe8ybOHMf4RQMliSm",
+      "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+    ],
+    [
+      "ses_-zUOdh9xazzUCbrKVzq0",
+      "prj_hRoOe8ybOHMf4RQMliSm",
+      "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+    ],
+    [
+      "ses_-zUOdh9lSzzw8IIqUi20",
+      "prj_hMOfsTc9Wg8XjvpUQR8W",
+      "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\independent-project"
+    ]
+  ],
+  "messages": [
+    {
+      "id": "msg_g0VbMHx5m00WrWxfbuZq",
+      "sessionID": "ses_-zUOdi2w5zzTiiqKKZWi",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033576034
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Native embedded empty content."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "f64ca9b0a01f1845cb9c522e971384d6da20b96488f1e35f56f4706042dd05d8"
+          }
+        },
+        "orderKey": "v1:0001795033576034:0000000000000030:0000000000000000:message:msg_g0VbMHx5m00WrWxfbuZq"
+      }
+    },
+    {
+      "id": "msg_g0VbMHxAM00UvukIObvk",
+      "sessionID": "ses_-zUOdi2w5zzTiiqKKZWi",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033576294,
+          "completed": 1795033578554
+        },
+        "parentID": "msg_g0VbMHx5m00WrWxfbuZq",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMHx5m00WrWxfbuZq"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033576294:0000000000000030:0000000000000000:message:msg_g0VbMHxAM00UvukIObvk"
+      }
+    },
+    {
+      "id": "msg_g0VbMHxos008LyJlw95R",
+      "sessionID": "ses_-zUOdi2CWzzIDGXbDQ3G",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033578823
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.command",
+            "literalText": "/inspect Inspect zero-byte resources. Registered command."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "49e78e984828f69796d858256ab74580c70d97dc3275d84255a23d15d1230f03"
+          }
+        },
+        "orderKey": "v1:0001795033578823:0000000000000030:0000000000000000:message:msg_g0VbMHxos008LyJlw95R"
+      }
+    },
+    {
+      "id": "msg_g0VbMHxr500B0E08NX9X",
+      "sessionID": "ses_-zUOdi2CWzzIDGXbDQ3G",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033578943,
+          "completed": 1795033581501
+        },
+        "parentID": "msg_g0VbMHxos008LyJlw95R",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMHxos008LyJlw95R"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033578943:0000000000000030:0000000000000000:message:msg_g0VbMHxr500B0E08NX9X"
+      }
+    },
+    {
+      "id": "msg_g0VbMHycX00xnaymx2YD",
+      "sessionID": "ses_-zUOdi1P4zz67YbbpfEO",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033581906
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Nonempty binary control."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "ed9fb29cf55356d5a0cd8f080bee9b77b0ad273dafa84b76a2393939662d2e3b"
+          }
+        },
+        "orderKey": "v1:0001795033581906:0000000000000030:0000000000000000:message:msg_g0VbMHycX00xnaymx2YD"
+      }
+    },
+    {
+      "id": "msg_g0VbMHyes00hDMQI595v",
+      "sessionID": "ses_-zUOdi1P4zz67YbbpfEO",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033582030,
+          "completed": 1795033583723
+        },
+        "parentID": "msg_g0VbMHycX00xnaymx2YD",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMHycX00xnaymx2YD"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033582030:0000000000000030:0000000000000000:message:msg_g0VbMHyes00hDMQI595v"
+      }
+    },
+    {
+      "id": "msg_g0VbMHzBH00xNUsZz258",
+      "sessionID": "ses_hZqCzLUaPShAjG3MEzEg",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033584050
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Visible editor attachments."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "676bbdc04834a3f7b73c676feb794a561a97a2769d7ee964ee9998cbd0ff4569"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795033584050:0000000000000030:0000000000000000:message:msg_g0VbMHzBH00xNUsZz258"
+      }
+    },
+    {
+      "id": "msg_g0VbMHzCa008xBRsVPkN",
+      "sessionID": "ses_hZqCzLUaPShAjG3MEzEg",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795033584120,
+          "completed": 1795033585432
+        },
+        "parentID": "msg_g0VbMHzBH00xNUsZz258",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMHzBH00xNUsZz258"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033584120:0000000000000030:0000000000000000:message:msg_g0VbMHzCa008xBRsVPkN"
+      }
+    },
+    {
+      "id": "msg_f73b45a2fac94f4bacd0eb8ef0ab2b5f",
+      "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033585785
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Public canonical files."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "622d374f67eb52691e4750a7f810806930465cc8395765cdc2ce07ba836f7c13"
+          }
+        },
+        "orderKey": "v1:0001795033585785:0000000000000030:0000000000000000:message:msg_f73b45a2fac94f4bacd0eb8ef0ab2b5f"
+      }
+    },
+    {
+      "id": "msg_g0VbMHzhN00YAQloY9zU",
+      "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033586030,
+          "completed": 1795033588038
+        },
+        "parentID": "msg_f73b45a2fac94f4bacd0eb8ef0ab2b5f",
+        "acceptedInputMessageIDs": [
+          "msg_f73b45a2fac94f4bacd0eb8ef0ab2b5f"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033586030:0000000000000030:0000000000000000:message:msg_g0VbMHzhN00YAQloY9zU"
+      }
+    },
+    {
+      "id": "msg_g0VbMI0Kv00eDjltCJPN",
+      "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033588489
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Following history operations."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "034947db184e53aa719b4e7ae47afc5af75e784bb818cca20ea83cbb2ab26298"
+          }
+        },
+        "orderKey": "v1:0001795033588489:0000000000000030:0000000000000000:message:msg_g0VbMI0Kv00eDjltCJPN"
+      }
+    },
+    {
+      "id": "msg_g0VbMI0NK0046d1fPRvc",
+      "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033588630,
+          "completed": 1795033589440
+        },
+        "parentID": "msg_g0VbMI0Kv00eDjltCJPN",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMI0Kv00eDjltCJPN"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033588630:0000000000000030:0000000000000000:message:msg_g0VbMI0NK0046d1fPRvc"
+      }
+    },
+    {
+      "id": "msg_g0VbMIOzh00dsa0ewmBQ",
+      "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033683294
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. After process restart."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "3854ed9e76d96637ffb9a29f510a8a10482ead9057c38748c6be04f942efbc00"
+          }
+        },
+        "orderKey": "v1:0001795033683294:0000000000000030:0000000000000000:message:msg_g0VbMIOzh00dsa0ewmBQ"
+      }
+    },
+    {
+      "id": "msg_g0VbMIP1l008P5YvD72A",
+      "sessionID": "ses_-zUOdi0PTzzkK5wnGnhW",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033683393,
+          "completed": 1795033685328
+        },
+        "parentID": "msg_g0VbMIOzh00dsa0ewmBQ",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMIOzh00dsa0ewmBQ"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033683393:0000000000000030:0000000000000000:message:msg_g0VbMIP1l008P5YvD72A"
+      }
+    },
+    {
+      "id": "msg_ece64264a2204f04adf359ae00a2dbb8",
+      "sessionID": "ses_-zUOdh9xazzUCbrKVzq0",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033787305
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Parallel project empty-resource-review round 0"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "13da7fcfa94f854a0cea04377ce0bcc92a4c7aaa73e60d660d42719f93d83b71"
+          }
+        },
+        "orderKey": "v1:0001795033787305:0000000000000030:0000000000000000:message:msg_ece64264a2204f04adf359ae00a2dbb8"
+      }
+    },
+    {
+      "id": "msg_g0VbMIq5f00rKkhRhwCm",
+      "sessionID": "ses_-zUOdh9xazzUCbrKVzq0",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033787423,
+          "completed": 1795033789287
+        },
+        "parentID": "msg_ece64264a2204f04adf359ae00a2dbb8",
+        "acceptedInputMessageIDs": [
+          "msg_ece64264a2204f04adf359ae00a2dbb8"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033787423:0000000000000030:0000000000000000:message:msg_g0VbMIq5f00rKkhRhwCm"
+      }
+    },
+    {
+      "id": "msg_30a1e4048152424e9e8d4a34446c98c6",
+      "sessionID": "ses_-zUOdh9lSzzw8IIqUi20",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033788072
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Parallel project independent-project round 0"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "eaff7dd1aa6e14f8e949622e66bb1b81ca7d6423474ee93007d343de6a4c452f"
+          }
+        },
+        "orderKey": "v1:0001795033788072:0000000000000030:0000000000000000:message:msg_30a1e4048152424e9e8d4a34446c98c6"
+      }
+    },
+    {
+      "id": "msg_g0VbMIqJ500Akmr1ovfG",
+      "sessionID": "ses_-zUOdh9lSzzw8IIqUi20",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033788255,
+          "completed": 1795033790688
+        },
+        "parentID": "msg_30a1e4048152424e9e8d4a34446c98c6",
+        "acceptedInputMessageIDs": [
+          "msg_30a1e4048152424e9e8d4a34446c98c6"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\independent-project",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\independent-project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033788255:0000000000000030:0000000000000000:message:msg_g0VbMIqJ500Akmr1ovfG"
+      }
+    },
+    {
+      "id": "msg_2c6ddca11f65442d90c0fecd13d2f07c",
+      "sessionID": "ses_-zUOdh9xazzUCbrKVzq0",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033789392
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Parallel project empty-resource-review round 1"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "c0abed071e154bd270e006687631ad8bcc441fbe3a586371560307e884de7159"
+          }
+        },
+        "orderKey": "v1:0001795033789392:0000000000000030:0000000000000000:message:msg_2c6ddca11f65442d90c0fecd13d2f07c"
+      }
+    },
+    {
+      "id": "msg_g0VbMIqdN002X7Odu2y4",
+      "sessionID": "ses_-zUOdh9xazzUCbrKVzq0",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033789513,
+          "completed": 1795033790641
+        },
+        "parentID": "msg_2c6ddca11f65442d90c0fecd13d2f07c",
+        "acceptedInputMessageIDs": [
+          "msg_2c6ddca11f65442d90c0fecd13d2f07c"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\empty-resource-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033789513:0000000000000030:0000000000000000:message:msg_g0VbMIqdN002X7Odu2y4"
+      }
+    },
+    {
+      "id": "msg_6996a546cd15403dad3c5cf18c3292b8",
+      "sessionID": "ses_-zUOdh9lSzzw8IIqUi20",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795033790811
+        },
+        "agent": "coding",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect zero-byte resources. Parallel project independent-project round 1"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "0941da487b3d2e8cce9cff6b30be8321869b18582342ec9e16962250ef1b5960"
+          }
+        },
+        "orderKey": "v1:0001795033790811:0000000000000030:0000000000000000:message:msg_6996a546cd15403dad3c5cf18c3292b8"
+      }
+    },
+    {
+      "id": "msg_g0VbMIr0G00didKXWJKm",
+      "sessionID": "ses_-zUOdh9lSzzw8IIqUi20",
+      "info": {
+        "author": "coding",
+        "role": "assistant",
+        "time": {
+          "created": 1795033790932,
+          "completed": 1795033791723
+        },
+        "parentID": "msg_6996a546cd15403dad3c5cf18c3292b8",
+        "acceptedInputMessageIDs": [
+          "msg_6996a546cd15403dad3c5cf18c3292b8"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "coding",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\independent-project",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b321\\baseline\\independent-project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795033790932:0000000000000030:0000000000000000:message:msg_g0VbMIr0G00didKXWJKm"
+      }
+    }
+  ]
+}
