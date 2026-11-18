@@ -22,7 +22,7 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
   })
   const text = () => isDecodableText(props.attachment.mime, props.attachment.filename)
   const textRead = createResourceTextRead(() => open() && current() && text()
-    ? { url: props.attachment.url, authority: context()?.authority }
+    ? { url: props.attachment.url, mime: props.attachment.mime, authority: context()?.authority }
     : undefined)
 
   return (

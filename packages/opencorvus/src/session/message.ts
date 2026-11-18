@@ -945,7 +945,7 @@ export namespace Message {
   const attachmentDigest = (bytes: Buffer) => createHash("sha256").update(bytes).digest("hex")
 
   const inlineAttachmentMime = (url: string, attachment: ToolResultAttachment): string => {
-    const match = /^data:([^;,]+)(?:;[^;,]+)*;base64,/i.exec(url)
+    const match = /^data:([^;,]+(?:;[^;,]+)*);base64,/i.exec(url)
     if (!match) {
       throw new Error(
         `Tool-result attachment ${attachment.filename ?? attachment.mime} must use a valid base64 data URL or canonical AttachmentStore URL`,
@@ -1078,7 +1078,7 @@ export namespace Message {
       .map((attachment) =>
         [
           `[Tool-result text attachment: ${attachment.filename ?? attachment.safeReference}; mime=${attachment.mime}; ref=${attachment.safeReference}; sha256=${attachment.sha256}; bytes=${attachment.byteLength}]`,
-          decodeTextBytes(attachment.bytes),
+          decodeTextBytes(attachment.bytes, attachment.mime),
         ].join("\n"),
       )
       .join("\n\n")

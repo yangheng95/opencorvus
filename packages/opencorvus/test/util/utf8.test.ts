@@ -37,3 +37,11 @@ test("flushes the real malformed EOF while a partial prefix retains its complete
   const innerInvalid = new Uint8Array([0x41, 0xff, 0x42, 0xe6, 0x96, 0x87])
   expect([decodeUtf8Prefix(innerInvalid, 5), decodeUtf8Prefix(innerInvalid, 6)]).toEqual(["A�B", "A�B文"])
 })
+
+test("projects complete declared-encoding prefixes with the existing attachment budget notice", () => {
+  const gbBytes = Buffer.concat([Buffer.from("A"), Buffer.from(Array.from({ length: 100001 }, () => [0xd6, 0xd0]).flat())])
+  const utf16Bytes = Buffer.from("A" + "😀".repeat(50001), "utf16le")
+  const notice = "\n\n[... truncated — file exceeds 195.3125KB limit ...]"
+  expect(decodeTextBytes(gbBytes, "text/plain; charset=gb18030")).toBe("A" + "中".repeat(99999) + notice)
+  expect(decodeTextBytes(utf16Bytes, "text/plain; charset=utf-16le")).toBe("A" + "😀".repeat(49999) + notice)
+})

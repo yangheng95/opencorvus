@@ -1,5 +1,5 @@
 import { Show, createResource } from "solid-js"
-import { decodeUnicodeText, TextDecodingError } from "@opencorvus-ai/util/text-decoding"
+import { decodeText, TextDecodingError } from "@opencorvus-ai/util/text-decoding"
 import {
   assertApiAuthorityCurrent,
   captureApiAuthority,
@@ -13,7 +13,7 @@ import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 import { DownloadLink } from "./OriginalFileDownload"
 
-type TextSource = { url: string; authority?: ApiAuthority }
+type TextSource = { url: string; mime: string; authority?: ApiAuthority }
 type TextContent = { href: string; value: string | TextDecodingError; focusOrigin?: HTMLButtonElement }
 
 async function loadText(source: TextSource): Promise<TextContent> {
@@ -23,7 +23,7 @@ async function loadText(source: TextSource): Promise<TextContent> {
   const bytes = new Uint8Array(await response.arrayBuffer())
   if (source.authority) assertApiAuthorityCurrent(source.authority)
   try {
-    return { href, value: decodeUnicodeText(bytes) }
+    return { href, value: decodeText(bytes, source.mime) }
   } catch (error) {
     if (!(error instanceof TextDecodingError)) throw error
     return { href, value: error }
@@ -37,6 +37,7 @@ export function createResourceTextRead(source: () => TextSource | undefined) {
       if (!input) return undefined
       return {
         url: input.url,
+        mime: input.mime,
         authority: input.url.startsWith("/") ? (input.authority ?? captureApiAuthority()) : undefined,
       }
     },

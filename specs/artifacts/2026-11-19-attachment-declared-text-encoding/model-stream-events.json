@@ -1,0 +1,459 @@
+{
+  "summary": {
+    "requests": 14,
+    "completed": 14,
+    "models": {
+      "local": 14
+    },
+    "streaming": {
+      "True": 14
+    },
+    "processes": 3,
+    "operations": {
+      "project-memory": 5,
+      "conversation": 9
+    }
+  },
+  "events": [
+    {
+      "event": "listening",
+      "port": 40158,
+      "pid": 20916
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_b70128a420754fceafb8e4c167e34d8c"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    },
+    {
+      "event": "listening",
+      "port": 40158,
+      "pid": 14204
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_e2faca3b6d994d619e94d3db58bdc0df"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 1,
+      "coveredOccurrenceIDs": [
+        "msg_e4f8d230874b4d5baa955e6bc4ebea53"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 4,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 5,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-4",
+          "content": "{\n  \"catalog_snapshot_hash\": \"ead224e0a392ff8580ff5b78c436b2bafc6b129fc00169189cc14d2843986049\",\n  \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 3,\n    \"returned_count\": 3,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:mcp:owned_encoding\",\n        \"local_ref\": \"owned_encoding_read_declared_text\"\n      },\n      \"name\": \"owned_encoding_read_declared_text\",\n      \"description\": \"Projected mcp tool owned_encoding_read_declared_text.\",\n      \"aliases\": [\n        \"Owned Encoding Read Declared Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_encoding_read_declared_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.98\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_frame_get_text\"\n      },\n      \"name\": \"browser_frame_get_text\",\n      \"description\": \"Projected mcp tool browser_frame_get_text.\",\n      \"aliases\": [\n        \"Browser Frame Get Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_frame_get_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.3\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_get_text\"\n      },\n      \"name\": \"browser_get_text\",\n      \"description\": \"Projected mcp tool browser_get_text.\",\n      \"aliases\": [\n        \"Browser Get Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_get_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.3\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 6,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_encoding_read_declared_text",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-4",
+          "content": "{\n  \"catalog_snapshot_hash\": \"ead224e0a392ff8580ff5b78c436b2bafc6b129fc00169189cc14d2843986049\",\n  \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 3,\n    \"returned_count\": 3,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:mcp:owned_encoding\",\n        \"local_ref\": \"owned_encoding_read_declared_text\"\n      },\n      \"name\": \"owned_encoding_read_declared_text\",\n      \"description\": \"Projected mcp tool owned_encoding_read_declared_text.\",\n      \"aliases\": [\n        \"Owned Encoding Read Declared Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_encoding_read_declared_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.98\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_frame_get_text\"\n      },\n      \"name\": \"browser_frame_get_text\",\n      \"description\": \"Projected mcp tool browser_frame_get_text.\",\n      \"aliases\": [\n        \"Browser Frame Get Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_frame_get_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.3\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_get_text\"\n      },\n      \"name\": \"browser_get_text\",\n      \"description\": \"Projected mcp tool browser_get_text.\",\n      \"aliases\": [\n        \"Browser Get Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_get_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.3\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-5",
+          "content": "{\n  \"catalog_snapshot_hash\": \"ead224e0a392ff8580ff5b78c436b2bafc6b129fc00169189cc14d2843986049\",\n  \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:mcp:owned_encoding\",\n      \"local_ref\": \"owned_encoding_read_declared_text\"\n    }\n  ],\n  \"active_payload_chars\": 79977,\n  \"active_payload_tokens\": 19544,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 83,\n    \"matched_count\": 83,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"browser\"\n      },\n      \"name\": \"browser\",\n      \"description\": \"Configured Model Context Protocol server browser.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.browser\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"computer\"\n      },\n      \"name\": \"computer\",\n      \"description\": \"Configured Model Context Protocol server computer.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.computer\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"owned_encoding\"\n      },\n      \"name\": \"owned_encoding\",\n      \"description\": \"Configured Model Context Protocol server owned_encoding.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.owned_encoding\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_check\"\n      },\n      \"name\": \"browser_check\",\n      \"description\": \"Projected mcp tool browser_check.\",\n      \"aliases\": [\n        \"Browser Check\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_check\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_click\"\n      },\n      \"name\": \"browser_click\",\n      \"description\": \"Projected mcp tool browser_click.\",\n      \"aliases\": [\n        \"Browser Click\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_click\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6,
+      "operation": "conversation",
+      "tool": "owned_encoding_read_declared_text"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 7,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 7,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_encoding_read_declared_text",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-4",
+          "content": "{\n  \"catalog_snapshot_hash\": \"ead224e0a392ff8580ff5b78c436b2bafc6b129fc00169189cc14d2843986049\",\n  \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 3,\n    \"returned_count\": 3,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:mcp:owned_encoding\",\n        \"local_ref\": \"owned_encoding_read_declared_text\"\n      },\n      \"name\": \"owned_encoding_read_declared_text\",\n      \"description\": \"Projected mcp tool owned_encoding_read_declared_text.\",\n      \"aliases\": [\n        \"Owned Encoding Read Declared Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_encoding_read_declared_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.98\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_frame_get_text\"\n      },\n      \"name\": \"browser_frame_get_text\",\n      \"description\": \"Projected mcp tool browser_frame_get_text.\",\n      \"aliases\": [\n        \"Browser Frame Get Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_frame_get_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.3\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_get_text\"\n      },\n      \"name\": \"browser_get_text\",\n      \"description\": \"Projected mcp tool browser_get_text.\",\n      \"aliases\": [\n        \"Browser Get Text\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_get_text\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": 0.3\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-5",
+          "content": "{\n  \"catalog_snapshot_hash\": \"ead224e0a392ff8580ff5b78c436b2bafc6b129fc00169189cc14d2843986049\",\n  \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:mcp:owned_encoding\",\n      \"local_ref\": \"owned_encoding_read_declared_text\"\n    }\n  ],\n  \"active_payload_chars\": 79977,\n  \"active_payload_tokens\": 19544,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 83,\n    \"matched_count\": 83,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"browser\"\n      },\n      \"name\": \"browser\",\n      \"description\": \"Configured Model Context Protocol server browser.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.browser\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"computer\"\n      },\n      \"name\": \"computer\",\n      \"description\": \"Configured Model Context Protocol server computer.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.computer\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"owned_encoding\"\n      },\n      \"name\": \"owned_encoding\",\n      \"description\": \"Configured Model Context Protocol server owned_encoding.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.owned_encoding\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_check\"\n      },\n      \"name\": \"browser_check\",\n      \"description\": \"Projected mcp tool browser_check.\",\n      \"aliases\": [\n        \"Browser Check\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_check\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcyyCHzzPlxYlwch3:browser\",\n        \"local_ref\": \"browser_click\"\n      },\n      \"name\": \"browser_click\",\n      \"description\": \"Projected mcp tool browser_click.\",\n      \"aliases\": [\n        \"Browser Click\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_click\"\n      },\n      \"catalog_revision\": \"3a8a353fab3a8bcd8b92ad089d3fb8186a97f9f074ad2e8b662d5d06c1d6fe6c\",\n      \"score\": null\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-6",
+          "content": "[Tool-result text attachment: owned-encoding://western.txt; mime=text/plain; charset=windows-1252; ref=/attachment/prj_h3kPVG6n85skzCJAy9MB/3218fad7b5749114a878775c202e1a0e8ce8f97b7e5b2b9ed3e5c2fba26297a3.txt; sha256=3218fad7b5749114a878775c202e1a0e8ce8f97b7e5b2b9ed3e5c2fba26297a3; bytes=9]\nCafé € 67\n\n[Tool-result text attachment: owned-encoding://chinese.txt; mime=text/plain; charset=gb18030; ref=/attachment/prj_h3kPVG6n85skzCJAy9MB/2e060c154db3226dc33c09c76e7a7e028119179a675de68433b6fb3c91e5f8f4.txt; sha256=2e060c154db3226dc33c09c76e7a7e028119179a675de68433b6fb3c91e5f8f4; bytes=7]\n中文 77\n\n[Tool-result text attachment: owned-encoding://unicode.txt; mime=text/plain; charset=utf-16be; ref=/attachment/prj_h3kPVG6n85skzCJAy9MB/63961a0ba3e5f4cf6d05edcdf6b73f903a3187ff35f7f1ef4fdfe1c1cbcc6baa.txt; sha256=63961a0ba3e5f4cf6d05edcdf6b73f903a3187ff35f7f1ef4fdfe1c1cbcc6baa; bytes=26]\nUnicode 中文 87"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 7,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    },
+    {
+      "event": "listening",
+      "port": 40158,
+      "pid": 24512
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 2,
+      "coveredOccurrenceIDs": [
+        "msg_6ff748e2161b44fda3ebd04154d58e8e"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": [
+        "[Tool-result text attachment: owned-encoding://western.txt; mime=text/plain; charset=windows-1252; ref=/attachment/prj_h3kPVG6n85skzCJAy9MB/3218fad7b5749114a878775c202e1a0e8ce8f97b7e5b2b9ed3e5c2fba26297a3.txt; sha256=3218fad7b5749114a878775c202e1a0e8ce8f97b7e5b2b9ed3e5c2fba26297a3; bytes=9]\nCafé € 67\n\n[Tool-result text attachment: owned-encoding://chinese.txt; mime=text/plain; charset=gb18030; ref=/attachment/prj_h3kPVG6n85skzCJAy9MB/2e060c154db3226dc33c09c76e7a7e028119179a675de68433b6fb3c91e5f8f4.txt; sha256=2e060c154db3226dc33c09c76e7a7e028119179a675de68433b6fb3c91e5f8f4; bytes=7]\n中文 77\n\n[Tool-result text attachment: owned-encoding://unicode.txt; mime=text/plain; charset=utf-16be; ref=/attachment/prj_h3kPVG6n85skzCJAy9MB/63961a0ba3e5f4cf6d05edcdf6b73f903a3187ff35f7f1ef4fdfe1c1cbcc6baa.txt; sha256=63961a0ba3e5f4cf6d05edcdf6b73f903a3187ff35f7f1ef4fdfe1c1cbcc6baa; bytes=26]\nUnicode 中文 87"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 3,
+      "coveredOccurrenceIDs": [
+        "msg_12c70f5f1ec04f9ead39295d571b15a6"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation",
+      "tool": "publish_interactive_artifact"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    }
+  ]
+}

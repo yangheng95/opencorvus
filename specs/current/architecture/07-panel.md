@@ -394,14 +394,17 @@ on a .ts file enters complete-byte strict UTF-8 and standard binary-control-byte
 classification. Valid text is uploaded as text/plain with its exact original
 bytes and filename; binary input retains its supplied type. Other file types and
 already stored references retain their existing metadata and capture behavior.
-The shared text reader decodes original bytes strictly: a UTF-16 BOM selects
-little or big endian, otherwise UTF-8 applies (including a UTF-8 BOM). Malformed
-input shows localized encoding feedback with the original download and guidance
+The shared text reader receives the original complete MIME declaration from draft,
+message and file-preview artifact references. The common util text decoder selects
+a Unicode BOM first, then the declared charset, then the UTF-8 default. It uses
+standard encoding labels and strict complete-byte decoding. Malformed input or an
+unsupported charset shows localized encoding feedback with the original download and guidance
 to save a UTF-8 copy, since repeating the preview would read the same bytes.
 The draft preview footer offers the original download once its bytes are accepted;
 history and file artifacts retain their original download/export actions.
 This read-only decoding contract does not change storage, model read tools or
-file editing and saving encodings.
+file editing and saving encodings. ACP replay and tool-result attachment projection
+use the same encoding selection with their own documented projection policies.
 FilePart's PDF content loads the same PdfPreview on demand, including canonical
 attachments; they do not depend on a host PDF plugin. The composer's constrained
 body scrolls independently of its header and footer, keeping Close visible.
@@ -2755,8 +2758,9 @@ remains metadata. The existing HTTP byte cap and final text-output budget stay
 authoritative; this text extraction neither executes scripts nor infers visual layout.
 When webfetch's first line exceeds its byte budget, its visible prefix ends at a
 complete UTF-8 character. Shown and omitted byte counts describe that exact prefix.
-The shared byte-prefix decoder also serves tool-result text attachments and Bash
-live previews; a budget cut retains partial encoding bytes as omitted input,
+The shared UTF-8 byte-prefix decoder also serves Bash live previews;
+tool-result attachments use the MIME-aware common text decoder. Both keep a
+budget cut's partial encoding bytes as omitted input,
 whereas the real end of malformed input keeps normal replacement-character decoding.
 Existing size limits, line-first selection, truncation notices and source identity
 remain owned by their original consumers.

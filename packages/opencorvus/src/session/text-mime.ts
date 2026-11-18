@@ -1,4 +1,4 @@
-import { decodeUtf8Prefix } from "../util/utf8"
+import { decodeText } from "@opencorvus-ai/util/text-decoding"
 
 /**
  * Maximum bytes to decode from a text attachment.
@@ -7,23 +7,12 @@ import { decodeUtf8Prefix } from "../util/utf8"
  */
 export const MAX_TEXT_DECODE_BYTES = 200_000
 
-export function decodeTextBytes(raw: Uint8Array): string {
-  const text = decodeUtf8Prefix(raw, MAX_TEXT_DECODE_BYTES)
+export function decodeTextBytes(raw: Uint8Array, mime?: string): string {
+  const text = decodeText(raw, mime, { maxBytes: MAX_TEXT_DECODE_BYTES, fatal: false, ignoreBOM: true })
   if (raw.byteLength > MAX_TEXT_DECODE_BYTES) {
     return `${text}\n\n[... truncated — file exceeds ${MAX_TEXT_DECODE_BYTES / 1024}KB limit ...]`
   }
   return text
-}
-
-/**
- * Extract and decode the base64 payload from a data URL to UTF-8 text.
- * e.g. "data:text/markdown;base64,IyBIZWxsbw==" → "# Hello"
- *
- * Truncates at MAX_TEXT_DECODE_BYTES and appends a note when the file is
- * larger, so the model is explicitly aware of the truncation.
- */
-export function decodeDataUrlText(dataUrl: string): string {
-  return decodeTextBytes(decodeDataUrlBase64Bytes(dataUrl, "decodeDataUrlText"))
 }
 
 /**

@@ -161,7 +161,7 @@ export function FilePart(props: {
         <LocalTextReference url={url()} name={name()} label={label()} />
       </Match>
       <Match when={historicalText()}>
-        <TextAttachment url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />
+        <TextAttachment url={url()} name={name()} displayLabel={props.displayLabel} mime={props.part.mime || props.part.mediaType || ""} />
       </Match>
       <Match when={kind() === "image" && url() && authed()}>
         <AuthedImage url={url()} name={name()} alt={alt()} displayLabel={props.displayLabel} presentation={props.presentation ?? "content"} />
@@ -350,7 +350,7 @@ function LocalTextReference(props: { url: string; name: string; label: string })
 
 function TextAttachment(props: { url: string; name: string; displayLabel?: string; mime: string }) {
   const [expanded, setExpanded] = createSignal(false)
-  const textRead = createResourceTextRead(() => expanded() ? { url: props.url } : undefined)
+  const textRead = createResourceTextRead(() => expanded() ? { url: props.url, mime: props.mime } : undefined)
   return (
     <Disclosure.Root class="msg-text-attachment" variant="surface" open={expanded()} onOpenChange={setExpanded}>
       <Disclosure.Trigger

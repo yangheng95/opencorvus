@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@types/node": "catalog:",
+    "content-type": "3.1.1",
     "proper-lockfile": "4.1.2",
     "rimraf": "5.0.10",
     "zod": "catalog:"

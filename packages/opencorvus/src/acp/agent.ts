@@ -29,6 +29,8 @@ import {
 } from "@agentclientprotocol/sdk"
 
 import { Log } from "../util/log"
+import { decodeText, TextDecodingError } from "@opencorvus-ai/util/text-decoding"
+import { isDecodableText } from "@opencorvus-ai/util/text-mime"
 import { posix } from "node:path"
 import { pathToFileURL } from "node:url"
 import { ACPSessionManager } from "./session"
@@ -1201,16 +1203,19 @@ export namespace ACP {
                 },
               })
             } else {
-              // Non-image: text types get decoded, binary types stay as blob
-              const isText = effectiveMime.startsWith("text/") || effectiveMime === "application/json"
               const fileUri = pathToFileURL(filename).href
-              const resource = isText
-                ? {
-                    uri: fileUri,
-                    mimeType: effectiveMime,
-                    text: decodedBytes.toString("utf-8"),
-                  }
-                : { uri: fileUri, mimeType: effectiveMime, blob: base64Data }
+              // A resource has Unicode text only when its original bytes decode.
+              // Otherwise the protocol's native blob preserves the exact original.
+              let resource: { uri: string; mimeType: string } & ({ text: string } | { blob: string }) = {
+                uri: fileUri, mimeType: effectiveMime, blob: base64Data,
+              }
+              if (isDecodableText(effectiveMime)) {
+                try {
+                  resource = { uri: fileUri, mimeType: effectiveMime, text: decodeText(decodedBytes, effectiveMime) }
+                } catch (error) {
+                  if (!(error instanceof TextDecodingError)) throw error
+                }
+              }
 
               await this.connection
                 .sessionUpdate({

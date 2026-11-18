@@ -1,0 +1,79 @@
+{
+  "checks": {
+    "focusedBackend": "49 pass, 295 expectations, 3 files",
+    "sharedDecoder": "22 pass, 29 expectations, 1 file",
+    "types": [
+      "backend",
+      "overlay",
+      "util"
+    ],
+    "build": [
+      "util",
+      "overlay with renderer public surface"
+    ],
+    "i18n": "2 locales, 3229 keys",
+    "css": "passed",
+    "docs": "353 operations, 26 groups",
+    "routes": "6 rules, 36 files",
+    "architecture": "20 documents"
+  },
+  "manualDesktopObservations": [
+    "Windows-1252 and GB18030 correct side by side",
+    "UTF-16BE without BOM and UTF-16LE with BOM correct",
+    "Unsupported charset named in English and Chinese with original download",
+    "Native file picker selects owned UTF-16 draft; original text and localized actions rendered; draft removed unsent",
+    "Actual publication tool creates file-preview@1 from declared Western source, displayed as Café € 17 in Chinese interface",
+    "Historical source reopened after actual process restart remains readable"
+  ],
+  "downloads": [
+    {
+      "filename": "western-note.txt",
+      "bytes": 10,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "chinese-note.txt",
+      "bytes": 8,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "unknown-note.txt",
+      "bytes": 23,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "draft-bom-note.txt",
+      "bytes": 96,
+      "equalsOriginal": true
+    }
+  ],
+  "protocol": "Actual official ACP stdio and developer HTTP; load/fork replay, resume restores mode then explicit load, restart reads same originals",
+  "realToolFlow": "Owned MCP stdio tool returns three embedded byte resources; actual streaming model request receives correct decoded text before and after restart",
+  "model": {
+    "requests": 14,
+    "completed": 14,
+    "models": {
+      "local": 14
+    },
+    "streaming": {
+      "True": 14
+    },
+    "processes": 3,
+    "operations": {
+      "project-memory": 5,
+      "conversation": 9
+    }
+  },
+  "ports": {
+    "40154": "closed",
+    "40156": "closed",
+    "40158": "closed"
+  },
+  "limits": [
+    "No GPT-6.1 Sol or external provider acceptance; local scripted streaming participant",
+    "No native Zed acceptance claim",
+    "Native file picker does not expose a charset editor; draft UI uses a real BOM sample, while declared charset flows are verified in history/artifact and code contract",
+    "Complete legacy text already replaced before persistence cannot be reconstructed by guessing",
+    "Persisted fork assistant counts include copied history; not model invocation counts"
+  ]
+}

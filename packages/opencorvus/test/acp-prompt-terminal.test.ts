@@ -991,6 +991,51 @@ test("ACP file attachments preserve display names and source selections", async 
   ]))
 }, 60_000)
 
+test("ACP replays original text encodings and byte resources through load, resume and fork", async () => {
+  await using env = await environment()
+  const cwd = env.project.path
+  const sessionId = await env.create("normal")
+  const originals = [
+    { mime: 'text/plain; charset="windows-1252"', bytes: Buffer.from([0x43, 0x61, 0x66, 0xe9, 0x20, 0x80]), text: "Café €" },
+    { mime: "text/plain; charset=gb18030", bytes: Buffer.from([0xd6, 0xd0, 0xce, 0xc4]), text: "中文" },
+    { mime: "application/schema+json; charset=utf-16be", bytes: Buffer.from('{"note":"中文"}', "utf16le").swap16(), text: '{"note":"中文"}' },
+    { mime: "text/plain", bytes: Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from("BOM 中文", "utf16le")]), text: "BOM 中文" },
+    { mime: "text/plain; charset=x-owned-unsupported", bytes: Buffer.from("Declared source") },
+    { mime: "text/plain; charset=utf-8", bytes: Buffer.from([0xc3]) },
+    { mime: "application/octet-stream", bytes: Buffer.from([0x00, 0xff]) },
+  ]
+  expect(await env.client.prompt({ sessionId, prompt: [
+    { type: "text", text: "Review the original declared text files." },
+    ...originals.map((item, index) => ({ type: "resource" as const, resource: {
+      uri: `file:///editor/declared-${index}.txt`, mimeType: item.mime, blob: item.bytes.toString("base64"),
+    } })),
+  ] })).toMatchObject({ stopReason: "end_turn" })
+  const [input] = await env.messages(sessionId)
+  for (const method of ["loadSession", "resumeSession", "unstable_forkSession"] as const) {
+    if (method === "resumeSession") {
+      expect(await env.client.resumeSession({ cwd, sessionId, mcpServers: [] })).toMatchObject({
+        modes: { currentModeId: "coding" },
+      })
+    }
+    const from = env.updates.length
+    await env.client[method === "resumeSession" ? "loadSession" : method]({ cwd, sessionId, mcpServers: [] })
+    const resources = env.updates.slice(from).flatMap(({ update }) =>
+      update.sessionUpdate === "user_message_chunk" && update.content.type === "resource" ? [update.content.resource] : [],
+    )
+    expect(resources).toEqual(originals.map((item) => expect.objectContaining({
+      mimeType: item.mime,
+      ...(item.text === undefined ? { blob: item.bytes.toString("base64") } : { text: item.text }),
+    })))
+  }
+  const { data: session } = await env.sdk.session.get({ sessionID: sessionId, directory: cwd }, { throwOnError: true })
+  const files = input.parts.filter((part) => part.type === "file")
+  expect(files.length).toBe(originals.length)
+  for (let index = 0; index < files.length; index++) {
+    const stored = await AttachmentStore.readVerifiedReference({ projectID: session.projectID, url: files[index].url, mime: files[index].mime })
+    expect(stored.bytes).toEqual(originals[index].bytes)
+  }
+}, 60_000)
+
 test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {
   const servers = new Set<McpServer>()
   const requests: Array<{ method: string; operation: string; header: string | null }> = []

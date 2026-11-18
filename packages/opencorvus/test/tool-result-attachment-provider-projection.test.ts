@@ -36,6 +36,33 @@ const openAIModel = {
 } satisfies Provider.Model
 
 describe("tool-result attachment provider projection", () => {
+  test("reports the declared unsupported charset as the explicit decoding error", async () => {
+    const mime = "text/plain; charset=x-owned-unsupported"
+    const url = `data:${mime};base64,${Buffer.from("Original source").toString("base64")}`
+    await expect(Message.toolResultToModelOutput({ attachments: [{ mime, url }] }, openAIModel))
+      .rejects.toMatchObject({ name: "TextDecodingError", code: "INVALID_TEXT_ENCODING", encoding: "x-owned-unsupported" })
+  })
+
+  test.each(["inline", "persisted"])("projects declared encodings from %s original tool resources", async (storage) => {
+    await using tmp = await tmpdir({ git: true })
+    await Instance.provide({ directory: tmp.path, fn: async () => {
+      for (const [mime, bytes, expected] of [
+        ['text/plain; charset="windows-1252"', Buffer.from([0x43, 0x61, 0x66, 0xe9, 0x20, 0x80]), "Café €"],
+        ["text/plain; charset=gb18030", Buffer.from([0xd6, 0xd0, 0xce, 0xc4]), "中文"],
+        ["application/schema+json; charset=utf-16be", Buffer.from('{"note":"中文"}', "utf16le").swap16(), '{"note":"中文"}'],
+      ] as const) {
+        const filename = "declared.txt"
+        const url = storage === "persisted"
+          ? (await AttachmentStore.write(Instance.project.id, bytes, mime, filename)).url
+          : `data:${mime};base64,${bytes.toString("base64")}`
+        const output = await Message.toolResultToModelOutput({ attachments: [{ mime, filename, url }] }, openAIModel)
+        expect(output.type).toBe("text")
+        if (output.type !== "text") throw new Error(`Expected text output, received ${output.type}`)
+        expect(output.value.slice(output.value.indexOf("\n") + 1)).toBe(expected)
+      }
+    } })
+  })
+
   test.each(["inline", "persisted"])(
     "projects the complete UTF-8 prefix of a large %s text attachment",
     async (storage) => {

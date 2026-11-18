@@ -10,7 +10,9 @@ export function FilePreviewArtifact(props: {
   payload: FilePreviewPayload
   downloads?: InteractiveArtifact["downloads"]
 }) {
-  const textRead = createResourceTextRead(() => props.payload.kind === "text" ? { url: props.payload.source.url } : undefined)
+  const textRead = createResourceTextRead(() => props.payload.kind === "text"
+    ? { url: props.payload.source.url, mime: props.payload.source.mime }
+    : undefined)
   return (
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="File" downloads={props.downloads}>
       <Switch>

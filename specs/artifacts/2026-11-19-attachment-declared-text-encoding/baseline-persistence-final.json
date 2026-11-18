@@ -1,0 +1,350 @@
+{
+  "counts": {
+    "session": 2,
+    "message": 4,
+    "part": 20,
+    "session_prompt_owner": 0,
+    "event_occurrence": 37
+  },
+  "assistantFinish": {
+    "stop": 2
+  },
+  "sessions": [
+    {
+      "id": "ses_hGSJScmZOPTGuerdctsb",
+      "projectID": "prj_hZOCcOuwFIZb45JAUMD7",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review"
+    },
+    {
+      "id": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "projectID": "prj_hZOCcOuwFIZb45JAUMD7",
+      "parentID": "ses_hGSJScmZOPTGuerdctsb",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_b70128a420754fceafb8e4c167e34d8c",
+      "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795043720322
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect declared attachment encodings. These are original source files for text review."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "ec2b7c80680ee61cdf5133698e354ac83dc7396893637622d0432dcc328725ec"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795043720322:0000000000000030:0000000000000000:message:msg_b70128a420754fceafb8e4c167e34d8c"
+      }
+    },
+    {
+      "id": "msg_g0VbMyWYb00JTT1q9a1D",
+      "sessionID": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795043720322
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect declared attachment encodings. These are original source files for text review."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "ec2b7c80680ee61cdf5133698e354ac83dc7396893637622d0432dcc328725ec"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbMyWYb007mN3dRMtI",
+            "sources": [
+              {
+                "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+                "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+                "partID": "prt_g0VbMyW5n00pClR0GtQE",
+                "sha256": "5797d639af1b870f498fcdbd4e7e787503b5368fade3fcd47d77ced02296c122"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795043720322:0000000000000030:0000000000000000:message:msg_g0VbMyWYb00JTT1q9a1D"
+      }
+    },
+    {
+      "id": "msg_g0VbMyW7K00rSL07qA3c",
+      "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795043720422,
+          "completed": 1795043721919
+        },
+        "parentID": "msg_b70128a420754fceafb8e4c167e34d8c",
+        "acceptedInputMessageIDs": [
+          "msg_b70128a420754fceafb8e4c167e34d8c"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795043720422:0000000000000030:0000000000000000:message:msg_g0VbMyW7K00rSL07qA3c"
+      }
+    },
+    {
+      "id": "msg_g0VbMyWYb017ptlHoPz0",
+      "sessionID": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795043720422,
+          "completed": 1795043721919
+        },
+        "parentID": "msg_g0VbMyWYb00JTT1q9a1D",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbMyWYb00JTT1q9a1D"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b327\\baseline\\declared-encoding-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbMyWYb08uxZn06COp",
+            "sources": [
+              {
+                "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+                "messageID": "msg_g0VbMyW7K00rSL07qA3c",
+                "partID": "prt_g0VbMyWSF0031DDkPHsr",
+                "sha256": "caf8bde5669335212509b4db5a23327122d8ea15bec58ad85e2b58f9207e5a1c"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795043720422:0000000000000030:0000000000000000:message:msg_g0VbMyWYb017ptlHoPz0"
+      }
+    }
+  ],
+  "files": [
+    {
+      "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+      "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=\"windows-1252\"",
+        "filename": "western-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/d7f6ade786f233397e536c1bb646adb27513f3db6a32cd982bfd9a7d7c80f2d6.txt"
+      }
+    },
+    {
+      "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+      "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=gb18030",
+        "filename": "chinese-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/f520cbf42b286f8e79c18d683e5284c93d6be2157a60f84c61432f893825ded1.txt"
+      }
+    },
+    {
+      "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+      "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=utf-16be",
+        "filename": "unicode-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/8757a51aec28afc98242eeffb68a47b4f57aee9bb662d831ae395adb62a7e3bd.txt"
+      }
+    },
+    {
+      "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+      "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+      "part": {
+        "type": "file",
+        "mime": "text/plain",
+        "filename": "bom-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/01af3bc735783a232faa318fc8119f6dd6d47fc37dbc2ddb416e8ea8fec27f65.txt"
+      }
+    },
+    {
+      "sessionID": "ses_hGSJScmZOPTGuerdctsb",
+      "messageID": "msg_b70128a420754fceafb8e4c167e34d8c",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=x-owned-unsupported",
+        "filename": "unknown-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/7689bf2b66af91317522717e16c3242c60269045a653f5c5f0418717662ef203.txt"
+      }
+    },
+    {
+      "sessionID": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "messageID": "msg_g0VbMyWYb00JTT1q9a1D",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=\"windows-1252\"",
+        "filename": "western-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/d7f6ade786f233397e536c1bb646adb27513f3db6a32cd982bfd9a7d7c80f2d6.txt"
+      }
+    },
+    {
+      "sessionID": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "messageID": "msg_g0VbMyWYb00JTT1q9a1D",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=gb18030",
+        "filename": "chinese-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/f520cbf42b286f8e79c18d683e5284c93d6be2157a60f84c61432f893825ded1.txt"
+      }
+    },
+    {
+      "sessionID": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "messageID": "msg_g0VbMyWYb00JTT1q9a1D",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=utf-16be",
+        "filename": "unicode-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/8757a51aec28afc98242eeffb68a47b4f57aee9bb662d831ae395adb62a7e3bd.txt"
+      }
+    },
+    {
+      "sessionID": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "messageID": "msg_g0VbMyWYb00JTT1q9a1D",
+      "part": {
+        "type": "file",
+        "mime": "text/plain",
+        "filename": "bom-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/01af3bc735783a232faa318fc8119f6dd6d47fc37dbc2ddb416e8ea8fec27f65.txt"
+      }
+    },
+    {
+      "sessionID": "ses_-zUOd1TRPzzE7n3W4oSS",
+      "messageID": "msg_g0VbMyWYb00JTT1q9a1D",
+      "part": {
+        "type": "file",
+        "mime": "text/plain; charset=x-owned-unsupported",
+        "filename": "unknown-note.txt",
+        "url": "/attachment/prj_hZOCcOuwFIZb45JAUMD7/7689bf2b66af91317522717e16c3242c60269045a653f5c5f0418717662ef203.txt"
+      }
+    }
+  ]
+}
