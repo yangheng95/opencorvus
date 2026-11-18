@@ -1,0 +1,81 @@
+{
+  "baseUrl": "http://127.0.0.1:40112",
+  "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b320\\baseline\\attachment-upload-review",
+  "outcomes": [
+    {
+      "source": {
+        "filename": "binary packet.bin",
+        "mime": "application/octet-stream",
+        "bytes": 31
+      },
+      "sdk": {
+        "status": 400,
+        "requestID": "1e96131d-8f7d-4373-a1c8-5b8809c8fe15",
+        "error": {
+          "message": "Attachment upload requires Content-Type"
+        }
+      },
+      "control": {
+        "status": 200,
+        "requestID": "1842f819-678b-4d5c-b68a-ff37faa01d81",
+        "reference": {
+          "sha": "7bed45d74a5a8ddce381a0ed9bb4e713824d4ae619badbefc910b63f5a197e1a",
+          "url": "/attachment/prj_h6txlhKpAof056CaM0rY/7bed45d74a5a8ddce381a0ed9bb4e713824d4ae619badbefc910b63f5a197e1a.bin",
+          "mime": "application/octet-stream",
+          "size": 31,
+          "filename": "binary packet.bin"
+        }
+      }
+    },
+    {
+      "source": {
+        "filename": "empty note.txt",
+        "mime": "text/plain",
+        "bytes": 0
+      },
+      "sdk": {
+        "status": 400,
+        "requestID": "57749ea8-c924-4edc-8a53-77ce61ec7470",
+        "error": {
+          "message": "Attachment upload requires Content-Type"
+        }
+      },
+      "control": {
+        "status": 200,
+        "requestID": "b1c8c825-2828-4f55-84f9-09f9409fdc3d",
+        "reference": {
+          "sha": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "url": "/attachment/prj_h6txlhKpAof056CaM0rY/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.txt",
+          "mime": "text/plain",
+          "size": 0,
+          "filename": "empty note.txt"
+        }
+      }
+    },
+    {
+      "source": {
+        "filename": "source.png",
+        "mime": "image/png",
+        "bytes": 100
+      },
+      "sdk": {
+        "status": 400,
+        "requestID": "54dceca0-05d6-4a87-867f-b7f33a8f4460",
+        "error": {
+          "message": "Attachment upload requires Content-Type"
+        }
+      },
+      "control": {
+        "status": 200,
+        "requestID": "bad6bcb7-d314-4afe-992d-a7fef5fa5651",
+        "reference": {
+          "sha": "019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583",
+          "url": "/attachment/prj_h6txlhKpAof056CaM0rY/019237df80dbdce3395b14b5f71d55e50bc7dbc8638f0909f1f6976a9ed7d583.png",
+          "mime": "image/png",
+          "size": 100,
+          "filename": "source.png"
+        }
+      }
+    }
+  ]
+}

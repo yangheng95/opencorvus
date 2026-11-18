@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [SDK 原始附件上传验收](2026-11-19-attachment-upload-sdk-body/README.md)
 - [编辑器嵌入资源可选媒体类型验收](2026-11-19-acp-embedded-resource-optional-mime/README.md)
 - [图片缩放锚点的 Windows 验收](2026-11-19-image-preview-zoom-anchor/README.md)
 - [ACP 资源链接媒体类型的 Windows 验收](2026-11-19-acp-linked-resource-media-type/README.md)
