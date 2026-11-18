@@ -1,0 +1,47 @@
+[
+  {
+    "event": "stream-request",
+    "occurrence": 16,
+    "operation": "conversation",
+    "model": "scoped",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input."
+    ]
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 18,
+    "operation": "conversation",
+    "model": "scoped",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input.",
+      "Read the saved session model. Resumed input."
+    ]
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 20,
+    "operation": "conversation",
+    "model": "scoped",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input.",
+      "Read the saved session model. Resumed input.",
+      "Read the saved session model. Forked input."
+    ]
+  },
+  {
+    "event": "stream-request",
+    "occurrence": 22,
+    "operation": "conversation",
+    "model": "scoped",
+    "stream": true,
+    "observedInputs": [
+      "Read the saved session model. Loaded input.",
+      "Read the saved session model. Resumed input.",
+      "Read the saved session model. Desktop continuation."
+    ]
+  }
+]

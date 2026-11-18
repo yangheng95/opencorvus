@@ -1,0 +1,52 @@
+{
+  "existingSession": "ses_-zUOeEQR8zzn8xOjvutH",
+  "load": {
+    "id": "6cce9e9f-cc63-4575-9bbb-f76029b5004d",
+    "model": "acp-review/scoped"
+  },
+  "prompt": {
+    "id": "47e9fea3-7b27-4207-b69c-1a9f2f8bf2f2",
+    "text": "Read the saved session model. Desktop continuation.",
+    "stopReason": "end_turn"
+  },
+  "persistedInput": {
+    "id": "msg_g0VbLoiZt00tnru29h9J",
+    "model": {
+      "providerID": "acp-review",
+      "modelID": "scoped"
+    }
+  },
+  "persistedReply": {
+    "id": "msg_g0VbLoicy00EH29xlphR",
+    "parentID": "msg_g0VbLoiZt00tnru29h9J",
+    "providerID": "acp-review",
+    "modelID": "scoped",
+    "finish": "stop"
+  },
+  "live": [
+    {
+      "sessionUpdate": "agent_thought_chunk",
+      "messageId": "msg_g0VbLoicy00EH29xlphR",
+      "content": {
+        "type": "text",
+        "text": "Checking the supplied file context."
+      }
+    },
+    {
+      "sessionUpdate": "agent_message_chunk",
+      "messageId": "msg_g0VbLoicy00EH29xlphR",
+      "content": {
+        "type": "text",
+        "text": "The saved session model "
+      }
+    },
+    {
+      "sessionUpdate": "agent_message_chunk",
+      "messageId": "msg_g0VbLoicy00EH29xlphR",
+      "content": {
+        "type": "text",
+        "text": "reply reached the stream."
+      }
+    }
+  ]
+}

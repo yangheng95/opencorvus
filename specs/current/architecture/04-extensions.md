@@ -1240,6 +1240,8 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 提供工作目录时精确筛选同一目录；省略时读取当前服务内的全局历史。客户端使用返回的 `nextCursor` 继续读取。
 模型及 variant 由会话返回的 `configOptions` 中唯一 `model` select 选项声明，
 通过 `setSessionConfigOption` 更新并返回完整当前选项；值须属于实际投影的模型目录。
+加载和恢复以目标会话身份读取唯一模型解析器，派生以源会话身份读取其根配置覆盖。
+新会话使用项目配置，连接内明确的模型选择继续作为本次请求的显式选择。
 不再提供旧的 model setter 或平行模型状态。MCP（Model Context Protocol，模型上下文协议）
 入站配置支持 stdio、`type: "http"` 对应的 Streamable HTTP 和 `type: "sse"` 对应的事件流端点。
 SDK 新增的 MCP-over-ACP 类型返回

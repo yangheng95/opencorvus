@@ -1,0 +1,27 @@
+{
+  "id": "ses_-zUOeEQR8zzn8xOjvutH",
+  "config": {
+    "requestID": "88db35cc-5cb8-4614-aba4-6ab186316532",
+    "model": "acp-review/scoped",
+    "origin": "session"
+  },
+  "history": {
+    "requestID": "b844514c-a95a-426d-870c-573b5cb7f5b6",
+    "verifiedOriginalPairs": [
+      {
+        "input": "msg_g0VbLlZe600MNuPfXykP",
+        "reply": "msg_g0VbLlZgO00reDFkafzP",
+        "model": "local"
+      },
+      {
+        "input": "msg_g0VbLlaFW00ecA6DQJ11",
+        "reply": "msg_g0VbLlaGs00XmxnfK5HM",
+        "model": "local"
+      }
+    ]
+  },
+  "load": {
+    "requestID": "6cce9e9f-cc63-4575-9bbb-f76029b5004d",
+    "model": "acp-review/scoped"
+  }
+}

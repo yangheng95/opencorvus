@@ -16,5 +16,12 @@
 
 ## 实施与验收
 
-- 已知会话的模型读取向当前唯一解析器传入其 `sessionID`。加载和恢复绑定目标会话，派生在当前父链合同下绑定源会话；已存连接缺模型时的读取同样使用该连接的会话。新建继续使用项目作用域。删除任何历史推断的可能性，配置来源仍由 `EffectiveConfig` 决定。
+- 已知会话的模型读取向当前唯一解析器传入其 `sessionID`。加载和恢复绑定目标会话，派生在当前父链合同下绑定源会话；已存连接缺模型时的读取同样使用该连接的会话。新建继续使用项目作用域。配置来源由 `EffectiveConfig` 决定。
 - 正向检查已保存根覆盖在加载、恢复、派生及派生重载后的明确模型值、实际流式输入和持久助手。独立新会话使用项目模型，连接内显式选择使用所选模型。真实 Zed 加载同一已存配置并从桌面发送后续输入，核对选择器和实际模型。通过同一开发服务 `/ui/` 检查隔离项目，逐张复核截图。执行聚焦 ACP、配置覆盖及模型解析检查，类型、文档与架构索引，范围提交及正常推送。
+
+## 实际验收
+
+- 官方客户端新会话声明项目模型 `local`，保存根覆盖后，加载、恢复和派生均声明 `acp-review/scoped`。随后三次实际流式请求和持久助手均为 `scoped`，父级匹配本轮用户记录且完成为 `stop`。派生父级指向保存覆盖的原会话。
+- 真实 Zed 重新打开修复前的同一 `ses_-zUOeEQR8zzn8xOjvutH`，实际加载 `6cce9e9f-cc63-4575-9bbb-f76029b5004d` 返回 `scoped`，界面显示 `Saved session choice`。从桌面提交 `Read the saved session model. Desktop continuation.`，请求 `47e9fea3-7b27-4207-b69c-1a9f2f8bf2f2` 返回 `end_turn`。实际模型请求 `model=scoped`、`stream=true`。持久用户 `msg_g0VbLoiZt00tnru29h9J` 与助手 `msg_g0VbLoicy00EH29xlphR` 对应，助手 `finish=stop`。原先两轮的消息身份、父级与原模型事实核对通过。
+- 同一开发服务真实网页打开原隔离项目和 `review.txt`，正文请求 `9982d43e-5288-4052-b309-cb9a51a2d7f6` 返回 200。网页和编辑器截图均逐张人工复核。桌面捕获的前台进程错误通过重新初始化捕获会话恢复，继续完成原验收。
+- `bun test './test/acp-prompt-terminal.test.ts' './test/acp-prompt-response.test.ts' './test/dependabot-runtime-contract.test.ts' './test/config-layer-inheritance.test.ts'` 从 `packages/opencorvus` 通过 62 项、261 个断言。新增的本机测试模型先被测试参与者当成终止原因输出，已按该参与者的正常完成合同改成 `stop` 并重跑原检查。后端类型、接口文档和架构索引通过。专用网页、编辑器服务及本机流式模型已正常退出。[完整运行和实拍证据](../../artifacts/2026-11-19-acp-session-model-scope/README.md)

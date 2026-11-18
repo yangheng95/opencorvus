@@ -761,7 +761,7 @@ export namespace ACP {
 
       try {
         const [model, primarySurface, messages] = await Promise.all([
-          defaultModel(this.config, directory),
+          defaultModel(this.config, directory, sessionId),
           this.loadPrimarySurface(directory),
           this.loadSessionHistory(directory, sessionId),
         ])
@@ -849,7 +849,7 @@ export namespace ACP {
 
       try {
         const [model, primarySurface] = await Promise.all([
-          defaultModel(this.config, directory),
+          defaultModel(this.config, directory, params.sessionId),
           this.loadPrimarySurface(directory),
         ])
 
@@ -912,7 +912,7 @@ export namespace ACP {
 
       try {
         const [model, primarySurface, messages] = await Promise.all([
-          defaultModel(this.config, directory),
+          defaultModel(this.config, directory, sessionId),
           this.loadPrimarySurface(directory),
           this.loadSessionHistory(directory, sessionId),
         ])
@@ -1515,7 +1515,7 @@ export namespace ACP {
       const directory = session.cwd
 
       const current = session.model
-      const model = current ?? (await defaultModel(this.config, directory))
+      const model = current ?? (await defaultModel(this.config, directory, sessionID))
       if (!current) {
         this.sessionManager.setModel(session.id, model)
       }
@@ -1744,12 +1744,12 @@ export namespace ACP {
   // `resolveConfiguredModelRef` resolver (session overlay > project base).
   // The previous `config.defaultModel` short-circuit was a parallel
   // production model source (rule 8) and is removed (rule 16, no compat).
-  async function defaultModel(_config: ACPConfig, cwd?: string) {
+  async function defaultModel(_config: ACPConfig, cwd?: string, sessionID?: string) {
     const directory = cwd ?? process.cwd()
     const { resolveConfiguredModelRef } = await import("@/agent/model")
     return Instance.provide({
       directory,
-      fn: () => resolveConfiguredModelRef(),
+      fn: () => resolveConfiguredModelRef({ sessionID }),
     })
   }
 

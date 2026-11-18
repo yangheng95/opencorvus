@@ -1,0 +1,82 @@
+{
+  "projectionRequest": "acc5acf9-143a-4ff2-94de-ba8f1b326a39",
+  "projectedModels": [
+    "acp-review/local",
+    "acp-review/scoped"
+  ],
+  "id": "ses_-zUOeDSYYzzPdqsZ3f34",
+  "fork": "ses_-zUOeDRf9zztCw2SSww3",
+  "createdModel": "acp-review/local",
+  "saved": {
+    "requestID": "3207315c-cc39-4707-a5bd-5a03e3b89262",
+    "model": "acp-review/scoped",
+    "origin": "session"
+  },
+  "loadedModel": "acp-review/scoped",
+  "loadedPrompt": {
+    "stopReason": "end_turn",
+    "requestID": "c06b48d7-8dda-4042-ad73-c751bf2fd3ce",
+    "input": {
+      "id": "msg_g0VbLmXX200vJidK6OzH",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "scoped"
+      }
+    },
+    "reply": {
+      "id": "msg_g0VbLmXZU00MD9LEEFds",
+      "parentID": "msg_g0VbLmXX200vJidK6OzH",
+      "providerID": "acp-review",
+      "modelID": "scoped",
+      "finish": "stop"
+    }
+  },
+  "resumedModel": "acp-review/scoped",
+  "resumedPrompt": {
+    "stopReason": "end_turn",
+    "requestID": "acf2bba1-af09-4141-ad3d-a85743a131b8",
+    "input": {
+      "id": "msg_g0VbLmY5Y00ziN6eMf2W",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "scoped"
+      }
+    },
+    "reply": {
+      "id": "msg_g0VbLmY6O00mGawlwdmS",
+      "parentID": "msg_g0VbLmY5Y00ziN6eMf2W",
+      "providerID": "acp-review",
+      "modelID": "scoped",
+      "finish": "stop"
+    }
+  },
+  "forkedModel": "acp-review/scoped",
+  "forkPrompt": {
+    "stopReason": "end_turn",
+    "requestID": "2ca98b58-84c3-42ca-a357-4f5e79ab5616",
+    "input": {
+      "id": "msg_g0VbLmYQF00fjJe4ok4Z",
+      "model": {
+        "providerID": "acp-review",
+        "modelID": "scoped"
+      }
+    },
+    "reply": {
+      "id": "msg_g0VbLmYR200W8c1yEg80",
+      "parentID": "msg_g0VbLmYQF00fjJe4ok4Z",
+      "providerID": "acp-review",
+      "modelID": "scoped",
+      "finish": "stop"
+    }
+  },
+  "finalConfig": {
+    "requestID": "9d879302-6941-44bd-8e48-ea78a040e99b",
+    "model": "acp-review/scoped",
+    "origin": "session"
+  },
+  "forkConfig": {
+    "requestID": "f7071d4b-ae82-4907-84c8-34d0005b1c2a",
+    "id": "ses_-zUOeDRf9zztCw2SSww3",
+    "parentID": "ses_-zUOeDSYYzzPdqsZ3f34"
+  }
+}

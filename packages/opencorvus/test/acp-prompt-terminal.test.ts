@@ -86,7 +86,7 @@ async function environment(options: {
             }
           : {
               ...chunk,
-              choices: [{ index: 0, delta: {}, finish_reason: body.model === "normal" ? "stop" : body.model }],
+              choices: [{ index: 0, delta: {}, finish_reason: ["normal", "scoped"].includes(body.model) ? "stop" : body.model }],
               usage: {
                 prompt_tokens: 12,
                 completion_tokens: 5,
@@ -123,7 +123,7 @@ async function environment(options: {
           api: new URL("v1", provider.url).href,
           options: { apiKey: "owned-local-participant", timeout: false },
           models: Object.fromEntries(
-            ["normal", "error", "length", "content_filter", "cancel"].map((id) => [
+            ["normal", "scoped", "error", "length", "content_filter", "cancel"].map((id) => [
               id,
               {
                 name: id,
@@ -623,6 +623,41 @@ test("ACP registered commands preserve embedded context and canonical image byte
   const [forkedInput, forkedReply] = await env.messages(forked.sessionId)
   expect(forkedReply.info).toMatchObject({ role: "assistant", parentID: forkedInput.info.id, finish: "stop" })
   expect(replayedUserContent(forkCursor, forked.sessionId)).toMatchObject(userContent(forkedInput.info.id))
+}, 60_000)
+
+test("ACP session initialization uses the saved root model through actual streamed turns", async () => {
+  await using env = await environment()
+  const cwd = env.project.path
+  const created = await env.client.newSession({ cwd, mcpServers: [] })
+  const sessionId = created.sessionId
+  const { data: saved } = await env.sdk.session.config.update({
+    sessionID: sessionId, directory: cwd, model: "acp-terminal/scoped",
+  }, { throwOnError: true })
+  expect(saved.config.model).toBe("acp-terminal/scoped")
+  expect(saved.origin.model).toBe("session")
+
+  const verifyTurn = async (ownerID: string, state: { configOptions?: Array<{ id: string; currentValue: unknown }> }) => {
+    expect(state.configOptions?.find((option) => option.id === "model"))
+      .toMatchObject({ currentValue: "acp-terminal/scoped" })
+    expect(await env.client.prompt({ sessionId: ownerID, prompt: [{ type: "text", text: "Use the saved session model." }] }))
+      .toMatchObject({ stopReason: "end_turn" })
+    const [input, reply] = (await env.messages(ownerID)).slice(-2)
+    expect(input.info).toMatchObject({ role: "user", model: { providerID: "acp-terminal", modelID: "scoped" } })
+    expect(reply.info).toMatchObject({ role: "assistant", parentID: input.info.id, providerID: "acp-terminal", modelID: "scoped", finish: "stop" })
+  }
+  await verifyTurn(sessionId, await env.client.loadSession({ cwd, sessionId, mcpServers: [] }))
+  await verifyTurn(sessionId, await env.client.resumeSession({ cwd, sessionId, mcpServers: [] }))
+  const forked = await env.client.unstable_forkSession({ cwd, sessionId, mcpServers: [] })
+  await verifyTurn(forked.sessionId, forked)
+  await verifyTurn(forked.sessionId, await env.client.loadSession({ cwd, sessionId: forked.sessionId, mcpServers: [] }))
+  const independent = await env.client.newSession({ cwd, mcpServers: [] })
+  expect(independent.configOptions?.find((option) => option.id === "model"))
+    .toMatchObject({ currentValue: "acp-terminal/normal" })
+  const explicit = await env.client.setSessionConfigOption({
+    sessionId: independent.sessionId, configId: "model", value: "acp-terminal/scoped",
+  })
+  await verifyTurn(independent.sessionId, explicit)
+  expect(env.requests).toContainEqual({ model: "scoped", stream: true })
 }, 60_000)
 
 test("ACP session discovery pages tied timestamps and preserves directory scope", async () => {
