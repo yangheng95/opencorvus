@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [按发布媒体选择完整图片显示](2026-11-19-attachment-image-display.md)
 - [原件响应遵循已发布媒体](2026-11-19-attachment-response-media.md)
 - [已发布原件的媒体身份保持不变](2026-11-19-attachment-published-media-identity.md)
 - [附件预览使用明确的媒体声明](2026-11-19-file-part-declared-media-type.md)

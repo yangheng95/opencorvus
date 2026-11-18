@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [按发布媒体显示图片验收](2026-11-19-attachment-image-display/README.md)
 - [原件响应媒体验收](2026-11-19-attachment-response-media/README.md)
 - [已发布附件媒体身份验收](2026-11-19-attachment-published-media-identity/README.md)
 - [附件明确媒体类型的桌面验收](2026-11-19-file-part-declared-media-type/README.md)
