@@ -1,0 +1,17 @@
+[
+  {
+    "target": "/work-ledger/events",
+    "admissionStatus": 200,
+    "response": {
+      "type": "response",
+      "status": 200,
+      "statusText": "",
+      "streaming": true
+    },
+    "event": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    }
+  }
+]

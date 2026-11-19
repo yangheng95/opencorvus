@@ -22,3 +22,11 @@
 3. 保留初次及重接/重开的实际流证据。退出时核隔离服务归属、模型未调用及正常关闭。Overlay 类型、语言、构建、文档/架构与路由检查通过后提交；合并上游、检查完整待推集合和正常推送。
 
 [真实基线及通路对照](../../artifacts/2026-11-19-prefixed-stream-target/README.md)
+
+## 验收结果
+
+- 传输按当前应用服务地址建立物理准入和升级连接，从调用者逻辑路由生成内部目标和原查询。公开生命周期地址仍含实际部署前缀。候选代理记录 `/team/ui/edge/global/transport/stream` 准入 200、升级 101、内部目标 `/work-ledger/events`，实际流回 `work-ledger.connected`。
+- Windows 隔离 Chrome 逐张人工复核。首个项目出现在候选侧栏。另一个隔离目录通过公开 `/path` 登记后，原窗口无需刷新便显示两个实际项目。用标签键聚焦第二项目、回车打开后，主区标题和 Network 代理作用域都为 `second-live-project`。公开列表从一项变为两项，项目标识与目录均独立。
+- 候选原进程 `21036` 正常停机并退出，同一隔离目录的后继进程 `36660` 接管原端口。代理上实际连接事件返回 200。原窗口通过相同公开地址重开，仍显示 Online、两项目及所选第二项目。两服务与代理最终正常退出，四端口均释放。隔离数据库各有两个 Project，Session、Message 和 Engine Task 均为零。此轮覆盖真实事件和读取，模型执行未纳入范围。
+- Overlay 聚焦 19 项通过，验证根/代理的外层准入、内部目标、原正文、显式和默认目录、回放查询与流标识。`bun run --no-env-file test test/server/stream-socket-runtime.test.ts test/server/stream-socket.test.ts` 通过 11 项，覆盖真实监听器、多连接、业务重接与原请求结算。首次直接命令使用默认 5 秒，过期用例需真实等待 10 秒，因此用仓库正式运行器的 60 秒预算重跑；生产时限和断言均沿用原值。
+- Overlay 类型、双语、构建和渲染器公开面检查通过。文档、架构索引及路由检查通过。[实页截图与转发记录](../../artifacts/2026-11-19-prefixed-stream-target/README.md)

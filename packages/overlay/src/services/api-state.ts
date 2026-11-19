@@ -186,10 +186,10 @@ export function requestTarget(
   return { pathOnly, query: nextQuery }
 }
 
-export function apiUrl(path: string): string {
+export function apiUrl(path: string, baseUrl = serverUrl): string {
   const next = path.replace(/^\/+/, "")
   const { pathOnly, query } = splitPathQuery(next)
-  const url = joinServerBaseUrl(serverUrl, pathOnly)
+  const url = joinServerBaseUrl(baseUrl, pathOnly)
   const nextQuery = queryWithDirectory(pathOnly, query, "GET")
   if (nextQuery) {
     for (const [key, value] of Object.entries(nextQuery)) {

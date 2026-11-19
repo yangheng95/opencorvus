@@ -10,6 +10,7 @@ import {
  */
 
 import {
+  joinServerBaseUrl,
   STREAM_INSTANCE_QUERY_KEY,
   STREAM_SOCKET_PATH,
   STREAM_SOCKET_PROTOCOL,
@@ -29,6 +30,7 @@ import {
   apiUrl as apiUrlFromState,
   assertApiAuthorityCurrent,
   captureApiAuthority,
+  getServerUrl,
   isApiAuthorityCurrent,
   onAuthChange,
 } from "./api-state"
@@ -145,9 +147,9 @@ function webSendNotification(title: string, body?: string, tag?: string): boolea
   return true
 }
 
-function buildUrl(path: string, query?: TransportRequest["query"]): URL {
+function buildUrl(path: string, query?: TransportRequest["query"], baseUrl?: string): URL {
   // apiUrl already handles serverUrl + ?directory= injection.
-  const u = new URL(apiUrlFromState(path))
+  const u = new URL(apiUrlFromState(path, baseUrl))
   if (query) {
     for (const [k, v] of Object.entries(query)) {
       if (v === undefined || v === null) continue
@@ -214,8 +216,13 @@ async function readErrorResponse<T>(res: Response): Promise<T> {
 /** UI GET and POST streams share one socket; business owners retain reconnect. */
 function openSocketStream(input: StreamOpenRequest, handlers: StreamHandlers): StreamHandle {
   const streamID = randomUUID()
-  const url = buildUrl(input.path, input.query)
-  url.searchParams.set(STREAM_INSTANCE_QUERY_KEY, streamID)
+  const serverUrl = getServerUrl()
+  const admissionUrl = joinServerBaseUrl(serverUrl, STREAM_SOCKET_PATH)
+  // The service dispatches this target internally, beneath its own origin.
+  const target = buildUrl(input.path, input.query, admissionUrl.origin)
+  target.searchParams.set(STREAM_INSTANCE_QUERY_KEY, streamID)
+  const dispatchTarget = target.pathname + target.search
+  const requestURL = joinServerBaseUrl(serverUrl, dispatchTarget).href
   const controller = new AbortController()
   let socket: WebSocket | undefined
   let closed = false
@@ -228,7 +235,7 @@ function openSocketStream(input: StreamOpenRequest, handlers: StreamHandlers): S
       protocol: STREAM_LIFECYCLE_PROTOCOL,
       streamID,
       timestampMilliseconds: performance.timeOrigin + performance.now(),
-      requestURL: url.toString(),
+      requestURL,
     })
   }
   const close = (reason: string, initiator: StreamCloseInitiator | "transport" = "transport") => {
@@ -287,13 +294,13 @@ function openSocketStream(input: StreamOpenRequest, handlers: StreamHandlers): S
             ...apiHeadersFromState(),
             ...(input.headers ?? {}),
             [STREAM_SOCKET_METHOD_HEADER]: input.method ?? "GET",
-            [STREAM_SOCKET_TARGET_HEADER]: url.pathname + url.search,
+            [STREAM_SOCKET_TARGET_HEADER]: dispatchTarget,
           },
           signal: controller.signal,
         },
         input.body,
       )
-      const response = await fetch(buildUrl(STREAM_SOCKET_PATH).toString(), init)
+      const response = await fetch(admissionUrl.href, init)
       if (closed) {
         await response.body?.cancel()
         return
@@ -301,7 +308,7 @@ function openSocketStream(input: StreamOpenRequest, handlers: StreamHandlers): S
       if (!response.ok) throw new Error("Stream admission " + response.status + ": " + (await response.text()))
       const { ticket } = (await response.json()) as { ticket: string }
       if (closed) return
-      const endpoint = buildUrl(STREAM_SOCKET_PATH)
+      const endpoint = new URL(admissionUrl)
       endpoint.protocol = endpoint.protocol === "https:" ? "wss:" : "ws:"
       socket = new WebSocket(endpoint.toString(), [STREAM_SOCKET_PROTOCOL, STREAM_SOCKET_TICKET_PREFIX + ticket])
       socket.binaryType = "arraybuffer"

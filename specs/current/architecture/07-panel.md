@@ -3329,6 +3329,13 @@ connecting/reconnecting state until the replacement actually opens. Only explici
 interruption rather than resetting it on every retry; source/authority retirement
 still invalidates old callbacks before closing their handles.
 
+Browser and Tauri streams reserve and upgrade the same WebSocket endpoint under
+the applied public service base, including its deployment prefix. The reservation
+target names the logical route and its query as dispatched inside that service.
+The transport builds that target from the caller's request, retaining the
+directory and stream-instance identity. The public request URL in lifecycle
+diagnostics includes the prefix.
+
 The sidebar badge and banner use one stateless presentation of those observations.
 A restored selected stream with backend health still unconfirmed is Connecting,
 with an explicit live-updates-connected message; it is neither an Online claim
