@@ -208,5 +208,15 @@
     "Local openai-compatible adapter deliberately has no verified typed image tool-result transport; actual tool-result inputs retain the explicit reference/limitation. Supported adapter typed pixels are tested through actual Message projection",
     "PDF/audio/video classifier and explicit capability errors tested; no new native PDF/audio/video playback or transport support claim",
     "Persisted fork transcripts include copied assistant facts, not additional live model invocations"
-  ]
+  ],
+  "postCommitCheckCorrection": {
+    "firstPush": "pre-push rejected TS2769 in util/test/mime.test.ts because expected modalities widened to string",
+    "change": "Preserve literal table rows with as const; no production type weakening",
+    "priorReportingError": "Combined typecheck/build command inspected only final build exit and missed preceding typecheck failure",
+    "independentRerun": {
+      "command": "bun run --cwd packages/util typecheck",
+      "exitCode": 0,
+      "utilTests": "42 pass, 49 expectations, 3 files"
+    }
+  }
 }

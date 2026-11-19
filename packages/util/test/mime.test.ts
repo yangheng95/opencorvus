@@ -8,7 +8,7 @@ test.each([
   ["APPLICATION/PDF; version=1.7", "application/pdf", "pdf"],
   ["Audio/WAV; codecs=1", "audio/wav", "audio"],
   ["VIDEO/MP4; codecs=avc1", "video/mp4", "video"],
-])("classifies declared %s as %s with its model modality", (mime, type, modality) => {
+] as const)("classifies declared %s as %s with its model modality", (mime, type, modality) => {
   expect({ type: baseMediaType(mime), modality: mediaInputModality(mime) }).toEqual({ type, modality })
 })
 

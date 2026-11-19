@@ -13,3 +13,4 @@
 - candidate-web-tool-first-image.png、candidate-web-tool-raster-images.png、candidate-web-tool-svg-images.png、candidate-web-tool-vector-full-image.png：本人真实展开工具，滚动复核全部五图，并打开参数 SVG 全图。
 - [未分配服务的网页失败](candidate-web-tool-runtime.json)、[仅 ACP 附加后的目录](candidate-web-tool-restored-runtime.json)、[显式项目分配后的成功](candidate-web-tool-assigned-runtime.json)：真实失败及后续恢复完整保留，不将连接/附加当作固定 Chat 的能力分配。生成 SDK 原型参数错误修正后重新运行成功。
 - zed-candidate-acp.jsonl 是首次候选的官方协议传输记录。这里只证明实际协议、数据和桌面运行；本机未验证工具图像传输的适配器保留明确限制，不宣称外部模型、GPT-6.1 Sol 或 native Zed 验收。
+- 首次推送的通用包测试字面量类型错误及独立修正重跑见最终检查中的 postCommitCheckCorrection；生产代码和图像字节验收未变，钩子按原流程重跑。
