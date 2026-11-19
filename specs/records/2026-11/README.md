@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [Markdown 跨文档标题链接](2026-11-19-markdown-cross-file-headings.md)
 - [Markdown 相对资源路径保留原样百分号](2026-11-19-markdown-literal-percent-paths.md)
 - [代理前缀下的网页实时事件](2026-11-19-prefixed-stream-target.md)
 - [网页按实际发布位置选择默认服务](2026-11-19-mounted-ui-server-default.md)
