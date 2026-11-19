@@ -395,6 +395,10 @@ function WorkLedgerRowView(props: {
     const directory = row().directory.trim()
     return directory ? projectDirectoryLabel(directory, "").name.trim() : ""
   }
+  const tooltipMissionRequest = () => {
+    const current = row()
+    return current.kind === "mission" ? current.pendingPromptText : undefined
+  }
   const tooltipTime = createMemo(() => {
     const current = row()
     const isTask = current.kind === "task"
@@ -410,7 +414,8 @@ function WorkLedgerRowView(props: {
     const relative = relativeTime(tooltipTime().timestamp)
     return relative === tooltipTimeDetail() ? "" : relative
   }
-  const hasTooltipSummary = () => Boolean(tooltipTitle() || tooltipFolderName() || tooltipTime().timestamp)
+  const hasTooltipSummary = () =>
+    Boolean(tooltipTitle() || tooltipFolderName() || tooltipTime().timestamp || tooltipMissionRequest())
   const missionTaskCount = () => (row().kind === "mission" ? (row() as WorkLedgerMissionRow).tasks.length : 0)
   const hasMissionTasks = () => missionTaskCount() > 0
   const [pointerWithinMission, setPointerWithinMission] = createSignal(false)
@@ -652,6 +657,14 @@ function WorkLedgerRowView(props: {
                         {(relative) => <time dateTime={tooltipDateTime()} data-ui="work-row-summary-time-relative">{relative()}</time>}
                       </Show>
                     </div>
+                  </Show>
+                  <Show when={tooltipMissionRequest()}>
+                    {(request) => (
+                      <div class="work-row-summary-tooltip__request" data-ui="work-row-summary-mission-request">
+                        <span>{t("mission_board.create.manual_draft")} · </span>
+                        <bdi>{request()}</bdi>
+                      </div>
+                    )}
                   </Show>
                   <Show when={tooltipTimeDetail()}>
                     {(detail) => (

@@ -505,6 +505,19 @@
   white-space: nowrap;
 }
 
+.work-row-summary-tooltip__request {
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.work-row-summary-tooltip__request > span {
+  color: var(--text-soft);
+}
+
 .work-row-summary-tooltip__time {
   min-width: 0;
   display: grid;

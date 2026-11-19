@@ -5558,6 +5558,10 @@ For Mission and Chat/Work it labels the record's creation time, including a
 saved draft or empty conversation. For top-level and nested Tasks it labels
 the Task lifecycle start. The displayed absolute and relative times refer to
 that same instant and use the current locale.
+Mission tooltips in Project groups and Recents include the current saved
+`pendingPromptText` with the localized Draft label. The two-line preview helps
+distinguish equal titles before opening the conversation. Selection opens the
+same Mission and its complete saved request.
 Chat and Mission sidebar action menus can rename the targeted item while
 keeping the current conversation selected. The shared rename dialog returns
 focus to the originating row if it remains available. The row's double-click
