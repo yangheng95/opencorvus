@@ -496,6 +496,7 @@ export function App(props: AppProps) {
   }
   const [goalOpenRequest, setGoalOpenRequest] = createSignal(0)
   const openGoalForm = () => setGoalOpenRequest((value) => value + 1)
+  const goalReadOnly = () => !props.homeActive && props.conversationItem()?.archived !== undefined
   const [goalFormRequest, setGoalFormRequest] = createSignal<GoalFormRequest>()
   const [startingGoal, setStartingGoal] = createSignal(false)
   async function startGoal(input: ContinuousGoalCreateInput, context: GoalLaunchContext) {
@@ -827,7 +828,7 @@ export function App(props: AppProps) {
                             </header>
                             <Show when={!props.homeActive}>
                               <ContinuousGoalControl
-                                readOnly={props.conversationItem()?.archived !== undefined}
+                                readOnly={goalReadOnly()}
                                 openRequest={goalOpenRequest()}
                                 ownerLabel={props.conversationTitle()}
                                 composerDraftKey={props.composerDraftKey}
@@ -1000,6 +1001,7 @@ export function App(props: AppProps) {
         <CommandPalette
           onNewChat={props.onNewChat}
           onOpenGoal={props.primarySurface() === "conversation" && (props.homeActive || props.conversationItem()) ? openGoalForm : undefined}
+          goalReadOnly={goalReadOnly()}
           onOpenFiles={filesAvailable() ? openProjectFiles : undefined}
           onSelectProject={props.onSelectProject}
           onSelectMission={props.onSelectMission}

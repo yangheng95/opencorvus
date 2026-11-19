@@ -62,6 +62,9 @@ the public Goal GET includes archived owners for history reading and reports
 the `owner_archived` boundary. Their UI permits reading details while edits
 remain unavailable until explicit restoration; mutation owner validation is
 unchanged. Reading or restoring visibility never resumes the goal.
+The goal guide for archived work explains that restoration is required to set
+or change a goal. Global search offers to view the goal with the same guidance
+and opens the existing read-only control for that owner.
 Creation and explicit active updates recheck exclusivity in the same transaction.
 Owner deletion follows the existing Session/Task deletion facts, including retained
 history rows. A retained row alone does not authorize execution or public goal access.

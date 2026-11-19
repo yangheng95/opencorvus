@@ -121,6 +121,7 @@ function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string
 export function CommandPalette(props: {
   onNewChat: () => Promise<void>
   onOpenGoal?: () => void
+  goalReadOnly?: boolean
   onOpenFiles?: () => void
   onSelectProject: (directory: string) => Promise<void>
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
@@ -158,18 +159,23 @@ export function CommandPalette(props: {
 
     const openGoal = props.onOpenGoal
     if (openGoal) {
-      cmds.push({
-        id: "goal:open",
-        label: t("continuous_goal.open"),
-        hint: t("cmdk.goal_hint"),
-        group: t("cmdk.group.commands"),
-        keywords: [
-          "goal continuous objective budget",
+      const readOnly = props.goalReadOnly
+      const keywords = ["goal continuous objective"]
+      if (!readOnly) {
+        keywords.push(
+          "budget",
           t("continuous_goal.token_budget"),
           t("continuous_goal.turn_budget"),
           t("continuous_goal.pause"),
           t("continuous_goal.resume"),
-        ].join(" "),
+        )
+      }
+      cmds.push({
+        id: "goal:open",
+        label: t(readOnly ? "continuous_goal.view" : "continuous_goal.open"),
+        hint: t(readOnly ? "continuous_goal.guide.archived" : "cmdk.goal_hint"),
+        group: t("cmdk.group.commands"),
+        keywords: keywords.join(" "),
         icon: "goals",
         run: openGoal,
       })

@@ -6287,6 +6287,9 @@ Its search metadata consumes the existing localized token/automatic-turn budget,
 Pause and Resume labels, alongside the canonical Goal terms. The result hint
 describes those existing operations; no second command catalog or execution path
 is introduced to make those controls discoverable in the current language.
+For archived work the same command offers to view the goal and explains the
+restoration requirement. It uses the current selected record's read-only state
+shared with the goal control, which shows existing details or the archived guide.
 Mission Board has no current-page Goal action. Empty-query recent work and
 suggested actions, work pagination and numbered work shortcuts retain their order.
 
