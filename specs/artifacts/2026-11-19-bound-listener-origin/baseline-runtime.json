@@ -1,0 +1,55 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-ipv6-baseline",
+    "outcome": "listening",
+    "url": "http://::1:40188",
+    "pid": 20240
+  },
+  "published": {
+    "error": {
+      "name": "TypeError",
+      "message": "Failed to parse URL from http://::1:40188/global/health",
+      "cause": "Invalid URL"
+    }
+  },
+  "directHealth": {
+    "status": 200
+  },
+  "diagnosticBase": "http://[::1]:40188",
+  "session": {
+    "id": "ses_hOtYUEyaVeUpcjHmv1L4",
+    "slug": "tidy-knight",
+    "version": "local",
+    "projectID": "prj_hgLO25DQv1UxugHwptJt",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b331\\baseline\\ipv6-review",
+    "title": "Chat",
+    "kind": "assistant",
+    "metadata": {
+      "projectConversationCreation": {
+        "version": 1,
+        "requestID": "5a348cc3-6d03-4857-bba3-4213aa0db188",
+        "model": "acp-review/local"
+      },
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "acp-review/local"
+      }
+    },
+    "time": {
+      "created": 1795052161505,
+      "updated": 1795052161505
+    }
+  },
+  "attachment": {
+    "sha": "1b38fd0e33c6272d01884ef8346f2c5d92435de9a38bd925120a798e19c79707",
+    "url": "/attachment/prj_hgLO25DQv1UxugHwptJt/1b38fd0e33c6272d01884ef8346f2c5d92435de9a38bd925120a798e19c79707.txt",
+    "mime": "text/plain",
+    "size": 26,
+    "filename": "listener-facts.txt"
+  },
+  "target": "http://[::1]:40188/ui/?sessionID=ses_hOtYUEyaVeUpcjHmv1L4&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b331%5Cbaseline%5Cipv6-review&experience=chat"
+}

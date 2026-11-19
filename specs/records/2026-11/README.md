@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从真实监听器发布规范服务来源](2026-11-19-bound-listener-origin.md)
 - [SDK 按逻辑路由绑定项目目录](2026-11-19-sdk-logical-route-directory.md)
 - [附件来源地址指向真实规范原件](2026-11-19-attachment-source-uri.md)
 - [附件媒体声明与模型模态一致](2026-11-19-attachment-media-modality.md)

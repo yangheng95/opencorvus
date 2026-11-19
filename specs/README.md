@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从真实监听器发布规范服务来源](records/2026-11/2026-11-19-bound-listener-origin.md)
 - [SDK 按逻辑路由绑定项目目录](records/2026-11/2026-11-19-sdk-logical-route-directory.md)
 - [附件来源地址指向真实规范原件](records/2026-11/2026-11-19-attachment-source-uri.md)
 - [附件媒体声明与模型模态一致](records/2026-11/2026-11-19-attachment-media-modality.md)

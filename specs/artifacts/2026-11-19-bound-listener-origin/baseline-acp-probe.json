@@ -1,0 +1,44 @@
+{
+  "initialization": {
+    "protocolVersion": 1,
+    "agentCapabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    },
+    "authMethods": [
+      {
+        "description": "Run `opencorvus auth login` in the terminal",
+        "name": "Login with opencorvus",
+        "id": "opencorvus-login"
+      }
+    ],
+    "agentInfo": {
+      "name": "OpenCorvus",
+      "version": "local"
+    }
+  },
+  "sessionError": {
+    "name": "RequestError",
+    "message": "Internal error",
+    "code": -32603,
+    "data": {
+      "details": "Failed to construct 'Request': Invalid URL \"http://::1:40182/session?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b331%5Cbaseline%5Cipv6-review\""
+    }
+  },
+  "exit": [
+    0,
+    null
+  ]
+}

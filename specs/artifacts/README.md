@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [监听器规范来源验收](2026-11-19-bound-listener-origin/README.md)
 - [SDK 逻辑路由目录验收](2026-11-19-sdk-logical-route-directory/README.md)
 - [附件来源地址验收](2026-11-19-attachment-source-uri/README.md)
 - [附件媒体模态验收](2026-11-19-attachment-media-modality/README.md)
