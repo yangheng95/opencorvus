@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [文件查找反馈已完成的无匹配结果](records/2026-11/2026-11-19-editor-search-no-matches.md)
 - [文件查找提示无效的正则表达式](records/2026-11/2026-11-19-editor-invalid-search-pattern.md)
 - [文件草稿确认保留原路径](records/2026-11/2026-11-19-stable-file-draft-confirmation.md)
 - [从 Markdown 文件链接返回阅读位置](records/2026-11/2026-11-19-markdown-return-to-document.md)
