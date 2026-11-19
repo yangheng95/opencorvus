@@ -1229,6 +1229,9 @@ publishes this action only for its live view and retires it on cleanup. Deferred
 focus verifies the original file, load generation and API authority. The main
 conversation's window search shortcut is active only while that conversation
 surface is visible; Settings and other primary surfaces retire that shortcut.
+The shared editor's status area announces an invalid nonempty regular expression
+from CodeMirror's current open query. Editing or closing that query updates the
+feedback through the same editor instance.
 Explicit file links activated inside that Preview resolve relative paths from
 the current document's parent, using the existing server-path primitives and
 selectedFileTarget identity. Absolute paths keep their existing meaning. The

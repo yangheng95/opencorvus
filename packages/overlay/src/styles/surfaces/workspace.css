@@ -474,6 +474,11 @@ code .file-link:focus-visible {
   font-size: var(--ui-font-caption);
 }
 
+.file-editor-search-error {
+  margin-inline-end: auto;
+  color: var(--text);
+}
+
 .file-editor-code .cm-editor {
   height: 100%;
   min-height: 0;

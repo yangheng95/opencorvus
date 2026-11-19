@@ -1,5 +1,5 @@
 import { Compartment, EditorSelection } from "@codemirror/state"
-import { openSearchPanel } from "@codemirror/search"
+import { getSearchQuery, openSearchPanel, searchPanelOpen } from "@codemirror/search"
 import type { SourceFileRange } from "@opencorvus-ai/sdk"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
@@ -60,6 +60,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   const readOnlyCompartment = new Compartment()
   const readOnlyExtensions = (readOnly: boolean) => codeEditorContent({ readOnly, ariaLabel: local.ariaLabel })
   const [languageName, setLanguageName] = createSignal("")
+  const [invalidSearchPattern, setInvalidSearchPattern] = createSignal(false)
   const [languageStatus, setLanguageStatus] = createSignal<"loading" | "ready" | "failed">("ready")
   const [languageRetry, setLanguageRetry] = createSignal(0)
 
@@ -168,6 +169,8 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
         EditorView.lineWrapping,
         readOnlyCompartment.of(readOnlyExtensions(!!local.readOnly)),
         EditorView.updateListener.of((update) => {
+          const query = searchPanelOpen(update.state) ? getSearchQuery(update.state) : undefined
+          setInvalidSearchPattern(query?.regexp === true && query.search !== "" && !query.valid)
           if (applyingExternalValue) return
           if (!update.docChanged && update.startState.field(codeEditorLineEndings) === update.state.field(codeEditorLineEndings)) return
           local.onValueChange(codeEditorValue(update.state))
@@ -264,6 +267,9 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
         }}
       />
       <div class="file-editor-language" role="status" aria-live="polite">
+        <Show when={invalidSearchPattern()}>
+          <span class="file-editor-search-error">{t("code_editor.invalid_regular_expression")}</span>
+        </Show>
         <span>
           {languageStatus() === "failed"
             ? t("file_editor.highlight_failed", { language: languageName() })
