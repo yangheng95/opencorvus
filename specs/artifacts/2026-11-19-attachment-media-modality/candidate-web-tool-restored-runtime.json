@@ -1,0 +1,1362 @@
+{
+  "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+  "result": {
+    "stopReason": "end_turn",
+    "usage": {
+      "totalTokens": 19,
+      "inputTokens": 11,
+      "outputTokens": 8
+    },
+    "_meta": {}
+  },
+  "updates": [
+    {
+      "sessionId": "ses_hzd7RSjYXYXIGzDuGZ0H",
+      "update": {
+        "toolCallId": "owned-encoding-call-7",
+        "title": "capability_search",
+        "kind": "other",
+        "status": "pending",
+        "locations": [],
+        "rawInput": {},
+        "sessionUpdate": "tool_call"
+      }
+    },
+    {
+      "sessionId": "ses_hzd7RSjYXYXIGzDuGZ0H",
+      "update": {
+        "toolCallId": "owned-encoding-call-7",
+        "kind": "other",
+        "status": "in_progress",
+        "title": "capability_search",
+        "locations": [],
+        "rawInput": {
+          "queries": [
+            "read_declared_images"
+          ],
+          "kinds": [
+            "mcp_tool"
+          ],
+          "exact_refs": [],
+          "deactivate_refs": [],
+          "limit": 5
+        },
+        "sessionUpdate": "tool_call_update"
+      }
+    },
+    {
+      "sessionId": "ses_hzd7RSjYXYXIGzDuGZ0H",
+      "update": {
+        "toolCallId": "owned-encoding-call-7",
+        "kind": "other",
+        "status": "completed",
+        "title": "Capability search",
+        "content": [
+          {
+            "content": {
+              "text": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+              "type": "text"
+            },
+            "type": "content"
+          }
+        ],
+        "rawInput": {
+          "queries": [
+            "read_declared_images"
+          ],
+          "kinds": [
+            "mcp_tool"
+          ],
+          "exact_refs": [],
+          "deactivate_refs": [],
+          "limit": 5
+        },
+        "rawOutput": {
+          "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+          "metadata": {
+            "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+            "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+            "caller": "conversation",
+            "result_count": 0,
+            "reveal_revision": 1,
+            "active_ref_count": 0,
+            "active_payload_chars": 113186,
+            "active_payload_tokens": 27673,
+            "visible_expert_squad_count": 5,
+            "opencorvus_capability_reveal_v2": {
+              "schema_version": 2,
+              "occurrence_id": "msg_g0VbNCman00z0vNEweZl",
+              "search_call_id": "owned-encoding-call-7",
+              "prior_revision": 0,
+              "revision": 1,
+              "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+              "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "materialization_fingerprint": "216462137566ccaf3bf5dd52d94294dd6a4ab5df735bb77edc4491e14c3e70c2",
+              "result_refs": [],
+              "deactivate_refs": [],
+              "activated": [],
+              "active_refs": [],
+              "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673
+            },
+            "truncated": false
+          }
+        },
+        "sessionUpdate": "tool_call_update"
+      }
+    },
+    {
+      "sessionId": "ses_hzd7RSjYXYXIGzDuGZ0H",
+      "update": {
+        "content": {
+          "text": "The owned image tool is not available in this occurrence catalogue. Session setup must attach the owned service before starting another occurrence.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNCmnX00sHr03YYio",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_hzd7RSjYXYXIGzDuGZ0H",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    }
+  ],
+  "history": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795046946107
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media tool declarations. Discover and call owned_media read_declared_images for this web Chat, then report the real returned evidence."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "64d9f3ddb4f5b17ed4d120e032047a4eb2b974d0a8de5257ed5a942d98b16a95"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795046946107:0000000000000030:0000000000000000:message:msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3GV00ILXDclJ6p",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+          "orderKey": "v1:0001795046946109:0000000000000031:0000000000000000:part:prt_g0VbNC3GV00ILXDclJ6p",
+          "type": "text",
+          "text": "Inspect media tool declarations. Discover and call owned_media read_declared_images for this web Chat, then report the real returned evidence.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+            "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046946261,
+          "completed": 1795046947048
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046946261:0000000000000030:0000000000000000:message:msg_g0VbNC3Iz009oc7bhbfC",
+        "id": "msg_g0VbNC3Iz009oc7bhbfC",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3T7003yoAS8YBW",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3Iz009oc7bhbfC",
+          "orderKey": "v1:0001795046946889:0000000000000031:0000000000000000:part:prt_g0VbNC3T7003yoAS8YBW",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3TQ00biUFym0ZO",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3Iz009oc7bhbfC",
+          "type": "tool",
+          "callID": "owned-encoding-call-19",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 1,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-19",
+                "prior_revision": 0,
+                "revision": 1,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "751e8deb098c851208730db77463693910dfac092f897a50dc492e3b3f0e3c08",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046946908,
+              "end": 1795046946987
+            }
+          },
+          "orderKey": "v1:0001795046946915:0000000000000031:0000000000000000:part:prt_g0VbNC3TQ00biUFym0ZO"
+        },
+        {
+          "id": "prt_g0VbNC3Ul004S5jBTf1W",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3Iz009oc7bhbfC",
+          "orderKey": "v1:0001795046946991:0000000000000031:0000000000000000:part:prt_g0VbNC3Ul004S5jBTf1W",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046947098,
+          "completed": 1795046947811
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046947098:0000000000000030:0000000000000000:message:msg_g0VbNC3WU00h51NL3GdG",
+        "id": "msg_g0VbNC3WU00h51NL3GdG",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3f400p7efWAZ0Z",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3WU00h51NL3GdG",
+          "orderKey": "v1:0001795046947630:0000000000000031:0000000000000000:part:prt_g0VbNC3f400p7efWAZ0Z",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3fP00fJ5yeFpbh",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3WU00h51NL3GdG",
+          "type": "tool",
+          "callID": "owned-encoding-call-20",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 2,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-20",
+                "prior_revision": 1,
+                "revision": 2,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "e693f72f26ee3b011b87cbc1dad4912ec9802b47aff4075c5148fbfa7362a75b",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046947651,
+              "end": 1795046947744
+            }
+          },
+          "orderKey": "v1:0001795046947659:0000000000000031:0000000000000000:part:prt_g0VbNC3fP00fJ5yeFpbh"
+        },
+        {
+          "id": "prt_g0VbNC3gy009V1aMnqJP",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3WU00h51NL3GdG",
+          "orderKey": "v1:0001795046947749:0000000000000031:0000000000000000:part:prt_g0VbNC3gy009V1aMnqJP",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046947839,
+          "completed": 1795046948408
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046947839:0000000000000030:0000000000000000:message:msg_g0VbNC3iR00Wjjh36iIj",
+        "id": "msg_g0VbNC3iR00Wjjh36iIj",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3nm00NxaVWDJBh",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3iR00Wjjh36iIj",
+          "orderKey": "v1:0001795046948170:0000000000000031:0000000000000000:part:prt_g0VbNC3nm00NxaVWDJBh",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3o600AwSehxElf",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3iR00Wjjh36iIj",
+          "type": "tool",
+          "callID": "owned-encoding-call-21",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 3,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 3,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-21",
+                "prior_revision": 2,
+                "revision": 3,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "190efa2471fca6f5517a7e295ec56bc4f60ae394900d4c5f5a17810e0121b495",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046948190,
+              "end": 1795046948329
+            }
+          },
+          "orderKey": "v1:0001795046948198:0000000000000031:0000000000000000:part:prt_g0VbNC3o600AwSehxElf"
+        },
+        {
+          "id": "prt_g0VbNC3qS00M6iho14mL",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3iR00Wjjh36iIj",
+          "orderKey": "v1:0001795046948336:0000000000000031:0000000000000000:part:prt_g0VbNC3qS00M6iho14mL",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046948446,
+          "completed": 1795046949004
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046948446:0000000000000030:0000000000000000:message:msg_g0VbNC3sE000wVgm8dBn",
+        "id": "msg_g0VbNC3sE000wVgm8dBn",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3y200FhZYRzorp",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3sE000wVgm8dBn",
+          "orderKey": "v1:0001795046948806:0000000000000031:0000000000000000:part:prt_g0VbNC3y200FhZYRzorp",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3yI00dFICDm60i",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3sE000wVgm8dBn",
+          "type": "tool",
+          "callID": "owned-encoding-call-22",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 4,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 4,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-22",
+                "prior_revision": 3,
+                "revision": 4,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "af81d9ed034748852980fd780bc92bb8cd7dd99fe92e700f8ec1fe5ef9c445c4",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046948822,
+              "end": 1795046948954
+            }
+          },
+          "orderKey": "v1:0001795046948830:0000000000000031:0000000000000000:part:prt_g0VbNC3yI00dFICDm60i"
+        },
+        {
+          "id": "prt_g0VbNC40U00hQVJD2iwQ",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3sE000wVgm8dBn",
+          "orderKey": "v1:0001795046948958:0000000000000031:0000000000000000:part:prt_g0VbNC40U00hQVJD2iwQ",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046949031,
+          "completed": 1795046949650
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046949031:0000000000000030:0000000000000000:message:msg_g0VbNC41f00P57rbTWzl",
+        "id": "msg_g0VbNC41f00P57rbTWzl",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC48N00eylKgKhOX",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC41f00P57rbTWzl",
+          "orderKey": "v1:0001795046949447:0000000000000031:0000000000000000:part:prt_g0VbNC48N00eylKgKhOX",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC49E003cUodDleC",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC41f00P57rbTWzl",
+          "type": "tool",
+          "callID": "owned-encoding-call-23",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 5,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 5,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-23",
+                "prior_revision": 4,
+                "revision": 5,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "ec8ad93c2efb90fb6f752535103caa214fbebb64f0bbb02e65e1a51aa43d0575",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046949500,
+              "end": 1795046949593
+            }
+          },
+          "orderKey": "v1:0001795046949506:0000000000000031:0000000000000000:part:prt_g0VbNC49E003cUodDleC"
+        },
+        {
+          "id": "prt_g0VbNC4An00qVxc0WJoC",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC41f00P57rbTWzl",
+          "orderKey": "v1:0001795046949597:0000000000000031:0000000000000000:part:prt_g0VbNC4An00qVxc0WJoC",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046949680,
+          "completed": 1795046950163
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046949680:0000000000000030:0000000000000000:message:msg_g0VbNC4C800h2xrgKLug",
+        "id": "msg_g0VbNC4C800h2xrgKLug",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC4H600U1DmMa4wz",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4C800h2xrgKLug",
+          "orderKey": "v1:0001795046949988:0000000000000031:0000000000000000:part:prt_g0VbNC4H600U1DmMa4wz",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC4HV00Mnx5gh7y6",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4C800h2xrgKLug",
+          "type": "tool",
+          "callID": "owned-encoding-call-24",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 6,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 6,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-24",
+                "prior_revision": 5,
+                "revision": 6,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "96813deb4416ef07f1a0ebc54c1f656330e845a33aae64eb7acb79c01bd6f950",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046950013,
+              "end": 1795046950101
+            }
+          },
+          "orderKey": "v1:0001795046950019:0000000000000031:0000000000000000:part:prt_g0VbNC4HV00Mnx5gh7y6"
+        },
+        {
+          "id": "prt_g0VbNC4Iz00B1ni6LmmN",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4C800h2xrgKLug",
+          "orderKey": "v1:0001795046950105:0000000000000031:0000000000000000:part:prt_g0VbNC4Iz00B1ni6LmmN",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046950188,
+          "completed": 1795046950738
+        },
+        "error": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Error: capability_search was called 7 times in a row with byte-identical input and no other Tool call in between. The result will not change; repeating it cannot make progress. Use the result you already have to take the next decision, or call a different Tool."
+          }
+        },
+        "failureOccurrence": {
+          "session_id": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "assistant_message_id": "msg_g0VbNC4KK00iYmbQx6fO",
+          "error_name": "UnknownError"
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 0,
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "finish": "error",
+        "orderKey": "v1:0001795046950188:0000000000000030:0000000000000000:message:msg_g0VbNC4KK00iYmbQx6fO",
+        "id": "msg_g0VbNC4KK00iYmbQx6fO",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC4SU00wkFl7CAtd",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4KK00iYmbQx6fO",
+          "orderKey": "v1:0001795046950694:0000000000000031:0000000000000000:part:prt_g0VbNC4SU00wkFl7CAtd",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC4Sm00JOqEzcgtW",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4KK00iYmbQx6fO",
+          "type": "tool",
+          "callID": "owned-encoding-call-25",
+          "tool": "capability_search",
+          "state": {
+            "status": "error",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "failure": {
+              "kind": "UnknownError",
+              "name": "UnknownError",
+              "message": "Error: capability_search was called 7 times in a row with byte-identical input and no other Tool call in between. The result will not change; repeating it cannot make progress. Use the result you already have to take the next decision, or call a different Tool.",
+              "originSite": "session.processor.catch",
+              "classification": "llm-activity",
+              "data": {
+                "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                "failure_occurrence": {
+                  "session_id": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                  "assistant_message_id": "msg_g0VbNC4KK00iYmbQx6fO",
+                  "error_name": "UnknownError"
+                }
+              }
+            },
+            "time": {
+              "start": 1795046950712,
+              "end": 1795046950730
+            }
+          },
+          "orderKey": "v1:0001795046950718:0000000000000031:0000000000000000:part:prt_g0VbNC4Sm00JOqEzcgtW"
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795047120353
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media tool declarations. The owned server is now attached through session setup; discover and call read_declared_images in this new authorized occurrence."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "bfda3b76e815ecfe4c3b9940d6fab8682d4cac8e212d75a49dddb83f9d295167"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795047120353:0000000000000030:0000000000000000:message:msg_g0VbNCman00z0vNEweZl",
+        "id": "msg_g0VbNCman00z0vNEweZl",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNCmav005Y0tYyNMV",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCman00z0vNEweZl",
+          "orderKey": "v1:0001795047120354:0000000000000031:0000000000000000:part:prt_g0VbNCmav005Y0tYyNMV",
+          "type": "text",
+          "text": "Inspect media tool declarations. The owned server is now attached through session setup; discover and call read_declared_images in this new authorized occurrence.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+            "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047120445,
+          "completed": 1795047121106
+        },
+        "parentID": "msg_g0VbNCman00z0vNEweZl",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbNCman00z0vNEweZl"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795047120445:0000000000000030:0000000000000000:message:msg_g0VbNCmcP00oFwCgBTmC",
+        "id": "msg_g0VbNCmcP00oFwCgBTmC",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNCmkg00YLl2tOFw1",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmcP00oFwCgBTmC",
+          "orderKey": "v1:0001795047120958:0000000000000031:0000000000000000:part:prt_g0VbNCmkg00YLl2tOFw1",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNCmkw001Yw1sEjDD",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmcP00oFwCgBTmC",
+          "type": "tool",
+          "callID": "owned-encoding-call-7",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 1,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_g0VbNCman00z0vNEweZl",
+                "search_call_id": "owned-encoding-call-7",
+                "prior_revision": 0,
+                "revision": 1,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "216462137566ccaf3bf5dd52d94294dd6a4ab5df735bb77edc4491e14c3e70c2",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795047120974,
+              "end": 1795047121056
+            }
+          },
+          "orderKey": "v1:0001795047120980:0000000000000031:0000000000000000:part:prt_g0VbNCmkw001Yw1sEjDD"
+        },
+        {
+          "id": "prt_g0VbNCmmK00OT6nE1cgT",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmcP00oFwCgBTmC",
+          "orderKey": "v1:0001795047121060:0000000000000031:0000000000000000:part:prt_g0VbNCmmK00OT6nE1cgT",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047121136,
+          "completed": 1795047121448
+        },
+        "parentID": "msg_g0VbNCman00z0vNEweZl",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbNCman00z0vNEweZl"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795047121136:0000000000000030:0000000000000000:message:msg_g0VbNCmnX00sHr03YYio",
+        "id": "msg_g0VbNCmnX00sHr03YYio",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNCmrn00S140s7xkF",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmnX00sHr03YYio",
+          "orderKey": "v1:0001795047121399:0000000000000031:0000000000000000:part:prt_g0VbNCmrn00S140s7xkF",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNCms300kxzdB3er2",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmnX00sHr03YYio",
+          "orderKey": "v1:0001795047121415:0000000000000031:0000000000000000:part:prt_g0VbNCms300kxzdB3er2",
+          "type": "text",
+          "text": "The owned image tool is not available in this occurrence catalogue. Session setup must attach the owned service before starting another occurrence.",
+          "time": {
+            "start": 1795047121415,
+            "end": 1795047121420
+          }
+        },
+        {
+          "id": "prt_g0VbNCmsB00EH7BDBx6r",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmnX00sHr03YYio",
+          "orderKey": "v1:0001795047121423:0000000000000031:0000000000000000:part:prt_g0VbNCmsB00EH7BDBx6r",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    }
+  ],
+  "target": "http://127.0.0.1:40162/ui/?sessionID=ses_hzd7RSjYXYXIGzDuGZ0H&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b328%5Ccandidate%5Cmedia-declaration-review&experience=chat"
+}

@@ -62,6 +62,7 @@
  * ───────────────────────────────────────────────────────────────────────────
  */
 import type { LanguageModel } from "ai"
+import { mediaInputModality } from "@opencorvus-ai/util/mime"
 import { isDeepStrictEqual } from "node:util"
 import type { TextHooks } from "@/llm/api"
 import { resolveProjectedWorkerModel } from "@/agent/model"
@@ -1141,12 +1142,8 @@ async function runAgentSessionInner<C>(input: RunAgentSessionInput<C>): Promise<
     const before = fileParts.length
     parts = parts.filter((p) => {
       if (p.type !== "file") return true
-      const mime = (p.mime || "").toLowerCase()
-      let modality: "image" | "audio" | "video" | "pdf" | undefined
-      if (mime.startsWith("image/")) modality = "image"
-      else if (mime === "application/pdf") modality = "pdf"
-      else if (mime.startsWith("audio/")) modality = "audio"
-      else if (mime.startsWith("video/")) modality = "video"
+      const mime = p.mime || ""
+      const modality = mediaInputModality(mime)
       if (!modality) return true
       const accepted = model.capabilities.input[modality]
       if (!accepted) {

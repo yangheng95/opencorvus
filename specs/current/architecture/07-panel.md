@@ -405,6 +405,10 @@ history and file artifacts retain their original download/export actions.
 This read-only decoding contract does not change storage, model read tools or
 file editing and saving encodings. ACP replay and tool-result attachment projection
 use the same encoding selection with their own documented projection policies.
+Text readability does not override a declared image modality in model input. SVG
+remains readable XML, while actual user/tool model image parts use the shared image
+preparation pipeline and its resulting media type. Original MIME parameters and bytes
+remain on the attachment used by preview, download and ACP replay.
 FilePart's PDF content loads the same PdfPreview on demand, including canonical
 attachments; they do not depend on a host PDF plugin. The composer's constrained
 body scrolls independently of its header and footer, keeping Close visible.

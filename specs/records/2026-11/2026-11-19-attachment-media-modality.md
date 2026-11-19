@@ -35,3 +35,26 @@
 3. 聚焦正向测试：媒体基础类型与四模态输出；原 SVG 可读性；大写/参数 PNG、SVG 真实图像准备；公开消息模型输入和持久工具结果，实际 MIME/字节/尺寸；具名不支持能力错误；本地 SVG 链接、ACP load/fork 及工具图像。禁止以不出现/不存在/不调用为核心断言，禁止 UI 自动化。
 4. 启动新的候选 `40162`，真实每例流式模型请求应得到正确图像，合并输入为五张；各原件仍逐字节相同。实际 MCP stdio 图像工具及官方 ACP 通知核对参数图像和大小写，按适配器真实支持范围记录模型内容。正常退出后重启同一库，重新读取历史/派生并发送后续输入核对投影。本人在真实页面展开候选全图及工具图像，截图人工复核，实际下载保留原字节。
 5. 通用、后端与界面类型及需要的构建、文档和架构检查，完成范围提交；保留 177 项原改动，fetch/merge 上游、检查全部待推提交、普通 push 后继续下一批。任何未达项明示，不把局部正向测试冒充外部 Provider/GPT-6.1 Sol 或 native 编辑器端到端验收。
+
+## 实施和验收结果
+
+- 通用 `baseMediaType`、`mediaInputModality` 是基础媒体类型和四模态的唯一实现，文本可读性复用基础类型但保留 SVG 为 true。Message 用户/工具图像优先，模型文件返回实际准备后的 MIME；ProviderTransform、图像准备、runner、ACP 同步调用。明确本地 SVG 图像链接保留字节物化，ACP 图像参数头不再被窄正则拒绝。旧私有模态实现已删除，格式转换/裁边/像素预算与适配器集合保持单一来源。
+- `bun test ./test/mime.test.ts ./test/text-mime.test.ts ./test/text-decoding.test.ts`：42 通过、49 次断言。后端最终 `bun test ./test/acp-prompt-terminal.test.ts ./test/session-model-image-input.test.ts ./test/tool-result-attachment-provider-projection.test.ts ./test/util/utf8.test.ts`：63 通过、351 次正向断言。新增直接用户图像断言曾错误依赖 SDK 返回 URL 对象的 href 读取；改用标准 URL 序列化，继续验证真实传输 MIME、解码字节与完整像素，完整四文件重跑通过。原冗余可变 buffer 摘要已删除，独立原字节/实际输出核对保持。
+- backend/overlay/util（后端、界面、通用包）类型通过；util 和新 overlay 构建及 renderer surface（渲染器公开面）通过。语言 2 类/3229 键、样式、文档 353 操作/26 组、路由 6 规则/36 文件、20 份架构索引通过。无新增、运行界面自动测试。
+- 候选真实开发 `40162` 的五个单文件请求各含一张实际 PNG，合并请求含五张。两份 SVG 由既有准备器转换，消息携带真实转换说明，原件仍为 SVG。正常退出再启动同一库后，对同一合并历史发送新输入，实际模型请求的五份 image/png 均为 4983 字节，逐字节等于已知 PNG 原件，非仅图片计数或模型自述。
+- 官方 ACP 用户历史五项均为 image，保留各自原 MIME 和原字节。真实 stdio 只读 MCP 工具的五种声明都完成：首次实时 5 图、回放 5 图；重启后新轮次实时 5 图、累计历史回放 10 图。三个真实工具动作包括搜索、精确启用和实际调用，均有持久 completed 事实。
+- 本人真实桌面看到候选五张缩略图、参数 SVG 用户全图、网页 MCP 五张实际工具图片 328–332，以及工具参数 SVG 的 100% 全图，逐张截图复核。两次真实下载分别为用户 SVG 343 字节、工具 SVG 348 字节，均与各自输入原字节一致。
+
+### 网页 MCP 夹具修正及失败事实
+
+网页补验最初只连接了 `owned_media`，没有通过当前项目能力配置将它分配给 Chat。真实目录 `candidate_count: 0`。本机脚本参与者重复同一搜索，按产品现有七次相同输入保护结束为具名错误，原失败历史保留。随后在 ACP 会话设置附加同名服务仍未替代固定 Chat 的项目分配，脚本已改为读到完整空目录就明确报告实际设置缺失，不再重复搜索。
+
+根因以 `Config.PrimaryAssistantCapabilities`、`conversation/capability.ts` 和当前扩展架构核实：固定 Chat/Work 默认分配为空，连接与运行时附加不等于 `primary_assistant_capabilities.chat.mcp_server_refs`。通过现有 `chat.capability.get/update`，只在本人隔离项目显式分配 `owned_media` 后，新输入完成工具；新建干净网页 Chat 也正常完成并用于真实视觉复核，没有修改产品授权或工具可见性。一份夹具原型误用生成 SDK 的参数对象，Node 进程随后报告 UV_HANDLE_CLOSING；修为其实际 `conversationCapabilityUpdate` 参数并重跑退出 0。上述失败与修正分别保存实际 JSON（JavaScript Object Notation，数据交换格式），未当成图像投影通过。
+
+这是有界同输入保护的正常错误路径；实际同一会话后续输入恢复 stop，持久所有者收敛为零，没有队列/唤醒/终态未收拢现象。未因这次夹具错误改动调度机制。
+
+### 运行事实与范围
+
+四个本人模型进程共 57 次请求/57 次流式传输完成，全部精确 local；对话 38、项目记忆 19。只读持久事实：基线 7 会话/14 消息/50 Part（消息片段）；候选 11/49/125。两库输入所有者均为 0；候选助手为 stop 14、工具调用中间步 19、上文夹具历史 error 1。派生复制历史，不等于额外模型调用。所有本人页面、协议服务和模型服务正常退出，40160/40162/40164 全关闭。
+
+限制：本机 openai-compatible 适配器按当前公开合同没有已验证的“工具结果 typed image”传输，真实工具模型输入保持原件引用和明确限制，未扩大适配器支持；已支持适配器的实际 Message typed image 像素经聚焦测试验证。PDF/音视频覆盖基础类型和具名能力错误、PDF 透明字节传输合同，没有新增原生播放或内容理解验收。没有外部 Provider/GPT-6.1 Sol 或 native Zed 验收；资源 URI 一般身份语义仍留下一批调查。

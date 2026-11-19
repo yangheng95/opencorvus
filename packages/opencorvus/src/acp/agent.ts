@@ -31,6 +31,7 @@ import {
 import { Log } from "../util/log"
 import { decodeText, TextDecodingError } from "@opencorvus-ai/util/text-decoding"
 import { isDecodableText } from "@opencorvus-ai/util/text-mime"
+import { mediaInputModality } from "@opencorvus-ai/util/mime"
 import { posix } from "node:path"
 import { pathToFileURL } from "node:url"
 import { ACPSessionManager } from "./session"
@@ -152,7 +153,7 @@ async function toolImageAttachmentContent(attachments: Message.FilePart[] | unde
   if (!attachments?.length) return []
   const content: ToolCallContent[] = []
   for (const attachment of attachments) {
-    if (!attachment.mime.startsWith("image/")) continue
+    if (mediaInputModality(attachment.mime) !== "image") continue
     const dataUrl =
       (await AttachmentStore.dataUrlFromReference(attachment.url, attachment.mime)) ??
       (attachment.url.startsWith("data:") ? attachment.url : undefined)
@@ -161,19 +162,13 @@ async function toolImageAttachmentContent(attachments: Message.FilePart[] | unde
         `ACP tool image attachment ${attachment.filename ?? attachment.url} is not a stored attachment or data URL`,
       )
     }
-    const match = dataUrl.match(/^data:([^;]+);base64,(.*)$/)
-    if (!match) {
-      throw new Error(
-        `ACP tool image attachment ${attachment.filename ?? attachment.url} is not a valid base64 data URL`,
-      )
-    }
     const payload = decodeDataUrlBase64(dataUrl, `ACP tool image attachment ${attachment.filename ?? attachment.url}`)
     decodeRawBase64Payload(payload, `ACP tool image attachment ${attachment.filename ?? attachment.url}`)
     content.push({
       type: "content",
       content: {
         type: "image",
-        mimeType: match[1] || attachment.mime,
+        mimeType: attachment.mime,
         data: payload,
         uri: pathToFileURL(attachment.filename ?? "tool-result-image.png").href,
       },
@@ -1155,7 +1150,7 @@ export namespace ACP {
           } else if (url?.startsWith("data:")) {
             const payload = decodeDataUrlBase64(url, `ACP replay file URL ${filename}`)
             decodedBytes = decodeRawBase64Payload(payload, `ACP replay file URL ${filename}`)
-            effectiveMime = url.slice("data:".length, url.indexOf(",")).split(";")[0] || mime
+            effectiveMime = url.slice("data:".length, url.indexOf(",") - ";base64".length)
           }
 
           if (url && (url.startsWith("http://") || url.startsWith("https://"))) {
@@ -1187,7 +1182,7 @@ export namespace ACP {
               })
           } else if (decodedBytes !== undefined) {
             const base64Data = decodedBytes.toString("base64")
-            if (effectiveMime.startsWith("image/")) {
+            if (mediaInputModality(effectiveMime) === "image") {
               // Image - send as image block
               await this.connection.sessionUpdate({
                 sessionId,

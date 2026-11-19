@@ -3,7 +3,7 @@ import { mergeDeep, unique } from "remeda"
 import type { JSONSchema7 } from "@ai-sdk/provider"
 import type { JSONSchema } from "zod/v4/core"
 import type { ProviderModel } from "./model-schema"
-import type { ModelsDev } from "./models"
+import { baseMediaType, mediaInputModality } from "@opencorvus-ai/util/mime"
 import { iife } from "@/util/iife"
 import { Flag } from "@/flag/flag"
 import { AttachmentStore } from "@/storage/attachment-store"
@@ -13,16 +13,6 @@ import { normalizeVendorMessages } from "./vendor-messages"
 import { GLM_EVALUATION_TEMPERATURE, THINKING_MODEL_TOP_P } from "./sampling"
 import { requiresOpenAIStrictToolSchema } from "./strict-tool-schema"
 import { requiresSerializedOpenAIToolCalls } from "./tool-call-policy"
-
-type Modality = NonNullable<ModelsDev.Model["modalities"]>["input"][number]
-
-function mimeToModality(mime: string): Modality | undefined {
-  if (mime.startsWith("image/")) return "image"
-  if (mime.startsWith("audio/")) return "audio"
-  if (mime.startsWith("video/")) return "video"
-  if (mime === "application/pdf") return "pdf"
-  return undefined
-}
 
 export namespace ProviderTransform {
   export const OUTPUT_TOKEN_MAX = Flag.OPENCORVUS_EXPERIMENTAL_OUTPUT_TOKEN_MAX || 64_000
@@ -194,7 +184,7 @@ export namespace ProviderTransform {
    * from package or model names.
    */
   export function toolResultAttachmentTransport(model: ProviderModel, mime: string): ToolResultAttachmentTransport {
-    const modality = mimeToModality(mime)
+    const modality = mediaInputModality(mime)
     if (modality === "image") {
       if (!model.capabilities.input.image) {
         return {
@@ -216,7 +206,7 @@ export namespace ProviderTransform {
       }
     }
 
-    const normalizedMime = mime.split(";", 1)[0].trim().toLowerCase()
+    const normalizedMime = baseMediaType(mime)
     if (
       model.providerID === "openai" &&
       model.api.npm === "@ai-sdk/openai" &&
@@ -367,7 +357,7 @@ export namespace ProviderTransform {
             : (part.mediaType ?? (part as { mime?: string }).mime)
         if (!mime) return part
         const filename = part.type === "file" ? part.filename : undefined
-        const modality = mimeToModality(mime)
+        const modality = mediaInputModality(mime)
         if (!modality) return part
         if (model.capabilities.input[modality]) return part
 
@@ -394,7 +384,7 @@ export namespace ProviderTransform {
     if (record.type !== "file") return { part }
     const mime = filePartMime(record)
     if (!mime) return { part }
-    const mediaType = mime
+    const mediaType = mediaInputModality(mime) ? baseMediaType(mime) : mime
 
     // AI SDK v6 `file` part shape contract diverges by field:
     //   - `data`: openai-compatible adapter ALWAYS prepends `data:<mediaType>;base64,`
@@ -424,7 +414,7 @@ export namespace ProviderTransform {
 
     const source = typeof record.filename === "string" ? record.filename : "inline file data URL"
     const dataUrlFromBytes = async (bytes: Buffer): Promise<{ dataUrl: string; note?: string }> => {
-      if (!mediaType.startsWith("image/")) return { dataUrl: `data:${mediaType};base64,${bytes.toString("base64")}` }
+      if (mediaInputModality(mediaType) !== "image") return { dataUrl: `data:${mediaType};base64,${bytes.toString("base64")}` }
       const prepared = await prepareModelImageInput({
         mime: mediaType,
         bytes,

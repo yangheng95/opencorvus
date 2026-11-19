@@ -1,0 +1,2470 @@
+{
+  "summary": {
+    "requests": 57,
+    "completed": 57,
+    "models": {
+      "local": 57
+    },
+    "streaming": {
+      "True": 57
+    },
+    "processes": 4,
+    "operations": {
+      "project-memory": 19,
+      "conversation": 38
+    }
+  },
+  "events": [
+    {
+      "event": "listening",
+      "port": 40164,
+      "pid": 32060
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_95840bb9960b4e36be3484aa7a30836a"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. standard.png single media declaration"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 1,
+      "coveredOccurrenceIDs": [
+        "msg_8d0d919a6a03499ebc24e7707785022a"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. capitals.dat single media declaration"
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 5,
+      "baseRevision": 2,
+      "coveredOccurrenceIDs": [
+        "msg_eeb48886232d463bb420cf800186b42f"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. parameter.raw single media declaration"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 7,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 7,
+      "baseRevision": 3,
+      "coveredOccurrenceIDs": [
+        "msg_40b5480ed88b4ec0abc211becac6aac0"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 7,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 8,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. vector.svg single media declaration\n[Attached image/svg+xml: vector.svg (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.svg)]"
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 8,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 9,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 9,
+      "baseRevision": 4,
+      "coveredOccurrenceIDs": [
+        "msg_ab8db1b1a8b74f8d8210d418ac6a682f"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 9,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 10,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. vector-capitals.bin single media declaration\n[Attached Image/SVG+XML; charset=utf-8: vector-capitals.bin (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.bin)]"
+      ],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 10,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 11,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 11,
+      "baseRevision": 5,
+      "coveredOccurrenceIDs": [
+        "msg_60406d2c83f84e8090964a4308bdede6"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 11,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 12,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. Five declared images\n[Attached image/svg+xml: vector.svg (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.svg)]\n[Attached Image/SVG+XML; charset=utf-8: vector-capitals.bin (/attachment/prj_hVvIc608DEuaCwdRbtQZ/5235a4e1596c2317b0a9b28ff2f1849e68393ed4fa7c9c628bd22bd8b36fbe52.bin)]"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 12,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    },
+    {
+      "event": "listening",
+      "port": 40164,
+      "pid": 17220
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 0,
+      "coveredOccurrenceIDs": [
+        "msg_8634ecb139c94bd1b0f7dd94e207aa1a"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. standard.png single media declaration"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 1,
+      "coveredOccurrenceIDs": [
+        "msg_8a4cf0648d3747cbaab019fee0aeaa0e"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. capitals.dat single media declaration"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 5,
+      "baseRevision": 2,
+      "coveredOccurrenceIDs": [
+        "msg_348b17d78a364bf7ada0e379412e840d"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. parameter.raw single media declaration"
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 7,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 7,
+      "baseRevision": 3,
+      "coveredOccurrenceIDs": [
+        "msg_1f60f16f5ab14a26aba21c99b928a63f"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 7,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 8,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. vector.svg single media declaration\n[model-image-input] Converted vector.svg from image/svg+xml to image/png (320x160) for provider input. Original attachment remains unchanged."
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 8,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 9,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 9,
+      "baseRevision": 4,
+      "coveredOccurrenceIDs": [
+        "msg_70e2749459a349bcb2b1869e3552573c"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 9,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 10,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. vector-capitals.bin single media declaration\n[model-image-input] Converted vector-capitals.bin from Image/SVG+XML; charset=utf-8 to image/png (320x160) for provider input. Original attachment remains unchanged."
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 10,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 11,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 11,
+      "baseRevision": 5,
+      "coveredOccurrenceIDs": [
+        "msg_383f64a745994a24a14150c6e09b683e"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 11,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 12,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. Five declared images\n[model-image-input] Converted vector.svg from image/svg+xml to image/png (320x160) for provider input. Original attachment remains unchanged.\n[model-image-input] Converted vector-capitals.bin from Image/SVG+XML; charset=utf-8 to image/png (320x160) for provider input. Original attachment remains unchanged."
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983
+        }
+      ],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 12,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 13,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 13,
+      "baseRevision": 6,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbNAOVJ00ych23kvWq"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 13,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 14,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 14,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 14,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 15,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 15,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-14",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 15,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 16,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 16,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-14",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-15",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 79985,\n  \"active_payload_tokens\": 19546,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 83,\n    \"matched_count\": 83,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"browser\"\n      },\n      \"name\": \"browser\",\n      \"description\": \"Configured Model Context Protocol server browser.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.browser\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"computer\"\n      },\n      \"name\": \"computer\",\n      \"description\": \"Configured Model Context Protocol server computer.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.computer\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"owned_media\"\n      },\n      \"name\": \"owned_media\",\n      \"description\": \"Configured Model Context Protocol server owned_media.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.owned_media\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_check\"\n      },\n      \"name\": \"browser_check\",\n      \"description\": \"Projected mcp tool browser_check.\",\n      \"aliases\": [\n        \"Browser Check\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_check\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_click\"\n      },\n      \"name\": \"browser_click\",\n      \"description\": \"Projected mcp tool browser_click.\",\n      \"aliases\": [\n        \"Browser Click\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_click\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 16,
+      "operation": "conversation",
+      "tool": "owned_media_read_declared_images"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 17,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 17,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-14",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-15",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 79985,\n  \"active_payload_tokens\": 19546,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 83,\n    \"matched_count\": 83,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"browser\"\n      },\n      \"name\": \"browser\",\n      \"description\": \"Configured Model Context Protocol server browser.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.browser\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"computer\"\n      },\n      \"name\": \"computer\",\n      \"description\": \"Configured Model Context Protocol server computer.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.computer\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"owned_media\"\n      },\n      \"name\": \"owned_media\",\n      \"description\": \"Configured Model Context Protocol server owned_media.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.owned_media\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_check\"\n      },\n      \"name\": \"browser_check\",\n      \"description\": \"Projected mcp tool browser_check.\",\n      \"aliases\": [\n        \"Browser Check\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_check\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_click\"\n      },\n      \"name\": \"browser_click\",\n      \"description\": \"Projected mcp tool browser_click.\",\n      \"aliases\": [\n        \"Browser Click\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_click\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-16",
+          "content": "Attachments remain tool-owned evidence because this provider transport cannot send them as typed tool results:\n- image/png; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560.png; sha256=b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560; bytes=5440; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- IMAGE/PNG; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png; sha256=6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8; bytes=5442; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/png; profile=srgb; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.bin; sha256=6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1; bytes=5453; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/svg+xml; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291.svg; sha256=ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- Image/SVG+XML; charset=utf-8; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.bin; sha256=50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 17,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 18,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 18,
+      "baseRevision": 7,
+      "coveredOccurrenceIDs": [
+        "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 18,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 19,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 19,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 19,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 20,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 20,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-19",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 20,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 21,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 21,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-19",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-20",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 21,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 22,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 22,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-19",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-20",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-21",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 3,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 22,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 23,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 23,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-19",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-20",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-21",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 3,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-22",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 4,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 23,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 24,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 24,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-19",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-20",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-21",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 3,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-22",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 4,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-23",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 5,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 24,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 25,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 25,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-19",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-20",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-21",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 3,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-22",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 4,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-23",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 5,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-24",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 6,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 25,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "shutdown"
+    },
+    {
+      "event": "listening",
+      "port": 40164,
+      "pid": 25352
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 8,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbNClXo00HEpz8Nf9D"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 2,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 3,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-2",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 4,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-2",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-3",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 79985,\n  \"active_payload_tokens\": 19546,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 83,\n    \"matched_count\": 83,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"browser\"\n      },\n      \"name\": \"browser\",\n      \"description\": \"Configured Model Context Protocol server browser.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.browser\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"computer\"\n      },\n      \"name\": \"computer\",\n      \"description\": \"Configured Model Context Protocol server computer.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.computer\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"owned_media\"\n      },\n      \"name\": \"owned_media\",\n      \"description\": \"Configured Model Context Protocol server owned_media.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.owned_media\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_check\"\n      },\n      \"name\": \"browser_check\",\n      \"description\": \"Projected mcp tool browser_check.\",\n      \"aliases\": [\n        \"Browser Check\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_check\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_click\"\n      },\n      \"name\": \"browser_click\",\n      \"description\": \"Projected mcp tool browser_click.\",\n      \"aliases\": [\n        \"Browser Click\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_click\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation",
+      "tool": "owned_media_read_declared_images"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 5,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-2",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 79723,\n  \"active_payload_tokens\": 19495,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 52,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-3",
+          "content": "{\n  \"catalog_snapshot_hash\": \"b100ac0a758fbf051d5b793bb24021f91935710e66004767bfb26117becaf9c3\",\n  \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 79985,\n  \"active_payload_tokens\": 19546,\n  \"visible_expert_squad_count\": 0,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 83,\n    \"matched_count\": 83,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"browser\"\n      },\n      \"name\": \"browser\",\n      \"description\": \"Configured Model Context Protocol server browser.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.browser\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"computer\"\n      },\n      \"name\": \"computer\",\n      \"description\": \"Configured Model Context Protocol server computer.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.computer\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_server\",\n        \"source\": \"project\",\n        \"owner_ref\": \"mcp-config\",\n        \"local_ref\": \"owned_media\"\n      },\n      \"name\": \"owned_media\",\n      \"description\": \"Configured Model Context Protocol server owned_media.\",\n      \"aliases\": [],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"open_settings\",\n        \"target\": \"mcp.owned_media\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_check\"\n      },\n      \"name\": \"browser_check\",\n      \"description\": \"Projected mcp tool browser_check.\",\n      \"aliases\": [\n        \"Browser Check\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_check\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_-zUOcpbf7zzdvSKMcayO:browser\",\n        \"local_ref\": \"browser_click\"\n      },\n      \"name\": \"browser_click\",\n      \"description\": \"Projected mcp tool browser_click.\",\n      \"aliases\": [\n        \"Browser Click\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"browser_click\"\n      },\n      \"catalog_revision\": \"633313be43c3a285c5680608edda9b7f4789d59ccf00430df4db7c4dce268579\",\n      \"score\": null\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-4",
+          "content": "Attachments remain tool-owned evidence because this provider transport cannot send them as typed tool results:\n- image/png; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560.png; sha256=b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560; bytes=5440; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- IMAGE/PNG; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png; sha256=6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8; bytes=5442; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/png; profile=srgb; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.bin; sha256=6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1; bytes=5453; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/svg+xml; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291.svg; sha256=ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- Image/SVG+XML; charset=utf-8; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.bin; sha256=50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 6,
+      "baseRevision": 9,
+      "coveredOccurrenceIDs": [
+        "msg_g0VbNCman00z0vNEweZl"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 7,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 7,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 7,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 8,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 8,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-7",
+          "content": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 8,
+      "operation": "conversation",
+      "diagnostic": "owned-service-not-attached"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 9,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 9,
+      "baseRevision": 10,
+      "coveredOccurrenceIDs": [
+        "msg_34eca6fabe1a4d028e8d14254828384b"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 9,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 10,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 10,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 10,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 11,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 11,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-10",
+          "content": "{\n  \"catalog_snapshot_hash\": \"0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb\",\n  \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 11,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 12,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 12,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-10",
+          "content": "{\n  \"catalog_snapshot_hash\": \"0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb\",\n  \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-11",
+          "content": "{\n  \"catalog_snapshot_hash\": \"0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb\",\n  \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 113448,\n  \"active_payload_tokens\": 27724,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 50,\n    \"matched_count\": 50,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"advanced\"\n      },\n      \"name\": \"Advanced\",\n      \"description\": \"Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.\",\n      \"aliases\": [\n        \"Advanced\",\n        \"advanced\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"advanced\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"base\"\n      },\n      \"name\": \"Base\",\n      \"description\": \"Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.\",\n      \"aliases\": [\n        \"Base\",\n        \"base\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"base\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"dynamic\"\n      },\n      \"name\": \"Dynamic\",\n      \"description\": \"Automatically compose Task-local experts with explicit identities, capability envelopes and evidence-driven scheduling when no Expert Squad is selected.\",\n      \"aliases\": [\n        \"Dynamic\",\n        \"dynamic\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"dynamic\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"research-studio\"\n      },\n      \"name\": \"Research Studio\",\n      \"description\": \"A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.\",\n      \"aliases\": [\n        \"Research Studio\",\n        \"research-studio\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"research-studio\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"squad-sdk\"\n      },\n      \"name\": \"Generate Expert Squads\",\n      \"description\": \"Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.\",\n      \"aliases\": [\n        \"Generate Expert Squads\",\n        \"squad-sdk\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"squad-sdk\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 12,
+      "operation": "conversation",
+      "tool": "owned_media_read_declared_images"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 13,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 13,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-10",
+          "content": "{\n  \"catalog_snapshot_hash\": \"0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb\",\n  \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-11",
+          "content": "{\n  \"catalog_snapshot_hash\": \"0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb\",\n  \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 113448,\n  \"active_payload_tokens\": 27724,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 50,\n    \"matched_count\": 50,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"advanced\"\n      },\n      \"name\": \"Advanced\",\n      \"description\": \"Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.\",\n      \"aliases\": [\n        \"Advanced\",\n        \"advanced\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"advanced\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"base\"\n      },\n      \"name\": \"Base\",\n      \"description\": \"Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.\",\n      \"aliases\": [\n        \"Base\",\n        \"base\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"base\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"dynamic\"\n      },\n      \"name\": \"Dynamic\",\n      \"description\": \"Automatically compose Task-local experts with explicit identities, capability envelopes and evidence-driven scheduling when no Expert Squad is selected.\",\n      \"aliases\": [\n        \"Dynamic\",\n        \"dynamic\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"dynamic\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"research-studio\"\n      },\n      \"name\": \"Research Studio\",\n      \"description\": \"A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.\",\n      \"aliases\": [\n        \"Research Studio\",\n        \"research-studio\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"research-studio\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"squad-sdk\"\n      },\n      \"name\": \"Generate Expert Squads\",\n      \"description\": \"Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.\",\n      \"aliases\": [\n        \"Generate Expert Squads\",\n        \"squad-sdk\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"squad-sdk\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-12",
+          "content": "Attachments remain tool-owned evidence because this provider transport cannot send them as typed tool results:\n- image/png; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560.png; sha256=b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560; bytes=5440; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- IMAGE/PNG; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png; sha256=6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8; bytes=5442; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/png; profile=srgb; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.bin; sha256=6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1; bytes=5453; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/svg+xml; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291.svg; sha256=ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- Image/SVG+XML; charset=utf-8; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.bin; sha256=50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 13,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    },
+    {
+      "event": "listening",
+      "port": 40164,
+      "pid": 12772
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 1,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 1,
+      "baseRevision": 11,
+      "coveredOccurrenceIDs": [
+        "msg_df9add805f794ba297505a645885f7f2"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 1,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 2,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [
+        "Inspect media declarations. Five declared images\n[model-image-input] Converted vector.svg from image/svg+xml to image/png (320x160) for provider input. Original attachment remains unchanged.\n[model-image-input] Converted vector-capitals.bin from Image/SVG+XML; charset=utf-8 to image/png (320x160) for provider input. Original attachment remains unchanged.",
+        "Inspect media declarations. Continue the stored five-image history after process restart; retain the real original image inputs."
+      ],
+      "imageInputs": [
+        {
+          "mime": "image/png",
+          "bytes": 4983,
+          "equalsReviewOriginalPNG": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983,
+          "equalsReviewOriginalPNG": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983,
+          "equalsReviewOriginalPNG": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983,
+          "equalsReviewOriginalPNG": true
+        },
+        {
+          "mime": "image/png",
+          "bytes": 4983,
+          "equalsReviewOriginalPNG": true
+        }
+      ],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 2,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 3,
+      "operation": "project-memory",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "organizer-reply",
+      "occurrence": 3,
+      "baseRevision": 12,
+      "coveredOccurrenceIDs": [
+        "msg_7a5b552524ed4ed4a95bf2a98e156da3"
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 3,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 4,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 4,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": []
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 4,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 5,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 5,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-4",
+          "content": "{\n  \"catalog_snapshot_hash\": \"27830d68d5c959b75aa8b41cf25b504ccabf382053d6e3a5341aa414c15372b3\",\n  \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_hFPDwuaVEciPD1mYZQt7:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 5,
+      "operation": "conversation",
+      "tool": "capability_search"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 6,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 6,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-4",
+          "content": "{\n  \"catalog_snapshot_hash\": \"27830d68d5c959b75aa8b41cf25b504ccabf382053d6e3a5341aa414c15372b3\",\n  \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_hFPDwuaVEciPD1mYZQt7:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-5",
+          "content": "{\n  \"catalog_snapshot_hash\": \"27830d68d5c959b75aa8b41cf25b504ccabf382053d6e3a5341aa414c15372b3\",\n  \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_hFPDwuaVEciPD1mYZQt7:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 113448,\n  \"active_payload_tokens\": 27724,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 50,\n    \"matched_count\": 50,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"advanced\"\n      },\n      \"name\": \"Advanced\",\n      \"description\": \"Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.\",\n      \"aliases\": [\n        \"Advanced\",\n        \"advanced\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"advanced\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"base\"\n      },\n      \"name\": \"Base\",\n      \"description\": \"Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.\",\n      \"aliases\": [\n        \"Base\",\n        \"base\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"base\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"dynamic\"\n      },\n      \"name\": \"Dynamic\",\n      \"description\": \"Automatically compose Task-local experts with explicit identities, capability envelopes and evidence-driven scheduling when no Expert Squad is selected.\",\n      \"aliases\": [\n        \"Dynamic\",\n        \"dynamic\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"dynamic\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"research-studio\"\n      },\n      \"name\": \"Research Studio\",\n      \"description\": \"A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.\",\n      \"aliases\": [\n        \"Research Studio\",\n        \"research-studio\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"research-studio\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"squad-sdk\"\n      },\n      \"name\": \"Generate Expert Squads\",\n      \"description\": \"Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.\",\n      \"aliases\": [\n        \"Generate Expert Squads\",\n        \"squad-sdk\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"squad-sdk\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 6,
+      "operation": "conversation",
+      "tool": "owned_media_read_declared_images"
+    },
+    {
+      "event": "stream-request",
+      "occurrence": 7,
+      "operation": "conversation",
+      "model": "local",
+      "stream": true,
+      "observedInputs": [],
+      "imageInputs": [],
+      "fileInputs": [],
+      "projectedToolTexts": []
+    },
+    {
+      "event": "owned-tool-observation",
+      "occurrence": 7,
+      "tools": [
+        "capability_search",
+        "apply_patch",
+        "bash",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "read",
+        "schedule",
+        "search_code",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write",
+        "owned_media_read_declared_images",
+        "skill"
+      ],
+      "toolMessages": [
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-4",
+          "content": "{\n  \"catalog_snapshot_hash\": \"27830d68d5c959b75aa8b41cf25b504ccabf382053d6e3a5341aa414c15372b3\",\n  \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_hFPDwuaVEciPD1mYZQt7:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": 0.98\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-5",
+          "content": "{\n  \"catalog_snapshot_hash\": \"27830d68d5c959b75aa8b41cf25b504ccabf382053d6e3a5341aa414c15372b3\",\n  \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_hFPDwuaVEciPD1mYZQt7:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 113448,\n  \"active_payload_tokens\": 27724,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 50,\n    \"matched_count\": 50,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"advanced\"\n      },\n      \"name\": \"Advanced\",\n      \"description\": \"Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.\",\n      \"aliases\": [\n        \"Advanced\",\n        \"advanced\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"advanced\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"base\"\n      },\n      \"name\": \"Base\",\n      \"description\": \"Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.\",\n      \"aliases\": [\n        \"Base\",\n        \"base\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"base\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"dynamic\"\n      },\n      \"name\": \"Dynamic\",\n      \"description\": \"Automatically compose Task-local experts with explicit identities, capability envelopes and evidence-driven scheduling when no Expert Squad is selected.\",\n      \"aliases\": [\n        \"Dynamic\",\n        \"dynamic\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"dynamic\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"research-studio\"\n      },\n      \"name\": \"Research Studio\",\n      \"description\": \"A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.\",\n      \"aliases\": [\n        \"Research Studio\",\n        \"research-studio\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"research-studio\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"squad-sdk\"\n      },\n      \"name\": \"Generate Expert Squads\",\n      \"description\": \"Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.\",\n      \"aliases\": [\n        \"Generate Expert Squads\",\n        \"squad-sdk\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"squad-sdk\"\n      },\n      \"catalog_revision\": \"14c9310c611a37b1fe7f74a7904e6c490ef6488c9160adb95111fde7f6075bdf\",\n      \"score\": null\n    }\n  ]\n}"
+        },
+        {
+          "role": "tool",
+          "tool_call_id": "owned-encoding-call-6",
+          "content": "Attachments remain tool-owned evidence because this provider transport cannot send them as typed tool results:\n- image/png; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560.png; sha256=b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560; bytes=5440; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- IMAGE/PNG; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png; sha256=6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8; bytes=5442; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/png; profile=srgb; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.bin; sha256=6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1; bytes=5453; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/svg+xml; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291.svg; sha256=ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- Image/SVG+XML; charset=utf-8; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.bin; sha256=50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport"
+        }
+      ]
+    },
+    {
+      "event": "stream-completed",
+      "occurrence": 7,
+      "operation": "conversation"
+    },
+    {
+      "event": "shutdown"
+    }
+  ]
+}

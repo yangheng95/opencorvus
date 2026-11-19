@@ -1,4 +1,5 @@
 import path from "path"
+import { mediaInputModality } from "@opencorvus-ai/util/mime"
 import os from "os"
 import fs from "fs/promises"
 import {
@@ -548,7 +549,7 @@ export async function materializeUserMessage(
                   part.mime = LOCAL_DIRECTORY_REFERENCE_MIME
                 }
 
-                if (Filesystem.isTextLikeMime(part.mime)) {
+                if (mediaInputModality(part.mime) !== "image" && Filesystem.isTextLikeMime(part.mime)) {
                   part.mime = "text/plain"
                 }
 

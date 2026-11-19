@@ -1,3 +1,5 @@
+import { baseMediaType } from "./mime.js"
+
 const TEXT_APP_MIMES = new Set([
   "application/json",
   "application/xml",
@@ -55,7 +57,7 @@ const TEXT_EXTS = new Set([
  * a binary file part to the model.
  */
 export function isDecodableText(mime: string, filename?: string): boolean {
-  const normalizedMime = mime.split(";", 1)[0].trim().toLowerCase()
+  const normalizedMime = baseMediaType(mime)
   if (normalizedMime.startsWith("text/")) return true
   if (TEXT_APP_MIMES.has(normalizedMime)) return true
   if (normalizedMime.endsWith("+json") || normalizedMime.endsWith("+xml")) return true

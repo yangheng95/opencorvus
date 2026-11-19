@@ -1,4 +1,5 @@
 import z from "zod"
+import { baseMediaType, mediaInputModality } from "@opencorvus-ai/util/mime"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { requireRuntimePackage } from "@/runtime/package-require"
 import {
@@ -97,7 +98,7 @@ export function assertModelImageInputWithinLimits(input: {
   maxDimension?: number
   maxPixels?: number
 }): void {
-  if (!input.mime.toLowerCase().startsWith("image/")) return
+  if (mediaInputModality(input.mime) !== "image") return
   const dimensions = readModelImageDimensions(input.bytes)
   if (!dimensions) return
   const maxDimension = input.maxDimension ?? MAX_MODEL_IMAGE_INPUT_DIMENSION
@@ -126,7 +127,7 @@ export async function prepareModelImageInput(input: {
   maxDimension?: number
   maxPixels?: number
 }): Promise<PreparedModelImageInput> {
-  if (!input.mime.toLowerCase().startsWith("image/")) {
+  if (mediaInputModality(input.mime) !== "image") {
     return { mime: input.mime, bytes: input.bytes }
   }
 
@@ -216,7 +217,7 @@ async function normalizeModelImageFormat(input: {
   bytes: Buffer
   source: string
 }): Promise<{ mime: string; bytes: Buffer; note?: string }> {
-  const mime = input.mime.toLowerCase().split(";")[0]?.trim()
+  const mime = baseMediaType(input.mime)
   if (mime === "image/png" || mime === "image/jpeg" || mime === "image/webp") {
     return { mime, bytes: input.bytes }
   }
@@ -263,7 +264,7 @@ async function cropBlankMargins(input: {
 type SharpPipeline = ReturnType<typeof sharp>
 
 function encoderForMime(mime: string): ((image: SharpPipeline) => SharpPipeline) | undefined {
-  const normalized = mime.toLowerCase().split(";")[0]?.trim()
+  const normalized = baseMediaType(mime)
   switch (normalized) {
     case "image/png":
       return (image) => image.png()

@@ -1,0 +1,764 @@
+{
+  "counts": {
+    "session": 7,
+    "message": 14,
+    "part": 50,
+    "session_prompt_owner": 0,
+    "event_occurrence": 122
+  },
+  "assistantFinish": {
+    "stop": 7
+  },
+  "sessions": [
+    {
+      "id": "ses_hNyJzL9RhIh4gmP4ugu8",
+      "projectID": "prj_hVvIc608DEuaCwdRbtQZ",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+    },
+    {
+      "id": "ses_hwLjd2l2JERQ3uMSBvTw",
+      "projectID": "prj_hVvIc608DEuaCwdRbtQZ",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+    },
+    {
+      "id": "ses_hxOfZImEmqqOi12QLlRy",
+      "projectID": "prj_hVvIc608DEuaCwdRbtQZ",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+    },
+    {
+      "id": "ses_hcEFyNuTh0atmZGAuhAi",
+      "projectID": "prj_hVvIc608DEuaCwdRbtQZ",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+    },
+    {
+      "id": "ses_hX0WW4gFWGfB2Zu9aD8k",
+      "projectID": "prj_hVvIc608DEuaCwdRbtQZ",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+    },
+    {
+      "id": "ses_hg9XYjioexmXG6mAM1RU",
+      "projectID": "prj_hVvIc608DEuaCwdRbtQZ",
+      "parentID": null,
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+    },
+    {
+      "id": "ses_-zUOcthGIzz5nrj0tRwZ",
+      "projectID": "prj_hVvIc608DEuaCwdRbtQZ",
+      "parentID": "ses_hg9XYjioexmXG6mAM1RU",
+      "kind": "assistant",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_95840bb9960b4e36be3484aa7a30836a",
+      "sessionID": "ses_hNyJzL9RhIh4gmP4ugu8",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795045568645
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media declarations. standard.png single media declaration"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "1d237903ce4d4d5db29f19aee547be091cc30c573fa3ad4b63276030d6dfe8ee"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795045568645:0000000000000030:0000000000000000:message:msg_95840bb9960b4e36be3484aa7a30836a"
+      }
+    },
+    {
+      "id": "msg_g0VbN6Gwz00IBv9BoSuh",
+      "sessionID": "ses_hNyJzL9RhIh4gmP4ugu8",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795045568745,
+          "completed": 1795045569890
+        },
+        "parentID": "msg_95840bb9960b4e36be3484aa7a30836a",
+        "acceptedInputMessageIDs": [
+          "msg_95840bb9960b4e36be3484aa7a30836a"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795045568745:0000000000000030:0000000000000000:message:msg_g0VbN6Gwz00IBv9BoSuh"
+      }
+    },
+    {
+      "id": "msg_8d0d919a6a03499ebc24e7707785022a",
+      "sessionID": "ses_hwLjd2l2JERQ3uMSBvTw",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795045570093
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media declarations. capitals.dat single media declaration"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "10cc5b49391c360877cd4cdee8ec77d7612afe4aac81aacc2ae8cd476b7cacf6"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795045570093:0000000000000030:0000000000000000:message:msg_8d0d919a6a03499ebc24e7707785022a"
+      }
+    },
+    {
+      "id": "msg_g0VbN6HJT00KxD31xEr1",
+      "sessionID": "ses_hwLjd2l2JERQ3uMSBvTw",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795045570139,
+          "completed": 1795045570998
+        },
+        "parentID": "msg_8d0d919a6a03499ebc24e7707785022a",
+        "acceptedInputMessageIDs": [
+          "msg_8d0d919a6a03499ebc24e7707785022a"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795045570139:0000000000000030:0000000000000000:message:msg_g0VbN6HJT00KxD31xEr1"
+      }
+    },
+    {
+      "id": "msg_eeb48886232d463bb420cf800186b42f",
+      "sessionID": "ses_hxOfZImEmqqOi12QLlRy",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795045571184
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media declarations. parameter.raw single media declaration"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "451e405de8a41d8fc8f9c9cd995f7dd6b0af2473b114b54da38c0cdf797217ef"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795045571184:0000000000000030:0000000000000000:message:msg_eeb48886232d463bb420cf800186b42f"
+      }
+    },
+    {
+      "id": "msg_g0VbN6Hb200RdddioVY1",
+      "sessionID": "ses_hxOfZImEmqqOi12QLlRy",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795045571228,
+          "completed": 1795045572090
+        },
+        "parentID": "msg_eeb48886232d463bb420cf800186b42f",
+        "acceptedInputMessageIDs": [
+          "msg_eeb48886232d463bb420cf800186b42f"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795045571228:0000000000000030:0000000000000000:message:msg_g0VbN6Hb200RdddioVY1"
+      }
+    },
+    {
+      "id": "msg_40b5480ed88b4ec0abc211becac6aac0",
+      "sessionID": "ses_hcEFyNuTh0atmZGAuhAi",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795045572296
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media declarations. vector.svg single media declaration"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "f0740e23d0918c784e009ceb7208264ee1a2b941dd8dbfade83e393048be343e"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795045572296:0000000000000030:0000000000000000:message:msg_40b5480ed88b4ec0abc211becac6aac0"
+      }
+    },
+    {
+      "id": "msg_g0VbN6Hsw007Ku93JdYT",
+      "sessionID": "ses_hcEFyNuTh0atmZGAuhAi",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795045572338,
+          "completed": 1795045573187
+        },
+        "parentID": "msg_40b5480ed88b4ec0abc211becac6aac0",
+        "acceptedInputMessageIDs": [
+          "msg_40b5480ed88b4ec0abc211becac6aac0"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795045572338:0000000000000030:0000000000000000:message:msg_g0VbN6Hsw007Ku93JdYT"
+      }
+    },
+    {
+      "id": "msg_ab8db1b1a8b74f8d8210d418ac6a682f",
+      "sessionID": "ses_hX0WW4gFWGfB2Zu9aD8k",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795045573396
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media declarations. vector-capitals.bin single media declaration"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "79ade8f8c17a4d1f10b254068ee41f38e3a807ab065602dbd38d273688b47170"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795045573396:0000000000000030:0000000000000000:message:msg_ab8db1b1a8b74f8d8210d418ac6a682f"
+      }
+    },
+    {
+      "id": "msg_g0VbN6IAh00QxpsWHN56",
+      "sessionID": "ses_hX0WW4gFWGfB2Zu9aD8k",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795045573439,
+          "completed": 1795045574254
+        },
+        "parentID": "msg_ab8db1b1a8b74f8d8210d418ac6a682f",
+        "acceptedInputMessageIDs": [
+          "msg_ab8db1b1a8b74f8d8210d418ac6a682f"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795045573439:0000000000000030:0000000000000000:message:msg_g0VbN6IAh00QxpsWHN56"
+      }
+    },
+    {
+      "id": "msg_60406d2c83f84e8090964a4308bdede6",
+      "sessionID": "ses_hg9XYjioexmXG6mAM1RU",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795045574467
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media declarations. Five declared images"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "d5dace0606d3c4b7d8086777a6b06f04bcdfb4a9ce7cd2a812b87371c3c31ffc"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795045574467:0000000000000030:0000000000000000:message:msg_60406d2c83f84e8090964a4308bdede6"
+      }
+    },
+    {
+      "id": "msg_g0VbN6Iji00sfxHLxonh",
+      "sessionID": "ses_-zUOcthGIzz5nrj0tRwZ",
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795045574467
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media declarations. Five declared images"
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "d5dace0606d3c4b7d8086777a6b06f04bcdfb4a9ce7cd2a812b87371c3c31ffc"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "copySources": [
+          {
+            "partID": "prt_g0VbN6Iji00f7FUrlu8m",
+            "sources": [
+              {
+                "sessionID": "ses_hg9XYjioexmXG6mAM1RU",
+                "messageID": "msg_60406d2c83f84e8090964a4308bdede6",
+                "partID": "prt_g0VbN6IRK00gFsXgeCuN",
+                "sha256": "fe4c2d98d160b9b4f5195a4104d0f5af237bece8b61791c3a02d378f06d42fcd"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795045574467:0000000000000030:0000000000000000:message:msg_g0VbN6Iji00sfxHLxonh"
+      }
+    },
+    {
+      "id": "msg_g0VbN6ISI00JYeHa49Qw",
+      "sessionID": "ses_hg9XYjioexmXG6mAM1RU",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795045574530,
+          "completed": 1795045575425
+        },
+        "parentID": "msg_60406d2c83f84e8090964a4308bdede6",
+        "acceptedInputMessageIDs": [
+          "msg_60406d2c83f84e8090964a4308bdede6"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795045574530:0000000000000030:0000000000000000:message:msg_g0VbN6ISI00JYeHa49Qw"
+      }
+    },
+    {
+      "id": "msg_g0VbN6Iji017oZEQIRH9",
+      "sessionID": "ses_-zUOcthGIzz5nrj0tRwZ",
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795045574530,
+          "completed": 1795045575425
+        },
+        "parentID": "msg_g0VbN6Iji00sfxHLxonh",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbN6Iji00sfxHLxonh"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\baseline\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "copySources": [
+          {
+            "partID": "prt_g0VbN6Iji08DcYWzQF1z",
+            "sources": [
+              {
+                "sessionID": "ses_hg9XYjioexmXG6mAM1RU",
+                "messageID": "msg_g0VbN6ISI00JYeHa49Qw",
+                "partID": "prt_g0VbN6Idb00Mz7gSzvqd",
+                "sha256": "5ac71867f3c04ce0be962cbe17973f6be93baffa203597a5b317b34b365b9c78"
+              }
+            ]
+          }
+        ],
+        "orderKey": "v1:0001795045574530:0000000000000030:0000000000000000:message:msg_g0VbN6Iji017oZEQIRH9"
+      }
+    }
+  ],
+  "tools": []
+}

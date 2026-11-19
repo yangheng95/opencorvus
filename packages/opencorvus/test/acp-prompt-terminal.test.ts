@@ -25,6 +25,7 @@ import { SessionControl } from "@/session/control"
 import { PermissionAuthority } from "@/permission/authority"
 import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
+import { readModelImageDimensions } from "@/session/model-image-input"
 import { Database } from "@/storage/db"
 import { withTimeout } from "@/util/await-with-timeout"
 import { Bus } from "@/bus"
@@ -44,6 +45,7 @@ async function environment(options: {
 } = {}) {
   const project = await memoryProject()
   const requests: Array<{ model: string; stream: boolean }> = []
+  const modelInputs: Array<{ model: string; stream: boolean; messages: Array<{ role: string; content: string | Array<{ type: string; text?: string; image_url?: { url: string } }> }> }> = []
   const updates: SessionNotification[] = []
   const cancelStarted = Promise.withResolvers<void>()
   const cancelClosed = Promise.withResolvers<void>()
@@ -51,7 +53,8 @@ async function environment(options: {
     hostname: "127.0.0.1",
     port: 0,
     async fetch(request) {
-      const body = (await request.json()) as { model: string; stream: boolean }
+      const body = (await request.json()) as (typeof modelInputs)[number]
+      modelInputs.push(body)
       requests.push({ model: body.model, stream: body.stream })
       const chunk = {
         id: "acp-owned-stream",
@@ -173,6 +176,7 @@ async function environment(options: {
     sdk,
     client,
     requests,
+    modelInputs,
     updates,
     cancelStarted: cancelStarted.promise,
     cancelClosed: cancelClosed.promise,
@@ -1034,6 +1038,39 @@ test("ACP replays original text encodings and byte resources through load, resum
     const stored = await AttachmentStore.readVerifiedReference({ projectID: session.projectID, url: files[index].url, mime: files[index].mime })
     expect(stored.bytes).toEqual(originals[index].bytes)
   }
+}, 60_000)
+
+test("ACP declared images retain original media and reach the actual model as prepared images", async () => {
+  await using env = await environment()
+  const cwd = env.project.path, sessionId = await env.create("normal")
+  const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"><rect width="2" height="2" fill="#1f61b7"/></svg>')
+  const source = path.join(cwd, "declared-vector.svg")
+  await fs.writeFile(source, svg)
+  const png = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAK0lEQVR4nO3NQQkAAAgEMGOZ90pZxxQ+hMH+q86cKoFAIBAIBAKBQJAnwQI3XMRbDMx7WQAAAABJRU5ErkJggg=="
+  expect(await env.client.prompt({ sessionId, prompt: [
+    { type: "text", text: "Review declared image media." },
+    { type: "resource_link", uri: pathToFileURL(source).href, name: "declared-vector.svg", mimeType: "image/svg+xml" },
+    { type: "resource", resource: { uri: "file:///editor/declared-pixels.dat", mimeType: "IMAGE/PNG; profile=srgb", blob: png } },
+  ] })).toMatchObject({ stopReason: "end_turn" })
+  const body = env.modelInputs.find((request) => request.messages.some((message) => message.role === "user" && (
+    typeof message.content === "string" ? message.content.startsWith("Review declared image media.")
+      : message.content.some(part => part.type === "text" && part.text?.startsWith("Review declared image media."))
+  )))
+  expect(body).toMatchObject({ model: "normal", stream: true })
+  const images = body!.messages.flatMap(message => Array.isArray(message.content)
+    ? message.content.filter(part => part.type === "image_url").map(part => part.image_url!.url)
+    : [])
+  expect(images.map((image) => image.slice(0, image.indexOf(",")))).toEqual(["data:image/png;base64", "data:image/png;base64"])
+  expect(images.map((image) => readModelImageDimensions(Buffer.from(image.slice(image.indexOf(",") + 1), "base64"))))
+    .toEqual([{ format: "png", width: 2, height: 2 }, { format: "png", width: 32, height: 32 }])
+  const [input] = await env.messages(sessionId)
+  expect(input.parts.filter(part => part.type === "file").map(part => part.mime)).toEqual(["image/svg+xml", "IMAGE/PNG; profile=srgb"])
+  const from = env.updates.length
+  await env.client.loadSession({ cwd, sessionId, mcpServers: [] })
+  const replay = env.updates.slice(from).flatMap(({update}) => update.sessionUpdate === "user_message_chunk" && update.content.type === "image" ? [update.content] : [])
+  expect(replay.map(image => ({ mime: image.mimeType, data: image.data }))).toEqual([
+    { mime: "image/svg+xml", data: svg.toString("base64") }, { mime: "IMAGE/PNG; profile=srgb", data: png },
+  ])
 }, 60_000)
 
 test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {

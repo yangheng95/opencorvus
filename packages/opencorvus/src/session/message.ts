@@ -1,4 +1,5 @@
 import { isDecodableText } from "@opencorvus-ai/util/text-mime"
+import { baseMediaType, mediaInputModality } from "@opencorvus-ai/util/mime"
 import { BusEvent } from "@/bus/bus-event"
 import { createHash } from "node:crypto"
 import z from "zod"
@@ -1069,10 +1070,10 @@ export namespace Message {
     // missing or corrupt evidence masquerade as a harmless provider omission.
     const resolvedAttachments = await Promise.all(rawAttachments.map(resolveToolResultAttachment))
     const textAttachments = resolvedAttachments.filter((attachment) =>
-      isDecodableText(attachment.mime, attachment.filename),
+      mediaInputModality(attachment.mime) !== "image" && isDecodableText(attachment.mime, attachment.filename),
     )
     const binaryAttachments = resolvedAttachments.filter(
-      (attachment) => !isDecodableText(attachment.mime, attachment.filename),
+      (attachment) => mediaInputModality(attachment.mime) === "image" || !isDecodableText(attachment.mime, attachment.filename),
     )
     const decodedAttachmentText = textAttachments
       .map((attachment) =>
@@ -1110,7 +1111,7 @@ export namespace Message {
             return {
               part: {
                 type: "file-data",
-                mediaType: attachment.mime,
+                mediaType: baseMediaType(attachment.mime),
                 data: attachment.bytes.toString("base64"),
                 ...(attachment.filename ? { filename: attachment.filename } : {}),
               },
@@ -1180,7 +1181,7 @@ export namespace Message {
       mime: string
       url: string
       filename?: string
-    }): Promise<{ url: string; note?: string }> => {
+    }): Promise<{ url: string; mime: string; note?: string }> => {
       const located = attachmentNameFromUrl(part.url)
       if (!located) {
         throw new Error(
@@ -1195,13 +1196,15 @@ export namespace Message {
         safeReference: part.url,
         ...(part.filename ? { filename: part.filename } : {}),
       })
+      const mime = baseMediaType(prepared.mime)
       return {
-        url: `data:${prepared.mime};base64,${prepared.bytes.toString("base64")}`,
+        url: `data:${mime};base64,${prepared.bytes.toString("base64")}`,
+        mime,
         ...(prepared.note ? { note: prepared.note } : {}),
       }
     }
 
-    const userFilePart = async (part: Message.FilePart): Promise<{ url: string; note?: string }> => {
+    const userFilePart = async (part: Message.FilePart): Promise<{ url: string; mime: string; note?: string }> => {
       return await modelBoundFilePart(part)
     }
 
@@ -1258,7 +1261,7 @@ export namespace Message {
           }
           // Canonical text attachments remain concise refs for the historical
           // API path. Noncanonical text inputs are handled by SessionPrompt.
-          if (part.type === "file" && isDecodableText(part.mime, part.filename)) {
+          if (part.type === "file" && mediaInputModality(part.mime) !== "image" && isDecodableText(part.mime, part.filename)) {
             if (attachmentNameFromUrl(part.url)) {
               userMessage.parts.push({
                 type: "text",
@@ -1278,15 +1281,16 @@ export namespace Message {
               })
               continue
             }
-            const isImage = part.mime.startsWith("image/")
-            const isPdf = part.mime === "application/pdf"
+            const modality = mediaInputModality(part.mime)
+            const isImage = modality === "image"
+            const isPdf = modality === "pdf"
             const capable = (isImage && model.capabilities.input.image) || (isPdf && model.capabilities.input.pdf)
             if (capable) {
               const file = await userFilePart(part)
               userMessage.parts.push({
                 type: "file",
                 url: file.url,
-                mediaType: part.mime,
+                mediaType: file.mime,
                 filename: part.filename,
               })
               if (file.note) userMessage.parts.push({ type: "text", text: file.note })

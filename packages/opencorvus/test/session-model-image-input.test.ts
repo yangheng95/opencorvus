@@ -1,5 +1,4 @@
 import { describe, expect, test } from "bun:test"
-import { createHash } from "node:crypto"
 import sharp from "sharp"
 import { prepareModelImageInput, readModelImageDimensions } from "../src/session/model-image-input"
 
@@ -9,9 +8,25 @@ const transparentTrackingPixelGif = Buffer.from(
 )
 
 describe("model image input preparation", () => {
+  test.each(["IMAGE/PNG", "image/png; profile=srgb", "image/svg+xml", "Image/SVG+XML; charset=utf-8"])(
+    "prepares the declared %s as actual provider PNG pixels",
+    async (mime) => {
+      const vector = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"><rect width="2" height="2" fill="#1f61b7"/></svg>')
+      const original = mime.toLowerCase().startsWith("image/png") ? await sharp(vector).png().toBuffer() : vector
+      const sourceBytes = Buffer.from(original)
+      const prepared = await prepareModelImageInput({ mime, bytes: sourceBytes, source: "declared image" })
+      const pixels = await sharp(prepared.bytes).removeAlpha().raw().toBuffer()
+      expect({ mime: prepared.mime, dimensions: readModelImageDimensions(prepared.bytes), sourceBytes, pixels: [...pixels] }).toEqual({
+        mime: "image/png",
+        dimensions: { format: "png", width: 2, height: 2 },
+        sourceBytes: original,
+        pixels: [31, 97, 183, 31, 97, 183, 31, 97, 183, 31, 97, 183],
+      })
+    },
+  )
+
   test("converts a real embedded GIF tracking pixel into provider-ready PNG bytes", async () => {
     const sourceBytes = Buffer.from(transparentTrackingPixelGif)
-    const sourceDigest = createHash("sha256").update(sourceBytes).digest("hex")
     const prepared = await prepareModelImageInput({
       mime: "image/gif",
       bytes: sourceBytes,
@@ -20,14 +35,12 @@ describe("model image input preparation", () => {
 
     expect({
       sourceBytes,
-      sourceDigest: createHash("sha256").update(sourceBytes).digest("hex"),
       mime: prepared.mime,
       dimensions: readModelImageDimensions(prepared.bytes),
       signature: prepared.bytes.subarray(0, 8),
       note: prepared.note,
     }).toEqual({
       sourceBytes: transparentTrackingPixelGif,
-      sourceDigest,
       mime: "image/png",
       dimensions: { format: "png", width: 1, height: 1 },
       signature: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),

@@ -7,6 +7,8 @@ import { MAX_TEXT_DECODE_BYTES } from "../src/session/text-mime"
 import { Instance } from "../src/project/instance"
 import { AttachmentStore } from "../src/storage/attachment-store"
 import { tmpdir } from "./fixture/fixture"
+import sharp from "sharp"
+import { Identifier } from "../src/id/id"
 
 const openAIModel = {
   id: "gpt-5",
@@ -36,6 +38,58 @@ const openAIModel = {
 } satisfies Provider.Model
 
 describe("tool-result attachment provider projection", () => {
+  test("projects declared image resources as prepared user and tool image pixels", async () => {
+    const vector = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="2" height="2"><rect width="2" height="2" fill="#1f61b7"/></svg>')
+    const png = await sharp(vector).png().toBuffer()
+    const mimes = ["image/png", "IMAGE/PNG", "image/png; profile=srgb", "image/svg+xml", "Image/SVG+XML; charset=utf-8"]
+    await using tmp = await tmpdir({ git: true })
+    await Instance.provide({ directory: tmp.path, fn: async () => {
+      const sessionID = Identifier.ascending("session"), messageID = Identifier.ascending("message")
+      const parts: Message.FilePart[] = []
+      for (let index = 0; index < mimes.length; index++) {
+        const mime = mimes[index], bytes = index < 3 ? png : vector, filename = `declared.image${index}`
+        const reference = await AttachmentStore.write(Instance.project.id, bytes, mime, filename)
+        parts.push({ id: Identifier.ascending("part"), sessionID, messageID, type: "file", mime, filename, url: reference.url })
+        const output = await Message.toolResultToModelOutput({ attachments: [{ mime, filename, url: reference.url }] }, openAIModel)
+        expect(output.type).toBe("content")
+        if (output.type !== "content") throw new Error(`Expected typed tool content, received ${output.type}`)
+        const image = output.value.find((part) => part.type === "image-data")
+        expect(image).toMatchObject({ type: "image-data", mediaType: "image/png" })
+        if (image?.type !== "image-data") throw new Error("Expected prepared tool image")
+        expect(await sharp(Buffer.from(image.data, "base64")).removeAlpha().raw().toBuffer()).toEqual(Buffer.from([31,97,183,31,97,183,31,97,183,31,97,183]))
+        expect((await AttachmentStore.readVerifiedReference({ projectID: Instance.project.id, url: reference.url, mime })).bytes).toEqual(bytes)
+      }
+      const input = await Message.toModelMessages([{ info: {
+        id: messageID, sessionID, role: "user", author: "user", time: { created: Date.now() }, agent: "coding",
+        model: { providerID: openAIModel.providerID, modelID: openAIModel.id },
+      }, parts }], openAIModel)
+      expect(input[0].role).toBe("user")
+      if (typeof input[0].content === "string") throw new Error("Expected typed user content")
+      const files = input[0].content.filter((part) => part.type === "file")
+      expect(files.map((file) => ({ mediaType: file.mediaType, filename: file.filename }))).toEqual(
+        parts.map((part) => ({ mediaType: "image/png", filename: part.filename })),
+      )
+      for (const file of files) {
+        const dataUrl = String((file.data as { type: "url"; url: URL }).url)
+        expect(file.data).toMatchObject({ type: "url" })
+        expect(dataUrl.slice(0, dataUrl.indexOf(","))).toBe("data:image/png;base64")
+        const bytes = Buffer.from(dataUrl.slice(dataUrl.indexOf(",") + 1), "base64")
+        expect(await sharp(bytes).removeAlpha().raw().toBuffer()).toEqual(Buffer.from([31,97,183,31,97,183,31,97,183,31,97,183]))
+      }
+    } })
+  })
+
+  test.each([
+    ["IMAGE/PNG; profile=srgb", "declared.png", "image"],
+    ["APPLICATION/PDF; version=1.7", "declared.pdf", "pdf"],
+    ["Audio/WAV; codecs=1", "declared.wav", "audio"],
+    ["VIDEO/MP4; codecs=avc1", "declared.mp4", "video"],
+  ])("projects unsupported %s input as the explicit capability error", async (mediaType, filename, modality) => {
+    const model = { ...openAIModel, capabilities: { ...openAIModel.capabilities, input: { text: true, image: false, pdf: false, audio: false, video: false } } }
+    const output = await ProviderTransform.message([{ role: "user", content: [{ type: "file", mediaType, data: Buffer.from([1]), filename }] }], model, {})
+    expect(output).toEqual([{ role: "user", content: [{ type: "text", text: `ERROR: Cannot read "${filename}" (this model does not support ${modality} input). Inform the user.` }] }])
+  })
+
   test("reports the declared unsupported charset as the explicit decoding error", async () => {
     const mime = "text/plain; charset=x-owned-unsupported"
     const url = `data:${mime};base64,${Buffer.from("Original source").toString("base64")}`
@@ -155,16 +209,16 @@ describe("tool-result attachment provider projection", () => {
     },
   )
 
-  test("projects an accepted PDF to the OpenAI Responses typed-file part", async () => {
+  test.each(["application/pdf", "APPLICATION/PDF; version=1.7"])("projects %s bytes through the typed-file transport", async (mime) => {
     const bytes = Buffer.from("%PDF-1.7\nfixture")
     const output = await Message.toolResultToModelOutput(
       {
         text: "Report generated.",
         attachments: [
           {
-            mime: "application/pdf",
+            mime,
             filename: "report.pdf",
-            url: `data:application/pdf;base64,${bytes.toString("base64")}`,
+            url: `data:${mime};base64,${bytes.toString("base64")}`,
           },
         ],
       },
@@ -183,7 +237,7 @@ describe("tool-result attachment provider projection", () => {
         },
       ],
     })
-    expect(ProviderTransform.toolResultAttachmentTransport(openAIModel, "application/pdf")).toEqual({
+    expect(ProviderTransform.toolResultAttachmentTransport(openAIModel, mime)).toEqual({
       contentType: "file-data",
       adapter: "openai-responses",
     })

@@ -1,0 +1,212 @@
+{
+  "checks": {
+    "backend": "63 pass, 351 expectations, 4 files",
+    "util": "42 pass, 49 expectations, 3 files",
+    "types": [
+      "backend",
+      "overlay",
+      "util"
+    ],
+    "build": [
+      "util",
+      "overlay and renderer public surface"
+    ],
+    "i18n": "2 locales, 3229 keys",
+    "css": "passed",
+    "docs": "353 operations, 26 groups",
+    "routes": "6 rules, 36 files",
+    "architecture": "20 documents"
+  },
+  "manualDesktop": [
+    "Five declared originals render correct thumbnails",
+    "Original mixed-case SVG opens correctly at 100%",
+    "Actual assigned web MCP tool returns five correct images 328-332",
+    "Tool mixed-case parameterized SVG opens at 100%",
+    "Two native browser downloads preserve exact original bytes"
+  ],
+  "protocolToolImages": {
+    "live": [
+      {
+        "mime": "image/png",
+        "bytes": 5440
+      },
+      {
+        "mime": "IMAGE/PNG",
+        "bytes": 5442
+      },
+      {
+        "mime": "image/png; profile=srgb",
+        "bytes": 5453
+      },
+      {
+        "mime": "image/svg+xml",
+        "bytes": 348
+      },
+      {
+        "mime": "Image/SVG+XML; charset=utf-8",
+        "bytes": 348
+      }
+    ],
+    "replay": [
+      {
+        "mime": "image/png",
+        "bytes": 5440
+      },
+      {
+        "mime": "IMAGE/PNG",
+        "bytes": 5442
+      },
+      {
+        "mime": "image/png; profile=srgb",
+        "bytes": 5453
+      },
+      {
+        "mime": "image/svg+xml",
+        "bytes": 348
+      },
+      {
+        "mime": "Image/SVG+XML; charset=utf-8",
+        "bytes": 348
+      }
+    ],
+    "restart-live": [
+      {
+        "mime": "image/png",
+        "bytes": 5440
+      },
+      {
+        "mime": "IMAGE/PNG",
+        "bytes": 5442
+      },
+      {
+        "mime": "image/png; profile=srgb",
+        "bytes": 5453
+      },
+      {
+        "mime": "image/svg+xml",
+        "bytes": 348
+      },
+      {
+        "mime": "Image/SVG+XML; charset=utf-8",
+        "bytes": 348
+      }
+    ],
+    "restart-replay": [
+      {
+        "mime": "image/png",
+        "bytes": 5440
+      },
+      {
+        "mime": "IMAGE/PNG",
+        "bytes": 5442
+      },
+      {
+        "mime": "image/png; profile=srgb",
+        "bytes": 5453
+      },
+      {
+        "mime": "image/svg+xml",
+        "bytes": 348
+      },
+      {
+        "mime": "Image/SVG+XML; charset=utf-8",
+        "bytes": 348
+      },
+      {
+        "mime": "image/png",
+        "bytes": 5440
+      },
+      {
+        "mime": "IMAGE/PNG",
+        "bytes": 5442
+      },
+      {
+        "mime": "image/png; profile=srgb",
+        "bytes": 5453
+      },
+      {
+        "mime": "image/svg+xml",
+        "bytes": 348
+      },
+      {
+        "mime": "Image/SVG+XML; charset=utf-8",
+        "bytes": 348
+      }
+    ]
+  },
+  "continuedActualImageInputs": [
+    [
+      {
+        "mime": "image/png",
+        "bytes": 4983,
+        "equalsReviewOriginalPNG": true
+      },
+      {
+        "mime": "image/png",
+        "bytes": 4983,
+        "equalsReviewOriginalPNG": true
+      },
+      {
+        "mime": "image/png",
+        "bytes": 4983,
+        "equalsReviewOriginalPNG": true
+      },
+      {
+        "mime": "image/png",
+        "bytes": 4983,
+        "equalsReviewOriginalPNG": true
+      },
+      {
+        "mime": "image/png",
+        "bytes": 4983,
+        "equalsReviewOriginalPNG": true
+      }
+    ]
+  ],
+  "downloads": [
+    {
+      "source": "published user vector",
+      "bytes": 343,
+      "equalsOriginal": true
+    },
+    {
+      "source": "owned MCP vector 332",
+      "bytes": 348,
+      "equalsOriginal": true
+    }
+  ],
+  "model": {
+    "requests": 57,
+    "completed": 57,
+    "models": {
+      "local": 57
+    },
+    "streaming": {
+      "True": 57
+    },
+    "processes": 4,
+    "operations": {
+      "project-memory": 19,
+      "conversation": 38
+    }
+  },
+  "ports": {
+    "40160": "closed",
+    "40162": "closed",
+    "40164": "closed"
+  },
+  "fixtureCorrections": [
+    "Native Chat defaults to no MCP assignments; connected/ACP-attached server does not assign it to that harness",
+    "Initial scripted unassigned web occurrence repeated empty search and reached the existing seven-call error; this real failed history is preserved",
+    "Existing public chat.capability.update explicitly assigns only owned_media in the isolated project; subsequent occurrence and a fresh web Chat perform the tool normally",
+    "One prototype SDK assignment call used the wrong wrapper argument, corrected to conversationCapabilityUpdate and rerun successfully",
+    "New direct user-image byte test now uses standard URL serialization before inspecting the actual PNG bytes; complete focused rerun passed"
+  ],
+  "limits": [
+    "Local scripted streaming participant, no external Provider or GPT-6.1 Sol acceptance",
+    "Official ACP SDK over actual stdio and developer HTTP; no native Zed acceptance claim",
+    "Local openai-compatible adapter deliberately has no verified typed image tool-result transport; actual tool-result inputs retain the explicit reference/limitation. Supported adapter typed pixels are tested through actual Message projection",
+    "PDF/audio/video classifier and explicit capability errors tested; no new native PDF/audio/video playback or transport support claim",
+    "Persisted fork transcripts include copied assistant facts, not additional live model invocations"
+  ]
+}

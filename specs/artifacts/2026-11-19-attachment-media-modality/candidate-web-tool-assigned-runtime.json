@@ -1,0 +1,2350 @@
+{
+  "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+  "before": {
+    "scope": {
+      "kind": "project",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+    },
+    "agent_id": "chat",
+    "tools": {
+      "declared": [
+        "apply_patch",
+        "bash",
+        "capability_search",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "schedule",
+        "search_code",
+        "skill",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write"
+      ]
+    },
+    "skills": {
+      "assigned_refs": [],
+      "installed": [
+        {
+          "name": "browser-use",
+          "description": "Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:browser-use",
+          "content": "\n# Browser Use\n\nUse Browser tools for rendered web state and interactions. Use native Computer tools for desktop interfaces outside the page. All names below are local tool names within the current Browser provider; use the callable names actually exposed by your harness.\n\n## Initialize and retain identity\n\n`session_create` returns `sessionId`, `profileId`, `browserMode` and `liveViewUrl`. Retain these exact values. Chrome DevTools Protocol (CDP) mode uses the current Chrome login environment but creates a tool-owned tab; isolated mode creates a separate browser environment. Configuration selects the mode. A launch/debugging error is not permission to change it or attach another browser.\n\nUse `navigate` with the intended URL, then `observe` to inspect the current page. `tabs` manages only tool-owned tabs; selection returns the `sessionId` that subsequent calls must use. Reuse `profileId` only when another tab should share that environment. User-owned tabs are not part of this tab inventory.\n\n## Ground actions and verify useful boundaries\n\n`observe` combines a screenshot, URL/title, a bounded Document Object Model (DOM) summary and diagnostics. Its text/element list is a sample, not a complete inventory, and suggested selectors may match several elements. Choose targets from current page evidence; use `count`, scoped selectors, `get_attribute` or a targeted read when needed. Never invent selectors from a desired label.\n\nPrefer a grounded selector for normal page controls. Use viewport coordinates for visual targets. After scrolling, navigation, a dialog or layout change, obtain fresh evidence before choosing new coordinates. `hover` can reveal menus/tooltips; inspect the result when that changes the intended target. Scrolling uses pixel deltas at a viewport point.\n\nKeep predictable actions together when the callable tool interface supports ordered execution. Observe at decision boundaries and inspect the final result; there is no universal requirement to screenshot after each input. Keyboard tools act on current focus, so establish the intended field first. `type` replaces the field value, including when `clear` is false; `clear` only controls the preliminary clear step.\n\n## Diagnose instead of guessing\n\n- A blocked coordinate interaction returns target/nearby evidence. Re-observe and correct the target. `force:true` is only for an intentionally chosen raw-coordinate action supported by current evidence, never an automatic retry strategy.\n- For selector ambiguity or absence, inspect the current state and refine the selector. If an iframe owns the target, inspect `frames` and use the exposed frame tools.\n- For a closed page or disconnected session, use `session_status` when exposed and read the exact result. Create a new session only after confirming the old one is unavailable; reestablish navigation/login state deliberately. Never replay submissions after a timeout without checking their actual outcome.\n- Use `diagnostics_get` for page/network failures and the specific wait tool for an expected transition. Repeating the same call without new evidence does not diagnose it.\n- `evaluate` executes a page expression, not a host script or a Playwright Page API. Use it for targeted inspection or an explicitly intended page operation; direct DOM/storage changes are not evidence that a user interaction worked.\n\nRespect task authorization for forms, uploads, downloads and external effects. Inspect actual screenshots for visual claims. `session_destroy` closes the tool-owned tab; in isolated mode, the final tab normally releases its login environment. `help` reloads these instructions without launching or changing a browser.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "computer-use",
+          "description": "Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:computer-use",
+          "content": "\n# Computer Use\n\nUse the Computer tools for native desktop interfaces. Use Browser tools for web pages when available. These tools control the current physical desktop; logical sessions do not provide separate desktops.\n\n## Start from evidence\n\n- `session_create` establishes this run's desktop authority and returns `computer_id` and `display_id`. After the user returns control, call it again to attach the new run, then `observe`.\n- `observe` returns the actual screenshot, dimensions and an exact observation identity. Inspect the image and select the intended app/control before input. Coordinates are integer pixels in that returned image, starting at its top left.\n- Copy all four binding fields into `act`: `computer_id`, `display_id`, `observation_id`, `observation_digest`. The digest binds the screenshot; copy it verbatim.\n\n## Group predictable actions\n\n`act` accepts an ordered `actions` array. Each action has `kind`: `click`, `type_text`, `keypress`, `scroll`, or `drag`. The current tool schema defines their parameters. For example, after observing a known search field, a short group can click it and type a query. A single action uses a one-element array.\n\nGroup actions whose targets and effects are already understood. End the group when the next decision depends on a new page, dialog, focus change or uncertain result. Choose the group size from current evidence; a screenshot/model round trip is not required between every input. Actions run sequentially and the result includes a fresh screenshot when capture succeeds.\n\n- `type_text` sends literal text to the focused control. Use `keypress` for control keys; `keys: [\"CTRL\", \"A\"]` is a chord, not two sequential presses.\n- `scroll.amount` is a count of lines, unlike Browser pixel deltas. Its point selects the scroll region.\n- `drag` takes `from`, `to` pixel points and `durationMs`.\n- One observation authorizes one entire group and is consumed at dispatch. Inspect the returned observation and use its new binding for the next group.\n\n## Read results before continuing\n\nThe receipt identifies the completed prefix and any failed action by zero-based index. Stop on failure and inspect the returned screen. `COMPUTER_OUTCOME_UNKNOWN` means the failing action may have happened; never replay the group blindly. A transport failure can leave the whole group's outcome unknown: call `observe` and decide from the actual state. If capture failed, explicitly observe again before input.\n\nInput dispatch can finish before the application paints its final state. A fresh screenshot is a point-in-time observation, not a rendering-complete guarantee. If text or a transition is still appearing, observe again instead of repeating the input.\n\n`STALE_OBSERVATION` requires a fresh observation. `COMPUTER_INPUT_OUT_OF_BOUNDS` requires correcting coordinates using the current image dimensions. `COMPUTER_RUN_REVOKED` means the user owns control; wait for return rather than retrying input. For backend errors, read the exact diagnostic; a locked desktop or unavailable native driver needs resolution, not alternate input transports.\n\nRespect the user's authorized scope and leave irreversible external effects for explicit confirmation. Stop on unexpected authentication, permission or target changes. Finish by inspecting the actual requested result. `session_destroy` ends this logical session; it does not close the user's apps. `help` reloads these instructions without interacting with the desktop.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "design-taste-frontend",
+          "description": "Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:design-taste-frontend",
+          "content": "\n# Design Taste for Frontend\n\nUse this Skill to improve the visual judgment of a frontend design or redesign while preserving the active Task contract. It is an OpenCorvus adaptation of Leonxlnx's Taste Skill.\n\nThe accepted Product Requirements, active Expert Squad instructions, design-system authority, evidence, target platform, and explicit user constraints remain authoritative. This Skill refines design decisions inside those boundaries. It does not invent product scope, override a referenced design system, turn inspiration into parity authority, or broaden a desktop task into mobile delivery.\n\n## 1. Read the design situation\n\nBefore producing markup, styles, or components, derive a short design read from current evidence:\n\n- product or page job;\n- primary audience and their decision context;\n- information density and interaction complexity;\n- existing brand, token, component, and asset authority;\n- explicit visual references and what each reference is allowed to influence;\n- accessibility, performance, regulatory, and platform constraints;\n- greenfield, preserve-redesign, overhaul-redesign, or reference-parity mode as declared by the active Task.\n\nState the design read in one concise sentence. If two materially different design directions remain equally plausible and the missing choice cannot be recovered from Task evidence, ask one focused question. Otherwise proceed.\n\nFor redesigns, first inventory the existing information architecture, navigation, conversion or work paths, content blocks, tokens, typography, spacing, component patterns, interaction states, accessibility behavior, and performance-sensitive surfaces. Preserve accepted structure and identity unless the Task explicitly replaces them.\n\n## 2. Set the three contextual dials\n\nRecord three values on a one-to-ten scale for this delivery:\n\n- `DESIGN_VARIANCE`: compositional experimentation and asymmetry;\n- `MOTION_INTENSITY`: the amount and depth of purposeful motion;\n- `VISUAL_DENSITY`: information and control density per viewport.\n\nInfer the values from the design read rather than using a universal baseline. A financial workstation can require high density and restrained variance; an editorial campaign can require lower density and more expressive composition. The values describe a decision, not configuration that overrides the accepted design system.\n\nUse the dials consistently across every surface in scope. Shared navigation, typography, color, spacing, radius, elevation, iconography, motion, and state treatment must form one system.\n\n## 3. Choose the real foundation\n\nInspect the repository and accepted design authority before choosing implementation primitives.\n\n- Reuse the product's current component library and tokens when they are authoritative.\n- When the Task names a mature design system, use its official maintained package and primitives.\n- When no system is prescribed, choose one maintained component foundation compatible with the existing stack and customize it through a coherent token layer.\n- Verify dependencies in the repository before importing them.\n- Keep one icon family and one component-system authority per delivery.\n- Do not redraw standard controls, icons, focus behavior, dialogs, menus, or form primitives when the selected library already owns them.\n\nFramework, styling, rendering, data, and state decisions come from the repository. This Skill does not force React, Next.js, Tailwind, a particular animation library, dark mode, or responsive scope.\n\n## 4. Build a recognizable composition\n\nCreate hierarchy through proportion, alignment, grouping, contrast, rhythm, and negative space before adding decoration.\n\n### Typography\n\n- Give each surface one obvious primary reading path.\n- Keep display text within a deliberate measure and line count appropriate to its role.\n- Use an intentional type scale, line height, and weight system; inspect descenders, truncation, wrapping, and numeric alignment in the rendered result.\n- Preserve brand typography when it is authoritative. Otherwise select type for audience, content density, language coverage, and legibility rather than novelty.\n- Use emphasis within the same family unless the design language has a justified pairing.\n\n### Color and material\n\n- Derive color from brand or design-system authority. When no authority exists, choose one coherent neutral family and one purposeful accent relationship.\n- Keep semantic colors stable across surfaces and states.\n- Use elevation, borders, cards, translucency, gradients, and texture only when they communicate hierarchy or product meaning.\n- Verify text, controls, focus indicators, charts, form states, and overlays against the real background.\n\n### Layout and density\n\n- Vary composition according to information meaning, not to manufacture novelty.\n- Do not repeat the same card grid, split section, centered heading, eyebrow label, or left-right alternation across the entire experience.\n- Use containers only when they express grouping or elevation. Prefer alignment, separators, and spacing when those carry the hierarchy.\n- Dense products still need grouping and scan paths; spacious products still need enough evidence and imagery to feel complete.\n- Size navigation, controls, tables, charts, and empty/loading/error states for their real content rather than demo copy.\n- Keep desktop navigation and primary actions stable, legible, and unclipped at the accepted viewport.\n\n### Content and assets\n\n- Use approved real assets and actual product content available through Task evidence.\n- Match asset aspect ratio, crop, resolution, and visual treatment to its exact region.\n- Do not substitute generic company names, fake metrics, fabricated testimonials, decorative fake screenshots, or unlabeled placeholder blocks for required evidence.\n- When required assets or content are unavailable, record the exact blocker instead of manufacturing a substitute.\n\n## 5. Design complete interaction states\n\nEvery interactive component in scope needs a coherent normal, hover, active, focus, disabled, loading, empty, success, and error treatment when that state exists in the product contract.\n\n- Keep labels stable for the same action across navigation, page content, dialogs, and footers.\n- Keep primary actions visually dominant without duplicating the same intent.\n- Place form labels, help, validation, and errors where users can associate them with the owning control.\n- Preserve keyboard order, visible focus, semantic structure, and accessible names.\n- Make charts, status colors, and icon-only actions understandable without relying on color alone.\n- Keep state feedback adjacent to the action or data it describes.\n\n## 6. Use motion with purpose\n\nMotion must explain hierarchy, continuity, causality, progress, or spatial change.\n\n- Match motion depth to `MOTION_INTENSITY` and the product context.\n- Prefer compositor-friendly transform and opacity changes.\n- Use the repository's established motion solution and clean up every listener, timeline, observer, and animation context.\n- Keep continuous pointer or scroll values outside render-state update loops.\n- Respect reduced-motion preferences and preserve the same information and actions in the reduced experience.\n- Avoid perpetual decoration, competing animation systems, scroll hijacking without a product reason, and motion that delays primary work.\n\n## 7. Remove generated-interface tells\n\nChallenge any result that could have been produced from a generic template without reading the Task:\n\n- default purple glow or mesh used without brand authority;\n- a centered headline followed by equal cards on every surface;\n- repeated small uppercase labels above every heading;\n- arbitrary pills, glass panels, gradients, or shadows used as decoration;\n- empty bento cells or filler regions created to complete a pattern;\n- identical section composition repeated with different copy;\n- oversized headings that destroy information density or push primary actions below the accepted viewport;\n- random type-family changes, mixed radius systems, mixed icon families, or drifting accent colors;\n- static success-only mockups without real product states;\n- dense interfaces reduced to disconnected marketing cards.\n\nDo not replace one cliché with another. Every correction must trace to audience, content, product behavior, design authority, or visible evidence.\n\n## 8. Rendered pre-flight review\n\nThe design is unfinished until it has been opened as a real page at the Task's accepted desktop viewport and personally inspected.\n\n1. Render the actual current implementation or design source through the repository's real preview path.\n2. Exercise the primary navigation and every material state in scope.\n3. Capture fresh Task-scoped screenshots for the relevant surfaces and states.\n4. Inspect hierarchy, density, alignment, spacing, wrapping, clipping, contrast, asset quality, control states, focus, scroll behavior, motion, and cross-surface consistency.\n5. Compare the result with the accepted Product Requirements and design authority, using references only for the influence explicitly granted by the Task.\n6. Fix every confirmed visual defect and repeat the real-page inspection with fresh evidence.\n\nCompletion requires a coherent product-specific system, real content and states, and current rendered evidence. A build, typecheck, static source review, or clean console is supporting evidence, not visual acceptance.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "grill-me",
+          "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:grill-me",
+          "content": "\nInterview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.\n\nAsk the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.\n\nIf a *fact* can be found by exploring the environment (filesystem, tools, etc.), look it up rather than asking me. The *decisions*, though, are mine — put each one to me and wait for my answer.\n\nDo not act on it until I confirm we have reached a shared understanding.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "research-report",
+          "description": "Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:research-report",
+          "content": "\n# Research Report Skill\n\nYou produce a **multi-source research report** as a single markdown file. The report is the deliverable — there is no code to compile, no UI to render, no test suite to satisfy beyond \"the file exists with the required sections and the claims trace back to real sources\".\n\n## Tool boundary — do NOT pick the wrong one\n\n- `websearch` — open-ended multi-source synthesis. THIS is your primary tool. Use it for product comparisons, capability matrices, ecosystem surveys, anything where the answer requires aggregating information from sources you cannot enumerate up-front.\n- `webfetch` — pull the full content of a specific URL. ONLY call after `websearch` has returned a concrete URL whose deeper content you actually need. Never invent URLs.\n- `external_code_search` — narrow programming questions about a specific library / SDK / API. NOT for product / vendor / competitor research, even when the subject is third-party software. If you find yourself reaching for it on a research task, you are about to call the wrong tool.\n\nIf the brief is research-shaped (the activation signals above) and you call `external_code_search`, you have misread the task. Stop, switch to `websearch`.\n\n## Process\n\n1. **Read the brief verbatim.** Identify (a) the subjects to compare or analyse, (b) the dimensions or sections the report must cover, (c) the audience and the expected output shape (matrix, narrative, mixed). The brief is the contract — do not silently broaden or narrow scope.\n\n2. **Plan the search queries.** One query per subject + at least one cross-cutting / industry-overview query. For an N-way comparison, plan AT LEAST `N + 1` distinct `websearch` calls. Vary the angle (official capability, third-party review, user feedback, recent news) so you are not just reading one source's framing N times.\n\n3. **Search.** Run the planned `websearch` calls. Read the snippets. Note which result URLs are worth fetching in full vs. which give you enough from the snippet alone. Cite the source URL inline next to each non-trivial claim — vendor name, version, date, or specific capability assertion.\n\n4. **Webfetch ONLY when needed.** If a `websearch` result is highly relevant but the snippet is too short for what you need (e.g. a feature matrix, a pricing page, a deep technical doc), call `webfetch` on that exact URL. Do not webfetch every search result reflexively.\n\n5. **Synthesise and write the report.** Produce a single markdown file at the path the Task request specifies (typically `report.md` under the Task directory). The report should contain whatever sections the brief calls for; a comparison-shaped brief typically wants:\n   - **概述 / Overview** — one paragraph framing what is being compared and why.\n   - **功能矩阵 / Capability Matrix** — a markdown table with subjects as columns and dimensions as rows, with concise per-cell entries and a citation footnote where a claim is non-obvious.\n   - **关键洞察 / Key Insights** — bulleted observations that emerge from the matrix, each insight backed by one or more matrix cells.\n   - **建议 / Recommendations** — actionable, prioritised, scoped to the audience the brief named (product team, engineering, leadership, …).\n   - **参考 / References** — the canonical URL list, deduplicated.\n     Adapt the section names + ordering to the brief's language. If the brief explicitly enumerates sections, follow that enumeration verbatim.\n\n6. **Self-check before reporting done.** Re-read the report yourself. Every non-obvious claim should have a citation; every section the brief asked for should exist; the recommendations should be concrete enough to act on. Do not pad with filler if a section has nothing real to say — say so explicitly and move on.\n\n## What success looks like\n\n- A single markdown file at the declared path (e.g. `report.md`).\n- The brief's required sections all present.\n- Every non-trivial factual claim cites a source URL discovered via `websearch` / `webfetch`.\n- The matrix (if applicable) is filled in completely — no \"TBD\" cells; if a value cannot be found, the cell explicitly says so and gives the closest indirect signal.\n- Recommendations are prioritised, scoped, and reference the matrix rows they are drawn from.\n\n## What success is NOT\n\n- Generic vendor brochures rephrased into Chinese / English. The whole point of a research report is the synthesis — comparing, contrasting, and recommending — not paraphrasing one source.\n- Inventing URLs, version numbers, or capability claims. If `websearch` returns nothing useful for a claim, say so in the report — do not fabricate.\n- A `.tsx` / `.ts` file. The deliverable is markdown.\n- Multiple files, build outputs, or a test suite. There is no software to test; the acceptance evidence is the report itself.\n",
+          "auto_detect": {
+            "task_signals": {
+              "request_text_any": [
+                "报告",
+                "调研",
+                "对比",
+                "综述",
+                "功能矩阵",
+                "评估",
+                "建议",
+                "report",
+                "comparison",
+                "matrix",
+                "survey",
+                "recommendation"
+              ]
+            }
+          },
+          "priority": 55,
+          "required_tools": [
+            "websearch",
+            "webfetch"
+          ],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "work-artifacts",
+          "description": "Produce editable PPTX presentations, DOCX documents and XLSX spreadsheets through the single OpenCorvus Work Artifact Harness. Use the exact mounted typed profile. DOCX supports ordered title, heading and body paragraphs; XLSX supports bounded worksheets and literal cells. Fresh PNG review and derived PDF previews accompany DOCX/XLSX delivery. Does not edit existing files or author formulas, macros, PDF source, OCR, archives or media.",
+          "aliases": [
+            "structured artifact production",
+            "presentation authoring",
+            "PowerPoint PPTX",
+            "Word DOCX",
+            "Excel XLSX",
+            "工作产物生成",
+            "演示文稿制作",
+            "文档制作",
+            "电子表格"
+          ],
+          "metadata": {
+            "opencorvus.profile-set": "work-artifacts@1"
+          },
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:work-artifacts",
+          "content": "\n# Work Artifacts\n\nProduce the requested editable file as the deliverable and use fresh derived\nrenders as review evidence. Never substitute an outline, HTML page, screenshot\ncollection, or semantic Interactive Artifact for the requested source file.\n\n## Workflow\n\n1. Read `references/common-lifecycle.md`.\n2. Read the matching profile reference before authoring:\n   `references/office-presentation.md`, `references/office-document.md`, or\n   `references/office-spreadsheet.md`.\n3. Call `work_artifact_author` with an exact qualified `profile` and a complete\n   typed plan.\n4. Inspect the returned canonical attachment with `work_artifact_inspect`.\n5. Validate that exact attachment with `work_artifact_validate`.\n6. Inspect every fresh render. Repair the typed authoring plan and repeat the\n   full lifecycle when a render is incomplete or visually weak.\n7. Read `references/review.md` and resolve confirmed review findings.\n8. Give `work_artifact_deliver` the exact final validation receipt. Delivery\n   revalidates and rerenders the candidate; only the current authorized Work\n   conversation or Expert Squad delivery owner publishes it.\n\nWhen the user requests a project file path, save the exact delivered source with\nthe ordinary `write` tool using `attachmentUrl` and `filePath`. This preserves the\nbinary bytes; it does not invoke an Office runtime or replace the canonical source.\n\nRead `references/security.md` before using user-supplied images or handling a\nrequest involving external links, macros, embedded objects, media, templates,\nor an existing file.\n",
+          "priority": 0,
+          "required_tools": [
+            "work_artifact_inspect",
+            "work_artifact_author",
+            "work_artifact_validate",
+            "work_artifact_deliver"
+          ],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "medium",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": true,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        }
+      ]
+    },
+    "mcp": {
+      "assigned_server_refs": [],
+      "configured_server_refs": [
+        "browser",
+        "computer",
+        "owned_media"
+      ]
+    }
+  },
+  "assignment": {
+    "scope": {
+      "kind": "project",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+    },
+    "agent_id": "chat",
+    "tools": {
+      "declared": [
+        "apply_patch",
+        "bash",
+        "capability_search",
+        "create_continuous_goal",
+        "delegate_agent",
+        "edit",
+        "external_code_search",
+        "get_continuous_goal",
+        "glob",
+        "memory",
+        "mission_state",
+        "panel_cancel_task",
+        "panel_create_task",
+        "panel_delete_goal",
+        "panel_expert_squad_inspect",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_respond_interaction",
+        "panel_select_workspace",
+        "panel_send_task_message",
+        "panel_update_checks",
+        "panel_update_goal",
+        "panel_wake_mission",
+        "panel_wake_work",
+        "planner",
+        "publish_interactive_artifact",
+        "question",
+        "read",
+        "schedule",
+        "search_code",
+        "skill",
+        "skill_market",
+        "todo",
+        "update_continuous_goal",
+        "webfetch",
+        "websearch",
+        "write"
+      ]
+    },
+    "skills": {
+      "assigned_refs": [],
+      "installed": [
+        {
+          "name": "browser-use",
+          "description": "Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:browser-use",
+          "content": "\n# Browser Use\n\nUse Browser tools for rendered web state and interactions. Use native Computer tools for desktop interfaces outside the page. All names below are local tool names within the current Browser provider; use the callable names actually exposed by your harness.\n\n## Initialize and retain identity\n\n`session_create` returns `sessionId`, `profileId`, `browserMode` and `liveViewUrl`. Retain these exact values. Chrome DevTools Protocol (CDP) mode uses the current Chrome login environment but creates a tool-owned tab; isolated mode creates a separate browser environment. Configuration selects the mode. A launch/debugging error is not permission to change it or attach another browser.\n\nUse `navigate` with the intended URL, then `observe` to inspect the current page. `tabs` manages only tool-owned tabs; selection returns the `sessionId` that subsequent calls must use. Reuse `profileId` only when another tab should share that environment. User-owned tabs are not part of this tab inventory.\n\n## Ground actions and verify useful boundaries\n\n`observe` combines a screenshot, URL/title, a bounded Document Object Model (DOM) summary and diagnostics. Its text/element list is a sample, not a complete inventory, and suggested selectors may match several elements. Choose targets from current page evidence; use `count`, scoped selectors, `get_attribute` or a targeted read when needed. Never invent selectors from a desired label.\n\nPrefer a grounded selector for normal page controls. Use viewport coordinates for visual targets. After scrolling, navigation, a dialog or layout change, obtain fresh evidence before choosing new coordinates. `hover` can reveal menus/tooltips; inspect the result when that changes the intended target. Scrolling uses pixel deltas at a viewport point.\n\nKeep predictable actions together when the callable tool interface supports ordered execution. Observe at decision boundaries and inspect the final result; there is no universal requirement to screenshot after each input. Keyboard tools act on current focus, so establish the intended field first. `type` replaces the field value, including when `clear` is false; `clear` only controls the preliminary clear step.\n\n## Diagnose instead of guessing\n\n- A blocked coordinate interaction returns target/nearby evidence. Re-observe and correct the target. `force:true` is only for an intentionally chosen raw-coordinate action supported by current evidence, never an automatic retry strategy.\n- For selector ambiguity or absence, inspect the current state and refine the selector. If an iframe owns the target, inspect `frames` and use the exposed frame tools.\n- For a closed page or disconnected session, use `session_status` when exposed and read the exact result. Create a new session only after confirming the old one is unavailable; reestablish navigation/login state deliberately. Never replay submissions after a timeout without checking their actual outcome.\n- Use `diagnostics_get` for page/network failures and the specific wait tool for an expected transition. Repeating the same call without new evidence does not diagnose it.\n- `evaluate` executes a page expression, not a host script or a Playwright Page API. Use it for targeted inspection or an explicitly intended page operation; direct DOM/storage changes are not evidence that a user interaction worked.\n\nRespect task authorization for forms, uploads, downloads and external effects. Inspect actual screenshots for visual claims. `session_destroy` closes the tool-owned tab; in isolated mode, the final tab normally releases its login environment. `help` reloads these instructions without launching or changing a browser.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "computer-use",
+          "description": "Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:computer-use",
+          "content": "\n# Computer Use\n\nUse the Computer tools for native desktop interfaces. Use Browser tools for web pages when available. These tools control the current physical desktop; logical sessions do not provide separate desktops.\n\n## Start from evidence\n\n- `session_create` establishes this run's desktop authority and returns `computer_id` and `display_id`. After the user returns control, call it again to attach the new run, then `observe`.\n- `observe` returns the actual screenshot, dimensions and an exact observation identity. Inspect the image and select the intended app/control before input. Coordinates are integer pixels in that returned image, starting at its top left.\n- Copy all four binding fields into `act`: `computer_id`, `display_id`, `observation_id`, `observation_digest`. The digest binds the screenshot; copy it verbatim.\n\n## Group predictable actions\n\n`act` accepts an ordered `actions` array. Each action has `kind`: `click`, `type_text`, `keypress`, `scroll`, or `drag`. The current tool schema defines their parameters. For example, after observing a known search field, a short group can click it and type a query. A single action uses a one-element array.\n\nGroup actions whose targets and effects are already understood. End the group when the next decision depends on a new page, dialog, focus change or uncertain result. Choose the group size from current evidence; a screenshot/model round trip is not required between every input. Actions run sequentially and the result includes a fresh screenshot when capture succeeds.\n\n- `type_text` sends literal text to the focused control. Use `keypress` for control keys; `keys: [\"CTRL\", \"A\"]` is a chord, not two sequential presses.\n- `scroll.amount` is a count of lines, unlike Browser pixel deltas. Its point selects the scroll region.\n- `drag` takes `from`, `to` pixel points and `durationMs`.\n- One observation authorizes one entire group and is consumed at dispatch. Inspect the returned observation and use its new binding for the next group.\n\n## Read results before continuing\n\nThe receipt identifies the completed prefix and any failed action by zero-based index. Stop on failure and inspect the returned screen. `COMPUTER_OUTCOME_UNKNOWN` means the failing action may have happened; never replay the group blindly. A transport failure can leave the whole group's outcome unknown: call `observe` and decide from the actual state. If capture failed, explicitly observe again before input.\n\nInput dispatch can finish before the application paints its final state. A fresh screenshot is a point-in-time observation, not a rendering-complete guarantee. If text or a transition is still appearing, observe again instead of repeating the input.\n\n`STALE_OBSERVATION` requires a fresh observation. `COMPUTER_INPUT_OUT_OF_BOUNDS` requires correcting coordinates using the current image dimensions. `COMPUTER_RUN_REVOKED` means the user owns control; wait for return rather than retrying input. For backend errors, read the exact diagnostic; a locked desktop or unavailable native driver needs resolution, not alternate input transports.\n\nRespect the user's authorized scope and leave irreversible external effects for explicit confirmation. Stop on unexpected authentication, permission or target changes. Finish by inspecting the actual requested result. `session_destroy` ends this logical session; it does not close the user's apps. `help` reloads these instructions without interacting with the desktop.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "design-taste-frontend",
+          "description": "Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:design-taste-frontend",
+          "content": "\n# Design Taste for Frontend\n\nUse this Skill to improve the visual judgment of a frontend design or redesign while preserving the active Task contract. It is an OpenCorvus adaptation of Leonxlnx's Taste Skill.\n\nThe accepted Product Requirements, active Expert Squad instructions, design-system authority, evidence, target platform, and explicit user constraints remain authoritative. This Skill refines design decisions inside those boundaries. It does not invent product scope, override a referenced design system, turn inspiration into parity authority, or broaden a desktop task into mobile delivery.\n\n## 1. Read the design situation\n\nBefore producing markup, styles, or components, derive a short design read from current evidence:\n\n- product or page job;\n- primary audience and their decision context;\n- information density and interaction complexity;\n- existing brand, token, component, and asset authority;\n- explicit visual references and what each reference is allowed to influence;\n- accessibility, performance, regulatory, and platform constraints;\n- greenfield, preserve-redesign, overhaul-redesign, or reference-parity mode as declared by the active Task.\n\nState the design read in one concise sentence. If two materially different design directions remain equally plausible and the missing choice cannot be recovered from Task evidence, ask one focused question. Otherwise proceed.\n\nFor redesigns, first inventory the existing information architecture, navigation, conversion or work paths, content blocks, tokens, typography, spacing, component patterns, interaction states, accessibility behavior, and performance-sensitive surfaces. Preserve accepted structure and identity unless the Task explicitly replaces them.\n\n## 2. Set the three contextual dials\n\nRecord three values on a one-to-ten scale for this delivery:\n\n- `DESIGN_VARIANCE`: compositional experimentation and asymmetry;\n- `MOTION_INTENSITY`: the amount and depth of purposeful motion;\n- `VISUAL_DENSITY`: information and control density per viewport.\n\nInfer the values from the design read rather than using a universal baseline. A financial workstation can require high density and restrained variance; an editorial campaign can require lower density and more expressive composition. The values describe a decision, not configuration that overrides the accepted design system.\n\nUse the dials consistently across every surface in scope. Shared navigation, typography, color, spacing, radius, elevation, iconography, motion, and state treatment must form one system.\n\n## 3. Choose the real foundation\n\nInspect the repository and accepted design authority before choosing implementation primitives.\n\n- Reuse the product's current component library and tokens when they are authoritative.\n- When the Task names a mature design system, use its official maintained package and primitives.\n- When no system is prescribed, choose one maintained component foundation compatible with the existing stack and customize it through a coherent token layer.\n- Verify dependencies in the repository before importing them.\n- Keep one icon family and one component-system authority per delivery.\n- Do not redraw standard controls, icons, focus behavior, dialogs, menus, or form primitives when the selected library already owns them.\n\nFramework, styling, rendering, data, and state decisions come from the repository. This Skill does not force React, Next.js, Tailwind, a particular animation library, dark mode, or responsive scope.\n\n## 4. Build a recognizable composition\n\nCreate hierarchy through proportion, alignment, grouping, contrast, rhythm, and negative space before adding decoration.\n\n### Typography\n\n- Give each surface one obvious primary reading path.\n- Keep display text within a deliberate measure and line count appropriate to its role.\n- Use an intentional type scale, line height, and weight system; inspect descenders, truncation, wrapping, and numeric alignment in the rendered result.\n- Preserve brand typography when it is authoritative. Otherwise select type for audience, content density, language coverage, and legibility rather than novelty.\n- Use emphasis within the same family unless the design language has a justified pairing.\n\n### Color and material\n\n- Derive color from brand or design-system authority. When no authority exists, choose one coherent neutral family and one purposeful accent relationship.\n- Keep semantic colors stable across surfaces and states.\n- Use elevation, borders, cards, translucency, gradients, and texture only when they communicate hierarchy or product meaning.\n- Verify text, controls, focus indicators, charts, form states, and overlays against the real background.\n\n### Layout and density\n\n- Vary composition according to information meaning, not to manufacture novelty.\n- Do not repeat the same card grid, split section, centered heading, eyebrow label, or left-right alternation across the entire experience.\n- Use containers only when they express grouping or elevation. Prefer alignment, separators, and spacing when those carry the hierarchy.\n- Dense products still need grouping and scan paths; spacious products still need enough evidence and imagery to feel complete.\n- Size navigation, controls, tables, charts, and empty/loading/error states for their real content rather than demo copy.\n- Keep desktop navigation and primary actions stable, legible, and unclipped at the accepted viewport.\n\n### Content and assets\n\n- Use approved real assets and actual product content available through Task evidence.\n- Match asset aspect ratio, crop, resolution, and visual treatment to its exact region.\n- Do not substitute generic company names, fake metrics, fabricated testimonials, decorative fake screenshots, or unlabeled placeholder blocks for required evidence.\n- When required assets or content are unavailable, record the exact blocker instead of manufacturing a substitute.\n\n## 5. Design complete interaction states\n\nEvery interactive component in scope needs a coherent normal, hover, active, focus, disabled, loading, empty, success, and error treatment when that state exists in the product contract.\n\n- Keep labels stable for the same action across navigation, page content, dialogs, and footers.\n- Keep primary actions visually dominant without duplicating the same intent.\n- Place form labels, help, validation, and errors where users can associate them with the owning control.\n- Preserve keyboard order, visible focus, semantic structure, and accessible names.\n- Make charts, status colors, and icon-only actions understandable without relying on color alone.\n- Keep state feedback adjacent to the action or data it describes.\n\n## 6. Use motion with purpose\n\nMotion must explain hierarchy, continuity, causality, progress, or spatial change.\n\n- Match motion depth to `MOTION_INTENSITY` and the product context.\n- Prefer compositor-friendly transform and opacity changes.\n- Use the repository's established motion solution and clean up every listener, timeline, observer, and animation context.\n- Keep continuous pointer or scroll values outside render-state update loops.\n- Respect reduced-motion preferences and preserve the same information and actions in the reduced experience.\n- Avoid perpetual decoration, competing animation systems, scroll hijacking without a product reason, and motion that delays primary work.\n\n## 7. Remove generated-interface tells\n\nChallenge any result that could have been produced from a generic template without reading the Task:\n\n- default purple glow or mesh used without brand authority;\n- a centered headline followed by equal cards on every surface;\n- repeated small uppercase labels above every heading;\n- arbitrary pills, glass panels, gradients, or shadows used as decoration;\n- empty bento cells or filler regions created to complete a pattern;\n- identical section composition repeated with different copy;\n- oversized headings that destroy information density or push primary actions below the accepted viewport;\n- random type-family changes, mixed radius systems, mixed icon families, or drifting accent colors;\n- static success-only mockups without real product states;\n- dense interfaces reduced to disconnected marketing cards.\n\nDo not replace one cliché with another. Every correction must trace to audience, content, product behavior, design authority, or visible evidence.\n\n## 8. Rendered pre-flight review\n\nThe design is unfinished until it has been opened as a real page at the Task's accepted desktop viewport and personally inspected.\n\n1. Render the actual current implementation or design source through the repository's real preview path.\n2. Exercise the primary navigation and every material state in scope.\n3. Capture fresh Task-scoped screenshots for the relevant surfaces and states.\n4. Inspect hierarchy, density, alignment, spacing, wrapping, clipping, contrast, asset quality, control states, focus, scroll behavior, motion, and cross-surface consistency.\n5. Compare the result with the accepted Product Requirements and design authority, using references only for the influence explicitly granted by the Task.\n6. Fix every confirmed visual defect and repeat the real-page inspection with fresh evidence.\n\nCompletion requires a coherent product-specific system, real content and states, and current rendered evidence. A build, typecheck, static source review, or clean console is supporting evidence, not visual acceptance.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "grill-me",
+          "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:grill-me",
+          "content": "\nInterview me relentlessly about every aspect of this until we reach a shared understanding. Walk down each branch of the decision tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.\n\nAsk the questions one at a time, waiting for feedback on each question before continuing. Asking multiple questions at once is bewildering.\n\nIf a *fact* can be found by exploring the environment (filesystem, tools, etc.), look it up rather than asking me. The *decisions*, though, are mine — put each one to me and wait for my answer.\n\nDo not act on it until I confirm we have reached a shared understanding.\n",
+          "priority": 0,
+          "required_tools": [],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "research-report",
+          "description": "Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.",
+          "aliases": [],
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:research-report",
+          "content": "\n# Research Report Skill\n\nYou produce a **multi-source research report** as a single markdown file. The report is the deliverable — there is no code to compile, no UI to render, no test suite to satisfy beyond \"the file exists with the required sections and the claims trace back to real sources\".\n\n## Tool boundary — do NOT pick the wrong one\n\n- `websearch` — open-ended multi-source synthesis. THIS is your primary tool. Use it for product comparisons, capability matrices, ecosystem surveys, anything where the answer requires aggregating information from sources you cannot enumerate up-front.\n- `webfetch` — pull the full content of a specific URL. ONLY call after `websearch` has returned a concrete URL whose deeper content you actually need. Never invent URLs.\n- `external_code_search` — narrow programming questions about a specific library / SDK / API. NOT for product / vendor / competitor research, even when the subject is third-party software. If you find yourself reaching for it on a research task, you are about to call the wrong tool.\n\nIf the brief is research-shaped (the activation signals above) and you call `external_code_search`, you have misread the task. Stop, switch to `websearch`.\n\n## Process\n\n1. **Read the brief verbatim.** Identify (a) the subjects to compare or analyse, (b) the dimensions or sections the report must cover, (c) the audience and the expected output shape (matrix, narrative, mixed). The brief is the contract — do not silently broaden or narrow scope.\n\n2. **Plan the search queries.** One query per subject + at least one cross-cutting / industry-overview query. For an N-way comparison, plan AT LEAST `N + 1` distinct `websearch` calls. Vary the angle (official capability, third-party review, user feedback, recent news) so you are not just reading one source's framing N times.\n\n3. **Search.** Run the planned `websearch` calls. Read the snippets. Note which result URLs are worth fetching in full vs. which give you enough from the snippet alone. Cite the source URL inline next to each non-trivial claim — vendor name, version, date, or specific capability assertion.\n\n4. **Webfetch ONLY when needed.** If a `websearch` result is highly relevant but the snippet is too short for what you need (e.g. a feature matrix, a pricing page, a deep technical doc), call `webfetch` on that exact URL. Do not webfetch every search result reflexively.\n\n5. **Synthesise and write the report.** Produce a single markdown file at the path the Task request specifies (typically `report.md` under the Task directory). The report should contain whatever sections the brief calls for; a comparison-shaped brief typically wants:\n   - **概述 / Overview** — one paragraph framing what is being compared and why.\n   - **功能矩阵 / Capability Matrix** — a markdown table with subjects as columns and dimensions as rows, with concise per-cell entries and a citation footnote where a claim is non-obvious.\n   - **关键洞察 / Key Insights** — bulleted observations that emerge from the matrix, each insight backed by one or more matrix cells.\n   - **建议 / Recommendations** — actionable, prioritised, scoped to the audience the brief named (product team, engineering, leadership, …).\n   - **参考 / References** — the canonical URL list, deduplicated.\n     Adapt the section names + ordering to the brief's language. If the brief explicitly enumerates sections, follow that enumeration verbatim.\n\n6. **Self-check before reporting done.** Re-read the report yourself. Every non-obvious claim should have a citation; every section the brief asked for should exist; the recommendations should be concrete enough to act on. Do not pad with filler if a section has nothing real to say — say so explicitly and move on.\n\n## What success looks like\n\n- A single markdown file at the declared path (e.g. `report.md`).\n- The brief's required sections all present.\n- Every non-trivial factual claim cites a source URL discovered via `websearch` / `webfetch`.\n- The matrix (if applicable) is filled in completely — no \"TBD\" cells; if a value cannot be found, the cell explicitly says so and gives the closest indirect signal.\n- Recommendations are prioritised, scoped, and reference the matrix rows they are drawn from.\n\n## What success is NOT\n\n- Generic vendor brochures rephrased into Chinese / English. The whole point of a research report is the synthesis — comparing, contrasting, and recommending — not paraphrasing one source.\n- Inventing URLs, version numbers, or capability claims. If `websearch` returns nothing useful for a claim, say so in the report — do not fabricate.\n- A `.tsx` / `.ts` file. The deliverable is markdown.\n- Multiple files, build outputs, or a test suite. There is no software to test; the acceptance evidence is the report itself.\n",
+          "auto_detect": {
+            "task_signals": {
+              "request_text_any": [
+                "报告",
+                "调研",
+                "对比",
+                "综述",
+                "功能矩阵",
+                "评估",
+                "建议",
+                "report",
+                "comparison",
+                "matrix",
+                "survey",
+                "recommendation"
+              ]
+            }
+          },
+          "priority": 55,
+          "required_tools": [
+            "websearch",
+            "webfetch"
+          ],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "low",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": false,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        },
+        {
+          "name": "work-artifacts",
+          "description": "Produce editable PPTX presentations, DOCX documents and XLSX spreadsheets through the single OpenCorvus Work Artifact Harness. Use the exact mounted typed profile. DOCX supports ordered title, heading and body paragraphs; XLSX supports bounded worksheets and literal cells. Fresh PNG review and derived PDF previews accompany DOCX/XLSX delivery. Does not edit existing files or author formulas, macros, PDF source, OCR, archives or media.",
+          "aliases": [
+            "structured artifact production",
+            "presentation authoring",
+            "PowerPoint PPTX",
+            "Word DOCX",
+            "Excel XLSX",
+            "工作产物生成",
+            "演示文稿制作",
+            "文档制作",
+            "电子表格"
+          ],
+          "metadata": {
+            "opencorvus.profile-set": "work-artifacts@1"
+          },
+          "platforms": [],
+          "builtin": true,
+          "location": "builtin:work-artifacts",
+          "content": "\n# Work Artifacts\n\nProduce the requested editable file as the deliverable and use fresh derived\nrenders as review evidence. Never substitute an outline, HTML page, screenshot\ncollection, or semantic Interactive Artifact for the requested source file.\n\n## Workflow\n\n1. Read `references/common-lifecycle.md`.\n2. Read the matching profile reference before authoring:\n   `references/office-presentation.md`, `references/office-document.md`, or\n   `references/office-spreadsheet.md`.\n3. Call `work_artifact_author` with an exact qualified `profile` and a complete\n   typed plan.\n4. Inspect the returned canonical attachment with `work_artifact_inspect`.\n5. Validate that exact attachment with `work_artifact_validate`.\n6. Inspect every fresh render. Repair the typed authoring plan and repeat the\n   full lifecycle when a render is incomplete or visually weak.\n7. Read `references/review.md` and resolve confirmed review findings.\n8. Give `work_artifact_deliver` the exact final validation receipt. Delivery\n   revalidates and rerenders the candidate; only the current authorized Work\n   conversation or Expert Squad delivery owner publishes it.\n\nWhen the user requests a project file path, save the exact delivered source with\nthe ordinary `write` tool using `attachmentUrl` and `filePath`. This preserves the\nbinary bytes; it does not invoke an Office runtime or replace the canonical source.\n\nRead `references/security.md` before using user-supplied images or handling a\nrequest involving external links, macros, embedded objects, media, templates,\nor an existing file.\n",
+          "priority": 0,
+          "required_tools": [
+            "work_artifact_inspect",
+            "work_artifact_author",
+            "work_artifact_validate",
+            "work_artifact_deliver"
+          ],
+          "source_type": "builtin",
+          "trust": "builtin",
+          "risk": {
+            "level": "medium",
+            "has_scripts": false,
+            "has_agents": false,
+            "has_references": true,
+            "has_templates": false
+          },
+          "recommended_policy": "allow",
+          "policy": "allow",
+          "managed": false,
+          "writable": false
+        }
+      ]
+    },
+    "mcp": {
+      "assigned_server_refs": [
+        "owned_media"
+      ],
+      "configured_server_refs": [
+        "browser",
+        "computer",
+        "owned_media"
+      ]
+    }
+  },
+  "finish": "stop",
+  "history": [
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795046946107
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media tool declarations. Discover and call owned_media read_declared_images for this web Chat, then report the real returned evidence."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "64d9f3ddb4f5b17ed4d120e032047a4eb2b974d0a8de5257ed5a942d98b16a95"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795046946107:0000000000000030:0000000000000000:message:msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3GV00ILXDclJ6p",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+          "orderKey": "v1:0001795046946109:0000000000000031:0000000000000000:part:prt_g0VbNC3GV00ILXDclJ6p",
+          "type": "text",
+          "text": "Inspect media tool declarations. Discover and call owned_media read_declared_images for this web Chat, then report the real returned evidence.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+            "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046946261,
+          "completed": 1795046947048
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046946261:0000000000000030:0000000000000000:message:msg_g0VbNC3Iz009oc7bhbfC",
+        "id": "msg_g0VbNC3Iz009oc7bhbfC",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3T7003yoAS8YBW",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3Iz009oc7bhbfC",
+          "orderKey": "v1:0001795046946889:0000000000000031:0000000000000000:part:prt_g0VbNC3T7003yoAS8YBW",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3TQ00biUFym0ZO",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3Iz009oc7bhbfC",
+          "type": "tool",
+          "callID": "owned-encoding-call-19",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 1,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-19",
+                "prior_revision": 0,
+                "revision": 1,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "751e8deb098c851208730db77463693910dfac092f897a50dc492e3b3f0e3c08",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046946908,
+              "end": 1795046946987
+            }
+          },
+          "orderKey": "v1:0001795046946915:0000000000000031:0000000000000000:part:prt_g0VbNC3TQ00biUFym0ZO"
+        },
+        {
+          "id": "prt_g0VbNC3Ul004S5jBTf1W",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3Iz009oc7bhbfC",
+          "orderKey": "v1:0001795046946991:0000000000000031:0000000000000000:part:prt_g0VbNC3Ul004S5jBTf1W",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046947098,
+          "completed": 1795046947811
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046947098:0000000000000030:0000000000000000:message:msg_g0VbNC3WU00h51NL3GdG",
+        "id": "msg_g0VbNC3WU00h51NL3GdG",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3f400p7efWAZ0Z",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3WU00h51NL3GdG",
+          "orderKey": "v1:0001795046947630:0000000000000031:0000000000000000:part:prt_g0VbNC3f400p7efWAZ0Z",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3fP00fJ5yeFpbh",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3WU00h51NL3GdG",
+          "type": "tool",
+          "callID": "owned-encoding-call-20",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 2,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-20",
+                "prior_revision": 1,
+                "revision": 2,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "e693f72f26ee3b011b87cbc1dad4912ec9802b47aff4075c5148fbfa7362a75b",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046947651,
+              "end": 1795046947744
+            }
+          },
+          "orderKey": "v1:0001795046947659:0000000000000031:0000000000000000:part:prt_g0VbNC3fP00fJ5yeFpbh"
+        },
+        {
+          "id": "prt_g0VbNC3gy009V1aMnqJP",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3WU00h51NL3GdG",
+          "orderKey": "v1:0001795046947749:0000000000000031:0000000000000000:part:prt_g0VbNC3gy009V1aMnqJP",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046947839,
+          "completed": 1795046948408
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046947839:0000000000000030:0000000000000000:message:msg_g0VbNC3iR00Wjjh36iIj",
+        "id": "msg_g0VbNC3iR00Wjjh36iIj",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3nm00NxaVWDJBh",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3iR00Wjjh36iIj",
+          "orderKey": "v1:0001795046948170:0000000000000031:0000000000000000:part:prt_g0VbNC3nm00NxaVWDJBh",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3o600AwSehxElf",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3iR00Wjjh36iIj",
+          "type": "tool",
+          "callID": "owned-encoding-call-21",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 3,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 3,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-21",
+                "prior_revision": 2,
+                "revision": 3,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "190efa2471fca6f5517a7e295ec56bc4f60ae394900d4c5f5a17810e0121b495",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046948190,
+              "end": 1795046948329
+            }
+          },
+          "orderKey": "v1:0001795046948198:0000000000000031:0000000000000000:part:prt_g0VbNC3o600AwSehxElf"
+        },
+        {
+          "id": "prt_g0VbNC3qS00M6iho14mL",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3iR00Wjjh36iIj",
+          "orderKey": "v1:0001795046948336:0000000000000031:0000000000000000:part:prt_g0VbNC3qS00M6iho14mL",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046948446,
+          "completed": 1795046949004
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046948446:0000000000000030:0000000000000000:message:msg_g0VbNC3sE000wVgm8dBn",
+        "id": "msg_g0VbNC3sE000wVgm8dBn",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC3y200FhZYRzorp",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3sE000wVgm8dBn",
+          "orderKey": "v1:0001795046948806:0000000000000031:0000000000000000:part:prt_g0VbNC3y200FhZYRzorp",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC3yI00dFICDm60i",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3sE000wVgm8dBn",
+          "type": "tool",
+          "callID": "owned-encoding-call-22",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 4,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 4,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-22",
+                "prior_revision": 3,
+                "revision": 4,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "af81d9ed034748852980fd780bc92bb8cd7dd99fe92e700f8ec1fe5ef9c445c4",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046948822,
+              "end": 1795046948954
+            }
+          },
+          "orderKey": "v1:0001795046948830:0000000000000031:0000000000000000:part:prt_g0VbNC3yI00dFICDm60i"
+        },
+        {
+          "id": "prt_g0VbNC40U00hQVJD2iwQ",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC3sE000wVgm8dBn",
+          "orderKey": "v1:0001795046948958:0000000000000031:0000000000000000:part:prt_g0VbNC40U00hQVJD2iwQ",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046949031,
+          "completed": 1795046949650
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046949031:0000000000000030:0000000000000000:message:msg_g0VbNC41f00P57rbTWzl",
+        "id": "msg_g0VbNC41f00P57rbTWzl",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC48N00eylKgKhOX",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC41f00P57rbTWzl",
+          "orderKey": "v1:0001795046949447:0000000000000031:0000000000000000:part:prt_g0VbNC48N00eylKgKhOX",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC49E003cUodDleC",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC41f00P57rbTWzl",
+          "type": "tool",
+          "callID": "owned-encoding-call-23",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 5,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 5,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-23",
+                "prior_revision": 4,
+                "revision": 5,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "ec8ad93c2efb90fb6f752535103caa214fbebb64f0bbb02e65e1a51aa43d0575",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046949500,
+              "end": 1795046949593
+            }
+          },
+          "orderKey": "v1:0001795046949506:0000000000000031:0000000000000000:part:prt_g0VbNC49E003cUodDleC"
+        },
+        {
+          "id": "prt_g0VbNC4An00qVxc0WJoC",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC41f00P57rbTWzl",
+          "orderKey": "v1:0001795046949597:0000000000000031:0000000000000000:part:prt_g0VbNC4An00qVxc0WJoC",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046949680,
+          "completed": 1795046950163
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795046949680:0000000000000030:0000000000000000:message:msg_g0VbNC4C800h2xrgKLug",
+        "id": "msg_g0VbNC4C800h2xrgKLug",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC4H600U1DmMa4wz",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4C800h2xrgKLug",
+          "orderKey": "v1:0001795046949988:0000000000000031:0000000000000000:part:prt_g0VbNC4H600U1DmMa4wz",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC4HV00Mnx5gh7y6",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4C800h2xrgKLug",
+          "type": "tool",
+          "callID": "owned-encoding-call-24",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 6,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 6,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+                "search_call_id": "owned-encoding-call-24",
+                "prior_revision": 5,
+                "revision": 6,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "96813deb4416ef07f1a0ebc54c1f656330e845a33aae64eb7acb79c01bd6f950",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795046950013,
+              "end": 1795046950101
+            }
+          },
+          "orderKey": "v1:0001795046950019:0000000000000031:0000000000000000:part:prt_g0VbNC4HV00Mnx5gh7y6"
+        },
+        {
+          "id": "prt_g0VbNC4Iz00B1ni6LmmN",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4C800h2xrgKLug",
+          "orderKey": "v1:0001795046950105:0000000000000031:0000000000000000:part:prt_g0VbNC4Iz00B1ni6LmmN",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795046950188,
+          "completed": 1795046950738
+        },
+        "error": {
+          "name": "UnknownError",
+          "data": {
+            "message": "Error: capability_search was called 7 times in a row with byte-identical input and no other Tool call in between. The result will not change; repeating it cannot make progress. Use the result you already have to take the next decision, or call a different Tool."
+          }
+        },
+        "failureOccurrence": {
+          "session_id": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "assistant_message_id": "msg_g0VbNC4KK00iYmbQx6fO",
+          "error_name": "UnknownError"
+        },
+        "parentID": "msg_af0cb81af8df4e09bb1ca0baffda3b69",
+        "acceptedInputMessageIDs": [
+          "msg_af0cb81af8df4e09bb1ca0baffda3b69"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 0,
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "finish": "error",
+        "orderKey": "v1:0001795046950188:0000000000000030:0000000000000000:message:msg_g0VbNC4KK00iYmbQx6fO",
+        "id": "msg_g0VbNC4KK00iYmbQx6fO",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNC4SU00wkFl7CAtd",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4KK00iYmbQx6fO",
+          "orderKey": "v1:0001795046950694:0000000000000031:0000000000000000:part:prt_g0VbNC4SU00wkFl7CAtd",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNC4Sm00JOqEzcgtW",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNC4KK00iYmbQx6fO",
+          "type": "tool",
+          "callID": "owned-encoding-call-25",
+          "tool": "capability_search",
+          "state": {
+            "status": "error",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "failure": {
+              "kind": "UnknownError",
+              "name": "UnknownError",
+              "message": "Error: capability_search was called 7 times in a row with byte-identical input and no other Tool call in between. The result will not change; repeating it cannot make progress. Use the result you already have to take the next decision, or call a different Tool.",
+              "originSite": "session.processor.catch",
+              "classification": "llm-activity",
+              "data": {
+                "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                "failure_occurrence": {
+                  "session_id": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                  "assistant_message_id": "msg_g0VbNC4KK00iYmbQx6fO",
+                  "error_name": "UnknownError"
+                }
+              }
+            },
+            "time": {
+              "start": 1795046950712,
+              "end": 1795046950730
+            }
+          },
+          "orderKey": "v1:0001795046950718:0000000000000031:0000000000000000:part:prt_g0VbNC4Sm00JOqEzcgtW"
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795047120353
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media tool declarations. The owned server is now attached through session setup; discover and call read_declared_images in this new authorized occurrence."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "bfda3b76e815ecfe4c3b9940d6fab8682d4cac8e212d75a49dddb83f9d295167"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795047120353:0000000000000030:0000000000000000:message:msg_g0VbNCman00z0vNEweZl",
+        "id": "msg_g0VbNCman00z0vNEweZl",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNCmav005Y0tYyNMV",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCman00z0vNEweZl",
+          "orderKey": "v1:0001795047120354:0000000000000031:0000000000000000:part:prt_g0VbNCmav005Y0tYyNMV",
+          "type": "text",
+          "text": "Inspect media tool declarations. The owned server is now attached through session setup; discover and call read_declared_images in this new authorized occurrence.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+            "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047120445,
+          "completed": 1795047121106
+        },
+        "parentID": "msg_g0VbNCman00z0vNEweZl",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbNCman00z0vNEweZl"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795047120445:0000000000000030:0000000000000000:message:msg_g0VbNCmcP00oFwCgBTmC",
+        "id": "msg_g0VbNCmcP00oFwCgBTmC",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNCmkg00YLl2tOFw1",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmcP00oFwCgBTmC",
+          "orderKey": "v1:0001795047120958:0000000000000031:0000000000000000:part:prt_g0VbNCmkg00YLl2tOFw1",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNCmkw001Yw1sEjDD",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmcP00oFwCgBTmC",
+          "type": "tool",
+          "callID": "owned-encoding-call-7",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452\",\n  \"catalog_revision\": \"0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 0,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Report the exact capability, operation, error and missing authority in your visible response to the current owner; this occurrence has no callable permission-request tool.\",\n  \"results\": []\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+              "catalog_revision": "0a1af1c0acb96a2a066156a2f9304ebaaafed9d7ff066df8976b27d0cd100f4e",
+              "caller": "conversation",
+              "result_count": 0,
+              "reveal_revision": 1,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_g0VbNCman00z0vNEweZl",
+                "search_call_id": "owned-encoding-call-7",
+                "prior_revision": 0,
+                "revision": 1,
+                "harness_projection_hash": "d56a05f6d48323a2756ba318bcbd5df1ae5d794a0dbd985223aea49f65086767",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452.json",
+                "catalog_snapshot_hash": "1143351ac4270416adc3b40702031f23ddac06ac710a3a6f75ac288866736452",
+                "materialization_fingerprint": "216462137566ccaf3bf5dd52d94294dd6a4ab5df735bb77edc4491e14c3e70c2",
+                "result_refs": [],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795047120974,
+              "end": 1795047121056
+            }
+          },
+          "orderKey": "v1:0001795047120980:0000000000000031:0000000000000000:part:prt_g0VbNCmkw001Yw1sEjDD"
+        },
+        {
+          "id": "prt_g0VbNCmmK00OT6nE1cgT",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmcP00oFwCgBTmC",
+          "orderKey": "v1:0001795047121060:0000000000000031:0000000000000000:part:prt_g0VbNCmmK00OT6nE1cgT",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047121136,
+          "completed": 1795047121448
+        },
+        "parentID": "msg_g0VbNCman00z0vNEweZl",
+        "acceptedInputMessageIDs": [
+          "msg_g0VbNCman00z0vNEweZl"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795047121136:0000000000000030:0000000000000000:message:msg_g0VbNCmnX00sHr03YYio",
+        "id": "msg_g0VbNCmnX00sHr03YYio",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNCmrn00S140s7xkF",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmnX00sHr03YYio",
+          "orderKey": "v1:0001795047121399:0000000000000031:0000000000000000:part:prt_g0VbNCmrn00S140s7xkF",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNCms300kxzdB3er2",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmnX00sHr03YYio",
+          "orderKey": "v1:0001795047121415:0000000000000031:0000000000000000:part:prt_g0VbNCms300kxzdB3er2",
+          "type": "text",
+          "text": "The owned image tool is not available in this occurrence catalogue. Session setup must attach the owned service before starting another occurrence.",
+          "time": {
+            "start": 1795047121415,
+            "end": 1795047121420
+          }
+        },
+        {
+          "id": "prt_g0VbNCmsB00EH7BDBx6r",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNCmnX00sHr03YYio",
+          "orderKey": "v1:0001795047121423:0000000000000031:0000000000000000:part:prt_g0VbNCmsB00EH7BDBx6r",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "user",
+        "role": "user",
+        "time": {
+          "created": 1795047388711
+        },
+        "agent": "chat",
+        "model": {
+          "providerID": "acp-review",
+          "modelID": "local"
+        },
+        "tools": {
+          "delegate_agent": true,
+          "panel_expert_squad_inspect": true,
+          "panel_query_task": true,
+          "panel_query_task_artifacts": true,
+          "panel_create_task": true,
+          "panel_wake_mission": true,
+          "panel_wake_work": true,
+          "panel_send_task_message": true,
+          "panel_respond_interaction": true,
+          "panel_cancel_task": true,
+          "panel_update_checks": true,
+          "panel_select_workspace": true,
+          "panel_update_goal": true,
+          "panel_delete_goal": true,
+          "question": true,
+          "bash": true,
+          "read": true,
+          "glob": true,
+          "search_code": true,
+          "edit": true,
+          "write": true,
+          "apply_patch": true,
+          "todo": true,
+          "schedule": true
+        },
+        "extra": {
+          "project_memory_user_input": {
+            "version": 1,
+            "surface": "session.prompt",
+            "literalText": "Inspect media tool declarations. The isolated project Chat now explicitly assigns owned_media. In this new occurrence discover and call read_declared_images, then report the returned evidence."
+          },
+          "publicSessionPromptIdentity": {
+            "version": 1,
+            "fingerprint": "84c3b9a9650363689c3189b0995d9e8d7ad9159efdcd20b3ccc74c30dbd14fc6"
+          },
+          "surface": "right-sidebar",
+          "source": "right-sidebar-conversation",
+          "experience": "chat"
+        },
+        "orderKey": "v1:0001795047388711:0000000000000030:0000000000000000:message:msg_34eca6fabe1a4d028e8d14254828384b",
+        "id": "msg_34eca6fabe1a4d028e8d14254828384b",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNDuPH00ImqIfY7Mh",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_34eca6fabe1a4d028e8d14254828384b",
+          "orderKey": "v1:0001795047388715:0000000000000031:0000000000000000:part:prt_g0VbNDuPH00ImqIfY7Mh",
+          "type": "text",
+          "text": "Inspect media tool declarations. The isolated project Chat now explicitly assigns owned_media. In this new occurrence discover and call read_declared_images, then report the returned evidence.",
+          "metadata": {
+            "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb.json",
+            "catalog_snapshot_hash": "0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047388817,
+          "completed": 1795047389960
+        },
+        "parentID": "msg_34eca6fabe1a4d028e8d14254828384b",
+        "acceptedInputMessageIDs": [
+          "msg_34eca6fabe1a4d028e8d14254828384b"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795047388817:0000000000000030:0000000000000000:message:msg_g0VbNDuQz00C5R5SMe9f",
+        "id": "msg_g0VbNDuQz00C5R5SMe9f",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNDugo00QVFe8395R",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDuQz00C5R5SMe9f",
+          "orderKey": "v1:0001795047389798:0000000000000031:0000000000000000:part:prt_g0VbNDugo00QVFe8395R",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNDuh800lDPM1A8kH",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDuQz00C5R5SMe9f",
+          "type": "tool",
+          "callID": "owned-encoding-call-10",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                "read_declared_images"
+              ],
+              "kinds": [
+                "mcp_tool"
+              ],
+              "exact_refs": [],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb\",\n  \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 113186,\n  \"active_payload_tokens\": 27673,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 1,\n    \"matched_count\": 1,\n    \"returned_count\": 1,\n    \"complete\": true\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"mcp_tool\",\n        \"source\": \"project\",\n        \"owner_ref\": \"host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media\",\n        \"local_ref\": \"owned_media_read_declared_images\"\n      },\n      \"name\": \"owned_media_read_declared_images\",\n      \"description\": \"Projected mcp tool owned_media_read_declared_images.\",\n      \"aliases\": [\n        \"Owned Media Read Declared Images\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"availability\": \"visible\",\n      \"next_owner\": {\n        \"kind\": \"call_tool\",\n        \"tool_id\": \"owned_media_read_declared_images\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": 0.98\n    }\n  ]\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb",
+              "catalog_revision": "9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348",
+              "caller": "conversation",
+              "result_count": 1,
+              "reveal_revision": 1,
+              "active_ref_count": 0,
+              "active_payload_chars": 113186,
+              "active_payload_tokens": 27673,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_34eca6fabe1a4d028e8d14254828384b",
+                "search_call_id": "owned-encoding-call-10",
+                "prior_revision": 0,
+                "revision": 1,
+                "harness_projection_hash": "fde643df93a51a31e3da99d6b042d64ff004a2f77f8bda6eb4a1c4614f71c6c6",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb.json",
+                "catalog_snapshot_hash": "0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb",
+                "materialization_fingerprint": "cbe0c81a4fa37a517a5fbe38a6e565d6ef1a7ad6e3f67fede4772984a693a12b",
+                "result_refs": [
+                  {
+                    "kind": "mcp_tool",
+                    "source": "project",
+                    "owner_ref": "host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media",
+                    "local_ref": "owned_media_read_declared_images"
+                  }
+                ],
+                "deactivate_refs": [],
+                "activated": [],
+                "active_refs": [],
+                "active_definition_digest": "dbe691133b82b34c6c49e15f9e07483654645501953baa6ef07cea7319ad3d83",
+                "active_payload_chars": 113186,
+                "active_payload_tokens": 27673
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795047389818,
+              "end": 1795047389915
+            }
+          },
+          "orderKey": "v1:0001795047389825:0000000000000031:0000000000000000:part:prt_g0VbNDuh800lDPM1A8kH"
+        },
+        {
+          "id": "prt_g0VbNDuil00h9cE6CPQu",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDuQz00C5R5SMe9f",
+          "orderKey": "v1:0001795047389919:0000000000000031:0000000000000000:part:prt_g0VbNDuil00h9cE6CPQu",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047389990,
+          "completed": 1795047390470
+        },
+        "parentID": "msg_34eca6fabe1a4d028e8d14254828384b",
+        "acceptedInputMessageIDs": [
+          "msg_34eca6fabe1a4d028e8d14254828384b"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795047389990:0000000000000030:0000000000000000:message:msg_g0VbNDuju0007t1Yvjkp",
+        "id": "msg_g0VbNDuju0007t1Yvjkp",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNDuoD00CP6LdgOzy",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDuju0007t1Yvjkp",
+          "orderKey": "v1:0001795047390257:0000000000000031:0000000000000000:part:prt_g0VbNDuoD00CP6LdgOzy",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNDuob00PzSPWGLE4",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDuju0007t1Yvjkp",
+          "type": "tool",
+          "callID": "owned-encoding-call-11",
+          "tool": "capability_search",
+          "state": {
+            "status": "completed",
+            "input": {
+              "queries": [
+                ""
+              ],
+              "exact_refs": [
+                {
+                  "kind": "mcp_tool",
+                  "source": "project",
+                  "owner_ref": "host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media",
+                  "local_ref": "owned_media_read_declared_images"
+                }
+              ],
+              "deactivate_refs": [],
+              "limit": 5
+            },
+            "output": "{\n  \"catalog_snapshot_hash\": \"0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb\",\n  \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 2,\n  \"active_refs\": [\n    {\n      \"kind\": \"mcp_tool\",\n      \"source\": \"project\",\n      \"owner_ref\": \"host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media\",\n      \"local_ref\": \"owned_media_read_declared_images\"\n    }\n  ],\n  \"active_payload_chars\": 113448,\n  \"active_payload_tokens\": 27724,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 50,\n    \"matched_count\": 50,\n    \"returned_count\": 5,\n    \"complete\": false\n  },\n  \"results\": [\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"advanced\"\n      },\n      \"name\": \"Advanced\",\n      \"description\": \"Built-in advanced software delivery team with capability-matched Requirements-to-Architect traceability, execution, testing, interface, and independent-review frontiers.\",\n      \"aliases\": [\n        \"Advanced\",\n        \"advanced\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"advanced\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"base\"\n      },\n      \"name\": \"Base\",\n      \"description\": \"Compact outcome delivery through capability-matched execution and independent verification; planning and parallel research only when needed.\",\n      \"aliases\": [\n        \"Base\",\n        \"base\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"base\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"dynamic\"\n      },\n      \"name\": \"Dynamic\",\n      \"description\": \"Automatically compose Task-local experts with explicit identities, capability envelopes and evidence-driven scheduling when no Expert Squad is selected.\",\n      \"aliases\": [\n        \"Dynamic\",\n        \"dynamic\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"dynamic\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"research-studio\"\n      },\n      \"name\": \"Research Studio\",\n      \"description\": \"A research planning, durable evidence collection, reproducible analysis, post-computation fact-checking, and template-driven report-delivery squad.\",\n      \"aliases\": [\n        \"Research Studio\",\n        \"research-studio\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"research-studio\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    },\n    {\n      \"ref\": {\n        \"kind\": \"expert_squad\",\n        \"source\": \"platform\",\n        \"owner_ref\": \"expert-squad-registry\",\n        \"local_ref\": \"squad-sdk\"\n      },\n      \"name\": \"Generate Expert Squads\",\n      \"description\": \"Evidence-led heterogeneous algorithm import and canonical generation of project-owned, traceable OpenCorvus Expert Squads with independent contract review.\",\n      \"aliases\": [\n        \"Generate Expert Squads\",\n        \"squad-sdk\"\n      ],\n      \"discoverable_by\": [\n        \"conversation\"\n      ],\n      \"product_pillars\": [\n        \"code\",\n        \"work\"\n      ],\n      \"availability\": \"installed_unbound\",\n      \"next_owner\": {\n        \"kind\": \"create_task_with_expert_squad\",\n        \"profile_id\": \"squad-sdk\"\n      },\n      \"catalog_revision\": \"9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348\",\n      \"score\": null\n    }\n  ]\n}",
+            "title": "Capability search",
+            "metadata": {
+              "catalog_snapshot_hash": "0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb",
+              "catalog_revision": "9ad88225173be9acef976aaf73c82a4e3150d2e911b8eab305d9a6ea3a607348",
+              "caller": "conversation",
+              "result_count": 5,
+              "reveal_revision": 2,
+              "active_ref_count": 1,
+              "active_payload_chars": 113448,
+              "active_payload_tokens": 27724,
+              "visible_expert_squad_count": 5,
+              "opencorvus_capability_reveal_v2": {
+                "schema_version": 2,
+                "occurrence_id": "msg_34eca6fabe1a4d028e8d14254828384b",
+                "search_call_id": "owned-encoding-call-11",
+                "prior_revision": 1,
+                "revision": 2,
+                "harness_projection_hash": "fde643df93a51a31e3da99d6b042d64ff004a2f77f8bda6eb4a1c4614f71c6c6",
+                "catalog_snapshot_ref": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb.json",
+                "catalog_snapshot_hash": "0e28d37b124a18bc339e43f855b584fe69448ff56d1fa702c319978c0a4b1cdb",
+                "materialization_fingerprint": "ee0c2bf9c2fcad293d01a4cfbaa3934014a3053a9c29d9960ce268e944164a96",
+                "result_refs": [
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "advanced"
+                  },
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "base"
+                  },
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "dynamic"
+                  },
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "research-studio"
+                  },
+                  {
+                    "kind": "expert_squad",
+                    "source": "platform",
+                    "owner_ref": "expert-squad-registry",
+                    "local_ref": "squad-sdk"
+                  }
+                ],
+                "deactivate_refs": [],
+                "activated": [
+                  {
+                    "requested_ref": {
+                      "kind": "mcp_tool",
+                      "source": "project",
+                      "owner_ref": "host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media",
+                      "local_ref": "owned_media_read_declared_images"
+                    },
+                    "executable_ref": {
+                      "kind": "mcp_tool",
+                      "source": "project",
+                      "owner_ref": "host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media",
+                      "local_ref": "owned_media_read_declared_images"
+                    },
+                    "provider_name": "owned_media_read_declared_images",
+                    "definition": {
+                      "name": "owned_media_read_declared_images",
+                      "description": "Read owned image originals with their media declarations.",
+                      "input_schema": {
+                        "type": "object",
+                        "properties": {},
+                        "$schema": "http://json-schema.org/draft-07/schema#",
+                        "additionalProperties": false
+                      },
+                      "strict": false
+                    },
+                    "definition_digest": "ed749360e06365258a797cc9a76d556707acabc3cbeeff0eed8bbd877ebb751a",
+                    "payload_chars": 262,
+                    "payload_tokens": 51,
+                    "materializer_binding_digest": "1078e1a664153c7570f7e1f6dc11f3430dd718033f7f4b55c9caa27f04bf3107"
+                  }
+                ],
+                "active_refs": [
+                  {
+                    "kind": "mcp_tool",
+                    "source": "project",
+                    "owner_ref": "host-session-mcp:session:ses_hzd7RSjYXYXIGzDuGZ0H:mcp:owned_media",
+                    "local_ref": "owned_media_read_declared_images"
+                  }
+                ],
+                "active_definition_digest": "e79aea19f7e4039a256f7acfda637656df69578b42ee84720016d281d8f00015",
+                "active_payload_chars": 113448,
+                "active_payload_tokens": 27724
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795047390281,
+              "end": 1795047390424
+            }
+          },
+          "orderKey": "v1:0001795047390286:0000000000000031:0000000000000000:part:prt_g0VbNDuob00PzSPWGLE4"
+        },
+        {
+          "id": "prt_g0VbNDur000KoUdhs2t7",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDuju0007t1Yvjkp",
+          "orderKey": "v1:0001795047390430:0000000000000031:0000000000000000:part:prt_g0VbNDur000KoUdhs2t7",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047390498,
+          "completed": 1795047391079
+        },
+        "parentID": "msg_34eca6fabe1a4d028e8d14254828384b",
+        "acceptedInputMessageIDs": [
+          "msg_34eca6fabe1a4d028e8d14254828384b"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "tool-calls",
+        "orderKey": "v1:0001795047390498:0000000000000030:0000000000000000:message:msg_g0VbNDus600TBdYJN99y",
+        "id": "msg_g0VbNDus600TBdYJN99y",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNDuyd00NXTwagyRz",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDus600TBdYJN99y",
+          "orderKey": "v1:0001795047390903:0000000000000031:0000000000000000:part:prt_g0VbNDuyd00NXTwagyRz",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNDuyt00xtSESj1sJ",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDus600TBdYJN99y",
+          "type": "tool",
+          "callID": "owned-encoding-call-12",
+          "tool": "owned_media_read_declared_images",
+          "state": {
+            "status": "completed",
+            "input": {},
+            "output": "",
+            "title": "",
+            "metadata": {
+              "mcp_tool_result": {
+                "is_error": false
+              },
+              "truncated": false
+            },
+            "time": {
+              "start": 1795047390919,
+              "end": 1795047390954
+            },
+            "attachments": [
+              {
+                "id": "prt_g0VbNDuzP00kMHBMA4aG",
+                "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                "messageID": "msg_g0VbNDus600TBdYJN99y",
+                "type": "file",
+                "mime": "image/png",
+                "url": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560.png"
+              },
+              {
+                "id": "prt_g0VbNDuzP01ceajFtzd3",
+                "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                "messageID": "msg_g0VbNDus600TBdYJN99y",
+                "type": "file",
+                "mime": "IMAGE/PNG",
+                "url": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png"
+              },
+              {
+                "id": "prt_g0VbNDuzP022JQS1Yj50",
+                "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                "messageID": "msg_g0VbNDus600TBdYJN99y",
+                "type": "file",
+                "mime": "image/png; profile=srgb",
+                "url": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.bin"
+              },
+              {
+                "id": "prt_g0VbNDuzP03e22SFMUNL",
+                "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                "messageID": "msg_g0VbNDus600TBdYJN99y",
+                "type": "file",
+                "mime": "image/svg+xml",
+                "url": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291.svg"
+              },
+              {
+                "id": "prt_g0VbNDuzP04ZedX2IQhb",
+                "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+                "messageID": "msg_g0VbNDus600TBdYJN99y",
+                "type": "file",
+                "mime": "Image/SVG+XML; charset=utf-8",
+                "url": "/attachment/prj_hUQkYf6w2jar0sVNKGo9/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.bin"
+              }
+            ]
+          },
+          "orderKey": "v1:0001795047390924:0000000000000031:0000000000000000:part:prt_g0VbNDuyt00xtSESj1sJ"
+        },
+        {
+          "id": "prt_g0VbNDuzZ00BA587LZuA",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDus600TBdYJN99y",
+          "orderKey": "v1:0001795047390962:0000000000000031:0000000000000000:part:prt_g0VbNDuzZ00BA587LZuA",
+          "type": "step-finish",
+          "reason": "tool-calls",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "author": "chat",
+        "role": "assistant",
+        "time": {
+          "created": 1795047391118,
+          "completed": 1795047391458
+        },
+        "parentID": "msg_34eca6fabe1a4d028e8d14254828384b",
+        "acceptedInputMessageIDs": [
+          "msg_34eca6fabe1a4d028e8d14254828384b"
+        ],
+        "modelID": "local",
+        "providerID": "acp-review",
+        "agent": "chat",
+        "path": {
+          "cwd": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review",
+          "root": "C:\\Users\\Public\\opencorvus-review-20261119-b328\\candidate\\media-declaration-review"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 19,
+          "input": 11,
+          "output": 8,
+          "reasoning": 0,
+          "cache": {
+            "read": 0,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "unpriced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795047391118:0000000000000030:0000000000000000:message:msg_g0VbNDv2600ltWVBd0MC",
+        "id": "msg_g0VbNDv2600ltWVBd0MC",
+        "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VbNDv6d000tNoATyeX",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDv2600ltWVBd0MC",
+          "orderKey": "v1:0001795047391399:0000000000000031:0000000000000000:part:prt_g0VbNDv6d000tNoATyeX",
+          "type": "step-start"
+        },
+        {
+          "id": "prt_g0VbNDv6v005ryGP4gQW",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDv2600ltWVBd0MC",
+          "orderKey": "v1:0001795047391418:0000000000000031:0000000000000000:part:prt_g0VbNDv6v005ryGP4gQW",
+          "type": "text",
+          "text": "Actual owned tool text projection:\nAttachments remain tool-owned evidence because this provider transport cannot send them as typed tool results:\n- image/png; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560.png; sha256=b8fbc65d14d7b40cc58bdea6123fba6e9e1ce4a361cc051bb8ae6cd99c7cc560; bytes=5440; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- IMAGE/PNG; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png; sha256=6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8; bytes=5442; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/png; profile=srgb; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.bin; sha256=6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1; bytes=5453; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- image/svg+xml; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291.svg; sha256=ecaf77c4539c236355d2678708065cfe8a90779d57021869bdc7ff03a3276291; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport\n- Image/SVG+XML; charset=utf-8; ref=/attachment/prj_hUQkYf6w2jar0sVNKGo9/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.bin; sha256=50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22; bytes=348; reason=provider adapter @ai-sdk/openai-compatible has no verified typed image tool-result transport",
+          "time": {
+            "start": 1795047391417,
+            "end": 1795047391423
+          }
+        },
+        {
+          "id": "prt_g0VbNDv7500CgLoIWU2o",
+          "sessionID": "ses_hzd7RSjYXYXIGzDuGZ0H",
+          "messageID": "msg_g0VbNDv2600ltWVBd0MC",
+          "orderKey": "v1:0001795047391427:0000000000000031:0000000000000000:part:prt_g0VbNDv7500CgLoIWU2o",
+          "type": "step-finish",
+          "reason": "stop",
+          "cost": 0,
+          "tokens": {
+            "total": 19,
+            "input": 11,
+            "output": 8,
+            "reasoning": 0,
+            "cache": {
+              "read": 0,
+              "write": 0
+            }
+          },
+          "billing": {
+            "status": "unpriced"
+          }
+        }
+      ]
+    }
+  ],
+  "target": "http://127.0.0.1:40162/ui/?sessionID=ses_hzd7RSjYXYXIGzDuGZ0H&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b328%5Ccandidate%5Cmedia-declaration-review&experience=chat"
+}
