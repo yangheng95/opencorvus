@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时任务清除筛选后回到搜索框](records/2026-11/2026-11-19-scheduled-clear-filters-focus.md)
 - [在工作侧栏提示中区分同名多步任务草稿](records/2026-11/2026-11-19-work-ledger-sidebar-draft-preview.md)
 - [归档工作显示只读目标说明](records/2026-11/2026-11-19-archived-continuous-goal-guide.md)
 - [按草稿请求查找多步任务](records/2026-11/2026-11-19-work-ledger-draft-request-search.md)

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务清除筛选焦点验收](2026-11-19-scheduled-clear-filters-focus/README.md)
 - [同名草稿侧栏提示桌面验收](2026-11-19-work-ledger-sidebar-draft-preview/README.md)
 - [归档持续目标只读说明的桌面验收](2026-11-19-archived-continuous-goal-guide/README.md)
 - [按草稿请求搜索的桌面验收](2026-11-19-work-ledger-draft-request-search/README.md)

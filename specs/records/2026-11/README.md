@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [定时任务清除筛选后回到搜索框](2026-11-19-scheduled-clear-filters-focus.md)
 - [在工作侧栏提示中区分同名多步任务草稿](2026-11-19-work-ledger-sidebar-draft-preview.md)
 - [归档工作显示只读目标说明](2026-11-19-archived-continuous-goal-guide.md)
 - [按草稿请求查找多步任务](2026-11-19-work-ledger-draft-request-search.md)
