@@ -1,0 +1,68 @@
+{
+  "configured": {
+    "hostname": "127.0.0.1",
+    "port": 40192
+  },
+  "requested": {
+    "hostname": "::1",
+    "port": 40194
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-network-baseline",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:40192",
+    "pid": 6052
+  },
+  "published": {
+    "status": 200,
+    "body": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b332\\opencorvus-zed-baseline\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b332\\opencorvus-zed-baseline\\data",
+        "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b332\\opencorvus-zed-baseline"
+      }
+    }
+  },
+  "directHealth": {
+    "status": 200
+  },
+  "diagnosticBase": "http://127.0.0.1:40192",
+  "session": {
+    "id": "ses_hFNkW0hvuG68dBj0bEVY",
+    "slug": "hidden-meadow",
+    "version": "local",
+    "projectID": "prj_hlZlkvI5Lk1TlHnndIvx",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b332\\baseline\\network-options-review",
+    "title": "Chat",
+    "kind": "assistant",
+    "metadata": {
+      "projectConversationCreation": {
+        "version": 1,
+        "requestID": "d8b18b7a-3597-4d18-8696-95d6043d840d",
+        "model": "acp-review/local"
+      },
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "acp-review/local"
+      }
+    },
+    "time": {
+      "created": 1795053128085,
+      "updated": 1795053128085
+    }
+  },
+  "attachment": {
+    "sha": "050accc87d6163f193d24f0c59161288d4760764c41770a0c0e3721f11711fca",
+    "url": "/attachment/prj_hlZlkvI5Lk1TlHnndIvx/050accc87d6163f193d24f0c59161288d4760764c41770a0c0e3721f11711fca.txt",
+    "mime": "text/plain",
+    "size": 27,
+    "filename": "network-option-facts.txt"
+  },
+  "target": "http://127.0.0.1:40192/ui/?sessionID=ses_hFNkW0hvuG68dBj0bEVY&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b332%5Cbaseline%5Cnetwork-options-review&experience=chat"
+}

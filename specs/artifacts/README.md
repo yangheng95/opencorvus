@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [网络监听参数验收](2026-11-19-cli-network-option-precedence/README.md)
 - [监听器规范来源验收](2026-11-19-bound-listener-origin/README.md)
 - [SDK 逻辑路由目录验收](2026-11-19-sdk-logical-route-directory/README.md)
 - [附件来源地址验收](2026-11-19-attachment-source-uri/README.md)
