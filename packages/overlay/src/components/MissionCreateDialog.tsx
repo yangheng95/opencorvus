@@ -38,8 +38,6 @@ type SelectOption = {
   value: string
   label: string
   description?: string
-  action?: "install-more"
-  outsideSearch?: boolean
 }
 type SquadSearchResult = { options: ExpertSquadOption[]; matchingIDs: readonly string[] }
 type SquadReadFailure = { operation: "context" | "search"; cause: unknown }
@@ -193,31 +191,12 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const selectedProject = createMemo(
     () => projectOptions().find((option) => option.value === projectDirectory()) ?? null,
   )
-  const expertSquadOptions = createMemo<SelectOption[]>(() => {
-    const ready = squadResultsReady()
-    const visibleSquads = ready
-      ? expertSquads()
-      : expertSquads().filter((squad) => expertSquadIDs().includes(squad.id))
-    const options = visibleSquads.map((squad) => ({
-      value: squad.id,
-      label: squad.display_label,
-      description: expertSquadDescription(squad),
-      outsideSearch:
-        Boolean(expertSquadQuery().trim()) &&
-        ready &&
-        !expertSquadResult().matchingIDs.includes(squad.id),
-    }))
-    if (!projectDirectory()) return options
-    return [
-      ...options,
-      {
-        value: "__install-more-expert-squads__",
-        label: t("chat.references.install_more"),
-        description: t("chat.references.install_more_description"),
-        action: "install-more" as const,
-      },
-    ]
-  })
+  const selectedExpertSquadIDs = createMemo(() => new Set(expertSquadIDs()))
+  const matchingExpertSquadIDs = createMemo(() => new Set(expertSquadResult().matchingIDs))
+  const isCurrentSquadCandidate = (id: string) => squadResultsReady() && matchingExpertSquadIDs().has(id)
+  const visibleExpertSquads = createMemo(() =>
+    expertSquads().filter((squad) => selectedExpertSquadIDs().has(squad.id) || isCurrentSquadCandidate(squad.id)),
+  )
   const selectedExpertSquadCount = createMemo(() => expertSquadIDs().length)
   const selectedExpertSquadSummary = createMemo(() => {
     const labels = new Map(expertSquads().map((squad) => [squad.id, squad.display_label]))
@@ -232,7 +211,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     () =>
       Boolean(expertSquadQuery().trim()) &&
       squadResultsReady() &&
-      expertSquadResult().matchingIDs.length === 0,
+      matchingExpertSquadIDs().size === 0,
   )
   const canSubmit = createMemo(
     () =>
@@ -252,13 +231,24 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     if (expertSquadError()) return t("mission_board.create.context_load_failed")
     if (selectedExpertSquadCount() === 0) {
       if (noMatchingSquads()) return t("mission_board.create.no_matching_squads")
-      if (expertSquads().length > 0) return t("mission_board.create.expert_squad_placeholder")
+      if (matchingExpertSquadIDs().size > 0) return t("mission_board.create.expert_squad_placeholder")
       return t("mission_board.create.no_compatible_squad")
     }
     return ""
   })
   const titleInvalid = createMemo(() => mode() === "manual" && submitAttempted() && !title().trim())
   const requestInvalid = createMemo(() => submitAttempted() && !request().trim())
+
+  function updateExpertSquadSelection(id: string, checked: boolean): void {
+    if (!isCurrentSquadCandidate(id)) {
+      if (checked) return
+      expertSquadSearchRef?.focus()
+    }
+    setExpertSquadIDs((current) => {
+      if (!checked) return current.filter((selected) => selected !== id)
+      return current.includes(id) ? current : [...current, id]
+    })
+  }
 
   function ownsSquadRequest(generation: number, sequence: number, directory: string, pillar: ProductPillar): boolean {
     return (
@@ -848,63 +838,51 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               aria-label={t("mission_board.create.expert_squad")}
               data-ui="mission-create-expert-squads"
             >
-              <For each={expertSquadOptions()}>
-                {(option) => (
-                  <Show
-                    when={option.action !== "install-more"}
-                    fallback={
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        tone="accent"
-                        data-ui="mission-create-install-more-squads"
-                        disabled={submitting() || expertSquadLoading()}
-                        onClick={() => {
-                          const directory = projectDirectory()
-                          requestLeave(() => {
-                            props.onClose()
-                            props.onInstallMoreExpertSquads?.(directory)
-                          })
-                        }}
-                      >
-                        <Icon name="config-expert-squad-install" size="compact" />
-                        {option.label}
-                      </Button>
-                    }
+              <For each={visibleExpertSquads()}>
+                {(squad) => (
+                  <Checkbox
+                    checked={selectedExpertSquadIDs().has(squad.id)}
+                    disabled={submitting() || expertSquadLoading()}
+                    onChange={(checked) => updateExpertSquadSelection(squad.id, checked)}
                   >
-                    <Checkbox
-                      checked={expertSquadIDs().includes(option.value)}
-                      disabled={submitting() || expertSquadLoading()}
-                      onChange={(checked) => {
-                        if (!squadResultsReady()) {
-                          if (checked) return
-                          expertSquadSearchRef?.focus()
-                        }
-                        setExpertSquadIDs((current) =>
-                          checked
-                            ? current.includes(option.value)
-                              ? current
-                              : [...current, option.value]
-                            : current.filter((id) => id !== option.value),
-                        )
-                      }}
-                    >
-                      <span class="mission-create-form__option">
-                        <strong>{option.label}</strong>
-                        <Show when={option.outsideSearch}>
-                          <Badge class="mission-create-form__search-origin" tone="muted" size="sm">
-                            {t("mission_board.create.outside_search")}
-                          </Badge>
-                        </Show>
-                        <Show when={option.description}>
-                          <small>{option.description}</small>
-                        </Show>
-                      </span>
-                    </Checkbox>
-                  </Show>
+                    <span class="mission-create-form__option">
+                      <strong>{squad.display_label}</strong>
+                      <Show when={
+                        expertSquadQuery().trim() && squadResultsReady() && !matchingExpertSquadIDs().has(squad.id)
+                      }>
+                        <Badge class="mission-create-form__search-origin" tone="muted" size="sm">
+                          {t("mission_board.create.outside_search")}
+                        </Badge>
+                      </Show>
+                      <Show when={expertSquadDescription(squad)}>
+                        {(description) => <small>{description()}</small>}
+                      </Show>
+                    </span>
+                  </Checkbox>
                 )}
               </For>
+              <Show when={projectDirectory()}>
+                {(directory) => (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tone="accent"
+                    data-ui="mission-create-install-more-squads"
+                    disabled={submitting() || expertSquadLoading()}
+                    onClick={() => {
+                      const target = directory()
+                      requestLeave(() => {
+                        props.onClose()
+                        props.onInstallMoreExpertSquads?.(target)
+                      })
+                    }}
+                  >
+                    <Icon name="config-expert-squad-install" size="compact" />
+                    {t("chat.references.install_more")}
+                  </Button>
+                )}
+              </Show>
             </div>
           </TextField.Root>
           <Show when={!expertSquadError() && prerequisiteMessage() && !noMatchingSquads()}>

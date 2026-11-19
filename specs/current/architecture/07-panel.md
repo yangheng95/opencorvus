@@ -1985,10 +1985,12 @@ The creation dialog's current catalog request projection retains the exact
 returned matching identities alongside its selectable options. Options kept for
 an authored selection carry an outside-search label when they did not match the
 current query. While a read is pending or failed, the checklist shows the
-authored selection and its count. Removing a retained selection during a failure
-returns focus to the search field. A confirmed read restores current candidates
-in producer order. An empty search result is explained beside the search field;
-existing selections remain visible and eligible for submission. With no selected
+authored selection and its count. Removing a retained selection that is outside
+the current candidates drops its row and returns focus to the search field.
+Confirmed matches stay selectable and retain focus when toggled. A confirmed
+read restores current candidates in producer order. An empty result is
+explained beside the search field. Existing selections remain visible and
+eligible for submission. With no selected
 squad, that same empty-result fact explains the creation prerequisite. Context
 changes and dialog reopening clear the request projection through its existing
 generation/sequence owner.
