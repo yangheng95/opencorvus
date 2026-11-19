@@ -1,0 +1,84 @@
+{
+  "listStatus": 200,
+  "definitions": [
+    {
+      "definition": {
+        "id": "atm_hF8Schb5XyONdTZjHUys",
+        "revisionId": "atm_hF8Schb5XyONdTZjHUys",
+        "name": "Review warehouse quantities",
+        "target": {
+          "scope": "global"
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Inspect the quantities in a saved warehouse report.",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4070908800000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "futureFireStatus": 200,
+      "futureFire": {
+        "fireId": "cal_automation_c0883b2baa424c491e8283a63d5c3655",
+        "automationId": "atm_hF8Schb5XyONdTZjHUys",
+        "automationRevisionId": "atm_hF8Schb5XyONdTZjHUys",
+        "origin": "scheduled",
+        "scheduledDueAt": 4070908800000,
+        "startedAt": 1795080314329,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      },
+      "runsStatus": 200,
+      "runs": []
+    },
+    {
+      "definition": {
+        "id": "atm_h7jzIGaHY6oKQgS3uOs7",
+        "revisionId": "atm_h1HcysQk0hyJOqYwFaz1",
+        "name": "Review office invoice approvals",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_hOUORBctoXQlIFrVOf4q"
+          ]
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART:20990102T080000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Check the office invoice details and list any open approvals.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4071024000000,
+        "failureCount": 0,
+        "lastError": null
+      },
+      "futureFireStatus": 200,
+      "futureFire": {
+        "fireId": "cal_automation_5d8e26f21645fb37ae8f1ded6b583aba",
+        "automationId": "atm_h7jzIGaHY6oKQgS3uOs7",
+        "automationRevisionId": "atm_h7jzIGaHY6oKQgS3uOs7",
+        "origin": "scheduled",
+        "scheduledDueAt": 4071024000000,
+        "startedAt": 1795080314344,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      },
+      "runsStatus": 200,
+      "runs": []
+    }
+  ]
+}

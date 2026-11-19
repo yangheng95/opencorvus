@@ -2025,6 +2025,9 @@ The next scheduled instant displays seconds when it falls outside a whole minute
 The machine calendar service owns parsing, serialization and edit comparison,
 without a parallel hard-coded English presentation export.
 
+Clearing the filters from an empty scheduled-task list resets the query, status
+and scope and returns focus to that list's search field for the next query.
+
 Paused definitions present an explicit localized automatic-runs-paused state in
 both list and detail. Their retained calendar frontier remains the authority for
 resume. Manual Run now uses the existing server-settled request policy because

@@ -16,3 +16,9 @@
 
 - 清除的原动作完成三个状态的重置后，通过 `focusAfterRender` 聚焦 `listSearchInput`。保留面板活动和目标连接检查，继续使用现有引用。只改变明确清除全部筛选触发器的焦点接续。更新面板实际合同，无新界面文字或焦点状态。
 - 正常构建后复用隔离资料启动 `40330/ui/`。英文从组合筛选的空状态用 Enter 清除，复核列表搜索的焦点和两条已恢复定义，直接输入 `invoice`，打开精确项目任务并复核暂停状态和原详情。简体中文由指针清除并继续输入 `warehouse`，核对精确全局结果和日期。可用现有聚焦正向服务或日历检查核对数据链；正式交互后的两份定义、未来触发与运行历史回执必须和基线一致。执行覆盖层类型、双语、正式构建、根文档和架构检查，并正常关闭双方隔离实例。
+
+## 实际验收
+
+- `40330/ui/` 提供 `main-DNaZaGdJ.js`。英文用 Tab 聚焦清除按钮并按 Enter，搜索框当场出现焦点环及插入光标，状态与范围回到 All 和 All scopes，两条记录重新出现。直接输入 `invoice` 得到唯一项目结果，打开后仍显示暂停、原项目和提示词。中文组合使用 `invoice`、已启用和全局，指针点击「清除筛选」后同一搜索框接到焦点，两条定义恢复。直接输入 `warehouse` 只匹配活动全局任务，详情显示 2099 年 1 月 1 日 08:00（Asia/Shanghai）、原提示词及空历史。四张基线和八张候选截图本人逐张复核。 [真实桌面证据](../../artifacts/2026-11-19-scheduled-clear-filters-focus/README.md)
+- 正式创建回执两次 201，项目定义暂停回执 200。候选重启后和交互后列表读取、各两次 Fire 和运行历史读取均为 200，完整定义及原未来触发逐字段与基线一致，运行和尝试均为零。界面验收没有使用真实模型请求。两套独立服务都以正式关闭请求 200 正常退出，端口释放。 [交互后的实际回执](../../artifacts/2026-11-19-scheduled-clear-filters-focus/candidate-scheduled-filter-receipts.json)
+- 服务 `bun test ./test/scheduler-automation-create-receipt.test.ts` 通过 1 项、36 次断言。覆盖层 `bun test ./test/scheduled-automations.test.ts --test-name-pattern 'recurrence presets|calendar validation|service sends the full lifecycle'` 通过 4 项、32 次断言。类型、3238 键双语、正式构建、渲染公共接口、根文档与架构索引检查通过。桌面样本覆盖活动全局和暂停项目，未安排实际到期执行。

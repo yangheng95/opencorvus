@@ -487,6 +487,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setSearch("")
     setFilter("all")
     setScopeFilter("all")
+    focusAfterRender(() => listSearchInput)
   }
   function rememberListFocus(): void {
     const active = document.activeElement
