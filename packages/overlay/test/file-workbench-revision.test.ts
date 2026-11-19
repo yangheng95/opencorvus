@@ -55,6 +55,32 @@ test("external citations and explicitly opened attachments retain exact source i
   })
 })
 
+test("revealing another Markdown heading preserves its current file and draft owner", async () => {
+  const scope = { directory: "/repo" }
+  expect(await openFileEditor("notes.md", scope)).toBe(true)
+  const release = registerFileEditorBeforeNavigate({
+    confirmLeave: async () => null,
+    getRevision: () => 7,
+    isBusy: () => false,
+    isDirty: () => true,
+  })
+  try {
+    const revision = fileEditorRevealRevision()
+    expect(await openFileReference("/repo/notes.md", scope, { markdownSection: "results" })).toBe(true)
+    expect({ target: selectedFileTarget(), revision: fileEditorRevealRevision() }).toEqual({
+      target: { ...scope, path: "notes.md", markdownSection: "results" },
+      revision: revision + 1,
+    })
+    expect(await openFileReference("./notes.md", scope, { markdownSection: "results-1" })).toBe(true)
+    expect({ target: selectedFileTarget(), revision: fileEditorRevealRevision() }).toEqual({
+      target: { ...scope, path: "notes.md", markdownSection: "results-1" },
+      revision: revision + 2,
+    })
+  } finally {
+    release()
+  }
+})
+
 test.each([
   ["/repo", "./notes.md"],
   ["/repo", "folder/../notes.md"],

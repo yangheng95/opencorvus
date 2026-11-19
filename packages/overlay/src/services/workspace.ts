@@ -30,7 +30,7 @@ import {
 import { abortChatRequest, setChatAttachments } from "../store/messages"
 import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
-import { fileReferenceRange, type FileReferenceLocation } from "../utils/file-reference"
+import { fileReferenceReveal, type FileReference, type FileReferenceLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { isAbsoluteServerPath, pathWithForwardSeparators } from "../utils/server-path"
 import { AppLog } from "../utils/log"
@@ -1374,7 +1374,7 @@ export async function openPathInSelectedEditor(
   await openProjectPathInEditor(settingsStore.projectEditor, path, location)
 }
 
-export async function openProjectFile(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
+export async function openProjectFile(target: string, location?: Partial<FileReference>): Promise<void> {
   const path = editorTargetPath(target)
   if (!path) {
     if (typeof target === "string" && target.trim()) {
@@ -1385,24 +1385,22 @@ export async function openProjectFile(target: string, location?: Partial<FileRef
     }
     return
   }
-  // A cited line has no meaning to the OS file association, so a located
-  // reference goes to the workbench, which can actually honour it.
-  if (location?.line !== undefined || !getHostTransport().capabilities.nativeCommands["open-path"]) {
+  // The workbench owns cited source lines and rendered Markdown sections.
+  if (location?.line !== undefined || location?.markdownSection || !getHostTransport().capabilities.nativeCommands["open-path"]) {
     await openProjectPathInWorkbench(target, location)
     return
   }
   await nativeOpen(path)
 }
 
-async function openProjectPathInWorkbench(target: string, location?: Partial<FileReferenceLocation>): Promise<void> {
+async function openProjectPathInWorkbench(target: string, location?: Partial<FileReference>): Promise<void> {
   const authority = captureApiAuthority()
   const directory = activeDirectory().trim()
   const rawTarget = typeof target === "string" ? target : ""
   if (!directory || !rawTarget) return
   const { openFileReference } = await import("./file-workbench")
   assertApiAuthorityCurrent(authority)
-  const range = fileReferenceRange(location)
-  await openFileReference(rawTarget, { directory, authority }, range)
+  await openFileReference(rawTarget, { directory, authority }, fileReferenceReveal(location))
 }
 
 export function editorTargetPath(target: string): string {

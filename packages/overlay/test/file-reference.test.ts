@@ -1,6 +1,23 @@
 import { expect, test } from "bun:test"
-import { fileReferenceRange, parseFileReference } from "../src/utils/file-reference"
+import { fileReferenceRange, fileReferenceReveal, parseFileReference } from "../src/utils/file-reference"
+import { markdownProjectFileReference } from "../src/utils/markdown"
 
+test("Markdown file links retain headings and the existing source-line grammar", () => {
+  const section = markdownProjectFileReference("./notes/target.md#implementation-details-1")
+  expect(section).toEqual({ path: "./notes/target.md", markdownSection: "implementation-details-1" })
+  expect(fileReferenceReveal(section!)).toEqual({ markdownSection: "implementation-details-1" })
+
+  const source = markdownProjectFileReference("./notes/target.md#L3-L4")
+  expect(source).toEqual({ path: "./notes/target.md", line: 3, endLine: 4 })
+  expect(fileReferenceReveal(source!)).toEqual({ startLine: 3, endLine: 4 })
+})
+
+test("document paths decode separately from encoded Markdown headings", () => {
+  expect(markdownProjectFileReference("../保留%20%2523.MDX#%E9%AA%8C%E6%94%B6%E7%BB%93%E6%9E%9C")).toEqual({
+    path: "../保留 %23.MDX",
+    markdownSection: "%E9%AA%8C%E6%94%B6%E7%BB%93%E6%9E%9C",
+  })
+})
 
 test("a cited location is split off the path it qualifies", () => {
   expect(parseFileReference("src/engine/pipeline.ts:42")).toEqual({ path: "src/engine/pipeline.ts", line: 42 })

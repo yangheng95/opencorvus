@@ -3147,9 +3147,14 @@ A matching heading scrolls into view and receives programmatic keyboard focus.
 Unknown, malformed or not-yet-rendered targets retain the current link and do
 not change the application's URL fragment or create deferred navigation work.
 Headings have no global page IDs, and worker caches contain no section counters.
-File links, source-line references and external URLs retain their existing
-delegates. Other direct HTML consumers, cross-file chapters and navigation across
-Notebook cells or Presentation slides do not gain this text-owner contract.
+An explicit local Markdown file link with a section fragment opens the file through
+the same workbench admission as other file links. The current file reveal consumes
+the fragment once its Preview owner has rendered, using the same heading sequence
+and focus ownership as other workbench reveals. A missing heading retains the
+opened Preview. A source-line reference selects the cited range in Source.
+External URLs retain their ordinary browser semantics. Each Notebook cell and
+Presentation slide has its own document owner. Direct HTML readers keep their
+respective navigation contracts.
 
 Future assistant Markdown prose uses the existing shared observable-work-narrative
 guidance for valid emphasis boundaries: punctuation can follow a bold label, or

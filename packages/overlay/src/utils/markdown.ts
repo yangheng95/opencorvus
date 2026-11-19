@@ -308,7 +308,7 @@ function browserPreviewAttrs(raw: string): string {
 const FILE_EXT_RE =
   /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs|json|jsonc|md|mdx|css|scss|less|html|htm|xml|svg|svgz|png|jpg|jpeg|gif|bmp|webp|ico|tif|tiff|avif|apng|jxl|heic|heif|raw|cr2|nef|arw|dng|orf|raf|pef|x3f|yaml|yml|toml|py|pyi|rs|go|java|c|h|cpp|cc|cxx|hpp|sh|bash|zsh|sql|rb|php|lua|kt|swift|dart|vue|astro|conf|ini|env|lock|txt|pdf|csv|tsv|xls|xlsx|xlsm|ods|doc|docx|odt|ppt|pptx|odp)$/i
 
-function markdownProjectFileReference(raw: string): FileReference | null {
+export function markdownProjectFileReference(raw: string): FileReference | null {
   // Split the cited location off first: `src/a.ts:42` has to clear the
   // `scheme:` guard and the end-anchored extension test on its path half alone.
   const reference = parseFileReference(String(raw || "").trim())
@@ -317,14 +317,20 @@ function markdownProjectFileReference(raw: string): FileReference | null {
   if (value.startsWith("#") || value.startsWith("//") || isAttachmentResourceUrl(value)) return null
   const windowsAbsolutePath = /^[A-Za-z]:[\\/]/.test(value)
   if (!windowsAbsolutePath && /^[a-z][a-z0-9+.-]*:/i.test(value)) return null
-  if (/[?#]/.test(value)) return null
+  const fragmentIndex = value.indexOf("#")
+  const path = fragmentIndex === -1 ? value : value.slice(0, fragmentIndex)
+  const markdownSection = fragmentIndex === -1 ? undefined : value.slice(fragmentIndex + 1)
+  if (path.includes("?")) return null
   let decoded: string
   try {
-    decoded = decodeMarkdownFilePath(value)
+    decoded = decodeMarkdownFilePath(path)
   } catch {
     return null
   }
-  return FILE_EXT_RE.test(decoded) ? { ...reference, path: decoded } : null
+  if (!FILE_EXT_RE.test(decoded)) return null
+  if (markdownSection === undefined) return { ...reference, path: decoded }
+  if (!markdownSection || reference.line !== undefined || extToLang(decoded) !== "markdown") return null
+  return { path: decoded, markdownSection }
 }
 
 /**

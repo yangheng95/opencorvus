@@ -1,5 +1,5 @@
 /** @jsxImportSource solid-js */
-import { For, Show, type JSX } from "solid-js"
+import { createEffect, For, Show, type JSX } from "solid-js"
 import { t } from "../utils/i18n"
 import { markdownSectionIndex } from "../utils/markdown-section"
 import { createStreamingTextPartModel } from "./text-part-model"
@@ -17,6 +17,19 @@ function headingLabel(node: Node): string {
   return Array.from(node.childNodes, headingLabel).join("")
 }
 
+function revealMarkdownSection(owner: HTMLElement, fragment: string): boolean {
+  const headings = Array.from(owner.querySelectorAll<HTMLElement>("[data-markdown-heading]"))
+    .filter((heading) => heading.closest("[data-markdown-owner]") === owner)
+  const index = markdownSectionIndex(headings.map(headingLabel), fragment)
+  if (index === undefined) return false
+  const heading = headings[index]!
+  heading.scrollIntoView({ block: "start", inline: "nearest" })
+  heading.focus({ preventScroll: true })
+  return true
+}
+
+export type MarkdownRenderedHandler = (revealSection: (fragment: string) => boolean) => void
+
 /** Worker-backed Markdown formats every accepted token, including a growing tail.
  * DOM insertion is spread across frames for both streaming and loaded text. */
 
@@ -30,8 +43,19 @@ export function StreamingMarkdownPart(props: {
   className?: string
   trailing?: JSX.Element
   images?: MarkdownImageReader
+  onRendered?: MarkdownRenderedHandler
 }) {
   const { frozenHtml, pending, error } = createStreamingTextPartModel(props)
+  let owner!: HTMLDivElement
+
+  createEffect(() => {
+    const onRendered = props.onRendered
+    if (!onRendered || pending()) return
+    queueMicrotask(() => {
+      if (!owner.isConnected || pending() || props.onRendered !== onRendered) return
+      onRendered((fragment) => !error() && revealMarkdownSection(owner, fragment))
+    })
+  })
 
   function navigateSection(event: MouseEvent & { currentTarget: HTMLDivElement }): void {
     if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
@@ -43,17 +67,11 @@ export function StreamingMarkdownPart(props: {
     const href = anchor.getAttribute("href") ?? ""
     if (!href.startsWith("#") || href.length < 2) return
     event.preventDefault()
-    const headings = Array.from(owner.querySelectorAll<HTMLElement>("[data-markdown-heading]"))
-      .filter((heading) => heading.closest("[data-markdown-owner]") === owner)
-    const index = markdownSectionIndex(headings.map(headingLabel), href.slice(1))
-    if (index === undefined) return
-    const heading = headings[index]!
-    heading.scrollIntoView({ block: "start", inline: "nearest" })
-    heading.focus({ preventScroll: true })
+    revealMarkdownSection(owner, href.slice(1))
   }
 
   return (
-    <div class={props.className || "msg-text"} data-markdown-owner="true" onClick={navigateSection}
+    <div ref={owner} class={props.className || "msg-text"} data-markdown-owner="true" onClick={navigateSection}
       data-markdown-rendering={pending() ? "true" : undefined}>
       <For each={frozenHtml()}>
         {(html) => (
@@ -82,6 +100,6 @@ export function StreamingMarkdownPart(props: {
 }
 
 /** Static documents share the same asynchronous renderer as streamed prose. */
-export function StaticTextPart(props: { text: string; images?: MarkdownImageReader }) {
-  return <StreamingMarkdownPart text={props.text} images={props.images} />
+export function StaticTextPart(props: { text: string; images?: MarkdownImageReader; onRendered?: MarkdownRenderedHandler }) {
+  return <StreamingMarkdownPart text={props.text} images={props.images} onRendered={props.onRendered} />
 }

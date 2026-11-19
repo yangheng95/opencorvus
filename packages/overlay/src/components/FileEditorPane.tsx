@@ -29,7 +29,7 @@ import type { MarkdownImageReader } from "./MarkdownDocumentImages"
 import { bytesToArrayBuffer } from "../utils/binary"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { extToLang } from "../utils/markdown"
-import { StaticTextPart } from "./TextPart"
+import { StaticTextPart, type MarkdownRenderedHandler } from "./TextPart"
 import { Icon } from "./ui/Icon"
 // CodeMirror and its Lezer grammars are only needed once a file is actually
 // open. This pane stays mounted to keep its state, so the editor itself is what
@@ -252,6 +252,7 @@ export function FileEditorPane() {
   createEffect(() => {
     fileEditorRevealRevision()
     if (target()?.range) setTextView("source")
+    else if (target()?.markdownSection) setTextView("preview")
   })
   const imageSource = createMemo(() => {
     const file = content()
@@ -286,19 +287,31 @@ export function FileEditorPane() {
   const previewFocusTarget = () => previewVisible() ? markdownPreview()
     : imageSource() ? imagePreviewTrigger()
     : pdfSource() ? pdfNavigation() : undefined
-  const revealPreview = createAnimationFrameScheduler(() => {
+  const claimPreviewReveal = (preview: HTMLElement): boolean => {
     const revision = fileEditorRevealRevision()
-    const preview = previewFocusTarget()
     const loaded = acceptedContent()
     if (
       previewRevealedRevision === revision || !resourceReady() || fileEditorReserved() ||
       !loaded || !ownsFileTarget(loaded.target) || !isApiAuthorityCurrent(loaded.readerAuthority) ||
-      !preview?.isConnected || !preview.clientWidth || !preview.clientHeight || preview.closest("[inert], [hidden]")
-    ) return
+      !preview.isConnected || !preview.clientWidth || !preview.clientHeight || preview.closest("[inert], [hidden]")
+    ) return false
     previewRevealedRevision = revision
     const active = document.activeElement
-    if (active === revealFocusOrigin() || active === document.body || active === preview) {
-      preview.focus({ preventScroll: true })
+    return active === revealFocusOrigin() || active === document.body || active === preview
+  }
+  const revealPreview = createAnimationFrameScheduler(() => {
+    if (previewVisible() && target()?.markdownSection) return
+    const preview = previewFocusTarget()
+    if (preview && claimPreviewReveal(preview)) preview.focus({ preventScroll: true })
+  })
+  const revealRenderedSection = createMemo<MarkdownRenderedHandler | undefined>(() => {
+    const fragment = target()?.markdownSection
+    if (!fragment) return
+    const revision = fileEditorRevealRevision()
+    return (revealSection) => {
+      const preview = markdownPreview()
+      if (!preview || revision !== fileEditorRevealRevision() || !previewVisible() || !claimPreviewReveal(preview)) return
+      if (!revealSection(fragment)) preview.focus({ preventScroll: true })
     }
   })
   createEffect(() => {
@@ -471,7 +484,8 @@ export function FileEditorPane() {
     const next = loaded?.value ?? null
     if (next && textView() === null) {
       setTextView(
-        canEdit(next) && next.content.length > 0 && extToLang(path()) === "markdown" && !target()?.range
+        canEdit(next) && extToLang(path()) === "markdown" && !target()?.range &&
+          (next.content.length > 0 || target()?.markdownSection)
           ? "preview"
           : "source",
       )
@@ -983,7 +997,7 @@ export function FileEditorPane() {
                       tabIndex={0}
                       aria-label={`${fileTitle()} · ${t("file_editor.view_preview")}`}
                     >
-                      <StaticTextPart text={draft()} images={previewImages()} />
+                      <StaticTextPart text={draft()} images={previewImages()} onRendered={revealRenderedSection()} />
                     </section>
                   </Show>
                 </Match>

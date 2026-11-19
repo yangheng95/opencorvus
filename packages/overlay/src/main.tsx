@@ -120,7 +120,7 @@ import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
 import {
   elementFileReference,
-  fileReferenceRange,
+  fileReferenceReveal,
   FILE_REFERENCE_PATH_ATTRIBUTE,
   PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE,
 } from "./utils/file-reference"
@@ -1995,7 +1995,7 @@ document.addEventListener(
     runMainAsync("workspace.open-project-file", () =>
       openRenderedFileLink(projectFileLink, async () => {
         if (documentTarget) {
-          await openFileReference(documentPath, { directory: documentTarget.directory }, fileReferenceRange(projectFile))
+          await openFileReference(documentPath, { directory: documentTarget.directory }, fileReferenceReveal(projectFile))
         } else {
           await openProjectFile(projectFile.path, projectFile)
         }

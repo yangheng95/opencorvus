@@ -16,6 +16,7 @@ export const PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE = "data-project-file-path"
 const FILE_REFERENCE_LINE_ATTRIBUTE = "data-file-line"
 const FILE_REFERENCE_END_LINE_ATTRIBUTE = "data-file-end-line"
 const FILE_REFERENCE_COLUMN_ATTRIBUTE = "data-file-column"
+const FILE_REFERENCE_MARKDOWN_SECTION_ATTRIBUTE = "data-file-markdown-section"
 
 // Lazy path half plus an anchored numeric tail, so a Windows drive letter
 // (`C:\repo\a.ts`) is never mistaken for a location separator: the tail must
@@ -30,7 +31,10 @@ export interface FileReferenceLocation {
 
 export interface FileReference extends Partial<FileReferenceLocation> {
   path: string
+  markdownSection?: string
 }
+
+export type FileRevealLocation = SourceFileRange | { markdownSection: string }
 
 function positiveLineNumber(raw: string | undefined): number | undefined {
   if (raw === undefined) return undefined
@@ -81,6 +85,11 @@ export function fileReferenceRange(
   }
 }
 
+export function fileReferenceReveal(reference?: Partial<FileReference>): FileRevealLocation | undefined {
+  if (reference?.markdownSection) return { markdownSection: reference.markdownSection }
+  return fileReferenceRange(reference)
+}
+
 /** Serialise a reference into HTML attributes for the delegated click handler. */
 export function fileReferenceHtmlAttributes(
   pathAttribute: string,
@@ -91,6 +100,9 @@ export function fileReferenceHtmlAttributes(
   if (reference.line !== undefined) attributes.push(`${FILE_REFERENCE_LINE_ATTRIBUTE}="${reference.line}"`)
   if (reference.endLine !== undefined) attributes.push(`${FILE_REFERENCE_END_LINE_ATTRIBUTE}="${reference.endLine}"`)
   if (reference.column !== undefined) attributes.push(`${FILE_REFERENCE_COLUMN_ATTRIBUTE}="${reference.column}"`)
+  if (reference.markdownSection) {
+    attributes.push(`${FILE_REFERENCE_MARKDOWN_SECTION_ATTRIBUTE}="${escape(reference.markdownSection)}"`)
+  }
   return ` ${attributes.join(" ")}`
 }
 
@@ -102,6 +114,7 @@ export function elementFileReference(element: Element, pathAttribute: string): F
   const rawEndLine = element.getAttribute(FILE_REFERENCE_END_LINE_ATTRIBUTE)
   const endLine = positiveLineNumber(rawEndLine ?? undefined)
   const column = positiveLineNumber(element.getAttribute(FILE_REFERENCE_COLUMN_ATTRIBUTE) ?? undefined)
+  const markdownSection = element.getAttribute(FILE_REFERENCE_MARKDOWN_SECTION_ATTRIBUTE)
   if (rawEndLine !== null && (line === undefined || endLine === undefined || endLine < line)) return null
   if (column !== undefined && endLine !== undefined && endLine !== line) return null
   return {
@@ -109,5 +122,6 @@ export function elementFileReference(element: Element, pathAttribute: string): F
     ...(line === undefined ? {} : { line }),
     ...(endLine === undefined ? {} : { endLine }),
     ...(line === undefined || column === undefined ? {} : { column }),
+    ...(markdownSection ? { markdownSection } : {}),
   }
 }

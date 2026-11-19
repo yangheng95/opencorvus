@@ -14,6 +14,7 @@ import {
   type ApiAuthority,
 } from "./api"
 import { projectScopedPath } from "./project-directory"
+import type { FileRevealLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { isAbsoluteServerPath, normalizeProjectFilePath } from "../utils/server-path"
 import { relativePathFrom } from "../utils/tool"
@@ -137,6 +138,7 @@ export async function collectFileRefreshReceipts(
 export interface FileEditorTarget extends FileOperationScope {
   path: string
   range?: SourceFileRange
+  markdownSection?: string
   sourceAbsolutePath?: string
   displayName?: string
 }
@@ -206,8 +208,7 @@ function descendantSuffix(path: string, base: string, directory: string): string
   return normalizedPath.startsWith(prefix) ? normalizedPath.slice(prefix.length) : null
 }
 
-function normalizeFileEditorRange(range?: SourceFileRange): SourceFileRange | undefined {
-  if (!range) return undefined
+function normalizeFileEditorRange(range: SourceFileRange): SourceFileRange {
   if (
     !Number.isInteger(range.startLine) ||
     !Number.isInteger(range.endLine) ||
@@ -229,21 +230,27 @@ function normalizeFileEditorRange(range?: SourceFileRange): SourceFileRange | un
   }
 }
 
-function normalizeFileEditorTarget(path: string, scope: FileOperationScope, range?: SourceFileRange): FileEditorTarget {
+function fileEditorLocation(location?: FileRevealLocation): Pick<FileEditorTarget, "range" | "markdownSection"> {
+  if (!location) return {}
+  if ("markdownSection" in location) return { markdownSection: location.markdownSection }
+  return { range: normalizeFileEditorRange(location) }
+}
+
+function normalizeFileEditorTarget(path: string, scope: FileOperationScope, location?: FileRevealLocation): FileEditorTarget {
   const next = String(path || "")
   const directory = scope.directory.trim()
   if (!next || !directory) throw new Error("openFileEditor: path and directory are required")
   return {
     path: normalizeProjectFilePath(next, directory),
     directory,
-    ...(range ? { range: normalizeFileEditorRange(range) } : {}),
+    ...fileEditorLocation(location),
   }
 }
 
 function normalizeSourceFileEditorTarget(
   absolutePath: string,
   scope: FileOperationScope,
-  range?: SourceFileRange,
+  location?: FileRevealLocation,
   displayName?: string,
 ): FileEditorTarget {
   const sourceAbsolutePath = String(absolutePath || "")
@@ -259,7 +266,7 @@ function normalizeSourceFileEditorTarget(
     directory,
     sourceAbsolutePath,
     ...(displayName === undefined ? {} : { displayName }),
-    ...(range ? { range: normalizeFileEditorRange(range) } : {}),
+    ...fileEditorLocation(location),
   }
 }
 
@@ -275,6 +282,7 @@ function sameFileEditorTarget(left: FileEditorTarget | null, right: FileEditorTa
   return (
     sameFileEditorResource(left, right) &&
     left?.displayName === right?.displayName &&
+    left?.markdownSection === right?.markdownSection &&
     left?.range?.startLine === right?.range?.startLine &&
     left?.range?.endLine === right?.range?.endLine &&
     left?.range?.startColumn === right?.range?.startColumn
@@ -385,26 +393,26 @@ export function registerFileEditorBeforeNavigate(owner: FileEditorNavigationOwne
   }
 }
 
-export function openFileEditor(path: string, scope: FileOperationScope, range?: SourceFileRange): Promise<boolean> {
+export function openFileEditor(path: string, scope: FileOperationScope, location?: FileRevealLocation): Promise<boolean> {
   const authority = scope.authority ?? captureApiAuthority()
-  return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, range), authority)
+  return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, location), authority)
 }
 
 /** Ordinary citations share the project's editor resource, regardless of path spelling. */
-export function openFileReference(path: string, scope: FileOperationScope, range?: SourceFileRange): Promise<boolean> {
-  if (!isAbsoluteServerPath(path)) return openFileEditor(path, scope, range)
+export function openFileReference(path: string, scope: FileOperationScope, location?: FileRevealLocation): Promise<boolean> {
+  if (!isAbsoluteServerPath(path)) return openFileEditor(path, scope, location)
   const relative = relativePathFrom(scope.directory.trim(), path)
-  return relative ? openFileEditor(relative, scope, range) : openSourceFileEditor(path, scope, range)
+  return relative ? openFileEditor(relative, scope, location) : openSourceFileEditor(path, scope, location)
 }
 
 export function openSourceFileEditor(
   absolutePath: string,
   scope: FileOperationScope,
-  range?: SourceFileRange,
+  location?: FileRevealLocation,
   displayName?: string,
 ): Promise<boolean> {
   const authority = scope.authority ?? captureApiAuthority()
-  return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, range, displayName), authority)
+  return requestFileEditorTarget(normalizeSourceFileEditorTarget(absolutePath, scope, location, displayName), authority)
 }
 
 export function closeFileEditor(boundary?: FileEditorCommitBoundary): Promise<boolean> {

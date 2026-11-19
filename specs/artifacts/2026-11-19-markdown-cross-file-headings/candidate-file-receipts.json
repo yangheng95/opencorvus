@@ -1,0 +1,17 @@
+{
+  "guideMatchesAuthoredBytes": true,
+  "reads": [
+    {
+      "file": "guide.md",
+      "status": 200,
+      "length": 478,
+      "matchesDisk": true
+    },
+    {
+      "file": "notes/target.md",
+      "status": 200,
+      "length": 2709,
+      "matchesDisk": true
+    }
+  ]
+}
