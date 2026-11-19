@@ -505,7 +505,7 @@
   white-space: nowrap;
 }
 
-.work-row-summary-tooltip__started {
+.work-row-summary-tooltip__time {
   min-width: 0;
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -515,11 +515,11 @@
   line-height: var(--ui-line-height-tight);
 }
 
-.work-row-summary-tooltip__started-label {
+.work-row-summary-tooltip__time-label {
   color: var(--text-soft);
 }
 
-.work-row-summary-tooltip__started time {
+.work-row-summary-tooltip__time time {
   min-width: 0;
   overflow: hidden;
   color: var(--text-muted);

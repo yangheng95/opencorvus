@@ -5553,6 +5553,11 @@ Projects, pinned, single-list, and Recents presentations reuse one assignment;
 their sort order and duplicate row appearances do not change that assignment.
 The row, its tooltip, and its action label use the same display title. The
 stored title and exact conversation target remain unchanged.
+The same row tooltip uses each Work Ledger record's actual timestamp meaning.
+For Mission and Chat/Work it labels the record's creation time, including a
+saved draft or empty conversation. For top-level and nested Tasks it labels
+the Task lifecycle start. The displayed absolute and relative times refer to
+that same instant and use the current locale.
 Chat and Mission sidebar action menus can rename the targeted item while
 keeping the current conversation selected. The shared rename dialog returns
 focus to the originating row if it remains available. The row's double-click

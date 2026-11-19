@@ -395,18 +395,22 @@ function WorkLedgerRowView(props: {
     const directory = row().directory.trim()
     return directory ? projectDirectoryLabel(directory, "").name.trim() : ""
   }
-  const tooltipStartedAt = () => {
-    const started = row().started
-    return typeof started === "number" && Number.isFinite(started) && started > 0 ? started : 0
+  const tooltipTime = createMemo(() => {
+    const current = row()
+    const isTask = current.kind === "task"
+    const timestamp = isTask ? current.started : current.created
+    return {
+      timestamp: Number.isFinite(timestamp) && timestamp > 0 ? timestamp : 0,
+      label: isTask ? "work_ledger.tooltip.started" : "work_ledger.tooltip.created",
+    }
+  })
+  const tooltipTimeDetail = () => detailStamp(tooltipTime().timestamp)
+  const tooltipDateTime = () => new Date(tooltipTime().timestamp).toISOString()
+  const tooltipRelativeTime = () => {
+    const relative = relativeTime(tooltipTime().timestamp)
+    return relative === tooltipTimeDetail() ? "" : relative
   }
-  const tooltipStartDetail = () => (tooltipStartedAt() ? detailStamp(tooltipStartedAt()) : "")
-  const tooltipStartRelative = () => {
-    const started = tooltipStartedAt()
-    if (!started) return ""
-    const relative = relativeTime(started)
-    return relative === tooltipStartDetail() ? "" : relative
-  }
-  const hasTooltipSummary = () => Boolean(tooltipTitle() || tooltipFolderName() || tooltipStartDetail())
+  const hasTooltipSummary = () => Boolean(tooltipTitle() || tooltipFolderName() || tooltipTime().timestamp)
   const missionTaskCount = () => (row().kind === "mission" ? (row() as WorkLedgerMissionRow).tasks.length : 0)
   const hasMissionTasks = () => missionTaskCount() > 0
   const [pointerWithinMission, setPointerWithinMission] = createSignal(false)
@@ -639,33 +643,25 @@ function WorkLedgerRowView(props: {
             <Show when={hasTooltipSummary()}>
               <Tooltip.Portal>
                 <Tooltip.Content class="card-meta-tooltip work-row-summary-tooltip" data-ui="work-row-summary-tooltip">
-                  <Show when={tooltipTitle() || tooltipStartRelative()}>
+                  <Show when={tooltipTitle() || tooltipRelativeTime()}>
                     <div class="work-row-summary-tooltip__headline">
                       <Show when={tooltipTitle()}>
                         <strong>{tooltipTitle()}</strong>
                       </Show>
-                      <Show when={tooltipStartRelative()}>
-                        <time
-                          dateTime={new Date(tooltipStartedAt()).toISOString()}
-                          data-ui="work-row-summary-start-relative"
-                        >
-                          {tooltipStartRelative()}
-                        </time>
+                      <Show when={tooltipRelativeTime()}>
+                        {(relative) => <time dateTime={tooltipDateTime()} data-ui="work-row-summary-time-relative">{relative()}</time>}
                       </Show>
                     </div>
                   </Show>
-                  <Show when={tooltipStartDetail()}>
-                    <div class="work-row-summary-tooltip__started" data-ui="work-row-summary-start-fact">
-                      <span class="work-row-summary-tooltip__started-label" data-ui="work-row-summary-start-label">
-                        {t("work_ledger.tooltip.started")}
-                      </span>
-                      <time
-                        dateTime={new Date(tooltipStartedAt()).toISOString()}
-                        data-ui="work-row-summary-start-detail"
-                      >
-                        {tooltipStartDetail()}
-                      </time>
-                    </div>
+                  <Show when={tooltipTimeDetail()}>
+                    {(detail) => (
+                      <div class="work-row-summary-tooltip__time" data-ui="work-row-summary-time-fact">
+                        <span class="work-row-summary-tooltip__time-label" data-ui="work-row-summary-time-label">
+                          {t(tooltipTime().label)}
+                        </span>
+                        <time dateTime={tooltipDateTime()} data-ui="work-row-summary-time-detail">{detail()}</time>
+                      </div>
+                    )}
                   </Show>
                   <Show when={tooltipFolderName()}>
                     <div class="work-ledger-tooltip__fact" data-ui="work-row-summary-folder">
