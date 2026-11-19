@@ -36,6 +36,38 @@ export interface FileReference extends Partial<FileReferenceLocation> {
   workbenchOnly?: true
 }
 
+export interface FileDocumentPosition {
+  scrollTop: number
+  linkOffset: number
+  linkIndex: number
+  linkPath: string
+  linkLabel: string | null
+}
+
+const projectFileLinkSelector = `a[${PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE}]`
+
+export function captureFileDocumentPosition(preview: HTMLElement, link: HTMLElement, path: string): FileDocumentPosition {
+  return {
+    scrollTop: preview.scrollTop,
+    linkOffset: link.getBoundingClientRect().top - preview.getBoundingClientRect().top,
+    linkIndex: Array.from(preview.querySelectorAll(projectFileLinkSelector)).indexOf(link),
+    linkPath: path,
+    linkLabel: link.textContent,
+  }
+}
+
+export function restoreFileDocumentPosition(preview: HTMLElement, position: FileDocumentPosition): void {
+  const link = preview.querySelectorAll<HTMLAnchorElement>(projectFileLinkSelector)[position.linkIndex]
+  if (link?.getAttribute(PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE) === position.linkPath &&
+      link.textContent === position.linkLabel) {
+    preview.scrollTop += link.getBoundingClientRect().top - preview.getBoundingClientRect().top - position.linkOffset
+    link.focus({ preventScroll: true })
+    return
+  }
+  preview.scrollTop = position.scrollTop
+  preview.focus({ preventScroll: true })
+}
+
 export type FileRevealLocation = SourceFileRange | { markdownSection: string }
 
 function positiveLineNumber(raw: string | undefined): number | undefined {

@@ -10,6 +10,7 @@ import {
   openFileReference,
   openSourceFileEditor,
   registerFileEditorBeforeNavigate,
+  returnToFileDocument,
   selectedFileTarget,
 } from "../src/services/file-workbench"
 
@@ -79,6 +80,47 @@ test("revealing another Markdown heading preserves its current file and draft ow
   } finally {
     release()
   }
+})
+
+test("following document links preserves each previous document's reading position", async () => {
+  const scope = { directory: "/repo" }
+  const guidePosition = { scrollTop: 1200, linkOffset: 302, linkIndex: 1, linkPath: "./rollout.md", linkLabel: "Rollout" }
+  const rolloutPosition = { scrollTop: 85, linkOffset: 150, linkIndex: 2, linkPath: "./appendix.md", linkLabel: "Appendix" }
+  await openFileEditor("manual/guide.md", scope)
+  await openFileReference("manual/rollout.md", scope, { markdownSection: "checkpoint-two" }, {
+    target: selectedFileTarget()!, position: guidePosition,
+  })
+  const reveal = fileEditorRevealRevision()
+  await openFileReference("manual/appendix.md", scope, undefined, {
+    target: selectedFileTarget()!, position: rolloutPosition,
+  })
+  expect(selectedFileTarget()).toMatchObject({ ...scope, path: "manual/appendix.md", previousDocument: {
+    ...scope, path: "manual/rollout.md", documentPosition: rolloutPosition, previousDocument: {
+      ...scope, path: "manual/guide.md", documentPosition: guidePosition,
+    },
+  } })
+  expect(await returnToFileDocument()).toBe(true)
+  expect(selectedFileTarget()).toMatchObject({ path: "manual/rollout.md", documentPosition: rolloutPosition })
+  expect(await returnToFileDocument()).toBe(true)
+  expect(selectedFileTarget()).toMatchObject({ path: "manual/guide.md", documentPosition: guidePosition })
+  expect(fileEditorRevealRevision()).toBe(reveal + 3)
+})
+
+test("revealing a heading in the current file keeps the previous document's exact identity", async () => {
+  const scope = { directory: "/repo" }
+  const position = { scrollTop: 491, linkOffset: 130, linkIndex: 0, linkPath: "./rollout.md", linkLabel: "Rollout" }
+  await openSourceFileEditor("/outside/guide.md", scope, undefined, "Guide source")
+  await openFileReference("manual/rollout.md", scope, undefined, { target: selectedFileTarget()!, position })
+  await openFileReference("manual/rollout.md", scope, { markdownSection: "last-checkpoint" }, {
+    target: selectedFileTarget()!, position: { ...position, linkPath: "./rollout.md#last-checkpoint" },
+  })
+  expect(selectedFileTarget()).toMatchObject({ path: "manual/rollout.md", markdownSection: "last-checkpoint" })
+  expect(await returnToFileDocument()).toBe(true)
+  expect(selectedFileTarget()).toMatchObject({ ...scope, path: "/outside/guide.md", sourceAbsolutePath: "/outside/guide.md",
+    displayName: "Guide source", documentPosition: position,
+  })
+  await openFileEditor("guide.md", { directory: "/other-project" })
+  expect(selectedFileTarget()).toEqual({ directory: "/other-project", path: "guide.md" })
 })
 
 test.each([

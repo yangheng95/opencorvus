@@ -119,6 +119,7 @@ import {
 import type { AutomationRunSession } from "./services/automations"
 import { t } from "./utils/i18n"
 import {
+  captureFileDocumentPosition,
   elementFileReference,
   fileReferenceReveal,
   FILE_REFERENCE_PATH_ATTRIBUTE,
@@ -1990,12 +1991,16 @@ document.addEventListener(
     const projectFile = elementFileReference(projectFileLink, PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE)
     if (!projectFile) return
     ev.preventDefault()
-    const documentTarget = projectFileLink.closest(".file-editor-markdown-preview") ? selectedFileTarget() : null
-    const documentPath = documentTarget ? resolveDocumentFilePath(projectFile.path, documentTarget) : projectFile.path
+    const preview = projectFileLink.closest<HTMLElement>(".file-editor-markdown-preview")
+    const documentTarget = preview ? selectedFileTarget() : null
+    const documentOrigin = preview && documentTarget
+      ? { target: documentTarget, position: captureFileDocumentPosition(preview, projectFileLink, projectFile.path) }
+      : null
     runMainAsync("workspace.open-project-file", () =>
       openRenderedFileLink(projectFileLink, async () => {
-        if (documentTarget) {
-          await openFileReference(documentPath, { directory: documentTarget.directory }, fileReferenceReveal(projectFile))
+        if (documentOrigin) {
+          const path = resolveDocumentFilePath(projectFile.path, documentOrigin.target)
+          await openFileReference(path, { directory: documentOrigin.target.directory }, fileReferenceReveal(projectFile), documentOrigin)
         } else {
           await openProjectFile(projectFile.path, projectFile)
         }

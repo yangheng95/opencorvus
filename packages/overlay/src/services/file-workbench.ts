@@ -14,7 +14,7 @@ import {
   type ApiAuthority,
 } from "./api"
 import { projectScopedPath } from "./project-directory"
-import type { FileRevealLocation } from "../utils/file-reference"
+import type { FileDocumentPosition, FileRevealLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { isAbsoluteServerPath, normalizeProjectFilePath } from "../utils/server-path"
 import { relativePathFrom } from "../utils/tool"
@@ -141,6 +141,8 @@ export interface FileEditorTarget extends FileOperationScope {
   markdownSection?: string
   sourceAbsolutePath?: string
   displayName?: string
+  documentPosition?: FileDocumentPosition
+  previousDocument?: FileEditorTarget
 }
 
 const [selectedFileTarget, setSelectedFileTarget] = createSignal<FileEditorTarget | null>(null)
@@ -283,6 +285,8 @@ function sameFileEditorTarget(left: FileEditorTarget | null, right: FileEditorTa
     sameFileEditorResource(left, right) &&
     left?.displayName === right?.displayName &&
     left?.markdownSection === right?.markdownSection &&
+    left?.documentPosition === right?.documentPosition &&
+    left?.previousDocument === right?.previousDocument &&
     left?.range?.startLine === right?.range?.startLine &&
     left?.range?.endLine === right?.range?.endLine &&
     left?.range?.startColumn === right?.range?.startColumn
@@ -398,11 +402,41 @@ export function openFileEditor(path: string, scope: FileOperationScope, location
   return requestFileEditorTarget(normalizeFileEditorTarget(path, scope, location), authority)
 }
 
-/** Ordinary citations share the project's editor resource, regardless of path spelling. */
-export function openFileReference(path: string, scope: FileOperationScope, location?: FileRevealLocation): Promise<boolean> {
-  if (!isAbsoluteServerPath(path)) return openFileEditor(path, scope, location)
-  const relative = relativePathFrom(scope.directory.trim(), path)
-  return relative ? openFileEditor(relative, scope, location) : openSourceFileEditor(path, scope, location)
+/** Citations share the same resource identity as direct opens. */
+export function openFileReference(
+  path: string,
+  scope: FileOperationScope,
+  location?: FileRevealLocation,
+  document?: { target: FileEditorTarget; position: FileDocumentPosition },
+): Promise<boolean> {
+  const authority = scope.authority ?? captureApiAuthority()
+  const absolute = isAbsoluteServerPath(path)
+  const relative = absolute ? relativePathFrom(scope.directory.trim(), path) : path
+  const target = absolute && !relative
+    ? normalizeSourceFileEditorTarget(path, scope, location)
+    : normalizeFileEditorTarget(relative, scope, location)
+  if (document) {
+    const source = document.target
+    if (selectedFileTarget() !== source) return Promise.resolve(false)
+    if (sameFileEditorResource(source, target)) target.previousDocument = source.previousDocument
+    else {
+      const { path, directory, sourceAbsolutePath, displayName, previousDocument } = source
+      target.previousDocument = {
+        path,
+        directory,
+        sourceAbsolutePath,
+        displayName,
+        previousDocument,
+        documentPosition: document.position,
+      }
+    }
+  }
+  return requestFileEditorTarget(target, authority)
+}
+
+export function returnToFileDocument(): Promise<boolean> {
+  const previous = selectedFileTarget()?.previousDocument
+  return previous ? requestFileEditorTarget(previous, captureApiAuthority()) : Promise.resolve(false)
 }
 
 export function openSourceFileEditor(

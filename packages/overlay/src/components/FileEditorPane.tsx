@@ -6,6 +6,7 @@ import {
   fileEditorRevealRevision,
   fileEditorReserved,
   registerFileEditorBeforeNavigate,
+  returnToFileDocument,
   selectedFileTarget,
   type FileContent,
   type FileEditorTarget,
@@ -28,6 +29,7 @@ import { relativePathFrom } from "../utils/tool"
 import type { MarkdownImageReader } from "./MarkdownDocumentImages"
 import { bytesToArrayBuffer } from "../utils/binary"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
+import { restoreFileDocumentPosition } from "../utils/file-reference"
 import { extToLang } from "../utils/markdown"
 import { StaticTextPart, type MarkdownRenderedHandler } from "./TextPart"
 import { Icon } from "./ui/Icon"
@@ -252,7 +254,7 @@ export function FileEditorPane() {
   createEffect(() => {
     fileEditorRevealRevision()
     if (target()?.range) setTextView("source")
-    else if (target()?.markdownSection) setTextView("preview")
+    else if (target()?.markdownSection || target()?.documentPosition) setTextView("preview")
   })
   const imageSource = createMemo(() => {
     const file = content()
@@ -300,18 +302,20 @@ export function FileEditorPane() {
     return active === revealFocusOrigin() || active === document.body || active === preview
   }
   const revealPreview = createAnimationFrameScheduler(() => {
-    if (previewVisible() && target()?.markdownSection) return
+    if (previewVisible() && (target()?.markdownSection || target()?.documentPosition)) return
     const preview = previewFocusTarget()
     if (preview && claimPreviewReveal(preview)) preview.focus({ preventScroll: true })
   })
-  const revealRenderedSection = createMemo<MarkdownRenderedHandler | undefined>(() => {
+  const revealRenderedDocument = createMemo<MarkdownRenderedHandler | undefined>(() => {
     const fragment = target()?.markdownSection
-    if (!fragment) return
+    const position = target()?.documentPosition
+    if (!fragment && !position) return
     const revision = fileEditorRevealRevision()
     return (revealSection) => {
       const preview = markdownPreview()
       if (!preview || revision !== fileEditorRevealRevision() || !previewVisible() || !claimPreviewReveal(preview)) return
-      if (!revealSection(fragment)) preview.focus({ preventScroll: true })
+      if (position) restoreFileDocumentPosition(preview, position)
+      else if (!fragment || !revealSection(fragment)) preview.focus({ preventScroll: true })
     }
   })
   createEffect(() => {
@@ -485,7 +489,7 @@ export function FileEditorPane() {
     if (next && textView() === null) {
       setTextView(
         canEdit(next) && extToLang(path()) === "markdown" && !target()?.range &&
-          (next.content.length > 0 || target()?.markdownSection)
+          (next.content.length > 0 || target()?.markdownSection || target()?.documentPosition)
           ? "preview"
           : "source",
       )
@@ -713,6 +717,19 @@ export function FileEditorPane() {
     }
   }
 
+  const returnToPreviousDocument = async (): Promise<void> => {
+    if (isBusy() || fileEditorReserved()) return
+    const file = target()
+    const authority = captureApiAuthority()
+    try {
+      await returnToFileDocument()
+    } catch (cause) {
+      if (file === target() && isApiAuthorityCurrent(authority)) {
+        setError({ messageKey: "file_editor.return_to_document_failed", cause })
+      }
+    }
+  }
+
   const saveAndLeave = async () => {
     if (leaveSaving()) return
     const decision = pendingLeaveDecision
@@ -758,6 +775,14 @@ export function FileEditorPane() {
         }
       >
         <header class="file-editor-header">
+          <Show when={target()?.previousDocument}>
+            <Button type="button" variant="ghost" size="icon" tone="neutral"
+              disabled={isBusy() || fileEditorReserved()}
+              title={t("file_editor.return_to_document")} aria-label={t("file_editor.return_to_document")}
+              onClick={() => void returnToPreviousDocument()}>
+              <Icon name="nav-back" />
+            </Button>
+          </Show>
           <div class="file-editor-title" title={[displayName(), target()?.sourceAbsolutePath || path()].filter(Boolean).join("\n")}>
             <span class="file-editor-title-name">{fileTitle()}</span>
           </div>
@@ -997,7 +1022,7 @@ export function FileEditorPane() {
                       tabIndex={0}
                       aria-label={`${fileTitle()} · ${t("file_editor.view_preview")}`}
                     >
-                      <StaticTextPart text={draft()} images={previewImages()} onRendered={revealRenderedSection()} />
+                      <StaticTextPart text={draft()} images={previewImages()} onRendered={revealRenderedDocument()} />
                     </section>
                   </Show>
                 </Match>

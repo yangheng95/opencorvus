@@ -3131,6 +3131,12 @@ An authored `./` or `../` destination with a file name can open a project file
 without a recognized extension. The workbench handles links admitted by this
 rule in both hosts, including unpreviewable files with an original download.
 In a file preview, the destination resolves relative to that document's parent.
+An accepted cross-document link in a Markdown file preview keeps the source
+document and its reading position for the file toolbar's Back action. Returning
+uses the same file admission and draft confirmation as opening a target. The
+accepted preview restores the link and its position through the current reveal
+revision. The document chain belongs to the current file target in the workbench
+and ends when a new file is opened directly or the file is closed.
 Parsing and highlighting occur
 off-thread; top-level HTML blocks mount over animation frames. Latest updates
 are coalesced by text owner, stale replies are discarded, disposal releases the
