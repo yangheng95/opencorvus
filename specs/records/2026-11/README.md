@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [首份多步任务草稿保存后的焦点](2026-11-19-mission-first-draft-focus.md)
 - [设置页空白区域保留 Esc 返回](2026-11-19-settings-background-escape.md)
 - [资源管理器中的查找快捷键聚焦文件搜索](2026-11-19-explorer-find-shortcut-scope.md)
 - [文件栏在窄宽度下优先显示文件名](2026-11-19-file-header-readable-title.md)
