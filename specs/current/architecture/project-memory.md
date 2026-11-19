@@ -340,7 +340,9 @@ Ledger project inventory, initially using the actual open Project. Selection is
 independent of the open conversation and does not require a Task. The settings
 read the protected Project document through the existing Project-memory service
 and public `experimental.projectMemory.get` contract, displaying its original
-content, revision, counts and localized update time as a read-only document.
+content, revision, token count and localized update time as a read-only document.
+The revision, token count and timestamp accompany readable content. An empty
+document shows its unorganized state and any actual pending-item count.
 Document loading retires its previous selection and API authority; old responses
 cannot replace another Project's view. A failed read can retry the same selected
 document in place, preserving the independent notes query and exposing the

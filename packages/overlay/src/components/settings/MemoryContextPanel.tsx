@@ -280,11 +280,13 @@ export function MemoryContextPanel() {
         <Show when={documentValue()}>
           {(value) => (
             <>
-              <div class="memory-project-meta">
-                <span>{t("memory.project_revision", { value: number(value().revision) })}</span>
-                <span>{t("memory.project_tokens", { value: number(value().tokenCount) })}</span>
-                <span>{t("memory.updated", { value: new Date(value().timeUpdated).toLocaleString(localeTag()) })}</span>
-              </div>
+              <Show when={value().content}>
+                <div class="memory-project-meta">
+                  <span>{t("memory.project_revision", { value: number(value().revision) })}</span>
+                  <span>{t("memory.project_tokens", { value: number(value().tokenCount) })}</span>
+                  <span>{t("memory.updated", { value: new Date(value().timeUpdated).toLocaleString(localeTag()) })}</span>
+                </div>
+              </Show>
               <Show when={value().pendingCount > 0}>
                 <Feedback>{t("memory.project_pending", { value: number(value().pendingCount) })}</Feedback>
               </Show>
