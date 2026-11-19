@@ -1046,6 +1046,8 @@ the display never parses its arrow label to reconstruct a destination.
 Existing dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.
+The draft prompt keeps the path and reason from the decision that opened it.
+The same wording remains visible while the dialog closes and the file selection advances.
 Selected-comparison read failures use the shared localized Feedback, with complete
 original diagnostics in Details and explicit Retry through that resource's
 existing refetch. The loading branch owns pending retries; the original request

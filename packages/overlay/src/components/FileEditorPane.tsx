@@ -150,7 +150,10 @@ export function FileEditorPane() {
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
-  const [leaveReason, setLeaveReason] = createSignal<"leave" | "reload">("leave")
+  const [leavePrompt, setLeavePrompt] = createSignal<{ reason: "leave" | "reload"; path: string }>({
+    reason: "leave",
+    path: "",
+  })
   const [comparison, setComparison] = createSignal<FileComparison | null>(null)
   const [comparisonMode, setComparisonMode] = createSignal<ComparisonMode>("disk-draft")
   let pendingLeaveDecision: Promise<number | null> | undefined
@@ -639,7 +642,7 @@ export function FileEditorPane() {
     leaveFocus = focused instanceof HTMLElement
       ? { element: dialogOpeningFocusTarget(focused), targetIdentity: activeTargetIdentity, authority: captureApiAuthority() }
       : undefined
-    setLeaveReason(reason)
+    setLeavePrompt({ reason, path: path() })
     setLeaveDialogOpen(true)
     pendingLeaveDecision = new Promise<number | null>((resolve) => {
       settleLeaveDecision = resolve
@@ -1081,7 +1084,7 @@ export function FileEditorPane() {
               data-ui="file-editor-discard"
               onClick={() => { if (!leaveSaving()) finishLeaveDecision(true) }}
             >
-              {t(leaveReason() === "reload" ? "file_editor.discard_reload" : "file_editor.discard")}
+              {t(leavePrompt().reason === "reload" ? "file_editor.discard_reload" : "file_editor.discard")}
             </Button>
             <Button
               type="button"
@@ -1093,14 +1096,14 @@ export function FileEditorPane() {
               data-ui="file-editor-save-and-leave"
               onClick={() => void saveAndLeave()}
             >
-              {leaveSaving() ? t("common.saving") : t(leaveReason() === "reload" ? "file_editor.save_reload" : "file_editor.save_continue")}
+              {leaveSaving() ? t("common.saving") : t(leavePrompt().reason === "reload" ? "file_editor.save_reload" : "file_editor.save_continue")}
             </Button>
           </>
         }
       >
         <p>
-          {t(leaveReason() === "reload" ? "file_editor.reload_unsaved_message" : "file_editor.unsaved_message", {
-            path: path(),
+          {t(leavePrompt().reason === "reload" ? "file_editor.reload_unsaved_message" : "file_editor.unsaved_message", {
+            path: leavePrompt().path,
           })}
         </p>
         <Show when={error()}>{(failure) =>
