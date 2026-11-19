@@ -1491,6 +1491,11 @@ The Save button keeps its label and busy semantics. Successful leave retains
 the destination's focus lifecycle. No delayed focus repair or parallel focus
 store supplies this behavior.
 
+The file header lays out the current name with its document return action in
+one group. The file controls share the available row when their intrinsic
+widths fit and move together to the next row when space is limited. The
+metadata and save status keep their full-width row.
+
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
 the existing file-content route owns the disk snapshot; the loaded baseline and

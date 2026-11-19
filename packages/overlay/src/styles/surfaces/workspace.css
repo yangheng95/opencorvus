@@ -278,8 +278,17 @@ code .file-link:focus-visible {
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
 }
 
+.file-editor-identity {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
+}
+
 .file-editor-title {
-  flex: 1 1 0;
+  flex: 1 1 auto;
   min-width: 0;
   display: inline-flex;
   align-items: center;
@@ -287,6 +296,17 @@ code .file-link:focus-visible {
   font-family: var(--mono);
   font-size: var(--ui-font-body);
   color: var(--text-strong);
+}
+
+.file-editor-actions {
+  flex: 0 0 auto;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ui-gap-sm);
+  margin-inline-start: auto;
 }
 
 .file-editor-meta {

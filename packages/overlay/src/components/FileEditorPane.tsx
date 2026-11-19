@@ -778,104 +778,108 @@ export function FileEditorPane() {
         }
       >
         <header class="file-editor-header">
-          <Show when={target()?.previousDocument}>
-            <Button type="button" variant="ghost" size="icon" tone="neutral"
-              disabled={isBusy() || fileEditorReserved()}
-              title={t("file_editor.return_to_document")} aria-label={t("file_editor.return_to_document")}
-              onClick={() => void returnToPreviousDocument()}>
-              <Icon name="nav-back" />
-            </Button>
-          </Show>
-          <div class="file-editor-title" title={[displayName(), target()?.sourceAbsolutePath || path()].filter(Boolean).join("\n")}>
-            <span class="file-editor-title-name">{fileTitle()}</span>
+          <div class="file-editor-identity">
+            <Show when={target()?.previousDocument}>
+              <Button type="button" variant="ghost" size="icon" tone="neutral"
+                disabled={isBusy() || fileEditorReserved()}
+                title={t("file_editor.return_to_document")} aria-label={t("file_editor.return_to_document")}
+                onClick={() => void returnToPreviousDocument()}>
+                <Icon name="nav-back" />
+              </Button>
+            </Show>
+            <div class="file-editor-title" title={[displayName(), target()?.sourceAbsolutePath || path()].filter(Boolean).join("\n")}>
+              <span class="file-editor-title-name">{fileTitle()}</span>
+            </div>
           </div>
-          <Show
-            when={!loading() && content() && !writable() || target()?.sourceAbsolutePath}
-            fallback={
+          <div class="file-editor-actions">
+            <Show
+              when={!loading() && content() && !writable() || target()?.sourceAbsolutePath}
+              fallback={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  tone={dirty() ? "accent" : "neutral"}
+                  data-ui="file-editor-save"
+                  data-dirty={dirty() ? "true" : "false"}
+                  title={`${t("common.save")} (Ctrl/Cmd+S)`}
+                  aria-keyshortcuts="Control+s Meta+s"
+                  disabled={!resourceReady() || fileEditorReserved()}
+                  aria-disabled={!dirty() || isBusy() || fileEditorReserved() || undefined}
+                  aria-busy={saving() || undefined}
+                  onClick={() => void save()}
+                >
+                  {t("common.save")}
+                </Button>
+              }
+            >
+              <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
+            </Show>
+            <Show when={textContent()}>
+              <Button type="button" variant="ghost" size="icon" tone="neutral"
+                disabled={!editorSearch() || isBusy() || fileEditorReserved()}
+                title={`${t("file_editor.find")} (Ctrl/Cmd+F)`}
+                aria-label={t("file_editor.find")} aria-keyshortcuts="Control+f Meta+f"
+                onClick={searchFile}>
+                <Icon name="search" />
+              </Button>
+            </Show>
+            <Show when={writable()}>
+              <Button type="button" variant="ghost" size="icon" tone="neutral"
+                data-ui="file-editor-compare" disabled={!resourceReady() || fileEditorReserved()}
+                aria-disabled={comparisonUnavailable() || undefined}
+                title={t("file_editor.compare")} aria-label={t("file_editor.compare")}
+                onClick={() => void compareWithDisk()}>
+                <Icon name="git-compare" />
+              </Button>
+            </Show>
+            <Show when={downloadable() && !originalDownloadOnly()}>
               <Button
                 type="button"
                 variant="ghost"
-                size="sm"
-                tone={dirty() ? "accent" : "neutral"}
-                data-ui="file-editor-save"
-                data-dirty={dirty() ? "true" : "false"}
-                title={`${t("common.save")} (Ctrl/Cmd+S)`}
-                aria-keyshortcuts="Control+s Meta+s"
+                size="icon"
+                tone="neutral"
                 disabled={!resourceReady() || fileEditorReserved()}
-                aria-disabled={!dirty() || isBusy() || fileEditorReserved() || undefined}
-                aria-busy={saving() || undefined}
-                onClick={() => void save()}
+                aria-disabled={isBusy() || fileEditorReserved() || downloading() || undefined}
+                aria-busy={downloading() || undefined}
+                title={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
+                aria-label={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
+                onClick={() => void downloadCurrentFile()}
               >
-                {t("common.save")}
+                <Icon name={downloading() ? "loading" : "download"} />
               </Button>
-            }
-          >
-            <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
-          </Show>
-          <Show when={textContent()}>
-            <Button type="button" variant="ghost" size="icon" tone="neutral"
-              disabled={!editorSearch() || isBusy() || fileEditorReserved()}
-              title={`${t("file_editor.find")} (Ctrl/Cmd+F)`}
-              aria-label={t("file_editor.find")} aria-keyshortcuts="Control+f Meta+f"
-              onClick={searchFile}>
-              <Icon name="search" />
-            </Button>
-          </Show>
-          <Show when={writable()}>
-            <Button type="button" variant="ghost" size="icon" tone="neutral"
-              data-ui="file-editor-compare" disabled={!resourceReady() || fileEditorReserved()}
-              aria-disabled={comparisonUnavailable() || undefined}
-              title={t("file_editor.compare")} aria-label={t("file_editor.compare")}
-              onClick={() => void compareWithDisk()}>
-              <Icon name="git-compare" />
-            </Button>
-          </Show>
-          <Show when={downloadable() && !originalDownloadOnly()}>
+            </Show>
             <Button
               type="button"
               variant="ghost"
               size="icon"
               tone="neutral"
+              data-ui="file-editor-reload"
               disabled={!resourceReady() || fileEditorReserved()}
-              aria-disabled={isBusy() || fileEditorReserved() || downloading() || undefined}
-              aria-busy={downloading() || undefined}
-              title={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
-              aria-label={t(downloading() ? "file.downloading" : dirty() ? "file_editor.download_draft" : "file.download")}
-              onClick={() => void downloadCurrentFile()}
+              aria-disabled={isBusy() || fileEditorReserved() || undefined}
+              aria-busy={reloading() || undefined}
+              title={t("file_editor.reload")}
+              aria-label={t("file_editor.reload")}
+              onClick={() => void reload()}
             >
-              <Icon name={downloading() ? "loading" : "download"} />
+              <Icon name={reloading() ? "loading" : "refresh"} />
             </Button>
-          </Show>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            tone="neutral"
-            data-ui="file-editor-reload"
-            disabled={!resourceReady() || fileEditorReserved()}
-            aria-disabled={isBusy() || fileEditorReserved() || undefined}
-            aria-busy={reloading() || undefined}
-            title={t("file_editor.reload")}
-            aria-label={t("file_editor.reload")}
-            onClick={() => void reload()}
-          >
-            <Icon name={reloading() ? "loading" : "refresh"} />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            tone="neutral"
-            data-chrome="icon-action"
-            data-ui="file-editor-close"
-            disabled={!resourceReady() || fileEditorReserved()}
-            aria-disabled={isBusy() || fileEditorReserved() || undefined}
-            onClick={() => void closeCurrentFile()}
-            title={t("file_editor.close", { path: fileTitle() })}
-            aria-label={t("file_editor.close", { path: fileTitle() })}
-          >
-            <Icon name="close" />
-          </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              data-chrome="icon-action"
+              data-ui="file-editor-close"
+              disabled={!resourceReady() || fileEditorReserved()}
+              aria-disabled={isBusy() || fileEditorReserved() || undefined}
+              onClick={() => void closeCurrentFile()}
+              title={t("file_editor.close", { path: fileTitle() })}
+              aria-label={t("file_editor.close", { path: fileTitle() })}
+            >
+              <Icon name="close" />
+            </Button>
+          </div>
           <Show when={showFileLocation() || writable()}>
             <div class="file-editor-meta">
               <Show when={showFileLocation()}>
