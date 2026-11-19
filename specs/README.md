@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [归档工作显示只读目标说明](records/2026-11/2026-11-19-archived-continuous-goal-guide.md)
 - [按草稿请求查找多步任务](records/2026-11/2026-11-19-work-ledger-draft-request-search.md)
 - [侧栏时间提示区分创建和开始](records/2026-11/2026-11-19-work-ledger-tooltip-time-meaning.md)
 - [在全局搜索中预览多步任务草稿请求](records/2026-11/2026-11-19-palette-mission-draft-request.md)
