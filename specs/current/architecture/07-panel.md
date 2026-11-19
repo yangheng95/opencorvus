@@ -1968,8 +1968,10 @@ Context initialization and user checkboxes own draft selection. A Market install
 catalog and makes the exact installation selectable without adding it to the
 draft. If the focused install action still belongs to the current dialog on
 success, focus returns to the existing search field. Search ranking does not
-choose a candidate. The existing selected-ID count is shown in
-the current language and number format. Available candidates with no selection,
+choose a candidate. The selection status shows the localized count and the exact
+catalog names in selection order above the scrolling checklist. The same
+accepted catalog and retained selections supply the names through searches.
+Available candidates with no selection,
 an empty query result and an unavailable compatible catalog have distinct hints.
 Package-authored descriptions wrap fully in the native scrolling checklist;
 the Project directory dropdown retains its compact path presentation.

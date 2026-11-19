@@ -219,6 +219,15 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     ]
   })
   const selectedExpertSquadCount = createMemo(() => expertSquadIDs().length)
+  const selectedExpertSquadSummary = createMemo(() => {
+    const labels = new Map(expertSquads().map((squad) => [squad.id, squad.display_label]))
+    const names = expertSquadIDs().map((id) => labels.get(id)).filter((label) => label !== undefined)
+    const locale = localeTag()
+    const count = new Intl.NumberFormat(locale).format(selectedExpertSquadCount())
+    return names.length
+      ? t("mission_board.create.squads_selected_named", { count, names: new Intl.ListFormat(locale).format(names) })
+      : t("mission_board.create.squads_selected", { count })
+  })
   const noMatchingSquads = createMemo(
     () =>
       Boolean(expertSquadQuery().trim()) &&
@@ -768,10 +777,8 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                 <Icon name="loading" size="compact" />
               </Show>
               <Show when={productPillar() && (squadResultsReady() || selectedExpertSquadCount() > 0)}>
-                <span class="mission-create-form__selection-count" role="status">
-                  {t("mission_board.create.squads_selected", {
-                    count: new Intl.NumberFormat(localeTag()).format(selectedExpertSquadCount()),
-                  })}
+                <span class="mission-create-form__selection-summary" role="status">
+                  {selectedExpertSquadSummary()}
                 </span>
               </Show>
             </TextField.Label>

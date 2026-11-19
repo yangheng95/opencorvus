@@ -771,11 +771,13 @@ body {
   margin-bottom: var(--ui-gap-xs);
 }
 
-.mission-create-form__selection-count {
+.mission-create-form__selection-summary {
   margin-inline-start: auto;
+  min-inline-size: 0;
   color: var(--text-muted);
   font-weight: var(--ui-font-weight-body);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  text-align: end;
 }
 
 .mission-create-form__search-origin {
