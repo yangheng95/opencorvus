@@ -2381,7 +2381,9 @@ Rail active state derives from the
 open config tab or primary surface; Chats/Mission Board navigation closes the
 config page through its existing native-surface reveal lifecycle before opening
 the selected primary surface. Settings owns search focus, scoped Escape/Back
-and focus restoration; nested action dialogs keep the shared modal primitive.
+and focus restoration. The named settings region accepts click focus on its
+background without adding a sequential stop. Escape remains scoped to that
+region and its contents. Nested action dialogs keep the shared modal primitive.
 The Memory project picker derives display order from its loaded options and the
 current interface locale. Language changes reorder the same option objects,
 retaining the selected Project, document scope and open conversation. Loading

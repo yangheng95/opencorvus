@@ -723,6 +723,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         id="configDialog"
         class="config-page"
         hidden={!dialogStore.config.open}
+        tabIndex={-1}
         aria-label={activeConfigTitle()}
       >
         <Tabs
