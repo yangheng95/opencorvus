@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目记忆初始状态的正文与元数据](2026-11-19-project-memory-initial-state.md)
 - [定时任务清除筛选后回到搜索框](2026-11-19-scheduled-clear-filters-focus.md)
 - [在工作侧栏提示中区分同名多步任务草稿](2026-11-19-work-ledger-sidebar-draft-preview.md)
 - [归档工作显示只读目标说明](2026-11-19-archived-continuous-goal-guide.md)

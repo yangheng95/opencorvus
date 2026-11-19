@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [新项目记忆的初始文档呈现](2026-11-19-project-memory-initial-state/README.md)
 - [定时任务清除筛选焦点验收](2026-11-19-scheduled-clear-filters-focus/README.md)
 - [同名草稿侧栏提示桌面验收](2026-11-19-work-ledger-sidebar-draft-preview/README.md)
 - [归档持续目标只读说明的桌面验收](2026-11-19-archived-continuous-goal-guide/README.md)
