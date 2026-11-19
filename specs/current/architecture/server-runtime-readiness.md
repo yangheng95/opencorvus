@@ -36,6 +36,12 @@ runtime event coalescing can omit that final notification. Observation stops
 on the validated receipt, failure, or caller cancellation; each launch keeps
 its own directory and occurrence identity. Startup deadlines remain unchanged.
 
+The bound listener's URL supplies the origin for ACP requests, the serve
+startup receipt, the published server address, and restart readiness. The
+predecessor captures its listener's origin before quiescence and verifies that
+the successor reports that same origin alongside the exact request and process
+identities. Bind host and port still identify the physical listening endpoint.
+
 ## Project authority for authoring
 
 The single `project-route-context` policy selects exact Project identity for

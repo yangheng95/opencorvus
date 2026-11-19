@@ -1,6 +1,6 @@
 /** Credential-free Windows restart qualification. SERVER_RESTART_RESULT selects evidence.
  * SERVER_RESTART_BINARY explicitly selects a compiled backend and its adjacent helper;
- * omitted input runs the thirteen-case source profile. Packaged mode runs six HTTP/SDK cases.
+ * omitted input runs the fourteen-case source profile. Packaged mode runs six HTTP/SDK cases.
  */
 import assert from "node:assert/strict"
 import fs from "node:fs/promises"
@@ -137,7 +137,8 @@ try {
   const capability = await NodeProcess.run({ command: { executable: helper!, args: ["--detached-capability"] }, ownership: "detached", timeoutMs: 15_000 })
   provenance.capability = JSON.parse(new TextDecoder().decode(capability.stdout))
   assert.deepEqual(provenance.capability, { protocol: 3, containment: "independent" })
-  const runCase = async (mode: "standalone" | "standalone-peer" | "managed-parent" | "owned-tree" | "helper-unavailable") => {
+  const runCase = async (mode: "standalone" | "standalone-peer" | "standalone-ipv6" | "managed-parent" | "owned-tree" | "helper-unavailable") => {
+    const hostname = mode === "standalone-ipv6" ? "::1" : "127.0.0.1"
     const home = path.join(root, mode, "home")
     const directory = path.join(root, mode, "project")
     await fs.mkdir(directory, { recursive: true })
@@ -153,9 +154,9 @@ try {
     const port = await new Promise<number>((resolve, reject) => {
       const probe = net.createServer()
       probe.once("error", reject)
-      probe.listen(0, "127.0.0.1", () => { const port = (probe.address() as net.AddressInfo).port; probe.close(error => error ? reject(error) : resolve(port)) })
+      probe.listen(0, hostname, () => { const port = (probe.address() as net.AddressInfo).port; probe.close(error => error ? reject(error) : resolve(port)) })
     })
-    const args = [...(binary ? [] : [entry]), "serve", "--hostname", "127.0.0.1", "--port", String(port), "--project-dir", directory,
+    const args = [...(binary ? [] : [entry]), "serve", "--hostname", hostname, "--port", String(port), "--project-dir", directory,
       "--startup-receipt", receiptPath, "--startup-occurrence", `restart-${mode}`, "--print-logs",
       ...(mode === "managed-parent" ? ["--parent-pid", String(parent.pid), "--parent-process-instance-id", parent.processInstanceID] : [])]
     const processHandle = mode === "owned-tree" ? await NodeProcess.spawn({ command: { executable: binary ?? process.execPath, args },
@@ -356,7 +357,7 @@ try {
       } finally { await nativeCapture?.close() }
     }
   }
-  const parallel = await Promise.allSettled([runCase("standalone"), runCase("standalone-peer")])
+  const parallel = await Promise.allSettled([runCase("standalone"), runCase("standalone-peer"), ...(!binary ? [runCase("standalone-ipv6")] : [])])
   const failures = parallel.flatMap(result => result.status === "rejected" ? [result.reason] : [])
   if (failures.length) throw new AggregateError(failures, "Parallel isolated restart qualification failed")
   for (const mode of ["managed-parent", "owned-tree", "helper-unavailable"] as const) await runCase(mode)
@@ -446,7 +447,7 @@ try {
     const record: any = { mode: "pre-cancellation-settlement-failure", owner, port: listener.port }
     results.push(record)
     try {
-      const result = await beginRestartHandoff({ hostname: "127.0.0.1", port: listener.port!,
+      const result = await beginRestartHandoff({ hostname: "127.0.0.1", port: listener.port!, listenerOrigin: listener.url.origin,
         settleAndQuiesce: async () => { throw failure }, releaseRuntimeState: async () => {},
         restoreListener: async () => { throw new Error("The original listener has not entered quiescence") },
       }).catch(error => error)
@@ -473,7 +474,7 @@ try {
     results.push(fault)
     try {
       try {
-        await beginRestartHandoff({ hostname: "127.0.0.1", port, command,
+        await beginRestartHandoff({ hostname: "127.0.0.1", port, listenerOrigin: listener.url.origin, command,
           settleAndQuiesce: async (started) => { const drained = listener.stop(true); started(); await drained }, releaseRuntimeState: async () => {},
           restoreListener: async () => { listener = Bun.serve({ hostname: "127.0.0.1", port, fetch: () => new Response(responseText) }); fault.restored = true } })
         throw new Error("Fault command unexpectedly transferred")
@@ -561,7 +562,7 @@ try {
   assert.equal(crash.targetDisposition, "dead_or_reused")
   crash.status = "passed"
   }
-  assert.equal(results.length, binary ? 6 : 13, "The selected qualification profile ran all of its cases")
+  assert.equal(results.length, binary ? 6 : 14, "The selected qualification profile ran all of its cases")
 } catch (error) { failure = error; process.exitCode = 1 }
 finally {
   await fs.mkdir(path.dirname(resultPath), { recursive: true })

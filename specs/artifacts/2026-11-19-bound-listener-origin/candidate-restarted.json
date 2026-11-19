@@ -1,0 +1,27 @@
+{
+  "initialPID": 9864,
+  "current": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-ipv6-candidate",
+    "outcome": "listening",
+    "url": "http://[::1]:40190",
+    "pid": 22416
+  },
+  "health": 200,
+  "sessionID": "ses_hsg4VskIMtwZdnTTrG6j",
+  "assistant": {
+    "id": "msg_g0VbNYm9Q00sAE7S7eHk",
+    "finish": "stop"
+  },
+  "original": {
+    "url": "http://[::1]:40190/attachment/prj_hZNA3NljgWDZTIT4VkIz/1b38fd0e33c6272d01884ef8346f2c5d92435de9a38bd925120a798e19c79707.txt",
+    "status": 200,
+    "bytes": 26,
+    "exact": true
+  },
+  "download": {
+    "suggestedFilename": "listener-facts.txt",
+    "bytes": 26,
+    "exact": true
+  }
+}

@@ -47,7 +47,7 @@ export const AcpCommand = cmd({
         fn: async () => {
 
           const sdk = createOpenCorvusClient({
-            baseUrl: `http://${server.hostname}:${server.port}`,
+            baseUrl: server.url.origin,
           })
 
           const input = new WritableStream<Uint8Array>({

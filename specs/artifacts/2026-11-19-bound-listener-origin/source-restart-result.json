@@ -1,0 +1,21 @@
+{
+  "status": "failed",
+  "profile": "source",
+  "executable": "C:\\Users\\hengu\\.bun\\bin\\bun.exe",
+  "checkerOwner": {
+    "pid": 35176,
+    "processInstanceID": "win32:639306491494595423",
+    "occurrenceID": "ecb9811d-4946-4590-b30c-4a67e278d78d"
+  },
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-98PBGz\\runner-35176-fGmaOK\\restart-check",
+  "helper": "D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-ce2985abb8de48b8\\published\\opencorvus-process-supervisor.exe",
+  "cases": [],
+  "error": {
+    "name": "AssertionError",
+    "message": "Standalone checker launcher must itself be outside a Job\n\ntrue !== false\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Standalone checker launcher must itself be outside a Job\n\ntrue !== false\n\n    at D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\script\\server-restart-e2e.ts:136:10"
+  },
+  "limits": [
+    "Credential-free Windows qualification; POSIX, Docker and GUI unverified"
+  ]
+}

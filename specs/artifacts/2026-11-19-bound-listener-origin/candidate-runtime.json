@@ -1,0 +1,60 @@
+{
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-ipv6-candidate",
+    "outcome": "listening",
+    "url": "http://[::1]:40190",
+    "pid": 9864
+  },
+  "published": {
+    "status": 200,
+    "body": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b331\\opencorvus-zed-candidate\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b331\\opencorvus-zed-candidate\\data",
+        "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b331\\opencorvus-zed-candidate"
+      }
+    }
+  },
+  "directHealth": {
+    "status": 200
+  },
+  "diagnosticBase": "http://[::1]:40190",
+  "session": {
+    "id": "ses_hsg4VskIMtwZdnTTrG6j",
+    "slug": "mighty-moon",
+    "version": "local",
+    "projectID": "prj_hZNA3NljgWDZTIT4VkIz",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b331\\candidate\\ipv6-review",
+    "title": "Chat",
+    "kind": "assistant",
+    "metadata": {
+      "projectConversationCreation": {
+        "version": 1,
+        "requestID": "a5ee52ed-12b9-4120-b567-b842d6a379cb",
+        "model": "acp-review/local"
+      },
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "acp-review/local"
+      }
+    },
+    "time": {
+      "created": 1795052361549,
+      "updated": 1795052361549
+    }
+  },
+  "attachment": {
+    "sha": "1b38fd0e33c6272d01884ef8346f2c5d92435de9a38bd925120a798e19c79707",
+    "url": "/attachment/prj_hZNA3NljgWDZTIT4VkIz/1b38fd0e33c6272d01884ef8346f2c5d92435de9a38bd925120a798e19c79707.txt",
+    "mime": "text/plain",
+    "size": 26,
+    "filename": "listener-facts.txt"
+  },
+  "target": "http://[::1]:40190/ui/?sessionID=ses_hsg4VskIMtwZdnTTrG6j&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b331%5Ccandidate%5Cipv6-review&experience=chat"
+}

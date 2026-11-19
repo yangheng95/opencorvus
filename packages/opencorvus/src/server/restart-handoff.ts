@@ -96,7 +96,8 @@ export class RestartHandoffEvidenceError extends Error {
 }
 
 export async function beginRestartHandoff(input: {
-  hostname: string; port: number; settleAndQuiesce: (onListenerQuiesceStarted: () => void) => Promise<void>
+  hostname: string; port: number; listenerOrigin: string
+  settleAndQuiesce: (onListenerQuiesceStarted: () => void) => Promise<void>
   releaseRuntimeState: () => Promise<void> | void; restoreListener: () => Promise<void>
   command?: string[]; environment?: Record<string, string>
 }): Promise<{ childPid: number; drained: Promise<void> }> {
@@ -157,7 +158,7 @@ export async function beginRestartHandoff(input: {
       hostname: input.hostname, port: input.port })
     const ready = await wait("restart-ready.json", Ready)
     if (ready.request_id !== context.requestID || !sameOwner(ready.successor, waiting.successor)
-      || ready.url !== `http://${input.hostname}:${input.port}`) throw new Error("Restart ready target identity or URL mismatch")
+      || ready.url !== input.listenerOrigin) throw new Error("Restart ready target identity or URL mismatch")
     if (!child.transferOwnership) throw new Error("Restart child has no ownership transfer capability")
     await child.transferOwnership(ready.successor)
     return await finishTransfer()

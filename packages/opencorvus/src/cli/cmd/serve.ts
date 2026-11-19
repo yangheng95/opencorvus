@@ -221,7 +221,7 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
   let startedTaskRecovery: Promise<void> = observeStartedTaskRecovery(preparedRuntime.recovery)
 
   let server = preparedRuntime.server
-  const serverUrl = `http://${server.hostname}:${server.port}`
+  const serverUrl = server.url.origin
   // Publish actual server URL so ChannelSupervisor can connect channel runtime to it
   process.env.OPENCORVUS_SERVER_URL = serverUrl
   console.log(`opencorvus server listening on ${serverUrl}`)
@@ -372,6 +372,7 @@ async function handleServeCommandInner(args: ArgumentsCamelCase<ServeOptions>) {
     const operation = beginRestartHandoff({
       hostname: actualHostname,
       port: actualPort,
+      listenerOrigin: server.url.origin,
       settleAndQuiesce: async (onListenerQuiesceStarted) => {
         console.log("[serve] restart settling execution and quiescing current listener")
         await settleAndQuiesce({ source: "http-client", reason }, onListenerQuiesceStarted)

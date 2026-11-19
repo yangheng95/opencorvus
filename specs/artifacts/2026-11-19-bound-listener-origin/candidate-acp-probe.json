@@ -1,0 +1,520 @@
+{
+  "initialization": {
+    "protocolVersion": 1,
+    "agentCapabilities": {
+      "loadSession": true,
+      "mcpCapabilities": {
+        "http": true,
+        "sse": true
+      },
+      "promptCapabilities": {
+        "embeddedContext": true,
+        "image": true
+      },
+      "sessionCapabilities": {
+        "fork": {},
+        "list": {},
+        "resume": {}
+      }
+    },
+    "authMethods": [
+      {
+        "description": "Run `opencorvus auth login` in the terminal",
+        "name": "Login with opencorvus",
+        "id": "opencorvus-login"
+      }
+    ],
+    "agentInfo": {
+      "name": "OpenCorvus",
+      "version": "local"
+    }
+  },
+  "session": {
+    "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+    "configOptions": [
+      {
+        "id": "model",
+        "name": "Model",
+        "category": "model",
+        "type": "select",
+        "currentValue": "acp-review/local",
+        "options": [
+          {
+            "value": "acp-review/local",
+            "name": "acp-review/IPv6 listener review"
+          }
+        ]
+      }
+    ],
+    "modes": {
+      "availableModes": [
+        {
+          "id": "coding",
+          "name": "coding",
+          "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+        }
+      ],
+      "currentModeId": "coding"
+    },
+    "_meta": {
+      "opencorvus": {
+        "modelId": "acp-review/local",
+        "variant": null,
+        "availableVariants": []
+      }
+    }
+  },
+  "prompt": {
+    "stopReason": "end_turn",
+    "usage": {
+      "totalTokens": 19,
+      "inputTokens": 11,
+      "outputTokens": 8
+    },
+    "_meta": {}
+  },
+  "loaded": {
+    "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+    "configOptions": [
+      {
+        "id": "model",
+        "name": "Model",
+        "category": "model",
+        "type": "select",
+        "currentValue": "acp-review/local",
+        "options": [
+          {
+            "value": "acp-review/local",
+            "name": "acp-review/IPv6 listener review"
+          }
+        ]
+      }
+    ],
+    "modes": {
+      "availableModes": [
+        {
+          "id": "coding",
+          "name": "coding",
+          "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+        }
+      ],
+      "currentModeId": "coding"
+    },
+    "_meta": {
+      "opencorvus": {
+        "modelId": "acp-review/local",
+        "variant": null,
+        "availableVariants": []
+      }
+    }
+  },
+  "fork": {
+    "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+    "configOptions": [
+      {
+        "id": "model",
+        "name": "Model",
+        "category": "model",
+        "type": "select",
+        "currentValue": "acp-review/local",
+        "options": [
+          {
+            "value": "acp-review/local",
+            "name": "acp-review/IPv6 listener review"
+          }
+        ]
+      }
+    ],
+    "modes": {
+      "availableModes": [
+        {
+          "id": "coding",
+          "name": "coding",
+          "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+        }
+      ],
+      "currentModeId": "coding"
+    },
+    "_meta": {
+      "opencorvus": {
+        "modelId": "acp-review/local",
+        "variant": null,
+        "availableVariants": []
+      }
+    }
+  },
+  "resume": {
+    "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+    "configOptions": [
+      {
+        "id": "model",
+        "name": "Model",
+        "category": "model",
+        "type": "select",
+        "currentValue": "acp-review/local",
+        "options": [
+          {
+            "value": "acp-review/local",
+            "name": "acp-review/IPv6 listener review"
+          }
+        ]
+      }
+    ],
+    "modes": {
+      "availableModes": [
+        {
+          "id": "coding",
+          "name": "coding",
+          "description": "Direct coding assistant for ad hoc workspace edits outside the task workflow."
+        }
+      ],
+      "currentModeId": "coding"
+    },
+    "_meta": {
+      "opencorvus": {
+        "modelId": "acp-review/local",
+        "variant": null,
+        "availableVariants": []
+      }
+    }
+  },
+  "continuation": {
+    "stopReason": "end_turn",
+    "usage": {
+      "totalTokens": 19,
+      "inputTokens": 11,
+      "outputTokens": 8
+    },
+    "_meta": {}
+  },
+  "updates": [
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "content": {
+          "text": "Checking the supplied file context.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfGG00OZkhg8JYU",
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "content": {
+          "text": "The local stream ",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfGG00OZkhg8JYU",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "content": {
+          "text": "completed.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfGG00OZkhg8JYU",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "content": {
+          "text": "Inspect attachment source identity. Review IPv6 ACP session.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfCN00koZ6BJhhu",
+        "sessionUpdate": "user_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "content": {
+          "text": "Checking the supplied file context.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfGG00OZkhg8JYU",
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfGG00OZkhg8JYU",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKqJzzDTUPfUl5x",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "content": {
+          "text": "Inspect attachment source identity. Review IPv6 ACP session.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfok00qI2tEaS9U",
+        "sessionUpdate": "user_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "content": {
+          "text": "Checking the supplied file context.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfok01uBLjtSlMb",
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "content": {
+          "text": "The local stream completed.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfok01uBLjtSlMb",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "availableCommands": [
+          {
+            "name": "init",
+            "description": "create/update AGENTS.md",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "review",
+            "description": "review changes [commit|branch|pr], defaults to uncommitted",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "inspect",
+            "description": "Inspect the submitted resource",
+            "input": {
+              "hint": "[arguments]"
+            }
+          },
+          {
+            "name": "compact",
+            "description": "compact the session"
+          }
+        ],
+        "sessionUpdate": "available_commands_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "content": {
+          "text": "Checking the supplied file context.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfu400WcZF5Xmzb",
+        "sessionUpdate": "agent_thought_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "content": {
+          "text": "The local stream ",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfu400WcZF5Xmzb",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "content": {
+          "text": "completed.",
+          "type": "text"
+        },
+        "messageId": "msg_g0VbNZfu400WcZF5Xmzb",
+        "sessionUpdate": "agent_message_chunk"
+      }
+    },
+    {
+      "sessionId": "ses_-zUOcQKBGzzQzSXf8EgA",
+      "update": {
+        "used": 11,
+        "size": 100000,
+        "cost": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "sessionUpdate": "usage_update"
+      }
+    }
+  ],
+  "exit": [
+    0,
+    null
+  ]
+}
