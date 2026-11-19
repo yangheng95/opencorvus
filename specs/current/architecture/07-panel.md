@@ -3352,7 +3352,10 @@ owner continue to control recovery.
 
 Network keeps the server URL, username and password in the mounted editor's
 local draft. Typing and unrelated preference saves retain the applied connection;
-explicit departure disposes that unsaved editor normally. Connection Save uses
+explicit departure disposes that unsaved editor normally. The connection fields
+submit one native form through Enter or the Save button. During the save the
+fields are read-only so the keyboard focus can stay in the editor. The existing
+connection validator supplies the localized feedback. Connection Save uses
 the single preference transaction defined in [05-config](05-config.md) to publish
 those three fields only after persistence is confirmed. The confirmed connection
 owner applies them through the sole API configure primitive; main synchronizes

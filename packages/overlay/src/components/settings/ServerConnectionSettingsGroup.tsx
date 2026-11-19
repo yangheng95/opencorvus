@@ -114,75 +114,82 @@ export function ServerConnectionSettingsGroup() {
   })
 
   return (
-    <SettingsGroup title={t("settings.section.connection")} data-ui="settings-server-connection-group">
-      <SettingsRow>
-        <TextField.Root as="label">
-          <TextField.Label>{t("settings.server_url")}</TextField.Label>
-          <TextField.Input
-            type="url"
-            value={draft().serverUrl}
-            placeholder="http://127.0.0.1:7878"
-            disabled={saving()}
-            onInput={(event) => {
-              clearFeedback()
-              setDraft((value) => ({ ...value, serverUrl: event.currentTarget.value.trim() }))
-            }}
-          />
-        </TextField.Root>
-      </SettingsRow>
-      <SettingsRow>
-        <TextField.Root as="label">
-          <TextField.Label>{t("settings.username")}</TextField.Label>
-          <TextField.Input
-            type="text"
-            value={draft().username}
-            disabled={saving()}
-            onInput={(event) => {
-              clearFeedback()
-              setDraft((value) => ({ ...value, username: event.currentTarget.value.trim() }))
-            }}
-          />
-        </TextField.Root>
-      </SettingsRow>
-      <SettingsRow>
-        <TextField.Root as="label">
-          <TextField.Label>{t("settings.password")}</TextField.Label>
-          <TextField.Input
-            type="password"
-            value={draft().password}
-            disabled={saving()}
-            onInput={(event) => {
-              clearFeedback()
-              setDraft((value) => ({ ...value, password: event.currentTarget.value }))
-            }}
-          />
-        </TextField.Root>
-      </SettingsRow>
-      <SettingsRow
-        align="center"
-        actions={
-          <Button
-            type="button"
-            variant="solid"
-            size="md"
-            tone="accent"
-            data-ui="settings-server-save"
-            onClick={() => void saveConnection()}
-            aria-disabled={saving() || undefined}
-            aria-busy={saving() || undefined}
-          >
-            {saving() ? t("common.saving") : saved() ? t("common.saved") : t("common.save")}
-          </Button>
-        }
-      />
-      <Show when={error()}>{(failure) => (
-        <Feedback tone="error" data-ui="settings-server-status" details={formatErrorDetails(failure().cause)}>
-          {failure().kind === "unavailable"
-            ? t("settings.connection_saved_unavailable")
-            : connectionFailureMessage(failure().cause)}
-        </Feedback>
-      )}</Show>
-      {referencesRetired() ? <Feedback tone="info">{t("settings.connection_references_retired")}</Feedback> : null}
-    </SettingsGroup>
+    <form
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault()
+        void saveConnection()
+      }}
+    >
+      <SettingsGroup title={t("settings.section.connection")} data-ui="settings-server-connection-group">
+        <SettingsRow>
+          <TextField.Root as="label">
+            <TextField.Label>{t("settings.server_url")}</TextField.Label>
+            <TextField.Input
+              type="url"
+              value={draft().serverUrl}
+              placeholder="http://127.0.0.1:7878"
+              readOnly={saving()}
+              onInput={(event) => {
+                clearFeedback()
+                setDraft((value) => ({ ...value, serverUrl: event.currentTarget.value.trim() }))
+              }}
+            />
+          </TextField.Root>
+        </SettingsRow>
+        <SettingsRow>
+          <TextField.Root as="label">
+            <TextField.Label>{t("settings.username")}</TextField.Label>
+            <TextField.Input
+              type="text"
+              value={draft().username}
+              readOnly={saving()}
+              onInput={(event) => {
+                clearFeedback()
+                setDraft((value) => ({ ...value, username: event.currentTarget.value.trim() }))
+              }}
+            />
+          </TextField.Root>
+        </SettingsRow>
+        <SettingsRow>
+          <TextField.Root as="label">
+            <TextField.Label>{t("settings.password")}</TextField.Label>
+            <TextField.Input
+              type="password"
+              value={draft().password}
+              readOnly={saving()}
+              onInput={(event) => {
+                clearFeedback()
+                setDraft((value) => ({ ...value, password: event.currentTarget.value }))
+              }}
+            />
+          </TextField.Root>
+        </SettingsRow>
+        <SettingsRow
+          align="center"
+          actions={
+            <Button
+              type="submit"
+              variant="solid"
+              size="md"
+              tone="accent"
+              data-ui="settings-server-save"
+              aria-disabled={saving() || undefined}
+              aria-busy={saving() || undefined}
+            >
+              {saving() ? t("common.saving") : saved() ? t("common.saved") : t("common.save")}
+            </Button>
+          }
+        />
+        <Show when={error()}>{(failure) => (
+          <Feedback tone="error" data-ui="settings-server-status" details={formatErrorDetails(failure().cause)}>
+            {failure().kind === "unavailable"
+              ? t("settings.connection_saved_unavailable")
+              : connectionFailureMessage(failure().cause)}
+          </Feedback>
+        )}</Show>
+        {referencesRetired() ? <Feedback tone="info">{t("settings.connection_references_retired")}</Feedback> : null}
+      </SettingsGroup>
+    </form>
   )
 }
