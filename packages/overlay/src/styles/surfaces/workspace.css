@@ -474,7 +474,7 @@ code .file-link:focus-visible {
   font-size: var(--ui-font-caption);
 }
 
-.file-editor-search-error {
+.file-editor-search-feedback {
   margin-inline-end: auto;
   color: var(--text);
 }

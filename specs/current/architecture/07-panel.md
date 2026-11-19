@@ -1230,8 +1230,10 @@ focus verifies the original file, load generation and API authority. The main
 conversation's window search shortcut is active only while that conversation
 surface is visible; Settings and other primary surfaces retire that shortcut.
 The shared editor's status area announces an invalid nonempty regular expression
-from CodeMirror's current open query. Editing or closing that query updates the
-feedback through the same editor instance.
+from CodeMirror's current open query. The next and previous commands also report
+when they find no match from the current position in their direction, using
+their existing matchers. A query change, document change, selection change, or
+panel closure retires the direction's result in the same editor.
 Explicit file links activated inside that Preview resolve relative paths from
 the current document's parent, using the existing server-path primitives and
 selectedFileTarget identity. Absolute paths keep their existing meaning. The

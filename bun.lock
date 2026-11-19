@@ -386,6 +386,7 @@
     "@astrojs/starlight@0.41.7": "patches/@astrojs%2Fstarlight@0.41.7.patch",
     "gitlab-ai-provider@6.20.1": "patches/gitlab-ai-provider@6.20.1.patch",
     "@codemirror/merge@6.12.2": "patches/@codemirror%2Fmerge@6.12.2.patch",
+    "@codemirror/search@6.7.1": "patches/@codemirror%2Fsearch@6.7.1.patch",
     "@univerjs/docs-ui@0.25.1": "patches/@univerjs%2Fdocs-ui@0.25.1.patch",
     "@univerjs/ui@0.25.1": "patches/@univerjs%2Fui@0.25.1.patch",
     "@univerjs/sheets-ui@0.25.1": "patches/@univerjs%2Fsheets-ui@0.25.1.patch",

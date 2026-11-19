@@ -1,0 +1,86 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index a6db11429e764f772d263aa0936efad8895cf3a4..d99096bebd56b21193484b533e68a44a9ca4eb0b 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -844,8 +844,10 @@ end.
+ const findNext = searchCommand((view, { query }) => {
+     let { to } = view.state.selection.main;
+     let next = query.nextMatch(view.state, to, to);
+-    if (!next)
++    if (!next) {
++        view.state.facet(searchConfigFacet).onNoMatch?.(view, "next");
+         return false;
++    }
+     let selection = state.EditorSelection.single(next.from, next.to);
+     let config = view.state.facet(searchConfigFacet);
+     view.dispatch({
+@@ -864,8 +866,10 @@ of the document to start searching at the end again.
+ const findPrevious = searchCommand((view, { query }) => {
+     let { state: state$1 } = view, { from } = state$1.selection.main;
+     let prev = query.prevMatch(state$1, from, from);
+-    if (!prev)
++    if (!prev) {
++        view.state.facet(searchConfigFacet).onNoMatch?.(view, "previous");
+         return false;
++    }
+     let selection = state.EditorSelection.single(prev.from, prev.to);
+     let config = view.state.facet(searchConfigFacet);
+     view.dispatch({
+diff --git a/dist/index.d.cts b/dist/index.d.cts
+index ffb693151c7f9b8e4ecc65875347902029303a7d..70a9c87a36e550d8dd7311bd1b4836c813daf94c 100644
+--- a/dist/index.d.cts
++++ b/dist/index.d.cts
+@@ -228,6 +228,10 @@ interface SearchConfig {
+     scroll effect.
+     */
+     scrollToMatch?: (range: SelectionRange, view: EditorView) => StateEffect<unknown>;
++    /**
++    Called when a directional search for a valid query completes without a match.
++    */
++    onNoMatch?: (view: EditorView, direction: "next" | "previous") => void;
+ }
+ /**
+ Add search state to the editor configuration, and optionally
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index ffb693151c7f9b8e4ecc65875347902029303a7d..70a9c87a36e550d8dd7311bd1b4836c813daf94c 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -228,6 +228,10 @@ interface SearchConfig {
+     scroll effect.
+     */
+     scrollToMatch?: (range: SelectionRange, view: EditorView) => StateEffect<unknown>;
++    /**
++    Called when a directional search for a valid query completes without a match.
++    */
++    onNoMatch?: (view: EditorView, direction: "next" | "previous") => void;
+ }
+ /**
+ Add search state to the editor configuration, and optionally
+diff --git a/dist/index.js b/dist/index.js
+index 29bc38236170b060b810870e81805934611a5f06..dd395010da4cc6ca85727997fef723a49af12c8a 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -842,8 +842,10 @@ end.
+ const findNext = /*@__PURE__*/searchCommand((view, { query }) => {
+     let { to } = view.state.selection.main;
+     let next = query.nextMatch(view.state, to, to);
+-    if (!next)
++    if (!next) {
++        view.state.facet(searchConfigFacet).onNoMatch?.(view, "next");
+         return false;
++    }
+     let selection = EditorSelection.single(next.from, next.to);
+     let config = view.state.facet(searchConfigFacet);
+     view.dispatch({
+@@ -862,8 +864,10 @@ of the document to start searching at the end again.
+ const findPrevious = /*@__PURE__*/searchCommand((view, { query }) => {
+     let { state } = view, { from } = state.selection.main;
+     let prev = query.prevMatch(state, from, from);
+-    if (!prev)
++    if (!prev) {
++        view.state.facet(searchConfigFacet).onNoMatch?.(view, "previous");
+         return false;
++    }
+     let selection = EditorSelection.single(prev.from, prev.to);
+     let config = view.state.facet(searchConfigFacet);
+     view.dispatch({

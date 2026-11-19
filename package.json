@@ -206,6 +206,7 @@
     "@univerjs/sheets-ui@0.25.1": "patches/@univerjs%2Fsheets-ui@0.25.1.patch",
     "@univerjs/docs-ui@0.25.1": "patches/@univerjs%2Fdocs-ui@0.25.1.patch",
     "chromium-bidi@14.0.0": "patches/chromium-bidi@14.0.0.patch",
-    "gitlab-ai-provider@6.20.1": "patches/gitlab-ai-provider@6.20.1.patch"
+    "gitlab-ai-provider@6.20.1": "patches/gitlab-ai-provider@6.20.1.patch",
+    "@codemirror/search@6.7.1": "patches/@codemirror%2Fsearch@6.7.1.patch"
   }
 }
