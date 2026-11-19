@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [全局搜索草稿请求的桌面验收](2026-11-19-palette-mission-draft-request/README.md)
 - [搜索保留专家团的桌面验收](2026-11-19-mission-squad-retained-result/README.md)
 - [已选专家团名称的桌面验收](2026-11-19-mission-squad-selection-names/README.md)
 - [首份多步任务草稿的桌面验收](2026-11-19-mission-first-draft-focus/README.md)

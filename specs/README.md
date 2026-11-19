@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [在全局搜索中预览多步任务草稿请求](records/2026-11/2026-11-19-palette-mission-draft-request.md)
 - [取消后从搜索范围外移除专家团](records/2026-11/2026-11-19-mission-squad-retained-result.md)
 - [新建多步任务显示已选专家团名称](records/2026-11/2026-11-19-mission-squad-selection-names.md)
 - [首份多步任务草稿保存后的焦点](records/2026-11/2026-11-19-mission-first-draft-focus.md)
