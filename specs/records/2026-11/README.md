@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [连接设置支持从输入框提交](2026-11-19-connection-keyboard-submit.md)
 - [网络监听参数以命令解析结果决定优先级](2026-11-19-cli-network-option-precedence.md)
 - [从真实监听器发布规范服务来源](2026-11-19-bound-listener-origin.md)
 - [SDK 按逻辑路由绑定项目目录](2026-11-19-sdk-logical-route-directory.md)
