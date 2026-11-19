@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同一服务地址验收](2026-11-19-equivalent-connection-endpoint/README.md)
 - [连接设置键盘提交证据](2026-11-19-connection-keyboard-submit/README.md)
 - [网络监听参数验收](2026-11-19-cli-network-option-precedence/README.md)
 - [监听器规范来源验收](2026-11-19-bound-listener-origin/README.md)

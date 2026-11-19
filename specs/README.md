@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [同一服务地址保留当前工作区](records/2026-11/2026-11-19-equivalent-connection-endpoint.md)
 - [连接设置支持从输入框提交](records/2026-11/2026-11-19-connection-keyboard-submit.md)
 - [网络监听参数以命令解析结果决定优先级](records/2026-11/2026-11-19-cli-network-option-precedence.md)
 - [从真实监听器发布规范服务来源](records/2026-11/2026-11-19-bound-listener-origin.md)
