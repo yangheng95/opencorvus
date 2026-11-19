@@ -1,8 +1,136 @@
 diff --git a/dist/index.cjs b/dist/index.cjs
-index a6db11429e764f772d263aa0936efad8895cf3a4..d99096bebd56b21193484b533e68a44a9ca4eb0b 100644
+index a6db11429e764f772d263aa0936efad8895cf3a4..f5c2bf44383fb07984009c7329d485f103048652 100644
 --- a/dist/index.cjs
 +++ b/dist/index.cjs
-@@ -844,8 +844,10 @@ end.
+@@ -182,8 +182,6 @@ class RegExpCursor {
+         }
+         else {
+             this.curLine = this.iter.value;
+-            if (this.curLineStart + this.curLine.length > this.to)
+-                this.curLine = this.curLine.slice(0, this.to - this.curLineStart);
+             this.iter.next();
+         }
+     }
+@@ -203,6 +201,10 @@ class RegExpCursor {
+             let match = this.matchPos <= this.to && this.re.exec(this.curLine);
+             if (match) {
+                 let from = this.curLineStart + match.index, to = from + match[0].length;
++                if (to > this.to) {
++                    this.done = true;
++                    return this;
++                }
+                 this.matchPos = toCharEnd(this.text, to + (from == to ? 1 : 0));
+                 if (from == this.curLineStart + this.curLine.length)
+                     this.nextLine();
+@@ -223,33 +225,15 @@ class RegExpCursor {
+         }
+     }
+ }
+-const flattened = new WeakMap();
+-// Reusable (partially) flattened document strings
+-class FlattenedDoc {
+-    constructor(from, text) {
+-        this.from = from;
+-        this.text = text;
+-    }
+-    get to() { return this.from + this.text.length; }
+-    static get(doc, from, to) {
+-        let cached = flattened.get(doc);
+-        if (!cached || cached.from >= to || cached.to <= from) {
+-            let flat = new FlattenedDoc(from, doc.sliceString(from, to));
+-            flattened.set(doc, flat);
+-            return flat;
+-        }
+-        if (cached.from == from && cached.to == to)
+-            return cached;
+-        let { text, from: cachedFrom } = cached;
+-        if (cachedFrom > from) {
+-            text = doc.sliceString(from, cachedFrom) + text;
+-            cachedFrom = from;
+-        }
+-        if (cached.to < to)
+-            text += doc.sliceString(cached.to, to);
+-        flattened.set(doc, new FlattenedDoc(cachedFrom, text));
+-        return new FlattenedDoc(from, text.slice(from - cachedFrom, to - cachedFrom));
++let regexpDocumentCache = new WeakMap();
++function regexpDocumentText(text) {
++    let source = regexpDocumentCache.get(text);
++    if (source === undefined) {
++        source = text.toString();
++        // Keep a weak entry only for the latest document to avoid retaining old drafts.
++        regexpDocumentCache = new WeakMap([[text, source]]);
+     }
++    return source;
+ }
+ class MultilineRegExpCursor {
+     constructor(text, query, options, from, to) {
+@@ -260,38 +244,30 @@ class MultilineRegExpCursor {
+         this.matchPos = toCharEnd(text, from);
+         this.re = new RegExp(query, baseFlags + ((options === null || options === void 0 ? void 0 : options.ignoreCase) ? "i" : ""));
+         this.test = options === null || options === void 0 ? void 0 : options.test;
+-        this.flat = FlattenedDoc.get(text, from, this.chunkEnd(from + 5000 /* Chunk.Base */));
+-    }
+-    chunkEnd(pos) {
+-        return pos >= this.to ? this.to : this.text.lineAt(pos).to;
++        this.source = regexpDocumentText(text);
+     }
+     next() {
+-        for (;;) {
+-            let off = this.re.lastIndex = this.matchPos - this.flat.from;
+-            let match = this.re.exec(this.flat.text);
+-            // Skip empty matches directly after the last match
+-            if (match && !match[0] && match.index == off) {
+-                this.re.lastIndex = off + 1;
+-                match = this.re.exec(this.flat.text);
+-            }
+-            if (match) {
+-                let from = this.flat.from + match.index, to = from + match[0].length;
+-                // If a match goes almost to the end of a noncomplete chunk, try
+-                // again, since it'll likely be able to match more
+-                if ((this.flat.to >= this.to || match.index + match[0].length <= this.flat.text.length - 10) &&
+-                    (!this.test || this.test(from, to, match))) {
+-                    this.value = { from, to, precise: true, match };
+-                    this.matchPos = toCharEnd(this.text, to + (from == to ? 1 : 0));
+-                    return this;
+-                }
++        while (this.matchPos <= this.to) {
++            let start = this.re.lastIndex = this.matchPos;
++            let match = this.re.exec(this.source);
++            // Skip empty matches directly after the last match.
++            if (match && !match[0] && match.index == start) {
++                this.re.lastIndex = toCharEnd(this.text, start + 1);
++                match = this.re.exec(this.source);
+             }
+-            if (this.flat.to == this.to) {
+-                this.done = true;
++            if (!match)
++                break;
++            let from = match.index, to = from + match[0].length;
++            if (to > this.to)
++                break;
++            this.matchPos = toCharEnd(this.text, to + (from == to ? 1 : 0));
++            if (!this.test || this.test(from, to, match)) {
++                this.value = { from, to, precise: true, match };
+                 return this;
+             }
+-            // Grow the flattened doc
+-            this.flat = FlattenedDoc.get(this.text, this.flat.from, this.chunkEnd(this.flat.from + this.flat.text.length * 2));
+         }
++        this.done = true;
++        return this;
+     }
+ }
+ if (typeof Symbol != "undefined") {
+@@ -711,7 +687,7 @@ class RegExpQuery extends QueryType {
+         return cursor.done ? null : cursor.value;
+     }
+     prevMatchInRange(state, from, to) {
+-        for (let size = 1;; size++) {
++        for (let size = 1;; size *= 2) {
+             let start = Math.max(from, to - size * 10000 /* FindPrev.ChunkSize */);
+             let cursor = regexpCursor(this.spec, state, start, to), range = null;
+             while (!cursor.next().done)
+@@ -844,8 +820,10 @@ end.
  const findNext = searchCommand((view, { query }) => {
      let { to } = view.state.selection.main;
      let next = query.nextMatch(view.state, to, to);
@@ -14,7 +142,7 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..d99096bebd56b21193484b533e68a44a
      let selection = state.EditorSelection.single(next.from, next.to);
      let config = view.state.facet(searchConfigFacet);
      view.dispatch({
-@@ -864,8 +866,10 @@ of the document to start searching at the end again.
+@@ -864,8 +842,10 @@ of the document to start searching at the end again.
  const findPrevious = searchCommand((view, { query }) => {
      let { state: state$1 } = view, { from } = state$1.selection.main;
      let prev = query.prevMatch(state$1, from, from);
@@ -57,10 +185,138 @@ index ffb693151c7f9b8e4ecc65875347902029303a7d..70a9c87a36e550d8dd7311bd1b4836c8
  /**
  Add search state to the editor configuration, and optionally
 diff --git a/dist/index.js b/dist/index.js
-index 29bc38236170b060b810870e81805934611a5f06..dd395010da4cc6ca85727997fef723a49af12c8a 100644
+index 29bc38236170b060b810870e81805934611a5f06..fce03f2944708a96fc1b0f3f65942e8ab9c1ad42 100644
 --- a/dist/index.js
 +++ b/dist/index.js
-@@ -842,8 +842,10 @@ end.
+@@ -180,8 +180,6 @@ class RegExpCursor {
+         }
+         else {
+             this.curLine = this.iter.value;
+-            if (this.curLineStart + this.curLine.length > this.to)
+-                this.curLine = this.curLine.slice(0, this.to - this.curLineStart);
+             this.iter.next();
+         }
+     }
+@@ -201,6 +199,10 @@ class RegExpCursor {
+             let match = this.matchPos <= this.to && this.re.exec(this.curLine);
+             if (match) {
+                 let from = this.curLineStart + match.index, to = from + match[0].length;
++                if (to > this.to) {
++                    this.done = true;
++                    return this;
++                }
+                 this.matchPos = toCharEnd(this.text, to + (from == to ? 1 : 0));
+                 if (from == this.curLineStart + this.curLine.length)
+                     this.nextLine();
+@@ -221,33 +223,15 @@ class RegExpCursor {
+         }
+     }
+ }
+-const flattened = /*@__PURE__*/new WeakMap();
+-// Reusable (partially) flattened document strings
+-class FlattenedDoc {
+-    constructor(from, text) {
+-        this.from = from;
+-        this.text = text;
+-    }
+-    get to() { return this.from + this.text.length; }
+-    static get(doc, from, to) {
+-        let cached = flattened.get(doc);
+-        if (!cached || cached.from >= to || cached.to <= from) {
+-            let flat = new FlattenedDoc(from, doc.sliceString(from, to));
+-            flattened.set(doc, flat);
+-            return flat;
+-        }
+-        if (cached.from == from && cached.to == to)
+-            return cached;
+-        let { text, from: cachedFrom } = cached;
+-        if (cachedFrom > from) {
+-            text = doc.sliceString(from, cachedFrom) + text;
+-            cachedFrom = from;
+-        }
+-        if (cached.to < to)
+-            text += doc.sliceString(cached.to, to);
+-        flattened.set(doc, new FlattenedDoc(cachedFrom, text));
+-        return new FlattenedDoc(from, text.slice(from - cachedFrom, to - cachedFrom));
++let regexpDocumentCache = new WeakMap();
++function regexpDocumentText(text) {
++    let source = regexpDocumentCache.get(text);
++    if (source === undefined) {
++        source = text.toString();
++        // Keep a weak entry only for the latest document to avoid retaining old drafts.
++        regexpDocumentCache = new WeakMap([[text, source]]);
+     }
++    return source;
+ }
+ class MultilineRegExpCursor {
+     constructor(text, query, options, from, to) {
+@@ -258,38 +242,30 @@ class MultilineRegExpCursor {
+         this.matchPos = toCharEnd(text, from);
+         this.re = new RegExp(query, baseFlags + ((options === null || options === void 0 ? void 0 : options.ignoreCase) ? "i" : ""));
+         this.test = options === null || options === void 0 ? void 0 : options.test;
+-        this.flat = FlattenedDoc.get(text, from, this.chunkEnd(from + 5000 /* Chunk.Base */));
+-    }
+-    chunkEnd(pos) {
+-        return pos >= this.to ? this.to : this.text.lineAt(pos).to;
++        this.source = regexpDocumentText(text);
+     }
+     next() {
+-        for (;;) {
+-            let off = this.re.lastIndex = this.matchPos - this.flat.from;
+-            let match = this.re.exec(this.flat.text);
+-            // Skip empty matches directly after the last match
+-            if (match && !match[0] && match.index == off) {
+-                this.re.lastIndex = off + 1;
+-                match = this.re.exec(this.flat.text);
+-            }
+-            if (match) {
+-                let from = this.flat.from + match.index, to = from + match[0].length;
+-                // If a match goes almost to the end of a noncomplete chunk, try
+-                // again, since it'll likely be able to match more
+-                if ((this.flat.to >= this.to || match.index + match[0].length <= this.flat.text.length - 10) &&
+-                    (!this.test || this.test(from, to, match))) {
+-                    this.value = { from, to, precise: true, match };
+-                    this.matchPos = toCharEnd(this.text, to + (from == to ? 1 : 0));
+-                    return this;
+-                }
++        while (this.matchPos <= this.to) {
++            let start = this.re.lastIndex = this.matchPos;
++            let match = this.re.exec(this.source);
++            // Skip empty matches directly after the last match.
++            if (match && !match[0] && match.index == start) {
++                this.re.lastIndex = toCharEnd(this.text, start + 1);
++                match = this.re.exec(this.source);
+             }
+-            if (this.flat.to == this.to) {
+-                this.done = true;
++            if (!match)
++                break;
++            let from = match.index, to = from + match[0].length;
++            if (to > this.to)
++                break;
++            this.matchPos = toCharEnd(this.text, to + (from == to ? 1 : 0));
++            if (!this.test || this.test(from, to, match)) {
++                this.value = { from, to, precise: true, match };
+                 return this;
+             }
+-            // Grow the flattened doc
+-            this.flat = FlattenedDoc.get(this.text, this.flat.from, this.chunkEnd(this.flat.from + this.flat.text.length * 2));
+         }
++        this.done = true;
++        return this;
+     }
+ }
+ if (typeof Symbol != "undefined") {
+@@ -709,7 +685,7 @@ class RegExpQuery extends QueryType {
+         return cursor.done ? null : cursor.value;
+     }
+     prevMatchInRange(state, from, to) {
+-        for (let size = 1;; size++) {
++        for (let size = 1;; size *= 2) {
+             let start = Math.max(from, to - size * 10000 /* FindPrev.ChunkSize */);
+             let cursor = regexpCursor(this.spec, state, start, to), range = null;
+             while (!cursor.next().done)
+@@ -842,8 +818,10 @@ end.
  const findNext = /*@__PURE__*/searchCommand((view, { query }) => {
      let { to } = view.state.selection.main;
      let next = query.nextMatch(view.state, to, to);
@@ -72,7 +328,7 @@ index 29bc38236170b060b810870e81805934611a5f06..dd395010da4cc6ca85727997fef723a4
      let selection = EditorSelection.single(next.from, next.to);
      let config = view.state.facet(searchConfigFacet);
      view.dispatch({
-@@ -862,8 +864,10 @@ of the document to start searching at the end again.
+@@ -862,8 +840,10 @@ of the document to start searching at the end again.
  const findPrevious = /*@__PURE__*/searchCommand((view, { query }) => {
      let { state } = view, { from } = state.selection.main;
      let prev = query.prevMatch(state, from, from);

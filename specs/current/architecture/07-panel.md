@@ -1234,6 +1234,9 @@ from CodeMirror's current open query. The next and previous commands also report
 when they find no match from the current position in their direction, using
 their existing matchers. A query change, document change, selection change, or
 panel closure retires the direction's result in the same editor.
+Regular expression anchors and lookarounds see the original line or document
+text. Directional and viewport bounds filter eligible match ranges while
+retaining the surrounding source text for the expression.
 Explicit file links activated inside that Preview resolve relative paths from
 the current document's parent, using the existing server-path primitives and
 selectedFileTarget identity. Absolute paths keep their existing meaning. The
