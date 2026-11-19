@@ -85,6 +85,11 @@ export function normalizeProjectFilePath(path: string, directory: string): strin
   return [...Array(baseSegments.length - common).fill(".."), ...fullSegments.slice(common)].join("/")
 }
 
+/** Decode Markdown file destinations once, preserving bare percent signs in filenames. */
+export function decodeMarkdownFilePath(path: string): string {
+  return decodeURIComponent(path.replace(/%(?![0-9a-f]{2})/gi, "%25"))
+}
+
 /** Explicit document resources use the document's parent under the server's syntax. */
 export function resolveDocumentFilePath(
   reference: string,

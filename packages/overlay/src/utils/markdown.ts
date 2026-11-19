@@ -28,6 +28,7 @@ import {
 import { iconHtml } from "./icon-html"
 import { imagePreviewTriggerHtmlAttributes } from "./image-preview-trigger"
 import { localeTag, t } from "./i18n"
+import { decodeMarkdownFilePath } from "./server-path"
 
 export const MARKDOWN_RENDER_CHAR_LIMIT = 120_000
 export const CODE_BLOCK_RENDER_CHAR_LIMIT = 120_000
@@ -319,7 +320,7 @@ function markdownProjectFileReference(raw: string): FileReference | null {
   if (/[?#]/.test(value)) return null
   let decoded: string
   try {
-    decoded = decodeURIComponent(value)
+    decoded = decodeMarkdownFilePath(value)
   } catch {
     return null
   }

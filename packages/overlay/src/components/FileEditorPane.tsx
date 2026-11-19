@@ -15,7 +15,13 @@ import { downloadBlob } from "../services/file-download"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
-import { isAbsoluteServerPath, normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath } from "../utils/server-path"
+import {
+  decodeMarkdownFilePath,
+  isAbsoluteServerPath,
+  normalizeProjectFilePath,
+  pathWithForwardSeparators,
+  resolveDocumentFilePath,
+} from "../utils/server-path"
 import { currentConversationFileChangeSource } from "../utils/file-change-summary"
 import { toolFileChangesFromState } from "../utils/tool-file-changes"
 import { relativePathFrom } from "../utils/tool"
@@ -230,7 +236,7 @@ export function FileEditorPane() {
     const { target: document, readerAuthority } = loaded
     return {
       read: async (reference, signal) => {
-        const path = resolveDocumentFilePath(decodeURIComponent(reference), document)
+        const path = resolveDocumentFilePath(decodeMarkdownFilePath(reference), document)
         const image = await readFileContent({
           directory: document.directory,
           path,

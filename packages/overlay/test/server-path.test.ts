@@ -1,5 +1,12 @@
 import { expect, test } from "bun:test"
-import { classifyProjectPathInput, normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath, serverFileUrlPath } from "../src/utils/server-path"
+import {
+  classifyProjectPathInput,
+  decodeMarkdownFilePath,
+  normalizeProjectFilePath,
+  pathWithForwardSeparators,
+  resolveDocumentFilePath,
+  serverFileUrlPath,
+} from "../src/utils/server-path"
 import { projectDirectoryKey } from "../src/utils/project-directory"
 
 test.each([
@@ -19,6 +26,20 @@ test.each([
   ["file:///repo/file.txt", "C:/Repo"],
 ])("invalid server file URL %s for %s has an explicit type error", (url, directory) => {
   expect(() => serverFileUrlPath(url, directory)).toThrow(TypeError)
+})
+
+test.each([
+  ["./chart-100%.png", "./chart-100%.png"],
+  ["./word%20notes-100%.md", "./word notes-100%.md"],
+  ["./图%20标%20%23100%25.png", "./图 标 #100%.png"],
+  ["./保留%20%2523.md", "./保留 %23.md"],
+  ["../%E8%B5%84%E6%96%99%26%2B.md", "../资料&+.md"],
+])("decodes Markdown file destination %s as exact path %s", (reference, expected) => {
+  expect(decodeMarkdownFilePath(reference)).toBe(expected)
+})
+
+test("malformed UTF-8 escape bytes in a Markdown file destination raise a URIError", () => {
+  expect(() => decodeMarkdownFilePath("./%E0%A4.md")).toThrow(URIError)
 })
 
 test.each([

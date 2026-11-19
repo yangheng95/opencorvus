@@ -471,6 +471,8 @@ separate explicit identities. This is one shared renderer rule, not path admissi
 After URL/resource classification, local Markdown file destinations and document-relative
 image paths decode URI components exactly once. Encoded filename characters such as
 `%23`, `%26` and `%2B` become literal `#`, `&` and `+`; `%2523` retains a literal `%23`.
+The shared local-path decoder also retains a percent sign that does not start a
+two-digit hexadecimal escape, as in `chart-100%.png`. Encoded bytes require valid UTF-8.
 Authored line/range suffixes are parsed before decoding the filename, and the file API
 continues to receive the exact filesystem path without additional URI decoding.
 
