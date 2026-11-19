@@ -58,6 +58,7 @@ export interface MissionManualCreateRequest extends MissionCreateRequest {
 
 export interface MissionCreateDialogProps {
   open: boolean
+  returnFocusTarget: () => HTMLElement | null
   projectDirectories: readonly string[]
   defaultProjectDirectory: string
   onInstallMoreExpertSquads?: (projectDirectory: string) => void
@@ -566,6 +567,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     <Dialog
       id="missionCreateDialog"
       open={props.open}
+      returnFocusTarget={props.returnFocusTarget}
       class="mission-create-dialog"
       wide
       backdropClose={!submitting()}

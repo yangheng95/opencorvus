@@ -1942,6 +1942,9 @@ that exact session through the existing Mission selection. A pending, failed,
 or filtered active list does not control the action. Navigation reads the
 current persisted record, including its archive state. Search/project values
 stay unchanged.
+After saving from the empty state's Create Mission button, the closing dialog
+returns focus to Open Mission on that accepted receipt. Other closes return
+focus to the original enabled and visible opener.
 Retired API authority invalidates the acknowledgement, and explicit dismissal
 removes it and focuses the existing Create Mission button when it is mounted,
 visible and enabled. Automatic retirement does not initiate focus.

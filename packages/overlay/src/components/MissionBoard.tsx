@@ -354,6 +354,8 @@ export function MissionBoard(props: MissionBoardProps) {
   const [editingDraft, setEditingDraft] = createSignal<MissionDraftEditTarget | null>(null)
   let titleHeading: HTMLHeadingElement | undefined
   let createButton: HTMLButtonElement | undefined
+  let openSavedDraftButton: HTMLButtonElement | undefined
+  let createReturnFocus: (() => HTMLButtonElement | null) | undefined
   let searchInput: HTMLInputElement | undefined
   let lanesElement: HTMLDivElement | undefined
   const laneHeadings: Partial<Record<MissionBoardLane, HTMLHeadingElement>> = {}
@@ -442,6 +444,11 @@ export function MissionBoard(props: MissionBoardProps) {
   const laneMissions = (lane: MissionBoardLane) => visibleMissions().filter((mission) => mission.boardLane === lane)
   const readBusy = () => missionBoardStore.loading || retryingRead()
   const showReadIssue = () => retryingRead() || Boolean(missionBoardStore.error) || (!appStore.connected && !readBusy())
+
+  function openCreateDialog(trigger: HTMLButtonElement): void {
+    createReturnFocus = () => trigger
+    setCreateOpen(true)
+  }
 
   function refreshRead(): void {
     if (!readBusy()) void reloadMissionBoard()
@@ -534,7 +541,7 @@ export function MissionBoard(props: MissionBoardProps) {
           data-ui="mission-board-create"
           ref={createButton}
           disabled={Boolean(pendingAction())}
-          onClick={() => setCreateOpen(true)}
+          onClick={(event) => openCreateDialog(event.currentTarget)}
         >
           <Icon name="plus" size="compact" />
           {t("mission_board.create.action")}
@@ -628,6 +635,7 @@ export function MissionBoard(props: MissionBoardProps) {
                 variant="outline"
                 size="sm"
                 tone="neutral"
+                ref={openSavedDraftButton}
                 disabled={Boolean(pendingAction())}
                 onClick={() => {
                   const mission = currentSavedDraftReceipt()
@@ -721,7 +729,7 @@ export function MissionBoard(props: MissionBoardProps) {
                       variant="solid"
                       size="md"
                       tone="neutral"
-                      onClick={() => setCreateOpen(true)}
+                      onClick={(event) => openCreateDialog(event.currentTarget)}
                     >
                       <Icon name="plus" size="compact" />
                       {t("mission_board.create.action")}
@@ -831,6 +839,7 @@ export function MissionBoard(props: MissionBoardProps) {
       />
       <MissionCreateDialog
         open={createOpen()}
+        returnFocusTarget={() => createReturnFocus?.() ?? null}
         projectDirectories={props.projectDirectories}
         defaultProjectDirectory={projectDirectory() || props.defaultProjectDirectory}
         onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
@@ -840,11 +849,16 @@ export function MissionBoard(props: MissionBoardProps) {
         canOpenMarketWebPage={props.canOpenMarketWebPage}
         onClose={() => setCreateOpen(false)}
         onCreateManual={async (input) => {
+          const returnFocus = createReturnFocus
           const authority = captureApiAuthority()
           const created = await props.onCreateManual(input)
           assertApiAuthorityCurrent(authority)
           const { sessionID, directory, productPillar } = created
-          setSavedDraftReceipt({ sessionID, directory, productPillar, authority })
+          const receipt = { sessionID, directory, productPillar, authority }
+          setSavedDraftReceipt(receipt)
+          if (returnFocus && createReturnFocus === returnFocus && returnFocus() !== createButton) {
+            createReturnFocus = () => currentSavedDraftReceipt() === receipt ? openSavedDraftButton ?? null : null
+          }
         }}
         onCreateWithAI={props.onCreateWithAI}
       />
