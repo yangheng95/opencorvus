@@ -1,0 +1,43 @@
+[
+  {
+    "command": "list",
+    "search": "North warehouse box count",
+    "exit": 0,
+    "rows": [
+      {
+        "kind": "mission",
+        "missionID": "draft-8b73337794f14b026c76e7669844f856",
+        "sessionID": "ses_hTCK1O4BGhoJ96iZKcYl",
+        "title": "Quarterly Review",
+        "pendingPromptText": "North warehouse box count. Prepare a cross-check for the peer warehouse.",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\peer-request-search",
+        "archived": null
+      },
+      {
+        "kind": "mission",
+        "missionID": "draft-6382bf1ace76b70a71b479f216cbf293",
+        "sessionID": "ses_hU8zTsjHK2QVcgNgK2iU",
+        "title": "Quarterly Review",
+        "pendingPromptText": "North warehouse box count. 核对包装50%_\\验收，再汇总入库差异。",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+        "archived": null
+      }
+    ]
+  },
+  {
+    "command": "archive",
+    "search": "Archive copper delivery",
+    "exit": 0,
+    "rows": [
+      {
+        "kind": "mission",
+        "missionID": "draft-015db411752fbcfe9951b7fffb4c44a1",
+        "sessionID": "ses_hfkZJJTxzk9GRwLRrHt4",
+        "title": "Historical Review",
+        "pendingPromptText": "Archive copper delivery. Review the old shipment receipt before quarterly reporting.",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+        "archived": 1795077144059
+      }
+    ]
+  }
+]

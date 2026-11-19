@@ -20,7 +20,7 @@ export const LedgerCommand = cmd({
 
 const listOptions = <T>(yargs: Argv<T>) =>
   withAttachOptions(yargs)
-    .option("search", { type: "string", describe: "filter rows by title" })
+    .option("search", { type: "string", describe: "search titles, project context, identifiers, kinds, and Mission draft requests" })
     .option("limit", { type: "number", describe: "maximum rows to return (1-200)" })
     .option("cursor-updated", { type: "number", describe: "nextCursor.updated from the preceding page" })
     .option("cursor-pinned", { type: "boolean", describe: "nextCursor.pinned from the preceding page" })

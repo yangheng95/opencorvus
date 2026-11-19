@@ -108,7 +108,14 @@ function rowCommandHint(row: PaletteLedgerRow): string {
 }
 
 function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string): boolean {
-  return matchesSearchParts(query, [row.title, row.id, row.directory, row.kind, workLedgerProject(row.directory)?.title])
+  return matchesSearchParts(query, [
+    row.title,
+    row.id,
+    row.directory,
+    row.kind,
+    workLedgerProject(row.directory)?.title,
+    row.kind === "mission" ? row.pendingPromptText : undefined,
+  ])
 }
 
 export function CommandPalette(props: {

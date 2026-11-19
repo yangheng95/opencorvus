@@ -6297,6 +6297,11 @@ Nonempty queries include matching Project names, IDs and directories, use bounde
 pages with explicit continuation, and flatten only the
 canonical Mission child Tasks. Search covers original titles, IDs, directories
 and technical kinds, including each conversation's canonical Chat/Work experience.
+Active and archived searches also match a Mission's current saved draft request
+as a literal substring before applying the existing pagination. The command
+palette uses the same draft text when deciding whether the Mission itself belongs
+in the results. Matching a draft request retains the Mission's normal Project
+scope, archive visibility, and selection identity.
 Surrounding whitespace preserves the current effective query, accepted results,
 cursor and diagnostics. The input keeps the operator's text.
 The global search Dialog owns closing; Tab can move from the query to its

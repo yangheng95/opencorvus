@@ -241,6 +241,7 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
   const search = searchPattern(input.search)
   const limit = input.limit + 1
   const archivedOnly = input.archivedOnly === true
+  const missionRequestPath = "$.mission.pendingPrompt.text"
   const sessionProjectNameMatches = sql`EXISTS (
     SELECT 1
     FROM ${ProjectTable}
@@ -356,6 +357,10 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
             OR ${SessionTable.title} LIKE ${search ?? null} ESCAPE '\\'
             OR ${SessionTable.directory} LIKE ${search ?? null} ESCAPE '\\'
             OR json_extract(${SessionTable.metadata}, '$.mission.id') LIKE ${search ?? null} ESCAPE '\\'
+            OR (
+              json_type(${SessionTable.metadata}, ${missionRequestPath}) = 'text'
+              AND json_extract(${SessionTable.metadata}, ${missionRequestPath}) LIKE ${search ?? null} ESCAPE '\\'
+            )
             OR ${sessionProjectNameMatches}
             OR EXISTS (
               SELECT 1
