@@ -340,6 +340,11 @@ their exact existing contracts across retry and restart.
 
 多工作区的代理 / SSE 透传不再需要单独一层 server，统一由 `src/server/` 承载路由。
 
+SDK 工厂的默认项目目录通过生成 transport 的请求拦截器统一传入普通 HTTP 与 SSE。
+目录策略以生成端点的逻辑路由和实际方法读取 transport-protocol 唯一定义，部署前缀不参与分类。
+每请求 baseUrl/fetch 选择保留同一目录语义，明确 query directory 保留其真实选择；
+全局路由与混合路由的全局成员沿用共享策略，服务端目录校验继续是数据完整性边界。
+
 ## Project runtime residency
 
 注册过的 Project 是持久历史，不等于常驻进程 Runtime。`project/instance.ts` 是 Plugin、

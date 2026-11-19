@@ -1,0 +1,35 @@
+{
+  "projectID": "prj_hL2Dkq80QPGkWV8cr3F5",
+  "sessionProjectID": "prj_hL2Dkq80QPGkWV8cr3F5",
+  "changedPrefixProjectID": "prj_hL2Dkq80QPGkWV8cr3F5",
+  "original": {
+    "status": 200,
+    "bytes": 49,
+    "exactBytes": true,
+    "uri": "http://127.0.0.1:40180/global/opencorvus/attachment/prj_hL2Dkq80QPGkWV8cr3F5/7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf.txt"
+  },
+  "download": {
+    "filename": "project-scope.txt",
+    "bytes": 49,
+    "exactBytes": true
+  },
+  "reply": {
+    "inputMessageID": "msg_956d25ee471a4a5b826ada9d91d3b1ba",
+    "replyMessageID": "msg_g0VbNV2Gq00CjsiNTLxD",
+    "finish": "stop"
+  },
+  "requests": [
+    {
+      "url": "http://127.0.0.1:40180/global/opencorvus/attachment/prj_hL2Dkq80QPGkWV8cr3F5/7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf.txt",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:40180/global/opencorvus/session/ses_hSyzKVKHvc54PHnXXstj/message?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "method": "GET"
+    },
+    {
+      "url": "http://127.0.0.1:40180/api/opencorvus/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "method": "GET"
+    }
+  ]
+}

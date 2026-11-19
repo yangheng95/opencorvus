@@ -1,0 +1,219 @@
+{
+  "directA": {
+    "id": "prj_hoe1poWCQL51tZ2xObym",
+    "worktree": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\candidate\\sdk-prefix-review",
+    "time": {
+      "created": 1795051384706,
+      "updated": 1795051384706
+    },
+    "sandboxes": []
+  },
+  "directB": {
+    "id": "prj_hL2Dkq80QPGkWV8cr3F5",
+    "worktree": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\candidate\\chosen-project",
+    "time": {
+      "created": 1795051385599,
+      "updated": 1795051385599
+    },
+    "sandboxes": []
+  },
+  "variants": [
+    {
+      "prefix": "/api/opencorvus",
+      "expectedProject": "prj_hL2Dkq80QPGkWV8cr3F5",
+      "project": {
+        "id": "prj_hL2Dkq80QPGkWV8cr3F5",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\candidate\\chosen-project",
+        "time": {
+          "created": 1795051385599,
+          "updated": 1795051385599
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "prefix": "/global/opencorvus",
+      "expectedProject": "prj_hL2Dkq80QPGkWV8cr3F5",
+      "project": {
+        "id": "prj_hL2Dkq80QPGkWV8cr3F5",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\candidate\\chosen-project",
+        "time": {
+          "created": 1795051385599,
+          "updated": 1795051385599
+        },
+        "sandboxes": []
+      }
+    }
+  ],
+  "upload": {
+    "attachment": {
+      "sha": "7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf",
+      "url": "/attachment/prj_hL2Dkq80QPGkWV8cr3F5/7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf.txt",
+      "mime": "text/plain",
+      "size": 49,
+      "filename": "project-scope.txt"
+    }
+  },
+  "creation": {
+    "session": {
+      "id": "ses_hSyzKVKHvc54PHnXXstj",
+      "slug": "cosmic-orchid",
+      "version": "local",
+      "projectID": "prj_hL2Dkq80QPGkWV8cr3F5",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\candidate\\chosen-project",
+      "title": "Chat",
+      "kind": "assistant",
+      "metadata": {
+        "projectConversationCreation": {
+          "version": 1,
+          "requestID": "029713c5-5a67-484b-bbca-a470210ad1a2",
+          "model": "acp-review/local"
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "model": "acp-review/local"
+        }
+      },
+      "time": {
+        "created": 1795051470246,
+        "updated": 1795051470246
+      }
+    }
+  },
+  "uiVia": "prefixed-sdk",
+  "overrides": [
+    {
+      "kind": "request-base-url",
+      "projectID": "prj_hL2Dkq80QPGkWV8cr3F5"
+    },
+    {
+      "kind": "request-fetch",
+      "projectID": "prj_hL2Dkq80QPGkWV8cr3F5"
+    },
+    {
+      "kind": "explicit-directory",
+      "projectID": "prj_hoe1poWCQL51tZ2xObym"
+    }
+  ],
+  "streamEvents": [
+    {
+      "custom": false,
+      "event": {
+        "type": "server.connected",
+        "properties": {}
+      }
+    },
+    {
+      "custom": true,
+      "event": {
+        "type": "server.connected",
+        "properties": {}
+      }
+    }
+  ],
+  "attachment": {
+    "sha": "7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf",
+    "url": "/attachment/prj_hL2Dkq80QPGkWV8cr3F5/7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf.txt",
+    "mime": "text/plain",
+    "size": 49,
+    "filename": "project-scope.txt"
+  },
+  "session": {
+    "id": "ses_hSyzKVKHvc54PHnXXstj",
+    "slug": "cosmic-orchid",
+    "version": "local",
+    "projectID": "prj_hL2Dkq80QPGkWV8cr3F5",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\candidate\\chosen-project",
+    "title": "Chat",
+    "kind": "assistant",
+    "metadata": {
+      "projectConversationCreation": {
+        "version": 1,
+        "requestID": "029713c5-5a67-484b-bbca-a470210ad1a2",
+        "model": "acp-review/local"
+      },
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "acp-review/local"
+      }
+    },
+    "time": {
+      "created": 1795051470246,
+      "updated": 1795051470246
+    }
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/api/opencorvus/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/api/opencorvus/global/health",
+      "target": "http://127.0.0.1:40174/global/health"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/global/health",
+      "target": "http://127.0.0.1:40174/global/health"
+    },
+    {
+      "method": "POST",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/attachment?filename=project-scope.txt&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/attachment?filename=project-scope.txt&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "POST",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/coding/chat/session?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/coding/chat/session?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Csdk-prefix-review",
+      "target": "http://127.0.0.1:40174/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Csdk-prefix-review"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/event?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/event?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/event?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/event?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "PATCH",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/session/ses_hSyzKVKHvc54PHnXXstj?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/session/ses_hSyzKVKHvc54PHnXXstj?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    },
+    {
+      "method": "POST",
+      "incoming": "http://127.0.0.1:40180/global/opencorvus/session/ses_hSyzKVKHvc54PHnXXstj/message?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project",
+      "target": "http://127.0.0.1:40174/session/ses_hSyzKVKHvc54PHnXXstj/message?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project"
+    }
+  ],
+  "target": "http://127.0.0.1:40174/ui/?sessionID=ses_hSyzKVKHvc54PHnXXstj&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Ccandidate%5Cchosen-project&experience=chat"
+}

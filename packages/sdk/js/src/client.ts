@@ -33,19 +33,12 @@ function headerBag(headers: Config["headers"]) {
   return new Headers(headers as HeadersInit | undefined)
 }
 
-function withDirectoryQuery(request: Request, directory: string) {
+function withDirectoryQuery(request: Request, directory: string, route: string) {
   const url = new URL(request.url)
-  if (!routeRequiresProjectDirectory(url.pathname, request.method)) return request
+  if (!routeRequiresProjectDirectory(route, request.method)) return request
   if (url.searchParams.has("directory")) return request
   url.searchParams.set("directory", directory)
   return new Request(url, request)
-}
-
-function directoryScopedFetch(fetcher: typeof fetch, directory: string): typeof fetch {
-  return ((input: RequestInfo | URL, init?: RequestInit) => {
-    const request = input instanceof Request ? input : new Request(input, init)
-    return fetcher(withDirectoryQuery(request, directory))
-  }) as typeof fetch
 }
 
 export function createOpenCorvusClient(input?: OpenCorvusClientConfig) {
@@ -61,7 +54,7 @@ export function createOpenCorvusClient(input?: OpenCorvusClientConfig) {
     }) as typeof fetch)
   config = {
     ...config,
-    fetch: directory ? directoryScopedFetch(fetcher, directory) : fetcher,
+    fetch: fetcher,
   }
 
   if (password) {
@@ -76,5 +69,8 @@ export function createOpenCorvusClient(input?: OpenCorvusClientConfig) {
   }
 
   const client = createClient(config)
+  if (directory) {
+    client.interceptors.request.use((request, options) => withDirectoryQuery(request, directory, options.url))
+  }
   return new OpenCorvusClient({ client })
 }
