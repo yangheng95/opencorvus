@@ -1,5 +1,6 @@
 import { Log } from "@/util/log"
 import { Bonjour } from "bonjour-service"
+import { DEFAULT_MDNS_DOMAIN } from "./defaults"
 
 const log = Log.create({ service: "mdns" })
 
@@ -75,7 +76,7 @@ export function createMDNSPublisher(
     if (publication?.port === port && publication.healthy) return true
     if (publication && !unpublish()) return false
 
-    const host = domain ?? "opencorvus.local"
+    const host = domain ?? DEFAULT_MDNS_DOMAIN
     const name = `opencorvus-${port}`
     let backend: MDNSBackend | undefined
     try {

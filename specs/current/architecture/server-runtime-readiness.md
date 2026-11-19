@@ -42,6 +42,13 @@ predecessor captures its listener's origin before quiescence and verifies that
 the successor reports that same origin alongside the exact request and process
 identities. Bind host and port still identify the physical listening endpoint.
 
+Serve and ACP resolve network settings from the parsed command options, then
+the configured server values, then shared defaults. CLI help describes the
+defaults without assigning them during parsing. The resolver preserves explicit
+false and zero, and combines configured CORS origins with those supplied on
+the command line. Restart bind ownership still supplies the original endpoint
+to the successor.
+
 ## Project authority for authoring
 
 The single `project-route-context` policy selects exact Project identity for

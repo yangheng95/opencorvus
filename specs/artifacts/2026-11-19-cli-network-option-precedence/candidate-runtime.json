@@ -1,0 +1,68 @@
+{
+  "configured": {
+    "hostname": "127.0.0.1",
+    "port": 40196
+  },
+  "requested": {
+    "hostname": "::1",
+    "port": 40200
+  },
+  "startup": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-network-candidate",
+    "outcome": "listening",
+    "url": "http://[::1]:40200",
+    "pid": 32672
+  },
+  "published": {
+    "status": 200,
+    "body": {
+      "healthy": true,
+      "version": "local",
+      "paths": {
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b332\\opencorvus-zed-candidate\\data\\opencorvus.db",
+        "data": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b332\\opencorvus-zed-candidate\\data",
+        "home": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261119-b332\\opencorvus-zed-candidate"
+      }
+    }
+  },
+  "directHealth": {
+    "status": 200
+  },
+  "diagnosticBase": "http://[::1]:40200",
+  "session": {
+    "id": "ses_h2INBfheN0cypaM0ZEbm",
+    "slug": "tidy-wizard",
+    "version": "local",
+    "projectID": "prj_hjKPUWjLPvVyX0CaSZLM",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b332\\candidate\\network-options-review",
+    "title": "Chat",
+    "kind": "assistant",
+    "metadata": {
+      "projectConversationCreation": {
+        "version": 1,
+        "requestID": "33a3c8bd-2c5a-47a9-ba7e-248d35c959f0",
+        "model": "acp-review/local"
+      },
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "acp-review/local"
+      }
+    },
+    "time": {
+      "created": 1795053578367,
+      "updated": 1795053578367
+    }
+  },
+  "attachment": {
+    "sha": "050accc87d6163f193d24f0c59161288d4760764c41770a0c0e3721f11711fca",
+    "url": "/attachment/prj_hjKPUWjLPvVyX0CaSZLM/050accc87d6163f193d24f0c59161288d4760764c41770a0c0e3721f11711fca.txt",
+    "mime": "text/plain",
+    "size": 27,
+    "filename": "network-option-facts.txt"
+  },
+  "target": "http://[::1]:40200/ui/?sessionID=ses_h2INBfheN0cypaM0ZEbm&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b332%5Ccandidate%5Cnetwork-options-review&experience=chat"
+}

@@ -1,26 +1,27 @@
 import type { Argv, InferredOptionTypes } from "yargs"
 import { Config } from "../config/config"
+import { DEFAULT_MDNS_DOMAIN, DEFAULT_SERVER_HOST, DEFAULT_SERVER_PORT } from "../server/defaults"
 
 const options = {
   port: {
     type: "number" as const,
     describe: "port to listen on",
-    default: 7878,
+    defaultDescription: String(DEFAULT_SERVER_PORT),
   },
   hostname: {
     type: "string" as const,
     describe: "hostname to listen on",
-    default: "127.0.0.1",
+    defaultDescription: DEFAULT_SERVER_HOST,
   },
   mdns: {
     type: "boolean" as const,
     describe: "enable mDNS service discovery (defaults hostname to 0.0.0.0)",
-    default: false,
+    defaultDescription: "false",
   },
   "mdns-domain": {
     type: "string" as const,
     describe: "custom domain name for mDNS service",
-    default: "opencorvus.local",
+    defaultDescription: DEFAULT_MDNS_DOMAIN,
   },
   cors: {
     type: "string" as const,
@@ -37,21 +38,12 @@ export function withNetworkOptions<T>(yargs: Argv<T>) {
 }
 
 export async function resolveNetworkOptions(args: NetworkOptions) {
-  const config = await Config.global()
-  const portExplicitlySet = process.argv.includes("--port")
-  const hostnameExplicitlySet = process.argv.includes("--hostname")
-  const mdnsExplicitlySet = process.argv.includes("--mdns")
-  const mdnsDomainExplicitlySet = process.argv.includes("--mdns-domain")
-
-  const mdns = mdnsExplicitlySet ? args.mdns : (config?.server?.mdns ?? args.mdns)
-  const mdnsDomain = mdnsDomainExplicitlySet ? args["mdns-domain"] : (config?.server?.mdnsDomain ?? args["mdns-domain"])
-  const port = portExplicitlySet ? args.port : (config?.server?.port ?? args.port)
-  const hostname = hostnameExplicitlySet
-    ? args.hostname
-    : mdns && !config?.server?.hostname
-      ? "0.0.0.0"
-      : (config?.server?.hostname ?? args.hostname)
-  const configCors = config?.server?.cors ?? []
+  const { server } = await Config.global()
+  const mdns = args.mdns ?? server?.mdns ?? false
+  const mdnsDomain = args["mdns-domain"] ?? server?.mdnsDomain ?? DEFAULT_MDNS_DOMAIN
+  const port = args.port ?? server?.port ?? DEFAULT_SERVER_PORT
+  const hostname = args.hostname ?? server?.hostname ?? (mdns ? "0.0.0.0" : DEFAULT_SERVER_HOST)
+  const configCors = server?.cors ?? []
   const argsCors = Array.isArray(args.cors) ? args.cors : args.cors ? [args.cors] : []
   const cors = [...configCors, ...argsCors]
 

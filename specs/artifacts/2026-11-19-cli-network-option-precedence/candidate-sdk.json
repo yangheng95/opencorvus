@@ -1,0 +1,14 @@
+{
+  "configured": {
+    "hostname": "127.0.0.1",
+    "port": 40204
+  },
+  "requested": {
+    "hostname": "::1",
+    "port": 40202
+  },
+  "sdkUrl": "http://[::1]:40202",
+  "health": 200,
+  "healthy": true,
+  "closed": true
+}

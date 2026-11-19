@@ -1,0 +1,177 @@
+{
+  "baseline": {
+    "counts": {
+      "message": 2,
+      "part": 6,
+      "session": 1
+    },
+    "ownerTables": [
+      "bus_publication_owner",
+      "engine_control_activation_lease_grant",
+      "engine_control_activation_lease",
+      "runtime_execution_capacity_lease",
+      "session_prompt_owner"
+    ],
+    "bus_publication_owner": {
+      "columns": [
+        "occurrence_id",
+        "project_generation",
+        "time_created"
+      ],
+      "count": 17
+    },
+    "engine_control_activation_lease_grant": {
+      "columns": [
+        "lease_id",
+        "ordinal",
+        "expires_at",
+        "time_created"
+      ],
+      "count": 94
+    },
+    "engine_control_activation_lease": {
+      "columns": [
+        "id",
+        "target",
+        "target_id",
+        "owner_occurrence_id",
+        "time_activated",
+        "expires_at"
+      ],
+      "count": 94
+    },
+    "runtime_execution_capacity_lease": {
+      "columns": [
+        "resource_key",
+        "slot",
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "count": 1
+    },
+    "session_prompt_owner": {
+      "columns": [
+        "session_id",
+        "project_id",
+        "directory",
+        "generation",
+        "owner_pid",
+        "owner_process_instance_id",
+        "owner_occurrence_id",
+        "time_acquired"
+      ],
+      "count": 0
+    },
+    "assistantFinishes": {
+      "stop": 1
+    },
+    "unfinishedAssistants": 0,
+    "physicalOwners": []
+  },
+  "candidate": {
+    "counts": {
+      "message": 2,
+      "part": 6,
+      "session": 1
+    },
+    "ownerTables": [
+      "bus_publication_owner",
+      "engine_control_activation_lease_grant",
+      "engine_control_activation_lease",
+      "runtime_execution_capacity_lease",
+      "session_prompt_owner"
+    ],
+    "bus_publication_owner": {
+      "columns": [
+        "occurrence_id",
+        "project_generation",
+        "time_created"
+      ],
+      "count": 17
+    },
+    "engine_control_activation_lease_grant": {
+      "columns": [
+        "lease_id",
+        "ordinal",
+        "expires_at",
+        "time_created"
+      ],
+      "count": 94
+    },
+    "engine_control_activation_lease": {
+      "columns": [
+        "id",
+        "target",
+        "target_id",
+        "owner_occurrence_id",
+        "time_activated",
+        "expires_at"
+      ],
+      "count": 94
+    },
+    "runtime_execution_capacity_lease": {
+      "columns": [
+        "resource_key",
+        "slot",
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "count": 1
+    },
+    "session_prompt_owner": {
+      "columns": [
+        "session_id",
+        "project_id",
+        "directory",
+        "generation",
+        "owner_pid",
+        "owner_process_instance_id",
+        "owner_occurrence_id",
+        "time_acquired"
+      ],
+      "count": 0
+    },
+    "assistantFinishes": {
+      "stop": 1
+    },
+    "unfinishedAssistants": 0,
+    "physicalOwners": []
+  },
+  "streamEvents": {
+    "listening": 1,
+    "stream-request": 4,
+    "organizer-reply": 2,
+    "stream-completed": 4,
+    "shutdown": 1
+  },
+  "requestContracts": [
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    }
+  ]
+}
