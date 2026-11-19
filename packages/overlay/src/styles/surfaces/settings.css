@@ -609,6 +609,13 @@ button.s-row:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.oc-select-option-copy .memory-project-option-hint {
+  display: block;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 .memory-project-document:focus-visible {
   border-radius: var(--oc-radius-soft);
   outline: var(--oc-border-width) solid var(--accent);

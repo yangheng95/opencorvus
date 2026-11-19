@@ -337,8 +337,10 @@ Project memory has three explicitly scoped authorities:
 
 Memory & Context settings select the Project directory from the complete Work
 Ledger project inventory, initially using the actual open Project. Selection is
-independent of the open conversation and does not require a Task. The settings
-read the protected Project document through the existing Project-memory service
+independent of the open conversation and does not require a Task. Same-named
+options include their shortest distinguishing directory segment in the option
+label. The selected Project's complete directory remains visible below the picker.
+The settings read the protected Project document through the Project-memory service
 and public `experimental.projectMemory.get` contract, displaying its original
 content, revision, token count and localized update time as a read-only document.
 The revision, token count and timestamp accompany readable content. An empty

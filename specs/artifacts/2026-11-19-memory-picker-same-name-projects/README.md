@@ -8,3 +8,5 @@
 - [选中后才看到完整南区目录](baseline-en-visible-directory-only-after-choice.png)
 
 本人在 Windows Chrome 1280×800 视口操作并复核 `40336/ui/` 的 `main-sP6B_RIw.js`。 [两个项目和原空聊天的正式回执](baseline-memory-picker-receipts.json)
+
+候选 `40338/ui/` 的 `main-CXavjC5-.js` 已完成正式回读。桌面截图待专用窗口恢复可见后补录。 [候选正式回读](candidate-memory-picker-receipts.json)

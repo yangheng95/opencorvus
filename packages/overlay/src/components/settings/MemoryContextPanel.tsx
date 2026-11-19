@@ -6,7 +6,7 @@ import { refreshProjectMemory, type ProjectMemoryDocument } from "../../services
 import { loadWorkLedger, type WorkLedgerCursor } from "../../services/work-ledger"
 import { subscribeWorkLedgerChanges } from "../../services/sse"
 import { formatErrorDetails } from "../../utils/error-details"
-import { projectDirectoryKey, projectDisplayName } from "../../utils/project-directory"
+import { projectDirectoryHints, projectDirectoryKey, projectDisplayName } from "../../utils/project-directory"
 import { localeTag, t } from "../../utils/i18n"
 import { MemoryPanel } from "../MemoryPanel"
 import { Button } from "../ui/Button"
@@ -47,6 +47,10 @@ export function MemoryContextPanel() {
     return projects().toSorted((left, right) =>
       projectName(left).localeCompare(projectName(right), locale) || left.directory.localeCompare(right.directory),
     )
+  })
+  const projectHints = createMemo(() => {
+    const names = projectOptions().map((project) => ({ directory: project.directory, name: projectName(project) }))
+    return projectDirectoryHints(names)
   })
   const [selectedProjectKey, setSelectedProjectKey] = createSignal<string | null>(null)
   const selectedProject = createMemo(() => projects().find((project) => project.key === selectedProjectKey()) ?? null)
@@ -210,8 +214,15 @@ export function MemoryContextPanel() {
             triggerRef={(element) => { projectTrigger = element }}
             ariaLabel={t("memory.project_picker_label")}
             renderValue={(project) => <span>{project ? projectName(project) : pickerPlaceholder()}</span>}
-            renderOptionLabel={projectName}
-            renderOptionDescription={(project) => project.directory}
+            renderOptionLabel={(project) => (
+              <>
+                {projectName(project)}
+                <Show when={projectHints().get(project.directory)}>
+                  {(hint) => <small class="memory-project-option-hint"><bdi>{hint()}</bdi></small>}
+                </Show>
+              </>
+            )}
+            renderOptionDescription={(project) => projectHints().has(project.directory) ? undefined : project.directory}
             optionData={(project) => ({ "data-project-directory": project.directory })}
           />
           <Show when={selectedProject()}>
