@@ -1,0 +1,142 @@
+{
+  "checks": [
+    {
+      "context": "A load",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/8f2241253e1dceb5a555ed78ef5578a2372653ffed651a8f611f93b451471d86.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "A load",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/7bf9187f4367cd6dda4241e5944af54c42c65738e0d3c8d1a8d57eb2d7aed470.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "A fork",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/8f2241253e1dceb5a555ed78ef5578a2372653ffed651a8f611f93b451471d86.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "A fork",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/7bf9187f4367cd6dda4241e5944af54c42c65738e0d3c8d1a8d57eb2d7aed470.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "A parallel",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/8f2241253e1dceb5a555ed78ef5578a2372653ffed651a8f611f93b451471d86.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "A parallel",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/7bf9187f4367cd6dda4241e5944af54c42c65738e0d3c8d1a8d57eb2d7aed470.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "B load",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hzLlieCOs1jrUfPxId03/b6eb2ebcff439f865a81b9392a640f072c308ffd50a558cde357208065e946c1.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "B fork",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hzLlieCOs1jrUfPxId03/b6eb2ebcff439f865a81b9392a640f072c308ffd50a558cde357208065e946c1.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "B parallel",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hzLlieCOs1jrUfPxId03/b6eb2ebcff439f865a81b9392a640f072c308ffd50a558cde357208065e946c1.txt",
+      "status": 200,
+      "bytes": 22,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool live",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png",
+      "status": 200,
+      "bytes": 5442,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool live",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.png",
+      "status": 200,
+      "bytes": 5453,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool live",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/b503c6938c9e94fd11569a170addc5dafdf0f7ff5e4c924788e5588edd330bfa.bin",
+      "status": 200,
+      "bytes": 5287,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool live",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.svg",
+      "status": 200,
+      "bytes": 348,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool live",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/15213f14d069400b701727483b78212e41715109a06f8688779f295777b41a5a.bin",
+      "status": 200,
+      "bytes": 348,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool replay",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/6070106449daeb9c5d1c399209426fd244a7e977b409f0e53615dc56f3b6cba8.png",
+      "status": 200,
+      "bytes": 5442,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool replay",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/6f42c2682f3bd37a291c5900add3ff4b993a033b029d101a37a6a7038ad430c1.png",
+      "status": 200,
+      "bytes": 5453,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool replay",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/b503c6938c9e94fd11569a170addc5dafdf0f7ff5e4c924788e5588edd330bfa.bin",
+      "status": 200,
+      "bytes": 5287,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool replay",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/50633acc76d7d34d3255fc54ac305249f4f55c745bfe68acbd53cc6020db1b22.svg",
+      "status": 200,
+      "bytes": 348,
+      "originalIdentity": true
+    },
+    {
+      "context": "tool replay",
+      "uri": "http://127.0.0.1:40168/attachment/prj_hOSYdrAwvqgY17KkU1Rc/15213f14d069400b701727483b78212e41715109a06f8688779f295777b41a5a.bin",
+      "status": 200,
+      "bytes": 348,
+      "originalIdentity": true
+    }
+  ],
+  "download": {
+    "filename": "shared-note.txt",
+    "bytes": 22,
+    "text": "Uploaded snapshot A2.\n"
+  }
+}

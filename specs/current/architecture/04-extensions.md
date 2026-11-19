@@ -1236,6 +1236,11 @@ update / uninstall 在写成功后直接推进它；Task 内执行的 Multica �
 
 当前使用官方 `@agentclientprotocol/sdk` 1.4。会话列表和恢复采用稳定的
 `listSessions` / `resumeSession`；分叉仍采用 SDK 的 `unstable_forkSession`。
+用户图像、嵌入文本/二进制资源及实时/历史工具图像的来源 URI 指向其真实规范原件。
+相对原件引用通过同一个 SDK 传输的 `resourceUrl` 解析，保留实际服务前缀且不携带用户密码；
+已有 data URL 保留自包含来源，真实 HTTP/file 链接保持原 URI 与显示名。
+显示文件名不代表磁盘路径，不用进程工作目录为上传快照虚构 file URI。
+回放仍内嵌完整原件，文件名由持久 FilePart、回执和下载响应保持；原生客户端对内容地址的标签显示各自决定。
 `listSessions` 使用全局会话读取的持久分页，按更新时间和会话标识降序列出根会话，包含已归档记录。
 提供工作目录时精确筛选同一目录；省略时读取当前服务内的全局历史。客户端使用返回的 `nextCursor` 继续读取。
 ACP 的主助手可运行集合来自完整的单一 Primary 注册表，普通会话的可选目录投影可见角色、当前身份及真实用户历史中已使用的主助手。

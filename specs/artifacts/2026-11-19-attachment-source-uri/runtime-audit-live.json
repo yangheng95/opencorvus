@@ -1,0 +1,304 @@
+{
+  "baseline": {
+    "counts": {
+      "message": 13,
+      "part": 36,
+      "session": 5
+    },
+    "ownerTables": [
+      "bus_publication_owner",
+      "engine_control_activation_lease_grant",
+      "engine_control_activation_lease",
+      "runtime_execution_capacity_lease",
+      "session_prompt_owner"
+    ],
+    "bus_publication_owner": {
+      "columns": [
+        "occurrence_id",
+        "project_generation",
+        "time_created"
+      ],
+      "count": 94
+    },
+    "engine_control_activation_lease_grant": {
+      "columns": [
+        "lease_id",
+        "ordinal",
+        "expires_at",
+        "time_created"
+      ],
+      "count": 712
+    },
+    "engine_control_activation_lease": {
+      "columns": [
+        "id",
+        "target",
+        "target_id",
+        "owner_occurrence_id",
+        "time_activated",
+        "expires_at"
+      ],
+      "count": 712
+    },
+    "runtime_execution_capacity_lease": {
+      "columns": [
+        "resource_key",
+        "slot",
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "count": 1
+    },
+    "session_prompt_owner": {
+      "columns": [
+        "session_id",
+        "project_id",
+        "directory",
+        "generation",
+        "owner_pid",
+        "owner_process_instance_id",
+        "owner_occurrence_id",
+        "time_acquired"
+      ],
+      "count": 0
+    },
+    "assistantFinishes": {
+      "stop": 5,
+      "tool-calls": 3
+    },
+    "unfinishedAssistants": 0,
+    "physicalOwners": []
+  },
+  "candidate": {
+    "counts": {
+      "message": 22,
+      "part": 59,
+      "session": 7
+    },
+    "ownerTables": [
+      "bus_publication_owner",
+      "engine_control_activation_lease_grant",
+      "engine_control_activation_lease",
+      "runtime_execution_capacity_lease",
+      "session_prompt_owner"
+    ],
+    "bus_publication_owner": {
+      "columns": [
+        "occurrence_id",
+        "project_generation",
+        "time_created"
+      ],
+      "count": 150
+    },
+    "engine_control_activation_lease_grant": {
+      "columns": [
+        "lease_id",
+        "ordinal",
+        "expires_at",
+        "time_created"
+      ],
+      "count": 1185
+    },
+    "engine_control_activation_lease": {
+      "columns": [
+        "id",
+        "target",
+        "target_id",
+        "owner_occurrence_id",
+        "time_activated",
+        "expires_at"
+      ],
+      "count": 1185
+    },
+    "runtime_execution_capacity_lease": {
+      "columns": [
+        "resource_key",
+        "slot",
+        "lease_id",
+        "owner_id",
+        "time_acquired",
+        "expires_at"
+      ],
+      "count": 1
+    },
+    "session_prompt_owner": {
+      "columns": [
+        "session_id",
+        "project_id",
+        "directory",
+        "generation",
+        "owner_pid",
+        "owner_process_instance_id",
+        "owner_occurrence_id",
+        "time_acquired"
+      ],
+      "count": 1
+    },
+    "assistantFinishes": {
+      "stop": 8,
+      "tool-calls": 6
+    },
+    "unfinishedAssistants": 0,
+    "physicalOwners": [
+      {
+        "session_id": "ses_hfi5Gx3YIlmYIuPn2OcH",
+        "project_id": "prj_hOSYdrAwvqgY17KkU1Rc",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b329\\candidate\\source-uri-review",
+        "generation": "cal_g0VbNR0f100iWFAspMI7",
+        "owner_pid": 15808,
+        "owner_process_instance_id": "win32:639306473048205658",
+        "owner_occurrence_id": "00eabdde-c835-43e1-b883-21622ec8ab63",
+        "time_acquired": 1795050511015
+      }
+    ]
+  },
+  "streamEvents": {
+    "listening": 1,
+    "stream-request": 23,
+    "organizer-reply": 7,
+    "stream-completed": 23,
+    "owned-tool-observation": 12
+  },
+  "requestContracts": [
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "project-memory"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    },
+    {
+      "event": "stream-request",
+      "model": "local",
+      "stream": true,
+      "operation": "conversation"
+    }
+  ]
+}

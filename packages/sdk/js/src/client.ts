@@ -2,9 +2,18 @@ export * from "./gen/types.gen.js"
 
 import { createClient } from "./gen/client/client.gen.js"
 import { type Config } from "./gen/client/types.gen.js"
-import { OpenCorvusClient } from "./gen/sdk.gen.js"
+import { OpenCorvusClient as GeneratedOpenCorvusClient } from "./gen/sdk.gen.js"
 import { routeRequiresProjectDirectory } from "./route-policy.js"
-export { OpenCorvusClient }
+
+export class OpenCorvusClient extends GeneratedOpenCorvusClient {
+  /** Resolve a resource through this client's actual transport, including its service prefix. */
+  resourceUrl(path: string): string {
+    const url = new URL(this.client.buildUrl({ url: path }))
+    url.username = ""
+    url.password = ""
+    return url.href
+  }
+}
 
 export type OpenCorvusClientConfig = Config & {
   /** Project path on the server, transmitted exactly regardless of the client's operating system. */

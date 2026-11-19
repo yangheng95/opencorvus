@@ -765,10 +765,10 @@ test("ACP loads, forks and resumes canonical empty originals with their real mes
     expect(replay).toEqual(expect.arrayContaining([
       expect.objectContaining({ messageId: messageID, content: { type: "text", text: "" } }),
       expect.objectContaining({ messageId: messageID, content: {
-        type: "resource", resource: expect.objectContaining({ mimeType: "application/octet-stream", blob: "" }),
+        type: "resource", resource: { uri: env.sdk.resourceUrl(files[0].url), mimeType: "application/octet-stream", blob: "" },
       } }),
       expect.objectContaining({ messageId: messageID, content: {
-        type: "resource", resource: expect.objectContaining({ mimeType: "text/plain", text: "" }),
+        type: "resource", resource: { uri: env.sdk.resourceUrl(files[1].url), mimeType: "text/plain", text: "" },
       } }),
     ]))
   }
@@ -1015,6 +1015,7 @@ test("ACP replays original text encodings and byte resources through load, resum
     } })),
   ] })).toMatchObject({ stopReason: "end_turn" })
   const [input] = await env.messages(sessionId)
+  const originalFiles = input.parts.filter(part => part.type === "file")
   for (const method of ["loadSession", "resumeSession", "unstable_forkSession"] as const) {
     if (method === "resumeSession") {
       expect(await env.client.resumeSession({ cwd, sessionId, mcpServers: [] })).toMatchObject({
@@ -1026,7 +1027,8 @@ test("ACP replays original text encodings and byte resources through load, resum
     const resources = env.updates.slice(from).flatMap(({ update }) =>
       update.sessionUpdate === "user_message_chunk" && update.content.type === "resource" ? [update.content.resource] : [],
     )
-    expect(resources).toEqual(originals.map((item) => expect.objectContaining({
+    expect(resources).toEqual(originals.map((item, index) => expect.objectContaining({
+      uri: env.sdk.resourceUrl(originalFiles[index].url),
       mimeType: item.mime,
       ...(item.text === undefined ? { blob: item.bytes.toString("base64") } : { text: item.text }),
     })))
@@ -1071,6 +1073,49 @@ test("ACP declared images retain original media and reach the actual model as pr
   expect(replay.map(image => ({ mime: image.mimeType, data: image.data }))).toEqual([
     { mime: "image/svg+xml", data: svg.toString("base64") }, { mime: "IMAGE/PNG; profile=srgb", data: png },
   ])
+  const files = input.parts.filter(part => part.type === "file")
+  for (let index = 0; index < replay.length; index++) {
+    expect(replay[index].uri).toBe(env.sdk.resourceUrl(files[index].url))
+    const response = await fetch(replay[index].uri!)
+    expect(response.status).toBe(200)
+    expect(Buffer.from(await response.arrayBuffer())).toEqual(Buffer.from(replay[index].data, "base64"))
+  }
+}, 60_000)
+
+test("ACP same-name snapshots retain their actual source bytes across projects and parallel replay", async () => {
+  await using peer = await memoryProject()
+  await using env = await environment()
+  await fs.mkdir(path.join(peer.path, ".opencorvus"), { recursive: true })
+  await fs.copyFile(ConfigPaths.projectFile(env.project.path), ConfigPaths.projectFile(peer.path))
+  const sessions = []
+  for (const [cwd, texts] of [
+    [env.project.path, ["Original A1", "Original A2"]],
+    [peer.path, ["Original B1"]],
+  ] as const) {
+    await fs.writeFile(path.join(cwd, "shared-note.txt"), "Current disk file")
+    const sessionId = await env.create("normal", cwd)
+    const files = []
+    for (const text of texts) {
+      const { data } = await env.sdk.attachment.create({ directory: cwd, filename: "shared-note.txt", body: new Blob([text]) },
+        { headers: { "Content-Type": "text/plain" }, throwOnError: true })
+      files.push({ type: "file" as const, filename: "shared-note.txt", mime: data.mime, url: data.url })
+    }
+    await env.sdk.session.prompt({ directory: cwd, sessionID: sessionId, messageID: Identifier.ascending("message"), model: { providerID: "acp-terminal", modelID: "normal" },
+      parts: [{ type: "text", text: "Inspect these snapshots." }, ...files] }, { throwOnError: true })
+    sessions.push({ cwd, sessionId, files, texts })
+  }
+  const from = env.updates.length
+  await Promise.all(sessions.map(row => env.client.loadSession({ cwd: row.cwd, sessionId: row.sessionId, mcpServers: [] })))
+  for (const row of sessions) {
+    const resources = env.updates.slice(from).flatMap(({ sessionId, update }) => sessionId === row.sessionId
+      && update.sessionUpdate === "user_message_chunk" && update.content.type === "resource" ? [update.content.resource] : [])
+    expect(resources).toEqual(row.files.map((file, index) => ({ uri: env.sdk.resourceUrl(file.url), mimeType: "text/plain", text: row.texts[index] })))
+    for (let index = 0; index < resources.length; index++) {
+      const response = await fetch(resources[index].uri)
+      expect(response.status).toBe(200)
+      expect(await response.text()).toBe(row.texts[index])
+    }
+  }
 }, 60_000)
 
 test("ACP HTTP attachment initializes a Streamable HTTP server with the declared request header", async () => {

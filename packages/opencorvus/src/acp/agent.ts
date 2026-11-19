@@ -149,7 +149,14 @@ function decodeAcpSessionListCursor(cursor: string): AcpSessionListCursor {
   return { updated, sessionID }
 }
 
-async function toolImageAttachmentContent(attachments: Message.FilePart[] | undefined): Promise<ToolCallContent[]> {
+function attachmentSourceUri(sdk: OpenCorvusClient, url: string): string {
+  return AttachmentStore.nameFromUrl(url) ? sdk.resourceUrl(url) : url
+}
+
+async function toolImageAttachmentContent(
+  sdk: OpenCorvusClient,
+  attachments: Message.FilePart[] | undefined,
+): Promise<ToolCallContent[]> {
   if (!attachments?.length) return []
   const content: ToolCallContent[] = []
   for (const attachment of attachments) {
@@ -170,7 +177,7 @@ async function toolImageAttachmentContent(attachments: Message.FilePart[] | unde
         type: "image",
         mimeType: attachment.mime,
         data: payload,
-        uri: pathToFileURL(attachment.filename ?? "tool-result-image.png").href,
+        uri: attachmentSourceUri(sdk, attachment.url),
       },
     })
   }
@@ -404,7 +411,7 @@ export namespace ACP {
                     },
                   },
                 ]
-                content.push(...(await toolImageAttachmentContent(part.state.attachments)))
+                content.push(...(await toolImageAttachmentContent(this.sdk, part.state.attachments)))
 
                 if (kind === "edit") {
                   // P0 (commit f4b08c75b) relaxed ToolStatePending/Running/
@@ -1005,7 +1012,7 @@ export namespace ACP {
                   },
                 },
               ]
-              content.push(...(await toolImageAttachmentContent(toolPart.state.attachments)))
+              content.push(...(await toolImageAttachmentContent(this.sdk, toolPart.state.attachments)))
 
               if (kind === "edit") {
                 // P0 (commit f4b08c75b) relaxed ToolStatePending/Running/
@@ -1193,20 +1200,20 @@ export namespace ACP {
                     type: "image",
                     mimeType: effectiveMime,
                     data: base64Data,
-                    uri: pathToFileURL(filename).href,
+                    uri: attachmentSourceUri(this.sdk, url!),
                   },
                 },
               })
             } else {
-              const fileUri = pathToFileURL(filename).href
+              const sourceUri = attachmentSourceUri(this.sdk, url!)
               // A resource has Unicode text only when its original bytes decode.
               // Otherwise the protocol's native blob preserves the exact original.
               let resource: { uri: string; mimeType: string } & ({ text: string } | { blob: string }) = {
-                uri: fileUri, mimeType: effectiveMime, blob: base64Data,
+                uri: sourceUri, mimeType: effectiveMime, blob: base64Data,
               }
               if (isDecodableText(effectiveMime)) {
                 try {
-                  resource = { uri: fileUri, mimeType: effectiveMime, text: decodeText(decodedBytes, effectiveMime) }
+                  resource = { uri: sourceUri, mimeType: effectiveMime, text: decodeText(decodedBytes, effectiveMime) }
                 } catch (error) {
                   if (!(error instanceof TextDecodingError)) throw error
                 }
