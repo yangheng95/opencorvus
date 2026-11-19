@@ -4087,6 +4087,8 @@ The open Right Dock retains the same Workbench minimum floor in its CSS maximum
 and pointer/keyboard clamp. On a desktop Panel too narrow even for navigation
 and the two reading lanes without Projects, Conversation takes the remainder.
 Closed Dock width remains zero through its canonical open signal.
+The Explorer activity also uses that floor for its content layout during the
+transition. The containing Dock clips the reveal at its current width.
 
 Environment Information embeds one compact `TaskProgressBar` projection only
 when the canonical board contains Goals. Its header exposes the Deliverables shortcut,

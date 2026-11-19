@@ -990,6 +990,11 @@ body[data-resizing="true"] .pane-resizer::after {
   overflow: hidden;
 }
 
+/* Keep Explorer laid out at a usable width while the Dock reveals it. */
+.right-dock-body .sidebar-explorer-panel {
+  min-inline-size: var(--ui-workbench-panel-min-width);
+}
+
 .right-dock-empty {
   display: none;
   flex: 1 1 auto;
