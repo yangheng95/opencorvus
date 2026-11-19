@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [SDK 逻辑路由目录验收](2026-11-19-sdk-logical-route-directory/README.md)
 - [附件来源地址验收](2026-11-19-attachment-source-uri/README.md)
 - [附件媒体模态验收](2026-11-19-attachment-media-modality/README.md)
 - [附件编码声明验收](2026-11-19-attachment-declared-text-encoding/README.md)

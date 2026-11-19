@@ -1,0 +1,129 @@
+{
+  "directA": {
+    "id": "prj_hHvdX5AKxc60PPNeHUdZ",
+    "worktree": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\baseline\\sdk-prefix-review",
+    "time": {
+      "created": 1795051050079,
+      "updated": 1795051050079
+    },
+    "sandboxes": []
+  },
+  "directB": {
+    "id": "prj_h2cPxa7XDjY7e6536603",
+    "worktree": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\baseline\\chosen-project",
+    "time": {
+      "created": 1795051051123,
+      "updated": 1795051051123
+    },
+    "sandboxes": []
+  },
+  "variants": [
+    {
+      "prefix": "/api/opencorvus",
+      "expectedProject": "prj_h2cPxa7XDjY7e6536603",
+      "project": {
+        "id": "prj_h2cPxa7XDjY7e6536603",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\baseline\\chosen-project",
+        "time": {
+          "created": 1795051051123,
+          "updated": 1795051051123
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "prefix": "/global/opencorvus",
+      "expectedProject": "prj_h2cPxa7XDjY7e6536603",
+      "error": {
+        "name": "DirectoryRequiredError",
+        "data": {
+          "message": "Project-scoped route /project/current requires ?directory= query parameter or x-opencorvus-directory header"
+        }
+      }
+    }
+  ],
+  "upload": {
+    "error": {
+      "name": "DirectoryRequiredError",
+      "data": {
+        "message": "Project-scoped route /attachment requires ?directory= query parameter or x-opencorvus-directory header"
+      }
+    }
+  },
+  "creation": {
+    "error": {
+      "name": "DirectoryRequiredError",
+      "data": {
+        "message": "Project-scoped route /coding/chat/session requires ?directory= query parameter or x-opencorvus-directory header"
+      }
+    }
+  },
+  "uiVia": "direct-diagnostic-service",
+  "attachment": {
+    "sha": "7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf",
+    "url": "/attachment/prj_h2cPxa7XDjY7e6536603/7856fbf169a247933a83465ab8465ae46c74b6b6d19a5e48daafb4a134f412bf.txt",
+    "mime": "text/plain",
+    "size": 49,
+    "filename": "project-scope.txt"
+  },
+  "session": {
+    "id": "ses_hf0rnsFhoHWXT5kh1iW8",
+    "slug": "gentle-mountain",
+    "version": "local",
+    "projectID": "prj_h2cPxa7XDjY7e6536603",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b330\\baseline\\chosen-project",
+    "title": "Chat",
+    "kind": "assistant",
+    "metadata": {
+      "projectConversationCreation": {
+        "version": 1,
+        "requestID": "66c734da-369f-4638-9980-5815a24c4a70",
+        "model": "acp-review/local"
+      },
+      "conversation": {
+        "experience": "chat",
+        "surface": "right-sidebar"
+      },
+      "configOverlay": {
+        "model": "acp-review/local"
+      }
+    },
+    "time": {
+      "created": 1795051110386,
+      "updated": 1795051110386
+    }
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40176/api/opencorvus/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Cbaseline%5Cchosen-project",
+      "target": "http://127.0.0.1:40172/project/current?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Cbaseline%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40176/api/opencorvus/global/health?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Cbaseline%5Cchosen-project",
+      "target": "http://127.0.0.1:40172/global/health?directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Cbaseline%5Cchosen-project"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40176/global/opencorvus/project/current",
+      "target": "http://127.0.0.1:40172/project/current"
+    },
+    {
+      "method": "GET",
+      "incoming": "http://127.0.0.1:40176/global/opencorvus/global/health",
+      "target": "http://127.0.0.1:40172/global/health"
+    },
+    {
+      "method": "POST",
+      "incoming": "http://127.0.0.1:40176/global/opencorvus/attachment?filename=project-scope.txt",
+      "target": "http://127.0.0.1:40172/attachment?filename=project-scope.txt"
+    },
+    {
+      "method": "POST",
+      "incoming": "http://127.0.0.1:40176/global/opencorvus/coding/chat/session",
+      "target": "http://127.0.0.1:40172/coding/chat/session"
+    }
+  ],
+  "target": "http://127.0.0.1:40172/ui/?sessionID=ses_hf0rnsFhoHWXT5kh1iW8&sessionKind=conversation&directory=C%3A%5CUsers%5CPublic%5Copencorvus-review-20261119-b330%5Cbaseline%5Cchosen-project&experience=chat"
+}

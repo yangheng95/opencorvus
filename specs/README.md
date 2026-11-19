@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [SDK 按逻辑路由绑定项目目录](records/2026-11/2026-11-19-sdk-logical-route-directory.md)
 - [附件来源地址指向真实规范原件](records/2026-11/2026-11-19-attachment-source-uri.md)
 - [附件媒体声明与模型模态一致](records/2026-11/2026-11-19-attachment-media-modality.md)
 - [附件文本按原件声明解码](records/2026-11/2026-11-19-attachment-declared-text-encoding.md)
