@@ -1,0 +1,7 @@
+{"method":"GET","path":"/team/ui/edge/global/health","upstream":"/global/health","status":200}
+{"method":"GET","path":"/team/ui/edge/global/projects/discover","upstream":"/global/projects/discover","status":200}
+{"method":"GET","path":"/team/ui/edge/global/transport/stream","upstream":"/global/transport/stream","upgrade":true,"status":101}
+{"method":"GET","path":"/team/ui/edge/path","upstream":"/path","status":200}
+{"method":"GET","path":"/team/ui/edge/work-ledger","upstream":"/work-ledger","status":200}
+{"method":"POST","path":"/team/ui/edge/global/transport/stream","upstream":"/global/transport/stream","streamTarget":"/team/ui/edge/work-ledger/events","status":200}
+{"method":"POST","path":"/team/ui/edge/global/transport/stream","upstream":"/global/transport/stream","streamTarget":"/work-ledger/events","status":200}

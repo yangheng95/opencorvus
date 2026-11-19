@@ -1,0 +1,28 @@
+[
+  {
+    "target": "/team/ui/edge/work-ledger/events",
+    "admissionStatus": 200,
+    "response": {
+      "type": "response",
+      "status": 400,
+      "statusText": "",
+      "streaming": false
+    },
+    "failure": "{\"name\":\"DirectoryRequiredError\",\"data\":{\"message\":\"Project-scoped route /team/ui/edge/work-ledger/events requires ?directory= query parameter or x-opencorvus-directory header\"}}"
+  },
+  {
+    "target": "/work-ledger/events",
+    "admissionStatus": 200,
+    "response": {
+      "type": "response",
+      "status": 200,
+      "statusText": "",
+      "streaming": true
+    },
+    "event": {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    }
+  }
+]

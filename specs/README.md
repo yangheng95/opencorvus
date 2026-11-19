@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [代理前缀下的网页实时事件](records/2026-11/2026-11-19-prefixed-stream-target.md)
 - [网页按实际发布位置选择默认服务](records/2026-11/2026-11-19-mounted-ui-server-default.md)
 - [同一服务地址保留当前工作区](records/2026-11/2026-11-19-equivalent-connection-endpoint.md)
 - [连接设置支持从输入框提交](records/2026-11/2026-11-19-connection-keyboard-submit.md)
