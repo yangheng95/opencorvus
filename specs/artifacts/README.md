@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [设置页空白区域返回验收](2026-11-19-settings-background-escape/README.md)
 - [资源管理器查找快捷键验收](2026-11-19-explorer-find-shortcut-scope/README.md)
 - [文件栏标题优先显示验收](2026-11-19-file-header-readable-title/README.md)
 - [资源管理器展开宽度验收](2026-11-19-explorer-opening-readable-width/README.md)

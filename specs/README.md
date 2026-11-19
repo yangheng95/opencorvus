@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [设置页空白区域保留 Esc 返回](records/2026-11/2026-11-19-settings-background-escape.md)
 - [资源管理器中的查找快捷键聚焦文件搜索](records/2026-11/2026-11-19-explorer-find-shortcut-scope.md)
 - [文件栏在窄宽度下优先显示文件名](records/2026-11/2026-11-19-file-header-readable-title.md)
 - [资源管理器展开时保持内容排版宽度](records/2026-11/2026-11-19-explorer-opening-readable-width.md)
