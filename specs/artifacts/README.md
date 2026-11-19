@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [反向代理下默认连接验收](2026-11-19-mounted-ui-server-default/README.md)
 - [同一服务地址验收](2026-11-19-equivalent-connection-endpoint/README.md)
 - [连接设置键盘提交证据](2026-11-19-connection-keyboard-submit/README.md)
 - [网络监听参数验收](2026-11-19-cli-network-option-precedence/README.md)
