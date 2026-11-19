@@ -3127,6 +3127,10 @@ action and canonical workbench range; unknown fragments retain their original
 text. External web links keep their complete authored URL and fragment.
 Bare filenames remain code
 prose; explicit Markdown file links retain their authored destinations.
+An authored `./` or `../` destination with a file name can open a project file
+without a recognized extension. The workbench handles links admitted by this
+rule in both hosts, including unpreviewable files with an original download.
+In a file preview, the destination resolves relative to that document's parent.
 Parsing and highlighting occur
 off-thread; top-level HTML blocks mount over animation frames. Latest updates
 are coalesced by text owner, stale replies are discarded, disposal releases the

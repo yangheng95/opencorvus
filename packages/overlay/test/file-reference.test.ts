@@ -1,6 +1,23 @@
 import { expect, test } from "bun:test"
 import { fileReferenceRange, fileReferenceReveal, parseFileReference } from "../src/utils/file-reference"
 import { markdownProjectFileReference } from "../src/utils/markdown"
+import { resolveDocumentFilePath } from "../src/utils/server-path"
+
+test.each([
+  ["../release%20bundle.zip", "../release bundle.zip", "release bundle.zip"],
+  ["../LICENSE", "../LICENSE", "LICENSE"],
+  ["./报告%20%2523.bundle", "./报告 %23.bundle", "notes/报告 %23.bundle"],
+])("explicit relative Markdown files resolve under the document directory: %s", (raw, path, resolved) => {
+  const reference = markdownProjectFileReference(raw)
+  expect(reference).toEqual({ path, workbenchOnly: true })
+  expect(resolveDocumentFilePath(reference!.path, { directory: "C:/project", path: "notes/guide.md" })).toBe(resolved)
+})
+
+test("an explicitly relative extensionless reference retains its cited lines", () => {
+  const reference = markdownProjectFileReference("../LICENSE#L2-L3")
+  expect(reference).toEqual({ path: "../LICENSE", line: 2, endLine: 3, workbenchOnly: true })
+  expect(fileReferenceReveal(reference!)).toEqual({ startLine: 2, endLine: 3 })
+})
 
 test("Markdown file links retain headings and the existing source-line grammar", () => {
   const section = markdownProjectFileReference("./notes/target.md#implementation-details-1")

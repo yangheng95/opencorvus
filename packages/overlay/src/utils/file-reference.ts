@@ -17,6 +17,7 @@ const FILE_REFERENCE_LINE_ATTRIBUTE = "data-file-line"
 const FILE_REFERENCE_END_LINE_ATTRIBUTE = "data-file-end-line"
 const FILE_REFERENCE_COLUMN_ATTRIBUTE = "data-file-column"
 const FILE_REFERENCE_MARKDOWN_SECTION_ATTRIBUTE = "data-file-markdown-section"
+const FILE_REFERENCE_WORKBENCH_ONLY_ATTRIBUTE = "data-file-workbench-only"
 
 // Lazy path half plus an anchored numeric tail, so a Windows drive letter
 // (`C:\repo\a.ts`) is never mistaken for a location separator: the tail must
@@ -32,6 +33,7 @@ export interface FileReferenceLocation {
 export interface FileReference extends Partial<FileReferenceLocation> {
   path: string
   markdownSection?: string
+  workbenchOnly?: true
 }
 
 export type FileRevealLocation = SourceFileRange | { markdownSection: string }
@@ -103,6 +105,7 @@ export function fileReferenceHtmlAttributes(
   if (reference.markdownSection) {
     attributes.push(`${FILE_REFERENCE_MARKDOWN_SECTION_ATTRIBUTE}="${escape(reference.markdownSection)}"`)
   }
+  if (reference.workbenchOnly) attributes.push(FILE_REFERENCE_WORKBENCH_ONLY_ATTRIBUTE)
   return ` ${attributes.join(" ")}`
 }
 
@@ -115,6 +118,7 @@ export function elementFileReference(element: Element, pathAttribute: string): F
   const endLine = positiveLineNumber(rawEndLine ?? undefined)
   const column = positiveLineNumber(element.getAttribute(FILE_REFERENCE_COLUMN_ATTRIBUTE) ?? undefined)
   const markdownSection = element.getAttribute(FILE_REFERENCE_MARKDOWN_SECTION_ATTRIBUTE)
+  const workbenchOnly = element.hasAttribute(FILE_REFERENCE_WORKBENCH_ONLY_ATTRIBUTE)
   if (rawEndLine !== null && (line === undefined || endLine === undefined || endLine < line)) return null
   if (column !== undefined && endLine !== undefined && endLine !== line) return null
   return {
@@ -123,5 +127,6 @@ export function elementFileReference(element: Element, pathAttribute: string): F
     ...(endLine === undefined ? {} : { endLine }),
     ...(line === undefined || column === undefined ? {} : { column }),
     ...(markdownSection ? { markdownSection } : {}),
+    ...(workbenchOnly ? { workbenchOnly: true } : {}),
   }
 }

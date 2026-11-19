@@ -302,9 +302,8 @@ function browserPreviewAttrs(raw: string): string {
   return isHttpUrl(raw) ? ` data-browser-preview-url="${escapeAttr(raw)}"` : ""
 }
 
-// File-ish extensions shared by code-path references and explicit Markdown
-// deliverable links. Images, Office documents and Portable Document Format
-// (PDF) outputs use the same project-file reader as text references.
+// Recognized extensions provide path evidence for codespans and Markdown
+// destinations without an explicit relative prefix.
 const FILE_EXT_RE =
   /\.(?:ts|tsx|js|jsx|mts|cts|mjs|cjs|json|jsonc|md|mdx|css|scss|less|html|htm|xml|svg|svgz|png|jpg|jpeg|gif|bmp|webp|ico|tif|tiff|avif|apng|jxl|heic|heif|raw|cr2|nef|arw|dng|orf|raf|pef|x3f|yaml|yml|toml|py|pyi|rs|go|java|c|h|cpp|cc|cxx|hpp|sh|bash|zsh|sql|rb|php|lua|kt|swift|dart|vue|astro|conf|ini|env|lock|txt|pdf|csv|tsv|xls|xlsx|xlsm|ods|doc|docx|odt|ppt|pptx|odp)$/i
 
@@ -327,7 +326,12 @@ export function markdownProjectFileReference(raw: string): FileReference | null 
   } catch {
     return null
   }
-  if (!FILE_EXT_RE.test(decoded)) return null
+  if (!FILE_EXT_RE.test(decoded)) {
+    if (markdownSection !== undefined || !/^\.\.?\//.test(path)) return null
+    const filename = decoded.slice(decoded.lastIndexOf("/") + 1)
+    if (!filename || filename === "." || filename === "..") return null
+    return { ...reference, path: decoded, workbenchOnly: true }
+  }
   if (markdownSection === undefined) return { ...reference, path: decoded }
   if (!markdownSection || reference.line !== undefined || extToLang(decoded) !== "markdown") return null
   return { path: decoded, markdownSection }

@@ -1385,8 +1385,13 @@ export async function openProjectFile(target: string, location?: Partial<FileRef
     }
     return
   }
-  // The workbench owns cited source lines and rendered Markdown sections.
-  if (location?.line !== undefined || location?.markdownSection || !getHostTransport().capabilities.nativeCommands["open-path"]) {
+  // Keep explicitly relative links to unrecognized file types in the workbench.
+  if (
+    location?.workbenchOnly ||
+    location?.line !== undefined ||
+    location?.markdownSection ||
+    !getHostTransport().capabilities.nativeCommands["open-path"]
+  ) {
     await openProjectPathInWorkbench(target, location)
     return
   }
