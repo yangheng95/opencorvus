@@ -16,3 +16,10 @@
 
 - 在现有 Explorer 内处理来自实际区域的未消费 Ctrl+F / Command+F。使用已有可见性和搜索输入检查，避免组合输入或其它修饰键。成功时聚焦原搜索输入并选择现查询，消费本次按键，等用户继续输入才发布查询。沿用搜索栏无障碍名称并通过可选属性声明快捷键。无新的全局监听或查询入口。
 - 候选 `40278/ui/` 以同构项目及真实空白会话运行。人工截取树、搜索输入、当前结果及 Enter 后实际文件。点击会话编辑区后核对会话查找、Escape 与焦点，再确认正文查找的语言和唯一结果。简体中文验证同一原查询的替换及空白项目主页中的 Explorer。用实际接口报文核实会话、路径和文件字节。当前改动是键盘界面，不引入界面自动化，补跑现有文件身份、导航、引用数据检查及类型、双语、构建和文档。
+
+## 实际验收
+
+- Windows 桌面 Chrome 以 1280×800 页面视口显示候选 `main-DY5usv8j.js`。活动会话的树行按 `Ctrl+F` 将焦点移到英文文件搜索，输入 `focused-record` 后，方向键和 Enter 打开 `evidence/focused-record.txt`。文件正文查找选中第二行的 `Lantern`。从会话编辑区按同一键打开英文会话查找，Escape 返回带焦点的编辑区。
+- 在简体中文资源管理器中从结果行按相同按键，原 `focused-record` 被选中。直接输入 `notes.md` 得到该目录中的确切文件，Enter 打开 Markdown 预览并呈现原文标题 `Navigation notes`。再进入没有活动会话的项目主页，从展开目录的文件行进入搜索框，得到 `focused-record.txt`。Command+F 走同一事件分支，在本次 Windows 桌面验收中实际使用了 Ctrl+F。[候选真实截图](../../artifacts/2026-11-19-explorer-find-shortcut-scope/README.md)
+- 真实接口返回候选会话 201、重命名 200，消息表初始为 0 条。两次实际搜索和读取分别返回相对路径 `evidence/focused-record.txt`、`evidence/notes.md`，101 与 80 字节与各自磁盘文件精确一致。验收只使用本地文件和空会话。两个隔离开发进程正常退出，40276 与 40278 的本地监听均已释放。
+- `bun test ./test/file-workbench-revision.test.ts ./test/file-reference.test.ts ./test/workspace-file-identity.test.ts` 通过 66 项、149 个断言。界面类型检查、双语 3,234 项、构建及渲染入口检查通过。根目录 `docs:check` 验证 353 个接口操作、26 组，`check:architecture-index` 验证 20 个入口。

@@ -633,6 +633,29 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     focusRow(row, event.currentTarget)
   }
 
+  function handleExplorerFind(event: KeyboardEvent & { currentTarget: HTMLElement }): void {
+    if (
+      event.defaultPrevented ||
+      event.isComposing ||
+      event.altKey ||
+      event.shiftKey ||
+      !(event.ctrlKey || event.metaKey) ||
+      event.key.toLowerCase() !== "f"
+    ) return
+    const input = searchInput
+    if (
+      !folderRevealVisible() ||
+      !input?.isConnected ||
+      input.disabled ||
+      !(event.target instanceof Node) ||
+      !event.currentTarget.contains(event.target)
+    ) return
+    event.preventDefault()
+    event.stopPropagation()
+    input.focus({ preventScroll: true })
+    input.select()
+  }
+
   function normalizeExplorerPath(path: string): string {
     return normalizeProjectFilePath(path, directory())
   }
@@ -2524,6 +2547,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       style={explorerPanelStyle()}
       on:pointerdown={{ handleEvent: cancelFolderReveal, capture: true }}
       on:keydown={{ handleEvent: cancelFolderReveal, capture: true }}
+      onKeyDown={handleExplorerFind}
     >
       <input
         ref={(node) => {
@@ -2555,6 +2579,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
               class="file-explorer-search"
               value={query()}
               placeholder={t("explorer.search_placeholder")}
+              ariaKeyShortcuts="Control+f Meta+f"
               disabled={!directory()}
               onValueChange={(value) => {
                 pendingFocus = undefined

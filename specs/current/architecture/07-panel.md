@@ -1577,6 +1577,9 @@ the current source must supply the result before the page reports no matches.
 The published deferred query retains its source while its normalized value is
 stable. Clearing the input restores the tree immediately. Explicit retries and
 file-change refreshes still read the current source.
+With focus inside the visible Explorer, Ctrl+F or Command+F focuses its
+existing file search field and selects the current query. The editor and
+conversation keep their respective find commands.
 The existing directory refresh batch rereads a settled search once when it
 observes changed membership in an already read directory. A newer query or
 an active file operation owns its own read. If an updated result removes the
