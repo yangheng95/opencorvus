@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [资源管理器中的查找快捷键聚焦文件搜索](2026-11-19-explorer-find-shortcut-scope.md)
 - [文件栏在窄宽度下优先显示文件名](2026-11-19-file-header-readable-title.md)
 - [资源管理器展开时保持内容排版宽度](2026-11-19-explorer-opening-readable-width.md)
 - [文件正则查找使用真实文档边界](2026-11-19-editor-regex-document-boundaries.md)
