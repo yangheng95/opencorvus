@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件栏标题优先显示验收](2026-11-19-file-header-readable-title/README.md)
 - [资源管理器展开宽度验收](2026-11-19-explorer-opening-readable-width/README.md)
 - [正则查找真实文档边界验收](2026-11-19-editor-regex-document-boundaries/README.md)
 - [文件查找无匹配结果验收](2026-11-19-editor-search-no-matches/README.md)
