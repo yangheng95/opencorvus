@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [文件草稿确认保留原路径](records/2026-11/2026-11-19-stable-file-draft-confirmation.md)
 - [从 Markdown 文件链接返回阅读位置](records/2026-11/2026-11-19-markdown-return-to-document.md)
 - [Markdown 显式相对文件链接](records/2026-11/2026-11-19-markdown-explicit-local-files.md)
 - [Markdown 跨文档标题链接](records/2026-11/2026-11-19-markdown-cross-file-headings.md)
