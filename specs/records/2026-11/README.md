@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从 Markdown 文件链接返回阅读位置](2026-11-19-markdown-return-to-document.md)
 - [Markdown 显式相对文件链接](2026-11-19-markdown-explicit-local-files.md)
 - [Markdown 跨文档标题链接](2026-11-19-markdown-cross-file-headings.md)
 - [Markdown 相对资源路径保留原样百分号](2026-11-19-markdown-literal-percent-paths.md)

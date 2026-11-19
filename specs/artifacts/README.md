@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Markdown 文档返回验收](2026-11-19-markdown-return-to-document/README.md)
 - [Markdown 显式相对文件链接验收](2026-11-19-markdown-explicit-local-files/README.md)
 - [Markdown 跨文档标题验收](2026-11-19-markdown-cross-file-headings/README.md)
 - [Markdown 原样百分号路径验收](2026-11-19-markdown-literal-percent-paths/README.md)
