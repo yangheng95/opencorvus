@@ -16,3 +16,10 @@
 
 - 从 `CommandPalette` 的已接受 `mission` 行取规范的 `pendingPromptText`，有请求时在共享选项说明内先展示已本地化的草稿名称和原请求，再显示现有类型、项目和目录。复用当前草稿翻译和两层选项结构。请求本身保持用户语言和真实内容，绘制最多两行，长字词可换行。名称和说明供同一个原选项，继续使用现有首组高亮、键盘与数字快捷键。其它行继续渲染现有提示。查询意义和结果身份均来自同一个工作记录来源。
 - 顺序停止基线和启动候选，使用同一个隔离工作记录数据库。候选在英文重放同名查询，截图查看两条请求、项目上下文、高亮、数字键，按键实际打开各自会话。再用中文复核，实际编辑一条草稿请求并检查新搜索结果和公开回读，利用较长带换行的请求复核绘制边界。覆盖唯一题名和无查询的最近结果，检查正常本地命令。已有工作记录和草稿写回检查、覆盖层类型、双语、样式令牌、正式构建、文档与架构索引提供辅助。无模型调用、无界面自动化。
+
+## 实际验收
+
+- 候选 `40310/ui/` 真实提供 `main-CYCLy1Fu.js`，本人在 1280×800 Windows Chrome 逐图复核。英文不填查询时显示三个最近草稿及原来三条建议动作。查询 `Quarterly Review` 时其两个原始请求分别呈现。Down 键高亮北区整行，Enter 打开准确的 `ses_hz5ISm9KOuY2CGzbtJ5K`；重新查询按实际 `Ctrl+1` 打开南区 `ses_hTr198nnA4n7e1oMQIVB`。查询 `Supplier Review` 只读到单项及其自己的草稿请求。 [实页截图](../../artifacts/2026-11-19-palette-mission-draft-request/README.md)
+- 简体中文有「待开始草稿」和「多步任务」，两条英文原文保持。通过正式编辑表单仅保存北区的三段请求。重新打开同题查询后，北区作为最新项显示新的两行预览与省略边界，项目目录仍独立可读。点击预览进入原 `ses_hz5ISm9KOuY2CGzbtJ5K`，实际正文显示完整三段原文。南区结果继续指向正确原文。 [编辑后搜索](../../artifacts/2026-11-19-palette-mission-draft-request/candidate-zh-edited-request-in-search.png) · [打开完整请求](../../artifacts/2026-11-19-palette-mission-draft-request/candidate-zh-opens-full-request.png)
+- 候选编辑前后分别核对 `/work-ledger`、`/mission` 与三个 `/session/{id}` 正式响应。两轮均为 200。标题、创建时刻、项目、任务和会话身份逐项一致，三个待规划草稿各有零个子任务。仅北区的原请求发生预期编辑，原最新更新时间排序使其成为第一项。候选沿用基线数据，两个专用进程已正常关闭，未调用模型。 [编辑前](../../artifacts/2026-11-19-palette-mission-draft-request/candidate-ledger-before-edit.json) · [编辑后](../../artifacts/2026-11-19-palette-mission-draft-request/candidate-ledger-after-edit.json)
+- 已有工作记录、草稿编辑和文本匹配检查通过 17 项（30 个断言），覆盖层类型、2 种语言的 3235 个键、样式令牌 9321 处引用、正常构建及渲染公共接口、文档和架构索引通过。只在真实桌面交互复核界面。物理读屏、其它平台、非草稿的执行和多页长列表本批未实测。

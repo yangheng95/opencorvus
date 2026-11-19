@@ -1,0 +1,42 @@
+{
+  "project": "C:\\Users\\Public\\opencorvus-review-20261119-b352\\palette-draft-review",
+  "query": "Quarterly Review",
+  "ledgerStatus": 200,
+  "missionStatus": 200,
+  "currentSearchOrder": [
+    "draft-806addc9c35411f28dc6034d4666e473",
+    "draft-18594af6117b150414742c71d8deb382"
+  ],
+  "drafts": [
+    {
+      "missionID": "draft-18594af6117b150414742c71d8deb382",
+      "sessionID": "ses_hz5ISm9KOuY2CGzbtJ5K",
+      "title": "Quarterly Review",
+      "pendingRequest": "North warehouse shipments. Compare the October inventory counts against the receiving log and list any discrepancies in a short summary.",
+      "created": 1795075444219,
+      "lane": "backlog",
+      "taskCount": 0,
+      "sessionStatus": 200
+    },
+    {
+      "missionID": "draft-806addc9c35411f28dc6034d4666e473",
+      "sessionID": "ses_hTr198nnA4n7e1oMQIVB",
+      "title": "Quarterly Review",
+      "pendingRequest": "South office invoices. Reconcile the October payment receipts against the invoice register and highlight missing approvals.",
+      "created": 1795075444260,
+      "lane": "backlog",
+      "taskCount": 0,
+      "sessionStatus": 200
+    },
+    {
+      "missionID": "draft-6cf064bc6cdab8979bc1de124c1a0c8f",
+      "sessionID": "ses_hsu5ADmoUiHXTClvyAgf",
+      "title": "Supplier Review",
+      "pendingRequest": "Review the supplier contact list for the next quarter.",
+      "created": 1795075444281,
+      "lane": "backlog",
+      "taskCount": 0,
+      "sessionStatus": 200
+    }
+  ]
+}

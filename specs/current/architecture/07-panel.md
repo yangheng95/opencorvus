@@ -6322,6 +6322,12 @@ commands use the shared Project display name and show the localized Project kind
 beside the original full directory, so equal names remain distinguishable. Each
 Project keeps its name on its own line and lets the directory wrap below it;
 the selected candidate background covers both lines while its group heading stays separate.
+Mission results with a saved pending request present a compact draft preview
+before their Project context. The existing Work Ledger `pendingPromptText`
+supplies the author's text, preceded by the current language's draft label.
+The two-line preview also appears in recent work. It lives in the existing
+option description, with the same title, search criteria, selection identity,
+and read-only full request available on opening the Mission.
 Selecting a Project calls the same existing Project navigation owner as its sidebar header;
 it restores that Project's composer intent without creating a conversation or execution.
 Chat and

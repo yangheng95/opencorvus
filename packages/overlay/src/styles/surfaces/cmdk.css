@@ -361,6 +361,16 @@
   overflow-wrap: anywhere;
 }
 
+.cmdk-item-draft {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  margin-block-end: var(--ui-gap-xs);
+  color: var(--text-strong);
+}
+
 .cmdk-item[data-kind] .cmdk-item-shortcut {
   flex: none;
 }

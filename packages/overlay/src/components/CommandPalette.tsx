@@ -55,6 +55,7 @@ interface Command {
   kind?: WorkLedgerRow["kind"]
   label: string
   hint?: string
+  pendingMissionRequest?: string
   shortcut?: string
   group: string
   groupStart?: boolean
@@ -178,6 +179,7 @@ export function CommandPalette(props: {
           implicitProjectName: t("work_ledger.implicit_project_row"),
         }) : row.title || row.id,
         hint: rowCommandHint(row),
+        pendingMissionRequest: row.kind === "mission" ? row.pendingPromptText : undefined,
         group: t("cmdk.group.work"),
         icon: rowCommandIcon(row),
         run: async () => {
@@ -556,7 +558,16 @@ export function CommandPalette(props: {
         renderOptionDescription={(command) => (
           <>
             <Show when={command.hint}>
-              <span class="cmdk-item-project">{command.hint}</span>
+              <span class="cmdk-item-project">
+                <Show when={command.pendingMissionRequest}>
+                  {(request) => (
+                    <span class="cmdk-item-draft">
+                      {t("mission_board.create.manual_draft")} · <bdi>{request()}</bdi>
+                    </span>
+                  )}
+                </Show>
+                {command.hint}
+              </span>
             </Show>
             <Show when={command.shortcut}>
               <span class="cmdk-item-shortcut">{command.shortcut}</span>
