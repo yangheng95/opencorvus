@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [搜索保留专家团的桌面验收](2026-11-19-mission-squad-retained-result/README.md)
 - [已选专家团名称的桌面验收](2026-11-19-mission-squad-selection-names/README.md)
 - [首份多步任务草稿的桌面验收](2026-11-19-mission-first-draft-focus/README.md)
 - [设置页空白区域返回验收](2026-11-19-settings-background-escape/README.md)

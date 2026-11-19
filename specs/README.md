@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [取消后从搜索范围外移除专家团](records/2026-11/2026-11-19-mission-squad-retained-result.md)
 - [新建多步任务显示已选专家团名称](records/2026-11/2026-11-19-mission-squad-selection-names.md)
 - [首份多步任务草稿保存后的焦点](records/2026-11/2026-11-19-mission-first-draft-focus.md)
 - [设置页空白区域保留 Esc 返回](records/2026-11/2026-11-19-settings-background-escape.md)
