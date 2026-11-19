@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Markdown 原样百分号路径验收](2026-11-19-markdown-literal-percent-paths/README.md)
 - [反向代理下的实时侧栏验收](2026-11-19-prefixed-stream-target/README.md)
 - [反向代理下默认连接验收](2026-11-19-mounted-ui-server-default/README.md)
 - [同一服务地址验收](2026-11-19-equivalent-connection-endpoint/README.md)
