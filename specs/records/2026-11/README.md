@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [资源管理器展开时保持内容排版宽度](2026-11-19-explorer-opening-readable-width.md)
 - [文件正则查找使用真实文档边界](2026-11-19-editor-regex-document-boundaries.md)
 - [文件查找反馈已完成的无匹配结果](2026-11-19-editor-search-no-matches.md)
 - [文件查找提示无效的正则表达式](2026-11-19-editor-invalid-search-pattern.md)
