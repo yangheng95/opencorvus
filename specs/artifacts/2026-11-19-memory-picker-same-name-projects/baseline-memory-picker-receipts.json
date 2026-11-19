@@ -1,0 +1,60 @@
+{
+  "ledgerStatus": 200,
+  "projects": [
+    {
+      "site": "north",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+      "projectID": "prj_hQcBwYqhkFAjeMnQuPuG",
+      "projectStatus": 200,
+      "ledgerTitle": "",
+      "memoryStatus": 200,
+      "memory": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "",
+        "revision": 0,
+        "tokenCount": 0,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1795081898253,
+        "timeUpdated": 1795081898707
+      },
+      "notesStatus": 200,
+      "notes": []
+    },
+    {
+      "site": "south",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+      "projectID": "prj_hBrRCHITIIh6iV5m0IY3",
+      "projectStatus": 200,
+      "ledgerTitle": "",
+      "memoryStatus": 200,
+      "memory": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "",
+        "revision": 0,
+        "tokenCount": 0,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1795081953787,
+        "timeUpdated": 1795081954275
+      },
+      "notesStatus": 200,
+      "notes": []
+    }
+  ],
+  "referenceChat": {
+    "creationStatus": 201,
+    "renameStatus": 200,
+    "readStatus": 200,
+    "historyStatus": 200,
+    "id": "ses_hbJXJdc1A6pCcDgZlSAY",
+    "title": "North context reference",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+    "created": 1795082114478,
+    "history": []
+  }
+}
