@@ -1,0 +1,112 @@
+{
+  "created": [
+    {
+      "key": "north",
+      "missionID": "draft-6382bf1ace76b70a71b479f216cbf293",
+      "sessionID": "ses_hU8zTsjHK2QVcgNgK2iU",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+      "title": "Quarterly Review",
+      "request": "North warehouse box count. 核对包装50%_\\验收，再汇总入库差异。",
+      "created": 1795077143662,
+      "archived": null,
+      "taskCount": 0
+    },
+    {
+      "key": "south",
+      "missionID": "draft-87fe4d0b9a9863e8a1325efc047375f1",
+      "sessionID": "ses_hBeH1ixuOwETzrV9EJfM",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+      "title": "Quarterly Review",
+      "request": "South office invoice approvals. 核对包装50个百分点A验收，再汇总付款差异。",
+      "created": 1795077143703,
+      "archived": null,
+      "taskCount": 0
+    },
+    {
+      "key": "peer",
+      "missionID": "draft-8b73337794f14b026c76e7669844f856",
+      "sessionID": "ses_hTCK1O4BGhoJ96iZKcYl",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\peer-request-search",
+      "title": "Quarterly Review",
+      "request": "North warehouse box count. Prepare a cross-check for the peer warehouse.",
+      "created": 1795077144010,
+      "archived": null,
+      "taskCount": 0
+    },
+    {
+      "key": "archive",
+      "missionID": "draft-015db411752fbcfe9951b7fffb4c44a1",
+      "sessionID": "ses_hfkZJJTxzk9GRwLRrHt4",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+      "title": "Historical Review",
+      "request": "Archive copper delivery. Review the old shipment receipt before quarterly reporting.",
+      "created": 1795077144028,
+      "archived": 1795077144059,
+      "taskCount": 0
+    }
+  ],
+  "queries": [
+    {
+      "path": "work-ledger",
+      "query": "North warehouse box count",
+      "status": 200,
+      "rows": []
+    },
+    {
+      "path": "work-ledger",
+      "query": "Quarterly Review",
+      "status": 200,
+      "rows": [
+        {
+          "kind": "mission",
+          "missionID": "draft-8b73337794f14b026c76e7669844f856",
+          "sessionID": "ses_hTCK1O4BGhoJ96iZKcYl",
+          "title": "Quarterly Review",
+          "pendingPromptText": "North warehouse box count. Prepare a cross-check for the peer warehouse.",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\peer-request-search",
+          "archived": null
+        },
+        {
+          "kind": "mission",
+          "missionID": "draft-87fe4d0b9a9863e8a1325efc047375f1",
+          "sessionID": "ses_hBeH1ixuOwETzrV9EJfM",
+          "title": "Quarterly Review",
+          "pendingPromptText": "South office invoice approvals. 核对包装50个百分点A验收，再汇总付款差异。",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+          "archived": null
+        },
+        {
+          "kind": "mission",
+          "missionID": "draft-6382bf1ace76b70a71b479f216cbf293",
+          "sessionID": "ses_hU8zTsjHK2QVcgNgK2iU",
+          "title": "Quarterly Review",
+          "pendingPromptText": "North warehouse box count. 核对包装50%_\\验收，再汇总入库差异。",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+          "archived": null
+        }
+      ]
+    },
+    {
+      "path": "work-ledger/archive",
+      "query": "Archive copper delivery",
+      "status": 200,
+      "rows": []
+    },
+    {
+      "path": "work-ledger/archive",
+      "query": "Historical Review",
+      "status": 200,
+      "rows": [
+        {
+          "kind": "mission",
+          "missionID": "draft-015db411752fbcfe9951b7fffb4c44a1",
+          "sessionID": "ses_hfkZJJTxzk9GRwLRrHt4",
+          "title": "Historical Review",
+          "pendingPromptText": "Archive copper delivery. Review the old shipment receipt before quarterly reporting.",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b354\\draft-request-search",
+          "archived": 1795077144059
+        }
+      ]
+    }
+  ]
+}

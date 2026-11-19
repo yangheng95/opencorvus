@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [按草稿请求查找多步任务](records/2026-11/2026-11-19-work-ledger-draft-request-search.md)
 - [侧栏时间提示区分创建和开始](records/2026-11/2026-11-19-work-ledger-tooltip-time-meaning.md)
 - [在全局搜索中预览多步任务草稿请求](records/2026-11/2026-11-19-palette-mission-draft-request.md)
 - [取消后从搜索范围外移除专家团](records/2026-11/2026-11-19-mission-squad-retained-result.md)
