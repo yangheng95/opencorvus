@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工作侧栏时间语义的桌面验收](2026-11-19-work-ledger-tooltip-time-meaning/README.md)
 - [全局搜索草稿请求的桌面验收](2026-11-19-palette-mission-draft-request/README.md)
 - [搜索保留专家团的桌面验收](2026-11-19-mission-squad-retained-result/README.md)
 - [已选专家团名称的桌面验收](2026-11-19-mission-squad-selection-names/README.md)
