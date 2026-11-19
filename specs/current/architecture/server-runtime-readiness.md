@@ -175,10 +175,11 @@ watcher, second asset cache, automatic page refresh or runtime source rebinding.
 Resource URLs decode once and enter the captured namespace after rejecting null
 bytes, backslashes, invalid escaping and parent traversal. HTTP HTML responses
 rewrite absolute and relative asset links against the existing public prefix and
-document depth. A client that independently constructs resource URLs must still
-use the correct application base; HTML rewriting does not repair relative locale
-requests authored by the client. Backend byte/status contracts and actual page
-inspection are separate verification surfaces.
+document depth. The browser resolves locale resources from the loaded module.
+Its default connection also uses the actual same-origin `/ui/assets/` module
+directory to recover the service prefix. Persisted settings still take priority.
+Backend byte/status contracts and actual page inspection are separate verification
+surfaces.
 
 ### Error responses
 

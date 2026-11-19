@@ -2,36 +2,20 @@ import serverDefaults from "../../../opencorvus/server-defaults.json"
 
 export const DEFAULT_LOCAL_SERVER_URL = `http://${serverDefaults.host}:${serverDefaults.port}`
 
-function prefixedServerUrlFromOverlayLocation(
-  location: Pick<Location, "origin" | "pathname" | "protocol">,
-): string | null {
-  if (!location.protocol.startsWith("http")) return null
-  const segments = location.pathname.split("/").filter(Boolean)
-  const uiIndex = segments.indexOf("ui")
-  if (uiIndex < 0) return null
-  const prefix = segments.slice(0, uiIndex).join("/")
-  return prefix ? `${location.origin}/${prefix}` : location.origin
-}
-
-export function originOnlyServerUrlFromOverlayLocation(
-  location: Pick<Location, "origin" | "pathname" | "protocol">,
-): string | null {
-  if (!location.protocol.startsWith("http")) return null
-  const segments = location.pathname.split("/").filter(Boolean)
-  return segments.includes("ui") ? location.origin : null
-}
-
-export function serverUrlFromOverlayLocation(
-  location: Pick<Location, "origin" | "pathname" | "protocol">,
-): string | null {
-  return prefixedServerUrlFromOverlayLocation(location)
-}
-
-export function currentDefaultServer(): string {
-  if (typeof window !== "undefined" && window.location) {
-    return serverUrlFromOverlayLocation(window.location) ?? DEFAULT_LOCAL_SERVER_URL
+export function defaultServerFromModule(documentOrigin: string | undefined, moduleUrl: URL): string {
+  if (moduleUrl.origin !== documentOrigin || (moduleUrl.protocol !== "http:" && moduleUrl.protocol !== "https:")) {
+    return DEFAULT_LOCAL_SERVER_URL
   }
-  return DEFAULT_LOCAL_SERVER_URL
+
+  // The service publishes bundled modules under its UI mount. The module's
+  // directory stays at that mount even when either path contains another ui.
+  const directory = new URL(".", moduleUrl)
+  const assetsPath = "/ui/assets/"
+  if (!directory.pathname.endsWith(assetsPath)) return DEFAULT_LOCAL_SERVER_URL
+  return directory.origin + directory.pathname.slice(0, -assetsPath.length)
 }
 
-export const DEFAULT_SERVER = currentDefaultServer()
+export const DEFAULT_SERVER = defaultServerFromModule(
+  typeof window === "undefined" ? undefined : window.location?.origin,
+  new URL(import.meta.url),
+)

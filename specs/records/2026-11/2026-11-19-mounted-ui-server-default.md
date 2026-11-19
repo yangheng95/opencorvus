@@ -22,3 +22,11 @@
 2. 聚焦正向测试确切默认地址，覆盖根、重复前缀及独立宿主，再运行同源请求、Connection Save、启动诊断、Overlay 类型/语言/样式、正式构建和文档检查。测试不操纵 DOM（Document Object Model，文档对象模型）或渲染页面。
 3. 真候选服务 `40216`，隔离反向代理 `40220`。首次访问含 `ui` 的部署地址，截图人工核对 Online、项目与设置地址；检查代理上实际健康和项目接口成功。新上下文复核嵌套文档及有转发头的普通前缀，直接根 `/ui/` 复核。通过页面保存另一自有端点，并用同一浏览器上下文重载以确认真实选择优先。通过固定隔离根和真实公开接口关闭服务，不接触用户窗口、存储或凭据。不调用模型。
 4. [基线截图与转发记录](../../artifacts/2026-11-19-mounted-ui-server-default/README.md)。完成后范围提交、合并上游、检查完整待推集合并正常推送，继续下一批。
+
+## 实施与验收结果
+
+- `DEFAULT_SERVER` 由一个解析函数选定。删除按文档 `pathname` 扫描 `ui` 和未调用的仅 origin 函数。保持单一持久文档及原保存、配置发布和连接探测路径。没有新增界面文案或样式。
+- `bun test ./test/default-server.test.ts ./test/connection-settings-endpoint.test.ts ./test/api-authority.test.ts ./test/connection-startup-diagnostics.test.ts` 共 34 项通过、103 次断言。Overlay 类型、双语、样式令牌、正式构建与渲染器公开面均通过。文档及架构索引检查通过。
+- 本人在隔离 Windows Chrome 逐图复核。首次打开 `40220/team/ui/edge/ui/` 显示 Online 和 `mount-path-review` 项目。Network 显示完整的 `/team/ui/edge` 及 `candidate` 目录的实际代理作用域。嵌套文档 `/team/ui/edge/ui/tools/ui/details`、带 `X-Forwarded-Prefix` 的 `/team/edge/ui/`、直接 `40216/ui/` 在各自新上下文在线。转发实录中，两种前缀的健康检查和项目发现均为 200，并加载了两种语言。
+- 继续在同一候选页手动保存 `40218/team/ui/edge`。真实保存显示 Saved。重载后候选页面仍由 40220 提供，Network 地址保持为 40218，项目的代理作用域是另一服务的 `baseline` 目录。这个行为证明真实意图优先于首次默认连接。对于以前已手动保存的错误地址，原 Network 纠正入口依然适用。
+- 专用浏览器关闭。两服务经启动归属和健康目录核对后正常停机，两转发器通过各自控制输入正常关闭，四个端口均释放。未发送消息或使用模型凭据。本轮实际验收是本机 HTTP 和 Windows Chrome；安全加密站点的地址逻辑及本机宿主由聚焦测试覆盖。

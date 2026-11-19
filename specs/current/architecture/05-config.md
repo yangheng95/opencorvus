@@ -135,6 +135,7 @@ Overlay 的配置投影按当前实际目录选择读取范围：项目读取 `/
 
 - **单一协议**：`OverlayPersistedSettings` 是唯一持久化文档结构。必填字段、可选字段、枚举、数值范围与非空约束由 `@opencorvus-ai/transport-protocol` 定义；部分文档和未知字段都是无效输入。
 - **Browser host**：在 localStorage 的唯一键 `oc_settings` 中存放完整文档。
+- **Browser host 初始连接**：缺少持久文档时，`DEFAULT_SERVER` 以同源发布模块的 `/ui/assets/` 目录确定服务 origin 和部署前缀。网页路径可含任意层级，部署前缀也可含 `ui`。独立宿主使用共享环回默认，有完整持久文档时采用已保存的地址。
 - **Tauri host**：在应用配置目录的 `overlay.jsonc` 中存放同一文档，写入使用同目录临时文件原子替换。
 - **加载边界**：Browser 直接使用 TypeScript 严格 parser；Tauri 先用 Rust 的同构严格 schema 拒绝未知或无效字段，返回 Overlay 后再经过 TypeScript parser。文档不存在时，由 TypeScript `DEFAULT_SETTINGS` 唯一提供默认值。
 - **地址读取与使用**：完整偏好文档的结构读取和 server base 的运行资格分开。历史文档中的非空非法地址仍原样可读并完成 settings hydration，供 Network 修正；不会悄悄覆盖为默认服务器。保存与 API/资源目标构造共享唯一运行态 URL parser，先解析 base 再拼接相对路径，保留其 authority、HTTP(S) 路径前缀、IPv6 与编码路径。query、fragment（含空分隔符）和嵌入 user-info 都被明确拒绝；认证仍由独立 username/password 字段拥有。离线但合法的地址允许保存，不以健康探测作为准入条件。ServerBaseUrlError 的五个原因是 malformed、unsupported_protocol、query、fragment、user_info；不携带原始 URL 或包含它的 cause。原生 String IPC 使用同名原因与安全消息。保存值及历史 projectComposerIntents 的 server 身份不被运行态 URL 序列化重写。
