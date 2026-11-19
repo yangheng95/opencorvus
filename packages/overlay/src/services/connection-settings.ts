@@ -1,3 +1,4 @@
+import { joinServerBaseUrl, ServerBaseUrlError } from "@opencorvus-ai/transport-protocol"
 import { batch } from "solid-js"
 import { saveSettings, settingsStore, setSettingsStore } from "../store/settings"
 import { activeTaskID, activeSessionID } from "../store/board"
@@ -26,17 +27,32 @@ export interface ConnectionSettingsInput {
 export interface ConnectionSettingsSaveReceipt {
   readonly authority: ApiAuthority
   readonly retiredReferences: boolean
+  readonly serverUrl: string
+}
+
+function retainedServerUrl(requested: string, applied: string): string {
+  if (requested === applied) return applied
+  try {
+    // The request builder defines the effective endpoint. Keep the existing
+    // spelling for workspace and preference keys when that endpoint is equal.
+    return joinServerBaseUrl(requested, "").href === joinServerBaseUrl(applied, "").href ? applied : requested
+  } catch (error) {
+    if (!(error instanceof ServerBaseUrlError)) throw error
+    // The save transaction validates the requested URL, including when it
+    // replaces an invalid address loaded from existing settings.
+    return requested
+  }
 }
 
 /** One admitted durable transaction for an operator's Connection Save. */
 export async function saveConnectionSettings(input: ConnectionSettingsInput): Promise<ConnectionSettingsSaveReceipt> {
-  const requested = { ...input }
+  const applied = settingsStore.serverUrl
+  const requested = { ...input, serverUrl: retainedServerUrl(input.serverUrl, applied) }
   const authority = captureApiAuthority()
-  const endpointChanged = requested.serverUrl !== settingsStore.serverUrl
+  const endpointChanged = requested.serverUrl !== applied
   const prepareDeparture = endpointChanged ? createWorkspaceDepartureIntent() : undefined
   const draftKey = workspaceComposerDraftKey(activeTaskID(), activeSessionID(), activeDirectory())
-  let confirmedAuthority: ApiAuthority | undefined
-  let retiredReferences = false
+  let receipt: ConnectionSettingsSaveReceipt | undefined
   await saveSettings({
     overrides: requested,
     prepare: async () => {
@@ -58,8 +74,9 @@ export async function saveConnectionSettings(input: ConnectionSettingsInput): Pr
             assertApiAuthorityCurrent(authority)
             if (close && !close.isCurrent()) throw new FileEditorAdmissionError("superseded")
           },
-          onConfirmed: () => {
+          onConfirmed: ({ serverUrl, username, password }) => {
             batch(() => {
+              let retiredReferences = false
               if (close) {
                 retiredReferences = commitDraft?.commit() ?? false
                 retireComposerModel(true)
@@ -68,15 +85,15 @@ export async function saveConnectionSettings(input: ConnectionSettingsInput): Pr
                 closeImagePreview()
                 close.commit()
               } else if (
-                requested.username !== settingsStore.username ||
-                requested.password !== settingsStore.password
+                username !== settingsStore.username ||
+                password !== settingsStore.password
               ) {
                 retireConnectionProjections(false)
                 retireComposerModel(false)
               }
-              setSettingsStore(requested)
-              configure({ ...requested, directory: activeDirectory() })
-              confirmedAuthority = captureApiAuthority()
+              setSettingsStore({ serverUrl, username, password })
+              configure({ serverUrl, username, password, directory: activeDirectory() })
+              receipt = { authority: captureApiAuthority(), retiredReferences, serverUrl }
               if (endpointChanged || !isApiAuthorityCurrent(authority)) setConnectionStatus("connecting")
             })
             return undefined
@@ -95,6 +112,6 @@ export async function saveConnectionSettings(input: ConnectionSettingsInput): Pr
       }
     },
   })
-  if (!confirmedAuthority) throw new Error("Connection Save completed without a confirmed publication")
-  return { authority: confirmedAuthority, retiredReferences }
+  if (!receipt) throw new Error("Connection Save completed without a confirmed publication")
+  return receipt
 }

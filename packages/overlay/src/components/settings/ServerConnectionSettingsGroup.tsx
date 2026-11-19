@@ -72,9 +72,10 @@ export function ServerConnectionSettingsGroup() {
     setError(null)
     let persistenceConfirmed = false
     try {
-      const { authority, retiredReferences } = await saveConnectionSettings(snapshot)
+      const { authority, retiredReferences, serverUrl } = await saveConnectionSettings(snapshot)
       persistenceConfirmed = true
       if (!ownsSave()) return
+      setDraft({ ...snapshot, serverUrl })
       setReferencesRetired(retiredReferences)
       const connected = await checkConnection({
         authority,
