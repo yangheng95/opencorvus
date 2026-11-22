@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [磁盘暂不可读时仍可比较基准版和草稿](2026-11-23-file-base-draft-without-disk.md)
 - [在连接地址字段关联实际校验说明](2026-11-23-connection-address-field-error.md)
 - [文件工作台解释链接指向的章节缺失](2026-11-23-markdown-missing-linked-section.md)
 - [更新日志搜索可用方向键进入真实结果](2026-11-23-release-history-keyboard-entry.md)
