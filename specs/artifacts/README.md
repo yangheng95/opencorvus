@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [聊天首页当前项目范围的桌面验收](2026-11-22-chat-home-same-name-project/README.md)
 - [定时任务建议时间的桌面验收](2026-11-22-scheduled-suggestion-time-summary/README.md)
 - [浏览器目录输入的双引号验收](2026-11-22-quoted-workspace-directory/README.md)
 - [命令面板通用设置入口的桌面验收](2026-11-22-palette-general-settings-command/README.md)

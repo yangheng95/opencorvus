@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [聊天首页标明同名项目的当前范围](2026-11-22-chat-home-same-name-project.md)
 - [定时任务建议显示实际预设星期与时间](2026-11-22-scheduled-suggestion-time-summary.md)
 - [浏览器可打开带外层双引号的目录路径](2026-11-22-quoted-workspace-directory.md)
 - [全局搜索为通用设置保留一个入口](2026-11-22-palette-general-settings-command.md)
