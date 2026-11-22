@@ -71,6 +71,7 @@ function UsageBucketDetails(props: { tokens: number; interval: string }) {
 }
 
 function UsageActivityGrid(props: { data: UsageStatistics }) {
+  let scrollElement: HTMLDivElement | undefined
   const bucketElements = new Map<string, HTMLLIElement>()
   const buckets = () => props.data.buckets
   const isYear = () => props.data.period === "year"
@@ -146,68 +147,61 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
     return ({ Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 } as Record<string, number>)[day] ?? 0
   })
   const yearColumn = (index: number) => Math.floor((index + yearOffset()) / 7) + 1
-  const linearLabelPosition = (index: number) => index / Math.max(1, buckets().length - 1)
+  const column = (index: number) => isYear() ? yearColumn(index) : index + 1
+  const columnCount = () => Math.max(1, column(buckets().length - 1))
 
   return (
     <div
       class="usage-activity"
       classList={{ "usage-activity--year": isYear() }}
-      style={isYear() ? { "--usage-year-columns": String(Math.max(1, yearColumn(buckets().length - 1))) } : undefined}
       data-ui="usage-token-activity"
     >
-      <ListboxRoot<UsageStatistics["buckets"][number]>
-        class={`usage-activity__grid usage-activity__grid--${props.data.period}`}
-        density="default"
-        aria-label={t("usage.chart_aria")}
-        state={listState}
-        selectOnFocus
-        disallowEmptySelection={listState.selectionManager().disallowEmptySelection()}
-        disallowTypeAhead
-        autoFocus={false}
-        shouldFocusWrap={false}
-        keyboardDelegate={keyboardDelegate}
-        renderItem={(item) => {
-          const interval = createMemo(() => intervalLabel(item.rawValue))
-          onCleanup(() => bucketElements.delete(item.key))
-          return (
-            <Tooltip.Root openDelay={180} closeDelay={80} placement="top" gutter={8} fitViewport>
-              <Tooltip.Trigger
-                as={ListboxItem}
-                item={item}
-                ref={(element) => bucketElements.set(item.key, element)}
-                class={`usage-activity__cell usage-activity__cell--${level(item.rawValue.tokens.total)}`}
-                style={
-                  isYear()
-                    ? {
-                        "grid-row": String(((item.index + yearOffset()) % 7) + 1),
-                        "grid-column": String(yearColumn(item.index)),
-                      }
-                    : undefined
-                }
-              >
-                <span class="sr-only">{bucketText(interval(), item.rawValue.tokens.total)}</span>
-                <UsageBucketDetails tokens={item.rawValue.tokens.total} interval={interval()} />
-              </Tooltip.Trigger>
-            </Tooltip.Root>
-          )
-        }}
-      />
-      <div
-        class="usage-activity__labels"
-        classList={{ "usage-activity__labels--linear": !isYear() }}
-        aria-hidden="true"
-      >
-        <For each={labels()}>
-          {(item) => (
-            <span
-              style={isYear()
-                ? { "grid-column": String(yearColumn(item.index)) }
-                : { left: `${linearLabelPosition(item.index) * 100}%` }}
-            >
-              {item.label}
-            </span>
-          )}
-        </For>
+      <div class="usage-activity__scroll" ref={scrollElement}>
+        <div class="usage-activity__timeline" style={{ "--usage-activity-columns": String(columnCount()) }}>
+          <ListboxRoot<UsageStatistics["buckets"][number]>
+            class="usage-activity__grid"
+            density="default"
+            aria-label={t("usage.chart_aria")}
+            state={listState}
+            selectOnFocus
+            disallowEmptySelection={listState.selectionManager().disallowEmptySelection()}
+            disallowTypeAhead
+            autoFocus={false}
+            shouldFocusWrap={false}
+            scrollRef={() => scrollElement}
+            keyboardDelegate={keyboardDelegate}
+            renderItem={(item) => {
+              const interval = createMemo(() => intervalLabel(item.rawValue))
+              onCleanup(() => bucketElements.delete(item.key))
+              return (
+                <Tooltip.Root openDelay={180} closeDelay={80} placement="top" gutter={8} fitViewport>
+                  <Tooltip.Trigger
+                    as={ListboxItem}
+                    item={item}
+                    ref={(element) => bucketElements.set(item.key, element)}
+                    class={`usage-activity__cell usage-activity__cell--${level(item.rawValue.tokens.total)}`}
+                    style={
+                      isYear()
+                        ? {
+                            "grid-row": String(((item.index + yearOffset()) % 7) + 1),
+                            "grid-column": String(column(item.index)),
+                          }
+                        : undefined
+                    }
+                  >
+                    <span class="sr-only">{bucketText(interval(), item.rawValue.tokens.total)}</span>
+                    <UsageBucketDetails tokens={item.rawValue.tokens.total} interval={interval()} />
+                  </Tooltip.Trigger>
+                </Tooltip.Root>
+              )
+            }}
+          />
+          <div class="usage-activity__labels" aria-hidden="true">
+            <For each={labels()}>
+              {(item) => <span style={{ "grid-column": String(column(item.index)) }}>{item.label}</span>}
+            </For>
+          </div>
+        </div>
       </div>
       <div class="usage-activity__legend" aria-hidden="true">
         <span>{t("usage.activity_less")}</span>

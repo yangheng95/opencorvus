@@ -2638,9 +2638,13 @@ credentials.
 Activity buckets use one Listbox inspection collection with a single Tab entry,
 visual-direction arrows and chronological Home/End. Zero-valued buckets remain
 inspectable; year positions express real weekdays without synthetic options.
-The year grid and month labels use the same week columns; each label starts at
-the column containing the month's first bucket. The shorter periods keep their
-linear axes.
+Activity buckets and their date labels share one column grid. The year view
+uses week columns and starts each month label at the column containing its
+first bucket. Shorter periods use one row with a column for each bucket. When
+the chart is wider than the available settings area, the grid and labels scroll
+together within the activity section. The Listbox reveals the focused bucket
+inside that same scroll area. The legend stays in view. The activity heading
+and its period and refresh controls can wrap as the settings area narrows.
 Kobalte owns collection selection and focus; retired data clears its selection.
 The shared Tooltip presents the same localized event interval, UTC offsets and
 Token count on hover or focus, with the item's registered description pointing
