@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [记忆设置项目搜索实页截图](2026-11-23-memory-project-picker-search/README.md)
 - [文件审阅组合搜索实页截图](2026-11-23-file-change-combined-search/README.md)
 - [视图菜单的目标语言实页截图](2026-11-23-titlebar-language-action-destination/README.md)
 - [收件箱离线与真实空结果实页截图](2026-11-23-mailbox-offline-read-state/README.md)
