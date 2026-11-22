@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [PDF 阅读器可直接输入页码导航](2026-11-23-pdf-direct-page-navigation.md)
 - [日志搜索显示已加载结果的精确匹配数](2026-11-23-log-search-match-count.md)
 - [磁盘暂不可读时仍可比较基准版和草稿](2026-11-23-file-base-draft-without-disk.md)
 - [在连接地址字段关联实际校验说明](2026-11-23-connection-address-field-error.md)
