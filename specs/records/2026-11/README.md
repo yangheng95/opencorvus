@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [已选会话加载时显示真实等待状态](2026-11-23-conversation-opening-status.md)
 - [多步任务编辑保存后可直接打开草稿](2026-11-22-mission-edit-save-feedback.md)
 - [聊天首页标明同名项目的当前范围](2026-11-22-chat-home-same-name-project.md)
 - [定时任务建议显示实际预设星期与时间](2026-11-22-scheduled-suggestion-time-summary.md)

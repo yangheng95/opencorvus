@@ -1,0 +1,21 @@
+{
+  "healthStatus": 200,
+  "exactSelection": [
+    {
+      "status": 200,
+      "kind": "mission",
+      "title": "North inventory review",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+      "sessionID": "ses_hW76ZyAYfXtCZCleqkGB",
+      "pendingPromptText": "Reconcile silver lanterns against the current north warehouse inventory."
+    },
+    {
+      "status": 200,
+      "kind": "chat",
+      "title": "South work conversation",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+      "sessionID": "ses_hm3Y1VzX8bBOO3bTcomm",
+      "pendingPromptText": null
+    }
+  ]
+}
