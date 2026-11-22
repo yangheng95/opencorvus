@@ -590,6 +590,7 @@ button.s-row:focus-visible {
 
 .memory-project-picker {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ui-gap-sm);
   min-width: 0;
 }
@@ -599,8 +600,31 @@ button.s-row:focus-visible {
   width: 100%;
 }
 
+.memory-project-picker .oc-select-value {
+  flex: 1;
+}
+
 .memory-project-picker .oc-feedback {
   margin: 0;
+}
+
+.memory-project-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ui-gap-xs);
+}
+
+.memory-project-value-name,
+.memory-project-value-hint {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.memory-project-value-hint {
+  flex-shrink: 0;
+  max-width: 50%;
+  color: var(--text-soft);
 }
 
 .memory-project-directory {

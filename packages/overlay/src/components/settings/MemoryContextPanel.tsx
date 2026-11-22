@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { batch, createEffect, createMemo, createSignal, onCleanup, Show, untrack } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, createUniqueId, onCleanup, Show, untrack } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { refreshProjectMemory, type ProjectMemoryDocument } from "../../services/project-memory"
@@ -41,6 +41,7 @@ function projectName(project: MemoryProjectOption): string {
 }
 
 export function MemoryContextPanel() {
+  const directoryDescriptionID = createUniqueId()
   const [projects, setProjects] = createSignal<MemoryProjectOption[]>([])
   const projectOptions = createMemo(() => {
     const locale = localeTag()
@@ -213,7 +214,19 @@ export function MemoryContextPanel() {
             triggerDataUI="memory-project-picker"
             triggerRef={(element) => { projectTrigger = element }}
             ariaLabel={t("memory.project_picker_label")}
-            renderValue={(project) => <span>{project ? projectName(project) : pickerPlaceholder()}</span>}
+            ariaDescribedBy={selectedProject() ? directoryDescriptionID : undefined}
+            renderValue={(project) => project ? (
+              <span class="memory-project-value">
+                <span class="memory-project-value-name">{projectName(project)}</span>
+                <Show when={projectHints().get(project.directory)}>
+                  {(hint) => (
+                    <bdi class="memory-project-value-hint">
+                      <span aria-hidden="true">· </span>{hint()}
+                    </bdi>
+                  )}
+                </Show>
+              </span>
+            ) : <span>{pickerPlaceholder()}</span>}
             renderOptionLabel={(project) => (
               <>
                 {projectName(project)}
@@ -226,7 +239,7 @@ export function MemoryContextPanel() {
             optionData={(project) => ({ "data-project-directory": project.directory })}
           />
           <Show when={selectedProject()}>
-            {(project) => <div class="memory-project-directory">{project().directory}</div>}
+            {(project) => <div class="memory-project-directory" id={directoryDescriptionID}>{project().directory}</div>}
           </Show>
           <Show when={projectLoadError()}>
             {(failure) => (

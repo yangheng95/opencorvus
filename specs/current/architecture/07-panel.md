@@ -2450,6 +2450,9 @@ accepted snapshot under the same connection authority, with a localized notice
 and retry of the same read. An initial failure exposes the retry without showing
 an empty result. New connection authority retires the old snapshot, selection
 and failure before publishing another connection's options.
+For projects with the same display name, the options and the selected value use
+the same distinguishing path suffix. The picker references its existing visible
+full directory as the accessible description of the selected project.
 Notes rows derive their date and relevance label/number from the current locale
 inside the row's reactive display. Language changes retain the original memory
 identity, source, content, query and expanded detail without another data read.
