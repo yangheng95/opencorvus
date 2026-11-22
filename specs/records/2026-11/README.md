@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [定时编辑器显示规则已保存的时区标识](2026-11-23-scheduled-saved-time-zone-identity.md)
 - [外观保存期间保留连续键盘导航](2026-11-23-appearance-keyboard-focus-during-save.md)
 - [收起的记忆项目选择器保留身份区别](2026-11-23-memory-selected-project-identity.md)
 - [在笔记结果中标明实际提交的查询](2026-11-23-memory-submitted-search-query.md)

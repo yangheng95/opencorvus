@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时编辑器保留已保存的时区标识](2026-11-23-scheduled-saved-time-zone-identity/README.md)
 - [外观偏好与连续键盘焦点](2026-11-23-appearance-keyboard-focus-during-save/README.md)
 - [记忆设置所选项目的收起值和路径说明](2026-11-23-memory-selected-project-identity/README.md)
 - [笔记搜索草稿与已提交查询](2026-11-23-memory-submitted-search-query/README.md)

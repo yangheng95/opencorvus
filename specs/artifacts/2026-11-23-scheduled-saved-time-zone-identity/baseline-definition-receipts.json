@@ -1,0 +1,20 @@
+[
+  {
+    "id": "atm_hZ2nxqjgkHM10jyTFpbn",
+    "revision": "atm_hjt6hP6m8gUr6IQutNoQ",
+    "name": "Time-zone link review",
+    "zone": "US/Eastern",
+    "recurrence": "DTSTART;TZID=US/Eastern:20990618T090000\nRRULE:FREQ=DAILY",
+    "firstRun": 4085470800000,
+    "status": "paused"
+  },
+  {
+    "id": "atm_haPiAsNfJIoeXrmMfTKp",
+    "revision": "atm_h4cnUfiJwBp3lpK0j07V",
+    "name": "Time-zone primary review",
+    "zone": "America/New_York",
+    "recurrence": "DTSTART;TZID=America/New_York:20990618T090000\nRRULE:FREQ=DAILY",
+    "firstRun": 4085470800000,
+    "status": "paused"
+  }
+]
