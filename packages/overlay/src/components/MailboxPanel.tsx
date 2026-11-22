@@ -21,7 +21,7 @@ import { loadTasks } from "../store/board"
 import { appStore } from "../store/app"
 import { workLedgerProject } from "../services/work-ledger"
 import { detailStamp, relativeTime } from "../utils/time"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { Avatar } from "./Avatar"
 import { Icon, type IconName } from "./ui/Icon"
@@ -107,6 +107,14 @@ export function MailboxPanel(props: MailboxPanelProps) {
 
   const currentAuthority = createMemo(captureApiAuthority)
   const currentSearch = createMemo(() => query().trim())
+  const hasAcceptedMailbox = () => loadedAuthorityRevision() === currentAuthority().revision
+  const activeCountText = createMemo(() =>
+    appStore.connected && hasAcceptedMailbox() ? counts().active.toLocaleString(localeTag()) : undefined,
+  )
+  const inboxLabel = () => {
+    const count = activeCountText()
+    return count === undefined ? t("mailbox.active") : `${t("mailbox.active")} (${count})`
+  }
   const visibleItems = items
   const currentRequestScope = () => ({ authority: currentAuthority(), view: MAILBOX_VIEW, search: currentSearch() })
   const retryUnavailable = () => loading() || !appStore.connected
@@ -529,13 +537,17 @@ export function MailboxPanel(props: MailboxPanelProps) {
         <div class="mailbox-panel__heading">
           <span
             class="mailbox-panel__inbox"
-            title={`${t("mailbox.active")} (${counts().active})`}
-            aria-label={`${t("mailbox.active")} (${counts().active})`}
+            title={inboxLabel()}
+            aria-label={inboxLabel()}
           >
             <span>{t("mailbox.title")}</span>
-            <Badge class="mailbox-panel__inbox-count" tone="muted" size="md">
-              {counts().active}
-            </Badge>
+            <Show when={activeCountText()}>
+              {(count) => (
+                <Badge class="mailbox-panel__inbox-count" tone="muted" size="md">
+                  {count()}
+                </Badge>
+              )}
+            </Show>
           </span>
           <Button
             type="button"
@@ -628,8 +640,14 @@ export function MailboxPanel(props: MailboxPanelProps) {
         </Show>
       </header>
 
-      <div ref={mailboxBody} class="mailbox-panel__body" aria-busy={loading()}>
-        <Show when={baseLoadIssue()}>
+      <div ref={mailboxBody} class="mailbox-panel__body" aria-busy={appStore.connected && loading()}>
+        <Show when={!appStore.connected}>
+          <div class="mailbox-panel__empty" role="status">
+            <Icon name="notifications" size="large" decorative />
+            <div class="mailbox-panel__empty-title">{t("mailbox.connection_wait")}</div>
+          </div>
+        </Show>
+        <Show when={appStore.connected && baseLoadIssue()}>
           {(issue) => (
             <Feedback
               tone="error"
@@ -656,12 +674,12 @@ export function MailboxPanel(props: MailboxPanelProps) {
             </Feedback>
           )}
         </Show>
-        <Show when={!baseLoadIssue()}>
+        <Show when={appStore.connected && !baseLoadIssue()}>
           <Show
             when={visibleItems().length > 0}
             fallback={
               <Show
-                when={!loading() || items().length > 0}
+                when={!loading() && hasAcceptedMailbox()}
                 fallback={<div class="mailbox-panel__loading">{t("mailbox.loading")}</div>}
               >
                 <div class="mailbox-panel__empty">

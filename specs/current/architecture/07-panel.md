@@ -4938,7 +4938,10 @@ Task navigation, preserves the global loaded range and expanded messages.
 Connection rotation retires prior reads and notification projection. Search
 is a literal case-insensitive query over canonical subject, body, source agent,
 squad, task title, current custom project name, and project directory, applied before cursor pagination by
-the sole Mailbox API. Counts remain global. Filtered results expose the same
+the sole Mailbox API. The count remains global and comes from an accepted read
+on the current connection. Offline and connecting states show a connection
+status in the body and retain the authored search. The next accepted read can
+show the confirmed empty mailbox or search result. Filtered results expose the same
 Load more operation; acknowledgements and invalidations revalidate the accepted
 prefix through its original oldest position before committing the fresh page
 sequence. A failed continuation preserves the accepted rows, selection,
