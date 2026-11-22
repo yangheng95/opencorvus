@@ -1243,12 +1243,13 @@ trigger with the same handoff, without a global focus listener or parallel store
 The file header exposes Find in file and Go to line for text documents, including
 read-only sources. Find and Ctrl/Cmd+F within the file pane open the retained
 CodeMirror view's search panel. Go to line opens its native line prompt or
-focuses the already open line input. Both actions reveal Source from Markdown
-Preview first; the same draft, history and search state stay owned by that
-editor. The editor publishes these actions only for its live view and retires
-them on cleanup. Deferred focus verifies the original file, load generation
-and API authority. The main
-conversation's window search shortcut is active only while that conversation
+focuses the already open line input. On submission the prompt resolves against
+the live document and selection, including after a reload in the same view.
+Both actions reveal Source from Markdown Preview first; the same draft, history
+and search state stay owned by that editor. The editor publishes these actions
+only for its live view and retires them on cleanup. Deferred focus verifies the
+original file, load generation and API authority. The main conversation's
+window search shortcut is active only while that conversation
 surface is visible; Settings and other primary surfaces retire that shortcut.
 The shared editor's status area announces an invalid nonempty regular expression
 from CodeMirror's current open query. The next and previous commands also report

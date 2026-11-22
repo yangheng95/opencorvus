@@ -1,5 +1,5 @@
 diff --git a/dist/index.cjs b/dist/index.cjs
-index a6db11429e764f772d263aa0936efad8895cf3a4..f5c2bf44383fb07984009c7329d485f103048652 100644
+index a6db11429e764f772d263aa0936efad8895cf3a4..1e5ccb05d47ff7522473f876d1f8f369a5b8c838 100644
 --- a/dist/index.cjs
 +++ b/dist/index.cjs
 @@ -182,8 +182,6 @@ class RegExpCursor {
@@ -121,7 +121,16 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..f5c2bf44383fb07984009c7329d485f1
      }
  }
  if (typeof Symbol != "undefined") {
-@@ -711,7 +687,7 @@ class RegExpQuery extends QueryType {
+@@ -340,6 +316,8 @@ const gotoLine = view$1 => {
+             view$1.dispatch({ effects: close });
+             return;
+         }
++        // Resolve the location in the document active when the prompt is submitted.
++        const { state: state$1 } = view$1;
+         let startLine = state$1.doc.lineAt(state$1.selection.main.head);
+         let [, sign, ln, cl, percent] = match;
+         let col = cl ? +cl.slice(1) : 0;
+@@ -711,7 +689,7 @@ class RegExpQuery extends QueryType {
          return cursor.done ? null : cursor.value;
      }
      prevMatchInRange(state, from, to) {
@@ -130,7 +139,7 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..f5c2bf44383fb07984009c7329d485f1
              let start = Math.max(from, to - size * 10000 /* FindPrev.ChunkSize */);
              let cursor = regexpCursor(this.spec, state, start, to), range = null;
              while (!cursor.next().done)
-@@ -844,8 +820,10 @@ end.
+@@ -844,8 +822,10 @@ end.
  const findNext = searchCommand((view, { query }) => {
      let { to } = view.state.selection.main;
      let next = query.nextMatch(view.state, to, to);
@@ -142,7 +151,7 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..f5c2bf44383fb07984009c7329d485f1
      let selection = state.EditorSelection.single(next.from, next.to);
      let config = view.state.facet(searchConfigFacet);
      view.dispatch({
-@@ -864,8 +842,10 @@ of the document to start searching at the end again.
+@@ -864,8 +844,10 @@ of the document to start searching at the end again.
  const findPrevious = searchCommand((view, { query }) => {
      let { state: state$1 } = view, { from } = state$1.selection.main;
      let prev = query.prevMatch(state$1, from, from);
@@ -185,7 +194,7 @@ index ffb693151c7f9b8e4ecc65875347902029303a7d..70a9c87a36e550d8dd7311bd1b4836c8
  /**
  Add search state to the editor configuration, and optionally
 diff --git a/dist/index.js b/dist/index.js
-index 29bc38236170b060b810870e81805934611a5f06..fce03f2944708a96fc1b0f3f65942e8ab9c1ad42 100644
+index 29bc38236170b060b810870e81805934611a5f06..144617bb5a449ed83ee5dc006ffc8ebd8725cf5a 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -180,8 +180,6 @@ class RegExpCursor {
@@ -307,7 +316,16 @@ index 29bc38236170b060b810870e81805934611a5f06..fce03f2944708a96fc1b0f3f65942e8a
      }
  }
  if (typeof Symbol != "undefined") {
-@@ -709,7 +685,7 @@ class RegExpQuery extends QueryType {
+@@ -338,6 +314,8 @@ const gotoLine = view => {
+             view.dispatch({ effects: close });
+             return;
+         }
++        // Resolve the location in the document active when the prompt is submitted.
++        const { state } = view;
+         let startLine = state.doc.lineAt(state.selection.main.head);
+         let [, sign, ln, cl, percent] = match;
+         let col = cl ? +cl.slice(1) : 0;
+@@ -709,7 +687,7 @@ class RegExpQuery extends QueryType {
          return cursor.done ? null : cursor.value;
      }
      prevMatchInRange(state, from, to) {
@@ -316,7 +334,7 @@ index 29bc38236170b060b810870e81805934611a5f06..fce03f2944708a96fc1b0f3f65942e8a
              let start = Math.max(from, to - size * 10000 /* FindPrev.ChunkSize */);
              let cursor = regexpCursor(this.spec, state, start, to), range = null;
              while (!cursor.next().done)
-@@ -842,8 +818,10 @@ end.
+@@ -842,8 +820,10 @@ end.
  const findNext = /*@__PURE__*/searchCommand((view, { query }) => {
      let { to } = view.state.selection.main;
      let next = query.nextMatch(view.state, to, to);
@@ -328,7 +346,7 @@ index 29bc38236170b060b810870e81805934611a5f06..fce03f2944708a96fc1b0f3f65942e8a
      let selection = EditorSelection.single(next.from, next.to);
      let config = view.state.facet(searchConfigFacet);
      view.dispatch({
-@@ -862,8 +840,10 @@ of the document to start searching at the end again.
+@@ -862,8 +842,10 @@ of the document to start searching at the end again.
  const findPrevious = /*@__PURE__*/searchCommand((view, { query }) => {
      let { state } = view, { from } = state.selection.main;
      let prev = query.prevMatch(state, from, from);
