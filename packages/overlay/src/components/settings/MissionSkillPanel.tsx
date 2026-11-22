@@ -457,6 +457,7 @@ export default function MissionSkillPanel() {
                               interactive
                               leading={<Icon name="workflow" />}
                               title={skill.name}
+                              desc={missionSkillDescription(skill)}
                               meta={
                                 <>
                                   <Badge tone="muted" size="sm">

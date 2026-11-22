@@ -482,6 +482,14 @@ button.s-row:focus-visible {
   margin-top: var(--ui-gap-3xs);
 }
 
+.mission-skill-item .s-row-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
 .mission-skill-detail {
   display: flex;
   flex-direction: column;

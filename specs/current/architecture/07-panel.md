@@ -6016,6 +6016,8 @@ name in the current scope's accepted catalog independently of list filters. When
 that name leaves the catalog, its heading and Back to list remain with a localized
 unavailable message. Navigation focuses the opened heading and returns to the
 exact visible row or the current catalog search.
+Mission Skill list rows show up to two lines of the same description used in the
+detail, with localized built-in copy and project or global descriptions as authored.
 Mission Skill invocation and path actions show their result at the action's
 detail section or directory row. The current interface language renders the
 result while preserving the exact invocation and filesystem path. The original
