@@ -6,6 +6,7 @@ import {
   fileEditorRevealRevision,
   fileEditorReserved,
   registerFileEditorBeforeNavigate,
+  requestFileExplorerFolder,
   returnToFileDocument,
   selectedFileTarget,
   type FileContent,
@@ -13,6 +14,8 @@ import {
 } from "../services/file-workbench"
 import { projectScopedPath } from "../services/project-directory"
 import { downloadBlob } from "../services/file-download"
+import { activeDirectory } from "../services/workspace"
+import { boardStore } from "../store/board"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
@@ -20,6 +23,7 @@ import {
   decodeMarkdownFilePath,
   isAbsoluteServerPath,
   normalizeProjectFilePath,
+  parentProjectPath,
   pathWithForwardSeparators,
   projectFileLocation,
   resolveDocumentFilePath,
@@ -275,6 +279,10 @@ export function FileEditorPane() {
   const writable = createMemo(() => textContent() && content()?.revision !== undefined && !target()?.sourceAbsolutePath)
   const dirty = createMemo(() => writable() && draft() !== savedBaseline()?.content)
   const showFileLocation = () => !target()?.sourceAbsolutePath && fileLocation() !== fileTitle()
+  const folderTarget = () => {
+    const file = target()
+    return file?.directory === activeDirectory().trim() && !file.sourceAbsolutePath && content() ? file : undefined
+  }
   const saveStatus = () => {
     if (saving()) return t("common.saving")
     if (dirty()) return t(previewVisible() ? "file_editor.preview_draft_hint" : "file_editor.unsaved")
@@ -735,6 +743,18 @@ export function FileEditorPane() {
     }
   }
 
+  function showContainingFolder(origin: HTMLButtonElement): void {
+    const file = folderTarget()
+    if (!file || isBusy() || fileEditorReserved()) return
+    requestFileExplorerFolder({
+      directory: file.directory,
+      authority: captureApiAuthority(),
+      selectionEpoch: boardStore.selectEpoch,
+      path: parentProjectPath(file.path, file.directory),
+      origin,
+    })
+  }
+
   const saveAndLeave = async () => {
     if (leaveSaving()) return
     const decision = pendingLeaveDecision
@@ -816,6 +836,20 @@ export function FileEditorPane() {
               }
             >
               <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
+            </Show>
+            <Show when={folderTarget()}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone="neutral"
+                disabled={isBusy() || fileEditorReserved()}
+                title={t("file_editor.show_containing_folder")}
+                aria-label={t("file_editor.show_containing_folder")}
+                onClick={(event) => showContainingFolder(event.currentTarget)}
+              >
+                <Icon name="folder-open" />
+              </Button>
             </Show>
             <Show when={textContent()}>
               <Button type="button" variant="ghost" size="icon" tone="neutral"

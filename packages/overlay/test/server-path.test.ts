@@ -4,6 +4,7 @@ import {
   decodeMarkdownFilePath,
   normalizeProjectFilePath,
   normalizeWorkspaceDirectoryInput,
+  parentProjectPath,
   pathWithForwardSeparators,
   projectFileLocation,
   resolveDocumentFilePath,
@@ -100,6 +101,14 @@ test.each([
 test("absolute path presentation retains roots, case and filename whitespace", () => {
   expect(pathWithForwardSeparators("C:\\Folder\\ File.md", "C:\\repo")).toBe("C:/Folder/ File.md")
   expect(pathWithForwardSeparators("/Folder/file\\name.md ", "/repo")).toBe("/Folder/file\\name.md ")
+})
+
+test.each([
+  ["C:\\Work\\North", "records\\Intake Notes\\Check.txt", "records/Intake Notes"],
+  ["\\\\host\\share\\repo", "README.md", ""],
+  ["/repo", "records/Side\\Name /file.txt", "records/Side\\Name "],
+])("the project parent in %s names the containing directory of %s", (directory, path, expected) => {
+  expect(parentProjectPath(path, directory)).toBe(expected)
 })
 
 test.each([

@@ -1,0 +1,42 @@
+{
+  "matchedOriginalFiles": {
+    "north": {
+      "warehouseRecords": 86,
+      "rootIgnoreFile": "original bytes"
+    },
+    "south": {
+      "warehouseRecords": 1,
+      "rootIgnoreFile": "original bytes"
+    }
+  },
+  "runtimeRows": {
+    "baseline": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "candidate": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "focusCandidate": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "finalCandidate": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  }
+}

@@ -96,6 +96,13 @@ export function normalizeProjectFilePath(path: string, directory: string): strin
   return [...Array(baseSegments.length - common).fill(".."), ...fullSegments.slice(common)].join("/")
 }
 
+/** The project root is represented by an empty relative parent. */
+export function parentProjectPath(path: string, directory: string): string {
+  const parts = normalizeProjectFilePath(path, directory).split("/")
+  parts.pop()
+  return parts.join("/")
+}
+
 /** How many trailing segments each visible path needs to distinguish it from its peers. */
 export function shortestDistinctPathSuffixLengths(paths: readonly (readonly string[])[]): number[] {
   return paths.map((parts, index) => {

@@ -55,6 +55,7 @@ import {
   classifyProjectPathInput,
   isWindowsPath,
   normalizeProjectFilePath,
+  parentProjectPath,
   projectFileLocation,
   shortestDistinctPathSuffixLengths,
 } from "../utils/server-path"
@@ -62,7 +63,6 @@ import { projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
-import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
@@ -699,9 +699,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   }
 
   function parentPath(path: string): string {
-    const parts = normalizeExplorerPath(path).split("/").filter(Boolean)
-    parts.pop()
-    return parts.join("/")
+    return parentProjectPath(path, directory())
   }
 
   function parentDirectoryPaths(path: string): string[] {
@@ -1101,20 +1099,19 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   }
 
   async function revealFolder(request: FileExplorerFolderRequest): Promise<void> {
+    // The selected tool signal can change before its tabs and contents update.
+    await Promise.resolve()
     if (!ownsFolderReveal(request)) return
     pendingFocus = undefined
     const origin = request.origin
     const ownerDocument = origin.ownerDocument
     let focusOrigin: Element = origin
-    const dock = origin.closest<HTMLElement>("#rightDock")
     const focused = ownerDocument.activeElement
-    // The attachment can sit inside the Dock tab that Explorer just replaced.
-    // Reserve focus on the visible Dock tab before waiting for directory reads.
-    if (request.focusWasOnOrigin && dock && origin.closest('[data-workbench-view][data-active="false"]') &&
+    // The destination search stays available while the Dock tabs reflow.
+    if (request.focusWasOnOrigin && searchInput && origin.closest('#rightDock [data-workbench-view][data-active="false"]') &&
       (focused === origin || focused === ownerDocument.body)) {
-      restoreRightDockFocus(dock, origin)
-      const restored = ownerDocument.activeElement
-      if (restored && dock.contains(restored)) focusOrigin = restored
+      searchInput.focus({ preventScroll: true })
+      if (ownerDocument.activeElement === searchInput) focusOrigin = searchInput
     }
     const previous = directoryErrors()
     let remaining: Map<string, ExplorerDirectoryFailure> | undefined

@@ -1,0 +1,116 @@
+[
+  {
+    "area": "north",
+    "project": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+    "listings": [
+      {
+        "path": "",
+        "status": 200,
+        "total": 4,
+        "exactEntry": {
+          "name": "records",
+          "path": "records",
+          "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        }
+      },
+      {
+        "path": "records",
+        "status": 200,
+        "total": 1,
+        "exactEntry": {
+          "name": "warehouse intake",
+          "path": "records\\warehouse intake",
+          "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        }
+      },
+      {
+        "path": "records/warehouse intake",
+        "status": 200,
+        "total": 86,
+        "exactEntry": {
+          "name": "warehouse-check-086.txt",
+          "path": "records\\warehouse intake\\warehouse-check-086.txt",
+          "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake\\warehouse-check-086.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      }
+    ],
+    "reads": [
+      {
+        "path": "records/warehouse intake/warehouse-check-086.txt",
+        "status": 200,
+        "content": "Warehouse: north\nAcceptance record: warehouse-check-086.txt\n"
+      },
+      {
+        "path": ".gitignore",
+        "status": 200,
+        "content": ".opencorvus/.r/\n"
+      }
+    ]
+  },
+  {
+    "area": "south",
+    "project": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes",
+    "listings": [
+      {
+        "path": "",
+        "status": 200,
+        "total": 4,
+        "exactEntry": {
+          "name": "records",
+          "path": "records",
+          "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes\\records",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        }
+      },
+      {
+        "path": "records",
+        "status": 200,
+        "total": 1,
+        "exactEntry": {
+          "name": "warehouse intake",
+          "path": "records\\warehouse intake",
+          "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes\\records\\warehouse intake",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        }
+      },
+      {
+        "path": "records/warehouse intake",
+        "status": 200,
+        "total": 1,
+        "exactEntry": {
+          "name": "warehouse-check-086.txt",
+          "path": "records\\warehouse intake\\warehouse-check-086.txt",
+          "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes\\records\\warehouse intake\\warehouse-check-086.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      }
+    ],
+    "reads": [
+      {
+        "path": "records/warehouse intake/warehouse-check-086.txt",
+        "status": 200,
+        "content": "Warehouse: south\nAcceptance record: warehouse-check-086.txt\n"
+      },
+      {
+        "path": ".gitignore",
+        "status": 200,
+        "content": ".opencorvus/.r/\n"
+      }
+    ]
+  }
+]

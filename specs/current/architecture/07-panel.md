@@ -1515,6 +1515,11 @@ widths fit and move together to the next row when space is limited. The
 metadata and save status keep their full-width row. The file location wraps
 within that row so narrow panes can show the full path, including its spaces.
 
+The file header can show the containing folder of an opened project file in
+Explorer. Its existing directory request activates that tool, reads and focuses
+the exact parent, and directs root entries to the project root and search field.
+Switching tools retains the open file and its current draft.
+
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
 the existing file-content route owns the disk snapshot; the loaded baseline and
