@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [侧栏在线状态直接显示当前连接端口](2026-11-23-sidebar-connected-port.md)
 - [已选会话加载时显示真实等待状态](2026-11-23-conversation-opening-status.md)
 - [多步任务编辑保存后可直接打开草稿](2026-11-22-mission-edit-save-feedback.md)
 - [聊天首页标明同名项目的当前范围](2026-11-22-chat-home-same-name-project.md)

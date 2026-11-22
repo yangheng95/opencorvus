@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [侧栏当前连接端口的桌面验收](2026-11-23-sidebar-connected-port/README.md)
 - [已选会话加载状态的桌面证据](2026-11-23-conversation-opening-status/README.md)
 - [多步任务草稿编辑反馈的桌面验收](2026-11-22-mission-edit-save-feedback/README.md)
 - [聊天首页当前项目范围的桌面验收](2026-11-22-chat-home-same-name-project/README.md)
