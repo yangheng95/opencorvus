@@ -7,6 +7,7 @@ import {
   type VirtualizerHandle,
 } from "virtua/solid"
 import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
+import { matchesSearchTerms } from "../services/text-search"
 import { localeTag, t, tc } from "../utils/i18n"
 import { shortRelativePath } from "../utils/tool"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
@@ -289,7 +290,7 @@ export function FileChangesView(props: FileChangesViewProps) {
     return allRows().filter((row) => {
       if (status !== "all" && (row.item.status ?? "changed") !== status) return false
       if (hideNonTextFiles() && row.item.isText === false) return false
-      if (query && !row.searchText.includes(query)) return false
+      if (query && !matchesSearchTerms(query, [row.searchText])) return false
       return true
     })
   })
