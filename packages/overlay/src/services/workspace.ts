@@ -32,7 +32,7 @@ import { clearConversationUiState } from "../store/conversation-ui"
 import { appStore, setAppStore } from "../store/app"
 import { fileReferenceReveal, type FileReference, type FileReferenceLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
-import { isAbsoluteServerPath, pathWithForwardSeparators } from "../utils/server-path"
+import { isAbsoluteServerPath, normalizeWorkspaceDirectoryInput, pathWithForwardSeparators } from "../utils/server-path"
 import { AppLog } from "../utils/log"
 import { t } from "../utils/i18n"
 import {
@@ -825,14 +825,15 @@ export async function chooseWorkspaceDirectory(options: {
     inputValue: options.start,
     inputRequired: true,
     inputRequiredMessage: t("cwd.path_required"),
-    validateInput: (value) => isAbsoluteServerPath(value.trim()) ? undefined : t("cwd.path_absolute_required"),
+    validateInput: (value) =>
+      isAbsoluteServerPath(normalizeWorkspaceDirectoryInput(value)) ? undefined : t("cwd.path_absolute_required"),
     submittingLabel: t("cwd.path_checking"),
     cancelWhileSubmitting: true,
     confirmErrorSummary: workspaceDirectoryCheckSummary,
     onConfirm: async (value, signal) => {
       if (!signal) throw new Error("Cancellable directory check requires its dialog signal")
       assertApiAuthorityCurrent(authority)
-      const directory = String(value ?? "").trim()
+      const directory = normalizeWorkspaceDirectoryInput(String(value ?? ""))
       const query = new URLSearchParams({ path: directory })
       const checked = await apiJson<{ directory: string }>(`global/projects/check-directory?${query}`, {
         authority,

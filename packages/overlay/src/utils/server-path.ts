@@ -5,6 +5,12 @@ export function isAbsoluteServerPath(path: string): boolean {
   return /^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/.test(path)
 }
 
+/** Interpret a manually entered workspace path while preserving the path's interior. */
+export function normalizeWorkspaceDirectoryInput(value: string): string {
+  const path = value.trim()
+  return path.length >= 2 && path.startsWith('"') && path.endsWith('"') ? path.slice(1, -1) : path
+}
+
 export function isWindowsPath(path: string): boolean {
   return /^(?:[A-Za-z]:[\\/]|\\\\[^\\]|\/\/[^/])/.test(path)
 }

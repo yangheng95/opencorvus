@@ -3,12 +3,24 @@ import {
   classifyProjectPathInput,
   decodeMarkdownFilePath,
   normalizeProjectFilePath,
+  normalizeWorkspaceDirectoryInput,
   pathWithForwardSeparators,
   resolveDocumentFilePath,
   serverFileUrlPath,
   shortestDistinctPathSuffixLengths,
 } from "../src/utils/server-path"
 import { projectDirectoryKey } from "../src/utils/project-directory"
+
+test.each([
+  ['  "C:\\Work\\Team folder"  ', "C:\\Work\\Team folder"],
+  ['"\\\\host\\share\\Team folder"', "\\\\host\\share\\Team folder"],
+  ['"/home/team/two  names"', "/home/team/two  names"],
+  ['"/home/team/say "hello""', '/home/team/say "hello"'],
+  [" /home/team/two  names ", "/home/team/two  names"],
+  ['"C:\\Work\\Team folder', '"C:\\Work\\Team folder'],
+])("workspace input %s resolves to the literal form %s", (input, expected) => {
+  expect(normalizeWorkspaceDirectoryInput(input)).toBe(expected)
+})
 
 test("relative result parents keep distinguishing ancestry, including the project root", () => {
   const paths = [[], ["warehouse", "north", "notes"], ["warehouse", "south", "notes"], ["warehouse", "receiving"]]

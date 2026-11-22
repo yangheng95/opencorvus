@@ -4424,8 +4424,10 @@ UI action. It selects the existing manualWorkspacePathEntry path dialog on
 browser hosts and the native picker on supported desktop hosts. Conversion names
 the destination parent separately from the new project folder; each dialog keeps
 the initiating project action's existing opening guard and return-focus target.
-Manual entry requires an absolute server path and keeps the dialog open while
-the global directory check confirms that it exists and is a directory. Its busy
+Manual entry accepts an absolute server path with an optional pair of outer
+double quotes. Validation and the directory request use the same entered path
+after removing that pair. The dialog stays open while the global directory
+check confirms that the path exists and is a directory. Its busy
 button names the directory check; metadata write dialogs retain their saving
 label. Failure preserves the input and current workspace. Only an accepted
 directory reaches workspace selection or conversion; the check does not
