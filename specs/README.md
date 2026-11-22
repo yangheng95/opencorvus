@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [在资源管理器中搜索项目文件夹](records/2026-11/2026-11-23-explorer-search-folder-entries.md)
 - [从文件查看器打开所在目录](records/2026-11/2026-11-23-file-editor-containing-folder.md)
 - [资源管理器原生剪贴板复验](records/2026-11/2026-11-23-explorer-native-clipboard-recheck.md)
 - [从资源管理器复制完整文件路径](records/2026-11/2026-11-23-explorer-copy-full-path.md)
