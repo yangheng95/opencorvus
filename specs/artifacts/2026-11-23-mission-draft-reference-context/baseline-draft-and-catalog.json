@@ -1,0 +1,86 @@
+{
+  "reads": [
+    {
+      "selectedStatus": 200,
+      "selected": {
+        "kind": "mission",
+        "id": "draft-4c4c35de0a4d2acf1713d15daf2bb8d0",
+        "missionID": "draft-4c4c35de0a4d2acf1713d15daf2bb8d0",
+        "sessionID": "ses_htgbk6YXoopqwTET0LY5",
+        "title": "South receiving review",
+        "pendingPromptText": "Reconcile ceramic planters against the current south warehouse inventory.",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+        "created": 1795366584915,
+        "started": 1795366584915,
+        "updated": 1795366584915,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      },
+      "messageStatus": 200,
+      "messages": []
+    },
+    {
+      "selectedStatus": 200,
+      "selected": {
+        "kind": "mission",
+        "id": "draft-19e3352d9585cb061336f4c87928d5d5",
+        "missionID": "draft-19e3352d9585cb061336f4c87928d5d5",
+        "sessionID": "ses_hzhW4GxL3Wbqu3TpjryD",
+        "title": "North receiving review",
+        "pendingPromptText": "Review the north receiving checklist with @mission(\"general\").",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+        "created": 1795366584590,
+        "started": 1795366584590,
+        "updated": 1795366584590,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "work",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      },
+      "messageStatus": 200,
+      "messages": []
+    }
+  ],
+  "catalogStatus": 200,
+  "catalog": {
+    "mission_skills": [
+      {
+        "name": "general",
+        "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+        "required_tools": [
+          "panel_expert_squad_inspect",
+          "panel_multica_catalog",
+          "panel_create_task",
+          "panel_query_task",
+          "panel_query_task_artifacts",
+          "panel_read_task_artifact",
+          "panel_read_task_message",
+          "panel_read_task_dispatch_evidence",
+          "panel_complete_mission",
+          "panel_block_mission",
+          "panel_resume_task",
+          "panel_extend_task_acceptance",
+          "panel_cancel_task",
+          "panel_respond_interaction"
+        ]
+      }
+    ],
+    "issues": []
+  }
+}

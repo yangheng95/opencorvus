@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务草稿引用上下文的桌面验收](2026-11-23-mission-draft-reference-context/README.md)
 - [已选会话工具栏的桌面验收](2026-11-23-composer-selected-context/README.md)
 - [归档多步任务请求预览的桌面验收](2026-11-23-archive-mission-request-preview/README.md)
 - [侧栏当前连接端口的桌面验收](2026-11-23-sidebar-connected-port/README.md)
