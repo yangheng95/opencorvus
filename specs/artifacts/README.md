@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件工作台跳转到行的实页截图](2026-11-23-file-workbench-go-to-line/README.md)
 - [命令面板当前外观的实页截图](2026-11-23-command-palette-current-appearance/README.md)
 - [多步任务技能用途摘要的实页截图](2026-11-23-mission-skill-list-description/README.md)
 - [全图预览固有尺寸的实页截图](2026-11-23-image-preview-dimensions/README.md)
