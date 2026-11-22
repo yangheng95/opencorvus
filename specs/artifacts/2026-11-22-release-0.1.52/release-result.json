@@ -1,0 +1,201 @@
+{
+  "version": "0.1.52",
+  "verifiedAt": "2026-11-22T15:43:05.463Z",
+  "source": "cf5e9a015bdbc477b5726a6f7519aa8156dae7ba",
+  "nativeRunID": 45036081992,
+  "websiteRunID": 45038512820,
+  "createdAt": "2026-11-22T15:02:36Z",
+  "completedAt": "2026-11-22T15:36:03Z",
+  "originalDeadline": "2026-11-22T16:02:36.000Z",
+  "elapsedSeconds": 2007,
+  "budgetMinutes": 60,
+  "nativeWorkflowAttempts": 2,
+  "websiteWorkflowAttempts": 1,
+  "publicationAttempts": 1,
+  "publication": [
+    "publish release\tDispatch public download page deployment\t2026-11-22T15:28:35.7445049Z Website workflow: https://github.com/yangheng95/opencorvus/actions/runs/45038512820",
+    "publish release\tAwait exact website deployment result\t2026-11-22T15:35:44.8118707Z Website run 45038512820 completed successfully within the release budget"
+  ],
+  "pairedWebsiteWorkflowSource": "fba0757b455581152a089d5cc44b6f3a495f84a4",
+  "pairedWebsiteProductSource": "cf5e9a015bdbc477b5726a6f7519aa8156dae7ba",
+  "pairedWebsiteSource": [
+    "resolve immutable website source\tResolve and verify website source\t2026-11-22T15:29:22.1117192Z   SOURCE_SHA: cf5e9a015bdbc477b5726a6f7519aa8156dae7ba",
+    "resolve immutable website source\tResolve and verify website source\t2026-11-22T15:29:22.1117551Z   RELEASE_RUN_ID: 45036081992",
+    "resolve immutable website source\tResolve and verify website source\t2026-11-22T15:29:24.4283800Z Resolved immutable website source cf5e9a015bdbc477b5726a6f7519aa8156dae7ba"
+  ],
+  "nativeJobs": [
+    {
+      "id": 137257316199,
+      "name": "release deadline",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257317101,
+      "name": "prepare",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257317754,
+      "name": "cli (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257317873,
+      "name": "cli (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318012,
+      "name": "overlay (windows-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137257318040,
+      "name": "overlay (linux-x64) / compile (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318085,
+      "name": "cli (darwin-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318093,
+      "name": "overlay (windows-x64) / compile (windows-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318185,
+      "name": "cli (windows-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318201,
+      "name": "overlay (darwin-x64) / compile (darwin-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318324,
+      "name": "cli (darwin-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318366,
+      "name": "overlay (linux-arm64) / compile (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318367,
+      "name": "overlay (windows-x64) / validate installers (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137257318381,
+      "name": "overlay (darwin-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137257318382,
+      "name": "overlay (darwin-arm64) / compile (darwin-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318395,
+      "name": "overlay (darwin-arm64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137257318417,
+      "name": "overlay (linux-x64) / rpm (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318434,
+      "name": "publish release",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318453,
+      "name": "overlay (linux-arm64) / appimage (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318528,
+      "name": "overlay (linux-arm64) / rpm (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318605,
+      "name": "overlay (linux-x64) / deb (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318648,
+      "name": "overlay (linux-x64) / appimage (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318705,
+      "name": "overlay (darwin-arm64) / validate installers (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137257318788,
+      "name": "overlay (linux-arm64) / deb (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257318982,
+      "name": "overlay (darwin-x64) / validate installers (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137257318997,
+      "name": "overlay (linux-arm64) / validate installers (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257319440,
+      "name": "overlay (linux-x64) / validate installers (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137257319767,
+      "name": "publish release assets",
+      "conclusion": "success"
+    },
+    {
+      "id": 137259590275,
+      "name": "release result",
+      "conclusion": "success"
+    }
+  ],
+  "firstRunQualification": [
+    "cli (linux-arm64)\traw job log\t2026-11-22T15:07:27.7264960Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "cli (linux-x64)\traw job log\t2026-11-22T15:06:48.7292177Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "cli (linux-x64)\traw job log\t2026-11-22T15:06:54.8588737Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (linux-x64) / compile (linux-x64)\traw job log\t2026-11-22T15:07:03.7545061Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "cli (darwin-arm64)\traw job log\t2026-11-22T15:10:26.6499780Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (windows-x64) / compile (windows-x64)\traw job log\t2026-11-22T15:09:17.1181662Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "cli (windows-x64)\traw job log\t2026-11-22T15:12:46.9828584Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "cli (windows-x64)\traw job log\t2026-11-22T15:12:58.1464288Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (darwin-x64) / compile (darwin-x64)\traw job log\t2026-11-22T15:10:38.2977900Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "cli (darwin-x64)\traw job log\t2026-11-22T15:09:41.8508100Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "cli (darwin-x64)\traw job log\t2026-11-22T15:10:02.9305270Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (linux-arm64) / compile (linux-arm64)\traw job log\t2026-11-22T15:07:26.5774213Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (darwin-arm64) / compile (darwin-arm64)\traw job log\t2026-11-22T15:14:52.3743920Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}"
+  ],
+  "installerValidation": [
+    "overlay (windows-x64) / compile (windows-x64)\traw job log\t2026-11-22T15:15:46.3371224Z Overlay assets validated for windows-x64",
+    "overlay (darwin-x64) / compile (darwin-x64)\traw job log\t2026-11-22T15:14:53.6055510Z Overlay assets validated for darwin-x64",
+    "overlay (darwin-arm64) / compile (darwin-arm64)\traw job log\t2026-11-22T15:21:58.3927500Z Overlay assets validated for darwin-arm64",
+    "overlay (linux-arm64) / validate installers (linux-arm64)\traw job log\t2026-11-22T15:19:30.6272113Z Overlay assets validated for linux-arm64",
+    "overlay (linux-x64) / validate installers (linux-x64)\traw job log\t2026-11-22T15:18:53.4774289Z Overlay assets validated for linux-x64"
+  ],
+  "websiteActivation": [
+    "build and verify database-backed release\tExercise packaged database runtime\t2026-11-22T15:32:06.7576859Z {\"publicationID\":1,\"publication\":{\"id\":1,\"catalogSha256\":\"2e0890413e0c8ea12c9047b0760efe959449c0e986f1f36d0b5f7620f2adfcfd\",\"total\":122,\"embeddedAlreadyAvailable\":5,\"bundledMarketImportable\":117,\"activatedAt\":\"2026-11-22T15:32:06.668Z\"}}",
+    "sign and deploy RackNerd release\tDeploy immutable release and atomically switch current\t2026-11-22T15:35:03.7087882Z {\"publicationID\":23,\"publication\":{\"id\":23,\"catalogSha256\":\"2e0890413e0c8ea12c9047b0760efe959449c0e986f1f36d0b5f7620f2adfcfd\",\"total\":122,\"embeddedAlreadyAvailable\":5,\"bundledMarketImportable\":117,\"activatedAt\":\"2026-11-22T15:35:03.500Z\"}}",
+    "sign and deploy RackNerd release\tDeploy immutable release and atomically switch current\t2026-11-22T15:35:11.2295170Z cf5e9a015bdbc477b5726a6f7519aa8156dae7ba-8011d8eaaa83b452"
+  ],
+  "scope": "Complete canonical native matrix, exact paired website activation and public readback; first-run/restart used realProvider=false, not all product workflows or models"
+}

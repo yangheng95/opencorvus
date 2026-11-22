@@ -1,0 +1,48 @@
+{
+  "version": "0.1.52",
+  "source": "cf5e9a015bdbc477b5726a6f7519aa8156dae7ba",
+  "nativeRunID": 45036081992,
+  "originalDeadline": "2026-11-22T16:02:36.000Z",
+  "firstNativeAttempt": {
+    "conclusion": "failure",
+    "created_at": "2026-11-22T15:02:36Z",
+    "head_sha": "cf5e9a015bdbc477b5726a6f7519aa8156dae7ba",
+    "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/45036081992",
+    "id": 45036081992,
+    "run_attempt": 1,
+    "status": "completed",
+    "updated_at": "2026-11-22T15:25:19Z"
+  },
+  "firstPairedWebsite": {
+    "conclusion": "cancelled",
+    "created_at": "2026-11-22T15:25:00Z",
+    "head_sha": "43833fd78cead3e907459ef8f7a4584be146109d",
+    "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/45038187290",
+    "id": 45038187290,
+    "run_attempt": 1,
+    "status": "completed",
+    "updated_at": "2026-11-22T15:25:37Z"
+  },
+  "firstAttemptEvidence": [
+    "2026-11-22T15:25:00.3807948Z Website workflow: https://github.com/yangheng95/opencorvus/actions/runs/45038187290",
+    "2026-11-22T15:25:00.8377101Z ReleaseAutomationError: RELEASE_API_ERROR: GET actions/runs/45038187290 returned HTTP 404"
+  ],
+  "rootCause": "The first read of the exact newly dispatched website run preceded GitHub API visibility; the original waiter classified this as a terminal API error. Native artifacts had already been published successfully.",
+  "recovery": {
+    "method": "Rerun only the failed jobs of the same canonical native run",
+    "nativeRunAttempt": 2,
+    "pairedWebsiteRunID": 45038512820,
+    "retainedPublishedReleaseID": 454528225,
+    "finalConclusion": "success",
+    "completedAt": "2026-11-22T15:36:03Z",
+    "elapsedSeconds": 2007,
+    "originalBudgetExtended": false
+  },
+  "mainlineRepair": {
+    "commit": "ad344d648028a3ee2db9519a32a79fa26f2ae92b",
+    "scope": "Allow HTTP 404 only before the first valid observation of the recorded exact website run, within the original native deadline; identity, permission and post-visibility errors retain their contracts.",
+    "qualification": "46 focused release automation and workflow contracts passed",
+    "includedInImmutableVersion": false
+  },
+  "history": "One version candidate; original failure and cancellation records retained. No public release, tag, historical release notes or healthy asset deleted."
+}

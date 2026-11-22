@@ -1,0 +1,226 @@
+{
+  "version": "0.1.52",
+  "nativeSource": "cf5e9a015bdbc477b5726a6f7519aa8156dae7ba",
+  "qualificationRun": "https://github.com/yangheng95/opencorvus/actions/runs/45034191153",
+  "qualificationSource": "c5185f40ed796fe87162d24e324c5411167ace9b",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 137244170714,
+      "name": "changes",
+      "conclusion": "success"
+    },
+    {
+      "id": 137244171812,
+      "name": "dependency review",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 137244496876,
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "id": 137244496938,
+      "name": "dependency audit",
+      "conclusion": "success"
+    },
+    {
+      "id": 137245919816,
+      "name": "service tests",
+      "conclusion": "success"
+    },
+    {
+      "id": 137245919858,
+      "name": "selected unit (windows)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137245919879,
+      "name": "selected unit (linux)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137245919882,
+      "name": "selected unit (macos)",
+      "conclusion": "success"
+    },
+    {
+      "id": 137249223714,
+      "name": "Selected CI passed",
+      "conclusion": "success"
+    }
+  ],
+  "platforms": [
+    {
+      "platform": "linux",
+      "jobID": 137245919879,
+      "source": "c5185f40ed796fe87162d24e324c5411167ace9b",
+      "selectedFilesStarted": [
+        "[1/20] START test/server/stop-control-identity.test.ts",
+        "[2/20] START test/intent-bundle-committed-projection.test.ts",
+        "[3/20] START test/file-attachment-editability.test.ts",
+        "[4/20] START test/file-git-alias-contract.test.ts",
+        "[5/20] START test/file-text-admission.test.ts",
+        "[6/20] START test/expert-squad-evolution-mutation.test.ts",
+        "[7/20] START test/server/passive-workspace-metadata.test.ts",
+        "[8/20] START test/usage/usage-stats.test.ts",
+        "[9/20] START test/test-runner-failure.test.ts",
+        "[10/20] START test/test-runner-selected-files.test.ts",
+        "[11/20] START test/project-delete-conflict-contract.test.ts",
+        "[12/20] START test/task-cancellation-permissions.test.ts",
+        "[13/20] START test/task-control-cancellation-convergence.test.ts",
+        "[14/20] START test/memory-fixture-publication-settlement.test.ts",
+        "[15/20] START test/bus-durable-outbox.test.ts",
+        "[16/20] START test/bus-delivery-lease-race.test.ts",
+        "[17/20] START test/bus-publication-owner.test.ts",
+        "[18/20] START test/runtime-execution-settlement.test.ts",
+        "[19/20] START test/instance-background-shutdown.test.ts",
+        "[20/20] START test/process-shutdown-task-lifecycle.test.ts"
+      ],
+      "selectedFilesSucceeded": [
+        "[1/20] DONE test/server/stop-control-identity.test.ts exit=0 duration=15.65s",
+        "[2/20] DONE test/intent-bundle-committed-projection.test.ts exit=0 duration=2.25s",
+        "[3/20] DONE test/file-attachment-editability.test.ts exit=0 duration=2.82s",
+        "[4/20] DONE test/file-git-alias-contract.test.ts exit=0 duration=7.65s",
+        "[5/20] DONE test/file-text-admission.test.ts exit=0 duration=7.61s",
+        "[6/20] DONE test/expert-squad-evolution-mutation.test.ts exit=0 duration=23.57s",
+        "[7/20] DONE test/server/passive-workspace-metadata.test.ts exit=0 duration=3.42s",
+        "[8/20] DONE test/usage/usage-stats.test.ts exit=0 duration=2.19s",
+        "[9/20] DONE test/test-runner-failure.test.ts exit=0 duration=18.11s",
+        "[10/20] DONE test/test-runner-selected-files.test.ts exit=0 duration=14.54s",
+        "[11/20] DONE test/project-delete-conflict-contract.test.ts exit=0 duration=2.70s",
+        "[12/20] DONE test/task-cancellation-permissions.test.ts exit=0 duration=6.41s",
+        "[13/20] DONE test/task-control-cancellation-convergence.test.ts exit=0 duration=2.54s",
+        "[14/20] DONE test/memory-fixture-publication-settlement.test.ts exit=0 duration=1.57s",
+        "[15/20] DONE test/bus-durable-outbox.test.ts exit=0 duration=7.95s",
+        "[16/20] DONE test/bus-delivery-lease-race.test.ts exit=0 duration=7.73s",
+        "[17/20] DONE test/bus-publication-owner.test.ts exit=0 duration=2.79s",
+        "[18/20] DONE test/runtime-execution-settlement.test.ts exit=0 duration=3.44s",
+        "[19/20] DONE test/instance-background-shutdown.test.ts exit=0 duration=4.08s",
+        "[20/20] DONE test/process-shutdown-task-lifecycle.test.ts exit=0 duration=3.87s"
+      ],
+      "originalDurableRetentionContract": [
+        "(pass) fixture retirement retains original durable input and admits the next Project's exact publication [763.33ms]"
+      ]
+    },
+    {
+      "platform": "macos",
+      "jobID": 137245919882,
+      "source": "c5185f40ed796fe87162d24e324c5411167ace9b",
+      "selectedFilesStarted": [
+        "[1/20] START test/server/stop-control-identity.test.ts",
+        "[2/20] START test/intent-bundle-committed-projection.test.ts",
+        "[3/20] START test/file-attachment-editability.test.ts",
+        "[4/20] START test/file-git-alias-contract.test.ts",
+        "[5/20] START test/file-text-admission.test.ts",
+        "[6/20] START test/expert-squad-evolution-mutation.test.ts",
+        "[7/20] START test/server/passive-workspace-metadata.test.ts",
+        "[8/20] START test/usage/usage-stats.test.ts",
+        "[9/20] START test/test-runner-failure.test.ts",
+        "[10/20] START test/test-runner-selected-files.test.ts",
+        "[11/20] START test/project-delete-conflict-contract.test.ts",
+        "[12/20] START test/task-cancellation-permissions.test.ts",
+        "[13/20] START test/task-control-cancellation-convergence.test.ts",
+        "[14/20] START test/memory-fixture-publication-settlement.test.ts",
+        "[15/20] START test/bus-durable-outbox.test.ts",
+        "[16/20] START test/bus-delivery-lease-race.test.ts",
+        "[17/20] START test/bus-publication-owner.test.ts",
+        "[18/20] START test/runtime-execution-settlement.test.ts",
+        "[19/20] START test/instance-background-shutdown.test.ts",
+        "[20/20] START test/process-shutdown-task-lifecycle.test.ts"
+      ],
+      "selectedFilesSucceeded": [
+        "[1/20] DONE test/server/stop-control-identity.test.ts exit=0 duration=38.78s",
+        "[2/20] DONE test/intent-bundle-committed-projection.test.ts exit=0 duration=5.64s",
+        "[3/20] DONE test/file-attachment-editability.test.ts exit=0 duration=7.86s",
+        "[4/20] DONE test/file-git-alias-contract.test.ts exit=0 duration=26.43s",
+        "[5/20] DONE test/file-text-admission.test.ts exit=0 duration=27.27s",
+        "[6/20] DONE test/expert-squad-evolution-mutation.test.ts exit=0 duration=63.48s",
+        "[7/20] DONE test/server/passive-workspace-metadata.test.ts exit=0 duration=8.60s",
+        "[8/20] DONE test/usage/usage-stats.test.ts exit=0 duration=4.03s",
+        "[9/20] DONE test/test-runner-failure.test.ts exit=0 duration=35.72s",
+        "[10/20] DONE test/test-runner-selected-files.test.ts exit=0 duration=31.35s",
+        "[11/20] DONE test/project-delete-conflict-contract.test.ts exit=0 duration=4.53s",
+        "[12/20] DONE test/task-cancellation-permissions.test.ts exit=0 duration=12.03s",
+        "[13/20] DONE test/task-control-cancellation-convergence.test.ts exit=0 duration=4.66s",
+        "[14/20] DONE test/memory-fixture-publication-settlement.test.ts exit=0 duration=2.64s",
+        "[15/20] DONE test/bus-durable-outbox.test.ts exit=0 duration=14.38s",
+        "[16/20] DONE test/bus-delivery-lease-race.test.ts exit=0 duration=11.57s",
+        "[17/20] DONE test/bus-publication-owner.test.ts exit=0 duration=6.10s",
+        "[18/20] DONE test/runtime-execution-settlement.test.ts exit=0 duration=5.42s",
+        "[19/20] DONE test/instance-background-shutdown.test.ts exit=0 duration=6.41s",
+        "[20/20] DONE test/process-shutdown-task-lifecycle.test.ts exit=0 duration=5.61s"
+      ],
+      "originalDurableRetentionContract": [
+        "(pass) fixture retirement retains original durable input and admits the next Project's exact publication [1709.19ms]"
+      ]
+    },
+    {
+      "platform": "windows",
+      "jobID": 137245919858,
+      "source": "c5185f40ed796fe87162d24e324c5411167ace9b",
+      "selectedFilesStarted": [
+        "[1/20] START test/server/stop-control-identity.test.ts",
+        "[2/20] START test/intent-bundle-committed-projection.test.ts",
+        "[3/20] START test/file-attachment-editability.test.ts",
+        "[4/20] START test/file-git-alias-contract.test.ts",
+        "[5/20] START test/file-text-admission.test.ts",
+        "[6/20] START test/expert-squad-evolution-mutation.test.ts",
+        "[7/20] START test/server/passive-workspace-metadata.test.ts",
+        "[8/20] START test/usage/usage-stats.test.ts",
+        "[9/20] START test/test-runner-failure.test.ts",
+        "[10/20] START test/test-runner-selected-files.test.ts",
+        "[11/20] START test/project-delete-conflict-contract.test.ts",
+        "[12/20] START test/task-cancellation-permissions.test.ts",
+        "[13/20] START test/task-control-cancellation-convergence.test.ts",
+        "[14/20] START test/memory-fixture-publication-settlement.test.ts",
+        "[15/20] START test/bus-durable-outbox.test.ts",
+        "[16/20] START test/bus-delivery-lease-race.test.ts",
+        "[17/20] START test/bus-publication-owner.test.ts",
+        "[18/20] START test/runtime-execution-settlement.test.ts",
+        "[19/20] START test/instance-background-shutdown.test.ts",
+        "[20/20] START test/process-shutdown-task-lifecycle.test.ts"
+      ],
+      "selectedFilesSucceeded": [
+        "[1/20] DONE test/server/stop-control-identity.test.ts exit=0 duration=37.84s",
+        "[2/20] DONE test/intent-bundle-committed-projection.test.ts exit=0 duration=3.76s",
+        "[3/20] DONE test/file-attachment-editability.test.ts exit=0 duration=8.46s",
+        "[4/20] DONE test/file-git-alias-contract.test.ts exit=0 duration=25.28s",
+        "[5/20] DONE test/file-text-admission.test.ts exit=0 duration=41.23s",
+        "[6/20] DONE test/expert-squad-evolution-mutation.test.ts exit=0 duration=63.39s",
+        "[7/20] DONE test/server/passive-workspace-metadata.test.ts exit=0 duration=8.02s",
+        "[8/20] DONE test/usage/usage-stats.test.ts exit=0 duration=3.73s",
+        "[9/20] DONE test/test-runner-failure.test.ts exit=0 duration=56.82s",
+        "[10/20] DONE test/test-runner-selected-files.test.ts exit=0 duration=29.37s",
+        "[11/20] DONE test/project-delete-conflict-contract.test.ts exit=0 duration=4.54s",
+        "[12/20] DONE test/task-cancellation-permissions.test.ts exit=0 duration=11.05s",
+        "[13/20] DONE test/task-control-cancellation-convergence.test.ts exit=0 duration=4.92s",
+        "[14/20] DONE test/memory-fixture-publication-settlement.test.ts exit=0 duration=3.18s",
+        "[15/20] DONE test/bus-durable-outbox.test.ts exit=0 duration=17.60s",
+        "[16/20] DONE test/bus-delivery-lease-race.test.ts exit=0 duration=11.78s",
+        "[17/20] DONE test/bus-publication-owner.test.ts exit=0 duration=5.56s",
+        "[18/20] DONE test/runtime-execution-settlement.test.ts exit=0 duration=6.18s",
+        "[19/20] DONE test/instance-background-shutdown.test.ts exit=0 duration=9.23s",
+        "[20/20] DONE test/process-shutdown-task-lifecycle.test.ts exit=0 duration=7.71s"
+      ],
+      "originalDurableRetentionContract": [
+        "(pass) fixture retirement retains original durable input and admits the next Project's exact publication [2199.84ms]"
+      ]
+    }
+  ],
+  "unchangedBackendAndToolchainInputPaths": [
+    "packages/opencorvus",
+    "packages/util",
+    "packages/sdk",
+    "packages/channel-config",
+    "packages/channel-runtime",
+    "packages/plugin",
+    "packages/transport-protocol",
+    "package.json",
+    "bun.lock",
+    ".github",
+    "script"
+  ],
+  "scope": "20 selected backend and fixture files per platform; complete verify, audit and service checks. Not a full backend suite claim."
+}
