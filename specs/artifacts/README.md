@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [不可预览文件的字节数实页截图](2026-11-23-binary-download-file-size/README.md)
 - [归档搜索方向键进入结果的实页截图](2026-11-23-archive-search-keyboard-entry/README.md)
 - [跳行在文件重新加载后的实页证据](2026-11-23-editor-go-to-line-after-reload/README.md)
 - [文件工作台跳转到行的实页截图](2026-11-23-file-workbench-go-to-line/README.md)

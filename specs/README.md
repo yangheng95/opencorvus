@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [在下载前显示不可预览文件的字节数](records/2026-11/2026-11-23-binary-download-file-size.md)
 - [从归档搜索用方向键进入结果](records/2026-11/2026-11-23-archive-search-keyboard-entry.md)
 - [跳转到行按提交时的文件内容定位](records/2026-11/2026-11-23-editor-go-to-line-after-reload.md)
 - [文件工作台提供跳转到行入口](records/2026-11/2026-11-23-file-workbench-go-to-line.md)
