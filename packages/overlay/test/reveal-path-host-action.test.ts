@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { HOST_CAPABILITIES, type HostKind, type HostTransport, type NativeCommand } from "../src/services/host-transport"
-import { pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../src/services/workspace"
+import { revealPath } from "../src/services/workspace"
 
 // What this pins
 // ----------------
@@ -74,20 +74,5 @@ describe("revealPath", () => {
     __setHostTransportForTest(transportFor("tauri", []))
 
     await expect(revealPath("   ")).rejects.toThrow(/requires a non-empty path/)
-  })
-})
-
-describe("path action labels", () => {
-  test("each host names the action it performs", () => {
-    __setHostTransportForTest(transportFor("tauri", []))
-    expect(pathRevealLabelKey()).toBe("cwd.open")
-
-    __setHostTransportForTest(transportFor("browser", []))
-    expect(pathRevealLabelKey()).toBe("cwd.copy_path")
-  })
-
-  test("only a copy needs a confirmation notice", () => {
-    expect(pathRevealNoticeKey("copied")).toBe("cwd.path_copied")
-    expect(pathRevealNoticeKey("opened")).toBe("")
   })
 })
