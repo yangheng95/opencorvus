@@ -1,0 +1,46 @@
+[
+  {
+    "HTTP": 200,
+    "period": "day",
+    "timeZone": "Asia/Shanghai",
+    "grain": "hour",
+    "count": 24,
+    "startsAt": "2026-11-22T00:00:00.0000000+08:00",
+    "endsAt": "2026-11-23T00:00:00.0000000+08:00",
+    "calls": 0,
+    "tokens": 0
+  },
+  {
+    "HTTP": 200,
+    "period": "week",
+    "timeZone": "Asia/Shanghai",
+    "grain": "day",
+    "count": 7,
+    "startsAt": "2026-11-16T00:00:00.0000000+08:00",
+    "endsAt": "2026-11-23T00:00:00.0000000+08:00",
+    "calls": 0,
+    "tokens": 0
+  },
+  {
+    "HTTP": 200,
+    "period": "month",
+    "timeZone": "Asia/Shanghai",
+    "grain": "day",
+    "count": 30,
+    "startsAt": "2026-11-01T00:00:00.0000000+08:00",
+    "endsAt": "2026-12-01T00:00:00.0000000+08:00",
+    "calls": 0,
+    "tokens": 0
+  },
+  {
+    "HTTP": 200,
+    "period": "year",
+    "timeZone": "Asia/Shanghai",
+    "grain": "day",
+    "count": 365,
+    "startsAt": "2026-01-01T00:00:00.0000000+08:00",
+    "endsAt": "2027-01-01T00:00:00.0000000+08:00",
+    "calls": 0,
+    "tokens": 0
+  }
+]

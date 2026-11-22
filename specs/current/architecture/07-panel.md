@@ -2575,7 +2575,10 @@ linear axes.
 Kobalte owns collection selection and focus; retired data clears its selection.
 The shared Tooltip presents the same localized event interval, UTC offsets and
 Token count on hover or focus, with the item's registered description pointing
-to the actual popup. Escape closes that popup through its existing owner.
+to the actual popup. Intervals with a shared offset use the localized range and
+display that offset once. When offsets differ, each endpoint keeps its own
+offset, including repeated local times. Escape closes that popup through its
+existing owner.
 Default light/dark palettes use neutral chrome; named palettes retain their
 own colors. Page typography follows the sole shared typography authority.
 

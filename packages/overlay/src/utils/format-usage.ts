@@ -8,8 +8,7 @@
 //
 // `aggregateUsageAcrossSessions` is the pure kernel of the chat-header
 // usage strip. `store/card-tree-stats.ts` owns the Solid-store projection,
-// while this file owns only the token/cost semantics so it can be
-// unit-tested without touching the DOM or Solid.
+// while this file keeps the token/cost semantics independent of the DOM or Solid.
 
 /** Compact usage in the caller's current locale; inspection retains exact counts. */
 export function formatTokenCount(n: number, locale: string): string {
@@ -42,6 +41,30 @@ export function formatDetailedCostUSD(n: number): string {
   if (n === 0) return "$0"
   const decimal = n.toFixed(USD_COST_DECIMAL_PLACES).replace(/0+$/, "").replace(/\.$/, "")
   return decimal === "0" ? "<$0.000000000001" : `$${decimal}`
+}
+
+/** Format a usage bucket's exact endpoints in the time zone of its report. */
+export function createUsageIntervalFormatter(locale: string, timeZone: string) {
+  const dateTime: Intl.DateTimeFormatOptions = {
+    timeZone,
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }
+  const range = new Intl.DateTimeFormat(locale, dateTime)
+  const endpoint = new Intl.DateTimeFormat(locale, { ...dateTime, timeZoneName: "shortOffset" })
+  const offset = (value: number) => endpoint.formatToParts(value).find((part) => part.type === "timeZoneName")?.value
+
+  return (start: number, end: number): string => {
+    const startOffset = offset(start)
+    if (startOffset && startOffset === offset(end)) {
+      return `${range.formatRange(start, end)} · ${startOffset}`
+    }
+    // Distinct offsets can identify two occurrences of the same local hour.
+    return `${endpoint.format(start)} – ${endpoint.format(end)}`
+  }
 }
 
 /** Minimal card shape consumed by the usage aggregator. Kept

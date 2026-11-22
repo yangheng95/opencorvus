@@ -10,7 +10,7 @@ import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from ".
 import { USAGE_PERIODS, UsagePeriodMismatchError, UsageServerVersionError, UsageTimeZoneMismatchError, loadUsageStatistics, userTimeZone } from "../../services/usage"
 import { useDisclosure } from "../../solid/disclosure"
 import { formatErrorDetails } from "../../utils/error-details"
-import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
+import { createUsageIntervalFormatter, formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t, tc } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
@@ -74,30 +74,17 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
   const bucketElements = new Map<string, HTMLLIElement>()
   const buckets = () => props.data.buckets
   const isYear = () => props.data.period === "year"
-  const intervalFormatter = createMemo(() =>
-    new Intl.DateTimeFormat(localeTag(), {
-      timeZone: props.data.timeZone,
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZoneName: "shortOffset",
-    }),
-  )
-  const intervalLabel = (bucket: UsageStatistics["buckets"][number]) => {
-    const formatter = intervalFormatter()
-    return `${formatter.format(bucket.start)} – ${formatter.format(bucket.end)}`
-  }
-  const bucketText = (bucket: UsageStatistics["buckets"][number]) =>
-    `${intervalLabel(bucket)} · ${exactNumber(bucket.tokens.total)} ${t("usage.table_tokens")}`
+  const intervalFormatter = createMemo(() => createUsageIntervalFormatter(localeTag(), props.data.timeZone))
+  const intervalLabel = (bucket: UsageStatistics["buckets"][number]) => intervalFormatter()(bucket.start, bucket.end)
+  const bucketText = (interval: string, tokens: number) =>
+    `${interval} · ${exactNumber(tokens)} ${t("usage.table_tokens")}`
   const listState = createListState({
     selectionMode: "single",
     selectionBehavior: "replace",
     disallowEmptySelection: () => buckets().length > 0,
     dataSource: buckets,
     getKey: () => (bucket: UsageStatistics["buckets"][number]) => bucket.start.toString(),
-    getTextValue: () => bucketText,
+    getTextValue: () => (bucket) => bucketText(intervalLabel(bucket), bucket.tokens.total),
   })
   const keyInDirection = (key: string, axis: "horizontal" | "vertical", direction: -1 | 1) => {
     const current = bucketElements.get(key)?.getBoundingClientRect()
@@ -180,6 +167,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
         shouldFocusWrap={false}
         keyboardDelegate={keyboardDelegate}
         renderItem={(item) => {
+          const interval = createMemo(() => intervalLabel(item.rawValue))
           onCleanup(() => bucketElements.delete(item.key))
           return (
             <Tooltip.Root openDelay={180} closeDelay={80} placement="top" gutter={8} fitViewport>
@@ -197,8 +185,8 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
                     : undefined
                 }
               >
-                <span class="sr-only">{bucketText(item.rawValue)}</span>
-                <UsageBucketDetails tokens={item.rawValue.tokens.total} interval={intervalLabel(item.rawValue)} />
+                <span class="sr-only">{bucketText(interval(), item.rawValue.tokens.total)}</span>
+                <UsageBucketDetails tokens={item.rawValue.tokens.total} interval={interval()} />
               </Tooltip.Trigger>
             </Tooltip.Root>
           )
