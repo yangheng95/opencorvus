@@ -4305,6 +4305,8 @@ behaviors of that one host; consumers cannot introduce another lightbox or
 parallel image source.
 The header menu button provides a keyboard entry for copy, width fit,
 whole-image fit and original size. Its dropdown is mounted inside the dialog.
+Once the displayed image is ready, its header displays the same intrinsic width
+and height used by fit and original size, localized and independent of zoom.
 The image's pointer context menu shares the same commands and enabled state.
 Zoom derives the viewed point from the image's actual viewport bounds before
 and after scaling, then adjusts the existing pan container by that displacement.

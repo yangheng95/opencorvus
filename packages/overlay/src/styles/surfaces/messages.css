@@ -766,6 +766,14 @@
   pointer-events: auto;
 }
 
+.image-preview-dialog__dimensions {
+  margin-inline-end: var(--ui-gap-sm);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .image-preview-dialog__header-action.oc-button[data-size="icon"][data-variant="ghost"][data-chrome="icon-action"] {
   --oc-button-height: calc(32px * var(--ui-scale));
   --oc-button-padding-x: 0;

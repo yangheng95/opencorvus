@@ -19,7 +19,7 @@ import {
   type ImagePreviewSize,
 } from "../utils/image-preview-scale"
 import { imagePreviewTriggerClass, imagePreviewTriggerContract } from "../utils/image-preview-trigger"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { Dialog } from "./ui/Dialog"
 import { Button } from "./ui/Button"
@@ -179,6 +179,7 @@ export function ImagePreviewHost() {
   const [imageFailed, setImageFailed] = createSignal(false)
   const imageUnavailable = () => imageFailed() || Boolean(imagePreviewState().resourceUrl && resource.error)
   const imageReady = () => !imageUnavailable() && imageSize().width > 0 && imageSize().height > 0
+  const dimensionFormat = createMemo(() => new Intl.NumberFormat(localeTag()))
   const [bodyGeometry, setBodyGeometry] = createSignal<ImagePreviewBodyGeometry | null>(null)
   const [copyInFlight, setCopyInFlight] = createSignal(false)
   const [downloadInFlight, setDownloadInFlight] = createSignal(false)
@@ -617,6 +618,14 @@ export function ImagePreviewHost() {
       draggable={false}
       headerActions={
         <>
+          <Show when={imageReady()}>
+            <span class="image-preview-dialog__dimensions">
+              {t("image_preview.dimensions", {
+                width: dimensionFormat().format(imageSize().width),
+                height: dimensionFormat().format(imageSize().height),
+              })}
+            </span>
+          </Show>
           <DropdownMenu.Root placement="bottom-end">
             <DropdownMenu.Trigger
               as={Button}
