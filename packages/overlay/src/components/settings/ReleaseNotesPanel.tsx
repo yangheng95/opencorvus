@@ -35,6 +35,19 @@ export default function ReleaseNotesPanel() {
   let versionHeading: HTMLHeadingElement | undefined
   let historySearchInput: HTMLInputElement | undefined
   let focusGeneration = 0
+  const hasSearchMatches = () => Boolean(query().trim() && filteredHistory().length)
+  const releaseRow = (version: string) =>
+    panel?.querySelector<HTMLButtonElement>(`[data-release-version="${CSS.escape(version)}"]`) ?? undefined
+  const focusSearchMatch = (event: KeyboardEvent) => {
+    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    if ((event.key !== "ArrowDown" && event.key !== "ArrowUp") || !hasSearchMatches()) return
+    const matches = filteredHistory()
+    const entry = event.key === "ArrowDown" ? matches[0] : matches.at(-1)
+    const target = entry && releaseRow(entry.version)
+    if (!target?.isConnected) return
+    event.preventDefault()
+    target.focus()
+  }
   const select = (entry: ChangelogEntry | null) => {
     const previous = selected()
     const origin = document.activeElement
@@ -46,9 +59,7 @@ export default function ReleaseNotesPanel() {
       if (document.activeElement !== origin && document.activeElement !== document.body) return
       let target: HTMLElement | undefined
       if (entry) target = versionHeading
-      else if (previous && filteredHistory().some((item) => item.version === previous.version)) {
-        target = panel.querySelector<HTMLElement>(`[data-release-version="${CSS.escape(previous.version)}"]`) ?? undefined
-      } else target = historySearchInput
+      else target = (previous && releaseRow(previous.version)) ?? historySearchInput
       if (target?.isConnected) target.focus()
     })
   }
@@ -71,14 +82,21 @@ export default function ReleaseNotesPanel() {
                 inputRef={(element) => (historySearchInput = element)}
                 value={query()}
                 placeholder={t("releases.search")}
+                ariaDescribedBy={hasSearchMatches() ? "release-notes-search-keyboard-hint" : undefined}
                 onValueChange={setQuery}
+                onKeyDown={focusSearchMatch}
                 size="md"
               />
               <Button variant="outline" size="sm" tone="neutral" onClick={() => select(installed)}>
                 {t("releases.installed")} · v{installed.displayVersion}
               </Button>
             </div>
-            <span class="release-notes-count">{tc("releases.count", filteredHistory().length)}</span>
+            <div class="release-notes-search-status">
+              <span>{tc("releases.count", filteredHistory().length)}</span>
+              <Show when={hasSearchMatches()}>
+                <span id="release-notes-search-keyboard-hint">{t("settings.search_keyboard_hint")}</span>
+              </Show>
+            </div>
             <SettingsSurface>
               <For each={filteredHistory()} fallback={<SettingsEmpty>{t("releases.empty")}</SettingsEmpty>}>
                 {(entry) => (

@@ -6089,7 +6089,10 @@ existing safe Markdown renderer. It starts at the installed Overlay version;
 searchable descending history and selected details use the same single-column
 list-to-detail pattern. History search matches all terms against the same entry's
 version identifiers, canonical and displayed release dates, and current language
-notes. Website and GitHub links
+notes. With a nonblank query and visible matches, the history search field
+describes the keyboard shortcut and moves focus to the first or last matching
+version button on an unmodified Down or Up key. The button keeps native Enter
+activation. Website and GitHub links
 supplement the offline reading surface rather than providing another content/cache
 authority.
 

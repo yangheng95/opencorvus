@@ -1813,7 +1813,14 @@ button.s-row:focus-visible {
   min-width: min(100%, 220px);
 }
 
-.release-notes-count,
+.release-notes-search-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ui-gap-xs) var(--ui-gap-lg);
+}
+
+.release-notes-search-status,
 .release-notes-heading time {
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
