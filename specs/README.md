@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时任务建议显示实际预设星期与时间](records/2026-11/2026-11-22-scheduled-suggestion-time-summary.md)
 - [浏览器可打开带外层双引号的目录路径](records/2026-11/2026-11-22-quoted-workspace-directory.md)
 - [全局搜索为通用设置保留一个入口](records/2026-11/2026-11-22-palette-general-settings-command.md)
 - [在文件查看器保留可读的完整位置](records/2026-11/2026-11-22-file-editor-readable-location.md)

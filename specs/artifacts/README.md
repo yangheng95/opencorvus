@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务建议时间的桌面验收](2026-11-22-scheduled-suggestion-time-summary/README.md)
 - [浏览器目录输入的双引号验收](2026-11-22-quoted-workspace-directory/README.md)
 - [命令面板通用设置入口的桌面验收](2026-11-22-palette-general-settings-command/README.md)
 - [文件查看器路径的桌面证据](2026-11-22-file-editor-readable-location/README.md)
