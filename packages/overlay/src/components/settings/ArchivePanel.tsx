@@ -129,6 +129,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   }
   const hasRefreshFailure = createMemo(() => panelFailure()?.operation === "refresh")
   const deletionUnconfirmed = (row: WorkLedgerItemRow) => unconfirmedDeletions().has(archiveRowKey(row))
+  const canOpenRow = (row: WorkLedgerItemRow) => !busyID() && !loading() && !deletionUnconfirmed(row)
+  const canBrowseSearchResults = () => Boolean(query()) && rows().some(canOpenRow)
 
   const reportArchiveError = (id: string, title: string, cause: unknown) => {
     reportError({
@@ -538,7 +540,13 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         clearable
         value={search()}
         placeholder={t("archive.search_placeholder")}
+        ariaDescribedBy={canBrowseSearchResults() ? "archive-search-keyboard-hint" : undefined}
         onValueChange={setSearch}
+        resultFocusTarget={(edge) => {
+          if (!canBrowseSearchResults()) return
+          const targets = panelElement?.querySelectorAll<HTMLButtonElement>('button[data-archive-action="open"]:enabled')
+          return targets?.[edge === "first" ? 0 : targets.length - 1]
+        }}
         disabled={!!busyID()}
       />
       <SettingsDetailSection
@@ -547,7 +555,14 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
             {t("archive.heading")}
           </span>
         }
-        description={t("archive.description")}
+        description={
+          <>
+            {t("archive.description")}
+            <Show when={canBrowseSearchResults()}>
+              <div id="archive-search-keyboard-hint">{t("settings.search_keyboard_hint")}</div>
+            </Show>
+          </>
+        }
         actions={
           <Show when={rows().length > 0 || (!loading() && !panelFailure())}>
             <Badge tone="muted">{rows().length.toLocaleString(localeTag())}</Badge>
@@ -612,7 +627,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       tone="neutral"
                       aria-label={archiveActionText("archive.open_item", row)}
                       data-archive-action="open"
-                      disabled={!!busyID() || loading() || deletionUnconfirmed(row)}
+                      disabled={!canOpenRow(row)}
                       onClick={(event) => void props.onOpenItem(row, event.currentTarget)}
                     >
                       {t("archive.open")}

@@ -38,16 +38,6 @@ export default function ReleaseNotesPanel() {
   const hasSearchMatches = () => Boolean(query().trim() && filteredHistory().length)
   const releaseRow = (version: string) =>
     panel?.querySelector<HTMLButtonElement>(`[data-release-version="${CSS.escape(version)}"]`) ?? undefined
-  const focusSearchMatch = (event: KeyboardEvent) => {
-    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
-    if ((event.key !== "ArrowDown" && event.key !== "ArrowUp") || !hasSearchMatches()) return
-    const matches = filteredHistory()
-    const entry = event.key === "ArrowDown" ? matches[0] : matches.at(-1)
-    const target = entry && releaseRow(entry.version)
-    if (!target?.isConnected) return
-    event.preventDefault()
-    target.focus()
-  }
   const select = (entry: ChangelogEntry | null) => {
     const previous = selected()
     const origin = document.activeElement
@@ -84,7 +74,12 @@ export default function ReleaseNotesPanel() {
                 placeholder={t("releases.search")}
                 ariaDescribedBy={hasSearchMatches() ? "release-notes-search-keyboard-hint" : undefined}
                 onValueChange={setQuery}
-                onKeyDown={focusSearchMatch}
+                resultFocusTarget={(edge) => {
+                  if (!hasSearchMatches()) return
+                  const matches = filteredHistory()
+                  const entry = edge === "first" ? matches[0] : matches.at(-1)
+                  return entry && releaseRow(entry.version)
+                }}
                 size="md"
               />
               <Button variant="outline" size="sm" tone="neutral" onClick={() => select(installed)}>

@@ -6315,6 +6315,9 @@ Nonempty input changes use the command palette's Work Ledger search delay;
 the initial read, a connection change and clearing the search read immediately.
 The result count reflects accepted rows and stays hidden while the new query
 awaits its first result or has a read error before accepting any rows.
+For a nonempty search the shared SearchField can focus the first or last
+available Open action with Down or Up. It exposes the localized guidance
+when a matching action is usable and otherwise preserves normal input behavior.
 Active and archived Work Ledger list requests keep the standard read deadline
 even when their caller provides a cancellation signal. Timeout preserves its
 diagnostic and the existing read error recovery; query replacement still retires

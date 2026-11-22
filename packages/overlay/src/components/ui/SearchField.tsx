@@ -29,6 +29,7 @@ export interface SearchFieldProps {
   onClear?: () => void
   onSubmit?: () => void
   onKeyDown?: JSX.EventHandlerUnion<HTMLInputElement, KeyboardEvent>
+  resultFocusTarget?: (edge: "first" | "last") => HTMLElement | undefined
 }
 
 function classes(...values: Array<string | undefined>): string {
@@ -54,6 +55,18 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
     if (typeof handler === "function") handler(event)
     else if (handler) handler[0](handler[1], event)
     if (event.defaultPrevented) return
+    if (
+      props.resultFocusTarget && !actionsDisabled() &&
+      !event.isComposing && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey &&
+      (event.key === "ArrowDown" || event.key === "ArrowUp")
+    ) {
+      const target = props.resultFocusTarget(event.key === "ArrowDown" ? "first" : "last")
+      if (target?.isConnected) {
+        event.preventDefault()
+        target.focus()
+        return
+      }
+    }
     if (event.key === "Escape" && props.clearable && props.value && !props.disabled) {
       event.preventDefault()
       clear()
