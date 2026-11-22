@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [设置搜索标明保留的当前页](records/2026-11/2026-11-22-settings-search-retained-page.md)
 - [在记忆页选择前区分同名项目](records/2026-11/2026-11-19-memory-picker-same-name-projects.md)
 - [项目记忆初始状态的正文与元数据](records/2026-11/2026-11-19-project-memory-initial-state.md)
 - [定时任务清除筛选后回到搜索框](records/2026-11/2026-11-19-scheduled-clear-filters-focus.md)
