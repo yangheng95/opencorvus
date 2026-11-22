@@ -20,4 +20,6 @@
 ## 候选检查
 
 - `40338/ui/` 返回 `main-CXavjC5-.js`，正式读取与基线回执一致，包括两个项目、各自受保护文档及笔记，以及北区 `North context reference` 聊天和空历史。覆盖层 `bun test ./test/project-directory-hints.test.ts` 通过 2 项、4 次断言，验证多级同名目录与同自定义名的不同目录。类型、双语、样式令牌、正式构建、渲染公共接口、根文档与架构索引通过。 [候选正式读取](../../artifacts/2026-11-19-memory-picker-same-name-projects/candidate-memory-picker-receipts.json)
-- 候选桌面验收待完成。Computer Use 能列出独立 Chrome 和备用 Edge，两款窗口的截图均显示 Codex。已尝试重绑、激活和重开专用 Chrome，并请求把显示 `127.0.0.1:40338/ui/` 的专用 Chrome 置于前台。候选服务和专用 Chrome 保持运行，备用 Edge 已关闭。未对错误窗口执行点击或按键。待辨认正确页面后按上述方案继续实际桌面验收。
+- 2026-11-22 恢复验收时，原服务进程已退出。以同一隔离数据重启服务后，`40338/ui/` 仍提供 `main-CXavjC5-.js`。系统窗口截图仍混入其他应用，改用 Windows 桌面应用内置浏览器的候选标签页，使用真实鼠标点击和键盘操作逐张复核 1280×720 截图。
+- 英文界面展开时可直接看见 `north` 与 `south`，下方向键高亮 `south`，回车后显示完整南区路径；返回应用时标题仍为原 `North context reference`。简体中文界面显示同样两个区别段。鼠标选中南区后显示完整路径。重新展开时，上方向键仅高亮北区，按 Escape 收起后，南区仍选中，焦点回到项目选择按钮。 [八张候选截图](../../artifacts/2026-11-19-memory-picker-same-name-projects/README.md#候选)
+- 界面操作后再次核对两个项目各自的受保护文档、笔记，以及原参考聊天和空历史。回读结果与候选正式回执一致。已关闭本批浏览器及标签页，候选服务关闭返回 HTTP 200，两个验收端口均已释放。
