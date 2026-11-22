@@ -113,6 +113,63 @@ describe("automatic release lifecycle", () => {
     })
   })
 
+  test("a dispatched website becomes readable at its exact ID and completes within the original budget", async () => {
+    let now = started + 30 * 60_000
+    const routes: string[] = []
+    let reads = 0
+    await withAPI((_request, route) => {
+      routes.push(route)
+      if (route === "actions/runs/41") return Response.json(parent)
+      if (++reads === 1) return new Response(null, { status: 404 })
+      return Response.json(reads === 2 ? website : { ...website, status: "completed", conclusion: "success" })
+    }, async (client) => {
+      const result = await waitForReleaseWebsite(client, { releaseRunID: 41, websiteRunID: 72 }, {
+        now: () => now, sleep: async milliseconds => { now += milliseconds },
+      })
+      expect({ id: result.id, conclusion: result.conclusion, deadline: releaseDeadline(parent), now }).toEqual({
+        id: 72, conclusion: "success", deadline: started + RELEASE_BUDGET_MS, now: started + 30 * 60_000 + 20_000,
+      })
+    })
+    expect(routes).toEqual(["actions/runs/41", "actions/runs/72", "actions/runs/72", "actions/runs/72"])
+  })
+
+  test("website visibility waiting expires at the original parent deadline", async () => {
+    let now = started + RELEASE_BUDGET_MS - 5_000
+    await withAPI((_request, route) => route === "actions/runs/41"
+      ? Response.json(parent) : new Response(null, { status: 404 }), async client => {
+      await expect(waitForReleaseWebsite(client, { releaseRunID: 41, websiteRunID: 72 }, {
+        now: () => now, sleep: async milliseconds => { now += milliseconds },
+      })).rejects.toMatchObject({ code: "RELEASE_BUDGET_EXHAUSTED" })
+      expect(now).toBe(started + RELEASE_BUDGET_MS)
+    })
+  })
+
+  test("an observed website's later missing run returns the exact API error", async () => {
+    let now = started + 30 * 60_000
+    let reads = 0
+    await withAPI((_request, route) => {
+      if (route === "actions/runs/41") return Response.json(parent)
+      return ++reads === 1 ? Response.json(website) : new Response(null, { status: 404 })
+    }, async client => {
+      await expect(waitForReleaseWebsite(client, { releaseRunID: 41, websiteRunID: 72 }, {
+        now: () => now, sleep: async milliseconds => { now += milliseconds },
+      })).rejects.toMatchObject({ code: "RELEASE_API_ERROR", status: 404 })
+    })
+  })
+
+  test("the first visible run retains the exact website workflow identity contract", async () => {
+    let now = started + 30 * 60_000
+    let reads = 0
+    await withAPI((_request, route) => {
+      if (route === "actions/runs/41") return Response.json(parent)
+      return ++reads === 1 ? new Response(null, { status: 404 }) : Response.json({ ...website, path: parent.path })
+    }, async client => {
+      await expect(waitForReleaseWebsite(client, { releaseRunID: 41, websiteRunID: 72 }, {
+        now: () => now, sleep: async milliseconds => { now += milliseconds },
+      })).rejects.toMatchObject({ code: "WEBSITE_RUN_MISMATCH" })
+    })
+  })
+
   test.each([200, 500])("the deadline owner cancels its exact run when an HTTP %i read crosses the limit", async (status) => {
     const requests: string[] = []
     let now = started + RELEASE_BUDGET_MS - 1

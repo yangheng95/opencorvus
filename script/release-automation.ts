@@ -20,8 +20,10 @@ class ReleaseApiResponseError extends ReleaseAutomationError {
   }
 }
 
-function observePollReadError(error: unknown): void {
-  if (!(error instanceof ReleaseApiResponseError) || ![500, 502, 503, 504].includes(error.status)) throw error
+function observePollReadError(error: unknown, awaitingFirstVisibility = false): void {
+  if (!(error instanceof ReleaseApiResponseError)) throw error
+  // A dispatch receipt can precede the first readable representation of its run.
+  if (![500, 502, 503, 504].includes(error.status) && !(awaitingFirstVisibility && error.status === 404)) throw error
   console.warn(`${error.message}. Waiting for the next release observation.`)
 }
 
@@ -131,10 +133,12 @@ export async function waitForReleaseWebsite(
   clock = { now: Date.now, sleep },
 ): Promise<ActionsRun> {
   const deadline = releaseDeadline(await readReleaseRun(client, input.releaseRunID))
+  let websiteObserved = false
   for (;;) {
     assertReleaseBudget(deadline, clock.now())
     try {
       const run = await readReleaseRun(client, input.websiteRunID)
+      websiteObserved = true
       assertReleaseBudget(deadline, clock.now())
       if (run.path.split("@")[0] !== ".github/workflows/deploy-opencorvus-com.yml") {
         throw new ReleaseAutomationError("WEBSITE_RUN_MISMATCH", "Dispatched run does not execute the website workflow")
@@ -146,7 +150,7 @@ export async function waitForReleaseWebsite(
         return run
       }
     } catch (error) {
-      observePollReadError(error)
+      observePollReadError(error, !websiteObserved)
     }
     await clock.sleep(Math.min(10_000, assertReleaseBudget(deadline, clock.now())))
   }
