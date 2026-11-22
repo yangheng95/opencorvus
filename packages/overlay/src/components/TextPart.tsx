@@ -17,18 +17,22 @@ function headingLabel(node: Node): string {
   return Array.from(node.childNodes, headingLabel).join("")
 }
 
-function revealMarkdownSection(owner: HTMLElement, fragment: string): boolean {
+function revealMarkdownSection(owner: HTMLElement, fragment: string, moveFocus = true): boolean {
   const headings = Array.from(owner.querySelectorAll<HTMLElement>("[data-markdown-heading]"))
     .filter((heading) => heading.closest("[data-markdown-owner]") === owner)
   const index = markdownSectionIndex(headings.map(headingLabel), fragment)
   if (index === undefined) return false
-  const heading = headings[index]!
-  heading.scrollIntoView({ block: "start", inline: "nearest" })
-  heading.focus({ preventScroll: true })
+  if (moveFocus) {
+    const heading = headings[index]!
+    heading.scrollIntoView({ block: "start", inline: "nearest" })
+    heading.focus({ preventScroll: true })
+  }
   return true
 }
 
-export type MarkdownRenderedHandler = (revealSection: (fragment: string) => boolean) => void
+export type MarkdownRenderedHandler = (
+  revealSection: (fragment: string, moveFocus: boolean) => "found" | "missing" | "render-failed",
+) => void
 
 /** Worker-backed Markdown formats every accepted token, including a growing tail.
  * DOM insertion is spread across frames for both streaming and loaded text. */
@@ -51,9 +55,13 @@ export function StreamingMarkdownPart(props: {
   createEffect(() => {
     const onRendered = props.onRendered
     if (!onRendered || pending()) return
+    const text = props.text
     queueMicrotask(() => {
-      if (!owner.isConnected || pending() || props.onRendered !== onRendered) return
-      onRendered((fragment) => !error() && revealMarkdownSection(owner, fragment))
+      if (!owner.isConnected || pending() || props.onRendered !== onRendered || props.text !== text) return
+      onRendered((fragment, moveFocus) => {
+        if (error()) return "render-failed"
+        return revealMarkdownSection(owner, fragment, moveFocus) ? "found" : "missing"
+      })
     })
   })
 

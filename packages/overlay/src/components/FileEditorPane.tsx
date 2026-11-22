@@ -178,6 +178,7 @@ export function FileEditorPane() {
   let contentAuthority: ApiAuthority | undefined
   let downloadController: AbortController | undefined
   const [markdownPreview, setMarkdownPreview] = createSignal<HTMLElement>()
+  const [linkedSectionMiss, setLinkedSectionMiss] = createSignal<{ revision: number; text: string }>()
   const [imagePreviewTrigger, setImagePreviewTrigger] = createSignal<HTMLButtonElement>()
   const [pdfNavigation, setPdfNavigation] = createSignal<HTMLDivElement>()
   let loadRetryButton: HTMLButtonElement | undefined
@@ -301,14 +302,14 @@ export function FileEditorPane() {
   const previewFocusTarget = () => previewVisible() ? markdownPreview()
     : imageSource() ? imagePreviewTrigger()
     : pdfSource() ? pdfNavigation() : undefined
-  const claimPreviewReveal = (preview: HTMLElement): boolean => {
-    const revision = fileEditorRevealRevision()
+  const ownsRenderedPreview = (preview: HTMLElement): boolean => {
     const loaded = acceptedContent()
-    if (
-      previewRevealedRevision === revision || !resourceReady() || fileEditorReserved() ||
-      !loaded || !ownsFileTarget(loaded.target) || !isApiAuthorityCurrent(loaded.readerAuthority) ||
-      !preview.isConnected || !preview.clientWidth || !preview.clientHeight || preview.closest("[inert], [hidden]")
-    ) return false
+    return !!loaded && resourceReady() && !fileEditorReserved() && ownsFileTarget(loaded.target) &&
+      isApiAuthorityCurrent(loaded.readerAuthority) && preview.isConnected &&
+      preview.clientWidth > 0 && preview.clientHeight > 0 && !preview.closest("[inert], [hidden]")
+  }
+  const claimPreviewFocus = (preview: HTMLElement, revision: number): boolean => {
+    if (previewRevealedRevision === revision) return false
     previewRevealedRevision = revision
     const active = document.activeElement
     return active === revealFocusOrigin() || active === document.body || active === preview
@@ -316,7 +317,9 @@ export function FileEditorPane() {
   const revealPreview = createAnimationFrameScheduler(() => {
     if (previewVisible() && (target()?.markdownSection || target()?.documentPosition)) return
     const preview = previewFocusTarget()
-    if (preview && claimPreviewReveal(preview)) preview.focus({ preventScroll: true })
+    if (preview && ownsRenderedPreview(preview) && claimPreviewFocus(preview, fileEditorRevealRevision())) {
+      preview.focus({ preventScroll: true })
+    }
   })
   const revealRenderedDocument = createMemo<MarkdownRenderedHandler | undefined>(() => {
     const fragment = target()?.markdownSection
@@ -325,11 +328,21 @@ export function FileEditorPane() {
     const revision = fileEditorRevealRevision()
     return (revealSection) => {
       const preview = markdownPreview()
-      if (!preview || revision !== fileEditorRevealRevision() || !previewVisible() || !claimPreviewReveal(preview)) return
-      if (position) restoreFileDocumentPosition(preview, position)
-      else if (!fragment || !revealSection(fragment)) preview.focus({ preventScroll: true })
+      if (!preview || revision !== fileEditorRevealRevision() || !previewVisible() || !ownsRenderedPreview(preview)) return
+      const moveFocus = claimPreviewFocus(preview, revision)
+      if (position) {
+        if (moveFocus) restoreFileDocumentPosition(preview, position)
+      } else if (fragment) {
+        const result = revealSection(fragment, moveFocus)
+        setLinkedSectionMiss(result === "missing" ? { revision, text: draft() } : undefined)
+        if (moveFocus && result !== "found") preview.focus({ preventScroll: true })
+      }
     }
   })
+  const missingLinkedSection = () => {
+    const miss = linkedSectionMiss()
+    return miss?.revision === fileEditorRevealRevision() && miss.text === draft()
+  }
   createEffect(() => {
     fileEditorRevealRevision()
     if (previewFocusTarget() && resourceReady() && !fileEditorReserved()) revealPreview.schedule()
@@ -1059,6 +1072,11 @@ export function FileEditorPane() {
                     readOnly={!writable() || fileEditorReserved()}
                   />
                   <Show when={previewVisible()}>
+                    <Show when={missingLinkedSection()}>
+                      <Feedback class="file-editor-section-feedback" tone="info">
+                        {t("file_editor.linked_section_missing")}
+                      </Feedback>
+                    </Show>
                     <section
                       ref={setMarkdownPreview}
                       class="file-editor-markdown-preview md-content"

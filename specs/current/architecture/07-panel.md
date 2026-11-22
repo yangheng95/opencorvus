@@ -3251,8 +3251,11 @@ Headings have no global page IDs, and worker caches contain no section counters.
 An explicit local Markdown file link with a section fragment opens the file through
 the same workbench admission as other file links. The current file reveal consumes
 the fragment once its Preview owner has rendered, using the same heading sequence
-and focus ownership as other workbench reveals. A missing heading retains the
-opened Preview. A source-line reference selects the cited range in Source.
+and focus ownership as other workbench reveals. When the rendered document lacks
+the linked heading, the opened Preview stays available and displays an inline
+status for that reveal and text. Re-rendering refreshes the lookup without
+migrating focus again. Read and render errors keep their existing feedback. A
+source-line reference selects the cited range in Source.
 External URLs retain their ordinary browser semantics. Each Notebook cell and
 Presentation slide has its own document owner. Direct HTML readers keep their
 respective navigation contracts.
