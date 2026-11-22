@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [跳转到行按提交时的文件内容定位](2026-11-23-editor-go-to-line-after-reload.md)
 - [文件工作台提供跳转到行入口](2026-11-23-file-workbench-go-to-line.md)
 - [命令面板标出当前主题和语言](2026-11-23-command-palette-current-appearance.md)
 - [多步任务技能列表显示用途摘要](2026-11-23-mission-skill-list-description.md)

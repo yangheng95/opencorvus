@@ -1,0 +1,8 @@
+[
+  {
+    "level": "error",
+    "message": "RangeError: Selection points outside of document\n    at lJ (http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js:194:12659)\n    at new Gi (http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js:194:19739)\n    at Gi.create (http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js:194:19871)\n    at vJ (http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js:194:21871)\n    at wr.update (http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js:194:23926)\n    at gn.dispatch (http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js:200:6376)\n    at http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js:201:37768",
+    "timestamp": "2026-11-22T21:42:52.218Z",
+    "url": "http://127.0.0.1:40508/ui/assets/main-nYBLtOle.js"
+  }
+]
