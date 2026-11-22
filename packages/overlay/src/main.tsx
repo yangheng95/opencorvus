@@ -24,7 +24,7 @@ import { App } from "./components/App"
 import { Icon, LUCIDE_ICON_NAMES, REGISTERED_ICONS, type IconName } from "./components/ui/Icon"
 import { Conversation } from "./components/Conversation"
 import { GoalsBoardPanel, RequirementsBoardPanel } from "./components/Board"
-import { ChatComposer, type ComposerStopAction } from "./components/ChatComposer"
+import { ChatComposer, type ChatComposerProps, type ComposerStopAction } from "./components/ChatComposer"
 import {
   DEFAULT_COMPOSER_INTENT,
   conversationExperienceFromProductPillar,
@@ -2286,20 +2286,6 @@ function conversationSubmitActive(): boolean {
   return composerIntent().conversationTarget === "chat" && !boardStore.selectedSource
 }
 
-function resolvedActiveComposerIntent(item: WorkLedgerItemRow | null): ComposerIntent | undefined {
-  if (!item) return undefined
-  if (item.kind === "chat") {
-    return {
-      productPillar: productPillarFromConversationExperience(item.experience),
-      conversationTarget: "chat",
-    }
-  }
-  return {
-    productPillar: item.productPillar,
-    conversationTarget: "mission",
-  }
-}
-
 function launcherHomeActive(): boolean {
   const panel = primaryCenterPanel()
   return (
@@ -2379,6 +2365,23 @@ function OverlayRoot() {
     return current && current.key === selectionRequest()?.key ? current : undefined
   })
   const readableSelectedItem = () => selectionRead()?.row ?? null
+  const activeComposerContext = (): ChatComposerProps["activeComposerContext"] => {
+    const item = readableSelectedItem()
+    if (item) {
+      return item.kind === "chat"
+        ? { kind: item.kind, productPillar: productPillarFromConversationExperience(item.experience) }
+        : { kind: item.kind, productPillar: item.productPillar }
+    }
+    const source = boardStore.selectedSource
+    if (!source) return undefined
+    if (source.kind === "task") return { kind: "task" }
+    if (source.sessionKind !== "conversation") return { kind: "mission" }
+    const experience = conversationSourceExperience(source)
+    return {
+      kind: "chat",
+      productPillar: experience ? productPillarFromConversationExperience(experience) : undefined,
+    }
+  }
   const selectedItem = () => {
     const read = selectionRead()
     return read?.kind === "current" ? read.row : null
@@ -3089,8 +3092,8 @@ function OverlayRoot() {
           launchReferences={composerLaunchReferences()}
           conversationExperience={conversationSourceExperience()}
           composerIntent={composerIntent()}
-          activeComposerIntent={resolvedActiveComposerIntent(selectedItem())}
-          activeWorkItemKind={selectedItem()?.kind}
+          activeComposerContext={activeComposerContext()}
+          activeTaskReferences={selectedItem()?.kind === "task"}
           onComposerIntentChange={(intent) =>
             runUserNavigation("composer.mode-change", () => handleComposerIntentChange(intent))
           }

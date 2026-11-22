@@ -1218,7 +1218,10 @@ Primary navigation retains visible localized captions on the existing actions.
 The Composer's mode selector exposes work type and conversation approach with
 visible descriptions; optional Skill and Expert Squad selection is disclosed
 inside the same popover. Selected references remain actual visible input text,
-and active conversations retain their read-only original assignment. Archive is
+and active conversations retain their read-only original assignment. The toolbar
+labels the selected work using its exact accepted or retained read. While that
+record is pending, the label uses the selected source's known kind and Chat/Work
+experience, when available. New work uses its current launch choice. Archive is
 also reachable from the existing More menu and opens the same Settings owner.
 Project navigation, global new-chat launch and Composer intent changes capture
 their focus origin before asynchronous work. Their shared input handoff runs only

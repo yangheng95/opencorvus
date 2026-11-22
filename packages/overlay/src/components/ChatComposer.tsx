@@ -233,9 +233,8 @@ export interface ChatComposerProps {
   launchReferences: VisibleComposerReferences
   conversationExperience?: ConversationExperience
   composerIntent: ComposerIntent
-  activeComposerIntent?: ComposerIntent
-  /** Current owned work item kind for the read-only context label. */
-  activeWorkItemKind?: WorkLedgerKind
+  activeComposerContext?: { kind: WorkLedgerKind; productPillar?: ProductPillar }
+  activeTaskReferences: boolean
   onComposerIntentChange: (intent: ComposerIntent) => void
 }
 
@@ -1429,7 +1428,6 @@ export function ChatComposer(props: ChatComposerProps) {
   const sendAriaLabel = () =>
     stopMode() ? stopLabel() : t(localCommand()?.kind === "goal" ? "continuous_goal.open" : "chat.send_label")
   const sendLabel = sendAriaLabel
-  const activeComposerIntent = createMemo(() => props.activeComposerIntent ?? props.composerIntent)
   const productPillarOptions = createMemo<ComposerIntentOption<ProductPillar>[]>(() => [
     {
       value: "code",
@@ -1538,13 +1536,18 @@ export function ChatComposer(props: ChatComposerProps) {
     </div>
   )
   const toolbarContextLabel = () => {
-    const intent = props.conversationActive ? activeComposerIntent() : props.composerIntent
-    return [
-      t(intent.productPillar === "work" ? "chat.composer_mode_work" : "chat.composer_mode_code"),
-      props.conversationActive && props.activeWorkItemKind === "task"
-        ? t("work_ledger.kind.task")
-        : t(intent.conversationTarget === "mission" ? "chat.composer_target_mission" : "chat.composer_target_chat"),
-    ].join(t("card.meta_separator"))
+    const context = props.conversationActive
+      ? props.activeComposerContext
+      : { kind: props.composerIntent.conversationTarget, productPillar: props.composerIntent.productPillar }
+    if (!context) return undefined
+    const target = t({
+      task: "work_ledger.kind.task",
+      mission: "chat.composer_target_mission",
+      chat: "chat.composer_target_chat",
+    }[context.kind])
+    if (!context.productPillar) return target
+    const pillar = t(context.productPillar === "work" ? "chat.composer_mode_work" : "chat.composer_mode_code")
+    return [pillar, target].join(t("card.meta_separator"))
   }
   const renderToolbarOptions = () => (
     <div class="composer-toolbar-options" data-presentation={toolbarLayout() === "overflow" ? "menu" : toolbarLayout()}>
@@ -1569,8 +1572,8 @@ export function ChatComposer(props: ChatComposerProps) {
         onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
         launchReferences={props.conversationActive ? props.launchReferences : visibleComposerReferences(text())}
         readOnly={Boolean(props.conversationActive)}
-        activePackage={props.conversationActive && props.activeWorkItemKind === "task" ? props.activeExpertSquadPackage : null}
-        referenceOrigin={props.conversationActive && props.activeWorkItemKind === "task" ? "task-request" : "first-message"}
+        activePackage={props.activeTaskReferences ? props.activeExpertSquadPackage : null}
+        referenceOrigin={props.activeTaskReferences ? "task-request" : "first-message"}
         contextLabel={toolbarContextLabel()}
         controls={props.conversationActive ? undefined : renderIntentControls()}
         disabled={!props.conversationActive && (!composerEnabled() || busy())}

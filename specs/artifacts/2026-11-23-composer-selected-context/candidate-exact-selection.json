@@ -1,0 +1,46 @@
+{
+  "reads": [
+    {
+      "status": 200,
+      "row": {
+        "kind": "mission",
+        "id": "draft-1cc4e6bad7fab02b8844a9199dd17e94",
+        "missionID": "draft-1cc4e6bad7fab02b8844a9199dd17e94",
+        "sessionID": "ses_h4svbX4oGx83uff6ZZih",
+        "title": "North code review",
+        "pendingPromptText": "Review the north depot inventory module and report the affected callers.",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+        "created": 1795366189537,
+        "started": 1795366189537,
+        "updated": 1795366189537,
+        "pinned": false,
+        "interruptible": false,
+        "outcome": null,
+        "productPillar": "code",
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        },
+        "pendingInteractions": 0,
+        "tasks": []
+      }
+    },
+    {
+      "status": 200,
+      "row": {
+        "kind": "chat",
+        "experience": "work",
+        "id": "ses_hryCOihvu5P1NpqlAZGH",
+        "sessionID": "ses_hryCOihvu5P1NpqlAZGH",
+        "title": "South work conversation",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+        "created": 1795366190206,
+        "started": 1795366190206,
+        "updated": 1795366190290,
+        "pinned": false,
+        "status": "idle"
+      }
+    }
+  ]
+}
