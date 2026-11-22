@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [在搜索命中的目录内新建并保存文件](2026-11-23-explorer-search-folder-create-save.md)
 - [在资源管理器中搜索项目文件夹](2026-11-23-explorer-search-folder-entries.md)
 - [从文件查看器打开所在目录](2026-11-23-file-editor-containing-folder.md)
 - [资源管理器原生剪贴板复验](2026-11-23-explorer-native-clipboard-recheck.md)

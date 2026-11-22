@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [目录搜索后的真实新建与保存](2026-11-23-explorer-search-folder-create-save/README.md)
 - [资源管理器搜索文件夹的桌面验收](2026-11-23-explorer-search-folder-entries/README.md)
 - [文件查看器打开所在目录的桌面验收](2026-11-23-file-editor-containing-folder/README.md)
 - [资源管理器原生剪贴板复验截图](2026-11-23-explorer-native-clipboard-recheck/README.md)
