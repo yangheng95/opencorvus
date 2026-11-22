@@ -73,6 +73,25 @@ test("time-zone choices are searchable canonical IANA values with the browser zo
   expect(options.every((option) => option.label === option.value)).toBe(true)
 })
 
+test("time-zone choices preserve a saved IANA link alongside its primary identifier", () => {
+  const recurrence = "DTSTART;TZID=US/Eastern:20990618T090000\nRRULE:FREQ=DAILY"
+  const fields = parseAutomationRecurrence(recurrence)
+  expect(fields).toMatchObject({ preset: "daily", timeZone: "US/Eastern", time: "09:00" })
+
+  const options = automationTimeZoneOptions(fields.timeZone)
+  expect(options.filter((option) => option.value === "US/Eastern")).toEqual([
+    { value: "US/Eastern", label: "US/Eastern" },
+  ])
+  expect(options.find((option) => option.value === "America/New_York")).toEqual({
+    value: "America/New_York",
+    label: "America/New_York",
+  })
+  expect(buildAutomationRecurrence(fields)).toBe(recurrence)
+  expect(buildAutomationRecurrence({ ...fields, time: "09:30" })).toBe(
+    "DTSTART;TZID=US/Eastern:20990618T093000\nRRULE:FREQ=DAILY",
+  )
+})
+
 test("common recurrence presets round-trip into the editable form without exposing RRULE", () => {
   for (const preset of ["daily", "weekdays", "weekly"] as const) {
     const recurrence = buildAutomationRecurrence({

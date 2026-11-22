@@ -1,0 +1,26 @@
+[
+  {
+    "id": "atm_hCoNOut9jgvm5epONXjg",
+    "previousRevision": "atm_h4WQgrj9LTu5MARTyYbX",
+    "revision": "atm_hs2YAcobwQEG0WYZXfiO",
+    "name": "Time-zone link review verified",
+    "zone": "US/Eastern",
+    "recurrence": "DTSTART;TZID=US/Eastern:20990618T090000\nRRULE:FREQ=DAILY",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4085470800000,
+    "runs": []
+  },
+  {
+    "id": "atm_hdH9p1Vu0Klkh6cxwJPQ",
+    "previousRevision": "atm_hTt4eQG6E32q8Wdir3vX",
+    "revision": "atm_hTt4eQG6E32q8Wdir3vX",
+    "name": "Time-zone primary review",
+    "zone": "America/New_York",
+    "recurrence": "DTSTART;TZID=America/New_York:20990618T090000\nRRULE:FREQ=DAILY",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4085470800000,
+    "runs": []
+  }
+]

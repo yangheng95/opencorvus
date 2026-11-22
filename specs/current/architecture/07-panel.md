@@ -2096,7 +2096,10 @@ authored rule in the current advanced editor. Explicit calendar changes use the
 chosen anchor, rather than resetting it to the save date. Weekly review's Friday
 is suggestion data passed through that same weekly field. Suggestion rows use
 their actual frequency, weekday and time through the shared localized timing
-presentation. The draft chooses its existing default time zone when opened.
+presentation. A new draft opens with the current default time zone. Editing
+includes the exact time zone from the opening recurrence among the selectable
+options for that draft, including valid IANA links outside the browser's primary
+identifier list.
 
 The localized clock supports direct segmented entry and a pointer picker for
 every hour and minute. Applying the picker replaces the entire keyboard draft

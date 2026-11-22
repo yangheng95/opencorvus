@@ -578,8 +578,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     ]
   })
   const selectedReasoningOption = createMemo(() => selectOption(reasoningOptions(), reasoningEffort()))
-  const timeZoneOptions = automationTimeZoneOptions()
-  const selectedTimeZoneOption = createMemo(() => timeZoneOptions.find((option) => option.value === timeZone()) ?? null)
+  const timeZoneOptions = createMemo(() => {
+    const definition = editOwner()?.definition
+    const savedTimeZone = definition ? parseAutomationRecurrence(definition.recurrence).timeZone : undefined
+    return automationTimeZoneOptions(savedTimeZone)
+  })
+  const selectedTimeZoneOption = createMemo(() => timeZoneOptions().find((option) => option.value === timeZone()) ?? null)
   const showForm = createMemo(() => editing() || creating())
   onCleanup(props.registerAuthor(showForm))
   const displayedError = createMemo((): AutomationError | null => {
@@ -1964,7 +1968,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       <TextField.Root class={preset() === "weekly" ? undefined : "automation-field-wide"}>
                         <TextField.Label>{t("automations.time_zone")}</TextField.Label>
                         <ComboboxControl
-                          options={timeZoneOptions}
+                          options={timeZoneOptions()}
                           value={selectedTimeZoneOption()}
                           onChange={(option) => {
                             if (!option) return

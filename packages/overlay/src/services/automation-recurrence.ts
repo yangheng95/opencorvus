@@ -92,9 +92,10 @@ export function browserTimeZone(): string {
   return timeZone
 }
 
-export function automationTimeZoneOptions(): AutomationTimeZoneOption[] {
-  const systemTimeZone = browserTimeZone()
-  return [...new Set([systemTimeZone, "UTC", ...Intl.supportedValuesOf("timeZone")])]
+export function automationTimeZoneOptions(savedTimeZone?: string): AutomationTimeZoneOption[] {
+  const timeZones = new Set([browserTimeZone(), "UTC", ...Intl.supportedValuesOf("timeZone")])
+  if (savedTimeZone) timeZones.add(savedTimeZone)
+  return [...timeZones]
     .sort((left, right) => left.localeCompare(right))
     .map((value) => ({ value, label: value }))
 }
