@@ -3425,6 +3425,11 @@ where the existing server URL and authentication form are immediately available.
 Navigation retains the configured API address; the saved settings and connection
 owner continue to control recovery.
 
+The sidebar's online status shows the explicit port of the applied endpoint
+alongside the localized status. The diagnostic description uses that same text
+and appends the existing process identifier when available. The status is
+readable in the sidebar and leaves its keyboard navigation order intact.
+
 Network keeps the server URL, username and password in the mounted editor's
 local draft. Typing and unrelated preference saves retain the applied connection;
 explicit departure disposes that unsaved editor normally. The connection fields

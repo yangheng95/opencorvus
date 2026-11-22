@@ -29,16 +29,6 @@ export function ConnectionBadge(props: ConnectionBadgeProps) {
     props.status ?? connectionPresentation(appStore.connectionStatus, messageStore.sseStatus).status,
   )
 
-  const label = createMemo(() => statusLabel(status()))
-
-  // ── Port + PID display ──
-  // The sidecar's port is dynamic (default 4096, falls back up to +32 and
-  // then ephemeral — see overlay/src-tauri/build.rs + main.rs::next_server_port).
-  // Port comes from settingsStore.serverUrl; PID comes from appStore.serverPid
-  // (populated by connection.ts:syncLocalServerUrl from the Tauri
-  // overlay_server_info command). Surface both next to "online" so the
-  // operator can `kill <pid>` / `lsof -p <pid>` / `curl :<port>` directly,
-  // without hunting through netstat.
   const port = createMemo<string>(() => {
     const raw = settingsStore.serverUrl
     if (!raw) return ""
@@ -51,16 +41,18 @@ export function ConnectionBadge(props: ConnectionBadgeProps) {
     return typeof value === "number" && value > 0 ? String(value) : ""
   })
 
-  const title = createMemo(() => {
-    if (status() !== "online") return label()
-    const p = port()
-    const pidValue = pid()
-    const parts = [label()]
-    if (p) parts.push(`${t("titlebar.connection.port")} ${p}`)
-    if (pidValue) parts.push(`${t("titlebar.connection.pid")} ${pidValue}`)
+  const statusText = createMemo(() => {
+    const current = status()
+    const label = statusLabel(current)
+    const activePort = current === "online" ? port() : ""
+    return activePort ? `${label} · ${t("titlebar.connection.port")} ${activePort}` : label
+  })
+  const diagnosticsLabel = createMemo(() => {
+    const parts = [t("titlebar.connection_diagnostics"), statusText()]
+    const activePid = status() === "online" ? pid() : ""
+    if (activePid) parts.push(`${t("titlebar.connection.pid")} ${activePid}`)
     return parts.join(" · ")
   })
-  const diagnosticsLabel = createMemo(() => `${t("titlebar.connection_diagnostics")} · ${title()}`)
 
   return (
     <span
@@ -72,7 +64,7 @@ export function ConnectionBadge(props: ConnectionBadgeProps) {
       aria-label={diagnosticsLabel()}
       aria-live="polite"
     >
-      <span class="conn-badge__label">{label()}</span>
+      <span class="conn-badge__label">{statusText()}</span>
     </span>
   )
 }

@@ -232,7 +232,8 @@ body .sidebar-header.oc-surface-header {
 }
 
 .sidebar-connection {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .sidebar-update.oc-button {
@@ -255,9 +256,10 @@ body .sidebar-header.oc-surface-header {
 .conn-badge[data-ui="connection-badge"] {
   --conn-badge-dot: var(--text-muted);
 
-  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
+  max-width: 100%;
   gap: var(--ui-gap-sm);
   padding: var(--ui-gap-sm) var(--ui-gap-md);
   font-size: var(--ui-font-caption);
@@ -294,6 +296,8 @@ body .sidebar-header.oc-surface-header {
 }
 
 .conn-badge__label {
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: inherit;
   text-transform: none;
 }
