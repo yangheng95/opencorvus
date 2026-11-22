@@ -17,7 +17,7 @@
 
 - 编辑器连接保留斜杠命令参数中的空格及附件上下文，支持读取跨项目的持久会话历史，并按原会话范围恢复模型身份。远端提示内容按原始命令协议处理。
 - 图像预览支持键盘操作，完整显示图像并在缩放时保留正在查看的位置。文件查找显示无匹配和无效正则表达式的具体反馈。
-- 改进窄文件栏、资源管理器展开和查找快捷键的体验，以及草稿保存、清除筛选和退出设置后的键盘焦点。记忆设置显示正文与元数据，并区分同名项目。
+- 改进窄文件栏、资源管理器展开和查找快捷键的体验，以及草稿保存、清除筛选和退出设置后的键盘焦点。记忆设置显示正文与元数据，并区分同名项目。设置搜索会标明因正在打开而保留、但不属于搜索结果的页面。
 
 #### 修复
 
@@ -41,7 +41,7 @@
 
 - Editor connections preserve whitespace in slash command arguments and attached context, paginate persisted conversations across projects, and restore model identity in the original session scope. Remote prompt content follows the original command protocol.
 - Use image previews from the keyboard, view the complete image, and keep the viewed point stable while zooming. File search provides specific feedback for no matches and invalid regular expressions.
-- Improve narrow file headers, Explorer opening and find shortcuts, and keyboard focus after saving drafts, clearing filters, and leaving Settings. Memory settings show content with metadata and distinguish projects with the same name.
+- Improve narrow file headers, Explorer opening and find shortcuts, and keyboard focus after saving drafts, clearing filters, and leaving Settings. Memory settings show content with metadata and distinguish projects with the same name. Settings search labels the open page when it is retained outside the search results.
 
 #### Fixed
 
