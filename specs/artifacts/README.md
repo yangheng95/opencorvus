@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [命令面板通用设置入口的桌面验收](2026-11-22-palette-general-settings-command/README.md)
 - [文件查看器路径的桌面证据](2026-11-22-file-editor-readable-location/README.md)
 - [资源管理器同名文件搜索的桌面证据](2026-11-22-explorer-same-name-search/README.md)
 - [用量活动时间提示的桌面证据](2026-11-22-usage-interval-time-details/README.md)

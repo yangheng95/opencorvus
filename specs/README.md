@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [全局搜索为通用设置保留一个入口](records/2026-11/2026-11-22-palette-general-settings-command.md)
 - [在文件查看器保留可读的完整位置](records/2026-11/2026-11-22-file-editor-readable-location.md)
 - [在资源管理器搜索中区分同名文件](records/2026-11/2026-11-22-explorer-same-name-search.md)
 - [用量活动时间提示保留必要日期与偏移](records/2026-11/2026-11-22-usage-interval-time-details.md)
