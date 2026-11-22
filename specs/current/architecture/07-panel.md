@@ -2594,8 +2594,9 @@ the existing `SupportedLocale` type. Both controls render the current-language
 name together with the language's self-name when those strings differ. Commands
 also expose the canonical locale ID and use their existing metadata term search,
 so a displayed name can discover the same language action across these surfaces.
-Language selection still uses the one `applyLocalePreference` operation; the
-runtime default-language policy and titlebar toggle semantics remain unchanged.
+Language selection uses the one `applyLocalePreference` operation. The titlebar
+language action names the destination language from the same option registry
+and applies it directly. Native menu actions use the same locale selection.
 Shared SelectControl consumers submit their controlled value through the owning
 surface. The visible trigger and its popup own keyboard navigation, including
 sequential focus after changing a value with the trigger's arrow keys.

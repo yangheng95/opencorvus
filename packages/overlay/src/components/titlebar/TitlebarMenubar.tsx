@@ -12,7 +12,7 @@ import { quitOverlay } from "../../services/window"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { installNativeMenuListener, type NativeMenuActionID, usesNativeMacosMenu } from "../../services/native-menu"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
-import { t } from "../../utils/i18n"
+import { localeOptions, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { Menubar } from "../ui/Menubar"
 import { Slider } from "../ui/Slider"
@@ -220,6 +220,12 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
   const hostCapabilities = hostTransport.capabilities
   const nativeCommands = hostCapabilities.nativeCommands
   const nativeMacosMenu = usesNativeMacosMenu(__OPENCORVUS_BUILD_PLATFORM__, hostTransport.kind)
+  const nextLocale = createMemo(() => localeOptions().find((option) => option.value !== settingsStore.locale))
+
+  async function switchLanguage(): Promise<void> {
+    const target = nextLocale()
+    if (target) await applyLocalePreference(target.value)
+  }
 
   function shortcut(id: FileShortcutID): { display: string; aria: string } {
     return nativeMacosMenu ? MACOS_FILE_SHORTCUTS[id] : FILE_SHORTCUTS[id]
@@ -420,9 +426,7 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
     "native-menu:theme-sage": () => setTheme("sage"),
     "native-menu:theme-mist": () => setTheme("mist"),
     "native-menu:theme-graphite": () => setTheme("graphite"),
-    "native-menu:toggle-locale": async () => {
-      await applyLocalePreference(settingsStore.locale === "zh-CN" ? "en-US" : "zh-CN")
-    },
+    "native-menu:toggle-locale": switchLanguage,
     "native-menu:zoom-in": () => setZoomPercent(Math.round(settingsStore.zoom * 100) + 5),
     "native-menu:zoom-out": () => setZoomPercent(Math.round(settingsStore.zoom * 100) - 5),
     "native-menu:zoom-reset": () => setZoomPercent(100),
@@ -685,15 +689,13 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
                         )}
                       </For>
                     </Menubar.RadioGroup>
-                    <MenuItem
-                      onClick={async () => {
-                        await applyLocalePreference(settingsStore.locale === "zh-CN" ? "en-US" : "zh-CN")
-                      }}
-                      meta={settingsStore.locale}
-                      testid="titlebar-toggle-locale"
-                    >
-                      {t("settings.language")}
-                    </MenuItem>
+                    <Show when={nextLocale()}>
+                      {(target) => (
+                        <MenuItem onClick={switchLanguage} testid="titlebar-toggle-locale">
+                          {t("titlebar.switch_language_to", { language: target().label })}
+                        </MenuItem>
+                      )}
+                    </Show>
                     <MenuRange
                       label={t("titlebar.zoom")}
                       description={t("titlebar.zoom_hint")}
