@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [更新日志搜索可用方向键进入真实结果](records/2026-11/2026-11-23-release-history-keyboard-entry.md)
 - [定时编辑器显示规则已保存的时区标识](records/2026-11/2026-11-23-scheduled-saved-time-zone-identity.md)
 - [外观保存期间保留连续键盘导航](records/2026-11/2026-11-23-appearance-keyboard-focus-during-save.md)
 - [收起的记忆项目选择器保留身份区别](records/2026-11/2026-11-23-memory-selected-project-identity.md)
