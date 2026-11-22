@@ -1,0 +1,41 @@
+{
+  "candidate": {
+    "page": {
+      "url": "http://127.0.0.1:40366/ui/",
+      "status": 200
+    },
+    "entry": {
+      "path": "assets/main-Cgj2-YPx.js",
+      "status": 200
+    },
+    "before": {
+      "read": "/global/automations",
+      "status": 200,
+      "body": []
+    },
+    "after": {
+      "read": "/global/automations",
+      "status": 200,
+      "body": []
+    },
+    "shutdownStatus": 200
+  },
+  "databaseCounts": {
+    "baseline": {
+      "automation": 0,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "candidate": {
+      "automation": 0,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  }
+}

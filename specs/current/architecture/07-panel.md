@@ -2059,7 +2059,9 @@ unrelated fields omits recurrence from the existing PATCH. Seconds and advanced
 recurrence components that the basic fields cannot express retain their complete
 authored rule in the current advanced editor. Explicit calendar changes use the
 chosen anchor, rather than resetting it to the save date. Weekly review's Friday
-is suggestion data passed through that same weekly field.
+is suggestion data passed through that same weekly field. Suggestion rows use
+their actual frequency, weekday and time through the shared localized timing
+presentation. The draft chooses its existing default time zone when opened.
 
 The localized clock supports direct segmented entry and a pointer picker for
 every hour and minute. Applying the picker replaces the entire keyboard draft

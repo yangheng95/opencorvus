@@ -100,12 +100,13 @@ type AutomationRunState = {
   error?: AutomationError
 }
 
+type BasicAutomationRecurrence = Exclude<AutomationRecurrencePreset, "custom">
+
 interface AutomationSuggestion {
   icon: "notifications" | "file-document" | "inspect"
   name: string
-  schedule: string
   description: string
-  preset: AutomationRecurrencePreset
+  preset: BasicAutomationRecurrence
   weekday?: AutomationWeekday
   time: string
   prompt: string
@@ -119,7 +120,6 @@ function automationSuggestions(): AutomationSuggestion[] {
     {
       icon: "notifications",
       name: t("automations.suggestion.daily_brief.name"),
-      schedule: t("automations.suggestion.daily_brief.schedule"),
       description: t("automations.suggestion.daily_brief.description"),
       preset: "weekdays",
       time: "08:00",
@@ -128,7 +128,6 @@ function automationSuggestions(): AutomationSuggestion[] {
     {
       icon: "file-document",
       name: t("automations.suggestion.weekly_review.name"),
-      schedule: t("automations.suggestion.weekly_review.schedule"),
       description: t("automations.suggestion.weekly_review.description"),
       preset: "weekly",
       weekday: "FR",
@@ -138,7 +137,6 @@ function automationSuggestions(): AutomationSuggestion[] {
     {
       icon: "inspect",
       name: t("automations.suggestion.follow_up.name"),
-      schedule: t("automations.suggestion.follow_up.schedule"),
       description: t("automations.suggestion.follow_up.description"),
       preset: "weekdays",
       time: "09:00",
@@ -212,17 +210,22 @@ function nextRunValue(automation: AutomationView): string {
   return formatTimestamp(nextRun, nextRun !== null && nextRun % 60_000 !== 0 ? "medium" : "short")
 }
 
-function recurrenceSummary(parsed: ParsedAutomationRecurrence): string {
-  if (parsed.preset === "custom") return t("automations.recurrence.advanced_summary")
+function recurrenceTiming(preset: BasicAutomationRecurrence, clock: string, weekday?: AutomationWeekday): string {
   const schedule =
-    parsed.preset === "weekly"
-      ? `${t("automations.recurrence.weekly")} (${t(`automations.weekday.${parsed.weekday}`)})`
-      : t(`automations.recurrence.${parsed.preset}`)
-  const [hour, minute] = parsed.time.split(":").map(Number)
+    preset === "weekly"
+      ? `${t("automations.recurrence.weekly")} (${t(`automations.weekday.${weekday}`)})`
+      : t(`automations.recurrence.${preset}`)
+  const [hour, minute] = clock.split(":").map(Number)
   // Format the rule's wall clock as a local-language clock, without converting its zone.
   const time = new Intl.DateTimeFormat(localeTag(), { hour: "numeric", minute: "2-digit", timeZone: "UTC" })
     .format(Date.UTC(2000, 0, 1, hour, minute))
-  return t("automations.recurrence.summary", { schedule, time, timeZone: parsed.timeZone })
+  return t("automations.recurrence.timing", { schedule, time })
+}
+
+function recurrenceSummary(parsed: ParsedAutomationRecurrence): string {
+  if (parsed.preset === "custom") return t("automations.recurrence.advanced_summary")
+  const timing = recurrenceTiming(parsed.preset, parsed.time, parsed.weekday)
+  return t("automations.recurrence.summary", { timing, timeZone: parsed.timeZone })
 }
 
 function statusTone(status: AutomationView["status"]): BadgeTone {
@@ -1411,7 +1414,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       <span>
                         <span class="automation-suggestion__title">
                           <strong>{suggestion.name}</strong>
-                          <span>{suggestion.schedule}</span>
+                          <span>{recurrenceTiming(suggestion.preset, suggestion.time, suggestion.weekday)}</span>
                         </span>
                         <span class="automation-suggestion__description">{suggestion.description}</span>
                       </span>
