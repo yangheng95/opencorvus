@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [聊天、通用工作与模型服务商设置的项目范围实页截图](2026-11-23-settings-capability-provider-project-scope/README.md)
 - [窄桌面用量活动图实页截图](2026-11-23-usage-activity-desktop-overflow/README.md)
 - [不可预览文件的字节数实页截图](2026-11-23-binary-download-file-size/README.md)
 - [归档搜索方向键进入结果的实页截图](2026-11-23-archive-search-keyboard-entry/README.md)
