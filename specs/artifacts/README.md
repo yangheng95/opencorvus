@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件查看器打开所在目录的桌面验收](2026-11-23-file-editor-containing-folder/README.md)
 - [资源管理器原生剪贴板复验截图](2026-11-23-explorer-native-clipboard-recheck/README.md)
 - [资源管理器复制路径的桌面验收](2026-11-23-explorer-copy-full-path/README.md)
 - [资源管理器完整路径搜索的桌面验收](2026-11-23-explorer-search-absolute-path/README.md)
