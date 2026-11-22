@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [在文件草稿决定中标明确切项目位置](records/2026-11/2026-11-23-file-draft-decision-project-location.md)
 - [在文件比较窗口标明确切项目位置](records/2026-11/2026-11-23-file-comparison-project-location.md)
 - [在会话上下文预览待开始草稿的引用](records/2026-11/2026-11-23-mission-draft-reference-context.md)
 - [已选会话工具栏显示当前对象类型](records/2026-11/2026-11-23-composer-selected-context.md)

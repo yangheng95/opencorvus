@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件草稿决定位置的桌面验收](2026-11-23-file-draft-decision-project-location/README.md)
 - [文件比较位置的桌面验收](2026-11-23-file-comparison-project-location/README.md)
 - [多步任务草稿引用上下文的桌面验收](2026-11-23-mission-draft-reference-context/README.md)
 - [已选会话工具栏的桌面验收](2026-11-23-composer-selected-context/README.md)

@@ -1,0 +1,42 @@
+{
+  "scopes": [
+    {
+      "area": "north",
+      "project": {
+        "id": "prj_h50W9zQIg9wMBZtVT82D",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\north\\site-notes",
+        "time": {
+          "created": 1795368272751,
+          "updated": 1795368272751
+        },
+        "sandboxes": []
+      },
+      "file": {
+        "type": "text",
+        "content": "Warehouse: north\nReceiving count: 12 cartons\nRecord: north-draft-review\n",
+        "revision": "32eb1b7e723db02e5f49e7a226be89c60eda51805b332af436f57200e16b61e3",
+        "resourceID": "03f0d76e2644c4dfd1155c3c9b421fce98023f70f45886206fa85ad5d2abdd97"
+      },
+      "readStatus": 200
+    },
+    {
+      "area": "south",
+      "project": {
+        "id": "prj_hidxEGOTDW5lzdkD8qqg",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\south\\site-notes",
+        "time": {
+          "created": 1795368273305,
+          "updated": 1795368273305
+        },
+        "sandboxes": []
+      },
+      "file": {
+        "type": "text",
+        "content": "Warehouse: south\nReceiving count: 12 cartons\nRecord: south-draft-review\n",
+        "revision": "6bba504f0567e357bfb2d6fd5af50a4c05a3a3eb88e472bca53c52f04d741fdf",
+        "resourceID": "a2b41fe7fec36ee386c051cb94b6b09fe3aa7de433ec9486907cb617cc509b71"
+      },
+      "readStatus": 200
+    }
+  ]
+}
