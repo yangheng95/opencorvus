@@ -5,13 +5,14 @@ import { activeProjectDirectory } from "../../services/project-directory"
 import { refreshProjectMemory, type ProjectMemoryDocument } from "../../services/project-memory"
 import { loadWorkLedger, type WorkLedgerCursor } from "../../services/work-ledger"
 import { subscribeWorkLedgerChanges } from "../../services/sse"
+import { matchesSearchTerms } from "../../services/text-search"
 import { formatErrorDetails } from "../../utils/error-details"
 import { projectDirectoryHints, projectDirectoryKey, projectDisplayName } from "../../utils/project-directory"
 import { localeTag, t } from "../../utils/i18n"
 import { MemoryPanel } from "../MemoryPanel"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
-import { SelectControl } from "../ui/SelectControl"
+import { ComboboxControl } from "../ui/ComboboxControl"
 import { SettingsEmpty, SettingsGroup, SettingsPanel } from "./layout"
 
 interface MemoryProjectOption {
@@ -72,7 +73,7 @@ export function MemoryContextPanel() {
   })
   let loadedProjectsAuthority: ApiAuthority | undefined
   let projectGroup: HTMLElement | undefined
-  let projectTrigger: HTMLButtonElement | undefined
+  let projectInput: HTMLInputElement | undefined
   let retryTrigger: HTMLButtonElement | undefined
   let documentGroup: HTMLElement | undefined
   let retryDocument: ((trigger: HTMLButtonElement) => void) | undefined
@@ -135,7 +136,7 @@ export function MemoryContextPanel() {
           setSelectedProjectKey(options.find((project) => project.key === selectedKey)?.key ?? null)
         })
         if (retryTrigger && retryTrigger.ownerDocument.activeElement === retryTrigger) {
-          const destination = options.length ? projectTrigger : projectGroup
+          const destination = options.length ? projectInput : projectGroup
           destination?.focus({ preventScroll: true })
         }
         retryTrigger = undefined
@@ -188,7 +189,7 @@ export function MemoryContextPanel() {
     if (projectLoadError()?.operation === "initial") return t("memory.project_picker_unavailable")
     if (loadingProjects() && projects().length === 0) return t("memory.project_picker_loading")
     if (projects().length === 0) return t("memory.project_picker_empty")
-    return t("memory.project_picker_placeholder")
+    return t("project_picker.search_placeholder")
   })
   const number = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
 
@@ -203,41 +204,45 @@ export function MemoryContextPanel() {
         contentInset
       >
         <div class="memory-project-picker">
-          <SelectControl<MemoryProjectOption>
-            options={projectOptions()}
-            value={selectedProject()}
-            onChange={(project) => setSelectedProjectKey(project?.key ?? null)}
-            optionValue="key"
-            optionTextValue={(project) => `${projectName(project)} ${project.directory}`}
-            disallowEmptySelection
-            disabled={projects().length === 0}
-            triggerDataUI="memory-project-picker"
-            triggerRef={(element) => { projectTrigger = element }}
-            ariaLabel={t("memory.project_picker_label")}
-            ariaDescribedBy={selectedProject() ? directoryDescriptionID : undefined}
-            renderValue={(project) => project ? (
-              <span class="memory-project-value">
-                <span class="memory-project-value-name">{projectName(project)}</span>
-                <Show when={projectHints().get(project.directory)}>
-                  {(hint) => (
-                    <bdi class="memory-project-value-hint">
-                      <span aria-hidden="true">· </span>{hint()}
-                    </bdi>
-                  )}
-                </Show>
-              </span>
-            ) : <span>{pickerPlaceholder()}</span>}
-            renderOptionLabel={(project) => (
-              <>
-                {projectName(project)}
-                <Show when={projectHints().get(project.directory)}>
-                  {(hint) => <small class="memory-project-option-hint"><bdi>{hint()}</bdi></small>}
-                </Show>
-              </>
-            )}
-            renderOptionDescription={(project) => projectHints().has(project.directory) ? undefined : project.directory}
-            optionData={(project) => ({ "data-project-directory": project.directory })}
-          />
+          <div class="memory-project-control">
+            <ComboboxControl<MemoryProjectOption>
+              presentation="popup"
+              options={projectOptions()}
+              value={selectedProject()}
+              onChange={(project) => { if (project) setSelectedProjectKey(project.key) }}
+              optionValue="key"
+              optionTextValue={(project) => `${projectName(project)} ${project.directory}`}
+              optionLabel={projectName}
+              placeholder={pickerPlaceholder()}
+              defaultFilter={(project, query) => matchesSearchTerms(query.replaceAll("\\", "/"), [
+                projectName(project), project.directory.replaceAll("\\", "/"),
+              ])}
+              allowsEmptyCollection
+              closeOnSelection
+              disallowEmptySelection
+              emptyContent={t("project_picker.no_matches")}
+              disabled={projects().length === 0}
+              inputDataUI="memory-project-picker"
+              inputRef={(element) => { projectInput = element }}
+              inputTitle={selectedDirectory() ?? pickerPlaceholder()}
+              ariaLabel={t("memory.project_picker_label")}
+              ariaDescribedBy={selectedProject() ? directoryDescriptionID : undefined}
+              renderOptionLabel={(project) => (
+                <>
+                  {projectName(project)}
+                  <Show when={projectHints().get(project.directory)}>
+                    {(hint) => <small class="memory-project-option-hint"><bdi>{hint()}</bdi></small>}
+                  </Show>
+                </>
+              )}
+              renderOptionDescription={(project) => projectHints().has(project.directory) ? undefined : project.directory}
+              optionDescriptionClass="memory-project-option-hint"
+              optionData={(project) => ({ "data-project-directory": project.directory })}
+            />
+            <Show when={projectHints().get(selectedDirectory() ?? "")}>
+              {(hint) => <bdi class="memory-project-value-hint" aria-hidden="true">{hint()}</bdi>}
+            </Show>
+          </div>
           <Show when={selectedProject()}>
             {(project) => <div class="memory-project-directory" id={directoryDescriptionID}>{project().directory}</div>}
           </Show>

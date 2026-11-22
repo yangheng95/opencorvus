@@ -603,36 +603,30 @@ button.s-row:focus-visible {
   min-width: 0;
 }
 
-.memory-project-picker .oc-select,
-.memory-project-picker .oc-select-trigger {
-  width: 100%;
+.memory-project-control {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap-sm);
 }
 
-.memory-project-picker .oc-select-value {
-  flex: 1;
+.memory-project-control .oc-select {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .memory-project-picker .oc-feedback {
   margin: 0;
 }
 
-.memory-project-value {
-  display: flex;
-  align-items: baseline;
-  gap: var(--ui-gap-xs);
-}
-
-.memory-project-value-name,
-.memory-project-value-hint {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .memory-project-value-hint {
   flex-shrink: 0;
+  min-width: 0;
   max-width: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--text-soft);
+  font-size: var(--ui-font-caption);
 }
 
 .memory-project-directory {
