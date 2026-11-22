@@ -413,21 +413,22 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   const setSettingsSearch = (value: string) => setDialogStore("config", "search", value)
   let settingsSearchInput: HTMLInputElement | undefined
   const normalizedSettingsSearch = createMemo(() => normalizeSearchText(settingsSearch()))
-  const visibleConfigTabs = createMemo(() => {
+  const matchedConfigTabIDs = createMemo(() => {
     const query = normalizedSettingsSearch()
-    if (!query) return CONFIG_TABS
-    return CONFIG_TABS.filter((tab) => matchesSearchTerms(query, [configSectionSearchText(tab, t)]))
+    const tabs = query
+      ? CONFIG_TABS.filter((tab) => matchesSearchTerms(query, [configSectionSearchText(tab, t)]))
+      : CONFIG_TABS
+    return new Set<string>(tabs.map((tab) => tab.id))
   })
-  const hasSettingsSearchMatches = () => Boolean(normalizedSettingsSearch() && visibleConfigTabs().length)
-  const visibleConfigTabIDs = createMemo(
-    () => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]),
-  )
+  const hasSettingsSearchMatches = () => Boolean(normalizedSettingsSearch() && matchedConfigTabIDs().size)
+  const isConfigTabVisible = (tab: ConfigTabDef) => tab.id === activeConfigTab() || matchedConfigTabIDs().has(tab.id)
   const focusSettingsSearchMatch = (event: KeyboardEvent) => {
     if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
     if ((event.key !== "ArrowDown" && event.key !== "ArrowUp") || !hasSettingsSearchMatches()) return
-    const matchedIDs = new Set(visibleConfigTabs().map((tab) => configTabID(tab.id)))
-    const matches = Array.from(sidebarElement()?.querySelectorAll<HTMLButtonElement>("[data-config-tab]") ?? [])
-      .filter((tab) => matchedIDs.has(tab.id))
+    const matchedIDs = matchedConfigTabIDs()
+    const matches = Array.from(sidebarElement()?.querySelectorAll<HTMLButtonElement>("[data-config-tab]") ?? []).filter(
+      (tab) => matchedIDs.has(tab.dataset.configTab ?? ""),
+    )
     const target = event.key === "ArrowDown" ? matches[0] : matches.at(-1)
     if (!target) return
     event.preventDefault()
@@ -716,6 +717,38 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     setConfigSidebarWidth(next)
   }
 
+  function renderConfigNavTab(tab: ConfigTabDef) {
+    const tabID = configTabID(tab.id)
+    const labelID = `${tabID}-label`
+    const descriptionID = `${tabID}-search-status`
+    const isRetainedDuringSearch = () => tab.id === activeConfigTab() && !matchedConfigTabIDs().has(tab.id)
+    return (
+      <Tab
+        value={tab.id}
+        size="md"
+        tone="neutral"
+        data-config-tab={tab.id}
+        id={tabID}
+        aria-controls={configPanelID(tab.id)}
+        aria-labelledby={labelID}
+        aria-describedby={isRetainedDuringSearch() ? descriptionID : undefined}
+      >
+        <Icon class="config-nav-icon" name={tab.icon} size="medium" />
+        <span class="config-nav-label">
+          <span id={labelID}>{t(tab.labelKey)}</span>
+          <Show when={isRetainedDuringSearch()}>
+            <span id={descriptionID} class="config-nav-search-status">
+              {t("settings.search_retained_page")}
+            </span>
+          </Show>
+        </span>
+        <Show when={tab.badgeID}>
+          <span class="config-nav-badge" id={tab.badgeID} />
+        </Show>
+      </Tab>
+    )
+  }
+
   return (
     <Show when={dialogStore.config.open || retainedScheduledDraft()}>
       <section
@@ -761,7 +794,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
             <Show when={hasSettingsSearchMatches()}>
               <p id="config-search-keyboard-hint" class="config-search-keyboard-hint">{t("settings.search_keyboard_hint")}</p>
             </Show>
-            <Show when={normalizedSettingsSearch() && visibleConfigTabs().length === 0}>
+            <Show when={normalizedSettingsSearch() && matchedConfigTabIDs().size === 0}>
               <div role="status">
                 <SettingsEmpty>{t("settings.search_no_results")}</SettingsEmpty>
               </div>
@@ -769,44 +802,13 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
             <TabList size="md" tone="neutral" layout="rail" data-ui="settings-dialog-tablist">
               <For each={CONFIG_NAV_GROUPS}>
                 {(group) => (
-                  <Show when={group.tabs.some((tab) => visibleConfigTabIDs().has(tab.id))}>
+                  <Show when={group.tabs.some(isConfigTabVisible)}>
                     <div class="config-nav-group-title oc-section-heading">{t(group.labelKey)}</div>
-                    <For each={group.tabs.filter((tab) => visibleConfigTabIDs().has(tab.id))}>
-                      {(tab) => (
-                        <Tab
-                          value={tab.id}
-                          size="md"
-                          tone="neutral"
-                          data-config-tab={tab.id}
-                          id={configTabID(tab.id)}
-                          aria-controls={configPanelID(tab.id)}
-                        >
-                          <Icon class="config-nav-icon" name={tab.icon} size="medium" />
-                          <span class="config-nav-label">{t(tab.labelKey)}</span>
-                          <Show when={tab.badgeID}>
-                            <span class="config-nav-badge" id={tab.badgeID} />
-                          </Show>
-                        </Tab>
-                      )}
-                    </For>
+                    <For each={group.tabs.filter(isConfigTabVisible)}>{renderConfigNavTab}</For>
                   </Show>
                 )}
               </For>
-              <For each={PRODUCT_INFO_TABS.filter((tab) => visibleConfigTabIDs().has(tab.id))}>
-                {(tab) => (
-                  <Tab
-                    value={tab.id}
-                    size="md"
-                    tone="neutral"
-                    data-config-tab={tab.id}
-                    id={configTabID(tab.id)}
-                    aria-controls={configPanelID(tab.id)}
-                  >
-                    <Icon class="config-nav-icon" name={tab.icon} size="medium" />
-                    <span class="config-nav-label">{t(tab.labelKey)}</span>
-                  </Tab>
-                )}
-              </For>
+              <For each={PRODUCT_INFO_TABS.filter(isConfigTabVisible)}>{renderConfigNavTab}</For>
             </TabList>
           </nav>
           <div

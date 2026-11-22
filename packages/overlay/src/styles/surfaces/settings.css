@@ -1500,6 +1500,14 @@ button.s-row:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.config-nav-search-status {
+  display: block;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-normal);
+}
+
 .config-sidebar .oc-tab[data-selected] .config-nav-icon {
   opacity: var(--ui-opacity-full);
 }
