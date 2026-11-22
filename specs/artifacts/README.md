@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [资源管理器同名文件搜索的桌面证据](2026-11-22-explorer-same-name-search/README.md)
 - [用量活动时间提示的桌面证据](2026-11-22-usage-interval-time-details/README.md)
 - [0.1.52 发布证据](2026-11-22-release-0.1.52/README.md) · 原生、官网与公开包日志
 - [设置搜索保留页的桌面验收](2026-11-22-settings-search-retained-page/README.md)

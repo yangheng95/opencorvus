@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [在资源管理器搜索中区分同名文件](2026-11-22-explorer-same-name-search.md)
 - [用量活动时间提示保留必要日期与偏移](2026-11-22-usage-interval-time-details.md)
 - [0.1.52 发布](2026-11-22-release-0.1.52.md)
 - [设置搜索标明保留的当前页](2026-11-22-settings-search-retained-page.md)
