@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [视图菜单直接说出切换去往的界面语言](2026-11-23-titlebar-language-action-destination.md)
 - [收件箱断线时区分不可读取与真实空结果](2026-11-23-mailbox-offline-read-state.md)
 - [新建文件与文件夹在同名冲突后可直接修正](2026-11-23-explorer-create-name-conflict-retry.md)
 - [聊天、通用工作与模型服务商设置区分同名项目](2026-11-23-settings-capability-provider-project-scope.md)
