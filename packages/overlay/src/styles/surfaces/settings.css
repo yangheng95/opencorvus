@@ -3498,6 +3498,14 @@ button.s-row:focus-visible {
   white-space: nowrap;
 }
 
+.archive-row-request {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
 .archive-row-project {
   color: var(--text-soft);
 }

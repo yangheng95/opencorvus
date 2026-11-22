@@ -6296,6 +6296,10 @@ from the canonical Project row. Archive rows present the existing canonical
 project display name with their complete real directory on a separate metadata
 line. This presentation uses the same fully loaded Work Ledger project projection
 as other project labels, without adding a second name store or changing row identity.
+An archived Mission with a saved request shows its canonical `pendingPromptText`
+between the title and the Project metadata, under the existing localized Saved
+request label. The list displays up to two lines of the original request. Opening
+the row shows the complete request in the retained conversation.
 The localized Open, Restore and permanent-delete accessible names identify the
 original item, the same displayed Project and the row's exact directory when
 present. The existing armed-delete description uses the same identity; its

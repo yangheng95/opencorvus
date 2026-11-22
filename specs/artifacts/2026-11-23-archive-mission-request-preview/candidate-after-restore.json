@@ -1,0 +1,53 @@
+{
+  "archiveStatus": 200,
+  "activeStatus": 200,
+  "archived": [
+    {
+      "kind": "mission",
+      "id": "draft-204de1b2627af61c457ff4fdc85f15c1",
+      "missionID": "draft-204de1b2627af61c457ff4fdc85f15c1",
+      "sessionID": "ses_hpKoAnlLyGDLp0MapJ5D",
+      "title": "Inventory handoff",
+      "pendingPromptText": "Reconcile ceramic planters against the current south warehouse inventory.\r\nUse the receiving sheets to cross-check the item labels and the shelving records. Group discrepancies by aisle, keep quantities in their original units, and keep the receiving date for each item. Record the condition of each carton and check the count with the manifest before preparing an inventory report. Include a dedicated note for any shipment with an incomplete receiving slip. South manifest closing reference SATURN-47.",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+      "created": 1795365423057,
+      "started": 1795365423057,
+      "updated": 1795365423143,
+      "pinned": false,
+      "archived": 1795365423143,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  ],
+  "active": [
+    {
+      "missionID": "draft-70e7b622723c10e59ce5364f41181159",
+      "sessionID": "ses_hGj0Yo6SfVaOxWBzJrKS",
+      "title": "Inventory handoff",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+      "created": 1795365422657,
+      "updated": 1795365447056,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Reconcile silver lanterns against the current north warehouse inventory."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  ]
+}

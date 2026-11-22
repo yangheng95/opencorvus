@@ -587,6 +587,11 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                     <span class="archive-row-title__text">{row.title || row.id}</span>
                   </span>
                 }
+                desc={row.kind === "mission" && row.pendingPromptText ? (
+                  <span class="archive-row-request">
+                    {t("mission.conversation.saved_request")} · <bdi>{row.pendingPromptText}</bdi>
+                  </span>
+                ) : undefined}
                 meta={
                   <>
                     <span>{kindLabel(row)}</span>
