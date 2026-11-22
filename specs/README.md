@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [命令面板标出当前主题和语言](records/2026-11/2026-11-23-command-palette-current-appearance.md)
 - [多步任务技能列表显示用途摘要](records/2026-11/2026-11-23-mission-skill-list-description.md)
 - [全图预览显示当前图片的固有宽高](records/2026-11/2026-11-23-image-preview-dimensions.md)
 - [PDF 阅读器可直接输入页码导航](records/2026-11/2026-11-23-pdf-direct-page-navigation.md)
