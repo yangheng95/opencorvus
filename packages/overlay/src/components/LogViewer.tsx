@@ -318,14 +318,15 @@ export function LogViewer(props: LogViewerProps) {
       setServerLog({ authority, tail })
     } catch (error) {
       if (!ownsRefresh()) return
-      setServerLog(null)
       setLogIssue({ operation: "refresh", cause: error })
     } finally {
       if (ownsRefresh()) setRefreshPending(false)
     }
   }
 
-  const currentServerLogPath = () => currentServerLog()?.path.trim() ?? ""
+  const currentServerLogPath = () =>
+    logIssue()?.operation === "refresh" ? "" : currentServerLog()?.path.trim() ?? ""
+  const refreshFailureKey = () => currentServerLog() ? "log.refresh_failed_retained" : "log.refresh_failed"
 
   /** Show a short-lived notice, replacing whatever one is on screen. */
   function flashNotice(tone: "success" | "error", message: string): void {
@@ -349,7 +350,9 @@ export function LogViewer(props: LogViewerProps) {
     if (!path || refreshPending() || openFileAction.pending()) return
     const authority = captureApiAuthority()
     void openFileAction.run(authority, path).catch((error) => {
-      if (ownsOpenConnection(authority)) setLogIssue({ operation: "reveal", cause: error })
+      if (ownsOpenConnection(authority) && logIssue()?.operation !== "refresh") {
+        setLogIssue({ operation: "reveal", cause: error })
+      }
     })
   }
 
@@ -552,7 +555,7 @@ export function LogViewer(props: LogViewerProps) {
       <Show when={logIssue()}>
         {(issue) => (
           <Feedback tone="error" details={formatErrorDetails(issue().cause)}>
-            {t(issue().operation === "refresh" ? "log.refresh_failed" : pathRevealFailureKey())}
+            {t(issue().operation === "refresh" ? refreshFailureKey() : pathRevealFailureKey())}
           </Feedback>
         )}
       </Show>

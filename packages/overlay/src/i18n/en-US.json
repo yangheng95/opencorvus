@@ -1688,6 +1688,7 @@
   "log.open_file_hint": "Open the current server log file",
   "log.raw": "Raw line",
   "log.refresh_failed": "Could not load server logs. Select Refresh to try again.",
+  "log.refresh_failed_retained": "Could not refresh server logs. The last loaded logs are still available. Select Refresh to try again.",
   "log.refreshing": "Refreshing…",
   "log.loading_server": "Loading current server logs…",
   "log.source_overlay": "Overlay",

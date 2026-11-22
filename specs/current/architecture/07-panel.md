@@ -6250,8 +6250,10 @@ LogViewer reads the current backend event envelope and preserves nested subject 
 
 Log Viewer feedback distinguishes a failed server refresh from revealing the
 loaded log path. Both keep the original error in Details and render the current
-language in one location above the log list. A failed refresh retires the old
-server tail; any still-matching client or pipeline logs remain readable.
+language in one location above the log list. A refresh failure on the same
+connection keeps its last accepted server tail readable with a localized notice.
+Search and Copy use the currently loaded records, including matching client or
+pipeline logs. The path action becomes available again after a successful read.
 During a refresh, the same toolbar action keeps keyboard focus, reports its
 localized busy state, and admits one current read.
 The accepted server tail and its path belong to the current API connection.
