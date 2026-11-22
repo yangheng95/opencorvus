@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [日志匹配数量的实页证据](2026-11-23-log-search-match-count/README.md)
 - [独立文件比较和磁盘错误的实页截图](2026-11-23-file-base-draft-without-disk/README.md)
 - [连接地址错误和字段关联的实页证据](2026-11-23-connection-address-field-error/README.md)
 - [文件工作台缺失章节的实页证据](2026-11-23-markdown-missing-linked-section/README.md)
