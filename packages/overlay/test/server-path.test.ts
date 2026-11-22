@@ -5,6 +5,7 @@ import {
   normalizeProjectFilePath,
   normalizeWorkspaceDirectoryInput,
   pathWithForwardSeparators,
+  projectFileLocation,
   resolveDocumentFilePath,
   serverFileUrlPath,
   shortestDistinctPathSuffixLengths,
@@ -99,6 +100,14 @@ test.each([
 test("absolute path presentation retains roots, case and filename whitespace", () => {
   expect(pathWithForwardSeparators("C:\\Folder\\ File.md", "C:\\repo")).toBe("C:/Folder/ File.md")
   expect(pathWithForwardSeparators("/Folder/file\\name.md ", "/repo")).toBe("/Folder/file\\name.md ")
+})
+
+test.each([
+  ["C:\\Work\\North", "records/Intake Notes/Check.txt", "C:/Work/North/records/Intake Notes/Check.txt"],
+  ["\\\\host\\share\\", "records/Intake Notes", "//host/share/records/Intake Notes"],
+  ["/repo/South/", "records/Check\\Name.txt ", "/repo/South/records/Check\\Name.txt "],
+])("project location within %s names %s precisely", (directory, path, expected) => {
+  expect(projectFileLocation({ directory, path })).toBe(expected)
 })
 
 test.each([

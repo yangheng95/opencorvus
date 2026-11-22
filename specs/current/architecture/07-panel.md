@@ -1206,6 +1206,13 @@ the canonical work-ledger Project title and original directory. Both update from
 the same directory input as listing, search and commands; the full path remains
 readable when the navigation sidebar is hidden.
 
+The shared Explorer row menu copies the full location of a single file or
+directory from the current project and row identity. Search results use the
+same action. The file editor and Explorer share lexical location formatting,
+and clipboard output uses the server's path separators. The existing host
+clipboard reports completion or failure in Explorer under the current selection
+and connection. Batch duplication still uses the explicit destination dialog.
+
 Markdown text files offer Source and Preview views of the same current draft.
 A newly opened nonempty Markdown file without a source range opens in Preview.
 An empty Markdown file opens in Source so its existing editor can accept input.

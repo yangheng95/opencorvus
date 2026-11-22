@@ -19,10 +19,9 @@ import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import {
   decodeMarkdownFilePath,
   isAbsoluteServerPath,
-  isWindowsPath,
   normalizeProjectFilePath,
-  normalizeServerPath,
   pathWithForwardSeparators,
+  projectFileLocation,
   resolveDocumentFilePath,
 } from "../utils/server-path"
 import { currentConversationFileChangeSource } from "../utils/file-change-summary"
@@ -47,10 +46,6 @@ import { Feedback } from "./ui/Feedback"
 import { PreviewableImage } from "./ImagePreview"
 import { TextDiffView } from "./DiffView"
 import { SegmentedControl } from "./ui/SegmentedControl"
-
-function projectFileLocation({ directory, path }: FileEditorTarget): string {
-  return normalizeServerPath(`${directory}/${path}`, isWindowsPath(directory))
-}
 
 function fileContentPath(target: FileEditorTarget): string {
   const query = new URLSearchParams({

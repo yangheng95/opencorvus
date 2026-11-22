@@ -19,6 +19,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { dialogOpeningFocusTarget } from "./ui/Dialog"
 import { Virtualizer, type VirtualizerHandle, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
+import { copyText } from "../services/clipboard"
 import { boardStore } from "../store/board"
 import { workLedgerProject } from "../services/work-ledger"
 import { showAppDialog } from "../services/app-dialog"
@@ -54,6 +55,7 @@ import {
   classifyProjectPathInput,
   isWindowsPath,
   normalizeProjectFilePath,
+  projectFileLocation,
   shortestDistinctPathSuffixLengths,
 } from "../utils/server-path"
 import { projectDisplayName } from "../utils/project-directory"
@@ -129,6 +131,8 @@ type ExplorerFeedback =
   | ExplorerOutcome
   | { kind: "validation"; reason: ExplorerValidation }
   | { kind: "failure"; operation: ExplorerFailureOperation; error: unknown }
+
+type PathCopyState = { kind: "pending" } | { kind: "copied" } | { kind: "failure"; error: unknown }
 
 type ExplorerDropStatus = "move" | "upload" | "invalid"
 
@@ -504,6 +508,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [dropStatus, setDropStatus] = createSignal<ExplorerDropStatus>("move")
   const [mutationOperation, setMutationOperation] = createSignal<FileMutationOperation | null>(null)
   const [mutationFeedback, setMutationFeedback] = createSignal<ExplorerFeedback | null>(null)
+  const [pathCopyState, setPathCopyState] = createSignal<PathCopyState | null>(null)
+  const pathCopyFeedback = () => {
+    const state = pathCopyState()
+    return state?.kind === "pending" ? null : state
+  }
   const active = createMemo(() => props.active?.() ?? true)
   const directory = createMemo(() => (props.directory ? props.directory().trim() : ""))
   const projectName = () => projectDisplayName({
@@ -781,6 +790,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     setExpandedPaths(new Set<string>([""]))
     setMutationOperation(null)
     setMutationFeedback(null)
+    setPathCopyState(null)
     mutationOperationSequence += 1
   })
 
@@ -1558,6 +1568,22 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
   }
 
+  async function copyFullPath(item: ExplorerSelection): Promise<void> {
+    const scope = currentOperationScope()
+    if (!scope || !ownsExplorerOperation(scope) || pathCopyState()?.kind === "pending") return
+    const location = projectFileLocation({ directory: scope.directory, path: item.path })
+    const text = isWindowsPath(scope.directory) ? location.replaceAll("/", "\\") : location
+    const attempt: PathCopyState = { kind: "pending" }
+    setPathCopyState(attempt)
+    const ownsCopy = () => pathCopyState() === attempt && ownsExplorerOperation(scope)
+    try {
+      await copyText(text)
+      if (ownsCopy()) setPathCopyState({ kind: "copied" })
+    } catch (error) {
+      if (ownsCopy()) setPathCopyState({ kind: "failure", error })
+    }
+  }
+
   async function runMutation(
     kind: Exclude<FileMutationKind, "">,
     scope: ExplorerOperationScope,
@@ -2315,6 +2341,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
               else openExplorerFile(item().path)
             }}
           />
+          <Show when={!hasMultipleTargets()}>
+            <FileExplorerContextMenuItem
+              dataUi="file-explorer-context-copy-full-path"
+              label={t("explorer.copy_full_path")}
+              disabled={pathCopyState()?.kind === "pending"}
+              onSelect={() => void copyFullPath(item())}
+            />
+          </Show>
           <FileExplorerContextMenuItem
             dataUi="file-explorer-context-upload"
             label={t("explorer.upload_files")}
@@ -2667,7 +2701,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           </div>
         )}
       </Show>
-      <Show when={uploading() || uploadFeedback() || mutationFeedback() || visibleDirectoryFailurePaths().length > 0 || searchHasMore()}>
+      <Show when={uploading() || uploadFeedback() || mutationFeedback() || pathCopyFeedback() || visibleDirectoryFailurePaths().length > 0 || searchHasMore()}>
         <div class="file-explorer-feedback-stack">
           <Show when={uploading()}>
             <Feedback class="file-explorer-feedback" tone="info">
@@ -2679,6 +2713,17 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           </Show>
           <Show when={mutationFeedback()}>
             {(feedback) => <ExplorerActionFeedback feedback={feedback()} dataUI="file-explorer-command-message" />}
+          </Show>
+          <Show when={pathCopyFeedback()} keyed>
+            {(feedback) => (
+              <Feedback
+                class="file-explorer-feedback"
+                tone={feedback.kind === "copied" ? "success" : "error"}
+                details={feedback.kind === "failure" ? formatErrorDetails(feedback.error) || undefined : undefined}
+              >
+                {feedback.kind === "copied" ? t("explorer.full_path_copied") : t("cwd.copy_failed")}
+              </Feedback>
+            )}
           </Show>
           <For each={visibleDirectoryFailurePaths()}>
             {(path) => (

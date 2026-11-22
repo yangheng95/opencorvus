@@ -73,6 +73,11 @@ export function normalizeServerPath(path: string, windows: boolean): string {
   return driveRelative || root.endsWith("/") || !root ? `${root}${suffix}` : `${root}${suffix ? "/" : ""}${suffix}`
 }
 
+/** Full lexical location of an admitted project-relative entry. */
+export function projectFileLocation({ directory, path }: { directory: string; path: string }): string {
+  return normalizeServerPath(`${directory}/${path}`, isWindowsPath(directory))
+}
+
 /** Canonical project-relative keys preserve every filename character. */
 export function normalizeProjectFilePath(path: string, directory: string): string {
   const windows = isWindowsPath(directory)
