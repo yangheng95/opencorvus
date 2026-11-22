@@ -2573,6 +2573,9 @@ also expose the canonical locale ID and use their existing metadata term search,
 so a displayed name can discover the same language action across these surfaces.
 Language selection still uses the one `applyLocalePreference` operation; the
 runtime default-language policy and titlebar toggle semantics remain unchanged.
+Shared SelectControl consumers submit their controlled value through the owning
+surface. The visible trigger and its popup own keyboard navigation, including
+sequential focus after changing a value with the trigger's arrow keys.
 
 Command palette ledger selections close the settings page through that same
 reveal lifecycle after file departure is approved and before selecting the

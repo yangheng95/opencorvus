@@ -146,13 +146,6 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
           <Icon name="chevron-down" size="compact" />
         </Select.Icon>
       </Select.Trigger>
-      <Select.HiddenSelect
-        aria-label={props.ariaLabel}
-        aria-labelledby={props.ariaLabelledBy}
-        aria-describedby={ariaDescribedBy()}
-        aria-invalid={invalid() ? "true" : undefined}
-        aria-errormessage={invalid() ? errorMessageID() : undefined}
-      />
       <Select.Portal mount={topLayerPortalMount(trigger)}>
         <Select.Content class="oc-select-content" data-variant={variant()}>
           <Select.Listbox class="oc-select-listbox" data-variant={variant()} />

@@ -15,3 +15,20 @@
 - [单步复现第一次 Tab 仍停在刚保存的浅色主题控件](09-baseline-first-tab-after-theme-change.jpg)
 - [没有偏好变动时的正常 Tab 顺序](10-baseline-unmodified-focus-order.jpg)
 - [收起语言更改后正常通过反向 Tab 返回主题](11-baseline-first-shift-tab-after-language-change.jpg)
+
+首轮候选 `40460/ui/` 为排除临时禁用的对照。
+
+- [按钮保持启用时第一次 Tab 仍留在主题](12-candidate-first-tab-after-theme.jpg)
+- [独立日志筛选同样需要额外一次 Tab](13-candidate-log-filter-repeats-tab.jpg)
+
+最终复验来自 `40462/ui/`。
+
+- [英语主题改变后的首次 Tab 到达语言](14-final-first-tab-reaches-language.jpg)
+- [简体中文切换后，首次反向 Tab 返回主题](15-final-chinese-shift-tab-reaches-theme.jpg)
+- [中文主题改变后的首次 Tab 到达语言](16-final-chinese-first-tab-reaches-language.jpg)
+- [在弹层提交浅色后恢复主题焦点](17-final-popup-theme-commit.jpg)
+- [真实刷新后读出浅色和简体中文](18-final-reloaded-preferences.jpg)
+- [还原初始系统主题和英语](19-final-original-preferences-restored.jpg)
+- [真实日志由 DEBUG 切至 INFO 后首次 Tab 到达刷新](20-final-log-first-tab-reaches-refresh.jpg)
+- [定时草稿改为工作日后首次 Tab 到达日期](21-final-automation-draft-date-focus.jpg)
+- [取消后正式计划列表回到空态](22-final-draft-cancelled.jpg)
