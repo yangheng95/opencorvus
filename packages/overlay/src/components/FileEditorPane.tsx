@@ -392,19 +392,22 @@ export function FileEditorPane() {
     return { titleKey: "file_editor.load_failed", hintKey: "file_editor.load_failed_hint" } as const
   })
 
-  const comparisonPair = createMemo(() => {
+  const comparisonDiskContent = () => {
     const read = comparison()
+    return read?.status === "loaded" ? read.content : null
+  }
+  const comparisonPair = createMemo(() => {
     const baseline = savedBaseline()
-    if (read?.status !== "loaded" || !canEdit(read.content) || !baseline) return undefined
-    const disk = read.content!.content
-    switch (comparisonMode()) {
-      case "base-disk":
-        return { before: baseline.content, after: disk, left: "file_editor.compare_base", right: "file_editor.compare_disk" }
-      case "base-draft":
-        return { before: baseline.content, after: draft(), left: "file_editor.compare_base", right: "file_editor.compare_draft" }
-      case "disk-draft":
-        return { before: disk, after: draft(), left: "file_editor.compare_disk", right: "file_editor.compare_draft" }
+    if (!baseline) return undefined
+    const mode = comparisonMode()
+    if (mode === "base-draft") {
+      return { before: baseline.content, after: draft(), left: "file_editor.compare_base", right: "file_editor.compare_draft" }
     }
+    const disk = comparisonDiskContent()
+    if (!disk || !canEdit(disk)) return undefined
+    return mode === "base-disk"
+      ? { before: baseline.content, after: disk.content, left: "file_editor.compare_base", right: "file_editor.compare_disk" }
+      : { before: disk.content, after: draft(), left: "file_editor.compare_disk", right: "file_editor.compare_draft" }
   })
   const retireComparison = () => {
     comparison()?.controller.abort()
@@ -412,7 +415,7 @@ export function FileEditorPane() {
   }
   const comparedDiskForBase = () => {
     const read = comparison()
-    const disk = read?.status === "loaded" ? read.content : null
+    const disk = comparisonDiskContent()
     if (
       !read || !canEdit(disk) || !disk?.revision || !writable() || !dirty() ||
       isBusy() || fileEditorReserved() || read.controller.signal.aborted ||
@@ -1242,21 +1245,22 @@ export function FileEditorPane() {
                     {t("file_editor.compare_failed")}
                   </Feedback>
                 </Match>
-                <Match when={read().status === "loaded"}>
-                  <Show when={comparisonPair()} fallback={<Feedback tone="warning">{t("file_editor.compare_non_text")}</Feedback>}>
-                    {(pair) => (
-                      <>
-                        <div class="file-comparison-labels">
-                          <span>− {t(pair().left)}</span><span>+ {t(pair().right)}</span>
-                        </div>
-                        <div class="file-comparison-diff" tabIndex={0} role="region" aria-label={t("file_editor.compare_versions")}>
-                          <TextDiffView before={pair().before} after={pair().after} />
-                        </div>
-                      </>
-                    )}
-                  </Show>
+                <Match when={read().status === "loaded" && !canEdit(comparisonDiskContent())}>
+                  <Feedback tone="warning">{t("file_editor.compare_non_text")}</Feedback>
                 </Match>
               </Switch>
+              <Show when={comparisonPair()}>
+                {(pair) => (
+                  <>
+                    <div class="file-comparison-labels">
+                      <span>− {t(pair().left)}</span><span>+ {t(pair().right)}</span>
+                    </div>
+                    <div class="file-comparison-diff" tabIndex={0} role="region" aria-label={t("file_editor.compare_versions")}>
+                      <TextDiffView before={pair().before} after={pair().after} />
+                    </div>
+                  </>
+                )}
+              </Show>
             </div>
           )}
         </Show>
