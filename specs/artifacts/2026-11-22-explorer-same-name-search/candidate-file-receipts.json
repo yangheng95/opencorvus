@@ -1,0 +1,62 @@
+[
+  {
+    "query": "handoff",
+    "HTTP": 200,
+    "paths": [
+      "warehouse-reference-materials-for-inventory-and-receiving/north/handoff.md",
+      "warehouse-reference-materials-for-inventory-and-receiving/south/handoff.md"
+    ],
+    "files": [
+      {
+        "path": "warehouse-reference-materials-for-inventory-and-receiving/north/handoff.md",
+        "HTTP": 200,
+        "content": "# North handoff\n\nNorth dock count: 11.\r\n"
+      },
+      {
+        "path": "warehouse-reference-materials-for-inventory-and-receiving/south/handoff.md",
+        "HTTP": 200,
+        "content": "# South handoff\n\nSouth dock count: 23.\r\n"
+      }
+    ]
+  },
+  {
+    "query": "details",
+    "HTTP": 200,
+    "paths": [
+      "details.md",
+      "warehouse-reference-materials-for-inventory-and-receiving/north/team/details.md",
+      "warehouse-reference-materials-for-inventory-and-receiving/south/team/details.md"
+    ],
+    "files": [
+      {
+        "path": "details.md",
+        "HTTP": 200,
+        "content": "# Root procedures\r\n"
+      },
+      {
+        "path": "warehouse-reference-materials-for-inventory-and-receiving/north/team/details.md",
+        "HTTP": 200,
+        "content": "# North team procedures\r\n"
+      },
+      {
+        "path": "warehouse-reference-materials-for-inventory-and-receiving/south/team/details.md",
+        "HTTP": 200,
+        "content": "# South team procedures\r\n"
+      }
+    ]
+  },
+  {
+    "query": "overview",
+    "HTTP": 200,
+    "paths": [
+      "warehouse-reference-materials-for-inventory-and-receiving/overview.md"
+    ],
+    "files": [
+      {
+        "path": "warehouse-reference-materials-for-inventory-and-receiving/overview.md",
+        "HTTP": 200,
+        "content": "# Unique overview\r\n"
+      }
+    ]
+  }
+]

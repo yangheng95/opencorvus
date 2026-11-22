@@ -850,6 +850,11 @@
   outline-offset: calc(-1px * var(--ui-scale));
 }
 
+.file-explorer-row[data-search-result] .oc-file-row__copy:has(.oc-file-row__detail) .oc-file-row__name {
+  flex-shrink: 0;
+  max-inline-size: 60%;
+}
+
 .file-explorer-row[data-active="true"],
 .file-explorer-row[data-selected="true"] {
   background: color-mix(in srgb, var(--accent) 16%, transparent);

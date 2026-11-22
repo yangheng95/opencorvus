@@ -50,7 +50,12 @@ import {
   type FileRefreshTarget,
   type FileUploadResult,
 } from "../services/file-workbench"
-import { classifyProjectPathInput, isWindowsPath, normalizeProjectFilePath } from "../utils/server-path"
+import {
+  classifyProjectPathInput,
+  isWindowsPath,
+  normalizeProjectFilePath,
+  shortestDistinctPathSuffixLengths,
+} from "../utils/server-path"
 import { projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
@@ -967,6 +972,29 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   })
   const currentSearchFailure = createMemo(() => currentSearchResult()?.error ?? null)
   const searchHasMore = () => (currentSearchResult()?.paths.length ?? 0) > SEARCH_LIMIT
+  const displayedSearchPaths = createMemo(() => currentSearchResult()?.paths.slice(0, SEARCH_LIMIT) ?? [])
+  const searchDirectoryHints = createMemo(() => {
+    const pathsByName = new Map<string, string[]>()
+    for (const path of displayedSearchPaths()) {
+      const name = fileName(path)
+      const peers = pathsByName.get(name) ?? []
+      peers.push(path)
+      pathsByName.set(name, peers)
+    }
+    const hints = new Map<string, string>()
+    for (const peers of pathsByName.values()) {
+      if (peers.length < 2) continue
+      const parents = peers.map((path) => dirname(path).split("/").filter(Boolean))
+      const lengths = shortestDistinctPathSuffixLengths(parents)
+      for (const [index, path] of peers.entries()) {
+        const parts = parents[index]!
+        const length = lengths[index]!
+        const suffix = parts.slice(-length).join("/")
+        hints.set(path, length < parts.length ? `…/${suffix}` : suffix)
+      }
+    }
+    return hints
+  })
   const rowScopeKey = createMemo(() => JSON.stringify([
     captureApiAuthority()?.revision ?? null,
     directory(),
@@ -995,7 +1023,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const scopeKey = rowScopeKey()
     const search = deferredQuery()
     if (search) {
-      return (currentSearchResult()?.paths ?? []).slice(0, SEARCH_LIMIT).map((path) => ({
+      return displayedSearchPaths().map((path) => ({
         kind: "search",
         key: searchResultKey(scopeKey, path),
         path,
@@ -2381,6 +2409,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (untrack(current).kind === "search") {
       const row = () => current() as Extract<ExplorerRow, { kind: "search" }>
       const item = () => selectionFromFilePath(row().path)
+      const directoryDetail = () => {
+        const hint = searchDirectoryHints().get(row().path)
+        return hint === undefined ? dirname(row().path) : explorerDirectoryDisplayPath(hint)
+      }
       const isSearchRowSelected = () => isSelected(item())
       const isSearchRowCurrent = () => currentFilePath() === item().path
       const isSearchRowDragging = () => draggedItems().some((entry) => entry.path === item().path)
@@ -2400,12 +2432,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             data-ui="file-explorer-row"
             data-app-context-menu-trigger="true"
             data-kind="file"
+            data-search-result=""
             data-active={isSearchRowSelected() ? "true" : "false"}
             data-selected={isSearchRowSelected() ? "true" : "false"}
             data-dragging={isSearchRowDragging() ? "true" : undefined}
             data-drop-target={isSearchRowDropTarget() ? dropStatus() : undefined}
             aria-current={isSearchRowCurrent() ? "true" : undefined}
-            aria-label={isSearchRowSelected() ? t("explorer.selected_path_hint", { path: row().path }) : undefined}
+            aria-label={isSearchRowSelected() ? t("explorer.selected_path_hint", { path: row().path }) : row().path}
             aria-keyshortcuts={EXPLORER_SELECTION_KEY_SHORTCUTS}
             draggable={!commandBusy()}
             style={{ "--file-explorer-row-depth": String(row().depth) }}
@@ -2437,7 +2470,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             onDrop={(event) => void handleExplorerDrop(event, parentPath(item().path))}
             onClick={(event) => handleRowClick(event, item(), () => openExplorerFile(item().path))}
           >
-            <FileRowContent name={fileName(row().path)} icon="file-document" detail={dirname(row().path)} />
+            <FileRowContent name={fileName(row().path)} icon="file-document" detail={directoryDetail()} />
           </ContextMenu.Trigger>
           {renderItemContextMenu(item, () => ({ isDirectory: false }))}
         </ContextMenu.Root>

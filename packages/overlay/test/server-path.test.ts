@@ -6,8 +6,20 @@ import {
   pathWithForwardSeparators,
   resolveDocumentFilePath,
   serverFileUrlPath,
+  shortestDistinctPathSuffixLengths,
 } from "../src/utils/server-path"
 import { projectDirectoryKey } from "../src/utils/project-directory"
+
+test("relative result parents keep distinguishing ancestry, including the project root", () => {
+  const paths = [[], ["warehouse", "north", "notes"], ["warehouse", "south", "notes"], ["warehouse", "receiving"]]
+  const lengths = shortestDistinctPathSuffixLengths(paths)
+  expect(paths.map((path, index) => path.slice(-lengths[index]!).join("/"))).toEqual([
+    "",
+    "north/notes",
+    "south/notes",
+    "receiving",
+  ])
+})
 
 test.each([
   ["file:///C:/Repo/second%20sample.txt", "C:/Repo", "C:/Repo/second sample.txt"],

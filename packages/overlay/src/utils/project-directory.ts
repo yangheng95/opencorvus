@@ -1,4 +1,4 @@
-import { normalizeServerPath } from "./server-path"
+import { normalizeServerPath, shortestDistinctPathSuffixLengths } from "./server-path"
 
 export interface ProjectDirectoryLabel {
   name: string
@@ -88,11 +88,9 @@ export function projectDirectoryHints(projects: readonly { directory: string; na
         entry.keys.pop()
       }
     }
-    for (const entry of entries) {
-      let length = 1
-      while (length < entry.keys.length && entries.some((other) =>
-        other !== entry && other.keys.slice(-length).join("/") === entry.keys.slice(-length).join("/"),
-      )) length += 1
+    const lengths = shortestDistinctPathSuffixLengths(entries.map((entry) => entry.keys))
+    for (const [index, entry] of entries.entries()) {
+      const length = lengths[index]!
       hints.set(entry.directory, entry.parts.slice(-length).join("/") || entry.directory)
     }
   }

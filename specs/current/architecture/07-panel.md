@@ -1818,6 +1818,11 @@ the selection and anchor for matching paths, retains the query, and returns
 focus to the search input. Pending or failed searches cannot establish this
 partition.
 
+Explorer search rows with the same filename display enough of their actual
+parent path to distinguish the visible results. Shortened directories indicate
+omitted ancestors, and a root-level result labels the project root. The full
+relative path still names the control and identifies its file actions.
+
 Explorer file rows disclose Ctrl+Space selection toggling and Shift+Space range
 selection in the current interface language. The accessible name of a selected
 row keeps its path and reports its selection separately from the current editor

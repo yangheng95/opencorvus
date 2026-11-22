@@ -85,6 +85,20 @@ export function normalizeProjectFilePath(path: string, directory: string): strin
   return [...Array(baseSegments.length - common).fill(".."), ...fullSegments.slice(common)].join("/")
 }
 
+/** How many trailing segments each visible path needs to distinguish it from its peers. */
+export function shortestDistinctPathSuffixLengths(paths: readonly (readonly string[])[]): number[] {
+  return paths.map((parts, index) => {
+    let length = Math.min(1, parts.length)
+    while (length < parts.length) {
+      const suffix = parts.slice(-length).join("/")
+      const shared = paths.some((peer, peerIndex) => peerIndex !== index && peer.slice(-length).join("/") === suffix)
+      if (!shared) break
+      length += 1
+    }
+    return length
+  })
+}
+
 /** Decode Markdown file destinations once, preserving bare percent signs in filenames. */
 export function decodeMarkdownFilePath(path: string): string {
   return decodeURIComponent(path.replace(/%(?![0-9a-f]{2})/gi, "%25"))
