@@ -1,0 +1,53 @@
+{
+  "archiveStatus": 200,
+  "activeStatus": 200,
+  "archived": [
+    {
+      "kind": "mission",
+      "id": "draft-58e3c609f7c6154bf2641d8bf436b6b9",
+      "missionID": "draft-58e3c609f7c6154bf2641d8bf436b6b9",
+      "sessionID": "ses_hbbVdoj6cqpTeg2gZIFM",
+      "title": "Inventory handoff",
+      "pendingPromptText": "Reconcile ceramic planters against the current south warehouse inventory.",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+      "created": 1795365017912,
+      "started": 1795365017912,
+      "updated": 1795365018025,
+      "pinned": false,
+      "archived": 1795365018025,
+      "interruptible": false,
+      "outcome": null,
+      "productPillar": "work",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "pendingInteractions": 0,
+      "tasks": []
+    }
+  ],
+  "active": [
+    {
+      "missionID": "draft-09ea3a5f31cdc7aba3f46dd3bba8609a",
+      "sessionID": "ses_hUFPP6MMNIHOLV1uDsfr",
+      "title": "Inventory handoff",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+      "created": 1795365017561,
+      "updated": 1795365060746,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Reconcile silver lanterns against the current north warehouse inventory."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  ]
+}

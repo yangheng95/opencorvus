@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [在归档结果中预览已保存的多步任务请求](2026-11-23-archive-mission-request-preview.md)
 - [侧栏在线状态直接显示当前连接端口](2026-11-23-sidebar-connected-port.md)
 - [已选会话加载时显示真实等待状态](2026-11-23-conversation-opening-status.md)
 - [多步任务编辑保存后可直接打开草稿](2026-11-22-mission-edit-save-feedback.md)
