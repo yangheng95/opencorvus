@@ -1494,7 +1494,8 @@ store supplies this behavior.
 The file header lays out the current name with its document return action in
 one group. The file controls share the available row when their intrinsic
 widths fit and move together to the next row when space is limited. The
-metadata and save status keep their full-width row.
+metadata and save status keep their full-width row. The file location wraps
+within that row so narrow panes can show the full path, including its spaces.
 
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
