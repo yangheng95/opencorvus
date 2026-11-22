@@ -11,6 +11,20 @@ async function runGit(directory: string, args: string[]) {
   if (result.exitCode !== 0) throw new Error(result.stderr.toString().trim() || `git ${args.join(" ")} failed`)
 }
 
+async function settleMemoryInstances() {
+  const { Bus } = await import("../../src/bus")
+  const { RuntimeExecutionSettlement } = await import("../../src/runtime/execution-settlement")
+  using execution = RuntimeExecutionSettlement.acquireSettlementGate()
+  execution.closeAdmission(["protocol_publication"])
+  using publications = Bus.acquireProcessSettlementGate()
+  execution.requestCancellation(["protocol_publication"], new Error("Memory fixture runtime is being retired"))
+  await execution.waitForIdle(["protocol_publication"], 60_000)
+  await Instance.disposeAll()
+  await execution.waitForIdle(["protocol_publication"], 60_000)
+  publications.commit()
+  execution.commit()
+}
+
 export async function memoryProject(identitySeed?: string) {
   declareNativeTaskProcessDeployment()
   const root = process.env.OPENCORVUS_TEST_PROCESS_ROOT
@@ -28,7 +42,7 @@ export async function memoryProject(identitySeed?: string) {
   return {
     path: physicalDirectory,
     async [Symbol.asyncDispose]() {
-      await Instance.disposeAll()
+      await settleMemoryInstances()
       const { ProcessSupervisor } = await import("../../src/shell/process-supervisor")
       await ProcessSupervisor.disposeLiveProcessesUnder(physicalDirectory)
       await removeManagedDirectoryTree(physicalDirectory)
@@ -37,7 +51,7 @@ export async function memoryProject(identitySeed?: string) {
 }
 
 export async function resetMemoryDatabase() {
-  await Instance.disposeAll()
+  await settleMemoryInstances()
   const root = process.env.OPENCORVUS_TEST_PROCESS_ROOT
   const databasePath = Database.Path()
   if (!root || !path.resolve(databasePath).startsWith(path.resolve(root))) {

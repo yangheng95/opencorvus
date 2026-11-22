@@ -1,0 +1,29 @@
+{
+  "runID": 45031837904,
+  "source": "b725432e63e7f72938179764ed4a3934cde00457",
+  "attempt": 1,
+  "conclusion": "success",
+  "createdAt": "2026-11-22T14:15:32Z",
+  "completedAt": "2026-11-22T14:31:49Z",
+  "jobID": 137237065923,
+  "finalNativeSource": "a50a7dfc1f8521e9d1b7aa550a53c1fb422a79ea",
+  "identicalCacheInputPaths": [
+    "bun.lock",
+    "packages/overlay/src-tauri/Cargo.lock",
+    "packages/opencorvus/native/process-supervisor/Cargo.lock",
+    ".github/actions/setup-bun/action.yml",
+    ".github/workflows/package-overlay.yml"
+  ],
+  "debugAssetsUsedForRelease": false,
+  "firstRunQualification": [
+    "2026-11-22T14:22:35.9136530Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}"
+  ],
+  "buildAndCacheEvidence": [
+    "2026-11-22T14:16:35.8646470Z Cache hit for restore-key: macOS-bun-e9fbd214b3762916fff9fb68cecc90809d1673b70bf9f7adaa7c2a0d4d346068",
+    "2026-11-22T14:16:46.6927400Z Received 440652240 of 440652240 (100.0%), 40.2 MBs/sec",
+    "2026-11-22T14:16:46.7931540Z Cache Size: ~420 MB (440652240 B)",
+    "2026-11-22T14:19:16.6737520Z No cache found.",
+    "2026-11-22T14:31:29.2838400Z ... Saving cache ...",
+    "2026-11-22T14:31:43.2382290Z Sent 415230172 of 415230172 (100.0%), 86.4 MBs/sec"
+  ]
+}
