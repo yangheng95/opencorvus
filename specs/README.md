@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [收件箱断线时区分不可读取与真实空结果](records/2026-11/2026-11-23-mailbox-offline-read-state.md)
 - [新建文件与文件夹在同名冲突后可直接修正](records/2026-11/2026-11-23-explorer-create-name-conflict-retry.md)
 - [聊天、通用工作与模型服务商设置区分同名项目](records/2026-11/2026-11-23-settings-capability-provider-project-scope.md)
 - [窄桌面用量活动图保留同一时间轴](records/2026-11/2026-11-23-usage-activity-desktop-overflow.md)

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [收件箱离线与真实空结果实页截图](2026-11-23-mailbox-offline-read-state/README.md)
 - [创建名称冲突的实页截图](2026-11-23-explorer-create-name-conflict-retry/README.md)
 - [聊天、通用工作与模型服务商设置的项目范围实页截图](2026-11-23-settings-capability-provider-project-scope/README.md)
 - [窄桌面用量活动图实页截图](2026-11-23-usage-activity-desktop-overflow/README.md)
