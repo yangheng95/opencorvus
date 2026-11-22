@@ -74,6 +74,7 @@ export namespace File {
     .object({
       type: z.enum(["text", "binary"]),
       content: z.string(),
+      sizeBytes: z.number().int().nonnegative().optional().describe("Size in bytes of a file classified as binary."),
       displayName: z.string().optional().describe("Canonical attachment display name for project-scoped file content."),
       revision: ContentRevision.optional(),
       resourceID: z.string().regex(/^[a-f0-9]{64}$/).optional()
@@ -937,7 +938,7 @@ export namespace File {
   }
 
   async function readResolvedContent(file: string, full: string, identity?: string): Promise<Content> {
-    await statReadableFile(file, full)
+    const stat = await statReadableFile(file, full)
     await assertReadableFile(file, full)
 
     const previewMimeType =
@@ -955,14 +956,14 @@ export namespace File {
     const text = isTextByExtension(file) || isTextByName(file)
 
     if (isBinaryByExtension(file) && !text) {
-      return { type: "binary", content: "" }
+      return { type: "binary", content: "", sizeBytes: stat.size }
     }
 
     const mimeType = Filesystem.mimeType(full)
     const encode = text ? false : await shouldEncode(mimeType)
 
     if (encode && !isImage(mimeType)) {
-      return { type: "binary", content: "", mimeType }
+      return { type: "binary", content: "", sizeBytes: stat.size, mimeType }
     }
 
     if (encode) {
@@ -972,7 +973,7 @@ export namespace File {
     }
 
     const bytes = await readFileBytes(file, full)
-    if (!isUtf8Text(bytes)) return { type: "binary", content: "" }
+    if (!isUtf8Text(bytes)) return { type: "binary", content: "", sizeBytes: bytes.byteLength }
     const editable = identity !== undefined && !AttachmentStore.nameFromAbsolutePath(Instance.project.id, full)
     return {
       type: "text",

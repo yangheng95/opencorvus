@@ -70,7 +70,7 @@ test("unnamed binary attachments use the existing generated display-name policy"
     const located = AttachmentStore.nameFromUrl(reference.url)!
     const absolute = AttachmentStore.resolveAbsolute(located.projectID, located.name)!
     expect(await File.read(path.relative(project.path, absolute))).toEqual({
-      type: "binary", content: "", displayName: AttachmentStore.displayFilename(reference),
+      type: "binary", content: "", sizeBytes: 3, displayName: AttachmentStore.displayFilename(reference),
     })
   } })
 }, 30_000)

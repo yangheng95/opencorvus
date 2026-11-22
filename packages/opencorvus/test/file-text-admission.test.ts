@@ -46,8 +46,8 @@ for (const input of binaryInputs) {
       const projectContent = await File.read(input.file)
       const sourceContent = await File.readSource(absolute)
       expect({ project: projectContent, source: sourceContent }).toEqual({
-        project: { type: "binary", content: "" },
-        source: { type: "binary", content: "" },
+        project: { type: "binary", content: "", sizeBytes: input.bytes.byteLength },
+        source: { type: "binary", content: "", sizeBytes: input.bytes.byteLength },
       })
       expect(await fs.readFile(absolute)).toEqual(input.bytes)
     } })
@@ -143,8 +143,8 @@ test("real HTTP file routes expose binary reads, explicit save errors, and exact
         body: { name: "FileInvalidPathError", data: { path: input.file, message: `Cannot edit binary file: ${input.file}` } },
       })
       expect({ project: loaded, source }).toEqual({
-        project: { status: 200, body: { type: "binary", content: "" } },
-        source: { status: 200, body: { type: "binary", content: "" } },
+        project: { status: 200, body: { type: "binary", content: "", sizeBytes: input.bytes.byteLength } },
+        source: { status: 200, body: { type: "binary", content: "", sizeBytes: input.bytes.byteLength } },
       })
       expect(await fs.readFile(absolute)).toEqual(input.bytes)
     }

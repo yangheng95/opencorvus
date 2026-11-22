@@ -8523,6 +8523,12 @@
             "pattern": "^[a-f0-9]{64}$",
             "type": "string"
           },
+          "sizeBytes": {
+            "description": "Size in bytes of a file classified as binary.",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
           "type": {
             "enum": [
               "text",

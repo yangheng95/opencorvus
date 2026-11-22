@@ -16,7 +16,7 @@ import { projectScopedPath } from "../services/project-directory"
 import { downloadBlob } from "../services/file-download"
 import { activeDirectory } from "../services/workspace"
 import { boardStore } from "../store/board"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import {
@@ -292,6 +292,11 @@ export function FileEditorPane() {
   }
   const projectBinary = createMemo(() => content()?.type === "binary" && !target()?.sourceAbsolutePath)
   const originalDownloadOnly = () => projectBinary() && content()?.encoding !== "base64"
+  const binarySizeLabel = createMemo(() => {
+    const size = originalDownloadOnly() ? content()?.sizeBytes : undefined
+    if (size === undefined) return undefined
+    return new Intl.NumberFormat(localeTag(), { style: "unit", unit: "byte", unitDisplay: "long" }).format(size)
+  })
   const originalDownloadFailure = () => {
     const failure = error()
     return originalDownloadOnly() && failure?.messageKey === "file.download_failed" ? failure : null
@@ -1030,6 +1035,7 @@ export function FileEditorPane() {
                 <div class="file-editor-empty">
                   <Icon name="file-document" size="medium" />
                   <p>{t(projectBinary() ? "file_editor.binary_download_hint" : "file_editor.binary")}</p>
+                  <Show when={binarySizeLabel()}>{(size) => <p>{size()}</p>}</Show>
                   <Show when={projectBinary()}>
                     <Button
                       type="button"

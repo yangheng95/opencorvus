@@ -131,6 +131,30 @@ test("PDF and image readers return exact encoded preview bytes in both file scop
   }
 }, 30_000)
 
+test("binary reads report the source size in project and absolute file scopes", async () => {
+  await using project = await memoryProject("file-reader-binary-size")
+  await configure(project.path, "Binary size inputs\n")
+  const cases = [
+    { name: "payload.bin", bytes: Buffer.alloc(4096, 0xa5) },
+    { name: "empty.bin", bytes: Buffer.alloc(0) },
+    { name: "sequence.mid", bytes: Buffer.from([0x4d, 0x54, 0x68, 0x64, 0, 0, 0, 6]), mimeType: "audio/midi" },
+    { name: "binary.txt", bytes: Buffer.from([0, 65, 200, 66, 31]) },
+  ]
+  for (const { name, bytes, mimeType } of cases) {
+    const absolutePath = path.join(project.path, name)
+    await fs.writeFile(absolutePath, bytes)
+    for (const route of [
+      `/file/content?${new URLSearchParams({ path: name })}`,
+      `/file/source-content?${new URLSearchParams({ path: absolutePath })}`,
+    ]) {
+      expect(await read(project.path, route)).toMatchObject({
+        status: 200,
+        body: { type: "binary", content: "", sizeBytes: bytes.byteLength, ...(mimeType && { mimeType }) },
+      })
+    }
+  }
+}, 30_000)
+
 test("file writes preserve their bytes and revision independently of the execution model", async () => {
   await using project = await memoryProject("file-reader-write-runtime")
   await configure(project.path, "FileReaderMarker\n")

@@ -2423,6 +2423,10 @@ export type FileContent = {
    * Opaque revision of the exact loaded file bytes and canonical physical resource identity.
    */
   revision?: string
+  /**
+   * Size in bytes of a file classified as binary.
+   */
+  sizeBytes?: number
   type: "text" | "binary"
 }
 
