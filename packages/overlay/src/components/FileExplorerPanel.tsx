@@ -1807,38 +1807,34 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     const targetDir = normalizeExplorerPath(targetDirInput ?? contextTargetDirectory(selectedItemList()[0] ?? null))
     const focus = type === "directory" ? capturePathMutationFocus(scope) : undefined
-    const result = await showAppDialog({
-      kind: `file-${type}-create`,
-      title: type === "file" ? t("explorer.new_file") : t("explorer.new_folder"),
-      message: t("explorer.create_in", { target: explorerDirectoryDisplayPath(targetDir) }),
-      input: true,
-      inputLabel: type === "file" ? t("explorer.file_name") : t("explorer.folder_name"),
-      inputPlaceholder: type === "file" ? t("explorer.file_name_placeholder") : t("explorer.folder_name_placeholder"),
-      inputRequired: true,
-      inputRequiredMessage: t("explorer.entry_name_only"),
-      validateInput: (value) => validateEntryName(value, scope),
-      okLabel: type === "file" ? t("explorer.create_file") : t("explorer.create_folder"),
-      cancel: true,
-      returnFocusTarget: focus?.returnFocusTarget,
-    })
-    if (!result.confirmed) return
-    if (!ownsExplorerOperation(scope)) return
-    const name = String(result.value || "")
-    if (!name) {
-      setMutationValidation("name")
-      return
-    }
-    await runMutation(type === "file" ? "create-file" : "create-directory", scope, async (ownsOperation, outcome) => {
-      const requestedPath = joinExplorerPath(targetDir, name)
-      let node: FileNode
-      try {
-        node = await createFileItem({ path: requestedPath, type, content: type === "file" ? "" : undefined }, scope)
-      } catch (error) {
-        recordOperationFailure(outcome, { phase: "member", path: requestedPath, error })
-        return
-      }
-      outcome.completed.push(node)
-      if (!ownsOperation()) return
+    const operation = type === "file" ? "create-file" : "create-directory"
+    await runMutation(operation, scope, async (ownsOperation, outcome) => {
+      let node: FileNode | undefined
+      const result = await showAppDialog({
+        kind: `file-${type}-create`,
+        title: type === "file" ? t("explorer.new_file") : t("explorer.new_folder"),
+        message: t("explorer.create_in", { target: explorerDirectoryDisplayPath(targetDir) }),
+        input: true,
+        inputLabel: type === "file" ? t("explorer.file_name") : t("explorer.folder_name"),
+        inputPlaceholder: type === "file" ? t("explorer.file_name_placeholder") : t("explorer.folder_name_placeholder"),
+        inputRequired: true,
+        inputRequiredMessage: t("explorer.entry_name_only"),
+        validateInput: (value) => validateEntryName(value, scope),
+        okLabel: type === "file" ? t("explorer.create_file") : t("explorer.create_folder"),
+        cancel: true,
+        returnFocusTarget: focus?.returnFocusTarget,
+        confirmErrorSummary: (error) => fileErrorSummary(error, operation),
+        onConfirm: async (value) => {
+          if (!ownsOperation()) return
+          node = await createFileItem({
+            path: joinExplorerPath(targetDir, value ?? ""),
+            type,
+            content: type === "file" ? "" : undefined,
+          }, scope)
+          outcome.completed.push(node)
+        },
+      })
+      if (!result.confirmed || !node || !ownsOperation()) return
       const parent = parentPath(node.path)
       setExpandedPaths((prev) => new Set([...prev, parent]))
       clearDirectoryCaches([parent])

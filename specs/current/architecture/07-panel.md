@@ -1818,6 +1818,10 @@ loading, error, depth and expansion updates do not replace the row owner. Actual
 removal, rename, type or scope changes retire it. Search/filter retirement
 and virtual-window retirement can remount rows; stable focus across those
 boundaries is not promised.
+New file and New folder confirm against the file creation endpoint before they
+close. A rejected submit retains the authored name, its destination, and the
+endpoint diagnostic for correction. The accepted creation receipt drives the
+existing selection, refresh, and editor actions after the dialog closes.
 Directory creation, explicit rename, Move and Copy dialogs share one operation focus owner.
 They hand keyboard focus to the new path only after the owned mutation
 receipt and current directory/search refresh have succeeded. It finds that row
