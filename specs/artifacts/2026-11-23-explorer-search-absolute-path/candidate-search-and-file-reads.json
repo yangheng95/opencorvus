@@ -1,0 +1,323 @@
+{
+  "projects": [
+    {
+      "id": "prj_hjgq9k2cVixopzgqrjeF",
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "time": {
+        "created": 1795369492100,
+        "updated": 1795369492100
+      },
+      "sandboxes": []
+    },
+    {
+      "id": "prj_ht3rj3nJ6m3dxUK02jyW",
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes",
+      "time": {
+        "created": 1795369492645,
+        "updated": 1795369492645
+      },
+      "sandboxes": []
+    }
+  ],
+  "reads": [
+    {
+      "name": "broad-visible",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "warehouse-check",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-001.txt",
+        "records\\warehouse intake\\warehouse-check-002.txt",
+        "records\\warehouse intake\\warehouse-check-003.txt",
+        "records\\warehouse intake\\warehouse-check-004.txt",
+        "records\\warehouse intake\\warehouse-check-005.txt",
+        "records\\warehouse intake\\warehouse-check-006.txt",
+        "records\\warehouse intake\\warehouse-check-007.txt",
+        "records\\warehouse intake\\warehouse-check-008.txt",
+        "records\\warehouse intake\\warehouse-check-009.txt",
+        "records\\warehouse intake\\warehouse-check-010.txt",
+        "records\\warehouse intake\\warehouse-check-011.txt",
+        "records\\warehouse intake\\warehouse-check-012.txt",
+        "records\\warehouse intake\\warehouse-check-013.txt",
+        "records\\warehouse intake\\warehouse-check-014.txt",
+        "records\\warehouse intake\\warehouse-check-015.txt",
+        "records\\warehouse intake\\warehouse-check-016.txt",
+        "records\\warehouse intake\\warehouse-check-017.txt",
+        "records\\warehouse intake\\warehouse-check-018.txt",
+        "records\\warehouse intake\\warehouse-check-019.txt",
+        "records\\warehouse intake\\warehouse-check-020.txt",
+        "records\\warehouse intake\\warehouse-check-021.txt",
+        "records\\warehouse intake\\warehouse-check-022.txt",
+        "records\\warehouse intake\\warehouse-check-023.txt",
+        "records\\warehouse intake\\warehouse-check-024.txt",
+        "records\\warehouse intake\\warehouse-check-025.txt",
+        "records\\warehouse intake\\warehouse-check-026.txt",
+        "records\\warehouse intake\\warehouse-check-027.txt",
+        "records\\warehouse intake\\warehouse-check-028.txt",
+        "records\\warehouse intake\\warehouse-check-029.txt",
+        "records\\warehouse intake\\warehouse-check-030.txt",
+        "records\\warehouse intake\\warehouse-check-031.txt",
+        "records\\warehouse intake\\warehouse-check-032.txt",
+        "records\\warehouse intake\\warehouse-check-033.txt",
+        "records\\warehouse intake\\warehouse-check-034.txt",
+        "records\\warehouse intake\\warehouse-check-035.txt",
+        "records\\warehouse intake\\warehouse-check-036.txt",
+        "records\\warehouse intake\\warehouse-check-037.txt",
+        "records\\warehouse intake\\warehouse-check-038.txt",
+        "records\\warehouse intake\\warehouse-check-039.txt",
+        "records\\warehouse intake\\warehouse-check-040.txt",
+        "records\\warehouse intake\\warehouse-check-041.txt",
+        "records\\warehouse intake\\warehouse-check-042.txt",
+        "records\\warehouse intake\\warehouse-check-043.txt",
+        "records\\warehouse intake\\warehouse-check-044.txt",
+        "records\\warehouse intake\\warehouse-check-045.txt",
+        "records\\warehouse intake\\warehouse-check-046.txt",
+        "records\\warehouse intake\\warehouse-check-047.txt",
+        "records\\warehouse intake\\warehouse-check-048.txt",
+        "records\\warehouse intake\\warehouse-check-049.txt",
+        "records\\warehouse intake\\warehouse-check-050.txt",
+        "records\\warehouse intake\\warehouse-check-051.txt",
+        "records\\warehouse intake\\warehouse-check-052.txt",
+        "records\\warehouse intake\\warehouse-check-053.txt",
+        "records\\warehouse intake\\warehouse-check-054.txt",
+        "records\\warehouse intake\\warehouse-check-055.txt",
+        "records\\warehouse intake\\warehouse-check-056.txt",
+        "records\\warehouse intake\\warehouse-check-057.txt",
+        "records\\warehouse intake\\warehouse-check-058.txt",
+        "records\\warehouse intake\\warehouse-check-059.txt",
+        "records\\warehouse intake\\warehouse-check-060.txt",
+        "records\\warehouse intake\\warehouse-check-061.txt",
+        "records\\warehouse intake\\warehouse-check-062.txt",
+        "records\\warehouse intake\\warehouse-check-063.txt",
+        "records\\warehouse intake\\warehouse-check-064.txt",
+        "records\\warehouse intake\\warehouse-check-065.txt",
+        "records\\warehouse intake\\warehouse-check-066.txt",
+        "records\\warehouse intake\\warehouse-check-067.txt",
+        "records\\warehouse intake\\warehouse-check-068.txt",
+        "records\\warehouse intake\\warehouse-check-069.txt",
+        "records\\warehouse intake\\warehouse-check-070.txt",
+        "records\\warehouse intake\\warehouse-check-071.txt",
+        "records\\warehouse intake\\warehouse-check-072.txt",
+        "records\\warehouse intake\\warehouse-check-073.txt",
+        "records\\warehouse intake\\warehouse-check-074.txt",
+        "records\\warehouse intake\\warehouse-check-075.txt",
+        "records\\warehouse intake\\warehouse-check-076.txt",
+        "records\\warehouse intake\\warehouse-check-077.txt",
+        "records\\warehouse intake\\warehouse-check-078.txt",
+        "records\\warehouse intake\\warehouse-check-079.txt",
+        "records\\warehouse intake\\warehouse-check-080.txt",
+        "records\\warehouse intake\\warehouse-check-081.txt"
+      ]
+    },
+    {
+      "name": "broad-original",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "warehouse-check",
+      "limit": 200,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-001.txt",
+        "records\\warehouse intake\\warehouse-check-002.txt",
+        "records\\warehouse intake\\warehouse-check-003.txt",
+        "records\\warehouse intake\\warehouse-check-004.txt",
+        "records\\warehouse intake\\warehouse-check-005.txt",
+        "records\\warehouse intake\\warehouse-check-006.txt",
+        "records\\warehouse intake\\warehouse-check-007.txt",
+        "records\\warehouse intake\\warehouse-check-008.txt",
+        "records\\warehouse intake\\warehouse-check-009.txt",
+        "records\\warehouse intake\\warehouse-check-010.txt",
+        "records\\warehouse intake\\warehouse-check-011.txt",
+        "records\\warehouse intake\\warehouse-check-012.txt",
+        "records\\warehouse intake\\warehouse-check-013.txt",
+        "records\\warehouse intake\\warehouse-check-014.txt",
+        "records\\warehouse intake\\warehouse-check-015.txt",
+        "records\\warehouse intake\\warehouse-check-016.txt",
+        "records\\warehouse intake\\warehouse-check-017.txt",
+        "records\\warehouse intake\\warehouse-check-018.txt",
+        "records\\warehouse intake\\warehouse-check-019.txt",
+        "records\\warehouse intake\\warehouse-check-020.txt",
+        "records\\warehouse intake\\warehouse-check-021.txt",
+        "records\\warehouse intake\\warehouse-check-022.txt",
+        "records\\warehouse intake\\warehouse-check-023.txt",
+        "records\\warehouse intake\\warehouse-check-024.txt",
+        "records\\warehouse intake\\warehouse-check-025.txt",
+        "records\\warehouse intake\\warehouse-check-026.txt",
+        "records\\warehouse intake\\warehouse-check-027.txt",
+        "records\\warehouse intake\\warehouse-check-028.txt",
+        "records\\warehouse intake\\warehouse-check-029.txt",
+        "records\\warehouse intake\\warehouse-check-030.txt",
+        "records\\warehouse intake\\warehouse-check-031.txt",
+        "records\\warehouse intake\\warehouse-check-032.txt",
+        "records\\warehouse intake\\warehouse-check-033.txt",
+        "records\\warehouse intake\\warehouse-check-034.txt",
+        "records\\warehouse intake\\warehouse-check-035.txt",
+        "records\\warehouse intake\\warehouse-check-036.txt",
+        "records\\warehouse intake\\warehouse-check-037.txt",
+        "records\\warehouse intake\\warehouse-check-038.txt",
+        "records\\warehouse intake\\warehouse-check-039.txt",
+        "records\\warehouse intake\\warehouse-check-040.txt",
+        "records\\warehouse intake\\warehouse-check-041.txt",
+        "records\\warehouse intake\\warehouse-check-042.txt",
+        "records\\warehouse intake\\warehouse-check-043.txt",
+        "records\\warehouse intake\\warehouse-check-044.txt",
+        "records\\warehouse intake\\warehouse-check-045.txt",
+        "records\\warehouse intake\\warehouse-check-046.txt",
+        "records\\warehouse intake\\warehouse-check-047.txt",
+        "records\\warehouse intake\\warehouse-check-048.txt",
+        "records\\warehouse intake\\warehouse-check-049.txt",
+        "records\\warehouse intake\\warehouse-check-050.txt",
+        "records\\warehouse intake\\warehouse-check-051.txt",
+        "records\\warehouse intake\\warehouse-check-052.txt",
+        "records\\warehouse intake\\warehouse-check-053.txt",
+        "records\\warehouse intake\\warehouse-check-054.txt",
+        "records\\warehouse intake\\warehouse-check-055.txt",
+        "records\\warehouse intake\\warehouse-check-056.txt",
+        "records\\warehouse intake\\warehouse-check-057.txt",
+        "records\\warehouse intake\\warehouse-check-058.txt",
+        "records\\warehouse intake\\warehouse-check-059.txt",
+        "records\\warehouse intake\\warehouse-check-060.txt",
+        "records\\warehouse intake\\warehouse-check-061.txt",
+        "records\\warehouse intake\\warehouse-check-062.txt",
+        "records\\warehouse intake\\warehouse-check-063.txt",
+        "records\\warehouse intake\\warehouse-check-064.txt",
+        "records\\warehouse intake\\warehouse-check-065.txt",
+        "records\\warehouse intake\\warehouse-check-066.txt",
+        "records\\warehouse intake\\warehouse-check-067.txt",
+        "records\\warehouse intake\\warehouse-check-068.txt",
+        "records\\warehouse intake\\warehouse-check-069.txt",
+        "records\\warehouse intake\\warehouse-check-070.txt",
+        "records\\warehouse intake\\warehouse-check-071.txt",
+        "records\\warehouse intake\\warehouse-check-072.txt",
+        "records\\warehouse intake\\warehouse-check-073.txt",
+        "records\\warehouse intake\\warehouse-check-074.txt",
+        "records\\warehouse intake\\warehouse-check-075.txt",
+        "records\\warehouse intake\\warehouse-check-076.txt",
+        "records\\warehouse intake\\warehouse-check-077.txt",
+        "records\\warehouse intake\\warehouse-check-078.txt",
+        "records\\warehouse intake\\warehouse-check-079.txt",
+        "records\\warehouse intake\\warehouse-check-080.txt",
+        "records\\warehouse intake\\warehouse-check-081.txt",
+        "records\\warehouse intake\\warehouse-check-082.txt",
+        "records\\warehouse intake\\warehouse-check-083.txt",
+        "records\\warehouse intake\\warehouse-check-084.txt",
+        "records\\warehouse intake\\warehouse-check-085.txt",
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    },
+    {
+      "name": "narrow",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "warehouse-check-086.txt",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    },
+    {
+      "name": "relative",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "records/warehouse intake/warehouse-check-086.txt",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    },
+    {
+      "name": "canonical-slashes",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "C:/Users/Public/opencorvus-review-20261123-b376/north/site-notes/records/warehouse intake/warehouse-check-086.txt",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    },
+    {
+      "name": "native-separators",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake\\warehouse-check-086.txt",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    },
+    {
+      "name": "quoted-absolute",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "\"C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake\\warehouse-check-086.txt\"",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    },
+    {
+      "name": "complete-directory",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake",
+      "limit": 81,
+      "kind": "directory",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake/"
+      ]
+    },
+    {
+      "name": "other-project-observed",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "C:/Users/Public/opencorvus-review-20261123-b376/south/site-notes/records/warehouse intake/warehouse-check-086.txt",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": []
+    },
+    {
+      "name": "after-switch",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes",
+      "query": "C:/Users/Public/opencorvus-review-20261123-b376/south/site-notes/records/warehouse intake/warehouse-check-086.txt",
+      "limit": 81,
+      "kind": "file",
+      "status": 200,
+      "paths": [
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "area": "north",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "relative": "records/warehouse intake/warehouse-check-086.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: north\nAcceptance record: warehouse-check-086.txt\n",
+        "revision": "427313c8382836283ada5753de09c0deaed9ff3c472126404778a8f147fd632d",
+        "resourceID": "71da2b275c0c267b8d84c97a67c0ba8f930ba06c797977de7f85a012625ae311"
+      }
+    },
+    {
+      "area": "south",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes",
+      "relative": "records/warehouse intake/warehouse-check-086.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: south\nAcceptance record: warehouse-check-086.txt\n",
+        "revision": "9749844d6cb6b051dbe2cd3372cdeeeeac71c73f81a456b64d211825ae355580",
+        "resourceID": "b5d29c97c9479d3d2d8d8233dcb87b5ede6f57efbf8316190063d04ebeb1f4cc"
+      }
+    }
+  ]
+}

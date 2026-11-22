@@ -1770,6 +1770,11 @@ their existing owners. The parent file list remains the one scrollable viewport;
 the virtual container retains the library's total-size geometry. It does not
 hide parent scrolling or own another inner scroll surface.
 Current-language keyboard guidance remains in the file panel.
+The existing project search accepts the complete server path of an indexed file
+or directory, with optional surrounding double quotes. It returns the exact
+indexed project-relative path for the requested kind. A complete path outside
+the selected project or absent from its index yields an empty result. Names and
+relative path fragments use the same fuzzy search and ranking.
 File search keeps a visible limit of 80 paths. Its same scoped request asks for
 one additional path; only that returned extra path establishes that more matches
 exist. The current owned result supplies both the first 80 rows and a localized

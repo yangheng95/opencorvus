@@ -1800,7 +1800,12 @@ export namespace File {
 
   export async function search(input: { query: string; limit?: number; dirs?: boolean; type?: "file" | "directory" }) {
     const searchKey = (item: string) => item.split(path.sep).join("/")
-    const query = searchKey(input.query.trim())
+    const text = input.query.trim()
+    const pathText = text.length >= 2 && text.startsWith('"') && text.endsWith('"') ? text.slice(1, -1) : text
+    const absolutePath = path.isAbsolute(pathText) ? pathText : undefined
+    const directory = Instance.directory
+    if (absolutePath && !Filesystem.contains(directory, absolutePath)) return []
+    const query = searchKey(text)
     const limit = input.limit ?? 100
     const kind = input.type ?? (input.dirs === false ? "file" : "all")
     log.info("search", { query, kind })
@@ -1830,6 +1835,11 @@ export namespace File {
 
     const items =
       kind === "file" ? result.files : kind === "directory" ? result.dirs : [...result.files, ...result.dirs].sort()
+
+    if (absolutePath) {
+      const indexedPath = items.find((item) => path.relative(absolutePath, path.join(directory, item)) === "")
+      return indexedPath === undefined ? [] : [indexedPath]
+    }
 
     const match = (candidates: string[]) => Array.from(fuzzysort.go(query, candidates, { key: searchKey, limit }))
       .sort((a, b) => b.score - a.score || (a.obj < b.obj ? -1 : a.obj > b.obj ? 1 : 0))

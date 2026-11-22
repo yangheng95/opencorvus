@@ -94,6 +94,21 @@ test("serves each project's exact original file paths through the public search 
   expect(await Promise.all([leftAPI.search("left/entry.txt"), rightAPI.search("right/entry.txt")])).toEqual(expected)
 })
 
+test("finds indexed files and directories by their complete paths in the current project", async () => {
+  await using project = await memoryProject("file-search-absolute-path")
+  const folder = path.join(project.path, "receiving records")
+  await fs.mkdir(folder)
+  await fs.writeFile(path.join(folder, "warehouse #86.txt"), "receiving record\n")
+  await fs.writeFile(path.join(folder, "warehouse #86 notes.txt"), "separate receiving notes\n")
+
+  await using searchAPI = await api(project.path)
+  const absolute = path.join(folder, "warehouse #86.txt")
+  const indexedPath = path.join("receiving records", "warehouse #86.txt")
+  expect(await searchAPI.search(absolute)).toEqual([indexedPath])
+  expect(await searchAPI.search(`  "${absolute.split(path.sep).join("/")}"  `)).toEqual([indexedPath])
+  expect(await searchAPI.search(folder, "directory")).toEqual(["receiving records/"])
+})
+
 test("finds physical empty directories and eligible files in their own projects", async () => {
   await using project = await memoryProject("project-directory-identities")
   await using sibling = await memoryProject("sibling-directory-identities")
