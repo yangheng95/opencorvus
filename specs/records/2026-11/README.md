@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [用量活动时间提示保留必要日期与偏移](2026-11-22-usage-interval-time-details.md)
 - [0.1.52 发布](2026-11-22-release-0.1.52.md)
 - [设置搜索标明保留的当前页](2026-11-22-settings-search-retained-page.md)
 - [在记忆页选择前区分同名项目](2026-11-19-memory-picker-same-name-projects.md)
