@@ -247,25 +247,18 @@ export function CommandPalette(props: {
       })
     }
 
-    cmds.push({
-      id: "settings:general-suggested",
-      label: t("cmdk.suggested.settings"),
-      shortcut: "Ctrl+,",
-      group: t("cmdk.group.suggested"),
-      keywords: "settings config preferences general",
-      icon: "config-general",
-      visibleWhenEmpty: true,
-      run: () => openConfigDialog("general"),
-    })
-
     for (const section of CONFIG_SECTIONS) {
+      const general = section.id === "general"
+      const settingKeywords = general ? "settings config preferences" : "settings config"
       cmds.push({
         id: `settings:${section.id}`,
         label: t(section.labelKey),
         hint: t("config.title"),
+        shortcut: general ? "Ctrl+," : undefined,
         group: t("cmdk.group.commands"),
-        keywords: `settings config ${configSectionSearchText(section, t)}`,
+        keywords: `${settingKeywords} ${configSectionSearchText(section, t)}`,
         icon: "config-general",
+        visibleWhenEmpty: general,
         run: () => {
           openConfigDialog(section.id)
         },
@@ -321,12 +314,15 @@ export function CommandPalette(props: {
     let previousGroup = ""
     let shortcutIndex = 0
     return visible.map((command) => {
-      const groupStart = command.group !== previousGroup
-      previousGroup = command.group
+      const presented = !term && command.id === "settings:general"
+        ? { ...command, label: t("cmdk.suggested.settings"), hint: undefined, group: t("cmdk.group.suggested") }
+        : command
+      const groupStart = presented.group !== previousGroup
+      previousGroup = presented.group
       const shortcut = command.id.startsWith("ledger:")
         ? (++shortcutIndex <= RECENT_COMMAND_LIMIT ? `Ctrl+${shortcutIndex}` : undefined)
         : command.shortcut
-      return { ...command, groupStart, shortcut }
+      return { ...presented, groupStart, shortcut }
     })
   })
 

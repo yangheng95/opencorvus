@@ -2490,7 +2490,9 @@ shared Tabs collection throughout the update.
 Settings navigation and the command palette derive their searchable section text
 from CONFIG_SECTIONS through configSectionSearchText. Page labels and referenced
 control labels resolve through the current interface language; existing aliases
-and identifiers remain searchable. Both entry points use the shared
+and identifiers remain searchable. The palette's empty-query Settings suggestion
+and the searchable General page use the same command and destination.
+Both entry points use the shared
 matchesSearchTerms primitive: every whitespace-separated query term must match
 that same section's metadata, independent of term order and case. Filtering
 retains the canonical section order and the existing explicit activation and
