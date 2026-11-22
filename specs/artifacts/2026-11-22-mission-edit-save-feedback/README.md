@@ -17,3 +17,17 @@
 | [重新查询新正文](baseline-edited-found-by-query.jpg) | `amber lamps` 可在原草稿上匹配。 |
 
 实际 [初始创建及列表](baseline-missions.json) 和 [编辑后列表](baseline-missions-after.json) 记录了两个草稿、未改的身份及更新后的请求。
+
+| 候选 | 人工观察 |
+| --- | --- |
+| [英文取消](candidate-en-cancel.jpg) | 看板保留草稿、查询和项目，焦点回到该编辑按钮。 |
+| [英文保存与空筛选](candidate-en-save-empty.jpg) | 保存提示和无匹配结果同时可见。 |
+| [英文直接打开](candidate-en-open-exact.jpg) | 确切北区草稿显示 `amber lamps` 新正文。 |
+| [英文返回](candidate-en-return.jpg) | 原看板、两个筛选和成功提示保留。 |
+| [英文关闭回执](candidate-en-dismiss.jpg) | 当前筛选仍然保持。 |
+| [中文保存并匹配](candidate-zh-save-matching.jpg) | 回执与仍匹配的南区卡片一起可见，正文更新为 `ceramic trays`。 |
+| [中文直接打开](candidate-zh-open-exact.jpg) | 打开确切南区草稿，新正文完整可见。 |
+| [中文新建回执](candidate-zh-create-receipt.jpg) | 新建草稿仍使用原回执，`ceramic` 筛选保持。 |
+| [中文打开新草稿](candidate-zh-create-open.jpg) | 回执打开新建的「南区货架标签复核」及其中文原请求。 |
+
+[候选运行回执](candidate-runtime-proof.json) 包含实际候选服务与构建入口、编辑前后保存身份和请求，以及两套隔离数据库的只读计数。

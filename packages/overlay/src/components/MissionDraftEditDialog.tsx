@@ -9,7 +9,7 @@ import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { TextField } from "./ui/TextField"
 
-export type MissionDraftEditTarget = Pick<MissionRecord, "missionID" | "sessionID" | "directory" | "title"> & {
+export type MissionDraftEditTarget = Pick<MissionRecord, "missionID" | "sessionID" | "directory" | "title" | "productPillar"> & {
   expectedRequest: string
 }
 

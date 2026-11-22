@@ -1941,13 +1941,14 @@ and placeholder are shared by both modes and the same request label is used
 by draft editing. Saving and starting use their own existing busy labels;
 switching modes retains authored fields and the existing validation/context.
 Manual creation returns its existing committed MissionRecord through the main
-binding. The Missions page retains the receipt's session, project directory,
-work type, and captured API authority as an ephemeral acknowledgement. It shows
-inline success outside the search/project results. Open Mission navigates to
-that exact session through the existing Mission selection. A pending, failed,
-or filtered active list does not control the action. Navigation reads the
-current persisted record, including its archive state. Search/project values
-stay unchanged.
+binding. A confirmed draft edit uses the same acknowledgement with its opened
+target's session, project directory and work type. The Missions page retains
+those fields with the captured API authority and shows inline success outside
+the search/project results, including when the saved request stops matching.
+Open Mission navigates to that exact session through the existing selection.
+A pending, failed, or filtered active list does not control the action.
+Navigation reads the current persisted record, including its archive state.
+Search/project values stay unchanged.
 After saving from the empty state's Create Mission button, the closing dialog
 returns focus to Open Mission on that accepted receipt. Other closes return
 focus to the original enabled and visible opener.

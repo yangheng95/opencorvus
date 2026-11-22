@@ -1,0 +1,188 @@
+{
+  "candidate": {
+    "page": {
+      "url": "http://127.0.0.1:40374/ui/",
+      "status": 200
+    },
+    "entry": {
+      "path": "assets/main-Co1HDOCQ.js",
+      "status": 200
+    },
+    "before": {
+      "created": [
+        {
+          "missionID": "draft-f570c101fed48542dedde2a510b6c8e4",
+          "sessionID": "ses_h0lf1yItjZb6hNuQf6JW",
+          "title": "North inventory review",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+          "created": 1795362603989,
+          "updated": 1795362603989,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "Reconcile silver lanterns against the current north warehouse inventory."
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        },
+        {
+          "missionID": "draft-155abb60956b0ace3f6313b212ee22cf",
+          "sessionID": "ses_hZKWjM4jXwvQih6epFHb",
+          "title": "South inventory review",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+          "created": 1795362604350,
+          "updated": 1795362604350,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "Reconcile ceramic planters against the current south warehouse inventory."
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        }
+      ],
+      "listStatus": 200,
+      "list": [
+        {
+          "missionID": "draft-155abb60956b0ace3f6313b212ee22cf",
+          "sessionID": "ses_hZKWjM4jXwvQih6epFHb",
+          "title": "South inventory review",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+          "created": 1795362604350,
+          "updated": 1795362604350,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "Reconcile ceramic planters against the current south warehouse inventory."
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        },
+        {
+          "missionID": "draft-f570c101fed48542dedde2a510b6c8e4",
+          "sessionID": "ses_h0lf1yItjZb6hNuQf6JW",
+          "title": "North inventory review",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+          "created": 1795362603989,
+          "updated": 1795362603989,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "Reconcile silver lanterns against the current north warehouse inventory."
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        }
+      ]
+    },
+    "after": {
+      "listStatus": 200,
+      "list": [
+        {
+          "missionID": "draft-ee11d20500eeec771eda1f1d5c153613",
+          "sessionID": "ses_hIkysDDehY23UA6O9VNK",
+          "title": "南区货架标签复核",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+          "created": 1795362700490,
+          "updated": 1795362700490,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "核对南区仓库的货架标签，整理需要更换的编号。"
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        },
+        {
+          "missionID": "draft-155abb60956b0ace3f6313b212ee22cf",
+          "sessionID": "ses_hZKWjM4jXwvQih6epFHb",
+          "title": "South inventory review",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+          "created": 1795362604350,
+          "updated": 1795362673354,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "Reconcile ceramic trays against the current south warehouse inventory."
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        },
+        {
+          "missionID": "draft-f570c101fed48542dedde2a510b6c8e4",
+          "sessionID": "ses_h0lf1yItjZb6hNuQf6JW",
+          "title": "North inventory review",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+          "created": 1795362603989,
+          "updated": 1795362626547,
+          "interruptible": false,
+          "productPillar": "work",
+          "boardLane": "backlog",
+          "pendingInteractions": 0,
+          "pendingPrompt": {
+            "text": "Reconcile amber lamps against the current north warehouse inventory."
+          },
+          "tasks": [],
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          }
+        }
+      ]
+    },
+    "shutdownStatus": 200
+  },
+  "databaseCounts": {
+    "baseline": {
+      "session": 2,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "candidate": {
+      "session": 3,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  }
+}

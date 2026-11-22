@@ -450,6 +450,19 @@ export function MissionBoard(props: MissionBoardProps) {
     setCreateOpen(true)
   }
 
+  function recordDraftSave({ sessionID, directory, productPillar }: MissionOpenTarget, authority: ApiAuthority) {
+    const receipt = { sessionID, directory, productPillar, authority }
+    setSavedDraftReceipt(receipt)
+    return receipt
+  }
+
+  async function saveDraftEdit(input: MissionDraftEditInput): Promise<void> {
+    const target = editingDraft()
+    const authority = captureApiAuthority()
+    await props.onEditMissionDraft(input)
+    if (target && editingDraft() === target && isApiAuthorityCurrent(authority)) recordDraftSave(target, authority)
+  }
+
   function refreshRead(): void {
     if (!readBusy()) void reloadMissionBoard()
   }
@@ -627,7 +640,7 @@ export function MissionBoard(props: MissionBoardProps) {
         <Feedback
           class="mission-board__saved"
           tone="success"
-          title={t("mission_board.create.saved")}
+          title={t("mission_board.draft_saved.title")}
           actions={
             <>
               <Button
@@ -642,7 +655,7 @@ export function MissionBoard(props: MissionBoardProps) {
                   if (mission) void props.onOpenMission(mission)
                 }}
               >
-                {t("mission_board.create.open_saved")}
+                {t("mission_board.draft_saved.open")}
               </Button>
               <Button
                 type="button"
@@ -659,7 +672,7 @@ export function MissionBoard(props: MissionBoardProps) {
             </>
           }
         >
-          {t("mission_board.create.saved_hint")}
+          {t("mission_board.draft_saved.hint")}
         </Feedback>
       </Show>
       <Show when={actionError()}>
@@ -817,6 +830,7 @@ export function MissionBoard(props: MissionBoardProps) {
                               missionID: mission.missionID,
                               sessionID: mission.sessionID,
                               directory: mission.directory,
+                              productPillar: mission.productPillar,
                               title: mission.title,
                               expectedRequest: mission.pendingPrompt!.text,
                             })
@@ -835,7 +849,7 @@ export function MissionBoard(props: MissionBoardProps) {
       <MissionDraftEditDialog
         target={editingDraft()}
         onClose={() => setEditingDraft(null)}
-        onSave={props.onEditMissionDraft}
+        onSave={saveDraftEdit}
       />
       <MissionCreateDialog
         open={createOpen()}
@@ -853,9 +867,7 @@ export function MissionBoard(props: MissionBoardProps) {
           const authority = captureApiAuthority()
           const created = await props.onCreateManual(input)
           assertApiAuthorityCurrent(authority)
-          const { sessionID, directory, productPillar } = created
-          const receipt = { sessionID, directory, productPillar, authority }
-          setSavedDraftReceipt(receipt)
+          const receipt = recordDraftSave(created, authority)
           if (returnFocus && createReturnFocus === returnFocus && returnFocus() !== createButton) {
             createReturnFocus = () => currentSavedDraftReceipt() === receipt ? openSavedDraftButton ?? null : null
           }
