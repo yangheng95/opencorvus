@@ -572,6 +572,10 @@ restores them after the current-width page paint and layout animation settle.
 Changing the document or page resets that local position. PDF and CodeEditor
 share the existing finite ancestor-animation decision through the animation
 utility; no global PDF history or conversation-follow controller is introduced.
+The page field accepts a whole page number within the loaded document on Enter
+through the same page change as the previous and next controls. An invalid draft
+retains the current page and shows the available range. Escape or leaving the
+field cancels its draft.
 The same page render also owns PDF.js TextLayer from that page's streamed text
 content. Its display viewport shares the canvas page geometry independently of
 canvas pixel density. Local transparent text styles enable native selection and

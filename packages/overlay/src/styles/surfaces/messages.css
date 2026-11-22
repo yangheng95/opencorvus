@@ -1815,6 +1815,15 @@ button.msg-source-chip .msg-source-chip__filename {
   gap: var(--ui-gap-xs);
 }
 
+.msg-artifact-file__page-number {
+  flex: 0 0 8ch;
+}
+
+.msg-artifact-file__page-number .oc-text-field__input {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
 .msg-artifact-file__pdf-preview {
   display: grid;
   min-height: 0;

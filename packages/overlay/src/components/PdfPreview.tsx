@@ -1,15 +1,16 @@
 import * as pdfjs from "pdfjs-dist"
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url"
 import { EventBus, PDFLinkService } from "pdfjs-dist/web/pdf_viewer.mjs"
-import { Show, batch, createEffect, createResource, createSignal, onCleanup } from "solid-js"
+import { Show, batch, createEffect, createMemo, createResource, createSignal, createUniqueId, onCleanup } from "solid-js"
 import { captureApiAuthority, fetchResourceAsObjectUrl } from "../services/api"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { createAnimationFrameScheduler, hasRunningLayoutAnimation } from "../utils/animation-frame"
 import { externalUrl } from "../utils/external-url"
 import { PDF_MIN_ZOOM, PDF_MAX_ZOOM, PdfDestinationError, pdfDestinationView } from "../utils/pdf-destination"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
+import { TextField } from "./ui/TextField"
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker
 
@@ -27,6 +28,10 @@ export function PdfPreview(props: {
   let resizeObserver: ResizeObserver | undefined
   const [page, setPage] = createSignal(1)
   const [pageCount, setPageCount] = createSignal(0)
+  const [pageDraft, setPageDraft] = createSignal<{ value: string; invalid: boolean }>()
+  const pageErrorID = createUniqueId()
+  const pageNumberFormat = createMemo(() => new Intl.NumberFormat(localeTag(), { useGrouping: false }))
+  const totalPages = () => pageCount() ? pageNumberFormat().format(pageCount()) : "…"
   const [zoom, setZoom] = createSignal(1)
   const [viewportWidth, setViewportWidth] = createSignal(0)
   const [error, setError] = createSignal<unknown>()
@@ -87,6 +92,19 @@ export function PdfPreview(props: {
       setPage(value)
       setNavigationRender(navigationSequence)
     })
+  }
+
+  function submitPageDraft() {
+    const draft = pageDraft()
+    if (!draft) return
+    const text = draft.value.trim()
+    const value = Number(text)
+    if (!/^[0-9]+$/.test(text) || value < 1 || value > pageCount()) {
+      setPageDraft({ ...draft, invalid: true })
+      return
+    }
+    setPageDraft(undefined)
+    if (value !== page()) changePage(value)
   }
 
   function changeZoom(value: number) {
@@ -199,6 +217,7 @@ export function PdfPreview(props: {
     setCurrentDocument(undefined)
     setPage(1)
     setPageCount(0)
+    setPageDraft(undefined)
     setError(undefined)
     if (canvas) {
       canvas.width = 0
@@ -376,9 +395,27 @@ export function PdfPreview(props: {
               >
                 {t("artifact.file.previous")}
               </Button>
-              <span>
-                {page()} / {pageCount() || "…"}
-              </span>
+              <TextField.Root class="msg-artifact-file__page-number" size="sm" invalid={pageDraft()?.invalid} disabled={!pageCount()}>
+                <TextField.Input
+                  type="text"
+                  inputMode="numeric"
+                  value={pageDraft()?.value ?? pageNumberFormat().format(page())}
+                  aria-label={t("artifact.file.page_number", { total: totalPages() })}
+                  aria-describedby={pageDraft()?.invalid ? pageErrorID : undefined}
+                  disabled={!pageCount()}
+                  onFocus={(event) => event.currentTarget.select()}
+                  onInput={(event) => setPageDraft({ value: event.currentTarget.value, invalid: false })}
+                  onBlur={() => setPageDraft(undefined)}
+                  onKeyDown={(event) => {
+                    if (event.isComposing || (event.key !== "Enter" && (event.key !== "Escape" || !pageDraft()))) return
+                    event.preventDefault()
+                    event.stopPropagation()
+                    if (event.key === "Enter") submitPageDraft()
+                    else setPageDraft(undefined)
+                  }}
+                />
+              </TextField.Root>
+              <span aria-hidden="true">/ {totalPages()}</span>
               <Button
                 variant="ghost"
                 size="sm"
@@ -423,6 +460,11 @@ export function PdfPreview(props: {
               </Button>
             </div>
           </div>
+          <Show when={pageDraft()?.invalid}>
+            <Feedback id={pageErrorID} tone="error">
+              {t("artifact.file.page_number_error", { total: totalPages() })}
+            </Feedback>
+          </Show>
           <Show when={navigationError()}>
             <Feedback tone="error" details={formatErrorDetails(navigationError())}>
               {t("artifact.file.link_failed")}
