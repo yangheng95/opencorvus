@@ -1240,12 +1240,14 @@ while that origin or BODY still owns focus, and checks the retained textarea is
 visible and enabled. Opening a menu during project loading retains that menu's
 keyboard focus when the directory load completes. Restore uses its original
 trigger with the same handoff, without a global focus listener or parallel store.
-The file header exposes Find in file for text documents, including read-only
-sources. It and Ctrl/Cmd+F within the file pane open that retained CodeMirror
-view's native search panel. Finding from Markdown Preview reveals Source first;
-the same draft, history and search state stay owned by that editor. The editor
-publishes this action only for its live view and retires it on cleanup. Deferred
-focus verifies the original file, load generation and API authority. The main
+The file header exposes Find in file and Go to line for text documents, including
+read-only sources. Find and Ctrl/Cmd+F within the file pane open the retained
+CodeMirror view's search panel. Go to line opens its native line prompt or
+focuses the already open line input. Both actions reveal Source from Markdown
+Preview first; the same draft, history and search state stay owned by that
+editor. The editor publishes these actions only for its live view and retires
+them on cleanup. Deferred focus verifies the original file, load generation
+and API authority. The main
 conversation's window search shortcut is active only while that conversation
 surface is visible; Settings and other primary surfaces retire that shortcut.
 The shared editor's status area announces an invalid nonempty regular expression

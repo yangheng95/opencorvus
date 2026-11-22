@@ -37,6 +37,7 @@ import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { restoreFileDocumentPosition } from "../utils/file-reference"
 import { extToLang } from "../utils/markdown"
 import { StaticTextPart, type MarkdownRenderedHandler } from "./TextPart"
+import type { CodeEditorNavigation } from "./ui/CodeEditor"
 import { Icon } from "./ui/Icon"
 // CodeMirror and its Lezer grammars are only needed once a file is actually
 // open. This pane stays mounted to keep its state, so the editor itself is what
@@ -150,7 +151,7 @@ export function FileEditorPane() {
   const [reloading, setReloading] = createSignal(false)
   const [downloading, setDownloading] = createSignal(false)
   const [textView, setTextView] = createSignal<"source" | "preview" | null>(null)
-  const [editorSearch, setEditorSearch] = createSignal<(() => void) | undefined>()
+  const [editorNavigation, setEditorNavigation] = createSignal<CodeEditorNavigation>()
   const [error, setError] = createSignal<FileEditorFailure | null>(null)
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
@@ -352,10 +353,10 @@ export function FileEditorPane() {
   const comparisonReading = () => comparison()?.status === "loading"
   const comparisonUnavailable = () => comparisonReading() || isBusy() || fileEditorReserved()
   const pendingRecordedUpdate = () => observationKey() !== null && observationKey() !== loadedObservationKey()
-  const searchFile = () => {
+  const runTextNavigation = (action: keyof CodeEditorNavigation) => {
     const file = target()
-    const search = editorSearch()
-    if (!file || !search || !textContent() || isBusy() || fileEditorReserved()) return
+    const navigation = editorNavigation()
+    if (!file || !navigation || !textContent() || isBusy() || fileEditorReserved()) return
     const generation = loadGeneration
     const authority = captureApiAuthority()
     setTextView("source")
@@ -363,8 +364,8 @@ export function FileEditorPane() {
     queueMicrotask(() => {
       if (
         generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority) &&
-        editorSearch() === search && !isBusy() && !fileEditorReserved()
-      ) search()
+        editorNavigation() === navigation && !isBusy() && !fileEditorReserved()
+      ) navigation[action]()
     })
   }
   const currentErrorMessage = () => {
@@ -802,7 +803,7 @@ export function FileEditorPane() {
         } else if (key === "f" && textContent()) {
           event.preventDefault()
           event.stopPropagation()
-          searchFile()
+          runTextNavigation("find")
         }
       }}
     >
@@ -815,7 +816,7 @@ export function FileEditorPane() {
           </div>
         }
       >
-        <header class="file-editor-header">
+        <header class="file-editor-header" data-text-navigation={textContent() ? "" : undefined}>
           <div class="file-editor-identity">
             <Show when={target()?.previousDocument}>
               <Button type="button" variant="ghost" size="icon" tone="neutral"
@@ -869,11 +870,17 @@ export function FileEditorPane() {
             </Show>
             <Show when={textContent()}>
               <Button type="button" variant="ghost" size="icon" tone="neutral"
-                disabled={!editorSearch() || isBusy() || fileEditorReserved()}
+                disabled={!editorNavigation() || isBusy() || fileEditorReserved()}
                 title={`${t("file_editor.find")} (Ctrl/Cmd+F)`}
                 aria-label={t("file_editor.find")} aria-keyshortcuts="Control+f Meta+f"
-                onClick={searchFile}>
+                onClick={() => runTextNavigation("find")}>
                 <Icon name="search" />
+              </Button>
+              <Button type="button" variant="ghost" size="icon" tone="neutral"
+                disabled={!editorNavigation() || isBusy() || fileEditorReserved()}
+                title={t("code_editor.go_to_line")} aria-label={t("code_editor.go_to_line")}
+                onClick={() => runTextNavigation("goToLine")}>
+                <Icon name="locate-current" />
               </Button>
             </Show>
             <Show when={writable()}>
@@ -1071,7 +1078,7 @@ export function FileEditorPane() {
                     revealFocusOrigin={revealFocusOrigin()}
                     ariaLabel={fileTitle()}
                     onValueChange={updateDraft}
-                    onSearchReady={(search) => setEditorSearch(() => search)}
+                    onNavigationReady={setEditorNavigation}
                     readOnly={!writable() || fileEditorReserved()}
                   />
                   <Show when={previewVisible()}>

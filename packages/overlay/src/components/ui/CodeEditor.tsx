@@ -1,5 +1,5 @@
 import { Compartment, EditorSelection } from "@codemirror/state"
-import { getSearchQuery, openSearchPanel, search, searchPanelOpen } from "@codemirror/search"
+import { getSearchQuery, gotoLine, openSearchPanel, search, searchPanelOpen } from "@codemirror/search"
 import type { SourceFileRange } from "@opencorvus-ai/sdk"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
@@ -22,12 +22,17 @@ import {
   revealLinesEffect,
 } from "./code-editor-theme"
 
+export interface CodeEditorNavigation {
+  find: () => void
+  goToLine: () => void
+}
+
 export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
   value: string
   path: string
   ariaLabel: string
   onValueChange: (value: string) => void
-  onSearchReady?: (search: (() => void) | undefined) => void
+  onNavigationReady?: (navigation: CodeEditorNavigation | undefined) => void
   shouldFocusOnMount?: () => boolean
   lineRange?: SourceFileRange
   revealRevision?: number
@@ -42,7 +47,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     "path",
     "ariaLabel",
     "onValueChange",
-    "onSearchReady",
+    "onNavigationReady",
     "shouldFocusOnMount",
     "lineRange",
     "revealRevision",
@@ -192,8 +197,17 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
       ],
     })
     const editor = view
-    local.onSearchReady?.(() => {
-      if (view === editor) openSearchPanel(editor)
+    local.onNavigationReady?.({
+      find: () => {
+        if (view === editor) openSearchPanel(editor)
+      },
+      goToLine: () => {
+        if (view !== editor) return
+        // The native command creates a new panel on each activation.
+        const input = editor.dom.querySelector<HTMLInputElement>(".cm-dialog input[name='line']")
+        if (input) input.focus()
+        else gotoLine(editor)
+      },
     })
     if (host.isConnected && !host.closest("[inert], [hidden]") && local.shouldFocusOnMount?.()) editor.focus()
     revealObserver = new ResizeObserver(revealOnLayout.schedule)
@@ -264,7 +278,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   })
 
   onCleanup(() => {
-    local.onSearchReady?.(undefined)
+    local.onNavigationReady?.(undefined)
     revealOnLayout.cancel()
     revealAfterMeasure.cancel()
     revealObserver?.disconnect()
