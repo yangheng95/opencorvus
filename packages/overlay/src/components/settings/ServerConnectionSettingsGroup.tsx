@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { createEffect, createSignal, onCleanup, Show } from "solid-js"
+import { createEffect, createSignal, createUniqueId, onCleanup, Show } from "solid-js"
 import { ServerBaseUrlError } from "@opencorvus-ai/transport-protocol"
 import { checkConnection } from "../../services/connection"
 import { refreshConnectionWorkspace } from "../../services/connection-projection"
@@ -43,6 +43,11 @@ export function ServerConnectionSettingsGroup() {
   const [error, setError] = createSignal<ConnectionFailure | null>(null)
   const [saving, setSaving] = createSignal(false)
   const [referencesRetired, setReferencesRetired] = createSignal(false)
+  const addressErrorID = createUniqueId()
+  const addressInvalid = () => {
+    const failure = error()
+    return failure?.kind === "save" && failure.cause instanceof ServerBaseUrlError
+  }
   let saveGeneration = 0
   let savedTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -124,13 +129,14 @@ export function ServerConnectionSettingsGroup() {
     >
       <SettingsGroup title={t("settings.section.connection")} data-ui="settings-server-connection-group">
         <SettingsRow>
-          <TextField.Root as="label">
+          <TextField.Root as="label" invalid={addressInvalid()}>
             <TextField.Label>{t("settings.server_url")}</TextField.Label>
             <TextField.Input
               type="url"
               value={draft().serverUrl}
               placeholder="http://127.0.0.1:7878"
               readOnly={saving()}
+              aria-describedby={addressInvalid() ? addressErrorID : undefined}
               onInput={(event) => {
                 clearFeedback()
                 setDraft((value) => ({ ...value, serverUrl: event.currentTarget.value.trim() }))
@@ -184,9 +190,11 @@ export function ServerConnectionSettingsGroup() {
         />
         <Show when={error()}>{(failure) => (
           <Feedback tone="error" data-ui="settings-server-status" details={formatErrorDetails(failure().cause)}>
-            {failure().kind === "unavailable"
-              ? t("settings.connection_saved_unavailable")
-              : connectionFailureMessage(failure().cause)}
+            <span id={addressInvalid() ? addressErrorID : undefined}>
+              {failure().kind === "unavailable"
+                ? t("settings.connection_saved_unavailable")
+                : connectionFailureMessage(failure().cause)}
+            </span>
           </Feedback>
         )}</Show>
         {referencesRetired() ? <Feedback tone="info">{t("settings.connection_references_retired")}</Feedback> : null}

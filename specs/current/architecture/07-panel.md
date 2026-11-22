@@ -3523,8 +3523,11 @@ a server response status or request ID.
 The Connection settings group retains the original current failure and projects
 its summary in the active interface language. Its private typed ServerBaseUrlError
 reason mapping supplies corrective address guidance; it does not parse the input
-again or match technical message text. Unknown failures describe an incomplete
-connection update because settlement can fail before or after persistence.
+again or match technical message text. A typed address validation failure marks
+the URL field invalid and associates it with the existing visible summary.
+A valid but unreachable address keeps its ordinary field state. Unknown failures
+describe an incomplete connection update because settlement can fail before or
+after persistence.
 SettingsActivationError keeps its distinct saved-but-not-applied fact. The same
 Feedback details retain the original diagnostic through the existing formatter;
 its stable content owner survives an in-place language change. Input editing and
