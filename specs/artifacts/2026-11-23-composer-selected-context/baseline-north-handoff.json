@@ -1,0 +1,17 @@
+{
+  "held": {
+    "path": "/path",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+    "upstreamStatus": 200,
+    "held": true,
+    "released": false
+  },
+  "released": {
+    "path": "/path",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+    "upstreamStatus": 200,
+    "held": false,
+    "released": true,
+    "source": "manual"
+  }
+}

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [已选会话工具栏显示当前对象类型](2026-11-23-composer-selected-context.md)
 - [在归档结果中预览已保存的多步任务请求](2026-11-23-archive-mission-request-preview.md)
 - [侧栏在线状态直接显示当前连接端口](2026-11-23-sidebar-connected-port.md)
 - [已选会话加载时显示真实等待状态](2026-11-23-conversation-opening-status.md)
