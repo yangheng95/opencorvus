@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件工作台缺失章节的实页证据](2026-11-23-markdown-missing-linked-section/README.md)
 - [更新日志搜索与键盘焦点实页截图](2026-11-23-release-history-keyboard-entry/README.md)
 - [定时编辑器保留已保存的时区标识](2026-11-23-scheduled-saved-time-zone-identity/README.md)
 - [外观偏好与连续键盘焦点](2026-11-23-appearance-keyboard-focus-during-save/README.md)

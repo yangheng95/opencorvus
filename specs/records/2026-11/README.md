@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件工作台解释链接指向的章节缺失](2026-11-23-markdown-missing-linked-section.md)
 - [更新日志搜索可用方向键进入真实结果](2026-11-23-release-history-keyboard-entry.md)
 - [定时编辑器显示规则已保存的时区标识](2026-11-23-scheduled-saved-time-zone-identity.md)
 - [外观保存期间保留连续键盘导航](2026-11-23-appearance-keyboard-focus-during-save.md)
