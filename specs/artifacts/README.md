@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [资源管理器复制路径的桌面验收](2026-11-23-explorer-copy-full-path/README.md)
 - [资源管理器完整路径搜索的桌面验收](2026-11-23-explorer-search-absolute-path/README.md)
 - [文件草稿决定位置的桌面验收](2026-11-23-file-draft-decision-project-location/README.md)
 - [文件比较位置的桌面验收](2026-11-23-file-comparison-project-location/README.md)

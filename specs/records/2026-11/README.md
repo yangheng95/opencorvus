@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从资源管理器复制完整文件路径](2026-11-23-explorer-copy-full-path.md)
 - [资源管理器搜索当前项目的完整文件路径](2026-11-23-explorer-search-absolute-path.md)
 - [在文件草稿决定中标明确切项目位置](2026-11-23-file-draft-decision-project-location.md)
 - [在文件比较窗口标明确切项目位置](2026-11-23-file-comparison-project-location.md)
