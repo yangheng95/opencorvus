@@ -27,6 +27,7 @@ import {
 } from "../../services/provider-form"
 import { matchesSearchTerms } from "../../services/text-search"
 import { activeDirectory } from "../../services/workspace"
+import { workLedgerProject } from "../../services/work-ledger"
 import {
   authenticateSelectedProvider,
   modelsForProvider,
@@ -53,7 +54,7 @@ import { TextField } from "../ui/TextField"
 import { Tooltip } from "../ui/Tooltip"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { formatErrorDetails } from "../../utils/error-details"
-import { implicitProjectSuffix, projectDirectoryLabel } from "../../utils/project-directory"
+import { SettingsProjectScope } from "./SettingsProjectScope"
 import { SettingsDetailSection, SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 
 interface ProviderFeedback {
@@ -209,12 +210,6 @@ export default function ProvidersPanel() {
   const providerInfoFeedbackVisible = () => providerInfoIssues().length > 0 || Boolean(providerInfoRetry())
   const providerScope = createMemo(() => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const)
   let providerSearchInput: HTMLInputElement | undefined
-
-  function scopeProjectLabel(): string {
-    const directory = activeDirectory().trim()
-    const name = projectDirectoryLabel(directory, t("task.project.unknown"), t("work_ledger.implicit_project")).name
-    return [name, implicitProjectSuffix(directory)].filter(Boolean).join(" ")
-  }
 
   function providerLoadOptions(directory = activeDirectory().trim(), authority = captureApiAuthority()) {
     const selectionEpoch = boardStore.selectEpoch
@@ -1172,16 +1167,13 @@ export default function ProvidersPanel() {
       <SettingsGroup class="provider-settings-flat">
         <div class="provider-command">
           <div class="provider-command-main">
-            <Show when={activeDirectory().trim()} fallback={<strong>{t("provider.scope.global")}</strong>}>
+            <Show when={activeDirectory().trim()} keyed fallback={<strong>{t("provider.scope.global")}</strong>}>
               {(directory) => (
-                <Disclosure.Root class="provider-scope-context">
-                  <Disclosure.Trigger>
-                    {t("settings.product.scope_project", { project: scopeProjectLabel() })}
-                  </Disclosure.Trigger>
-                  <Disclosure.Content>
-                    <code class="provider-scope-path">{directory()}</code>
-                  </Disclosure.Content>
-                </Disclosure.Root>
+                <SettingsProjectScope
+                  class="provider-scope-context"
+                  directory={directory}
+                  customName={workLedgerProject(directory)?.title}
+                />
               )}
             </Show>
             <span class="provider-command-description">

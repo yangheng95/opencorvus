@@ -2567,6 +2567,9 @@ when a write response cannot be confirmed. The explicit Check current assignment
 action reads the same Project and role, keeps the original diagnostic, and uses
 the accepted read to enable editing again. It does not repeat the assignment
 write. A failed initial read also offers an in-place retry.
+Chat, Work, and Provider settings use the shared project disclosure for project
+scope. Its collapsed label shows the project name and short parent path.
+Opening it shows the exact directory from the owning settings scope.
 While saving, assignment checkboxes remain focusable and read-only, showing
 the last confirmed value. Skill rows are keyed by their canonical names so a
 confirmed response updates the existing controls and leaves their details open.

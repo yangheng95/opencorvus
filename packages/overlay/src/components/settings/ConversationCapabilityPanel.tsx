@@ -11,12 +11,13 @@ import {
   type ConversationCapabilitySettings,
   type ConversationExperience,
 } from "../../services/conversation-capability"
+import { workLedgerProject } from "../../services/work-ledger"
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { Disclosure } from "../ui/Disclosure"
-import { implicitProjectSuffix, projectDirectoryLabel } from "../../utils/project-directory"
 import { Checkbox } from "../ui/Checkbox"
 import { Button } from "../ui/Button"
+import { SettingsProjectScope } from "./SettingsProjectScope"
 import {
   SettingsEmpty,
   SettingsGroup,
@@ -62,13 +63,6 @@ export default function ConversationCapabilityPanel(props: {
 
   function scopeDirectory() {
     return settings()?.scope.directory || directory()
-  }
-
-  function scopeLabel() {
-    const value = scopeDirectory()
-    if (!value) return t("settings.product.project_required")
-    const name = projectDirectoryLabel(value, t("task.project.unknown"), t("work_ledger.implicit_project")).name
-    return [name, implicitProjectSuffix(value)].filter(Boolean).join(" ")
   }
 
   async function readCapability(scope: CapabilityScope): Promise<void> {
@@ -155,15 +149,15 @@ export default function ConversationCapabilityPanel(props: {
       data-experience={props.experience}
     >
       <SettingsGroup description={t("settings.product.capability_intro", { product: productLabel() })}>
-        <Show when={directory()}>
-          <Disclosure.Root class="conversation-capability-scope">
-            <Disclosure.Trigger ref={(element) => (scopeTrigger = element)}>
-              {t("settings.product.scope_project", { project: scopeLabel() })}
-            </Disclosure.Trigger>
-            <Disclosure.Content>
-              <p class="conversation-capability-scope-path">{scopeDirectory()}</p>
-            </Disclosure.Content>
-          </Disclosure.Root>
+        <Show when={directory() && scopeDirectory()} keyed>
+          {(scope) => (
+            <SettingsProjectScope
+              class="conversation-capability-scope"
+              directory={scope}
+              customName={workLedgerProject(scope)?.title}
+              triggerRef={(element) => (scopeTrigger = element)}
+            />
+          )}
         </Show>
         <Show
           when={!!directory()}

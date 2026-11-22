@@ -3130,14 +3130,6 @@ button.s-row:focus-visible {
 .conversation-capability-scope {
   margin-top: var(--ui-gap-sm);
 }
-.conversation-capability-scope-path {
-  margin: var(--ui-gap-sm) 0;
-  color: var(--text-muted);
-  font-family: var(--mono);
-  font-size: var(--ui-font-caption);
-  line-height: var(--ui-line-height-normal);
-  overflow-wrap: anywhere;
-}
 
 .conversation-capability-sections {
   display: grid;
@@ -3225,15 +3217,6 @@ button.s-row:focus-visible {
 }
 .provider-scope-context {
   min-width: 0;
-  overflow-wrap: anywhere;
-}
-.provider-scope-path {
-  display: block;
-  color: var(--text-muted);
-  font-family: var(--mono);
-  font-size: var(--ui-font-caption);
-  line-height: var(--ui-line-height-normal);
-  overflow-wrap: anywhere;
 }
 .provider-stat-strip {
   display: flex;
