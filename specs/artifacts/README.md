@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Markdown 视图切换的实页截图](2026-11-23-markdown-source-preview-reading-position/README.md)
 - [日志刷新失败保留上次结果的实页截图](2026-11-23-log-refresh-retains-last-read/README.md)
 - [记忆设置项目搜索实页截图](2026-11-23-memory-project-picker-search/README.md)
 - [文件审阅组合搜索实页截图](2026-11-23-file-change-combined-search/README.md)

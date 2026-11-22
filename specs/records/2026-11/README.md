@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [Markdown 源码与预览切换保留阅读位置](2026-11-23-markdown-source-preview-reading-position.md)
 - [日志刷新失败时保留上次读取结果](2026-11-23-log-refresh-retains-last-read.md)
 - [记忆设置按名称或路径查找项目](2026-11-23-memory-project-picker-search.md)
 - [文件审阅可组合搜索路径与修改类型](2026-11-23-file-change-combined-search.md)
