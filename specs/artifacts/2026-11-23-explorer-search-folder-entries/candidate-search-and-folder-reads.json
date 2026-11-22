@@ -1,0 +1,125 @@
+{
+  "queries": [
+    {
+      "name": "north-exact-native-folder",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake",
+      "status": 200,
+      "count": 1,
+      "leadingPaths": [
+        "records\\warehouse intake/"
+      ]
+    },
+    {
+      "name": "north-exact-portable-folder",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "C:/Users/Public/opencorvus-review-20261123-b376/north/site-notes/records/warehouse intake",
+      "status": 200,
+      "count": 1,
+      "leadingPaths": [
+        "records\\warehouse intake/"
+      ]
+    },
+    {
+      "name": "north-mixed-search-window",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "warehouse intake",
+      "status": 200,
+      "count": 81,
+      "leadingPaths": [
+        "records\\warehouse intake/",
+        "records\\warehouse intake\\warehouse-check-001.txt",
+        "records\\warehouse intake\\warehouse-check-002.txt",
+        "records\\warehouse intake\\warehouse-check-003.txt"
+      ]
+    },
+    {
+      "name": "north-file-search-window",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "warehouse-check",
+      "status": 200,
+      "count": 81,
+      "leadingPaths": [
+        "records\\warehouse intake\\warehouse-check-001.txt",
+        "records\\warehouse intake\\warehouse-check-002.txt",
+        "records\\warehouse intake\\warehouse-check-003.txt",
+        "records\\warehouse intake\\warehouse-check-004.txt"
+      ]
+    },
+    {
+      "name": "north-exact-file",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake\\warehouse-check-086.txt",
+      "status": 200,
+      "count": 1,
+      "leadingPaths": [
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    },
+    {
+      "name": "north-with-south-path",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "query": "\"C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes\\records\\warehouse intake\"",
+      "status": 200,
+      "count": 0,
+      "leadingPaths": []
+    },
+    {
+      "name": "south-with-same-quoted-path",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes",
+      "query": "\"C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes\\records\\warehouse intake\"",
+      "status": 200,
+      "count": 1,
+      "leadingPaths": [
+        "records\\warehouse intake/"
+      ]
+    },
+    {
+      "name": "south-mixed-search",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes",
+      "query": "warehouse intake",
+      "status": 200,
+      "count": 2,
+      "leadingPaths": [
+        "records\\warehouse intake/",
+        "records\\warehouse intake\\warehouse-check-086.txt"
+      ]
+    }
+  ],
+  "folderAndFileReads": [
+    {
+      "area": "north",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes",
+      "parent": "records/warehouse intake",
+      "listStatus": 200,
+      "children": 86,
+      "exactEntry": {
+        "name": "warehouse-check-086.txt",
+        "path": "records\\warehouse intake\\warehouse-check-086.txt",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\north\\site-notes\\records\\warehouse intake\\warehouse-check-086.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      "readStatus": 200,
+      "content": "Warehouse: north\nAcceptance record: warehouse-check-086.txt\n"
+    },
+    {
+      "area": "south",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes",
+      "parent": "records/warehouse intake",
+      "listStatus": 200,
+      "children": 1,
+      "exactEntry": {
+        "name": "warehouse-check-086.txt",
+        "path": "records\\warehouse intake\\warehouse-check-086.txt",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261123-b376\\south\\site-notes\\records\\warehouse intake\\warehouse-check-086.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      "readStatus": 200,
+      "content": "Warehouse: south\nAcceptance record: warehouse-check-086.txt\n"
+    }
+  ]
+}

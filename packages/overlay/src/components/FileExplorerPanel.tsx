@@ -94,13 +94,15 @@ type ExplorerRow =
       error: ExplorerFailure | null
       empty: boolean
     }
-  | { kind: "search"; key: string; path: string; depth: number }
+  | { kind: "search"; key: string; entry: ExplorerSearchEntry; depth: number }
+
+type ExplorerSearchEntry = { path: string; type: "file" | "directory" }
 
 type ExplorerSelection = {
   path: string
   name: string
   type: "file" | "directory"
-  source: "listing" | "file"
+  source: "listing" | "file" | "search"
 }
 
 type FileMutationKind = "create-file" | "create-directory" | "rename" | "copy" | "move" | "delete" | "refresh" | ""
@@ -196,16 +198,16 @@ function FileExplorerContextMenuItem(props: {
   )
 }
 
-async function searchFiles(query: string, scope: ExplorerOperationScope): Promise<string[]> {
+async function searchExplorerEntries(query: string, scope: ExplorerOperationScope): Promise<ExplorerSearchEntry[]> {
   const directory = scope.directory.trim()
-  if (!directory) throw new Error("searchFiles: directory is required")
+  if (!directory) throw new Error("searchExplorerEntries: directory is required")
   const params = new URLSearchParams({
     query,
-    type: "file",
     limit: String(SEARCH_LIMIT + 1),
     directory,
   })
-  return (await apiJson(`find/file?${params.toString()}`, { authority: scope.authority })) as string[]
+  const paths = (await apiJson(`find/file?${params.toString()}`, { authority: scope.authority })) as string[]
+  return paths.map((path) => ({ path, type: path.endsWith("/") ? "directory" : "file" }))
 }
 
 function operationFailureMessage(operation: ExplorerFailureOperation): string {
@@ -763,7 +765,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   }
 
   function selectionFromRow(row: ExplorerRow): ExplorerSelection {
-    return row.kind === "search" ? selectionFromFilePath(row.path) : selectionFromNode(row.node)
+    if (row.kind === "node") return selectionFromNode(row.node)
+    const { path, type } = row.entry
+    return { path: normalizeExplorerPath(path), name: fileName(path), type, source: "search" }
   }
 
   const uploading = createMemo(() => uploadOperation()?.directory === directory())
@@ -956,15 +960,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   })
   const [searchResults, { refetch: refetchSearch }] = createResource(searchSource, async (source) => {
     if (!source.query)
-      return { source, query: source.query, paths: [] as string[], error: null as ExplorerFailure | null }
+      return { source, query: source.query, entries: [] as ExplorerSearchEntry[], error: null as ExplorerFailure | null }
     try {
-      const paths = await searchFiles(source.query, source)
-      return { source, query: source.query, paths, error: null as ExplorerFailure | null }
+      const entries = await searchExplorerEntries(source.query, source)
+      return { source, query: source.query, entries, error: null as ExplorerFailure | null }
     } catch (error) {
       return {
         source,
         query: source.query,
-        paths: [] as string[],
+        entries: [] as ExplorerSearchEntry[],
         error: { error },
       }
     }
@@ -979,11 +983,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return owned(result) ? result : owned(latest) ? latest : undefined
   })
   const currentSearchFailure = createMemo(() => currentSearchResult()?.error ?? null)
-  const searchHasMore = () => (currentSearchResult()?.paths.length ?? 0) > SEARCH_LIMIT
-  const displayedSearchPaths = createMemo(() => currentSearchResult()?.paths.slice(0, SEARCH_LIMIT) ?? [])
+  const searchHasMore = () => (currentSearchResult()?.entries.length ?? 0) > SEARCH_LIMIT
+  const displayedSearchEntries = createMemo(() => currentSearchResult()?.entries.slice(0, SEARCH_LIMIT) ?? [])
   const searchDirectoryHints = createMemo(() => {
     const pathsByName = new Map<string, string[]>()
-    for (const path of displayedSearchPaths()) {
+    for (const { path } of displayedSearchEntries()) {
       const name = fileName(path)
       const peers = pathsByName.get(name) ?? []
       peers.push(path)
@@ -1009,8 +1013,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     boardStore.selectEpoch,
   ]))
 
-  function searchResultKey(scopeKey: string, path: string): string {
-    return JSON.stringify([scopeKey, "search", "file", path])
+  function searchResultKey(scopeKey: string, entry: ExplorerSearchEntry): string {
+    return JSON.stringify([scopeKey, "search", entry.type, entry.path])
   }
 
   // Use the accepted search result before the virtual list projects its new rows.
@@ -1020,9 +1024,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const origin = key ? rowElements.get(key) : undefined
     if (!origin || origin.ownerDocument.activeElement !== origin) return
     const scopeKey = rowScopeKey()
-    const ownsFocusedResult = (path: string) => searchResultKey(scopeKey, path) === key
-    if (previous.paths.slice(0, SEARCH_LIMIT).some(ownsFocusedResult) &&
-      !current.paths.slice(0, SEARCH_LIMIT).some(ownsFocusedResult)) {
+    const ownsFocusedResult = (entry: ExplorerSearchEntry) => searchResultKey(scopeKey, entry) === key
+    if (previous.entries.slice(0, SEARCH_LIMIT).some(ownsFocusedResult) &&
+      !current.entries.slice(0, SEARCH_LIMIT).some(ownsFocusedResult)) {
       searchInput?.focus({ preventScroll: true })
     }
   }))
@@ -1031,10 +1035,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const scopeKey = rowScopeKey()
     const search = deferredQuery()
     if (search) {
-      return displayedSearchPaths().map((path) => ({
+      return displayedSearchEntries().map((entry) => ({
         kind: "search",
-        key: searchResultKey(scopeKey, path),
-        path,
+        key: searchResultKey(scopeKey, entry),
+        entry,
         depth: 0,
       }))
     }
@@ -1099,17 +1103,22 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   }
 
   async function revealFolder(request: FileExplorerFolderRequest): Promise<void> {
-    // The selected tool signal can change before its tabs and contents update.
-    await Promise.resolve()
     if (!ownsFolderReveal(request)) return
     pendingFocus = undefined
     const origin = request.origin
     const ownerDocument = origin.ownerDocument
+    const retiringSearchOrigin = origin.matches("[data-search-result]") ||
+      !!origin.closest(".file-explorer-context-menu")
+    setQuery("")
+    // Allow the source row or menu to unmount and the destination tab to render.
+    await Promise.resolve()
+    if (!ownsFolderReveal(request)) return
     let focusOrigin: Element = origin
     const focused = ownerDocument.activeElement
-    // The destination search stays available while the Dock tabs reflow.
-    if (request.focusWasOnOrigin && searchInput && origin.closest('#rightDock [data-workbench-view][data-active="false"]') &&
-      (focused === origin || focused === ownerDocument.body)) {
+    const retiringOrigin = retiringSearchOrigin ||
+      !!origin.closest('#rightDock [data-workbench-view][data-active="false"]')
+    if (searchInput && retiringOrigin &&
+      (focused === origin || (request.focusWasOnOrigin && (focused === ownerDocument.body || focused === searchInput)))) {
       searchInput.focus({ preventScroll: true })
       if (ownerDocument.activeElement === searchInput) focusOrigin = searchInput
     }
@@ -1122,7 +1131,6 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       else remaining.set(path, { error: failure.error })
     }
     if (remaining) setDirectoryErrors(remaining)
-    setQuery("")
     const ancestors = [""]
     let target: FileListingNode | undefined
     const windows = isWindowsPath(request.directory)
@@ -1439,6 +1447,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   function contextTargetDirectory(item: ExplorerSelection | null): string {
     if (item?.source === "listing" && directoryTarget(item.path)) return item.path
+    if (item?.source === "search" && item.type === "directory") return item.path
     if (item) return parentPath(item.path)
     return ""
   }
@@ -1880,9 +1889,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           (focused !== document.body && dialogOpeningFocusTarget(focused) !== opener)
         )
           return
-        const row = rows().find(
-          (entry) => normalizeExplorerPath(entry.kind === "node" ? entry.node.path : entry.path) === nextPath,
-        )
+        const row = rows().find((entry) => selectionFromRow(entry).path === nextPath)
         if (row) {
           focusTarget = () => rowElements.get(row.key) ?? null
           focusRow(row, focused)
@@ -2313,7 +2320,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   function renderItemContextMenu(
     item: Accessor<ExplorerSelection>,
-    options: Accessor<{ isDirectory: boolean; expanded?: boolean }>,
+    options: Accessor<{ isDirectory: boolean; expanded?: boolean; activate: () => void }>,
   ) {
     const targets = () => contextSelectionFor(item())
     const hasMultipleTargets = () => targets().length > 1
@@ -2324,7 +2331,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           <FileExplorerContextMenuItem
             dataUi="file-explorer-context-open"
             label={
-              options().isDirectory
+              options().isDirectory && options().expanded !== undefined
                 ? options().expanded
                   ? t("explorer.collapse")
                   : t("explorer.expand")
@@ -2334,8 +2341,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             disabled={hasMultipleTargets() || commandBusy()}
             onSelect={() => {
               setSingleSelection(item())
-              if (options().isDirectory) toggleDirectory(item().path)
-              else openExplorerFile(item().path)
+              options().activate()
             }}
           />
           <Show when={!hasMultipleTargets()}>
@@ -2439,15 +2445,35 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const renderRow = (current: Accessor<ExplorerRow>) => {
     if (untrack(current).kind === "search") {
       const row = () => current() as Extract<ExplorerRow, { kind: "search" }>
-      const item = () => selectionFromFilePath(row().path)
+      const item = () => selectionFromRow(row())
+      const isDirectory = () => item().type === "directory"
+      const activate = () => {
+        if (!isDirectory()) {
+          openExplorerFile(item().path)
+          return
+        }
+        const scope = currentOperationScope()
+        const trigger = rowElements.get(row().key)
+        if (!scope?.authority || !trigger || !ownsExplorerOperation(scope)) return
+        const document = trigger.ownerDocument
+        const focused = document.activeElement
+        const menuID = trigger.getAttribute("aria-controls")
+        const menu = menuID ? document.getElementById(menuID) : null
+        const origin = focused instanceof HTMLElement && menu?.contains(focused) ? focused : trigger
+        requestFileExplorerFolder({ ...scope, authority: scope.authority, path: item().path, origin })
+      }
       const directoryDetail = () => {
-        const hint = searchDirectoryHints().get(row().path)
-        return hint === undefined ? dirname(row().path) : explorerDirectoryDisplayPath(hint)
+        const hint = searchDirectoryHints().get(row().entry.path)
+        return hint === undefined ? dirname(item().path) : explorerDirectoryDisplayPath(hint)
       }
       const isSearchRowSelected = () => isSelected(item())
       const isSearchRowCurrent = () => currentFilePath() === item().path
       const isSearchRowDragging = () => draggedItems().some((entry) => entry.path === item().path)
       const isSearchRowDropTarget = () => dropTargetRowPath() === item().path
+      const rowDropDirectory = () => contextTargetDirectory(item())
+      const label = () => isDirectory()
+        ? t("explorer.folder_search_result", { path: item().path })
+        : row().entry.path
       return (
         <ContextMenu.Root>
           <ContextMenu.Trigger
@@ -2462,18 +2488,18 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             onKeyDown={(event) => handleRowKeyDown(event, row())}
             data-ui="file-explorer-row"
             data-app-context-menu-trigger="true"
-            data-kind="file"
+            data-kind={item().type}
             data-search-result=""
             data-active={isSearchRowSelected() ? "true" : "false"}
             data-selected={isSearchRowSelected() ? "true" : "false"}
             data-dragging={isSearchRowDragging() ? "true" : undefined}
             data-drop-target={isSearchRowDropTarget() ? dropStatus() : undefined}
             aria-current={isSearchRowCurrent() ? "true" : undefined}
-            aria-label={isSearchRowSelected() ? t("explorer.selected_path_hint", { path: row().path }) : row().path}
+            aria-label={isSearchRowSelected() ? t("explorer.selected_path_hint", { path: label() }) : label()}
             aria-keyshortcuts={EXPLORER_SELECTION_KEY_SHORTCUTS}
             draggable={!commandBusy()}
             style={{ "--file-explorer-row-depth": String(row().depth) }}
-            title={row().path}
+            title={label()}
             onContextMenu={(event) => {
               event.stopPropagation()
               prepareContextSelection(item())
@@ -2485,11 +2511,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             onDragEnd={clearExplorerDrag}
             onDragEnter={(event) => {
               event.stopPropagation()
-              updateExplorerDropTarget(event, parentPath(item().path), item().path)
+              updateExplorerDropTarget(event, rowDropDirectory(), item().path)
             }}
             onDragOver={(event) => {
               event.stopPropagation()
-              updateExplorerDropTarget(event, parentPath(item().path), item().path)
+              updateExplorerDropTarget(event, rowDropDirectory(), item().path)
             }}
             onDragLeave={(event) => {
               if (event.currentTarget.contains(event.relatedTarget as Node | null)) return
@@ -2498,12 +2524,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                 setDropTargetRowPath(null)
               }
             }}
-            onDrop={(event) => void handleExplorerDrop(event, parentPath(item().path))}
-            onClick={(event) => handleRowClick(event, item(), () => openExplorerFile(item().path))}
+            onDrop={(event) => void handleExplorerDrop(event, rowDropDirectory())}
+            onClick={(event) => handleRowClick(event, item(), activate)}
           >
-            <FileRowContent name={fileName(row().path)} icon="file-document" detail={directoryDetail()} />
+            <FileRowContent name={item().name} icon={isDirectory() ? "folder" : "file-document"} detail={directoryDetail()} />
           </ContextMenu.Trigger>
-          {renderItemContextMenu(item, () => ({ isDirectory: false }))}
+          {renderItemContextMenu(item, () => ({ isDirectory: isDirectory(), activate }))}
         </ContextMenu.Root>
       )
     }
@@ -2529,6 +2555,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const isNodeDragging = () => draggedItems().some((entry) => entry.path === item().path)
     const isNodeDropTarget = () => dropTargetRowPath() === item().path
     const rowDropDirectory = () => contextTargetDirectory(item())
+    const activate = () => {
+      if (isDirectory()) toggleDirectory(item().path)
+      else openExplorerFile(item().path)
+    }
     return (
       <ContextMenu.Root>
         <ContextMenu.Trigger
@@ -2581,12 +2611,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             }
           }}
           onDrop={(event) => void handleExplorerDrop(event, rowDropDirectory())}
-          onClick={(event) => {
-            handleRowClick(event, item(), () => {
-              if (isDirectory()) toggleDirectory(item().path)
-              else openExplorerFile(item().path)
-            })
-          }}
+          onClick={(event) => handleRowClick(event, item(), activate)}
         >
           <FileRowContent
             name={node().name}
@@ -2596,7 +2621,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             trailing={readStatus()}
           />
         </ContextMenu.Trigger>
-        {renderItemContextMenu(item, () => ({ isDirectory: isDirectory(), expanded: row().expanded }))}
+        {renderItemContextMenu(item, () => ({ isDirectory: isDirectory(), expanded: row().expanded, activate }))}
       </ContextMenu.Root>
     )
   }

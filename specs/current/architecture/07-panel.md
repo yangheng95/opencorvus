@@ -1589,8 +1589,12 @@ perform another target query after publication.
 
 Explorer's current successful listing owns this target fact. Expansion, folder
 menus and destination actions use the link's original logical path. Selection
-retains entry identity and its listing/file origin rather than copying a target
-flag. File search remains a file-path result. Its shared host search compares
+retains entry identity and its listing, editor or index origin. Explorer search
+reads combined file and directory entries once, using the directory suffix to
+retain the indexed type. Opening a directory match reveals the exact folder in
+the project tree through the existing directory request. The search input holds
+focus while the result row retires, then the directory, root or retry receives
+focus. Files retain the normal editor action. The shared host search compares
 queries and enumerated candidates through forward-slash matching keys derived
 from the host path separator. The fuzzy library returns the original candidate
 identity, including the directory suffix. Windows native and portable separators
@@ -1604,7 +1608,7 @@ The published deferred query retains its source while its normalized value is
 stable. Clearing the input restores the tree immediately. Explicit retries and
 file-change refreshes still read the current source.
 With focus inside the visible Explorer, Ctrl+F or Command+F focuses its
-existing file search field and selects the current query. The editor and
+existing search field and selects the current query. The editor and
 conversation keep their respective find commands.
 The existing directory refresh batch rereads a settled search once when it
 observes changed membership in an already read directory. A newer query or
@@ -1787,7 +1791,7 @@ or directory, with optional surrounding double quotes. It returns the exact
 indexed project-relative path for the requested kind. A complete path outside
 the selected project or absent from its index yields an empty result. Names and
 relative path fragments use the same fuzzy search and ranking.
-File search keeps a visible limit of 80 paths. Its same scoped request asks for
+Explorer search keeps a visible limit of 80 paths. Its same scoped request asks for
 one additional path; only that returned extra path establishes that more matches
 exist. The current owned result supplies both the first 80 rows and a localized
 inline prompt to narrow the query. A response of exactly 80 paths establishes no
