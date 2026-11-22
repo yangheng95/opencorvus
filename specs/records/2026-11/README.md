@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [日志刷新失败时保留上次读取结果](2026-11-23-log-refresh-retains-last-read.md)
 - [记忆设置按名称或路径查找项目](2026-11-23-memory-project-picker-search.md)
 - [文件审阅可组合搜索路径与修改类型](2026-11-23-file-change-combined-search.md)
 - [视图菜单直接说出切换去往的界面语言](2026-11-23-titlebar-language-action-destination.md)
