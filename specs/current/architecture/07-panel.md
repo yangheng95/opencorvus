@@ -4386,7 +4386,8 @@ directory-free launcher 从既有 Overlay settings 的 `lastSelectedModel` 恢�
 首次显式 Mission 发送才通过 `/global/projects/anonymous` 创建并激活它的独立 Project。
 Mission 草稿标题、输入提示与首页说明使用通用 Mission 语义；选择 Mission 目标本身不代表
 已选专家团或执行上下文已就绪。已选 Squad 的精确身份继续由同一份真实可见 reference 展示。
-既有 Mission / Chat 的只读上下文沿用首条消息的真实 references；目录默认包不是该会话的专家团分配。
+携带已保存请求的 Mission 在只读上下文中展示该请求的显式引用，来源与正文使用同一份规范工作记录。
+已发送的 Mission / Chat 的只读上下文沿用首条消息的真实 references；目录默认包不是该会话的专家团分配。
 只有冻结包绑定的 Task 显示其实际分配包及版本，不能把 session-effective catalog 的默认包当成 Mission held set。
 可见引用的共享词法扫描只投影成对引号及合法 JSON 字符串转义；编辑中的无效候选保持原文，继续扫描后续合法引用。
 提交校验仍将无效候选映射到明确的引用格式错误；修正建议直接显示在反馈正文，并按当前界面语言从原始错误原因投影。

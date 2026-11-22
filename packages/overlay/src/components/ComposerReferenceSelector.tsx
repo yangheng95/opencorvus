@@ -44,6 +44,26 @@ interface ComposerReferenceGroup {
   options: ComposerReferenceOption[]
 }
 
+const READ_ONLY_REFERENCE_COPY = {
+  "task-request": {
+    hint: "chat.references.task_request_hint",
+    title: "chat.references.task_request_title",
+    empty: "chat.references.task_request_empty",
+  },
+  "saved-mission-request": {
+    hint: "chat.references.saved_request_hint",
+    title: "chat.references.saved_request_title",
+    empty: "chat.references.saved_request_empty",
+  },
+  "first-message": {
+    hint: "chat.references.read_only_hint",
+    title: "chat.references.first_message_title",
+    empty: "chat.references.none_selected",
+  },
+} as const
+
+export type ComposerReferenceOrigin = keyof typeof READ_ONLY_REFERENCE_COPY
+
 export interface ComposerReferenceSelectorProps {
   contextLabel?: string
   controls?: JSX.Element
@@ -63,7 +83,7 @@ export interface ComposerReferenceSelectorProps {
   onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
   onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<ExpertSquadMarketInstallOutcome>
   activePackage?: ComposerExpertSquadPackage | null
-  referenceOrigin?: "task-request" | "first-message"
+  referenceOrigin: ComposerReferenceOrigin
   launchReferences: VisibleComposerReferences
   readOnly: boolean
   disabled?: boolean
@@ -79,6 +99,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   let searchInputRef: HTMLInputElement | undefined
   let listboxElement: HTMLUListElement | undefined
   let resultsElement: HTMLDivElement | undefined
+  const readOnlyCopy = () => READ_ONLY_REFERENCE_COPY[props.referenceOrigin]
 
   const skillOptions = createMemo<ComposerReferenceOption[]>(() => [
     ...props.skills.map((skill) => ({
@@ -401,15 +422,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                   <span class="composer-reference-context">{props.contextLabel}</span>
                 </Show>
               </div>
-              <span>
-                {t(
-                  props.readOnly
-                    ? props.referenceOrigin === "task-request"
-                      ? "chat.references.task_request_hint"
-                      : "chat.references.read_only_hint"
-                    : "chat.references.selection_hint",
-                )}
-              </span>
+              <span>{t(readOnlyCopy().hint)}</span>
             </div>
           </Show>
           <Show when={props.readOnly && props.activePackage}>
@@ -434,11 +447,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
           <Show when={props.readOnly && readOnlyOptions().length > 0}>
             <div class="composer-reference-popover-heading">
               <span class="oc-section-heading">
-                {t(
-                  props.referenceOrigin === "task-request"
-                    ? "chat.references.task_request_title"
-                    : "chat.references.first_message_title",
-                )}
+                {t(readOnlyCopy().title)}
               </span>
             </div>
           </Show>
@@ -448,13 +457,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
               <Show
                 when={readOnlyOptions().length > 0}
                 fallback={
-                  <div class="composer-reference-empty">
-                    {t(
-                      props.referenceOrigin === "task-request"
-                        ? "chat.references.task_request_empty"
-                        : "chat.references.none_selected",
-                    )}
-                  </div>
+                  <div class="composer-reference-empty">{t(readOnlyCopy().empty)}</div>
                 }
               >
                 <div class="composer-reference-list" data-ui="composer-reference-read-only-list">

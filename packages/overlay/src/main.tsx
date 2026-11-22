@@ -156,7 +156,6 @@ import {
   VisibleComposerReferences as VisibleComposerReferencesSchema,
   visibleComposerReferences,
   type ProductPillar,
-  type VisibleComposerReferences,
 } from "@opencorvus-ai/transport-protocol"
 import { waitForLogDrain, AppLog } from "./utils/log"
 import { teardownApp } from "./services/init"
@@ -2602,16 +2601,21 @@ function OverlayRoot() {
       squads: catalog.squads.filter((squad) => squad.product_pillars.includes(composerIntent().productPillar)),
     }
   })
-  const composerLaunchReferences = createMemo<VisibleComposerReferences>(() => {
+  const composerLaunchContext = createMemo<ChatComposerProps["launchContext"]>(() => {
+    const item = readableSelectedItem()
+    if (item?.kind === "mission" && item.pendingPromptText) {
+      return { origin: "saved-mission-request", references: visibleComposerReferences(item.pendingPromptText) }
+    }
     const source = boardStore.selectedSource
     const board = boardStore.board
+    const origin = selectedItem()?.kind === "task" ? "task-request" : "first-message"
     if (source?.kind === "task" && board?.task?.id === source.id) {
-      return visibleComposerReferences(typeof board.task.request === "string" ? board.task.request : "")
+      return { origin, references: visibleComposerReferences(typeof board.task.request === "string" ? board.task.request : "") }
     }
     if (source?.kind === "session" && board?.kind === "session" && board.sessionID === source.id) {
-      return VisibleComposerReferencesSchema.parse(board.composerReferences)
+      return { origin, references: VisibleComposerReferencesSchema.parse(board.composerReferences) }
     }
-    return visibleComposerReferences("")
+    return { origin, references: visibleComposerReferences("") }
   })
 
   onMount(() => {
@@ -3089,11 +3093,10 @@ function OverlayRoot() {
           }
           activeExpertSquadPackage={composerExpertSquadCatalog().activePackage}
           conversationActive={Boolean(activeTaskID() || activeSessionID())}
-          launchReferences={composerLaunchReferences()}
+          launchContext={composerLaunchContext()}
           conversationExperience={conversationSourceExperience()}
           composerIntent={composerIntent()}
           activeComposerContext={activeComposerContext()}
-          activeTaskReferences={selectedItem()?.kind === "task"}
           onComposerIntentChange={(intent) =>
             runUserNavigation("composer.mode-change", () => handleComposerIntentChange(intent))
           }

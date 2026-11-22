@@ -103,7 +103,7 @@ import {
   type ComposerMentionOption,
 } from "../services/composer-mention"
 import { ComposerMentionMenu } from "./ComposerMentionMenu"
-import { ComposerReferenceSelector } from "./ComposerReferenceSelector"
+import { ComposerReferenceSelector, type ComposerReferenceOrigin } from "./ComposerReferenceSelector"
 import { pickDirectory } from "../services/workspace"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { activeProjectDirectory } from "../services/project-directory"
@@ -230,11 +230,10 @@ export interface ChatComposerProps {
   onInstallMoreExpertSquads?: () => void
   activeExpertSquadPackage: ComposerExpertSquadPackage | null
   conversationActive: boolean
-  launchReferences: VisibleComposerReferences
+  launchContext: { origin: ComposerReferenceOrigin; references: VisibleComposerReferences }
   conversationExperience?: ConversationExperience
   composerIntent: ComposerIntent
   activeComposerContext?: { kind: WorkLedgerKind; productPillar?: ProductPillar }
-  activeTaskReferences: boolean
   onComposerIntentChange: (intent: ComposerIntent) => void
 }
 
@@ -1570,10 +1569,10 @@ export function ChatComposer(props: ChatComposerProps) {
         onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
         onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
         onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}
-        launchReferences={props.conversationActive ? props.launchReferences : visibleComposerReferences(text())}
+        launchReferences={props.conversationActive ? props.launchContext.references : visibleComposerReferences(text())}
         readOnly={Boolean(props.conversationActive)}
-        activePackage={props.activeTaskReferences ? props.activeExpertSquadPackage : null}
-        referenceOrigin={props.activeTaskReferences ? "task-request" : "first-message"}
+        activePackage={props.launchContext.origin === "task-request" ? props.activeExpertSquadPackage : null}
+        referenceOrigin={props.launchContext.origin}
         contextLabel={toolbarContextLabel()}
         controls={props.conversationActive ? undefined : renderIntentControls()}
         disabled={!props.conversationActive && (!composerEnabled() || busy())}
