@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [全图预览固有尺寸的实页截图](2026-11-23-image-preview-dimensions/README.md)
 - [PDF 直接页码导航的实页证据](2026-11-23-pdf-direct-page-navigation/README.md)
 - [日志匹配数量的实页证据](2026-11-23-log-search-match-count/README.md)
 - [独立文件比较和磁盘错误的实页截图](2026-11-23-file-base-draft-without-disk/README.md)

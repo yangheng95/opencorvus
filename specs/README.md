@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [全图预览显示当前图片的固有宽高](records/2026-11/2026-11-23-image-preview-dimensions.md)
 - [PDF 阅读器可直接输入页码导航](records/2026-11/2026-11-23-pdf-direct-page-navigation.md)
 - [日志搜索显示已加载结果的精确匹配数](records/2026-11/2026-11-23-log-search-match-count.md)
 - [磁盘暂不可读时仍可比较基准版和草稿](records/2026-11/2026-11-23-file-base-draft-without-disk.md)
