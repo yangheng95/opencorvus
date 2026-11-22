@@ -1,0 +1,67 @@
+{
+  "files": [
+    {
+      "area": "north",
+      "project": {
+        "id": "prj_h50W9zQIg9wMBZtVT82D",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\north\\site-notes",
+        "time": {
+          "created": 1795368605413,
+          "updated": 1795368605413
+        },
+        "sandboxes": []
+      },
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\north\\site-notes",
+      "path": "notes/receiving.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: north\nReceiving count: 12 cartons\nRecord: north-draft-review\n",
+        "revision": "32eb1b7e723db02e5f49e7a226be89c60eda51805b332af436f57200e16b61e3",
+        "resourceID": "03f0d76e2644c4dfd1155c3c9b421fce98023f70f45886206fa85ad5d2abdd97"
+      }
+    },
+    {
+      "area": "south",
+      "project": {
+        "id": "prj_hidxEGOTDW5lzdkD8qqg",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\south\\site-notes",
+        "time": {
+          "created": 1795368606028,
+          "updated": 1795368606028
+        },
+        "sandboxes": []
+      },
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\south\\site-notes",
+      "path": "notes/receiving.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: south\nReceiving count: 12 cartons\nRecord: south-draft-review\n",
+        "revision": "6bba504f0567e357bfb2d6fd5af50a4c05a3a3eb88e472bca53c52f04d741fdf",
+        "resourceID": "a2b41fe7fec36ee386c051cb94b6b09fe3aa7de433ec9486907cb617cc509b71"
+      }
+    },
+    {
+      "area": "north-long",
+      "project": {
+        "id": "prj_h50W9zQIg9wMBZtVT82D",
+        "worktree": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\north\\site-notes",
+        "time": {
+          "created": 1795368605413,
+          "updated": 1795368605413
+        },
+        "sandboxes": []
+      },
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b375\\north\\site-notes",
+      "path": "notes/receiving  reference records with dated warehouse count reconciliation snapshots/returns and shortage follow-up reports checked by the receiving team/verification-current.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: north\nLocation: long path with a double space\n",
+        "revision": "9df75028016b2b92221db81c003ed4095fd8cdfe4918b02155c13e596b2a6f5a",
+        "resourceID": "26d0c89ff0a2206cff459734e146b3acd4427ad464ca224d39b8e31e1308c52c"
+      }
+    }
+  ]
+}

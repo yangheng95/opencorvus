@@ -1479,6 +1479,9 @@ draft and loaded baseline. Reload uses the same unsaved decision owner and only
 publishes a successful response still owned by the resource, generation and
 draft revision; failed or superseded reads retain input. Save-and-leave errors
 remain visible inside its decision dialog.
+The dialog captures the original file's complete project-scoped path alongside
+the leave reason. The visible path can wrap and stays tied to that original
+file through the dialog close animation.
 The same unsaved decision names its actions by their consequence: Keep editing
 retains the current draft; Discard changes completes the pending operation without
 saving; Save and continue completes a pending navigation or file operation after

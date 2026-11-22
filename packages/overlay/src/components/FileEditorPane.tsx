@@ -48,6 +48,10 @@ import { PreviewableImage } from "./ImagePreview"
 import { TextDiffView } from "./DiffView"
 import { SegmentedControl } from "./ui/SegmentedControl"
 
+function projectFileLocation({ directory, path }: FileEditorTarget): string {
+  return normalizeServerPath(`${directory}/${path}`, isWindowsPath(directory))
+}
+
 function fileContentPath(target: FileEditorTarget): string {
   const query = new URLSearchParams({
     path: target.sourceAbsolutePath || target.path,
@@ -637,14 +641,15 @@ export function FileEditorPane() {
 
   const decideBeforeNavigate = (reason: "leave" | "reload" = "leave"): Promise<number | null> => {
     if (fileEditorReserved() || isBusy()) return Promise.resolve(null)
-    if (!dirty()) return Promise.resolve(draftRevision)
+    const file = target()
+    if (!file || !dirty()) return Promise.resolve(draftRevision)
     if (pendingLeaveDecision) return pendingLeaveDecision
     decisionRevision = draftRevision
     const focused = document.activeElement
     leaveFocus = focused instanceof HTMLElement
       ? { element: dialogOpeningFocusTarget(focused), targetIdentity: activeTargetIdentity, authority: captureApiAuthority() }
       : undefined
-    setLeavePrompt({ reason, path: path() })
+    setLeavePrompt({ reason, path: projectFileLocation(file) })
     setLeaveDialogOpen(true)
     pendingLeaveDecision = new Promise<number | null>((resolve) => {
       settleLeaveDecision = resolve
@@ -1108,9 +1113,10 @@ export function FileEditorPane() {
         }
       >
         <p>
-          {t(leavePrompt().reason === "reload" ? "file_editor.reload_unsaved_message" : "file_editor.unsaved_message", {
-            path: leavePrompt().path,
-          })}
+          {t(leavePrompt().reason === "reload" ? "file_editor.reload_unsaved_message" : "file_editor.unsaved_message")}
+        </p>
+        <p class="file-editor-dialog-path">
+          <bdi>{leavePrompt().path}</bdi>
         </p>
         <Show when={error()}>{(failure) =>
             <Feedback class="file-editor-compare-feedback" tone={isUnconfirmedSave(failure().messageKey) ? "warning" : "error"}
@@ -1165,11 +1171,8 @@ export function FileEditorPane() {
         <Show when={comparison()}>
           {(read) => (
             <div class="file-comparison-content">
-              <p class="file-comparison-path">
-                <bdi>{normalizeServerPath(
-                  `${read().target.directory}/${read().target.path}`,
-                  isWindowsPath(read().target.directory),
-                )}</bdi>
+              <p class="file-editor-dialog-path">
+                <bdi>{projectFileLocation(read().target)}</bdi>
               </p>
               <p class="file-comparison-hint">{t("file_editor.compare_hint")}</p>
               <Show when={comparedDiskForBase()}>
