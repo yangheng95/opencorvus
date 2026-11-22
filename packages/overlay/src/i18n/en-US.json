@@ -1679,6 +1679,7 @@
   "log.search_loaded": "Search loaded logs",
   "log.clear_search": "Clear search",
   "log.search_empty": "No loaded logs match this search.",
+  "log.search_matches": { "one": "{{count}} match in loaded logs", "other": "{{count}} matches in loaded logs" },
   "log.fields": "Structured fields",
   "log.filter_level": "Log level",
   "log.open_file": "Open File",

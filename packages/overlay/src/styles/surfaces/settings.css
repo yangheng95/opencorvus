@@ -1213,6 +1213,12 @@ button.s-row:focus-visible {
   width: 100%;
 }
 
+.log-viewer-search-count {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
 .log-viewer {
   flex: 1 1 auto;
   height: auto;

@@ -10,7 +10,7 @@ import type { JSX } from "solid-js"
 import { VList, type VListHandle } from "virtua/solid"
 import { appStore, setAppStore, filteredLogEntries } from "../store/app"
 import type { LogEntry, LogLevel, LogSource } from "../store/app"
-import { t } from "../utils/i18n"
+import { localeTag, t, tc } from "../utils/i18n"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { pathRevealFailureKey, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../services/workspace"
 import { useAsyncAction } from "../solid/async-action"
@@ -267,6 +267,7 @@ export function LogViewer(props: LogViewerProps) {
   const [refreshPending, setRefreshPending] = createSignal(false)
   const [copyPending, setCopyPending] = createSignal(false)
   const [copyNotice, setCopyNotice] = createSignal<{ tone: "success" | "error"; message: string } | null>(null)
+  const countFormatter = createMemo(() => new Intl.NumberFormat(localeTag()))
   let logList: VListHandle | undefined
   let followTail = true
   let refreshGeneration = 0
@@ -527,6 +528,13 @@ export function LogViewer(props: LogViewerProps) {
           if (event.key === "Enter") event.preventDefault()
         }}
       />
+      <Show when={searchQuery().trim() ? entries().length : 0}>
+        {(count) => (
+          <p class="log-viewer-search-count" role="status">
+            {tc("log.search_matches", count(), { count: countFormatter().format(count()) })}
+          </p>
+        )}
+      </Show>
       <Show when={copyNotice()}>
         {(notice) => (
           <div
