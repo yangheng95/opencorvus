@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [窄桌面用量活动图保留同一时间轴](records/2026-11/2026-11-23-usage-activity-desktop-overflow.md)
 - [在下载前显示不可预览文件的字节数](records/2026-11/2026-11-23-binary-download-file-size.md)
 - [从归档搜索用方向键进入结果](records/2026-11/2026-11-23-archive-search-keyboard-entry.md)
 - [跳转到行按提交时的文件内容定位](records/2026-11/2026-11-23-editor-go-to-line-after-reload.md)
