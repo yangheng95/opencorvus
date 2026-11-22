@@ -296,7 +296,7 @@ export async function recoverStartedTaskExecutions(input?: {
       if (!project) throw new Error(`Cancelled Task ${taskID} belongs to missing Project ${task.project_id}`)
       const { EngineService } = await import("@/task-api")
       const retired = await runWithIndependentProjectIdentity({
-        directory: taskRootDirectory(task),
+        directory: project.worktree,
         fn: () => EngineService.reconcileCancelledTaskPermissions(taskID),
       })
       if (retired > 0) cancelledPermissionTasksRecovered += 1

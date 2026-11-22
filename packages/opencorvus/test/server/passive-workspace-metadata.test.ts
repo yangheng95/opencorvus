@@ -108,10 +108,10 @@ describe("cold passive workspace metadata", () => {
       `/expert-squad/search?query=another&limit=1&cursor=${encodeURIComponent(first.next_cursor!)}`,
     )
     expect({ status: wrongQuery.status, body: await wrongQuery.json() }).toMatchObject({
-      status: 500,
+      status: 400,
       body: {
-        name: "UnknownError",
-        data: { message: "Internal server error. See x-opencorvus-request-id for diagnostics." },
+        name: "ExpertSquadCatalogCursorInvalidError",
+        data: { message: "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query." },
       },
     })
     await Instance.disposeAll()

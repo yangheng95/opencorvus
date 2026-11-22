@@ -757,3 +757,5 @@ The following gates define the maintained control-plane proof:
 - storage schema-contract and schema-migration tests prove canonical SQLite Data Definition Language, versioned upgrades, retained facts, rollback and cross-process convergence; explicit reset remains a separate administrative contract;
 - `bun run typecheck`, `bun run docs:check`, and `git diff --check` remain required;
 - the real streaming Provider checker is run only when credential and exact model projection use is explicitly authorized.
+
+Task cancellation enters its independent cleanup lease through the validated Task's owning Project worktree. The root Session remains the execution-directory authority for physical Prompt and process settlement; an alternate execution directory must not rediscover or replace the Task's Project identity. Cancelled-permission recovery uses that same persisted Project ownership.

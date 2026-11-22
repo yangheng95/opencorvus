@@ -133,7 +133,7 @@ test("literal Git file identity projects the exact bracket filename while its ma
     body: { type: "text", content: original, revision: expect.any(String) },
   })
   const direct = await Instance.provide({ directory: project.path, fn: () => File.read(file) })
-  expect(direct).toEqual({ type: "text", content: original, revision: expect.any(String) })
+  expect(direct).toEqual({ type: "text", content: original, revision: expect.any(String), resourceID: expect.any(String) })
   await fs.writeFile(path.join(project.path, file), "literal-first\ncommon-second\n")
   expect((await http.read(file)).body.patch).toEqual(replacementPatch(file, "literal-first"))
 }, 60_000)

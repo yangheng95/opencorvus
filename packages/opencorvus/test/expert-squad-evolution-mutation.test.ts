@@ -898,6 +898,7 @@ describe("authorized expert squad evolution mutation", () => {
                 taskID: operationTask.taskID,
                 kind: "operator",
                 source: "expert_squad.evolution_authorization",
+                operatorRequest: { version: 1, requestID: expect.any(String), fingerprint: expect.any(String) },
               },
             },
             parts: [{ type: "text", text: promotionText, kind: "user_content", source: "user" }],

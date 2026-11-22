@@ -2,6 +2,7 @@ import { spawnSync } from "node:child_process"
 import os from "node:os"
 import path from "node:path"
 import fs from "node:fs"
+import { resolveInstalledRustTool } from "./installed-rust-tool"
 import { expectedTestProcessSupervisor } from "./test-process-supervisor"
 
 /** Publish a completed executable without replacing one already in use. */
@@ -31,18 +32,6 @@ export function publishTestProcessSupervisor(source: string, helper: string): st
   }
 }
 
-function resolveInstalledRustTool(name: "cargo" | "rustc", environment: NodeJS.ProcessEnv): string {
-  const result = spawnSync("rustup", ["which", name], {
-    encoding: "utf8",
-    windowsHide: true,
-    env: environment,
-  })
-  if (result.error) throw result.error
-  if (result.status !== 0) throw new Error(`rustup could not resolve installed ${name}: ${result.stderr.trim()}`)
-  const resolved = result.stdout.trim()
-  if (!path.isAbsolute(resolved)) throw new Error(`rustup returned a non-absolute ${name} path: ${resolved}`)
-  return resolved
-}
 
 export function prepareTestProcessSupervisor(): string | undefined {
   const helper = expectedTestProcessSupervisor()

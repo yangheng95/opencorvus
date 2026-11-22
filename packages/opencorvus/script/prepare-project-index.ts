@@ -1,11 +1,16 @@
 import { spawnSync } from "node:child_process"
 import { statSync } from "node:fs"
 import path from "node:path"
+import { resolveInstalledRustTool } from "./installed-rust-tool"
 import { projectIndexSourceDirectory, sourceProjectIndexExecutable } from "../src/runtime/project-index"
 
 export function prepareProjectIndex(): string {
   const source = projectIndexSourceDirectory()
-  const result = spawnSync("cargo", [
+  const cargo = resolveInstalledRustTool("cargo", process.env)
+  const rustc = resolveInstalledRustTool("rustc", process.env)
+  process.env.CARGO = cargo
+  process.env.RUSTC = rustc
+  const result = spawnSync(cargo, [
     "build", "--locked", "--release",
     "--manifest-path", path.join(source, "Cargo.toml"),
     "--target-dir", path.join(source, "target"),

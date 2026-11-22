@@ -4,6 +4,56 @@
 
 ## 未发布
 
+## 0.1.52 - 2026-11-22
+
+### zh-CN
+
+#### 新增
+
+- Markdown 中的项目文件链接可以打开对应文件并跳转到标题，返回时恢复原来的阅读位置。历史消息中的本地文件夹和文本引用也可在工作台打开。
+- 多步任务草稿支持按请求正文搜索，并在全局搜索和侧栏提示中预览请求。新建多步任务时显示已选专家团的名称。
+
+#### 调整
+
+- 编辑器连接保留斜杠命令参数中的空格及附件上下文，支持读取跨项目的持久会话历史，并按原会话范围恢复模型身份。远端提示内容按原始命令协议处理。
+- 图像预览支持键盘操作，完整显示图像并在缩放时保留正在查看的位置。文件查找显示无匹配和无效正则表达式的具体反馈。
+- 改进窄文件栏、资源管理器展开和查找快捷键的体验，以及草稿保存、清除筛选和退出设置后的键盘焦点。记忆设置显示正文与元数据，并区分同名项目。
+
+#### 修复
+
+- 附件上传、历史重放和下载保留原始字节、文件名、媒体类型、字符编码及来源。编辑器传入的空文件和未声明媒体类型的资源可正常保留，图像与文本预览依据已确认的内容显示。
+- 修复反向代理和带路径前缀部署下的默认服务器发现、项目请求作用域与实时连接路由。命令行网络选项按明确输入生效，等价服务器地址的保存保留当前工作区。
+- 修复执行目录与所属项目目录不同时取消任务和删除会话失败的问题；取消和恢复继续使用原任务的项目身份。
+- 归档工作显示只读的持续目标说明，工作侧栏准确区分创建和开始时间。更新 Hono、Astro 及相关适配器以修复已公布的安全漏洞。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 13，保留已有项目、会话和任务数据。macOS 安装包使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Open project files from Markdown links at the linked heading, then return to the previous reading position. Local folder and text references in message history can also open in the workbench.
+- Search saved Mission drafts by request text and preview requests in global search and sidebar tooltips. Mission creation shows the selected Expert Squad names.
+
+#### Changed
+
+- Editor connections preserve whitespace in slash command arguments and attached context, paginate persisted conversations across projects, and restore model identity in the original session scope. Remote prompt content follows the original command protocol.
+- Use image previews from the keyboard, view the complete image, and keep the viewed point stable while zooming. File search provides specific feedback for no matches and invalid regular expressions.
+- Improve narrow file headers, Explorer opening and find shortcuts, and keyboard focus after saving drafts, clearing filters, and leaving Settings. Memory settings show content with metadata and distinguish projects with the same name.
+
+#### Fixed
+
+- Attachment uploads, history replay, and downloads preserve original bytes, filenames, media types, text encodings, and sources. Empty editor resources and resources without a declared media type are retained, and image and text previews follow the confirmed content.
+- Correct default server discovery, project request scope, and live connection routing behind reverse proxies and deployment path prefixes. Explicit command-line network options take effect, and saving an equivalent server address retains the current workspace.
+- Fix task cancellation and conversation deletion when the execution directory differs from the owning project. Cancellation and recovery retain the original task's project identity.
+- Archived work shows read-only continuous goal guidance, and the sidebar distinguishes creation and start times. Update Hono, Astro, and their related adapters to address published security advisories.
+
+#### Upgrade impact and known limitations
+
+- The database remains at version 13, retaining existing projects, conversations, and tasks. macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
+
 ## 0.1.51 - 2026-11-12
 
 ### zh-CN

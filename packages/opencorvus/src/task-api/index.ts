@@ -2982,18 +2982,22 @@ export namespace EngineService {
   }
 
   export function cancelTask(taskID: string, options: CancelTaskOptions): Promise<boolean> {
-    return joinTaskCancellation(taskID, options, (operationOptions) =>
-      operationOptions.projectDeletionAdmission
+    return joinTaskCancellation(taskID, options, async (operationOptions) => {
+      const task = requireTaskInCurrentProject(taskID)
+      const project = Project.get(task.project_id)
+      if (!project) throw new NotFoundError({ message: `Project not found: ${task.project_id}` })
+      // Cleanup retains the owning Project; physical settlement still uses taskCwd.
+      return operationOptions.projectDeletionAdmission
         ? runWithProjectDeletionIdentity({
-            directory: taskCwd(taskID),
+            directory: project.worktree,
             projectDeletionAdmission: operationOptions.projectDeletionAdmission,
             fn: () => cancelTaskOnce(taskID, operationOptions),
           })
         : runWithIndependentProjectIdentity({
-            directory: taskCwd(taskID),
+            directory: project.worktree,
             fn: () => cancelTaskOnce(taskID, operationOptions),
-          }),
-    )
+          })
+    })
   }
 
   function joinTaskCancellation(

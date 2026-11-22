@@ -409,26 +409,27 @@ describe("natural-period Provider usage", () => {
     })
   })
 
+  // Use an observed transition: tzdb 2026f cancelled Havana's 2026 rollback.
   for (const period of ["day", "month"] as const) {
     test.each([
-      { observation: "first 00:30", now: "2026-11-01T00:30:00-04:00" },
-      { observation: "second 00:30", now: "2026-11-01T00:30:00-05:00" },
-      { observation: "noon", now: "2026-11-01T12:00:00-05:00" },
+      { observation: "first 00:30", now: "2020-11-01T00:30:00-04:00" },
+      { observation: "second 00:30", now: "2020-11-01T00:30:00-05:00" },
+      { observation: "noon", now: "2020-11-01T12:00:00-05:00" },
     ])(`uses Havana's first real midnight for the ${period} observed at $observation`, (sample) => {
       const window = UsageStats.resolveWindow({ period, timeZone: "America/Havana", now: Date.parse(sample.now) })
-      const start = Date.parse("2026-11-01T00:00:00-04:00")
-      const dayEnd = Date.parse("2026-11-02T00:00:00-05:00")
-      const end = period === "day" ? dayEnd : Date.parse("2026-12-01T00:00:00-05:00")
+      const start = Date.parse("2020-11-01T00:00:00-04:00")
+      const dayEnd = Date.parse("2020-11-02T00:00:00-05:00")
+      const end = period === "day" ? dayEnd : Date.parse("2020-12-01T00:00:00-05:00")
       expect(window.current).toEqual({ start, end })
       expect(window.previous).toEqual({
-        start: Date.parse(period === "day" ? "2026-10-31T00:00:00-04:00" : "2026-10-01T00:00:00-04:00"),
+        start: Date.parse(period === "day" ? "2020-10-31T00:00:00-04:00" : "2020-10-01T00:00:00-04:00"),
         end: start,
       })
       const result = UsageStats.aggregate(
         [
-          measuredRecord("second-midnight-hour", Date.parse("2026-11-01T00:30:00-05:00"), 200),
-          measuredRecord("previous-period", Date.parse("2026-10-31T12:00:00-04:00"), 400),
-          measuredRecord("first-midnight-hour", Date.parse("2026-11-01T00:30:00-04:00"), 100),
+          measuredRecord("second-midnight-hour", Date.parse("2020-11-01T00:30:00-05:00"), 200),
+          measuredRecord("previous-period", Date.parse("2020-10-31T12:00:00-04:00"), 400),
+          measuredRecord("first-midnight-hour", Date.parse("2020-11-01T00:30:00-04:00"), 100),
         ],
         window,
       )
@@ -442,7 +443,7 @@ describe("natural-period Provider usage", () => {
             .map((bucket) => ({ start: bucket.start, calls: bucket.calls, tokens: bucket.tokens.total })),
         ).toEqual([
           { start, calls: 1, tokens: 100 },
-          { start: Date.parse("2026-11-01T00:00:00-05:00"), calls: 1, tokens: 200 },
+          { start: Date.parse("2020-11-01T00:00:00-05:00"), calls: 1, tokens: 200 },
         ])
       } else {
         expect(result.buckets[0]).toMatchObject({
@@ -459,15 +460,15 @@ describe("natural-period Provider usage", () => {
   test.each([
     {
       period: "day" as const,
-      now: "2026-11-02T12:00:00-05:00",
-      start: "2026-11-02T00:00:00-05:00",
-      end: "2026-11-03T00:00:00-05:00",
+      now: "2020-11-02T12:00:00-05:00",
+      start: "2020-11-02T00:00:00-05:00",
+      end: "2020-11-03T00:00:00-05:00",
     },
     {
       period: "month" as const,
-      now: "2026-12-15T12:00:00-05:00",
-      start: "2026-12-01T00:00:00-05:00",
-      end: "2027-01-01T00:00:00-05:00",
+      now: "2020-12-15T12:00:00-05:00",
+      start: "2020-12-01T00:00:00-05:00",
+      end: "2021-01-01T00:00:00-05:00",
     },
   ])("includes both Havana midnight hours in the previous $period", (sample) => {
     const window = UsageStats.resolveWindow({
@@ -477,12 +478,12 @@ describe("natural-period Provider usage", () => {
     })
     const start = Date.parse(sample.start)
     expect(window.current).toEqual({ start, end: Date.parse(sample.end) })
-    expect(window.previous).toEqual({ start: Date.parse("2026-11-01T00:00:00-04:00"), end: start })
+    expect(window.previous).toEqual({ start: Date.parse("2020-11-01T00:00:00-04:00"), end: start })
     const result = UsageStats.aggregate(
       [
-        measuredRecord("second-midnight-hour", Date.parse("2026-11-01T00:30:00-05:00"), 200),
+        measuredRecord("second-midnight-hour", Date.parse("2020-11-01T00:30:00-05:00"), 200),
         measuredRecord("current-period", start + 1_800_000, 300),
-        measuredRecord("first-midnight-hour", Date.parse("2026-11-01T00:30:00-04:00"), 100),
+        measuredRecord("first-midnight-hour", Date.parse("2020-11-01T00:30:00-04:00"), 100),
       ],
       window,
     )
@@ -491,26 +492,26 @@ describe("natural-period Provider usage", () => {
   })
 
   test.each([
-    { period: "week" as const, start: "2026-10-26T00:00:00-04:00", end: "2026-11-02T00:00:00-05:00" },
-    { period: "year" as const, start: "2026-01-01T00:00:00-05:00", end: "2027-01-01T00:00:00-05:00" },
+    { period: "week" as const, start: "2020-10-26T00:00:00-04:00", end: "2020-11-02T00:00:00-05:00" },
+    { period: "year" as const, start: "2020-01-01T00:00:00-05:00", end: "2021-01-01T00:00:00-05:00" },
   ])("places both Havana midnight hours in one natural-day bucket within the $period", (sample) => {
     const window = UsageStats.resolveWindow({
       period: sample.period,
       timeZone: "America/Havana",
-      now: Date.parse("2026-11-01T12:00:00-05:00"),
+      now: Date.parse("2020-11-01T12:00:00-05:00"),
     })
     expect(window.current).toEqual({ start: Date.parse(sample.start), end: Date.parse(sample.end) })
     const result = UsageStats.aggregate(
       [
-        measuredRecord("second-midnight-hour", Date.parse("2026-11-01T00:30:00-05:00"), 200),
-        measuredRecord("first-midnight-hour", Date.parse("2026-11-01T00:30:00-04:00"), 100),
+        measuredRecord("second-midnight-hour", Date.parse("2020-11-01T00:30:00-05:00"), 200),
+        measuredRecord("first-midnight-hour", Date.parse("2020-11-01T00:30:00-04:00"), 100),
       ],
       window,
     )
     expectMeasuredBuckets(result, { calls: 2, tokens: 300, costUSD: 0.003 })
-    expect(result.buckets.find((bucket) => bucket.start === Date.parse("2026-11-01T00:00:00-04:00"))).toMatchObject({
-      start: Date.parse("2026-11-01T00:00:00-04:00"),
-      end: Date.parse("2026-11-02T00:00:00-05:00"),
+    expect(result.buckets.find((bucket) => bucket.start === Date.parse("2020-11-01T00:00:00-04:00"))).toMatchObject({
+      start: Date.parse("2020-11-01T00:00:00-04:00"),
+      end: Date.parse("2020-11-02T00:00:00-05:00"),
       calls: 2,
       tokens: { total: 300 },
       costUSD: 0.003,

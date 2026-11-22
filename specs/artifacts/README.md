@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.52 发布证据](2026-11-22-release-0.1.52/README.md) · 原生、官网与公开包日志
 - [设置搜索保留页的桌面验收](2026-11-22-settings-search-retained-page/README.md)
 - [记忆页两个同名项目的桌面验收](2026-11-19-memory-picker-same-name-projects/README.md)
 - [新项目记忆的初始文档呈现](2026-11-19-project-memory-initial-state/README.md)

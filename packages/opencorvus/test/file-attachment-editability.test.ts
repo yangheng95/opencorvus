@@ -102,7 +102,7 @@ test("ordinary copies and attachment metadata retain the conditional editable-fi
       expect(typeof loaded.revision).toBe("string")
       const content = loaded.content + "\n"
       const saved = await File.writeText(file, content, loaded.revision!)
-      expect(saved).toEqual({ type: "text", content, revision: expect.any(String) })
+      expect(saved).toEqual({ type: "text", content, revision: expect.any(String), resourceID: loaded.resourceID })
       expect(await fs.readFile(path.join(project.path, file), "utf8")).toBe(content)
     }
   } })

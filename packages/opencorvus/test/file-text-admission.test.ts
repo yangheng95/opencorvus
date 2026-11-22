@@ -77,10 +77,10 @@ for (const input of textInputs) {
     await fs.writeFile(absolute, input.content)
     await Instance.provide({ directory: project.path, fn: async () => {
       const loaded = await File.read(input.file)
-      expect(loaded).toEqual({ type: "text", content: input.content, revision: expect.any(String) })
+      expect(loaded).toEqual({ type: "text", content: input.content, revision: expect.any(String), resourceID: expect.any(String) })
       expect(await File.readSource(absolute)).toEqual({ type: "text", content: input.content })
       const saved = await File.writeText(input.file, input.saved, loaded.revision!)
-      expect(saved).toEqual({ type: "text", content: input.saved, revision: expect.any(String) })
+      expect(saved).toEqual({ type: "text", content: input.saved, revision: expect.any(String), resourceID: loaded.resourceID })
       expect(await File.read(input.file)).toEqual(saved)
       expect(await File.readSource(absolute)).toEqual({ type: "text", content: input.saved })
       expect(await fs.readFile(absolute)).toEqual(Buffer.from(input.saved, "utf8"))
@@ -152,9 +152,9 @@ test("real HTTP file routes expose binary reads, explicit save errors, and exact
       const absolute = path.join(project.path, input.file)
       await fs.writeFile(absolute, input.content)
       const loaded = await request(`/file/content?${new URLSearchParams({ path: input.file })}`)
-      expect(loaded).toEqual({ status: 200, body: { type: "text", content: input.content, revision: expect.any(String) } })
+      expect(loaded).toEqual({ status: 200, body: { type: "text", content: input.content, revision: expect.any(String), resourceID: expect.any(String) } })
       const saved = await request("/file/content", { path: input.file, content: input.saved, expectedRevision: loaded.body.revision })
-      expect(saved).toEqual({ status: 200, body: { type: "text", content: input.saved, revision: expect.any(String) } })
+      expect(saved).toEqual({ status: 200, body: { type: "text", content: input.saved, revision: expect.any(String), resourceID: loaded.body.resourceID } })
       expect(await request(`/file/source-content?${new URLSearchParams({ path: absolute })}`)).toEqual({
         status: 200, body: { type: "text", content: input.saved },
       })
