@@ -85,15 +85,13 @@ export function setWorkLedgerRuntimeRows(rows: readonly WorkLedgerRow[], authori
   setRuntimeRowsRevision((revision) => revision + 1)
 }
 
-export function workLedgerProjectDirectories(): string[] {
+export function workLedgerProjects(): WorkLedgerProjectRow[] {
   runtimeRowsRevision()
-  return [
-    ...new Set(
-      [...runtimeRows.values()]
-        .filter((row): row is WorkLedgerProjectRow => row.kind === "project")
-        .map((row) => row.directory),
-    ),
-  ].sort((left, right) => left.localeCompare(right))
+  return [...runtimeRows.values()].filter((row): row is WorkLedgerProjectRow => row.kind === "project")
+}
+
+export function workLedgerProjectDirectories(): string[] {
+  return [...new Set(workLedgerProjects().map((row) => row.directory))].sort((left, right) => left.localeCompare(right))
 }
 
 export function workLedgerProject(directory: string): WorkLedgerProjectRow | undefined {

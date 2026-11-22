@@ -1,0 +1,111 @@
+{
+  "candidate": {
+    "page": {
+      "url": "http://127.0.0.1:40370/ui/",
+      "status": 200
+    },
+    "entry": {
+      "path": "assets/main-hdDOztLr.js",
+      "status": 200
+    },
+    "before": {
+      "endpoint": "http://127.0.0.1:40370",
+      "projects": [
+        {
+          "status": 200,
+          "id": "prj_hQcBwYqhkFAjeMnQuPuG",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes"
+        },
+        {
+          "status": 200,
+          "id": "prj_hBrRCHITIIh6iV5m0IY3",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes"
+        }
+      ],
+      "ledgerStatus": 200,
+      "ledger": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hBrRCHITIIh6iV5m0IY3",
+            "title": "",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+            "created": 1795361712118,
+            "updated": 1795361712118,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_hQcBwYqhkFAjeMnQuPuG",
+            "title": "",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+            "created": 1795361711837,
+            "updated": 1795361711837,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "after": {
+      "endpoint": "http://127.0.0.1:40370",
+      "projects": [
+        {
+          "status": 200,
+          "id": "prj_hQcBwYqhkFAjeMnQuPuG",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes"
+        },
+        {
+          "status": 200,
+          "id": "prj_hBrRCHITIIh6iV5m0IY3",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes"
+        }
+      ],
+      "ledgerStatus": 200,
+      "ledger": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hBrRCHITIIh6iV5m0IY3",
+            "title": "",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+            "created": 1795361712118,
+            "updated": 1795361712118,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_hQcBwYqhkFAjeMnQuPuG",
+            "title": "",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+            "created": 1795361711837,
+            "updated": 1795361711837,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "missionListAfter": {
+      "status": 200,
+      "body": []
+    },
+    "shutdownStatus": 200
+  },
+  "databaseCounts": {
+    "baseline": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "candidate": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  }
+}

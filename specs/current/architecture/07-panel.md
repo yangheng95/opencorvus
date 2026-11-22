@@ -3891,8 +3891,11 @@ owns the original action's focus. An inactive mention does not issue a competing
 query or replace the popup's current search.
 
 Home headings, starter actions and the Composer use the same inherited reading
-column insets as the transcript. Home has no separate percentage-width rule or
-visible empty transcript scrollbar. The Textarea owns its native, static
+column insets as the transcript. When home projects share a displayed name, the
+heading and Mission draft identify the current Project with the shortest
+distinguishing directory from the accepted work ledger projection. The current
+directory still owns the Composer scope. Home has no separate percentage-width
+rule or visible empty transcript scrollbar. The Textarea owns its native, static
 placeholder; no separate placeholder text layer, decorative caret or rotation
 timer participates in layout. Mention selection still uses the real Composer
 reference catalog and remains available through typing and the reference menu.

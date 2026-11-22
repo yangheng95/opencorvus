@@ -32,9 +32,9 @@ import { Feedback } from "./ui/Feedback"
 import { showAppDialog } from "../services/app-dialog"
 import { formatErrorDetails } from "../utils/error-details"
 import { StatusIndicator } from "./ui/StatusIndicator"
-import { projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
+import { projectDirectoryHints, projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
 import { retrySelectedTaskSelection } from "../services/task"
-import { workLedgerProject, type WorkLedgerItemRow } from "../services/work-ledger"
+import { workLedgerProject, workLedgerProjects, type WorkLedgerItemRow } from "../services/work-ledger"
 import {
   buildSubagentConversationItems,
   isSubagentActivityRecord,
@@ -705,15 +705,26 @@ export function Conversation(props: {
     return String(sessionBoard()?.directory || session?.directory || "").trim()
   }
   const homeProjectDirectory = () => selectedSessionDirectory() || settingsStore.directory.trim()
-  const homeProjectName = () => {
-    const directory = homeProjectDirectory()
-    return projectDisplayName({
+  const homeProjectName = (directory: string, customName?: string) =>
+    projectDisplayName({
       directory,
-      customName: workLedgerProject(directory)?.title,
+      customName,
       unknownName: directory,
       implicitProjectName: t("work_ledger.implicit_project"),
     })
-  }
+  const homeProjectLabel = createMemo(() => {
+    if (!homeContentActive()) return ""
+    const directory = homeProjectDirectory()
+    const project = workLedgerProject(directory)
+    const name = homeProjectName(directory, project?.title)
+    if (!project) return name
+    const projects = workLedgerProjects().map((row) => ({
+      directory: row.directory,
+      name: homeProjectName(row.directory, row.title),
+    }))
+    const hint = projectDirectoryHints(projects).get(project.directory)
+    return hint ? t("chat.home_project_with_context", { name, hint }) : name
+  })
   const homeSuggestions = createMemo(() => [
     {
       id: "webpage",
@@ -1081,7 +1092,7 @@ export function Conversation(props: {
             <div class="chat-home-prompt">
               <h1 class="chat-home-prompt__title">
                 {homeProjectDirectory()
-                  ? t("chat.home_prompt", { project: homeProjectName() })
+                  ? t("chat.home_prompt", { project: homeProjectLabel() })
                   : t("chat.home_prompt_global")}
               </h1>
               <p class="chat-home-prompt__subtitle">
@@ -1138,7 +1149,7 @@ export function Conversation(props: {
                     <strong>{t("mission.launcher.home_notice_title")}</strong>
                     <span>
                       {homeProjectDirectory()
-                        ? t("mission.launcher.home_notice_body", { project: homeProjectName() })
+                        ? t("mission.launcher.home_notice_body", { project: homeProjectLabel() })
                         : t("mission.launcher.home_notice_body_global")}
                     </span>
                   </div>
