@@ -6381,6 +6381,11 @@ shortcuts and native menu actions cannot navigate away from their unsaved forms.
 The command palette itself retains global navigation ownership. Chrome search
 requests obey the same foreground-dialog boundary as its K shortcut.
 
+Theme and language commands describe the current matching appearance preference
+using the same setting values as Appearance. The System theme stays identifiable
+as the selected preference regardless of the resolved palette. The localized
+description is separate from the combobox's current keyboard option.
+
 On the conversation surface, Home or a loaded conversation also supplies App's
 existing Goal-open request to the palette. A nonempty matching query exposes
 the localized Open goal action before work matches. It opens the same owner-bound

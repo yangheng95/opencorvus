@@ -38,6 +38,7 @@ import {
 } from "../services/work-ledger"
 import { openConfigDialog } from "../services/config-dialog-control"
 import { CONFIG_SECTIONS, configSectionSearchText } from "../store/dialog"
+import { settingsStore } from "../store/settings"
 import { localeOptions, t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
@@ -55,6 +56,7 @@ interface Command {
   kind?: WorkLedgerRow["kind"]
   label: string
   hint?: string
+  currentPreference?: boolean
   pendingMissionRequest?: string
   shortcut?: string
   group: string
@@ -269,6 +271,7 @@ export function CommandPalette(props: {
       cmds.push({
         id: `theme:${theme.id}`,
         label: `${t("cmdk.theme_prefix")}: ${t(`cmdk.theme.${theme.i18nSlug}`)}`,
+        currentPreference: theme.id === settingsStore.theme,
         group: t("cmdk.group.commands"),
         keywords: `theme ${theme.id}`,
         icon: "config-appearance",
@@ -283,6 +286,7 @@ export function CommandPalette(props: {
         id: `locale:${loc.value}`,
         label: `${t("cmdk.locale_prefix")}: ${loc.label}`,
         hint: loc.value,
+        currentPreference: loc.value === settingsStore.locale,
         group: t("cmdk.group.commands"),
         keywords: `locale language ${loc.value}`,
         icon: "web-search",
@@ -577,6 +581,9 @@ export function CommandPalette(props: {
                 </Show>
                 {command.hint}
               </span>
+            </Show>
+            <Show when={command.currentPreference}>
+              <span>{t("cmdk.current_preference")}</span>
             </Show>
             <Show when={command.shortcut}>
               <span class="cmdk-item-shortcut">{command.shortcut}</span>
