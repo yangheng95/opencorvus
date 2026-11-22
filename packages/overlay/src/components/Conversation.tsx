@@ -992,49 +992,49 @@ export function Conversation(props: {
 
   return (
     <>
-      <Show when={emptyMissionSource() && (!props.selectionReadFailed || emptyMissionItem())}>
-        <section class="chat-empty mission-empty-context" aria-label={t("mission.conversation.context")}>
-          <div class="chat-empty-marker" aria-hidden="true">
-            <Icon name="mission" size="large" />
-          </div>
-          <div class="mission-empty-context__body">
-            <span class="chat-empty-kicker">
-              {emptyMissionItem()?.pendingPromptText ? t("mission_board.create.manual_draft") : t("chat.empty")}
-            </span>
-            <h2 class="chat-empty-title">
-              {emptyMissionItem()?.title || t("mission.title")}
-            </h2>
-            <Show when={emptyMissionItem()?.pendingPromptText} keyed>
-              {(request) => (
-                <div
-                  class="mission-empty-context__request"
-                  role="region"
-                  aria-label={t("mission.conversation.saved_request")}
-                  tabIndex={0}
-                >
-                  {request}
-                </div>
-              )}
-            </Show>
-            <Show when={!props.selectionReadFailed}>
-              <p class="mission-empty-context__hint">
-                {emptyMissionItem()?.archived !== undefined
-                  ? t("mission.conversation.archived_hint")
-                  : emptyMissionItem()?.pendingPromptText
-                    ? t("mission.conversation.draft_hint")
-                    : t("mission.conversation.empty_hint")}
-              </p>
-            </Show>
-            <Show when={!props.selectionReadFailed && emptyMissionItem() && emptyMissionItem()?.archived === undefined}>
-              <div class="chat-empty-actions">
-                <Button type="button" variant="outline" size="sm" tone="neutral" onClick={props.onOpenMissionBoard}>
-                  <Icon name="mission" size="compact" />
-                  {t("mission_board.title")}
-                </Button>
-              </div>
-            </Show>
-          </div>
-        </section>
+      <Show when={emptyMissionItem()}>
+        {(mission) => (
+          <section class="chat-empty mission-empty-context" aria-label={t("mission.conversation.context")}>
+            <div class="chat-empty-marker" aria-hidden="true">
+              <Icon name="mission" size="large" />
+            </div>
+            <div class="mission-empty-context__body">
+              <span class="chat-empty-kicker">
+                {mission().pendingPromptText ? t("mission_board.create.manual_draft") : t("chat.empty")}
+              </span>
+              <h2 class="chat-empty-title">{mission().title || t("mission.title")}</h2>
+              <Show when={mission().pendingPromptText} keyed>
+                {(request) => (
+                  <div
+                    class="mission-empty-context__request"
+                    role="region"
+                    aria-label={t("mission.conversation.saved_request")}
+                    tabIndex={0}
+                  >
+                    {request}
+                  </div>
+                )}
+              </Show>
+              <Show when={!props.selectionReadFailed}>
+                <p class="mission-empty-context__hint">
+                  {mission().archived !== undefined
+                    ? t("mission.conversation.archived_hint")
+                    : mission().pendingPromptText
+                      ? t("mission.conversation.draft_hint")
+                      : t("mission.conversation.empty_hint")}
+                </p>
+                <Show when={mission().archived === undefined}>
+                  <div class="chat-empty-actions">
+                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={props.onOpenMissionBoard}>
+                      <Icon name="mission" size="compact" />
+                      {t("mission_board.title")}
+                    </Button>
+                  </div>
+                </Show>
+              </Show>
+            </div>
+          </section>
+        )}
       </Show>
       <Show when={taskContextID() && selectedTaskLoadError()} keyed>
         {(failure) => (

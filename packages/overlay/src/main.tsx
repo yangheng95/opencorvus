@@ -2283,7 +2283,7 @@ function missionSubmitActive(): boolean {
 }
 
 function conversationSubmitActive(): boolean {
-  return composerIntent().conversationTarget === "chat" && !activeTaskID() && !isConversationSource()
+  return composerIntent().conversationTarget === "chat" && !boardStore.selectedSource
 }
 
 function resolvedActiveComposerIntent(item: WorkLedgerItemRow | null): ComposerIntent | undefined {
@@ -2530,6 +2530,14 @@ function OverlayRoot() {
     const item = selectedItem()
     if (item?.archived === undefined) return undefined
     return t(item.kind === "mission" ? "work_ledger.archived_mission_composer" : "work_ledger.archived_readonly")
+  }
+  const composerUnavailableReason = () => {
+    if (selectionReadError()) return t("work_ledger.selection_error_composer")
+    const archivedReason = archivedComposerReason()
+    if (archivedReason) return archivedReason
+    if (appStore.connected && selectionUnavailable() && (boardStore.taskSwitching || selection.loading)) {
+      return t("workspace.loading_conversation")
+    }
   }
   let refreshPending: Promise<void> | undefined
   let refreshQueued = false
@@ -3027,7 +3035,7 @@ function OverlayRoot() {
                 ? "submitting"
                 : "ready"
           }
-          unavailableReason={selectionReadError() ? t("work_ledger.selection_error_composer") : archivedComposerReason()}
+          unavailableReason={composerUnavailableReason()}
           stopAction={composerStopAction()}
           stopping={composerStopping()}
           draftKey={panelComposerDraftKey()}

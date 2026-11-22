@@ -1,0 +1,96 @@
+{
+  "interim": {
+    "browserPort": 40380,
+    "relay": {
+      "held": {
+        "path": "/work-ledger/selection/session/ses_h2j2dUojaDMRtnUqB3ji",
+        "upstreamStatus": 200,
+        "held": true,
+        "released": false
+      },
+      "released": {
+        "path": "/work-ledger/selection/session/ses_h2j2dUojaDMRtnUqB3ji",
+        "upstreamStatus": 200,
+        "held": false,
+        "released": true,
+        "source": "manual"
+      }
+    }
+  },
+  "final": {
+    "page": {
+      "url": "http://127.0.0.1:40382/ui/",
+      "status": 200
+    },
+    "entry": {
+      "path": "assets/main-DRV03wD2.js",
+      "status": 200
+    },
+    "browserPort": 40384,
+    "relay": {
+      "held": {
+        "path": "/work-ledger/selection/session/ses_hlcSX8My0JprW63RT0Ck",
+        "upstreamStatus": 200,
+        "held": true,
+        "released": false
+      },
+      "released": {
+        "path": "/work-ledger/selection/session/ses_hlcSX8My0JprW63RT0Ck",
+        "upstreamStatus": 200,
+        "held": false,
+        "released": true,
+        "source": "manual"
+      }
+    },
+    "records": {
+      "healthStatus": 200,
+      "exactSelection": [
+        {
+          "status": 200,
+          "kind": "mission",
+          "title": "North inventory review",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\north\\site-notes",
+          "sessionID": "ses_hlcSX8My0JprW63RT0Ck",
+          "pendingPromptText": "Reconcile silver lanterns against the current north warehouse inventory.",
+          "historyStatus": 200,
+          "history": []
+        },
+        {
+          "status": 200,
+          "kind": "chat",
+          "title": "South work conversation",
+          "directory": "C:\\Users\\Public\\opencorvus-review-20261119-b359\\warehouse-reference-materials-for-inventory-and-receiving\\south\\site-notes",
+          "sessionID": "ses_hayQIN8R1L9lze3XPgJe",
+          "pendingPromptText": null,
+          "historyStatus": 200,
+          "history": []
+        }
+      ]
+    },
+    "shutdownStatus": 200,
+    "relayShutdownStatus": 200
+  },
+  "databaseCounts": {
+    "baseline": {
+      "session": 3,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "interim": {
+      "session": 3,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "final": {
+      "session": 3,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  }
+}

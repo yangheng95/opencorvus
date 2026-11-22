@@ -99,6 +99,11 @@ indicator has a localized conversation-loading name and indeterminate
 `progressbar` semantics while active; its idle projection is hidden from the
 accessibility tree. No second DOM-writing effect or synthetic percentage owns
 the loading presentation, and the fixed indicator reserves no layout space.
+While connected, a Composer waiting for the selected record uses the same
+loading label during hydration and the subsequent exact read. Its current read
+error and archived reason keep precedence. The new conversation launcher only
+applies before a work source is selected. A selected Mission keeps its Mission
+heading while its intent is hydrating.
 
 Invalid or conflicting location parameters produce the existing localized
 diagnostic after settings and locale hydration. Connection and sidebar loading
@@ -2013,11 +2018,11 @@ message tree. Active work retains the Board action for editing or starting;
 archived work explains restoration and uses the existing page-level Restore
 action before Board work. The archived header, restore action and failure, and
 read-only composer identify the selected Mission using the current locale.
-Loading, failed or mismatched selection data does not
-supply draft text. Long requests retain native focused-region keyboard scrolling;
-the parent history keymap owns only its directly focused viewport. Opening the
-already selected source from the Board reveals that conversation without another
-selection epoch, hydration or file-owner transition.
+The empty Mission context waits for a confirmed matching record, including a
+retained same-record read. Long requests retain native focused-region keyboard
+scrolling. The parent history keymap owns only its directly focused viewport.
+Opening the already selected source from the Board reveals that conversation
+without another selection epoch, hydration or file-owner transition.
 
 Scheduled timestamp presentation uses the current application locale while
 retaining the original instant and existing browser time-zone semantics.
