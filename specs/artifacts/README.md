@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [记忆设置所选项目的收起值和路径说明](2026-11-23-memory-selected-project-identity/README.md)
 - [笔记搜索草稿与已提交查询](2026-11-23-memory-submitted-search-query/README.md)
 - [目录搜索后的真实新建与保存](2026-11-23-explorer-search-folder-create-save/README.md)
 - [资源管理器搜索文件夹的桌面验收](2026-11-23-explorer-search-folder-entries/README.md)

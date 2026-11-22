@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [收起的记忆项目选择器保留身份区别](records/2026-11/2026-11-23-memory-selected-project-identity.md)
 - [在笔记结果中标明实际提交的查询](records/2026-11/2026-11-23-memory-submitted-search-query.md)
 - [在搜索命中的目录内新建并保存文件](records/2026-11/2026-11-23-explorer-search-folder-create-save.md)
 - [在资源管理器中搜索项目文件夹](records/2026-11/2026-11-23-explorer-search-folder-entries.md)
