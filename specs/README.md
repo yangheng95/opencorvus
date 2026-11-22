@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [在连接地址字段关联实际校验说明](records/2026-11/2026-11-23-connection-address-field-error.md)
 - [文件工作台解释链接指向的章节缺失](records/2026-11/2026-11-23-markdown-missing-linked-section.md)
 - [更新日志搜索可用方向键进入真实结果](records/2026-11/2026-11-23-release-history-keyboard-entry.md)
 - [定时编辑器显示规则已保存的时区标识](records/2026-11/2026-11-23-scheduled-saved-time-zone-identity.md)
