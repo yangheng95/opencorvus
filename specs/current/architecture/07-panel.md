@@ -2453,9 +2453,11 @@ and failure before publishing another connection's options.
 Notes rows derive their date and relevance label/number from the current locale
 inside the row's reactive display. Language changes retain the original memory
 identity, source, content, query and expanded detail without another data read.
-The current search mode also owns each row's result styling and localized result
-label. List/search transitions derive both from that same mode; CSS supplies
-presentation while the component supplies the visible and accessible text.
+Notes holds the submitted search term separately from the editable draft. The
+submitted term owns the result styling and the localized result, empty and
+failure text. One label identifies a nonempty result group. Editing a draft
+keeps the submitted term, its results and their expanded source until the next
+explicit submission, clear, or scope retirement.
 Within the returned relevance window, Notes search projects one row per original
 file ID, using that file's first ranked chunk for its score and excerpt. File
 order follows those first appearances. Expansion and deletion retain file

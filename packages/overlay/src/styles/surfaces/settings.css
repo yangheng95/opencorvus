@@ -924,15 +924,17 @@ button.s-row:focus-visible {
   font-size: var(--ui-font-code);
 }
 
-/* Current search results highlight their metadata and show a localized label. */
+/* Current search results retain their relevance styling. */
 .knowledge-item[data-mode="search"] .knowledge-item-meta {
   color: var(--good);
 }
 
-.knowledge-item-search-label {
-  font-weight: var(--ui-font-weight-body);
-  color: var(--text-muted);
+.knowledge-results-query {
+  margin: 0;
+  padding: var(--ui-gap-3xs) var(--ui-gap-sm);
+  color: var(--text-soft);
   font-size: var(--ui-font-body);
+  overflow-wrap: anywhere;
 }
 
 /* ── ExtensionsPanel.tsx (Skill / Channel sections) ─────── */

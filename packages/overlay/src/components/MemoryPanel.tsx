@@ -96,8 +96,8 @@ export interface MemoryPanelProps {
 
 export function MemoryPanel(props: MemoryPanelProps) {
   const [files, setFiles] = createSignal<MemoryFile[]>([])
-  const [searchMode, setSearchMode] = createSignal(false)
   const [searchQuery, setSearchQuery] = createSignal("")
+  const [submittedQuery, setSubmittedQuery] = createSignal("")
   const [loading, setLoading] = createSignal(false)
   const [failure, setFailure] = createSignal<{ operation: "list" | "search"; cause: unknown }>()
   const [expandedFileId, setExpandedFileId] = createSignal<string | null>(null)
@@ -166,7 +166,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
     if (!directory) {
       batch(() => {
         retireVisibleFiles()
-        setSearchMode(false)
+        setSubmittedQuery("")
         setFailure(undefined)
         setLoading(false)
       })
@@ -184,7 +184,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
       batch(() => {
         setFiles(Array.isArray(data) ? data : [])
         setFilesSource(source)
-        setSearchMode(false)
+        setSubmittedQuery("")
         setExpandedFileId(null)
         setDetailStates({})
         setFailure(undefined)
@@ -193,7 +193,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
       if (ownsLoad()) {
         batch(() => {
           retireVisibleFiles()
-          setSearchMode(false)
+          setSubmittedQuery("")
           setFailure({ operation: "list", cause: err })
         })
       }
@@ -212,9 +212,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
   const returnToList = (source = captureSource()) => {
     if (!sourceMatches(source)) return
     return batch(() => {
-      if (searchMode()) {
+      if (submittedQuery()) {
         retireVisibleFiles()
-        setSearchMode(false)
+        setSubmittedQuery("")
       }
       return loadMemory(source)
     })
@@ -223,20 +223,20 @@ export function MemoryPanel(props: MemoryPanelProps) {
   const doSearch = async (q: string) => {
     const source = captureSource()
     if (!sourceMatches(source)) return
-    if (!q || !q.trim()) {
+    const query = q.trim()
+    if (!query) {
       return returnToList(source)
     }
     const directory = currentDirectory()
     if (!directory) {
       return loadMemory(source)
     }
-    const query = q.trim()
     const token = Symbol("memory-search")
     memoryLoadOwner = token
-    const ownsSearch = () => memoryLoadOwner === token && sourceMatches(source) && searchQuery().trim() === query
+    const ownsSearch = () => memoryLoadOwner === token && sourceMatches(source) && submittedQuery() === query
     batch(() => {
       retireVisibleFiles()
-      setSearchMode(true)
+      setSubmittedQuery(query)
       setFailure(undefined)
       setLoading(true)
     })
@@ -246,7 +246,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          query: q.trim(),
+          query,
           limit: 20,
         }),
       })
@@ -280,7 +280,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
   }
 
   const handleSearchClear = () => {
-    if (searchMode()) void returnToList()
+    if (submittedQuery()) void returnToList()
   }
 
   const handleDeleteInline = async (fileId: string, source = filesSource()) => {
@@ -393,7 +393,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
     sourceGeneration += 1
     memoryLoadOwner = null
     retireVisibleFiles()
-    setSearchMode(false)
+    setSubmittedQuery("")
     setSearchQuery("")
     setDeletingKeys(new Set<string>())
     setLoading(false)
@@ -423,8 +423,10 @@ export function MemoryPanel(props: MemoryPanelProps) {
   const emptyHint = createMemo(() => {
     if (loading()) return t("common.loading")
     const currentFailure = failure()
-    if (currentFailure) return t(currentFailure.operation === "search" ? "memory.search_failed_title" : "memory.notes_list_load_failed")
-    if (searchMode()) return t("memory.no_results")
+    const query = submittedQuery()
+    if (currentFailure?.operation === "search") return t("memory.search_failed_title", { query })
+    if (currentFailure) return t("memory.notes_list_load_failed")
+    if (query) return t("memory.no_results", { query })
     if (!currentDirectory()) return t("memory.none_unselected")
     return t("memory.none")
   })
@@ -501,6 +503,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
       {/* List */}
       <div id="memoryList" class="knowledge-list" ref={listElement}>
         <Show when={files().length > 0} fallback={emptyState()}>
+          <Show when={submittedQuery()}>
+            {(query) => <p class="knowledge-results-query" role="status">{t("memory.results_for", { query: query() })}</p>}
+          </Show>
           <For each={files()}>
             {(f) => {
               const meta = () => {
@@ -526,7 +531,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
               return (
                 <div
                   class="knowledge-item"
-                  data-mode={searchMode() ? "search" : "list"}
+                  data-mode={submittedQuery() ? "search" : "list"}
                   data-id={f.id}
                   data-expanded={expanded() ? "true" : "false"}
                 >
@@ -544,12 +549,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
                       disabled={!filesSourceActive()}
                       onClick={() => toggleMemoryDetail(f.id)}
                     >
-                      <span class="knowledge-item-title">
-                        {f.title}
-                        <Show when={searchMode()}>
-                          <span class="knowledge-item-search-label">{` (${t("memory.search_result")})`}</span>
-                        </Show>
-                      </span>
+                      <span class="knowledge-item-title">{f.title}</span>
                       <span class="knowledge-item-meta-row">
                         <span class="knowledge-item-meta">{meta()}</span>
                         <Badge class="knowledge-scope" tone="neutral" size="sm" data-scope={f.scope}>
