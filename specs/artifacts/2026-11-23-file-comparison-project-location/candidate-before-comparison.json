@@ -1,0 +1,40 @@
+{
+  "files": [
+    {
+      "area": "north",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b374\\north\\site-notes",
+      "path": "notes/receiving.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: north\nReceiving count: 12 cartons\nRecord: north-file-review\n",
+        "revision": "dc18863281ac7ba93246f190ff51839d2c06ecb8166ba091acf8a88ace29692b",
+        "resourceID": "3ad51a203e57d9d7ba8588c21bb126e78a39473b1cb367dd4c024efe5f3618c6"
+      }
+    },
+    {
+      "area": "south",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b374\\south\\site-notes",
+      "path": "notes/receiving.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: south\nReceiving count: 12 cartons\nRecord: south-file-review\n",
+        "revision": "c2ae601435432f936942bc7f9ec8ed4db3e2c8d14c46f9a78f287c0d90201e8d",
+        "resourceID": "e913e2ed9fbc67d7e85b205a476f3a92b499d2c73b3a62fd8911aca390670ee2"
+      }
+    },
+    {
+      "area": "north-long",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261123-b374\\north\\site-notes",
+      "path": "notes/receiving  reference records with dated warehouse count reconciliation snapshots/returns and shortage follow-up reports checked by the receiving team/verification-current.txt",
+      "status": 200,
+      "file": {
+        "type": "text",
+        "content": "Warehouse: north\nLocation: long path with a double space\n",
+        "revision": "6706b4c778b084a8d9489724e069aeff8c5b282dde8fb05fea7b1e241c486f35",
+        "resourceID": "0dabb2075c09fff6ab37deccd70dc894038bf7937e2311c3da90cf96565bccfb"
+      }
+    }
+  ]
+}

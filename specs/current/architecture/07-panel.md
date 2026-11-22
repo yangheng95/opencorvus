@@ -1508,8 +1508,10 @@ within that row so narrow panes can show the full path, including its spaces.
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
 the existing file-content route owns the disk snapshot; the loaded baseline and
-authored draft remain in their existing signals. The base is the most recently
-loaded, successfully saved or explicitly adopted disk text. Closing, replacing the read,
+authored draft remain in their existing signals. The comparison displays the
+snapshot target's complete project-scoped file path and allows it to wrap. The
+base is the most recently loaded, successfully saved or explicitly adopted disk
+text. Closing, replacing the read,
 changing resource or API authority and unmounting retire that read. Three pair
 views compare disk/draft, base/disk and base/draft through the shared text
 diff renderer. Refresh updates only the disk snapshot. While a comparison read

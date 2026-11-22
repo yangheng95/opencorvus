@@ -19,7 +19,9 @@ import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import {
   decodeMarkdownFilePath,
   isAbsoluteServerPath,
+  isWindowsPath,
   normalizeProjectFilePath,
+  normalizeServerPath,
   pathWithForwardSeparators,
   resolveDocumentFilePath,
 } from "../utils/server-path"
@@ -1163,7 +1165,12 @@ export function FileEditorPane() {
         <Show when={comparison()}>
           {(read) => (
             <div class="file-comparison-content">
-              <p class="file-comparison-path">{read().target.path}</p>
+              <p class="file-comparison-path">
+                <bdi>{normalizeServerPath(
+                  `${read().target.directory}/${read().target.path}`,
+                  isWindowsPath(read().target.directory),
+                )}</bdi>
+              </p>
               <p class="file-comparison-hint">{t("file_editor.compare_hint")}</p>
               <Show when={comparedDiskForBase()}>
                 <Feedback tone="warning">{t("file_editor.compare_adopt_hint")}</Feedback>

@@ -607,6 +607,7 @@ code .file-link:focus-visible {
 .file-comparison-path {
   font-family: var(--mono);
   font-size: var(--ui-font-caption);
+  white-space: pre-wrap;
 }
 
 .file-comparison-hint {
