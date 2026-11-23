@@ -27,3 +27,16 @@
 
 - [英文 160% 切到看板前第 24 项完整可见](15-verified-en-160-tail-before-board.jpg)
 - [修正读取后同一卡片仍返回末行，外层净空测量导致末行部分落在输入区边缘](16-verified-en-160-same-card-returns-to-saved-request-tail.jpg)
+
+最终由 `40754/ui/` 提供，加载 `main-DwezpmBy.js`。真实精确读取由 `40756` 观察。
+
+- [英文 160% 切换前的第 24 项及键盘焦点](17-complete-en-160-request-tail-before-board.jpg)
+- [Tab 进入可见的看板创建动作](18-complete-en-160-board-keyboard-focus-stays-visible.jpg)
+- [同一卡片返回，继续阅读第 24 项和原外层位置](19-complete-en-160-same-card-keeps-full-tail-and-outer-position.jpg)
+- [简体中文 160% 往返前阅读第 07 至 12 项](20-complete-zh-160-request-middle-before-board.jpg)
+- [经对话导航回到同一请求中段](21-complete-zh-160-chats-reveals-same-request-middle.jpg)
+- [搜索与取消编辑后从同一卡片返回原中段](22-complete-zh-160-same-card-after-filter-and-edit-cancel.jpg)
+- [真实切换到另一草稿，显示它的确切短请求](23-complete-zh-160-real-switch-shows-exact-short-draft.jpg)
+- [真实切换回来时从第 01 项开始](24-complete-zh-160-real-reselection-opens-at-first-line.jpg)
+- [隔离归档草稿能按同一地址读取并提供恢复动作](25-complete-zh-160-archived-current-source-can-be-restored.jpg)
+- [恢复保留原请求并把输入焦点归给现有输入区](26-complete-zh-160-restored-same-request-and-composer-focus.jpg)

@@ -18,6 +18,7 @@ function recordingTransport(requests: TransportRequest[]): HostTransport {
           missionID: "mission_board_acceptance",
           sessionID: "session_board_acceptance",
           directory: "D:/project",
+          title: "Panel backlog",
           pendingPrompt: { text: "Publish the revised backlog item" },
           created: true,
           productPillar: "code",
@@ -57,7 +58,7 @@ test("Mission wake, draft creation, editing, and dispatch settle on the authorit
     expertSquadIDs: ["base"],
   })
   await dispatchMission({ missionID: "mission_board_acceptance", directory: "D:/project" }, "openai/gpt-5.6-terra")
-  await editMissionDraft({
+  const confirmedTitle = await editMissionDraft({
     missionID: "mission_board_acceptance",
     sessionID: "session_board_acceptance",
     directory: "D:/project",
@@ -65,6 +66,7 @@ test("Mission wake, draft creation, editing, and dispatch settle on the authorit
     expectedRequest: "Publish the backlog item",
   })
 
+  expect(confirmedTitle).toBe("Panel backlog")
   expect(
     requests.map((request) => ({
       method: request.method,

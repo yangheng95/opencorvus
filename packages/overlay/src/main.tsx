@@ -2376,7 +2376,8 @@ function OverlayRoot() {
     if (!source || boardStore.taskSwitching || !appStore.connected || !source.directory) return undefined
     return {
       kind: source.kind, id: source.id, directory: source.directory, authority,
-      key: JSON.stringify([authority.revision, boardStore.selectEpoch, source.kind, source.id, source.directory]),
+      // A surface change can supersede navigation while this record stays selected.
+      key: JSON.stringify([authority.revision, source.kind, source.id, source.directory]),
     }
   }, undefined, { equals: (a, b) => a?.key === b?.key })
   let selectionController: AbortController | undefined
@@ -2591,7 +2592,10 @@ function OverlayRoot() {
   onCleanup(() => selectionController?.abort())
   const [restoringSelection, setRestoringSelection] = createSignal(false)
   const [restoreFailure, setRestoreFailure] = createSignal<unknown>()
-  createEffect(on(() => selectionRequest()?.key, () => { setRestoringSelection(false); setRestoreFailure(undefined) }))
+  createEffect(on([() => selectionRequest()?.key, () => boardStore.selectEpoch], () => {
+    setRestoringSelection(false)
+    setRestoreFailure(undefined)
+  }))
   createEffect(() => {
     if (!restoreFailure()) return
     const current = selectedItem()
@@ -2600,7 +2604,9 @@ function OverlayRoot() {
   async function restoreSelection(): Promise<void> {
     const item = selectedItem(), request = selectionRequest()
     if (!item || item.archived === undefined || !request || restoringSelection()) return
-    const owns = () => selectionRequest()?.key === request.key && isApiAuthorityCurrent(request.authority)
+    const epoch = boardStore.selectEpoch
+    const owns = () => ownsWorkspaceSelection(epoch) && selectionRequest()?.key === request.key &&
+      isApiAuthorityCurrent(request.authority)
     const trigger = document.activeElement
     setRestoringSelection(true)
     setRestoreFailure(undefined)

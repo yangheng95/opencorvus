@@ -825,6 +825,7 @@ export function Conversation(props: {
     const composerMount = document.getElementById("solidChatComposer")
     if (!promptMount || !afterMount || !composerMount) throw new Error("Conversation composition mounts are missing")
     const syncComposerClearance = () => {
+      if (el.clientHeight <= 0) return
       el.style.setProperty("--conversation-composer-block-size", `${composerMount.getBoundingClientRect().height}px`)
       scrollController?.contentChanged()
     }

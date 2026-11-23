@@ -2105,6 +2105,10 @@ retain native focused-region keyboard scrolling. The parent history keymap
 owns only its directly focused viewport.
 Opening the already selected source from the Board reveals that conversation
 without another selection epoch, hydration or file-owner transition.
+Opening the Board supersedes pending navigation without retiring the settled
+record for the same connection, source and directory. The selected-record
+read stays keyed to that identity. Archive restoration retains its separate
+navigation ownership check.
 
 Scheduled timestamp presentation uses the current application locale while
 retaining the original instant and existing browser time-zone semantics.
@@ -2738,6 +2742,8 @@ semantics stay with their owners.
 The same measured Composer block size supplies main content end padding and
 native scroll-padding clearance, including the existing edge-fade extent, so
 browser focus scrolling can use the region above the floating Composer's paint.
+A hidden conversation retains the last clearance until its viewport can be
+measured again, preserving its native scroll range when revealed.
 The terminal file-change summary preserves its
 natural block size as a nonshrinking flex item alongside the virtual window;
 the main scrollport owns their combined overflow.
