@@ -73,6 +73,7 @@ import { FileEditorPane } from "./components/FileEditorPane"
 import { MailboxPanel } from "./components/MailboxPanel"
 import { Button } from "./components/ui/Button"
 import { TabPanel } from "./components/ui/Tabs"
+import { observeTooltipPointer } from "./components/ui/createTooltipInputPriority"
 import {
   cancelFileExplorerFolderReveal,
   closeFileEditor,
@@ -2686,6 +2687,7 @@ function OverlayRoot() {
     measurePanelInlineSize()
     const disposePaneResizers = initPaneResizers(paneCallbacks, workspacePaneConfig)
     onCleanup(disposePaneResizers)
+    onCleanup(observeTooltipPointer(document))
   })
 
   createEffect<string>((previousKey) => {

@@ -4837,8 +4837,10 @@ The shared progressive list respects a more recent focus or a changed list.
 
 Work Ledger previews follow keyboard focus when disclosure or scrolling moves a
 different work row or kind marker under a stationary pointer. Real pointer
-movement restores the existing hover behavior. The annual usage grid shares
-the same input tracking, with separate state for each region.
+movement restores the existing hover behavior. The renderer records physical
+pointer positions across the document, including menus outside the list.
+The Work Ledger and annual usage grid share that observation and each own
+their focus preference.
 
 The Projects toolbar provides an explicit localized `Locate current work`
 action. It derives the target from the current ledger projection and the same
