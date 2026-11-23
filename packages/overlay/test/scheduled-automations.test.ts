@@ -226,6 +226,44 @@ test("advanced recurrence retains seconds, limits, exceptions and the exact anch
   )
 })
 
+test("a saved advanced weekly rule projects its explicit weekday into a weekly edit", () => {
+  const cases = [
+    "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "DTSTART;TZID=America/New_York:20991123T114533\nRRULE:BYDAY=FR;FREQ=WEEKLY;COUNT=4",
+    "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;BYDAY=FR\nEXDATE:20991127T164500Z",
+  ]
+  for (const recurrence of cases) {
+    const parsed = parseAutomationRecurrence(recurrence)
+    expect(parsed).toEqual({
+      preset: "custom",
+      startDate: "2099-11-23",
+      weekday: "FR",
+      time: "11:45",
+      timeZone: "America/New_York",
+      customRule: recurrence,
+    })
+    expect(automationRecurrenceUpdate(recurrence, { ...parsed, preset: "weekly" })).toBe(
+      "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+    )
+  }
+})
+
+test("advanced multi-day and multi-rule schedules retain the anchor weekday for a weekly edit", () => {
+  const anchor = "DTSTART;TZID=America/New_York:20991123T114500"
+  const cases = [
+    `${anchor}\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR,SU`,
+    `${anchor}\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR\n${anchor}\nRRULE:FREQ=WEEKLY;BYDAY=SU`,
+  ]
+  for (const recurrence of cases) {
+    expect(parseAutomationRecurrence(recurrence)).toMatchObject({
+      preset: "custom",
+      startDate: "2099-11-23",
+      weekday: "MO",
+      customRule: recurrence,
+    })
+  }
+})
+
 test("calendar validation returns explicit errors and accepts a leap-day anchor", () => {
   const input: AutomationRecurrenceInput = {
     preset: "weekly",

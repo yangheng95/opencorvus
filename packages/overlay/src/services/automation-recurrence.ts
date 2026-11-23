@@ -162,23 +162,31 @@ export function parseAutomationRecurrence(recurrence: string): ParsedAutomationR
   } catch {
     return custom
   }
-  Object.assign(custom, { startDate, weekday, time, timeZone })
   const rule = start[9].toUpperCase()
+  const parts = rule.split(";")
+  const frequency = parts.filter((part) => part.startsWith("FREQ="))
+  const days = parts.filter((part) => part.startsWith("BYDAY="))
+  const hasOtherRule = /^RRULE:/im.test(normalized.slice(start[0].length))
+  if (!hasOtherRule && frequency.length === 1 && frequency[0] === "FREQ=WEEKLY" && days.length === 1) {
+    weekday = WEEKDAYS.find((day) => days[0] === `BYDAY=${day}`) ?? weekday
+  }
   const preset: AutomationRecurrencePreset =
     rule === "FREQ=DAILY"
       ? "daily"
       : rule === "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"
         ? "weekdays"
-        : /^FREQ=WEEKLY;BYDAY=(?:MO|TU|WE|TH|FR|SA|SU)$/.test(rule)
+        : rule === `FREQ=WEEKLY;BYDAY=${weekday}`
           ? "weekly"
           : "custom"
   // Extra recurrence lines, nonzero seconds and mixed UTC/zoned anchors belong
   // to the existing advanced editor, which owns their complete rule verbatim.
-  if (preset === "custom" || start[0] !== normalized || start[7] !== "00" || (start[1] && start[8])) return custom
+  if (preset === "custom" || start[0] !== normalized || start[7] !== "00" || (start[1] && start[8])) {
+    return { ...custom, startDate, weekday, time, timeZone }
+  }
   return {
     preset,
     startDate,
-    weekday: preset === "weekly" ? (rule.slice("FREQ=WEEKLY;BYDAY=".length) as AutomationWeekday) : weekday,
+    weekday,
     time,
     timeZone,
     customRule: "",

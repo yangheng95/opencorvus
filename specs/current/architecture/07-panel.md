@@ -2158,6 +2158,8 @@ authored rule in the current advanced editor. Entering advanced mode from
 complete basic fields seeds the editable rule through the same serializer as
 Save. Unedited rules reflect later basic changes on conversion. Saved and
 manually edited advanced text retains its authored value across mode switches.
+For an explicitly opened weekly edit, a saved advanced schedule with one
+weekly rule and one named weekday projects that weekday into the basic field.
 Explicit calendar changes keep the chosen anchor. Weekly review's Friday
 is suggestion data passed through that same weekly field. Suggestion rows use
 their actual frequency, weekday and time through the shared localized timing
