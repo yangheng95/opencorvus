@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [用量周期比较的微小变化](2026-11-24-usage-comparison-small-changes.md)
 - [用量摘要的指标宽度](2026-11-24-usage-summary-metric-width.md)
 - [用量占比的真实端点](2026-11-24-usage-share-endpoints.md)
 - [年度用量热力图区间提示](2026-11-24-usage-heatmap-tooltip-input-priority.md)
