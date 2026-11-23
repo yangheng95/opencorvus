@@ -180,8 +180,6 @@ function FileExplorerContextMenuItem(props: {
 }) {
   return (
     <ContextMenu.Item
-      as="button"
-      type="button"
       class="file-explorer-menu-item"
       data-ui={props.dataUi}
       data-tone={props.tone ?? "neutral"}

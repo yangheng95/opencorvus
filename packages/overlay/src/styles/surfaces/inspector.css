@@ -721,9 +721,7 @@
   font-size: var(--ui-font-caption);
 }
 
-.file-explorer-menu-item:hover:not(:disabled):not([data-disabled]) .file-explorer-menu-item-detail,
-.file-explorer-menu-item[data-highlighted]:not(:disabled):not([data-disabled]) .file-explorer-menu-item-detail,
-.file-explorer-menu-item:focus-visible:not(:disabled):not([data-disabled]) .file-explorer-menu-item-detail {
+.file-explorer-menu-item:not([data-disabled]):is(:hover, [data-highlighted], :focus-visible) .file-explorer-menu-item-detail {
   color: var(--text-soft);
 }
 

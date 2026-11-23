@@ -5236,6 +5236,10 @@ The patched context-menu trigger delivers the native event to its registered
 callback before opening the menu. Explorer uses that callback for tree and
 search rows, so keyboard and pointer menus select the same target. Opening
 the menu for an already selected row retains its full current selection.
+On first native context-menu opening, the menu's existing focus strategy
+places focus on the first enabled item. Activation and dismissal remain
+separate user actions. Explorer actions use the shared menu item's focus
+contract, with disabled items excluded from native tab navigation.
 When another decision opens while a modal Dialog is closing, the shared opener
 resolver follows that closing Dialog's existing return-focus owner. The Content
 element registers a getter for the same owner; it does not store a second focus

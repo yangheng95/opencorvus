@@ -591,6 +591,15 @@ diff --git a/src/context-menu/context-menu-trigger.tsx b/src/context-menu/contex
  
  		// Clearing the long press here because some platforms already support
  		// long press to trigger a `contextmenu` event.
+@@ -106,7 +104,7 @@
+ 			// If the menu is already open, focus the menu itself.
+ 			menuContext.focusContent();
+ 		} else {
+-			menuContext.open(true);
++			menuContext.open("first");
+ 		}
+ 	};
+ 
 diff --git a/dist/chunk/RHVJLHNR.jsx b/dist/chunk/RHVJLHNR.jsx
 --- a/dist/chunk/RHVJLHNR.jsx
 +++ b/dist/chunk/RHVJLHNR.jsx
@@ -607,6 +616,15 @@ diff --git a/dist/chunk/RHVJLHNR.jsx b/dist/chunk/RHVJLHNR.jsx
      clearLongPressTimeout();
      e.preventDefault();
      e.stopPropagation();
+@@ -193,7 +191,7 @@
+     if (menuContext.isOpen()) {
+       menuContext.focusContent();
+     } else {
+-      menuContext.open(true);
++      menuContext.open("first");
+     }
+   };
+   const isTouchOrPen = (e) => e.pointerType === "touch" || e.pointerType === "pen";
 diff --git a/dist/chunk/H367UGHF.js b/dist/chunk/H367UGHF.js
 --- a/dist/chunk/H367UGHF.js
 +++ b/dist/chunk/H367UGHF.js
@@ -623,3 +641,12 @@ diff --git a/dist/chunk/H367UGHF.js b/dist/chunk/H367UGHF.js
      clearLongPressTimeout();
      e.preventDefault();
      e.stopPropagation();
+@@ -141,7 +139,7 @@
+     if (menuContext.isOpen()) {
+       menuContext.focusContent();
+     } else {
+-      menuContext.open(true);
++      menuContext.open("first");
+     }
+   };
+   const isTouchOrPen = (e) => e.pointerType === "touch" || e.pointerType === "pen";
