@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [PDF 阅读区域提供明确的键盘焦点](2026-11-23-pdf-reading-region-keyboard-focus.md)
 - [文件工具栏支持跳行快捷键](2026-11-23-file-workbench-go-to-line-shortcut.md)
 - [折叠日志显示请求路径和状态](2026-11-23-log-http-request-summary.md)
 - [按界面语言显示笔记来源](2026-11-23-memory-note-source-localization.md)

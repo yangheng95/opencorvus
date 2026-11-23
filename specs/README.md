@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [PDF 阅读区域提供明确的键盘焦点](records/2026-11/2026-11-23-pdf-reading-region-keyboard-focus.md)
 - [文件工具栏支持跳行快捷键](records/2026-11/2026-11-23-file-workbench-go-to-line-shortcut.md)
 - [折叠日志显示请求路径和状态](records/2026-11/2026-11-23-log-http-request-summary.md)
 - [按界面语言显示笔记来源](records/2026-11/2026-11-23-memory-note-source-localization.md)

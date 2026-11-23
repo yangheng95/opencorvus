@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [PDF 阅读区域键盘焦点的真实桌面截图](2026-11-23-pdf-reading-region-keyboard-focus/README.md)
 - [文件工具栏跳行快捷键的真实桌面截图](2026-11-23-file-workbench-go-to-line-shortcut/README.md)
 - [折叠请求日志的真实桌面截图](2026-11-23-log-http-request-summary/README.md)
 - [笔记来源本地化的真实桌面截图](2026-11-23-memory-note-source-localization/README.md)
