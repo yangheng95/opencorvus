@@ -132,6 +132,24 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const canOpenRow = (row: WorkLedgerItemRow) => !busyID() && !loading() && !deletionUnconfirmed(row)
   const canBrowseSearchResults = () => Boolean(query()) && rows().some(canOpenRow)
 
+  function archiveSearchOpenActions(): HTMLButtonElement[] {
+    if (!canBrowseSearchResults() || !panelElement) return []
+    return Array.from(panelElement.querySelectorAll<HTMLButtonElement>('button[data-archive-action="open"]:enabled'))
+  }
+
+  function handleArchiveResultKeyDown(event: KeyboardEvent & { currentTarget: HTMLButtonElement }): void {
+    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
+
+    const actions = archiveSearchOpenActions()
+    const current = actions.indexOf(event.currentTarget)
+    if (current < 0) return
+    const next = current + (event.key === "ArrowDown" ? 1 : -1)
+    event.preventDefault()
+    event.stopPropagation()
+    actions[next]?.focus()
+  }
+
   const reportArchiveError = (id: string, title: string, cause: unknown) => {
     reportError({
       id,
@@ -543,9 +561,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         ariaDescribedBy={canBrowseSearchResults() ? "archive-search-keyboard-hint" : undefined}
         onValueChange={setSearch}
         resultFocusTarget={(edge) => {
-          if (!canBrowseSearchResults()) return
-          const targets = panelElement?.querySelectorAll<HTMLButtonElement>('button[data-archive-action="open"]:enabled')
-          return targets?.[edge === "first" ? 0 : targets.length - 1]
+          const actions = archiveSearchOpenActions()
+          return edge === "first" ? actions[0] : actions.at(-1)
         }}
         disabled={!!busyID()}
       />
@@ -626,8 +643,10 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       size="sm"
                       tone="neutral"
                       aria-label={archiveActionText("archive.open_item", row)}
+                      aria-keyshortcuts={query() && canOpenRow(row) ? "ArrowUp ArrowDown" : undefined}
                       data-archive-action="open"
                       disabled={!canOpenRow(row)}
+                      onKeyDown={handleArchiveResultKeyDown}
                       onClick={(event) => void props.onOpenItem(row, event.currentTarget)}
                     >
                       {t("archive.open")}
