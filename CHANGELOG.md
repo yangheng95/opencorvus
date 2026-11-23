@@ -17,7 +17,7 @@
 #### 调整
 
 - 图像预览按当前窗口适应完整图片并显示固有尺寸；PDF 缩放、Markdown 源码与预览切换保留阅读位置。文本比较明确标出纯换行格式变化，不能预览的文件在下载前显示实际字节数。
-- 项目选择、任务卡、设置范围和草稿决定显示足以区分同名项目的位置；记忆笔记保留完整标题与准确的删除目标。改进窄桌面的设置标题、用量图和菜单缩放操作。
+- 项目选择、任务卡、设置范围和草稿决定显示足以区分同名项目的位置；记忆笔记保留完整标题与准确的删除目标。改进窄桌面的设置标题、用量图和菜单缩放操作；高缩放下设置页签独立滚动，搜索与返回保持可见。
 - Shell 阅读视图优先呈现实际命令输出，静默命令明确显示无输出；仍可查看和复制包含退出记录的完整原始回执。
 
 #### 修复
@@ -43,7 +43,7 @@
 #### Changed
 
 - Image previews fit the current window and show intrinsic dimensions. PDF zoom and switching between Markdown source and preview retain the reading position. Text comparisons identify changes limited to line endings, and files without a preview show their actual byte size before download.
-- Project pickers, task cards, Settings scopes and draft decisions show enough of the location to distinguish projects with the same name. Memory notes retain full titles and identify the exact deletion target. Improve narrow desktop Settings headers, usage charts and menu zoom controls.
+- Project pickers, task cards, Settings scopes and draft decisions show enough of the location to distinguish projects with the same name. Memory notes retain full titles and identify the exact deletion target. Improve narrow desktop Settings headers, usage charts and menu zoom controls. At high zoom, Settings tabs scroll independently while Search and Back remain visible.
 - Shell reading views show actual command output first and explicitly identify silent commands. The complete original receipt, including exit information, remains available to view and copy.
 
 #### Fixed
