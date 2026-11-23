@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [用量占比端点的真实桌面截图](2026-11-24-usage-share-endpoints/README.md)
 - [用量热力图区间提示的真实桌面截图](2026-11-24-usage-heatmap-tooltip-input-priority/README.md)
 - [公开服务商目录连接控件顺序的真实桌面截图](2026-11-24-provider-catalog-connection-tab-order/README.md)
 - [模型服务商内联表单的真实桌面截图](2026-11-24-provider-form-focus-handoff/README.md)
