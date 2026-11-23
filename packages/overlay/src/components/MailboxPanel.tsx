@@ -1,5 +1,5 @@
 import { For, Show, batch, createEffect, createMemo, createSignal, createUniqueId, on, onCleanup } from "solid-js"
-import * as Accordion from "@kobalte/core/accordion"
+import * as Collapsible from "@kobalte/core/collapsible"
 import {
   acknowledgeMailboxItem,
   deleteMailboxItem,
@@ -124,14 +124,15 @@ export function MailboxPanel(props: MailboxPanelProps) {
     return issue?.operation === "base" ? issue : undefined
   }
   const searchKeyboardHintID = createUniqueId()
-  const canBrowseSearchResults = () => searchOpen() && currentSearch() !== "" && appStore.connected &&
+  const canBrowseMessages = () => appStore.connected &&
     hasAcceptedMailbox() && !loading() && !baseLoadIssue() && visibleItems().length > 0
-  const searchNavigation = createSearchResultNavigation(() => {
-    if (!canBrowseSearchResults() || !mailboxBody) return []
+  const canBrowseSearchResults = () => searchOpen() && currentSearch() !== "" && canBrowseMessages()
+  const messageNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseMessages() || !mailboxBody) return []
     return Array.from(mailboxBody.querySelectorAll<HTMLButtonElement>(
       "details[open][data-project-directory] button.mailbox-item__main:enabled",
     ))
-  }, { returnToSearch: () => searchInput })
+  }, { returnToSearch: () => canBrowseSearchResults() ? searchInput : undefined })
   const continuationIssue = () => {
     const issue = loadIssue()
     return issue?.operation === "append" ? issue : undefined
@@ -190,18 +191,14 @@ export function MailboxPanel(props: MailboxPanelProps) {
     })
   }
 
-  function setProjectGroupExpandedMessages(group: MailboxProjectGroup, messageIDs: string[]): void {
-    const groupIDs = new Set(group.items.map((item) => item.id))
-    const previous = expandedMessageIDs()
-    const newlyExpandedUnreadItems = group.items.filter(
-      (item) => !item.readAt && messageIDs.includes(item.id) && !previous.has(item.id),
-    )
-    setExpandedMessageIDs((current) => {
-      const next = new Set([...current].filter((messageID) => !groupIDs.has(messageID)))
-      for (const messageID of messageIDs) next.add(messageID)
-      return next
-    })
-    for (const item of newlyExpandedUnreadItems) void applyAction(item, "read")
+  function setMessageExpanded(item: MailboxItem, expanded: boolean): void {
+    const current = expandedMessageIDs()
+    if (current.has(item.id) === expanded) return
+    const next = new Set(current)
+    if (expanded) next.add(item.id)
+    else next.delete(item.id)
+    setExpandedMessageIDs(next)
+    if (expanded && !item.readAt) void applyAction(item, "read")
   }
 
   function openSearch(): void {
@@ -585,7 +582,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
                 placeholder={t("mailbox.search")}
                 inputRef={(element) => (searchInput = element)}
                 ariaDescribedBy={canBrowseSearchResults() ? searchKeyboardHintID : undefined}
-                resultFocusTarget={searchNavigation.resultFocusTarget}
+                resultFocusTarget={canBrowseSearchResults() ? messageNavigation.resultFocusTarget : undefined}
                 onValueChange={setQuery}
                 onKeyDown={(event) => {
                   if (event.key !== "Escape") return
@@ -752,24 +749,20 @@ export function MailboxPanel(props: MailboxPanelProps) {
                         <span class="mailbox-project-group__count">{messageIDs().length}</span>
                       </Disclosure.Trigger>
                       <Disclosure.Content class="mailbox-project-group__content">
-                        <Accordion.Root
-                          class="mailbox-list"
-                          role="list"
-                          value={[...expandedMessageIDs()].filter((messageID) => messageIDs().includes(messageID))}
-                          multiple
-                          collapsible
-                          onChange={(expandedIDs) => setProjectGroupExpandedMessages(group(), expandedIDs)}
-                        >
+                        <div class="mailbox-list" role="list">
                           <For each={messageIDs()}>
                             {(messageID) => {
                               const item = createMemo(
                                 () => group().items.find((candidate) => candidate.id === messageID)!,
                               )
+                              const expanded = () => expandedMessageIDs().has(messageID)
+                              const triggerID = createUniqueId()
                               return (
-                                <Accordion.Item
+                                <Collapsible.Root
                                   as="article"
                                   class="mailbox-item"
-                                  value={item().id}
+                                  open={expanded()}
+                                  onOpenChange={(open) => setMessageExpanded(item(), open)}
                                   data-unread={String(!item().readAt)}
                                   data-attention={String(item().attention)}
                                   data-category={item().category}
@@ -792,18 +785,21 @@ export function MailboxPanel(props: MailboxPanelProps) {
                                       <span class="mailbox-item__unread" aria-label={t("mailbox.unread")} />
                                     </Show>
                                   </div>
-                                  <Accordion.Header class="mailbox-item__heading">
-                                    <Accordion.Trigger
+                                  <h3 class="mailbox-item__heading">
+                                    <Collapsible.Trigger
                                       as={Button}
+                                      id={triggerID}
                                       type="button"
                                       variant="ghost"
                                       size="md"
                                       tone="neutral"
                                       class="mailbox-item__main"
-                                      aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown Escape" : undefined}
-                                      onKeyDown={searchNavigation.handleResultKeyDown}
+                                      aria-keyshortcuts={canBrowseMessages()
+                                        ? canBrowseSearchResults() ? "ArrowUp ArrowDown Escape" : "ArrowUp ArrowDown"
+                                        : undefined}
+                                      onKeyDown={messageNavigation.handleResultKeyDown}
                                       aria-label={
-                                        expandedMessageIDs().has(item().id)
+                                        expanded()
                                           ? t("mailbox.collapse_message", { subject: item().subject })
                                           : t("mailbox.expand_message", { subject: item().subject })
                                       }
@@ -819,7 +815,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
                                         </time>
                                         <Icon
                                           class="mailbox-item__chevron"
-                                          name={expandedMessageIDs().has(item().id) ? "chevron-down" : "chevron"}
+                                          name={expanded() ? "chevron-down" : "chevron"}
                                           size="compact"
                                         />
                                       </div>
@@ -846,8 +842,8 @@ export function MailboxPanel(props: MailboxPanelProps) {
                                           </span>
                                         </Show>
                                       </div>
-                                    </Accordion.Trigger>
-                                  </Accordion.Header>
+                                    </Collapsible.Trigger>
+                                  </h3>
                                   <div class="mailbox-item__actions">
                                     <Button
                                       type="button"
@@ -880,14 +876,14 @@ export function MailboxPanel(props: MailboxPanelProps) {
                                       <Icon name="delete" />
                                     </Button>
                                   </div>
-                                  <Accordion.Content class="mailbox-item__content">
+                                  <Collapsible.Content class="mailbox-item__content" role="region" aria-labelledby={triggerID}>
                                     <div class="mailbox-item__body mailbox-item__body--expanded">{item().body}</div>
-                                  </Accordion.Content>
-                                </Accordion.Item>
+                                  </Collapsible.Content>
+                                </Collapsible.Root>
                               )
                             }}
                           </For>
-                        </Accordion.Root>
+                        </div>
                       </Disclosure.Content>
                     </Disclosure.Root>
                   )

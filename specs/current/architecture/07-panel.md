@@ -5021,9 +5021,9 @@ separate from host delivery bookkeeping so a deferred native notification can
 retry without reopening the sidebar. The mark-all-read action appends one
 canonical read acknowledgement for every active unread registered-project item in one
 transaction; it is not limited by the current page or search. Each Mailbox row
-uses the canonical Kobalte
-Accordion to reveal its complete message body inline while preserving the
-compact summary when collapsed. Expanding an unread row appends the same
+uses an independent Kobalte Collapsible to reveal its complete message body
+inline while preserving the compact summary when collapsed. A click, Enter, or
+Space on the message button changes that row's expansion. Expanding an unread row appends the same
 canonical `read` acknowledgement used by Open Task; the blue avatar dot and
 strong subject therefore disappear after the refreshed backend projection
 confirms that read fact. A yellow leading highlight projects the independent
@@ -5074,7 +5074,7 @@ and CSS only hides the inactive body. The single Mailbox scroll element
 therefore retains its native `scrollTop` when the operator leaves and re-enters;
 there is no local-storage or parallel scroll-position model. Each project
 directory is a shared native Disclosure, open by default and independently
-collapsible around its nested message Accordion. Directory and message ID keys
+collapsible around its list of message disclosures. Directory and message ID keys
 preserve Disclosure state, item expansion, focus, and DOM identity across
 same-scope backend refreshes.
 
@@ -5095,9 +5095,10 @@ disclosure and scroll context. Its footer shows the original diagnostic and
 retries that cursor in the current query. A revalidation with the same cursor
 keeps the continuation diagnostic; a new cursor replaces that retry boundary.
 Successful continuation gives focus to the first newly loaded message or its
-collapsed group only while the continuation control still owns focus. In a
-settled search, Down and Up browse the matching message buttons in visual
-order across open project groups. Enter uses the usual message disclosure.
+collapsed group only while the continuation control still owns focus. Down and
+Up move focus between message buttons in visual order across open project groups
+in both the inbox and settled search results. Expansion and the separate
+message selection remain under their explicit controls.
 Escape on a matching message focuses the original query and preserves expansion
 and selection. Escape in the search field closes the search. Search
 results never substitute for the native notification
