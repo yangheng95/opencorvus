@@ -22,7 +22,7 @@ import { Icon } from "./ui/Icon"
 import { ComboboxControl } from "./ui/ComboboxControl"
 import { matchesSearchTerms } from "../services/text-search"
 import { useNowTick } from "../services/clock"
-import { SearchField } from "./ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
 import { appStore } from "../store/app"
 import { MissionDraftEditDialog, type MissionDraftEditTarget } from "./MissionDraftEditDialog"
@@ -164,6 +164,7 @@ function MissionBoardCard(props: {
           size="md"
           tone="neutral"
           class="mission-board-card__open"
+          data-ui="mission-board-card-open"
           id={openLabelID}
           ref={(element) => { openButton = element }}
           title={props.mission.title}
@@ -410,6 +411,13 @@ export function MissionBoard(props: MissionBoardProps) {
       ])
     })
   })
+  const hasAcceptedBoard = () => appStore.connected && missionBoardStore.accepted
+  const canBrowseSearchResults = () =>
+    hasAcceptedBoard() && Boolean(search().trim()) && visibleMissions().length > 0 && !pendingAction()
+  const searchNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseSearchResults() || !lanesElement) return []
+    return Array.from(lanesElement.querySelectorAll<HTMLButtonElement>('button[data-ui="mission-board-card-open"]:enabled'))
+  })
   // Moving an existing card during list reconciliation can blur its focused control.
   createComputed(
     on(visibleMissions, () => {
@@ -578,7 +586,9 @@ export function MissionBoard(props: MissionBoardProps) {
           value={search()}
           placeholder={t("mission_board.search_placeholder")}
           ariaDescribedBy={searchHintID}
+          ariaKeyShortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
           onValueChange={setSearch}
+          resultFocusTarget={searchNavigation.resultFocusTarget}
         />
         <ComboboxControl<ProjectOption>
           presentation="popup"
@@ -634,7 +644,10 @@ export function MissionBoard(props: MissionBoardProps) {
         >
           <Icon name={missionBoardStore.loading ? "loading" : "refresh"} size="medium" />
         </Button>
-        <p class="mission-board__search-hint" id={searchHintID}>{t("mission_board.search_hint")}</p>
+        <p class="mission-board__search-hint" id={searchHintID}>
+          {t("mission_board.search_hint")}
+          <Show when={canBrowseSearchResults()}>{" "}{t("settings.search_keyboard_hint")}</Show>
+        </p>
         <Show when={projectDirectory()}>
           {(directory) => (
             <div class="mission-board__project-context" id={projectContextID}>
@@ -728,7 +741,7 @@ export function MissionBoard(props: MissionBoardProps) {
       </Show>
 
       <Show
-        when={appStore.connected && missionBoardStore.accepted}
+        when={hasAcceptedBoard()}
         fallback={
           <Show when={!showReadIssue()}>
             <div class="mission-board__state" role="status" aria-live="polite">
@@ -799,7 +812,12 @@ export function MissionBoard(props: MissionBoardProps) {
               </For>
             </nav>
           </Show>
-          <div ref={lanesElement} class="mission-board__lanes" data-ui="mission-board-lanes">
+          <div
+            ref={lanesElement}
+            class="mission-board__lanes"
+            data-ui="mission-board-lanes"
+            onKeyDown={searchNavigation.handleResultKeyDown}
+          >
             <For each={MISSION_BOARD_LANES}>
               {(lane) => (
                 <section

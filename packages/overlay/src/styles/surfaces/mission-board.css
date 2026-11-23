@@ -308,6 +308,12 @@ body {
   white-space: normal;
 }
 
+.mission-board-card__open.oc-button:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--oc-border-width));
+  box-shadow: none;
+}
+
 .mission-board-card__identity,
 .mission-board-card__project,
 .mission-board-card__progress-copy,
