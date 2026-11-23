@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [收件箱消息的真实桌面键盘复现](2026-11-24-mailbox-explicit-message-disclosure/README.md)
 - [收件箱搜索键盘导航的真实桌面截图](2026-11-24-mailbox-search-result-navigation/README.md)
 - [设置匹配标签返回搜索的真实桌面截图](2026-11-24-settings-tab-return-to-search/README.md)
 - [新建多步任务专家团搜索的真实桌面截图](2026-11-24-mission-squad-return-to-search/README.md)
