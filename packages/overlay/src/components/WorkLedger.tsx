@@ -243,6 +243,12 @@ function projectGroupControl(region: HTMLElement | null | undefined, directory: 
   return group?.querySelector<HTMLElement>('[data-ui="project-group-select"]') ?? null
 }
 
+function workLedgerRowControl(region: HTMLElement | null | undefined, key: string): HTMLElement | null {
+  const row = Array.from(region?.querySelectorAll<HTMLElement>('[data-ui="work-ledger-row"]') ?? [])
+    .find((element) => element.dataset.rowKey === key)
+  return row?.querySelector<HTMLElement>(".work-row-main") ?? null
+}
+
 function focusLedgerControl(target: HTMLElement | null): boolean {
   if (
     !target?.isConnected ||
@@ -959,6 +965,7 @@ function WorkLedgerProjectGroupView(props: {
       class="work-ledger-rows"
       revealItem={props.revealItem}
       onRevealReady={props.onRevealReady}
+      onExpansionFocus={(row, list) => focusLedgerControl(workLedgerRowControl(list, rowKey(row)))}
     >
       {(row) => (
         <WorkLedgerRowView
@@ -1387,15 +1394,9 @@ export function WorkLedger(props: WorkLedgerProps) {
     const region = projectsScrollRef?.querySelector<HTMLElement>(
       request.target.pinned ? '[data-ui="work-ledger-pinned-groups"]' : '[data-ui="ledger-list"]',
     )
-    let target: HTMLElement | null = null
-    if (request.target.rowKey) {
-      const row = Array.from(region?.querySelectorAll<HTMLElement>('[data-ui="work-ledger-row"]') ?? []).find(
-        (element) => element.dataset.rowKey === request.target.rowKey,
-      )
-      target = row?.querySelector<HTMLElement>(".work-row-main") ?? null
-    } else {
-      target = projectGroupControl(region, request.target.directory)
-    }
+    const target = request.target.rowKey
+      ? workLedgerRowControl(region, request.target.rowKey)
+      : projectGroupControl(region, request.target.directory)
     if (focusLedgerControl(target)) setLocateRequest(null)
   }
 

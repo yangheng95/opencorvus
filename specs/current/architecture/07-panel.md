@@ -4830,6 +4830,11 @@ remains presentation-owned: selecting a descendant neither collapses nor
 expands the Project, while an already visible selected Mission child keeps its
 Mission drawer open after pointer and keyboard focus leave.
 
+Keyboard or assistive activation of a Work Ledger row-list expansion focuses
+the first newly visible work button in that same list. Project, Pinned and
+combined views resolve the stable row identity within their own disclosure.
+The shared progressive list respects a more recent focus or a changed list.
+
 The Projects toolbar provides an explicit localized `Locate current work`
 action. It derives the target from the current ledger projection and the same
 selection predicate, opens only its required Project and progressive-list

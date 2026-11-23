@@ -13,7 +13,7 @@ export interface ProgressiveListProps<T> {
   revealItem?: T
   onRevealReady?: () => void
   /** Optional owner for focus after keyboard or assistive activation of the disclosure. */
-  onExpansionFocus?: (firstRevealed: T) => void
+  onExpansionFocus?: (firstRevealed: T, list: HTMLElement) => void
 }
 
 export function ProgressiveList<T>(props: ProgressiveListProps<T>): JSX.Element {
@@ -44,17 +44,18 @@ export function ProgressiveList<T>(props: ProgressiveListProps<T>): JSX.Element 
     }
     if (!hasOverflow()) return
     const trigger = event.currentTarget
+    const list = trigger.parentElement
     const shouldTransferFocus = event.detail === 0 && trigger.ownerDocument.activeElement === trigger
     const firstRevealed = props.items[visibleCount()]
     setExpanded(true)
-    if (!shouldTransferFocus || !props.onExpansionFocus) return
+    if (!list || !shouldTransferFocus || !props.onExpansionFocus) return
     queueMicrotask(() => {
       if (
-        !disposed && expanded() && trigger.isConnected &&
+        !disposed && expanded() && trigger.isConnected && trigger.parentElement === list &&
         trigger.ownerDocument.activeElement === trigger &&
         props.items[visibleCount()] === firstRevealed
       ) {
-        props.onExpansionFocus?.(firstRevealed)
+        props.onExpansionFocus?.(firstRevealed, list)
       }
     })
   }
