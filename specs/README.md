@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [用量摘要的指标宽度](records/2026-11/2026-11-24-usage-summary-metric-width.md)
 - [用量占比的真实端点](records/2026-11/2026-11-24-usage-share-endpoints.md)
 - [年度用量热力图区间提示](records/2026-11/2026-11-24-usage-heatmap-tooltip-input-priority.md)
 - [公开服务商目录展开后的连接控件顺序](records/2026-11/2026-11-24-provider-catalog-connection-tab-order.md)
