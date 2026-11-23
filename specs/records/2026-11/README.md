@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [在对话能力设置中搜索可用技能](2026-11-23-conversation-capability-skill-search.md)
 - [编辑器快捷键复用当前跳转到行输入](2026-11-23-editor-go-to-line-single-prompt.md)
 - [全图预览按当前窗口适应图像](2026-11-23-image-preview-fit-current-viewport.md)
 - [多步任务技能搜索支持方向键进入结果](2026-11-23-mission-skill-search-keyboard-entry.md)
