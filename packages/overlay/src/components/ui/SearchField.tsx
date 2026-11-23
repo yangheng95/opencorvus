@@ -34,7 +34,10 @@ export interface SearchFieldProps {
 
 export function createSearchResultNavigation(
   readActions: () => readonly HTMLElement[],
-  { tabList = false }: { tabList?: boolean } = {},
+  { tabList = false, returnToSearch }: {
+    tabList?: boolean
+    returnToSearch?: () => HTMLInputElement | undefined
+  } = {},
 ) {
   function resultFocusTarget(edge: "first" | "last"): HTMLElement | undefined {
     const actions = readActions()
@@ -44,17 +47,24 @@ export function createSearchResultNavigation(
   function handleResultKeyDown(event: KeyboardEvent): void {
     if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
     const key = event.key
-    if (key !== "ArrowDown" && key !== "ArrowUp" && !(tabList && (key === "Home" || key === "End"))) return
+    const search = key === "Escape" ? returnToSearch?.() : undefined
+    if (search && (!search.isConnected || search.disabled || search.readOnly)) return
+    if (!search && key !== "ArrowDown" && key !== "ArrowUp" && !(tabList && (key === "Home" || key === "End"))) return
 
     const actions = readActions()
     const current = actions.findIndex((action) => action === event.target)
     if (current < 0) return
+    event.preventDefault()
+    event.stopPropagation()
+    if (search) {
+      search.focus()
+      return
+    }
+
     let next = current + (key === "ArrowDown" ? 1 : -1)
     if (key === "Home") next = 0
     else if (key === "End") next = actions.length - 1
     else if (tabList) next = (next + actions.length) % actions.length
-    event.preventDefault()
-    event.stopPropagation()
     actions[next]?.focus()
   }
 
