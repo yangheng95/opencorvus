@@ -3912,6 +3912,10 @@ source label. These are read-only parts of the existing option, without nested
 links or another query, identity cache or label policy. Ordinary message previews,
 one result per Message, matching order and the original source-location action
 remain owned by the existing search and navigation paths.
+Find results retain both the validated Message role and original author. User
+inputs use the conversation bubble's localized author label, and assistant
+results display their exact recorded author. The same label supplies the result
+text for keyboard announcements.
 
 ## Shared visual primitives
 

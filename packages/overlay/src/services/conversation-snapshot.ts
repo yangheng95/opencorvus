@@ -85,7 +85,8 @@ function readSnapshotMessages(value: unknown, sessionID: string | null) {
     ids.add(id)
     if (sessionID !== null && info.sessionID !== sessionID) throw new ConversationExportError("CONVERSATION_EXPORT_IDENTITY_MISMATCH", `${field}.info.sessionID`)
     text(info.sessionID, `${field}.info.sessionID`)
-    if (info.role !== "user" && info.role !== "assistant") return invalid(`${field}.info.role`)
+    const role = info.role
+    if (role !== "user" && role !== "assistant") return invalid(`${field}.info.role`)
     const author = text(info.author, `${field}.info.author`)
     const created = timestamp(record(info.time, `${field}.info.time`).created, `${field}.info.time.created`)
     if (!Array.isArray(original.parts)) return invalid(`${field}.parts`)
@@ -112,6 +113,6 @@ function readSnapshotMessages(value: unknown, sessionID: string | null) {
       }
       return part
     })
-    return { original, info, id, author, created, parts }
+    return { original, info, id, role, author, created, parts }
   })
 }

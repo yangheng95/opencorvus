@@ -6,36 +6,41 @@ import { conversationSourceIdentity, conversationSourceLocation, conversationSou
 
 const time = Date.UTC(2026, 9, 28, 6)
 const session = { id: "ses_search", title: "搜索", time: { created: time, updated: time } }
-const message = (id: string, body: string, author = "user") => ({
-  info: { id, sessionID: session.id, role: "user", author, time: { created: time } },
+const message = (id: string, body: string, author = "user", role: "user" | "assistant" = "user") => ({
+  info: { id, sessionID: session.id, role, author, time: { created: time } },
   parts: [{ type: "text", text: body }],
 })
 
-test("complete snapshot search returns actual message identities, authors and Unicode text in producer order", () => {
-  const snapshot = readConversationSnapshot({ session, messages: [message("m1", "中文🙂 Alpha 引用"), message("m2", "ALPHA 原始输出", "work")] }, session.id)
+test("complete snapshot search returns actual message roles, identities, authors and Unicode text in producer order", () => {
+  const snapshot = readConversationSnapshot({ session, messages: [
+    message("m1", "中文🙂 Alpha 引用"),
+    message("m2", "Alpha 调整", "goal-controller"),
+    message("m3", "ALPHA 原始输出", "work", "assistant"),
+  ] }, session.id)
   expect(findConversationMessages(snapshot, " alpha ")).toEqual([
-    { id: "m1", author: "user", created: time, preview: "中文🙂 Alpha 引用" },
-    { id: "m2", author: "work", created: time, preview: "ALPHA 原始输出" },
+    { id: "m1", role: "user", author: "user", created: time, preview: "中文🙂 Alpha 引用" },
+    { id: "m2", role: "user", author: "goal-controller", created: time, preview: "Alpha 调整" },
+    { id: "m3", role: "assistant", author: "work", created: time, preview: "ALPHA 原始输出" },
   ])
 })
 
 test("a match beyond the initial history window retains its exact source message", () => {
   const messages = Array.from({ length: 121 }, (_, i) => message(`m${i}`, i === 120 ? "最后一页 唯一目标🙂" : `原消息 ${i}`))
   const snapshot = readConversationSnapshot({ session, messages }, session.id)
-  expect(findConversationMessages(snapshot, "唯一目标")).toEqual([{ id: "m120", author: "user", created: time, preview: "最后一页 唯一目标🙂" }])
+  expect(findConversationMessages(snapshot, "唯一目标")).toEqual([{ id: "m120", role: "user", author: "user", created: time, preview: "最后一页 唯一目标🙂" }])
 })
 
 test("structured stop reason is searchable as its original error text", () => {
   const original = message("m_stop", "已输出部分", "chat")
   const info = { ...original.info, role: "assistant", error: { name: "MessageAbortedError", data: { message: "session aborted" } } }
   expect(findConversationMessages(readConversationSnapshot({ session, messages: [{ ...original, info }] }, session.id), "aborted"))
-    .toEqual([{ id: "m_stop", author: "chat", created: time, preview: "已输出部分 session aborted" }])
+    .toEqual([{ id: "m_stop", role: "assistant", author: "chat", created: time, preview: "已输出部分 session aborted" }])
 })
 
 test("case folding before a Unicode match keeps readable context intact", () => {
   const text = "İ 中文🙂 needle 后续"
   expect(findConversationMessages(readConversationSnapshot({ session, messages: [message("m_unicode", text)] }, session.id), "needle"))
-    .toEqual([{ id: "m_unicode", author: "user", created: time, preview: text }])
+    .toEqual([{ id: "m_unicode", role: "user", author: "user", created: time, preview: text }])
 })
 
 test("saved file-source locations and excerpts return their original message and source identities", () => {
@@ -78,7 +83,7 @@ test("a source result preview belongs to its matching saved source", () => {
     { type: "source-file", sourceId: "source_next", path: "src/invoice.py", snippet: "def sum_due(rows):" },
   ] }
   expect(findConversationMessages(readConversationSnapshot({ session, messages: [original] }, session.id), "proposal documents"))
-    .toEqual([{ id: "m_neighbors", author: "user", created: time, sourceId: "source_first",
+    .toEqual([{ id: "m_neighbors", role: "user", author: "user", created: time, sourceId: "source_first",
       preview: "İ 中文🙂 https://example.test/first Proposal Documents" }])
 })
 
@@ -90,11 +95,11 @@ test("case-folded source offsets retain the matching source across Unicode expan
   const original = { ...message("m_expansions", ""), parts: sources }
   const snapshot = readConversationSnapshot({ session, messages: [original] }, session.id)
   expect(findConversationMessages(snapshot, "needle")).toEqual([
-    { id: "m_expansions", author: "user", created: time, sourceId: "source_expanded",
+    { id: "m_expansions", role: "user", author: "user", created: time, sourceId: "source_expanded",
       preview: "İ".repeat(12) + " https://example.test/first needle" },
   ])
   expect(findConversationMessages(snapshot, "second target")).toEqual([
-    { id: "m_expansions", author: "user", created: time, sourceId: "source_following", preview: "report.txt second target" },
+    { id: "m_expansions", role: "user", author: "user", created: time, sourceId: "source_following", preview: "report.txt second target" },
   ])
 })
 

@@ -3,7 +3,10 @@ import { assistantMessageFailure } from "../utils/message-part"
 import type { ConversationSearchSnapshot } from "./conversation-snapshot"
 import { conversationSourceLocation, isConversationSourcePart } from "../utils/conversation-source"
 
-export type ConversationSearchHit = { id: string; author: string; created: number; preview: string; sourceId?: string }
+export type ConversationSearchHit = Pick<ConversationSearchSnapshot["messages"][number], "id" | "role" | "author" | "created"> & {
+  preview: string
+  sourceId?: string
+}
 
 /** Search the complete captured snapshot in producer order, independently of mounted cards. */
 export function findConversationMessages(snapshot: ConversationSearchSnapshot, query: string): ConversationSearchHit[] {
@@ -36,7 +39,7 @@ export function findConversationMessages(snapshot: ConversationSearchSnapshot, q
     let folded = 0, position = 0
     while (position < points.length && folded < previewIndex) folded += points[position++].toLowerCase().length
     const start = Math.max(0, position - 50), end = Math.min(points.length, position + Array.from(needle).length + 100)
-    return [{ id: message.id, author: message.author, created: message.created,
+    return [{ id: message.id, role: message.role, author: message.author, created: message.created,
       preview: `${start ? "…" : ""}${points.slice(start, end).join("").replace(/\s+/g, " ")}${end < points.length ? "…" : ""}`,
       ...(sourceId ? { sourceId } : {}), }]
   })

@@ -11,7 +11,7 @@ import {
   visibleChildIDsForCard,
 } from "../utils/card-tree"
 import { bubbleAlign } from "../utils/chat-bubble"
-import { agentIdentityLabel, normalizeAgentRole, workerSteerTargetSessionID } from "../utils/message"
+import { agentIdentityLabel, normalizeAgentRole, userMessageAuthorLabel, workerSteerTargetSessionID } from "../utils/message"
 import { stageAccent } from "../utils/card-color"
 import { sendOperatorSteer, type OperatorSteerResult } from "../services/task"
 import { t } from "../utils/i18n"
@@ -41,9 +41,9 @@ function ChatBubbleIdentity(props: { node: CardNode; compact?: boolean; hideDura
   const role = () => normalizeAgentRole(props.node.role || props.node.stage || "")
   const participant = () => messageParticipant(props.node)
   const identityLabel = () =>
-    participant() === "goal-controller"
-      ? t("continuous_goal.controller")
-      : participant() || agentIdentityLabel(props.node.agentID, role())
+    role() === "user"
+      ? userMessageAuthorLabel(props.node.author)
+      : agentIdentityLabel(props.node.agentID, role())
   const status = () => props.node.status || "idle"
   const hasErrorReason = () => status() === "error" && !!String(props.node.errorReason || "").trim()
   return (

@@ -16,6 +16,7 @@ import { isSubagentActivityRecord, subagentProgressCardID } from "../utils/subag
 import { setCardExpanded, setConversationDisclosureExpanded } from "../store/conversation-ui"
 import { parentIDChainForCard } from "../utils/card-tree"
 import { getLocale, t } from "../utils/i18n"
+import { userMessageAuthorLabel } from "../utils/message"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { conversationSourceExcerptKey, isConversationSourcePart } from "../utils/conversation-source"
 
@@ -71,9 +72,12 @@ export function ConversationSearchDialog(props: {
       isConversationSourcePart(part) && part.sourceId === hit.sourceId)
     return isConversationSourcePart(part) ? part : undefined
   }
+  const hitAuthorLabel = (hit: ConversationSearchHit) =>
+    hit.role === "user" ? userMessageAuthorLabel(hit.author) : hit.author
   const hitLabel = (hit: ConversationSearchHit) => {
     const source = hitSource(hit)
-    return source ? `${sourceLabel(source)} · ${hit.preview}` : hit.preview
+    const author = hitAuthorLabel(hit)
+    return source ? `${author} · ${sourceLabel(source)} · ${hit.preview}` : `${author} · ${hit.preview}`
   }
 
   async function load(): Promise<void> {
@@ -183,7 +187,7 @@ export function ConversationSearchDialog(props: {
       }}
       onChange={(hit) => void locate(hit)} ariaLabel={t("chat.search_placeholder")} placeholder={t("chat.search_placeholder")}
       renderOptionLabel={(hit) => <span class="conversation-search-hit">
-        <span class="conversation-search-hit__meta"><strong>{hit.author}</strong><time>{date().format(hit.created)}</time></span>
+        <span class="conversation-search-hit__meta"><strong>{hitAuthorLabel(hit)}</strong><time>{date().format(hit.created)}</time></span>
         <Show when={hitSource(hit)}>{(source) => <SourceSearchContext source={source()} />}</Show>
         <span>{hit.preview}</span>
       </span>}

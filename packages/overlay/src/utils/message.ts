@@ -174,6 +174,12 @@ export function roleLabel(role: string): string {
   return t("chat.role.assistant")
 }
 
+export function userMessageAuthorLabel(author: string | undefined): string {
+  if (!author || author === "user") return roleLabel("user")
+  if (author === "goal-controller") return t("continuous_goal.controller")
+  return author
+}
+
 /** Preserve the exact runtime identity in visible non-user message headers. */
 export function agentIdentityLabel(agentID: string | undefined, role: AgentRole): string {
   if (role === "user" || role === "system") return roleLabel(role)
