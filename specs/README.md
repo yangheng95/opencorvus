@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [键盘展开工作侧栏后聚焦第一条新显示的工作](records/2026-11/2026-11-24-work-ledger-expanded-row-focus.md)
 - [展开收件箱消息时显示完整标题](records/2026-11/2026-11-24-mailbox-expanded-subject.md)
 - [收件箱键盘浏览时保留未读状态](records/2026-11/2026-11-24-mailbox-explicit-message-disclosure.md)
 - [用键盘浏览收件箱搜索结果并返回查询](records/2026-11/2026-11-24-mailbox-search-result-navigation.md)
