@@ -2834,7 +2834,7 @@ function OverlayRoot() {
           onCreateWithAI={createMissionBoardWithAI}
           onDispatchMission={dispatchMissionBoardDraft}
           onEditMissionDraft={async (input) => {
-            const authority = captureApiAuthority()
+            const authority = input.authority ?? captureApiAuthority()
             await editMissionDraft({ ...input, authority })
             assertApiAuthorityCurrent(authority)
             refreshWorkLedgerViews({ sessionID: input.sessionID })

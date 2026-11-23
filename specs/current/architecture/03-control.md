@@ -268,7 +268,8 @@ tombstone returns 410. An omitted request ID denotes a separate save. No
 Message or execution occurrence is created by saving a draft.
 
 `mission.editDraft` updates only an existing pending operator text. The strict
-request carries the desired `request` and its opening `expectedRequest`. The
+request carries the desired `request` and the exact `expectedRequest` from
+opening or explicitly reviewing the saved draft. The
 existing immediate metadata transaction rereads and validates exact Session,
 Mission, Project and directory ownership before comparing the current text.
 Archived Missions require restoration before editing. Missing, changed and
@@ -279,6 +280,10 @@ creates no Message or execution occurrence, and cannot revive a consumed draft.
 After an uncertain save receipt, the editor reads the exact original Session
 in its Project. A matching pending request completes the save feedback.
 Explicit rejections and unconfirmed results retain the editor's input.
+After a changed-draft rejection, review reads the same exact Session and
+requires its currently editable pending request. Explicitly continuing from
+that review supplies the comparison text for the next manual save. The save
+still performs the full transaction checks against any intervening change.
 
 `mission.dispatch` binds one pending operator draft to the deterministic
 Session/source/request Message. A replay reads that Message's accepted text

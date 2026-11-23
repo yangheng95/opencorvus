@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
 import { ApiError, configure } from "../src/services/api"
-import { editMissionDraft, MissionDraftEditUnconfirmedError } from "../src/services/mission"
+import { editMissionDraft, loadEditableMissionDraft, MissionDraftEditUnconfirmedError } from "../src/services/mission"
 
 const target = {
   missionID: "draft-owned",
@@ -95,4 +95,10 @@ test("a definitive draft edit conflict preserves the server contract", async () 
   const error = await editMissionDraft(target).catch((cause) => cause)
   expect(error).toBeInstanceOf(ApiError)
   expect(error).toMatchObject({ status: 409, requestID: "draft-edit", body: conflict })
+})
+
+test("draft review reads the exact saved request for the selected Mission session and directory", async () => {
+  pendingPromptText = "Another editor updated the request.\n记录原交接内容。"
+  expect(await loadEditableMissionDraft(target)).toBe(pendingPromptText)
+  expect(operations[0]).toEqual({ method: "GET", path: "/work-ledger/selection/session/ses_owned", directory: target.directory })
 })

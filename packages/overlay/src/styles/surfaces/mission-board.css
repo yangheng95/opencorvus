@@ -675,6 +675,17 @@ body {
   color: var(--text-soft);
 }
 
+.mission-draft-edit__comparison {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--ui-gap-sm);
+}
+
+.mission-draft-edit__comparison > .oc-button {
+  align-self: flex-start;
+}
+
 .mission-create-dialog__breadcrumb {
   display: flex;
   min-width: 0;

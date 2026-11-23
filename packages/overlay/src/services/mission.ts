@@ -177,7 +177,9 @@ export interface MissionActionTarget {
   directory: string
 }
 
-export type MissionDraftEditInput = MissionEditDraftData["body"] & MissionActionTarget & { sessionID: string }
+type MissionDraftTarget = MissionActionTarget & { sessionID: string }
+
+export type MissionDraftEditInput = MissionEditDraftData["body"] & MissionDraftTarget
 
 export class MissionDraftEditUnconfirmedError extends AggregateError {
   override readonly name = "MissionDraftEditUnconfirmedError"
@@ -354,6 +356,28 @@ export async function dispatchMission(
   )
 }
 
+async function readMissionDraft(target: MissionDraftTarget & { signal?: AbortSignal }) {
+  const missionID = target.missionID.trim()
+  const sessionID = target.sessionID.trim()
+  const directory = target.directory.trim()
+  const row = await loadWorkLedgerSelection({
+    kind: "session", id: sessionID, directory, authority: target.authority ?? captureApiAuthority(), signal: target.signal,
+  })
+  if (
+    row.kind !== "mission" || row.missionID !== missionID || row.sessionID !== sessionID ||
+    projectDirectoryKey(row.directory) !== projectDirectoryKey(directory)
+  ) throw new Error("The draft check returned a different Mission identity.")
+  return row
+}
+
+export async function loadEditableMissionDraft(target: MissionDraftTarget & { signal?: AbortSignal }): Promise<string> {
+  const row = await readMissionDraft(target)
+  if (row.archived !== undefined || !row.pendingPromptText) {
+    throw new Error("The selected Mission no longer has an editable draft.")
+  }
+  return row.pendingPromptText
+}
+
 export async function editMissionDraft(input: MissionDraftEditInput): Promise<void> {
   const request = input.request.trim()
   const sessionID = input.sessionID.trim()
@@ -382,11 +406,7 @@ export async function editMissionDraft(input: MissionDraftEditInput): Promise<vo
       ) throw new Error("The Mission draft receipt does not confirm the selected request.")
     },
     verify: async () => {
-      const row = await loadWorkLedgerSelection({ kind: "session", id: sessionID, directory, authority })
-      if (
-        row.kind !== "mission" || row.missionID !== missionID || row.sessionID !== sessionID ||
-        projectDirectoryKey(row.directory) !== directoryKey
-      ) throw new Error("The draft check returned a different Mission identity.")
+      const row = await readMissionDraft({ missionID, sessionID, directory, authority })
       if (row.pendingPromptText !== request) throw new Error("The current Mission draft does not contain the submitted request.")
     },
     UnconfirmedError: MissionDraftEditUnconfirmedError,

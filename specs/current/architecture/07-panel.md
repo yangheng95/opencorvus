@@ -1985,9 +1985,12 @@ Mission creation and draft editing retain authored text when a close is requeste
 The existing dialog shows an inline unsaved-input choice; continuing to edit or
 pressing Escape again returns to the mounted request field, while explicit
 discard performs the original exit. Creation's install-more navigation uses the
-same exit intent and captured Project directory. Editing compares against its
-opened target's exact request snapshot. Creation's current mode, Project, pillar
-and squad selection retire any pending exit intent when that context changes;
+same exit intent and captured Project directory. Draft editing compares against
+the exact request the operator opened or explicitly reviewed. A changed-draft
+conflict retains the editable text and offers a read-only view of the latest
+editable request from the same Project and Session. Review confirmation returns
+focus to the editable text and enables a separate manual save. Creation's current
+mode, Project, pillar and squad selection retire any pending exit intent when that context changes;
 an explicit later exit captures the updated context. Creation guards authored
 title/request text. Clean exits and successful saves retain their direct close
 path. Submission busy state still owns exit availability; no persistence or
