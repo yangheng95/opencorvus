@@ -11,3 +11,4 @@ Windows 桌面上的隔离开发服务、真实文件和自有草稿。截图由
 | [05](05-baseline-en-100-file-delete-space-confirms.jpg) | 空格打开同一文件的安全确认，默认取消持焦。 |
 | [06](06-baseline-en-100-separate-enter-deliberately-cancels.jpg) | 文件确认已显示时另按 Enter，明确取消后焦点回原文件。 |
 | [07](07-baseline-en-100-mission-cancel-focus-on-page.jpg) | 用空格进入多步任务确认再 Escape，焦点落到页面根。 |
+| [17](17-first-candidate-zh-160-mixed-confirmation-copy.jpg) | 回车交接已修复，首个候选的中文确认仍混用两个英文类型名称。 |
