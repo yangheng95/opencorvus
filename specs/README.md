@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [右侧工具溢出菜单选择后聚焦实际标签](records/2026-11/2026-11-24-right-dock-overflow-tab-focus.md)
 - [文件审阅阅读说明保留列表和比较空间](records/2026-11/2026-11-24-file-review-reading-guide-space.md)
 - [文件审阅窄栏保留可辨识文件名](records/2026-11/2026-11-24-file-review-distinguishable-filenames.md)
 - [文件审阅列表的 Page Up 和 Page Down](records/2026-11/2026-11-24-file-review-page-navigation.md)
