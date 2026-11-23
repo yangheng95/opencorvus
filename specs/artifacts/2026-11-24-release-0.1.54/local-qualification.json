@@ -1,0 +1,50 @@
+{
+  "version": "0.1.54",
+  "verifiedAt": "2026-11-23T17:07:32.547579+00:00",
+  "preparationBase": "367c70a5ed6a993941549297eadfa665c6c08238",
+  "inputScope": "Shared worktree with prepared 0.1.54 metadata; unrelated work preserved",
+  "bun": "1.4.0",
+  "results": [
+    {
+      "log": "backend-contracts.log",
+      "passed": 19,
+      "failed": 0,
+      "selectedFiles": [
+        "test/server/expert-inventory-read-identity.test.ts",
+        "test/scheduler-recurrence-contract.test.ts",
+        "test/scheduler-automation-create-receipt.test.ts",
+        "test/server/mission-draft-edit.test.ts",
+        "test/server/mission-draft-creation-replay.test.ts"
+      ]
+    },
+    {
+      "log": "service-contracts.log",
+      "passed": 38,
+      "failed": 0,
+      "selectedFiles": []
+    },
+    {
+      "log": "release-contracts.log",
+      "passed": 65,
+      "failed": 0,
+      "selectedFiles": []
+    }
+  ],
+  "frozenInstall": "passed; lock changes limited to eight workspace versions",
+  "audit": "actual empty vulnerability object",
+  "versions": "13 release-family projections aligned",
+  "authoredHistoryEntries": 90,
+  "generatedRegistry": "13 generated paths match corresponding committed projections; full dirty-worktree checker reserved for clean hosted checkout",
+  "frontendBuild": "actual build and renderer public surface passed; not visual acceptance",
+  "localization": {
+    "locales": 2,
+    "keys": 3294
+  },
+  "cssTokenReferences": 9368,
+  "documentation": {
+    "operations": 353,
+    "groups": 26
+  },
+  "databaseVersion": 13,
+  "scope": "Focused actual backend contracts and pure client/data contracts; no UI automation, full-suite or real Provider claim"
+}

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.54 发布证据](2026-11-24-release-0.1.54/README.md) · 原生、官网与随包日志
 - [文件审阅跨虚拟窗口的键盘焦点截图](2026-11-24-file-review-virtual-keyboard-focus/README.md)
 - [文件审阅搜索结果与键盘截图](2026-11-24-file-review-search-result-focus/README.md)
 - [日志查看器键盘阅读区截图](2026-11-24-log-reading-viewport-keyboard-focus/README.md)

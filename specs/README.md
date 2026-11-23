@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [0.1.54 发布](records/2026-11/2026-11-24-release-0.1.54.md) · 增量日志与公开交付
 - [文件审阅跨虚拟窗口时保持键盘焦点](records/2026-11/2026-11-24-file-review-virtual-keyboard-focus.md)
 - [文件审阅的搜索结果可见且可用键盘进入](records/2026-11/2026-11-24-file-review-search-result-focus.md)
 - [日志查看器的键盘阅读区](records/2026-11/2026-11-24-log-reading-viewport-keyboard-focus.md)

@@ -4,6 +4,54 @@
 
 ## 未发布
 
+## 0.1.54 - 2026-11-24
+
+### zh-CN
+
+#### 新增
+
+- 文件比较显示原行、新行和实际比较的版本，区分编辑基准、磁盘快照与当前草稿。日志折叠行直接显示请求方法、路径和状态，并支持按当前语言的摘要搜索，原始字段与复制内容保持完整。
+
+#### 调整
+
+- 归档、更新日志、技能、专家团、笔记和多步任务看板搜索支持用方向键连续浏览结果。文件审阅的筛选与结果区保持可见，普通结果列表可从搜索框进入并滚动到当前焦点。
+- 专家团设置明确配置的安装范围，区分筛选空结果和仍可继续加载的目录；已读完当前内置清单时结束该筛选的续页。配置动作保留焦点和就地反馈，窄栏详情标签完整换行。
+- 文件比较使用同一阅读滚动区，同名文件结果完整显示区分路径。PDF（Portable Document Format，便携文档格式）和日志阅读区可用键盘聚焦、滚动，笔记来源标签随界面语言显示。
+
+#### 修复
+
+- 修复键盘上下文菜单使用过期选区、首个可用动作未获得焦点，以及菜单回车的默认动作立即关闭新确认框的问题；取消后返回准确的文件行或任务卡。
+- 打开已保存的多步任务草稿时，从正文开头呈现；保存回执显示服务确认的当前名称。返回同一草稿时保留阅读位置，从看板打开后直接进入可读区域。
+- 从常用定时模式进入高级编辑时接续当前日期、时间、时区和星期，保留已手写的高级规则；将明确的高级周规则简化为每周时保留其实际星期。
+- 资源管理器标签上的查找快捷键聚焦当前文件搜索，Escape 可从结果返回查询；文件工具栏和预览中的跳行快捷键使用同一个编辑器入口。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 13，保留已有项目、会话和任务数据。macOS 安装包使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- File comparisons show old and new line numbers and identify the actual compared versions: editor base, disk snapshot and current draft. Collapsed logs summarize request methods, paths and status, support searching the current language's summary, and retain original fields and copied content.
+
+#### Changed
+
+- Browse Archive, release history, Skill, Expert Squad, note and Mission board search results with consecutive arrow keys. File review keeps filters and results visible; ordinary result lists accept focus from Search and scroll the focused row into view.
+- Expert Squad settings explain the installation scope and distinguish empty filtered results from catalogs with more entries to load. Stop continuing a built-in filter once its current inventory is complete. Configuration actions retain focus and local feedback, and detail tabs wrap in narrow panels.
+- Read file comparisons in one scroll region and see the full distinguishing path for same-named file results. PDF (Portable Document Format) and log reading regions support keyboard focus and scrolling. Note source labels follow the interface language.
+
+#### Fixed
+
+- Use the current selection for keyboard context menus, focus the first enabled action, and keep confirmations open when invoked with Enter. Cancelling returns to the exact file row or task card.
+- Open saved Mission drafts at the beginning of their text and show the server-confirmed current name in save receipts. Retain the reading position when returning to the same draft and focus the reading region after opening it from the board.
+- Carry the current date, time, time zone and weekday into advanced schedule editing while preserving authored advanced rules. Retain the actual weekday when simplifying an unambiguous advanced weekly rule.
+- Explorer's Find shortcut focuses the selected file search, and Escape returns from results to its query. Go-to-line shortcuts in the file toolbar and preview use the same editor entry point.
+
+#### Upgrade impact and known limitations
+
+- The database remains at version 13, retaining existing projects, conversations, and tasks. macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
+
 ## 0.1.53 - 2026-11-23
 
 ### zh-CN
