@@ -188,10 +188,13 @@ function ChangesVirtualWindow(props: CustomContainerComponentProps) {
   )
 }
 
-function ChangesVirtualItem(props: CustomItemComponentProps) {
+function ChangesVirtualItem(props: CustomItemComponentProps & { onLayout: () => void }) {
   const setRef = (node: HTMLDivElement) => {
     if (typeof props.ref === "function") props.ref(node)
   }
+  createEffect(() => {
+    if (props.style.visibility !== "hidden") queueMicrotask(props.onLayout)
+  })
   return (
     <div ref={setRef} class="changes-list-virtual-item" style={props.style}>
       {props.children}
@@ -203,6 +206,12 @@ export function FileChangesView(props: FileChangesViewProps) {
   let rowVirtualizer: VirtualizerHandle | undefined
   let filterInputEl: HTMLInputElement | undefined
   let listEl: HTMLUListElement | undefined
+  let pendingVirtualRowFocus: {
+    list: HTMLUListElement
+    row: ChangeRowModel
+    rows: readonly ChangeRowModel[]
+    scopeKey: string | undefined
+  } | undefined
   const [selectedRowKey, setSelectedRowKey] = createSignal("")
   const [filterQuery, setFilterQuery] = createSignal("")
   const [statusFilter, setStatusFilter] = createSignal<ChangeStatusFilter>("all")
@@ -367,8 +376,9 @@ export function FileChangesView(props: FileChangesViewProps) {
 
   const selectRow = (row: ChangeRowModel) => setSelectedRowKey(row.key)
 
+  const renderedRow = (row: ChangeRowModel) => listEl?.querySelector<HTMLElement>(`#change-row-${row.index}`)
   const scrollRenderedRowIntoView = (row: ChangeRowModel) => {
-    listEl?.querySelector(`#change-row-${row.index}`)?.scrollIntoView({ block: "nearest", inline: "nearest" })
+    renderedRow(row)?.scrollIntoView({ block: "nearest", inline: "nearest" })
   }
 
   const focusExactRow = (row: ChangeRowModel) => {
@@ -410,7 +420,42 @@ export function FileChangesView(props: FileChangesViewProps) {
     return true
   }
 
+  const currentVirtualRowFocus = () => {
+    const request = pendingVirtualRowFocus
+    if (!request) return
+    if (
+      request.list !== listEl || !request.list.isConnected || !fileListVisible() ||
+      request.list.ownerDocument.activeElement !== request.list ||
+      request.scopeKey !== props.scopeKey || request.rows !== filteredRows()
+    ) {
+      pendingVirtualRowFocus = undefined
+      return
+    }
+    return request
+  }
+
+  const settleVirtualRowFocus = (): void => {
+    const request = currentVirtualRowFocus()
+    if (!request) return
+    const target = renderedRow(request.row)
+    if (!target || getComputedStyle(target).visibility !== "visible") return
+    const rowBox = target.getBoundingClientRect()
+    const viewport = request.list.getBoundingClientRect()
+    if (!rowBox.height || rowBox.bottom <= viewport.top || rowBox.top >= viewport.bottom) return
+    if (rowBox.height <= viewport.height && (rowBox.top < viewport.top - 1 || rowBox.bottom > viewport.bottom + 1)) return
+    pendingVirtualRowFocus = undefined
+    target.focus({ preventScroll: true })
+  }
+
   const onListShortcutKeyDown = (event: KeyboardEvent) => {
+    if (!event.defaultPrevented && !event.isComposing && event.target === listEl && (event.key === "Enter" || event.key === " ")) {
+      const request = currentVirtualRowFocus()
+      if (request) {
+        event.preventDefault()
+        selectRow(request.row)
+        return
+      }
+    }
     if (event.key === "/" || (event.key.toLowerCase() === "f" && (event.ctrlKey || event.metaKey))) {
       if (focusFilterInput()) event.preventDefault()
     }
@@ -419,9 +464,23 @@ export function FileChangesView(props: FileChangesViewProps) {
   const scrollToFocusedRow = (key: string) => {
     const rows = filteredRows()
     const position = rows.findIndex((row) => row.key === key)
+    pendingVirtualRowFocus = undefined
     if (position < 0) return
-    if (shouldVirtualizeRows()) rowVirtualizer?.scrollToIndex(position)
-    else scrollRenderedRowIntoView(rows[position]!)
+    const row = rows[position]!
+    if (!shouldVirtualizeRows()) {
+      scrollRenderedRowIntoView(row)
+      return
+    }
+    const list = listEl
+    const active = list?.ownerDocument.activeElement
+    const target = renderedRow(row)
+    if (list && active && list.contains(active) && (!target || getComputedStyle(target).visibility !== "visible")) {
+      // The list survives the jump even when the old focused option leaves the virtual window.
+      pendingVirtualRowFocus = { list, row, rows, scopeKey: props.scopeKey }
+      list.focus({ preventScroll: true })
+    }
+    rowVirtualizer?.scrollToIndex(position)
+    if (pendingVirtualRowFocus) queueMicrotask(settleVirtualRowFocus)
   }
 
   const onFilterKeyDown = (event: KeyboardEvent) => {
@@ -620,6 +679,11 @@ export function FileChangesView(props: FileChangesViewProps) {
                 virtualized
                 scrollToItem={scrollToFocusedRow}
                 onKeyDown={onListShortcutKeyDown}
+                onFocusOut={(event) => {
+                  if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) {
+                    pendingVirtualRowFocus = undefined
+                  }
+                }}
               >
                 {(collection) => {
                   const nodeByKey = createMemo(() => {
@@ -692,7 +756,8 @@ export function FileChangesView(props: FileChangesViewProps) {
                           bufferSize={VIRTUAL_CHANGE_ROW_BUFFER_PIXELS}
                           itemSize={ESTIMATED_CHANGE_ROW_HEIGHT}
                           as={ChangesVirtualWindow}
-                          item={ChangesVirtualItem}
+                          item={(itemProps) => <ChangesVirtualItem {...itemProps} onLayout={settleVirtualRowFocus} />}
+                          onScrollEnd={settleVirtualRowFocus}
                         >
                           {(key) => (
                             <Show when={filteredRows().find((row) => row.key === key)}>

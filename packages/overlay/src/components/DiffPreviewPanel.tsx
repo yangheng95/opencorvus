@@ -81,6 +81,10 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
   )
 
   const item = createMemo(() => (change.loading || change.error ? null : (change() ?? null)))
+  const renamePaths = createMemo(() => {
+    const current = item()
+    return current?.previousPath ? { previousPath: current.previousPath, openPath: current.openPath } : undefined
+  })
   const loading = () => change.loading
   const [opening, setOpening] = createSignal(false)
   const [openFailure, setOpenFailure] = createSignal<{ error: unknown } | null>(null)
@@ -124,35 +128,37 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
     if (!props.target?.filePath) return undefined
     return (
       <>
-        <div class="diff-preview-copy" classList={{ "diff-preview-copy--rename": !!item()?.previousPath }}>
-          <Show when={item()?.previousPath} fallback={
+        <div class="diff-preview-copy" classList={{ "diff-preview-copy--rename": !!renamePaths() }}>
+          <Show when={renamePaths()} keyed fallback={
             <span class="diff-preview-path" title={props.target?.filePath || ""}>
               {props.target?.filePath}
             </span>
           }>
-            {(previousPath) => (
+            {(paths) => (
               <dl class="diff-preview-paths">
                 <dt class="diff-preview-scope">{t("diff.original_path")}</dt>
-                <dd class="diff-preview-path" title={previousPath()}>
-                  {shortRelativePath(previousPath(), props.directory)}
+                <dd class="diff-preview-path" title={paths.previousPath}>
+                  {shortRelativePath(paths.previousPath, props.directory)}
                 </dd>
                 <dt class="diff-preview-scope">{t("diff.destination_path")}</dt>
-                <dd class="diff-preview-path" title={item()!.openPath}>
-                  {shortRelativePath(item()!.openPath, props.directory)}
+                <dd class="diff-preview-path" title={paths.openPath}>
+                  {shortRelativePath(paths.openPath, props.directory)}
                 </dd>
               </dl>
             )}
           </Show>
         </div>
-        <Show when={item()}>
-          <span class="diff-preview-meta">
-            <span class="change-status" data-status={item()!.status}>
-              {changeStatusLabel(item()!.status, item()!.previousPath)}
+        <Show when={item()} keyed>
+          {(current) => (
+            <span class="diff-preview-meta">
+              <span class="change-status" data-status={current.status}>
+                {changeStatusLabel(current.status, current.previousPath)}
+              </span>
+              <Show when={current.evidence.kind === "complete"}>
+                <ChangeLineStats additions={current.additions} deletions={current.deletions} isText={current.isText} />
+              </Show>
             </span>
-            <Show when={item()!.evidence.kind === "complete"}>
-              <ChangeLineStats additions={item()!.additions} deletions={item()!.deletions} isText={item()!.isText} />
-            </Show>
-          </span>
+          )}
         </Show>
         <Button
           class="diff-preview-open-file"
@@ -216,31 +222,34 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
           >
             <Show
               when={item()}
+              keyed
               fallback={
                 <div class="diff-preview-empty">
                   <p class="empty-hint">{t("diff.no_preview")}</p>
                 </div>
               }
             >
-              <div
-                class="diff-preview-body"
-                classList={{
-                  "diff-preview-body--text":
-                    hasDiffBody(item()) && isKnownTextDiff(item()) && item()!.before !== item()!.after,
-                }}
-              >
-                <Show
-                  when={
-                    item()!.evidence.kind === "incomplete" &&
-                    props.groups?.some(
-                      (group) => group.id === props.target?.groupID && group.observationKind === "tool_interval",
-                    )
-                  }
-                  fallback={<DiffView item={item()!} />}
+              {(current) => (
+                <div
+                  class="diff-preview-body"
+                  classList={{
+                    "diff-preview-body--text":
+                      hasDiffBody(current) && isKnownTextDiff(current) && current.before !== current.after,
+                  }}
                 >
-                  <RecordedToolComparisons item={item()!} />
-                </Show>
-              </div>
+                  <Show
+                    when={
+                      current.evidence.kind === "incomplete" &&
+                      props.groups?.some(
+                        (group) => group.id === props.target?.groupID && group.observationKind === "tool_interval",
+                      )
+                    }
+                    fallback={<DiffView item={current} />}
+                  >
+                    <RecordedToolComparisons item={current} />
+                  </Show>
+                </div>
+              )}
             </Show>
           </Show>
         </Show>
