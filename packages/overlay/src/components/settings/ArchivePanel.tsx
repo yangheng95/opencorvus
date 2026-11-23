@@ -112,6 +112,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   let requestGeneration = 0
   let controller: AbortController | undefined
   let panelElement: HTMLDivElement | undefined
+  let searchInput: HTMLInputElement | undefined
   let headingElement: HTMLSpanElement | undefined
   let continuationElement: HTMLDivElement | undefined
   let continuationButton: HTMLButtonElement | undefined
@@ -135,7 +136,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const searchNavigation = createSearchResultNavigation(() => {
     if (!canBrowseSearchResults() || !panelElement) return []
     return Array.from(panelElement.querySelectorAll<HTMLButtonElement>('button[data-archive-action="open"]:enabled'))
-  })
+  }, { returnToSearch: () => searchInput })
 
   const reportArchiveError = (id: string, title: string, cause: unknown) => {
     reportError({
@@ -543,6 +544,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       </Show>
       <SearchField
         clearable
+        inputRef={(element) => (searchInput = element)}
         value={search()}
         placeholder={t("archive.search_placeholder")}
         ariaDescribedBy={canBrowseSearchResults() ? "archive-search-keyboard-hint" : undefined}
@@ -560,7 +562,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
           <>
             {t("archive.description")}
             <Show when={canBrowseSearchResults()}>
-              <div id="archive-search-keyboard-hint">{t("settings.search_keyboard_hint")}</div>
+              <div id="archive-search-keyboard-hint">{t("settings.search_return_keyboard_hint")}</div>
             </Show>
           </>
         }
@@ -627,7 +629,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       size="sm"
                       tone="neutral"
                       aria-label={archiveActionText("archive.open_item", row)}
-                      aria-keyshortcuts={query() && canOpenRow(row) ? "ArrowUp ArrowDown" : undefined}
+                      aria-keyshortcuts={query() && canOpenRow(row) ? "ArrowUp ArrowDown Escape" : undefined}
                       data-archive-action="open"
                       disabled={!canOpenRow(row)}
                       onKeyDown={searchNavigation.handleResultKeyDown}

@@ -102,7 +102,7 @@ export default function ReleaseNotesPanel() {
             <div class="release-notes-search-status">
               <span>{tc("releases.count", filteredHistory().length)}</span>
               <Show when={hasSearchMatches()}>
-                <span id="release-notes-search-keyboard-hint">{t("releases.search_keyboard_hint")}</span>
+                <span id="release-notes-search-keyboard-hint">{t("settings.search_return_keyboard_hint")}</span>
               </Show>
             </div>
             <SettingsSurface>
