@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [右侧工具栏标签与关闭按钮的完整焦点环](2026-11-24-right-dock-visible-focus-ring.md)
 - [右侧工具溢出菜单选择后聚焦实际标签](2026-11-24-right-dock-overflow-tab-focus.md)
 - [文件审阅阅读说明保留列表和比较空间](2026-11-24-file-review-reading-guide-space.md)
 - [文件审阅窄栏保留可辨识文件名](2026-11-24-file-review-distinguishable-filenames.md)
