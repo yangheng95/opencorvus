@@ -62,6 +62,7 @@ import {
 import { isUncertainMutationReceipt } from "../../services/mutation-receipt"
 import { showAppDialog } from "../../services/app-dialog"
 import type { ConversationExperience } from "../../services/conversation-capability"
+import { matchesSearchTerms } from "../../services/text-search"
 import {
   isMcpConnectionStatus,
   mcpConnectionStatusLabel,
@@ -72,8 +73,9 @@ import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { TextField } from "../ui/TextField"
 import { Icon } from "../ui/Icon"
+import { SearchField } from "../ui/SearchField"
 import { SelectField, type SelectFieldOption } from "../ui/SelectField"
-import { SettingsDetailSection, SettingsGroup, SettingsRow } from "./layout"
+import { SettingsDetailSection, SettingsEmpty, SettingsGroup, SettingsRow } from "./layout"
 import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
 import { SettingsProjectScope } from "./SettingsProjectScope"
 
@@ -393,6 +395,13 @@ function SharedResourceManagementPanel(props: {
     return scope !== null && ownsSkillScope(scope)
   }
   const poolSkills = createMemo(() => (skillInventoryCurrent() ? (appStore.skills as SkillItem[]) : []))
+  const [installedSkillQuery, setInstalledSkillQuery] = createSignal("")
+  const matchingInstalledSkills = createMemo(() => {
+    const skills = poolSkills()
+    const query = installedSkillQuery().trim()
+    return query ? skills.filter((skill) => matchesSearchTerms(query, [skill.name, skill.description])) : skills
+  })
+  let installedSkillList: HTMLDivElement | undefined
   const mcp = createMemo(
     (): McpProjectStatusResponse => (mcpPanelActive() ? { ...appStore.mcp } : {}),
   )
@@ -984,6 +993,7 @@ function SharedResourceManagementPanel(props: {
   createEffect(on(
     () => skillPanelActive() ? [selectedDirectory(), captureApiAuthority().revision] as const : undefined,
     (scope) => {
+      setInstalledSkillQuery("")
       if (!scope?.[0]) return
       void refreshSkillLibrary(currentDirectory())
       onCleanup(() => {
@@ -1573,7 +1583,7 @@ function SharedResourceManagementPanel(props: {
                 </div>
               </form>
             </Show>
-            <div class="extension-list" id="skillList">
+            <div class="extension-list" id="skillList" ref={(element) => { installedSkillList = element }}>
               <Show when={currentSkillRead()?.inventory.failure}>
                 {(failure) => (
                   <Feedback tone="error" ref={skillInventoryFeedback} details={formatErrorDetails(failure().error)}>
@@ -1614,7 +1624,24 @@ function SharedResourceManagementPanel(props: {
                   </Show>
                 }
               >
-                <For each={poolSkills()}>
+                <SearchField
+                  value={installedSkillQuery()}
+                  placeholder={t("skill.installed_search_placeholder")}
+                  ariaLabel={t("skill.installed_search_label")}
+                  ariaKeyShortcuts="ArrowDown ArrowUp"
+                  onValueChange={setInstalledSkillQuery}
+                  clearable
+                  resultFocusTarget={(edge) => {
+                    const rows = installedSkillList?.querySelectorAll<HTMLElement>(".skill-installed-item > summary")
+                    return rows?.[edge === "first" ? 0 : rows.length - 1]
+                  }}
+                />
+                <Show when={matchingInstalledSkills().length === 0}>
+                  <div role="status">
+                    <SettingsEmpty>{t("skill.installed_search_empty")}</SettingsEmpty>
+                  </div>
+                </Show>
+                <For each={matchingInstalledSkills()}>
                   {(item) => (
                     <Disclosure.Root class="skill-installed-item">
                       <Disclosure.Trigger indicatorPosition="end">

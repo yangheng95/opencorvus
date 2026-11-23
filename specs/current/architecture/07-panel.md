@@ -5985,6 +5985,10 @@ independently for its current project and connection. The installed read owns
 the library list; the agent mount matrix owns its separate runtime projection.
 Reload retains the last accepted results in scope and reports each read failure
 beside installed skills, independently of install, update, or removal notices.
+The installed list filters the accepted inventory by terms within each skill's
+name and description. Its local query survives a reload in the same scope and
+clears when that scope retires. The active project and original actions still
+own the filtered rows.
 Without a workspace, the installed section offers the existing project folder
 picker. Selecting a directory keeps the Skill Library open and identifies the
 actual scope of its installed list and import controls. The global Skill
