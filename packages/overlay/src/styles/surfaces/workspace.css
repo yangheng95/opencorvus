@@ -648,10 +648,9 @@ code .file-link:focus-visible {
 }
 
 .file-comparison-diff {
+  flex: 0 0 auto;
   min-height: calc(160px * var(--ui-scale));
-  max-height: min(calc(360px * var(--ui-scale)), 45vh);
-  overflow: auto;
-  overscroll-behavior: contain;
+  overflow: clip;
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-soft);
 }

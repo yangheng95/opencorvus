@@ -1550,7 +1550,9 @@ base is the most recently loaded, successfully saved or explicitly adopted disk
 text. Closing, replacing the read,
 changing resource or API authority and unmounting retire that read. Three pair
 views compare disk/draft, base/disk and base/draft through the shared text
-diff renderer. For identical logical lines with changed line endings, the
+diff renderer. The comparison body scrolls as one region from the file path
+through the last diff row, with the dialog header and actions kept in place.
+For identical logical lines with changed line endings, the
 shared renderer shows each changed line range with its before and after
 separator, including a missing final line ending. Recorded change counts
 retain their original comparisons. Base/draft uses the editor's accepted base
