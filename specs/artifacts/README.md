@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工作侧栏预览输入优先级的真实桌面截图](2026-11-24-work-ledger-preview-input-priority/README.md)
 - [工作侧栏展开焦点的真实桌面截图](2026-11-24-work-ledger-expanded-row-focus/README.md)
 - [收件箱展开长标题的真实桌面截图](2026-11-24-mailbox-expanded-subject/README.md)
 - [收件箱消息的真实桌面键盘复现](2026-11-24-mailbox-explicit-message-disclosure/README.md)
