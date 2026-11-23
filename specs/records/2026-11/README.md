@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [日志查看器的键盘阅读区](2026-11-24-log-reading-viewport-keyboard-focus.md)
 - [多步任务看板用方向键浏览搜索结果](2026-11-23-mission-board-search-result-navigation.md)
 - [文件版本比较标明行号与实际版本](2026-11-23-file-comparison-version-line-labels.md)
 - [PDF 阅读区域提供明确的键盘焦点](2026-11-23-pdf-reading-region-keyboard-focus.md)
