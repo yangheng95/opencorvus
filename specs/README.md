@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [折叠日志显示请求路径和状态](records/2026-11/2026-11-23-log-http-request-summary.md)
 - [按界面语言显示笔记来源](records/2026-11/2026-11-23-memory-note-source-localization.md)
 - [用方向键浏览已提交的笔记搜索结果](records/2026-11/2026-11-23-memory-note-result-navigation.md)
 - [连续浏览多步任务专家团匹配项](records/2026-11/2026-11-23-mission-squad-result-navigation.md)
