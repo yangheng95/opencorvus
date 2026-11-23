@@ -14,7 +14,7 @@
 
 #### 调整
 
-- 归档、更新日志、技能、专家团、笔记和多步任务看板搜索支持用方向键连续浏览结果。文件审阅的筛选与结果区保持可见，普通结果列表可从搜索框进入并滚动到当前焦点。
+- 归档、更新日志、技能、专家团、笔记和多步任务看板搜索支持用方向键连续浏览结果。文件审阅的筛选与结果区保持可见，普通结果列表可从搜索框进入并滚动到当前焦点；长列表首末跳转保留真实焦点，明确选择后更新准确预览。
 - 专家团设置明确配置的安装范围，区分筛选空结果和仍可继续加载的目录；已读完当前内置清单时结束该筛选的续页。配置动作保留焦点和就地反馈，窄栏详情标签完整换行。
 - 文件比较使用同一阅读滚动区，同名文件结果完整显示区分路径。PDF（Portable Document Format，便携文档格式）和日志阅读区可用键盘聚焦、滚动，笔记来源标签随界面语言显示。
 
@@ -27,6 +27,7 @@
 
 #### 升级影响与已知限制
 
+- 大型文件审阅列表的 Page Up 分页键仍有选择器错误；当前可使用方向键、Home 和 End 浏览。
 - 数据库保持版本 13，保留已有项目、会话和任务数据。macOS 安装包使用临时签名，尚未经过 Apple 公证。
 
 ### en-US
@@ -37,7 +38,7 @@
 
 #### Changed
 
-- Browse Archive, release history, Skill, Expert Squad, note and Mission board search results with consecutive arrow keys. File review keeps filters and results visible; ordinary result lists accept focus from Search and scroll the focused row into view.
+- Browse Archive, release history, Skill, Expert Squad, note and Mission board search results with consecutive arrow keys. File review keeps filters and results visible; ordinary result lists accept focus from Search and scroll the focused row into view. First/last jumps in long lists retain real focus and update the exact preview after explicit selection.
 - Expert Squad settings explain the installation scope and distinguish empty filtered results from catalogs with more entries to load. Stop continuing a built-in filter once its current inventory is complete. Configuration actions retain focus and local feedback, and detail tabs wrap in narrow panels.
 - Read file comparisons in one scroll region and see the full distinguishing path for same-named file results. PDF (Portable Document Format) and log reading regions support keyboard focus and scrolling. Note source labels follow the interface language.
 
@@ -50,6 +51,7 @@
 
 #### Upgrade impact and known limitations
 
+- Page Up in large file review lists still encounters a selector error. Arrow keys, Home and End remain available for navigation.
 - The database remains at version 13, retaining existing projects, conversations, and tasks. macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
 
 ## 0.1.53 - 2026-11-23
