@@ -154,22 +154,29 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   })
   const squadSearchCurrent = () => props.expertSquadSearch.query === query().trim()
   const squadSearchLoading = () => !squadSearchCurrent() || props.expertSquadSearch.status === "pending"
+  const squadSearchReady = () => squadSearchCurrent() && props.expertSquadSearch.status === "ready"
+  const matchingSquadIDs = () => squadSearchReady() ? props.expertSquadSearch.matchingIDs : []
+  const retainedSquadIDs = createMemo<readonly string[]>(() => {
+    const matching = new Set(matchingSquadIDs())
+    return props.launchReferences.expertSquadIDs.filter((id) => !matching.has(id))
+  }, [], {
+    // Changing a selected value must not rebuild the listbox collection of matching options.
+    equals: (previous, next) => previous.length === next.length && previous.every((id, index) => id === next[index]),
+  })
   const filteredSquadOptions = createMemo(() => {
     const options = squadOptions()
     const byID = new Map(options.map((option) => [option.id, option]))
-    const matchingIDs =
-      squadSearchCurrent() && props.expertSquadSearch.status === "ready" ? props.expertSquadSearch.matchingIDs : []
-    const matching = new Set(matchingIDs)
+    const retained = new Set(retainedSquadIDs())
     return [
-      ...matchingIDs.flatMap((id) => {
+      ...matchingSquadIDs().flatMap((id) => {
         const option = byID.get(id)
         return option ? [option] : []
       }),
       ...options
-        .filter((option) => selectedKeys().has(option.key) && !matching.has(option.id))
+        .filter((option) => retained.has(option.id))
         .map((option) => ({
           ...option,
-          outsideSearch: squadSearchCurrent() && props.expertSquadSearch.status === "ready",
+          outsideSearch: squadSearchReady(),
         })),
     ]
   })
@@ -293,11 +300,20 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
 
   function applyListboxSelection(keys: Set<string>): void {
     if (!props.onTextChange) return
+    const focused = listboxElement?.ownerDocument.activeElement
+    const focusedKey = focused && listboxElement?.contains(focused) ? focused.getAttribute("data-reference-key") : null
+    let removesFocusedRetainedSquad = false
     let next = props.text
     for (const option of visibleReferenceOptions()) {
-      next = setComposerMentionDirectiveSelected(next, option.kind, option.id, keys.has(option.key))
+      const selected = keys.has(option.key)
+      next = setComposerMentionDirectiveSelected(next, option.kind, option.id, selected)
+      if (!selected && option.kind === "squad" && option.key === focusedKey) {
+        removesFocusedRetainedSquad = retainedSquadIDs().includes(option.id)
+      }
     }
-    if (next !== props.text) props.onTextChange(next)
+    if (next === props.text) return
+    if (removesFocusedRetainedSquad) searchInputRef?.focus()
+    props.onTextChange(next)
   }
 
   function handleReferenceEscape(event: KeyboardEvent): boolean {
