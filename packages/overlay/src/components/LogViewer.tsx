@@ -597,6 +597,9 @@ export function LogViewer(props: LogViewerProps) {
         <VList
           id="logViewerBody"
           class="log-viewer"
+          role="region"
+          aria-label={t("log.loaded_entries")}
+          tabIndex={0}
           data={entries()}
           itemSize={88}
           bufferSize={88 * 8}

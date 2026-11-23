@@ -1221,7 +1221,7 @@ button.s-row:focus-visible {
   flex: 1 1 auto;
   height: auto;
   max-height: none;
-  min-height: calc(360px * var(--ui-scale));
+  min-height: 0;
   min-width: 0;
   overflow-y: auto;
   background: var(--surface-inset);
@@ -1234,6 +1234,11 @@ button.s-row:focus-visible {
   line-height: var(--ui-line-height-normal);
   white-space: pre-wrap;
   word-break: break-all;
+}
+
+.log-viewer:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--oc-border-width));
 }
 
 .log-viewer-loading {
