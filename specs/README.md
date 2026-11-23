@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时任务筛选结果键盘导航](records/2026-11/2026-11-24-scheduled-automation-search-keyboard.md)
 - [右侧工具溢出选择及时交接键盘焦点](records/2026-11/2026-11-24-right-dock-overflow-immediate-focus.md)
 - [文件标签上的 Ctrl+F 查找当前文件](records/2026-11/2026-11-24-file-workbench-tab-find.md)
 - [右侧工具栏标签与关闭按钮的完整焦点环](records/2026-11/2026-11-24-right-dock-visible-focus-ring.md)
