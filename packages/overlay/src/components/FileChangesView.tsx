@@ -220,6 +220,7 @@ export function FileChangesView(props: FileChangesViewProps) {
   const [fileListVisible, setFileListVisible] = createSignal(true)
   const fileListID = createUniqueId()
   const filterKeyboardHintID = createUniqueId()
+  const sharedVirtualGroupID = createUniqueId()
   const resetFilters = () => {
     setFilterQuery("")
     setStatusFilter("all")
@@ -335,6 +336,10 @@ export function FileChangesView(props: FileChangesViewProps) {
   })
   const shouldShowFilter = createMemo(() => allRows().length > 0)
   const shouldVirtualizeRows = createMemo(() => filteredRows().length > VIRTUAL_CHANGE_ROW_THRESHOLD)
+  const sharedVirtualGroup = createMemo(() => {
+    if (!shouldVirtualizeRows() || !hasGroupLabels() || visibleGroups().length !== 1) return
+    return visibleGroups()[0]
+  })
   const selectedKeys = createMemo(() => (selectedRowKey() ? [selectedRowKey()] : []))
   const disallowEmptySelection = () => filteredRows().length > 0
   const listState = createListState({
@@ -606,6 +611,13 @@ export function FileChangesView(props: FileChangesViewProps) {
               {t(fileListVisible() ? "files.hide_record_list" : "files.show_record_list")}
             </Button>
           </Show>
+          <Show when={fileListVisible() && sharedVirtualGroup()} keyed>
+            {(group) => (
+              <span class="changes-shared-group" id={sharedVirtualGroupID} title={group.label}>
+                {group.label}
+              </span>
+            )}
+          </Show>
           <Disclosure.Root class="changes-reading-help">
             <Disclosure.Trigger>{t("files.reading_help")}</Disclosure.Trigger>
             <Disclosure.Content>
@@ -720,6 +732,7 @@ export function FileChangesView(props: FileChangesViewProps) {
                 data-grouped={hasGroupLabels() ? "true" : "false"}
                 data-virtualized={shouldVirtualizeRows() ? "true" : "false"}
                 aria-label={t("section.files")}
+                aria-describedby={fileListVisible() && sharedVirtualGroup() ? sharedVirtualGroupID : undefined}
                 state={listState}
                 keyboardDelegate={keyboardDelegate}
                 disallowEmptySelection={disallowEmptySelection()}
@@ -812,7 +825,7 @@ export function FileChangesView(props: FileChangesViewProps) {
                                 <ChangeRow
                                   node={nodeForRow(row())}
                                   row={row()}
-                                  showScope={hasGroupLabels()}
+                                  showScope={hasGroupLabels() && !sharedVirtualGroup()}
                                   onSelect={selectRow}
                                 />
                               )}

@@ -62,6 +62,17 @@
   margin-bottom: var(--ui-gap-sm);
 }
 
+.changes-shared-group {
+  flex: 1 1 0;
+  align-self: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+}
+
 .changes-reading-help {
   min-width: 0;
   margin-inline-start: auto;
@@ -468,6 +479,11 @@
 
 .changes-file-pane .change-row .oc-file-row__name {
   flex: 1 1 auto;
+}
+
+.changes-file-pane .change-row .oc-file-row__copy:not(:has(.oc-file-row__prefix)) .oc-file-row__name {
+  flex-shrink: 0;
+  max-inline-size: 100%;
 }
 
 .changes-file-pane .change-row .oc-file-row__detail {
