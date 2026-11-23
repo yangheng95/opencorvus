@@ -1156,6 +1156,18 @@
   min-width: 0;
 }
 
+.composer-reference-market .composer-reference-option-heading {
+  flex-wrap: wrap;
+  row-gap: var(--ui-gap-3xs);
+}
+
+.composer-reference-market .composer-reference-option-name {
+  max-width: 100%;
+  flex: 0 1 auto;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 .composer-model-selector {
   position: relative;
   display: flex;

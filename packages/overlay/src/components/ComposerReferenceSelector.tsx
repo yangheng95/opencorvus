@@ -614,6 +614,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                               variant="outline"
                               size="sm"
                               tone="accent"
+                              aria-label={t("chat.references.market_install_named", { name: item.name })}
                               aria-disabled={marketActionBusy() || undefined}
                               aria-busy={activeMarketInstall()?.item === item || undefined}
                               onClick={(event) => void installFromMarket(item, event.currentTarget)}
