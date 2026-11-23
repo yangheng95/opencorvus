@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从归档结果返回搜索](records/2026-11/2026-11-24-archive-return-to-search.md)
 - [从版本结果返回更新日志搜索](records/2026-11/2026-11-24-release-history-return-to-search.md)
 - [更新日志的搜索摘要](records/2026-11/2026-11-24-release-search-excerpts.md)
 - [设置搜索的匹配结果导航](records/2026-11/2026-11-24-settings-search-match-navigation.md)
