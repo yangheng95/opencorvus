@@ -3206,6 +3206,8 @@
   "usage.table_tokens": "令牌",
   "usage.table_cost": "成本",
   "usage.table_share": "占比",
+  "usage.share_below": "低于 {{value}}",
+  "usage.share_above": "高于 {{value}}",
   "usage.no_model_data": "本周期暂无模型用量。",
   "secure_context.needs_https": "{{subject}}需要安全上下文：请经 HTTPS 或 localhost 访问 OpenCorvus",
   "secure_context.unsupported": "此浏览器不支持{{subject}}",

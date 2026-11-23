@@ -27,6 +27,28 @@ function percent(value: number): string {
   return new Intl.NumberFormat(localeTag(), { maximumFractionDigits: 1 }).format(value) + "%"
 }
 
+function UsageShare(props: { value: number }) {
+  const bound = () => {
+    if (props.value > 0 && props.value < 0.1) return { value: 0.1, sign: "<", label: "usage.share_below" }
+    if (props.value < 100 && props.value > 99.9) return { value: 99.9, sign: ">", label: "usage.share_above" }
+  }
+  return (
+    <Show when={bound()} fallback={percent(props.value)}>
+      {(limit) => {
+        const value = () => percent(limit().value)
+        return (
+          <>
+            <span aria-hidden="true">
+              {limit().sign}{value()}
+            </span>
+            <span class="sr-only">{t(limit().label, { value: value() })}</span>
+          </>
+        )
+      }}
+    </Show>
+  )
+}
+
 function dateRange(data: UsageStatistics): string {
   const formatter = new Intl.DateTimeFormat(localeTag(), {
     timeZone: data.timeZone,
@@ -558,7 +580,7 @@ export default function UsagePanel() {
                   <span class="usage-metric__label">{t("usage.calls")}</span>
                 </div>
                 <div class="usage-metric">
-                  <strong>{pricingCoverage() === null ? "—" : percent(pricingCoverage()!)}</strong>
+                  <strong>{pricingCoverage() === null ? "—" : <UsageShare value={pricingCoverage()!} />}</strong>
                   <span class="usage-metric__label">{t("usage.pricing_coverage")}</span>
                 </div>
               </div>
@@ -760,7 +782,9 @@ export default function UsagePanel() {
                             <td>{exactNumber(model.summary.calls)}</td>
                             <td>{exactNumber(model.summary.tokens.total)}</td>
                             <td>{formatDetailedCostUSD(model.summary.costUSD)}</td>
-                            <td>{percent(model.share * 100)}</td>
+                            <td>
+                              <UsageShare value={model.share * 100} />
+                            </td>
                           </tr>
                         )}
                       </For>

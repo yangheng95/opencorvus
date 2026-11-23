@@ -443,7 +443,7 @@
   background: var(--usage-cell-fill);
 }
 
-.usage-activity__cell > .sr-only {
+.usage-panel .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;

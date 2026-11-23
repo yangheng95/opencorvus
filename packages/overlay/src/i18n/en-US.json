@@ -3207,6 +3207,8 @@
   "usage.table_tokens": "Token",
   "usage.table_cost": "Cost",
   "usage.table_share": "Share",
+  "usage.share_below": "Less than {{value}}",
+  "usage.share_above": "More than {{value}}",
   "usage.no_model_data": "No model usage for this period.",
   "secure_context.needs_https": "{{subject}} needs a secure context: open OpenCorvus over HTTPS, or from localhost",
   "secure_context.unsupported": "{{subject}} is unavailable in this browser",
