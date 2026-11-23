@@ -39,10 +39,15 @@ test("successive real user commands publish completed occurrences with their act
     const completed: Array<{ inputMessageID: string; finalMessageID: string; exit: number }> = []
     for (const exit of [7, 0]) {
       const messageID = Identifier.ascending("message")
-      const command = `\n  echo "原始输入🙂"\nexit ${exit}\n`
+      const command = `\n  echo 原始输入🙂\necho 第二行\nexit ${exit}\n`
       const result = await SessionShell.shell({ sessionID: session.id, messageID, agent: "chat", model, command })
       const originalInput = (await Session.messages({ sessionID: session.id })).find(message => message.info.id === messageID)
       expect(originalInput?.parts.filter(part => part.type === "text").map(part => part.text)).toEqual([command])
+      expect(result.parts[0]).toMatchObject({ type: "tool", state: {
+        status: "completed",
+        output: expect.stringMatching(/^原始输入🙂\r?\n第二行\r?\n/),
+        metadata: { exit },
+      } })
       completed.push({ inputMessageID: messageID, finalMessageID: result.info.id, exit })
       expect(await occurrenceView(session.id, messageID)).toMatchObject({ inputMessageID: messageID, status: "completed" })
       expect(lifecycle(session.id, messageID)).toEqual({ type: "terminal", reason: "completed", final_message_id: result.info.id })

@@ -513,26 +513,17 @@ export namespace SessionShell {
         ).toLowerCase()
 
         const localEnvironment = await LocalEnvironment.projectShellCommand(input.command)
-        const invocationCommand: Record<string, string> = {
-          nu: localEnvironment.command,
-          fish: localEnvironment.command,
-          zsh: `
-            [[ -f ~/.zshenv ]] && source ~/.zshenv >/dev/null 2>&1 || true
-            [[ -f "\${ZDOTDIR:-$HOME}/.zshrc" ]] && source "\${ZDOTDIR:-$HOME}/.zshrc" >/dev/null 2>&1 || true
-            eval ${JSON.stringify(localEnvironment.command)}
-          `,
-          bash: `
-            shopt -s expand_aliases
-            [[ -f ~/.bashrc ]] && source ~/.bashrc >/dev/null 2>&1 || true
-            eval ${JSON.stringify(localEnvironment.command)}
-          `,
-          cmd: localEnvironment.command,
-          powershell: localEnvironment.command,
-          pwsh: localEnvironment.command,
-          "": localEnvironment.command,
+        const startupLines: Partial<Record<string, string[]>> = {
+          zsh: [
+            "[[ -f ~/.zshenv ]] && source ~/.zshenv >/dev/null 2>&1 || true",
+            '[[ -f "${ZDOTDIR:-$HOME}/.zshrc" ]] && source "${ZDOTDIR:-$HOME}/.zshrc" >/dev/null 2>&1 || true',
+          ],
+          bash: [
+            "shopt -s expand_aliases",
+            "[[ -f ~/.bashrc ]] && source ~/.bashrc >/dev/null 2>&1 || true",
+          ],
         }
-
-        const supervisedCommand = invocationCommand[shellName] ?? invocationCommand[""]
+        const supervisedCommand = [...(startupLines[shellName] ?? []), localEnvironment.command].join("\n")
 
         const cwd = Instance.directory
         const shellEnv = await Plugin.trigger(

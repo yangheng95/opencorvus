@@ -94,6 +94,9 @@ the same `LocalEnvironment.projectShellCommand` projection and final
 existing order above the host environment; execution guard values remain last.
 Each layer reaches that merge separately, so JavaScript object insertion order
 cannot promote an older case alias over a later project or execution-guard value.
+Explicit Session shell commands pass the projected setup and command as native
+program text. Bash and Zsh apply their startup lines before that program in the
+same process, preserving multiline input and shell-defined aliases.
 
 The project environment editor generates its merge patch from the opened draft
 baseline and the edited values. Removing or renaming a variable explicitly
