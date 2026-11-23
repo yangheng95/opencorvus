@@ -11,3 +11,5 @@ Windows 桌面使用隔离项目开发服务、实际文件和自有多步任务
 | [05](05-baseline-en-100-multiselect-menu-initial-focus.jpg) | 两个同名文件已选，键盘菜单仍只聚焦容器。 |
 | [06](06-baseline-en-100-multiselect-first-enabled-after-arrow.jpg) | 按 Down 跳过不可用动作，焦点到「Copy」。 |
 | [07](07-baseline-en-mission-menu-initial-focus.jpg) | 真实未启动多步任务的共享菜单同样先聚焦容器。 |
+| [08](08-baseline-en-image-pointer-menu-focus.jpg) | 图片真实右键菜单焦点初始停在容器。 |
+| [11](11-first-candidate-en-100-disabled-item-retakes-focus.jpg) | 首个候选的「Copy」逻辑高亮，浏览器实际焦点留在不可用「Open」。 |
