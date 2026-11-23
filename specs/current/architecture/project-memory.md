@@ -353,6 +353,10 @@ the existing project-scoped semantic list, search, detail and delete operations.
 It neither copies the protected document into semantic memory nor exposes it to
 generic deletion. Search preserves the actual source and Project scope; dates
 and numeric metadata follow the current interface language.
+Up and Down move among enabled note buttons in the accepted search results. The
+search field can enter the first or last result when its text still matches the
+submitted query. Enter on a note opens its original content, and Tab retains
+access to the search controls, result buttons, inline content and delete actions.
 List and search rows wrap the full stored title. Each delete action and its
 confirmation identify the same title while the operation uses the record ID.
 

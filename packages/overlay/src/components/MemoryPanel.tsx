@@ -13,7 +13,7 @@ import { syncActiveDirectoryApiContext } from "../services/workspace"
 import { Button } from "./ui/Button"
 import { ArmedConfirmButton } from "./ui/ArmedConfirmButton"
 import { Badge } from "./ui/Badge"
-import { SearchField } from "./ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "./ui/SearchField"
 import { Icon } from "./ui/Icon"
 import { SettingsEmpty } from "./settings/layout"
 
@@ -414,6 +414,13 @@ export function MemoryPanel(props: MemoryPanelProps) {
     const source = filesSource()
     return !!source && sourceMatches(source)
   })
+  const hasSearchResults = () => Boolean(submittedQuery()) && filesSourceActive() && !loading() && files().length > 0
+  const canEnterSearchResults = () => hasSearchResults() && searchQuery().trim() === submittedQuery()
+  const searchKeyboardHintID = "memory-search-keyboard-hint"
+  const searchNavigation = createSearchResultNavigation(() => {
+    if (!hasSearchResults() || !listElement) return []
+    return Array.from(listElement.querySelectorAll<HTMLButtonElement>('[data-ui="memory-row-main"]:enabled'))
+  })
 
   const listFailure = createMemo(() => {
     const current = failure()
@@ -492,6 +499,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
           placeholder={t("memory.search_placeholder")}
           disabled={!currentDirectory()}
           readOnly={loading()}
+          ariaDescribedBy={canEnterSearchResults() ? searchKeyboardHintID : undefined}
+          ariaKeyShortcuts={canEnterSearchResults() ? "ArrowUp ArrowDown" : undefined}
+          resultFocusTarget={(edge) => canEnterSearchResults() ? searchNavigation.resultFocusTarget(edge) : undefined}
           onValueChange={setSearchQuery}
           onClear={handleSearchClear}
           clearDataUI="memory-search-clear"
@@ -504,7 +514,14 @@ export function MemoryPanel(props: MemoryPanelProps) {
       <div id="memoryList" class="knowledge-list" ref={listElement}>
         <Show when={files().length > 0} fallback={emptyState()}>
           <Show when={submittedQuery()}>
-            {(query) => <p class="knowledge-results-query" role="status">{t("memory.results_for", { query: query() })}</p>}
+            {(query) => (
+              <p class="knowledge-results-query" role="status">
+                {t("memory.results_for", { query: query() })}
+                <Show when={canEnterSearchResults()}>
+                  {" · "}<span id={searchKeyboardHintID}>{t("memory.search_keyboard_hint")}</span>
+                </Show>
+              </p>
+            )}
           </Show>
           <For each={files()}>
             {(f) => {
@@ -546,7 +563,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
                       data-ui="memory-row-main"
                       aria-expanded={expanded()}
                       aria-controls={expanded() ? detailElementId() : undefined}
+                      aria-keyshortcuts={hasSearchResults() ? "ArrowUp ArrowDown" : undefined}
                       disabled={!filesSourceActive()}
+                      onKeyDown={searchNavigation.handleResultKeyDown}
                       onClick={() => toggleMemoryDetail(f.id)}
                     >
                       <span class="knowledge-item-title">{f.title}</span>
