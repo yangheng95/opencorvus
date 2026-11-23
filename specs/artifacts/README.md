@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [更新日志方向键浏览的真实桌面截图](2026-11-23-release-history-result-navigation/README.md)
 - [归档结果键盘浏览的真实桌面截图](2026-11-23-archive-search-result-navigation/README.md)
 - [同名文件区分目录的真实桌面截图](2026-11-23-explorer-wrapped-duplicate-locations/README.md)
 - [资源管理器标签查找的真实桌面截图](2026-11-23-explorer-tab-find-shortcut/README.md)

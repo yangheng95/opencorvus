@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [连续浏览更新日志搜索结果](records/2026-11/2026-11-23-release-history-result-navigation.md)
 - [归档搜索结果支持连续方向键浏览](records/2026-11/2026-11-23-archive-search-result-navigation.md)
 - [同名文件结果完整显示区分目录](records/2026-11/2026-11-23-explorer-wrapped-duplicate-locations.md)
 - [在资源管理器标签上使用文件查找](records/2026-11/2026-11-23-explorer-tab-find-shortcut.md)
