@@ -357,8 +357,10 @@ source labels in the current interface language alongside localized dates and
 numeric metadata. Transport and storage retain the actual source identifiers.
 Up and Down move among enabled note buttons in the accepted search results. The
 search field can enter the first or last result when its text still matches the
-submitted query. Enter on a note opens its original content, and Tab retains
-access to the search controls, result buttons, inline content and delete actions.
+submitted query. Escape on an accepted result returns focus to the search field
+with the current draft, submitted query, and expanded note intact. Enter on a
+note opens its original content, and Tab retains access to the search controls,
+result buttons, inline content and delete actions.
 List and search rows wrap the full stored title. Each delete action and its
 confirmation identify the same title while the operation uses the record ID.
 
