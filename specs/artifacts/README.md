@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件审阅跨虚拟窗口的键盘焦点截图](2026-11-24-file-review-virtual-keyboard-focus/README.md)
 - [文件审阅搜索结果与键盘截图](2026-11-24-file-review-search-result-focus/README.md)
 - [日志查看器键盘阅读区截图](2026-11-24-log-reading-viewport-keyboard-focus/README.md)
 - [多步任务看板搜索结果导航截图](2026-11-23-mission-board-search-result-navigation/README.md)

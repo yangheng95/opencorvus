@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件审阅跨虚拟窗口时保持键盘焦点](2026-11-24-file-review-virtual-keyboard-focus.md)
 - [文件审阅的搜索结果可见且可用键盘进入](2026-11-24-file-review-search-result-focus.md)
 - [日志查看器的键盘阅读区](2026-11-24-log-reading-viewport-keyboard-focus.md)
 - [多步任务看板用方向键浏览搜索结果](2026-11-23-mission-board-search-result-navigation.md)
