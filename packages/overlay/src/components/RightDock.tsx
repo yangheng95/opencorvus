@@ -108,6 +108,7 @@ export interface RightDockProps {
   onNewBrowserTab: (tabID: string) => void
   onClose: (tabID: string) => Promise<boolean>
   onCloseDock: () => void
+  onKeyDown?: JSX.EventHandler<HTMLDivElement, KeyboardEvent>
   addMenuOpen: Accessor<boolean>
   onAddMenuOpenChange: (open: boolean) => void
   overflowMenuOpen: Accessor<boolean>
@@ -316,7 +317,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
   }
 
   return (
-    <Tabs class="right-dock-tabs-root" value={tabsValue()} onValueChange={props.onSelect}>
+    <Tabs class="right-dock-tabs-root" value={tabsValue()} onValueChange={props.onSelect} onKeyDown={props.onKeyDown}>
       <div class="right-dock-tabs">
         <TabList
           class="right-dock-tab-strip"
@@ -352,7 +353,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
                     data-panel={tab().panel}
                     disabled={!isOpen() || hidden().has(tabID)}
                     aria-label={title()}
-                    aria-keyshortcuts="Delete"
+                    aria-keyshortcuts={tab().panel === "explorer" && tabsValue() === tabID ? "Delete Control+f Meta+f" : "Delete"}
                     title={title()}
                     onKeyDown={(event) => handleTabKeyDown(event, tabID)}
                   >

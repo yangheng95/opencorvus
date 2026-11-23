@@ -17,3 +17,9 @@
 由包含真实标签及活动内容的 Dock 局部事件边界接收同一个 Explorer 查找动作。工作台利用已选 Explorer、可见 Dock、真实事件来路与当前输入的可用性判定，成功时按原行为聚焦和选中现查询。明确的 Browse files 也复用聚焦动作，保留自己原来的导航和归属判断。从标签明确查找后沿现有入口退休先前的文件夹揭示意图；内容区原捕获和导航复核仍适用。只在活动 Explorer 标签向辅助设备声明该键，保留 Delete 和标签切换。沿用现有查询、结果、目录、文件身份以及键盘输入方式。
 
 候选在英文 100% 和简体中文 160% 实际检查关闭文件得到 Explorer 标签、Ctrl+F 进入搜索并选择原词、改查另一项后方向键及 Enter 打开确切文件。对照内容区 Ctrl+F、文件正文 Ctrl+F、其他已聚焦标签、Escape 和空搜索后目录。继续检查真实查询和原文件、库和进程退出，运行聚焦文件身份检查、类型、语言、样式、构建和文档检查，截图逐张复核后提交并正常推送。
+
+## 实施和验证结果
+
+候选英文 100% 从北仓 `November checklist.md` 的文件关闭按钮启动关闭，原焦点落点仍为 Explorer 标签。Ctrl+F 进入文件搜索并选中当前 `November checklist.md`，贴入新查询即可直接替换，方向键和 Enter 打开 `delivery/north warehouse/receiving/Freight receipt and exceptions.md`。向左移动标签焦点而维持 File 激活时，按 Ctrl+F 后已读文件继续显示。从文件正文按 Ctrl+F 进入已有编辑器搜索并使用 `missing seal numbers`。简体中文 160% 从活动标签选择原查询，换词后打开 `records/验收/交接清单.md`，复核正文「检查文件和现场记录。」关闭该文件，活动标签 Ctrl+F 选中中文词。搜索输入 Escape 恢复项目树，从普通 `archive` 目录行按 Ctrl+F 仍聚焦同一搜索框。 [11 张交互后逐张复核的真实桌面原图](../../artifacts/2026-11-23-explorer-tab-find-shortcut/README.md)
+
+基线和候选正式查询分别按三个词得到 2、1、1 个精确路径，四份正文和五个原件下载匹配各自文件，原件字节与 Git 提交相同。两个 SQLite（嵌入式数据库）通过 `quick_check`，会话、消息、计划、引擎和模型活动表为空。两个已验证所属的服务关闭响应 200，进程退出 0，40786 和 40788 均释放。核心 `bun run test test/server/file-read-identity.test.ts` 通过 7 项、52 断言。类型、双语、样式、正常构建和渲染器公共接口、文档和架构检查通过。真实桌面操作在 Windows 执行 Ctrl+F，Command+F 与其走同一按键判断，未单独进行另一平台验收。

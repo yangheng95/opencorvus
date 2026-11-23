@@ -74,6 +74,7 @@ import { MailboxPanel } from "./components/MailboxPanel"
 import { Button } from "./components/ui/Button"
 import { TabPanel } from "./components/ui/Tabs"
 import {
+  cancelFileExplorerFolderReveal,
   closeFileEditor,
   hasUnsavedFileChanges,
   fileEditorRevealRevision,
@@ -715,6 +716,32 @@ function openRightDockPanel(panel: RightDockPanel, onReveal?: CenterWorkbenchRev
   openCenterWorkbenchPanel(panel, onReveal)
 }
 
+function focusExplorerSearchField(view: HTMLElement, selectQuery = false): boolean {
+  const input = view.querySelector<HTMLInputElement>('[data-ui="file-explorer-search-input"]')
+  if (!input?.isConnected || input.disabled || input.getClientRects().length === 0) return false
+  input.focus({ preventScroll: true })
+  if (input.ownerDocument.activeElement !== input) return false
+  if (selectQuery) input.select()
+  return true
+}
+
+function handleRightDockFind(event: KeyboardEvent & { currentTarget: HTMLDivElement }): void {
+  if (
+    event.defaultPrevented || event.isComposing || event.altKey || event.shiftKey ||
+    !(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "f" ||
+    !rightDockOpen() || selectedCenterWorkbenchTab()?.id !== "explorer"
+  ) return
+  const target = event.target
+  const view = getCenterWorkbenchViews().explorer
+  if (!view || !(target instanceof Element) || !event.currentTarget.contains(target)) return
+  const fromTab = target.matches('[role="tab"][data-tab="explorer"][aria-selected="true"]')
+  if (!fromTab && !view.contains(target)) return
+  if (!focusExplorerSearchField(view, true)) return
+  if (fromTab) cancelFileExplorerFolderReveal()
+  event.preventDefault()
+  event.stopPropagation()
+}
+
 function openProjectFiles(): void {
   const origin = document.activeElement
   const authority = captureApiAuthority()
@@ -729,10 +756,7 @@ function openProjectFiles(): void {
       selectedCenterWorkbenchTab()?.id !== "explorer" ||
       (document.activeElement !== origin && document.activeElement !== document.body)
     ) return
-    const input = view.querySelector<HTMLInputElement>('[data-ui="file-explorer-search-input"]')
-    if (input?.isConnected && !input.disabled && input.getClientRects().length > 0) {
-      input.focus({ preventScroll: true })
-    }
+    focusExplorerSearchField(view)
   })
 }
 
@@ -3313,6 +3337,7 @@ function OverlayRoot() {
           onNewBrowserTab={openBlankBrowserTab}
           onClose={closeRightDockTab}
           onCloseDock={() => setRightDockVisible(false)}
+          onKeyDown={handleRightDockFind}
           onAddMenuOpenChange={setRightDockAddMenuOpen}
           overflowMenuOpen={rightDockOverflowMenuOpen}
           onOverflowMenuOpenChange={setRightDockOverflowMenuOpen}
