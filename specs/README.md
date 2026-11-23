@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [编辑已保存的多步任务草稿时从开头开始](records/2026-11/2026-11-23-mission-draft-editor-initial-position.md)
 - [菜单回车保留确认对话框并归还入口焦点](records/2026-11/2026-11-23-menu-confirmation-keyboard-handoff.md)
 - [上下文菜单打开时聚焦首个可用选项](records/2026-11/2026-11-23-context-menu-initial-item-focus.md)
 - [资源管理器键盘菜单同步当前操作选区](records/2026-11/2026-11-23-explorer-keyboard-context-selection.md)
