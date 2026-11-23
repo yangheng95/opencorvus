@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [专家团安装筛选的真实桌面实拍](2026-11-23-installed-expert-squad-filter-feedback/README.md)
 - [专家团详情标签的真实桌面实拍](2026-11-23-expert-squad-detail-tabs-wrap/README.md)
 - [0.1.53 发布证据](2026-11-23-release-0.1.53/README.md) · 原生、官网与公开日志
 - [设置导航滚动与键盘焦点实拍](2026-11-23-settings-tablist-scroll-owner/README.md)

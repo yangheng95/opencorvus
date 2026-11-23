@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [已安装专家团筛选的空状态和续页动作](2026-11-23-installed-expert-squad-filter-feedback.md)
 - [窄桌面专家团详情标签的完整显示](2026-11-23-expert-squad-detail-tabs-wrap.md)
 - [0.1.53 发布](2026-11-23-release-0.1.53.md)
 - [设置导航让键盘焦点随标签列表滚动](2026-11-23-settings-tablist-scroll-owner.md)
