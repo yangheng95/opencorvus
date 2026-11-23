@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [公开服务商目录连接控件顺序的真实桌面截图](2026-11-24-provider-catalog-connection-tab-order/README.md)
 - [模型服务商内联表单的真实桌面截图](2026-11-24-provider-form-focus-handoff/README.md)
 - [模型服务商搜索结果的真实桌面截图](2026-11-24-provider-search-keyboard-navigation/README.md)
 - [定时任务多词检索的真实桌面截图](2026-11-24-scheduled-automation-multi-term-search/README.md)

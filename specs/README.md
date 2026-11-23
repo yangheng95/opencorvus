@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [公开服务商目录展开后的连接控件顺序](records/2026-11/2026-11-24-provider-catalog-connection-tab-order.md)
 - [模型服务商新增和编辑焦点交接](records/2026-11/2026-11-24-provider-form-focus-handoff.md)
 - [模型服务商搜索结果键盘导航](records/2026-11/2026-11-24-provider-search-keyboard-navigation.md)
 - [定时任务列表跨字段多词搜索](records/2026-11/2026-11-24-scheduled-automation-multi-term-search.md)
