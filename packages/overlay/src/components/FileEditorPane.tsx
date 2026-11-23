@@ -1310,8 +1310,13 @@ export function FileEditorPane() {
                     <div class="file-comparison-labels">
                       <span>− {t(pair().left)}</span><span>+ {t(pair().right)}</span>
                     </div>
-                    <div class="file-comparison-diff" tabIndex={0} role="region" aria-label={t("file_editor.compare_versions")}>
-                      <TextDiffView before={pair().before} after={pair().after} />
+                    <div
+                      class="file-comparison-diff"
+                      tabIndex={0}
+                      role="region"
+                      aria-label={t("file_editor.compare_result", { before: t(pair().left), after: t(pair().right) })}
+                    >
+                      <TextDiffView before={pair().before} after={pair().after} showLineHeader={pair().before !== pair().after} />
                     </div>
                   </>
                 )}

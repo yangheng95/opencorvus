@@ -1556,6 +1556,8 @@ changing resource or API authority and unmounting retire that read. Three pair
 views compare disk/draft, base/disk and base/draft through the shared text
 diff renderer. The comparison body scrolls as one region from the file path
 through the last diff row, with the dialog header and actions kept in place.
+Changed text rows use the shared before/after line headers. The focusable
+result area identifies the actual selected source and target versions.
 For identical logical lines with changed line endings, the
 shared renderer shows each changed line range with its before and after
 separator, including a missing final line ending. Recorded change counts

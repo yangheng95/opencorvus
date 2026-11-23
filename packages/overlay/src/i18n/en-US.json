@@ -2717,6 +2717,7 @@
   "file_editor.compare_adopt_disk": "Keep draft and use this disk base",
   "file_editor.compare_adopt_hint": "Review and merge the changes you want into your draft first. This adopts the displayed disk snapshot as your editing base. Your next Save still checks for newer disk changes.",
   "file_editor.compare_versions": "Versions to compare",
+  "file_editor.compare_result": "Differences from {{before}} to {{after}}",
   "file_editor.compare_disk_draft": "Disk → Draft",
   "file_editor.compare_base_disk": "Base → Disk",
   "file_editor.compare_base_draft": "Base → Draft",
