@@ -1631,6 +1631,10 @@ identity, including the directory suffix. Windows native and portable separators
 therefore match the same file; POSIX literal backslashes retain their identity.
 Hidden-directory preference consumes that same matching projection. The index,
 API result paths and file-opening authority remain the original sources.
+Same-name results display their shortest distinguishing parent path on a
+separate line that can wrap at the Explorer's current width. The existing
+virtual list measures those rows; a focus target taller than the viewport can
+settle when it fills the visible region.
 Explorer search uses the same owned result for waiting, errors and rows. A
 previous result with identical query text does not settle a new query source;
 the current source must supply the result before the page reports no matches.

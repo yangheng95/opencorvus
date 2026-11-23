@@ -557,7 +557,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (request.waitingForScroll) {
       const rowRect = element.getBoundingClientRect()
       const viewport = listElement.getBoundingClientRect()
-      if (!rowRect.height || rowRect.top < viewport.top || rowRect.bottom > viewport.bottom) return
+      const inView = rowRect.height <= viewport.height
+        ? rowRect.top >= viewport.top && rowRect.bottom <= viewport.bottom
+        : rowRect.top <= viewport.top && rowRect.bottom >= viewport.bottom
+      if (!rowRect.height || !inView) return
       request.waitingForScroll = false
     }
     element.focus({ preventScroll: true })
@@ -2398,8 +2401,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         const origin = focused instanceof HTMLElement && menu?.contains(focused) ? focused : trigger
         requestFileExplorerFolder({ ...scope, authority: scope.authority, path: item().path, origin })
       }
+      const directoryHint = () => searchDirectoryHints().get(row().entry.path)
       const directoryDetail = () => {
-        const hint = searchDirectoryHints().get(row().entry.path)
+        const hint = directoryHint()
         return hint === undefined ? dirname(item().path) : explorerDirectoryDisplayPath(hint)
       }
       const isSearchRowSelected = () => isSelected(item())
@@ -2426,6 +2430,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             data-app-context-menu-trigger="true"
             data-kind={item().type}
             data-search-result=""
+            data-distinct-location={directoryHint() !== undefined ? "" : undefined}
             data-active={isSearchRowSelected() ? "true" : "false"}
             data-selected={isSearchRowSelected() ? "true" : "false"}
             data-dragging={isSearchRowDragging() ? "true" : undefined}

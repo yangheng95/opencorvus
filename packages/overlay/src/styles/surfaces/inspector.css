@@ -848,9 +848,26 @@
   outline-offset: calc(-1px * var(--ui-scale));
 }
 
-.file-explorer-row[data-search-result] .oc-file-row__copy:has(.oc-file-row__detail) .oc-file-row__name {
+.file-explorer-row[data-search-result]:not([data-distinct-location]) .oc-file-row__copy:has(.oc-file-row__detail) .oc-file-row__name {
   flex-shrink: 0;
   max-inline-size: 60%;
+}
+
+.file-explorer-row[data-distinct-location] {
+  height: auto;
+  padding-block: var(--ui-gap-xs);
+}
+
+.file-explorer-row[data-distinct-location] .oc-file-row__copy {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.file-explorer-row[data-distinct-location] :is(.oc-file-row__name, .oc-file-row__detail) {
+  text-overflow: clip;
+  white-space: break-spaces;
+  overflow-wrap: anywhere;
 }
 
 .file-explorer-row[data-active="true"],
