@@ -6,6 +6,7 @@
 import { diffLines } from "diff"
 import { createMemo, createSignal, For, Show } from "solid-js"
 import { localeTag, t, tc } from "../utils/i18n"
+import { compareLineEndings, splitComparisonLines } from "../utils/text-comparison"
 import type { ConversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
 import { Disclosure } from "./ui/Disclosure"
 import { OriginalFileDownload } from "./OriginalFileDownload"
@@ -71,23 +72,13 @@ interface DiffLine {
 
 type DiffOp = DiffLine | { kind: "skip"; lines: DiffLine[] }
 
-// ── Diff helpers ──
-
-function splitDiffLines(text: string): string[] {
-  const value = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n")
-  if (!value) return []
-  const lines = value.split("\n")
-  if (lines[lines.length - 1] === "") lines.pop()
-  return lines
-}
-
 function buildDiffOps(before: string, after: string): DiffLine[] {
   const ops: DiffLine[] = []
   let leftLine = 1
   let rightLine = 1
 
   for (const part of diffLines(before, after)) {
-    const lines = splitDiffLines(part.value)
+    const lines = splitComparisonLines(part.value)
     if (part.added) {
       for (const text of lines) {
         ops.push({ kind: "add", left: "", right: rightLine, text })
@@ -247,6 +238,30 @@ export function DiffView(props: DiffViewProps) {
     >
       {(value) => (
         <div class="diff-comparison">
+          <TextDiffView before={value().before} after={value().after} showLineHeader />
+        </div>
+      )}
+    </Show>
+  )
+}
+
+const lineEndingLabels = {
+  "\n": "diff.line_ending_lf",
+  "\r\n": "diff.line_ending_crlf",
+  "\r": "diff.line_ending_cr",
+  none: "diff.line_ending_none",
+} as const
+
+/** Read-only comparison of actual text values, independent of persisted change receipts. */
+export function TextDiffView(props: { before: string; after: string; showLineHeader?: boolean }) {
+  const endings = createMemo(() => compareLineEndings(props.before, props.after))
+  const ops = createMemo(() => endings() ? [] : collapseDiffOps(buildDiffOps(props.before, props.after)))
+  const hasChanges = createMemo(() => ops().some((op) => op.kind === "add" || op.kind === "del"))
+  const number = (line: number) => line.toLocaleString(localeTag())
+  return (
+    <Show when={endings()} fallback={
+      <>
+        <Show when={props.showLineHeader}>
           <div class="diff-row diff-columns">
             <div class="diff-gutter" aria-hidden="true" />
             <div class="diff-num" title={t("diff.before_line_hint")}>{t("diff.before_line")}</div>
@@ -256,24 +271,43 @@ export function DiffView(props: DiffViewProps) {
               <span data-tone="add">+ {t("files.status.added")}</span>
             </div>
           </div>
-          <TextDiffView before={value().before} after={value().after} />
-        </div>
+        </Show>
+        <Show when={hasChanges()} fallback={<div class="diff-empty"><p class="empty-hint">{t("diff.empty_unchanged")}</p></div>}>
+          <div class="diff-lines">
+            <For each={ops()}>
+              {(line) => (line.kind === "skip" ? <DiffContext lines={line.lines} /> : <DiffLineRow line={line} />)}
+            </For>
+          </div>
+        </Show>
+      </>
+    }>
+      {(changes) => (
+        <table class="diff-line-endings">
+          <caption>{t("diff.line_endings_changed")}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{t("diff.line_endings_lines")}</th>
+              <th scope="col">{t("diff.line_endings_before")}</th>
+              <th scope="col">{t("diff.line_endings_after")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <For each={changes()}>
+              {(range) => (
+                <tr>
+                  <td>
+                    {range.firstLine === range.lastLine
+                      ? number(range.firstLine)
+                      : `${number(range.firstLine)}–${number(range.lastLine)}`}
+                  </td>
+                  <td>{t(lineEndingLabels[range.before ?? "none"])}</td>
+                  <td>{t(lineEndingLabels[range.after ?? "none"])}</td>
+                </tr>
+              )}
+            </For>
+          </tbody>
+        </table>
       )}
-    </Show>
-  )
-}
-
-/** Read-only comparison of actual text values, independent of persisted change receipts. */
-export function TextDiffView(props: { before: string; after: string }) {
-  const ops = createMemo(() => collapseDiffOps(buildDiffOps(props.before, props.after)))
-  const hasChanges = createMemo(() => ops().some((op) => op.kind === "add" || op.kind === "del"))
-  return (
-    <Show when={hasChanges()} fallback={<div class="diff-empty"><p class="empty-hint">{t("diff.empty_unchanged")}</p></div>}>
-      <div class="diff-lines">
-        <For each={ops()}>
-          {(line) => (line.kind === "skip" ? <DiffContext lines={line.lines} /> : <DiffLineRow line={line} />)}
-        </For>
-      </div>
     </Show>
   )
 }

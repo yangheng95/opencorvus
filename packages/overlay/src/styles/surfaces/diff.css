@@ -30,6 +30,27 @@
   line-height: var(--ui-line-height-normal);
 }
 
+.diff-line-endings {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+}
+
+.diff-line-endings :is(caption, th, td) {
+  padding: var(--ui-gap-sm) var(--ui-section-padding-x);
+  text-align: start;
+}
+
+.diff-line-endings :is(caption, th) {
+  color: var(--text-strong);
+  font-weight: var(--ui-font-weight-strong);
+}
+
+.diff-line-endings :is(th, td) {
+  border-top: var(--oc-border-width) solid var(--divider-soft);
+}
+
 .diff-row {
   display: grid;
   grid-template-columns: calc(26px * var(--ui-scale)) calc(52px * var(--ui-scale)) calc(52px * var(--ui-scale)) 1fr;
