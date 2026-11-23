@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [PDF 缩放保持正在阅读的位置](2026-11-23-pdf-zoom-reading-anchor.md)
 - [侧栏项目展开按钮指向各自内容](2026-11-23-sidebar-project-disclosure-identity.md)
 - [单项重命名和移动保留冲突输入](2026-11-23-explorer-single-transfer-conflict-retry.md)
 - [Markdown 源码与预览切换保留阅读位置](2026-11-23-markdown-source-preview-reading-position.md)

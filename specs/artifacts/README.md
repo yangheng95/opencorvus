@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [PDF 缩放阅读位置的桌面证据](2026-11-23-pdf-zoom-reading-anchor/README.md)
 - [侧栏项目展开关联的桌面证据](2026-11-23-sidebar-project-disclosure-identity/README.md)
 - [单项重命名和移动冲突的实页截图](2026-11-23-explorer-single-transfer-conflict-retry/README.md)
 - [Markdown 视图切换的实页截图](2026-11-23-markdown-source-preview-reading-position/README.md)
