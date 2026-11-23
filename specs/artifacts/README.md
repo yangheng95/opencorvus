@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [更新日志搜索焦点的真实桌面截图](2026-11-24-release-history-return-to-search/README.md)
 - [更新日志搜索摘要的真实桌面截图](2026-11-24-release-search-excerpts/README.md)
 - [设置搜索匹配导航的真实桌面截图](2026-11-24-settings-search-match-navigation/README.md)
 - [用量模型表的真实桌面截图](2026-11-24-usage-model-table-density/README.md)
