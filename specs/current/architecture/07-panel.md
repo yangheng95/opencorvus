@@ -2599,6 +2599,10 @@ Opening it shows the exact directory from the owning settings scope.
 While saving, assignment checkboxes remain focusable and read-only, showing
 the last confirmed value. Skill rows are keyed by their canonical names so a
 confirmed response updates the existing controls and leaves their details open.
+The available skills search matches every term against the same skill's canonical
+name and author description. Clearing it restores the accepted inventory in its
+original order. A scope change clears the query, and a confirmed assignment in
+the current scope retains the query and the visible matching controls.
 Unconfirmed writes move focus to the existing check action only while the
 original assignment still owns focus.
 

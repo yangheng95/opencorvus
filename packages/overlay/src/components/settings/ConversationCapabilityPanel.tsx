@@ -2,7 +2,7 @@ import { Feedback } from "../ui/Feedback"
 import { isConversationMcpRef } from "@opencorvus-ai/util/conversation-mcp-ref"
 import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
 import { Key } from "@solid-primitives/keyed"
-import { batch, createEffect, createSignal, For, on, Show, onCleanup } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, For, on, Show, onCleanup } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import {
   loadConversationCapability,
@@ -11,12 +11,14 @@ import {
   type ConversationCapabilitySettings,
   type ConversationExperience,
 } from "../../services/conversation-capability"
+import { matchesSearchTerms } from "../../services/text-search"
 import { workLedgerProject } from "../../services/work-ledger"
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { Disclosure } from "../ui/Disclosure"
 import { Checkbox } from "../ui/Checkbox"
 import { Button } from "../ui/Button"
+import { SearchField } from "../ui/SearchField"
 import { SettingsProjectScope } from "./SettingsProjectScope"
 import {
   SettingsEmpty,
@@ -40,6 +42,7 @@ export default function ConversationCapabilityPanel(props: {
   const [issue, setIssue] = createSignal<CapabilityIssue | null>(null)
   const [loading, setLoading] = createSignal(false)
   const [saving, setSaving] = createSignal(false)
+  const [skillQuery, setSkillQuery] = createSignal("")
   let loadGeneration = 0
   let mutationGeneration = 0
   let scopeTrigger: HTMLElement | undefined
@@ -60,6 +63,12 @@ export default function ConversationCapabilityPanel(props: {
   const ownsScope = (scope: CapabilityScope) =>
     directory() === scope.directory && props.experience === scope.experience && isApiAuthorityCurrent(scope.authority)
   const assignmentLocked = () => saving() || loading() || issue() !== null
+  const installedSkills = () => settings()?.skills.installed ?? []
+  const filteredSkills = createMemo(() => {
+    const query = skillQuery().trim()
+    const skills = installedSkills()
+    return query ? skills.filter((skill) => matchesSearchTerms(query, [skill.name, skill.description])) : skills
+  })
 
   function scopeDirectory() {
     return settings()?.scope.directory || directory()
@@ -95,6 +104,7 @@ export default function ConversationCapabilityPanel(props: {
     mutationGeneration++
     batch(() => {
       setSettings(null)
+      setSkillQuery("")
       setIssue(null)
       setLoading(!!scope.directory)
       setSaving(false)
@@ -228,13 +238,27 @@ export default function ConversationCapabilityPanel(props: {
                   <SettingsGroup
                     title={t("settings.product.skills", { product: productLabel() })}
                     description={t("settings.product.skills_description", { product: productLabel() })}
+                    actions={
+                      <Show when={installedSkills().length > 0}>
+                        <SearchField
+                          clearable
+                          dataUI="conversation-capability-skill-search"
+                          value={skillQuery()}
+                          ariaLabel={t("settings.product.skills_search_label")}
+                          placeholder={t("settings.product.skills_search")}
+                          onValueChange={setSkillQuery}
+                        />
+                      </Show>
+                    }
                   >
                     <SettingsSurface>
                       <Show
-                        when={current().skills.installed.length > 0}
-                        fallback={<SettingsEmpty>{t("skill.none")}</SettingsEmpty>}
+                        when={filteredSkills().length > 0}
+                        fallback={
+                          <SettingsEmpty>{t(installedSkills().length ? "settings.product.skills_no_results" : "skill.none")}</SettingsEmpty>
+                        }
                       >
-                        <Key each={current().skills.installed} by="name">
+                        <Key each={filteredSkills()} by="name">
                           {(skill) => {
                             const assigned = () => current().skills.assigned_refs.includes(skill().name)
                             return (
