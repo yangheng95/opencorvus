@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [设置标题在狭窄桌面保留项目可读宽度](records/2026-11/2026-11-23-settings-section-header-readable-scope.md)
 - [技能库搜索当前项目已安装技能](records/2026-11/2026-11-23-skill-library-installed-filter.md)
 - [视图缩放保持键盘可达与可见焦点](records/2026-11/2026-11-23-view-menu-zoom-focus.md)
 - [笔记列表完整呈现标题与删除目标](records/2026-11/2026-11-23-memory-note-title-identity.md)

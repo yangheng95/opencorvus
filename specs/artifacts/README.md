@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [设置标题和项目范围的窄桌面截图](2026-11-23-settings-section-header-readable-scope/README.md)
 - [技能库已安装搜索截图](2026-11-23-skill-library-installed-filter/README.md)
 - [视图缩放与可见焦点截图](2026-11-23-view-menu-zoom-focus/README.md)
 - [笔记标题与删除目标截图](2026-11-23-memory-note-title-identity/README.md)
