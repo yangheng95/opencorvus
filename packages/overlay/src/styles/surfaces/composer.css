@@ -950,6 +950,7 @@
 
 .composer-reference-popover[data-editable="true"] {
   padding: var(--ui-gap-lg);
+  scrollbar-gutter: stable;
 }
 
 .composer-reference-popover-heading {
@@ -973,10 +974,7 @@
 }
 
 .composer-reference-results {
-  max-height: calc(360px * var(--ui-scale));
-  overflow-y: auto;
   padding: var(--ui-gap-md);
-  scrollbar-gutter: stable;
 }
 
 .composer-reference-section + .composer-reference-section {
@@ -999,12 +997,6 @@
   max-height: calc(370px * var(--ui-scale));
   overflow-y: auto;
   padding: var(--ui-gap-md);
-}
-
-.composer-reference-results .composer-reference-list {
-  max-height: none;
-  overflow: visible;
-  padding: 0;
 }
 
 .composer-reference-listbox {

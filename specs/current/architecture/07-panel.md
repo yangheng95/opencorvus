@@ -3962,8 +3962,9 @@ selection change; clearing the last selected reference remains available.
 Shared Listbox items use the installed library's default li/option element;
 the library owns keyboard and pointer selection without a competing native
 button activation. File changes retain their explicit keyboard/click open
-action. The editable reference Listbox's scrollRef is the existing bounded
-results container, so its keyboard-focused item scrolls within that owner.
+action. The editable reference popover owns scrolling and supplies the Listbox
+scrollRef, so keyboard focus scrolls the option into the popup's visible area.
+The results use their natural height within that single scroll region.
 File comparison groups use the same complete observation identity as the
 merge projection. Rendered rows are keyed by selected Task scope, that group
 identity and exact recorded path; global list index is position only. Both

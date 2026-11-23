@@ -98,7 +98,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   const [anchorRef, setAnchorRef] = createSignal<HTMLElement>()
   let searchInputRef: HTMLInputElement | undefined
   let listboxElement: HTMLUListElement | undefined
-  let resultsElement: HTMLDivElement | undefined
+  let popoverElement: HTMLDivElement | undefined
   const readOnlyCopy = () => READ_ONLY_REFERENCE_COPY[props.referenceOrigin]
 
   const skillOptions = createMemo<ComposerReferenceOption[]>(() => [
@@ -418,7 +418,11 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
         </Popover.Trigger>
       </div>
       <Popover.Portal>
-        <Popover.Content class="composer-reference-popover" data-editable={props.readOnly ? undefined : "true"}>
+        <Popover.Content
+          ref={popoverElement}
+          class="composer-reference-popover"
+          data-editable={props.readOnly ? undefined : "true"}
+        >
           <Show when={props.controls}>
             <div class="composer-reference-controls">{props.controls}</div>
           </Show>
@@ -535,11 +539,11 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                     {t("expert_squad.loading")}
                   </div>
                 </Show>
-                <div ref={resultsElement} class="composer-reference-results">
+                <div class="composer-reference-results">
                   <Show when={editableGroups().length > 0}>
                     <ListboxRoot<ComposerReferenceOption, ComposerReferenceGroup>
                       ref={listboxElement}
-                      scrollRef={() => resultsElement}
+                      scrollRef={() => popoverElement}
                       class="composer-reference-listbox"
                       id="composerReferenceListbox"
                       density="rich"
