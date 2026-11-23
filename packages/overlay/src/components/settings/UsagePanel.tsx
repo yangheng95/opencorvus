@@ -19,18 +19,26 @@ import { SegmentedControl } from "../ui/SegmentedControl"
 import { Tooltip } from "../ui/Tooltip"
 import { SettingsPanel } from "./layout"
 
+const PERCENT_FRACTION_DIGITS = 1
+const PERCENT_DISPLAY_STEP = 10 ** -PERCENT_FRACTION_DIGITS
+
 function exactNumber(value: number): string {
   return new Intl.NumberFormat(localeTag(), { maximumFractionDigits: 0 }).format(value)
 }
 
 function percent(value: number): string {
-  return new Intl.NumberFormat(localeTag(), { maximumFractionDigits: 1 }).format(value) + "%"
+  return new Intl.NumberFormat(localeTag(), { maximumFractionDigits: PERCENT_FRACTION_DIGITS }).format(value) + "%"
 }
 
 function UsageShare(props: { value: number }) {
+  const upperBound = 100 - PERCENT_DISPLAY_STEP
   const bound = () => {
-    if (props.value > 0 && props.value < 0.1) return { value: 0.1, sign: "<", label: "usage.share_below" }
-    if (props.value < 100 && props.value > 99.9) return { value: 99.9, sign: ">", label: "usage.share_above" }
+    if (props.value > 0 && props.value < PERCENT_DISPLAY_STEP) {
+      return { value: PERCENT_DISPLAY_STEP, sign: "<", label: "usage.share_below" }
+    }
+    if (props.value < 100 && props.value > upperBound) {
+      return { value: upperBound, sign: ">", label: "usage.share_above" }
+    }
   }
   return (
     <Show when={bound()} fallback={percent(props.value)}>
@@ -62,6 +70,10 @@ function dateRange(data: UsageStatistics): string {
 function comparisonLabel(value: number | null): string {
   if (value === null) return t("usage.comparison_new")
   if (value === 0) return t("usage.comparison_even")
+  if (Math.abs(value) < PERCENT_DISPLAY_STEP) {
+    const key = value > 0 ? "usage.comparison_increase_under" : "usage.comparison_decrease_under"
+    return t(key, { value: percent(PERCENT_DISPLAY_STEP) })
+  }
   const sign = value > 0 ? "+" : ""
   return t("usage.comparison_value", { value: `${sign}${percent(value)}` })
 }

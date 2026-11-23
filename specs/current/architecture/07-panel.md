@@ -2741,6 +2741,9 @@ settings content uses one stacked column.
 Model share and pricing coverage reserve 0% and 100% for the exact endpoints.
 Interior values closer than 0.1 percentage points to either endpoint show a compact
 inequality with a localized spoken equivalent.
+Period comparisons express a nonzero change smaller than the 0.1% display step
+as a localized increase or decrease below that bound. The even state represents
+an exact zero change, and the new state represents use without a prior baseline.
 Each official documentation link is named by its visible action followed by the
 localized title of its source card.
 No personal identity, subscription, streak or plugin usage is inferred from server
