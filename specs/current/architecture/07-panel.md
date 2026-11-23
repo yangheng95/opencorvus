@@ -1224,6 +1224,9 @@ The initial view settles with the first successful content read, including a
 retry after an initial read failure. Explicit source ranges and Find reveal
 Source; an existing identity retains its chosen view and dirty draft through
 the same file-workbench owner.
+Leaving a rendered Markdown Preview for Source records its vertical reading
+offset. Returning to the same draft and reveal restores the offset after
+rendering. A new file read or reveal uses its own destination and focus rules.
 
 Primary navigation retains visible localized captions on the existing actions.
 The Composer's mode selector exposes work type and conversation approach with

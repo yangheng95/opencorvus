@@ -186,6 +186,7 @@ export function FileEditorPane() {
   let binaryDownloadButton: HTMLButtonElement | undefined
   let binaryDownloadFeedback: HTMLDivElement | undefined
   let previewRevealedRevision: number | undefined
+  let previewReadingPosition: { scrollTop: number; revealRevision: number; draftRevision: number } | undefined
 
   const contentTarget = createMemo(
     () => {
@@ -330,11 +331,20 @@ export function FileEditorPane() {
   const revealRenderedDocument = createMemo<MarkdownRenderedHandler | undefined>(() => {
     const fragment = target()?.markdownSection
     const position = target()?.documentPosition
-    if (!fragment && !position) return
+    const readingPosition = previewVisible() ? previewReadingPosition : undefined
+    if (!fragment && !position && !readingPosition) return
     const revision = fileEditorRevealRevision()
     return (revealSection) => {
       const preview = markdownPreview()
       if (!preview || revision !== fileEditorRevealRevision() || !previewVisible() || !ownsRenderedPreview(preview)) return
+      if (readingPosition && readingPosition === previewReadingPosition) {
+        previewReadingPosition = undefined
+        if (readingPosition.revealRevision === revision && readingPosition.draftRevision === draftRevision) {
+          preview.scrollTop = readingPosition.scrollTop
+          return
+        }
+      }
+      if (!fragment && !position) return
       const moveFocus = claimPreviewFocus(preview, revision)
       if (position) {
         if (moveFocus) restoreFileDocumentPosition(preview, position)
@@ -358,13 +368,22 @@ export function FileEditorPane() {
   const comparisonReading = () => comparison()?.status === "loading"
   const comparisonUnavailable = () => comparisonReading() || isBusy() || fileEditorReserved()
   const pendingRecordedUpdate = () => observationKey() !== null && observationKey() !== loadedObservationKey()
+  const switchTextView = (view: "source" | "preview") => {
+    if (view === "source" && previewVisible()) {
+      const preview = markdownPreview()
+      if (preview && ownsRenderedPreview(preview)) {
+        previewReadingPosition = { scrollTop: preview.scrollTop, revealRevision: fileEditorRevealRevision(), draftRevision }
+      }
+    }
+    setTextView(view)
+  }
   const runTextNavigation = (action: keyof CodeEditorNavigation) => {
     const file = target()
     const navigation = editorNavigation()
     if (!file || !navigation || !textContent() || isBusy() || fileEditorReserved()) return
     const generation = loadGeneration
     const authority = captureApiAuthority()
-    setTextView("source")
+    switchTextView("source")
     // Solid reveals the retained editor before its native panel claims focus.
     queueMicrotask(() => {
       if (
@@ -550,6 +569,7 @@ export function FileEditorPane() {
       }
       retireComparison()
       retireDownload()
+      previewReadingPosition = undefined
       const retainDraft = identity === activeTargetIdentity && dirty()
       if (identity !== activeTargetIdentity) {
         setTextView(null)
@@ -967,7 +987,7 @@ export function FileEditorPane() {
                 { value: "source", label: t("file_editor.view_source") },
                 { value: "preview", label: t("file_editor.view_preview") },
               ]}
-              onChange={setTextView}
+              onChange={switchTextView}
             />
           </div>
         </Show>
