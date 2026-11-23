@@ -2455,13 +2455,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             draggable={!commandBusy()}
             style={{ "--file-explorer-row-depth": String(row().depth) }}
             title={label()}
-            onContextMenu={(event) => {
-              event.stopPropagation()
-              prepareContextSelection(item())
-            }}
-            onPointerDown={(event) => {
-              if (event.button === 2) prepareContextSelection(item())
-            }}
+            onContextMenu={() => prepareContextSelection(item())}
             onDragStart={(event) => beginExplorerRowDrag(event, item())}
             onDragEnd={clearExplorerDrag}
             onDragEnter={(event) => {
@@ -2541,13 +2535,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           draggable={!commandBusy()}
           style={{ "--file-explorer-row-depth": String(row().depth) }}
           title={node().path}
-          onContextMenu={(event) => {
-            event.stopPropagation()
-            prepareContextSelection(item())
-          }}
-          onPointerDown={(event) => {
-            if (event.button === 2) prepareContextSelection(item())
-          }}
+          onContextMenu={() => prepareContextSelection(item())}
           onDragStart={(event) => beginExplorerRowDrag(event, item())}
           onDragEnd={clearExplorerDrag}
           onDragEnter={(event) => {

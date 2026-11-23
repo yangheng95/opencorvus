@@ -575,3 +575,51 @@ index afc6293cc70e9243ee8a5cb832b69d468eef2b00..78457e10be7f5e1eb5990e02195ae201
  				}
  				break;
  			case "Tab": {
+diff --git a/src/context-menu/context-menu-trigger.tsx b/src/context-menu/context-menu-trigger.tsx
+--- a/src/context-menu/context-menu-trigger.tsx
++++ b/src/context-menu/context-menu-trigger.tsx
+@@ -88,10 +88,8 @@
+ 
+ 	const onContextMenu: JSX.EventHandlerUnion<HTMLElement, MouseEvent> = (e) => {
+ 		// If trigger is disabled, enable the native Context Menu.
+-		if (local.disabled) {
+-			callHandler(e, local.onContextMenu);
+-			return;
+-		}
++		callHandler(e, local.onContextMenu);
++		if (local.disabled) return;
+ 
+ 		// Clearing the long press here because some platforms already support
+ 		// long press to trigger a `contextmenu` event.
+diff --git a/dist/chunk/RHVJLHNR.jsx b/dist/chunk/RHVJLHNR.jsx
+--- a/dist/chunk/RHVJLHNR.jsx
++++ b/dist/chunk/RHVJLHNR.jsx
+@@ -182,10 +182,8 @@
+     clearLongPressTimeout();
+   });
+   const onContextMenu = (e) => {
+-    if (local.disabled) {
+-      callHandler(e, local.onContextMenu);
+-      return;
+-    }
++    callHandler(e, local.onContextMenu);
++    if (local.disabled) return;
+     clearLongPressTimeout();
+     e.preventDefault();
+     e.stopPropagation();
+diff --git a/dist/chunk/H367UGHF.js b/dist/chunk/H367UGHF.js
+--- a/dist/chunk/H367UGHF.js
++++ b/dist/chunk/H367UGHF.js
+@@ -127,10 +127,8 @@
+     clearLongPressTimeout();
+   });
+   const onContextMenu = (e) => {
+-    if (local.disabled) {
+-      callHandler(e, local.onContextMenu);
+-      return;
+-    }
++    callHandler(e, local.onContextMenu);
++    if (local.disabled) return;
+     clearLongPressTimeout();
+     e.preventDefault();
+     e.stopPropagation();
