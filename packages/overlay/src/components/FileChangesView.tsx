@@ -1,3 +1,4 @@
+import { createCollator, createListState, ListKeyboardDelegate } from "@kobalte/core"
 import { ListboxItem, ListboxRoot } from "./ui/Listbox"
 import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, onMount, Show } from "solid-js"
 import {
@@ -335,6 +336,16 @@ export function FileChangesView(props: FileChangesViewProps) {
   const shouldShowFilter = createMemo(() => allRows().length > 0)
   const shouldVirtualizeRows = createMemo(() => filteredRows().length > VIRTUAL_CHANGE_ROW_THRESHOLD)
   const selectedKeys = createMemo(() => (selectedRowKey() ? [selectedRowKey()] : []))
+  const disallowEmptySelection = () => filteredRows().length > 0
+  const listState = createListState({
+    selectionMode: "single",
+    selectedKeys,
+    onSelectionChange: (keys) => setSelectedRowKey([...keys][0] ?? ""),
+    disallowEmptySelection,
+    dataSource: filteredRows,
+    getKey: () => (row: ChangeRowModel) => row.key,
+    getTextValue: () => (row: ChangeRowModel) => row.searchText,
+  })
   const selectedRow = createMemo(() => allRows().find((row) => row.key === selectedRowKey()) || null)
   const selectedDiffTarget = createMemo<DiffTarget | null>(() => {
     const row = selectedRow()
@@ -380,6 +391,45 @@ export function FileChangesView(props: FileChangesViewProps) {
   const scrollRenderedRowIntoView = (row: ChangeRowModel) => {
     renderedRow(row)?.scrollIntoView({ block: "nearest", inline: "nearest" })
   }
+
+  const keyByPage = (key: string, direction: -1 | 1) => {
+    const rows = filteredRows()
+    const index = rows.findIndex((row) => row.key === key)
+    const adjacent = index + direction
+    if (index < 0 || !rows[adjacent]) return
+
+    if (shouldVirtualizeRows()) {
+      const virtualizer = rowVirtualizer
+      if (!virtualizer) return
+      const distance = Math.max(1, virtualizer.viewportSize - virtualizer.getItemSize(index))
+      const offset = virtualizer.getItemOffset(index) + direction * distance
+      let candidate = virtualizer.findItemIndex(offset)
+      // The item containing the offset can start outside the page when moving up.
+      if (direction === -1 && virtualizer.getItemOffset(candidate) < offset) candidate += 1
+      const target = direction === 1 ? Math.max(adjacent, candidate) : Math.min(adjacent, candidate)
+      return rows[target]?.key
+    }
+
+    const list = listEl
+    const current = renderedRow(rows[index]!)?.getBoundingClientRect()
+    if (!list || !current) return
+    const stickyInset = Number.parseFloat(getComputedStyle(list).scrollPaddingBlockStart) || 0
+    const distance = Math.max(1, list.clientHeight - stickyInset - current.height)
+    let target = adjacent
+    for (let candidate = adjacent + direction; rows[candidate]; candidate += direction) {
+      const top = renderedRow(rows[candidate]!)?.getBoundingClientRect().top
+      if (top === undefined || (top - current.top) * direction > distance) break
+      target = candidate
+    }
+    return rows[target]?.key
+  }
+  const keyboardDelegate = Object.assign(
+    new ListKeyboardDelegate(listState.collection, () => listEl, createCollator({ usage: "search", sensitivity: "base" })),
+    {
+      getKeyPageAbove: (key: string) => keyByPage(key, -1),
+      getKeyPageBelow: (key: string) => keyByPage(key, 1),
+    },
+  )
 
   const focusExactRow = (row: ChangeRowModel) => {
     resetFilters()
@@ -670,12 +720,9 @@ export function FileChangesView(props: FileChangesViewProps) {
                 data-grouped={hasGroupLabels() ? "true" : "false"}
                 data-virtualized={shouldVirtualizeRows() ? "true" : "false"}
                 aria-label={t("section.files")}
-                options={filteredRows()}
-                optionValue={(row) => row.key}
-                optionTextValue={(row) => row.searchText}
-                value={selectedKeys()}
-                onChange={(keys) => setSelectedRowKey([...keys][0] ?? "")}
-                disallowEmptySelection={filteredRows().length > 0}
+                state={listState}
+                keyboardDelegate={keyboardDelegate}
+                disallowEmptySelection={disallowEmptySelection()}
                 virtualized
                 scrollToItem={scrollToFocusedRow}
                 onKeyDown={onListShortcutKeyDown}
