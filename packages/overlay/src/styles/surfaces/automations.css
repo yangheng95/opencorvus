@@ -139,6 +139,10 @@
   background: var(--ui-list-hover-bg);
 }
 
+.automations-list .s-row.automation-list-item:focus-visible {
+  outline-offset: calc(-1 * var(--oc-border-width));
+}
+
 .automation-list-item__top,
 .automation-list-item__timing {
   display: flex;
@@ -815,4 +819,8 @@
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
+}
+
+.automations-search-hint {
+  margin-top: var(--ui-gap-sm);
 }

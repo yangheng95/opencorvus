@@ -56,7 +56,7 @@ import { Disclosure } from "../ui/Disclosure"
 import { Icon } from "../ui/Icon"
 import { ListboxItem, ListboxRoot } from "../ui/Listbox"
 import { ComboboxControl } from "../ui/ComboboxControl"
-import { SearchField } from "../ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "../ui/SearchField"
 import { SegmentedControl } from "../ui/SegmentedControl"
 import { SelectControl } from "../ui/SelectControl"
 import { TextField } from "../ui/TextField"
@@ -478,6 +478,15 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const problem = error()
     return problem?.source === "delete-retry" && problem.automationID === id
   }
+  const listActionDisabled = (id: string) => loading() || Boolean(busyAction()) || deletionNeedsRetry(id)
+  const canBrowseSearchResults = createMemo(() =>
+    Boolean(searchQuery()) && filteredAutomations().some(({ id }) => !listActionDisabled(id)),
+  )
+  const searchKeyboardHintID = "automations-search-keyboard-hint"
+  const searchNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseSearchResults() || !listElement?.isConnected) return []
+    return Array.from(listElement.querySelectorAll<HTMLButtonElement>("button.automation-list-item:enabled"))
+  })
   function feedbackRetryLabel(source: AutomationError["source"]): string {
     if (feedbackRetryPending()) return "common.retrying"
     switch (source) {
@@ -1322,9 +1331,17 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               value={search()}
               inputRef={(element) => (listSearchInput = element)}
               placeholder={t("automations.search_placeholder")}
+              ariaDescribedBy={canBrowseSearchResults() ? searchKeyboardHintID : undefined}
+              ariaKeyShortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
               onValueChange={setSearch}
+              resultFocusTarget={searchNavigation.resultFocusTarget}
               disabled={Boolean(busyAction())}
             />
+            <Show when={canBrowseSearchResults()}>
+              <p id={searchKeyboardHintID} class="automations-muted automations-search-hint">
+                {t("settings.search_keyboard_hint")}
+              </p>
+            </Show>
             <div class="automations-filters">
               <SegmentedControl
                 class="automations-filter"
@@ -1371,6 +1388,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                     {(automation) => {
                       const parsed = parseAutomationRecurrence(automation.recurrence)
                       const summary = createMemo(() => recurrenceSummary(parsed))
+                      const actionDisabled = () => listActionDisabled(automation.id)
                       return (
                         <div class="automation-list-row">
                           <SettingsRow
@@ -1379,7 +1397,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             interactive
                             customContent
                             data-selected={String(selectedID() === automation.id)}
-                            disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
+                            aria-keyshortcuts={canBrowseSearchResults() && !actionDisabled() ? "ArrowUp ArrowDown" : undefined}
+                            disabled={actionDisabled()}
+                            onKeyDown={searchNavigation.handleResultKeyDown}
                             onClick={() => selectAutomation(automation.id)}
                           >
                             <Icon name={automation.status === "active" ? "run" : "scheduled"} />
@@ -1408,7 +1428,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             tone="danger"
                             title={deletionLabel(automation)}
                             aria-label={deletionLabel(automation)}
-                            disabled={loading() || Boolean(busyAction()) || deletionNeedsRetry(automation.id)}
+                            disabled={actionDisabled()}
                             onClick={() => void confirmRemoveAutomation(automation)}
                           >
                             <Icon name="delete" />
