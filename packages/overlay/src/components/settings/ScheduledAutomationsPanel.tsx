@@ -363,7 +363,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const initialCalendar = automationRecurrenceDefaults(timeZone())
   const [startDate, setStartDate] = createSignal(initialCalendar.startDate)
   const [weekday, setWeekday] = createSignal<AutomationWeekday>(initialCalendar.weekday)
-  const [advancedRule, setAdvancedRule] = createSignal("")
+  const [advancedRule, setAdvancedRule] = createSignal({ text: "", authored: false })
   const [providerID, setProviderID] = createSignal("")
   const [modelID, setModelID] = createSignal("")
   const [reasoningEffort, setReasoningEffort] = createSignal("")
@@ -382,6 +382,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let projectListElement: HTMLUListElement | undefined
   let isStartDateComplete: (() => boolean) | undefined
   let isTimeComplete: (() => boolean) | undefined
+  const calendarFieldsComplete = () => isStartDateComplete?.() && isTimeComplete?.()
   let projectLoadSequence = 0
   let disposed = false
   let errorFeedbackElement: HTMLDivElement | undefined
@@ -625,7 +626,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     )
     setExecutionMode(automation?.target.scope === "session" ? "local" : (automation?.executionMode ?? "local"))
     setPreset(recurrence?.preset ?? "daily")
-    setAdvancedRule(recurrence?.customRule ?? "")
+    setAdvancedRule({ text: recurrence?.customRule ?? "", authored: recurrence?.preset === "custom" })
     setTime(recurrence?.time ?? "09:00")
     setTimeZone(zone)
     setStartDate(calendar.startDate)
@@ -780,6 +781,31 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (nextScope === "session") setExecutionMode("local")
   }
 
+  function recurrenceDraft() {
+    return {
+      preset: preset(),
+      startDate: startDate(),
+      weekday: weekday(),
+      time: time(),
+      timeZone: timeZone().trim(),
+      customRule: advancedRule().text,
+    }
+  }
+
+  function selectRecurrencePreset(next: AutomationRecurrencePreset): void {
+    setError(null)
+    if (next === "custom" && preset() !== "custom" && !advancedRule().authored) {
+      let text = ""
+      try {
+        if (calendarFieldsComplete()) text = buildAutomationRecurrence(recurrenceDraft())
+      } catch (cause) {
+        setError(automationFailure(cause, "automations.error.recurrence_invalid"))
+      }
+      setAdvancedRule({ text, authored: false })
+    }
+    setPreset(next)
+  }
+
   function applyProjectSelection(next: Set<string>): void {
     setError(null)
     const visible = visibleProjects().map((option) => option.target)
@@ -835,7 +861,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       showFormError({ messageKey: "automations.error.edit_target_missing" })
       return
     }
-    if (preset() !== "custom" && (!isStartDateComplete?.() || !isTimeComplete?.())) {
+    if (preset() !== "custom" && !calendarFieldsComplete()) {
       showFormError({ messageKey: "automations.error.calendar_fields_required" })
       return
     }
@@ -846,14 +872,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       sessionID: sessionTargetID(),
       projectTargets: [...selectedProjectTargets()],
       executionMode: executionMode(),
-      recurrence: {
-        preset: preset(),
-        startDate: startDate(),
-        weekday: weekday(),
-        time: time(),
-        timeZone: timeZone().trim(),
-        customRule: advancedRule(),
-      },
+      recurrence: recurrenceDraft(),
       model: providerID() && modelID() ? { providerID: providerID().trim(), modelID: modelID().trim() } : undefined,
       reasoningEffort: reasoningEffort().trim(),
     }
@@ -1910,11 +1929,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                     <SelectControl
                       options={recurrenceOptions()}
                       value={selectOption(recurrenceOptions(), preset())}
-                      onChange={(option) => {
-                        if (!option) return
-                        setError(null)
-                        setPreset(option.value)
-                      }}
+                      onChange={(option) => option && selectRecurrencePreset(option.value)}
                       optionValue="value"
                       optionTextValue="label"
                       disallowEmptySelection
@@ -2007,13 +2022,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       <AutoGrowTextarea
                         rows={4}
                         maxLines={8}
-                        value={advancedRule()}
+                        value={advancedRule().text}
                         data-ui="automation-advanced-rule"
                         required
                         placeholder={"DTSTART;TZID=Asia/Singapore:20260727T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR"}
                         onInput={(event) => {
                           setError(null)
-                          setAdvancedRule(event.currentTarget.value)
+                          setAdvancedRule({ text: event.currentTarget.value, authored: true })
                         }}
                       />
                       <TextField.Description>{t("automations.advanced_help")}</TextField.Description>

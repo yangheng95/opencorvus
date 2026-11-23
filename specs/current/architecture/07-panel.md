@@ -2154,8 +2154,11 @@ Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing
 unrelated fields omits recurrence from the existing PATCH. Seconds and advanced
 recurrence components that the basic fields cannot express retain their complete
-authored rule in the current advanced editor. Explicit calendar changes use the
-chosen anchor, rather than resetting it to the save date. Weekly review's Friday
+authored rule in the current advanced editor. Entering advanced mode from
+complete basic fields seeds the editable rule through the same serializer as
+Save. Unedited rules reflect later basic changes on conversion. Saved and
+manually edited advanced text retains its authored value across mode switches.
+Explicit calendar changes keep the chosen anchor. Weekly review's Friday
 is suggestion data passed through that same weekly field. Suggestion rows use
 their actual frequency, weekday and time through the shared localized timing
 presentation. A new draft opens with the current default time zone. Editing
