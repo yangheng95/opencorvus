@@ -122,7 +122,8 @@ export function RightDock(props: RightDockProps): JSX.Element {
   let stripEl!: HTMLDivElement
   let moreBtnEl!: HTMLButtonElement
   let disposed = false
-  let focusReturnOrigin: Element | undefined
+  let focusReturn: { origin: Element; tabID?: string } | undefined
+  let overflowActivation: { origin: Element; tabID: string } | undefined
   const [hidden, setHidden] = createSignal<Set<string>>(new Set())
 
   const openSet = () => new Set(props.tabs().map((tab) => tab.id))
@@ -198,16 +199,18 @@ export function RightDock(props: RightDockProps): JSX.Element {
 
   const reflowScheduler = createAnimationFrameScheduler(() => {
     reflow()
-    const origin = focusReturnOrigin
-    focusReturnOrigin = undefined
-    if (!origin || disposed || !props.open()) return
+    const request = focusReturn
+    focusReturn = undefined
+    if (!request || disposed || !props.open()) return
+    if (request.tabID !== undefined && props.active() !== request.tabID) return
     const dock = stripEl.closest<HTMLElement>("#rightDock")
-    if (dock) restoreRightDockFocus(dock, origin)
+    if (dock) restoreRightDockFocus(dock, request.origin)
   })
   const scheduleReflow = reflowScheduler.schedule
   onCleanup(() => {
     disposed = true
-    focusReturnOrigin = undefined
+    focusReturn = undefined
+    overflowActivation = undefined
     reflowScheduler.cancel()
   })
 
@@ -215,7 +218,22 @@ export function RightDock(props: RightDockProps): JSX.Element {
     const origin = document.activeElement
     const closed = await props.onClose(tabID)
     if (!closed || disposed || !props.open() || props.tabs().some((tab) => tab.id === tabID) || !origin) return
-    focusReturnOrigin = origin
+    focusReturn = { origin }
+    scheduleReflow()
+  }
+
+  function activateOverflowTab(tabID: string): void {
+    const origin = moreBtnEl.ownerDocument.activeElement
+    if (origin) overflowActivation = { origin, tabID }
+    props.onSelect(tabID)
+  }
+
+  function focusActivatedOverflowTab(event: Event): void {
+    const activation = overflowActivation
+    overflowActivation = undefined
+    if (!activation || !props.open() || props.active() !== activation.tabID) return
+    event.preventDefault()
+    focusReturn = activation
     scheduleReflow()
   }
 
@@ -402,7 +420,10 @@ export function RightDock(props: RightDockProps): JSX.Element {
           <DropdownMenu.Root
             open={props.overflowMenuOpen()}
             onOpenChange={(open) => {
-              if (open) props.onAddMenuOpenChange(false)
+              if (open) {
+                overflowActivation = undefined
+                props.onAddMenuOpenChange(false)
+              }
               props.onOverflowMenuOpenChange(open)
             }}
             placement="bottom-end"
@@ -424,7 +445,11 @@ export function RightDock(props: RightDockProps): JSX.Element {
               <Icon name="more-horizontal" size="medium" />
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-              <DropdownMenu.Content class="right-dock-menu" data-ui="right-dock-overflow-menu">
+              <DropdownMenu.Content
+                class="right-dock-menu"
+                data-ui="right-dock-overflow-menu"
+                onCloseAutoFocus={focusActivatedOverflowTab}
+              >
                 <For each={hiddenTabs()}>
                   {(tab) => {
                     const meta = () => rightDockPanelMeta(tab.panel)
@@ -434,7 +459,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
                         type="button"
                         class="right-dock-menu-item"
                         data-checked={props.active() === tab.id ? "" : undefined}
-                        onSelect={() => props.onSelect(tab.id)}
+                        onSelect={() => activateOverflowTab(tab.id)}
                       >
                         <Icon name={meta().icon} size="compact" />
                         <span>{tabLabel(tab)}</span>
@@ -544,7 +569,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
                       const origin = event.currentTarget
                       if (meta.id === "browser") props.onNewBrowserTab(nextBlankBrowserTab().id)
                       else props.onOpen(meta.id)
-                      focusReturnOrigin = origin
+                      focusReturn = { origin }
                       scheduleReflow()
                     }}
                   >
