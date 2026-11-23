@@ -9,3 +9,14 @@
 - [基线 03 · 正常 research 的三条建议](03-baseline-en-mission-research-recommendations.jpg)
 - [基线 04 · 输入区通过同一查询展示无关建议](04-baseline-en-composer-same-unrelated-recommendations.jpg)
 - [基线 05 · 精算首项之后混入其它领域](05-baseline-en-composer-actuarial-query-with-weak-results.jpg)
+
+候选实际页面 `40626/ui/` 使用同一目录与独立运行数据。
+
+- [候选 06 · 新建无匹配仍保留原选择](06-candidate-en-mission-preserves-selection-with-no-market-results.jpg)
+- [候选 07 · 新建表单中的唯一精算建议](07-candidate-en-mission-exact-actuarial-recommendation.jpg)
+- [候选 08 · research 保留前三项与顺序](08-candidate-en-mission-research-preserves-ranking.jpg)
+- [候选 09 · 输入区的英文空结果与市场入口](09-candidate-en-composer-empty-search-readable.jpg)
+- [候选 10 · 输入区中的唯一精算建议](10-candidate-en-composer-exact-actuarial-recommendation.jpg)
+- [候选 11 · 中文合同查询的首项 Commercial Legal](11-candidate-zh-composer-commercial-legal-first.jpg)
+- [候选 12 · 中文界面中的三条实际市场结果](12-candidate-zh-composer-details-remain-localized.jpg)
+- [候选 13 · 紧凑字符串得到明确中文空结果](13-candidate-zh-composer-compact-query-resolves-empty.jpg)

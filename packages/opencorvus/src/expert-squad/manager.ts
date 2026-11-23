@@ -33,7 +33,7 @@ import {
   preserveExpertSquadMutationEvidence,
   readExpertSquadMutationPreservation,
 } from "./mutation-preservation"
-import { scoreDiscoveryFields, scoreDocumentField } from "@/capability/fuzzy"
+import { scoreDiscoveryFields } from "@/capability/fuzzy"
 import { ExpertSquadIDSchema, ExpertSquadNamespaceSchema } from "./id"
 
 export namespace ExpertSquadPackageManager {
@@ -1671,8 +1671,8 @@ export namespace ExpertSquadPackageManager {
     payloadPackageSources.map((source) => [
       `${source.namespace}/${source.id}`,
       {
-        // The selector document is the package's own statement of when it should be chosen, so it is
-        // the highest-signal discovery text a package owns. It is short enough to score as identity.
+        // The selector is the package's statement of when it should be chosen and carries
+        // the strongest weight among its longer documents.
         selector: boundedPayloadSearchText(
           source,
           (relativePath) => relativePath === "selector.md",
@@ -1700,23 +1700,19 @@ export namespace ExpertSquadPackageManager {
     packageFields: { selector: string; skills: string; prompts: string } | undefined
     localization: { primary: readonly string[]; detail: readonly string[] } | undefined
   }): number | undefined {
-    const identity = scoreDiscoveryFields(input.query, [
-      { text: input.entry.id, weight: 1 },
-      { text: input.entry.name, weight: 1 },
-      { text: input.entry.label, weight: 0.96 },
+    return scoreDiscoveryFields(input.query, [
+      { text: input.entry.id, weight: 1, kind: "name" },
+      { text: input.entry.name, weight: 1, kind: "name" },
+      { text: input.entry.label, weight: 0.96, kind: "name" },
       { text: input.entry.description ?? "", weight: 0.9 },
       { text: input.entry.manifest.selector.summary, weight: 0.82 },
       { text: input.entry.manifest.selector.selection_guidance, weight: 0.72 },
       ...(input.localization?.primary ?? []).map((text) => ({ text, weight: 0.94 })),
       ...(input.localization?.detail ?? []).map((text) => ({ text, weight: 0.8 })),
-    ])
-    const body = Math.max(
-      scoreDocumentField(input.query, input.packageFields?.selector ?? "") * 0.9,
-      scoreDocumentField(input.query, input.packageFields?.skills ?? "") * 0.84,
-      scoreDocumentField(input.query, input.packageFields?.prompts ?? "") * 0.76,
-    )
-    if (identity === undefined && body <= 0) return undefined
-    return Math.max(identity ?? 0, body)
+      { text: input.packageFields?.selector ?? "", weight: 0.9, kind: "document" },
+      { text: input.packageFields?.skills ?? "", weight: 0.84, kind: "document" },
+      { text: input.packageFields?.prompts ?? "", weight: 0.76, kind: "document" },
+    ], { requireWordEvidence: true })
   }
 
   const payloadMarketSnapshotCache = new Map<

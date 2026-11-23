@@ -19,3 +19,11 @@
 使随包市场所有来源以同一套加权相关性函数接受当前查询。对使用空格分词的查询，要求对应字段提供实际语句或词语证据。保留完整标准化搜索词组、词语自身、前缀与近似词形，多词查询需要至少两个不同的词，专名/标识仍可通过有限的词内拼写差异提供证据。长正文不能用散落字符单独入选。中日韩继续使用已有无空格文字证据。每个字段已有权重继续参与排名，正文与短资料均按现有最低相关性统一入选。普通发现调用的输入及排序合同保持。以脚本对实际目录预测，三种无关语句的通过数为 0，三项主要 `research` 建议保持原序，中文合同仍以 Commercial Legal 首选；精算短语仅剩具体领域包。正式接口和实页结果以候选真实运行验收为准。
 
 聚焦覆盖专名和拼写近似、正文领域精确命中、双语商业合同和代码场景、实际安装路径和现有已安装发现。候选实际测试新建表单与输入区的无关短语/精算短语/正常关键词、本地化中文合同及修正查询后的结果，留存正式请求、目录排序和截图。核对项目范围、计数、错误访问、空查询、工作类型过滤及游标、检查 SQLite 数据、正常关闭。运行后端和界面类型、相关测试、构建、语言及文档检查后范围提交并推送。
+
+## 实施与实际验收
+
+在 `40626/ui/` 通过正式项目服务加载 `main-DWL_DZIN.js`。新建多步任务和项目输入区的 `repot indoor succulents` 都在市场结算后显示相应空结果，新建表单保留原选 Dynamic 和查询。两处把 `unpaid claim triangle` 显示为一条 Actuarial Reserving。英语 `research` 仍按 Browser Research & Acceptance、Deep Research、Equity Research 排列前三项。中文询问商务合同后，Commercial Legal 仍是第一条，说明和安装控件使用当前界面语言。再换到原紧凑错误查询显示中文无匹配。本人复核 5 张基线和 8 张候选截图。[截图与观察](../../artifacts/2026-11-23-expert-squad-market-query-evidence/README.md)
+
+正式接口复核三条无词证据的查询均返回 0，已安装查询 `research` 仍返回 Research Studio 和 Base。市场 `research` 从 24 项收敛为 20 项，候选第二页依次为 `sales-strategy`、`scientific-research-design`、`academic-paper-review`。英文词内漏字 `reserch` 的前三项仍为 Deep Research、Equity Research 和 Browser Research & Acceptance。空查询逐页核对 6 页与同序的 114 个真实可安装身份。用真实研究游标请求精算查询，响应 HTTP 400 与 `ExpertSquadCatalogCursorInvalidError`。Code 场景 `build a landing page` 返回三个支持该工作类型的包，首项 `frontend-innovate`。基线和候选两套存储均健康，会话、消息、Provider（模型供应商）请求、结果和用量全为 0。两套服务均通过正式接口正常退出，端口释放。
+
+相关性与市场生产路由 21 项聚焦测试、522 个断言通过，包含准确的精算结果、词内漏字、跨语言、安装回读及五个内置目录读取。后端类型、Overlay 构建与渲染器边界、2 种语言 3271 个键、文档 353 个接口操作及 20 份当前架构文档检查通过。查询相关性由确定性本地索引产生，未调用真实模型。安装回读通过现有后端正向测试覆盖，桌面验收使用只读目录。

@@ -140,6 +140,22 @@ describe("expert squad market discovery chain", () => {
       expect(landing.entries[0]!.id).toBe("frontend-innovate")
     })
   }, 60_000)
+
+  test("returns the actuarial reserving package as the complete result for its specialized terminology", async () => {
+    await using project = await memoryProject()
+    await withMarketRoutes(project.path, async (call) => {
+      const market = (await call(`market?${new URLSearchParams({
+        directory: project.path,
+        query: "unpaid claim triangle",
+        availability: "available",
+        productPillar: "work",
+        limit: "3",
+      })}`)) as MarketPage
+
+      expect(market.total_count).toBe(1)
+      expect(market.entries.map((entry) => entry.id)).toEqual(["actuarial-reserving"])
+    })
+  }, 60_000)
 })
 
 

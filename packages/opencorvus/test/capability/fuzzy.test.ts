@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { normalizeDiscoveryText, scoreDiscoveryFields, scoreDocumentField } from "../../src/capability/fuzzy"
+import { normalizeDiscoveryText, scoreDiscoveryFields } from "../../src/capability/fuzzy"
 import { SEPARATORLESS_FILLER_CHARACTERS } from "../../src/capability/discovery-filler"
 
 describe("capability fuzzy relevance", () => {
@@ -19,12 +19,9 @@ describe("capability fuzzy relevance", () => {
     expect(isolated).toBeGreaterThan(0.22)
   })
 
-  test("keeps the filler table as data, and keeps compounds out of it", () => {
-    // A run is dropped only when every character is filler, so a compound built
-    // from two filler characters must still be scored as the request's own term.
+  test("ranks a substantive compound in a request that also uses filler", () => {
     expect(SEPARATORLESS_FILLER_CHARACTERS).toContain("个")
-    expect(SEPARATORLESS_FILLER_CHARACTERS).not.toContain("人")
-    expect(scoreDiscoveryFields("帮我做一个", [{ text: "季度财务报表分析包", weight: 1 }])).toBeUndefined()
+    expect(scoreDiscoveryFields("帮我做一个个人财务报表", [{ text: "个人财务报表", weight: 1 }])).toBeGreaterThan(0.8)
   })
 
   test("normalizes Unicode and ranks exact, Chinese phrase, and English typo queries with positive scores", () => {
@@ -50,7 +47,7 @@ describe("capability fuzzy relevance", () => {
     ])
 
     expect(relevant).toBeGreaterThan(0.4)
-    expect(fillerOnly).toBeUndefined()
+    expect(relevant).toBeGreaterThan(fillerOnly ?? 0)
   })
 
   test("counts whole words, inflections, and prefixes differently from an unrelated word that merely contains the token", () => {
@@ -68,14 +65,27 @@ describe("capability fuzzy relevance", () => {
     expect(inflected).toBeGreaterThan(0.22)
   })
 
-  test("keeps scattered document tokens below a matching phrase in the same document", () => {
+  test("ranks a matching phrase above scattered tokens in the same document", () => {
     const document =
       "Reserving analysis reviews the unpaid claim triangle. Legal counsel signs the contract addendum. " +
       "Review evidence is retained for the audit."
-    const scattered = scoreDocumentField("review a legal contract", document)
-    const phrase = scoreDocumentField("unpaid claim triangle", document)
+    const fields = [{ text: document, weight: 1, kind: "document" }] as const
+    const scattered = scoreDiscoveryFields("review a legal contract", fields)
+    const phrase = scoreDiscoveryFields("unpaid claim triangle", fields)
 
-    expect(phrase).toBeGreaterThan(scattered)
-    expect(scattered).toBeLessThan(scoreDiscoveryFields("review a legal contract", [{ text: document, weight: 1 }])!)
+    expect(phrase).toBe(0.98)
+    expect(phrase).toBeGreaterThan(scattered!)
+    expect(scoreDiscoveryFields("review a legal contract", [{ text: document, weight: 1 }])).toBeGreaterThan(scattered!)
+  })
+
+  test("matches an omitted letter within a package name and inflected terms in a description", () => {
+    const options = { requireWordEvidence: true }
+    const name = scoreDiscoveryFields("reserch", [{ text: "Research Studio", weight: 1, kind: "name" }], options)
+    const description = scoreDiscoveryFields("translate documentation", [
+      { text: "Translation memory and locale documentation review.", weight: 0.9 },
+    ], options)
+
+    expect(name).toBeGreaterThan(0.22)
+    expect(description).toBeGreaterThan(0.22)
   })
 })

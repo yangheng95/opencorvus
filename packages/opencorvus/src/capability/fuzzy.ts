@@ -4,6 +4,7 @@ import { SEPARATORLESS_FILLER_CHARACTERS, SEPARATORLESS_FILLER_SCRIPT } from "./
 export type DiscoverySearchField = {
   text: string
   weight: number
+  kind?: "name" | "document"
 }
 
 const MINIMUM_DISCOVERY_SCORE = 0.22
@@ -142,13 +143,19 @@ function sharedPrefixLength(left: string, right: string): number {
 // partial evidence; everything else falls back to fuzzy matching.
 const TOKEN_STEM_MINIMUM = 5
 
+function wordPresenceScore(token: string, word: string): number {
+  if (token === word) return 1
+  if (token.length >= 4 && word.startsWith(token)) return 0.8
+  const shared = sharedPrefixLength(token, word)
+  return shared >= TOKEN_STEM_MINIMUM && shared >= Math.min(token.length, word.length) - 3 ? 0.7 : 0
+}
+
 function tokenPresenceScore(token: string, words: readonly string[], candidate: string): number {
   if (words.includes(token)) return 1
   let best = 0
   for (const word of words) {
-    if (token.length >= 4 && word.startsWith(token)) return 0.8
-    const shared = sharedPrefixLength(token, word)
-    if (shared >= TOKEN_STEM_MINIMUM && shared >= Math.min(token.length, word.length) - 3) best = Math.max(best, 0.7)
+    best = Math.max(best, wordPresenceScore(token, word))
+    if (best === 0.8) return best
   }
   return Math.max(best, fuzzyScore(token, candidate))
 }
@@ -161,9 +168,7 @@ function tokenCoverageScore(query: string, candidate: string): number {
   return scores.reduce((sum, score) => sum + score, 0) / scores.length
 }
 
-function scoreField(query: string, runs: SeparatorlessRuns | undefined, rawCandidate: string): number {
-  const candidate = normalizeDiscoveryText(rawCandidate)
-  if (!candidate) return 0
+function scoreField(query: string, runs: SeparatorlessRuns | undefined, candidate: string): number {
   if (candidate === query) return 1
   if (candidate.includes(query)) return 0.98
   if (compact(candidate).length >= 4 && query.includes(candidate)) {
@@ -188,27 +193,57 @@ function scoreField(query: string, runs: SeparatorlessRuns | undefined, rawCandi
  */
 const DOCUMENT_TOKEN_DAMPING = 0.75
 
-export function scoreDocumentField(query: string, rawCandidate: string): number {
-  const normalizedQuery = normalizeDiscoveryText(query)
-  const candidate = normalizeDiscoveryText(rawCandidate)
-  if (!normalizedQuery || !candidate) return 0
-  if (candidate.includes(normalizedQuery)) return 0.98
+function scoreDocumentField(query: string, runs: SeparatorlessRuns | undefined, candidate: string): number {
+  if (candidate.includes(query)) return 0.98
   return Math.max(
-    separatorlessScore(separatorlessQueryRuns(normalizedQuery), candidate),
-    tokenCoverageScore(normalizedQuery, candidate) * DOCUMENT_TOKEN_DAMPING,
+    separatorlessScore(runs, candidate),
+    tokenCoverageScore(query, candidate) * DOCUMENT_TOKEN_DAMPING,
   )
 }
 
-export function scoreDiscoveryFields(query: string, fields: readonly DiscoverySearchField[]): number | undefined {
+function hasWordEvidence(
+  query: string,
+  terms: readonly string[],
+  candidate: string,
+  allowNameTypo: boolean,
+): boolean {
+  if (candidate.includes(query)) return true
+  if (!terms.length) return false
+  const words = candidate.split(" ")
+  const required = Math.min(2, terms.length)
+  let matched = 0
+  for (const term of terms) {
+    if (!words.some((word) => wordPresenceScore(term, word) > 0 || (
+      allowNameTypo && term.length >= TOKEN_STEM_MINIMUM && Math.abs(term.length - word.length) === 1 &&
+      fuzzyScore(term, word) >= MINIMUM_DISCOVERY_SCORE
+    ))) continue
+    if (++matched === required) return true
+  }
+  return false
+}
+
+export function scoreDiscoveryFields(
+  query: string,
+  fields: readonly DiscoverySearchField[],
+  options: { requireWordEvidence?: boolean } = {},
+): number | undefined {
   const normalizedQuery = normalizeDiscoveryText(query)
   if (!normalizedQuery) return undefined
   const runs = separatorlessQueryRuns(normalizedQuery)
+  const terms = options.requireWordEvidence && !runs
+    ? [...new Set(normalizedQuery.split(" ").filter((term) => term.length >= 2))]
+    : undefined
   let best = 0
   for (const field of fields) {
     if (!Number.isFinite(field.weight) || field.weight <= 0 || field.weight > 1) {
       throw new Error(`Discovery field weight must be greater than zero and at most one: ${field.weight}`)
     }
-    best = Math.max(best, scoreField(normalizedQuery, runs, field.text) * field.weight)
+    const candidate = normalizeDiscoveryText(field.text)
+    if (!candidate || (terms && !hasWordEvidence(normalizedQuery, terms, candidate, field.kind === "name"))) continue
+    const score = field.kind === "document"
+      ? scoreDocumentField(normalizedQuery, runs, candidate)
+      : scoreField(normalizedQuery, runs, candidate)
+    best = Math.max(best, score * field.weight)
   }
   if (best < MINIMUM_DISCOVERY_SCORE) return undefined
   return Number(best.toFixed(6))
