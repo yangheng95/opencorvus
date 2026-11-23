@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [设置搜索匹配导航的真实桌面截图](2026-11-24-settings-search-match-navigation/README.md)
 - [用量模型表的真实桌面截图](2026-11-24-usage-model-table-density/README.md)
 - [用量周期比较的真实桌面截图](2026-11-24-usage-comparison-small-changes/README.md)
 - [用量摘要指标宽度的真实桌面截图](2026-11-24-usage-summary-metric-width/README.md)
