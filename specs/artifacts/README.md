@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Shell 可读输出和原始回执的实页截图](2026-11-23-shell-output-readable-receipt/README.md)
 - [会话多行 Shell 和项目设置的实页截图](2026-11-23-session-shell-preserve-command-source/README.md)
 - [对话可见空白查找的实页截图](2026-11-23-conversation-search-visible-spacing/README.md)
 - [对话内查找作者标签的实页截图](2026-11-23-conversation-search-message-author/README.md)
