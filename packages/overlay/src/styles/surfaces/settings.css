@@ -1426,7 +1426,7 @@ button.s-row:focus-visible {
   padding: var(--ui-gap-lg) var(--ui-gap-md) var(--ui-gap-xl);
   border-right: var(--oc-border-width) solid var(--divider-soft);
   background: var(--rail-surface);
-  overflow-y: auto;
+  overflow: clip;
   flex-shrink: 0;
 }
 
@@ -1453,6 +1453,7 @@ button.s-row:focus-visible {
 }
 
 .config-nav-group-title {
+  flex-shrink: 0;
   margin: var(--ui-gap-xs) 0 var(--ui-gap-3xs);
   padding-inline: var(--ui-gap-md);
   color: var(--text-muted);
@@ -1462,8 +1463,12 @@ button.s-row:focus-visible {
 }
 
 .config-sidebar .oc-tabs {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--session-scrollbar-track);
 }
 
 /* The shared rail owns layout; Settings keeps its compact row density. */
@@ -1499,6 +1504,10 @@ button.s-row:focus-visible {
 
   background: var(--oc-tab-bg);
   color: var(--text-strong);
+}
+
+.config-sidebar .oc-tab:focus-visible {
+  outline-offset: calc(-1 * var(--oc-border-width));
 }
 
 .config-sidebar .oc-tab[data-selected] {

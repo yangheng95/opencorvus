@@ -2546,7 +2546,9 @@ can dismiss its enclosing menu or settings page through that owner's lifecycle.
 Its navigation uses the shared Tabs rail layout and allows destination labels
 to wrap within the measured sidebar. Settings owns compact row density and
 selection colors; the shared primitive owns vertical layout and tab semantics.
-Rail rows retain their intrinsic content height as the navigation scrolls.
+The tablist is the sidebar's scroll container, so the shared keyboard navigation
+reveals the focused tab and keeps Back and Search in view. Rail rows retain their
+intrinsic content height, and focused outlines stay inside the scroll boundary.
 The search field keeps a concise visible hint and a complete accessible name.
 Shared SearchField uses explicit `clearable` for its clear affordance; optional
 `onClear` owns only a domain action after the single empty-value publication.
