@@ -4165,8 +4165,11 @@ owns these fields; the exact project filter still selects the parent Mission's
 directory. Card previews stably prioritize matching child Tasks within the same
 three-item limit without reordering stored Tasks or changing progress/counts.
 The localized scope hint is associated with the shared SearchField input through
-its optional `ariaDescribedBy` property. Clearing the query restores the original
-Task preview order; the existing filtered-empty reset owns query/project clearing.
+its optional `ariaDescribedBy` property. Down and Up browse the available
+matching card buttons in either Board layout. Escape from those buttons focuses
+the search field with its query, project filter, and layout intact. Clearing the
+query restores the original Task preview order. The existing filtered-empty
+reset owns query and project clearing.
 Expert-squad choice rows and their install action retain their natural content
 height within the creation list's bounded scroll region. Long squad descriptions
 wrap within their own row rather than compressing into adjacent choices.

@@ -92,6 +92,7 @@ function MissionBoardCard(props: {
   mission: MissionRecord
   project: ProjectOption | undefined
   searchQuery: string
+  searchResult: boolean
   dispatching: boolean
   deleting: boolean
   actionBusy: boolean
@@ -170,6 +171,7 @@ function MissionBoardCard(props: {
           title={props.mission.title}
           aria-label={t("mission_board.open_mission", { title: props.mission.title })}
           aria-labelledby={props.project ? `${openLabelID}${projectLabelRefs()}` : undefined}
+          aria-keyshortcuts={props.searchResult ? "ArrowUp ArrowDown Escape" : undefined}
           disabled={props.actionBusy}
           onClick={props.onOpen}
         >
@@ -417,7 +419,7 @@ export function MissionBoard(props: MissionBoardProps) {
   const searchNavigation = createSearchResultNavigation(() => {
     if (!canBrowseSearchResults() || !lanesElement) return []
     return Array.from(lanesElement.querySelectorAll<HTMLButtonElement>('button[data-ui="mission-board-card-open"]:enabled'))
-  })
+  }, { returnToSearch: () => searchInput })
   // Moving an existing card during list reconciliation can blur its focused control.
   createComputed(
     on(visibleMissions, () => {
@@ -646,7 +648,7 @@ export function MissionBoard(props: MissionBoardProps) {
         </Button>
         <p class="mission-board__search-hint" id={searchHintID}>
           {t("mission_board.search_hint")}
-          <Show when={canBrowseSearchResults()}>{" "}{t("settings.search_keyboard_hint")}</Show>
+          <Show when={canBrowseSearchResults()}>{" "}{t("settings.search_return_keyboard_hint")}</Show>
         </p>
         <Show when={projectDirectory()}>
           {(directory) => (
@@ -845,6 +847,7 @@ export function MissionBoard(props: MissionBoardProps) {
                           mission={mission}
                           project={projectContexts().get(mission.directory)}
                           searchQuery={search()}
+                          searchResult={canBrowseSearchResults()}
                           dispatching={
                             pendingAction()?.kind === "dispatch" && pendingAction()?.missionID === mission.missionID
                           }
