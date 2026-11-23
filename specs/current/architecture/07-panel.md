@@ -2151,6 +2151,10 @@ enabled scheduled-task button and move among those buttons in visible order.
 The search field describes those shortcuts in the current language. Results use
 the existing native activation and detail flow, keep the ordinary Tab sequence,
 and show their keyboard outline within the list's clipping boundary.
+Returning from scheduled-task details focuses the list search during its read.
+Once the current read settles, it restores the same definition's available row
+by ID while focus still belongs to that handoff. Interacting with the search or
+moving focus keeps the user's chosen position.
 
 Paused definitions present an explicit localized automatic-runs-paused state in
 both list and detail. Their retained calendar frontier remains the authority for

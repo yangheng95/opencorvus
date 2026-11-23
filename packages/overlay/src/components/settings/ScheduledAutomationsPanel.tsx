@@ -648,12 +648,26 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   async function load(
     preferredID?: string,
-    { background, confirmation, authority }: { background?: boolean; confirmation?: AutomationError; authority?: ApiAuthority } = {},
+    { background, confirmation, authority, returnFocusID }: {
+      background?: boolean
+      confirmation?: AutomationError
+      authority?: ApiAuthority
+      returnFocusID?: string
+    } = {},
   ): Promise<void> {
     listRequest?.abort()
     const request = new AbortController()
     listRequest = request
     const owns = () => !request.signal.aborted && (!authority || isApiAuthorityCurrent(authority))
+    const focusInput = returnFocusID ? listSearchInput : undefined
+    const focus = focusInput ? new AbortController() : undefined
+    if (focusInput && focus) {
+      const release = () => focus.abort()
+      request.signal.addEventListener("abort", release, { signal: focus.signal })
+      for (const event of ["keydown", "pointerdown", "input", "blur"]) {
+        focusInput.addEventListener(event, release, { signal: focus.signal })
+      }
+    }
     if (!background) {
       setLoading(true)
       if (!confirmation && error()?.source !== "list-load") setError(null)
@@ -691,6 +705,15 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       }
     } finally {
       if (!request.signal.aborted && !background) setLoading(false)
+      if (returnFocusID && focus && !focus.signal.aborted) {
+        focusAfterRender(() => {
+          if (!owns() || document.activeElement !== focusInput) return
+          return listElement?.querySelector<HTMLButtonElement>(
+            `button.automation-list-item[data-automation-id="${CSS.escape(returnFocusID)}"]:enabled`,
+          ) ?? undefined
+        })
+      }
+      focus?.abort()
     }
   }
 
@@ -770,15 +793,20 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     focusAfterRender(() => formNameInput)
   }
 
-  function returnToList(): void {
+  function returnToList(returnFocusID?: string): void {
     if (busyAction()) return
     invalidateListNavigation()
     setSelectedID("")
     setCreationRequestID(undefined)
     setEditOwner(null)
     setError(null)
-    void load()
-    focusListReturn()
+    if (returnFocusID) {
+      void load(undefined, { authority: captureApiAuthority(), returnFocusID })
+      focusAfterRender(() => listSearchInput)
+    } else {
+      void load()
+      focusListReturn()
+    }
   }
 
   function selectScope(nextScope: AutomationScope): void {
@@ -1396,6 +1424,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             class="automation-list-item"
                             interactive
                             customContent
+                            data-automation-id={automation.id}
                             data-selected={String(selectedID() === automation.id)}
                             aria-keyshortcuts={canBrowseSearchResults() && !actionDisabled() ? "ArrowUp ArrowDown" : undefined}
                             disabled={actionDisabled()}
@@ -1504,7 +1533,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         size="sm"
                         tone="neutral"
                         disabled={Boolean(busyAction()) || checkingStatus()}
-                        onClick={returnToList}
+                        onClick={() => returnToList(automation().id)}
                       >
                         <Icon name="nav-back" />
                         {t("automations.back")}
@@ -1763,7 +1792,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   size="sm"
                   tone="neutral"
                   disabled={Boolean(busyAction())}
-                  onClick={returnToList}
+                  onClick={() => returnToList()}
                 >
                   <Icon name="nav-back" />
                   {t("automations.back")}
