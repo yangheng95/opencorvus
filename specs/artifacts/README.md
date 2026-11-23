@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件操作选区的真实桌面截图](2026-11-23-explorer-keyboard-context-selection/README.md)
 - [文件比较滚动的真实桌面截图](2026-11-23-file-comparison-scroll-owner/README.md)
 - [项目文件入口键盘交接的真实桌面实拍](2026-11-23-project-files-opener-focus/README.md)
 - [内置专家团分类续页的真实桌面实拍](2026-11-23-expert-squad-built-in-continuation/README.md)

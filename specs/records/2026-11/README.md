@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [资源管理器键盘菜单同步当前操作选区](2026-11-23-explorer-keyboard-context-selection.md)
 - [文件比较的差异从头到尾使用同一滚动区](2026-11-23-file-comparison-scroll-owner.md)
 - [项目文件入口把键盘焦点交给文件搜索](2026-11-23-project-files-opener-focus.md)
 - [已加载全部内置专家团时结束该筛选的续页](2026-11-23-expert-squad-built-in-continuation.md)
