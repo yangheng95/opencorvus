@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务看板搜索结果导航截图](2026-11-23-mission-board-search-result-navigation/README.md)
 - [文件版本比较的行号和版本焦点截图](2026-11-23-file-comparison-version-line-labels/README.md)
 - [PDF 阅读区域键盘焦点的真实桌面截图](2026-11-23-pdf-reading-region-keyboard-focus/README.md)
 - [文件工具栏跳行快捷键的真实桌面截图](2026-11-23-file-workbench-go-to-line-shortcut/README.md)

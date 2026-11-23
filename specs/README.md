@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [多步任务看板用方向键浏览搜索结果](records/2026-11/2026-11-23-mission-board-search-result-navigation.md)
 - [文件版本比较标明行号与实际版本](records/2026-11/2026-11-23-file-comparison-version-line-labels.md)
 - [PDF 阅读区域提供明确的键盘焦点](records/2026-11/2026-11-23-pdf-reading-region-keyboard-focus.md)
 - [文件工具栏支持跳行快捷键](records/2026-11/2026-11-23-file-workbench-go-to-line-shortcut.md)
