@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从项目笔记结果返回搜索草稿](records/2026-11/2026-11-24-memory-result-return-to-search.md)
 - [从服务商与多步任务技能结果返回搜索](records/2026-11/2026-11-24-catalog-results-return-to-search.md)
 - [阅读定时详情时可直接返回列表](records/2026-11/2026-11-24-scheduled-detail-reading-return.md)
 - [从定时任务结果返回搜索](records/2026-11/2026-11-24-scheduled-return-to-search.md)
