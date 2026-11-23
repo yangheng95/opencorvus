@@ -580,6 +580,9 @@ The page field accepts a whole page number within the loaded document on Enter
 through the same page change as the previous and next controls. An invalid draft
 retains the current page and shows the available range. Escape or leaving the
 field cancels its draft.
+The loaded reading viewport follows the controls in the Tab order and precedes
+author links, with a localized name that includes the file, current page and
+total page count. It uses native keyboard scrolling and the shared focus outline.
 The same page render also owns PDF.js TextLayer from that page's streamed text
 content. Its display viewport shares the canvas page geometry independently of
 canvas pixel density. Local transparent text styles enable native selection and

@@ -501,6 +501,13 @@ export function PdfPreview(props: {
         </div>
         <div
           class="msg-artifact-pdf"
+          role={pageCount() ? "region" : undefined}
+          tabIndex={pageCount() ? 0 : undefined}
+          aria-label={pageCount() ? t("artifact.file.reading_region", {
+            name: props.label,
+            page: pageNumberFormat().format(page()),
+            total: totalPages(),
+          }) : undefined}
           onScroll={rememberReading}
           ref={(element) => {
             bindViewport(element)

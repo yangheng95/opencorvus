@@ -2011,6 +2011,11 @@ button.msg-source-chip .msg-source-chip__filename {
   text-align: center;
 }
 
+.msg-artifact-pdf:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--oc-border-width));
+}
+
 .msg-artifact-pdf__page {
   --scale-round-x: 1px;
   --scale-round-y: 1px;
