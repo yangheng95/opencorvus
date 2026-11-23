@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目 MCP 新增表单的键盘焦点](2026-11-23-mcp-add-form-focus.md)
 - [设置标题在狭窄桌面保留项目可读宽度](2026-11-23-settings-section-header-readable-scope.md)
 - [技能库搜索当前项目已安装技能](2026-11-23-skill-library-installed-filter.md)
 - [视图缩放保持键盘可达与可见焦点](2026-11-23-view-menu-zoom-focus.md)
