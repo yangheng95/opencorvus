@@ -2487,6 +2487,8 @@ the selected primary surface. Settings owns search focus, scoped Escape/Back
 and focus restoration. The named settings region accepts click focus on its
 background without adding a sequential stop. Escape remains scoped to that
 region and its contents. Nested action dialogs keep the shared modal primitive.
+WorkLedger navigation hints use the workspace overlay layer. A titlebar menu
+paints above these hints even while the pointer remains on their trigger.
 The Memory project picker derives display order from its loaded options and the
 current interface locale. Language changes reorder the same option objects,
 retaining the selected Project, document scope and open conversation. Loading

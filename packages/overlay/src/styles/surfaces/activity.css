@@ -104,6 +104,10 @@
   color: var(--text-strong);
 }
 
+.oc-tooltip.work-ledger-navigation-tooltip {
+  z-index: var(--ui-z-overlay);
+}
+
 .workspace-navigation .sidebar-codex-action-label {
   max-width: 100%;
   font-size: var(--ui-font-caption);

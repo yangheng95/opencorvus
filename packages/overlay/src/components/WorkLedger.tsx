@@ -340,6 +340,7 @@ function WorkLedgerNavigationAction(props: {
       </Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.ExplainerContent
+          class="work-ledger-navigation-tooltip"
           data-ui={`${props["data-ui"]}-tooltip`}
           heading={props.label}
           description={props.description}
