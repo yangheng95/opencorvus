@@ -198,15 +198,16 @@ export function RightDock(props: RightDockProps): JSX.Element {
     setHidden(next)
   }
 
-  const reflowScheduler = createAnimationFrameScheduler(() => {
+  function reflowAndRestoreFocus(): void {
     reflow()
     const request = focusReturn
     focusReturn = undefined
     if (!request || disposed || !props.open()) return
-    if (request.tabID !== undefined && props.active() !== request.tabID) return
+    if (request.tabID !== undefined && (props.active() !== request.tabID || props.overflowMenuOpen())) return
     const dock = stripEl.closest<HTMLElement>("#rightDock")
     if (dock) restoreRightDockFocus(dock, request.origin)
-  })
+  }
+  const reflowScheduler = createAnimationFrameScheduler(reflowAndRestoreFocus)
   const scheduleReflow = reflowScheduler.schedule
   onCleanup(() => {
     disposed = true
@@ -225,17 +226,26 @@ export function RightDock(props: RightDockProps): JSX.Element {
 
   function activateOverflowTab(tabID: string): void {
     const origin = moreBtnEl.ownerDocument.activeElement
-    if (origin) overflowActivation = { origin, tabID }
     props.onSelect(tabID)
+    const activation = origin && props.open() && props.active() === tabID ? { origin, tabID } : undefined
+    overflowActivation = activation
+    props.onOverflowMenuOpenChange(false)
+    if (!activation) return
+
+    focusReturn = activation
+    // Let the controlled selection and menu close settle before focusing the revealed tab.
+    queueMicrotask(() => {
+      if (focusReturn !== activation) return
+      reflowScheduler.cancel()
+      reflowAndRestoreFocus()
+    })
   }
 
-  function focusActivatedOverflowTab(event: Event): void {
+  function onOverflowMenuCloseAutoFocus(event: Event): void {
     const activation = overflowActivation
     overflowActivation = undefined
     if (!activation || !props.open() || props.active() !== activation.tabID) return
     event.preventDefault()
-    focusReturn = activation
-    scheduleReflow()
   }
 
   function handleTabKeyDown(event: KeyboardEvent, tabID: string): void {
@@ -450,7 +460,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
               <DropdownMenu.Content
                 class="right-dock-menu"
                 data-ui="right-dock-overflow-menu"
-                onCloseAutoFocus={focusActivatedOverflowTab}
+                onCloseAutoFocus={onOverflowMenuCloseAutoFocus}
               >
                 <For each={hiddenTabs()}>
                   {(tab) => {
@@ -460,6 +470,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
                         as="button"
                         type="button"
                         class="right-dock-menu-item"
+                        closeOnSelect={false}
                         data-checked={props.active() === tab.id ? "" : undefined}
                         onSelect={() => activateOverflowTab(tab.id)}
                       >

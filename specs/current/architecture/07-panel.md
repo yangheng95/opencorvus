@@ -5251,8 +5251,9 @@ existing overflow menu activates. The active tab remains visible. Its exact
 tab is removed on close; closing Review also clears the legacy diff
 workspace presentation before the canonical tab collection selects the
 preceding remaining tab.
-Activating a tool in the overflow menu hands focus to its visible selected tab
-after reflow. Dismissing the menu follows the shared menu focus lifecycle.
+Activating a tool closes the controlled overflow menu and hands focus to the
+visible selected tab as the same selection settles. Dismissing the menu follows
+the shared menu focus lifecycle.
 Focused open tabs expose Delete as a direct close action. The close button and
 keyboard action await the same completed close result, including the existing
 File dirty-draft confirmation; cancellation keeps the tab and its focus owner.
