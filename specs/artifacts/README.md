@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文本比较纯换行变化的实页截图](2026-11-23-text-comparison-line-ending-changes/README.md)
 - [对话能力技能筛选的实页截图](2026-11-23-conversation-capability-skill-search/README.md)
 - [编辑器跳转到行的实页截图](2026-11-23-editor-go-to-line-single-prompt/README.md)
 - [全图预览窗口尺寸变化的实页截图](2026-11-23-image-preview-fit-current-viewport/README.md)
