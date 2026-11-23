@@ -14,7 +14,7 @@ import { Badge } from "../ui/Badge"
 import { Disclosure } from "../ui/Disclosure"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
-import { SearchField } from "../ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "../ui/SearchField"
 import { copyText } from "../../services/clipboard"
 import {
   SettingsEmpty,
@@ -296,6 +296,10 @@ export default function MissionSkillPanel() {
 
   const scopeUnavailable = () => currentScope().kind === "unavailable"
   const hasSearchMatches = () => !scopeUnavailable() && Boolean(query().trim() && filteredSkills().length)
+  const searchNavigation = createSearchResultNavigation(() => {
+    if (!hasSearchMatches() || !panel) return []
+    return Array.from(panel.querySelectorAll<HTMLButtonElement>('button[data-ui="mission-skill-item"]:enabled'))
+  })
   const searchKeyboardHintID = "mission-skill-search-keyboard-hint"
   const refreshBusy = () => !scopeUnavailable() && loading()
   const scopeStatus = createMemo(() => {
@@ -402,12 +406,7 @@ export default function MissionSkillPanel() {
                 placeholder={t("mission_skill.search_placeholder")}
                 ariaDescribedBy={hasSearchMatches() ? searchKeyboardHintID : undefined}
                 onValueChange={setQuery}
-                resultFocusTarget={(edge) => {
-                  if (!hasSearchMatches()) return
-                  const matches = filteredSkills()
-                  const skill = edge === "first" ? matches[0] : matches.at(-1)
-                  return skill && catalogRow(skill.name)
-                }}
+                resultFocusTarget={searchNavigation.resultFocusTarget}
               />
               <div class="mission-skill-filters" role="toolbar" aria-label={t("mission_skill.filter_label")}>
                 <For each={["all", "built_in", "project", "global"] as MissionSkillFilter[]}>
@@ -466,6 +465,7 @@ export default function MissionSkillPanel() {
                               class="mission-skill-item"
                               data-ui="mission-skill-item"
                               data-skill-name={skill.name}
+                              aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown" : undefined}
                               interactive
                               leading={<Icon name="workflow" />}
                               title={skill.name}
@@ -478,6 +478,7 @@ export default function MissionSkillPanel() {
                                 </>
                               }
                               actions={<Icon name="chevron" />}
+                              onKeyDown={searchNavigation.handleResultKeyDown}
                               onClick={() => openDetail(skill.name)}
                             />
                           )}

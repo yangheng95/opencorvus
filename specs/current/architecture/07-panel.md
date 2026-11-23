@@ -6207,7 +6207,8 @@ Mission Skill search matches all terms against the same accepted skill's name,
 description, localized source label or required tools, within the selected source filter.
 For a nonempty query with visible matches, the shared SearchField moves focus to
 the first or last matching skill button with Down or Up and describes the shortcut
-with localized guidance. Opening the result is a separate action. The source
+with localized guidance. The same search result navigation moves focus between
+visible matching skills. Opening the result is a separate action. The source
 controls remain in the normal Tab order, and returning from detail restores the
 same filtered result and query.
 The Mission Skill Refresh control stays focusable while the active read is busy
