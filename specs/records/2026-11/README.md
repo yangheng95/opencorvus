@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从看板打开多步任务后可直接用键盘阅读](2026-11-23-mission-board-open-reading-focus.md)
 - [从看板返回同一草稿时保留阅读位置](2026-11-23-mission-context-board-return-reading.md)
 - [长草稿会话从保存请求的开头呈现](2026-11-23-mission-context-initial-reading.md)
 - [草稿保存回执标明多步任务名称](2026-11-23-mission-draft-receipt-title.md)
