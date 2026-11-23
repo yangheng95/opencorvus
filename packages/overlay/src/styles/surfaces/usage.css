@@ -89,7 +89,7 @@
 
 .usage-metrics {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr));
+  grid-template-columns: minmax(min-content, 1.5fr) repeat(4, minmax(min-content, 1fr));
   align-items: center;
 }
 
@@ -127,6 +127,7 @@
   margin-top: var(--ui-gap-sm);
   color: var(--text-muted);
   font: var(--ui-font-weight-body) var(--ui-font-body) / var(--ui-line-height-tight) var(--font);
+  word-break: keep-all;
 }
 
 .usage-metric--primary {
