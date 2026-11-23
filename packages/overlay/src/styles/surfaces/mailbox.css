@@ -239,6 +239,8 @@
 }
 
 .mailbox-item {
+  --mailbox-item-action-size: calc(22px * var(--ui-scale));
+
   position: relative;
   display: grid;
   grid-template-columns: calc(28px * var(--ui-scale)) minmax(0, 1fr);
@@ -393,6 +395,33 @@
   color: var(--text-muted);
 }
 
+.mailbox-item[data-expanded] .mailbox-item__topline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto calc(2 * var(--mailbox-item-action-size));
+  grid-template-rows: minmax(var(--mailbox-item-action-size), auto) auto;
+  align-items: center;
+  row-gap: var(--ui-gap-3xs);
+}
+
+.mailbox-item[data-expanded] .mailbox-item__subject {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.mailbox-item[data-expanded] .mailbox-item__time {
+  grid-column: 1;
+  grid-row: 1;
+  max-width: none;
+}
+
+.mailbox-item[data-expanded] .mailbox-item__chevron {
+  grid-column: 2;
+  grid-row: 1;
+}
+
 .mailbox-item__body {
   display: -webkit-box;
   overflow: hidden;
@@ -490,12 +519,12 @@
 }
 
 .mailbox-item__actions .oc-button {
-  --oc-button-height: calc(22px * var(--ui-scale));
+  --oc-button-height: var(--mailbox-item-action-size);
   --oc-button-padding-x: 0;
-  width: calc(22px * var(--ui-scale));
-  min-width: calc(22px * var(--ui-scale));
-  height: calc(22px * var(--ui-scale));
-  min-height: calc(22px * var(--ui-scale));
+  width: var(--mailbox-item-action-size);
+  min-width: var(--mailbox-item-action-size);
+  height: var(--mailbox-item-action-size);
+  min-height: var(--mailbox-item-action-size);
   margin-top: 0;
 }
 

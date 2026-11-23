@@ -5101,10 +5101,12 @@ in both the inbox and settled search results. Expansion and the separate
 message selection remain under their explicit controls.
 Escape on a matching message focuses the original query and preserves expansion
 and selection. Escape in the search field closes the search. Search
-results never substitute for the native notification
-projector's complete active global snapshot. Dense row timestamps may truncate
-to preserve the subject; their complete localized date remains available on
-hover.
+results never substitute for the native notification projector's complete
+active global snapshot. Collapsed rows keep a compact subject preview and may
+truncate the timestamp. Expanded rows reserve the first line for the timestamp,
+disclosure indicator and row actions. The exact subject, including long
+identifiers, wraps across the next line's full text width. The complete localized
+date remains available on hover.
 
 Every `work-ledger.connected` frame on the unified stream triggers a canonical `/mailbox` refetch,
 so durable items written while the change stream was disconnected converge
