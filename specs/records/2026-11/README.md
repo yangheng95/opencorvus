@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [阅读长更新日志时可直接返回版本列表](2026-11-23-release-notes-return-during-reading.md)
 - [单项复制在原表单中保留目的路径并重试](2026-11-23-explorer-single-copy-conflict-retry.md)
 - [文本比较直接标明纯换行格式变化](2026-11-23-text-comparison-line-ending-changes.md)
 - [在对话能力设置中搜索可用技能](2026-11-23-conversation-capability-skill-search.md)
