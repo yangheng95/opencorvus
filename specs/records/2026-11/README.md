@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [工作侧栏的项目层展开按钮显示项目数量](2026-11-24-work-ledger-project-group-count.md)
 - [展开工作侧栏前显示剩余工作数](2026-11-24-work-ledger-disclosure-count.md)
 - [切换界面语言后保留键盘工作的预览](2026-11-24-work-ledger-preview-after-menu.md)
 - [工作侧栏的键盘预览随当前焦点显示](2026-11-24-work-ledger-preview-input-priority.md)
