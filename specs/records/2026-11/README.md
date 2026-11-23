@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [长草稿会话从保存请求的开头呈现](2026-11-23-mission-context-initial-reading.md)
 - [草稿保存回执标明多步任务名称](2026-11-23-mission-draft-receipt-title.md)
 - [编辑已保存的多步任务草稿时从开头开始](2026-11-23-mission-draft-editor-initial-position.md)
 - [菜单回车保留确认对话框并归还入口焦点](2026-11-23-menu-confirmation-keyboard-handoff.md)
