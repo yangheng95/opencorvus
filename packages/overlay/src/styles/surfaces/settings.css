@@ -2393,12 +2393,18 @@ button.s-row:focus-visible {
 
 .expert-squad-detail-tablist {
   width: 100%;
-  flex-wrap: nowrap;
+  height: auto;
+  flex-wrap: wrap;
+  row-gap: var(--ui-gap-xs);
 }
 
 .expert-squad-detail-tablist > [role="tab"] {
+  height: auto;
+  max-inline-size: 100%;
   padding-inline: var(--ui-gap-md);
   font-size: var(--ui-font-body);
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .expert-squad-detail-panel {

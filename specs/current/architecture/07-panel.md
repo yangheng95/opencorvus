@@ -6120,6 +6120,8 @@ diagnostic remains available on failure, and retiring the action's scope clears
 its result.
 Installed Expert Squad navigation focuses Back to list while the exact detail
 loads, then returns to the original physical installation row or selected filter.
+Detail tabs wrap within the available width and keep their full labels and
+manual keyboard activation in declaration order.
 Retrying a failed detail read keeps the current installation's original diagnostic
 and the focusable Retry action. A successful retry moves still-owned focus from
 that retiring action to the recovered installation heading.
