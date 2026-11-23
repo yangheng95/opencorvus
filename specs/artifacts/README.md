@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [草稿保存回执名称的真实桌面截图](2026-11-23-mission-draft-receipt-title/README.md)
 - [长草稿首次编辑位置的真实桌面截图](2026-11-23-mission-draft-editor-initial-position/README.md)
 - [键盘菜单确认交接的真实桌面截图](2026-11-23-menu-confirmation-keyboard-handoff/README.md)
 - [上下文菜单焦点的真实桌面截图](2026-11-23-context-menu-initial-item-focus/README.md)
