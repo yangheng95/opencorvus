@@ -4381,6 +4381,9 @@ for zoom and pan; rendered layout dimensions and `complete` alone do not prove
 successful decoding. Copy reports image unavailability before clipboard work.
 The full-image preview paints its outline outside the scaled image content.
 The complete rectangular frame remains visible at original size and at zoom.
+The initial display, Fit Image and Fit Width calculate from the preview viewport's
+current inner dimensions. Resizing the window preserves the current zoom until
+the user chooses a different zoom or fit action.
 Source changes retire the previous decode result, and a successful native load
 restores normal controls. No alternate image, retry loop or second resource
 loader is introduced; original resource error details remain available.
