@@ -11,7 +11,7 @@ import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { LinkButton } from "../ui/LinkButton"
-import { SearchField } from "../ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "../ui/SearchField"
 import { SettingsEmpty, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 
 const history = parseChangelog(changelog)
@@ -36,6 +36,10 @@ export default function ReleaseNotesPanel() {
   let historySearchInput: HTMLInputElement | undefined
   let focusGeneration = 0
   const hasSearchMatches = () => Boolean(query().trim() && filteredHistory().length)
+  const searchNavigation = createSearchResultNavigation(() => {
+    if (!hasSearchMatches() || !panel) return []
+    return Array.from(panel.querySelectorAll<HTMLButtonElement>("button[data-release-version]:enabled"))
+  })
   const releaseRow = (version: string) =>
     panel?.querySelector<HTMLButtonElement>(`[data-release-version="${CSS.escape(version)}"]`) ?? undefined
   const select = (entry: ChangelogEntry | null) => {
@@ -74,12 +78,7 @@ export default function ReleaseNotesPanel() {
                 placeholder={t("releases.search")}
                 ariaDescribedBy={hasSearchMatches() ? "release-notes-search-keyboard-hint" : undefined}
                 onValueChange={setQuery}
-                resultFocusTarget={(edge) => {
-                  if (!hasSearchMatches()) return
-                  const matches = filteredHistory()
-                  const entry = edge === "first" ? matches[0] : matches.at(-1)
-                  return entry && releaseRow(entry.version)
-                }}
+                resultFocusTarget={searchNavigation.resultFocusTarget}
                 size="md"
               />
               <Button variant="outline" size="sm" tone="neutral" onClick={() => select(installed)}>
@@ -100,6 +99,7 @@ export default function ReleaseNotesPanel() {
                     interactive
                     class="release-notes-row"
                     data-release-version={entry.version}
+                    aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown" : undefined}
                     title={
                       <span class="release-notes-version">
                         v{entry.displayVersion}
@@ -116,6 +116,7 @@ export default function ReleaseNotesPanel() {
                       />
                     }
                     meta={<time dateTime={entry.date}>{date(entry)}</time>}
+                    onKeyDown={searchNavigation.handleResultKeyDown}
                     onClick={() => select(entry)}
                   />
                 )}

@@ -6268,8 +6268,9 @@ list-to-detail pattern. History search matches all terms against the same entry'
 version identifiers, canonical and displayed release dates, and current language
 notes. With a nonblank query and visible matches, the history search field
 describes the keyboard shortcut and moves focus to the first or last matching
-version button on an unmodified Down or Up key. The button keeps native Enter
-activation. Website and GitHub links
+version button on an unmodified Down or Up key. The same search result
+navigation used by Archive moves focus between matching version buttons.
+The button keeps native Enter activation. Website and GitHub links
 supplement the offline reading surface rather than providing another content/cache
 authority.
 
@@ -6481,7 +6482,8 @@ For a nonempty search the shared SearchField can focus the first or last
 available Open action with Down or Up. It exposes the localized guidance
 when a matching action is usable and otherwise preserves normal input behavior.
 From a focused matching Open action, Down and Up move to the adjacent available
-Open action in the same accepted results. Tab keeps the usual row action order.
+Open action in the same accepted results through the shared search result
+navigation. Tab keeps the usual row action order.
 Active and archived Work Ledger list requests keep the standard read deadline
 even when their caller provides a cancellation signal. Timeout preserves its
 diagnostic and the existing read error recovery; query replacement still retires

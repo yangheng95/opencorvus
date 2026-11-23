@@ -30,7 +30,7 @@ import { projectLedgerDisplayName } from "../../utils/project-directory"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon, type IconName } from "../ui/Icon"
-import { SearchField } from "../ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "../ui/SearchField"
 import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from "./layout"
 
 const ARCHIVE_PAGE_SIZE = 100
@@ -132,23 +132,10 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const canOpenRow = (row: WorkLedgerItemRow) => !busyID() && !loading() && !deletionUnconfirmed(row)
   const canBrowseSearchResults = () => Boolean(query()) && rows().some(canOpenRow)
 
-  function archiveSearchOpenActions(): HTMLButtonElement[] {
+  const searchNavigation = createSearchResultNavigation(() => {
     if (!canBrowseSearchResults() || !panelElement) return []
     return Array.from(panelElement.querySelectorAll<HTMLButtonElement>('button[data-archive-action="open"]:enabled'))
-  }
-
-  function handleArchiveResultKeyDown(event: KeyboardEvent & { currentTarget: HTMLButtonElement }): void {
-    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
-    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
-
-    const actions = archiveSearchOpenActions()
-    const current = actions.indexOf(event.currentTarget)
-    if (current < 0) return
-    const next = current + (event.key === "ArrowDown" ? 1 : -1)
-    event.preventDefault()
-    event.stopPropagation()
-    actions[next]?.focus()
-  }
+  })
 
   const reportArchiveError = (id: string, title: string, cause: unknown) => {
     reportError({
@@ -560,10 +547,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         placeholder={t("archive.search_placeholder")}
         ariaDescribedBy={canBrowseSearchResults() ? "archive-search-keyboard-hint" : undefined}
         onValueChange={setSearch}
-        resultFocusTarget={(edge) => {
-          const actions = archiveSearchOpenActions()
-          return edge === "first" ? actions[0] : actions.at(-1)
-        }}
+        resultFocusTarget={searchNavigation.resultFocusTarget}
         disabled={!!busyID()}
       />
       <SettingsDetailSection
@@ -646,7 +630,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       aria-keyshortcuts={query() && canOpenRow(row) ? "ArrowUp ArrowDown" : undefined}
                       data-archive-action="open"
                       disabled={!canOpenRow(row)}
-                      onKeyDown={handleArchiveResultKeyDown}
+                      onKeyDown={searchNavigation.handleResultKeyDown}
                       onClick={(event) => void props.onOpenItem(row, event.currentTarget)}
                     >
                       {t("archive.open")}

@@ -32,6 +32,28 @@ export interface SearchFieldProps {
   resultFocusTarget?: (edge: "first" | "last") => HTMLElement | undefined
 }
 
+export function createSearchResultNavigation(readActions: () => readonly HTMLElement[]) {
+  function resultFocusTarget(edge: "first" | "last"): HTMLElement | undefined {
+    const actions = readActions()
+    return edge === "first" ? actions[0] : actions.at(-1)
+  }
+
+  function handleResultKeyDown(event: KeyboardEvent & { currentTarget: HTMLElement }): void {
+    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
+
+    const actions = readActions()
+    const current = actions.indexOf(event.currentTarget)
+    if (current < 0) return
+    const next = current + (event.key === "ArrowDown" ? 1 : -1)
+    event.preventDefault()
+    event.stopPropagation()
+    actions[next]?.focus()
+  }
+
+  return { resultFocusTarget, handleResultKeyDown }
+}
+
 function classes(...values: Array<string | undefined>): string {
   return values.filter(Boolean).join(" ")
 }
