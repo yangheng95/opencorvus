@@ -34,7 +34,7 @@ import { Disclosure } from "./ui/Disclosure"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { LinkButton } from "./ui/LinkButton"
-import { SearchField } from "./ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "./ui/SearchField"
 import { Tab, TabList, TabPanel, Tabs } from "./ui/Tabs"
 import { appStore } from "../store/app"
 import { boardStore } from "../store/board"
@@ -422,18 +422,16 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   })
   const hasSettingsSearchMatches = () => Boolean(normalizedSettingsSearch() && matchedConfigTabIDs().size)
   const isConfigTabVisible = (tab: ConfigTabDef) => tab.id === activeConfigTab() || matchedConfigTabIDs().has(tab.id)
-  const focusSettingsSearchMatch = (event: KeyboardEvent) => {
-    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
-    if ((event.key !== "ArrowDown" && event.key !== "ArrowUp") || !hasSettingsSearchMatches()) return
-    const matchedIDs = matchedConfigTabIDs()
-    const matches = Array.from(sidebarElement()?.querySelectorAll<HTMLButtonElement>("[data-config-tab]") ?? []).filter(
-      (tab) => matchedIDs.has(tab.dataset.configTab ?? ""),
-    )
-    const target = event.key === "ArrowDown" ? matches[0] : matches.at(-1)
-    if (!target) return
-    event.preventDefault()
-    target.focus()
-  }
+  const settingsSearchNavigation = createSearchResultNavigation(
+    () => {
+      if (!hasSettingsSearchMatches()) return []
+      const matchedIDs = matchedConfigTabIDs()
+      return Array.from(sidebarElement()?.querySelectorAll<HTMLButtonElement>("[data-config-tab]") ?? []).filter(
+        (tab) => matchedIDs.has(tab.dataset.configTab ?? ""),
+      )
+    },
+    { tabList: true },
+  )
   const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
   let pageTitle: HTMLHeadingElement | undefined
   let mcpAssignmentTarget: { tab: "code" | "work"; directory: string; origin: Element | null } | undefined
@@ -732,6 +730,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         aria-controls={configPanelID(tab.id)}
         aria-labelledby={labelID}
         aria-describedby={isRetainedDuringSearch() ? descriptionID : undefined}
+        onKeyDown={settingsSearchNavigation.handleResultKeyDown}
       >
         <Icon class="config-nav-icon" name={tab.icon} size="medium" />
         <span class="config-nav-label">
@@ -788,7 +787,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               ariaLabel={t("settings.search_placeholder")}
               ariaDescribedBy={hasSettingsSearchMatches() ? "config-search-keyboard-hint" : undefined}
               onValueChange={setSettingsSearch}
-              onKeyDown={focusSettingsSearchMatch}
+              resultFocusTarget={settingsSearchNavigation.resultFocusTarget}
               clearDataUI="config-search-clear"
             />
             <Show when={hasSettingsSearchMatches()}>

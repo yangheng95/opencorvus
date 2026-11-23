@@ -305,8 +305,8 @@ function WorkLedgerKindMark(props: { row: WorkLedgerItemRow }) {
   )
 }
 
-function isSettingsSearchControl(target: EventTarget | null): boolean {
-  return target instanceof Element && !!target.closest(".config-search")
+function isSettingsSidebarControl(target: EventTarget | null): boolean {
+  return target instanceof Element && !!target.closest("#configSidebar")
 }
 
 function WorkLedgerNavigationAction(props: {
@@ -325,7 +325,7 @@ function WorkLedgerNavigationAction(props: {
   createEffect(() => {
     if (!hintOpen()) return
     const onFocusIn = (event: FocusEvent) => {
-      if (isSettingsSearchControl(event.target)) setHintOpen(false)
+      if (isSettingsSidebarControl(event.target)) setHintOpen(false)
     }
     document.addEventListener("focusin", onFocusIn, true)
     onCleanup(() => document.removeEventListener("focusin", onFocusIn, true))
@@ -334,7 +334,7 @@ function WorkLedgerNavigationAction(props: {
   return (
     <Tooltip.Root
       open={hintOpen()}
-      onOpenChange={(open) => setHintOpen(open && !isSettingsSearchControl(document.activeElement))}
+      onOpenChange={(open) => setHintOpen(open && !isSettingsSidebarControl(document.activeElement))}
       openDelay={180}
       closeDelay={80}
       placement="right"

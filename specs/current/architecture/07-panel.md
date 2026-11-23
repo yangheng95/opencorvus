@@ -2539,9 +2539,9 @@ background without adding a sequential stop. Escape remains scoped to that
 region and its contents. Nested action dialogs keep the shared modal primitive.
 WorkLedger navigation hints use the workspace overlay layer. A titlebar menu
 paints above these hints even while the pointer remains on their trigger.
-The Settings search dismisses open WorkLedger navigation hints when its
-controls take focus. Pending hint requests also respect the current focus, so
-the search field remains visible and owns its regular Escape sequence.
+The Settings sidebar dismisses open WorkLedger navigation hints when its
+controls take focus. Pending hint requests also respect sidebar focus, keeping
+the search field and the focused navigation tab visible.
 The Memory project picker derives display order from its loaded options and the
 current interface locale. Language changes reorder the same option objects,
 retaining the selected Project, document scope and open conversation. Loading
@@ -2633,7 +2633,9 @@ The selected trigger shows a localized search status when retained outside the
 match set. That status describes the trigger independently of its page name.
 With a matching query, Down and Up from the search field focus the first and
 last actual matching tabs in rail order. The active tab participates only if it
-matches. Focus keeps the current page open until the existing manual activation.
+matches. On a matching tab, Up and Down cycle through matches, while Home and
+End focus the first and last match. Focus keeps the current page open until the
+existing manual activation.
 Canonical navigation groups and tab objects retain their component identity
 across filtering and selection, keeping the active trigger registered in the
 shared Tabs collection throughout the update.
