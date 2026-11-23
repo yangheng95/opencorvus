@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件工具栏支持跳行快捷键](2026-11-23-file-workbench-go-to-line-shortcut.md)
 - [折叠日志显示请求路径和状态](2026-11-23-log-http-request-summary.md)
 - [按界面语言显示笔记来源](2026-11-23-memory-note-source-localization.md)
 - [用方向键浏览已提交的笔记搜索结果](2026-11-23-memory-note-result-navigation.md)
