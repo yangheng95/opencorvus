@@ -52,9 +52,12 @@ excludes only `specs/artifacts/`, retaining current architecture and dated recor
 required by the production configuration checker, the root changelog and all
 generated website inputs. The shared Bun
 dependency cache is keyed by the root workspace `bun.lock`, which owns the actual
-installed dependency graph. Run the existing `build-overlays` Intel preflight
-from main to establish its dependency cache before canonical Intel publication,
-whose native build restores that cache read-only.
+installed dependency graph. The shared setup action saves this cache on Linux
+and non-Intel macOS rows; Intel rows restore it read-only, including debug
+preflight. Confirm that the current lock's macOS cache is available before
+canonical Intel publication. The existing `build-overlays` Intel preflight from
+main qualifies the native producer and establishes its Rust dependency cache
+when that cache identity has no entry.
 
 | Surface                   | Main output                                                                                                        | UI hosting model                                                                                                                                                            | Current owner                                                                                                         |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |

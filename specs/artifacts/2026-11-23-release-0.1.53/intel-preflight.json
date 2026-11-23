@@ -1,0 +1,29 @@
+{
+  "runID": 45129477739,
+  "source": "a0f3c82958918cc449d0d9aec8f412cf15c8d876",
+  "attempt": 1,
+  "conclusion": "success",
+  "createdAt": "2026-11-23T07:13:01Z",
+  "completedAt": "2026-11-23T07:26:36Z",
+  "jobID": 137541652534,
+  "finalNativeSource": "33901838d60748e7a46d4136cecb4bed7c262a2f",
+  "identicalCacheInputPaths": [
+    "bun.lock",
+    "packages/overlay/src-tauri/Cargo.lock",
+    "packages/opencorvus/native/process-supervisor/Cargo.lock",
+    ".github/actions/setup-bun/action.yml",
+    ".github/workflows/package-overlay.yml"
+  ],
+  "debugAssetsUsedForRelease": false,
+  "firstRunQualification": [
+    "2026-11-23T07:20:41.2365670Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}"
+  ],
+  "buildAndCacheEvidence": [
+    "2026-11-23T07:14:02.7197460Z Cache hit for restore-key: macOS-bun-2b7c08db3d4355d5b0b3ed68ee1b23a68e14bcf6f29e23b2f486242d59f43d13",
+    "2026-11-23T07:14:19.3518020Z Received 463639528 of 463639528 (100.0%), 27.0 MBs/sec",
+    "2026-11-23T07:14:19.3675730Z Cache Size: ~442 MB (463639528 B)",
+    "2026-11-23T07:16:22.0229320Z Cache hit for: v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+    "2026-11-23T07:16:30.1709200Z Received 415230172 of 415230172 (100.0%), 50.4 MBs/sec",
+    "2026-11-23T07:16:30.2623570Z Cache Size: ~396 MB (415230172 B)"
+  ]
+}

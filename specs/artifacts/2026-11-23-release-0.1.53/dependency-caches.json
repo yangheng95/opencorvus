@@ -1,0 +1,23 @@
+{
+  "version": "0.1.53",
+  "source": "33901838d60748e7a46d4136cecb4bed7c262a2f",
+  "observedAt": "2026-11-23T07:31:38.923503+00:00",
+  "preflightRunID": 45129477739,
+  "bunPrimaryCache": {
+    "id": 10951819898,
+    "key": "macOS-bun-8fd86c4b9cf03296b4632440b2e5e6aa11e936891b33cb03115e79a8edb18749",
+    "ref": "refs/heads/main",
+    "size_in_bytes": 464038510,
+    "created_at": "2026-11-23T07:29:26.729449Z"
+  },
+  "rustCache": {
+    "id": 10924837261,
+    "key": "v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+    "ref": "refs/heads/main",
+    "size_in_bytes": 415230172,
+    "created_at": "2026-11-22T14:31:43.646933Z"
+  },
+  "preflightBunRestoreKey": "macOS-bun-2b7c08db3d4355d5b0b3ed68ee1b23a68e14bcf6f29e23b2f486242d59f43d13",
+  "ownership": "Intel rows are read-only Bun consumers; the exact new macOS Bun key is now present from an existing non-Intel consumer. Preflight reused the Rust cache. No cache write or product artifact transfer was added.",
+  "scope": "Actual GitHub cache objects and job observations; performance inputs only, not a replacement for first-run acceptance"
+}
