@@ -351,8 +351,10 @@ document in place, preserving the independent notes query and exposing the
 original read diagnostic. The separate notes-and-facts surface uses
 the existing project-scoped semantic list, search, detail and delete operations.
 It neither copies the protected document into semantic memory nor exposes it to
-generic deletion. Search preserves the actual source and Project scope; dates
-and numeric metadata follow the current interface language.
+generic deletion. Search preserves the actual source and Project scope. The
+list, search results and original-content metadata display the recognized
+source labels in the current interface language alongside localized dates and
+numeric metadata. Transport and storage retain the actual source identifiers.
 Up and Down move among enabled note buttons in the accepted search results. The
 search field can enter the first or last result when its text still matches the
 submitted query. Enter on a note opens its original content, and Tab retains

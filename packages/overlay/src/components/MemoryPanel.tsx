@@ -52,6 +52,16 @@ function knowledgeScopeLabel(scope: string): string {
   return scope || ""
 }
 
+function knowledgeSourceLabel(source: MemoryFile["source"]): string {
+  switch (source) {
+    case "agent": return t("memory.source.agent")
+    case "compaction": return t("memory.source.compaction")
+    case "reflection": return t("memory.source.reflection")
+    case "user": return t("memory.source.user")
+    default: return source
+  }
+}
+
 function memoryDialogErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
@@ -530,7 +540,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
                 const scoreHint = f.score != null
                   ? ` · ${t("memory.score", { value: new Intl.NumberFormat(localeTag(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(f.score) })}`
                   : ""
-                return `${f.source}${scoreHint}${time ? ` · ${time}` : ""}`
+                return `${knowledgeSourceLabel(f.source)}${scoreHint}${time ? ` · ${time}` : ""}`
               }
               const detailState = () => detailStates()[f.id]
               const detail = () => {
@@ -632,7 +642,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
                         {(d) => (
                           <>
                             <div class="memory-detail-meta">
-                              <span>{t("memory.source", { value: d().source })}</span>
+                              <span>{t("memory.source", { value: knowledgeSourceLabel(d().source) })}</span>
                               <span>{t("memory.created", { value: formatDateTime(d().timeCreated) })}</span>
                               <span>{t("memory.updated", { value: formatDateTime(d().timeUpdated) })}</span>
                             </div>
