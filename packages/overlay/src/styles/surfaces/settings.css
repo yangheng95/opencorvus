@@ -832,17 +832,11 @@ button.s-row:focus-visible {
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-medium);
   color: var(--text-strong);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .memory-panel[data-compact="true"] .knowledge-item-title {
   line-height: var(--ui-line-height-tight);
-  overflow-wrap: anywhere;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .knowledge-item-meta {

@@ -568,8 +568,8 @@ export function MemoryPanel(props: MemoryPanelProps) {
                       data-chrome="icon-action"
                       data-action="delete-memory"
                       data-id={f.id}
-                      label={t("memory.delete_button_title")}
-                      armedDescription={t("memory.delete_confirm")}
+                      label={t("memory.delete_button_title", { title: f.title })}
+                      armedDescription={t("memory.delete_confirm", { title: f.title })}
                       disabled={!filesSourceActive() || deletingKeys().has(deleteKey(f.id))}
                       onConfirm={() => void handleDeleteInline(f.id)}
                       confirmChildren={<Icon name="check" size="compact" />}

@@ -353,6 +353,8 @@ the existing project-scoped semantic list, search, detail and delete operations.
 It neither copies the protected document into semantic memory nor exposes it to
 generic deletion. Search preserves the actual source and Project scope; dates
 and numeric metadata follow the current interface language.
+List and search rows wrap the full stored title. Each delete action and its
+confirmation identify the same title while the operation uses the record ID.
 
 Both named documents use all caps. API and tool responses distinguish them with `scope=session` and `scope=project`; filename case is not a semantic discriminator.
 
