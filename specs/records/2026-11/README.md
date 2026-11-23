@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [设置搜索接管焦点时退场导航提示](2026-11-23-settings-search-dismiss-navigation-tooltip.md)
 - [工作区导航提示的绘制层](2026-11-23-navigation-tooltip-workspace-layer.md)
 - [对话框关闭后立即交还键盘](2026-11-23-dialog-close-keyboard-release.md)
 - [项目 MCP 新增表单的键盘焦点](2026-11-23-mcp-add-form-focus.md)
