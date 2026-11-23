@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件审阅行文件名的真实桌面截图](2026-11-24-file-review-distinguishable-filenames/README.md)
 - [文件审阅翻页键的真实桌面截图](2026-11-24-file-review-page-navigation/README.md)
 - [0.1.54 发布证据](2026-11-24-release-0.1.54/README.md) · 原生、官网与随包日志
 - [文件审阅跨虚拟窗口的键盘焦点截图](2026-11-24-file-review-virtual-keyboard-focus/README.md)

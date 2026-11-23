@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [文件审阅窄栏保留可辨识文件名](records/2026-11/2026-11-24-file-review-distinguishable-filenames.md)
 - [文件审阅列表的 Page Up 和 Page Down](records/2026-11/2026-11-24-file-review-page-navigation.md)
 - [0.1.54 发布](records/2026-11/2026-11-24-release-0.1.54.md) · 增量日志与公开交付
 - [文件审阅跨虚拟窗口时保持键盘焦点](records/2026-11/2026-11-24-file-review-virtual-keyboard-focus.md)
