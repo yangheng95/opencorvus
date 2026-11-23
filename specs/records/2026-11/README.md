@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件审阅阅读说明保留列表和比较空间](2026-11-24-file-review-reading-guide-space.md)
 - [文件审阅窄栏保留可辨识文件名](2026-11-24-file-review-distinguishable-filenames.md)
 - [文件审阅列表的 Page Up 和 Page Down](2026-11-24-file-review-page-navigation.md)
 - [0.1.54 发布](2026-11-24-release-0.1.54.md)
