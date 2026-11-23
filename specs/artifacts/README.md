@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [输入区市场专家团名称与安装动作截图](2026-11-23-composer-market-squad-titles/README.md)
 - [专家团市场查询与推荐截图](2026-11-23-expert-squad-market-query-evidence/README.md)
 - [新建多步任务专家团搜索的键盘交互截图](2026-11-23-mission-squad-search-keyboard/README.md)
 - [Shell 可读输出和原始回执的实页截图](2026-11-23-shell-output-readable-receipt/README.md)

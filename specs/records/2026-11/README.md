@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [输入区显示完整市场专家团名称](2026-11-23-composer-market-squad-titles.md)
 - [专家团市场推荐以当前查询的词语证据为准](2026-11-23-expert-squad-market-query-evidence.md)
 - [新建多步任务可用方向键聚焦匹配专家团](2026-11-23-mission-squad-search-keyboard.md)
 - [Shell 阅读视图显示实际输出并保留完整回执](2026-11-23-shell-output-readable-receipt.md)
