@@ -43,6 +43,30 @@ test("case folding before a Unicode match keeps readable context intact", () => 
     .toEqual([{ id: "m_unicode", role: "user", author: "user", created: time, preview: text }])
 })
 
+test("phrase search treats runs of visible whitespace alike in the query and original message", () => {
+  const original = message("m_spacing", "İ 中文🙂 Copper    (seam)\r\n\t421 后续")
+  const snapshot = readConversationSnapshot({ session, messages: [original] }, session.id)
+  const hit = { id: "m_spacing", role: "user", author: "user", created: time, preview: "İ 中文🙂 Copper (seam) 421 后续" }
+  expect(findConversationMessages(snapshot, "copper (seam) 421")).toEqual([hit])
+  expect(findConversationMessages(snapshot, " COPPER\u00a0(seam)    421 ")).toEqual([hit])
+  expect(snapshot.messages[0].original).toBe(original)
+})
+
+test("a phrase spanning parts returns the owning message and the full visible phrase", () => {
+  const original = {
+    ...message("m_spanning", ""),
+    parts: [
+      { type: "source-document", sourceId: "source_report", title: "Report\theading" },
+      { type: "text", text: "  \r\n  " },
+      { type: "text", text: "continues   here." },
+    ],
+  }
+  const snapshot = readConversationSnapshot({ session, messages: [original] }, session.id)
+  expect(findConversationMessages(snapshot, "heading continues")).toEqual([
+    { id: "m_spanning", role: "user", author: "user", created: time, preview: "Report heading continues here." },
+  ])
+})
+
 test("saved file-source locations and excerpts return their original message and source identities", () => {
   const original = { ...message("m_file_source", "检索完成", "chat"), parts: [
     { type: "source-file", sourceId: "source_file_44", path: "C:\\project\\test_invoice.py", title: "test_invoice.py",
@@ -89,8 +113,8 @@ test("a source result preview belongs to its matching saved source", () => {
 
 test("case-folded source offsets retain the matching source across Unicode expansions", () => {
   const sources = [
-    { type: "source-url", sourceId: "source_expanded", url: "https://example.test/first", title: "İ".repeat(12), snippet: "needle" },
-    { type: "source-file", sourceId: "source_following", path: "report.txt", snippet: "second target" },
+    { type: "source-url", sourceId: "source_expanded", url: "https://example.test/first", title: "İ".repeat(12), snippet: "   needle" },
+    { type: "source-file", sourceId: "source_following", path: "report.txt", snippet: "second\r\n target" },
   ]
   const original = { ...message("m_expansions", ""), parts: sources }
   const snapshot = readConversationSnapshot({ session, messages: [original] }, session.id)

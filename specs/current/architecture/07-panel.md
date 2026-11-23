@@ -3916,6 +3916,10 @@ Find results retain both the validated Message role and original author. User
 inputs use the conversation bubble's localized author label, and assistant
 results display their exact recorded author. The same label supplies the result
 text for keyboard announcements.
+Phrase matching and excerpts use the same whitespace-collapsed display text.
+A match contained in a single Source part opens that source. A phrase
+spanning parts opens the owning Message with the full phrase in its excerpt.
+Message and Source content retain their stored text.
 
 ## Shared visual primitives
 

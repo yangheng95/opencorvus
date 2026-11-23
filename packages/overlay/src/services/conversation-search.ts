@@ -8,9 +8,13 @@ export type ConversationSearchHit = Pick<ConversationSearchSnapshot["messages"][
   sourceId?: string
 }
 
+function collapseSearchWhitespace(text: string): string {
+  return text.trim().replace(/\s+/gu, " ")
+}
+
 /** Search the complete captured snapshot in producer order, independently of mounted cards. */
 export function findConversationMessages(snapshot: ConversationSearchSnapshot, query: string): ConversationSearchHit[] {
-  const needle = normalizeSearchText(query)
+  const needle = normalizeSearchText(collapseSearchWhitespace(query))
   if (!needle) return []
   return snapshot.messages.flatMap((message) => {
     const failure = assistantMessageFailure(message.info)
@@ -22,25 +26,31 @@ export function findConversationMessages(snapshot: ConversationSearchSnapshot, q
       ].filter(Boolean).join("\n") }]
     })
     if (failure) segments.push({ text: failure.reason })
-    const body = segments.map(segment => segment.text).join("\n\n")
+    const visibleSegments = segments
+      .map(segment => ({ ...segment, text: collapseSearchWhitespace(segment.text) }))
+      .filter(segment => segment.text)
+    const body = visibleSegments.map(segment => segment.text).join(" ")
     const index = body.toLowerCase().indexOf(needle)
     if (index < 0) return []
     let offset = 0, sourceId: string | undefined, previewBody = body, previewIndex = index
-    for (const segment of segments) {
-      const foldedLength = segment.text.toLowerCase().length
-      if (index < offset + foldedLength) {
-        sourceId = segment.sourceId
-        if (sourceId) { previewBody = segment.text; previewIndex = index - offset }
+    for (const segment of visibleSegments) {
+      const segmentEnd = offset + segment.text.toLowerCase().length
+      if (index < segmentEnd) {
+        if (segment.sourceId && index + needle.length <= segmentEnd) {
+          sourceId = segment.sourceId
+          previewBody = segment.text
+          previewIndex = index - offset
+        }
         break
       }
-      offset += foldedLength + 2
+      offset = segmentEnd + 1
     }
     const points = Array.from(previewBody)
     let folded = 0, position = 0
     while (position < points.length && folded < previewIndex) folded += points[position++].toLowerCase().length
     const start = Math.max(0, position - 50), end = Math.min(points.length, position + Array.from(needle).length + 100)
     return [{ id: message.id, role: message.role, author: message.author, created: message.created,
-      preview: `${start ? "…" : ""}${points.slice(start, end).join("").replace(/\s+/g, " ")}${end < points.length ? "…" : ""}`,
+      preview: `${start ? "…" : ""}${points.slice(start, end).join("")}${end < points.length ? "…" : ""}`,
       ...(sourceId ? { sourceId } : {}), }]
   })
 }
