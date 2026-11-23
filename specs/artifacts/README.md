@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [导航提示与标题菜单的桌面实拍](2026-11-23-navigation-tooltip-workspace-layer/README.md)
 - [对话框关闭后的桌面交接截图](2026-11-23-dialog-close-keyboard-release/README.md)
 - [项目 MCP 新增表单的桌面焦点截图](2026-11-23-mcp-add-form-focus/README.md)
 - [设置标题和项目范围的窄桌面截图](2026-11-23-settings-section-header-readable-scope/README.md)
