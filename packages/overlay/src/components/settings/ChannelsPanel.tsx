@@ -648,8 +648,6 @@ export default function ChannelsPanel(props: { directory: string }) {
 
       <Dialog
         open={editingEntry() !== null}
-        class="channel-editor-dialog"
-        overlayClass="channel-editor-dialog"
         title={
           <Show when={editingEntry()}>
             {(entry) => (

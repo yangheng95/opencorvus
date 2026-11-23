@@ -176,10 +176,6 @@
   .dialog[data-expanded]:not(.dialog-fullscreen) > .dialog-form {
     animation: oc-floating-enter var(--ui-duration-base) ease-out;
   }
-
-  :is(.dialog, .dialog-overlay)[data-closed] {
-    animation: oc-floating-exit var(--ui-duration-fast) ease-in;
-  }
 }
 
 @keyframes oc-dialog-fade-in {
