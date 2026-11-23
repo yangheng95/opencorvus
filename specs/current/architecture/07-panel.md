@@ -2151,9 +2151,11 @@ Clearing the filters from an empty scheduled-task list resets the query, status
 and scope and returns focus to that list's search field for the next query.
 While a query has actionable results, Down and Up enter the first and last
 enabled scheduled-task button and move among those buttons in visible order.
-The search field describes those shortcuts in the current language. Results use
-the existing native activation and detail flow, keep the ordinary Tab sequence,
-and show their keyboard outline within the list's clipping boundary.
+Escape on a matching button returns focus to that search field with its query,
+status, and scope filters intact. The field describes those shortcuts in the
+current language. Results use the existing native activation and detail flow,
+keep the ordinary Tab sequence, and show their keyboard outline within the
+list's clipping boundary.
 Returning from scheduled-task details focuses the list search during its read.
 Once the current read settles, it restores the same definition's available row
 by ID while focus still belongs to that handoff. Interacting with the search or
