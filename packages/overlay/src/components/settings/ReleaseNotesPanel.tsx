@@ -126,7 +126,7 @@ export default function ReleaseNotesPanel() {
       >
         {(entry) => (
           <>
-            <div class="release-notes-toolbar">
+            <div class="release-notes-toolbar release-notes-toolbar--detail">
               <Button variant="ghost" size="sm" tone="neutral" onClick={() => select(null)}>
                 <Icon name="nav-back" size="compact" />
                 {t("releases.history")}

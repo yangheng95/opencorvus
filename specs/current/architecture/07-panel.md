@@ -6177,6 +6177,9 @@ activation. Website and GitHub links
 supplement the offline reading surface rather than providing another content/cache
 authority.
 
+The release detail keeps its All versions button and website link at the start
+edge of the Settings reading viewport as the notes scroll.
+
 Explicit history/detail transitions hand focus to the newly rendered version
 heading or the actual previous version row. Returning to that row restores its
 place in the visible history instead of resetting the list to the top. When
