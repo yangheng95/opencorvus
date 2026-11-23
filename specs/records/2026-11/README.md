@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [单项复制在原表单中保留目的路径并重试](2026-11-23-explorer-single-copy-conflict-retry.md)
 - [文本比较直接标明纯换行格式变化](2026-11-23-text-comparison-line-ending-changes.md)
 - [在对话能力设置中搜索可用技能](2026-11-23-conversation-capability-skill-search.md)
 - [编辑器快捷键复用当前跳转到行输入](2026-11-23-editor-go-to-line-single-prompt.md)
