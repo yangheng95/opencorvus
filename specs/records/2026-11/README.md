@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件比较的差异从头到尾使用同一滚动区](2026-11-23-file-comparison-scroll-owner.md)
 - [项目文件入口把键盘焦点交给文件搜索](2026-11-23-project-files-opener-focus.md)
 - [已加载全部内置专家团时结束该筛选的续页](2026-11-23-expert-squad-built-in-continuation.md)
 - [专家团配置操作保持键盘焦点和就地反馈](2026-11-23-expert-squad-configuration-action-focus.md)
