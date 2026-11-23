@@ -2755,7 +2755,8 @@ Token count on hover or focus, with the item's registered description pointing
 to the actual popup. Intervals with a shared offset use the localized range and
 display that offset once. When offsets differ, each endpoint keeps its own
 offset, including repeated local times. Escape closes that popup through its
-existing owner.
+existing owner. While keyboard navigation moves focus, the tooltip follows the
+focused bucket across scrolling. Physical pointer movement resumes hover details.
 Default light/dark palettes use neutral chrome; named palettes retain their
 own colors. Page typography follows the sole shared typography authority.
 

@@ -73,6 +73,18 @@ function UsageBucketDetails(props: { tokens: number; interval: string }) {
 function UsageActivityGrid(props: { data: UsageStatistics }) {
   let scrollElement: HTMLDivElement | undefined
   const bucketElements = new Map<string, HTMLLIElement>()
+  const [focusDetailsOnly, setFocusDetailsOnly] = createSignal(false)
+  let pointerPosition: { x: number; y: number } | undefined
+
+  function trackPointer(event: PointerEvent): void {
+    if (event.pointerType === "touch") return
+    const { clientX: x, clientY: y } = event
+    const moved = pointerPosition?.x !== x || pointerPosition?.y !== y
+    pointerPosition = { x, y }
+    // Scrolling a different bucket under a stationary pointer can fire pointerenter.
+    if (moved || event.type === "pointerdown") setFocusDetailsOnly(false)
+  }
+
   const buckets = () => props.data.buckets
   const isYear = () => props.data.period === "year"
   const intervalFormatter = createMemo(() => createUsageIntervalFormatter(localeTag(), props.data.timeZone))
@@ -156,7 +168,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
       classList={{ "usage-activity--year": isYear() }}
       data-ui="usage-token-activity"
     >
-      <div class="usage-activity__scroll" ref={scrollElement}>
+      <div class="usage-activity__scroll" ref={scrollElement} onPointerMove={trackPointer} onPointerDown={trackPointer}>
         <div class="usage-activity__timeline" style={{ "--usage-activity-columns": String(columnCount()) }}>
           <ListboxRoot<UsageStatistics["buckets"][number]>
             class="usage-activity__grid"
@@ -170,15 +182,28 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
             shouldFocusWrap={false}
             scrollRef={() => scrollElement}
             keyboardDelegate={keyboardDelegate}
+            onKeyDown={(event) => {
+              if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+                setFocusDetailsOnly(true)
+              }
+            }}
             renderItem={(item) => {
               const interval = createMemo(() => intervalLabel(item.rawValue))
               onCleanup(() => bucketElements.delete(item.key))
               return (
-                <Tooltip.Root openDelay={180} closeDelay={80} placement="top" gutter={8} fitViewport>
+                <Tooltip.Root
+                  triggerOnFocusOnly={focusDetailsOnly()}
+                  openDelay={180}
+                  closeDelay={80}
+                  placement="top"
+                  gutter={8}
+                  fitViewport
+                >
                   <Tooltip.Trigger
                     as={ListboxItem}
                     item={item}
                     ref={(element) => bucketElements.set(item.key, element)}
+                    onPointerEnter={trackPointer}
                     class={`usage-activity__cell usage-activity__cell--${level(item.rawValue.tokens.total)}`}
                     style={
                       isYear()
