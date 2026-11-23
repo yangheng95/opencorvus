@@ -4726,7 +4726,8 @@ context. This reactive presentation follows renames and pin relocation without
 changing names, directory identity, ordering, or command-palette labels. Context
 wraps below the name and participates in navigation/disclosure accessible names;
 the summary tooltip shows the same Project display name as the row and lets it
-wrap in full. The original full directory remains a separate fact below it.
+wrap in full. The original full directory remains a separate fact below it and
+wraps within the width available from the anchored tooltip's viewport position.
 Rename fields continue to receive the original Project name.
 The Project row's actions menu and start-work buttons name the same Project
 identity in their localized labels and existing hints, including directory

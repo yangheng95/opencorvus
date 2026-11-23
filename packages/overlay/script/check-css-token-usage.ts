@@ -118,6 +118,7 @@ const PRIMITIVE_RUNTIME_TOKENS = new Set([
   "--kb-progress-fill-width",
   "--kb-tooltip-content-transform-origin",
   "--kb-popper-content-available-height",
+  "--kb-popper-content-available-width",
 ])
 const RUNTIME_TOKENS = new Set([...HOST_RUNTIME_TOKENS, ...PRIMITIVE_RUNTIME_TOKENS])
 

@@ -477,8 +477,8 @@
 }
 
 [data-ui="project-group-summary-tooltip"] {
-  width: min(calc(560px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - calc(32px * var(--ui-scale))));
-  max-width: min(calc(560px * var(--ui-scale)), calc(var(--ui-overlay-shell-width) - calc(32px * var(--ui-scale))));
+  width: calc(560px * var(--ui-scale));
+  max-width: max(0px, var(--kb-popper-content-available-width));
 }
 
 .work-row-summary-tooltip__headline {
