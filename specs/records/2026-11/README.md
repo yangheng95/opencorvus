@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [会话 Shell 保留多行命令和项目设置程序](2026-11-23-session-shell-preserve-command-source.md)
 - [对话内查找按摘要中可见的空白匹配短语](2026-11-23-conversation-search-visible-spacing.md)
 - [对话内查找使用原消息一致的作者显示](2026-11-23-conversation-search-message-author.md)
 - [阅读长更新日志时可直接返回版本列表](2026-11-23-release-notes-return-during-reading.md)
