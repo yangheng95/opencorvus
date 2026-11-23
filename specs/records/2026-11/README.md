@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [年度用量热力图区间提示](2026-11-24-usage-heatmap-tooltip-input-priority.md)
 - [公开服务商目录展开后的连接控件顺序](2026-11-24-provider-catalog-connection-tab-order.md)
 - [模型服务商新增和编辑焦点交接](2026-11-24-provider-form-focus-handoff.md)
 - [模型服务商搜索结果键盘导航](2026-11-24-provider-search-keyboard-navigation.md)
