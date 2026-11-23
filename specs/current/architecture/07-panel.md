@@ -2071,6 +2071,10 @@ length limits, context prerequisites and server validation retain their owners.
 Mission creation searches update candidates while retaining the exact authored
 selection, including a deliberately cleared selection. Enter in its SearchField
 keeps focus in search; creating or saving remains a separate form action.
+Escape on an available checkbox matching the current nonempty query returns to
+that search field with the query and form inputs intact. The matching checklist
+handles this before dialog dismissal. Escape in the search field clears the
+query through the usual search action.
 Context initialization and user checkboxes own draft selection. A Market install updates the project
 catalog and makes the exact installation selectable without adding it to the
 draft. If the focused install action still belongs to the current dialog on

@@ -197,12 +197,13 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const matchingExpertSquadIDs = createMemo(() => new Set(expertSquadResult().matchingIDs))
   const isCurrentSquadCandidate = (id: string) => squadResultsReady() && matchingExpertSquadIDs().has(id)
   const canFocusSquadMatch = () => squadResultsReady() && !submitting() && matchingExpertSquadIDs().size > 0
+  const hasSquadSearch = () => Boolean(expertSquadQuery().trim())
   const squadSearchNavigation = createSearchResultNavigation(() => {
     if (!canFocusSquadMatch() || !expertSquadList) return []
     return Array.from(
       expertSquadList.querySelectorAll<HTMLInputElement>('[data-search-match] input[type="checkbox"]:enabled'),
     )
-  })
+  }, { returnToSearch: () => hasSquadSearch() ? expertSquadSearchRef : undefined })
   const visibleExpertSquads = createMemo(() =>
     expertSquads().filter((squad) => selectedExpertSquadIDs().has(squad.id) || isCurrentSquadCandidate(squad.id)),
   )
@@ -218,7 +219,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   })
   const noMatchingSquads = createMemo(
     () =>
-      Boolean(expertSquadQuery().trim()) &&
+      hasSquadSearch() &&
       squadResultsReady() &&
       matchingExpertSquadIDs().size === 0,
   )
@@ -840,7 +841,9 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                 <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
               }>
                 <p class="mission-create-form__context-status" id={squadSearchHelpID}>
-                  {t("mission_board.create.squad_search_keyboard_hint")}
+                  {t(hasSquadSearch()
+                    ? "mission_board.create.squad_search_return_keyboard_hint"
+                    : "mission_board.create.squad_search_keyboard_hint")}
                 </p>
               </Show>
             </Show>
@@ -856,21 +859,23 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               role="group"
               aria-label={t("mission_board.create.expert_squad")}
               data-ui="mission-create-expert-squads"
-              onKeyDown={squadSearchNavigation.handleResultKeyDown}
+              on:keydown={squadSearchNavigation.handleResultKeyDown}
             >
               <For each={visibleExpertSquads()}>
                 {(squad) => (
                   <Checkbox
                     checked={selectedExpertSquadIDs().has(squad.id)}
                     disabled={submitting() || expertSquadLoading()}
-                    aria-keyshortcuts={canFocusSquadMatch() && isCurrentSquadCandidate(squad.id) ? "ArrowUp ArrowDown" : undefined}
+                    aria-keyshortcuts={canFocusSquadMatch() && isCurrentSquadCandidate(squad.id)
+                      ? (hasSquadSearch() ? "ArrowUp ArrowDown Escape" : "ArrowUp ArrowDown")
+                      : undefined}
                     data-search-match={isCurrentSquadCandidate(squad.id) ? "true" : undefined}
                     onChange={(checked) => updateExpertSquadSelection(squad.id, checked)}
                   >
                     <span class="mission-create-form__option">
                       <strong>{squad.display_label}</strong>
                       <Show when={
-                        expertSquadQuery().trim() && squadResultsReady() && !matchingExpertSquadIDs().has(squad.id)
+                        hasSquadSearch() && squadResultsReady() && !matchingExpertSquadIDs().has(squad.id)
                       }>
                         <Badge class="mission-create-form__search-origin" tone="muted" size="sm">
                           {t("mission_board.create.outside_search")}
