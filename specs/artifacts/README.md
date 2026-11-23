@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [新建多步任务专家团搜索的键盘交互截图](2026-11-23-mission-squad-search-keyboard/README.md)
 - [Shell 可读输出和原始回执的实页截图](2026-11-23-shell-output-readable-receipt/README.md)
 - [会话多行 Shell 和项目设置的实页截图](2026-11-23-session-shell-preserve-command-source/README.md)
 - [对话可见空白查找的实页截图](2026-11-23-conversation-search-visible-spacing/README.md)
