@@ -3281,9 +3281,19 @@ button.s-row:focus-visible {
   justify-content: flex-start;
   gap: var(--ui-gap-sm);
 }
-.provider-command .provider-search-field.search-field {
+.provider-search {
   grid-area: search;
+  min-width: 0;
+  display: grid;
+  gap: var(--ui-gap-sm);
+}
+.provider-search > .search-field {
   width: 100%;
+}
+.provider-search-keyboard-hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
 }
 .provider-flat-section {
   display: flex;

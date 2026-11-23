@@ -49,7 +49,7 @@ import { Button } from "../ui/Button"
 import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { DropdownMenu } from "../ui/DropdownMenu"
 import { Disclosure } from "../ui/Disclosure"
-import { SearchField } from "../ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "../ui/SearchField"
 import { TextField } from "../ui/TextField"
 import { Tooltip } from "../ui/Tooltip"
 import { getHostTransport } from "../../services/host-transport-runtime"
@@ -209,6 +209,7 @@ export default function ProvidersPanel() {
   })
   const providerInfoFeedbackVisible = () => providerInfoIssues().length > 0 || Boolean(providerInfoRetry())
   const providerScope = createMemo(() => [activeDirectory().trim(), captureApiAuthority().revision, boardStore.selectEpoch] as const)
+  let panel: HTMLDivElement | undefined
   let providerSearchInput: HTMLInputElement | undefined
 
   function providerLoadOptions(directory = activeDirectory().trim(), authority = captureApiAuthority()) {
@@ -1151,6 +1152,12 @@ export default function ProvidersPanel() {
   const totalProviderCount = createMemo(() => unfilteredProviderEntries().length + unfilteredCatalogEntries().length)
   const visibleProviderCount = createMemo(() => providerEntries().size + catalogEntries().size)
   const hasProviderSearch = createMemo(() => providerSearch().trim().length > 0)
+  const canBrowseSearchResults = () => hasProviderSearch() && visibleProviderCount() > 0
+  const searchKeyboardHintID = "provider-search-keyboard-hint"
+  const searchNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseSearchResults() || !panel?.isConnected) return []
+    return Array.from(panel.querySelectorAll<HTMLButtonElement>("button[data-provider-search-action]:enabled"))
+  })
   const configuredProviderCount = createMemo(() => configuredProviderIDs().size)
   const catalogProviderCount = createMemo(() => catalogProviders().length)
   const catalogAvailable = () =>
@@ -1163,7 +1170,7 @@ export default function ProvidersPanel() {
   }
 
   return (
-    <SettingsPanel class="general-panel provider-panel">
+    <SettingsPanel class="general-panel provider-panel" ref={panel}>
       <SettingsGroup class="provider-settings-flat">
         <div class="provider-command">
           <div class="provider-command-main">
@@ -1264,20 +1271,29 @@ export default function ProvidersPanel() {
               )}
             </Show>
           </div>
-          <SearchField
-            clearable
-            class="provider-search-field"
-            inputDataUI="provider-search-input"
-            inputDataTestID="provider-search-input"
-            size="md"
-            value={providerSearch()}
-            placeholder={t("provider.search.placeholder")}
-            ariaLabel={t("provider.search.label")}
-            onValueChange={setProviderSearch}
-            inputRef={(input) => { providerSearchInput = input }}
-            clearDataUI="provider-search-clear"
-            clearDataTestID="provider-search-clear"
-          />
+          <div class="provider-search">
+            <SearchField
+              clearable
+              inputDataUI="provider-search-input"
+              inputDataTestID="provider-search-input"
+              size="md"
+              value={providerSearch()}
+              placeholder={t("provider.search.placeholder")}
+              ariaLabel={t("provider.search.label")}
+              ariaDescribedBy={canBrowseSearchResults() ? searchKeyboardHintID : undefined}
+              ariaKeyShortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
+              onValueChange={setProviderSearch}
+              resultFocusTarget={searchNavigation.resultFocusTarget}
+              inputRef={(input) => { providerSearchInput = input }}
+              clearDataUI="provider-search-clear"
+              clearDataTestID="provider-search-clear"
+            />
+            <Show when={canBrowseSearchResults()}>
+              <p id={searchKeyboardHintID} class="provider-search-keyboard-hint">
+                {t("settings.search_keyboard_hint")}
+              </p>
+            </Show>
+          </div>
         </div>
 
         <Show when={loadingProviderInfo() && !providerInfoFeedbackVisible()}>
@@ -1419,6 +1435,10 @@ export default function ProvidersPanel() {
                             variant="outline"
                             size="md"
                             tone="neutral"
+                            data-provider-search-action
+                            aria-label={t("provider.form.edit_title", { id: providerID })}
+                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
+                            onKeyDown={searchNavigation.handleResultKeyDown}
                             onClick={() => startEdit(providerID)}
                           >
                             {t("common.edit")}
@@ -1671,9 +1691,18 @@ export default function ProvidersPanel() {
                             variant="ghost"
                             size="md"
                             tone="neutral"
+                            data-provider-search-action
                             data-ui="provider-catalog-configure"
                             data-testid={`provider-catalog-configure-${providerID}`}
                             aria-expanded={expandedCatalogProviderID() === providerID}
+                            aria-label={t(
+                              expandedCatalogProviderID() === providerID
+                                ? "provider.action.collapse_named"
+                                : "provider.action.configure_named",
+                              { name: provider().name },
+                            )}
+                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
+                            onKeyDown={searchNavigation.handleResultKeyDown}
                             title={
                               expandedCatalogProviderID() === providerID
                                 ? t("provider.action.collapse")

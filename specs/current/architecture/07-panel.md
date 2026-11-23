@@ -5922,6 +5922,9 @@ search terms in both row collections. Catalog rows retain active connections
 first, then configured declarations, then other entries, with name ordering
 within each group. A configuration-only catalog label uses the neutral badge;
 it does not claim authentication, runnable models or successful inference.
+Provider search offers Down and Up to enter and browse the available Edit and
+Configure buttons in display order. Those controls name their provider for
+keyboard users. The ordinary Tab sequence continues to reach the other actions.
 Model quantities in provider
 rows, discovery receipts, Composer groups and usage use the shared plural
 translation contract. Discovery stores the current successful count, translated

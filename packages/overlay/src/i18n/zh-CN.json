@@ -799,6 +799,8 @@
   "provider.action.add": "添加",
   "provider.action.configure": "配置",
   "provider.action.collapse": "收起",
+  "provider.action.configure_named": "配置 {{name}}",
+  "provider.action.collapse_named": "收起 {{name}} 的配置",
   "provider.section.custom": "自定义模型服务商",
   "provider.scope.global": "全局设置",
   "provider.scope.project_hint": "本页使用当前项目的模型配置，服务商配置的修改保存在该项目。",

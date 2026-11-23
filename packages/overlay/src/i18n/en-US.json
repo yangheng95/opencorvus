@@ -799,6 +799,8 @@
   "provider.action.add": "Add",
   "provider.action.configure": "Configure",
   "provider.action.collapse": "Done",
+  "provider.action.configure_named": "Configure {{name}}",
+  "provider.action.collapse_named": "Collapse {{name}} configuration",
   "provider.section.custom": "Custom providers",
   "provider.scope.global": "Global settings",
   "provider.scope.project_hint": "This page uses the current project's model configuration. Provider changes are saved to this project.",
