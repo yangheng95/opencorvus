@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从设置页面的匹配标签返回搜索](records/2026-11/2026-11-24-settings-tab-return-to-search.md)
 - [从新建多步任务的专家团结果返回搜索](records/2026-11/2026-11-24-mission-squad-return-to-search.md)
 - [从多步任务卡片返回看板搜索](records/2026-11/2026-11-24-mission-board-return-to-search.md)
 - [从项目笔记结果返回搜索草稿](records/2026-11/2026-11-24-memory-result-return-to-search.md)
