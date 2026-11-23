@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [项目层展开后的摘要跟随键盘项目焦点](records/2026-11/2026-11-24-work-ledger-project-preview-priority.md)
 - [工作侧栏项目提示在桌面视口内完整显示路径](records/2026-11/2026-11-24-work-ledger-project-tooltip-viewport.md)
 - [工作侧栏的项目层展开按钮显示项目数量](records/2026-11/2026-11-24-work-ledger-project-group-count.md)
 - [展开工作侧栏前显示剩余工作数](records/2026-11/2026-11-24-work-ledger-disclosure-count.md)
