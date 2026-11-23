@@ -4835,6 +4835,11 @@ the first newly visible work button in that same list. Project, Pinned and
 combined views resolve the stable row identity within their own disclosure.
 The shared progressive list respects a more recent focus or a changed list.
 
+Work Ledger previews follow keyboard focus when disclosure or scrolling moves a
+different work row or kind marker under a stationary pointer. Real pointer
+movement restores the existing hover behavior. The annual usage grid shares
+the same input tracking, with separate state for each region.
+
 The Projects toolbar provides an explicit localized `Locate current work`
 action. It derives the target from the current ledger projection and the same
 selection predicate, opens only its required Project and progressive-list

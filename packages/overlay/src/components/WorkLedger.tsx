@@ -1,4 +1,5 @@
 import { Tooltip } from "./ui/Tooltip"
+import { createTooltipInputPriority } from "./ui/createTooltipInputPriority"
 import { WorkOutcomeBadge } from "./WorkOutcomeBadge"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import {
@@ -82,6 +83,7 @@ import { useTaskRowActionsKeyboard } from "./useTaskRowActionsKeyboard"
 import { useDisclosure } from "../solid/disclosure"
 
 const WORK_LEDGER_PAGE_SIZE = 80
+type WorkRowTooltipInput = ReturnType<typeof createTooltipInputPriority>
 
 type WorkLedgerGroup = {
   renderKey: string
@@ -284,11 +286,11 @@ function missionHasVisibleStoppableTask(row: WorkLedgerMissionRow): boolean {
   return row.tasks.some(workLedgerTaskCanStop)
 }
 
-function WorkLedgerKindMark(props: { row: WorkLedgerItemRow }) {
+function WorkLedgerKindMark(props: { row: WorkLedgerItemRow; tooltipInput: WorkRowTooltipInput }) {
   const label = () => kindLabel(props.row)
   const description = () => kindDescription(props.row)
   return (
-    <Tooltip.Root openDelay={0} closeDelay={0} placement="right" gutter={6}>
+    <Tooltip.Root triggerOnFocusOnly={props.tooltipInput.focusOnly()} openDelay={0} closeDelay={0} placement="right" gutter={6}>
       <Tooltip.Trigger
         as="span"
         class="work-row-kind-mark"
@@ -296,6 +298,7 @@ function WorkLedgerKindMark(props: { row: WorkLedgerItemRow }) {
         data-kind={props.row.kind}
         data-experience={props.row.kind === "chat" ? props.row.experience : undefined}
         aria-label={description()}
+        onPointerEnter={props.tooltipInput.trackPointer}
       >
         <Icon name={kindIcon(props.row)} />
       </Tooltip.Trigger>
@@ -388,6 +391,7 @@ export type WorkLedgerRenamePresentation = Pick<AppDialogOpenOptions, "openingGu
 
 function WorkLedgerRowView(props: {
   row: WorkLedgerItemRow
+  tooltipInput: WorkRowTooltipInput
   conversationOrdinal?: number
   selected: boolean
   isSelected?: (row: WorkLedgerItemRow) => boolean
@@ -607,9 +611,10 @@ function WorkLedgerRowView(props: {
         ref={(el) => rowActions.setRowRef(el)}
         onFocusOut={(event) => rowActions.closeActionsOnFocusOut(event)}
       >
-        <WorkLedgerKindMark row={row()} />
+        <WorkLedgerKindMark row={row()} tooltipInput={props.tooltipInput} />
         <div class="task-row-body work-row-body">
           <Tooltip.Root
+            triggerOnFocusOnly={props.tooltipInput.focusOnly()}
             openDelay={350}
             closeDelay={0}
             ignoreSafeArea
@@ -624,6 +629,7 @@ function WorkLedgerRowView(props: {
               ref={(el) => rowActions.setMainButtonRef(el)}
               aria-current={props.selected ? "page" : undefined}
               aria-keyshortcuts={hasActions() ? "ArrowRight" : undefined}
+              onPointerEnter={props.tooltipInput.trackPointer}
               onKeyDown={rowActions.openActionsFromKeyboard}
               onClick={() => props.onSelect(row())}
               onDblClick={(event) => {
@@ -848,6 +854,7 @@ function WorkLedgerRowView(props: {
             <For each={(row() as WorkLedgerMissionRow).tasks}>
               {(task, insertionIndex) => (
                 <WorkLedgerTaskChildRow
+                  tooltipInput={props.tooltipInput}
                   task={task}
                   insertionIndex={insertionIndex()}
                   selected={props.isSelected?.(task) ?? false}
@@ -877,6 +884,7 @@ function WorkLedgerRowView(props: {
 
 function WorkLedgerTaskChildRow(props: {
   task: WorkLedgerTaskRow
+  tooltipInput: WorkRowTooltipInput
   insertionIndex: number
   selected: boolean
   isSelected?: (row: WorkLedgerItemRow) => boolean
@@ -905,6 +913,7 @@ function WorkLedgerTaskChildRow(props: {
     >
       <WorkLedgerRowView
         row={props.task}
+        tooltipInput={props.tooltipInput}
         selected={props.selected}
         isSelected={props.isSelected}
         onSelect={props.onSelect}
@@ -927,6 +936,7 @@ function WorkLedgerTaskChildRow(props: {
 
 function WorkLedgerProjectGroupView(props: {
   group: WorkLedgerGroup
+  tooltipInput: WorkRowTooltipInput
   conversationOrdinal: (row: WorkLedgerItemRow) => number | undefined
   dataUi?: string
   directoryHint?: string
@@ -970,6 +980,7 @@ function WorkLedgerProjectGroupView(props: {
       {(row) => (
         <WorkLedgerRowView
           row={row}
+          tooltipInput={props.tooltipInput}
           conversationOrdinal={props.conversationOrdinal(row)}
           selected={props.selected(row)}
           isSelected={props.selected}
@@ -1027,6 +1038,7 @@ function WorkLedgerProjectGroupView(props: {
 }
 
 export function WorkLedger(props: WorkLedgerProps) {
+  const tooltipInput = createTooltipInputPriority()
   const missionCounts = createMemo(() => missionBoardCounts(missionBoardStore.records))
   // A hover hint reports what is happening, not what is not: empty lanes stay silent so the
   // Mission Board row collapses to the same two-line explainer every other shortcut shows.
@@ -1515,6 +1527,7 @@ export function WorkLedger(props: WorkLedgerProps) {
     anonymousProjectHeader = false,
   ) => (
     <WorkLedgerProjectGroupView
+      tooltipInput={tooltipInput}
       group={group()}
       conversationOrdinal={(row) => conversationOrdinals().get(rowKey(row))}
       dataUi={dataUi}
@@ -1566,6 +1579,12 @@ export function WorkLedger(props: WorkLedgerProps) {
         class="work-ledger-projects-scroll"
         id="workLedgerProjectsScroll"
         data-ui="work-ledger-projects-scroll"
+        on:keydown={tooltipInput.preferFocus}
+        on:focusin={(event) => {
+          if (event.target instanceof Element && event.target.matches(":focus-visible")) tooltipInput.preferFocus()
+        }}
+        onPointerMove={tooltipInput.trackPointer}
+        onPointerDown={tooltipInput.trackPointer}
       >
         <Show when={pinnedProjects().length > 0}>
           <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.pinned")}</div>

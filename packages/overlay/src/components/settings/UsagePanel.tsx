@@ -17,6 +17,7 @@ import { Icon } from "../ui/Icon"
 import { ListboxItem, ListboxItemDescription, ListboxRoot } from "../ui/Listbox"
 import { SegmentedControl } from "../ui/SegmentedControl"
 import { Tooltip } from "../ui/Tooltip"
+import { createTooltipInputPriority } from "../ui/createTooltipInputPriority"
 import { SettingsPanel } from "./layout"
 
 const PERCENT_FRACTION_DIGITS = 1
@@ -107,17 +108,7 @@ function UsageBucketDetails(props: { tokens: number; interval: string }) {
 function UsageActivityGrid(props: { data: UsageStatistics }) {
   let scrollElement: HTMLDivElement | undefined
   const bucketElements = new Map<string, HTMLLIElement>()
-  const [focusDetailsOnly, setFocusDetailsOnly] = createSignal(false)
-  let pointerPosition: { x: number; y: number } | undefined
-
-  function trackPointer(event: PointerEvent): void {
-    if (event.pointerType === "touch") return
-    const { clientX: x, clientY: y } = event
-    const moved = pointerPosition?.x !== x || pointerPosition?.y !== y
-    pointerPosition = { x, y }
-    // Scrolling a different bucket under a stationary pointer can fire pointerenter.
-    if (moved || event.type === "pointerdown") setFocusDetailsOnly(false)
-  }
+  const { focusOnly, preferFocus, trackPointer } = createTooltipInputPriority()
 
   const buckets = () => props.data.buckets
   const isYear = () => props.data.period === "year"
@@ -218,7 +209,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
             keyboardDelegate={keyboardDelegate}
             onKeyDown={(event) => {
               if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
-                setFocusDetailsOnly(true)
+                preferFocus()
               }
             }}
             renderItem={(item) => {
@@ -226,7 +217,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
               onCleanup(() => bucketElements.delete(item.key))
               return (
                 <Tooltip.Root
-                  triggerOnFocusOnly={focusDetailsOnly()}
+                  triggerOnFocusOnly={focusOnly()}
                   openDelay={180}
                   closeDelay={80}
                   placement="top"
