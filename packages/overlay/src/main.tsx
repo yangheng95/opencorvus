@@ -1255,13 +1255,17 @@ async function dispatchMissionBoardDraft(mission: MissionRecord): Promise<void> 
   assertUserNavigationCurrent(selectionEpoch)
 }
 
-async function confirmDeleteMissionBoardMission(mission: MissionRecord): Promise<boolean> {
+async function confirmDeleteMissionBoardMission(
+  mission: MissionRecord,
+  opener: HTMLButtonElement | undefined,
+): Promise<boolean> {
   const confirmation = await showAppDialog({
     title: t("mission_board.delete.title"),
     message: t("mission_board.delete.confirm", { title: mission.title || mission.missionID }),
     cancel: true,
     okLabel: t("common.delete"),
     okTone: "danger",
+    returnFocusTarget: () => opener ?? null,
   })
   return confirmation.confirmed
 }

@@ -471,10 +471,17 @@ index 02672fa3904984be01c5c5f3b0f172812e38f84e..5851ec96343a68cf0891620cbee18efc
  		}
  
 diff --git a/dist/chunk/46NU5BYI.js b/dist/chunk/46NU5BYI.js
-index 4ecdbc7c34b278c6b242c51cf575c8b0d0cf9b72..6c9996b12981c90eb7bec48472fd7831b5172457 100644
 --- a/dist/chunk/46NU5BYI.js
 +++ b/dist/chunk/46NU5BYI.js
-@@ -474,6 +474,8 @@ function MenuContentBase(props) {
+@@ -149,6 +149,7 @@
+     switch (e.key) {
+       case "Enter":
+       case " ":
++        e.preventDefault();
+         onSelect();
+         break;
+     }
+@@ -474,6 +475,8 @@
    };
    const onEscapeKeyDown = (e) => {
      local.onEscapeKeyDown?.(e);
@@ -502,10 +509,17 @@ index 938fb65e7b65282f490603f0edc790954e30d757..1ad671d071124cb1e8e995ad8e047da7
          break;
        case "Tab": {
 diff --git a/dist/chunk/LEK3K6R3.jsx b/dist/chunk/LEK3K6R3.jsx
-index b7a0e8beebc5288364a478a6c1a39f1ad9cf14dd..20a0b852173187bf753e0a08fa18f90ba07bb6df 100644
 --- a/dist/chunk/LEK3K6R3.jsx
 +++ b/dist/chunk/LEK3K6R3.jsx
-@@ -620,6 +620,8 @@ function MenuContentBase(props) {
+@@ -248,6 +248,7 @@
+     switch (e.key) {
+       case "Enter":
+       case " ":
++        e.preventDefault();
+         onSelect();
+         break;
+     }
+@@ -620,6 +621,8 @@
    };
    const onEscapeKeyDown = (e) => {
      local.onEscapeKeyDown?.(e);
@@ -650,3 +664,14 @@ diff --git a/dist/chunk/H367UGHF.js b/dist/chunk/H367UGHF.js
      }
    };
    const isTouchOrPen = (e) => e.pointerType === "touch" || e.pointerType === "pen";
+diff --git a/src/menu/menu-item-base.tsx b/src/menu/menu-item-base.tsx
+--- a/src/menu/menu-item-base.tsx
++++ b/src/menu/menu-item-base.tsx
+@@ -245,6 +245,7 @@
+ 		switch (e.key) {
+ 			case "Enter":
+ 			case " ":
++				e.preventDefault();
+ 				onSelect();
+ 				break;
+ 		}

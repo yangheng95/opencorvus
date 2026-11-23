@@ -5240,6 +5240,10 @@ On first native context-menu opening, the menu's existing focus strategy
 places focus on the first enabled item. Activation and dismissal remain
 separate user actions. Explorer actions use the shared menu item's focus
 contract, with disabled items excluded from native tab navigation.
+Menu items consume their Enter or Space default action before dispatching
+selection, so newly focused dialog controls receive only subsequent input.
+The Mission card's delete confirmation returns focus to its own surviving
+Open Mission button when that button remains available.
 When another decision opens while a modal Dialog is closing, the shared opener
 resolver follows that closing Dialog's existing return-focus owner. The Content
 element registers a getter for the same owner; it does not store a second focus

@@ -54,7 +54,7 @@ export interface MissionBoardProps {
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
   onDispatchMission: (mission: MissionRecord) => Promise<void>
   onEditMissionDraft: (input: MissionDraftEditInput) => Promise<void>
-  onConfirmDeleteMission: (mission: MissionRecord) => Promise<boolean>
+  onConfirmDeleteMission: (mission: MissionRecord, opener: HTMLButtonElement | undefined) => Promise<boolean>
   onDeleteMission: (mission: MissionRecord) => Promise<boolean>
 }
 
@@ -98,8 +98,9 @@ function MissionBoardCard(props: {
   onOpenTask: (task: MissionTask) => void
   onDispatch: () => void
   onEdit: () => void
-  onDelete: () => void
+  onDelete: (opener: HTMLButtonElement | undefined) => void
 }) {
+  let openButton: HTMLButtonElement | undefined
   const now = useNowTick()
   const openLabelID = createUniqueId()
   const titleID = createUniqueId()
@@ -163,6 +164,7 @@ function MissionBoardCard(props: {
           tone="neutral"
           class="mission-board-card__open"
           id={openLabelID}
+          ref={(element) => { openButton = element }}
           title={props.mission.title}
           aria-label={t("mission_board.open_mission", { title: props.mission.title })}
           aria-labelledby={props.project ? `${openLabelID}${projectLabelRefs()}` : undefined}
@@ -329,7 +331,7 @@ function MissionBoardCard(props: {
             class="mission-board-card-menu__delete"
             data-ui="mission-board-card-delete"
             disabled={props.actionBusy}
-            onSelect={props.onDelete}
+          onSelect={() => props.onDelete(openButton)}
           >
             <Icon name={props.deleting ? "loading" : "delete"} size="compact" />
             <span>{props.deleting ? t("mission_board.delete.deleting") : t("mission_board.delete.action")}</span>
@@ -512,11 +514,11 @@ export function MissionBoard(props: MissionBoardProps) {
     }
   }
 
-  async function deleteMission(mission: MissionRecord): Promise<void> {
+  async function deleteMission(mission: MissionRecord, opener: HTMLButtonElement | undefined): Promise<void> {
     if (pendingAction()) return
     setActionError("")
     try {
-      if (!(await props.onConfirmDeleteMission(mission))) return
+      if (!(await props.onConfirmDeleteMission(mission, opener))) return
     } catch (nextError) {
       setActionError(nextError instanceof Error ? nextError.message : String(nextError))
       return
@@ -835,7 +837,7 @@ export function MissionBoard(props: MissionBoardProps) {
                               expectedRequest: mission.pendingPrompt!.text,
                             })
                           }
-                          onDelete={() => void deleteMission(mission)}
+                          onDelete={(opener) => void deleteMission(mission, opener)}
                         />
                       )}
                     </For>
