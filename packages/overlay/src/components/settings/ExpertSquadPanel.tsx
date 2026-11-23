@@ -507,6 +507,12 @@ export default function ExpertSquadPanel() {
       return true
     })
   })
+  const canContinueInstallations = () => catalogFilter() !== "active" && Boolean(catalogNextCursor())
+  const filteredCatalogEmptyMessage = () => {
+    if (canContinueInstallations()) return t("expert_squad.no_loaded_matches")
+    if (catalogFilter() === "package") return t("expert_squad.no_installed_packages")
+    return t("expert_squad.no_filter_matches")
+  }
   const currentSquadIndex = createMemo(() => {
     const list = filteredSquads()
     return list.find((squad) => squadSelectionKey(squad) === selectedSquadID()) ?? list[0]
@@ -1723,7 +1729,7 @@ export default function ExpertSquadPanel() {
                   </div>
                   <Show
                     when={filteredSquads().length > 0}
-                    fallback={<div class="empty-hint">{t("expert_squad.none")}</div>}
+                    fallback={<div class="empty-hint">{filteredCatalogEmptyMessage()}</div>}
                   >
                     <SettingsSurface class="expert-squad-list" data-ui="expert-squad-list">
                       <For each={filteredSquads()}>
@@ -1772,31 +1778,31 @@ export default function ExpertSquadPanel() {
                         }}
                       </For>
                     </SettingsSurface>
-                    <Show when={catalogNextCursor()}>
-                      <div ref={installationsFooter} class="expert-squad-installation-footer">
-                        <Button
-                          ref={installationsMoreButton}
-                          type="button"
-                          variant="outline"
-                          size="md"
-                          tone="neutral"
-                          aria-disabled={installationPageBusy() || undefined}
-                          aria-busy={installationPageBusy() || undefined}
-                          onClick={() => void runInstallationContinuationAction()}
-                        >
-                          {installationPageActionLabel()}
-                        </Button>
-                        <Show when={installationPageFailure()}>
-                          {(failure) => (
-                            <Feedback tone="error" details={formatErrorDetails(failure().error)}>
-                              {t(failure().action === "refresh"
-                                ? "expert_squad.installation_page_refresh_needed"
-                                : "expert_squad.installation_page_failed")}
-                            </Feedback>
-                          )}
-                        </Show>
-                      </div>
-                    </Show>
+                  </Show>
+                  <Show when={canContinueInstallations()}>
+                    <div ref={installationsFooter} class="expert-squad-installation-footer">
+                      <Button
+                        ref={installationsMoreButton}
+                        type="button"
+                        variant="outline"
+                        size="md"
+                        tone="neutral"
+                        aria-disabled={installationPageBusy() || undefined}
+                        aria-busy={installationPageBusy() || undefined}
+                        onClick={() => void runInstallationContinuationAction()}
+                      >
+                        {installationPageActionLabel()}
+                      </Button>
+                      <Show when={installationPageFailure()}>
+                        {(failure) => (
+                          <Feedback tone="error" details={formatErrorDetails(failure().error)}>
+                            {t(failure().action === "refresh"
+                              ? "expert_squad.installation_page_refresh_needed"
+                              : "expert_squad.installation_page_failed")}
+                          </Feedback>
+                        )}
+                      </Show>
+                    </div>
                   </Show>
                 </Show>
                 <Show when={detailOpen()}>
