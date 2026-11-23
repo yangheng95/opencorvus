@@ -982,6 +982,13 @@ body[data-resizing="true"] .pane-resizer::after {
   display: inline-flex;
 }
 
+.right-dock-tab.oc-tab:focus-visible,
+.right-dock-tab__close.oc-button:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--oc-border-width));
+  box-shadow: none;
+}
+
 /* Overflow ··· menu */
 .right-dock-more-wrap {
   position: relative;

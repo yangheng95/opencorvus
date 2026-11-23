@@ -5256,6 +5256,8 @@ keyboard action await the same completed close result, including the existing
 File dirty-draft confirmation; cancellation keeps the tab and its focus owner.
 Each close control uses its tab's current title in its accessible name and
 in the shared hover and keyboard hint.
+The tab and its embedded close control draw their keyboard focus outline
+inside their bounds so the clipped strip leaves the outline visible.
 Equal titles receive a localized ordinal within their group, derived from the
 canonical open tab order. The strip, overflow menu and close controls share
 that label; selecting or overflowing a tab does not change its ordinal.
