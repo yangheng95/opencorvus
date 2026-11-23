@@ -2791,6 +2791,11 @@
   "todo.progress_value_cancelled_current": "{{completed}}/{{total}} done · {{cancelled}} cancelled · {{current}}",
   "todo.progress_value_terminal": "{{completed}}/{{total}} done · {{remaining}} left when agent stopped",
   "work_ledger.title": "Projects",
+  "work_ledger.projects_expand": {
+    "one": "Show {{count}} more project",
+    "other": "Show {{count}} more projects"
+  },
+  "work_ledger.projects_collapse": "Show fewer projects",
   "work_ledger.organize": "Organize sidebar",
   "work_ledger.locate_current": "Locate current work",
   "work_ledger.locate_unavailable": "Open a listed conversation, or use By project to locate a project",

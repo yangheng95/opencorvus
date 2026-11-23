@@ -2790,6 +2790,11 @@
   "todo.progress_value_cancelled_current": "{{completed}}/{{total}} 已完成 · {{cancelled}} 项已取消 · {{current}}",
   "todo.progress_value_terminal": "{{completed}}/{{total}} 已完成 · Agent 结束时遗留 {{remaining}} 项",
   "work_ledger.title": "项目",
+  "work_ledger.projects_expand": {
+    "one": "再显示 {{count}} 个项目",
+    "other": "再显示 {{count}} 个项目"
+  },
+  "work_ledger.projects_collapse": "收起其余项目",
   "work_ledger.organize": "整理侧边栏",
   "work_ledger.locate_current": "定位当前工作",
   "work_ledger.locate_unavailable": "打开列表中的对话，或切换到“按项目”定位项目",

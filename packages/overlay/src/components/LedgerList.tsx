@@ -1,5 +1,5 @@
 import { Show, type JSX } from "solid-js"
-import { t } from "../utils/i18n"
+import { t, tc } from "../utils/i18n"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 import { ProgressiveList } from "./ui/ProgressiveList"
@@ -87,6 +87,10 @@ export function LedgerList<T>(props: LedgerListProps<T>) {
         <ProgressiveList
           items={props.items}
           dataUi="ledger-progressive-list"
+          disclosureLabels={{
+            expand: (count, formattedCount) => tc("work_ledger.projects_expand", count, { count: formattedCount }),
+            collapse: t("work_ledger.projects_collapse"),
+          }}
           revealItem={props.revealItem}
           onRevealReady={props.onRevealReady}
           onExpansionFocus={props.onExpansionFocus}

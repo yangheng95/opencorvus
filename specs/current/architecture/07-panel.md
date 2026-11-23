@@ -4838,6 +4838,9 @@ The work-row disclosure shows the number of currently hidden top-level rows
 using the panel locale. Its accessible name starts with the visible button
 label and includes the list's scope. Same-named Projects use the directory hint
 from their existing group identity.
+The outer Projects disclosure names its scope directly and counts only the
+currently hidden unpinned Project groups. Combined work uses the inner work-row
+disclosure to report its own count.
 
 Work Ledger previews follow keyboard focus when disclosure or scrolling moves a
 different work row or kind marker under a stationary pointer. Real pointer

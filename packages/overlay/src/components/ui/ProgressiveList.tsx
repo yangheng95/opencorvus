@@ -11,6 +11,10 @@ export interface ProgressiveListProps<T> {
   class?: string
   dataUi?: string
   disclosureScope?: string
+  disclosureLabels?: {
+    expand: (count: number, formattedCount: string) => string
+    collapse: string
+  }
   revealItem?: T
   onRevealReady?: () => void
   /** Optional owner for focus after keyboard or assistive activation of the disclosure. */
@@ -24,9 +28,11 @@ export function ProgressiveList<T>(props: ProgressiveListProps<T>): JSX.Element 
   const hasOverflow = () => remainingCount() > 0
   const visibleItems = createMemo(() => (expanded() ? props.items : props.items.slice(0, visibleCount())))
   const disclosureText = createMemo(() => {
-    if (expanded()) return t("progressive_list.collapse")
-    if (props.disclosureScope && hasOverflow()) {
-      return t("progressive_list.expand_count", { count: new Intl.NumberFormat(localeTag()).format(remainingCount()) })
+    if (expanded()) return props.disclosureLabels?.collapse ?? t("progressive_list.collapse")
+    if (hasOverflow() && (props.disclosureScope || props.disclosureLabels)) {
+      const count = remainingCount()
+      const formattedCount = new Intl.NumberFormat(localeTag()).format(count)
+      return props.disclosureLabels?.expand(count, formattedCount) ?? t("progressive_list.expand_count", { count: formattedCount })
     }
     return t("progressive_list.expand")
   })
