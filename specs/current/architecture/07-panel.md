@@ -1640,6 +1640,9 @@ file-change refreshes still read the current source.
 With focus inside the visible Explorer, Ctrl+F or Command+F focuses its
 existing search field and selects the current query. The editor and
 conversation keep their respective find commands.
+Escape on a focused search result returns to the search field with the query
+intact. Escape from the search input clears the query through the existing field.
+An open result menu dismisses through its own Escape handler first.
 The existing directory refresh batch rereads a settled search once when it
 observes changed membership in an already read directory. A newer query or
 an active file operation owns its own read. If an updated result removes the

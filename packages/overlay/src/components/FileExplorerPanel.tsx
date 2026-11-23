@@ -615,6 +615,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       case "ArrowUp": next = visible[Math.max(index - 1, 0)]; break
       case "Home": next = visible[0]; break
       case "End": next = visible.at(-1); break
+      case "Escape":
+        if (row.kind !== "search" || event.target !== event.currentTarget || !searchInput?.isConnected || searchInput.disabled) {
+          return
+        }
+        searchInput.focus({ preventScroll: true })
+        break
       case "ArrowRight":
         if (row.kind !== "node") return
         if (row.node.directoryTarget) {
@@ -2449,7 +2455,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             data-drop-target={isSearchRowDropTarget() ? dropStatus() : undefined}
             aria-current={isSearchRowCurrent() ? "true" : undefined}
             aria-label={isSearchRowSelected() ? t("explorer.selected_path_hint", { path: label() }) : label()}
-            aria-keyshortcuts={EXPLORER_SELECTION_KEY_SHORTCUTS}
+            aria-keyshortcuts={`${EXPLORER_SELECTION_KEY_SHORTCUTS} Escape`}
             draggable={!commandBusy()}
             style={{ "--file-explorer-row-depth": String(row().depth) }}
             title={label()}
