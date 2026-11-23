@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务技能搜索方向键的实页截图](2026-11-23-mission-skill-search-keyboard-entry/README.md)
 - [定时任务时区搜索的桌面证据](2026-11-23-scheduled-time-zone-city-search/README.md)
 - [多步任务并发草稿的桌面证据](2026-11-23-mission-draft-conflict-review/README.md)
 - [PDF 缩放阅读位置的桌面证据](2026-11-23-pdf-zoom-reading-anchor/README.md)

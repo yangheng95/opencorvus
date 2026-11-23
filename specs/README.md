@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [多步任务技能搜索支持方向键进入结果](records/2026-11/2026-11-23-mission-skill-search-keyboard-entry.md)
 - [定时编辑器按城市和地区词查找时区](records/2026-11/2026-11-23-scheduled-time-zone-city-search.md)
 - [多步任务草稿可在原编辑框审阅并发版本](records/2026-11/2026-11-23-mission-draft-conflict-review.md)
 - [PDF 缩放保持正在阅读的位置](records/2026-11/2026-11-23-pdf-zoom-reading-anchor.md)
