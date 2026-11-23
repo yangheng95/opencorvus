@@ -426,11 +426,11 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     () => {
       if (!hasSettingsSearchMatches()) return []
       const matchedIDs = matchedConfigTabIDs()
-      return Array.from(sidebarElement()?.querySelectorAll<HTMLButtonElement>("[data-config-tab]") ?? []).filter(
+      return Array.from(sidebarElement()?.querySelectorAll<HTMLButtonElement>("button[data-config-tab]:enabled") ?? []).filter(
         (tab) => matchedIDs.has(tab.dataset.configTab ?? ""),
       )
     },
-    { tabList: true },
+    { tabList: true, returnToSearch: () => settingsSearchInput },
   )
   const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
   let pageTitle: HTMLHeadingElement | undefined
@@ -730,6 +730,9 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         aria-controls={configPanelID(tab.id)}
         aria-labelledby={labelID}
         aria-describedby={isRetainedDuringSearch() ? descriptionID : undefined}
+        aria-keyshortcuts={hasSettingsSearchMatches() && matchedConfigTabIDs().has(tab.id)
+          ? "ArrowUp ArrowDown Home End Escape"
+          : undefined}
         onKeyDown={settingsSearchNavigation.handleResultKeyDown}
       >
         <Icon class="config-nav-icon" name={tab.icon} size="medium" />
@@ -791,7 +794,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               clearDataUI="config-search-clear"
             />
             <Show when={hasSettingsSearchMatches()}>
-              <p id="config-search-keyboard-hint" class="config-search-keyboard-hint">{t("settings.search_keyboard_hint")}</p>
+              <p id="config-search-keyboard-hint" class="config-search-keyboard-hint">{t("settings.search_return_keyboard_hint")}</p>
             </Show>
             <Show when={normalizedSettingsSearch() && matchedConfigTabIDs().size === 0}>
               <div role="status">
