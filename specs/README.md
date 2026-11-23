@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [已加载全部内置专家团时结束该筛选的续页](records/2026-11/2026-11-23-expert-squad-built-in-continuation.md)
 - [专家团配置操作保持键盘焦点和就地反馈](records/2026-11/2026-11-23-expert-squad-configuration-action-focus.md)
 - [专家团配置说明明确安装范围](records/2026-11/2026-11-23-expert-squad-configuration-scope-copy.md)
 - [已安装专家团筛选的空状态和续页动作](records/2026-11/2026-11-23-installed-expert-squad-filter-feedback.md)
