@@ -20,7 +20,7 @@ import { SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
 import { Checkbox } from "./ui/Checkbox"
 import { DiffPreviewPanel } from "./DiffPreviewPanel"
-import { Disclosure } from "./ui/Disclosure"
+import { Popover } from "./ui/Popover"
 import {
   completeReviewFocus,
   failReviewFocus,
@@ -618,17 +618,20 @@ export function FileChangesView(props: FileChangesViewProps) {
               </span>
             )}
           </Show>
-          <Disclosure.Root class="changes-reading-help">
-            <Disclosure.Trigger>{t("files.reading_help")}</Disclosure.Trigger>
-            <Disclosure.Content>
-              <p class="changes-context">
-                {t("files.recorded_comparison_hint", { action: t("diff.open_current_file") })}
-              </p>
-              <Show when={summary().additions === null || summary().deletions === null}>
-                <p class="changes-context">{t("files.total_counts_unavailable")}</p>
-              </Show>
-            </Disclosure.Content>
-          </Disclosure.Root>
+          <Popover.Root placement="bottom-end" gutter={6} fitViewport>
+            <Popover.Trigger as={Button} type="button" class="changes-reading-guide-trigger" variant="ghost" size="sm" tone="neutral">
+              <Icon name="info-circle" size="compact" decorative />
+              {t("files.reading_help")}
+            </Popover.Trigger>
+            <Popover.Portal>
+              <Popover.Content class="changes-reading-guide" aria-label={t("files.reading_help")}>
+                <p>{t("files.recorded_comparison_hint", { action: t("diff.open_current_file") })}</p>
+                <Show when={summary().additions === null || summary().deletions === null}>
+                  <p>{t("files.total_counts_unavailable")}</p>
+                </Show>
+              </Popover.Content>
+            </Popover.Portal>
+          </Popover.Root>
         </div>
         <div class="changes-review-workspace" data-file-list-visible={allRows().length > 1 && fileListVisible()}>
           <section class="changes-diff-pane" aria-label={t("workspace.diff")}>

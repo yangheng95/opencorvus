@@ -934,7 +934,8 @@ list can be hidden to give the comparison the available space, and shown again
 with its selection and filters intact. The list visibility is local presentation
 state, reset on scope changes; explicit record/session focus and clearing filters
 show the list before using its existing focus or scroll owner. Recorded/current
-file and aggregate-count explanations live in the native Reading guide disclosure.
+file and aggregate-count explanations open in the shared non-modal Reading guide
+popover. It anchors to the toolbar without resizing the records or comparison.
 The actual record count, unknown aggregate indicator and individual-comparison
 evidence limitations remain visible. No separate data projection or window is used.
 
