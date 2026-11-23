@@ -2827,6 +2827,7 @@ button.s-row:focus-visible {
 
 .expert-squad-configuration-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: var(--ui-gap-md);
   padding-top: var(--ui-gap-xs);

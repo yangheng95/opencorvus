@@ -6126,6 +6126,9 @@ The Configuration tab explains the scope returned for the selected installation.
 Project installations have separate values per project. A user-wide installation
 shares its values wherever it is used. Package-authored field labels retain their
 original text, and the form presents saved secrets as write-only.
+Configuration actions keep their keyboard focus while a request settles. Reload
+keeps the last accepted fields visible. Save uses the confirmed write response
+and shows its result beside the form actions.
 Retrying a failed detail read keeps the current installation's original diagnostic
 and the focusable Retry action. A successful retry moves still-owned focus from
 that retiring action to the recovered installation heading.

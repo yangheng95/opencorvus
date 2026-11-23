@@ -254,6 +254,7 @@ type InstalledSquadSection = "overview" | "agents" | "configuration" | "evolutio
 type CatalogDiscoveryIssue = Extract<ExpertSquadDiagnosticsPage["entries"][number], { kind: "issue" }>["issue"]
 type CatalogDiagnosticsSnapshot = Pick<ExpertSquadDiagnosticsPage, "entries" | "next_cursor" | "total_count">
 type DiagnosticContinuation = { kind: "loading" } | { kind: "failed"; error: unknown }
+type ConfigurationFeedback = { kind: "saved" } | { kind: "failed"; operation: "load" | "save"; error: unknown }
 type InstallationContinuationFailure = { error: unknown; action: "retry" | "refresh" }
 type InstallationContinuation =
   | { kind: "loading"; failure?: InstallationContinuationFailure }
@@ -356,7 +357,8 @@ export default function ExpertSquadPanel() {
   const [configurationClears, setConfigurationClears] = createSignal<Record<string, boolean>>({})
   const [configurationLoading, setConfigurationLoading] = createSignal(false)
   const [configurationSaving, setConfigurationSaving] = createSignal(false)
-  const [configurationError, setConfigurationError] = createSignal("")
+  const [configurationFeedback, setConfigurationFeedback] = createSignal<ConfigurationFeedback>()
+  const configurationBusy = () => configurationLoading() || configurationSaving()
   const [expandedAgentIDs, setExpandedAgentIDs] = createSignal<ReadonlySet<string>>(new Set())
   const [installedSquadSection, setInstalledSquadSection] = createSignal<InstalledSquadSection>("overview")
 
@@ -568,7 +570,7 @@ export default function ExpertSquadPanel() {
       setConfigurationClears({})
       setConfigurationLoading(false)
       setConfigurationSaving(false)
-      setConfigurationError("")
+      setConfigurationFeedback(undefined)
     }
     return selectionIdentity
   }, "")
@@ -1244,17 +1246,31 @@ export default function ExpertSquadPanel() {
     )
   }
 
-  async function openConfiguration(): Promise<boolean> {
+  function acceptConfiguration(next: ExpertSquadConfiguration): void {
+    const values: Record<string, string | boolean> = {}
+    for (const field of next.fields) {
+      values[field.key] = field.value ?? (field.type === "boolean" ? false : "")
+    }
+    batch(() => {
+      setConfigurationValues(values)
+      setConfigurationClears({})
+      setConfiguration(next)
+    })
+  }
+
+  async function openConfiguration(): Promise<void> {
     const squad = currentSquad()
     const captured = captureCatalogActionScope()
-    if (!squad?.configuration || !captured || squad.source.kind !== "installed_package") return false
-    const selectedInstallation = squadSelectionKey(squad)
+    if (!squad?.configuration || !captured || squad.source.kind !== "installed_package" || configurationBusy()) return
+    const selection = selectedDetailKey()
     const sequence = ++configurationLoadSequence
+    const owns = () =>
+      sequence === configurationLoadSequence &&
+      currentScopeIdentity() === captured.identity &&
+      selectedDetailKey() === selection &&
+      Boolean(currentSquad())
     setConfigurationLoading(true)
-    setConfiguration(null)
-    setConfigurationValues({})
-    setConfigurationClears({})
-    setConfigurationError("")
+    setConfigurationFeedback(undefined)
     setActionError("")
     try {
       const next = await loadExpertSquadConfiguration(
@@ -1262,47 +1278,11 @@ export default function ExpertSquadPanel() {
         squad.id,
         squad.source.installation_scope,
       )
-      if (
-        sequence !== configurationLoadSequence ||
-        currentScopeIdentity() !== captured.identity ||
-        !currentSquad() ||
-        squadSelectionKey(currentSquad()!) !== selectedInstallation
-      ) {
-        return false
-      }
-      const values: Record<string, string | boolean> = {}
-      for (const field of next.fields) {
-        values[field.key] = field.value ?? (field.type === "boolean" ? false : "")
-      }
-      setConfigurationValues(values)
-      setConfigurationClears({})
-      setConfiguration(next)
-      return true
+      if (owns()) acceptConfiguration(next)
     } catch (error) {
-      if (
-        sequence !== configurationLoadSequence ||
-        currentScopeIdentity() !== captured.identity ||
-        !currentSquad() ||
-        squadSelectionKey(currentSquad()!) !== selectedInstallation
-      ) {
-        return false
-      }
-      const message = error instanceof Error ? error.message : String(error)
-      setConfiguration(null)
-      setConfigurationValues({})
-      setConfigurationClears({})
-      setConfigurationError(message)
-      setActionError(message)
-      return false
+      if (owns()) setConfigurationFeedback({ kind: "failed", operation: "load", error })
     } finally {
-      if (
-        sequence === configurationLoadSequence &&
-        currentScopeIdentity() === captured.identity &&
-        currentSquad() &&
-        squadSelectionKey(currentSquad()!) === selectedInstallation
-      ) {
-        setConfigurationLoading(false)
-      }
+      if (owns()) setConfigurationLoading(false)
     }
   }
 
@@ -1315,11 +1295,13 @@ export default function ExpertSquadPanel() {
   }
 
   function updateConfigurationValue(key: string, value: string | boolean): void {
+    if (configurationFeedback()?.kind === "saved") setConfigurationFeedback(undefined)
     setConfigurationValues((current) => ({ ...current, [key]: value }))
     setConfigurationClears((current) => ({ ...current, [key]: false }))
   }
 
   function toggleConfigurationClear(key: string): void {
+    if (configurationFeedback()?.kind === "saved") setConfigurationFeedback(undefined)
     setConfigurationClears((current) => ({ ...current, [key]: !current[key] }))
     setConfigurationValues((current) => ({ ...current, [key]: "" }))
   }
@@ -1346,12 +1328,18 @@ export default function ExpertSquadPanel() {
       !scope ||
       !selectedInstallation ||
       squadSelectionKey(selectedInstallation) !== configurationInstallation ||
-      configurationSaving() ||
+      configurationBusy() ||
       configurationInvalid()
     ) {
       return
     }
+    const selection = selectedDetailKey()
     const sequence = ++configurationSaveSequence
+    const owns = () =>
+      sequence === configurationSaveSequence &&
+      currentScopeIdentity() === scope.identity &&
+      selectedDetailKey() === selection &&
+      Boolean(currentSquad())
     const updates: Record<string, string | boolean | null> = {}
     for (const field of current.fields) {
       const value = configurationValues()[field.key]
@@ -1366,45 +1354,16 @@ export default function ExpertSquadPanel() {
       }
     }
     setConfigurationSaving(true)
-    setConfigurationError("")
+    setConfigurationFeedback(undefined)
     try {
-      await updateExpertSquadConfiguration(scope.scope.directory, current.id, current.installationScope, updates)
-      if (
-        sequence !== configurationSaveSequence ||
-        currentScopeIdentity() !== scope.identity ||
-        !currentSquad() ||
-        squadSelectionKey(currentSquad()!) !== configurationInstallation
-      ) {
-        return
-      }
-      if (!(await openConfiguration())) return
-      if (
-        sequence !== configurationSaveSequence ||
-        currentScopeIdentity() !== scope.identity ||
-        !currentSquad() ||
-        squadSelectionKey(currentSquad()!) !== configurationInstallation
-      ) {
-        return
-      }
-      showNotice(t("expert_squad.configuration_saved"), "active")
+      const next = await updateExpertSquadConfiguration(scope.scope.directory, current.id, current.installationScope, updates)
+      if (!owns()) return
+      acceptConfiguration(next)
+      setConfigurationFeedback({ kind: "saved" })
     } catch (error) {
-      if (
-        sequence === configurationSaveSequence &&
-        currentScopeIdentity() === scope.identity &&
-        currentSquad() &&
-        squadSelectionKey(currentSquad()!) === configurationInstallation
-      ) {
-        setConfigurationError(error instanceof Error ? error.message : String(error))
-      }
+      if (owns()) setConfigurationFeedback({ kind: "failed", operation: "save", error })
     } finally {
-      if (
-        sequence === configurationSaveSequence &&
-        currentScopeIdentity() === scope.identity &&
-        currentSquad() &&
-        squadSelectionKey(currentSquad()!) === configurationInstallation
-      ) {
-        setConfigurationSaving(false)
-      }
+      if (owns()) setConfigurationSaving(false)
     }
   }
 
@@ -1416,18 +1375,13 @@ export default function ExpertSquadPanel() {
           when={squad()?.configuration}
           fallback={<Feedback>{t("expert_squad.configuration_unavailable")}</Feedback>}
         >
-          <Show
-            when={!configurationLoading()}
-            fallback={<Feedback>{t("expert_squad.configuration_loading")}</Feedback>}
-          >
-            <Show when={configurationError()}>
-              <Feedback tone="error" data-ui="expert-squad-configuration-error">
-                {configurationError()}
-              </Feedback>
+          <div class="expert-squad-configuration" data-ui="expert-squad-configuration-fields">
+            <Show when={configurationLoading() && !configuration()}>
+              <Feedback>{t("expert_squad.configuration_loading")}</Feedback>
             </Show>
             <Show when={configuration()} keyed>
               {(current) => (
-                <div class="expert-squad-configuration" data-ui="expert-squad-configuration-fields">
+                <>
                   <p>
                     {t(
                       current.installationScope === "project"
@@ -1452,6 +1406,7 @@ export default function ExpertSquadPanel() {
                             <Switch
                               aria-label={field.label}
                               checked={value() === true}
+                              disabled={configurationBusy()}
                               onChange={(checked) => updateConfigurationValue(field.key, checked)}
                             />
                           </div>
@@ -1475,6 +1430,7 @@ export default function ExpertSquadPanel() {
                               value={String(value() ?? "")}
                               placeholder={field.placeholder ?? ""}
                               disabled={clearing()}
+                              readOnly={configurationBusy()}
                               autocomplete="off"
                               onInput={(event) => updateConfigurationValue(field.key, event.currentTarget.value)}
                             />
@@ -1488,6 +1444,7 @@ export default function ExpertSquadPanel() {
                               variant="ghost"
                               size="sm"
                               tone={clearing() ? "accent" : "neutral"}
+                              disabled={configurationBusy()}
                               onClick={() => toggleConfigurationClear(field.key)}
                             >
                               {clearing()
@@ -1499,33 +1456,46 @@ export default function ExpertSquadPanel() {
                       )
                     }}
                   </For>
-                  <div class="expert-squad-configuration-actions">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="md"
-                      tone="neutral"
-                      onClick={() => void openConfiguration()}
-                      disabled={configurationSaving() || configurationLoading()}
-                    >
-                      {t("common.reload")}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="solid"
-                      size="md"
-                      tone="accent"
-                      data-ui="expert-squad-configuration-save"
-                      onClick={() => void saveConfiguration()}
-                      disabled={configurationSaving() || configurationInvalid()}
-                    >
-                      {configurationSaving() ? t("common.saving") : t("common.save")}
-                    </Button>
-                  </div>
-                </div>
+                </>
               )}
             </Show>
-          </Show>
+            <Show when={configurationFeedback()} keyed>
+              {(feedback) => feedback.kind === "failed" && (
+                <Feedback tone="error" data-ui="expert-squad-configuration-error" details={formatErrorDetails(feedback.error)}>
+                  {t(feedback.operation === "load" ? "expert_squad.configuration_load_failed" : "expert_squad.configuration_save_failed")}
+                </Feedback>
+              )}
+            </Show>
+            <div class="expert-squad-configuration-actions">
+              <Show when={configurationFeedback()?.kind === "saved"}>
+                <Badge tone="ok" role="status">{t("common.saved")}</Badge>
+              </Show>
+              <Button
+                type="button"
+                variant="ghost"
+                size="md"
+                tone="neutral"
+                onClick={() => void openConfiguration()}
+                aria-disabled={configurationBusy() || undefined}
+                aria-busy={configurationLoading() || undefined}
+              >
+                {t(configurationLoading() ? "common.loading" : "common.reload")}
+              </Button>
+              <Button
+                type="button"
+                variant="solid"
+                size="md"
+                tone="accent"
+                data-ui="expert-squad-configuration-save"
+                onClick={() => void saveConfiguration()}
+                disabled={configurationInvalid()}
+                aria-disabled={configurationBusy() || undefined}
+                aria-busy={configurationSaving() || undefined}
+              >
+                {t(configurationSaving() ? "common.saving" : "common.save")}
+              </Button>
+            </div>
+          </div>
         </Show>
       </div>
     )

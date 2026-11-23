@@ -11,3 +11,13 @@
 | [05 下一次 Tab](05-baseline-en-next-tab-returns-to-first-field.jpg) | 焦点回到表单的第一个字段。 |
 | [06 中文 160% 保存前](06-baseline-zh-160-save-focus-before-write.jpg) | 窄设置区底部原保存按钮聚焦。 |
 | [07 中文 160% 保存后](07-baseline-zh-160-save-loses-focus-and-feedback-offscreen.jpg) | 焦点消失，成功说明位于当前可见范围之外。 |
+
+| 候选实拍 | 实际画面和焦点 |
+| --- | --- |
+| [08 英文重载前](08-candidate-en-reload-focus-with-unsaved-draft.jpg) | 非秘密草稿存在，键盘聚焦原 Reload。 |
+| [09 英文重载成功](09-candidate-en-real-reload-restores-value-and-keeps-button-focus.jpg) | 恢复正式持久值，原 Reload 焦点环保留。 |
+| [10 英文保存成功](10-candidate-en-save-focus-and-local-confirmation.jpg) | Save 仍聚焦，Saved 在同一操作区。 |
+| [11 英文 Shift+Tab](11-candidate-en-shift-tab-visits-adjacent-reload.jpg) | 直接聚焦到相邻的 Reload。 |
+| [12 中文 160% 编辑后](12-candidate-zh-160-edit-clears-prior-confirmation.jpg) | 上一次回执退休，恢复用的草稿保留，保存获得焦点。 |
+| [13 中文 160% 保存成功](13-candidate-zh-160-save-keeps-visible-focus-and-confirmation.jpg) | 原保存焦点和已保存反馈在窄区同屏。 |
+| [14 中文 160% Shift+Tab](14-candidate-zh-160-shift-tab-remains-at-form-actions.jpg) | 相邻重新加载重新获得焦点。 |
