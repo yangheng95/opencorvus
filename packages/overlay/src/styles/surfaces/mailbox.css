@@ -131,6 +131,13 @@
   width: 100%;
 }
 
+.mailbox-panel__search-hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+}
+
 .mailbox-panel__body {
   flex: 1 1 0;
   min-height: 0;

@@ -1,4 +1,4 @@
-import { For, Show, batch, createEffect, createMemo, createSignal, on, onCleanup } from "solid-js"
+import { For, Show, batch, createEffect, createMemo, createSignal, createUniqueId, on, onCleanup } from "solid-js"
 import * as Accordion from "@kobalte/core/accordion"
 import {
   acknowledgeMailboxItem,
@@ -30,7 +30,7 @@ import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { Checkbox } from "./ui/Checkbox"
 import { Disclosure } from "./ui/Disclosure"
-import { SearchField } from "./ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "./ui/SearchField"
 import { createMailboxRequestOwner } from "./mailbox-request-owner"
 
 const MAILBOX_PAGE_SIZE = 40
@@ -123,6 +123,15 @@ export function MailboxPanel(props: MailboxPanelProps) {
     const issue = loadIssue()
     return issue?.operation === "base" ? issue : undefined
   }
+  const searchKeyboardHintID = createUniqueId()
+  const canBrowseSearchResults = () => searchOpen() && currentSearch() !== "" && appStore.connected &&
+    hasAcceptedMailbox() && !loading() && !baseLoadIssue() && visibleItems().length > 0
+  const searchNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseSearchResults() || !mailboxBody) return []
+    return Array.from(mailboxBody.querySelectorAll<HTMLButtonElement>(
+      "details[open][data-project-directory] button.mailbox-item__main:enabled",
+    ))
+  }, { returnToSearch: () => searchInput })
   const continuationIssue = () => {
     const issue = loadIssue()
     return issue?.operation === "append" ? issue : undefined
@@ -575,6 +584,8 @@ export function MailboxPanel(props: MailboxPanelProps) {
                 size="sm"
                 placeholder={t("mailbox.search")}
                 inputRef={(element) => (searchInput = element)}
+                ariaDescribedBy={canBrowseSearchResults() ? searchKeyboardHintID : undefined}
+                resultFocusTarget={searchNavigation.resultFocusTarget}
                 onValueChange={setQuery}
                 onKeyDown={(event) => {
                   if (event.key !== "Escape") return
@@ -585,6 +596,11 @@ export function MailboxPanel(props: MailboxPanelProps) {
               />
             </div>
           </div>
+          <Show when={canBrowseSearchResults()}>
+            <p class="mailbox-panel__search-hint" id={searchKeyboardHintID}>
+              {t("settings.search_return_keyboard_hint")}
+            </p>
+          </Show>
         </Show>
         <Show when={visibleItems().length > 0}>
           <div class="mailbox-panel__toolbar">
@@ -784,6 +800,8 @@ export function MailboxPanel(props: MailboxPanelProps) {
                                       size="md"
                                       tone="neutral"
                                       class="mailbox-item__main"
+                                      aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown Escape" : undefined}
+                                      onKeyDown={searchNavigation.handleResultKeyDown}
                                       aria-label={
                                         expandedMessageIDs().has(item().id)
                                           ? t("mailbox.collapse_message", { subject: item().subject })

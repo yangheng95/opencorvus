@@ -5095,7 +5095,11 @@ disclosure and scroll context. Its footer shows the original diagnostic and
 retries that cursor in the current query. A revalidation with the same cursor
 keeps the continuation diagnostic; a new cursor replaces that retry boundary.
 Successful continuation gives focus to the first newly loaded message or its
-collapsed group only while the continuation control still owns focus. Search
+collapsed group only while the continuation control still owns focus. In a
+settled search, Down and Up browse the matching message buttons in visual
+order across open project groups. Enter uses the usual message disclosure.
+Escape on a matching message focuses the original query and preserves expansion
+and selection. Escape in the search field closes the search. Search
 results never substitute for the native notification
 projector's complete active global snapshot. Dense row timestamps may truncate
 to preserve the subject; their complete localized date remains available on
