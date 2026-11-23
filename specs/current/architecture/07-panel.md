@@ -372,6 +372,10 @@ that chip. Media decoding and PDF parsing retain their separate lifecycles.
 The shared PDF reader expresses page and zoom limits with guarded aria-disabled
 buttons and removes unavailable actions from the Tab sequence. Reaching a limit
 keeps the current button focused, allowing native Tab navigation to continue.
+Manual zoom retains the current page position at the leading edges of the
+reader after the new scale renders. Scroll boundaries still constrain the
+restored position. Explicit page changes and document links retain their own
+navigation targets.
 
 Nonimage file chips open an existing Dialog for review before submission. The
 shared util/text-mime classifier serves both model text projection and review:

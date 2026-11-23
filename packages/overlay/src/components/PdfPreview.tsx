@@ -14,6 +14,10 @@ import { TextField } from "./ui/TextField"
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker
 
+type PdfReadingPosition =
+  | { kind: "scroll"; left: number; top: number }
+  | { kind: "page"; left?: number; top?: number }
+
 export function PdfPreview(props: {
   url: string
   label: string
@@ -53,7 +57,7 @@ export function PdfPreview(props: {
     currentPoint?: [number, number]
     events: EventBus
   } | undefined
-  let readingPosition = { top: 0, left: 0 }
+  let readingPosition: PdfReadingPosition = { kind: "scroll", top: 0, left: 0 }
   let restorePending = false
   let renderedPage = 0
   let paintedWidth = 0
@@ -65,16 +69,26 @@ export function PdfPreview(props: {
       return
     }
     if (!currentDocument() || paintedWidth !== viewportWidth()) return
-    viewport.scrollTop = readingPosition.top
-    viewport.scrollLeft = readingPosition.left
+    if (readingPosition.kind === "page") {
+      const frame = pageHost
+      if (!frame) return
+      const offset = pageOffset()
+      const { left, top } = readingPosition
+      viewport.scrollTop = top === undefined ? 0 : offset.top + top * frame.offsetHeight
+      viewport.scrollLeft = left === undefined ? 0 : offset.left + left * frame.offsetWidth
+    } else {
+      viewport.scrollTop = readingPosition.top
+      viewport.scrollLeft = readingPosition.left
+    }
     restorePending = false
+    rememberReading()
   })
 
   const rememberReading = () => {
     const viewport = viewportHost
     if (restorePending || !viewport?.clientWidth || !viewport.clientHeight ||
       viewport.closest("[inert], [hidden]") || hasRunningLayoutAnimation(viewport)) return
-    readingPosition = { top: viewport.scrollTop, left: viewport.scrollLeft }
+    readingPosition = { kind: "scroll", top: viewport.scrollTop, left: viewport.scrollLeft }
   }
   const [source] = createResource(
     () => ({
@@ -111,6 +125,19 @@ export function PdfPreview(props: {
     navigationSequence += 1
     pendingNavigation = undefined
     setNavigationError(undefined)
+    const viewport = viewportHost
+    const frame = pageHost
+    if (value !== zoom() && readingPosition.kind === "scroll" && paintedWidth && viewport && frame) {
+      const offset = pageOffset()
+      const left = viewport.scrollLeft - offset.left
+      const top = viewport.scrollTop - offset.top
+      readingPosition = {
+        kind: "page",
+        left: left > 0 ? left / frame.offsetWidth : undefined,
+        top: top > 0 ? top / frame.offsetHeight : undefined,
+      }
+      restorePending = true
+    }
     batch(() => {
       setZoom(value)
       setNavigationRender(navigationSequence)
@@ -209,7 +236,7 @@ export function PdfPreview(props: {
     navigationSequence += 1
     pendingNavigation = undefined
     setNavigationError(undefined)
-    readingPosition = { top: 0, left: 0 }
+    readingPosition = { kind: "scroll", top: 0, left: 0 }
     restorePending = false
     renderedPage = 0
     paintedWidth = 0
@@ -265,7 +292,7 @@ export function PdfPreview(props: {
     textTarget.replaceChildren()
     if (renderedPage !== pageNumber) {
       renderedPage = pageNumber
-      readingPosition = { top: 0, left: 0 }
+      readingPosition = { kind: "scroll", top: 0, left: 0 }
       restorePending = true
     }
     let renderTask: pdfjs.RenderTask | undefined
@@ -343,9 +370,10 @@ export function PdfPreview(props: {
           const offset = pageOffset()
           const coordinates = rect && displayViewport.convertToViewportRectangle(rect)
           readingPosition = coordinates ? {
+            kind: "scroll",
             left: Math.max(0, offset.left + Math.min(coordinates[0], coordinates[2])),
             top: Math.max(0, offset.top + Math.min(coordinates[1], coordinates[3])),
-          } : { top: 0, left: 0 }
+          } : { kind: "scroll", top: 0, left: 0 }
           restorePending = true
           pendingNavigation = undefined
         }
