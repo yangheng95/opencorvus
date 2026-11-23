@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [笔记标题与删除目标截图](2026-11-23-memory-note-title-identity/README.md)
 - [跳转到行的输入错误提示与纠正截图](2026-11-23-editor-go-to-line-validation/README.md)
 - [输入区引用焦点和弹窗滚动截图](2026-11-23-composer-reference-visible-focus/README.md)
 - [输入区引用选中、取消与焦点截图](2026-11-23-composer-reference-toggle-focus/README.md)
