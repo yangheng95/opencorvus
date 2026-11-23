@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [右侧工具溢出选择及时交接键盘焦点](2026-11-24-right-dock-overflow-immediate-focus.md)
 - [文件标签上的 Ctrl+F 查找当前文件](2026-11-24-file-workbench-tab-find.md)
 - [右侧工具栏标签与关闭按钮的完整焦点环](2026-11-24-right-dock-visible-focus-ring.md)
 - [右侧工具溢出菜单选择后聚焦实际标签](2026-11-24-right-dock-overflow-tab-focus.md)
