@@ -1841,6 +1841,9 @@ existing refresh and selection after dismissal. Cancelling an affected draft
 decision retains the authored draft and settles the file operation as cancelled.
 The draft decision owns initial focus on Continue editing, including when it
 opens above a pending path dialog.
+Single-item Copy keeps the destination input open for local validation and
+rejected writes. Successful Copy uses the committed destination receipt for
+selection and focus after the dialog closes.
 Directory creation, explicit rename, Move and Copy dialogs share one operation focus owner.
 They hand keyboard focus to the new path only after the owned mutation
 receipt and current directory/search refresh have succeeded. It finds that row

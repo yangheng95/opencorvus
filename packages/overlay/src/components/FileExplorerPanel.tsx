@@ -2043,42 +2043,38 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const focus = capturePathMutationFocus(scope)
-    const result = await showAppDialog({
-      kind: "file-copy",
-      title: t("explorer.copy"),
-      message: t("explorer.copy_message", { path: item.path }),
-      input: true,
-      inputLabel: t("explorer.destination_path"),
-      inputValue: joinExplorerPath(parentPath(item.path), copyNameSuggestion(item.path)),
-      inputRequired: true,
-      inputRequiredMessage: t("explorer.name_required"),
-      validateInput: (value) => validateTransferDestination(value, scope),
-      okLabel: t("explorer.copy"),
-      cancel: true,
-      returnFocusTarget: focus.returnFocusTarget,
-    })
-    if (!result.confirmed) return
-    if (!ownsExplorerOperation(scope)) return
-    const nextPath = normalizeExplorerPath(String(result.value || ""))
-    if (!nextPath) {
-      setMutationValidation("name")
-      return
-    }
-    if (item.type === "directory" && (nextPath === item.path || isPathOrDescendant(nextPath, item.path))) {
-      setMutationValidation("copy-target")
-      return
-    }
     await runMutation("copy", scope, async (ownsOperation, outcome) => {
-      let result: FileCopyResult
-      try {
-        result = await copyFileItem(item.path, nextPath, scope)
-      } catch (error) {
-        recordOperationFailure(outcome, { phase: "member", path: item.path, error })
-        return
-      }
-      outcome.completed.push(result)
-      outcome.refresh = await applyCopyResults([result], scope, ownsOperation)
-      focus.restore(result.path, outcome.refresh, ownsOperation)
+      let receipt: FileCopyResult | undefined
+      const result = await showAppDialog({
+        kind: "file-copy",
+        title: t("explorer.copy"),
+        message: t("explorer.copy_message", { path: item.path }),
+        input: true,
+        inputLabel: t("explorer.destination_path"),
+        inputValue: joinExplorerPath(parentPath(item.path), copyNameSuggestion(item.path)),
+        inputRequired: true,
+        inputRequiredMessage: t("explorer.name_required"),
+        validateInput: (value) => {
+          const error = validateTransferDestination(value, scope)
+          if (error) return error
+          const destination = normalizeProjectFilePath(value, scope.directory)
+          if (!destination) return t("explorer.name_required")
+          if (item.type === "directory" && isPathOrDescendant(destination, item.path)) return t("explorer.copy_invalid")
+        },
+        okLabel: t("explorer.copy"),
+        cancel: true,
+        returnFocusTarget: focus.returnFocusTarget,
+        confirmErrorSummary: (error) => fileErrorSummary(error, "copy"),
+        onConfirm: async (value) => {
+          if (!ownsOperation()) return
+          const destination = normalizeProjectFilePath(value ?? "", scope.directory)
+          receipt = await copyFileItem(item.path, destination, scope)
+          outcome.completed.push(receipt)
+        },
+      })
+      if (!result.confirmed || !receipt || !ownsOperation()) return
+      outcome.refresh = await applyCopyResults([receipt], scope, ownsOperation)
+      focus.restore(receipt.path, outcome.refresh, ownsOperation)
     })
   }
 
