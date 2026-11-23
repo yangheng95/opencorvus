@@ -1697,20 +1697,6 @@ export default function ProvidersPanel() {
                           </Show>
                         </div>
                         <div class="provider-row-actions">
-                          <Show when={provider().authMethods > 0 && expandedCatalogProviderID() === providerID}>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="md"
-                              tone="neutral"
-                              onClick={() => void handleAuth(providerID)}
-                              disabled={authing().has(providerID)}
-                              title={t("llm.auth_connect_title")}
-                              data-testid={`provider-auth-${providerID}`}
-                            >
-                              {authing().has(providerID) ? t("common.loading") : t("llm.auth_connect")}
-                            </Button>
-                          </Show>
                           <Button
                             type="button"
                             variant="ghost"
@@ -1743,6 +1729,21 @@ export default function ProvidersPanel() {
                         </div>
                         <Show when={expandedCatalogProviderID() === providerID}>
                           <div class="provider-row-key">
+                            <Show when={provider().authMethods > 0}>
+                              <Button
+                                type="button"
+                                class="provider-catalog-connect"
+                                variant="outline"
+                                size="md"
+                                tone="neutral"
+                                onClick={() => void handleAuth(providerID)}
+                                disabled={authing().has(providerID)}
+                                title={t("llm.auth_connect_title")}
+                                data-testid={`provider-auth-${providerID}`}
+                              >
+                                {authing().has(providerID) ? t("common.loading") : t("llm.auth_connect")}
+                              </Button>
+                            </Show>
                             <ApiKeyEditor providerId={providerID} />
                           </div>
                         </Show>

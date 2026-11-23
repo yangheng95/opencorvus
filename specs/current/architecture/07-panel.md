@@ -5925,6 +5925,8 @@ it does not claim authentication, runnable models or successful inference.
 Provider search offers Down and Up to enter and browse the available Edit and
 Configure buttons in display order. Those controls name their provider for
 keyboard users. The ordinary Tab sequence continues to reach the other actions.
+An expanded catalog row places its available account connection action and then
+its API key editor directly after the Configure trigger in the native Tab order.
 Model quantities in provider
 rows, discovery receipts, Composer groups and usage use the shared plural
 translation contract. Discovery stores the current successful count, translated

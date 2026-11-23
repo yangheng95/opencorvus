@@ -3512,6 +3512,14 @@ button.s-row:focus-visible {
 .provider-catalog-row .provider-row-actions {
   flex-wrap: nowrap;
 }
+.provider-catalog-row .provider-row-key {
+  display: grid;
+  gap: var(--ui-gap-sm);
+}
+.provider-catalog-connect {
+  justify-self: start;
+  margin-inline-start: var(--ui-gap-sm);
+}
 
 .provider-connection-feedback {
   grid-area: result;
