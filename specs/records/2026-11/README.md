@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [阅读定时详情时可直接返回列表](2026-11-24-scheduled-detail-reading-return.md)
 - [从定时任务结果返回搜索](2026-11-24-scheduled-return-to-search.md)
 - [从归档结果返回搜索](2026-11-24-archive-return-to-search.md)
 - [从版本结果返回更新日志搜索](2026-11-24-release-history-return-to-search.md)
