@@ -4601,8 +4601,10 @@ The Project row's actions menu and start-work buttons name the same Project
 identity in their localized labels and existing hints, including directory
 context when that name is shared.
 Each Project header has separate disclosure and navigation buttons. Its arrow
-changes only the existing group visibility; its name opens the Project through
-the original selection action. Project action dialogs, pin relocation and Project
+changes the existing group visibility. While expanded, the button refers to
+its own mounted content through a unique identifier assigned to the group
+instance. Its name opens the Project through the original selection action.
+Project action dialogs, pin relocation and Project
 locating return focus to that visible name button. Collapsing a group preserves
 the current conversation and its scoped composer draft.
 

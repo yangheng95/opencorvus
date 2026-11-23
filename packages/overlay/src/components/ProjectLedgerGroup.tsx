@@ -1,5 +1,5 @@
 import { DropdownMenu } from "./ui/DropdownMenu"
-import { createEffect, createSignal, onCleanup, Show, type JSX } from "solid-js"
+import { createEffect, createSignal, createUniqueId, onCleanup, Show, type JSX } from "solid-js"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog, type AppDialogOpenOptions } from "../services/app-dialog"
 import { ApiAuthorityChangedError, ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
@@ -63,13 +63,8 @@ export function createProjectLedgerGroupCollapseState() {
   return { isCollapsed, toggle, expand }
 }
 
-function projectLedgerGroupBodyElementID(directory: string, dataUi: string | undefined): string {
-  const namespace = dataUi || "task-project-group"
-  const raw = `${namespace}-${projectDirectoryKey(directory)}-body`
-  return raw.replace(/[^A-Za-z0-9_-]+/g, "-").replace(/^-+|-+$/g, "") || "project-group-body"
-}
-
 export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
+  const bodyElementID = createUniqueId()
   let groupHeadRef!: HTMLDivElement
   const [busy, setBusy] = createSignal(false)
   let actionGeneration = 0
@@ -163,7 +158,6 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
   const countText = () => new Intl.NumberFormat(localeTag()).format(props.count)
   const tooltipDirectory = () => props.directory.trim()
   const hasTooltipSummary = () => Boolean(props.count > 0 || tooltipDirectory())
-  const bodyElementID = () => projectLedgerGroupBodyElementID(props.directory, props.dataUi)
   const canCreateChat = () => !!props.onCreateChat && !!props.directory.trim()
   const canPinProject = () => !!props.onPinnedChange && !!props.directory.trim()
   const canOpenProjectDirectory = () => !!props.onOpenProjectDirectory && !!props.directory.trim()
@@ -191,7 +185,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
           tone="neutral"
           data-ui="project-group-toggle"
           aria-expanded={props.collapsed ? "false" : "true"}
-          aria-controls={props.collapsed ? undefined : bodyElementID()}
+          aria-controls={props.collapsed ? undefined : bodyElementID}
           aria-label={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: accessibleName() })}
           title={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: accessibleName() })}
           onClick={() => {
@@ -400,7 +394,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
         </div>
       </div>
       <Show when={!props.collapsed}>
-        <div id={bodyElementID()} class="project-group-body">
+        <div id={bodyElementID} class="project-group-body">
           {props.children}
         </div>
       </Show>
