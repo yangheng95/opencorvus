@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [文件标签上的 Ctrl+F 查找当前文件](records/2026-11/2026-11-24-file-workbench-tab-find.md)
 - [右侧工具栏标签与关闭按钮的完整焦点环](records/2026-11/2026-11-24-right-dock-visible-focus-ring.md)
 - [右侧工具溢出菜单选择后聚焦实际标签](records/2026-11/2026-11-24-right-dock-overflow-tab-focus.md)
 - [文件审阅阅读说明保留列表和比较空间](records/2026-11/2026-11-24-file-review-reading-guide-space.md)

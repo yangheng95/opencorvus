@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件标签查找的真实桌面截图](2026-11-24-file-workbench-tab-find/README.md)
 - [右侧工具焦点描边的真实桌面截图](2026-11-24-right-dock-visible-focus-ring/README.md)
 - [右侧工具溢出选择的真实桌面焦点](2026-11-24-right-dock-overflow-tab-focus/README.md)
 - [文件审阅阅读说明的真实桌面空间](2026-11-24-file-review-reading-guide-space/README.md)
