@@ -1,0 +1,24 @@
+{
+  "version": "0.1.54",
+  "source": "b136e6ec01cc21b5413e8f55ae0f4f7a6850adb9",
+  "observedAt": "2026-11-23T17:46:44.732945+00:00",
+  "preflightRunID": 45226376119,
+  "bunPrimaryCache": {
+    "id": 10984223167,
+    "key": "macOS-bun-893933356aa4af8151a68062074e870227dc94399b48fa89a3f635f11465c4d9",
+    "ref": "refs/heads/main",
+    "size_in_bytes": 464367320,
+    "created_at": "2026-11-23T17:28:40.660168Z"
+  },
+  "rustCache": {
+    "id": 10985167467,
+    "key": "v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+    "ref": "refs/heads/main",
+    "size_in_bytes": 415049049,
+    "created_at": "2026-11-23T17:45:32.214308Z"
+  },
+  "preflightBunRestoreKey": "macOS-bun-8fd86c4b9cf03296b4632440b2e5e6aa11e936891b33cb03115e79a8edb18749",
+  "preflightRustObservation": "cache miss, compiled successfully and saved requested cache",
+  "ownership": "Intel rows are read-only Bun consumers. The exact requested macOS Bun key exists from an existing non-Intel consumer. The existing debug preflight saved the Rust cache after its observed miss; the API object is retained below. No extra cache writer or product artifact transfer was added.",
+  "scope": "Actual GitHub cache objects and job observations; performance inputs only, not a replacement for native first-run acceptance"
+}

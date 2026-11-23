@@ -1,0 +1,197 @@
+{
+  "verifiedAt": "2026-11-23T18:18:49.845Z",
+  "version": "0.1.54",
+  "source": "b136e6ec01cc21b5413e8f55ae0f4f7a6850adb9",
+  "runID": "45231354131",
+  "releaseID": 455781038,
+  "publishedAt": "2026-11-23T18:10:45Z",
+  "githubLatestRelease": "v0.1.54",
+  "assets": [
+    {
+      "name": "latest.json",
+      "bytes": 3042,
+      "state": "uploaded",
+      "digest": "sha256:0403cb9e446aec7f25df895aa23a32c31edcf5cd0ec6dd5900916d83d9122c73"
+    },
+    {
+      "name": "LICENSE",
+      "bytes": 1066,
+      "state": "uploaded",
+      "digest": "sha256:b4863be2c0ab3316a74d6623baead6b88509559b59b21e0843210dd565010cf8"
+    },
+    {
+      "name": "OpenCorvus-0.1.54-1.aarch64.rpm",
+      "bytes": 207142224,
+      "state": "uploaded",
+      "digest": "sha256:627adb5dd40bbf20ed59150d36fd28e5b7c15e07e98cdf2ce99f253b67f78f64"
+    },
+    {
+      "name": "OpenCorvus-0.1.54-1.x86_64.rpm",
+      "bytes": 209041858,
+      "state": "uploaded",
+      "digest": "sha256:048d4512dee52bc3922a88b9acb22201c87736c58cd74b0fa734527571ed3e52"
+    },
+    {
+      "name": "opencorvus-darwin-arm64.tar.gz",
+      "bytes": 138731901,
+      "state": "uploaded",
+      "digest": "sha256:57c927b552d7bb1367159650d9c52950d619f6f6829a4af11c3827d19e8f9537"
+    },
+    {
+      "name": "opencorvus-darwin-x64-baseline.tar.gz",
+      "bytes": 145846825,
+      "state": "uploaded",
+      "digest": "sha256:4f58770430dfa21faf609013bf5cf5e0595ce3bd0c3aa6612b6b534d98ad9ce4"
+    },
+    {
+      "name": "opencorvus-darwin-x64.tar.gz",
+      "bytes": 145846925,
+      "state": "uploaded",
+      "digest": "sha256:43e8761c3ca310f8857a750327c0faea9a4da7821fd40b3e020427f79431587f"
+    },
+    {
+      "name": "opencorvus-linux-arm64.tar.gz",
+      "bytes": 154710443,
+      "state": "uploaded",
+      "digest": "sha256:98e434474f8a89cde39c445ce74850ec700fbe81680b9f915d3bea46e20b6b9a"
+    },
+    {
+      "name": "opencorvus-linux-x64-baseline.tar.gz",
+      "bytes": 155348733,
+      "state": "uploaded",
+      "digest": "sha256:a7ddd6bfc97b92fededb28cedbcbb63b63bbce406c851136614a0ab87d13e5d1"
+    },
+    {
+      "name": "opencorvus-linux-x64.tar.gz",
+      "bytes": 155342411,
+      "state": "uploaded",
+      "digest": "sha256:8b4d50c8b23a4c92de499fb1d0b03a7805fdea1b3fe4b7f4c9e70df4a2fef5b8"
+    },
+    {
+      "name": "opencorvus-windows-x64-baseline.tar.gz",
+      "bytes": 146056427,
+      "state": "uploaded",
+      "digest": "sha256:04c66b6fcb95ccdf25d41e030eedca720b1ab5c510a0ab4da2b660c48bab376a"
+    },
+    {
+      "name": "opencorvus-windows-x64.tar.gz",
+      "bytes": 146053160,
+      "state": "uploaded",
+      "digest": "sha256:284c6281ebc72e10a4a4782e8ee1435b82b9d378b9a0a6317b7bfb59b9962d38"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_aarch64.app.tar.gz",
+      "bytes": 188178357,
+      "state": "uploaded",
+      "digest": "sha256:9780c34fc292c7de9dd99f5e96cd4f55723387fd91f8c4a3c06011f32b1d7650"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_aarch64.app.tar.gz.sig",
+      "bytes": 408,
+      "state": "uploaded",
+      "digest": "sha256:34b72fffba624b1f0ad9bff1466a90d28bd5297c96bd8b459455d562f89cff44"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_aarch64.AppImage",
+      "bytes": 281053704,
+      "state": "uploaded",
+      "digest": "sha256:91cf55c0380d87ca07b439c2da2cb715f883a05afb726c155a42a728b9f095b8"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_aarch64.AppImage.sig",
+      "bytes": 428,
+      "state": "uploaded",
+      "digest": "sha256:3471bd92094dad4d4197fc1985c27ac945167878bb27f77ab62a578d9bed6bfb"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_aarch64.dmg",
+      "bytes": 188593241,
+      "state": "uploaded",
+      "digest": "sha256:d68724bc54cd02ee93d2c3214a3efb2cc322f30ec16db94ad037a71d62a58f05"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_amd64.AppImage",
+      "bytes": 284670456,
+      "state": "uploaded",
+      "digest": "sha256:61ffb688e5f018ae9bd3aa915226aa247554153392eb6481fdd74a85d1d1e51a"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_amd64.AppImage.sig",
+      "bytes": 424,
+      "state": "uploaded",
+      "digest": "sha256:d8afd15bce5e21c2856c495adad50bd4afd2d8e0687c6ee875da1c521a67bd93"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_amd64.deb",
+      "bytes": 209041324,
+      "state": "uploaded",
+      "digest": "sha256:79d8b2d437bff80c6ab7af3376f8f638371c128c403ba8ceb75f9b4c916c9b49"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_arm64.deb",
+      "bytes": 207141466,
+      "state": "uploaded",
+      "digest": "sha256:ab2e4679ebd44cf31b81c6f364f4d04c5dfbc77e96c1daa7d81fa3fe94cef042"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_x64-setup.exe",
+      "bytes": 198135523,
+      "state": "uploaded",
+      "digest": "sha256:bce288398d80cfe11f74f9c8060f1bdd6ee2926e0c27c713adb6b89cec2cf6d9"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_x64-setup.exe.sig",
+      "bytes": 424,
+      "state": "uploaded",
+      "digest": "sha256:79520896d5537d4c4ea5df9ec2218c116bdee0d1c3c04d5363b559455672c578"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_x64.app.tar.gz",
+      "bytes": 198328016,
+      "state": "uploaded",
+      "digest": "sha256:0ee6b0e188d7f32b80c2e6d59445dfad5a6ab04836db530e4617fd7540ded61f"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_x64.app.tar.gz.sig",
+      "bytes": 408,
+      "state": "uploaded",
+      "digest": "sha256:26c004858b93aaf80ba76b42ed6395611952629df2c46a2766f1f915aee05e89"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_x64.dmg",
+      "bytes": 198828188,
+      "state": "uploaded",
+      "digest": "sha256:ff48790800d340bd88ca14d9f52f22916046fadd7435b122c25d2885fbd5f3b2"
+    },
+    {
+      "name": "OpenCorvus_0.1.54_x64_en-US.msi",
+      "bytes": 198668288,
+      "state": "uploaded",
+      "digest": "sha256:ce2e8ff7c8e2333f6604cb7ef81428f16f970f5d20a5b83075f7ff5470cdab39"
+    },
+    {
+      "name": "SHA256SUMS",
+      "bytes": 2720,
+      "state": "uploaded",
+      "digest": "sha256:b42860fc641d54fee84a268e7b97ebfcc853d6f512736f36e1e6138ce154bff8"
+    },
+    {
+      "name": "THIRD_PARTY_NOTICES.md",
+      "bytes": 4106,
+      "state": "uploaded",
+      "digest": "sha256:ccb1898d2939c13b464d2f5805eaaaa348a342d44e5aa01321b45abeb8b70f6e"
+    }
+  ],
+  "updaterPlatforms": [
+    "linux-x86_64",
+    "linux-aarch64",
+    "darwin-x86_64",
+    "darwin-aarch64",
+    "windows-x86_64"
+  ],
+  "websiteDownloads": 18,
+  "websiteManifest": "exact canonical-generator match",
+  "authoredReleaseNotes": "exact frozen-source match",
+  "stableUpdateChannel": "exact immutable-manifest match",
+  "publicIntegrity": "28 checksum entries match uploaded-object digests; SHA256SUMS bytes match its uploaded-object digest"
+}
