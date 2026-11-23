@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [连续浏览多步任务专家团匹配项](records/2026-11/2026-11-23-mission-squad-result-navigation.md)
 - [连续浏览多步任务技能搜索结果](records/2026-11/2026-11-23-mission-skill-result-navigation.md)
 - [连续浏览更新日志搜索结果](records/2026-11/2026-11-23-release-history-result-navigation.md)
 - [归档搜索结果支持连续方向键浏览](records/2026-11/2026-11-23-archive-search-result-navigation.md)
