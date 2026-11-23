@@ -6094,6 +6094,11 @@ catalog and filters; the count describes accepted data. An unavailable scope
 distinguishes disconnection from a missing project.
 Mission Skill search matches all terms against the same accepted skill's name,
 description, localized source label or required tools, within the selected source filter.
+For a nonempty query with visible matches, the shared SearchField moves focus to
+the first or last matching skill button with Down or Up and describes the shortcut
+with localized guidance. Opening the result is a separate action. The source
+controls remain in the normal Tab order, and returning from detail restores the
+same filtered result and query.
 The Mission Skill Refresh control stays focusable while the active read is busy
 and ignores another activation until the read settles. An unavailable scope
 still disables Refresh.

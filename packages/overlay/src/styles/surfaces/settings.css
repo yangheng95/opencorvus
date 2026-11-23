@@ -426,7 +426,8 @@ button.s-row:focus-visible {
   font-size: var(--ui-font-caption);
 }
 
-.mission-skill-boundary-copy {
+.mission-skill-boundary-copy,
+.mission-skill-search-hint {
   margin: 0;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
@@ -436,6 +437,10 @@ button.s-row:focus-visible {
 .mission-skill-search {
   flex: 1 1 calc(240px * var(--ui-scale));
   min-width: calc(200px * var(--ui-scale));
+}
+
+.mission-skill-search-hint {
+  flex-basis: 100%;
 }
 
 .mission-skill-filters {

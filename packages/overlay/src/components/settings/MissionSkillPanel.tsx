@@ -134,6 +134,8 @@ export default function MissionSkillPanel() {
       ])
     })
   })
+  const catalogRow = (name: string) =>
+    panel?.querySelector<HTMLButtonElement>(`[data-skill-name="${CSS.escape(name)}"]`) ?? undefined
   const selectedSkill = createMemo(() => {
     const name = selectedName()
     return name === undefined ? undefined : skills().find((skill) => skill.name === name)
@@ -164,9 +166,7 @@ export default function MissionSkillPanel() {
     if (name === undefined) return
     changeCatalogView(
       () => setSelectedName(undefined),
-      () => !detailOpen()
-        ? panel?.querySelector<HTMLButtonElement>(`[data-skill-name="${CSS.escape(name)}"]`) ?? searchInput
-        : undefined,
+      () => !detailOpen() ? catalogRow(name) ?? searchInput : undefined,
     )
   }
 
@@ -295,6 +295,8 @@ export default function MissionSkillPanel() {
   }
 
   const scopeUnavailable = () => currentScope().kind === "unavailable"
+  const hasSearchMatches = () => !scopeUnavailable() && Boolean(query().trim() && filteredSkills().length)
+  const searchKeyboardHintID = "mission-skill-search-keyboard-hint"
   const refreshBusy = () => !scopeUnavailable() && loading()
   const scopeStatus = createMemo(() => {
     if (!scopeUnavailable()) return ""
@@ -398,7 +400,14 @@ export default function MissionSkillPanel() {
                 inputRef={(element) => (searchInput = element)}
                 value={query()}
                 placeholder={t("mission_skill.search_placeholder")}
+                ariaDescribedBy={hasSearchMatches() ? searchKeyboardHintID : undefined}
                 onValueChange={setQuery}
+                resultFocusTarget={(edge) => {
+                  if (!hasSearchMatches()) return
+                  const matches = filteredSkills()
+                  const skill = edge === "first" ? matches[0] : matches.at(-1)
+                  return skill && catalogRow(skill.name)
+                }}
               />
               <div class="mission-skill-filters" role="toolbar" aria-label={t("mission_skill.filter_label")}>
                 <For each={["all", "built_in", "project", "global"] as MissionSkillFilter[]}>
@@ -420,6 +429,9 @@ export default function MissionSkillPanel() {
                   )}
                 </For>
               </div>
+              <Show when={hasSearchMatches()}>
+                <p id={searchKeyboardHintID} class="mission-skill-search-hint">{t("settings.search_keyboard_hint")}</p>
+              </Show>
             </SettingsToolbar>
 
             <Show
