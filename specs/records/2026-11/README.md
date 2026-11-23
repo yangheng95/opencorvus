@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件审阅列表的 Page Up 和 Page Down](2026-11-24-file-review-page-navigation.md)
 - [0.1.54 发布](2026-11-24-release-0.1.54.md)
 - [文件审阅跨虚拟窗口时保持键盘焦点](2026-11-24-file-review-virtual-keyboard-focus.md)
 - [文件审阅的搜索结果可见且可用键盘进入](2026-11-24-file-review-search-result-focus.md)
