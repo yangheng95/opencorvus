@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [键盘菜单确认交接的真实桌面截图](2026-11-23-menu-confirmation-keyboard-handoff/README.md)
 - [上下文菜单焦点的真实桌面截图](2026-11-23-context-menu-initial-item-focus/README.md)
 - [文件操作选区的真实桌面截图](2026-11-23-explorer-keyboard-context-selection/README.md)
 - [文件比较滚动的真实桌面截图](2026-11-23-file-comparison-scroll-owner/README.md)
