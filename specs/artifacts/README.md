@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [对话可见空白查找的实页截图](2026-11-23-conversation-search-visible-spacing/README.md)
 - [对话内查找作者标签的实页截图](2026-11-23-conversation-search-message-author/README.md)
 - [长更新日志详情导航的实页截图](2026-11-23-release-notes-return-during-reading/README.md)
 - [单项复制目的路径冲突的实页截图](2026-11-23-explorer-single-copy-conflict-retry/README.md)

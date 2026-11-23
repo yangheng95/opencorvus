@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [对话内查找按摘要中可见的空白匹配短语](2026-11-23-conversation-search-visible-spacing.md)
 - [对话内查找使用原消息一致的作者显示](2026-11-23-conversation-search-message-author.md)
 - [阅读长更新日志时可直接返回版本列表](2026-11-23-release-notes-return-during-reading.md)
 - [单项复制在原表单中保留目的路径并重试](2026-11-23-explorer-single-copy-conflict-retry.md)
