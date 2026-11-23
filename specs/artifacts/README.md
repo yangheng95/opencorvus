@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [设置导航滚动与键盘焦点实拍](2026-11-23-settings-tablist-scroll-owner/README.md)
 - [设置搜索焦点与导航提示的实拍](2026-11-23-settings-search-dismiss-navigation-tooltip/README.md)
 - [导航提示与标题菜单的桌面实拍](2026-11-23-navigation-tooltip-workspace-layer/README.md)
 - [对话框关闭后的桌面交接截图](2026-11-23-dialog-close-keyboard-release/README.md)
