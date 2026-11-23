@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [专家团市场推荐以当前查询的词语证据为准](2026-11-23-expert-squad-market-query-evidence.md)
 - [新建多步任务可用方向键聚焦匹配专家团](2026-11-23-mission-squad-search-keyboard.md)
 - [Shell 阅读视图显示实际输出并保留完整回执](2026-11-23-shell-output-readable-receipt.md)
 - [会话 Shell 保留多行命令和项目设置程序](2026-11-23-session-shell-preserve-command-source.md)
