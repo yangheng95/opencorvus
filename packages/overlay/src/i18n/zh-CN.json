@@ -1047,6 +1047,7 @@
   "automations.reasoning_catalog_help": "此已保存模型的推理选项不在当前项目模型目录中。可保留默认设置，或选择已连接的模型。",
   "automations.time_zone": "时区",
   "automations.time_zone_help": "搜索城市或地区，选择任务运行的时区。",
+  "automations.time_zone_empty": "未找到匹配的时区。",
   "automations.advanced_rule": "RFC 5545 重复规则",
   "automations.advanced_help": "必须同时包含 DTSTART 和 RRULE；DTSTART 必须使用 UTC 或明确的 TZID。",
   "automations.reasoning": "推理强度",

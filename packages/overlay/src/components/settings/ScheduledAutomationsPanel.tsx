@@ -9,6 +9,7 @@ import {
   automationRecurrenceUpdate,
   buildAutomationRecurrence,
   browserTimeZone,
+  matchesAutomationTimeZone,
   parseAutomationRecurrence,
   type AutomationRecurrencePreset,
   type AutomationWeekday,
@@ -1980,7 +1981,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           optionValue="value"
                           optionTextValue="label"
                           optionLabel="label"
-                          defaultFilter="contains"
+                          defaultFilter={matchesAutomationTimeZone}
+                          allowsEmptyCollection
+                          emptyContent={<div class="oc-combobox-empty" role="status">{t("automations.time_zone_empty")}</div>}
                           disallowEmptySelection
                           closeOnSelection
                           class="automation-time-zone-combobox"

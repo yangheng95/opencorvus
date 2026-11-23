@@ -1047,6 +1047,7 @@
   "automations.reasoning_catalog_help": "Reasoning options for this saved model are outside the current project's catalog. Keep Model default or choose a connected model.",
   "automations.time_zone": "Time zone",
   "automations.time_zone_help": "Search for a city or region to choose the time zone.",
+  "automations.time_zone_empty": "No matching time zones.",
   "automations.advanced_rule": "RFC 5545 recurrence",
   "automations.advanced_help": "Include both DTSTART and RRULE. DTSTART must use UTC or an explicit TZID.",
   "automations.reasoning": "Reasoning effort",

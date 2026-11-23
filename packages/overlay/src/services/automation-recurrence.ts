@@ -1,3 +1,5 @@
+import { matchesSearchTerms } from "./text-search"
+
 export type AutomationRecurrencePreset = "daily" | "weekdays" | "weekly" | "custom"
 export type AutomationWeekday = "SU" | "MO" | "TU" | "WE" | "TH" | "FR" | "SA"
 
@@ -98,6 +100,10 @@ export function automationTimeZoneOptions(savedTimeZone?: string): AutomationTim
   return [...timeZones]
     .sort((left, right) => left.localeCompare(right))
     .map((value) => ({ value, label: value }))
+}
+
+export function matchesAutomationTimeZone(option: AutomationTimeZoneOption, query: string): boolean {
+  return matchesSearchTerms(query.replace(/[/_]+/g, " "), [option.value])
 }
 
 export function buildAutomationRecurrence(input: AutomationRecurrenceInput): string {

@@ -4,6 +4,7 @@ import {
   automationRecurrenceDefaults,
   automationRecurrenceUpdate,
   buildAutomationRecurrence,
+  matchesAutomationTimeZone,
   parseAutomationRecurrence,
   type AutomationRecurrenceInput,
 } from "../src/services/automation-recurrence"
@@ -90,6 +91,17 @@ test("time-zone choices preserve a saved IANA link alongside its primary identif
   expect(buildAutomationRecurrence({ ...fields, time: "09:30" })).toBe(
     "DTSTART;TZID=US/Eastern:20990618T093000\nRRULE:FREQ=DAILY",
   )
+})
+
+test("time-zone searches use city and region words while returning the exact selectable identifier", () => {
+  const options = automationTimeZoneOptions("US/Eastern")
+  const find = (query: string) => options.filter((option) => matchesAutomationTimeZone(option, query))
+  const newYork = [{ value: "America/New_York", label: "America/New_York" }]
+  expect(find("New York")).toEqual(newYork)
+  expect(find("york america NEW")).toEqual(newYork)
+  expect(find("America/New York")).toEqual(newYork)
+  expect(find("America/New_York")).toEqual(newYork)
+  expect(find("US Eastern")).toEqual([{ value: "US/Eastern", label: "US/Eastern" }])
 })
 
 test("common recurrence presets round-trip into the editable form without exposing RRULE", () => {

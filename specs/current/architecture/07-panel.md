@@ -2133,7 +2133,9 @@ their actual frequency, weekday and time through the shared localized timing
 presentation. A new draft opens with the current default time zone. Editing
 includes the exact time zone from the opening recurrence among the selectable
 options for that draft, including valid IANA links outside the browser's primary
-identifier list.
+identifier list. The time-zone search accepts city and region words as well as
+the technical identifier, retains the exact selected identifier, and provides a
+localized empty result while the authored search text remains editable.
 
 The localized clock supports direct segmented entry and a pointer picker for
 every hour and minute. Applying the picker replaces the entire keyboard draft

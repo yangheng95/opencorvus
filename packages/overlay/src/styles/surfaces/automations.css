@@ -765,7 +765,8 @@
   list-style: none;
 }
 
-.automation-time-zone-combobox[data-closed] .automation-time-zone-list {
+.automation-time-zone-combobox[data-closed] .automation-time-zone-list,
+.automation-time-zone-list:empty {
   display: none;
 }
 
