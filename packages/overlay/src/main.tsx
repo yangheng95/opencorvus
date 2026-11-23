@@ -2860,7 +2860,21 @@ function OverlayRoot() {
           onOpenMarketExpertSquad={openMissionMarketExpertSquad}
           canOpenMarketWebPage={getHostTransport().capabilities.nativeCommands["open-url"]}
           onOpenMission={(mission) =>
-            runUserNavigation("mission-board.open-mission", () => openMissionWithUILifecycle(mission, mission.directory))
+            runUserNavigation("mission-board.open-mission", async () => {
+              const authority = captureApiAuthority()
+              const opener = document.activeElement
+              const boardHadFocus = Boolean(opener?.closest("#centerWorkbenchMissionBoard"))
+              await openMissionWithUILifecycle(mission, mission.directory)
+              const focused = document.activeElement
+              if (
+                !boardHadFocus || (focused !== opener && focused !== document.body) ||
+                !isApiAuthorityCurrent(authority) || primaryWorkspaceSurface() !== "conversation"
+              ) return
+              const viewport = document.getElementById("chatScroll")
+              if (viewport?.getClientRects().length && !viewport.closest('[inert], [hidden], [aria-hidden="true"]')) {
+                viewport.focus({ preventScroll: true })
+              }
+            })
           }
           onOpenTask={(task) =>
             runUserNavigation("mission-board.open-task", () => selectTaskWithUILifecycle(task.id, task.directory))

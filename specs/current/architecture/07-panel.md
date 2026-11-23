@@ -2105,6 +2105,11 @@ retain native focused-region keyboard scrolling. The parent history keymap
 owns only its directly focused viewport.
 Opening the already selected source from the Board reveals that conversation
 without another selection epoch, hydration or file-owner transition.
+Opening a Mission from a focused Board card or save receipt hands focus to
+the existing conversation viewport when the original focus is still owned
+by the navigation or has been released to the document.
+This retains the viewport's reading position and respects any intervening
+focus assignment.
 Opening the Board supersedes pending navigation without retiring the settled
 record for the same connection, source and directory. The selected-record
 read stays keyed to that identity. Archive restoration retains its separate
