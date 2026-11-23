@@ -34,6 +34,7 @@ const MISSION_TASK_PREVIEW_LIMIT = 3
 
 type MissionTask = MissionRecord["tasks"][number]
 type MissionOpenTarget = Pick<MissionRecord, "sessionID" | "directory" | "productPillar">
+type SavedDraftReceipt = MissionOpenTarget & { title: string; authority: ApiAuthority }
 type ProjectOption = { value: string; label: string; parent?: string; distinctPath?: boolean }
 
 export interface MissionBoardProps {
@@ -53,7 +54,7 @@ export interface MissionBoardProps {
   onCreateManual: (input: MissionManualCreateRequest) => Promise<MissionRecord>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
   onDispatchMission: (mission: MissionRecord) => Promise<void>
-  onEditMissionDraft: (input: MissionDraftEditInput) => Promise<void>
+  onEditMissionDraft: (input: MissionDraftEditInput) => Promise<string>
   onConfirmDeleteMission: (mission: MissionRecord, opener: HTMLButtonElement | undefined) => Promise<boolean>
   onDeleteMission: (mission: MissionRecord) => Promise<boolean>
 }
@@ -347,7 +348,7 @@ export function MissionBoard(props: MissionBoardProps) {
   const [layout, setLayout] = createSignal<"list" | "board">("list")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [createOpen, setCreateOpen] = createSignal(false)
-  const [savedDraftReceipt, setSavedDraftReceipt] = createSignal<(MissionOpenTarget & { authority: ApiAuthority }) | null>(null)
+  const [savedDraftReceipt, setSavedDraftReceipt] = createSignal<SavedDraftReceipt | null>(null)
   const [pendingAction, setPendingAction] = createSignal<{ kind: "dispatch" | "delete"; missionID: string } | null>(
     null,
   )
@@ -452,8 +453,11 @@ export function MissionBoard(props: MissionBoardProps) {
     setCreateOpen(true)
   }
 
-  function recordDraftSave({ sessionID, directory, productPillar }: MissionOpenTarget, authority: ApiAuthority) {
-    const receipt = { sessionID, directory, productPillar, authority }
+  function recordDraftSave(
+    { sessionID, directory, productPillar, title }: Omit<SavedDraftReceipt, "authority">,
+    authority: ApiAuthority,
+  ) {
+    const receipt = { sessionID, directory, productPillar, title, authority }
     setSavedDraftReceipt(receipt)
     return receipt
   }
@@ -461,8 +465,10 @@ export function MissionBoard(props: MissionBoardProps) {
   async function saveDraftEdit(input: MissionDraftEditInput): Promise<void> {
     const target = editingDraft()
     const authority = captureApiAuthority()
-    await props.onEditMissionDraft(input)
-    if (target && editingDraft() === target && isApiAuthorityCurrent(authority)) recordDraftSave(target, authority)
+    const title = await props.onEditMissionDraft(input)
+    if (target && editingDraft() === target && isApiAuthorityCurrent(authority)) {
+      recordDraftSave({ ...target, title }, authority)
+    }
   }
 
   function refreshRead(): void {
@@ -639,43 +645,47 @@ export function MissionBoard(props: MissionBoardProps) {
       </div>
 
       <Show when={currentSavedDraftReceipt()}>
-        <Feedback
-          class="mission-board__saved"
-          tone="success"
-          title={t("mission_board.draft_saved.title")}
-          actions={
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                tone="neutral"
-                ref={openSavedDraftButton}
-                disabled={Boolean(pendingAction())}
-                onClick={() => {
-                  const mission = currentSavedDraftReceipt()
-                  if (mission) void props.onOpenMission(mission)
-                }}
-              >
-                {t("mission_board.draft_saved.open")}
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                tone="neutral"
-                onClick={() => {
-                  setSavedDraftReceipt(null)
-                  createButton?.focus({ preventScroll: true })
-                }}
-              >
-                {t("common.dismiss")}
-              </Button>
-            </>
-          }
-        >
-          {t("mission_board.draft_saved.hint")}
-        </Feedback>
+        {(receipt) => (
+          <Feedback
+            class="mission-board__saved"
+            tone="success"
+            actions={
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  ref={openSavedDraftButton}
+                  disabled={Boolean(pendingAction())}
+                  aria-label={t("mission_board.open_mission", { title: receipt().title })}
+                  onClick={() => {
+                    const mission = currentSavedDraftReceipt()
+                    if (mission) void props.onOpenMission(mission)
+                  }}
+                >
+                  {t("mission_board.draft_saved.open")}
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  tone="neutral"
+                  onClick={() => {
+                    setSavedDraftReceipt(null)
+                    createButton?.focus({ preventScroll: true })
+                  }}
+                >
+                  {t("common.dismiss")}
+                </Button>
+              </>
+            }
+          >
+            <span class="mission-board__saved-title" title={receipt().title}>
+              {t("mission_board.draft_saved.title", { title: receipt().title })}
+            </span>
+          </Feedback>
+        )}
       </Show>
       <Show when={actionError()}>
         <Feedback

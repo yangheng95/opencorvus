@@ -378,7 +378,7 @@ export async function loadEditableMissionDraft(target: MissionDraftTarget & { si
   return row.pendingPromptText
 }
 
-export async function editMissionDraft(input: MissionDraftEditInput): Promise<void> {
+export async function editMissionDraft(input: MissionDraftEditInput): Promise<string> {
   const request = input.request.trim()
   const sessionID = input.sessionID.trim()
   if (!request || request.length > 32000 || !input.expectedRequest || input.expectedRequest.length > 32000) {
@@ -390,7 +390,7 @@ export async function editMissionDraft(input: MissionDraftEditInput): Promise<vo
   const directory = input.directory.trim()
   const path = missionActionPath({ missionID, directory }, "/draft")
   const directoryKey = projectDirectoryKey(directory)
-  await settleMutationReceipt({
+  return await settleMutationReceipt({
     authority,
     write: async () => {
       const receipt = await apiJson<MissionEditDraftResponse>(path, serverSettledRequest({
@@ -402,12 +402,14 @@ export async function editMissionDraft(input: MissionDraftEditInput): Promise<vo
       if (
         receipt?.missionID !== missionID || receipt.sessionID !== sessionID ||
         typeof receipt.directory !== "string" || projectDirectoryKey(receipt.directory) !== directoryKey ||
-        receipt.pendingPrompt?.text !== request
+        receipt.pendingPrompt?.text !== request || typeof receipt.title !== "string"
       ) throw new Error("The Mission draft receipt does not confirm the selected request.")
+      return receipt.title
     },
     verify: async () => {
       const row = await readMissionDraft({ missionID, sessionID, directory, authority })
       if (row.pendingPromptText !== request) throw new Error("The current Mission draft does not contain the submitted request.")
+      return row.title
     },
     UnconfirmedError: MissionDraftEditUnconfirmedError,
   })

@@ -2024,10 +2024,12 @@ by draft editing. Saving and starting use their own existing busy labels;
 switching modes retains authored fields and the existing validation/context.
 Manual creation returns its existing committed MissionRecord through the main
 binding. A confirmed draft edit uses the same acknowledgement with its opened
-target's session, project directory and work type. The Missions page retains
-those fields with the captured API authority and shows inline success outside
-the search/project results, including when the saved request stops matching.
-Open Mission navigates to that exact session through the existing selection.
+target's session, project directory and work type. The confirmed edit response
+or verified exact read supplies the title at confirmation. The Missions page
+retains those fields with the captured API authority and names the saved draft
+in inline success outside the search/project results, including when the saved
+request stops matching. Open Mission identifies the same draft for assistive
+technology and navigates to the exact session through the existing selection.
 A pending, failed, or filtered active list does not control the action.
 Navigation reads the current persisted record, including its archive state.
 Search/project values stay unchanged.

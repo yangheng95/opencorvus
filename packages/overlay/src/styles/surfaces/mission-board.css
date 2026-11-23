@@ -115,6 +115,16 @@ body {
   margin: var(--ui-gap-lg) var(--ui-gap-xl);
 }
 
+.mission-board__saved-title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-strong);
+  font-weight: var(--ui-font-weight-medium);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
 .mission-board__state {
   display: flex;
   flex: 1 1 auto;

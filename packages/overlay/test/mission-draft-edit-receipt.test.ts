@@ -32,6 +32,13 @@ const conflict = {
   name: "MissionDraftEditConflictError",
   data: { missionID: target.missionID, sessionID: target.sessionID, reason: "changed" },
 }
+const saved = {
+  missionID: target.missionID,
+  sessionID: target.sessionID,
+  directory: target.directory,
+  title: "Renamed draft identity",
+  pendingPrompt: { text: target.request },
+}
 
 let receiptStatus: number
 let pendingPromptText: string
@@ -54,6 +61,7 @@ beforeEach(() => {
         ...(request.method === "PATCH" ? { body: await request.json() } : {}),
       })
       if (request.method === "PATCH") {
+        if (receiptStatus === 200) return Response.json(saved)
         return Response.json(receiptStatus === 409 ? conflict : { message: "Receipt interrupted" }, {
           status: receiptStatus, headers: { "x-opencorvus-request-id": "draft-edit" },
         })
@@ -69,8 +77,17 @@ afterEach(async () => {
   configure({ serverUrl: "http://127.0.0.1:7878" })
 })
 
-test("an uncertain draft edit receipt settles from its exact persisted Mission request", async () => {
-  expect(await editMissionDraft(target)).toBeUndefined()
+test("a confirmed draft edit reports the Mission title from the save response", async () => {
+  receiptStatus = 200
+  expect(await editMissionDraft(target)).toBe(saved.title)
+  expect(operations[0]).toEqual({
+    method: "PATCH", path: "/mission/draft-owned/draft", directory: target.directory,
+    body: { request: target.request, expectedRequest: target.expectedRequest },
+  })
+})
+
+test("an uncertain draft edit receipt reports the title from its exact persisted Mission request", async () => {
+  expect(await editMissionDraft(target)).toBe(selectedRow.title)
   expect(operations).toEqual([
     {
       method: "PATCH", path: "/mission/draft-owned/draft", directory: target.directory,
