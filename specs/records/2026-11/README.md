@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从多步任务卡片返回看板搜索](2026-11-24-mission-board-return-to-search.md)
 - [从项目笔记结果返回搜索草稿](2026-11-24-memory-result-return-to-search.md)
 - [从服务商与多步任务技能结果返回搜索](2026-11-24-catalog-results-return-to-search.md)
 - [阅读定时详情时可直接返回列表](2026-11-24-scheduled-detail-reading-return.md)
