@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { matchesLogEntrySearch, parseServerLogLine } from "../src/utils/log"
+import { matchesLogEntrySearch, parseServerLogLine, readServerRequestLog } from "../src/utils/log"
 
 describe("parseServerLogLine", () => {
   test("parses Pino JSONL server records", () => {
@@ -87,6 +87,21 @@ describe("parseServerLogLine", () => {
   })
 })
 
+test("projects the actual HTTP method, path and phase from a structured server request", () => {
+  const request = { requestID: "request-a", method: "GET", path: "/file/content" }
+  const parse = (data: object) => ({
+    ...parseServerLogLine(JSON.stringify({ level: "info", service: "server", message: "request", data })),
+    source: "server" as const,
+  })
+  const started = parse({ ...request, status: "started" })
+  const completed = parse({ ...request, status: "completed", statusCode: 404 })
+  const failed = parse({ ...request, status: "failed", error: { message: "reader failed" } })
+  expect(readServerRequestLog(started)).toEqual({ method: "GET", path: "/file/content", status: "started" })
+  expect(readServerRequestLog(completed)).toEqual({ method: "GET", path: "/file/content", status: "completed", statusCode: 404 })
+  expect(readServerRequestLog(failed)).toEqual({ method: "GET", path: "/file/content", status: "failed" })
+  expect(completed.fields.data).toEqual({ ...request, status: "completed", statusCode: 404 })
+})
+
 describe("loaded log literal search", () => {
   const raw =
     '{"level":"warn","time":"2026-10-07T09:11:58.030Z","service":"logger-observation","message":"Subject chronology","data":{"sessionID":"ses_actual","duration":333,"path":"/session?directory=C:/owned"},"retained":"RAW.[token]"}'
@@ -137,6 +152,17 @@ describe("loaded log literal search", () => {
     expect(find("SERVER")).toEqual([actual])
     expect(find("前端")).toEqual([rows[1].entry])
     expect(find("服务端")[0]).toBe(actual)
+  })
+
+  test("finds the same original request by its displayed summary and canonical fields", () => {
+    const raw = '{"service":"server","message":"request","data":{"requestID":"request-b","method":"GET","path":"/file/status","status":"completed","statusCode":200}}'
+    const entry = { ...parseServerLogLine(raw), source: "server" }
+    const summary = "GET /file/status · 已响应 200"
+    const find = (query: string) => [entry].filter((item) => matchesLogEntrySearch(item, query, "服务端", summary))
+    expect(find("GET /file/status")).toEqual([entry])
+    expect(find("已响应 200")).toEqual([entry])
+    expect(find("request-b")).toEqual([entry])
+    expect(find("已响应 200")[0].raw).toBe(raw)
   })
 
   test("filters a bounded 500-entry loaded set in actual input order", () => {

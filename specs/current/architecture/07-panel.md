@@ -6410,6 +6410,11 @@ up keep their position in the same list, subject to normal bounds and retention.
 Log source badges use the current interface language. The loaded-log search
 matches the same badge label alongside the stable source identifier, which
 continues to identify raw details, copied logs, and exported diagnostics.
+The structured server request lifecycle record supplies the method, path, and
+localized phase shown in the collapsed row. Received responses show their
+recorded status code. The same summary identifies the request's Details action
+and participates in loaded-log search. Raw fields and exports retain the
+recorded request and its original status values.
 
 Loaded logs have one local literal, case-insensitive query through the shared search primitive. The existing level-qualified aggregation depends only on original sources/level; query filters those records without re-parsing them, and empty/whitespace query returns that base result. The same matching result supplies the list, Copy, the localized count for a search with matches, and no-match feedback. Copy includes all loaded matches. Query covers header/message/structured fields/raw, is retired on close and is not persisted or sent to a backend. Search explicitly covers loaded logs; server tail remains bounded to the current fetch, not full-file history. Clear search and Clear logs keep distinct semantics; source read failures remain visible.
 

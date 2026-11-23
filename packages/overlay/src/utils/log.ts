@@ -211,11 +211,11 @@ export const AppLog = {
 export function matchesLogEntrySearch(
   entry: Pick<ServerLogEntry, "source" | "level" | "ts" | "delta" | "service" | "message" | "fields" | "raw">,
   query: string,
-  sourceLabel?: string,
+  ...displayLabels: (string | undefined)[]
 ): boolean {
   return matchesSearchParts(query, [
     entry.source,
-    sourceLabel,
+    ...displayLabels,
     entry.level,
     entry.ts,
     entry.delta,
@@ -224,6 +224,26 @@ export function matchesLogEntrySearch(
     stringifyLogValue(entry.fields),
     entry.raw,
   ])
+}
+
+type ServerRequestLog = { method: string; path: string } & (
+  | { status: "started" | "failed" }
+  | { status: "completed"; statusCode: number }
+)
+
+export function readServerRequestLog(entry: Pick<LogEntry, "source" | "service" | "fields">): ServerRequestLog | undefined {
+  if (entry.source !== "server" || entry.service !== "server") return undefined
+  const data = entry.fields.data
+  if (!data || typeof data !== "object" || Array.isArray(data)) return undefined
+
+  const { requestID, method, path, status, statusCode } = data as Record<string, unknown>
+  if (typeof requestID !== "string" || !requestID || typeof method !== "string" || !method || typeof path !== "string" || !path) {
+    return undefined
+  }
+  if (status === "started" || status === "failed") return { method, path, status }
+  if (status === "completed" && typeof statusCode === "number" && Number.isInteger(statusCode)) {
+    return { method, path, status, statusCode }
+  }
 }
 
 // ── stringifyLogValue ──

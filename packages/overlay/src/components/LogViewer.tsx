@@ -21,7 +21,7 @@ import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { SelectControl } from "./ui/SelectControl"
 import { SearchField } from "./ui/SearchField"
-import { fmtElapsed, logDetailFields, matchesLogEntrySearch, parseServerLogLine, stringifyLogValue } from "../utils/log"
+import { fmtElapsed, logDetailFields, matchesLogEntrySearch, parseServerLogLine, readServerRequestLog, stringifyLogValue } from "../utils/log"
 import { copyText } from "../services/clipboard"
 import { formatErrorDetails } from "../utils/error-details"
 
@@ -85,6 +85,16 @@ const LOG_SOURCE_KEYS = {
 
 function logSourceLabel(source: LogSource): string {
   return t(LOG_SOURCE_KEYS[source])
+}
+
+function requestLogSummary(entry: LogEntry): string | undefined {
+  const request = readServerRequestLog(entry)
+  if (!request) return undefined
+  const { method, path } = request
+  if (request.status === "completed") {
+    return t("log.request_responded", { method, path, statusCode: request.statusCode })
+  }
+  return t(request.status === "started" ? "log.request_started" : "log.request_failed", { method, path })
 }
 
 // ── Merge all log sources (
@@ -172,7 +182,7 @@ function formatLogText(entries: LogEntry[]): string {
 // ── LogEntryDetail subcomponent ──
 // Ports renderLogEntryDetail ( 10928–10944)
 
-function LogEntryDetail(props: { entry: LogEntry }) {
+function LogEntryDetail(props: { entry: LogEntry; requestSummary?: string }) {
   const fields = createMemo(() => logDetailFields(props.entry.fields))
   const items = createMemo(() => Object.entries(fields()))
 
@@ -189,7 +199,11 @@ function LogEntryDetail(props: { entry: LogEntry }) {
           </For>
         </div>
         <Disclosure.Root class="log-detail">
-          <Disclosure.Trigger>{t("log.details")}</Disclosure.Trigger>
+          <Disclosure.Trigger
+            aria-label={props.requestSummary ? t("log.request_details", { summary: props.requestSummary }) : undefined}
+          >
+            {t("log.details")}
+          </Disclosure.Trigger>
           <Disclosure.Content>
             <div class="log-detail-block">
               <div class="log-detail-title oc-section-heading">{t("log.fields")}</div>
@@ -222,6 +236,7 @@ function LogEntryDetail(props: { entry: LogEntry }) {
 // ── LogLine subcomponent ──
 
 function LogLine(props: { entry: LogEntry }) {
+  const summary = createMemo(() => requestLogSummary(props.entry))
   return (
     <div class="log-line" data-source={props.entry.source}>
       <div class="log-line-head">
@@ -237,8 +252,8 @@ function LogLine(props: { entry: LogEntry }) {
         </Show>
         <span class="log-ts">{props.entry.ts}</span>
       </div>
-      <div class="log-msg">{props.entry.message || props.entry.raw || ""}</div>
-      <LogEntryDetail entry={props.entry} />
+      <div class="log-msg">{summary() ?? (props.entry.message || props.entry.raw)}</div>
+      <LogEntryDetail entry={props.entry} requestSummary={summary()} />
     </div>
   )
 }
@@ -288,7 +303,9 @@ export function LogViewer(props: LogViewerProps) {
   const entries = createMemo(() => {
     const loaded = loadedEntries()
     const query = searchQuery()
-    return query.trim() ? loaded.filter((entry) => matchesLogEntrySearch(entry, query, logSourceLabel(entry.source))) : loaded
+    return query.trim()
+      ? loaded.filter((entry) => matchesLogEntrySearch(entry, query, logSourceLabel(entry.source), requestLogSummary(entry)))
+      : loaded
   })
 
   const invalidateRefresh = () => {
