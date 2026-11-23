@@ -22,3 +22,8 @@
 - [相同尺寸与定位类型下仍丢失阅读位置](12-second-candidate-en-160-box-stable-but-reading-resets.jpg)
 - [第二次正式 200 待交付时原请求区已卸载，返回显示正在加载](13-second-candidate-held-selected-read-removes-request-context.jpg)
 - [交付同一正式响应后，阅读内容从首行重新挂载](14-second-candidate-delivered-read-remounts-at-first-line.jpg)
+
+第三候选由 `40750/ui/` 提供，加载 `main--8moE9Tu.js`。
+
+- [英文 160% 切到看板前第 24 项完整可见](15-verified-en-160-tail-before-board.jpg)
+- [修正读取后同一卡片仍返回末行，外层净空测量导致末行部分落在输入区边缘](16-verified-en-160-same-card-returns-to-saved-request-tail.jpg)
