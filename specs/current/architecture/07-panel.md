@@ -2735,6 +2735,8 @@ Empty periods retain their actual zero-valued buckets. Official provider
 comparisons and model detail remain below the primary overview. The official
 comparison disclosure keeps the user's open or closed choice for the current
 panel across period changes and retries. Its source cards require accepted data.
+The model table keeps short column headings intact and adjusts cell insets to the
+settings content width. The table's own scroll area exposes any remaining overflow.
 The overview's horizontal grid sizes each column to its minimum content before
 distributing extra width. Short metric labels keep their words intact. Narrow
 settings content uses one stacked column.

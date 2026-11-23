@@ -717,7 +717,7 @@
 
 .usage-model-table th,
 .usage-model-table td {
-  padding: var(--ui-gap-lg) var(--ui-gap-2xl);
+  padding: var(--ui-gap-lg) clamp(var(--ui-gap-md), 2.5cqi, var(--ui-gap-2xl));
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -732,6 +732,7 @@
   background: var(--surface-inset);
   color: var(--text-muted);
   font-weight: var(--ui-font-weight-medium);
+  word-break: keep-all;
 }
 
 .usage-model-table tbody tr:last-child td {

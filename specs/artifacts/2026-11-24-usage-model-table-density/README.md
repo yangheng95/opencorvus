@@ -8,3 +8,11 @@ OpenCorvus 隔离开发页。真实周报包含两行模型计量样本。截图
 | 简体中文 160% 下「调用」拆到两行 | [中文表头断行](baseline-zh-models-week-wrapped-header.jpg) |
 | 1150×720 桌面左侧保留模型名，右端占比在视口之外 | [窄桌面左端](baseline-zh-narrow-models-left.jpg) |
 | 键盘滚到右端可读占比，模型身份移出左边 | [窄桌面右端](baseline-zh-narrow-models-right.jpg) |
+
+| 最终版 | 原始截图 |
+| --- | --- |
+| 英文 100% 的五列、两行按原宽度完整呈现 | [英文周明细](final-en-models-week.jpg) |
+| 简体中文 160% 1280×720 的调用表头单行完整 | [中文周明细](final-zh-models-week.jpg) |
+| 简体中文 160% 1150×720 同时显示两行身份及占比 | [窄桌面全部列](final-zh-narrow-models-all-columns.jpg) |
+| 简体中文 160% 1070×720 下实际剩余溢出 | [更窄桌面左端](final-zh-overflow-models-left.jpg) |
+| 原生 Tab 和右方向键到达完整占比列 | [更窄桌面右端](final-zh-overflow-models-right.jpg) |
