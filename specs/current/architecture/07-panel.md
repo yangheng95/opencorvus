@@ -6315,8 +6315,10 @@ existing safe Markdown renderer. It starts at the installed Overlay version;
 searchable descending history and selected details use the same single-column
 list-to-detail pattern. History search matches all terms against the same entry's
 version identifiers, canonical and displayed release dates, and current language
-notes. With a nonblank query and visible matches, the history search field
-describes the keyboard shortcut and moves focus to the first or last matching
+notes. The preview favors the authored list item that matches the most search
+terms from the notes, with author order breaking ties. Version and date searches
+keep the first item. With a nonblank query and visible matches, the history search
+field describes the keyboard shortcut and moves focus to the first or last matching
 version button on an unmodified Down or Up key. The same search result
 navigation used by Archive moves focus between matching version buttons.
 The button keeps native Enter activation. Website and GitHub links

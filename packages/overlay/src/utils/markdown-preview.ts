@@ -25,7 +25,21 @@ function tokenText(tokens: readonly Token[], separator = ""): string {
     .join(separator)
 }
 
+function previewTokens(markdown: string): readonly Token[] {
+  return new Lexer({ gfm: true }).lex(markdown)
+}
+
 /** Plain text for a compact activity row; the original transcript owns full rendering. */
 export function markdownPreviewText(text: string): string {
-  return tokenText(new Lexer({ gfm: true }).lex(text), " ")
+  return tokenText(previewTokens(text), " ")
+}
+
+export function markdownListPreviewItems(markdown: string): { markdown: string; text: string }[] {
+  return previewTokens(markdown).flatMap((token) => {
+    if (token.type !== "list") return []
+    return (token as Tokens.List).items.map((item) => ({
+      markdown: item.text,
+      text: tokenText(item.tokens, " ").replace(/\s+/gu, " ").trim(),
+    }))
+  })
 }

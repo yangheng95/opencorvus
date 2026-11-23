@@ -1,10 +1,11 @@
 import { For, Show, createMemo, createSignal } from "solid-js"
 import { parseChangelog, requireReleaseNotes, standaloneReleaseNotes, type ChangelogEntry } from "@opencorvus-ai/util/changelog"
 import changelog from "../../../../../CHANGELOG.md?raw"
-import { matchesSearchTerms } from "../../services/text-search"
+import { matchesSearchParts, matchesSearchTerms, splitSearchTerms } from "../../services/text-search"
 import { appStore } from "../../store/app"
 import { t, tc } from "../../utils/i18n"
 import { inlineMarkdown, renderMarkdown } from "../../utils/markdown"
+import { markdownListPreviewItems } from "../../utils/markdown-preview"
 import { PROJECT_URL, PROJECT_WEBSITE_URL } from "../../utils/project-links"
 import { OVERLAY_VERSION } from "../../utils/version"
 import { Badge } from "../ui/Badge"
@@ -24,11 +25,13 @@ export default function ReleaseNotesPanel() {
   const date = (entry: ChangelogEntry) => dateFormatter().format(new Date(`${entry.date}T00:00:00Z`))
   const [selected, setSelected] = createSignal<ChangelogEntry | null>(installed)
   const [query, setQuery] = createSignal("")
+  const queryTerms = createMemo(() => splitSearchTerms(query()))
+  const metadata = (entry: ChangelogEntry) => [entry.displayVersion, entry.version, entry.date, date(entry)]
   const filteredHistory = createMemo(() => {
     const term = query().trim()
     if (!term) return history
     return history.filter((entry) =>
-      matchesSearchTerms(term, [entry.displayVersion, entry.version, entry.date, date(entry), markdown(entry)]),
+      matchesSearchTerms(term, [...metadata(entry), markdown(entry)]),
     )
   })
   let panel: HTMLDivElement | undefined
@@ -57,11 +60,22 @@ export default function ReleaseNotesPanel() {
       if (target?.isConnected) target.focus()
     })
   }
-  const summary = (entry: ChangelogEntry) =>
-    markdown(entry)
-      .split("\n")
-      .find((line) => line.startsWith("- "))
-      ?.slice(2) ?? ""
+  const summary = (entry: ChangelogEntry, notes: ReturnType<typeof markdownListPreviewItems>) => {
+    const entryMetadata = metadata(entry)
+    const bodyTerms = queryTerms().filter((term) => !matchesSearchParts(term, entryMetadata))
+    let best = notes[0]
+    let bestScore = 0
+    if (bodyTerms.length === 0) return best?.markdown ?? ""
+
+    for (const note of notes) {
+      const score = bodyTerms.filter((term) => matchesSearchParts(term, [note.text])).length
+      if (score > bestScore) {
+        best = note
+        bestScore = score
+      }
+    }
+    return best?.markdown ?? ""
+  }
 
   return (
     <SettingsPanel class="release-notes-panel" ref={panel}>
@@ -93,33 +107,36 @@ export default function ReleaseNotesPanel() {
             </div>
             <SettingsSurface>
               <For each={filteredHistory()} fallback={<SettingsEmpty>{t("releases.empty")}</SettingsEmpty>}>
-                {(entry) => (
-                  <SettingsRow
-                    as="button"
-                    interactive
-                    class="release-notes-row"
-                    data-release-version={entry.version}
-                    aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown" : undefined}
-                    title={
-                      <span class="release-notes-version">
-                        v{entry.displayVersion}
-                        <Show when={entry.version === installed.version}>
-                          <Badge size="sm">{t("releases.installed")}</Badge>
-                        </Show>
-                      </span>
-                    }
-                    desc={
-                      <span
-                        class="release-notes-preview"
-                        lang={locale()}
-                        innerHTML={inlineMarkdown(summary(entry)).replace(/<\/?a(?:\s[^>]*)?>/g, "")}
-                      />
-                    }
-                    meta={<time dateTime={entry.date}>{date(entry)}</time>}
-                    onKeyDown={searchNavigation.handleResultKeyDown}
-                    onClick={() => select(entry)}
-                  />
-                )}
+                {(entry) => {
+                  const notes = createMemo(() => markdownListPreviewItems(markdown(entry)))
+                  return (
+                    <SettingsRow
+                      as="button"
+                      interactive
+                      class="release-notes-row"
+                      data-release-version={entry.version}
+                      aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown" : undefined}
+                      title={
+                        <span class="release-notes-version">
+                          v{entry.displayVersion}
+                          <Show when={entry.version === installed.version}>
+                            <Badge size="sm">{t("releases.installed")}</Badge>
+                          </Show>
+                        </span>
+                      }
+                      desc={
+                        <span
+                          class="release-notes-preview"
+                          lang={locale()}
+                          innerHTML={inlineMarkdown(summary(entry, notes())).replace(/<\/?a(?:\s[^>]*)?>/g, "")}
+                        />
+                      }
+                      meta={<time dateTime={entry.date}>{date(entry)}</time>}
+                      onKeyDown={searchNavigation.handleResultKeyDown}
+                      onClick={() => select(entry)}
+                    />
+                  )
+                }}
               </For>
             </SettingsSurface>
           </>
