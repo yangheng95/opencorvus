@@ -1414,11 +1414,7 @@ export default function ExpertSquadPanel() {
       <div class="expert-squad-configuration-page" data-ui="expert-squad-configuration-page">
         <Show
           when={squad()?.configuration}
-          fallback={
-            <Feedback title={t("expert_squad.configuration_unavailable_title")}>
-              {t("expert_squad.configuration_unavailable_body")}
-            </Feedback>
-          }
+          fallback={<Feedback>{t("expert_squad.configuration_unavailable")}</Feedback>}
         >
           <Show
             when={!configurationLoading()}
@@ -1432,7 +1428,14 @@ export default function ExpertSquadPanel() {
             <Show when={configuration()} keyed>
               {(current) => (
                 <div class="expert-squad-configuration" data-ui="expert-squad-configuration-fields">
-                  <p>{t("expert_squad.configuration_description")}</p>
+                  <p>
+                    {t(
+                      current.installationScope === "project"
+                        ? "expert_squad.configuration_scope_project"
+                        : "expert_squad.configuration_scope_global",
+                    )}{" "}
+                    {t("expert_squad.configuration_description")}
+                  </p>
                   <For each={current.fields}>
                     {(field) => {
                       const value = () => configurationValues()[field.key]
