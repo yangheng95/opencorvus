@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [编辑器快捷键复用当前跳转到行输入](records/2026-11/2026-11-23-editor-go-to-line-single-prompt.md)
 - [全图预览按当前窗口适应图像](records/2026-11/2026-11-23-image-preview-fit-current-viewport.md)
 - [多步任务技能搜索支持方向键进入结果](records/2026-11/2026-11-23-mission-skill-search-keyboard-entry.md)
 - [定时编辑器按城市和地区词查找时区](records/2026-11/2026-11-23-scheduled-time-zone-city-search.md)
