@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [视图缩放保持键盘可达与可见焦点](2026-11-23-view-menu-zoom-focus.md)
 - [笔记列表完整呈现标题与删除目标](2026-11-23-memory-note-title-identity.md)
 - [跳转到行可在原输入框纠正格式](2026-11-23-editor-go-to-line-validation.md)
 - [输入区引用键盘游标滚入可见区域](2026-11-23-composer-reference-visible-focus.md)
