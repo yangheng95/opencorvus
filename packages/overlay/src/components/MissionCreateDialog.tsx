@@ -27,7 +27,7 @@ import { Icon } from "./ui/Icon"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
 import { ComboboxControl } from "./ui/ComboboxControl"
 import { matchesSearchTerms } from "../services/text-search"
-import { SearchField } from "./ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "./ui/SearchField"
 import { TextField } from "./ui/TextField"
 import { ExpertSquadMarketSearchFeedback } from "./ExpertSquadMarketSearchFeedback"
 import { ExpertSquadMarketInstallFeedback } from "./ExpertSquadMarketInstallFeedback"
@@ -197,6 +197,12 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const matchingExpertSquadIDs = createMemo(() => new Set(expertSquadResult().matchingIDs))
   const isCurrentSquadCandidate = (id: string) => squadResultsReady() && matchingExpertSquadIDs().has(id)
   const canFocusSquadMatch = () => squadResultsReady() && !submitting() && matchingExpertSquadIDs().size > 0
+  const squadSearchNavigation = createSearchResultNavigation(() => {
+    if (!canFocusSquadMatch() || !expertSquadList) return []
+    return Array.from(
+      expertSquadList.querySelectorAll<HTMLInputElement>('[data-search-match] input[type="checkbox"]:enabled'),
+    )
+  })
   const visibleExpertSquads = createMemo(() =>
     expertSquads().filter((squad) => selectedExpertSquadIDs().has(squad.id) || isCurrentSquadCandidate(squad.id)),
   )
@@ -781,17 +787,12 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               value={expertSquadQuery()}
               disabled={!projectDirectory() || !productPillar()}
               ariaDescribedBy={canFocusSquadMatch() ? squadSearchHelpID : undefined}
+              ariaKeyShortcuts={canFocusSquadMatch() ? "ArrowUp ArrowDown" : undefined}
               onValueChange={(value) => {
                 setExpertSquadQuery(value)
                 void searchSquads(value)
               }}
-              resultFocusTarget={(edge) => {
-                if (!canFocusSquadMatch()) return
-                const matches = expertSquadList?.querySelectorAll<HTMLInputElement>(
-                  '[data-search-match] input[type="checkbox"]:enabled',
-                )
-                return edge === "first" ? matches?.[0] : matches?.[matches.length - 1]
-              }}
+              resultFocusTarget={squadSearchNavigation.resultFocusTarget}
               placeholder={t("mission_board.create.squad_search_placeholder")}
               size="sm"
             />
@@ -855,12 +856,14 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               role="group"
               aria-label={t("mission_board.create.expert_squad")}
               data-ui="mission-create-expert-squads"
+              onKeyDown={squadSearchNavigation.handleResultKeyDown}
             >
               <For each={visibleExpertSquads()}>
                 {(squad) => (
                   <Checkbox
                     checked={selectedExpertSquadIDs().has(squad.id)}
                     disabled={submitting() || expertSquadLoading()}
+                    aria-keyshortcuts={canFocusSquadMatch() && isCurrentSquadCandidate(squad.id) ? "ArrowUp ArrowDown" : undefined}
                     data-search-match={isCurrentSquadCandidate(squad.id) ? "true" : undefined}
                     onChange={(checked) => updateExpertSquadSelection(squad.id, checked)}
                   >

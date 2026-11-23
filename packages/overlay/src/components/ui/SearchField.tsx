@@ -38,12 +38,12 @@ export function createSearchResultNavigation(readActions: () => readonly HTMLEle
     return edge === "first" ? actions[0] : actions.at(-1)
   }
 
-  function handleResultKeyDown(event: KeyboardEvent & { currentTarget: HTMLElement }): void {
+  function handleResultKeyDown(event: KeyboardEvent): void {
     if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
 
     const actions = readActions()
-    const current = actions.indexOf(event.currentTarget)
+    const current = actions.findIndex((action) => action === event.target)
     if (current < 0) return
     const next = current + (event.key === "ArrowDown" ? 1 : -1)
     event.preventDefault()

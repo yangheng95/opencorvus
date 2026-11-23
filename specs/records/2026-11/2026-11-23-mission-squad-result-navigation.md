@@ -19,3 +19,15 @@
 以当前结果且可用的原生复选框作为唯一导航集合，让现有共用函数同时处理输入首末项和组内相邻项。允许列表容器代理按键，按真实事件目标识别集合中的当前控件。仅在方向键所属目标为集合成员时消耗普通上下键，保留边界、修饰键、原生 Tab 和 Space。两种语言更新方向键提示，按键说明绑定搜索输入和当前匹配的原生复选框。保持现有焦点样式，通过实际放大页面检查移出可见区后能看到下一行。
 
 英文 100% 与简体中文 160% 实页分别从输入进入首或末项，再往相邻项浏览，确认边界、精确焦点、原生选择、原生 Tab 到保留项、零项与清除。实际键盘选择并保存自有草稿，在正式回执与数据中核对项目、原请求、确切专家团和待办位置。真实更新日志用日期复核共享原生按钮路径的方向键与 Enter。独立检查目录请求、原项目文件、SQLite 完整性与会话和消息状态，人工复核原截图及正常关停。运行聚焦选择和草稿契约、类型、双语键、样式令牌、正式构建、文档、架构检查。
+
+## 实施与实际验收
+
+候选 40818/ui/ 加载 main-CSBbkIeF.js。英文 100% 搜索 research 后，Down 从输入进入 Research Studio，再到 Base，末项保持焦点，Ctrl+Up 保持原生行为。Space 勾选 Base 后 Up 回到 Research Studio 并可单独勾选。Down 到 Base 再用 Tab 进入范围外 Dynamic，取消后回到查询。无匹配的已确认查询将焦点留在搜索框，Base 与 Research Studio 都保留并标明范围外。Escape 清除后 Up 进入恢复的真实末项 Generate Expert Squads。
+
+简体中文 160% 从输入 Up 到 Base，再 Up 到 Research Studio。首项保留焦点，Down 与 Space 回到并勾选 Base。实际焦点边框和本地化说明完整可见。取消临时表单后，中文更新日志查询 2026年11月5日，连续两次 Down 依次聚焦 v0.1.46、v0.1.45；Enter 打开真实 v0.1.45 详情并将焦点给标题。 [14 张本人复核的原始桌面截图](../../artifacts/2026-11-23-mission-squad-result-navigation/README.md)
+
+正式列表与持久快照一致，唯一自有草稿 Receiving review selection 位于 backlog，身份 draft-90caeecc98c22bca6036bd2993d7e039，会话 ses_hrzCOnj72QzW2A8T7Uyf。项目为 field-notes-review，精确请求为「Compare the receiving notebook with the signed list and record any differences.」，保存的专家团为 base、research-studio。独立基线和候选各核对两个正式目录查询、五个原文件字节和 SQLite quick_check。基线零会话，候选仅有该草稿，会话消息、执行任务和入口、自动化及供应商请求、结果、用量均为零。
+
+聚焦专家团选择、草稿回执和真实草稿创建回放共 10 项、33 个断言通过。面板类型检查、两语 3281 个键、9355 处样式令牌引用、正式构建及公开渲染器检查通过。
+
+公开接口文档的 353 个操作、20 份架构文档索引及截图链接核对通过。两个独立服务通过正式关闭接口返回 200 并正常退出，端口 40816 和 40818 已释放。

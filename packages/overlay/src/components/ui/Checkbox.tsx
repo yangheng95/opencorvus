@@ -10,14 +10,18 @@ export interface CheckboxProps extends Omit<ComponentProps<typeof KobalteCheckbo
 
 /** Canonical checkbox for discrete multi-selection. */
 export function Checkbox(props: CheckboxProps): JSX.Element {
-  const [local, rest] = splitProps(props, ["class", "children", "inputID", "description", "aria-label"])
+  const [local, rest] = splitProps(props, ["class", "children", "inputID", "description", "aria-label", "aria-keyshortcuts"])
   const defaultInputID = `checkbox-input-${createUniqueId()}`
   const inputID = () => local.inputID ?? defaultInputID
   const className = () => (local.class ? `oc-checkbox ${local.class}` : "oc-checkbox")
 
   return (
     <KobalteCheckbox.Root {...rest} class={className()}>
-      <KobalteCheckbox.Input id={inputID()} aria-label={local["aria-label"]} />
+      <KobalteCheckbox.Input
+        id={inputID()}
+        aria-label={local["aria-label"]}
+        aria-keyshortcuts={local["aria-keyshortcuts"]}
+      />
       <KobalteCheckbox.Control class="oc-checkbox-control">
         <KobalteCheckbox.Indicator class="oc-checkbox-indicator">
           <Icon name="check" size="compact" />
