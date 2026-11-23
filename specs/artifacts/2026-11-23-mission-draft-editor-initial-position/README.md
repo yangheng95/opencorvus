@@ -13,3 +13,11 @@ Windows 隔离项目开发页面，使用真实多步任务草稿及本地未保
 | [07](07-baseline-zh-160-board-opens-mid-request.jpg) | 简体中文看板打开同一长草稿也从约第 10 项开始。 |
 | [08](08-first-candidate-en-100-short-caret-after-value.jpg) | 首个候选的短草稿仍将光标放到已保存文字末尾。 |
 | [09](09-first-candidate-en-160-value-overrides-initial-caret.jpg) | 首轮同步设置的起点被原生赋值覆盖，长草稿仍从中间显示。 |
+| [10](10-final-en-100-short-draft-start.jpg) | 最终默认缩放短草稿首次聚焦文字开头。 |
+| [11](11-final-en-160-list-long-draft-start.jpg) | 最终英文列表 160% 直接显示完整原首行。 |
+| [12](12-final-en-160-wheel-reaches-original-tail.jpg) | 保持指针位置连续滚动可见真实第 24 项。 |
+| [13](13-final-en-160-keep-editing-retains-local-tail.jpg) | 继续编辑恢复原输入及末尾未保存内容。 |
+| [14](14-final-zh-160-board-long-draft-start.jpg) | 最终简体中文看板 160% 直接显示同一已保存首行。 |
+| [15](15-final-zh-160-edit-starts-before-saved-first-line.jpg) | 从初始光标实际在第一项之前输入指定前缀。 |
+| [16](16-final-zh-160-saved-draft-returns-to-exact-card.jpg) | 实际保存反馈出现并归还原草稿编辑入口。 |
+| [17](17-final-zh-160-reopen-shows-exact-saved-opening.jpg) | 重新打开准确新请求，仍在新的第一行首部取焦。 |

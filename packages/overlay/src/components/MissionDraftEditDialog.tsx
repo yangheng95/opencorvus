@@ -187,8 +187,16 @@ export function MissionDraftEditDialog(props: {
       backdropClose={false}
       onClose={close}
       onOpenAutoFocus={(event) => {
+        const target = props.target
+        const input = requestInput
+        if (!target || !input) return
         event.preventDefault()
-        requestInput?.focus()
+        input.focus()
+        queueMicrotask(() => {
+          if (props.target !== target || input.ownerDocument.activeElement !== input) return
+          input.setSelectionRange(0, 0)
+          input.scrollTop = 0
+        })
       }}
       footer={
         <>
