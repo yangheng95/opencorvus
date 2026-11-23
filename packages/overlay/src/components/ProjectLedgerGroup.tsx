@@ -4,7 +4,7 @@ import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog, type AppDialogOpenOptions } from "../services/app-dialog"
 import { ApiAuthorityChangedError, ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { localeTag, t } from "../utils/i18n"
-import { projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
+import { projectDirectoryKey, projectDisplayName, projectNameWithDirectoryHint } from "../utils/project-directory"
 import { workLedgerSummaryAnchorRect } from "../utils/work-ledger-summary-anchor"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
@@ -151,7 +151,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
       unknownName: t("task.project.unknown"),
     }),
   })
-  const accessibleName = () => [label().name, props.directoryHint].filter(Boolean).join(" · ")
+  const accessibleName = () => projectNameWithDirectoryHint(label().name, props.directoryHint)
   const projectActionsLabel = () => t("project.more_actions", { name: accessibleName() })
   const startProjectWorkLabel = () => t("project.new_chat_button_title", { name: accessibleName() })
   const className = () => ["project-group", props.class].filter(Boolean).join(" ")

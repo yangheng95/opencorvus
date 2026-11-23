@@ -64,6 +64,10 @@ export function projectLedgerDisplayName(input: ProjectDisplayNameInput & { impl
   return projectDisplayName(input)
 }
 
+export function projectNameWithDirectoryHint(name: string, directoryHint?: string): string {
+  return [name, directoryHint].filter(Boolean).join(" · ")
+}
+
 export function projectDirectoryHints(projects: readonly { directory: string; name: string }[]): Map<string, string> {
   const byName = new Map<string, string[]>()
   for (const { directory, name } of projects) {

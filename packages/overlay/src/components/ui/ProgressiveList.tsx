@@ -1,5 +1,5 @@
 import { createEffect, createMemo, createSignal, For, onCleanup, Show, type Accessor, type JSX } from "solid-js"
-import { t } from "../../utils/i18n"
+import { localeTag, t } from "../../utils/i18n"
 import { Button } from "./Button"
 
 const INITIAL_VISIBLE_ITEM_COUNT = 10
@@ -10,6 +10,7 @@ export interface ProgressiveListProps<T> {
   children: (item: T, index: Accessor<number>) => JSX.Element
   class?: string
   dataUi?: string
+  disclosureScope?: string
   revealItem?: T
   onRevealReady?: () => void
   /** Optional owner for focus after keyboard or assistive activation of the disclosure. */
@@ -19,8 +20,16 @@ export interface ProgressiveListProps<T> {
 export function ProgressiveList<T>(props: ProgressiveListProps<T>): JSX.Element {
   const [expanded, setExpanded] = createSignal(false)
   const visibleCount = () => props.initialVisibleCount ?? INITIAL_VISIBLE_ITEM_COUNT
-  const hasOverflow = () => props.items.length > visibleCount()
+  const remainingCount = () => props.items.length - visibleCount()
+  const hasOverflow = () => remainingCount() > 0
   const visibleItems = createMemo(() => (expanded() ? props.items : props.items.slice(0, visibleCount())))
+  const disclosureText = createMemo(() => {
+    if (expanded()) return t("progressive_list.collapse")
+    if (props.disclosureScope && hasOverflow()) {
+      return t("progressive_list.expand_count", { count: new Intl.NumberFormat(localeTag()).format(remainingCount()) })
+    }
+    return t("progressive_list.expand")
+  })
   const className = () => ["oc-progressive-list", props.class].filter(Boolean).join(" ")
   let disposed = false
   onCleanup(() => {
@@ -73,9 +82,12 @@ export function ProgressiveList<T>(props: ProgressiveListProps<T>): JSX.Element 
           data-ui="progressive-list-toggle"
           data-chrome="text-disclosure"
           aria-expanded={expanded()}
+          aria-label={props.disclosureScope
+            ? t("progressive_list.scoped_label", { action: disclosureText(), scope: props.disclosureScope })
+            : undefined}
           onClick={toggleExpansion}
         >
-          {expanded() ? t("progressive_list.collapse") : t("progressive_list.expand")}
+          {disclosureText()}
         </Button>
       </Show>
     </div>

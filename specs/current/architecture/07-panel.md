@@ -4834,6 +4834,10 @@ Keyboard or assistive activation of a Work Ledger row-list expansion focuses
 the first newly visible work button in that same list. Project, Pinned and
 combined views resolve the stable row identity within their own disclosure.
 The shared progressive list respects a more recent focus or a changed list.
+The work-row disclosure shows the number of currently hidden top-level rows
+using the panel locale. Its accessible name starts with the visible button
+label and includes the list's scope. Same-named Projects use the directory hint
+from their existing group identity.
 
 Work Ledger previews follow keyboard focus when disclosure or scrolling moves a
 different work row or kind marker under a stationary pointer. Real pointer

@@ -71,6 +71,7 @@ import {
   projectDirectoryKey,
   projectDirectoryLabel,
   projectLedgerDisplayName,
+  projectNameWithDirectoryHint,
 } from "../utils/project-directory"
 import { Icon, type IconName } from "./ui/Icon"
 import { Badge } from "./ui/Badge"
@@ -968,11 +969,17 @@ function WorkLedgerProjectGroupView(props: {
   onRevealReady?: () => void
 }) {
   const collapsed = () => props.directoryCollapse.isCollapsed(props.group.directory)
+  const disclosureScope = () => {
+    if (props.dataUi === "work-ledger-recents") return t("work_ledger.recents")
+    if (props.showProjectHeader === false) return t("work_ledger.title")
+    return projectNameWithDirectoryHint(projectDisplayName(props.group), props.directoryHint)
+  }
   const renderRows = () => (
     <ProgressiveList
       items={props.group.items}
       initialVisibleCount={props.showProjectHeader === false ? 8 : 5}
       class="work-ledger-rows"
+      disclosureScope={disclosureScope()}
       revealItem={props.revealItem}
       onRevealReady={props.onRevealReady}
       onExpansionFocus={(row, list) => focusLedgerControl(workLedgerRowControl(list, rowKey(row)))}
