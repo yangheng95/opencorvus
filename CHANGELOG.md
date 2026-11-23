@@ -20,6 +20,7 @@
 
 #### 修复
 
+- 文件审阅的 Page Up 和 Page Down 按当前可视区域翻页，修复复合记录键引起的选择器错误。普通和虚拟列表保留准确焦点，放大后的短视口也能逐项来回浏览，明确选择后才切换预览。
 - 修复键盘上下文菜单使用过期选区、首个可用动作未获得焦点，以及菜单回车的默认动作立即关闭新确认框的问题；取消后返回准确的文件行或任务卡。
 - 打开已保存的多步任务草稿时，从正文开头呈现；保存回执显示服务确认的当前名称。返回同一草稿时保留阅读位置，从看板打开后直接进入可读区域。
 - 从常用定时模式进入高级编辑时接续当前日期、时间、时区和星期，保留已手写的高级规则；将明确的高级周规则简化为每周时保留其实际星期。
@@ -27,7 +28,6 @@
 
 #### 升级影响与已知限制
 
-- 大型文件审阅列表的 Page Up 分页键仍有选择器错误；当前可使用方向键、Home 和 End 浏览。
 - 数据库保持版本 13，保留已有项目、会话和任务数据。macOS 安装包使用临时签名，尚未经过 Apple 公证。
 
 ### en-US
@@ -44,6 +44,7 @@
 
 #### Fixed
 
+- Page Up and Page Down move through file review by the current viewport, fixing selector errors caused by compound record keys. Ordinary and virtual lists keep the exact focused row, including short viewports at higher zoom; previews change after explicit selection.
 - Use the current selection for keyboard context menus, focus the first enabled action, and keep confirmations open when invoked with Enter. Cancelling returns to the exact file row or task card.
 - Open saved Mission drafts at the beginning of their text and show the server-confirmed current name in save receipts. Retain the reading position when returning to the same draft and focus the reading region after opening it from the board.
 - Carry the current date, time, time zone and weekday into advanced schedule editing while preserving authored advanced rules. Retain the actual weekday when simplifying an unambiguous advanced weekly rule.
@@ -51,7 +52,6 @@
 
 #### Upgrade impact and known limitations
 
-- Page Up in large file review lists still encounters a selector error. Arrow keys, Home and End remain available for navigation.
 - The database remains at version 13, retaining existing projects, conversations, and tasks. macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
 
 ## 0.1.53 - 2026-11-23
