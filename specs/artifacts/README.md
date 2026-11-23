@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务详情返回的真实桌面截图](2026-11-24-scheduled-automation-detail-return-focus/README.md)
 - [定时任务筛选结果的真实桌面截图](2026-11-24-scheduled-automation-search-keyboard/README.md)
 - [溢出菜单切换和紧接查找的真实桌面截图](2026-11-24-right-dock-overflow-immediate-focus/README.md)
 - [文件标签查找的真实桌面截图](2026-11-24-file-workbench-tab-find/README.md)
