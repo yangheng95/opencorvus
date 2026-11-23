@@ -180,6 +180,7 @@ export const ExpertSquadInventoryStatusSchema = z
     catalog_revision: z.string().regex(/^[a-f0-9]{64}$/),
     effective_count: z.number().int().nonnegative(),
     installation_count: z.number().int().nonnegative(),
+    built_in_count: z.number().int().nonnegative().describe("Number of built-in installations in the current inventory."),
     issue_count: z.number().int().nonnegative(),
     warning_count: z.number().int().nonnegative(),
   })

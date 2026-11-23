@@ -127,6 +127,7 @@ test("cold inventory and diagnostics retain real project catalogue facts without
           issue_count: issueCount,
           warning_count: 0,
           installation_count: fixture.installationCount,
+          built_in_count: fixture.installationCount - 1,
           effective_count: fixture.effectiveCount,
         },
       })

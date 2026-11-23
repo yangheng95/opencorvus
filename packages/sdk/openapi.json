@@ -8131,6 +8131,12 @@
       "ExpertSquadInventoryStatus": {
         "additionalProperties": false,
         "properties": {
+          "built_in_count": {
+            "description": "Number of built-in installations in the current inventory.",
+            "maximum": 9007199254740991,
+            "minimum": 0,
+            "type": "integer"
+          },
           "catalog_revision": {
             "pattern": "^[a-f0-9]{64}$",
             "type": "string"
@@ -8160,6 +8166,7 @@
           "catalog_revision",
           "effective_count",
           "installation_count",
+          "built_in_count",
           "issue_count",
           "warning_count"
         ],

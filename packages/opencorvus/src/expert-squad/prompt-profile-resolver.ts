@@ -3249,6 +3249,7 @@ export namespace PromptProfileResolver {
       catalog_revision: inventory.revision,
       effective_count: inventory.squads.length,
       installation_count: inventory.installations.length,
+      built_in_count: inventory.installations.filter((entry) => entry.built_in).length,
       issue_count: inventory.issues.length,
       warning_count: inventory.warnings.length,
     })

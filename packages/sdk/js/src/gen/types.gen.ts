@@ -2300,6 +2300,10 @@ export type ExpertSquadDiagnosticPage = {
 }
 
 export type ExpertSquadInventoryStatus = {
+  /**
+   * Number of built-in installations in the current inventory.
+   */
+  built_in_count: number
   catalog_revision: string
   effective_count: number
   installation_count: number

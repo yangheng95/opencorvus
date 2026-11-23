@@ -6139,6 +6139,8 @@ available during reads and failures. The footer retains the original diagnostic
 and retries the same page, or offers a full catalog refresh for a rejected cursor.
 The Active filter shows the exact effective installation. The paginated catalog
 filters keep their continuation action when a loaded page has no matching rows.
+The Built-in filter uses the inventory's built-in installation count to finish
+its results while the shared catalog cursor remains available to other filters.
 Empty messages distinguish a filter on loaded results from a completed filter.
 A successful continuation hands its still-owned focus to the first new visible
 physical installation row.

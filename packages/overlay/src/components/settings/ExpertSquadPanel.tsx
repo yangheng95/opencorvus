@@ -509,7 +509,13 @@ export default function ExpertSquadPanel() {
       return true
     })
   })
-  const canContinueInstallations = () => catalogFilter() !== "active" && Boolean(catalogNextCursor())
+  const canContinueInstallations = () => {
+    const filter = catalogFilter()
+    if (!catalogNextCursor() || filter === "active") return false
+    if (filter !== "built_in") return true
+    const inventory = inventoryStatus()
+    return Boolean(inventory && filteredSquads().length < inventory.built_in_count)
+  }
   const filteredCatalogEmptyMessage = () => {
     if (canContinueInstallations()) return t("expert_squad.no_loaded_matches")
     if (catalogFilter() === "package") return t("expert_squad.no_installed_packages")
