@@ -5945,7 +5945,9 @@ within each group. A configuration-only catalog label uses the neutral badge;
 it does not claim authentication, runnable models or successful inference.
 Provider search offers Down and Up to enter and browse the available Edit and
 Configure buttons in display order. Those controls name their provider for
-keyboard users. The ordinary Tab sequence continues to reach the other actions.
+keyboard users. Escape from those matching actions focuses the provider search
+with the query and catalog disclosure state intact. The ordinary Tab sequence
+continues to reach the other actions.
 An expanded catalog row places its available account connection action and then
 its API key editor directly after the Configure trigger in the native Tab order.
 Model quantities in provider
@@ -6263,9 +6265,10 @@ description, localized source label or required tools, within the selected sourc
 For a nonempty query with visible matches, the shared SearchField moves focus to
 the first or last matching skill button with Down or Up and describes the shortcut
 with localized guidance. The same search result navigation moves focus between
-visible matching skills. Opening the result is a separate action. The source
-controls remain in the normal Tab order, and returning from detail restores the
-same filtered result and query.
+visible matching skills. Escape from a matching skill returns focus to the
+search with its query and selected source intact. The source controls remain
+in the normal Tab order, and returning from detail restores the same filtered
+result and query.
 The Mission Skill Refresh control stays focusable while the active read is busy
 and ignores another activation until the read settles. An unavailable scope
 still disables Refresh.

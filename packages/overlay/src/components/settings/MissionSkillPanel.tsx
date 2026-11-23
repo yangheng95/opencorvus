@@ -299,7 +299,7 @@ export default function MissionSkillPanel() {
   const searchNavigation = createSearchResultNavigation(() => {
     if (!hasSearchMatches() || !panel) return []
     return Array.from(panel.querySelectorAll<HTMLButtonElement>('button[data-ui="mission-skill-item"]:enabled'))
-  })
+  }, { returnToSearch: () => searchInput })
   const searchKeyboardHintID = "mission-skill-search-keyboard-hint"
   const refreshBusy = () => !scopeUnavailable() && loading()
   const scopeStatus = createMemo(() => {
@@ -429,7 +429,7 @@ export default function MissionSkillPanel() {
                 </For>
               </div>
               <Show when={hasSearchMatches()}>
-                <p id={searchKeyboardHintID} class="mission-skill-search-hint">{t("settings.search_keyboard_hint")}</p>
+                <p id={searchKeyboardHintID} class="mission-skill-search-hint">{t("settings.search_return_keyboard_hint")}</p>
               </Show>
             </SettingsToolbar>
 
@@ -465,7 +465,7 @@ export default function MissionSkillPanel() {
                               class="mission-skill-item"
                               data-ui="mission-skill-item"
                               data-skill-name={skill.name}
-                              aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown" : undefined}
+                              aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown Escape" : undefined}
                               interactive
                               leading={<Icon name="workflow" />}
                               title={skill.name}
