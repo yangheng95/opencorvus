@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [对话框关闭后立即交还键盘](records/2026-11/2026-11-23-dialog-close-keyboard-release.md)
 - [项目 MCP 新增表单的键盘焦点](records/2026-11/2026-11-23-mcp-add-form-focus.md)
 - [设置标题在狭窄桌面保留项目可读宽度](records/2026-11/2026-11-23-settings-section-header-readable-scope.md)
 - [技能库搜索当前项目已安装技能](records/2026-11/2026-11-23-skill-library-installed-filter.md)

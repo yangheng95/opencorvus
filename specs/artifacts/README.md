@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [对话框关闭后的桌面交接截图](2026-11-23-dialog-close-keyboard-release/README.md)
 - [项目 MCP 新增表单的桌面焦点截图](2026-11-23-mcp-add-form-focus/README.md)
 - [设置标题和项目范围的窄桌面截图](2026-11-23-settings-section-header-readable-scope/README.md)
 - [技能库已安装搜索截图](2026-11-23-skill-library-installed-filter/README.md)
