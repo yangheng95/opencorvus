@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目文件入口键盘交接的真实桌面实拍](2026-11-23-project-files-opener-focus/README.md)
 - [内置专家团分类续页的真实桌面实拍](2026-11-23-expert-squad-built-in-continuation/README.md)
 - [专家团配置操作焦点的真实桌面实拍](2026-11-23-expert-squad-configuration-action-focus/README.md)
 - [专家团配置归属说明的真实桌面实拍](2026-11-23-expert-squad-configuration-scope-copy/README.md)
