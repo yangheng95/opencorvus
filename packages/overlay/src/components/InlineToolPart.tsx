@@ -1,5 +1,6 @@
 import { createMemo, createResource, For, Show } from "solid-js"
 import stripAnsi from "strip-ansi"
+import { shellCommandOutput } from "@opencorvus-ai/util/shell-result"
 import { ChangeLineStats, DiffView, changeStatusLabel } from "./DiffView"
 import { summarizeFileChanges } from "../services/diff"
 import {
@@ -397,6 +398,14 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     if (showStructuredOutput()) return /<diagnostics\b/i.test(output())
     return !FILE_READ_TOOLS.has(key()) || !codeResult()
   })
+  const readableShellOutput = createMemo(() => {
+    const exitCode = display().commandExitCode
+    if (key() !== "bash" || exitCode === undefined) return
+    const result = output()
+    const commandOutput = shellCommandOutput(result, exitCode)
+    if (commandOutput === result) return
+    return commandOutput || t("tool.command_no_output")
+  })
   const visibleShellCommand = createMemo(() => {
     if (status() === "pending" || !SHELL_TOOLS.has(key())) return ""
     return toolInputCommand(input())
@@ -607,6 +616,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                     messageID={part().messageID}
                     label={t("tool.output")}
                     value={output()}
+                    readableText={readableShellOutput()}
                   />
                 </Show>
                 <Show when={shellProgressOutput().trim()}>

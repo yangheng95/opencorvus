@@ -56,7 +56,15 @@ function PayloadValue(props: { value: unknown; depth: number; stateKey: string; 
 
 /** Lossless output disclosure: JSON values preserve multiline strings; raw
  * bytes remain available for copying and inspection. Nested bodies mount on demand. */
-export function ToolPayload(props: { stateKey: string; messageID: string; label: string; value: string; live?: boolean; collapsed?: boolean }) {
+export function ToolPayload(props: {
+  stateKey: string
+  messageID: string
+  label: string
+  value: string
+  readableText?: string
+  live?: boolean
+  collapsed?: boolean
+}) {
   const id = createUniqueId()
   const raw = () => toolPayloadDisplayState(props.stateKey)?.raw ?? false
   const expanded = () => toolPayloadDisplayState(props.stateKey)?.expanded ?? false
@@ -115,17 +123,20 @@ export function ToolPayload(props: { stateKey: string; messageID: string; label:
   const expansionLabel = () => t(expanded() ? "tool.collapse_payload" : "tool.expand_payload", { label: props.label })
   const clipboard = createClipboardCopy({
     text: () => props.value,
-    label: () => t("tool.copy_payload", { label: props.label }),
+    label: () => t("tool.copy_payload", {
+      label: props.readableText === undefined ? props.label : t("tool.raw_payload", { label: props.label }),
+    }),
     diagnosticID: "tool-payload",
   })
   const parsed = createMemo(() => {
-    if (props.live) return undefined
+    if (props.live || props.readableText !== undefined) return undefined
     try {
       return { value: JSON.parse(props.value) as unknown }
     } catch {
       return undefined
     }
   })
+  const displayedText = () => raw() ? props.value : props.readableText ?? props.value
   return (
     <section
       class="msg-tool-payload"
@@ -136,7 +147,7 @@ export function ToolPayload(props: { stateKey: string; messageID: string; label:
     >
       <div class="msg-tool-payload__toolbar">
         <span id={`${id}-label`} class="msg-tool-payload__label">{props.label}</span>
-        <Show when={parsed()}>
+        <Show when={parsed() || props.readableText !== undefined}>
           <Button
             variant="ghost"
             tone="neutral"
@@ -187,7 +198,7 @@ export function ToolPayload(props: { stateKey: string; messageID: string; label:
           data-tool-payload-identity={props.stateKey}
           data-tool-message-id={props.messageID}
         >
-          <Show when={parsed() && !raw()} fallback={<pre>{props.value}</pre>}>
+          <Show when={parsed() && !raw()} fallback={<pre>{displayedText()}</pre>}>
             <PayloadValue value={parsed()!.value} depth={0} stateKey={props.stateKey} path={[]} />
           </Show>
         </div>

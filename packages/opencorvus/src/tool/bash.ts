@@ -12,7 +12,7 @@ import { Filesystem } from "@/util/filesystem"
 import { fileURLToPath } from "url"
 import { Flag } from "@/flag/flag.ts"
 import { Shell } from "@/shell/shell"
-import { shellResultOutput } from "@/shell/result"
+import { shellResultOutput } from "@opencorvus-ai/util/shell-result"
 import {
   BASH_BACKGROUND_READINESS_MAX_MS,
   DEFAULT_BASH_BACKGROUND_LEASE_MS,

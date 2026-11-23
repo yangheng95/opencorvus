@@ -3201,7 +3201,11 @@ the terminal partial observation is labelled Recorded output, with the original
 failure or cancellation still visible. These labels and their named copy/expansion
 controls follow the current interface language. A running command with observed
 output uses its actual active status rather than claiming that it is waiting for a
-result. Completed Tools continue to display their definitive `state.output` once.
+result. Completed Tools use their definitive `state.output`. A Bash result with
+only its confirmed exit receipt shows actual command output or a localized
+empty message in the readable view. The exit code remains visible in the
+command status. Raw mode and copy use the complete receipt from the same Part.
+Detailed receipts keep their recorded text.
 All views use the existing producing Part and output-slot identity, ToolPayload
 reader, bounded preview and clipboard writer.
 
