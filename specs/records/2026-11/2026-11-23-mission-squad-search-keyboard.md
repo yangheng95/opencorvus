@@ -17,3 +17,11 @@
 同一套当前匹配身份在已安装列表标明本次结果，沿用 `SearchField` 的 Down / Up 分别交给列表中第一/最后的真实可用复选框。待接收、新搜索、失败、空结果及提交期间保留当下输入行为。市场建议、清除、安装入口和范围外选择仍通过各自的原控件操作。仅有当前匹配时显示中英文键盘提示并让输入关联该提示。按照原生复选框语义使用 Space 切换，用主题焦点边框标记当前行，不创建第二个选择状态或模拟按键。[W3C Web Accessibility Initiative 复选框指南](https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/)
 
 候选实页分别复核英文与中文的两个匹配项、Up / Down 的精确落点、Space 与原有 Tab 顺序、范围外已选项移除后回焦、空结果、清除恢复初始目录和放大桌面焦点。用真实键盘选择保存手动草稿并通过服务回读项目、原始请求与确切专家团身份。复核两套独立数据库和正常关闭。聚焦运行现有选择和手动草稿创建覆盖，并执行类型、两语、样式、正式构建、文档、架构检查。风险包括跳向上次匹配、意外更改选择或提交、选错范围外已选行、增加文字后焦点遮挡、切换语言和放大后提示截断。
+
+## 实施与实际验收
+
+候选 `40622/ui/` 加载 `main-DWL_DZIN.js`。英文实际查询 `research` 后，Down 到 Research Studio，Space 在原位置勾选，Up 到 Base。正常 Tab 仍可从 Base 到范围外的已选 Dynamic。取消该项后焦点回到保留 `research` 的搜索框。换到已确认空结果时，Down 留在字段，已经选择的 Research Studio 继续可见。Escape 清除查询后，Up 直接到恢复的目录末项 Generate Expert Squads，该行随列表滚入可见区域。
+
+简体中文在应用 150% 桌面缩放时可读完整键盘提示，焦点边框显示在 Base 与 Research Studio 的实际行上。用同一键盘路径勾选两项、取消 Dynamic，保存并从正式回执打开 `Keyboard squad receipt 424`。真实列表返回唯一草稿 `draft-3e849f51e26f9ba5ec09c97bf2f73395` 和会话 `ses_hT3YVu3iB6cY9GM1T0tS`，`boardLane=backlog`。回读确认项目、标题和原文 `Review the cedar inventory and summarize confirmed counts.`，持久快照为 `base` 和 `research-studio`。两套隔离 SQLite 的 `quick_check` 均通过，基线 0 条会话，候选恰有该 1 条，消息与 Provider（模型供应商）请求、结果、用量均为 0。本人查看 4 张基线和 10 张候选截图，两个专用服务均通过正式关闭接口退出。[截图与观察](../../artifacts/2026-11-23-mission-squad-search-keyboard/README.md)
+
+现有专家团选择和 Mission（多步任务）草稿回执检查 5 项、23 个断言通过。Overlay 类型、2 种语言 3271 个键、9354 处样式令牌引用、正式构建与渲染器边界通过。公开文档 353 个接口操作与 20 份当前架构文档的检查通过。

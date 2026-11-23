@@ -88,6 +88,7 @@ function mergeSquadOptions(
 
 export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const modeHelpID = createUniqueId()
+  const squadSearchHelpID = createUniqueId()
   const [mode, setMode] = createSignal<MissionCreateMode>("ai")
   const [title, setTitle] = createSignal("")
   const [request, setRequest] = createSignal("")
@@ -114,6 +115,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   let requestRef: HTMLTextAreaElement | undefined
   let titleRef: HTMLInputElement | undefined
   let expertSquadSearchRef: HTMLInputElement | undefined
+  let expertSquadList: HTMLDivElement | undefined
   let submitFeedback: HTMLDivElement | undefined
   let leaveFeedback: HTMLDivElement | undefined
   let leaveAction: (() => void) | undefined
@@ -194,6 +196,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const selectedExpertSquadIDs = createMemo(() => new Set(expertSquadIDs()))
   const matchingExpertSquadIDs = createMemo(() => new Set(expertSquadResult().matchingIDs))
   const isCurrentSquadCandidate = (id: string) => squadResultsReady() && matchingExpertSquadIDs().has(id)
+  const canFocusSquadMatch = () => squadResultsReady() && !submitting() && matchingExpertSquadIDs().size > 0
   const visibleExpertSquads = createMemo(() =>
     expertSquads().filter((squad) => selectedExpertSquadIDs().has(squad.id) || isCurrentSquadCandidate(squad.id)),
   )
@@ -777,9 +780,17 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               inputRef={(element) => { expertSquadSearchRef = element }}
               value={expertSquadQuery()}
               disabled={!projectDirectory() || !productPillar()}
+              ariaDescribedBy={canFocusSquadMatch() ? squadSearchHelpID : undefined}
               onValueChange={(value) => {
                 setExpertSquadQuery(value)
                 void searchSquads(value)
+              }}
+              resultFocusTarget={(edge) => {
+                if (!canFocusSquadMatch()) return
+                const matches = expertSquadList?.querySelectorAll<HTMLInputElement>(
+                  '[data-search-match] input[type="checkbox"]:enabled',
+                )
+                return edge === "first" ? matches?.[0] : matches?.[matches.length - 1]
               }}
               placeholder={t("mission_board.create.squad_search_placeholder")}
               size="sm"
@@ -824,7 +835,13 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                 </p>
               </Show>
             }>
-              <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
+              <Show when={canFocusSquadMatch()} fallback={
+                <p class="mission-create-form__context-status">{t("mission_board.create.squad_selection_help")}</p>
+              }>
+                <p class="mission-create-form__context-status" id={squadSearchHelpID}>
+                  {t("mission_board.create.squad_search_keyboard_hint")}
+                </p>
+              </Show>
             </Show>
             <Show when={noMatchingSquads()}>
               <p class="mission-create-form__context-status" role="status">
@@ -833,6 +850,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               </p>
             </Show>
             <div
+              ref={expertSquadList}
               class="mission-create-form__expert-squad-list"
               role="group"
               aria-label={t("mission_board.create.expert_squad")}
@@ -843,6 +861,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                   <Checkbox
                     checked={selectedExpertSquadIDs().has(squad.id)}
                     disabled={submitting() || expertSquadLoading()}
+                    data-search-match={isCurrentSquadCandidate(squad.id) ? "true" : undefined}
                     onChange={(checked) => updateExpertSquadSelection(squad.id, checked)}
                   >
                     <span class="mission-create-form__option">

@@ -814,6 +814,12 @@ body {
   align-items: flex-start;
 }
 
+.mission-create-form__expert-squad-list .oc-checkbox:has(input:focus-visible) {
+  border-radius: var(--oc-radius-soft);
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: var(--ui-gap-3xs);
+}
+
 .mission-create-form__expert-squad-list .oc-button {
   flex-shrink: 0;
   justify-content: flex-start;
