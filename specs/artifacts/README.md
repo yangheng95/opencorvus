@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务时区搜索的桌面证据](2026-11-23-scheduled-time-zone-city-search/README.md)
 - [多步任务并发草稿的桌面证据](2026-11-23-mission-draft-conflict-review/README.md)
 - [PDF 缩放阅读位置的桌面证据](2026-11-23-pdf-zoom-reading-anchor/README.md)
 - [侧栏项目展开关联的桌面证据](2026-11-23-sidebar-project-disclosure-identity/README.md)
