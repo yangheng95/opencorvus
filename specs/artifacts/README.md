@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [新建多步任务专家团搜索的真实桌面截图](2026-11-24-mission-squad-return-to-search/README.md)
 - [多步任务看板搜索的真实桌面截图](2026-11-24-mission-board-return-to-search/README.md)
 - [项目笔记搜索的真实桌面截图](2026-11-24-memory-result-return-to-search/README.md)
 - [服务商与多步任务技能搜索的真实桌面截图](2026-11-24-catalog-results-return-to-search/README.md)

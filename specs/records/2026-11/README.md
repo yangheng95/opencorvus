@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从新建多步任务的专家团结果返回搜索](2026-11-24-mission-squad-return-to-search.md)
 - [从多步任务卡片返回看板搜索](2026-11-24-mission-board-return-to-search.md)
 - [从项目笔记结果返回搜索草稿](2026-11-24-memory-result-return-to-search.md)
 - [从服务商与多步任务技能结果返回搜索](2026-11-24-catalog-results-return-to-search.md)
