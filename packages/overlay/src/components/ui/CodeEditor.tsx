@@ -1,5 +1,6 @@
-import { Compartment, EditorSelection } from "@codemirror/state"
-import { getSearchQuery, gotoLine, openSearchPanel, search, searchPanelOpen } from "@codemirror/search"
+import { Compartment, EditorSelection, Prec } from "@codemirror/state"
+import { getSearchQuery, gotoLine, openSearchPanel, search, searchKeymap, searchPanelOpen } from "@codemirror/search"
+import { keymap } from "@codemirror/view"
 import type { SourceFileRange } from "@opencorvus-ai/sdk"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
@@ -21,6 +22,19 @@ import {
   revealHighlightLines,
   revealLinesEffect,
 } from "./code-editor-theme"
+
+function focusOrOpenLinePrompt(editor: EditorView): boolean {
+  const input = editor.dom.querySelector<HTMLInputElement>(".cm-dialog input[name='line']")
+  if (!input) return gotoLine(editor)
+  input.focus()
+  return true
+}
+
+// basicSetup binds gotoLine directly. Give that same shortcut the shared prompt behavior.
+const lineNavigationKeymap = Prec.high(keymap.of(searchKeymap
+  .filter((binding) => binding.run === gotoLine)
+  .map((binding) => ({ ...binding, run: focusOrOpenLinePrompt })),
+))
 
 export interface CodeEditorNavigation {
   find: () => void
@@ -169,6 +183,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
       parent: host,
       extensions: [
         basicSetup,
+        lineNavigationKeymap,
         search({
           onNoMatch: (editor, direction) => {
             if (!searchPanelOpen(editor.state)) return
@@ -202,11 +217,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
         if (view === editor) openSearchPanel(editor)
       },
       goToLine: () => {
-        if (view !== editor) return
-        // The native command creates a new panel on each activation.
-        const input = editor.dom.querySelector<HTMLInputElement>(".cm-dialog input[name='line']")
-        if (input) input.focus()
-        else gotoLine(editor)
+        if (view === editor) focusOrOpenLinePrompt(editor)
       },
     })
     if (host.isConnected && !host.closest("[inert], [hidden]") && local.shouldFocusOnMount?.()) editor.focus()
