@@ -2633,6 +2633,9 @@ so a displayed name can discover the same language action across these surfaces.
 Language selection uses the one `applyLocalePreference` operation. The titlebar
 language action names the destination language from the same option registry
 and applies it directly. Native menu actions use the same locale selection.
+The View menu shows the current interface zoom on a command that opens the
+shared dialog with its slider focused. The slider applies and saves the existing
+zoom preference while staying visible. Closing returns focus to the View trigger.
 Shared SelectControl consumers submit their controlled value through the owning
 surface. The visible trigger and its popup own keyboard navigation, including
 sequential focus after changing a value with the trigger's arrow keys.

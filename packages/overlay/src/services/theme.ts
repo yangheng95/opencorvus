@@ -14,8 +14,8 @@ import { sanitizeThemeForHost, type OverlayThemeID } from "./theme-registry"
 
 // ── Constants ──
 
-const MIN_UI_ZOOM = 0.8
-const MAX_UI_ZOOM = 1.6
+export const MIN_UI_ZOOM = 0.8
+export const MAX_UI_ZOOM = 1.6
 
 // ── themeColor ──
 // Canvas-backed libraries (charts, terminals) parse only legacy CSS color

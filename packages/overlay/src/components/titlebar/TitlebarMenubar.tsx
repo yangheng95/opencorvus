@@ -1,19 +1,20 @@
-import { For, Show, createMemo, createSignal, onCleanup, onMount } from "solid-js"
+import { For, Show, batch, createMemo, createSignal, onCleanup, onMount } from "solid-js"
 import { Portal } from "solid-js/web"
 import { settingsStore, setSettingsStore, saveSettings } from "../../store/settings"
 import { applyLocalePreference } from "../../services/locale-preference"
 import { applyThemePreference } from "../../services/theme-preference"
 import { openDocumentationEntry } from "../../services/documentation"
 import { openConfigDialog } from "../../services/config-dialog-control"
-import { applyZoom, sanitizeZoom, toggleDevtools } from "../../services/theme"
+import { applyZoom, MAX_UI_ZOOM, MIN_UI_ZOOM, sanitizeZoom, toggleDevtools } from "../../services/theme"
 import { themeOptionsForCurrentHost } from "../../services/theme-registry"
 import { browseDirectory, closeProject } from "../../services/workspace"
 import { quitOverlay } from "../../services/window"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { installNativeMenuListener, type NativeMenuActionID, usesNativeMacosMenu } from "../../services/native-menu"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
-import { localeOptions, t } from "../../utils/i18n"
+import { localeOptions, localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
+import { Dialog } from "../ui/Dialog"
 import { Menubar } from "../ui/Menubar"
 import { Slider } from "../ui/Slider"
 
@@ -70,6 +71,7 @@ const MACOS_FILE_SHORTCUTS: Record<FileShortcutID, { display: string; aria: stri
 
 const SEARCH_SHORTCUT = { key: "g", display: "Ctrl+G", aria: "Control+G" }
 const MACOS_SEARCH_SHORTCUT = { display: "⌘G", aria: "Meta+G" }
+const ZOOM_STEP_PERCENT = 5
 
 function fileShortcutIDForEvent(event: KeyboardEvent): FileShortcutID | null {
   const key = event.key.toLowerCase()
@@ -98,8 +100,7 @@ function hasForegroundDialog(): boolean {
   return document.querySelector(".dialog:not(#commandPaletteDialog)") !== null
 }
 
-function runTitlebarMenuAction(label: string, action: () => void | Promise<void>): void {
-  if (hasForegroundDialog()) return
+function runTitlebarAction(label: string, action: () => void | Promise<void>): void {
   try {
     void Promise.resolve(action()).catch((error) => {
       if (error instanceof DOMException && error.name === "AbortError") return
@@ -121,6 +122,10 @@ function runTitlebarMenuAction(label: string, action: () => void | Promise<void>
   }
 }
 
+function runTitlebarMenuAction(label: string, action: () => void | Promise<void>): void {
+  if (!hasForegroundDialog()) runTitlebarAction(label, action)
+}
+
 function MenuItem(props: {
   children: any
   onClick: () => void | Promise<void>
@@ -129,6 +134,7 @@ function MenuItem(props: {
   disabled?: boolean
   testid?: string
   ariaKeyShortcuts?: string
+  opensDialog?: boolean
 }) {
   const childrenTitle = () => (typeof props.children === "string" ? props.children : undefined)
   const accessibleLabel = () => props.ariaLabel || childrenTitle() || props.meta
@@ -138,9 +144,11 @@ function MenuItem(props: {
       type="button"
       class="titlebar-menubar-item"
       disabled={props.disabled}
+      closeOnSelect={!props.opensDialog}
       data-testid={props.testid}
       aria-label={accessibleLabel()}
       aria-keyshortcuts={props.ariaKeyShortcuts}
+      aria-haspopup={props.opensDialog ? "dialog" : undefined}
       onSelect={() => runTitlebarMenuAction(accessibleLabel() || "menu-item", props.onClick)}
     >
       <span class="titlebar-menubar-item-title">{props.children}</span>
@@ -164,55 +172,10 @@ function MenuSeparator() {
   return <Menubar.Separator />
 }
 
-function MenuRange(props: {
-  label: string
-  description: string
-  value: number
-  min: number
-  max: number
-  step: number
-  unit?: string
-  disabled?: boolean
-  testid?: string
-  onChange: (value: number) => void | Promise<void>
-}) {
-  function commit(value: number | undefined) {
-    if (value !== undefined) runTitlebarMenuAction(props.label, () => props.onChange(value))
-  }
-
-  return (
-    <Slider.Root
-      class="oc-menu-item titlebar-menubar-range"
-      value={[props.value]}
-      minValue={props.min}
-      maxValue={props.max}
-      step={props.step}
-      disabled={props.disabled}
-      onChange={(values) => commit(values[0])}
-    >
-      <span class="titlebar-menubar-range-copy">
-        <Slider.Label class="titlebar-menubar-item-title">{props.label}</Slider.Label>
-        <span class="titlebar-menubar-item-meta">{props.description}</span>
-      </span>
-      <span class="titlebar-menubar-range-control">
-        <Slider.Track>
-          <Slider.Fill />
-          <Slider.Thumb>
-            <Slider.Input aria-label={props.label} data-testid={props.testid} />
-          </Slider.Thumb>
-        </Slider.Track>
-        <span class="titlebar-menubar-range-value" aria-hidden="true">
-          {props.value}
-          {props.unit || ""}
-        </span>
-      </span>
-    </Slider.Root>
-  )
-}
-
 export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
   const [openMenu, setOpenMenu] = createSignal<MenuID | null>(null)
   const [autoFocusMenu, setAutoFocusMenu] = createSignal(false)
+  const [zoomOpen, setZoomOpen] = createSignal(false)
   let rootRef: HTMLDivElement | undefined
   let pointerDriftInProgress = false
   let altPressedOnly = false
@@ -427,8 +390,8 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
     "native-menu:theme-mist": () => setTheme("mist"),
     "native-menu:theme-graphite": () => setTheme("graphite"),
     "native-menu:toggle-locale": switchLanguage,
-    "native-menu:zoom-in": () => setZoomPercent(Math.round(settingsStore.zoom * 100) + 5),
-    "native-menu:zoom-out": () => setZoomPercent(Math.round(settingsStore.zoom * 100) - 5),
+    "native-menu:zoom-in": () => setZoomPercent(zoomPercent() + ZOOM_STEP_PERCENT),
+    "native-menu:zoom-out": () => setZoomPercent(zoomPercent() - ZOOM_STEP_PERCENT),
     "native-menu:zoom-reset": () => setZoomPercent(100),
     "native-menu:reset-layout": resetLayout,
     "native-menu:docs": () => openDocumentation("quickstart"),
@@ -540,6 +503,8 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
   })
 
   const zoomPercent = createMemo(() => Math.round(settingsStore.zoom * 100))
+  const formatPercent = createMemo(() => new Intl.NumberFormat(localeTag(), { style: "percent" }))
+  const zoomText = () => formatPercent().format(zoomPercent() / 100)
   const themeOptions = themeOptionsForCurrentHost()
 
   return (
@@ -585,6 +550,9 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
                 class="titlebar-menubar-panel"
                 data-menu={menu.id}
                 data-testid={`titlebar-menu-${menu.id}`}
+                onCloseAutoFocus={(event) => {
+                  if (menu.id === "view" && zoomOpen()) event.preventDefault()
+                }}
               >
                 <Show when={menu.id === "file"}>
                   <MenuItem
@@ -666,6 +634,17 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
 
                 <Show when={menu.id === "view"}>
                   <MenuGroup title={t("titlebar.menu.view")}>
+                    <MenuItem
+                      opensDialog
+                      meta={zoomText()}
+                      ariaLabel={`${t("titlebar.adjust_zoom")} ${zoomText()}`}
+                      onClick={() => batch(() => {
+                        closeMenu()
+                        setZoomOpen(true)
+                      })}
+                    >
+                      {t("titlebar.adjust_zoom")}
+                    </MenuItem>
                     <Menubar.RadioGroup
                       class="titlebar-theme-options titlebar-theme-options-menubar"
                       aria-label={t("settings.theme.label")}
@@ -696,17 +675,6 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
                         </MenuItem>
                       )}
                     </Show>
-                    <MenuRange
-                      label={t("titlebar.zoom")}
-                      description={t("titlebar.zoom_hint")}
-                      value={zoomPercent()}
-                      min={80}
-                      max={160}
-                      step={5}
-                      unit="%"
-                      testid="titlebar-zoom-range"
-                      onChange={setZoomPercent}
-                    />
                     <MenuItem onClick={resetLayout}>{t("titlebar.reset_layout")}</MenuItem>
                   </MenuGroup>
                 </Show>
@@ -748,6 +716,40 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
           </Menubar.Menu>
         )}
       </For>
+      <Dialog
+        open={zoomOpen()}
+        title={t("titlebar.zoom")}
+        returnFocusTarget={() => menuTrigger("view")}
+        onClose={() => setZoomOpen(false)}
+        footer={(
+          <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => setZoomOpen(false)}>
+            {t("common.close")}
+          </Button>
+        )}
+      >
+        <Slider.Root
+          class="titlebar-zoom-slider"
+          value={[zoomPercent()]}
+          minValue={MIN_UI_ZOOM * 100}
+          maxValue={MAX_UI_ZOOM * 100}
+          step={ZOOM_STEP_PERCENT}
+          getValueLabel={() => zoomText()}
+          onChange={([value]) => {
+            if (value !== undefined) runTitlebarAction(t("titlebar.zoom"), () => setZoomPercent(value))
+          }}
+        >
+          <p class="titlebar-zoom-hint">{t("titlebar.zoom_hint")}</p>
+          <div class="titlebar-zoom-control">
+            <Slider.Track>
+              <Slider.Fill />
+              <Slider.Thumb aria-label={t("titlebar.zoom")}>
+                <Slider.Input data-testid="titlebar-zoom-range" />
+              </Slider.Thumb>
+            </Slider.Track>
+            <Slider.ValueLabel class="titlebar-zoom-value" aria-hidden="true" />
+          </div>
+        </Slider.Root>
+      </Dialog>
     </Menubar.Root>
   )
 }

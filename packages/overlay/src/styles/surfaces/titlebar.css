@@ -362,6 +362,8 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   width: min(calc(280px * var(--ui-scale)), calc(100cqw - calc(24px * var(--ui-scale))));
   max-height: min(calc(620px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - calc(88px * var(--ui-scale))));
   overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--session-scrollbar-track);
   gap: 0;
   -webkit-app-region: no-drag;
 }
@@ -396,19 +398,6 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   gap: var(--ui-gap-xl);
 }
 
-.titlebar-menubar-range {
-  display: grid;
-  align-items: stretch;
-  gap: var(--ui-gap-sm);
-}
-
-.titlebar-menubar-range:hover,
-.titlebar-menubar-range:focus-within {
-  background: var(--surface-hover);
-  color: var(--text-strong);
-  outline: none;
-}
-
 .titlebar-menubar-item:disabled .titlebar-menubar-item-title,
 .titlebar-menubar-item[data-disabled] .titlebar-menubar-item-title,
 .titlebar-menubar-item:disabled .titlebar-menubar-item-meta,
@@ -439,46 +428,33 @@ html[data-native-titlebar="macos"] .titlebar-menubar .oc-button[data-ui="titleba
   font-variant-numeric: tabular-nums;
 }
 
-.titlebar-menubar-range-copy {
-  min-width: 0;
+.titlebar-zoom-slider {
   display: grid;
-  gap: var(--ui-gap-3xs);
+  gap: var(--ui-gap-sm);
 }
 
-.titlebar-menubar-range-copy {
-  flex: 1 1 auto;
+.titlebar-zoom-hint {
+  margin: 0;
+  color: var(--text-muted);
 }
 
-.titlebar-menubar-range-control {
+.titlebar-zoom-control {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(calc(34px * var(--ui-scale)), auto);
   align-items: center;
-  gap: var(--ui-gap-md);
+  gap: var(--ui-gap-lg);
 }
 
-.titlebar-menubar-range-value {
-  color: var(--text-muted);
-  font-size: var(--ui-font-caption);
+.titlebar-zoom-value {
   font-variant-numeric: tabular-nums;
-  line-height: var(--ui-line-height-flat);
   text-align: right;
   white-space: nowrap;
-}
-
-.titlebar-menubar-range .oc-slider-track {
-  width: 100%;
-  min-width: 0;
 }
 
 .titlebar-theme-options-menubar {
   grid-template-columns: minmax(0, 1fr);
   margin-left: 0;
   padding: var(--ui-gap-xs);
-}
-
-.titlebar-menubar-range-copy .titlebar-menubar-item-meta {
-  max-width: none;
-  text-align: left;
 }
 
 /* ─────────────────────────────────────────────────────────────
