@@ -108,6 +108,7 @@ export interface RightDockProps {
   onNewBrowserTab: (tabID: string) => void
   onClose: (tabID: string) => Promise<boolean>
   onCloseDock: () => void
+  canFindInFile: Accessor<boolean>
   onKeyDown?: JSX.EventHandler<HTMLDivElement, KeyboardEvent>
   addMenuOpen: Accessor<boolean>
   onAddMenuOpenChange: (open: boolean) => void
@@ -353,6 +354,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
               const closeLabel = () => t("right_dock.close_tab", { tab: title() })
               const meta = () => rightDockPanelMeta(tab().panel)
               const isOpen = () => openSet().has(tabID)
+              const canFind = () => tabsValue() === tabID && (tab().panel === "explorer" || (tab().panel === "file" && props.canFindInFile()))
               return (
                 <div
                   class="right-dock-tab-shell"
@@ -371,7 +373,7 @@ export function RightDock(props: RightDockProps): JSX.Element {
                     data-panel={tab().panel}
                     disabled={!isOpen() || hidden().has(tabID)}
                     aria-label={title()}
-                    aria-keyshortcuts={tab().panel === "explorer" && tabsValue() === tabID ? "Delete Control+f Meta+f" : "Delete"}
+                    aria-keyshortcuts={canFind() ? "Delete Control+f Meta+f" : "Delete"}
                     title={title()}
                     onKeyDown={(event) => handleTabKeyDown(event, tabID)}
                   >

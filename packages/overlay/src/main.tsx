@@ -725,19 +725,23 @@ function focusExplorerSearchField(view: HTMLElement, selectQuery = false): boole
   return true
 }
 
-function handleRightDockFind(event: KeyboardEvent & { currentTarget: HTMLDivElement }): void {
+function handleRightDockFind(event: KeyboardEvent & { currentTarget: HTMLDivElement }, findInFile: (() => void) | undefined): void {
   if (
     event.defaultPrevented || event.isComposing || event.altKey || event.shiftKey ||
     !(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "f" ||
-    !rightDockOpen() || selectedCenterWorkbenchTab()?.id !== "explorer"
+    !rightDockOpen()
   ) return
   const target = event.target
-  const view = getCenterWorkbenchViews().explorer
-  if (!view || !(target instanceof Element) || !event.currentTarget.contains(target)) return
-  const fromTab = target.matches('[role="tab"][data-tab="explorer"][aria-selected="true"]')
-  if (!fromTab && !view.contains(target)) return
-  if (!focusExplorerSearchField(view, true)) return
-  if (fromTab) cancelFileExplorerFolderReveal()
+  const activeTab = selectedCenterWorkbenchTab()?.id
+  if (!activeTab || !(target instanceof Element) || !event.currentTarget.contains(target)) return
+  const fromTab = target.matches('[role="tab"][aria-selected="true"]') && target.getAttribute("data-tab") === activeTab
+  if (activeTab === "file" && fromTab && findInFile) {
+    findInFile()
+  } else if (activeTab === "explorer") {
+    const view = getCenterWorkbenchViews().explorer
+    if (!view || (!fromTab && !view.contains(target)) || !focusExplorerSearchField(view, true)) return
+    if (fromTab) cancelFileExplorerFolderReveal()
+  } else return
   event.preventDefault()
   event.stopPropagation()
 }
@@ -2366,6 +2370,7 @@ const paneCallbacks = {
 }
 
 function OverlayRoot() {
+  const [findInFile, setFindInFile] = createSignal<() => void>()
   const taskBrowserPreview = createTaskBrowserPreviewRead(() => {
     const taskID = activeBrowserPreviewTaskID()
     const directory = activeDirectory().trim()
@@ -3337,7 +3342,8 @@ function OverlayRoot() {
           onNewBrowserTab={openBlankBrowserTab}
           onClose={closeRightDockTab}
           onCloseDock={() => setRightDockVisible(false)}
-          onKeyDown={handleRightDockFind}
+          canFindInFile={() => !!findInFile()}
+          onKeyDown={(event) => handleRightDockFind(event, findInFile())}
           onAddMenuOpenChange={setRightDockAddMenuOpen}
           overflowMenuOpen={rightDockOverflowMenuOpen}
           onOverflowMenuOpenChange={setRightDockOverflowMenuOpen}
@@ -3531,7 +3537,7 @@ function OverlayRoot() {
               id="solidFileEditorMount"
               class="center-workbench-activity chat-file-editor-activity file-editor-mount"
             >
-              <FileEditorPane />
+              <FileEditorPane onFindActionChange={(action) => setFindInFile(() => action)} />
             </div>
           </TabPanel>
         </RightDock>

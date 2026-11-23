@@ -144,7 +144,7 @@ type FileComparison = {
   | { status: "failed"; cause: unknown }
 )
 
-export function FileEditorPane() {
+export function FileEditorPane(props: { onFindActionChange: (action: (() => void) | undefined) => void }) {
   const [draft, setDraft] = createSignal("")
   const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision" | "resourceID"> | null>(null)
   const [saving, setSaving] = createSignal(false)
@@ -378,10 +378,16 @@ export function FileEditorPane() {
     }
     setTextView(view)
   }
-  const runTextNavigation = (action: "find" | "goToLine") => {
+  const textNavigationTarget = () => {
     const file = target()
     const navigation = editorNavigation()
     if (!file || !navigation || !textContent() || isBusy() || fileEditorReserved()) return
+    return { file, navigation }
+  }
+  const runTextNavigation = (action: "find" | "goToLine") => {
+    const current = textNavigationTarget()
+    if (!current) return
+    const { file, navigation } = current
     const generation = loadGeneration
     const authority = captureApiAuthority()
     switchTextView("source")
@@ -393,6 +399,9 @@ export function FileEditorPane() {
       ) navigation[action]()
     })
   }
+  const findInFile = () => runTextNavigation("find")
+  createEffect(() => props.onFindActionChange(textNavigationTarget() ? findInFile : undefined))
+  onCleanup(() => props.onFindActionChange(undefined))
   const currentErrorMessage = () => {
     const failure = error()
     return failure && t(failure.messageKey)
@@ -838,7 +847,7 @@ export function FileEditorPane() {
         } else if (key === "f" && textContent()) {
           event.preventDefault()
           event.stopPropagation()
-          runTextNavigation("find")
+          findInFile()
         }
       }}
     >
@@ -905,14 +914,14 @@ export function FileEditorPane() {
             </Show>
             <Show when={textContent()}>
               <Button type="button" variant="ghost" size="icon" tone="neutral"
-                disabled={!editorNavigation() || isBusy() || fileEditorReserved()}
+                disabled={!textNavigationTarget()}
                 title={`${t("file_editor.find")} (Ctrl/Cmd+F)`}
                 aria-label={t("file_editor.find")} aria-keyshortcuts="Control+f Meta+f"
-                onClick={() => runTextNavigation("find")}>
+                onClick={findInFile}>
                 <Icon name="search" />
               </Button>
               <Button type="button" variant="ghost" size="icon" tone="neutral"
-                disabled={!editorNavigation() || isBusy() || fileEditorReserved()}
+                disabled={!textNavigationTarget()}
                 title={`${t("code_editor.go_to_line")} (Ctrl/Cmd+Alt+G)`}
                 aria-label={t("code_editor.go_to_line")} aria-keyshortcuts="Control+Alt+G Meta+Alt+G"
                 onClick={() => runTextNavigation("goToLine")}>

@@ -1252,9 +1252,11 @@ visible and enabled. Opening a menu during project loading retains that menu's
 keyboard focus when the directory load completes. Restore uses its original
 trigger with the same handoff, without a global focus listener or parallel store.
 The file header exposes Find in file and Go to line for text documents, including
-read-only sources. Find and Ctrl/Cmd+F within the file pane open the retained
-CodeMirror view's search panel. Go to line opens its native line prompt or
-focuses the already open line input through the header action and the same
+read-only sources. Find and Ctrl/Cmd+F within the file pane or on its selected
+Dock tab open the retained CodeMirror view's search panel. The tab exposes the
+shortcut while the pane publishes an available text search action.
+Go to line opens its native line prompt or focuses the already open line input
+through the header action and the same
 native shortcut throughout the active text file pane, including Preview and
 the toolbar. On submission the prompt resolves against the live document
 and selection, including after a reload in the same view.
