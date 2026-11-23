@@ -2619,6 +2619,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           <>
             <SearchField
               inputRef={(element) => { searchInput = element }}
+              inputDataUI="file-explorer-search-input"
               clearable
               class="file-explorer-search"
               value={query()}

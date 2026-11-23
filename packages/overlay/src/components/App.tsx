@@ -450,6 +450,7 @@ export interface AppProps {
   rightDock: JSX.Element
   logViewer: JSX.Element
   onOpenRightDockPanel: (panel: RightDockPanel) => void
+  onOpenProjectFiles: () => void
   taskBrowserPreview: TaskBrowserPreviewRead
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
@@ -492,7 +493,7 @@ export function App(props: AppProps) {
     if (restore) return { kind: "restore" as const, cause: restore }
   })
   const openProjectFiles = () => {
-    if (filesAvailable()) props.onOpenRightDockPanel("explorer")
+    if (filesAvailable()) props.onOpenProjectFiles()
   }
   const [goalOpenRequest, setGoalOpenRequest] = createSignal(0)
   const openGoalForm = () => setGoalOpenRequest((value) => value + 1)

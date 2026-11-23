@@ -64,6 +64,7 @@ interface Command {
   keywords?: string
   icon: IconName
   visibleWhenEmpty?: boolean
+  runAfterClose?: boolean
   run: () => void | Promise<void>
 }
 
@@ -142,6 +143,7 @@ export function CommandPalette(props: {
   // close so keyboard users land back where they triggered Cmd+K from
   // (textarea, button, etc.) instead of leaking to <body>.
   let priorFocus: HTMLElement | null = null
+  let runAfterClose: (() => void) | undefined
 
   const commands = createMemo<Command[]>(() => {
     const cmds: Command[] = []
@@ -155,6 +157,7 @@ export function CommandPalette(props: {
         group: t("cmdk.group.commands"),
         keywords: "files explorer browse project workspace directory",
         icon: "folder",
+        runAfterClose: true,
         run: openFiles,
       })
     }
@@ -427,10 +430,8 @@ export function CommandPalette(props: {
     palette.close()
   }
 
-  function runCommand(cmd: Command | null) {
-    if (!cmd) return
-    const authority = captureApiAuthority()
-    close()
+  function executeCommand(cmd: Command, authority: ApiAuthority) {
+    if (!isApiAuthorityCurrent(authority)) return
     try {
       void Promise.resolve(cmd.run()).catch((err) => {
         if (!isApiAuthorityCurrent(authority) || err instanceof ApiAuthorityChangedError) return
@@ -450,6 +451,14 @@ export function CommandPalette(props: {
         details: formatErrorDetails(err),
       })
     }
+  }
+
+  function runCommand(cmd: Command | null) {
+    if (!cmd) return
+    const authority = captureApiAuthority()
+    runAfterClose = cmd.runAfterClose ? () => executeCommand(cmd, authority) : undefined
+    close()
+    if (!cmd.runAfterClose) executeCommand(cmd, authority)
   }
 
   // Global hotkey: Cmd+K (mac) / Ctrl+K (others). Captured in capture
@@ -512,6 +521,8 @@ export function CommandPalette(props: {
       onCloseAutoFocus={(event) => {
         const restore = !event.defaultPrevented
         event.preventDefault()
+        const command = runAfterClose
+        runAfterClose = undefined
         if (palette.open()) return
         const target = priorFocus
         priorFocus = null
@@ -520,6 +531,7 @@ export function CommandPalette(props: {
         if (restore && target?.isConnected && target.getClientRects().length > 0) {
           target.focus({ preventScroll: true })
         }
+        command?.()
       }}
     >
       <ComboboxControl<Command>

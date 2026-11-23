@@ -592,13 +592,17 @@ function isCenterWorkbenchPanelOpen(panel: CenterWorkbenchPanel): boolean {
   return centerWorkbenchPanels().some((tab) => tab.panel === panel)
 }
 
-let pendingCenterWorkbenchRevealPanel: CenterWorkbenchPanel | null = null
+type CenterWorkbenchReveal = (view: HTMLElement) => void
+let pendingCenterWorkbenchReveal: { panel: CenterWorkbenchPanel; onReveal?: CenterWorkbenchReveal } | undefined
 
 function revealPendingCenterWorkbenchPanel(): void {
-  const panel = pendingCenterWorkbenchRevealPanel
-  pendingCenterWorkbenchRevealPanel = null
-  if (!panel) return
-  getCenterWorkbenchViews()[panel]?.scrollIntoView({ block: "nearest", inline: "nearest" })
+  const reveal = pendingCenterWorkbenchReveal
+  pendingCenterWorkbenchReveal = undefined
+  if (!reveal) return
+  const view = getCenterWorkbenchViews()[reveal.panel]
+  if (!view) return
+  view.scrollIntoView({ block: "nearest", inline: "nearest" })
+  reveal.onReveal?.(view)
 }
 
 function resetCenterWorkbenchToPrimaryPanel(panel: PrimaryCenterPanel): void {
@@ -702,13 +706,34 @@ function showRightDockForExplicitAction(): void {
   setRightDockVisible(true)
 }
 
-function openRightDockPanel(panel: RightDockPanel): void {
+function openRightDockPanel(panel: RightDockPanel, onReveal?: CenterWorkbenchReveal): void {
   if (panel === "side-chat") {
     requestSideChat()
     return
   }
   showRightDockForExplicitAction()
-  openCenterWorkbenchPanel(panel)
+  openCenterWorkbenchPanel(panel, onReveal)
+}
+
+function openProjectFiles(): void {
+  const origin = document.activeElement
+  const authority = captureApiAuthority()
+  const selectionEpoch = boardStore.selectEpoch
+  const directory = activeDirectory()
+  openRightDockPanel("explorer", (view) => {
+    if (
+      !isApiAuthorityCurrent(authority) ||
+      !ownsWorkspaceSelection(selectionEpoch) ||
+      activeDirectory() !== directory ||
+      !rightDockOpen() ||
+      selectedCenterWorkbenchTab()?.id !== "explorer" ||
+      (document.activeElement !== origin && document.activeElement !== document.body)
+    ) return
+    const input = view.querySelector<HTMLInputElement>('[data-ui="file-explorer-search-input"]')
+    if (input?.isConnected && !input.disabled && input.getClientRects().length > 0) {
+      input.focus({ preventScroll: true })
+    }
+  })
 }
 
 function presentRightDockPanel(panel: RightDockPanel): void {
@@ -1768,7 +1793,7 @@ async function restoreClientLocation(location: ClientWorkspaceLocation, authorit
   await openMissionWithUILifecycle(mission, mission.directory)
 }
 
-function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
+function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel, onReveal?: CenterWorkbenchReveal): void {
   const tab: CenterWorkbenchTab = {
     id: panel,
     panel,
@@ -1779,7 +1804,7 @@ function openCenterWorkbenchPanel(panel: CenterWorkbenchPanel): void {
     return [...current, tab]
   })
   setSelectedCenterWorkbenchTabID(tab.id)
-  scheduleCenterWorkbenchPanelReveal(panel)
+  scheduleCenterWorkbenchPanelReveal(panel, onReveal)
 }
 
 disposers.push(
@@ -1927,11 +1952,11 @@ disposers.push(() => renderRightDockHandleSemanticsOnFrame.cancel())
 const revealPendingCenterWorkbenchPanelOnFrame = createAnimationFrameScheduler(revealPendingCenterWorkbenchPanel)
 disposers.push(() => {
   revealPendingCenterWorkbenchPanelOnFrame.cancel()
-  pendingCenterWorkbenchRevealPanel = null
+  pendingCenterWorkbenchReveal = undefined
 })
 
-function scheduleCenterWorkbenchPanelReveal(panel: CenterWorkbenchPanel): void {
-  pendingCenterWorkbenchRevealPanel = panel
+function scheduleCenterWorkbenchPanelReveal(panel: CenterWorkbenchPanel, onReveal?: CenterWorkbenchReveal): void {
+  pendingCenterWorkbenchReveal = { panel, onReveal }
   revealPendingCenterWorkbenchPanelOnFrame.schedule()
 }
 
@@ -3462,6 +3487,7 @@ function OverlayRoot() {
         </RightDock>
       }
       onOpenRightDockPanel={openRightDockPanel}
+      onOpenProjectFiles={openProjectFiles}
       taskBrowserPreview={taskBrowserPreview}
       onOpenSubagentConversation={openSubagentConversation}
       onOpenRightDockAddMenu={openRightDockAddMenu}

@@ -5169,7 +5169,10 @@ their availability from its current connection and active directory, and passes
 stable action/availability readers through the retained Conversation slot. Both
 entries use the existing explicit Explorer panel opener; browsing needs no
 Task, Chat Session or model execution and retains the current scoped Composer
-draft. A directory-free launcher offers its existing Project selection flow
+draft. Both Browse files entries focus the search input in the revealed Explorer
+for the current Project. The palette runs this command after its focus scope
+closes. Cancelling the palette returns focus to its original owner.
+A directory-free launcher offers its existing Project selection flow
 rather than allocating a Project for file browsing. File navigation, dirty
 decisions and conditional saves keep their original owners.
 Explorer distinguishes an unselected Project from an empty directory or an
