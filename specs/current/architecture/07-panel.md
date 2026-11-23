@@ -2098,8 +2098,11 @@ archived work explains restoration and uses the existing page-level Restore
 action before Board work. The archived header, restore action and failure, and
 read-only composer identify the selected Mission using the current locale.
 The empty Mission context waits for a confirmed matching record, including a
-retained same-record read. Long requests retain native focused-region keyboard
-scrolling. The parent history keymap owns only its directly focused viewport.
+retained same-record read. When this context opens for the current selection,
+its outer viewport starts at the title and request beginning. Automatic
+transcript following pauses while the static context is shown. Long requests
+retain native focused-region keyboard scrolling. The parent history keymap
+owns only its directly focused viewport.
 Opening the already selected source from the Board reveals that conversation
 without another selection epoch, hydration or file-owner transition.
 

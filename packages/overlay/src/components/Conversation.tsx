@@ -524,7 +524,7 @@ export function Conversation(props: {
     if (!layoutRoot) throw new Error("Main conversation layout owner is missing")
     scrollController = setupAutoScroll(el, {
       initialPosition: position && !position.following ? { kind: "position", top: position.top, layoutRoot, ...restoration } : { kind: "bottom" },
-      isTracking: tracking,
+      isTracking: () => tracking() && !missionContextReadingKey(),
       onUserScrollUp: () => changeTracking(false),
       onFollowRequested: () => changeTracking(true),
       onPositionRestored: () => rememberReadingPosition(true),
@@ -647,6 +647,7 @@ export function Conversation(props: {
       projectDirectoryKey(item.directory) !== projectDirectoryKey(source.directory || "")) return null
     return item
   })
+  const missionContextReadingKey = createMemo(() => emptyMissionItem() ? readingKey() : "")
   const currentTaskID = () => (isSessionSource() ? "" : String(activeTaskID() || boardStore.board?.task?.id || ""))
   const taskContextItem = () => {
     if (isSessionSource()) return null
@@ -938,6 +939,10 @@ export function Conversation(props: {
   })
 
   createEffect(on(readingKey, bindReader, { defer: true }))
+  createEffect(on(missionContextReadingKey, (key, previous) => {
+    if (key) el.scrollTop = 0
+    if (key || previous) scrollController?.contentChanged()
+  }))
 
   createEffect(
     on(

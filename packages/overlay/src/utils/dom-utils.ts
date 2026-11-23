@@ -429,7 +429,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   requestAnimationFrame(() => {
     if (disposed || pauseCoveredViewport() || !fullscreenViewportRestored()) return
     syncFollowLockAttribute()
-    if (opts.initialPosition.kind === "bottom") pinToBottom()
+    if (opts.initialPosition.kind === "bottom" && opts.isTracking()) pinToBottom()
     else scheduleFollowScroll()
   })
 
