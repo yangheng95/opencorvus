@@ -1253,6 +1253,9 @@ CodeMirror view's search panel. Go to line opens its native line prompt or
 focuses the already open line input, through either the header action or the
 editor shortcut. On submission the prompt resolves against the live document
 and selection, including after a reload in the same view.
+Invalid line syntax keeps the same prompt open with its typed value, focus and
+localized formatting guidance. Keyboard and pointer submissions share validation
+before the dialog settles.
 Both actions reveal Source from Markdown Preview first; the same draft, history
 and search state stay owned by that editor. The editor publishes these actions
 only for its live view and retires them on cleanup. Deferred focus verifies the

@@ -19,6 +19,7 @@ export function createCodeEditorLocale(views: () => readonly EditorView[]) {
     "replace all": t("code_editor.replace_all"),
     close: t("common.close"),
     "Go to line": t("code_editor.go_to_line"),
+    "Enter a line number such as 42, +2, 50%, or 42:3.": t("code_editor.go_to_line_invalid"),
     go: t("code_editor.go"),
     "current match": t("code_editor.current_match"),
     "on line": t("code_editor.on_line"),

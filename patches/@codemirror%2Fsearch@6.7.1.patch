@@ -1,5 +1,5 @@
 diff --git a/dist/index.cjs b/dist/index.cjs
-index a6db11429e764f772d263aa0936efad8895cf3a4..1e5ccb05d47ff7522473f876d1f8f369a5b8c838 100644
+index a6db11429e764f772d263aa0936efad8895cf3a4..26c6ae7cc7355011b80cb330474b569b583a91e7 100644
 --- a/dist/index.cjs
 +++ b/dist/index.cjs
 @@ -182,8 +182,6 @@ class RegExpCursor {
@@ -121,7 +121,74 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..1e5ccb05d47ff7522473f876d1f8f369
      }
  }
  if (typeof Symbol != "undefined") {
-@@ -340,6 +316,8 @@ const gotoLine = view$1 => {
+@@ -325,21 +301,67 @@ Supports line numbers, relative line offsets prefixed with `+` or
+ column position by adding `:` and a second number after the line
+ number.
+ */
++const goToLineSyntax = /^([+-])?(\d+)?(:\d+)?(%)?$/;
++let goToLineNoticeSequence = 0;
+ const gotoLine = view$1 => {
+-    let { state: state$1 } = view$1;
+-    let line = String(state$1.doc.lineAt(view$1.state.selection.main.head).number);
+-    let { close, result } = view.showDialog(view$1, {
+-        label: state$1.phrase("Go to line"),
+-        input: { type: "text", name: "line", value: line },
++    const initialState = view$1.state;
++    const line = String(initialState.doc.lineAt(initialState.selection.main.head).number);
++    let match;
++    const { close, result } = view.showDialog(view$1, {
+         focus: true,
+-        submitLabel: state$1.phrase("go"),
++        content: () => {
++            const document = view$1.dom.ownerDocument;
++            const form = document.createElement("form");
++            const label = document.createElement("label");
++            const input = document.createElement("input");
++            input.type = "text";
++            input.name = "line";
++            input.value = line;
++            input.className = "cm-textfield";
++            label.append(initialState.phrase("Go to line") + ": ", input);
++            const submit = document.createElement("button");
++            submit.type = "submit";
++            submit.className = "cm-button";
++            submit.textContent = initialState.phrase("go");
++            const notice = document.createElement("span");
++            notice.id = `cm-goto-line-error-${++goToLineNoticeSequence}`;
++            notice.className = "cm-goto-line-error";
++            notice.setAttribute("role", "alert");
++            input.setAttribute("aria-describedby", notice.id);
++            form.append(label, " ", submit, notice);
++            const validate = event => {
++                match = goToLineSyntax.exec(input.value);
++                if (match)
++                    return;
++                event.preventDefault();
++                event.stopImmediatePropagation();
++                input.setAttribute("aria-invalid", "true");
++                notice.textContent = view$1.state.phrase("Enter a line number such as 42, +2, 50%, or 42:3.");
++                input.focus();
++            };
++            form.addEventListener("keydown", event => {
++                if (event.key !== "Enter")
++                    return;
++                if (event.isComposing)
++                    event.stopImmediatePropagation();
++                else
++                    validate(event);
++            }, true);
++            form.addEventListener("submit", validate, true);
++            input.addEventListener("input", () => {
++                input.removeAttribute("aria-invalid");
++                notice.textContent = "";
++            });
++            return form;
++        },
+     });
+     result.then(form => {
+-        let match = form && /^([+-])?(\d+)?(:\d+)?(%)?$/.exec(form.elements["line"].value);
+-        if (!match) {
++        if (!form || !match) {
              view$1.dispatch({ effects: close });
              return;
          }
@@ -130,7 +197,7 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..1e5ccb05d47ff7522473f876d1f8f369
          let startLine = state$1.doc.lineAt(state$1.selection.main.head);
          let [, sign, ln, cl, percent] = match;
          let col = cl ? +cl.slice(1) : 0;
-@@ -711,7 +689,7 @@ class RegExpQuery extends QueryType {
+@@ -711,7 +733,7 @@ class RegExpQuery extends QueryType {
          return cursor.done ? null : cursor.value;
      }
      prevMatchInRange(state, from, to) {
@@ -139,7 +206,7 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..1e5ccb05d47ff7522473f876d1f8f369
              let start = Math.max(from, to - size * 10000 /* FindPrev.ChunkSize */);
              let cursor = regexpCursor(this.spec, state, start, to), range = null;
              while (!cursor.next().done)
-@@ -844,8 +822,10 @@ end.
+@@ -844,8 +866,10 @@ end.
  const findNext = searchCommand((view, { query }) => {
      let { to } = view.state.selection.main;
      let next = query.nextMatch(view.state, to, to);
@@ -151,7 +218,7 @@ index a6db11429e764f772d263aa0936efad8895cf3a4..1e5ccb05d47ff7522473f876d1f8f369
      let selection = state.EditorSelection.single(next.from, next.to);
      let config = view.state.facet(searchConfigFacet);
      view.dispatch({
-@@ -864,8 +844,10 @@ of the document to start searching at the end again.
+@@ -864,8 +888,10 @@ of the document to start searching at the end again.
  const findPrevious = searchCommand((view, { query }) => {
      let { state: state$1 } = view, { from } = state$1.selection.main;
      let prev = query.prevMatch(state$1, from, from);
@@ -194,7 +261,7 @@ index ffb693151c7f9b8e4ecc65875347902029303a7d..70a9c87a36e550d8dd7311bd1b4836c8
  /**
  Add search state to the editor configuration, and optionally
 diff --git a/dist/index.js b/dist/index.js
-index 29bc38236170b060b810870e81805934611a5f06..144617bb5a449ed83ee5dc006ffc8ebd8725cf5a 100644
+index 29bc38236170b060b810870e81805934611a5f06..4f12390131715f2ec5b62f3d48c8bd3ad05bca9c 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -180,8 +180,6 @@ class RegExpCursor {
@@ -316,7 +383,74 @@ index 29bc38236170b060b810870e81805934611a5f06..144617bb5a449ed83ee5dc006ffc8ebd
      }
  }
  if (typeof Symbol != "undefined") {
-@@ -338,6 +314,8 @@ const gotoLine = view => {
+@@ -323,21 +299,67 @@ Supports line numbers, relative line offsets prefixed with `+` or
+ column position by adding `:` and a second number after the line
+ number.
+ */
++const goToLineSyntax = /^([+-])?(\d+)?(:\d+)?(%)?$/;
++let goToLineNoticeSequence = 0;
+ const gotoLine = view => {
+-    let { state } = view;
+-    let line = String(state.doc.lineAt(view.state.selection.main.head).number);
+-    let { close, result } = showDialog(view, {
+-        label: state.phrase("Go to line"),
+-        input: { type: "text", name: "line", value: line },
++    const initialState = view.state;
++    const line = String(initialState.doc.lineAt(initialState.selection.main.head).number);
++    let match;
++    const { close, result } = showDialog(view, {
+         focus: true,
+-        submitLabel: state.phrase("go"),
++        content: () => {
++            const document = view.dom.ownerDocument;
++            const form = document.createElement("form");
++            const label = document.createElement("label");
++            const input = document.createElement("input");
++            input.type = "text";
++            input.name = "line";
++            input.value = line;
++            input.className = "cm-textfield";
++            label.append(initialState.phrase("Go to line") + ": ", input);
++            const submit = document.createElement("button");
++            submit.type = "submit";
++            submit.className = "cm-button";
++            submit.textContent = initialState.phrase("go");
++            const notice = document.createElement("span");
++            notice.id = `cm-goto-line-error-${++goToLineNoticeSequence}`;
++            notice.className = "cm-goto-line-error";
++            notice.setAttribute("role", "alert");
++            input.setAttribute("aria-describedby", notice.id);
++            form.append(label, " ", submit, notice);
++            const validate = event => {
++                match = goToLineSyntax.exec(input.value);
++                if (match)
++                    return;
++                event.preventDefault();
++                event.stopImmediatePropagation();
++                input.setAttribute("aria-invalid", "true");
++                notice.textContent = view.state.phrase("Enter a line number such as 42, +2, 50%, or 42:3.");
++                input.focus();
++            };
++            form.addEventListener("keydown", event => {
++                if (event.key !== "Enter")
++                    return;
++                if (event.isComposing)
++                    event.stopImmediatePropagation();
++                else
++                    validate(event);
++            }, true);
++            form.addEventListener("submit", validate, true);
++            input.addEventListener("input", () => {
++                input.removeAttribute("aria-invalid");
++                notice.textContent = "";
++            });
++            return form;
++        },
+     });
+     result.then(form => {
+-        let match = form && /^([+-])?(\d+)?(:\d+)?(%)?$/.exec(form.elements["line"].value);
+-        if (!match) {
++        if (!form || !match) {
              view.dispatch({ effects: close });
              return;
          }
@@ -325,7 +459,7 @@ index 29bc38236170b060b810870e81805934611a5f06..144617bb5a449ed83ee5dc006ffc8ebd
          let startLine = state.doc.lineAt(state.selection.main.head);
          let [, sign, ln, cl, percent] = match;
          let col = cl ? +cl.slice(1) : 0;
-@@ -709,7 +687,7 @@ class RegExpQuery extends QueryType {
+@@ -709,7 +731,7 @@ class RegExpQuery extends QueryType {
          return cursor.done ? null : cursor.value;
      }
      prevMatchInRange(state, from, to) {
@@ -334,7 +468,7 @@ index 29bc38236170b060b810870e81805934611a5f06..144617bb5a449ed83ee5dc006ffc8ebd
              let start = Math.max(from, to - size * 10000 /* FindPrev.ChunkSize */);
              let cursor = regexpCursor(this.spec, state, start, to), range = null;
              while (!cursor.next().done)
-@@ -842,8 +820,10 @@ end.
+@@ -842,8 +864,10 @@ end.
  const findNext = /*@__PURE__*/searchCommand((view, { query }) => {
      let { to } = view.state.selection.main;
      let next = query.nextMatch(view.state, to, to);
@@ -346,7 +480,7 @@ index 29bc38236170b060b810870e81805934611a5f06..144617bb5a449ed83ee5dc006ffc8ebd
      let selection = EditorSelection.single(next.from, next.to);
      let config = view.state.facet(searchConfigFacet);
      view.dispatch({
-@@ -862,8 +842,10 @@ of the document to start searching at the end again.
+@@ -862,8 +886,10 @@ of the document to start searching at the end again.
  const findPrevious = /*@__PURE__*/searchCommand((view, { query }) => {
      let { state } = view, { from } = state.selection.main;
      let prev = query.prevMatch(state, from, from);

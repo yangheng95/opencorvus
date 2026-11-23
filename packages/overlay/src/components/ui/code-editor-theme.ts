@@ -158,6 +158,12 @@ const overlayEditorTheme = EditorView.theme({
     borderRadius: "var(--oc-radius-soft)",
   },
   ".cm-textfield": { backgroundColor: "var(--surface-strong)", caretColor: "var(--accent)" },
+  ".cm-goto-line-error": {
+    display: "block",
+    color: "var(--bad)",
+    fontSize: "var(--ui-font-secondary)",
+    overflowWrap: "anywhere",
+  },
   ".cm-button, .cm-button:active": { backgroundColor: "var(--subtle-2)", backgroundImage: "none" },
   ".cm-button:hover": { backgroundColor: "var(--subtle-3)" },
   ".cm-textfield:focus-visible, .cm-button:focus-visible, .cm-panel.cm-search [name=close]:focus-visible": {
