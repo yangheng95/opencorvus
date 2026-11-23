@@ -209,6 +209,7 @@ export function FileChangesView(props: FileChangesViewProps) {
   const [hideNonTextFiles, setHideNonTextFiles] = createSignal(false)
   const [fileListVisible, setFileListVisible] = createSignal(true)
   const fileListID = createUniqueId()
+  const filterKeyboardHintID = createUniqueId()
   const resetFilters = () => {
     setFilterQuery("")
     setStatusFilter("all")
@@ -366,6 +367,10 @@ export function FileChangesView(props: FileChangesViewProps) {
 
   const selectRow = (row: ChangeRowModel) => setSelectedRowKey(row.key)
 
+  const scrollRenderedRowIntoView = (row: ChangeRowModel) => {
+    listEl?.querySelector(`#change-row-${row.index}`)?.scrollIntoView({ block: "nearest", inline: "nearest" })
+  }
+
   const focusExactRow = (row: ChangeRowModel) => {
     resetFilters()
     setFileListVisible(true)
@@ -375,10 +380,7 @@ export function FileChangesView(props: FileChangesViewProps) {
       if (position >= 0 && shouldVirtualizeRows()) rowVirtualizer?.scrollToIndex(position)
       window.requestAnimationFrame(() => {
         const current = allRows().find((candidate) => candidate.key === row.key)
-        if (current)
-          document
-            .getElementById(`change-row-${current.index}`)
-            ?.scrollIntoView({ block: "nearest", inline: "nearest" })
+        if (current) scrollRenderedRowIntoView(current)
       })
     })
   }
@@ -399,6 +401,8 @@ export function FileChangesView(props: FileChangesViewProps) {
     if (props.groupsSettled ?? true) failReviewFocus(request.id)
   })
 
+  const canBrowseFilterResults = () => Boolean(filterQuery().trim()) && filteredRows().length > 0
+
   const focusFilterInput = () => {
     if (!shouldShowFilter()) return false
     filterInputEl?.focus()
@@ -412,9 +416,12 @@ export function FileChangesView(props: FileChangesViewProps) {
     }
   }
 
-  const scrollToSelectedItem = (key: string) => {
-    const position = filteredRows().findIndex((row) => row.key === key)
-    if (position >= 0 && shouldVirtualizeRows()) rowVirtualizer?.scrollToIndex(position)
+  const scrollToFocusedRow = (key: string) => {
+    const rows = filteredRows()
+    const position = rows.findIndex((row) => row.key === key)
+    if (position < 0) return
+    if (shouldVirtualizeRows()) rowVirtualizer?.scrollToIndex(position)
+    else scrollRenderedRowIntoView(rows[position]!)
   }
 
   const onFilterKeyDown = (event: KeyboardEvent) => {
@@ -530,64 +537,73 @@ export function FileChangesView(props: FileChangesViewProps) {
 
           <Show when={allRows().length > 1}>
             <aside id={fileListID} class="changes-file-pane" hidden={!fileListVisible()} aria-label={t("section.files")}>
-              <Show when={shouldShowFilter()}>
-                <div class="changes-toolbar">
-                  <SearchField
-                    clearable
-                    class="changes-filter-field"
-                    inputRef={(element) => {
-                      filterInputEl = element
-                    }}
-                    inputDataUI="file-changes-search-input"
-                    value={filterQuery()}
-                    placeholder={t("files.filter_placeholder")}
-                    onValueChange={setFilterQuery}
-                    onKeyDown={onFilterKeyDown}
-                    clearLabel={t("files.clear_filter")}
-                    clearDataUI="file-changes-search-clear"
-                  />
-                </div>
-              </Show>
-
-              <Show when={allRows().length > 0}>
-                <div class="changes-status-strip">
-                  <div class="changes-status-filter-group">
-                    <SegmentedControl<ChangeStatusFilter>
-                      options={statusFilterOptions()}
-                      value={statusFilter()}
-                      onChange={setStatusFilter}
-                      onActivate={setStatusFilter}
-                      ariaLabel={t("files.status_filter_label")}
-                      class="changes-status-filter"
-                      itemAttributes={(option) => ({
-                        "data-ui": "file-changes-status-filter-option",
-                        "data-status": option.value,
-                        "data-size": "sm",
-                      })}
+              <div class="changes-file-controls">
+                <Show when={shouldShowFilter()}>
+                  <div class="changes-toolbar">
+                    <SearchField
+                      clearable
+                      class="changes-filter-field"
+                      inputRef={(element) => {
+                        filterInputEl = element
+                      }}
+                      inputDataUI="file-changes-search-input"
+                      value={filterQuery()}
+                      placeholder={t("files.filter_placeholder")}
+                      ariaDescribedBy={canBrowseFilterResults() ? filterKeyboardHintID : undefined}
+                      ariaKeyShortcuts={canBrowseFilterResults() ? "ArrowUp ArrowDown" : undefined}
+                      resultFocusTarget={() => canBrowseFilterResults() ? listEl : undefined}
+                      onValueChange={setFilterQuery}
+                      onKeyDown={onFilterKeyDown}
+                      clearLabel={t("files.clear_filter")}
+                      clearDataUI="file-changes-search-clear"
                     />
                   </div>
-                  <div class="changes-filter-summary">
-                    <Checkbox
-                      class="changes-non-text-filter"
-                      data-ui="file-changes-non-text-filter"
-                      checked={hideNonTextFiles()}
-                      onChange={setHideNonTextFiles}
-                    >
-                      {t("files.hide_non_text")}
-                    </Checkbox>
-                    <p class="changes-status-explanation" role="status" aria-atomic="true">
-                      {t("files.filter_result_count", {
-                        shown: filteredRows().length.toLocaleString(localeTag()),
-                        total: allRows().length.toLocaleString(localeTag()),
-                      })}
-                    </p>
-                  </div>
-                </div>
-              </Show>
+                </Show>
 
-              <Show when={statusFilter() === "changed"}>
-                <p class="changes-status-explanation">{t("files.status.changed_hint")}</p>
-              </Show>
+                <Show when={canBrowseFilterResults()}>
+                  <p class="changes-status-explanation" id={filterKeyboardHintID}>{t("files.filter_keyboard_hint")}</p>
+                </Show>
+
+                <Show when={allRows().length > 0}>
+                  <div class="changes-status-strip">
+                    <div class="changes-status-filter-group">
+                      <SegmentedControl<ChangeStatusFilter>
+                        options={statusFilterOptions()}
+                        value={statusFilter()}
+                        onChange={setStatusFilter}
+                        onActivate={setStatusFilter}
+                        ariaLabel={t("files.status_filter_label")}
+                        class="changes-status-filter"
+                        itemAttributes={(option) => ({
+                          "data-ui": "file-changes-status-filter-option",
+                          "data-status": option.value,
+                          "data-size": "sm",
+                        })}
+                      />
+                    </div>
+                    <div class="changes-filter-summary">
+                      <Checkbox
+                        class="changes-non-text-filter"
+                        data-ui="file-changes-non-text-filter"
+                        checked={hideNonTextFiles()}
+                        onChange={setHideNonTextFiles}
+                      >
+                        {t("files.hide_non_text")}
+                      </Checkbox>
+                      <p class="changes-status-explanation" role="status" aria-atomic="true">
+                        {t("files.filter_result_count", {
+                          shown: filteredRows().length.toLocaleString(localeTag()),
+                          total: allRows().length.toLocaleString(localeTag()),
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </Show>
+
+                <Show when={statusFilter() === "changed"}>
+                  <p class="changes-status-explanation">{t("files.status.changed_hint")}</p>
+                </Show>
+              </div>
               <ListboxRoot<ChangeRowModel>
                 ref={listEl}
                 class="changes-list"
@@ -602,7 +618,7 @@ export function FileChangesView(props: FileChangesViewProps) {
                 onChange={(keys) => setSelectedRowKey([...keys][0] ?? "")}
                 disallowEmptySelection={filteredRows().length > 0}
                 virtualized
-                scrollToItem={scrollToSelectedItem}
+                scrollToItem={scrollToFocusedRow}
                 onKeyDown={onListShortcutKeyDown}
               >
                 {(collection) => {
