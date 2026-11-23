@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [单项重命名和移动冲突的实页截图](2026-11-23-explorer-single-transfer-conflict-retry/README.md)
 - [Markdown 视图切换的实页截图](2026-11-23-markdown-source-preview-reading-position/README.md)
 - [日志刷新失败保留上次结果的实页截图](2026-11-23-log-refresh-retains-last-read/README.md)
 - [记忆设置项目搜索实页截图](2026-11-23-memory-project-picker-search/README.md)
