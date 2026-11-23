@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务搜索焦点的真实桌面截图](2026-11-24-scheduled-return-to-search/README.md)
 - [归档搜索焦点的真实桌面截图](2026-11-24-archive-return-to-search/README.md)
 - [更新日志搜索焦点的真实桌面截图](2026-11-24-release-history-return-to-search/README.md)
 - [更新日志搜索摘要的真实桌面截图](2026-11-24-release-search-excerpts/README.md)
