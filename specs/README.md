@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [切换界面语言后保留键盘工作的预览](records/2026-11/2026-11-24-work-ledger-preview-after-menu.md)
 - [工作侧栏的键盘预览随当前焦点显示](records/2026-11/2026-11-24-work-ledger-preview-input-priority.md)
 - [键盘展开工作侧栏后聚焦第一条新显示的工作](records/2026-11/2026-11-24-work-ledger-expanded-row-focus.md)
 - [展开收件箱消息时显示完整标题](records/2026-11/2026-11-24-mailbox-expanded-subject.md)
