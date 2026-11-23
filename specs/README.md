@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [全图预览按当前窗口适应图像](records/2026-11/2026-11-23-image-preview-fit-current-viewport.md)
 - [多步任务技能搜索支持方向键进入结果](records/2026-11/2026-11-23-mission-skill-search-keyboard-entry.md)
 - [定时编辑器按城市和地区词查找时区](records/2026-11/2026-11-23-scheduled-time-zone-city-search.md)
 - [多步任务草稿可在原编辑框审阅并发版本](records/2026-11/2026-11-23-mission-draft-conflict-review.md)

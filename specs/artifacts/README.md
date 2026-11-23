@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [全图预览窗口尺寸变化的实页截图](2026-11-23-image-preview-fit-current-viewport/README.md)
 - [多步任务技能搜索方向键的实页截图](2026-11-23-mission-skill-search-keyboard-entry/README.md)
 - [定时任务时区搜索的桌面证据](2026-11-23-scheduled-time-zone-city-search/README.md)
 - [多步任务并发草稿的桌面证据](2026-11-23-mission-draft-conflict-review/README.md)
