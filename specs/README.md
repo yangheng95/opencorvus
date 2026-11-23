@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [更新日志的搜索摘要](records/2026-11/2026-11-24-release-search-excerpts.md)
 - [设置搜索的匹配结果导航](records/2026-11/2026-11-24-settings-search-match-navigation.md)
 - [用量模型表的短表头与间距](records/2026-11/2026-11-24-usage-model-table-density.md)
 - [用量周期比较的微小变化](records/2026-11/2026-11-24-usage-comparison-small-changes.md)
