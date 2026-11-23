@@ -7,7 +7,7 @@ import { Feedback } from "../ui/Feedback"
 // • Project MCP servers with add/remove and connection actions
 // All CRUD operations are self-contained — no dependency on static HTML dialogs.
 
-import { createEffect, createSignal, createMemo, For, on, onCleanup, Show } from "solid-js"
+import { createEffect, createSignal, createMemo, createUniqueId, For, on, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { Key } from "@solid-primitives/keyed"
 import type { McpProjectStatusResponse, SkillInstalledResponse } from "@opencorvus-ai/sdk"
@@ -1043,6 +1043,9 @@ function SharedResourceManagementPanel(props: {
   })
 
   const [showAddMcp, setShowAddMcp] = createSignal(false)
+  const mcpAddFormID = createUniqueId()
+  let mcpAddTrigger: HTMLButtonElement | undefined
+  let mcpAddNameInput: HTMLInputElement | undefined
   const initialMcpForm = {
     name: "",
     type: "remote" as "remote" | "local",
@@ -1071,6 +1074,28 @@ function SharedResourceManagementPanel(props: {
     if (mcpForm.credentialType === "none") return true
     return Boolean(mcpForm.credentialSecret.trim()) &&
       (mcpForm.credentialType === "bearer" || Boolean(mcpForm.credentialName.trim()))
+  }
+
+  function dismissMcpAddForm() {
+    mcpAddTrigger?.focus()
+    setShowAddMcp(false)
+  }
+
+  function toggleMcpAddForm() {
+    if (loading()) return
+    if (showAddMcp()) {
+      dismissMcpAddForm()
+      return
+    }
+
+    const directory = selectedDirectory()
+    const authority = captureApiAuthority()
+    const previousFocus = document.activeElement
+    setShowAddMcp(true)
+    queueMicrotask(() => {
+      if (!mcpPanelActive() || !showAddMcp() || selectedDirectory() !== directory || !isApiAuthorityCurrent(authority)) return
+      if (document.activeElement === previousFocus && mcpAddNameInput?.isConnected) mcpAddNameInput.focus()
+    })
   }
 
   function closeAndClearMcpForm() {
@@ -1786,12 +1811,12 @@ function SharedResourceManagementPanel(props: {
                 data-ui="tool-panel-action"
                 title={t("mcp.add_action")}
                 aria-label={t("mcp.add_action")}
-                disabled={loading()}
-                onClick={() =>
-                  runPanelAction(t("mcp.add_action"), () => {
-                    setShowAddMcp(!showAddMcp())
-                  })
-                }
+                aria-expanded={showAddMcp()}
+                aria-controls={showAddMcp() ? mcpAddFormID : undefined}
+                aria-disabled={loading() || undefined}
+                aria-busy={loading() || undefined}
+                ref={mcpAddTrigger}
+                onClick={() => runPanelAction(t("mcp.add_action"), toggleMcpAddForm)}
               >
                 <Icon name="plus" />
                 <span class="tool-panel-action-label">{t("mcp.add_action")}</span>
@@ -1818,6 +1843,7 @@ function SharedResourceManagementPanel(props: {
             {/* Add MCP inline form */}
             <Show when={showAddMcp()}>
               <form
+                id={mcpAddFormID}
                 class="config-inline-form"
                 spellcheck={false}
                 noValidate
@@ -1830,6 +1856,7 @@ function SharedResourceManagementPanel(props: {
                   <TextField.Label>{t("mcp.name")}</TextField.Label>
                   {/* Fixed MCP server-name example. */}
                   <TextField.Input
+                    ref={mcpAddNameInput}
                     type="text"
                     value={mcpForm.name}
                     placeholder="exa"
@@ -1949,7 +1976,7 @@ function SharedResourceManagementPanel(props: {
                 </Show>
                 {renderNotice("mcp-add")}
                 <div class="dialog-actions compact">
-                  <Button type="button" variant="ghost" size="md" tone="neutral" onClick={() => setShowAddMcp(false)}>
+                  <Button type="button" variant="ghost" size="md" tone="neutral" onClick={dismissMcpAddForm}>
                     {t("common.cancel")}
                   </Button>
                   <Button

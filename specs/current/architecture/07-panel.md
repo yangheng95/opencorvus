@@ -6034,6 +6034,11 @@ instead of showing project management controls. Confirmation keeps the page and
 renders the newly selected project; cancellation keeps the selection prompt.
 The add-server draft belongs to the selected project and connection. An
 accepted add reply clears the form when it still matches the submitted draft.
+The Add MCP disclosure exposes its expanded state and links to the mounted
+form. Opening focuses the name input while the project, connection and initiating
+focus remain current. Manual dismissal returns focus to the disclosure and keeps
+the same draft. While a connection action is pending, the disclosure stays
+focusable and reports its unavailable state.
 The form submits the authored name verbatim. When the name has leading or
 trailing whitespace, the field explains that those characters will be saved
 and describes the current Chat and Work assignment requirement.
