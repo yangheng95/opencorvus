@@ -5968,8 +5968,10 @@ the background, while installation requires an explicit restart confirmation.
 
 SettingsGroup and SettingsDetailSection share SettingsSectionHeader: one title,
 description and action composition, with wrapping text and one separator. The
-shared panel owns section spacing and rows own list density; individual panels
-do not restyle that hierarchy. Settings use flat neutral surfaces, including
+title and description retain a readable column. Actions wrap to a separate row
+when their combined width would squeeze that column. The shared panel owns
+section spacing and rows own list density. Individual panels follow that
+hierarchy. Settings use flat neutral surfaces, including
 About and Usage. Semantic colors remain for status and analytical graphics.
 Network and Provider result/error notices use the shared Feedback primitive.
 Skill Library labels use the interface language. The install form derives its

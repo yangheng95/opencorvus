@@ -194,9 +194,10 @@
 }
 
 .s-section-copy {
-  flex: 1;
+  flex: 1 1 min(100%, 24ch);
   min-width: 0;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ui-gap-xs);
 }
 
@@ -214,6 +215,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--ui-gap-sm);
+  max-inline-size: 100%;
   flex-shrink: 0;
   flex-wrap: wrap;
   justify-content: flex-end;
