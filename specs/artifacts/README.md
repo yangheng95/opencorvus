@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目路径提示视口裁切与修复的真实桌面截图](2026-11-24-work-ledger-project-tooltip-viewport/README.md)
 - [项目层展开按钮的真实桌面截图](2026-11-24-work-ledger-project-group-count/README.md)
 - [展开工作列表前的数量与范围截图](2026-11-24-work-ledger-disclosure-count/README.md)
 - [切换语言菜单后工作预览的真实桌面截图](2026-11-24-work-ledger-preview-after-menu/README.md)
