@@ -10,3 +10,6 @@ Windows 隔离项目开发页面，使用真实多步任务草稿及本地未保
 | [04](04-baseline-en-160-keep-editing-retains-local-tail.jpg) | 继续编辑回到原光标，未保存末行保留。 |
 | [05](05-baseline-en-160-reopen-starts-in-middle.jpg) | 放弃临时文字再开同一草稿，旧初始位置稳定复现。 |
 | [06](06-baseline-en-160-keyboard-home-shows-request-start.jpg) | Ctrl+Home 显示原始第一项，确认当前值的开头已存在。 |
+| [07](07-baseline-zh-160-board-opens-mid-request.jpg) | 简体中文看板打开同一长草稿也从约第 10 项开始。 |
+| [08](08-first-candidate-en-100-short-caret-after-value.jpg) | 首个候选的短草稿仍将光标放到已保存文字末尾。 |
+| [09](09-first-candidate-en-160-value-overrides-initial-caret.jpg) | 首轮同步设置的起点被原生赋值覆盖，长草稿仍从中间显示。 |
