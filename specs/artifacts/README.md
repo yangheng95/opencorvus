@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [高级定时星期转换的真实桌面截图](2026-11-23-scheduled-weekday-from-advanced-rule/README.md)
 - [高级定时规则转换的真实桌面截图](2026-11-23-scheduled-advanced-rule-from-calendar/README.md)
 - [看板打开后的键盘焦点真实桌面截图](2026-11-23-mission-board-open-reading-focus/README.md)
 - [同一草稿返回阅读位置的真实桌面截图](2026-11-23-mission-context-board-return-reading/README.md)
