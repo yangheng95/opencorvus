@@ -305,6 +305,10 @@ function WorkLedgerKindMark(props: { row: WorkLedgerItemRow }) {
   )
 }
 
+function isSettingsSearchControl(target: EventTarget | null): boolean {
+  return target instanceof Element && !!target.closest(".config-search")
+}
+
 function WorkLedgerNavigationAction(props: {
   "data-ui": string
   icon: IconName
@@ -316,8 +320,27 @@ function WorkLedgerNavigationAction(props: {
   active?: boolean
   onClick: () => void
 }) {
+  const [hintOpen, setHintOpen] = createSignal(false)
+
+  createEffect(() => {
+    if (!hintOpen()) return
+    const onFocusIn = (event: FocusEvent) => {
+      if (isSettingsSearchControl(event.target)) setHintOpen(false)
+    }
+    document.addEventListener("focusin", onFocusIn, true)
+    onCleanup(() => document.removeEventListener("focusin", onFocusIn, true))
+  })
+
   return (
-    <Tooltip.Root openDelay={180} closeDelay={80} placement="right" gutter={8} fitViewport>
+    <Tooltip.Root
+      open={hintOpen()}
+      onOpenChange={(open) => setHintOpen(open && !isSettingsSearchControl(document.activeElement))}
+      openDelay={180}
+      closeDelay={80}
+      placement="right"
+      gutter={8}
+      fitViewport
+    >
       <Tooltip.Trigger
         as={Button}
         type="button"

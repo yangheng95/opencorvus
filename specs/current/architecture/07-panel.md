@@ -2489,6 +2489,9 @@ background without adding a sequential stop. Escape remains scoped to that
 region and its contents. Nested action dialogs keep the shared modal primitive.
 WorkLedger navigation hints use the workspace overlay layer. A titlebar menu
 paints above these hints even while the pointer remains on their trigger.
+The Settings search dismisses open WorkLedger navigation hints when its
+controls take focus. Pending hint requests also respect the current focus, so
+the search field remains visible and owns its regular Escape sequence.
 The Memory project picker derives display order from its loaded options and the
 current interface locale. Language changes reorder the same option objects,
 retaining the selected Project, document scope and open conversation. Loading
