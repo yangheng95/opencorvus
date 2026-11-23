@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从文件结果返回搜索输入框](2026-11-23-explorer-result-return-to-search.md)
 - [每周定时编辑保留高级规则星期](2026-11-23-scheduled-weekday-from-advanced-rule.md)
 - [高级定时规则接续当前日程](2026-11-23-scheduled-advanced-rule-from-calendar.md)
 - [从看板打开多步任务后可直接用键盘阅读](2026-11-23-mission-board-open-reading-focus.md)
