@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [按界面语言显示笔记来源](2026-11-23-memory-note-source-localization.md)
 - [用方向键浏览已提交的笔记搜索结果](2026-11-23-memory-note-result-navigation.md)
 - [连续浏览多步任务专家团匹配项](2026-11-23-mission-squad-result-navigation.md)
 - [连续浏览多步任务技能搜索结果](2026-11-23-mission-skill-result-navigation.md)

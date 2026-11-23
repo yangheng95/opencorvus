@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [笔记来源本地化的真实桌面截图](2026-11-23-memory-note-source-localization/README.md)
 - [笔记搜索结果方向键的真实桌面截图](2026-11-23-memory-note-result-navigation/README.md)
 - [多步任务专家团结果方向键的真实桌面截图](2026-11-23-mission-squad-result-navigation/README.md)
 - [多步任务技能结果方向键的真实桌面截图](2026-11-23-mission-skill-result-navigation/README.md)
