@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [模型服务商内联表单的真实桌面截图](2026-11-24-provider-form-focus-handoff/README.md)
 - [模型服务商搜索结果的真实桌面截图](2026-11-24-provider-search-keyboard-navigation/README.md)
 - [定时任务多词检索的真实桌面截图](2026-11-24-scheduled-automation-multi-term-search/README.md)
 - [定时任务详情返回的真实桌面截图](2026-11-24-scheduled-automation-detail-return-focus/README.md)

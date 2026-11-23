@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [模型服务商新增和编辑焦点交接](2026-11-24-provider-form-focus-handoff.md)
 - [模型服务商搜索结果键盘导航](2026-11-24-provider-search-keyboard-navigation.md)
 - [定时任务列表跨字段多词搜索](2026-11-24-scheduled-automation-multi-term-search.md)
 - [定时任务详情返回原计划行](2026-11-24-scheduled-automation-detail-return-focus.md)
