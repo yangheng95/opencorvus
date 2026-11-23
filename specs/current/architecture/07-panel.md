@@ -2160,6 +2160,11 @@ Returning from scheduled-task details focuses the list search during its read.
 Once the current read settles, it restores the same definition's available row
 by ID while focus still belongs to that handoff. Interacting with the search or
 moving focus keeps the user's chosen position.
+While reading scheduled-task details, the same sticky toolbar used by release
+notes keeps the existing return button at the settings scrollport's top edge.
+The detail surface clips its contents without taking over settings scrolling.
+The scrollport reserves that toolbar's height for native focus scrolling within
+the visible scheduled-task detail.
 
 Paused definitions present an explicit localized automatic-runs-paused state in
 both list and detail. Their retained calendar frontier remains the authority for

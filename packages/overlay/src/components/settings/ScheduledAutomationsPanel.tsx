@@ -1315,7 +1315,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       </div>
 
       <SettingsGroup>
-        <SettingsSurface class="automations-layout" data-drill-in={showForm() || selected() ? "true" : undefined}>
+        <SettingsSurface class="automations-layout" data-drill-in={showForm() ? "form" : selected() ? "detail" : undefined}>
           <Show when={displayedError()}>
             {(problem) => (
               <Feedback
@@ -1526,19 +1526,21 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   >
                     {(automation) => (
                       <div class="automation-detail-view">
-                      <Button
-                        ref={detailBackButton}
-                        type="button"
-                        class="automation-back"
-                        variant="ghost"
-                        size="sm"
-                        tone="neutral"
-                        disabled={Boolean(busyAction()) || checkingStatus()}
-                        onClick={() => returnToList(automation().id)}
-                      >
-                        <Icon name="nav-back" />
-                        {t("automations.back")}
-                      </Button>
+                      <div class="settings-detail-toolbar automation-detail-toolbar">
+                        <Button
+                          ref={detailBackButton}
+                          type="button"
+                          class="automation-back"
+                          variant="ghost"
+                          size="sm"
+                          tone="neutral"
+                          disabled={Boolean(busyAction()) || checkingStatus()}
+                          onClick={() => returnToList(automation().id)}
+                        >
+                          <Icon name="nav-back" />
+                          {t("automations.back")}
+                        </Button>
+                      </div>
                       <header class="automation-detail-header">
                         <div>
                           <div class="automation-detail-heading">

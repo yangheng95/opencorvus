@@ -1586,6 +1586,7 @@ button.s-row:focus-visible {
 /* Content and heading use one inset and bounded column. */
 .config-content {
   --settings-content-inset: var(--ui-gap-3xl);
+  --settings-detail-toolbar-padding-block: var(--ui-gap-sm);
   position: relative;
   flex: 1;
   min-width: 0;
@@ -1597,6 +1598,16 @@ button.s-row:focus-visible {
   background: var(--bg);
   container-name: settings-content;
   container-type: inline-size;
+}
+
+.settings-detail-toolbar {
+  position: sticky;
+  /* Cover the scrolling text in the Settings top inset once the toolbar sticks. */
+  inset-block-start: calc(-1 * var(--settings-content-inset));
+  z-index: var(--ui-z-sticky);
+  padding-block: var(--settings-detail-toolbar-padding-block);
+  border-block-end: var(--oc-border-width) solid var(--divider-soft);
+  background: var(--bg);
 }
 
 .config-page-title {
@@ -1825,16 +1836,6 @@ button.s-row:focus-visible {
 
 .release-notes-toolbar {
   justify-content: space-between;
-}
-
-.release-notes-toolbar--detail {
-  position: sticky;
-  /* Cover the scrolling text in the Settings top inset once the toolbar sticks. */
-  inset-block-start: calc(-1 * var(--settings-content-inset));
-  z-index: var(--ui-z-sticky);
-  padding-block: var(--ui-gap-sm);
-  border-block-end: var(--oc-border-width) solid var(--divider-soft);
-  background: var(--bg);
 }
 
 .release-notes-toolbar .search-field {
