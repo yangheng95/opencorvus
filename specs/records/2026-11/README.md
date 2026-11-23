@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多步任务草稿可在原编辑框审阅并发版本](2026-11-23-mission-draft-conflict-review.md)
 - [PDF 缩放保持正在阅读的位置](2026-11-23-pdf-zoom-reading-anchor.md)
 - [侧栏项目展开按钮指向各自内容](2026-11-23-sidebar-project-disclosure-identity.md)
 - [单项重命名和移动保留冲突输入](2026-11-23-explorer-single-transfer-conflict-retry.md)
