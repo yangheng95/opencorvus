@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [跳转到行可在原输入框纠正格式](2026-11-23-editor-go-to-line-validation.md)
 - [输入区引用键盘游标滚入可见区域](2026-11-23-composer-reference-visible-focus.md)
 - [输入区切换引用时保留键盘焦点](2026-11-23-composer-reference-toggle-focus.md)
 - [输入区显示完整市场专家团名称](2026-11-23-composer-market-squad-titles.md)
