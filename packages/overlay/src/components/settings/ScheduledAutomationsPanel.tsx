@@ -413,7 +413,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     (filter() === "all" || automation.status === filter()) &&
     (scopeFilter() === "all" || automation.target.scope === scopeFilter()),
   ))
-  const searchQuery = () => search().trim().toLocaleLowerCase()
+  const searchQuery = () => search().trim()
   const projectSearchIncomplete = () => Boolean(searchQuery()) && projectRead().status !== "ready" &&
     scopedAutomations().some(({ target }) => target.scope === "project")
   const sessionTitles = createMemo(() => {
@@ -429,18 +429,19 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const filteredAutomations = createMemo(() => {
     const query = searchQuery()
     if (!query) return scopedAutomations()
-    const matches = (value: string | undefined) => value?.toLocaleLowerCase().includes(query)
     return scopedAutomations().filter(({ name, prompt, recurrence, target, targetSession }) => {
       const parsed = parseAutomationRecurrence(recurrence)
       const wallTime = parsed.preset === "custom" ? undefined : parsed.time
-      if ([name, prompt, recurrenceSummary(parsed), recurrence, wallTime].some(matches)) return true
+      const fields = [name, prompt, recurrenceSummary(parsed), recurrence, wallTime]
       if (target.scope === "session") {
-        return [target.sessionId, targetSession?.title, targetSession?.directory].some(matches)
+        fields.push(target.sessionId, targetSession?.title, targetSession?.directory)
+      } else if (target.scope === "project") {
+        for (const id of target.projectIds) {
+          const project = projectsByID().get(id)
+          fields.push(id, project?.name, project?.directory)
+        }
       }
-      return target.scope === "project" && target.projectIds.some((id) => {
-        const project = projectsByID().get(id)
-        return [id, project?.name, project?.directory].some(matches)
-      })
+      return matchesSearchTerms(query, fields)
     })
   })
   function targetLabel({ target, targetSession }: AutomationView): string {
@@ -466,7 +467,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       ? t("automations.delete_named", { name: automation.name })
       : t("automations.delete_named_in_target", { name: automation.name, target: targetLabel(automation) })
   }
-  const filtersActive = createMemo(() => Boolean(search().trim()) || filter() !== "all" || scopeFilter() !== "all")
+  const filtersActive = createMemo(() => Boolean(searchQuery()) || filter() !== "all" || scopeFilter() !== "all")
   const initialLoadError = createMemo(() => {
     const problem = error()
     return automations().length === 0 && problem?.source === "list-load" ? problem : null

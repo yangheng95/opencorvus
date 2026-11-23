@@ -2140,6 +2140,9 @@ calendar parser. Basic frequency, weekday names and wall-clock times use the
 current interface locale and keep the rule's time zone. An advanced recurrence
 has a concise summary and a disclosure with the complete stored rule. Search
 also reads the technical rule and the basic clock in its authored format.
+The scheduled-task list matches all space-separated terms within each definition's
+metadata, including the definition's bound target fields. The shared matcher
+allows those terms to occur in any order and across fields of that definition.
 The next scheduled instant displays seconds when it falls outside a whole minute.
 The machine calendar service owns parsing, serialization and edit comparison,
 without a parallel hard-coded English presentation export.
