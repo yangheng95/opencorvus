@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [模型服务商搜索结果键盘导航](records/2026-11/2026-11-24-provider-search-keyboard-navigation.md)
 - [定时任务列表跨字段多词搜索](records/2026-11/2026-11-24-scheduled-automation-multi-term-search.md)
 - [定时任务详情返回原计划行](records/2026-11/2026-11-24-scheduled-automation-detail-return-focus.md)
 - [定时任务筛选结果键盘导航](records/2026-11/2026-11-24-scheduled-automation-search-keyboard.md)
