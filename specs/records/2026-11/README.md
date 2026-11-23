@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [0.1.53 发布](2026-11-23-release-0.1.53.md)
 - [设置导航让键盘焦点随标签列表滚动](2026-11-23-settings-tablist-scroll-owner.md)
 - [设置搜索接管焦点时退场导航提示](2026-11-23-settings-search-dismiss-navigation-tooltip.md)
 - [工作区导航提示的绘制层](2026-11-23-navigation-tooltip-workspace-layer.md)

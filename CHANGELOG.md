@@ -4,6 +4,60 @@
 
 ## 未发布
 
+## 0.1.53 - 2026-11-23
+
+### zh-CN
+
+#### 新增
+
+- 文件工作台支持跳转到行，PDF（Portable Document Format，便携文档格式）阅读器支持直接输入页码。资源管理器可搜索项目文件夹和项目内完整路径、复制完整路径，并打开文件所在目录。
+- 在当前项目技能库和对话能力设置中搜索已安装技能；记忆设置支持按项目名称或目录查找，日志搜索显示已加载内容的匹配数量。
+- 归档、更新日志、多步任务技能与专家团搜索支持从搜索框用方向键进入结果，输入区引用也能保持可见的键盘选择。
+
+#### 调整
+
+- 图像预览按当前窗口适应完整图片并显示固有尺寸；PDF 缩放、Markdown 源码与预览切换保留阅读位置。文本比较明确标出纯换行格式变化，不能预览的文件在下载前显示实际字节数。
+- 项目选择、任务卡、设置范围和草稿决定显示足以区分同名项目的位置；记忆笔记保留完整标题与准确的删除目标。改进窄桌面的设置标题、用量图和菜单缩放操作。
+- Shell 阅读视图优先呈现实际命令输出，静默命令明确显示无输出；仍可查看和复制包含退出记录的完整原始回执。
+
+#### 修复
+
+- 修复 Bash/Zsh 会话 Shell 的多行命令、项目初始化脚本和启动别名被额外解释而改变的问题，保留原命令、实际退出码和重放身份。
+- 专家团市场按当前查询的真实词语证据筛选和排序，减少无关长文片段产生的推荐，并保留名称拼写容错和双语查询。
+- 新建、重命名、移动和复制遇到文件冲突后保留输入并支持原处修正；多步任务草稿发生并发修改时，可在原编辑框审阅已保存版本并继续自己的修改。
+- 修复离线收件箱误显示为空、日志刷新失败后丢失已读内容，以及定时建议时间和保存时区的显示问题。改进对话查找的作者与空白匹配、无效行号纠正、对话框关闭和模型上下文协议（MCP）新增表单的焦点交接，避免导航提示遮挡前台菜单。
+- 发布流程等待精确配对官网首次可读取时，允许在原始发布预算内继续观察刚分派运行的短暂 404；保留运行身份校验与后续明确错误。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 13，保留已有项目、会话和任务数据。macOS 安装包使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Go to a line in the file workbench and enter a page number in the PDF (Portable Document Format) reader. Explorer can search project folders and full paths within the project, copy full paths, and open a file's containing folder.
+- Search installed skills in the current project library and conversation capability settings. Find memory projects by name or directory, and see the number of matches in loaded logs.
+- Use arrow keys to enter Archive, release history, Mission Skill and Expert Squad search results. Keyboard selection in Composer references stays visible.
+
+#### Changed
+
+- Image previews fit the current window and show intrinsic dimensions. PDF zoom and switching between Markdown source and preview retain the reading position. Text comparisons identify changes limited to line endings, and files without a preview show their actual byte size before download.
+- Project pickers, task cards, Settings scopes and draft decisions show enough of the location to distinguish projects with the same name. Memory notes retain full titles and identify the exact deletion target. Improve narrow desktop Settings headers, usage charts and menu zoom controls.
+- Shell reading views show actual command output first and explicitly identify silent commands. The complete original receipt, including exit information, remains available to view and copy.
+
+#### Fixed
+
+- Preserve multiline programs, project setup scripts and startup aliases in Bash/Zsh Session shells by removing an extra interpretation step. Original commands, observed exit codes and replay identity are retained.
+- Filter and rank Expert Squad Market results using real word evidence for the current query, reducing unrelated recommendations from long documents while retaining name typo tolerance and bilingual queries.
+- Keep file creation, rename, move and copy inputs available for correction after conflicts. When a Mission draft changes concurrently, review the saved version in the same editor before continuing with your own changes.
+- Distinguish an offline Mailbox from an empty result, retain loaded logs after refresh failures, and correct suggested schedule times and saved time zone display. Improve conversation search authors and whitespace matching, invalid line number correction, focus after closing dialogs or opening Model Context Protocol (MCP) add forms, and navigation hints overlapping foreground menus.
+- Within the original release budget, continue observing a briefly unavailable newly dispatched website run until that exact paired run first becomes readable. Run identity checks and subsequent explicit errors retain their contracts.
+
+#### Upgrade impact and known limitations
+
+- The database remains at version 13, retaining existing projects, conversations, and tasks. macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
+
 ## 0.1.52 - 2026-11-22
 
 ### zh-CN

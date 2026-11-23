@@ -1,0 +1,61 @@
+{
+  "version": "0.1.53",
+  "verifiedAt": "2026-11-23T07:08:44.222425+00:00",
+  "preparationBase": "74fbf319a8e658d2733c6f69e580c222e6850eae",
+  "inputScope": "Shared worktree with prepared 0.1.53 version metadata; unrelated changes preserved",
+  "bun": "1.4.0",
+  "results": [
+    {
+      "log": "backend-contracts.log",
+      "passed": 83,
+      "failed": 0,
+      "selectedFiles": [
+        "test/capability/fuzzy.test.ts",
+        "test/expert-squad/market-discovery-chain.test.ts",
+        "test/file-attachment-editability.test.ts",
+        "test/file-search-order.test.ts",
+        "test/file-text-admission.test.ts",
+        "test/server/file-read-identity.test.ts",
+        "test/session-shell-lifecycle.test.ts",
+        "test/shell-command-result.test.ts"
+      ]
+    },
+    {
+      "log": "shell-replay.log",
+      "passed": 16,
+      "failed": 0,
+      "selectedFiles": [
+        "test/server/session-shell-idempotency.test.ts"
+      ]
+    },
+    {
+      "log": "service-contracts.log",
+      "passed": 146,
+      "failed": 0,
+      "selectedFiles": []
+    },
+    {
+      "log": "release-contracts-fixed.log",
+      "passed": 65,
+      "failed": 0,
+      "selectedFiles": []
+    }
+  ],
+  "frozenInstall": "passed; dependency changes limited to eight workspace versions",
+  "audit": "actual empty vulnerability object",
+  "versions": "13 release-family projections aligned",
+  "authoredHistoryEntries": 89,
+  "generatedRegistry": "13 actual generated paths match corresponding committed projections; full clean-worktree checker reserved for hosted checkout",
+  "frontendBuild": "passed in 1m30s; renderer public surface passed; not visual acceptance",
+  "localization": {
+    "locales": 2,
+    "keys": 3277
+  },
+  "cssTokenReferences": 9349,
+  "documentation": {
+    "operations": 353,
+    "groups": 26
+  },
+  "databaseVersion": 13,
+  "scope": "Focused backend and pure service/data contracts; no UI automation, real Provider verification or full-suite claim"
+}
