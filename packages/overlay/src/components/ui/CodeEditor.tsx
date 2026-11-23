@@ -1,6 +1,6 @@
 import { Compartment, EditorSelection, Prec } from "@codemirror/state"
 import { getSearchQuery, gotoLine, openSearchPanel, search, searchKeymap, searchPanelOpen } from "@codemirror/search"
-import { keymap } from "@codemirror/view"
+import { keymap, runScopeHandlers } from "@codemirror/view"
 import type { SourceFileRange } from "@opencorvus-ai/sdk"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
@@ -31,14 +31,16 @@ function focusOrOpenLinePrompt(editor: EditorView): boolean {
 }
 
 // basicSetup binds gotoLine directly. Give that same shortcut the shared prompt behavior.
-const lineNavigationKeymap = Prec.high(keymap.of(searchKeymap
-  .filter((binding) => binding.run === gotoLine)
-  .map((binding) => ({ ...binding, run: focusOrOpenLinePrompt })),
+const goToLineBindings = searchKeymap.filter((binding) => binding.run === gotoLine)
+const lineNavigationKeymap = Prec.high(keymap.of(
+  goToLineBindings.map((binding) => ({ ...binding, run: focusOrOpenLinePrompt })),
 ))
+const filePaneLineScope = "file-pane-line-navigation"
 
 export interface CodeEditorNavigation {
   find: () => void
   goToLine: () => void
+  handleGoToLineShortcut: (event: KeyboardEvent) => boolean
 }
 
 export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>, "class" | "classList" | "onChange"> {
@@ -47,6 +49,7 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   ariaLabel: string
   onValueChange: (value: string) => void
   onNavigationReady?: (navigation: CodeEditorNavigation | undefined) => void
+  onGoToLineShortcut?: () => void
   shouldFocusOnMount?: () => boolean
   lineRange?: SourceFileRange
   revealRevision?: number
@@ -62,6 +65,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     "ariaLabel",
     "onValueChange",
     "onNavigationReady",
+    "onGoToLineShortcut",
     "shouldFocusOnMount",
     "lineRange",
     "revealRevision",
@@ -178,12 +182,21 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
 
   onMount(() => {
     if (!host) return
+    const onGoToLineShortcut = local.onGoToLineShortcut
     view = new EditorView({
       doc: local.value,
       parent: host,
       extensions: [
         basicSetup,
         lineNavigationKeymap,
+        onGoToLineShortcut ? keymap.of(goToLineBindings.map((binding) => ({
+          ...binding,
+          scope: filePaneLineScope,
+          run: () => {
+            onGoToLineShortcut()
+            return true
+          },
+        }))) : [],
         search({
           onNoMatch: (editor, direction) => {
             if (!searchPanelOpen(editor.state)) return
@@ -219,6 +232,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
       goToLine: () => {
         if (view === editor) focusOrOpenLinePrompt(editor)
       },
+      handleGoToLineShortcut: (event) => view === editor && runScopeHandlers(editor, event, filePaneLineScope),
     })
     if (host.isConnected && !host.closest("[inert], [hidden]") && local.shouldFocusOnMount?.()) editor.focus()
     revealObserver = new ResizeObserver(revealOnLayout.schedule)

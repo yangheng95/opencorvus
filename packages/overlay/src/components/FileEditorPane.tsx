@@ -378,7 +378,7 @@ export function FileEditorPane() {
     }
     setTextView(view)
   }
-  const runTextNavigation = (action: keyof CodeEditorNavigation) => {
+  const runTextNavigation = (action: "find" | "goToLine") => {
     const file = target()
     const navigation = editorNavigation()
     if (!file || !navigation || !textContent() || isBusy() || fileEditorReserved()) return
@@ -817,11 +817,20 @@ export function FileEditorPane() {
         if (
           event.defaultPrevented ||
           event.isComposing ||
-          event.altKey ||
           event.shiftKey ||
           !(event.ctrlKey || event.metaKey)
         )
           return
+        if (event.altKey) {
+          if (
+            !event.getModifierState("AltGraph") && textContent() && !isBusy() && !fileEditorReserved() &&
+            editorNavigation()?.handleGoToLineShortcut(event)
+          ) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          return
+        }
         const key = event.key.toLowerCase()
         if (key === "s") {
           event.preventDefault()
@@ -904,7 +913,8 @@ export function FileEditorPane() {
               </Button>
               <Button type="button" variant="ghost" size="icon" tone="neutral"
                 disabled={!editorNavigation() || isBusy() || fileEditorReserved()}
-                title={t("code_editor.go_to_line")} aria-label={t("code_editor.go_to_line")}
+                title={`${t("code_editor.go_to_line")} (Ctrl/Cmd+Alt+G)`}
+                aria-label={t("code_editor.go_to_line")} aria-keyshortcuts="Control+Alt+G Meta+Alt+G"
                 onClick={() => runTextNavigation("goToLine")}>
                 <Icon name="locate-current" />
               </Button>
@@ -1106,6 +1116,7 @@ export function FileEditorPane() {
                     ariaLabel={fileTitle()}
                     onValueChange={updateDraft}
                     onNavigationReady={setEditorNavigation}
+                    onGoToLineShortcut={() => runTextNavigation("goToLine")}
                     readOnly={!writable() || fileEditorReserved()}
                   />
                   <Show when={previewVisible()}>

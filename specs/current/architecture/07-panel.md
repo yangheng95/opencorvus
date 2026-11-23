@@ -1250,8 +1250,9 @@ trigger with the same handoff, without a global focus listener or parallel store
 The file header exposes Find in file and Go to line for text documents, including
 read-only sources. Find and Ctrl/Cmd+F within the file pane open the retained
 CodeMirror view's search panel. Go to line opens its native line prompt or
-focuses the already open line input, through either the header action or the
-editor shortcut. On submission the prompt resolves against the live document
+focuses the already open line input through the header action and the same
+native shortcut throughout the active text file pane, including Preview and
+the toolbar. On submission the prompt resolves against the live document
 and selection, including after a reload in the same view.
 Invalid line syntax keeps the same prompt open with its typed value, focus and
 localized formatting guidance. Keyboard and pointer submissions share validation
