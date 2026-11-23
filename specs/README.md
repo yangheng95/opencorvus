@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [专家团配置操作保持键盘焦点和就地反馈](records/2026-11/2026-11-23-expert-squad-configuration-action-focus.md)
 - [专家团配置说明明确安装范围](records/2026-11/2026-11-23-expert-squad-configuration-scope-copy.md)
 - [已安装专家团筛选的空状态和续页动作](records/2026-11/2026-11-23-installed-expert-squad-filter-feedback.md)
 - [窄桌面专家团详情标签的完整显示](records/2026-11/2026-11-23-expert-squad-detail-tabs-wrap.md)
