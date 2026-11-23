@@ -182,6 +182,7 @@ export function AppDialogHost() {
           id="appDialogInput"
           aria-labelledby="appDialogInputLabel"
           type={dialogStore.app.inputType === "password" ? "password" : "text"}
+          disabled={dialogStore.app.submitting}
           placeholder={dialogStore.app.inputPlaceholder || ""}
           value={dialogStore.app.inputValue || ""}
           ref={(el) => {

@@ -1897,7 +1897,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
   }
 
-  async function renameItem(item: ExplorerSelection | null): Promise<void> {
+  async function transferItem(operation: "rename" | "move", item: ExplorerSelection | null): Promise<void> {
     if (!item) {
       setMutationValidation("selection")
       return
@@ -1908,91 +1908,54 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const focus = capturePathMutationFocus(scope)
-    const result = await showAppDialog({
-      kind: "file-rename",
-      title: t("explorer.rename"),
-      message: t("explorer.rename_message", { path: item.path }),
-      input: true,
-      inputLabel: t("explorer.new_name"),
-      inputValue: item.name,
-      inputRequired: true,
-      inputRequiredMessage: t("explorer.entry_name_only"),
-      validateInput: (value) => validateEntryName(value, scope),
-      okLabel: t("explorer.rename"),
-      cancel: true,
-      returnFocusTarget: focus.returnFocusTarget,
-    })
-    if (!result.confirmed) return
-    if (!ownsExplorerOperation(scope)) return
-    const name = String(result.value || "")
-    if (!name) {
-      setMutationValidation("name")
-      return
-    }
-    const nextPath = joinExplorerPath(parentPath(item.path), name)
-    if (normalizeExplorerPath(nextPath) === item.path) return
-    await runMutation("rename", scope, async (ownsOperation, outcome) => {
-      let result: FileMoveResult
-      try {
-        result = await moveFileItem(item.path, nextPath, scope)
-      } catch (error) {
-        recordOperationFailure(outcome, { phase: "member", path: item.path, error })
-        return
-      }
-      outcome.completed.push(result)
-      outcome.refresh = await applyMoveResults([result], scope, ownsOperation)
-      focus.restore(result.path, outcome.refresh, ownsOperation)
-    })
-  }
-
-  async function moveItem(item: ExplorerSelection | null): Promise<void> {
-    if (!item) {
-      setMutationValidation("selection")
-      return
-    }
-    const scope = currentOperationScope()
-    if (!scope) {
-      setMutationValidation("directory")
-      return
-    }
-    const focus = capturePathMutationFocus(scope)
-    const result = await showAppDialog({
-      kind: "file-move",
-      title: t("explorer.move"),
-      message: t("explorer.move_message", { path: item.path }),
-      input: true,
-      inputLabel: t("explorer.destination_path"),
-      inputValue: item.path,
-      inputRequired: true,
-      inputRequiredMessage: t("explorer.name_required"),
-      validateInput: (value) => validateTransferDestination(value, scope),
-      okLabel: t("explorer.move"),
-      cancel: true,
-      returnFocusTarget: focus.returnFocusTarget,
-    })
-    if (!result.confirmed) return
-    if (!ownsExplorerOperation(scope)) return
-    const nextPath = normalizeExplorerPath(String(result.value || ""))
-    if (!nextPath) {
-      setMutationValidation("name")
-      return
-    }
-    await runMutation("move", scope, async (ownsOperation, outcome) => {
-      if (nextPath === item.path) {
-        outcome.target = parentPath(item.path)
-        outcome.alreadyAtDestination = 1
-        return
-      }
-      let result: FileMoveResult
-      try {
-        result = await moveFileItem(item.path, nextPath, scope)
-      } catch (error) {
-        recordOperationFailure(outcome, { phase: "member", path: item.path, error })
-        return
-      }
-      outcome.completed.push(result)
-      outcome.refresh = await applyMoveResults([result], scope, ownsOperation)
-      focus.restore(result.path, outcome.refresh, ownsOperation)
+    const renaming = operation === "rename"
+    await runMutation(operation, scope, async (ownsOperation, outcome) => {
+      let receipt: FileMoveResult | undefined
+      const result = await showAppDialog({
+        kind: `file-${operation}`,
+        title: t(`explorer.${operation}`),
+        message: t(`explorer.${operation}_message`, { path: item.path }),
+        input: true,
+        inputLabel: t(renaming ? "explorer.new_name" : "explorer.destination_path"),
+        inputValue: renaming ? item.name : item.path,
+        inputRequired: true,
+        inputRequiredMessage: t(renaming ? "explorer.entry_name_only" : "explorer.name_required"),
+        validateInput: (value) => {
+          if (renaming) return validateEntryName(value, scope)
+          const error = validateTransferDestination(value, scope)
+          if (error) return error
+          if (!normalizeProjectFilePath(value, scope.directory)) return t("explorer.name_required")
+        },
+        okLabel: t(`explorer.${operation}`),
+        cancel: true,
+        returnFocusTarget: focus.returnFocusTarget,
+        confirmErrorSummary: (error) => fileErrorSummary(error, operation),
+        onConfirm: async (value) => {
+          if (!ownsOperation()) return
+          const input = value ?? ""
+          const nextPath = renaming ? joinExplorerPath(parentPath(item.path), input) : input
+          const destination = normalizeProjectFilePath(nextPath, scope.directory)
+          if (destination === item.path) {
+            if (!renaming) {
+              outcome.target = parentPath(item.path)
+              outcome.alreadyAtDestination = 1
+            }
+            return
+          }
+          try {
+            receipt = await moveFileItem(item.path, renaming ? nextPath : destination, scope)
+          } catch (error) {
+            if (!ownsOperation()) return
+            if (!(error instanceof FileEditorAdmissionError) || error.reason !== "cancelled") throw error
+            recordOperationFailure(outcome, { phase: "member", path: item.path, error })
+            return
+          }
+          outcome.completed.push(receipt)
+        },
+      })
+      if (!result.confirmed || !receipt || !ownsOperation()) return
+      outcome.refresh = await applyMoveResults([receipt], scope, ownsOperation)
+      focus.restore(receipt.path, outcome.refresh, ownsOperation)
     })
   }
 
@@ -2002,7 +1965,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     if (items.length === 1) {
-      await moveItem(items[0] ?? null)
+      await transferItem("move", items[0] ?? null)
       return
     }
     const scope = currentOperationScope()
@@ -2375,7 +2338,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             label={t("explorer.rename")}
             detail={targetDetail()}
             disabled={hasMultipleTargets() || commandBusy()}
-            onSelect={() => void renameItem(targets()[0] ?? null)}
+            onSelect={() => void transferItem("rename", targets()[0] ?? null)}
           />
           <FileExplorerContextMenuItem
             dataUi="file-explorer-context-copy"

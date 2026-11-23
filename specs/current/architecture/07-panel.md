@@ -1825,6 +1825,13 @@ New file and New folder confirm against the file creation endpoint before they
 close. A rejected submit retains the authored name, its destination, and the
 endpoint diagnostic for correction. The accepted creation receipt drives the
 existing selection, refresh, and editor actions after the dialog closes.
+Rename and single-item Move keep their original name or path input open when
+the file endpoint rejects the write. They submit through the existing editor
+admission and show the original diagnostic. A committed path receipt drives the
+existing refresh and selection after dismissal. Cancelling an affected draft
+decision retains the authored draft and settles the file operation as cancelled.
+The draft decision owns initial focus on Continue editing, including when it
+opens above a pending path dialog.
 Directory creation, explicit rename, Move and Copy dialogs share one operation focus owner.
 They hand keyboard focus to the new path only after the owned mutation
 receipt and current directory/search refresh have succeeded. It finds that row
@@ -6546,9 +6553,10 @@ queue, while the mutation runs outside that queue. The dialog retains input and
 shows a localized error with original diagnostic details when confirmation fails.
 Only its current completion may close it or restore input focus; replacement and
 late completion retain the existing epoch and native-surface ownership contract.
-Submitting disables duplicate confirmation and form dismissal until that write
-settles. Chat, Work, Task and Mission retain the existing trimmed 200-character
-title contract; Project names retain their own existing validation.
+Submitting disables the text input and duplicate confirmation and applies the
+existing dismissal rule until that write settles. Chat, Work, Task and Mission
+retain the existing trimmed 200-character title contract. Project names retain
+their own validation.
 
 A confirmed Task rename remains successful if a subsequent list or board read
 fails. The existing read-error state and diagnostic retain that refresh failure;

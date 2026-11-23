@@ -183,6 +183,7 @@ export function FileEditorPane() {
   const [imagePreviewTrigger, setImagePreviewTrigger] = createSignal<HTMLButtonElement>()
   const [pdfNavigation, setPdfNavigation] = createSignal<HTMLDivElement>()
   let loadRetryButton: HTMLButtonElement | undefined
+  let keepEditingButton: HTMLButtonElement | undefined
   let binaryDownloadButton: HTMLButtonElement | undefined
   let binaryDownloadFeedback: HTMLDivElement | undefined
   let previewRevealedRevision: number | undefined
@@ -1144,6 +1145,15 @@ export function FileEditorPane() {
         open={leaveDialogOpen()}
         title={t("file_editor.unsaved")}
         backdropClose={false}
+        onOpenAutoFocus={(event) => {
+          const origin = document.activeElement
+          event.preventDefault()
+          queueMicrotask(() => {
+            if (!leaveDialogOpen() || !keepEditingButton?.isConnected) return
+            const { activeElement, body } = keepEditingButton.ownerDocument
+            if (activeElement === origin || activeElement === body) keepEditingButton.focus({ preventScroll: true })
+          })
+        }}
         onCloseAutoFocus={(event) => {
           event.preventDefault()
           const intent = leaveFocus
@@ -1164,6 +1174,7 @@ export function FileEditorPane() {
               size="md"
               tone="neutral"
               data-ui="file-editor-leave-cancel"
+              ref={keepEditingButton}
               aria-disabled={leaveSaving() || undefined}
               onClick={() => { if (!leaveSaving()) finishLeaveDecision(false) }}
             >
