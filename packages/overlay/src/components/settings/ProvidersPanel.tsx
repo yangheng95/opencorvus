@@ -546,6 +546,9 @@ export default function ProvidersPanel() {
   const [formInitialValues, setFormInitialValues] = createSignal<ProviderFormValues | null>(null)
   const formApiValidation = createMemo(() => validateProviderFormApi(formApi(), formInitialValues()?.api))
   const apiInvalid = () => Boolean(formApi().trim()) && !formApiValidation().ok
+  let providerForm: HTMLDivElement | undefined
+  let providerFormApiInput: HTMLInputElement | undefined
+  let providerFormTrigger: HTMLButtonElement | undefined
   let formOccurrence = 0
   let discoveryRevision = 0
 
@@ -569,7 +572,7 @@ export default function ProvidersPanel() {
   createEffect(
     on(
       providerScope,
-      () => cancel(),
+      () => closeProviderForm(),
       { defer: true },
     ),
   )
@@ -618,6 +621,7 @@ export default function ProvidersPanel() {
 
   function resetForm() {
     formOccurrence += 1
+    providerFormTrigger = undefined
     invalidateDiscovery()
     setSaving(false)
     setFormId("")
@@ -632,14 +636,28 @@ export default function ProvidersPanel() {
     setDiscoveredModelCount(null)
   }
 
-  function startAdd() {
+  function openProviderForm(trigger: HTMLButtonElement) {
+    const occurrence = formOccurrence
+    const scope = providerScope()
+    const priorFocus = document.activeElement
+    providerFormTrigger = trigger
+    setShowAdd(true)
+    queueMicrotask(() => {
+      if (formOccurrence !== occurrence || providerScope() !== scope || !providerFormApiInput?.isConnected) return
+      if (document.activeElement === priorFocus || document.activeElement === document.body) {
+        providerFormApiInput.focus()
+      }
+    })
+  }
+
+  function startAdd(trigger: HTMLButtonElement) {
     resetForm()
     setFormDirectory(activeDirectory().trim())
     setEditing(null)
-    setShowAdd(true)
+    openProviderForm(trigger)
   }
 
-  function startEdit(id: string) {
+  function startEdit(id: string, trigger: HTMLButtonElement) {
     const p = configProviders()[id]
     if (!p) return
     resetForm()
@@ -652,9 +670,7 @@ export default function ProvidersPanel() {
     setFormEnvKey(values.env)
     setFormModels(values.models)
     setEditing(id)
-    setShowAdd(true)
-    setFormError(null)
-    setDiscoveredModelCount(null)
+    openProviderForm(trigger)
   }
 
   function formProviderId(): string {
@@ -747,6 +763,7 @@ export default function ProvidersPanel() {
     const occurrence = formOccurrence
     const options = providerLoadOptions(directory)
     const ownsForm = () => occurrence === formOccurrence && options.isCurrentDirectory(directory)
+    const hadFormFocus = providerForm?.contains(document.activeElement)
     invalidateDiscovery()
     setSaving(true)
     const issues: ProviderSaveIssue[] = []
@@ -798,9 +815,7 @@ export default function ProvidersPanel() {
       issues.push(...(await settleProviderSaveFollowups(followups, ownsForm)))
 
       if (!ownsForm()) return
-      setShowAdd(false)
-      resetForm()
-      setEditing(null)
+      closeProviderForm(hadFormFocus || providerForm?.contains(document.activeElement))
       if (issues.length > 0) {
         setFormError(feedback("provider.form.saved_with_issues", issues.map(describeProviderIssue).join("\n")))
       }
@@ -1031,10 +1046,19 @@ export default function ProvidersPanel() {
     }
   }
 
-  function cancel() {
+  function closeProviderForm(restoreFocus = false) {
+    const trigger = providerFormTrigger
+    const scope = providerScope()
     setShowAdd(false)
     resetForm()
     setEditing(null)
+    if (!restoreFocus) return
+    const occurrence = formOccurrence
+    queueMicrotask(() => {
+      if (formOccurrence !== occurrence || providerScope() !== scope || document.activeElement !== document.body) return
+      const target = trigger?.isConnected && !trigger.disabled ? trigger : providerSearchInput
+      if (target?.isConnected) target.focus()
+    })
   }
 
   function modelListIssue(providerID: string): boolean {
@@ -1254,7 +1278,7 @@ export default function ProvidersPanel() {
                 </DropdownMenu.Content>
               </DropdownMenu.Portal>
             </DropdownMenu.Root>
-            <Button type="button" variant="solid" size="md" tone="neutral" data-ui="provider-add" onClick={startAdd}>
+            <Button type="button" variant="solid" size="md" tone="neutral" data-ui="provider-add" onClick={(event) => startAdd(event.currentTarget)}>
               <Icon name="plus" />
               {t("provider.action.add")}
             </Button>
@@ -1439,7 +1463,7 @@ export default function ProvidersPanel() {
                             aria-label={t("provider.form.edit_title", { id: providerID })}
                             aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
                             onKeyDown={searchNavigation.handleResultKeyDown}
-                            onClick={() => startEdit(providerID)}
+                            onClick={(event) => startEdit(providerID, event.currentTarget)}
                           >
                             {t("common.edit")}
                           </Button>
@@ -1497,7 +1521,7 @@ export default function ProvidersPanel() {
 
         {/* ── Add / Edit Form ── */}
         <Show when={showAdd()}>
-          <div class="provider-add-card">
+          <div class="provider-add-card" ref={providerForm}>
             <h4 class="provider-add-title oc-section-heading">
               {editing() ? t("provider.form.edit_title", { id: editing() ?? "" }) : t("provider.form.add_title")}
             </h4>
@@ -1505,6 +1529,7 @@ export default function ProvidersPanel() {
             <TextField.Root as="label" invalid={apiInvalid()}>
               <TextField.Label>{t("provider.form.api_label")}</TextField.Label>
               <TextField.Input
+                ref={providerFormApiInput}
                 type="url"
                 required={formApiValidation().changed}
                 placeholder={t("provider.form.api_placeholder", { value: "https://my-gateway.com/v1" })}
@@ -1622,7 +1647,7 @@ export default function ProvidersPanel() {
             <Show when={formError()}>{(messages) => <ProviderMessages messages={messages()} />}</Show>
 
             <div class="dialog-actions compact provider-form-actions">
-              <Button type="button" variant="outline" size="md" tone="neutral" onClick={cancel}>
+              <Button type="button" variant="outline" size="md" tone="neutral" onClick={() => closeProviderForm(true)}>
                 {t("common.cancel")}
               </Button>
               <Button

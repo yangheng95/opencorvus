@@ -5937,6 +5937,9 @@ Inherited models can reappear when an override is removed. The localized inline
 hint states that models can be added or discovered later and inheritance is
 preserved. Model references, captured scope and API validation keep their existing
 contracts. Saving configuration alone does not claim inference qualification.
+Explicit Add and Edit focus the inline form's API address. Cancellation and an
+accepted save from the form return focus to their opener while its scope is
+current, with the provider search as the target when that opener has retired.
 
 The Composer's empty model list describes unavailable model choices, without
 inferring missing authentication from an empty runnable-provider projection.
