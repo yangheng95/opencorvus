@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同名文件区分目录的真实桌面截图](2026-11-23-explorer-wrapped-duplicate-locations/README.md)
 - [资源管理器标签查找的真实桌面截图](2026-11-23-explorer-tab-find-shortcut/README.md)
 - [文件搜索结果回焦的真实桌面截图](2026-11-23-explorer-result-return-to-search/README.md)
 - [高级定时星期转换的真实桌面截图](2026-11-23-scheduled-weekday-from-advanced-rule/README.md)

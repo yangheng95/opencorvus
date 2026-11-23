@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [同名文件结果完整显示区分目录](records/2026-11/2026-11-23-explorer-wrapped-duplicate-locations.md)
 - [在资源管理器标签上使用文件查找](records/2026-11/2026-11-23-explorer-tab-find-shortcut.md)
 - [从文件结果返回搜索输入框](records/2026-11/2026-11-23-explorer-result-return-to-search.md)
 - [每周定时编辑保留高级规则星期](records/2026-11/2026-11-23-scheduled-weekday-from-advanced-rule.md)
