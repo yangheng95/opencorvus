@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务技能结果方向键的真实桌面截图](2026-11-23-mission-skill-result-navigation/README.md)
 - [更新日志方向键浏览的真实桌面截图](2026-11-23-release-history-result-navigation/README.md)
 - [归档结果键盘浏览的真实桌面截图](2026-11-23-archive-search-result-navigation/README.md)
 - [同名文件区分目录的真实桌面截图](2026-11-23-explorer-wrapped-duplicate-locations/README.md)

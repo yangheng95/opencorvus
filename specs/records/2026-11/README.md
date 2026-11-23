@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [连续浏览多步任务技能搜索结果](2026-11-23-mission-skill-result-navigation.md)
 - [连续浏览更新日志搜索结果](2026-11-23-release-history-result-navigation.md)
 - [归档搜索结果支持连续方向键浏览](2026-11-23-archive-search-result-navigation.md)
 - [同名文件结果完整显示区分目录](2026-11-23-explorer-wrapped-duplicate-locations.md)
