@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [输入区引用焦点和弹窗滚动截图](2026-11-23-composer-reference-visible-focus/README.md)
 - [输入区引用选中、取消与焦点截图](2026-11-23-composer-reference-toggle-focus/README.md)
 - [输入区市场专家团名称与安装动作截图](2026-11-23-composer-market-squad-titles/README.md)
 - [专家团市场查询与推荐截图](2026-11-23-expert-squad-market-query-evidence/README.md)

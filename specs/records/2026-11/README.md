@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [输入区引用键盘游标滚入可见区域](2026-11-23-composer-reference-visible-focus.md)
 - [输入区切换引用时保留键盘焦点](2026-11-23-composer-reference-toggle-focus.md)
 - [输入区显示完整市场专家团名称](2026-11-23-composer-market-squad-titles.md)
 - [专家团市场推荐以当前查询的词语证据为准](2026-11-23-expert-squad-market-query-evidence.md)
