@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [环境栏重叠读取的桌面证据](2026-11-25-environment-joins-pending-git-metadata/README.md)
 - [Git 提交说明与分支变更的桌面证据](2026-11-24-git-action-confirmed-branch/README.md)
 - [同项目分支切换的环境栏桌面证据](2026-11-24-project-git-branch-peer-refresh/README.md)
 - [比较中观察到不同磁盘版本的桌面证据](2026-11-24-file-comparison-observes-newer-disk/README.md)

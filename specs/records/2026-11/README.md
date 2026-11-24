@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [展开环境栏时复用同一项目在途元数据](2026-11-25-environment-joins-pending-git-metadata.md)
 - [提交和推送绑定到已确认的 Git 分支](2026-11-24-git-action-confirmed-branch.md)
 - [环境信息跟随同项目分支切换](2026-11-24-project-git-branch-peer-refresh.md)
 - [比较窗口标明磁盘快照与当前版本的差异](2026-11-24-file-comparison-observes-newer-disk.md)
