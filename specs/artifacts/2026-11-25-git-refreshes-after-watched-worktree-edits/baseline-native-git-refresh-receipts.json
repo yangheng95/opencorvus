@@ -1,0 +1,97 @@
+{
+  "rendererAsset": "main-B_GCr59G.js",
+  "browserUI": "http://127.0.0.1:41788/ui/",
+  "project": {
+    "sessionID": "ses_h254CgxgV5NWvGozfRsj",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+    "projectID": "prj_hhU2qo3YenNg17NrNCSt",
+    "title": "B612 external Git review",
+    "requestID": "f316d580-d742-4b71-8e83-629968df0cec"
+  },
+  "nativeSource": [
+    {
+      "at": "2026-11-24T20:56:32.332Z",
+      "status": 200,
+      "type": "stream-ready"
+    },
+    {
+      "at": "2026-11-24T20:56:54.582Z",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+      "payload": {
+        "occurrenceID": "bus-occurrence:94ffd973-be78-4099-bf0e-f5bea91ba0c4",
+        "type": "file.watcher.updated",
+        "properties": {
+          "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+          "event": "change"
+        }
+      }
+    }
+  ],
+  "actualReads": [
+    {
+      "at": "2026-11-24T20:56:05.043Z",
+      "requestID": "a61b9783-bda5-4c85-a4c8-84a8d3d0e114",
+      "status": 200,
+      "durationMs": 909
+    },
+    {
+      "at": "2026-11-24T20:56:10.459Z",
+      "requestID": "98350b20-0338-4729-b981-764ec13459ce",
+      "status": 200,
+      "durationMs": 894
+    },
+    {
+      "at": "2026-11-24T20:56:55.738Z",
+      "requestID": "8dfd7388-931a-4a74-860e-301951345d13",
+      "status": 200,
+      "durationMs": 1107
+    },
+    {
+      "at": "2026-11-24T20:57:01.451Z",
+      "requestID": "413a0bcf-b1f5-4b41-ae1c-07d9740e854b",
+      "status": 200,
+      "durationMs": 1105
+    }
+  ],
+  "cleanRead": {
+    "git": "be780262be980d070aa5c8bb5e93b6720385fdd1",
+    "status": 200,
+    "receipt": "a61b9783-bda5-4c85-a4c8-84a8d3d0e114",
+    "result": {
+      "initialized": true,
+      "branch": "main",
+      "commit": "be78026",
+      "clean": true,
+      "dirty": false,
+      "staged": 0,
+      "modified": 0,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    }
+  },
+  "checkoutAfterExternalWrite": {
+    "gitStatus": [
+      " M handoff.txt"
+    ],
+    "status": 200,
+    "receipt": "8dfd7388-931a-4a74-860e-301951345d13",
+    "result": {
+      "initialized": true,
+      "branch": "main",
+      "commit": "be78026",
+      "clean": false,
+      "dirty": true,
+      "staged": 0,
+      "modified": 1,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    },
+    "file": "Approved baseline for stockroom review.\r\nExternal note for the second delivery.\r\n"
+  }
+}

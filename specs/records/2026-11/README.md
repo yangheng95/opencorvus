@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [开启文件监视后，外部写入更新已打开的 Git 状态](2026-11-25-git-refreshes-after-watched-worktree-edits.md)
 - [收件箱刷新失败时保留正在阅读的消息](2026-11-25-mailbox-keeps-reading-after-refresh-failure.md)
 - [归档列表后台刷新期间仍可阅读已接受的结果](2026-11-25-archive-reading-during-background-refresh.md)
 - [归档页按会话实际归档状态刷新](2026-11-25-archive-reads-only-relevant-session-updates.md)

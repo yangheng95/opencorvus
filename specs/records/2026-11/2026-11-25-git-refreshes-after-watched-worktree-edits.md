@@ -1,0 +1,18 @@
+# 开启文件监视后，外部写入更新已打开的 Git 状态
+
+## Recall
+
+- 用户要求本人独立持续迭代，先落盘根因、影响和方案，再实施、实际桌面截图和人工复核、相关正向检查、提交、合并上游并正常推送。上一批 `7de3e7569` 已在远端 `main`，本地与上游 0/0，原工作区 177 条状态保留。本批只用单独 Git 仓库、空白会话及隔离开发服务；只在该服务启动时启用现有工作树文件监视选项。
+- 已读[应用内保存更新 Git 状态](2026-11-25-git-working-tree-state-after-file-save.md)、[分支变更通知](2026-11-24-project-git-branch-peer-refresh.md)、[在途 Git 读取](2026-11-25-environment-joins-pending-git-metadata.md)、[返回文件编辑器的磁盘核对](2026-11-25-file-rechecks-disk-on-return.md)、[实时投影架构](../../current/architecture/07-panel-reactivity.md)。全仓核对 `FileWatcher.Event.Updated`、`File.Event.Edited`、`WorkLedgerChangedEvent`、`work-ledger.file-changed`、`routeSSEEvent`、`showingGitMetadata`、`pendingFileMetadata`、`loadMeta`、`Vcs.Event.BranchUpdated`、已装本地文件监视器、项目生命周期和全部工作记录变更消费者。
+
+## 可观察事实、根因和影响
+
+- 专用 Windows 实例 `41788/ui/` 提供 `main-B_GCr59G.js`，真实项目 `git-external-edit-review`。Bootstrap 日志确认 Windows 文件监视器已启动。服务初始化生成三个未跟踪配置，只在该一次性仓库的 Git 本地排除文件中列出；浏览器元数据请求 `98350b20-0338-4729-b981-764ec13459ce` 确认初始干净 `main`。提交 `be780262be980d070aa5c8bb5e93b6720385fdd1`、空会话和对照内容明确。
+- 环境栏保持打开。通过 PowerShell 在跟踪的 `handoff.txt` 新增真实一行。`/global/event` 于 `20:56:54.582Z` 收到规范 `file.watcher.updated`，项目目录、原文件绝对路径、事件类型 `change` 一致。独立公开 `GET /vcs` `8dfd7388-931a-4a74-860e-301951345d13` 返回 `dirty:true, modified:1`，Git 显示 ` M handoff.txt`。当前页面仍显示原分支、原状态，浏览器没有实时主动 `/vcs` 读取。随后手动刷新 `413a0bcf-b1f5-4b41-ae1c-07d9740e854b` 才显示 `1 modified`。[实页和真实回执](../../artifacts/2026-11-25-git-refreshes-after-watched-worktree-edits/README.md)
+- `FileWatcher` 的宿主变化事实从项目全局总线发布。现有工作记录投影专门处理应用内 `File.Event.Edited` 和已观察到的 Git 分支变化，未将普通的原生项目内文件变更交给 `TaskDirBar` 已打开的 Git 元数据刷新入口。所选会话事件中的文件监视信号当前用于原文件工作台修订，不驱动环境栏的 `loadMeta`。应用内文件写入、分支变更、重连和手动刷新各自正常，无法补回持续在线时这次外部文件变更。
+- 影响为启用工作树监视时当前项目已经展开的环境栏/提交对话框所呈现的 Git 状态和提交按钮必要条件。文件真实字节、分支、工作树锁、写入回执、项目/目录隔离、作者草稿和原分支选择不改。默认只有 Git HEAD 的监视条件继续适用；其他 Git 元数据的外部变化、监视排除目录和未启用的普通文件通知未纳入本次验收。没有任务、多步任务或会话的调度、并发、唤醒、重试、恢复或终态异常。
+
+## 实施与验收
+
+- 在当前工作记录变化流投影已有 `file.watcher.updated` 的目录级失效，保留原事件来源，序号 0，无文件字节、写回执或新增连接。验证已有宿主绝对路径在通知目录内并排除已有 Git 目录，Git HEAD 仍沿原分支所有者。将该类型交给原 `TaskDirBar` 文件变更排队入口，保持当下项目目录、选择轮次、连接、可见性、在途和写入边界。主工作列表无需为这个 Git 元数据通知重读，既有文件工作台和文件成员列表沿原事件路径。
+- 正向检查用实际公开工作记录流核对两个项目里受监视的文件事实与准确通知目录，原应用内写入读取和分支契约保留。桌面候选以真实文件系统事件重复干净 → 修改 → 恢复原文，并在提交框已有手写主题时验证新鲜状态及原主题；其他项目同名路径作隔离核对。截图保留真实 Git 状态与焦点，公开接口、外部 Git、精确文件和事件相互对照。运行相关测试、类型、构建和文档检查，无实际模型请求、提交用户文件或发布版本。
