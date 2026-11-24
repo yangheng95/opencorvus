@@ -18,7 +18,7 @@ type State = {
   lifecycleTail: Promise<void>
   status: RuntimeStatus
   detail: string
-  signature: string
+  signature?: string
   channels: string[]
   logs: string[]
 }
@@ -39,7 +39,6 @@ export namespace ChannelSupervisor {
       lifecycleTail: Promise.resolve(),
       status: "disabled",
       detail: "No managed channel runtime active.",
-      signature: "",
       channels: [],
       logs: [],
     }),
@@ -53,18 +52,29 @@ export namespace ChannelSupervisor {
     const current = await state()
     return withLifecycleOwner(current, async () => {
       const next = desired(config)
-      if (next.status === "disabled" || next.status === "unavailable") {
-        await stop(current)
-        current.status = next.status
-        current.detail = next.detail
-        current.signature = ""
-        current.channels = []
-        return snapshot(current)
-      }
       if (current.signature === next.signature && current.runtime && current.status === "running") {
         return snapshot(current)
       }
       await syncRuntime(current, next)
+      return snapshot(current)
+    })
+  }
+
+  export async function initialize(config: Record<string, unknown>) {
+    const current = await state()
+    if (current.signature !== undefined) {
+      // A concurrent first read can already have published the desired signature.
+      await current.lifecycleTail
+      return snapshot(current)
+    }
+    return withLifecycleOwner(current, async () => {
+      if (current.signature === undefined) {
+        try {
+          await syncRuntime(current, desired(config))
+        } catch (error) {
+          if (!(error instanceof RuntimeStartError)) throw error
+        }
+      }
       return snapshot(current)
     })
   }

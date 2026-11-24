@@ -6131,6 +6131,9 @@ or diagnostic as each response settles, with the same connection, directory and
 selection ownership. Their caller's aggregate receipt still settles after both.
 Channel rows use generated ChannelListResponse and display configuration status
 and runtime status separately; missing configuration is not runtime availability.
+The channel catalog reads the owning Project under identity authority. A cold
+catalog initializes configured adapters through the existing ChannelSupervisor
+lifecycle and reads its runtime snapshot without preparing Git or execution.
 Edit and documentation actions name the same channel as their catalog row in
 the current language, using the original catalog name for each action target.
 The channel editor publishes its actual open and closed states to the shared

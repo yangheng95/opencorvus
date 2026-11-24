@@ -50,6 +50,7 @@ const PROJECT_IDENTITY_ROUTE_KEYS = new Set([
   "GET /config",
   "PATCH /config",
   "GET /config/providers",
+  "GET /channel",
   "GET /path",
   "GET /skill/mounts",
   "GET /mcp",

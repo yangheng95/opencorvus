@@ -1,0 +1,45 @@
+{
+  "projectDirectory": "C:\\Users\\Public\\opencorvus-review-20261124-b556\\candidate\\local-matrix",
+  "candidateHandshake": {
+    "method": "GET",
+    "path": "/_matrix/client/v3/account/whoami",
+    "at": "2026-11-24T08:37:52.694Z"
+  },
+  "firstCandidateSync": {
+    "method": "GET",
+    "path": "/_matrix/client/v3/sync",
+    "at": "2026-11-24T08:37:52.705Z"
+  },
+  "candidateHandshakeCount": 1,
+  "matrixReads": [
+    {
+      "status": 200,
+      "requestID": "967fe60c-20a1-4933-8016-0675396787ee",
+      "matrix": {
+        "id": "matrix",
+        "status": "configured",
+        "runtime_status": "running",
+        "runtime_detail": "Managed runtime active for matrix."
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "91dc67ae-d3f0-46d7-858f-569ff5b99dde",
+      "matrix": {
+        "id": "matrix",
+        "status": "configured",
+        "runtime_status": "running",
+        "runtime_detail": "Managed runtime active for matrix."
+      }
+    }
+  ],
+  "verifiedProjectFiles": [
+    "change-review",
+    "protected-ignore",
+    "local-matrix"
+  ],
+  "protectReadOnly": [
+    "protected-ignore",
+    "local-matrix"
+  ]
+}

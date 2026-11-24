@@ -95,7 +95,7 @@ describe("Project route context authority", () => {
       commit: "runtime",
       push: "runtime",
       commitMessage: "runtime",
-      channel: "runtime",
+      channel: "identity",
     })
   })
 

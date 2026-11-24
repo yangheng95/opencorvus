@@ -23,7 +23,7 @@ export namespace ChannelRegistry {
 
   export async function list() {
     const config = await Config.get()
-    const supervisor = await ChannelSupervisor.status()
+    const supervisor = await ChannelSupervisor.initialize(config)
     return Info.array().parse(
       ChannelCatalog.map((item) => {
         const state = channelState(item.id, config.channel?.[item.id] as Record<string, unknown> | undefined, {})
