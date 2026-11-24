@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [提交和推送绑定到已确认的 Git 分支](records/2026-11/2026-11-24-git-action-confirmed-branch.md)
 - [环境信息跟随同项目分支切换](records/2026-11/2026-11-24-project-git-branch-peer-refresh.md)
 - [比较窗口标明磁盘快照与当前版本的差异](records/2026-11/2026-11-24-file-comparison-observes-newer-disk.md)
 - [原文件恢复时结清此前的保存缺失提示](records/2026-11/2026-11-24-file-save-missing-after-original-restored.md)
