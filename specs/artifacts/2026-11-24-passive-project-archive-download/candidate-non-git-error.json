@@ -1,0 +1,14 @@
+{
+  "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\candidate\\without-git",
+  "sessionID": "ses_hZ1MdGjsRS3AVl8A5wgY",
+  "route": "/mission/draft-22d531045059473ab6614bd766f17ea9/project-archive",
+  "status": 422,
+  "message": "Mission draft-22d531045059473ab6614bd766f17ea9 project is not a Git worktree and cannot be archived with gitignore semantics",
+  "isolatedDatabaseCountsAfterErrorControl": {
+    "session": 3,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "archives": [
+    {
+      "label": "change-review",
+      "response": {
+        "requestID": "11d5e6ec-6a3d-4bb4-ae51-350184eb5b8e",
+        "method": "GET",
+        "path": "/mission/draft-5f58450279181a962bac6cc949e34e7a/project-archive",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 655
+      },
+      "downloadStartedAt": "2026-11-24T08:21:08.586Z",
+      "downloadBytes": 4663,
+      "manifest": {
+        "schema": "opencorvus.mission-project-archive.v1",
+        "exportedAt": "2026-11-24T08:21:09.237Z",
+        "missionID": "draft-5f58450279181a962bac6cc949e34e7a",
+        "sessionID": "ses_hOO3IZ467Oh9fxUuTME7",
+        "title": "Project handoff export - change-review",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\candidate\\change-review",
+        "project": {
+          "id": "prj_hHOLBA44FvCRFiZjePvb",
+          "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\candidate\\change-review"
+        },
+        "projectFileRoot": "project/",
+        "projectFileSelection": "Git index + Git ignore-filtered physical entries + OpenCorvus runtime filter",
+        "projectFileCount": 6,
+        "executionFlowRoot": "opencorvus-mission-execution-flow/",
+        "executionFiles": [
+          "manifest.json",
+          "mission.json",
+          "status.json",
+          "tasks.json",
+          "transcript.json"
+        ],
+        "executionFlowBounds": {
+          "maxStringChars": 16384,
+          "maxArrayItems": 500,
+          "maxDepth": 12
+        }
+      },
+      "sourceFilesVerifiedAgainstDisk": [
+        ".gitattributes",
+        ".gitignore",
+        ".opencorvus/opencorvus.jsonc",
+        "draft-notes.txt",
+        "handoff.txt",
+        "交付说明.txt"
+      ],
+      "originalUserSource": {
+        "draft-notes.txt": "Untracked project notes distinct to change-review.\n",
+        "handoff.txt": "Source handoff distinct to change-review.\n",
+        "交付说明.txt": "本项目的真实交付原文：change-review\n"
+      },
+      "gitignoreReadOnly": false,
+      "gitStatusBeforeBrowser": [
+        "?? .opencorvus/",
+        "?? draft-notes.txt"
+      ],
+      "gitStatusAfterDownload": [
+        " M .gitattributes",
+        " M .gitignore",
+        "?? .opencorvus/",
+        "?? draft-notes.txt"
+      ],
+      "gitRuleFileModifiedAt": {
+        ".gitignore": "2026-11-24T08:20:47.480417+00:00",
+        ".gitattributes": "2026-11-24T08:20:47.482434+00:00"
+      },
+      "actualGitRules": {
+        ".gitignore": "# Existing project checkout rules\nlocal-build/\n.opencorvus/.r/\n",
+        ".gitattributes": "# Existing project text attributes\n*.txt text eol=lf\n*.pdf binary\n*.doc binary\n*.docx binary\n*.docm binary\n*.xls binary\n*.xlsx binary\n*.xlsm binary\n*.xlsb binary\n*.ppt binary\n*.pptx binary\n*.pptm binary\n"
+      }
+    },
+    {
+      "label": "protected-ignore",
+      "response": {
+        "requestID": "d3f8f953-8b5b-47a1-a3a1-60208cd0ead3",
+        "method": "GET",
+        "path": "/mission/draft-980ab3d65ae52c75c66c0a8aead982fe/project-archive",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 985
+      },
+      "downloadStartedAt": "2026-11-24T08:20:58.635Z",
+      "downloadBytes": 3931,
+      "manifest": {
+        "schema": "opencorvus.mission-project-archive.v1",
+        "exportedAt": "2026-11-24T08:20:59.611Z",
+        "missionID": "draft-980ab3d65ae52c75c66c0a8aead982fe",
+        "sessionID": "ses_h4VyZubkfNOF6PwTuLaq",
+        "title": "Project handoff export - protected-ignore",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\candidate\\protected-ignore",
+        "project": {
+          "id": "prj_hvrvR2GFavL2V7llysgr",
+          "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\candidate\\protected-ignore"
+        },
+        "projectFileRoot": "project/",
+        "projectFileSelection": "Git index + Git ignore-filtered physical entries + OpenCorvus runtime filter",
+        "projectFileCount": 5,
+        "executionFlowRoot": "opencorvus-mission-execution-flow/",
+        "executionFiles": [
+          "manifest.json",
+          "mission.json",
+          "status.json",
+          "tasks.json",
+          "transcript.json"
+        ],
+        "executionFlowBounds": {
+          "maxStringChars": 16384,
+          "maxArrayItems": 500,
+          "maxDepth": 12
+        }
+      },
+      "sourceFilesVerifiedAgainstDisk": [
+        ".gitattributes",
+        ".gitignore",
+        "draft-notes.txt",
+        "handoff.txt",
+        "交付说明.txt"
+      ],
+      "originalUserSource": {
+        "draft-notes.txt": "Untracked project notes distinct to protected-ignore.\n",
+        "handoff.txt": "Source handoff distinct to protected-ignore.\n",
+        "交付说明.txt": "本项目的真实交付原文：protected-ignore\n"
+      },
+      "gitignoreReadOnly": true,
+      "gitStatusBeforeBrowser": [
+        "?? .opencorvus/",
+        "?? draft-notes.txt"
+      ],
+      "gitStatusAfterDownload": [
+        "?? .opencorvus/",
+        "?? draft-notes.txt"
+      ],
+      "gitRuleFileModifiedAt": {
+        ".gitignore": "2026-11-24T08:19:57.476305+00:00",
+        ".gitattributes": "2026-11-24T08:19:57.477798+00:00"
+      },
+      "actualGitRules": {
+        ".gitignore": "# Existing project checkout rules\nlocal-build/\n",
+        ".gitattributes": "# Existing project text attributes\n*.txt text eol=lf\n"
+      }
+    }
+  ],
+  "isolatedDatabaseCounts": {
+    "session": 2,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  }
+}
