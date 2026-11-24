@@ -942,7 +942,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         setPendingRefresh("project")
         return
       }
-      if (event.type !== "work-ledger.file-changed" || event.resourceID ||
+      if (event.type !== "work-ledger.file-changed" || event.sourceType !== "file.edited" || event.resourceID ||
         projectDirectoryKey(event.directory) !== directoryKey) return
       const parent = parentProjectPath(event.path, scope.directory)
       setPendingRefresh((target) => target === "project" || target?.has(parent) ? target : new Set(target).add(parent))

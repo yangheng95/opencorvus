@@ -527,7 +527,7 @@ export const WorkLedgerChangedEvent = z
 export const WorkLedgerFileChangedEvent = z
   .object({
     type: z.literal("work-ledger.file-changed"),
-    sourceType: z.literal("file.edited"),
+    sourceType: z.enum(["file.edited", "file.watcher.updated"]),
     directory: z.string().min(1),
     path: z.string().min(1),
     resourceID: z.string().min(1).optional(),

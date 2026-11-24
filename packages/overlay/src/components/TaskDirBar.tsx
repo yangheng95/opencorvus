@@ -1449,9 +1449,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       }
       return
     }
-    const worktreeChanged = event.type === "work-ledger.file-changed" ||
-      (event.type === "work-ledger.changed" && event.sourceType === "file.watcher.updated")
-    if (!worktreeChanged || !event.directory || !showingGitMetadata() || !appStore.connected) return
+    if (event.type !== "work-ledger.file-changed" || !showingGitMetadata() || !appStore.connected) return
     const directory = dir().trim()
     if (!directory || projectDirectoryKey(directory) !== projectDirectoryKey(event.directory) ||
       lastVcs()?.initialized === false) return

@@ -144803,7 +144803,10 @@
                           "type": "number"
                         },
                         "sourceType": {
-                          "const": "file.edited",
+                          "enum": [
+                            "file.edited",
+                            "file.watcher.updated"
+                          ],
                           "type": "string"
                         },
                         "type": {

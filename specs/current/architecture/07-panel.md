@@ -1583,8 +1583,10 @@ disk comparison action. An unchanged editable snapshot keeps the existing view.
 Returning to the open File tab or showing the workbench again requests the same
 check for the retained editable project snapshot, scoped to its file and current
 connection. This also observes edits made outside OpenCorvus before the return.
-The same disk check follows a committed project file edit delivered by the Work
-Ledger stream. Within the owning project, the change path matches either the
+The same disk check follows a committed project file edit or a change observed
+by the enabled worktree file watcher. The Work Ledger stream carries the original
+source and validated project-relative path in its existing file-change event.
+Within the owning project, the change path matches either the
 open file or one of its ancestor directories at a path component boundary. A
 saved editable resource identity also lets a project alias observe the same
 file. Pending checks wait for the current editor operation and expire with the

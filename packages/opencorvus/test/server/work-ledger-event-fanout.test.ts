@@ -486,25 +486,34 @@ test("created directory members announce their exact parent path on the public s
   }
 }, 30_000)
 
-test("watched worktree changes invalidate Git metadata for each exact checkout", async () => {
+test("watched worktree changes identify each exact file and its Git checkout", async () => {
   await using first = await memoryProject("ledger-watched-first")
   await using second = await memoryProject("ledger-watched-second")
   const { next, close } = await openLedgerEvents()
   try {
     expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
     for (const project of [first, second]) {
-      const file = path.join(project.path, ".opencorvus-test-project-identity")
-      await writeFile(file, "Externally edited worktree\n")
+      const relativePath = ".opencorvus-test-project-identity"
+      const file = path.join(project.path, relativePath)
+      const content = "Externally edited worktree\n"
+      await writeFile(file, content)
       await Instance.provide({ directory: project.path, fn: async () => {
         await Bus.publish(FileWatcher.Event.Updated, { file, event: "change" })
       } })
-      expect(await next("work-ledger.changed", FileWatcher.Event.Updated.type)).toEqual({
-        type: "work-ledger.changed",
+      expect(await next("work-ledger.file-changed", FileWatcher.Event.Updated.type)).toEqual({
+        type: "work-ledger.file-changed",
         sourceType: FileWatcher.Event.Updated.type,
         directory: project.path,
+        path: relativePath,
         sequence: 0,
       })
-      const vcs = await Server.App().request("/vcs", { headers: { "x-opencorvus-directory": project.path } })
+      const headers = { "x-opencorvus-directory": project.path }
+      const read = await Server.App().request(`/file/content?${new URLSearchParams({ path: relativePath })}`, { headers })
+      expect({ status: read.status, body: await read.json() }).toMatchObject({
+        status: 200,
+        body: { type: "text", content },
+      })
+      const vcs = await Server.App().request("/vcs", { headers })
       expect({ status: vcs.status, body: await vcs.json() }).toMatchObject({
         status: 200,
         body: { initialized: true, dirty: true, modified: 1 },

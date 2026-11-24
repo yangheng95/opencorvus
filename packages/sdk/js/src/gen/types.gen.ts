@@ -41370,7 +41370,7 @@ export type WorkLedgerEventsResponses = {
         path: string
         resourceID?: string
         sequence: 0
-        sourceType: "file.edited"
+        sourceType: "file.edited" | "file.watcher.updated"
         type: "work-ledger.file-changed"
       }
     | {

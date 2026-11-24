@@ -409,10 +409,13 @@ export function WorkLedgerRoutes() {
               const { file } = FileWatcher.Event.Updated.properties.parse(envelope.properties)
               if (!path.isAbsolute(file) || !Filesystem.contains(event.directory, file) ||
                 Filesystem.contains(path.join(event.directory, ".git"), file)) return
+              const relativePath = path.relative(event.directory, file)
+              if (path.isAbsolute(relativePath) || relativePath.split(path.sep)[0] === "..") return
               writeWorkLedgerEventData(writeData, {
-                type: "work-ledger.changed",
+                type: "work-ledger.file-changed",
                 sourceType: FileWatcher.Event.Updated.type,
                 directory: event.directory,
+                path: relativePath.split(path.sep).join("/") || ".",
                 sequence: 0,
               })
               return

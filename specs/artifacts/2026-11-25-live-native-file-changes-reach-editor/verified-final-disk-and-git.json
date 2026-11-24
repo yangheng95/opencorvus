@@ -1,0 +1,48 @@
+[
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b618\\candidate\\mission-list-review",
+    "path": "handoff.txt",
+    "fileStatus": 200,
+    "fileRequestID": "b0d52918-70d7-46a1-9071-bcfaa20de44a",
+    "content": "Outside edit: use gate seven.\nApplication save confirmed.\n",
+    "vcsStatus": 200,
+    "vcsRequestID": "711c7d25-4d3c-4b31-bf1a-0f52cae7b7bb",
+    "vcs": {
+      "initialized": true,
+      "branch": "main",
+      "commit": "3e0c1cc",
+      "clean": false,
+      "dirty": true,
+      "staged": 0,
+      "modified": 2,
+      "untracked": 3,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    }
+  },
+  {
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b618\\candidate\\control-review",
+    "path": "handoff.txt",
+    "fileStatus": 200,
+    "fileRequestID": "872dcca3-e705-44a7-b615-5e9642c0e93a",
+    "content": "Initial owned file for control-review\r\n",
+    "vcsStatus": 200,
+    "vcsRequestID": "5cb1096a-f150-4b15-a009-2e5af2faef31",
+    "vcs": {
+      "initialized": true,
+      "branch": "main",
+      "commit": "73b1780",
+      "clean": true,
+      "dirty": false,
+      "staged": 0,
+      "modified": 0,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    }
+  }
+]
