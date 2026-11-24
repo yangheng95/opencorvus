@@ -828,6 +828,15 @@ function isMissionSessionSource(): boolean {
   return boardStore.selectedSource?.kind === "session" && !isConversationSource()
 }
 
+function refreshWorkspaceProjectConfiguration(directory: string): void {
+  const authority = captureApiAuthority()
+  void loadConfigInfo(undefined, { authority, directory }).catch((error) => {
+    if (isApiAuthorityCurrent(authority) && activeDirectory() === directory) {
+      AppLog.warn("config", "Project configuration refresh failed", { directory, error: String(error) })
+    }
+  })
+}
+
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   if (event.type === "work-ledger.file-changed") {
     requestOpenFileDiskCheck(event)
@@ -835,22 +844,20 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   }
   if (event.type === "work-ledger.connected") {
     requestOpenFileDiskCheck()
+    const directory = activeDirectory()
+    if (directory && appStore.config !== null) refreshWorkspaceProjectConfiguration(directory)
   }
   if (event.type === "work-ledger.changed" && event.sourceType === "vcs.branch.updated") {
     if (event.directory) observeFileWorkbenchCheckout(event.directory)
     return
   }
-  const authority = captureApiAuthority()
   if (event.type === "work-ledger.changed" && event.sourceType === "project.config.changed") {
     const directory = activeDirectory()
     if (!directory || !event.directory || projectDirectoryKey(directory) !== projectDirectoryKey(event.directory)) return
-    void loadConfigInfo(undefined, { authority, directory }).catch((error) => {
-      if (isApiAuthorityCurrent(authority) && activeDirectory() === directory) {
-        AppLog.warn("config", "Project configuration refresh failed", { directory, error: String(error) })
-      }
-    })
+    refreshWorkspaceProjectConfiguration(directory)
     return
   }
+  const authority = captureApiAuthority()
   const selectedSource = boardStore.selectedSource
   refreshWorkLedgerViews(event.type === "work-ledger.changed" ? event : undefined)
   if (event.type === "work-ledger.changed" && event.sourceType === "project.memory.notice.changed") {
