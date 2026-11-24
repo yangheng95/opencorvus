@@ -6408,7 +6408,10 @@ terms from the notes, with author order breaking ties. Version and date searches
 keep the first item. With a nonblank query and visible matches, the history search
 field describes the keyboard shortcut and moves focus to the first or last matching
 version button on an unmodified Down or Up key. The same search result
-navigation used by Archive moves focus between matching version buttons.
+navigation used by Archive moves focus between matching version buttons. Page Up
+and Page Down use the actual version rows in the Settings scroll area and bring
+the focused result into view. The history row draws its focus ring inside the
+clipped results surface so all sides are visible during keyboard browsing.
 Escape on a matching version button returns focus to the search field with
 its query intact. Escape in the focused field clears that query. The version
 button keeps native Enter activation. Website and GitHub links

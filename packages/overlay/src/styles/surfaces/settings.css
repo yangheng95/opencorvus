@@ -1869,6 +1869,11 @@ button.s-row:focus-visible {
 .release-notes-row {
   width: 100%;
   text-align: left;
+  scroll-margin-block: var(--ui-gap-xs);
+}
+
+button.release-notes-row:focus-visible {
+  outline-offset: calc(-1 * var(--oc-border-width));
 }
 
 .release-notes-preview {

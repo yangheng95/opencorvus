@@ -42,7 +42,10 @@ export default function ReleaseNotesPanel() {
   const searchNavigation = createSearchResultNavigation(() => {
     if (!hasSearchMatches() || !panel) return []
     return Array.from(panel.querySelectorAll<HTMLButtonElement>("button[data-release-version]:enabled"))
-  }, { returnToSearch: () => historySearchInput })
+  }, {
+    returnToSearch: () => historySearchInput,
+    pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+  })
   const releaseRow = (version: string) =>
     panel?.querySelector<HTMLButtonElement>(`[data-release-version="${CSS.escape(version)}"]`) ?? undefined
   const select = (entry: ChangelogEntry | null) => {
@@ -102,7 +105,7 @@ export default function ReleaseNotesPanel() {
             <div class="release-notes-search-status">
               <span>{tc("releases.count", filteredHistory().length)}</span>
               <Show when={hasSearchMatches()}>
-                <span id="release-notes-search-keyboard-hint">{t("settings.search_return_keyboard_hint")}</span>
+                <span id="release-notes-search-keyboard-hint">{t("releases.search_page_navigation")}</span>
               </Show>
             </div>
             <SettingsSurface>
@@ -115,7 +118,7 @@ export default function ReleaseNotesPanel() {
                       interactive
                       class="release-notes-row"
                       data-release-version={entry.version}
-                      aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown Escape" : undefined}
+                      aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
                       title={
                         <span class="release-notes-version">
                           v{entry.displayVersion}
