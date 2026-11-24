@@ -21,6 +21,7 @@ import { Virtualizer, type VirtualizerHandle, type CustomContainerComponentProps
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { copyText } from "../services/clipboard"
 import { boardStore } from "../store/board"
+import { subscribeWorkLedgerChanges } from "../services/sse"
 import { workLedgerProject } from "../services/work-ledger"
 import { showAppDialog } from "../services/app-dialog"
 import {
@@ -59,7 +60,7 @@ import {
   projectFileLocation,
   shortestDistinctPathSuffixLengths,
 } from "../utils/server-path"
-import { projectDisplayName } from "../utils/project-directory"
+import { projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
@@ -902,24 +903,53 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     onCleanup(() => window.clearTimeout(timer))
   })
 
-  async function refreshActiveDirectoryListings(scope: ExplorerOperationScope): Promise<void> {
+  async function refreshActiveDirectoryListings(
+    scope: ExplorerOperationScope,
+    changedParents?: ReadonlySet<string>,
+  ): Promise<void> {
+    if (!ownsExplorerOperation(scope)) return
     const acceptedSearch = searchResults.loading ? undefined : currentSearchResult()
-    const reads = batch(() => [...new Set(["", ...expandedPaths()])]
-      .filter((path) => path === "" || childrenByPath().has(path) || directoryErrors().has(path))
-      .map((path) => loadDirectory(path, { force: true, scope })))
+    const visiblePaths = [...new Set(["", ...expandedPaths()])].filter((path) =>
+      (path === "" || childrenByPath().has(path) || directoryErrors().has(path)) &&
+      (!changedParents || changedParents.has(path)),
+    )
+    const hasUnobservedParent = changedParents && [...changedParents].some((path) =>
+      !visiblePaths.includes(path) || !childrenByPath().has(path),
+    )
+    const reads = batch(() => visiblePaths.map((path) => loadDirectory(path, { force: true, scope })))
     const results = await Promise.all(reads)
-    if (!acceptedSearch || acceptedSearch.error || searchResults.loading || currentSearchResult() !== acceptedSearch ||
-      commandBusy() || uploading() || !results.some((result) => result?.status === "loaded" && result.membershipChanged)) return
+    const membershipChanged = results.some((result) => result?.status === "loaded" && result.membershipChanged)
+    const needsSearch = membershipChanged || hasUnobservedParent ||
+      (changedParents && results.some((result) => result?.status !== "loaded"))
+    if (!needsSearch || !acceptedSearch || acceptedSearch.error || searchResults.loading ||
+      currentSearchResult() !== acceptedSearch || commandBusy() || uploading()) return
     await refreshActiveSearchResults(scope, acceptedSearch.source)
   }
 
   createEffect(() => {
-    const currentDirectory = directory()
-    const authority = captureApiAuthority()
-    const selectionEpoch = boardStore.selectEpoch
-    if (!active() || !currentDirectory) return
-    const scope = { directory: currentDirectory, authority, selectionEpoch }
-    const interval = window.setInterval(() => void refreshActiveDirectoryListings(scope), ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS)
+    const scope = currentOperationScope()
+    if (!active() || !scope?.authority) return
+    const directoryKey = projectDirectoryKey(scope.directory)
+    const [changedParents, setChangedParents] = createSignal<ReadonlySet<string>>(new Set())
+    const [refreshing, setRefreshing] = createSignal(false)
+    onCleanup(subscribeWorkLedgerChanges((event) => {
+      if (event.type !== "work-ledger.file-changed" || event.resourceID ||
+        projectDirectoryKey(event.directory) !== directoryKey || !ownsExplorerOperation(scope)) return
+      const parent = parentProjectPath(event.path, scope.directory)
+      setChangedParents((paths) => paths.has(parent) ? paths : new Set(paths).add(parent))
+    }))
+    createEffect(() => {
+      const parents = changedParents()
+      if (!parents.size || refreshing() || commandBusy() || uploading() || searchResults.loading) return
+      batch(() => {
+        setRefreshing(true)
+        setChangedParents(new Set<string>())
+      })
+      untrack(() => void refreshActiveDirectoryListings(scope, parents).finally(() => setRefreshing(false)))
+    })
+    const interval = window.setInterval(() => {
+      if (!refreshing()) void refreshActiveDirectoryListings(scope)
+    }, ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS)
     onCleanup(() => window.clearInterval(interval))
   })
 

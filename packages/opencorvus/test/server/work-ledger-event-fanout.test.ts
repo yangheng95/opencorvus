@@ -108,6 +108,43 @@ test("committed file writes announce their real path and resource on the public 
   }
 }, 30_000)
 
+test("created directory members announce their exact parent path on the public stream in each project", async () => {
+  await using first = await memoryProject("ledger-create-first")
+  await using second = await memoryProject("ledger-create-second")
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    for (const [index, project] of [first, second].entries()) {
+      const name = `handoff-${index + 1}.txt`
+      const file = `notes/${name}`
+      const content = `Project handoff ${index + 1}\n`
+      await mkdir(path.join(project.path, "notes"))
+      const headers = { "x-opencorvus-directory": project.path, "content-type": "application/json" }
+      const app = Server.App()
+      const created = await app.request("/file/item", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ path: file, type: "file", content }),
+      })
+      expect(created.status).toBe(200)
+      expect(File.Node.parse(await created.json())).toMatchObject({ name, type: "file" })
+      expect(await next("work-ledger.file-changed", "file.edited")).toEqual({
+        type: "work-ledger.file-changed",
+        sourceType: "file.edited",
+        directory: project.path,
+        path: file,
+        sequence: 0,
+      })
+      const list = await app.request("/file?path=notes", { headers })
+      expect(list.status).toBe(200)
+      expect(await list.json()).toMatchObject([{ name, type: "file", directoryTarget: false }])
+      expect(await readFile(path.join(project.path, file), "utf8")).toBe(content)
+    }
+  } finally {
+    await close()
+  }
+}, 30_000)
+
 test("global ledger stream fans out durable Task events to every affected projection across projects", async () => {
   await using first = await memoryProject("ledger-first")
   await using second = await memoryProject("ledger-second")
