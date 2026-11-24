@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [全局查找显示多步任务结果的完整原标题](2026-11-24-palette-full-mission-search-titles.md)
 - [项目层展开后的摘要跟随键盘项目焦点](2026-11-24-work-ledger-project-preview-priority.md)
 - [工作侧栏项目提示在桌面视口内完整显示路径](2026-11-24-work-ledger-project-tooltip-viewport.md)
 - [工作侧栏的项目层展开按钮显示项目数量](2026-11-24-work-ledger-project-group-count.md)
