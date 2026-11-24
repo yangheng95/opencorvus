@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从文件标签跳转到行](records/2026-11/2026-11-24-file-tab-go-to-line.md)
 - [完整版本历史的键盘浏览](records/2026-11/2026-11-24-release-history-unfiltered-navigation.md)
 - [手动滚动后恢复用量区间焦点](records/2026-11/2026-11-24-usage-activity-focus-after-scroll.md)
 - [用量活动图的分页焦点](records/2026-11/2026-11-24-usage-activity-page-focus.md)

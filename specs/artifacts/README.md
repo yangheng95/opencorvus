@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [从文件标签跳行的桌面证据](2026-11-24-file-tab-go-to-line/README.md)
 - [完整版本历史键盘浏览的桌面证据](2026-11-24-release-history-unfiltered-navigation/README.md)
 - [手动滚动后用量区间焦点的桌面证据](2026-11-24-usage-activity-focus-after-scroll/README.md)
 - [用量活动图分页的桌面证据](2026-11-24-usage-activity-page-focus/README.md)
