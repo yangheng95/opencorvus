@@ -19,7 +19,7 @@ Project 配置调和发布唯一 `Config.Event.ProjectChanged`：`project.config
 `properties` 是有效 `Config.Info`，外层保留实际 directory，进入同一公开 BusEvent union。
 工作记录实时流只把这个事件的类型与项目目录作为配置读取提示。当前项目的面板通过
 现有目录范围重新读取配置和频道目录，配置正文继续由原读取接口提供。
-当工作记录流重新连通，持有已接受配置的当前项目也使用同一读者核对断开期间的变化。
+当工作记录流重新连通，持有已接受配置的当前范围使用同一读者核对断开期间的变化。
 Session/Task 的 `config.changed` 则始终携带精确 `sessionID`，只刷新该 Session 的配置投影；
 它不承载项目配置，也不靠缺字段猜测来源。两者均不改写持久历史或已有 Session 模型。
 
@@ -299,6 +299,8 @@ reset 只失效 cache，不丢失仍活跃 reader 的观察资格，Instance 释
 global config、尚无 Project state 的 backend 也会比较 global revision，并在 peer commit 后发布原有
 `global.disposed`。global writer 可以为已注册 Project 使用 identity lease 做 runtime settlement，但只对
 此前已加载且仍活跃的 Project rewarm Config state，不能让 inactive Project 泄漏新的 cache owner。
+工作记录流转发 `global.disposed` 的事件身份，未选项目的面板沿唯一 `/global/config` 读取当前配置。
+已选项目继续通过各自的项目配置变更读回有效配置。
 
 Global candidate validation captures the previously loaded Project owners before
 its inspection reads. Each registered/active directory retains one existing

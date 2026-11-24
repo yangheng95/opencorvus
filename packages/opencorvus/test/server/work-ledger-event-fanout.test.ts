@@ -316,3 +316,35 @@ test("accepted branch switches announce their exact workspaces on the public str
     await close()
   }
 }, 30_000)
+
+test("a saved global configuration announces settlement on the public stream", async () => {
+  await using project = await memoryProject("ledger-config-global-control")
+  const configPath = ConfigPaths.projectFile(project.path)
+  await mkdir(path.dirname(configPath), { recursive: true })
+  await writeFile(configPath, JSON.stringify({ permission_mode: "full_access" }))
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    const app = Server.App()
+    const saved = await app.request("/global/config", {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ permission_mode: "ask" }),
+    })
+    expect(saved.status).toBe(200)
+    expect(await saved.json()).toMatchObject({ permission_mode: "ask" })
+    expect(await next("work-ledger.changed", "global.disposed")).toEqual({
+      type: "work-ledger.changed",
+      sourceType: "global.disposed",
+      sequence: 0,
+    })
+    const global = await app.request("/global/config")
+    expect(global.status).toBe(200)
+    expect(await global.json()).toMatchObject({ permission_mode: "ask" })
+    const scoped = await app.request("/config", { headers: { "x-opencorvus-directory": project.path } })
+    expect(scoped.status).toBe(200)
+    expect(await scoped.json()).toMatchObject({ permission_mode: "full_access" })
+  } finally {
+    await close()
+  }
+}, 30_000)

@@ -30,6 +30,7 @@ import { isMailboxChangeEventType } from "@/engine/mailbox"
 import { ProjectMemory } from "@/memory/project-memory"
 import { listArchivedWorkLedger, listWorkLedger, readWorkLedgerSelection } from "@/work-ledger/projection"
 import { errors } from "../error"
+import { Event as ServerEvent } from "../event"
 import { streamGlobalSSE } from "../sse"
 import { isTaskListProjectionEventType, taskListProtocolEvent } from "./orchestrator"
 
@@ -352,6 +353,14 @@ export function WorkLedgerRoutes() {
           }
           const globalBusListener = bind((event: { directory?: string; payload?: unknown }) => {
             const envelope = event.payload as { type?: unknown; properties?: unknown } | undefined
+            if (envelope?.type === ServerEvent.Disposed.type && event.directory === "global") {
+              writeWorkLedgerEventData(writeData, {
+                type: "work-ledger.changed",
+                sourceType: ServerEvent.Disposed.type,
+                sequence: 0,
+              })
+              return
+            }
             if (envelope?.type === File.Event.Edited.type && event.directory) {
               const { file, processAuthority, resourceID } = File.Event.Edited.properties.parse(envelope.properties)
               if (processAuthority.kind !== "host") return

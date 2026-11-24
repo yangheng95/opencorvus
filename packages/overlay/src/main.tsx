@@ -828,11 +828,11 @@ function isMissionSessionSource(): boolean {
   return boardStore.selectedSource?.kind === "session" && !isConversationSource()
 }
 
-function refreshWorkspaceProjectConfiguration(directory: string): void {
+function refreshWorkspaceConfiguration(directory: string): void {
   const authority = captureApiAuthority()
   void loadConfigInfo(undefined, { authority, directory }).catch((error) => {
     if (isApiAuthorityCurrent(authority) && activeDirectory() === directory) {
-      AppLog.warn("config", "Project configuration refresh failed", { directory, error: String(error) })
+      AppLog.warn("config", "Workspace configuration refresh failed", { directory, error: String(error) })
     }
   })
 }
@@ -844,8 +844,7 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   }
   if (event.type === "work-ledger.connected") {
     requestOpenFileDiskCheck()
-    const directory = activeDirectory()
-    if (directory && appStore.config !== null) refreshWorkspaceProjectConfiguration(directory)
+    if (appStore.config !== null) refreshWorkspaceConfiguration(activeDirectory())
   }
   if (event.type === "work-ledger.changed" && event.sourceType === "vcs.branch.updated") {
     if (event.directory) observeFileWorkbenchCheckout(event.directory)
@@ -854,7 +853,11 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   if (event.type === "work-ledger.changed" && event.sourceType === "project.config.changed") {
     const directory = activeDirectory()
     if (!directory || !event.directory || projectDirectoryKey(directory) !== projectDirectoryKey(event.directory)) return
-    refreshWorkspaceProjectConfiguration(directory)
+    refreshWorkspaceConfiguration(directory)
+    return
+  }
+  if (event.type === "work-ledger.changed" && event.sourceType === "global.disposed") {
+    if (!activeDirectory()) refreshWorkspaceConfiguration("")
     return
   }
   const authority = captureApiAuthority()
