@@ -4232,6 +4232,9 @@ with its original diagnostic until the next export or conversation change.
 Conversation diagnostic copy also keeps the original title. Its initiating
 conversation selection, connection and action own clipboard handoff and
 feedback; a completed read from a retired action cannot affect a later selection.
+The header's existing title tooltip displays the complete original title when
+the heading is clipped. The heading keeps its full accessible name, and the
+tooltip continues to present usage and diagnostic information.
 Transcript actor avatars use neutral chrome with the role glyph; elapsed times
 are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved
@@ -5917,8 +5920,8 @@ analysis request. The request tells the receiving assistant to separate facts
 from inference, treat unavailable data as unknown rather than zero, reconstruct
 the timeline, report confidence, and propose read-only confirmation checks. The
 Overlay confirms a successful copy with a localized instruction to paste the
-bundle into an AI assistant; the title tooltip exposes the double-click or
-keyboard copy gesture even when usage information is absent.
+bundle into an AI assistant. The title tooltip points to the diagnostic copy
+action in the title menu even when usage information is absent.
 
 A Chat bundle keeps three scopes separate. `Persisted root Session` reads the
 exact root `/session/{id}/message` collection. `Persisted Session tree` reads

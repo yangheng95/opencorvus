@@ -103,7 +103,9 @@ function ChatViewTitle(props: {
   }
   const [searchOpen, setSearchOpen] = createSignal(false)
   const [itemActionBusy, setItemActionBusy] = createSignal(false)
+  const [titleClipped, setTitleClipped] = createSignal(false)
   let disposed = false
+  let titleElement: HTMLSpanElement | undefined
   let searchReturnFocus: HTMLElement | null = null
   let searchMenuTrigger: HTMLElement | undefined
   const [debugCopy, setDebugCopy] = createSignal<DebugCopyState>()
@@ -286,9 +288,19 @@ function ChatViewTitle(props: {
 
   return (
     <div class="chat-title-group">
-      <Tooltip.Root openDelay={160} closeDelay={80} placement="bottom-start" gutter={8} fitViewport>
+      <Tooltip.Root
+        openDelay={160}
+        closeDelay={80}
+        placement="bottom-start"
+        gutter={8}
+        fitViewport
+        onOpenChange={(open) => {
+          if (open && titleElement) setTitleClipped(titleElement.scrollWidth > titleElement.clientWidth)
+        }}
+      >
         <Tooltip.Trigger
           as="span"
+          ref={(element) => { titleElement = element }}
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
           tabIndex={0}
           id="chatViewTitle"
@@ -298,6 +310,9 @@ function ChatViewTitle(props: {
         </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content class="chat-title-usage-tooltip" data-ui="chat-title-usage-tooltip">
+            <Show when={titleClipped()}>
+              <strong class="chat-title-usage-tooltip__title" aria-hidden="true">{props.title()}</strong>
+            </Show>
             <Show when={usageText()}>
               <span class="chat-title-usage-tooltip__label">{t("chat.usage_aria")}</span>
               <strong class="chat-title-usage-tooltip__value" id="chatTitleUsage">

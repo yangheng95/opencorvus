@@ -1372,6 +1372,15 @@
   gap: var(--ui-gap-md);
 }
 
+.chat-title-usage-tooltip__title {
+  grid-column: 1 / -1;
+  min-width: 0;
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: var(--ui-line-height-normal);
+  white-space: pre-wrap;
+}
+
 .chat-title-usage-tooltip__label {
   color: var(--text-muted);
 }
