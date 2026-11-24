@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [全局输入栏同步已保存的默认配置](records/2026-11/2026-11-24-global-config-peer-notification.md)
 - [实时流重连后核对当前项目配置](records/2026-11/2026-11-24-project-config-after-stream-rejoin.md)
 - [项目配置保存后更新同项目的其它标签页](records/2026-11/2026-11-24-project-config-peer-notification.md)
 - [在文件资源管理器工具栏直接刷新目录和搜索](records/2026-11/2026-11-24-explorer-toolbar-refresh.md)
