@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [离线提示按钮的真实桌面证据](2026-11-24-connection-banner-retry/README.md)
 - [重启服务与已打开文件的桌面证据](2026-11-24-open-file-reconnect/README.md)
 - [分支切换和已打开文件的真实桌面证据](2026-11-24-open-file-branch-switch/README.md)
 - [聊天草稿同名附件的桌面证据](2026-11-24-composer-same-name-attachment-removal/README.md)
