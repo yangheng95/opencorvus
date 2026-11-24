@@ -12,6 +12,7 @@ import { useDisclosure } from "../../solid/disclosure"
 import { formatErrorDetails } from "../../utils/error-details"
 import { createUsageIntervalFormatter, formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t, tc } from "../../utils/i18n"
+import { renderedListPageIndex } from "../../utils/rendered-list-navigation"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { ListboxItem, ListboxItemDescription, ListboxRoot } from "../ui/Listbox"
@@ -22,6 +23,7 @@ import { SettingsPanel } from "./layout"
 
 const PERCENT_FRACTION_DIGITS = 1
 const PERCENT_DISPLAY_STEP = 10 ** -PERCENT_FRACTION_DIGITS
+const DAYS_PER_WEEK = 7
 
 function exactNumber(value: number): string {
   return new Intl.NumberFormat(localeTag(), { maximumFractionDigits: 0 }).format(value)
@@ -141,11 +143,36 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
     }
     return nearest?.key
   }
+  const keyByPage = (key: string, direction: -1 | 1) => {
+    const currentBuckets = buckets()
+    const currentIndex = currentBuckets.findIndex((bucket) => bucket.start.toString() === key)
+    if (currentIndex < 0 || !scrollElement) return undefined
+
+    const bucketsPerColumn = isYear() ? DAYS_PER_WEEK : 1
+    const row = currentBuckets.filter((_, index) => index % bucketsPerColumn === currentIndex % bucketsPerColumn)
+    if (scrollElement.scrollWidth <= scrollElement.clientWidth) {
+      return (direction === -1 ? row[0] : row.at(-1))?.start.toString()
+    }
+
+    const target = renderedListPageIndex(
+      Math.floor(currentIndex / bucketsPerColumn),
+      row.length,
+      direction,
+      scrollElement.getBoundingClientRect().width,
+      (index) => {
+        const bounds = bucketElements.get(row[index]!.start.toString())?.getBoundingClientRect()
+        return bounds && { top: bounds.left, height: bounds.width }
+      },
+    )
+    return target === undefined ? undefined : row[target]?.start.toString()
+  }
   const keyboardDelegate: KeyboardDelegate = {
     getKeyAbove: (key) => keyInDirection(key, "vertical", -1),
     getKeyBelow: (key) => keyInDirection(key, "vertical", 1),
     getKeyLeftOf: (key) => keyInDirection(key, "horizontal", -1),
     getKeyRightOf: (key) => keyInDirection(key, "horizontal", 1),
+    getKeyPageAbove: (key) => keyByPage(key, -1),
+    getKeyPageBelow: (key) => keyByPage(key, 1),
     getFirstKey: () => buckets()[0]?.start.toString(),
     getLastKey: () => buckets().at(-1)?.start.toString(),
   }
@@ -183,7 +210,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
     }).format(data.buckets[0].start)
     return ({ Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 } as Record<string, number>)[day] ?? 0
   })
-  const yearColumn = (index: number) => Math.floor((index + yearOffset()) / 7) + 1
+  const yearColumn = (index: number) => Math.floor((index + yearOffset()) / DAYS_PER_WEEK) + 1
   const column = (index: number) => isYear() ? yearColumn(index) : index + 1
   const columnCount = () => Math.max(1, column(buckets().length - 1))
 
@@ -199,6 +226,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
             class="usage-activity__grid"
             density="default"
             aria-label={t("usage.chart_aria")}
+            aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home End PageUp PageDown"
             state={listState}
             selectOnFocus
             disallowEmptySelection={listState.selectionManager().disallowEmptySelection()}
@@ -208,7 +236,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
             scrollRef={() => scrollElement}
             keyboardDelegate={keyboardDelegate}
             onKeyDown={(event) => {
-              if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+              if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(event.key)) {
                 preferFocus()
               }
             }}
@@ -233,7 +261,7 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
                     style={
                       isYear()
                         ? {
-                            "grid-row": String(((item.index + yearOffset()) % 7) + 1),
+                            "grid-row": String(((item.index + yearOffset()) % DAYS_PER_WEEK) + 1),
                             "grid-column": String(column(item.index)),
                           }
                         : undefined

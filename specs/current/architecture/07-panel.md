@@ -2813,6 +2813,10 @@ credentials.
 Activity buckets use one Listbox inspection collection with a single Tab entry,
 visual-direction arrows and chronological Home/End. Zero-valued buckets remain
 inspectable; year positions express real weekdays without synthetic options.
+Page Up and Page Down browse the width of the current chart viewport while
+keeping the focused weekday row in the year view. When the chart fits, they go
+to the first or last bucket in that row. At an edge focus stays on the current
+bucket, and the page keys scroll the settings normally outside the chart.
 Activity buckets and their date labels share one column grid. The year view
 uses week columns and starts each month label at the column containing its
 first bucket. Shorter periods use one row with a column for each bucket. When
