@@ -1,0 +1,78 @@
+{
+  "active": "dynamic",
+  "results": {
+    "": [
+      {
+        "id": "advanced",
+        "label": "Advanced"
+      },
+      {
+        "id": "base",
+        "label": "Base"
+      },
+      {
+        "id": "dynamic",
+        "label": "Dynamic"
+      },
+      {
+        "id": "research-studio",
+        "label": "Research Studio"
+      },
+      {
+        "id": "squad-sdk",
+        "label": "Generate Expert Squads"
+      }
+    ],
+    "re": [
+      {
+        "id": "research-studio",
+        "label": "Research Studio"
+      },
+      {
+        "id": "advanced",
+        "label": "Advanced"
+      },
+      {
+        "id": "base",
+        "label": "Base"
+      },
+      {
+        "id": "squad-sdk",
+        "label": "Generate Expert Squads"
+      }
+    ],
+    "traceability": [
+      {
+        "id": "advanced",
+        "label": "Advanced"
+      }
+    ],
+    "handoff": []
+  },
+  "missions": [
+    {
+      "missionID": "draft-0c3d526b4ec64bbffb173dfbf447e607",
+      "sessionID": "ses_hLiDSWquePyyZnhNxDaz",
+      "title": "Receiving checklist paging review",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b535\\candidate\\change-review",
+      "created": 1795494359875,
+      "updated": 1795494359875,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Compare the receiving checklist with the signed register and report any missing entries."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  ],
+  "exactDraftSelection": [
+    "squad-sdk"
+  ]
+}

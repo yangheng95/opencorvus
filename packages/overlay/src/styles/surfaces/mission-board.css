@@ -829,6 +829,7 @@ body {
 .mission-create-form__expert-squad-list .oc-checkbox {
   flex-shrink: 0;
   align-items: flex-start;
+  scroll-margin-block: var(--ui-gap-xs);
 }
 
 .mission-create-form__expert-squad-list .oc-checkbox:has(input:focus-visible) {

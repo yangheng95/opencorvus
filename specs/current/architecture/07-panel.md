@@ -2084,6 +2084,10 @@ length limits, context prerequisites and server validation retain their owners.
 Mission creation searches update candidates while retaining the exact authored
 selection, including a deliberately cleared selection. Enter in its SearchField
 keeps focus in search; creating or saving remains a separate form action.
+Page Up and Page Down use the height of the squad checklist and the rendered
+checkbox rows to focus an available accepted match. Paging leaves the current
+selection intact. Retained selections and the install action keep their regular
+Tab access.
 Escape on an available checkbox matching the current nonempty query returns to
 that search field with the query and form inputs intact. The matching checklist
 handles this before dialog dismissal. Escape in the search field clears the

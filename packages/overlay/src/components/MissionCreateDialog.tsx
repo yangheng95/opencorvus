@@ -203,7 +203,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     return Array.from(
       expertSquadList.querySelectorAll<HTMLInputElement>('[data-search-match] input[type="checkbox"]:enabled'),
     )
-  }, { returnToSearch: () => hasSquadSearch() ? expertSquadSearchRef : undefined })
+  }, {
+    returnToSearch: () => hasSquadSearch() ? expertSquadSearchRef : undefined,
+    pageViewport: () => expertSquadList,
+    pageRow: (action) => action.closest<HTMLElement>(".oc-checkbox"),
+  })
   const visibleExpertSquads = createMemo(() =>
     expertSquads().filter((squad) => selectedExpertSquadIDs().has(squad.id) || isCurrentSquadCandidate(squad.id)),
   )
@@ -867,7 +871,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                     checked={selectedExpertSquadIDs().has(squad.id)}
                     disabled={submitting() || expertSquadLoading()}
                     aria-keyshortcuts={canFocusSquadMatch() && isCurrentSquadCandidate(squad.id)
-                      ? (hasSquadSearch() ? "ArrowUp ArrowDown Escape" : "ArrowUp ArrowDown")
+                      ? (hasSquadSearch() ? "ArrowUp ArrowDown PageUp PageDown Escape" : "ArrowUp ArrowDown PageUp PageDown")
                       : undefined}
                     data-search-match={isCurrentSquadCandidate(squad.id) ? "true" : undefined}
                     onChange={(checked) => updateExpertSquadSelection(squad.id, checked)}
