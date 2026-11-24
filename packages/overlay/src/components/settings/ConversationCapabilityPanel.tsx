@@ -2,7 +2,7 @@ import { Feedback } from "../ui/Feedback"
 import { isConversationMcpRef } from "@opencorvus-ai/util/conversation-mcp-ref"
 import { displayMcpName } from "@opencorvus-ai/util/mcp-name"
 import { Key } from "@solid-primitives/keyed"
-import { batch, createEffect, createMemo, createSignal, For, on, Show, onCleanup } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, createUniqueId, For, on, Show, onCleanup } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import {
   loadConversationCapability,
@@ -15,6 +15,7 @@ import { matchesSearchTerms } from "../../services/text-search"
 import { workLedgerProject } from "../../services/work-ledger"
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
+import { revealRenderedListRow } from "../../utils/rendered-list-navigation"
 import { Disclosure } from "../ui/Disclosure"
 import { Checkbox } from "../ui/Checkbox"
 import { Button } from "../ui/Button"
@@ -49,6 +50,9 @@ export default function ConversationCapabilityPanel(props: {
   let checkButton: HTMLButtonElement | undefined
   let assignmentsElement: HTMLDivElement | undefined
   let mcpSection: HTMLElement | undefined
+  let skillSearchInput: HTMLInputElement | undefined
+  let skillResults: HTMLDivElement | undefined
+  const skillSearchHintID = `capability-skill-search-hint-${createUniqueId()}`
   onCleanup(() => {
     loadGeneration++
     mutationGeneration++
@@ -80,6 +84,24 @@ export default function ConversationCapabilityPanel(props: {
     const skills = installedSkills()
     return query ? skills.filter((skill) => matchesSearchTerms(query, [skill.name, skill.description])) : skills
   })
+  const hasSkillResults = () => filteredSkills().length > 0
+  const hasFilteredSkillResults = () => Boolean(skillQuery().trim()) && hasSkillResults()
+  const skillResultKeyShortcuts = () => hasFilteredSkillResults()
+    ? "ArrowUp ArrowDown PageUp PageDown Escape"
+    : "ArrowUp ArrowDown PageUp PageDown"
+  const skillNavigationOptions = {
+    pageViewport: (action: HTMLElement) => action.closest<HTMLElement>(".config-content"),
+    pageRow: (action: HTMLElement) => action.closest<HTMLElement>(".s-row"),
+    returnToSearch: () => hasFilteredSkillResults() ? skillSearchInput : undefined,
+  }
+  const skillDetailNavigation = createSearchResultNavigation(
+    () => Array.from(skillResults?.querySelectorAll<HTMLElement>(".conversation-capability-description > summary") ?? []),
+    skillNavigationOptions,
+  )
+  const skillAssignmentNavigation = createSearchResultNavigation(
+    () => Array.from(skillResults?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:enabled') ?? []),
+    skillNavigationOptions,
+  )
 
   function scopeDirectory() {
     return settings()?.scope.directory || directory()
@@ -248,7 +270,16 @@ export default function ConversationCapabilityPanel(props: {
 
                   <SettingsGroup
                     title={t("settings.product.skills", { product: productLabel() })}
-                    description={t("settings.product.skills_description", { product: productLabel() })}
+                    description={
+                      <>
+                        {t("settings.product.skills_description", { product: productLabel() })}
+                        <Show when={hasFilteredSkillResults()}>
+                          <p id={skillSearchHintID} class="settings-search-keyboard-hint">
+                            {t("settings.product.skills_keyboard_hint")}
+                          </p>
+                        </Show>
+                      </>
+                    }
                     actions={
                       <Show when={installedSkills().length > 0}>
                         <SearchField
@@ -256,13 +287,17 @@ export default function ConversationCapabilityPanel(props: {
                           dataUI="conversation-capability-skill-search"
                           value={skillQuery()}
                           ariaLabel={t("settings.product.skills_search_label")}
+                          ariaDescribedBy={hasFilteredSkillResults() ? skillSearchHintID : undefined}
+                          ariaKeyShortcuts={hasSkillResults() ? "ArrowUp ArrowDown" : undefined}
                           placeholder={t("settings.product.skills_search")}
+                          inputRef={(element) => { skillSearchInput = element }}
                           onValueChange={setSkillQuery}
+                          resultFocusTarget={skillDetailNavigation.resultFocusTarget}
                         />
                       </Show>
                     }
                   >
-                    <SettingsSurface>
+                    <SettingsSurface class="conversation-capability-skill-results" ref={skillResults}>
                       <Show
                         when={filteredSkills().length > 0}
                         fallback={
@@ -272,12 +307,26 @@ export default function ConversationCapabilityPanel(props: {
                         <Key each={filteredSkills()} by="name">
                           {(skill) => {
                             const assigned = () => current().skills.assigned_refs.includes(skill().name)
+                            let description: HTMLDetailsElement | undefined
                             return (
                               <SettingsRow
                                 title={skill().name}
                                 children={
-                                  <Disclosure.Root class="conversation-capability-description">
-                                    <Disclosure.Trigger indicatorPosition="end">
+                                  <Disclosure.Root
+                                    ref={description}
+                                    class="conversation-capability-description"
+                                    onOpenChange={(open) => {
+                                      if (!open || !description?.contains(document.activeElement)) return
+                                      const row = skillNavigationOptions.pageRow(description)
+                                      const viewport = skillNavigationOptions.pageViewport(description)
+                                      if (row && viewport) revealRenderedListRow(row, viewport)
+                                    }}
+                                  >
+                                    <Disclosure.Trigger
+                                      indicatorPosition="end"
+                                      aria-keyshortcuts={skillResultKeyShortcuts()}
+                                      on:keydown={skillDetailNavigation.handleResultKeyDown}
+                                    >
                                       <span class="conversation-capability-description-preview">
                                         {skill().description || t("settings.product.skill_available")}
                                       </span>
@@ -294,10 +343,12 @@ export default function ConversationCapabilityPanel(props: {
                                   <Checkbox
                                     checked={assigned()}
                                     readOnly={assignmentLocked()}
+                                    aria-keyshortcuts={skillResultKeyShortcuts()}
                                     aria-label={t("settings.product.skill_toggle", {
                                       name: skill().name,
                                       product: productLabel(),
                                     })}
+                                    onKeyDown={skillAssignmentNavigation.handleResultKeyDown}
                                     onChange={(checked) => toggleSkill(skill().name, checked)}
                                   />
                                 }

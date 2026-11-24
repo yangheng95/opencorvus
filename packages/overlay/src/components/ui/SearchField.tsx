@@ -1,6 +1,6 @@
 import { Show, type JSX } from "solid-js"
 import { t } from "../../utils/i18n"
-import { renderedListPageIndex } from "../../utils/rendered-list-navigation"
+import { renderedListPageIndex, revealRenderedListRow } from "../../utils/rendered-list-navigation"
 import { Icon } from "./Icon"
 import { Button } from "./Button"
 import { TextField, type TextFieldSize } from "./TextField"
@@ -18,10 +18,7 @@ function focusSearchResult(target: SearchResultTarget | undefined): boolean {
   if (!action.isConnected) return false
 
   action.focus({ preventScroll: !native })
-  if (!native && target.row) {
-    const block = target.row.getBoundingClientRect().height > target.viewport.clientHeight ? "start" : "nearest"
-    target.row.scrollIntoView({ block, inline: "nearest" })
-  }
+  if (!native && target.row) revealRenderedListRow(target.row, target.viewport)
   return true
 }
 

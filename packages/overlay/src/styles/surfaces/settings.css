@@ -3210,6 +3210,10 @@ button.release-notes-row:focus-visible {
   margin-top: var(--ui-gap-2xl);
 }
 
+.conversation-capability-skill-results .s-row {
+  scroll-margin-block: var(--ui-gap-xs);
+}
+
 .conversation-capability-sections .oc-checkbox[data-readonly] {
   cursor: default;
 }

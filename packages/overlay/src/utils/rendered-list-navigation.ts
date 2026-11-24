@@ -1,5 +1,10 @@
 type RowBounds = { top: number; height: number }
 
+export function revealRenderedListRow(row: HTMLElement, viewport: HTMLElement): void {
+  const block = row.getBoundingClientRect().height > viewport.clientHeight ? "start" : "nearest"
+  row.scrollIntoView({ block, inline: "nearest" })
+}
+
 export function renderedListPageIndex(
   index: number,
   rowCount: number,

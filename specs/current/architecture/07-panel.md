@@ -2718,6 +2718,13 @@ The available skills search matches every term against the same skill's canonica
 name and author description. Clearing it restores the accepted inventory in its
 original order. A scope change clears the query, and a confirmed assignment in
 the current scope retains the query and the visible matching controls.
+Down and Up from the skill search enter the first or last description. Arrow
+keys and Page Up or Page Down move among rendered descriptions or among the
+assignment checkboxes, keeping the destination row visible. Opening a focused
+description also brings the expanded row into view. Tab retains the normal
+order between a skill's description and assignment. With a nonempty
+query, Escape from a matching description or checkbox returns to that search
+without clearing it.
 Unconfirmed writes move focus to the existing check action only while the
 original assignment still owns focus.
 In the available connections section, arrow keys and Page Up or Page Down move
