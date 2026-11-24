@@ -1213,6 +1213,10 @@ as the file service. A name cannot change the selected or original parent;
 the Move command is the explicit path-changing operation. Busy and
 navigation-reservation boundaries, mutation feedback, refresh and post-create
 editor admission remain owned by that existing operation.
+The Explorer toolbar also exposes the same Refresh command as the background
+context menu. It keeps the current search and reads the expanded directories and
+active query through the existing action receipts. The toolbar button stays
+focusable while the requested reads settle.
 The Files tool identifies its current Project above the existing toolbar using
 the canonical work-ledger Project title and original directory. Both update from
 the same directory input as listing, search and commands; the full path remains

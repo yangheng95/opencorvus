@@ -1272,6 +1272,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return target && target.directory === directory() ? normalizeExplorerPath(target.path) : ""
   })
   const commandBusy = createMemo(() => fileEditorReserved() || mutationOperation()?.directory === directory())
+  const refreshingExplorer = createMemo(() => {
+    const operation = mutationOperation()
+    return operation?.kind === "refresh" && operation.directory === directory()
+  })
   const projectCommandsDisabled = () => !directory() || commandBusy()
 
   function uniquePaths(paths: string[]): string[] {
@@ -2649,6 +2653,21 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
               onKeyDown={handleSearchKeyDown}
               clearDataUI="file-explorer-search-clear"
             />
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              tone="neutral"
+              data-ui="file-explorer-refresh"
+              disabled={!directory()}
+              aria-disabled={commandBusy() || undefined}
+              aria-busy={refreshingExplorer() || undefined}
+              title={t("explorer.refresh")}
+              aria-label={t("explorer.refresh")}
+              onClick={() => void refreshVisibleDirectories()}
+            >
+              <Icon name={refreshingExplorer() ? "loading" : "refresh"} size="compact" />
+            </Button>
             <DropdownMenu.Root placement="bottom-end" fitViewport>
               <DropdownMenu.Trigger
                 as={Button}
