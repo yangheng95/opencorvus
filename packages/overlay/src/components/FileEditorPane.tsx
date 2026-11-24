@@ -94,6 +94,15 @@ function isEditableFileSnapshot(content: FileContent | null | undefined): conten
     typeof content.resourceID === "string" && Boolean(content.resourceID)
 }
 
+function fileReadFailureKind(error: unknown): "missing" | "invalid_path" | "failed" {
+  if (error instanceof ApiError && error.body && typeof error.body === "object") {
+    const name = (error.body as { name?: unknown }).name
+    if (error.status === 404 && name === "FileNotFoundError") return "missing"
+    if (error.status === 400 && name === "FileInvalidPathError") return "invalid_path"
+  }
+  return "failed"
+}
+
 function saveFailureMessageKey(error: unknown): string {
   if (
     error instanceof ApiError &&
@@ -133,6 +142,11 @@ function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditor
 }
 
 type FileEditorFailure = { messageKey: string; cause?: unknown; observationCause?: unknown }
+
+function isReloadFailure(failure: FileEditorFailure | null): boolean {
+  return failure?.messageKey === "file_editor.reload_failed" || failure?.messageKey === "file_editor.reload_missing"
+}
+
 type AcceptedFileContent = { value: FileContent; target: FileEditorTarget; readerAuthority: ApiAuthority }
 type ComparisonMode = "disk-draft" | "base-disk" | "base-draft"
 type FileComparison = {
@@ -427,20 +441,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     const key = error()?.messageKey
     return key === "file_editor.save_conflict" || isUnconfirmedSave(key)
   }
-  const readFailurePresentation = createMemo(() => {
-    const cause = loadFailure()?.error
-    const body = cause instanceof ApiError ? cause.body : undefined
-    if (cause instanceof ApiError && body && typeof body === "object") {
-      const name = (body as { name?: unknown }).name
-      if (cause.status === 404 && name === "FileNotFoundError") {
-        return { titleKey: "file_editor.load_missing", hintKey: "file_editor.load_missing_hint" } as const
-      }
-      if (cause.status === 400 && name === "FileInvalidPathError") {
-        return { titleKey: "file_editor.load_invalid_path", hintKey: "file_editor.load_invalid_path_hint" } as const
-      }
-    }
-    return { titleKey: "file_editor.load_failed", hintKey: "file_editor.load_failed_hint" } as const
-  })
+  const readFailureKind = createMemo(() => fileReadFailureKind(loadFailure()?.error))
 
   const comparisonDiskContent = () => {
     const read = comparison()
@@ -778,8 +779,10 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       const next = await readFileContent(file, authority)
       if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
       if (checkingDisk) {
+        setError((failure) => isReloadFailure(failure) ? null : failure)
         const baseline = savedBaseline()
         if (baseline && isEditableFileSnapshot(next) && next.revision === baseline.revision && next.resourceID === baseline.resourceID) {
+          setLoadedObservationKey(observed)
           return
         }
       }
@@ -793,7 +796,12 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     } catch (cause) {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
         if (loadFailure()) setLoadFailure({ error: cause })
-        else setError({ messageKey: "file_editor.reload_failed", cause })
+        else {
+          const messageKey = fileReadFailureKind(cause) === "missing"
+            ? "file_editor.reload_missing"
+            : "file_editor.reload_failed"
+          setError((failure) => checkingDisk && failure && !isReloadFailure(failure) ? failure : { messageKey, cause })
+        }
       }
     } finally {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) setReloading(false)
@@ -1084,7 +1092,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
                   class="file-editor-load-feedback"
                   data-ui="file-editor-load-error"
                   tone="error"
-                  title={t(readFailurePresentation().titleKey)}
+                  title={t(`file_editor.load_${readFailureKind()}`)}
                   details={loadFailure() ? formatErrorDetails(loadFailure()!.error) : undefined}
                   actions={
                     <Button
@@ -1103,7 +1111,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
                   }
                 >
                   <div class="file-editor-failure-path">{target()?.sourceAbsolutePath || path()}</div>
-                  <div>{t(readFailurePresentation().hintKey)}</div>
+                  <div>{t(`file_editor.load_${readFailureKind()}_hint`)}</div>
                 </Feedback>
               }
             >

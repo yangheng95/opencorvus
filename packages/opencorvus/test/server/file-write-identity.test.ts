@@ -69,6 +69,36 @@ test("file read and save identify the same canonical editable resource across by
   expect(await read(project.path, "second/edit.txt")).toEqual(second)
 }, 30_000)
 
+test("restoring a moved file to its former path accepts a draft based on the original revision", async () => {
+  await using project = await memoryProject("file-restore-open-path")
+  await configure(project.path)
+  const original = "The original checklist\n"
+  const draft = `${original}An item edited while the path was unavailable\n`
+  const originalPath = "notes/checklist.txt"
+  const movedPath = "notes/moved-checklist.txt"
+  await fs.mkdir(path.join(project.path, "notes"))
+  await fs.writeFile(path.join(project.path, originalPath), original)
+  const loaded = await read(project.path, originalPath)
+  expect(structuredClone(loaded)).toMatchObject({
+    status: 200,
+    body: { content: original, revision: expect.any(String), resourceID: expect.any(String) },
+  })
+  expect(await request(project.path, "PATCH", "/file/item", { path: originalPath, newPath: movedPath }))
+    .toMatchObject({ status: 200, body: { previousPath: originalPath, path: movedPath } })
+  expect(await read(project.path, originalPath))
+    .toMatchObject({ status: 404, body: { name: "FileNotFoundError", data: { path: originalPath } } })
+  expect(await request(project.path, "PATCH", "/file/item", { path: movedPath, newPath: originalPath }))
+    .toMatchObject({ status: 200, body: { previousPath: movedPath, path: originalPath } })
+  expect(await read(project.path, originalPath)).toEqual(loaded)
+  const saved = await request(project.path, "PATCH", "/file/content", {
+    path: originalPath,
+    content: draft,
+    expectedRevision: loaded.body.revision,
+  })
+  expect(saved).toMatchObject({ status: 200, body: { content: draft, resourceID: loaded.body.resourceID } })
+  expect(await fs.readFile(path.join(project.path, originalPath), "utf8")).toBe(draft)
+}, 30_000)
+
 test.skipIf(process.platform !== "win32").each(["file", "directory", "junction"] as const)(
   "case-only %s rename returns the current entry name and retains its physical identity",
   async (kind) => {

@@ -2714,6 +2714,7 @@
   "file_editor.reload": "Reload from disk",
   "file_editor.disk_update": "The disk version may have changed.",
   "file_editor.disk_update_dirty": "The disk version may have changed. Your edits are kept here.",
+  "file_editor.reload_missing": "This file is missing at its original path. Your current contents are kept here.",
   "file_editor.reload_failed": "Could not reload this file. Your current contents are kept here.",
   "file_editor.discard_reload": "Discard and reload",
   "file_editor.reload_unsaved_message": "Reload this file from disk? Save or discard your changes first.",

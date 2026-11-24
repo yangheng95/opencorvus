@@ -2713,6 +2713,7 @@
   "file_editor.reload": "从磁盘重新加载",
   "file_editor.disk_update": "磁盘版本可能已变更。",
   "file_editor.disk_update_dirty": "磁盘版本可能已变更。你的编辑仍保留在此处。",
+  "file_editor.reload_missing": "原路径下已找不到此文件。当前内容仍保留在这里。",
   "file_editor.reload_failed": "无法重新加载此文件。当前内容已保留。",
   "file_editor.discard_reload": "放弃并重新加载",
   "file_editor.reload_unsaved_message": "从磁盘重新加载此文件？请先保存或放弃更改。",

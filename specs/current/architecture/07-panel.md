@@ -1563,6 +1563,11 @@ A saved editable resource identity also lets a project alias observe the same
 file. Pending checks wait for the current editor operation and expire with the
 owning target or server. The editor reads the current disk snapshot through its
 existing reader, including when its own save produced the event.
+When a recheck finds the open path missing, the editor explains the missing
+path and keeps the loaded text and local draft. A later successful check clears
+the earlier reload failure. If the same resource and revision are back, the
+accepted editing base and current draft stay in place. An automatic read
+failure leaves a pending save conflict or other action failure in place.
 
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
