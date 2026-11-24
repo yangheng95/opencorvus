@@ -1835,6 +1835,10 @@ button.mission-skill-item:focus-visible {
   outline-offset: var(--ui-gap-xs);
 }
 
+.conversation-capability-mcp .s-row {
+  scroll-margin-block: var(--ui-gap-xs);
+}
+
 .extension-list > .s-surface > #mcpList > .empty-hint {
   padding: var(--ui-gap-xl);
 }

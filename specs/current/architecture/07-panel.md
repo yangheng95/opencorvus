@@ -2720,6 +2720,10 @@ original order. A scope change clears the query, and a confirmed assignment in
 the current scope retains the query and the visible matching controls.
 Unconfirmed writes move focus to the existing check action only while the
 original assignment still owns focus.
+In the available connections section, arrow keys and Page Up or Page Down move
+focus among the current project's connection checkboxes and keep the full
+destination row visible. Space changes the focused assignment through the
+existing write, and Tab retains its native order.
 
 General's log export keeps the same button focusable while its accepted request
 is busy, publishing aria-disabled/aria-busy and guarding repeat activation. The

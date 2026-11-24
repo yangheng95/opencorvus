@@ -18,7 +18,7 @@ import { formatErrorDetails } from "../../utils/error-details"
 import { Disclosure } from "../ui/Disclosure"
 import { Checkbox } from "../ui/Checkbox"
 import { Button } from "../ui/Button"
-import { SearchField } from "../ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "../ui/SearchField"
 import { SettingsProjectScope } from "./SettingsProjectScope"
 import {
   SettingsEmpty,
@@ -48,6 +48,7 @@ export default function ConversationCapabilityPanel(props: {
   let scopeTrigger: HTMLElement | undefined
   let checkButton: HTMLButtonElement | undefined
   let assignmentsElement: HTMLDivElement | undefined
+  let mcpSection: HTMLElement | undefined
   onCleanup(() => {
     loadGeneration++
     mutationGeneration++
@@ -63,6 +64,16 @@ export default function ConversationCapabilityPanel(props: {
   const ownsScope = (scope: CapabilityScope) =>
     directory() === scope.directory && props.experience === scope.experience && isApiAuthorityCurrent(scope.authority)
   const assignmentLocked = () => saving() || loading() || issue() !== null
+  const canBrowseMcpAssignments = createMemo(() =>
+    (settings()?.mcp.configured_server_refs.filter(isConversationMcpRef).length ?? 0) > 1,
+  )
+  const mcpAssignmentNavigation = createSearchResultNavigation(
+    () => Array.from(mcpSection?.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:enabled') ?? []),
+    {
+      pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+      pageRow: (action) => action.closest<HTMLElement>(".s-row"),
+    },
+  )
   const installedSkills = () => settings()?.skills.installed ?? []
   const filteredSkills = createMemo(() => {
     const query = skillQuery().trim()
@@ -299,12 +310,22 @@ export default function ConversationCapabilityPanel(props: {
                   </SettingsGroup>
 
                   <SettingsGroup
-                    ref={props.onMcpSectionReady}
+                    ref={(section) => {
+                      mcpSection = section
+                      props.onMcpSectionReady(section)
+                    }}
                     class="conversation-capability-mcp"
                     tabIndex={-1}
                     aria-label={t("settings.product.mcp", { product: productLabel() })}
                     title={t("settings.product.mcp", { product: productLabel() })}
-                    description={t("settings.product.mcp_description", { product: productLabel() })}
+                    description={
+                      <>
+                        {t("settings.product.mcp_description", { product: productLabel() })}
+                        <Show when={canBrowseMcpAssignments()}>
+                          <p class="settings-search-keyboard-hint">{t("mcp.connection_keyboard_hint")}</p>
+                        </Show>
+                      </>
+                    }
                   >
                     <SettingsSurface>
                       <Show
@@ -332,6 +353,8 @@ export default function ConversationCapabilityPanel(props: {
                                       name,
                                       product: productLabel(),
                                     })}
+                                    aria-keyshortcuts={canBrowseMcpAssignments() ? "ArrowUp ArrowDown PageUp PageDown" : undefined}
+                                    onKeyDown={mcpAssignmentNavigation.handleResultKeyDown}
                                     onChange={(checked) => toggleMcp(serverID, checked)}
                                   />
                                 )}

@@ -1,0 +1,83 @@
+{
+  "configured": [
+    "browser",
+    "computer",
+    "status-review-01",
+    "status-review-02",
+    "status-review-03",
+    "status-review-04",
+    "status-review-05",
+    "status-review-06",
+    "status-review-07",
+    "status-review-08",
+    "status-review-09",
+    "status-review-10",
+    "status-review-11",
+    "status-review-12",
+    "status-review-13",
+    "status-review-14",
+    "status-review-15",
+    "status-review-16",
+    "status-review-17",
+    "status-review-18",
+    "status-review-19",
+    "status-review-20",
+    "status-review-21",
+    "status-review-22",
+    "status-review-23"
+  ],
+  "confirmedAssignments": {
+    "chat": [],
+    "work": []
+  },
+  "persistedAssignments": {
+    "chat": [],
+    "work": []
+  },
+  "isolatedDisabledStatuses": [
+    "status-review-01",
+    "status-review-02",
+    "status-review-03",
+    "status-review-04",
+    "status-review-05",
+    "status-review-06",
+    "status-review-07",
+    "status-review-08",
+    "status-review-09",
+    "status-review-10",
+    "status-review-11",
+    "status-review-12",
+    "status-review-13",
+    "status-review-14",
+    "status-review-15",
+    "status-review-16",
+    "status-review-17",
+    "status-review-18",
+    "status-review-19",
+    "status-review-20",
+    "status-review-21",
+    "status-review-22",
+    "status-review-23"
+  ],
+  "assignmentReceipts": [
+    {
+      "route": "/chat/capability",
+      "requestID": "c09011bc-a14a-4048-a419-9ef0a18e7493",
+      "status": 200
+    },
+    {
+      "route": "/chat/capability",
+      "requestID": "7cb8e83b-1fea-497c-a6f3-b6c5aaccce74",
+      "status": 200
+    }
+  ],
+  "directMcpWrites": 0,
+  "sqliteQuickCheck": "ok",
+  "executionCounts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  }
+}
