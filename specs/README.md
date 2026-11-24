@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [资源管理器及时显示另一标签页已创建的文件](records/2026-11/2026-11-24-explorer-peer-change.md)
 - [项目输入模式可以保存并按项目恢复](records/2026-11/2026-11-24-project-mode-persistence.md)
 - [两个标签页修改不同设置后都能恢复](records/2026-11/2026-11-24-preferences-across-tabs.md)
 - [别的标签页保存后及时核对已打开的项目文件](records/2026-11/2026-11-24-open-file-live-save.md)
