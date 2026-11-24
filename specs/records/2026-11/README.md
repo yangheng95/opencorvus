@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [打开的全局查找跟进会话更名](2026-11-25-palette-refreshes-renamed-conversations.md)
 - [环境面板跟进项目工作树更新](2026-11-25-environment-worktree-project-updates.md)
 - [Git 说明生成失败时保留手写正文](2026-11-25-git-regeneration-retains-authored-subject.md)
 - [提交成功后保留在途编辑的新说明](2026-11-25-git-commit-retains-newer-message-draft.md)
