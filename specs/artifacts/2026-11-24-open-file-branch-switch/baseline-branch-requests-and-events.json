@@ -1,0 +1,60 @@
+{
+  "requests": [
+    {
+      "requestID": "8a90ed40-8325-4952-b0c6-7a09aa007313",
+      "method": "POST",
+      "path": "/vcs/branch",
+      "http": 200,
+      "time": "2026-11-24T09:35:20.676Z"
+    },
+    {
+      "requestID": "999a878e-b959-4841-9062-6de6c8b0117a",
+      "method": "POST",
+      "path": "/vcs/branch",
+      "http": 200,
+      "time": "2026-11-24T09:38:26.627Z"
+    },
+    {
+      "requestID": "c0b752bc-705e-423f-9e3a-54419dda750e",
+      "method": "PATCH",
+      "path": "/file/content",
+      "http": 409,
+      "time": "2026-11-24T09:38:32.054Z"
+    }
+  ],
+  "expectedReviewText": "Review branch checklist for branch-review\n- Verify reconciliation\n",
+  "staleEditorText": "Main branch checklist for branch-review\n- Check receipt queue\n",
+  "conflictType": "FileWriteConflictError",
+  "globalEvents": [
+    {
+      "time": "2026-11-24T09:37:41.628Z",
+      "type": "server.connected",
+      "directory": "global"
+    },
+    {
+      "time": "2026-11-24T09:38:25.691Z",
+      "type": "file.watcher.updated",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b562\\baseline\\branch-review",
+      "path": "C:\\Users\\Public\\opencorvus-review-20261124-b562\\baseline\\branch-review\\.git\\HEAD"
+    },
+    {
+      "time": "2026-11-24T09:38:25.692Z",
+      "type": "file.watcher.updated",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b562\\baseline\\branch-review",
+      "path": "C:\\Users\\Public\\opencorvus-review-20261124-b562\\baseline\\branch-review\\.git\\HEAD"
+    }
+  ],
+  "ledgerEventsDuringSwitch": [
+    {
+      "time": "2026-11-24T09:38:21.618Z",
+      "type": "work-ledger.heartbeat",
+      "sourceType": "work-ledger.heartbeat"
+    },
+    {
+      "time": "2026-11-24T09:38:31.619Z",
+      "type": "work-ledger.heartbeat",
+      "sourceType": "work-ledger.heartbeat"
+    }
+  ],
+  "screenshotNotes": "The clean stale editor and accepted switch were captured before the browser began returning zero-width screenshots. The dirty comparison has actual accessibility observations and request evidence."
+}
