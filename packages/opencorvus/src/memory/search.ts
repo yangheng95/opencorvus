@@ -55,6 +55,7 @@ export namespace MemorySearch {
     query: string
     projectId: string
     limit?: number
+    resultUnit?: "chunk" | "file"
     minScore?: number
     temporalDecay?: boolean
     kinds?: MemoryKind[]
@@ -100,6 +101,31 @@ export namespace MemorySearch {
             sql`, `,
           )})`
         : sql``
+    const matches = sql`
+      SELECT mc.id as chunk_id, mc.file_id, mc.time_created, memory_fts.rank as rank
+      FROM memory_fts
+      JOIN memory_chunk mc ON mc.id = memory_fts.chunk_id
+      JOIN memory_file mf ON mf.id = mc.file_id
+      WHERE memory_fts MATCH ${query}
+        AND memory_fts.project_id = ${input.projectId}
+        ${kindFilter}
+        ${sourceFilter}
+    `
+    const candidateWindow = input.resultUnit === "file"
+      ? sql`
+          WITH matches AS MATERIALIZED (${matches}), ranked AS (
+            SELECT *, ROW_NUMBER() OVER (
+              PARTITION BY file_id ORDER BY rank, time_created DESC, chunk_id
+            ) AS file_position
+            FROM matches
+          )
+          SELECT chunk_id, rank
+          FROM ranked
+          WHERE file_position = 1
+          ORDER BY rank, time_created DESC, chunk_id
+          LIMIT ${candidates}
+        `
+      : sql`${matches} ORDER BY memory_fts.rank LIMIT ${candidates}`
     const rows = Database.use((db) =>
       db.all<{
         chunk_id: string
@@ -125,16 +151,11 @@ export namespace MemorySearch {
           mf.importance,
           mf.confidence,
           mc.time_created,
-          memory_fts.rank as rank
-        FROM memory_fts
-        JOIN memory_chunk mc ON mc.id = memory_fts.chunk_id
+          candidate.rank
+        FROM (${candidateWindow}) candidate
+        JOIN memory_chunk mc ON mc.id = candidate.chunk_id
         JOIN memory_file mf ON mf.id = mc.file_id
-        WHERE memory_fts MATCH ${query}
-          AND memory_fts.project_id = ${input.projectId}
-          ${kindFilter}
-          ${sourceFilter}
-        ORDER BY memory_fts.rank
-        LIMIT ${candidates}
+        ORDER BY candidate.rank
       `),
     )
 
@@ -143,6 +164,7 @@ export namespace MemorySearch {
       query: input.query,
       projectId: input.projectId,
       kinds: input.kinds?.join(","),
+      resultUnit: input.resultUnit ?? "chunk",
       found: final.length,
       candidates: rows.length,
     })

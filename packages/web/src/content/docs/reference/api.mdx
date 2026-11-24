@@ -296,7 +296,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 |---|---|---|---|
 | GET | `/panel/capabilities` | List panel capabilities | `panel.capabilities` |
 | GET | `/panel/knowledge/memory` | List memory files for current project | `panel.knowledge.memory.list` |
-| POST | `/panel/knowledge/memory/search` | Search memories Body: `limit`, `query`. | `panel.knowledge.memory.search` |
+| POST | `/panel/knowledge/memory/search` | Search memories Body: `limit`, `query`, `resultUnit`. | `panel.knowledge.memory.search` |
 | DELETE | `/panel/knowledge/memory/{id}` | Delete memory file Errors: `LogFileNotFoundError`, `NotFoundError`. | `panel.knowledge.memory.delete` |
 | GET | `/panel/knowledge/memory/{id}` | Get memory file content (all chunks) Errors: `LogFileNotFoundError`, `NotFoundError`. | `panel.knowledge.memory.get` |
 | POST | `/panel/message` | Handle desktop panel message Body: `allow_create`, `attachments`, `channel`, `model`, `request_id`, `sessionID`, `source`, `surface`, `taskID`, `text`, `thread`, `user_id`; Errors: `MissionSessionAuthorityError`. | `panel.message` |

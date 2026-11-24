@@ -258,23 +258,19 @@ export function MemoryPanel(props: MemoryPanelProps) {
         body: JSON.stringify({
           query,
           limit: 20,
+          resultUnit: "file",
         }),
       })
       if (!ownsSearch()) return
-      const mapped = new Map<string, MemoryFile>()
-      for (const result of results) {
-        if (mapped.has(result.fileId)) continue
-        mapped.set(result.fileId, {
+      batch(() => {
+        setFiles(results.map((result) => ({
           id: result.fileId,
           title: result.fileTitle,
           scope: result.scope,
           source: result.source,
           score: result.score,
           snippet: result.content ? result.content.slice(0, 200) : "",
-        })
-      }
-      batch(() => {
-        setFiles([...mapped.values()])
+        })))
         setFilesSource(source)
       })
     } catch (err) {

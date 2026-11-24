@@ -84,11 +84,10 @@ test("minScore drops candidates and limit cuts after ranking, not before", () =>
   expect(thresholded.map((item) => item.chunkId)).toEqual(["a"])
 })
 
-test("non-searchable kinds never reach a score", () => {
-  const ranked = MemorySearch.rankCandidates([row({ chunk_id: "singleton", kind: "project_context" })], {
-    nowMs: BASE.time_created,
-    minScore: 0,
-    limit: 10,
-  })
-  expect(ranked).toEqual([])
+test("the eligible fact owns the result when a protected document is among candidates", () => {
+  const ranked = MemorySearch.rankCandidates(
+    [row({ chunk_id: "singleton", kind: "project_context", rank: -10 }), row({ chunk_id: "fact" })],
+    { nowMs: BASE.time_created, minScore: 0, limit: 1 },
+  )
+  expect(ranked.map(({ chunkId, kind }) => ({ chunkId, kind }))).toEqual([{ chunkId: "fact", kind: "fact" }])
 })

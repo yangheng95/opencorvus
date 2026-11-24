@@ -189,6 +189,7 @@ export function PanelRoutes() {
         "/knowledge/memory/search",
         describeRoute({
           summary: "Search memories",
+          description: "Search memory in the current project. Chunk results return matching passages. File results return one representative matching passage per file, with the limit applied to distinct files.",
           operationId: "panel.knowledge.memory.search",
           responses: {
             200: {
@@ -222,11 +223,12 @@ export function PanelRoutes() {
           z.object({
             query: z.string(),
             limit: z.number().int().min(1).max(50).optional(),
+            resultUnit: z.enum(["chunk", "file"]).optional().describe("Result unit. Defaults to chunk."),
           }),
         ),
         async (c) => {
-          const { query, limit } = c.req.valid("json")
-          const results = Memory.search({ query, projectId: projectId(), limit })
+          const { query, limit, resultUnit } = c.req.valid("json")
+          const results = Memory.search({ query, projectId: projectId(), limit, resultUnit })
           return c.json(results)
         },
       )

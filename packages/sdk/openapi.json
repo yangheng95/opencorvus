@@ -96324,6 +96324,7 @@
     },
     "/panel/knowledge/memory/search": {
       "post": {
+        "description": "Search memory in the current project. Chunk results return matching passages. File results return one representative matching passage per file, with the limit applied to distinct files.",
         "operationId": "panel.knowledge.memory.search",
         "parameters": [
           {
@@ -96347,6 +96348,14 @@
                     "type": "integer"
                   },
                   "query": {
+                    "type": "string"
+                  },
+                  "resultUnit": {
+                    "description": "Result unit. Defaults to chunk.",
+                    "enum": [
+                      "chunk",
+                      "file"
+                    ],
                     "type": "string"
                   }
                 },

@@ -355,6 +355,11 @@ generic deletion. Search preserves the actual source and Project scope. The
 list, search results and original-content metadata display the recognized
 source labels in the current interface language alongside localized dates and
 numeric metadata. Transport and storage retain the actual source identifiers.
+The panel requests file results from the project-scoped note search. The full-text
+candidate window admits one matching passage per stored file before either limit,
+so a long note cannot consume another note's result slot. Each file result still
+carries the selected original passage, score and exact file identity for opening
+its full text. Chunk-level tool and context searches retain their passage contract.
 Up and Down move among enabled note buttons in the accepted search results. The
 search field can enter the first or last result when its text still matches the
 submitted query. Escape on an accepted result returns focus to the search field

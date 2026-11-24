@@ -26938,6 +26938,10 @@ export type PanelKnowledgeMemorySearchData = {
   body: {
     limit?: number
     query: string
+    /**
+     * Result unit. Defaults to chunk.
+     */
+    resultUnit?: "chunk" | "file"
   }
   path?: never
   query?: {

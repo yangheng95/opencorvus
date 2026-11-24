@@ -10686,12 +10686,15 @@ export class Memory2 extends HeyApiClient {
 
   /**
    * Search memories
+   *
+   * Search memory in the current project. Chunk results return matching passages. File results return one representative matching passage per file, with the limit applied to distinct files.
    */
   public search<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
       limit?: number
       query: string
+      resultUnit?: "chunk" | "file"
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -10703,6 +10706,7 @@ export class Memory2 extends HeyApiClient {
             { in: "query", key: "directory" },
             { in: "body", key: "limit" },
             { in: "body", key: "query" },
+            { in: "body", key: "resultUnit" },
           ],
         },
       ],

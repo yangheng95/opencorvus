@@ -548,15 +548,7 @@ export namespace Memory {
     return { episode, derived }
   }
 
-  export function search(input: {
-    query: string
-    projectId: string
-    limit?: number
-    minScore?: number
-    temporalDecay?: boolean
-    kinds?: Kind[]
-    sources?: Source[]
-  }) {
+  export function search(input: Parameters<typeof MemorySearch.search>[0]) {
     return MemorySearch.search(input)
   }
 
