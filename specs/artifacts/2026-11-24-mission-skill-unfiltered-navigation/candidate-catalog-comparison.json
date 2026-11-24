@@ -1,0 +1,40 @@
+{
+  "primaryCount": 30,
+  "independentCount": 9,
+  "exactDetails": [
+    "handoff-project-02",
+    "handoff-project-17"
+  ],
+  "settingsReads": [
+    {
+      "time": "2026-11-24T06:44:19.528Z",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": 200
+    },
+    {
+      "time": "2026-11-24T06:44:20.239Z",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": 200
+    },
+    {
+      "time": "2026-11-24T06:44:37.242Z",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": 200
+    },
+    {
+      "time": "2026-11-24T06:44:59.415Z",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": 200
+    },
+    {
+      "time": "2026-11-24T06:45:47.59Z",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": 200
+    }
+  ]
+}

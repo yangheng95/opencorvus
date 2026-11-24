@@ -1,0 +1,397 @@
+{
+  "primary": {
+    "roots": {
+      "global": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills",
+      "project": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills"
+    },
+    "mission_skills": [
+      {
+        "name": "general",
+        "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+        "required_tools": [
+          "panel_expert_squad_inspect",
+          "panel_multica_catalog",
+          "panel_create_task",
+          "panel_query_task",
+          "panel_query_task_artifacts",
+          "panel_read_task_artifact",
+          "panel_read_task_message",
+          "panel_read_task_dispatch_evidence",
+          "panel_complete_mission",
+          "panel_block_mission",
+          "panel_resume_task",
+          "panel_extend_task_acceptance",
+          "panel_cancel_task",
+          "panel_respond_interaction"
+        ],
+        "source": "built_in",
+        "location": null
+      },
+      {
+        "name": "handoff-global-01",
+        "description": "ledgeraudit candidate 01 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-01\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-02",
+        "description": "ledgeraudit candidate 02 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-02\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-03",
+        "description": "ledgeraudit candidate 03 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-03\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-04",
+        "description": "ledgeraudit candidate 04 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-04\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-05",
+        "description": "ledgeraudit candidate 05 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-05\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-06",
+        "description": "ledgeraudit candidate 06 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-06\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-07",
+        "description": "ledgeraudit candidate 07 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-07\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-01",
+        "description": "ledgeraudit candidate 01 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-01\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-02",
+        "description": "ledgeraudit candidate 02 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-02\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-03",
+        "description": "ledgeraudit candidate 03 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-03\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-04",
+        "description": "ledgeraudit candidate 04 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-04\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-05",
+        "description": "ledgeraudit candidate 05 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-05\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-06",
+        "description": "ledgeraudit candidate 06 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-06\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-07",
+        "description": "ledgeraudit candidate 07 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-07\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-08",
+        "description": "ledgeraudit candidate 08 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-08\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-09",
+        "description": "ledgeraudit candidate 09 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-09\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-10",
+        "description": "ledgeraudit candidate 10 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-10\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-11",
+        "description": "ledgeraudit candidate 11 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-11\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-12",
+        "description": "ledgeraudit candidate 12 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-12\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-13",
+        "description": "ledgeraudit candidate 13 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-13\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-14",
+        "description": "ledgeraudit candidate 14 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-14\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-15",
+        "description": "ledgeraudit candidate 15 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-15\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-16",
+        "description": "ledgeraudit candidate 16 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-16\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-17",
+        "description": "ledgeraudit candidate 17 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-17\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-18",
+        "description": "ledgeraudit candidate 18 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-18\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-19",
+        "description": "ledgeraudit candidate 19 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-19\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-20",
+        "description": "ledgeraudit candidate 20 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-20\\SKILL.md"
+      },
+      {
+        "name": "handoff-project-21",
+        "description": "ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-21\\SKILL.md"
+      },
+      {
+        "name": "wheel-storage",
+        "description": "Check the replacement wheel drawer.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\wheel-storage\\SKILL.md"
+      }
+    ],
+    "issues": []
+  },
+  "independent": {
+    "roots": {
+      "global": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills",
+      "project": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\repair-workshop\\.opencorvus\\mission-skills"
+    },
+    "mission_skills": [
+      {
+        "name": "general",
+        "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+        "required_tools": [
+          "panel_expert_squad_inspect",
+          "panel_multica_catalog",
+          "panel_create_task",
+          "panel_query_task",
+          "panel_query_task_artifacts",
+          "panel_read_task_artifact",
+          "panel_read_task_message",
+          "panel_read_task_dispatch_evidence",
+          "panel_complete_mission",
+          "panel_block_mission",
+          "panel_resume_task",
+          "panel_extend_task_acceptance",
+          "panel_cancel_task",
+          "panel_respond_interaction"
+        ],
+        "source": "built_in",
+        "location": null
+      },
+      {
+        "name": "handoff-global-01",
+        "description": "ledgeraudit candidate 01 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-01\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-02",
+        "description": "ledgeraudit candidate 02 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-02\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-03",
+        "description": "ledgeraudit candidate 03 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-03\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-04",
+        "description": "ledgeraudit candidate 04 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-04\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-05",
+        "description": "ledgeraudit candidate 05 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-05\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-06",
+        "description": "ledgeraudit candidate 06 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-06\\SKILL.md"
+      },
+      {
+        "name": "handoff-global-07",
+        "description": "ledgeraudit candidate 07 records the receipt.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "global",
+        "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b547\\opencorvus-zed-candidate\\config\\mission-skills\\handoff-global-07\\SKILL.md"
+      },
+      {
+        "name": "handoff-repair-only",
+        "description": "ledgeraudit from the repair workshop.",
+        "required_tools": [
+          "panel_query_task"
+        ],
+        "source": "project",
+        "location": "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\repair-workshop\\.opencorvus\\mission-skills\\handoff-repair-only\\SKILL.md"
+      }
+    ],
+    "issues": []
+  }
+}

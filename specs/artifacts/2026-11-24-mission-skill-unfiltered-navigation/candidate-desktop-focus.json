@@ -1,0 +1,935 @@
+{
+  "enAllBlank": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 199.6666717529297,
+      "left": 443.3333435058594,
+      "right": 913.8854370117188,
+      "top": 171.6666717529297
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "enAllFirst": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 314.7083435058594,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 243.1666717529297
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "generalCoordinate your Mission with fixed-profile Tasks.Built-in",
+    "query": "",
+    "skill": "general",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "enAllFirstBoundary": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 314.7083435058594,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 243.1666717529297
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "generalCoordinate your Mission with fixed-profile Tasks.Built-in",
+    "query": "",
+    "skill": "general",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "enAllNext": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 386.25001525878906,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 314.7083435058594
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "handoff-global-01ledgeraudit candidate 01 records the receipt.User global",
+    "query": "",
+    "skill": "handoff-global-01",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "enAllPageOne": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 716.2500457763672,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 644.7083740234375
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "handoff-project-02ledgeraudit candidate 02 records the receipt.Project",
+    "query": "",
+    "skill": "handoff-project-02",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 275.3333435058594
+  },
+  "enAllPageTwo": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 715.8750457763672,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 627.8333740234375
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "handoff-project-09ledgeraudit candidate 09 records the receipt, aisle and source manifest, followed by the assigned reader and the",
+    "query": "",
+    "skill": "handoff-project-09",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 826
+  },
+  "enAllReverse": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 165.58334350585938,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 94.04167175292967
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "handoff-project-02ledgeraudit candidate 02 records the receipt.Project",
+    "query": "",
+    "skill": "handoff-project-02",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 826
+  },
+  "enAllNativeTab": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 253.62501525878903,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 165.58334350585938
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "handoff-project-03ledgeraudit candidate 03 records the receipt, aisle and source manifest, followed by the assigned reader and the",
+    "query": "",
+    "skill": "handoff-project-03",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 826
+  },
+  "enAllNativeShiftTab": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 165.58334350585938,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 94.04167175292967
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "handoff-project-02ledgeraudit candidate 02 records the receipt.Project",
+    "query": "",
+    "skill": "handoff-project-02",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 826
+  },
+  "enAllOpensFocusedSkill": {
+    "count": 0,
+    "describedBy": null,
+    "detailCodes": [
+      "@mission(\"handoff-project-02\")",
+      "panel_query_task",
+      "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-02\\SKILL.md"
+    ],
+    "focus": {
+      "bottom": 180.5,
+      "left": 404,
+      "right": 533.1041717529297,
+      "top": 159.5
+    },
+    "hint": null,
+    "label": "handoff-project-02",
+    "query": null,
+    "skill": null,
+    "tag": "H3",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "enAllReturnsToSameRow": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 413.5833587646485,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 342.04168701171875
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "handoff-project-02ledgeraudit candidate 02 records the receipt.Project",
+    "query": "",
+    "skill": "handoff-project-02",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 578
+  },
+  "enAllRowEscapeToMatchingSearch": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 199.6666717529297,
+      "left": 443.3333435058594,
+      "right": 913.8854370117188,
+      "top": 171.6666717529297
+    },
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "zhProjectBlank": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 908.593780517578,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhProjectLastFromBlank": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 713.5520858764648,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 599.09375
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "wheel-storageCheck the replacement wheel drawer.项目",
+    "query": "",
+    "skill": "wheel-storage",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 2378
+  },
+  "zhProjectLastBoundary": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 713.5520858764648,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 599.09375
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "wheel-storageCheck the replacement wheel drawer.项目",
+    "query": "",
+    "skill": "wheel-storage",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 2378
+  },
+  "zhProjectPreviousRow": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 599.0937805175781,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 458.2291870117187
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "handoff-project-21ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the",
+    "query": "",
+    "skill": "handoff-project-21",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 2378
+  },
+  "zhProjectPagePrevious": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 178.4479217529297,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 63.98958587646485
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "handoff-project-17ledgeraudit candidate 17 records the receipt.项目",
+    "query": "",
+    "skill": "handoff-project-17",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 2288
+  },
+  "zhProjectOpenActualSkill": {
+    "count": 0,
+    "describedBy": null,
+    "detailCodes": [
+      "@mission(\"handoff-project-17\")",
+      "panel_query_task",
+      "C:\\Users\\Public\\opencorvus-review-20261124-b547\\candidate\\change-review\\.opencorvus\\mission-skills\\handoff-project-17\\SKILL.md"
+    ],
+    "focus": {
+      "bottom": 288.7708435058594,
+      "left": 499.1770935058594,
+      "right": 696.6250152587891,
+      "top": 255.17709350585935
+    },
+    "hint": null,
+    "label": "handoff-project-17",
+    "query": null,
+    "skill": null,
+    "tag": "H3",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhProjectSameRow": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 445.7812728881836,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 331.32293701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "handoff-project-17ledgeraudit candidate 17 records the receipt.项目",
+    "query": "",
+    "skill": "handoff-project-17",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 2020.6666259765625
+  },
+  "zhProjectBackToEmptyQuery": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 908.593780517578,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhProjectFiltered21": {
+    "count": 21,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 854.2083740234375,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "ledgeraudit",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhFilteredLast": {
+    "count": 21,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 713.7604675292969,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 572.8958740234375
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "handoff-project-21ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the",
+    "query": "ledgeraudit",
+    "skill": "handoff-project-21",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 2263.333251953125
+  },
+  "zhFilteredPrevious": {
+    "count": 21,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 203.11458587646484,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 88.65625
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "handoff-project-17ledgeraudit candidate 17 records the receipt.项目",
+    "query": "ledgeraudit",
+    "skill": "handoff-project-17",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 2263.333251953125
+  },
+  "zhFilteredEscapeKeepsTerm": {
+    "count": 21,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 854.2083740234375,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "ledgeraudit",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhFilteredClearRestores22": {
+    "count": 22,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "project",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 908.593780517578,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhGlobalBlank7": {
+    "count": 7,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "global",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 908.593780517578,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhGlobalStartsAtActual01": {
+    "count": 7,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "global",
+    "focus": {
+      "bottom": 503.0833358764648,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 388.625
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "handoff-global-01ledgeraudit candidate 01 records the receipt.用户全局",
+    "query": "",
+    "skill": "handoff-global-01",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhGlobalPagesToActual": {
+    "count": 7,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "global",
+    "focus": {
+      "bottom": 713.3229598999023,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 598.8646240234375
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "handoff-global-05ledgeraudit candidate 05 records the receipt.用户全局",
+    "query": "",
+    "skill": "handoff-global-05",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 274
+  },
+  "zhGlobalReturnsToSearch": {
+    "count": 7,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "global",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 908.593780517578,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInNoMatch": {
+    "count": 0,
+    "describedBy": null,
+    "detailCodes": [],
+    "filter": "built_in",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 854.2083740234375,
+      "top": 274.22918701171875
+    },
+    "hint": null,
+    "label": "",
+    "query": "ledgeraudit",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInNoMatchRetainsInput": {
+    "count": 0,
+    "describedBy": null,
+    "detailCodes": [],
+    "filter": "built_in",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 854.2083740234375,
+      "top": 274.22918701171875
+    },
+    "hint": null,
+    "label": "",
+    "query": "ledgeraudit",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInClearsToOne": {
+    "count": 1,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "built_in",
+    "focus": {
+      "bottom": 319.0208549499512,
+      "left": 561.2916870117188,
+      "right": 908.593780517578,
+      "top": 274.22918701171875
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "",
+    "query": "",
+    "skill": null,
+    "tag": "INPUT",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInSingleEnters": {
+    "count": 1,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "built_in",
+    "focus": {
+      "bottom": 503.0833358764648,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 388.625
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "general用固定配置的任务协调你的多步任务。内置",
+    "query": "",
+    "skill": "general",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInSingleNextBoundary": {
+    "count": 1,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "built_in",
+    "focus": {
+      "bottom": 503.0833358764648,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 388.625
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "general用固定配置的任务协调你的多步任务。内置",
+    "query": "",
+    "skill": "general",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInSinglePriorBoundary": {
+    "count": 1,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "built_in",
+    "focus": {
+      "bottom": 503.0833358764648,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 388.625
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "general用固定配置的任务协调你的多步任务。内置",
+    "query": "",
+    "skill": "general",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInOpensGeneral": {
+    "count": 0,
+    "describedBy": null,
+    "detailCodes": [
+      "@mission(\"general\")",
+      "panel_expert_squad_inspect",
+      "panel_multica_catalog",
+      "panel_create_task",
+      "panel_query_task",
+      "panel_query_task_artifacts",
+      "panel_read_task_artifact",
+      "panel_read_task_message",
+      "panel_read_task_dispatch_evidence",
+      "panel_complete_mission",
+      "panel_block_mission",
+      "panel_resume_task",
+      "panel_extend_task_acceptance",
+      "panel_cancel_task",
+      "panel_respond_interaction"
+    ],
+    "focus": {
+      "bottom": 288.7708435058594,
+      "left": 499.1770935058594,
+      "right": 579.8020935058594,
+      "top": 255.17709350585935
+    },
+    "hint": null,
+    "label": "general",
+    "query": null,
+    "skill": null,
+    "tag": "H3",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhBuiltInReturnsToGeneral": {
+    "count": 1,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "built_in",
+    "focus": {
+      "bottom": 503.0833358764648,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 388.625
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "general用固定配置的任务协调你的多步任务。内置",
+    "query": "",
+    "skill": "general",
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zhRefreshAccepts30FromCurrentScope": {
+    "count": 30,
+    "describedBy": "mission-skill-search-keyboard-hint",
+    "detailCodes": [],
+    "filter": "all",
+    "focus": {
+      "bottom": 203.17708587646484,
+      "left": 1150.6875,
+      "right": 1241.6041717529297,
+      "top": 164.78125
+    },
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "label": "刷新",
+    "query": "",
+    "skill": null,
+    "tag": "BUTTON",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  }
+}
