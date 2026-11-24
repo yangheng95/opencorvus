@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [重命名已打开的文件时保持资源管理器焦点](records/2026-11/2026-11-25-file-rename-keeps-explorer-focus.md)
 - [打开的全局查找跟进会话更名](records/2026-11/2026-11-25-palette-refreshes-renamed-conversations.md)
 - [环境面板跟进项目工作树更新](records/2026-11/2026-11-25-environment-worktree-project-updates.md)
 - [Git 说明生成失败时保留手写正文](records/2026-11/2026-11-25-git-regeneration-retains-authored-subject.md)

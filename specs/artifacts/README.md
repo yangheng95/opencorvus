@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [重命名已打开文件的桌面证据](2026-11-25-file-rename-keeps-explorer-focus/README.md)
 - [全局查找跟进保存标题的页面证据](2026-11-25-palette-refreshes-renamed-conversations/README.md)
 - [环境面板接收工作树列表变化的证据](2026-11-25-environment-worktree-project-updates/README.md)
 - [Git 说明重新生成失败的桌面证据](2026-11-25-git-regeneration-retains-authored-subject/README.md)
