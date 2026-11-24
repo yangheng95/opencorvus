@@ -641,6 +641,7 @@ export namespace Vcs {
     }
     if (localBranches.some((item) => item.name === requested && item.current)) return info()
 
+    const checkout = await state()
     const result = await git(["switch", "--no-guess", "--", requested], {
       cwd: currentProject().directory,
       timeoutProfile: "default",
@@ -652,8 +653,7 @@ export namespace Vcs {
         message: `vcs switch to "${requested}" failed${detail ? `: ${detail}` : ""}`,
       })
     }
-    await resetState()
-    await init()
+    await checkout.branchRefresh?.refresh()
     return info()
   }
 

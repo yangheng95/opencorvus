@@ -8,6 +8,7 @@ import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { Database, eq } from "@/storage/db"
 import { EngineService } from "@/task-api"
+import { hostGit } from "@/util/git"
 import { WorkLedgerEvent } from "@opencorvus-ai/transport-protocol"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -16,9 +17,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-test("global ledger stream fans out durable Task events to every affected projection across projects", async () => {
-  await using first = await memoryProject("ledger-first")
-  await using second = await memoryProject("ledger-second")
+async function openLedgerEvents() {
   const abort = new AbortController()
   const response = await Server.App().request("/work-ledger/events", { signal: abort.signal })
   expect(response.status).toBe(200)
@@ -58,6 +57,19 @@ test("global ledger stream fans out durable Task events to every affected projec
       clearTimeout(timer)
     }
   }
+  return {
+    next,
+    async close() {
+      abort.abort()
+      await reader.cancel()
+    },
+  }
+}
+
+test("global ledger stream fans out durable Task events to every affected projection across projects", async () => {
+  await using first = await memoryProject("ledger-first")
+  await using second = await memoryProject("ledger-second")
+  const { next, close } = await openLedgerEvents()
   try {
     expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
     const affected: Array<{ project: typeof first; taskID: string }> = []
@@ -155,7 +167,34 @@ test("global ledger stream fans out durable Task events to every affected projec
       else expect(record.time_archived).toBeNull()
     }
   } finally {
-    abort.abort()
-    await reader.cancel()
+    await close()
+  }
+}, 30_000)
+
+test("accepted branch switches announce their exact workspaces on the public stream", async () => {
+  await using first = await memoryProject("ledger-switch-first")
+  await using second = await memoryProject("ledger-switch-second")
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    for (const project of [first, second]) {
+      const branch = "review-checkout"
+      const creation = await hostGit(["branch", branch], { cwd: project.path, timeoutProfile: "default" })
+      expect(creation.exitCode).toBe(0)
+      const response = await Server.App().request("/vcs/branch", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-opencorvus-directory": project.path },
+        body: JSON.stringify({ branch }),
+      })
+      expect({ status: response.status, body: await response.json() }).toMatchObject({ status: 200, body: { branch } })
+      expect(await next("work-ledger.changed", "vcs.branch.updated")).toEqual({
+        type: "work-ledger.changed",
+        sourceType: "vcs.branch.updated",
+        directory: project.path,
+        sequence: 0,
+      })
+    }
+  } finally {
+    await close()
   }
 }, 30_000)

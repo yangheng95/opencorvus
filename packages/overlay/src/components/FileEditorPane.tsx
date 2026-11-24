@@ -3,6 +3,7 @@ import { base64ToUint8 } from "@opencorvus-ai/transport-protocol"
 import { ApiError, apiJson, apiRequest, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
   closeFileEditor,
+  fileEditorCheckoutRevision,
   fileEditorRevealRevision,
   fileEditorReserved,
   registerFileEditorBeforeNavigate,
@@ -215,13 +216,14 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
   const observationKey = createMemo(() => {
     const file = contentTarget()
     if (!file || file.sourceAbsolutePath) return null
+    const checkoutRevision = fileEditorCheckoutRevision()
     const source = currentConversationFileChangeSource()
-    if (source.directory !== file.directory) return null
+    const relevantInputs = source.directory === file.directory ? source.inputs : []
     const matchesPath = (path: string) => {
       const relative = isAbsoluteServerPath(path) ? relativePathFrom(file.directory, path) : path
       return Boolean(relative) && normalizeProjectFilePath(relative, file.directory) === file.path
     }
-    const identities = source.inputs.flatMap(({ part }) => {
+    const identities = relevantInputs.flatMap(({ part }) => {
       if (!part || typeof part !== "object") return []
       const tool = part as { type?: unknown; id?: unknown; sessionID?: unknown; messageID?: unknown; state?: unknown }
       if (tool.type !== "tool" || typeof tool.id !== "string" || typeof tool.sessionID !== "string" || typeof tool.messageID !== "string") return []
@@ -230,7 +232,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       )
       return affected ? [JSON.stringify([tool.sessionID, tool.messageID, tool.id])] : []
     })
-    return identities.length ? JSON.stringify([...new Set(identities)].sort()) : null
+    return checkoutRevision || identities.length ? JSON.stringify([checkoutRevision, [...new Set(identities)].sort()]) : null
   })
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
@@ -373,7 +375,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
   const isBusy = () => !resourceReady() || saving() || reloading()
   const comparisonReading = () => comparison()?.status === "loading"
   const comparisonUnavailable = () => comparisonReading() || isBusy() || fileEditorReserved()
-  const pendingRecordedUpdate = () => observationKey() !== null && observationKey() !== loadedObservationKey()
+  const pendingDiskUpdate = () => observationKey() !== null && observationKey() !== loadedObservationKey()
   const switchTextView = (view: "source" | "preview") => {
     if (view === "source" && previewVisible()) {
       const preview = markdownPreview()
@@ -1016,9 +1018,9 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
             />
           </div>
         </Show>
-        <Show when={pendingRecordedUpdate() && content() && resourceReady()}>
+        <Show when={pendingDiskUpdate() && content() && resourceReady() && !needsDiskComparison()}>
           <Feedback
-            class="file-editor-load-feedback"
+            class="file-editor-load-feedback file-editor-compare-feedback"
             tone="info"
             actions={<>
               <Show when={writable()}>
@@ -1034,7 +1036,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
               </Button>
             </>}
           >
-            {t(dirty() ? "file_editor.recorded_update_dirty" : "file_editor.recorded_update")}
+            {t(dirty() ? "file_editor.disk_update_dirty" : "file_editor.disk_update")}
           </Feedback>
         </Show>
         <div class="file-editor-body">

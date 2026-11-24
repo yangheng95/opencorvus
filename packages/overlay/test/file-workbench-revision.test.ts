@@ -4,8 +4,10 @@ import { __setHostTransportForTest } from "../src/services/host-transport-runtim
 import {
   closeFileEditor,
   createFileItem,
+  fileEditorCheckoutRevision,
   fileEditorRevealRevision,
   fileWorkbenchRevision,
+  observeFileWorkbenchCheckout,
   openFileEditor,
   openFileReference,
   openSourceFileEditor,
@@ -17,6 +19,17 @@ import {
 afterEach(async () => {
   await closeFileEditor()
   __setHostTransportForTest(undefined)
+})
+
+test("a checkout notification refreshes the current file at the canonical project directory", async () => {
+  const directory = "C:/Review/Branch"
+  await openFileEditor("checklist.txt", { directory })
+  const before = fileEditorCheckoutRevision()
+  observeFileWorkbenchCheckout("c:\\REVIEW\\BRANCH")
+  expect({ target: selectedFileTarget(), revision: fileEditorCheckoutRevision() }).toEqual({
+    target: { directory, path: "checklist.txt" },
+    revision: before + 1,
+  })
 })
 
 test.each([

@@ -1548,6 +1548,12 @@ Explorer. Its existing directory request activates that tool, reads and focuses
 the exact parent, and directs root entries to the project root and search field.
 Switching tools retains the open file and its current draft.
 
+A branch notification for the same Git checkout invalidates the Explorer listing
+and an open project file. Clean content is read again from the existing file
+endpoint. The editor keeps unsaved text and its editing base, and offers the
+ordinary disk comparison or reload action. A file opened from an explicit
+external source keeps its own reader.
+
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of
 the existing file-content route owns the disk snapshot; the loaded baseline and

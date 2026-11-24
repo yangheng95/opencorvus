@@ -1,0 +1,78 @@
+{
+  "projects": [
+    {
+      "label": "branch-review",
+      "branch": "main",
+      "fileText": "Main branch checklist for branch-review\n- Check receipt queue\n",
+      "fileReadHttp": 200,
+      "changedPaths": [
+        "M .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ]
+    },
+    {
+      "label": "control-review",
+      "branch": "main",
+      "fileText": "Main branch checklist for control-review\n- Check receipt queue\n",
+      "fileReadHttp": 200,
+      "changedPaths": [
+        "M .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ]
+    }
+  ],
+  "branchChanges": [
+    {
+      "from": "main",
+      "to": "review",
+      "time": "2026-11-24T09:52:58.506Z"
+    },
+    {
+      "from": "review",
+      "to": "main",
+      "time": "2026-11-24T09:53:15.393Z"
+    }
+  ],
+  "publicEvents": [
+    {
+      "time": "2026-11-24T09:52:58.510Z",
+      "type": "work-ledger.changed",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b562\\candidate\\branch-review",
+      "sourceType": "vcs.branch.updated"
+    },
+    {
+      "time": "2026-11-24T09:53:15.394Z",
+      "type": "work-ledger.changed",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b562\\candidate\\branch-review",
+      "sourceType": "vcs.branch.updated"
+    }
+  ],
+  "mutationRequests": [
+    {
+      "requestID": "6bd83692-e997-4389-aaf9-f8dd471867b6",
+      "method": "POST",
+      "path": "/vcs/branch",
+      "statusCode": 200
+    },
+    {
+      "requestID": "ed692627-5804-4700-b454-ed8463450ff4",
+      "method": "POST",
+      "path": "/vcs/branch",
+      "statusCode": 200
+    },
+    {
+      "requestID": "c4b58ba0-ee93-4dd1-9e54-2463d302fd89",
+      "method": "PATCH",
+      "path": "/file/content",
+      "statusCode": 409
+    }
+  ],
+  "isolatedDatabaseCounts": {
+    "session": 2,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  }
+}

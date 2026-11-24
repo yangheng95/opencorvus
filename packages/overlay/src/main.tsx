@@ -83,6 +83,7 @@ import {
   completeFileExplorerFolderRequest,
   fileWorkbenchOpen,
   fileEditorReserved,
+  observeFileWorkbenchCheckout,
   openFileReference,
   selectedFileTarget,
 } from "./services/file-workbench"
@@ -825,6 +826,10 @@ function isMissionSessionSource(): boolean {
 }
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
+  if (event.type === "work-ledger.changed" && event.sourceType === "vcs.branch.updated") {
+    if (event.directory) observeFileWorkbenchCheckout(event.directory)
+    return
+  }
   const authority = captureApiAuthority()
   const selectedSource = boardStore.selectedSource
   refreshWorkLedgerViews(event.type === "work-ledger.changed" ? event : undefined)

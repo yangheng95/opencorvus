@@ -18,6 +18,7 @@ import { ConversationHandoffEvent } from "@/chat/handoff"
 import { MissionHandoffEvent } from "@/mission/caller-receipt"
 import { Project } from "@/project/project"
 import { Instance } from "@/project/instance"
+import { Vcs } from "@/project/vcs"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
@@ -348,6 +349,15 @@ export function WorkLedgerRoutes() {
           }
           const globalBusListener = bind((event: { directory?: string; payload?: unknown }) => {
             const envelope = event.payload as { type?: unknown; properties?: unknown } | undefined
+            if (envelope?.type === Vcs.Event.BranchUpdated.type && event.directory) {
+              writeWorkLedgerEventData(writeData, {
+                type: "work-ledger.changed",
+                sourceType: Vcs.Event.BranchUpdated.type,
+                directory: event.directory,
+                sequence: 0,
+              })
+              return
+            }
             if (envelope?.type === EngineEvent.TaskUpdated.type) {
               const task = EngineEvent.TaskUpdated.properties.parse(envelope.properties)
               writeWorkLedgerEventData(writeData, {

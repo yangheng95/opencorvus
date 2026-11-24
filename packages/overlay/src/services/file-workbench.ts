@@ -13,7 +13,7 @@ import {
   isApiAuthorityCurrent,
   type ApiAuthority,
 } from "./api"
-import { projectScopedPath } from "./project-directory"
+import { activeProjectDirectory, projectScopedPath } from "./project-directory"
 import type { FileDocumentPosition, FileRevealLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { isAbsoluteServerPath, normalizeProjectFilePath } from "../utils/server-path"
@@ -149,6 +149,7 @@ const [selectedFileTarget, setSelectedFileTarget] = createSignal<FileEditorTarge
 const [fileWorkbenchOpen, setFileWorkbenchOpen] = createSignal(false)
 const [fileWorkbenchRevision, setFileWorkbenchRevision] = createSignal(0)
 const [fileEditorRevealRevision, setFileEditorRevealRevision] = createSignal(0)
+const [fileEditorCheckoutRevision, setFileEditorCheckoutRevision] = createSignal(0)
 export interface FileEditorNavigationOwner {
   confirmLeave: () => Promise<number | null>
   getRevision: () => number
@@ -189,10 +190,28 @@ export function hasUnsavedFileChanges(): boolean {
 
 const selectedFilePath = () => selectedFileTarget()?.path ?? ""
 
-export { selectedFilePath, selectedFileTarget, fileWorkbenchOpen, fileWorkbenchRevision, fileEditorRevealRevision }
+export {
+  selectedFilePath,
+  selectedFileTarget,
+  fileWorkbenchOpen,
+  fileWorkbenchRevision,
+  fileEditorRevealRevision,
+  fileEditorCheckoutRevision,
+}
 
 export function bumpFileWorkbenchRevision(): void {
   setFileWorkbenchRevision((current) => current + 1)
+}
+
+export function observeFileWorkbenchCheckout(directory: string): void {
+  const key = projectDirectoryKey(directory)
+  const target = selectedFileTarget()
+  batch(() => {
+    if (key === projectDirectoryKey(activeProjectDirectory())) bumpFileWorkbenchRevision()
+    if (target && !target.sourceAbsolutePath && key === projectDirectoryKey(target.directory)) {
+      setFileEditorCheckoutRevision((current) => current + 1)
+    }
+  })
 }
 
 function joinWorkbenchPath(parent: string, child: string, directory: string): string {

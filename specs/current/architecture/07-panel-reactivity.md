@@ -1150,6 +1150,10 @@ Task identity and sequence zero: it invalidates a current read without advancing
 the execution Protocol cursor. Execution/Interaction facts retain their original
 Protocol subscription and sequence. Reconnection hydrates the current canonical
 projection, including Mission outcomes and child Tasks.
+The existing project branch notification uses this stream with the exact checkout
+directory and sequence zero. It invalidates the file workbench for that checkout.
+The VCS branch owner observes the result of a successful switch through the same
+refresh operation used by the native HEAD watcher.
 Archive actions show their observed committed result with the shared inline
 Feedback component. Subsequent list-read errors retain that success alongside
 the read error; source/query replacement retires the feedback. Its action key
