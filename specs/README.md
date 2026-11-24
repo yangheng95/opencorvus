@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [全局查找显示已保存会话的完整标题](records/2026-11/2026-11-24-palette-full-conversation-search-titles.md)
 - [文件搜索刷新时保留已接受的选区提示和焦点](records/2026-11/2026-11-24-explorer-search-refresh-keeps-selection-context.md)
 - [文件资源管理器翻页时移动实际焦点](records/2026-11/2026-11-24-file-explorer-page-focus.md)
 - [对话内查找在摘要里标记实际命中](records/2026-11/2026-11-24-conversation-search-highlight-matched-phrase.md)
