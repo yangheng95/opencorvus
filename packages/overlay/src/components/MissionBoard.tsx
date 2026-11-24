@@ -373,7 +373,11 @@ export function MissionBoard(props: MissionBoardProps) {
     return receipt && isApiAuthorityCurrent(receipt.authority) ? receipt : null
   })
   const projectContexts = createMemo(() => {
-    const projects = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].map((directory) => ({
+    const directories = new Set([
+      ...missionBoardStore.records.map((mission) => mission.directory),
+      ...props.projectDirectories,
+    ])
+    const projects = Array.from(directories, (directory) => ({
       directory,
       name: missionDirectoryLabel(directory),
     }))

@@ -1,0 +1,55 @@
+{
+  "retained": {
+    "requestID": "ad3f4940-5b07-471c-9498-fc1bf3971b57",
+    "rows": [
+      {
+        "missionID": "draft-6f613c2fb4fa8a4d0a55da2be3483a5b",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b616\\candidate\\mission-list-review",
+        "request": "Count packing racks before the shift handoff.",
+        "taskCount": 0,
+        "lane": "backlog",
+        "sessionID": "ses_hNLaWcqch16XL5CmtxS6",
+        "archived": 1795557036259,
+        "title": "B616 Packing handoff"
+      }
+    ],
+    "status": 200
+  },
+  "selected": {
+    "requestID": "2cd18cf9-eed5-49ab-befd-41f0be7c2da0",
+    "rows": [
+      {
+        "missionID": "draft-6ffd4954e100cc0cef84f94bf3482d32",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b616\\candidate\\mission-list-review",
+        "request": "Verify the packing rack count and attach the shift handoff sheet.",
+        "taskCount": 0,
+        "lane": "backlog",
+        "sessionID": "ses_hgy3hFuSRMrAfAvkG5gE",
+        "archived": null,
+        "title": "B616 Draft saved in selected project"
+      }
+    ],
+    "status": 200
+  },
+  "messages": {
+    "requestID": "20a3d4b3-d502-4bef-8503-6a279fe32d69",
+    "status": 200,
+    "count": 0
+  },
+  "control": {
+    "requestID": "76747855-4311-4e0d-8dc7-442699bf3042",
+    "rows": [
+      {
+        "missionID": "draft-63885f6b341f1f0c05052cf76d181952",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b616\\candidate\\dispatch-control",
+        "request": "Record the loading paperwork for dispatch.",
+        "taskCount": 0,
+        "lane": "backlog",
+        "sessionID": "ses_hzpKZXBFF4zUbduwaKXs",
+        "archived": null,
+        "title": "B616 Dispatch follow-up"
+      }
+    ],
+    "status": 200
+  }
+}

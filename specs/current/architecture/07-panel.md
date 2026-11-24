@@ -4332,6 +4332,10 @@ label as well as its visible second line. The selected directory remains visible
 the filter or project field and is associated with its control. Cards retain
 parent-directory context; implicit project names use the existing ledger suffix.
 Canonical directory values continue to own filtering and creation targets.
+The board offers the existing creation projects alongside directories from its
+accepted Mission records. A project with no active Missions remains selectable.
+When its last Mission leaves the active board, that project keeps its selected
+filter and still supplies the default directory for creation.
 Board project choices, creation fields and Mission cards read custom project names
 from the existing reactive work-ledger project reader, as the chat home does.
 Search covers that current display name and the original directory; a project
