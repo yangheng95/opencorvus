@@ -420,11 +420,11 @@ export function MemoryPanel(props: MemoryPanelProps) {
     const source = filesSource()
     return !!source && sourceMatches(source)
   })
-  const hasSearchResults = () => Boolean(submittedQuery()) && filesSourceActive() && !loading() && files().length > 0
-  const canEnterSearchResults = () => hasSearchResults() && searchQuery().trim() === submittedQuery()
+  const canBrowseNotes = () => filesSourceActive() && !loading() && files().length > 0
+  const canEnterNotes = () => canBrowseNotes() && searchQuery().trim() === submittedQuery()
   const searchKeyboardHintID = "memory-search-keyboard-hint"
-  const searchNavigation = createSearchResultNavigation(() => {
-    if (!hasSearchResults() || !listElement) return []
+  const noteNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseNotes() || !listElement) return []
     return Array.from(listElement.querySelectorAll<HTMLButtonElement>('[data-ui="memory-row-main"]:enabled'))
   }, {
     returnToSearch: () => searchInput,
@@ -509,9 +509,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
           placeholder={t("memory.search_placeholder")}
           disabled={!currentDirectory()}
           readOnly={loading()}
-          ariaDescribedBy={canEnterSearchResults() ? searchKeyboardHintID : undefined}
-          ariaKeyShortcuts={canEnterSearchResults() ? "ArrowUp ArrowDown" : undefined}
-          resultFocusTarget={(edge) => canEnterSearchResults() ? searchNavigation.resultFocusTarget(edge) : undefined}
+          ariaDescribedBy={canEnterNotes() ? searchKeyboardHintID : undefined}
+          ariaKeyShortcuts={canEnterNotes() ? "ArrowUp ArrowDown" : undefined}
+          resultFocusTarget={(edge) => canEnterNotes() ? noteNavigation.resultFocusTarget(edge) : undefined}
           onValueChange={setSearchQuery}
           onClear={handleSearchClear}
           clearDataUI="memory-search-clear"
@@ -523,18 +523,21 @@ export function MemoryPanel(props: MemoryPanelProps) {
       {/* List */}
       <div id="memoryList" class="knowledge-list" ref={listElement}>
         <Show when={files().length > 0} fallback={emptyState()}>
-          <Show when={submittedQuery()}>
-            {(query) => (
-              <p class="knowledge-results-query" role="status">
-                {t("memory.results_for", { query: query() })}
-                <Show when={canEnterSearchResults()}>
-                  {" · "}<span id={searchKeyboardHintID}>{t("memory.search_keyboard_hint")}</span>
-                </Show>
-                <Show when={hasSearchResults()}>
-                  {" · "}{t("memory.search_result_keyboard_hint")}
-                </Show>
-              </p>
-            )}
+          <Show when={submittedQuery() || canBrowseNotes()}>
+            <p class="knowledge-results-query" role={submittedQuery() ? "status" : undefined}>
+              <Show when={submittedQuery()}>
+                {(query) => (
+                  <>
+                    {t("memory.results_for", { query: query() })}
+                    <Show when={canBrowseNotes()}>{" · "}</Show>
+                  </>
+                )}
+              </Show>
+              <Show when={canEnterNotes()}>
+                <span id={searchKeyboardHintID}>{t("memory.search_keyboard_hint")}</span>{" · "}
+              </Show>
+              <Show when={canBrowseNotes()}>{t("memory.search_result_keyboard_hint")}</Show>
+            </p>
           </Show>
           <For each={files()}>
             {(f) => {
@@ -576,9 +579,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
                       data-ui="memory-row-main"
                       aria-expanded={expanded()}
                       aria-controls={expanded() ? detailElementId() : undefined}
-                      aria-keyshortcuts={hasSearchResults() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
+                      aria-keyshortcuts={canBrowseNotes() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
                       disabled={!filesSourceActive()}
-                      onKeyDown={searchNavigation.handleResultKeyDown}
+                      onKeyDown={noteNavigation.handleResultKeyDown}
                       onClick={() => toggleMemoryDetail(f.id)}
                     >
                       <span class="knowledge-item-title">{f.title}</span>

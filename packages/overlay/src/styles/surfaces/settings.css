@@ -814,9 +814,6 @@ button.mission-skill-item:focus-visible {
   align-items: center;
   gap: var(--ui-gap-xs);
   min-width: 0;
-}
-
-.knowledge-item[data-mode="search"] .knowledge-item-row {
   scroll-margin-block: var(--ui-gap-xs);
 }
 
