@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同项目分支切换的环境栏桌面证据](2026-11-24-project-git-branch-peer-refresh/README.md)
 - [比较中观察到不同磁盘版本的桌面证据](2026-11-24-file-comparison-observes-newer-disk/README.md)
 - [同一文件恢复后的保存错误桌面证据](2026-11-24-file-save-missing-after-original-restored/README.md)
 - [定时计划跟进会话改名的真实桌面证据](2026-11-24-scheduled-conversation-title-peer-refresh/README.md)
