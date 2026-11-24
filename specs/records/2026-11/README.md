@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [默认设置下重开工作区仍可实时更新 Git 分支](2026-11-25-default-git-branch-watch-after-reopen.md)
 - [启用文件监视的工作区在重开已有会话后恢复 Git 实时状态](2026-11-25-git-watch-starts-on-reopened-workspace.md)
 - [开启文件监视后，外部写入更新已打开的 Git 状态](2026-11-25-git-refreshes-after-watched-worktree-edits.md)
 - [收件箱刷新失败时保留正在阅读的消息](2026-11-25-mailbox-keeps-reading-after-refresh-failure.md)

@@ -1,0 +1,76 @@
+{
+  "rendererAsset": "main-EXy72qO_.js",
+  "browserUI": "http://127.0.0.1:41791/ui/",
+  "seedProcess": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-iteration-b614-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:41791",
+    "pid": 37820
+  },
+  "reopenedProcess": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-iteration-b614-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:41791",
+    "pid": 22768
+  },
+  "savedConversation": {
+    "sessionID": "ses_h9vN1lVMkZezTMJXrVl3",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b614\\candidate\\git-default-branch-review",
+    "projectID": "prj_hgdJDjTVOacaD9pWKdjd",
+    "title": "B614 default Git branch review",
+    "requestID": "9c8a97ab-7946-4dc9-9094-df2f823f9c7c"
+  },
+  "fullWorktreeWatchOverride": false,
+  "globalWatchDisableOverride": false,
+  "nativeWatcherStartCount": 0,
+  "actualExternalChange": {
+    "at": "2026-11-24T21:22:31.2981748Z",
+    "gitBranch": "default-observer",
+    "gitHead": "b12b36e303aeecc1271a0080abb518ce7ce68619",
+    "readStatus": 200,
+    "requestID": "f4a877b7-bab6-4587-b187-7b2e77cea8a3",
+    "vcs": {
+      "initialized": true,
+      "branch": "default-observer",
+      "commit": "b12b36e",
+      "clean": true,
+      "dirty": false,
+      "staged": 0,
+      "modified": 0,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    }
+  },
+  "vcsReceipts": [
+    {
+      "at": "2026-11-24T21:21:34.522Z",
+      "receipt": "823984b8-e1a2-41b9-9bec-be67cf557199",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:21:35.921Z",
+      "receipt": "91410c8c-5cc6-460a-a482-7ceeb5470bcb",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:21:39.879Z",
+      "receipt": "823d705f-9a77-483f-95dd-7351e96f05a8",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:22:32.299Z",
+      "receipt": "f4a877b7-bab6-4587-b187-7b2e77cea8a3",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:22:39.803Z",
+      "receipt": "07f807fc-542f-43c6-946a-70252bf23e8e",
+      "status": 200
+    }
+  ]
+}
