@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [已打开的归档列表同步其他标签的变更](records/2026-11/2026-11-24-archive-cross-tab-refresh.md)
 - [项目配置跨标签刷新时保留设置草稿](records/2026-11/2026-11-24-settings-drafts-on-project-refresh.md)
 - [全局输入栏同步已保存的默认配置](records/2026-11/2026-11-24-global-config-peer-notification.md)
 - [实时流重连后核对当前项目配置](records/2026-11/2026-11-24-project-config-after-stream-rejoin.md)
