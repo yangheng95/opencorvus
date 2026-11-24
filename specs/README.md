@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [不同标签页中的对话草稿可各自恢复](records/2026-11/2026-11-24-composer-drafts-across-tabs.md)
 - [离线提示在当前页面发起连接重试](records/2026-11/2026-11-24-connection-banner-retry.md)
 - [重连后重新核对已打开的项目文件](records/2026-11/2026-11-24-open-file-reconnect.md)
 - [分支切换后更新已打开的项目文件](records/2026-11/2026-11-24-open-file-branch-switch.md)
