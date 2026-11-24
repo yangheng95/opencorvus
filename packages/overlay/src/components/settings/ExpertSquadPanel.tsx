@@ -419,7 +419,12 @@ export default function ExpertSquadPanel() {
         setSelectedSquadID(key)
         setDetailOpen(true)
       },
-      () => detailOpen() ? installedBackButton : undefined,
+      () => {
+        const back = installedBackButton
+        if (!detailOpen() || !back?.isConnected) return
+        back.closest(".config-content")?.scrollTo({ top: 0 })
+        return back
+      },
     )
   }
 

@@ -11,3 +11,17 @@
 | [中文回车重开](baseline-zh-keyboard-reopen-clips-setting-title.jpg) | 同一裁切稳定复现，原返回按钮获得焦点。 |
 
 [基线界面实测](baseline-desktop-focus.json)与[真实目录、详情和数据](baseline-catalog-proof.json)。
+
+候选是 `41552/ui/` 的同样桌面范围，以下原图均已人工查看。
+
+| 候选 | 观察 |
+| --- | --- |
+| [英文回车重开](candidate-en-keyboard-reopen-at-top.jpg) | 标题回到顶部，保持 Package Details、准确包 12 和返回焦点。 |
+| [中文返回原行](candidate-zh-return-to-exact-package-row.jpg) | 准确 07 和扩展包筛选保持，列表以原行继续浏览。 |
+| [中文指针重开](candidate-zh-pointer-reopen-shows-complete-title.jpg) | 完整标题、包 07 及所选能力包详情显示在首屏。 |
+| [中文回车重开](candidate-zh-keyboard-reopen-shows-complete-title.jpg) | 完整标题和返回按钮的键盘焦点可见。 |
+| [继续阅读原文](candidate-zh-retained-tab-allows-reading-original.jpg) | 实际滚到 07 的 README、选择指引和声明副标题。 |
+| [首次打开相邻包](candidate-zh-new-package-opens-overview.jpg) | 08 顶部显示原概览、来源、版本和项目选择。 |
+| [续页移交焦点](candidate-zh-real-continuation-focuses-first-new-package.jpg) | 真实第二页第一项 16 获得焦点。 |
+
+[候选界面实测](candidate-desktop-focus.json)与[正式目录、详情和数据](candidate-catalog-proof.json)。

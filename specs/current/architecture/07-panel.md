@@ -6318,8 +6318,9 @@ detail section or directory row. The current interface language renders the
 result while preserving the exact invocation and filesystem path. The original
 diagnostic remains available on failure, and retiring the action's scope clears
 its result.
-Installed Expert Squad navigation focuses Back to list while the exact detail
-loads, then returns to the original physical installation row or selected filter.
+Explicitly opening an installed Expert Squad starts the settings viewport at the
+top and focuses Back to list while the exact detail loads. Returning restores
+focus to the original physical installation row or selected filter.
 Arrow keys and Page Up or Page Down move focus among the current filter's accepted
 rows, using the settings viewport to keep the destination row visible. Opening a
 row is a separate action. The catalog footer remains in the normal Tab order and
