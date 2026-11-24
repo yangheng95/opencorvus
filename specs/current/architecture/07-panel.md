@@ -166,6 +166,9 @@ Within a provider group, options with the same label show their model IDs in
 the list, including in filtered views. The compact Composer button presents
 the selected model's ID in that case and retains the fully-qualified identity
 in its accessible name and tooltip.
+Closing the Composer model picker clears its search after dismissal, model
+selection, navigation to Providers or a scope change. The next opening starts
+with the complete available list and focuses the search field.
 The model selector and Provider discovery match every whitespace-separated query
 term literally across each candidate's existing metadata fields, in any order.
 The shared metadata matcher retains canonical option IDs and list ordering;

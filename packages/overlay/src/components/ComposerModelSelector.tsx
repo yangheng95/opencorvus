@@ -357,7 +357,6 @@ export function ComposerModelSelector() {
     providerLoadsInFlight = 0
     setProviderLoading(false)
     close()
-    setQuery("")
   })
 
   async function readProviderInfo(): Promise<void> {
@@ -400,6 +399,7 @@ export function ComposerModelSelector() {
   function close() {
     setCatalogRetry(undefined)
     disclosure.close()
+    setQuery("")
   }
 
   function open() {
@@ -426,7 +426,6 @@ export function ComposerModelSelector() {
           open()
           return
         }
-        setQuery("")
         close()
       }}
       anchorRef={slotRef}
