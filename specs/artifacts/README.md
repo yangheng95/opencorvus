@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同一项目文件跨标签页保存的桌面证据](2026-11-24-open-file-live-save/README.md)
 - [两个标签页写入草稿的桌面证据](2026-11-24-composer-drafts-across-tabs/README.md)
 - [离线提示按钮的真实桌面证据](2026-11-24-connection-banner-retry/README.md)
 - [重启服务与已打开文件的桌面证据](2026-11-24-open-file-reconnect/README.md)
