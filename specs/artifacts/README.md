@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同一个项目用不同拼写打开时的草稿证据](2026-11-25-project-launcher-draft-canonical-path/README.md)
 - [保存成功后原操作报告忙碌的桌面证据](2026-11-25-file-save-continues-through-editor-admission/README.md)
 - [0.1.55 发布证据](2026-11-25-release-0.1.55/README.md) · 原生、官网与随包日志
 - [重命名已打开文件的桌面证据](2026-11-25-file-rename-keeps-explorer-focus/README.md)

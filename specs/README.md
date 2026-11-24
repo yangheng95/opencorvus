@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [同一 Windows 项目使用一份首页草稿](records/2026-11/2026-11-25-project-launcher-draft-canonical-path.md)
 - [文件保存确认后续接原来的操作](records/2026-11/2026-11-25-file-save-continues-through-editor-admission.md)
 - [0.1.55 发布](records/2026-11/2026-11-25-release-0.1.55.md) · 增量日志与公开交付
 - [重命名已打开的文件时保持资源管理器焦点](records/2026-11/2026-11-25-file-rename-keeps-explorer-focus.md)
