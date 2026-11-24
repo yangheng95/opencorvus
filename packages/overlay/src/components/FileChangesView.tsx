@@ -11,6 +11,7 @@ import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type Diff
 import { matchesSearchTerms } from "../services/text-search"
 import { localeTag, t, tc } from "../utils/i18n"
 import { shortRelativePath } from "../utils/tool"
+import { virtualListPageIndex } from "../utils/virtual-list-navigation"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
@@ -406,13 +407,7 @@ export function FileChangesView(props: FileChangesViewProps) {
     if (shouldVirtualizeRows()) {
       const virtualizer = rowVirtualizer
       if (!virtualizer) return
-      const distance = Math.max(1, virtualizer.viewportSize - virtualizer.getItemSize(index))
-      const offset = virtualizer.getItemOffset(index) + direction * distance
-      let candidate = virtualizer.findItemIndex(offset)
-      // The item containing the offset can start outside the page when moving up.
-      if (direction === -1 && virtualizer.getItemOffset(candidate) < offset) candidate += 1
-      const target = direction === 1 ? Math.max(adjacent, candidate) : Math.min(adjacent, candidate)
-      return rows[target]?.key
+      return rows[virtualListPageIndex(virtualizer, index, rows.length, direction)]?.key
     }
 
     const list = listEl

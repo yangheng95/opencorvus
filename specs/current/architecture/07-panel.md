@@ -1922,6 +1922,9 @@ Explorer file rows disclose Ctrl+Space selection toggling and Shift+Space range
 selection in the current interface language. The accessible name of a selected
 row keeps its path and reports its selection separately from the current editor
 marker. Selection uses the same row and range actions as pointer input.
+Page Up and Page Down move keyboard focus through the expanded tree or current
+search results by approximately one viewport with one row of overlap. The
+focused row stays visible, and selection remains an explicit action.
 
 Before the first successful root directory listing, an active scoped Explorer
 shows pending loading, including the initial request scheduling interval. Empty

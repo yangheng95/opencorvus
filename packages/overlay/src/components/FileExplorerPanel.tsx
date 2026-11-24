@@ -63,6 +63,7 @@ import { projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
+import { virtualListPageIndex } from "../utils/virtual-list-navigation"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
@@ -81,7 +82,7 @@ const SEARCH_LIMIT = 80
 const INITIAL_DIRECTORY_LOAD_DELAY_MS = 250
 const ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS = 15_000
 const EXPLORER_SELECTION_MIME = "application/x-opencorvus-explorer-selection"
-const EXPLORER_SELECTION_KEY_SHORTCUTS = "Control+Space Shift+Space"
+const EXPLORER_ROW_KEY_SHORTCUTS = "PageUp PageDown Control+Space Shift+Space"
 
 type ExplorerRow =
   | {
@@ -618,6 +619,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       case "ArrowUp": next = visible[Math.max(index - 1, 0)]; break
       case "Home": next = visible[0]; break
       case "End": next = visible.at(-1); break
+      case "PageUp":
+      case "PageDown": {
+        if (!virtualizer) return
+        const target = virtualListPageIndex(virtualizer, index, visible.length, event.key === "PageUp" ? -1 : 1)
+        if (target !== index) next = visible[target]
+        break
+      }
       case "Escape":
         if (row.kind !== "search" || event.target !== event.currentTarget || !searchInput?.isConnected || searchInput.disabled) {
           return
@@ -2437,7 +2445,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             data-drop-target={isSearchRowDropTarget() ? dropStatus() : undefined}
             aria-current={isSearchRowCurrent() ? "true" : undefined}
             aria-label={isSearchRowSelected() ? t("explorer.selected_path_hint", { path: label() }) : label()}
-            aria-keyshortcuts={`${EXPLORER_SELECTION_KEY_SHORTCUTS} Escape`}
+            aria-keyshortcuts={`${EXPLORER_ROW_KEY_SHORTCUTS} Escape`}
             draggable={!commandBusy()}
             style={{ "--file-explorer-row-depth": String(row().depth) }}
             title={label()}
@@ -2517,7 +2525,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           aria-current={isNodeCurrent() ? "true" : undefined}
           aria-expanded={isDirectory() ? row().expanded : undefined}
           aria-label={selectedLabel()}
-          aria-keyshortcuts={EXPLORER_SELECTION_KEY_SHORTCUTS}
+          aria-keyshortcuts={EXPLORER_ROW_KEY_SHORTCUTS}
           draggable={!commandBusy()}
           style={{ "--file-explorer-row-depth": String(row().depth) }}
           title={node().path}
