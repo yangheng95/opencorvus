@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Git 回执结算与在途手写说明的桌面证据](2026-11-25-git-commit-retains-newer-message-draft/README.md)
 - [保存后 Git 工作树状态的实际桌面证据](2026-11-25-git-working-tree-state-after-file-save/README.md)
 - [环境栏重叠读取的桌面证据](2026-11-25-environment-joins-pending-git-metadata/README.md)
 - [Git 提交说明与分支变更的桌面证据](2026-11-24-git-action-confirmed-branch/README.md)

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [提交成功后保留在途编辑的新说明](2026-11-25-git-commit-retains-newer-message-draft.md)
 - [文件保存后更新已打开的 Git 工作树状态](2026-11-25-git-working-tree-state-after-file-save.md)
 - [展开环境栏时复用同一项目在途元数据](2026-11-25-environment-joins-pending-git-metadata.md)
 - [提交和推送绑定到已确认的 Git 分支](2026-11-24-git-action-confirmed-branch.md)
