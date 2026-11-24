@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [搜索结果方向键的行焦点](records/2026-11/2026-11-24-search-result-row-focus.md)
 - [新建多步任务专家团结果的分页焦点](records/2026-11/2026-11-24-mission-squad-search-page-focus.md)
 - [服务商搜索结果的分页焦点](records/2026-11/2026-11-24-provider-search-page-focus.md)
 - [多步任务技能搜索的分页焦点](records/2026-11/2026-11-24-mission-skill-search-page-focus.md)

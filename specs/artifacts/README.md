@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [搜索结果键盘聚焦完整行的桌面证据](2026-11-24-search-result-row-focus/README.md)
 - [新建多步任务专家团搜索分页的桌面证据](2026-11-24-mission-squad-search-page-focus/README.md)
 - [服务商搜索分页的桌面证据](2026-11-24-provider-search-page-focus/README.md)
 - [多步任务技能搜索分页的桌面证据](2026-11-24-mission-skill-search-page-focus/README.md)
