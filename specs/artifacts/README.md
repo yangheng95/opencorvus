@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时计划在多个标签的真实状态证据](2026-11-24-scheduled-definition-peer-refresh/README.md)
 - [原路径缺失时保存项目内草稿副本的桌面证据](2026-11-24-save-missing-file-draft-copy/README.md)
 - [父目录改名后的项目编辑器桌面证据](2026-11-24-open-file-after-parent-rename/README.md)
 - [同名任务的停止确认桌面证据](2026-11-24-work-ledger-stop-project-context/README.md)
