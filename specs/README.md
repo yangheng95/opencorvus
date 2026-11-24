@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时任务详情显示完整模型标识](records/2026-11/2026-11-25-scheduled-details-show-full-model-identity.md)
 - [已打开的定时历史跟随实际运行回执](records/2026-11/2026-11-25-scheduled-run-updates-while-online.md)
 - [定时任务重连时更新当前运行历史](records/2026-11/2026-11-25-scheduled-run-history-after-reconnect.md)
 - [返回文件编辑器时核对磁盘版本](records/2026-11/2026-11-25-file-rechecks-disk-on-return.md)
