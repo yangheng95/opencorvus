@@ -1161,6 +1161,12 @@ Archive actions show their observed committed result with the shared inline
 Feedback component. Subsequent list-read errors retain that success alongside
 the read error; source/query replacement retires the feedback. Its action key
 is translated at render time while the original item title remains unchanged.
+The mounted Settings Archive also uses the existing Work Ledger stream to
+invalidate its retained query on archive-relevant Task, Session and Project
+metadata changes and on reconnect. The same paged reader refreshes the loaded
+window after any current read, write or deletion confirmation. Search input
+remains in place. A focused row action returns to its matching row or to Archive
+search if that row has left the list. A notification does not settle a write.
 The selected conversation reads its exact Task or canonical Session metadata
 through `GET /work-ledger/selection/:kind/:id?directory=…`, using the same
 Work Ledger projection factories as the lists. Active-list membership never

@@ -13,7 +13,7 @@ import { Session } from "@/session"
 import { Database, eq } from "@/storage/db"
 import { EngineService } from "@/task-api"
 import { hostGit } from "@/util/git"
-import { WorkLedgerEvent } from "@opencorvus-ai/transport-protocol"
+import { WorkLedgerArchiveList, WorkLedgerEvent } from "@opencorvus-ai/transport-protocol"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterEach(async () => {
@@ -69,6 +69,54 @@ async function openLedgerEvents() {
     },
   }
 }
+
+test("Mission archive and restore invalidate the public archive query for the exact original Session", async () => {
+  await using project = await memoryProject("archive-notification")
+  await using control = await memoryProject("archive-notification-control")
+  const search = "Handoff summary"
+  async function createDraft(directory: string) {
+    const response = await Server.App().request("/mission/draft", {
+      method: "POST",
+      headers: { "x-opencorvus-directory": directory, "content-type": "application/json" },
+      body: JSON.stringify({ title: search, request: "Review the handoff.", productPillar: "work", expertSquadIDs: ["base"] }),
+    })
+    expect(response.status).toBe(200)
+    return (await response.json()) as { missionID: string; sessionID: string; directory: string }
+  }
+  type Draft = Awaited<ReturnType<typeof createDraft>>
+  async function setArchived(draft: Draft, archived: boolean) {
+    const response = await Server.App().request(`/mission/${draft.missionID}/archive`, {
+      method: "PATCH",
+      headers: { "x-opencorvus-directory": draft.directory, "content-type": "application/json" },
+      body: JSON.stringify(archived ? { archived, surface: "api", reason: "Archive the isolated draft" } : { archived }),
+    })
+    expect(response.status).toBe(200)
+    expect(await response.json()).toMatchObject({ missionID: draft.missionID, sessionID: draft.sessionID, directory: draft.directory })
+  }
+
+  const target = await createDraft(project.path)
+  const retained = await createDraft(control.path)
+  await setArchived(retained, true)
+  for (const [archived, expected] of [[true, [target, retained]], [false, [retained]]] as const) {
+    const { next, close } = await openLedgerEvents()
+    try {
+      expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+      await setArchived(target, archived)
+      expect(await next("work-ledger.changed", "session.updated")).toMatchObject({ sessionID: target.sessionID })
+      const response = await Server.App().request(`/work-ledger/archive?${new URLSearchParams({ search })}`)
+      expect(response.status).toBe(200)
+      const { rows } = WorkLedgerArchiveList.parse(await response.json())
+      expect(rows.map((row) => row.sessionID).sort()).toEqual(expected.map((draft) => draft.sessionID).sort())
+      for (const draft of expected) {
+        expect(rows.find((row) => row.sessionID === draft.sessionID)).toMatchObject({
+          kind: "mission", missionID: draft.missionID, directory: draft.directory, title: search,
+        })
+      }
+    } finally {
+      await close()
+    }
+  }
+}, 30_000)
 
 test("committed file writes announce their real path and resource on the public stream in each project", async () => {
   await using first = await memoryProject("ledger-file-first")

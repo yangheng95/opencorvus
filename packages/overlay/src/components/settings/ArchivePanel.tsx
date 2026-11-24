@@ -22,6 +22,7 @@ import { restoreArchivedWork } from "../../services/restore-archived-work"
 import { deleteMission } from "../../services/mission"
 import { deleteTask } from "../../services/task"
 import { deleteConversationSession } from "../../services/conversation-session"
+import { subscribeWorkLedgerChanges } from "../../services/sse"
 import { conversationExperienceIcon, conversationExperienceLabel } from "../../services/conversation-experience"
 import { formatErrorDetails, reportError, reportSuccess, runPostCommitUiEffect } from "../../services/diagnostics"
 import { detailStamp } from "../../utils/time"
@@ -37,6 +38,7 @@ import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from
 const ARCHIVE_PAGE_SIZE = 100
 const ARCHIVE_ROW_SELECTOR = "[data-archive-row-key]"
 const ARCHIVE_OPEN_ACTION_SELECTOR = 'button[data-archive-action="open"]:enabled'
+const ARCHIVE_CHANGE_SOURCES = new Set(["session.updated", "session.deleted", "task.updated", "task.archived", "task.deleted", "project.updated"])
 
 type ArchiveRead = "initial" | "append" | "refresh"
 
@@ -119,6 +121,9 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   let headingElement: HTMLSpanElement | undefined
   let continuationElement: HTMLDivElement | undefined
   let continuationButton: HTMLButtonElement | undefined
+  let confirmingDeletion = false
+  let refreshRequested = false
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined
 
   const ownsRequest = (generation: number, authority: ApiAuthority) =>
     generation === requestGeneration && isApiAuthorityCurrent(authority)
@@ -242,6 +247,12 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     const authority = captureApiAuthority()
     const hadContinuationFocus = append && continuationButton === document.activeElement
     const hadRetryFocus = retryTrigger === document.activeElement
+    const background = refresh && !retryTrigger
+    const focusedButton = background && document.activeElement instanceof HTMLButtonElement ? document.activeElement : undefined
+    const focusedRowKey = focusedButton?.closest<HTMLElement>(ARCHIVE_ROW_SELECTOR)?.dataset.archiveRowKey
+    const focusedAction = focusedButton?.dataset.archiveAction
+    const priorOperation = failure()?.operation
+    const preserveActionFailure = background && (priorOperation === "restore" || priorOperation === "delete")
     let focusRow: WorkLedgerItemRow | undefined
     setLoading(true)
     if (append) setFailure(undefined)
@@ -264,7 +275,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       setRows((current) => (append ? [...current, ...result.rows] : result.rows))
       setNextCursor(result.nextCursor)
       focusRow = nextFocus
-      if (!append) setFailure(undefined)
+      if (!append && !preserveActionFailure) setFailure(undefined)
     } catch (cause) {
       if (
         requestController.signal.aborted ||
@@ -272,7 +283,11 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         cause instanceof ApiAuthorityChangedError
       )
         return
-      recordFailure("settings:archive:load", operation, cause)
+      if (preserveActionFailure) {
+        reportArchiveError("settings:archive:load", archiveFailureSummary({ operation, cause }), cause)
+      } else {
+        recordFailure("settings:archive:load", operation, cause)
+      }
     } finally {
       if (ownsRequest(generation, authority)) {
         if (controller === requestController) controller = undefined
@@ -288,8 +303,33 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         } else if (append && continuationFailure() && continuationElement?.contains(document.activeElement)) {
           continuationElement.scrollIntoView({ block: "nearest" })
         }
+        if (focusedRowKey && focusedAction) {
+          queueMicrotask(() => {
+            if (!ownsRequest(generation, authority) ||
+              (document.activeElement !== focusedButton && document.activeElement !== document.body)) return
+            const row = findArchiveRow(focusedRowKey)
+            const action = row?.querySelector<HTMLButtonElement>(`[data-archive-action="${focusedAction}"]:enabled`)
+            ;(action ?? searchInput)?.focus({ preventScroll: true })
+          })
+        }
       }
     }
+  }
+
+  function clearArchiveRefresh() {
+    clearTimeout(refreshTimer)
+    refreshTimer = undefined
+    refreshRequested = false
+  }
+
+  function scheduleArchiveRefresh() {
+    if (!refreshRequested || refreshTimer !== undefined || loading() || busyID() || confirmingDeletion) return
+    refreshTimer = setTimeout(() => {
+      refreshTimer = undefined
+      if (loading() || busyID() || confirmingDeletion) return
+      refreshRequested = false
+      void load("refresh")
+    }, WORK_LEDGER_SEARCH_DELAY_MS)
   }
 
   const retryRead = () => (
@@ -457,6 +497,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   }
 
   const confirmRowDeletion = async (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => {
+    if (confirmingDeletion) return
     const authority = captureApiAuthority()
     const generation = requestGeneration
     const ownsConfirmation = () => ownsRequest(generation, authority) && !busyID() && !loading() &&
@@ -467,6 +508,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       `${kindLabel(row)} · ${archiveProjectName(row)}`,
       row.directory,
     ].join("\n")
+    confirmingDeletion = true
     try {
       const result = await showAppDialog({
         title: t("archive.delete_confirm_title"),
@@ -481,6 +523,9 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       if (result.confirmed && ownsConfirmation()) await runRowAction(row, "delete", { authority, trigger })
     } catch (cause) {
       if (ownsConfirmation()) recordFailure(`settings:archive:delete:${row.kind}:${row.id}`, "delete", cause)
+    } finally {
+      confirmingDeletion = false
+      scheduleArchiveRefresh()
     }
   }
 
@@ -488,6 +533,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     [() => captureApiAuthority().revision, query],
     ([revision, term], previous) => {
       // Retire the previous result and cursor as soon as the effective query changes.
+      clearArchiveRefresh()
       requestGeneration += 1
       controller?.abort()
       controller = undefined
@@ -511,7 +557,16 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       }
     },
   ))
+  createEffect(on([loading, busyID], scheduleArchiveRefresh))
+  const unsubscribe = subscribeWorkLedgerChanges((event) => {
+    if (event.type !== "work-ledger.connected" &&
+      !(event.type === "work-ledger.changed" && ARCHIVE_CHANGE_SOURCES.has(event.sourceType))) return
+    refreshRequested = true
+    scheduleArchiveRefresh()
+  })
   onCleanup(() => {
+    unsubscribe()
+    clearArchiveRefresh()
     requestGeneration += 1
     controller?.abort()
   })
