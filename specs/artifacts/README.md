@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [独立任务归档删除的项目归属桌面证据](2026-11-24-archived-task-delete-project-owner/README.md)
 - [归档跨标签刷新的桌面证据](2026-11-24-archive-cross-tab-refresh/README.md)
 - [设置草稿和跨标签刷新的桌面证据](2026-11-24-settings-drafts-on-project-refresh/README.md)
 - [全局默认配置的跨标签桌面证据](2026-11-24-global-config-peer-notification/README.md)
