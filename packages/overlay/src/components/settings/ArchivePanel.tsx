@@ -44,6 +44,7 @@ const ARCHIVE_OPEN_ACTION_SELECTOR = 'button[data-archive-action="open"]:enabled
 const ARCHIVE_CHANGE_SOURCES = new Set(["session.deleted", "task.updated", "task.archived", "task.deleted", "project.updated"])
 
 type ArchiveRead = "initial" | "append" | "refresh"
+type ArchiveReadPhase = ArchiveRead | "background"
 
 type ArchiveFailure = {
   operation: ArchiveRead | "restore" | "delete"
@@ -113,7 +114,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const query = createMemo(() => normalizeWorkLedgerSearch(search()))
   const [rows, setRows] = createSignal<WorkLedgerItemRow[]>([])
   const [nextCursor, setNextCursor] = createSignal<WorkLedgerCursor | null>(null)
-  const [loading, setLoading] = createSignal(false)
+  const [readPhase, setReadPhase] = createSignal<ArchiveReadPhase>()
+  const loading = () => readPhase() !== undefined
   const [busyID, setBusyID] = createSignal("")
   const [failure, setFailure] = createSignal<ArchiveFailure>()
   const [unconfirmedDeletions, setUnconfirmedDeletions] = createSignal(new Map<string, UnconfirmedDeletion>())
@@ -142,7 +144,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   }
   const hasRefreshFailure = createMemo(() => panelFailure()?.operation === "refresh")
   const deletionUnconfirmed = (row: WorkLedgerItemRow) => unconfirmedDeletions().has(archiveRowKey(row))
-  const canOpenRow = (row: WorkLedgerItemRow) => !busyID() && !loading() && !deletionUnconfirmed(row)
+  const canOpenRow = (row: WorkLedgerItemRow) =>
+    !busyID() && (!loading() || readPhase() === "background") && !deletionUnconfirmed(row)
   const canBrowseRows = () => rows().some(canOpenRow)
   const archiveViewport = () => panelElement?.closest<HTMLElement>(".config-content") ?? undefined
 
@@ -208,6 +211,14 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     Array.from(panelElement?.querySelectorAll<HTMLElement>(ARCHIVE_ROW_SELECTOR) ?? [])
       .find((element) => element.dataset.archiveRowKey === rowKey)
 
+  const focusedArchiveAction = () => {
+    const button = document.activeElement
+    if (!(button instanceof HTMLButtonElement) || !panelElement?.contains(button)) return
+    const rowKey = button.closest<HTMLElement>(ARCHIVE_ROW_SELECTOR)?.dataset.archiveRowKey
+    const action = button.dataset.archiveAction
+    if (rowKey && action) return { button, rowKey, action }
+  }
+
   const focusAfterAction = (
     rowKey: string,
     previousIndex: number,
@@ -252,13 +263,13 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     const hadContinuationFocus = append && continuationButton === document.activeElement
     const hadRetryFocus = retryTrigger === document.activeElement
     const background = refresh && !retryTrigger
-    const focusedButton = background && document.activeElement instanceof HTMLButtonElement ? document.activeElement : undefined
-    const focusedRowKey = focusedButton?.closest<HTMLElement>(ARCHIVE_ROW_SELECTOR)?.dataset.archiveRowKey
-    const focusedAction = focusedButton?.dataset.archiveAction
+    let rowFocus = background ? focusedArchiveAction() : undefined
+    // Open stays available. Only mutation buttons can lose focus when the read starts.
+    if (rowFocus?.action === "open") rowFocus = undefined
     const priorOperation = failure()?.operation
     const preserveActionFailure = background && (priorOperation === "restore" || priorOperation === "delete")
     let focusRow: WorkLedgerItemRow | undefined
-    setLoading(true)
+    setReadPhase(background ? "background" : operation)
     if (append) setFailure(undefined)
     try {
       const result = await readPages({
@@ -276,6 +287,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       if (hadRetryFocus && retryTrigger === document.activeElement) {
         headingElement?.focus({ preventScroll: true })
       }
+      if (background) rowFocus = focusedArchiveAction() ?? rowFocus
       setRows((current) => (append ? [...current, ...result.rows] : result.rows))
       setNextCursor(result.nextCursor)
       focusRow = nextFocus
@@ -295,7 +307,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     } finally {
       if (ownsRequest(generation, authority)) {
         if (controller === requestController) controller = undefined
-        setLoading(false)
+        setReadPhase(undefined)
         if (focusRow) {
           const row = findArchiveRow(archiveRowKey(focusRow))
           const action = row?.querySelector<HTMLButtonElement>(ARCHIVE_OPEN_ACTION_SELECTOR)
@@ -307,13 +319,16 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         } else if (append && continuationFailure() && continuationElement?.contains(document.activeElement)) {
           continuationElement.scrollIntoView({ block: "nearest" })
         }
-        if (focusedRowKey && focusedAction) {
+        if (rowFocus) {
+          const { button, rowKey, action } = rowFocus
           queueMicrotask(() => {
             if (!ownsRequest(generation, authority) ||
-              (document.activeElement !== focusedButton && document.activeElement !== document.body)) return
-            const row = findArchiveRow(focusedRowKey)
-            const action = row?.querySelector<HTMLButtonElement>(`[data-archive-action="${focusedAction}"]:enabled`)
-            ;(action ?? searchInput)?.focus({ preventScroll: true })
+              (document.activeElement !== button && document.activeElement !== document.body)) return
+            const row = findArchiveRow(rowKey)
+            const target = row?.querySelector<HTMLButtonElement>(`[data-archive-action="${action}"]:enabled`)
+            ;(target ?? searchInput)?.focus({ preventScroll: true })
+            const viewport = archiveViewport()
+            if (row && target && viewport) revealRenderedListRow(row, viewport)
           })
         }
       }
@@ -460,7 +475,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
 
     const requestController = new AbortController()
     controller = requestController
-    setLoading(true)
+    setReadPhase("refresh")
     try {
       const result = await readPages({
         search: query(),
@@ -479,7 +494,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     } finally {
       if (!ownsAction()) return
       if (controller === requestController) controller = undefined
-      setLoading(false)
+      setReadPhase(undefined)
       setBusyID("")
       if (committed) {
         runPostCommitUiEffect(
@@ -581,11 +596,11 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       const sameAuthority = revision === previous?.[0]
       if (!sameAuthority) setUnconfirmedDeletions(new Map())
       const readFirstPage = () => batch(() => {
-        setLoading(false)
+        setReadPhase(undefined)
         void load("initial")
       })
       if (sameAuthority && term) {
-        setLoading(true)
+        setReadPhase("initial")
         const timer = setTimeout(readFirstPage, WORK_LEDGER_SEARCH_DELAY_MS)
         onCleanup(() => clearTimeout(timer))
       } else {

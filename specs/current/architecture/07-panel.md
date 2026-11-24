@@ -6824,6 +6824,12 @@ authority changes immediately retire the previous request, rows and cursor.
 Session updates refresh the archive when their committed change affects archive
 membership or the session belongs to the archive. The work ledger supplies both
 facts from the existing session publication.
+Background refresh keeps the accepted archive rows available for reading while
+the next result is pending. Open and keyboard navigation stay available for the
+accepted rows. On accepting the refresh, a focused row action follows its
+original identity or returns to the current search if it has left the result.
+Other focused controls keep their focus. Restore and deletion keep their current
+read and mutation admission checks.
 Nonempty input changes use the command palette's Work Ledger search delay;
 the initial read, a connection change and clearing the search read immediately.
 The result count reflects accepted rows and stays hidden while the new query

@@ -1,0 +1,203 @@
+{
+  "rendererAsset": "main-BL9BfK-8.js",
+  "browserUI": "http://127.0.0.1:41785/ui/",
+  "heldReadObservations": {
+    "restoreDisabled": true,
+    "inFlight": true,
+    "focusBefore": "East Open",
+    "deleteDisabled": true,
+    "focusAfterDown": "West Open",
+    "focusAfterAccept": "West Open"
+  },
+  "openWhileHeld": {
+    "id": "ses_hKRwRgdeQXFrEbOtRphX",
+    "noticeFocused": "archivedWorkNotice",
+    "heldReadId": 103
+  },
+  "peerRestoredFocus": {
+    "input": "B610 Quarterly",
+    "focused": true
+  },
+  "actualSessionMutations": {
+    "moveFocus": {
+      "status": 200,
+      "requestID": "7072e6aa-4e0f-41ef-afb9-caf94195b397",
+      "finishedAt": "2026-11-24T20:33:36.6237764Z",
+      "id": "ses_hRk7LruZwq7OscawmrYE",
+      "title": "B610 Quarterly Control reconciled",
+      "archived": 1795552108262,
+      "archiveRead": {
+        "at": "2026-11-24T20:33:39.561Z",
+        "event": "archive-response-held",
+        "id": 99,
+        "status": 200,
+        "actual": "0b1c5a47-9ff6-4b07-8c95-86c39a901859"
+      }
+    },
+    "open": {
+      "status": 200,
+      "requestID": "ae786c39-c6ef-4fde-af09-12d4ba772ac2",
+      "finishedAt": "2026-11-24T20:33:55.0446347Z",
+      "id": "ses_hRk7LruZwq7OscawmrYE",
+      "title": "B610 Quarterly Control finalized",
+      "archived": 1795552108262,
+      "archiveRead": {
+        "at": "2026-11-24T20:33:55.143Z",
+        "event": "archive-response-held",
+        "id": 103,
+        "status": 200,
+        "actual": "578541a8-fdad-4530-aadd-9a69e4257b2d"
+      }
+    },
+    "peerRestore": {
+      "status": 200,
+      "requestID": "167b71eb-d81d-45cd-975e-edb2d40139bf",
+      "finishedAt": "2026-11-24T20:34:13.2736715Z",
+      "id": "ses_hzse8sVAFY92d2AddKXN",
+      "title": "B610 Quarterly East ledger",
+      "archived": null
+    }
+  },
+  "observedTransport": [
+    {
+      "at": "2026-11-24T20:33:32.769Z",
+      "event": "upstream-response",
+      "id": 88,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "3270921b-3109-4431-933a-0ddb91380a05"
+    },
+    {
+      "at": "2026-11-24T20:33:39.56Z",
+      "event": "upstream-response",
+      "id": 99,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "0b1c5a47-9ff6-4b07-8c95-86c39a901859"
+    },
+    {
+      "at": "2026-11-24T20:33:39.561Z",
+      "event": "archive-response-held",
+      "id": 99,
+      "status": 200,
+      "actual": "0b1c5a47-9ff6-4b07-8c95-86c39a901859"
+    },
+    {
+      "at": "2026-11-24T20:33:47.962Z",
+      "event": "archive-response-released",
+      "id": 99,
+      "actual": "0b1c5a47-9ff6-4b07-8c95-86c39a901859"
+    },
+    {
+      "at": "2026-11-24T20:33:55.142Z",
+      "event": "upstream-response",
+      "id": 103,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "578541a8-fdad-4530-aadd-9a69e4257b2d"
+    },
+    {
+      "at": "2026-11-24T20:33:55.143Z",
+      "event": "archive-response-held",
+      "id": 103,
+      "status": 200,
+      "actual": "578541a8-fdad-4530-aadd-9a69e4257b2d"
+    },
+    {
+      "at": "2026-11-24T20:33:59.209Z",
+      "event": "archive-response-closed",
+      "id": 103,
+      "actual": "578541a8-fdad-4530-aadd-9a69e4257b2d"
+    },
+    {
+      "at": "2026-11-24T20:34:09.927Z",
+      "event": "upstream-response",
+      "id": 136,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "1bb37525-54bb-4a14-9f74-c7f6bf15fb0e"
+    },
+    {
+      "at": "2026-11-24T20:34:13.371Z",
+      "event": "upstream-response",
+      "id": 140,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "f65287e6-153c-442e-acd1-c5207e70177f"
+    },
+    {
+      "at": "2026-11-24T20:34:21.823Z",
+      "event": "upstream-response",
+      "id": 145,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "dbfb6ca9-4241-4b28-ab37-47c5b13404ed"
+    },
+    {
+      "at": "2026-11-24T20:34:21.985Z",
+      "event": "upstream-response",
+      "id": 148,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "d42f3855-a67d-4c3d-b23d-75b47f5e704b"
+    }
+  ],
+  "finalOriginalSessions": [
+    {
+      "key": "west",
+      "id": "ses_hKRwRgdeQXFrEbOtRphX",
+      "title": "B610 Quarterly West ledger",
+      "archived": 1795552107990,
+      "projectID": "prj_hMVoGib8zvGpE6PRre0x",
+      "status": 200,
+      "requestID": "90171bbe-7480-40cc-a6fa-885b6ef5d3c4"
+    },
+    {
+      "key": "east",
+      "id": "ses_hzse8sVAFY92d2AddKXN",
+      "title": "B610 Quarterly East ledger",
+      "archived": null,
+      "projectID": "prj_hMVoGib8zvGpE6PRre0x",
+      "status": 200,
+      "requestID": "650f2a99-56c4-4c2a-9877-3c4dc86dfc56"
+    },
+    {
+      "key": "control",
+      "id": "ses_hRk7LruZwq7OscawmrYE",
+      "title": "B610 Quarterly Control finalized",
+      "archived": null,
+      "projectID": "prj_hMVoGib8zvGpE6PRre0x",
+      "status": 200,
+      "requestID": "b45ed52b-1c15-43c9-bcd5-8c79543ae4c8"
+    }
+  ],
+  "publicArchive": {
+    "requestID": "f62b269f-693b-429e-bc6d-855999376026",
+    "ids": [
+      "ses_hKRwRgdeQXFrEbOtRphX"
+    ],
+    "status": 200
+  },
+  "publicActive": {
+    "requestID": "fef0bb2b-a5bb-4dac-85df-4fa28614206a",
+    "ids": [
+      "ses_hRk7LruZwq7OscawmrYE",
+      "ses_hzse8sVAFY92d2AddKXN"
+    ],
+    "status": 200
+  }
+}
