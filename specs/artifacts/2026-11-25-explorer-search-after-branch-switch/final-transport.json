@@ -1,0 +1,250 @@
+[
+  {
+    "at": "2026-11-24T18:38:09.198Z",
+    "event": "socket-open",
+    "id": 235,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:38:53.673Z",
+    "event": "upstream-response",
+    "id": 267,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "2976c8d5-1999-4b8e-a821-75c2fcdc2158"
+  },
+  {
+    "at": "2026-11-24T18:38:53.993Z",
+    "event": "upstream-response",
+    "id": 266,
+    "pathname": "/find/file",
+    "method": "GET",
+    "status": 200,
+    "query": "launch-plan",
+    "actual": "06c707d7-7b4b-435d-b085-ec2e193c7120"
+  },
+  {
+    "at": "2026-11-24T18:39:00.711Z",
+    "event": "upstream-response",
+    "id": 271,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "48efa58f-06ff-4409-9672-d88daecf6643"
+  },
+  {
+    "at": "2026-11-24T18:39:00.823Z",
+    "event": "upstream-response",
+    "id": 272,
+    "pathname": "/find/file",
+    "method": "GET",
+    "status": 200,
+    "query": "launch-plan",
+    "actual": "a83e5f07-fa82-42fe-87f4-0c486d320c03"
+  },
+  {
+    "at": "2026-11-24T18:39:08.411Z",
+    "event": "upstream-response",
+    "id": 274,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "244a5e9b-4163-4a74-ae1c-4c10f21ac444"
+  },
+  {
+    "at": "2026-11-24T18:39:20.346Z",
+    "event": "mode",
+    "mode": "held",
+    "openLedgerStreams": 0,
+    "openSockets": 1
+  },
+  {
+    "at": "2026-11-24T18:39:23.36Z",
+    "event": "socket-held",
+    "id": 277,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:39:23.42Z",
+    "event": "upstream-response",
+    "id": 278,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "03d8b85e-15d3-446d-a2e4-43797eb5f649"
+  },
+  {
+    "at": "2026-11-24T18:39:26.371Z",
+    "event": "socket-held",
+    "id": 281,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:39:29.388Z",
+    "event": "socket-held",
+    "id": 283,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:39:32.401Z",
+    "event": "socket-held",
+    "id": 285,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:39:35.419Z",
+    "event": "socket-held",
+    "id": 288,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:39:37.542Z",
+    "event": "mode",
+    "mode": "open",
+    "openLedgerStreams": 0,
+    "openSockets": 0
+  },
+  {
+    "at": "2026-11-24T18:39:38.421Z",
+    "event": "upstream-response",
+    "id": 289,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "2c287a7a-bc33-4885-86eb-6b1c944b9641"
+  },
+  {
+    "at": "2026-11-24T18:39:38.428Z",
+    "event": "socket-open",
+    "id": 291,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:39:38.436Z",
+    "event": "upstream-response",
+    "id": 296,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "2aff3289-fa68-4501-bdbf-aa9de3d93185"
+  },
+  {
+    "at": "2026-11-24T18:39:38.538Z",
+    "event": "upstream-response",
+    "id": 297,
+    "pathname": "/find/file",
+    "method": "GET",
+    "status": 200,
+    "query": "launch-plan",
+    "actual": "ab0be2bd-cc7e-4588-a6c6-b57f4ce84081"
+  },
+  {
+    "at": "2026-11-24T18:39:44.051Z",
+    "event": "upstream-response",
+    "id": 301,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "f759adcd-bdf6-445f-bf54-2da9c47cbcf9"
+  },
+  {
+    "at": "2026-11-24T18:39:44.052Z",
+    "event": "upstream-response",
+    "id": 302,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "e7fc551c-f235-458a-8145-29e276337055"
+  },
+  {
+    "at": "2026-11-24T18:39:53.422Z",
+    "event": "upstream-response",
+    "id": 306,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "e72c4db2-1400-464d-95b2-9d87c8474eef"
+  },
+  {
+    "at": "2026-11-24T18:39:53.423Z",
+    "event": "upstream-response",
+    "id": 307,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "06e42f0b-b3c9-45aa-96b5-6c69b2c83612"
+  },
+  {
+    "at": "2026-11-24T18:39:53.424Z",
+    "event": "upstream-response",
+    "id": 308,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "26d96441-6abc-41bb-9c85-07a43e67c704"
+  },
+  {
+    "at": "2026-11-24T18:40:02.229Z",
+    "event": "upstream-response",
+    "id": 310,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "f9349a24-0d9f-4fa6-8a4b-8d4c7d5e0804"
+  },
+  {
+    "at": "2026-11-24T18:40:02.34Z",
+    "event": "upstream-response",
+    "id": 311,
+    "pathname": "/find/file",
+    "method": "GET",
+    "status": 200,
+    "query": "launch-plan",
+    "actual": "081e061a-21bb-441e-b807-d7ce93bd39e9"
+  },
+  {
+    "at": "2026-11-24T18:40:08.419Z",
+    "event": "upstream-response",
+    "id": 313,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "fca70c0a-0274-4596-9fe1-702ccefba5cd"
+  },
+  {
+    "at": "2026-11-24T18:40:08.42Z",
+    "event": "upstream-response",
+    "id": 315,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "076e75ed-dd4e-4260-be6c-6b6a0999e295"
+  },
+  {
+    "at": "2026-11-24T18:40:08.42Z",
+    "event": "upstream-response",
+    "id": 314,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "bbeaab7c-71fe-4bd0-aec6-cc0c7b439856"
+  }
+]

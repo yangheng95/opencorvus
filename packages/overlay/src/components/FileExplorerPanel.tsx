@@ -114,6 +114,7 @@ type FileMutationOperation = {
   directory: string
 }
 type ExplorerOperationScope = FileOperationScope & { selectionEpoch: number }
+type ExplorerRefreshTarget = "project" | ReadonlySet<string>
 
 type ExplorerFailure = { error: unknown }
 type ExplorerDirectoryFailure = ExplorerFailure & { reveal?: { target: string; notListed?: true } }
@@ -905,9 +906,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   async function refreshActiveDirectoryListings(
     scope: ExplorerOperationScope,
-    changedParents?: ReadonlySet<string>,
+    target?: ExplorerRefreshTarget,
   ): Promise<void> {
     if (!ownsExplorerOperation(scope)) return
+    const changedParents = typeof target === "object" ? target : undefined
     const acceptedSearch = searchResults.loading ? undefined : currentSearchResult()
     const visiblePaths = [...new Set(["", ...expandedPaths()])].filter((path) =>
       (path === "" || childrenByPath().has(path) || directoryErrors().has(path)) &&
@@ -919,7 +921,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const reads = batch(() => visiblePaths.map((path) => loadDirectory(path, { force: true, scope })))
     const results = await Promise.all(reads)
     const membershipChanged = results.some((result) => result?.status === "loaded" && result.membershipChanged)
-    const needsSearch = membershipChanged || hasUnobservedParent ||
+    const needsSearch = target === "project" || membershipChanged || hasUnobservedParent ||
       (changedParents && results.some((result) => result?.status !== "loaded"))
     if (!needsSearch || !acceptedSearch || acceptedSearch.error || searchResults.loading ||
       currentSearchResult() !== acceptedSearch || commandBusy() || uploading()) return
@@ -930,22 +932,29 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const scope = currentOperationScope()
     if (!active() || !scope?.authority) return
     const directoryKey = projectDirectoryKey(scope.directory)
-    const [changedParents, setChangedParents] = createSignal<ReadonlySet<string>>(new Set())
+    const [pendingRefresh, setPendingRefresh] = createSignal<ExplorerRefreshTarget>()
     const [refreshing, setRefreshing] = createSignal(false)
     onCleanup(subscribeWorkLedgerChanges((event) => {
+      if (!ownsExplorerOperation(scope)) return
+      const projectChanged = event.type === "work-ledger.changed" && event.sourceType === "vcs.branch.updated" &&
+        event.directory && projectDirectoryKey(event.directory) === directoryKey
+      if (event.type === "work-ledger.connected" || projectChanged) {
+        setPendingRefresh("project")
+        return
+      }
       if (event.type !== "work-ledger.file-changed" || event.resourceID ||
-        projectDirectoryKey(event.directory) !== directoryKey || !ownsExplorerOperation(scope)) return
+        projectDirectoryKey(event.directory) !== directoryKey) return
       const parent = parentProjectPath(event.path, scope.directory)
-      setChangedParents((paths) => paths.has(parent) ? paths : new Set(paths).add(parent))
+      setPendingRefresh((target) => target === "project" || target?.has(parent) ? target : new Set(target).add(parent))
     }))
     createEffect(() => {
-      const parents = changedParents()
-      if (!parents.size || refreshing() || commandBusy() || uploading() || searchResults.loading) return
+      const target = pendingRefresh()
+      if (!target || refreshing() || commandBusy() || uploading() || searchResults.loading) return
       batch(() => {
         setRefreshing(true)
-        setChangedParents(new Set<string>())
+        setPendingRefresh(undefined)
       })
-      untrack(() => void refreshActiveDirectoryListings(scope, parents).finally(() => setRefreshing(false)))
+      untrack(() => void refreshActiveDirectoryListings(scope, target).finally(() => setRefreshing(false)))
     })
     const interval = window.setInterval(() => {
       if (!refreshing()) void refreshActiveDirectoryListings(scope)
@@ -1006,7 +1015,31 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   })
   const currentSearchFailure = createMemo(() => currentSearchResult()?.error ?? null)
   const searchHasMore = () => (currentSearchResult()?.entries.length ?? 0) > SEARCH_LIMIT
-  const displayedSearchEntries = createMemo(() => currentSearchResult()?.entries.slice(0, SEARCH_LIMIT) ?? [])
+  const rowScopeKey = createMemo(() => JSON.stringify([
+    captureApiAuthority()?.revision ?? null,
+    directory(),
+    boardStore.selectEpoch,
+  ]))
+
+  function searchResultKey(scopeKey: string, entry: ExplorerSearchEntry): string {
+    return JSON.stringify([scopeKey, "search", entry.type, entry.path])
+  }
+
+  // Return focus before the new result window can retire the focused button.
+  const displayedSearchEntries = createMemo(on(currentSearchResult, (current, previous) => {
+    const entries = current?.entries.slice(0, SEARCH_LIMIT) ?? []
+    if (!current || !previous || current.error || current.source !== previous.source) return entries
+    const key = focusedRowKey()
+    const origin = key ? rowElements.get(key) : undefined
+    if (origin && origin.ownerDocument.activeElement === origin) {
+      const scopeKey = rowScopeKey()
+      const ownsFocusedResult = (entry: ExplorerSearchEntry) => searchResultKey(scopeKey, entry) === key
+      if (previous.entries.slice(0, SEARCH_LIMIT).some(ownsFocusedResult) && !entries.some(ownsFocusedResult)) {
+        searchInput?.focus({ preventScroll: true })
+      }
+    }
+    return entries
+  }))
   const searchDirectoryHints = createMemo(() => {
     const pathsByName = new Map<string, string[]>()
     for (const { path } of displayedSearchEntries()) {
@@ -1029,30 +1062,6 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     return hints
   })
-  const rowScopeKey = createMemo(() => JSON.stringify([
-    captureApiAuthority()?.revision ?? null,
-    directory(),
-    boardStore.selectEpoch,
-  ]))
-
-  function searchResultKey(scopeKey: string, entry: ExplorerSearchEntry): string {
-    return JSON.stringify([scopeKey, "search", entry.type, entry.path])
-  }
-
-  // Use the accepted search result before the virtual list projects its new rows.
-  createComputed(on(currentSearchResult, (current, previous) => {
-    if (!current || !previous || current.error || current.source !== previous.source) return
-    const key = focusedRowKey()
-    const origin = key ? rowElements.get(key) : undefined
-    if (!origin || origin.ownerDocument.activeElement !== origin) return
-    const scopeKey = rowScopeKey()
-    const ownsFocusedResult = (entry: ExplorerSearchEntry) => searchResultKey(scopeKey, entry) === key
-    if (previous.entries.slice(0, SEARCH_LIMIT).some(ownsFocusedResult) &&
-      !current.entries.slice(0, SEARCH_LIMIT).some(ownsFocusedResult)) {
-      searchInput?.focus({ preventScroll: true })
-    }
-  }))
-
   const rows = createMemo<ExplorerRow[]>(() => {
     const scopeKey = rowScopeKey()
     const search = deferredQuery()

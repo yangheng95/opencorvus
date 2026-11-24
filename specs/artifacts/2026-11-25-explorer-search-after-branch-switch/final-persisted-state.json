@@ -1,0 +1,37 @@
+{
+  "integrity": "ok",
+  "counts": {
+    "session": 0,
+    "message": 0,
+    "part": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_activity_outcome": 0
+  },
+  "worktrees": [
+    {
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review",
+      "branch": "main",
+      "paths": [
+        {
+          "path": "plans/releases/launch-plan-main.txt",
+          "text": "Original document for branch-review.\n"
+        },
+        {
+          "path": "plans/releases/launch-plan-peer.txt",
+          "text": "Independent peer-created file for branch review.\n"
+        }
+      ]
+    },
+    {
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\other-project",
+      "branch": "main",
+      "paths": [
+        {
+          "path": "plans/releases/launch-plan-independent.txt",
+          "text": "Original document for other-project.\n"
+        }
+      ]
+    }
+  ]
+}

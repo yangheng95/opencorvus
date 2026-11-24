@@ -1861,6 +1861,13 @@ explicit file action settles, the ordinary listing reader checks affected open
 directories. A changed listing or an affected parent without a successful
 listing refreshes the current accepted search, which also covers collapsed
 folders. File saves carrying a resource identity leave entry membership alone.
+An accepted branch change for the same project or recovery of the work ledger
+stream requests the current visible listings and accepted search together.
+The search refreshes even when visible directory membership stays the same.
+Pending project refreshes include any outstanding parent notifications in the
+same selection scope.
+The projection of a refreshed search window returns keyboard focus to the
+current input before publishing results that remove the focused row.
 All explicit file actions, including upload, refresh the current nonempty query
 through the same required-refresh collector as their directory reads. There is
 no separate revision watcher, search polling loop or search opt-out. Concurrent

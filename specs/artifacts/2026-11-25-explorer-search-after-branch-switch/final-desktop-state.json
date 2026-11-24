@@ -1,0 +1,15 @@
+{
+  "asset": "main-DDsvwfvj.js",
+  "beforeLiveSwitch": true,
+  "afterLiveSwitch": {
+    "activeTag": "INPUT",
+    "focused": true,
+    "value": "launch-plan"
+  },
+  "afterReconnect": {
+    "activeTag": "INPUT",
+    "focused": true,
+    "value": "launch-plan"
+  },
+  "composerFocusDuringPeerUpdate": true
+}

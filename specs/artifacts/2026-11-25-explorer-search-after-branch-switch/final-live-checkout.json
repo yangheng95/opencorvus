@@ -1,0 +1,157 @@
+{
+  "beforeSearch": {
+    "status": 200,
+    "requestID": "2bb94f4f-d078-420f-8e63-d00101e9d489",
+    "body": [
+      "plans\\releases\\launch-plan-main.txt"
+    ]
+  },
+  "beforeRoot": {
+    "status": 200,
+    "requestID": "436649fd-e798-4a86-84d9-7f5a9d6fc249",
+    "body": [
+      {
+        "name": ".opencorvus",
+        "path": ".opencorvus",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\.opencorvus",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "plans",
+        "path": "plans",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\plans",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": ".gitattributes",
+        "path": ".gitattributes",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\.gitattributes",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": ".gitignore",
+        "path": ".gitignore",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\.gitignore",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "README.md",
+        "path": "README.md",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\README.md",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "retained-notes.txt",
+        "path": "retained-notes.txt",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\retained-notes.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      }
+    ]
+  },
+  "connected": {
+    "type": "work-ledger.connected",
+    "sourceType": "work-ledger.connected",
+    "sequence": 0
+  },
+  "switch": {
+    "status": 200,
+    "requestID": "7b5b4d5b-2ced-4ba2-8824-10f64e0e9bf8",
+    "body": {
+      "initialized": true,
+      "branch": "review",
+      "commit": "1ea2016",
+      "clean": false,
+      "dirty": true,
+      "staged": 0,
+      "modified": 0,
+      "untracked": 3,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    }
+  },
+  "switchedAt": "2026-11-24T18:39:03.209553+00:00",
+  "branchEvent": {
+    "type": "work-ledger.changed",
+    "sourceType": "vcs.branch.updated",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review",
+    "sequence": 0
+  },
+  "afterRoot": {
+    "status": 200,
+    "requestID": "9b5c0c0a-efd0-494a-a866-4d156e144fa7",
+    "body": [
+      {
+        "name": ".opencorvus",
+        "path": ".opencorvus",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\.opencorvus",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "plans",
+        "path": "plans",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\plans",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": ".gitattributes",
+        "path": ".gitattributes",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\.gitattributes",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": ".gitignore",
+        "path": ".gitignore",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\.gitignore",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "README.md",
+        "path": "README.md",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\README.md",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "retained-notes.txt",
+        "path": "retained-notes.txt",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b602\\candidate\\branch-review\\retained-notes.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      }
+    ]
+  },
+  "rootMembershipUnchanged": true,
+  "afterSearch": {
+    "status": 200,
+    "requestID": "e3cfa929-cb4f-47da-ac40-c9c27c91121b",
+    "body": [
+      "plans\\releases\\launch-plan-review.txt"
+    ]
+  },
+  "actualBranch": "review",
+  "currentBytes": "Review-branch document for the nested search.\n"
+}
