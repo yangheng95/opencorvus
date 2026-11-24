@@ -362,12 +362,15 @@ carries the selected original passage, score and exact file identity for opening
 its full text. Its preview shows the full-text engine's plain excerpt from that
 same passage and query, preserving the source spelling. Chunk-level tool and
 context searches retain their passage contract.
-Up and Down move among enabled note buttons in the accepted search results. The
-search field can enter the first or last result when its text still matches the
-submitted query. Escape on an accepted result returns focus to the search field
-with the current draft, submitted query, and expanded note intact. Enter on a
-note opens its original content, and Tab retains access to the search controls,
-result buttons, inline content and delete actions.
+Up and Down move among enabled note buttons in the accepted search results.
+Page Up and Page Down move focus among their result rows using the settings
+content viewport. The row with the note button and its sibling action determines
+the paging position. Expanded original content remains available in the regular
+Tab sequence. The search field can enter the first or last result when its text
+still matches the submitted query. Escape on an accepted result returns focus to
+the search field with the current draft, submitted query, and expanded note
+intact. Enter on a note opens its original content, and Tab retains access to
+the search controls, result buttons, inline content and delete actions.
 List and search rows wrap the full stored title. Each delete action and its
 confirmation identify the same title while the operation uses the record ID.
 

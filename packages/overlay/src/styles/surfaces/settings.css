@@ -811,6 +811,10 @@ button.s-row:focus-visible {
   min-width: 0;
 }
 
+.knowledge-item[data-mode="search"] .knowledge-item-row {
+  scroll-margin-block: var(--ui-gap-xs);
+}
+
 .knowledge-item-main {
   flex: 1;
   min-width: 0;

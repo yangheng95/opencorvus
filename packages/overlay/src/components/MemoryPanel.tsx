@@ -426,7 +426,11 @@ export function MemoryPanel(props: MemoryPanelProps) {
   const searchNavigation = createSearchResultNavigation(() => {
     if (!hasSearchResults() || !listElement) return []
     return Array.from(listElement.querySelectorAll<HTMLButtonElement>('[data-ui="memory-row-main"]:enabled'))
-  }, { returnToSearch: () => searchInput })
+  }, {
+    returnToSearch: () => searchInput,
+    pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+    pageRow: (action) => action.closest<HTMLElement>(".knowledge-item-row"),
+  })
 
   const listFailure = createMemo(() => {
     const current = failure()
@@ -527,7 +531,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
                   {" · "}<span id={searchKeyboardHintID}>{t("memory.search_keyboard_hint")}</span>
                 </Show>
                 <Show when={hasSearchResults()}>
-                  {" · "}{t("memory.search_return_keyboard_hint")}
+                  {" · "}{t("memory.search_result_keyboard_hint")}
                 </Show>
               </p>
             )}
@@ -572,7 +576,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
                       data-ui="memory-row-main"
                       aria-expanded={expanded()}
                       aria-controls={expanded() ? detailElementId() : undefined}
-                      aria-keyshortcuts={hasSearchResults() ? "ArrowUp ArrowDown Escape" : undefined}
+                      aria-keyshortcuts={hasSearchResults() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
                       disabled={!filesSourceActive()}
                       onKeyDown={searchNavigation.handleResultKeyDown}
                       onClick={() => toggleMemoryDetail(f.id)}
