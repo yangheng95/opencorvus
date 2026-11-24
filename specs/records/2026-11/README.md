@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [设置侧栏匹配标签的分页焦点](2026-11-24-settings-search-tab-page-focus.md)
 - [更新日志历史翻页跟随当前版本焦点](2026-11-24-release-history-page-focus.md)
 - [从定时任务列表打开详情时看到计划概要](2026-11-24-scheduled-detail-starts-at-overview.md)
 - [定时任务搜索结果分页随焦点浏览](2026-11-24-scheduled-search-page-focus.md)

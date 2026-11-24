@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [设置侧栏匹配标签分页的桌面证据](2026-11-24-settings-search-tab-page-focus/README.md)
 - [更新日志历史分页的桌面证据](2026-11-24-release-history-page-focus/README.md)
 - [定时详情起点的真实桌面证据](2026-11-24-scheduled-detail-starts-at-overview/README.md)
 - [定时任务搜索分页的桌面证据](2026-11-24-scheduled-search-page-focus/README.md)
