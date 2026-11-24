@@ -1,0 +1,33 @@
+{
+  "version": "0.1.55",
+  "source": "b3c36e74f8424281ea4d74bfb7763d2b2efa02fa",
+  "observedAt": "2026-11-24T17:45:39.778969+00:00",
+  "installRunID": 45448881074,
+  "installSource": "6e88faa0db668931986cb31ce0bec81507070c2b",
+  "installJobID": 138640981862,
+  "installJobConclusion": "success",
+  "observedBunInput": "2026-11-24T17:31:01.7165876Z   key: Linux-bun-c9e3644a0b763b3d18da09c59ba7e1926200a7a151191c1896c6cc5f285af732",
+  "sharedCacheInputPaths": [
+    "bun.lock",
+    ".github/actions/setup-bun/action.yml"
+  ],
+  "macOSBunCache": {
+    "id": 11050621831,
+    "key": "macOS-bun-c9e3644a0b763b3d18da09c59ba7e1926200a7a151191c1896c6cc5f285af732",
+    "ref": "refs/heads/main",
+    "size_in_bytes": 464324841,
+    "created_at": "2026-11-24T17:44:15.825146Z"
+  },
+  "existingIntelRustCaches": [
+    {
+      "id": 10985167467,
+      "key": "v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+      "ref": "refs/heads/main",
+      "size_in_bytes": 415049049,
+      "created_at": "2026-11-23T17:45:32.214308Z"
+    }
+  ],
+  "cacheProtocolInference": "The existing setup action uses runner.os plus the same root bun.lock hashFiles input; the observed Linux input suffix identifies the actual saved macOS object. Install input files are unchanged between the two immutable sources.",
+  "preflight": "Not dispatched: the existing native dependency cache entry is present and the declared native dependency graph and producer are unchanged; effective cache restores are retained from the canonical native job.",
+  "scope": "Actual job inputs and service cache objects only; functional qualification comes from native build and first-run/restart receipts, not cache identities or CI completion inference"
+}

@@ -1,0 +1,42 @@
+{
+  "source": "b3c36e74f8424281ea4d74bfb7763d2b2efa02fa",
+  "runID": 45452171188,
+  "attempt": 1,
+  "failedJobID": 138652896653,
+  "job": "cli (darwin-x64)",
+  "failedStep": "Verify packaged Work Artifact lifecycle",
+  "profile": "office.document@1",
+  "observed": [
+    "2026-11-24T17:58:06.5555890Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-11-24T17:58:45.4967730Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-11-24T18:08:08.2396790Z Work Artifact Office HTML renderer inactive for 45000ms after start. stderr="
+  ],
+  "mechanism": "Office HTML child emits JSON only at completion; shared executor starts a 45-second inactivity timer and refreshes it on actual stdout/stderr. An output-free interval alone does not identify the blocked internal stage.",
+  "unknown": "No intermediate render stages or retained Office work directory were available. Slow execution, browser startup, fonts, screenshots and PDF stages are not distinguished by this log.",
+  "scope": "Native qualification failure retained with a successful same-source, same-run full failed-set retry within the original deadline; no real model call, timeout increase, source change or checker bypass.",
+  "finalOutcome": {
+    "workflowAttempt": 2,
+    "jobID": 138670611145,
+    "jobConclusion": "success",
+    "jobCompletedAt": "2026-11-24T18:34:07Z",
+    "nativeWorkflowConclusion": "success",
+    "completedAt": "2026-11-24T18:43:33Z",
+    "elapsedSeconds": 3452,
+    "originalDeadlineRetained": true,
+    "completedProfileOutput": [
+      "2026-11-24T18:25:35.2312310Z     \"profile\": \"office.presentation@1\",",
+      "2026-11-24T18:27:39.5946970Z     \"profile\": \"office.presentation@1\",",
+      "2026-11-24T18:28:46.4536240Z     \"profile\": \"office.presentation@1\",",
+      "2026-11-24T18:29:54.4035870Z     \"profile\": \"office.document@1\",",
+      "2026-11-24T18:29:54.4064960Z     \"profile\": \"office.document@1\",",
+      "2026-11-24T18:30:48.9538870Z     \"profile\": \"office.spreadsheet@1\",",
+      "2026-11-24T18:30:48.9567030Z     \"profile\": \"office.spreadsheet@1\",",
+      "2026-11-24T18:31:53.9743860Z     \"profile\": \"office.presentation@1\",",
+      "2026-11-24T18:32:49.1538050Z     \"profile\": \"office.document@1\",",
+      "2026-11-24T18:32:49.1570070Z     \"profile\": \"office.document@1\",",
+      "2026-11-24T18:33:43.3091310Z     \"profile\": \"office.spreadsheet@1\",",
+      "2026-11-24T18:33:43.3128510Z     \"profile\": \"office.spreadsheet@1\","
+    ],
+    "rootCauseLimit": "Same-source native requalification succeeded without changing renderer or timeouts. The first output-free timeout has no intermediate phase evidence and its internal cause is unresolved."
+  }
+}
