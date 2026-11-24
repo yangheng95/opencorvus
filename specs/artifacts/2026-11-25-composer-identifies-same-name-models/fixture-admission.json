@@ -1,0 +1,29 @@
+{
+  "projectID": "prj_htxf7ckeH6202brGd9ll",
+  "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b625\\candidate\\model-identity-review",
+  "connected": [
+    "model-identity-fixture"
+  ],
+  "models": [
+    {
+      "definedContext": 64000,
+      "apiID": "review-fast",
+      "id": "review-fast",
+      "name": "Review model"
+    },
+    {
+      "definedContext": 128000,
+      "apiID": "review-long",
+      "id": "review-long",
+      "name": "Review model"
+    },
+    {
+      "definedContext": 16000,
+      "apiID": "draft-quick",
+      "id": "draft-quick",
+      "name": "Quick draft"
+    }
+  ],
+  "catalogRequestID": "5343924b-54b3-4524-982d-c86e8f7ef660",
+  "baseURL": "http://127.0.0.1:41811/v1"
+}
