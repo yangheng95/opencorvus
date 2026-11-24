@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目配置保存后更新同项目的其它标签页](2026-11-24-project-config-peer-notification.md)
 - [在文件资源管理器工具栏直接刷新目录和搜索](2026-11-24-explorer-toolbar-refresh.md)
 - [启动时重新选择同一个项目后加载已保存权限模式](2026-11-24-project-mode-read-on-reselect.md)
 - [项目文件回到原路径时清除过期读取错误](2026-11-24-file-editor-restored-path.md)
