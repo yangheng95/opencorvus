@@ -1,0 +1,104 @@
+{
+  "before": {
+    "Cedar cross-project": {
+      "status": 200,
+      "requestID": "f8505a60-a446-4355-adf0-30daecb7f530",
+      "body": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_hN5O0t4QlTSveM971y4y",
+            "sessionID": "ses_hN5O0t4QlTSveM971y4y",
+            "title": "Cedar cross-project handoff",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b597\\verified\\control-review",
+            "created": 1795540183449,
+            "started": 1795540183449,
+            "updated": 1795540183515,
+            "pinned": false,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "Amber cross-project": {
+      "status": 200,
+      "requestID": "05a23501-70d9-467f-a318-87394581dddb",
+      "body": {
+        "rows": [],
+        "nextCursor": null
+      }
+    }
+  },
+  "renamed": {
+    "status": 200,
+    "requestID": "eddcb977-df56-413c-949d-5e6ba477600d",
+    "body": {
+      "id": "ses_hN5O0t4QlTSveM971y4y",
+      "slug": "silent-rocket",
+      "projectID": "prj_hbyk2afReASsAHra0ITT",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b597\\verified\\control-review",
+      "title": "Amber cross-project handoff",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "projectConversationCreation": {
+          "version": 1,
+          "requestID": "8715e0f8-841b-4e75-8bb2-561c791e0277",
+          "model": null
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        }
+      },
+      "time": {
+        "created": 1795540183449,
+        "updated": 1795540198339
+      }
+    }
+  },
+  "after": {
+    "Cedar cross-project": {
+      "status": 200,
+      "requestID": "e1f487e5-eabd-489e-a3be-408b18ee48d5",
+      "body": {
+        "rows": [],
+        "nextCursor": null
+      }
+    },
+    "Amber cross-project": {
+      "status": 200,
+      "requestID": "7fe9b9a5-4fc0-411e-8d2e-e8ea1f64fee9",
+      "body": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_hN5O0t4QlTSveM971y4y",
+            "sessionID": "ses_hN5O0t4QlTSveM971y4y",
+            "title": "Amber cross-project handoff",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b597\\verified\\control-review",
+            "created": 1795540183449,
+            "started": 1795540183449,
+            "updated": 1795540198339,
+            "pinned": false,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  },
+  "titleChangeEvents": [
+    {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hN5O0t4QlTSveM971y4y",
+      "titleChanged": true,
+      "sequence": 1795540198339
+    }
+  ],
+  "streamErrors": []
+}

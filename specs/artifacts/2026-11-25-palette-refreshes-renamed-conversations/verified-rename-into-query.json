@@ -1,0 +1,104 @@
+{
+  "before": {
+    "Amber cross-project": {
+      "status": 200,
+      "requestID": "d268045b-e24c-4539-b772-6823318f5998",
+      "body": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_hN5O0t4QlTSveM971y4y",
+            "sessionID": "ses_hN5O0t4QlTSveM971y4y",
+            "title": "Amber cross-project handoff",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b597\\verified\\control-review",
+            "created": 1795540183449,
+            "started": 1795540183449,
+            "updated": 1795540198339,
+            "pinned": false,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "Spruce cross-project": {
+      "status": 200,
+      "requestID": "aa7c4210-beb7-4d95-95fa-8e6327c36455",
+      "body": {
+        "rows": [],
+        "nextCursor": null
+      }
+    }
+  },
+  "renamed": {
+    "status": 200,
+    "requestID": "041bd919-a8cd-4d0c-8539-aaa5880eb1c3",
+    "body": {
+      "id": "ses_hN5O0t4QlTSveM971y4y",
+      "slug": "silent-rocket",
+      "projectID": "prj_hbyk2afReASsAHra0ITT",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b597\\verified\\control-review",
+      "title": "Spruce cross-project handoff",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "projectConversationCreation": {
+          "version": 1,
+          "requestID": "8715e0f8-841b-4e75-8bb2-561c791e0277",
+          "model": null
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        }
+      },
+      "time": {
+        "created": 1795540183449,
+        "updated": 1795540210704
+      }
+    }
+  },
+  "after": {
+    "Amber cross-project": {
+      "status": 200,
+      "requestID": "6457e4d0-073e-4717-a1df-d5e9cf80acee",
+      "body": {
+        "rows": [],
+        "nextCursor": null
+      }
+    },
+    "Spruce cross-project": {
+      "status": 200,
+      "requestID": "97b79820-3582-4f24-be96-605e72946e59",
+      "body": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_hN5O0t4QlTSveM971y4y",
+            "sessionID": "ses_hN5O0t4QlTSveM971y4y",
+            "title": "Spruce cross-project handoff",
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b597\\verified\\control-review",
+            "created": 1795540183449,
+            "started": 1795540183449,
+            "updated": 1795540210704,
+            "pinned": false,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  },
+  "titleChangeEvents": [
+    {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hN5O0t4QlTSveM971y4y",
+      "titleChanged": true,
+      "sequence": 1795540210704
+    }
+  ],
+  "streamErrors": []
+}

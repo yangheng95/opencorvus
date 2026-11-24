@@ -37,6 +37,7 @@ import {
   type WorkLedgerTaskRow,
 } from "../services/work-ledger"
 import { openConfigDialog } from "../services/config-dialog-control"
+import { subscribeWorkLedgerChanges } from "../services/sse"
 import { CONFIG_SECTIONS, configSectionSearchText } from "../store/dialog"
 import { settingsStore } from "../store/settings"
 import { localeOptions, t } from "../utils/i18n"
@@ -74,7 +75,14 @@ const RECENT_COMMAND_LIMIT = 9
 const LEDGER_PAGE_SIZE = 12
 
 type PaletteLedgerRow = WorkLedgerProjectRow | WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
-type LedgerSearch = { query: string; authority: ApiAuthority; controller: AbortController }
+type LedgerReadMode = "initial" | "append" | "refresh"
+type LedgerSearch = {
+  query: string
+  authority: ApiAuthority
+  controller: AbortController
+  refreshPending: boolean
+  failedMode?: LedgerReadMode
+}
 
 function paletteLedgerRows(rows: readonly WorkLedgerRow[], query: string): PaletteLedgerRow[] {
   const entries: PaletteLedgerRow[] = []
@@ -138,6 +146,7 @@ export function CommandPalette(props: {
   const [ledgerLoading, setLedgerLoading] = createSignal(false)
   const [ledgerError, setLedgerError] = createSignal<string>()
   let inputRef: HTMLInputElement | undefined
+  let ledgerActionButton: HTMLButtonElement | undefined
   let ledgerSearch: LedgerSearch | undefined
   // Element that had focus right before the palette opened — restored on
   // close so keyboard users land back where they triggered Cmd+K from
@@ -338,12 +347,17 @@ export function CommandPalette(props: {
       isApiAuthorityCurrent(search.authority)
   }
 
-  async function loadLedger(search: LedgerSearch, append = false): Promise<void> {
+  async function loadLedger(search: LedgerSearch, mode: LedgerReadMode = "initial"): Promise<void> {
     if (!ownsSearch(search)) return
+    search.refreshPending = false
+    const action = ledgerActionButton === document.activeElement ? ledgerActionButton : undefined
     setLedgerLoading(true)
+    const append = mode === "append"
     const rows = new Map((append ? ledgerRows() : []).map((row) => [`${row.kind}:${row.id}`, row]))
     let cursor = append ? ledgerCursor() : null
-    const priorCount = rows.size
+    const rowTarget = search.query
+      ? mode === "refresh" ? Math.max(1, ledgerRows().length) : rows.size + 1
+      : RECENT_COMMAND_LIMIT
     try {
       do {
         const result = await loadWorkLedger({
@@ -358,7 +372,8 @@ export function CommandPalette(props: {
           rows.set(`${row.kind}:${row.id}`, row)
         }
         cursor = result.nextCursor
-      } while (cursor && (search.query ? rows.size === priorCount : rows.size < RECENT_COMMAND_LIMIT))
+      } while (cursor && rows.size < rowTarget)
+      search.failedMode = undefined
       batch(() => {
         setLedgerRows(search.query ? [...rows.values()] : [...rows.values()].slice(0, RECENT_COMMAND_LIMIT))
         setLedgerCursor(search.query ? cursor : null)
@@ -367,21 +382,23 @@ export function CommandPalette(props: {
     } catch (error) {
       if (!ownsSearch(search) || error instanceof ApiAuthorityChangedError) return
       if (error instanceof DOMException && error.name === "AbortError") return
+      search.failedMode = mode
       setLedgerError(formatErrorDetails(error))
     } finally {
-      if (ownsSearch(search)) setLedgerLoading(false)
+      if (ownsSearch(search)) {
+        if (search.refreshPending) void loadLedger(search, "refresh")
+        else setLedgerLoading(false)
+        if (action && !action.isConnected && document.activeElement === document.body) {
+          inputRef?.focus({ preventScroll: true })
+        }
+      }
     }
   }
 
-  async function loadMore(event: MouseEvent & { currentTarget: HTMLButtonElement }) {
-    if (!ledgerSearch || ledgerLoading()) return
+  function loadMore() {
     const search = ledgerSearch
-    const action = event.currentTarget
-    const hadFocus = document.activeElement === action
-    await loadLedger(search, ledgerRows().length > 0 && ledgerCursor() !== null)
-    if (hadFocus && !action.isConnected && ownsSearch(search) && document.activeElement === document.body) {
-      inputRef?.focus({ preventScroll: true })
-    }
+    if (!search || ledgerLoading()) return
+    void loadLedger(search, search.failedMode ?? (ledgerCursor() ? "append" : "initial"))
   }
 
   createEffect(
@@ -398,7 +415,7 @@ export function CommandPalette(props: {
           setQuery("")
           return
         }
-        const search = { query: term, authority, controller: new AbortController() }
+        const search = { query: term, authority, controller: new AbortController(), refreshPending: false }
         ledgerSearch = search
         const timer = setTimeout(() => void loadLedger(search), term ? WORK_LEDGER_SEARCH_DELAY_MS : 0)
         onCleanup(() => {
@@ -411,6 +428,13 @@ export function CommandPalette(props: {
   )
 
   onCleanup(() => ledgerSearch?.controller.abort())
+  onCleanup(subscribeWorkLedgerChanges((event) => {
+    if (event.type !== "work-ledger.changed" || !event.titleChanged) return
+    const search = ledgerSearch
+    if (!search || !ownsSearch(search)) return
+    if (ledgerLoading()) search.refreshPending = true
+    else void loadLedger(search, "refresh")
+  }))
 
   onMount(() => {
     const openFromChrome = () => {
@@ -619,6 +643,7 @@ export function CommandPalette(props: {
           </Show>
           <Show when={ledgerCursor() || ledgerError()}>
             <Button
+              ref={ledgerActionButton}
               type="button"
               variant="ghost"
               size="md"
