@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [专家团目录读取不应阻断草稿保存](records/2026-11/2026-11-24-passive-expert-catalog-project-bootstrap.md)
 - [多步任务草稿的保存、重启与并发审阅](records/2026-11/2026-11-24-mission-draft-lifecycle-review.md)
 - [浏览完整项目笔记列表](records/2026-11/2026-11-24-memory-unfiltered-navigation.md)
 - [浏览无关键词的定时任务](records/2026-11/2026-11-24-scheduled-unfiltered-navigation.md)

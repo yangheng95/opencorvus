@@ -1,0 +1,76 @@
+{
+  "receipts": [
+    {
+      "project": "change-review",
+      "code": 200,
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\baseline\\change-review",
+      "vcs": null,
+      "error": null,
+      "detail": null
+    },
+    {
+      "project": "protected-ignore",
+      "code": 200,
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\baseline\\protected-ignore",
+      "vcs": null,
+      "error": null,
+      "detail": null
+    },
+    {
+      "project": "plain-directory",
+      "code": 200,
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\baseline\\plain-directory",
+      "vcs": null,
+      "error": null,
+      "detail": null
+    }
+  ],
+  "metadata": {
+    "listenerReady": [
+      {
+        "project": "change-review",
+        "git": true,
+        "ignoreText": "# Existing team ignore policy\nlocal-build/\n",
+        "attributesText": "# Existing team Git attributes\n*.txt text eol=lf\n",
+        "registryConfig": false
+      },
+      {
+        "project": "protected-ignore",
+        "git": true,
+        "ignoreText": "# Existing team ignore policy\nlocal-build/\n",
+        "attributesText": "# Existing team Git attributes\n*.txt text eol=lf\n",
+        "registryConfig": false
+      },
+      {
+        "project": "plain-directory",
+        "git": false,
+        "ignoreText": null,
+        "attributesText": null,
+        "registryConfig": false
+      }
+    ],
+    "afterProjectReads": [
+      {
+        "project": "change-review",
+        "git": true,
+        "ignoreText": "# Existing team ignore policy\nlocal-build/\n",
+        "attributesText": "# Existing team Git attributes\n*.txt text eol=lf\n",
+        "registryConfig": false
+      },
+      {
+        "project": "protected-ignore",
+        "git": true,
+        "ignoreText": "# Existing team ignore policy\nlocal-build/\n",
+        "attributesText": "# Existing team Git attributes\n*.txt text eol=lf\n",
+        "registryConfig": false
+      },
+      {
+        "project": "plain-directory",
+        "git": false,
+        "ignoreText": null,
+        "attributesText": null,
+        "registryConfig": false
+      }
+    ]
+  }
+}

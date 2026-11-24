@@ -1,0 +1,12 @@
+{
+  "requestID": "81b89892-8ade-4288-8dd1-f2534796dfaa",
+  "route": "/expert-squad/catalog",
+  "status": 500,
+  "code": "EPERM",
+  "syscall": "open",
+  "file": ".gitignore",
+  "stage": "engine.git.ensure-project-metadata",
+  "project": "protected-ignore",
+  "statusOfStage": "failed",
+  "failure": "EPERM: operation not permitted, open 'C:\\Users\\Public\\opencorvus-review-20261124-b553\\baseline\\protected-ignore/.gitignore'"
+}

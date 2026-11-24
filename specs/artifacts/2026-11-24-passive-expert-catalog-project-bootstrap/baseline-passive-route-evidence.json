@@ -1,0 +1,210 @@
+[
+  {
+    "project": "protected-ignore",
+    "route": "/project/current",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\baseline\\protected-ignore",
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "09dc60e8-e0cc-4389-bac7-365673bff523"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "protected-ignore",
+    "route": "/file/content",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "a8e1efd4-1437-43d9-af62-43d5baf02e71"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "protected-ignore",
+    "route": "/config",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "94745238-cfe8-423e-9ef1-efa9f6b0efbe"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "protected-ignore",
+    "route": "/expert-squad/catalog",
+    "status": 500,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": "UnknownError",
+    "requestID": [
+      "4094e789-b576-4c1a-a930-d88e373961fb"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "protected-ignore",
+    "route": "/expert-squad/search",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 5,
+    "error": null,
+    "requestID": [
+      "a565d625-ce3c-4690-9ff9-7a82b5b3249d"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "protected-ignore",
+    "route": "/mission-skill/catalog",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "9b530f33-4ea9-444d-894c-16ea93cc6f87"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "protected-ignore",
+    "route": "/skill/mounts",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "163c6c5e-c2fc-4255-b7fb-0fd92d573263"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "protected-ignore",
+    "route": "/mission",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "f5eb4a63-6e13-4eb1-8773-dfb18d1b41d9"
+    ],
+    "versionControlReadOnly": true
+  },
+  {
+    "project": "change-review",
+    "route": "/project/current",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\baseline\\change-review",
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "fc0ffe8e-ae39-49bb-9340-3edfa4efe5ec"
+    ],
+    "versionControlReadOnly": false
+  },
+  {
+    "project": "change-review",
+    "route": "/file/content",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "6baf671b-f0c4-4248-a5ca-1a0b002074a0"
+    ],
+    "versionControlReadOnly": false
+  },
+  {
+    "project": "change-review",
+    "route": "/config",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "b559ba5d-3670-4314-9cdf-ceb32b2a401f"
+    ],
+    "versionControlReadOnly": false
+  },
+  {
+    "project": "change-review",
+    "route": "/expert-squad/catalog",
+    "status": 200,
+    "activeSquad": "dynamic",
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "84995a3c-6f1a-40c2-93b9-874cce1170c4"
+    ],
+    "versionControlReadOnly": false
+  },
+  {
+    "project": "change-review",
+    "route": "/expert-squad/search",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 5,
+    "error": null,
+    "requestID": [
+      "1430cb3e-3115-48c9-8730-65cab593f16b"
+    ],
+    "versionControlReadOnly": false
+  },
+  {
+    "project": "change-review",
+    "route": "/mission-skill/catalog",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "967c4c09-af09-4213-95c0-40b3fc4b4aab"
+    ],
+    "versionControlReadOnly": false
+  },
+  {
+    "project": "change-review",
+    "route": "/skill/mounts",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "551a4db9-37e8-40fc-ab5e-539e1ea15d5c"
+    ],
+    "versionControlReadOnly": false
+  },
+  {
+    "project": "change-review",
+    "route": "/mission",
+    "status": 200,
+    "activeSquad": null,
+    "worktree": null,
+    "entryCount": 0,
+    "error": null,
+    "requestID": [
+      "fe400911-ebe6-4f98-8347-e1e064f1f92a"
+    ],
+    "versionControlReadOnly": false
+  }
+]
