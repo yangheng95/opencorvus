@@ -1,0 +1,92 @@
+{
+  "created": [
+    {
+      "missionID": "draft-ad19647ed4256b69bd2292063750ed59",
+      "sessionID": "ses_hkuvjHD50ceeg9TEYIkM",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\change-review",
+      "title": "Receiving handoff draft",
+      "request": "CHANGE-REVIEW original. Check three sealed cartons and record each intake identifier. This verification draft must stay in change-review.",
+      "boardLane": "backlog"
+    },
+    {
+      "missionID": "draft-13674a3ed9ff98ef385bb9c77923f766",
+      "sessionID": "ses_hOGd52YgUCT5ORYuIAoZ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\receiving-yard",
+      "title": "Receiving handoff draft",
+      "request": "RECEIVING-YARD original. Reconcile the visitor gate register and record two receipt identifiers. This verification draft must stay in receiving-yard.",
+      "boardLane": "backlog"
+    }
+  ],
+  "edited": [
+    {
+      "missionID": "draft-ad19647ed4256b69bd2292063750ed59",
+      "sessionID": "ses_hkuvjHD50ceeg9TEYIkM",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\change-review",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "CHANGE-REVIEW original. Check three sealed cartons and record each intake identifier. This verification draft must stay in change-review."
+    },
+    {
+      "missionID": "draft-13674a3ed9ff98ef385bb9c77923f766",
+      "sessionID": "ses_hOGd52YgUCT5ORYuIAoZ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\receiving-yard",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "RECEIVING-YARD original. Reconcile the visitor gate register and record two receipt identifiers. This verification draft must stay in receiving-yard.\nRECEIVING-YARD revision: retain the second receipt identifier with the gate record."
+    }
+  ],
+  "reopened": [
+    {
+      "missionID": "draft-ad19647ed4256b69bd2292063750ed59",
+      "sessionID": "ses_hkuvjHD50ceeg9TEYIkM",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\change-review",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "CHANGE-REVIEW original. Check three sealed cartons and record each intake identifier. This verification draft must stay in change-review."
+    },
+    {
+      "missionID": "draft-13674a3ed9ff98ef385bb9c77923f766",
+      "sessionID": "ses_hOGd52YgUCT5ORYuIAoZ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\receiving-yard",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "RECEIVING-YARD original. Reconcile the visitor gate register and record two receipt identifiers. This verification draft must stay in receiving-yard.\nRECEIVING-YARD revision: retain the second receipt identifier with the gate record."
+    }
+  ],
+  "conflict-reviewed": [
+    {
+      "missionID": "draft-ad19647ed4256b69bd2292063750ed59",
+      "sessionID": "ses_hkuvjHD50ceeg9TEYIkM",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\change-review",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "CHANGE-REVIEW original. Check three sealed cartons and record each intake identifier. This verification draft must stay in change-review."
+    },
+    {
+      "missionID": "draft-13674a3ed9ff98ef385bb9c77923f766",
+      "sessionID": "ses_hOGd52YgUCT5ORYuIAoZ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\receiving-yard",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "RECEIVING-YARD original. Reconcile the visitor gate register and record two receipt identifiers. This verification draft must stay in receiving-yard.\nRECEIVING-YARD revision: retain the second receipt identifier with the gate record.\nSECOND WINDOW SAVED: attach the signed gate ticket reference."
+    }
+  ],
+  "merged": [
+    {
+      "missionID": "draft-ad19647ed4256b69bd2292063750ed59",
+      "sessionID": "ses_hkuvjHD50ceeg9TEYIkM",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\change-review",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "CHANGE-REVIEW original. Check three sealed cartons and record each intake identifier. This verification draft must stay in change-review."
+    },
+    {
+      "missionID": "draft-13674a3ed9ff98ef385bb9c77923f766",
+      "sessionID": "ses_hOGd52YgUCT5ORYuIAoZ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b552\\baseline\\receiving-yard",
+      "title": "Receiving handoff draft",
+      "boardLane": "backlog",
+      "request": "RECEIVING-YARD original. Reconcile the visitor gate register and record two receipt identifiers. This verification draft must stay in receiving-yard.\nRECEIVING-YARD revision: retain the second receipt identifier with the gate record.\nLOCAL UNSAVED: record the gate supervisor initials.\nSECOND WINDOW SAVED: attach the signed gate ticket reference."
+    }
+  ]
+}

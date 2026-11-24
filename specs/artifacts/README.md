@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务草稿流程的桌面证据](2026-11-24-mission-draft-lifecycle-review/README.md)
 - [完整项目笔记列表的桌面证据](2026-11-24-memory-unfiltered-navigation/README.md)
 - [完整和仅筛选定时任务的桌面证据](2026-11-24-scheduled-unfiltered-navigation/README.md)
 - [完整模型服务商目录的桌面证据](2026-11-24-provider-unfiltered-navigation/README.md)
