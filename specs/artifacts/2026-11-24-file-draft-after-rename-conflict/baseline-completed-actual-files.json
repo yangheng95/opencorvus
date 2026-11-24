@@ -1,0 +1,54 @@
+{
+  "phase": "completed",
+  "projects": {
+    "east": {
+      "projectID": "prj_h3LYj8P339krqP3wfU7u",
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b559\\baseline\\east-checkout",
+      "listingRequestID": "f19e7bc8-d8c7-4e4e-adc7-141aa6d1531d",
+      "members": [
+        "closed.txt",
+        "ready.txt"
+      ],
+      "contents": {
+        "ready.txt": {
+          "requestID": "d767aa95-f0e6-477b-aadb-daa57d28230a",
+          "content": "Original east handoff.\nInventory verified.\nDraft note: confirm the pending crates.\n",
+          "resourceID": "21b60b9ea6723d934cbd676c98b211a18d175aa4e1aba081438dbef1cfdd5174"
+        },
+        "closed.txt": {
+          "requestID": "5eb5d35b-2079-408f-9c3b-7afb3e8c8b26",
+          "content": "Existing east closed record.\n",
+          "resourceID": "3ac75198a8265ffccbbfba81e31fbfef692de5562efaf32fcef09b03a37a940f"
+        }
+      }
+    },
+    "west": {
+      "projectID": "prj_h6xy3eJ6kyTKFqTDMDwW",
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b559\\baseline\\west-checkout",
+      "listingRequestID": "638deb26-4c18-4d69-b4d6-8e2bc9c89c04",
+      "members": [
+        "closed.txt",
+        "handoff.txt"
+      ],
+      "contents": {
+        "handoff.txt": {
+          "requestID": "91c638eb-c869-4822-81ce-61c9a78feb1b",
+          "content": "Original west handoff.\nInventory verified.\n",
+          "resourceID": "aba719a8dba1038e64fb60e17105dc5652da9c1b40c2c5d5b9d48c4cb5f4d7f3"
+        },
+        "closed.txt": {
+          "requestID": "bbfb137e-3b38-4423-a511-b2ca36d0b295",
+          "content": "Existing west closed record.\n",
+          "resourceID": "1978c963ac350d73166369b8206ad946358f30d5a180687e9af788b1bdf075ae"
+        }
+      }
+    }
+  },
+  "counts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  }
+}

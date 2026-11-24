@@ -1,0 +1,54 @@
+{
+  "phase": "collision",
+  "projects": {
+    "east": {
+      "projectID": "prj_h3LYj8P339krqP3wfU7u",
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b559\\baseline\\east-checkout",
+      "listingRequestID": "eec1df05-1b8f-4a33-bcaa-60fd9be47121",
+      "members": [
+        "closed.txt",
+        "handoff.txt"
+      ],
+      "contents": {
+        "handoff.txt": {
+          "requestID": "2ecf6367-6489-4569-92fe-70537aeb1778",
+          "content": "Original east handoff.\nInventory verified.\n",
+          "resourceID": "0c4add00060ccee8497cad495dc11b4c996da4afb24ae6c5b14b39b6e4713413"
+        },
+        "closed.txt": {
+          "requestID": "055d2af8-f409-49ec-b416-d9a847ebee42",
+          "content": "Existing east closed record.\n",
+          "resourceID": "3ac75198a8265ffccbbfba81e31fbfef692de5562efaf32fcef09b03a37a940f"
+        }
+      }
+    },
+    "west": {
+      "projectID": "prj_h6xy3eJ6kyTKFqTDMDwW",
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b559\\baseline\\west-checkout",
+      "listingRequestID": "1ad7e14b-b273-44f0-89ae-061463685783",
+      "members": [
+        "closed.txt",
+        "handoff.txt"
+      ],
+      "contents": {
+        "handoff.txt": {
+          "requestID": "4218e309-705d-4868-9929-9d8ef2a5b8f5",
+          "content": "Original west handoff.\nInventory verified.\n",
+          "resourceID": "aba719a8dba1038e64fb60e17105dc5652da9c1b40c2c5d5b9d48c4cb5f4d7f3"
+        },
+        "closed.txt": {
+          "requestID": "9c559800-95d7-47e5-b5e6-caf4ffa8a955",
+          "content": "Existing west closed record.\n",
+          "resourceID": "1978c963ac350d73166369b8206ad946358f30d5a180687e9af788b1bdf075ae"
+        }
+      }
+    }
+  },
+  "counts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  }
+}
