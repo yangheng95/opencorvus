@@ -5,6 +5,26 @@ import { Icon } from "./Icon"
 import { Button } from "./Button"
 import { TextField, type TextFieldSize } from "./TextField"
 
+type SearchResultTarget = HTMLElement | {
+  action: HTMLElement
+  viewport: HTMLElement
+  row: HTMLElement | null
+}
+
+function focusSearchResult(target: SearchResultTarget | undefined): boolean {
+  if (!target) return false
+  const native = target instanceof HTMLElement
+  const action = native ? target : target.action
+  if (!action.isConnected) return false
+
+  action.focus({ preventScroll: !native })
+  if (!native && target.row) {
+    const block = target.row.getBoundingClientRect().height > target.viewport.clientHeight ? "start" : "nearest"
+    target.row.scrollIntoView({ block, inline: "nearest" })
+  }
+  return true
+}
+
 export interface SearchFieldProps {
   value: string
   placeholder: string
@@ -30,7 +50,7 @@ export interface SearchFieldProps {
   onClear?: () => void
   onSubmit?: () => void
   onKeyDown?: JSX.EventHandlerUnion<HTMLInputElement, KeyboardEvent>
-  resultFocusTarget?: (edge: "first" | "last") => HTMLElement | undefined
+  resultFocusTarget?: (edge: "first" | "last") => SearchResultTarget | undefined
 }
 
 export function createSearchResultNavigation(
@@ -42,9 +62,14 @@ export function createSearchResultNavigation(
     pageRow?: (action: HTMLElement) => HTMLElement | null
   } = {},
 ) {
-  function resultFocusTarget(edge: "first" | "last"): HTMLElement | undefined {
+  const rowFor = (action: HTMLElement) => pageRow ? pageRow(action) : action
+  const targetFor = (action: HTMLElement, viewport = pageViewport?.(action)): SearchResultTarget =>
+    viewport ? { action, viewport, row: rowFor(action) } : action
+
+  function resultFocusTarget(edge: "first" | "last"): SearchResultTarget | undefined {
     const actions = readActions()
-    return edge === "first" ? actions[0] : actions.at(-1)
+    const action = edge === "first" ? actions[0] : actions.at(-1)
+    return action && targetFor(action)
   }
 
   function handleResultKeyDown(event: KeyboardEvent): void {
@@ -68,7 +93,6 @@ export function createSearchResultNavigation(
       return
     }
     if (viewport) {
-      const rowFor = (action: HTMLElement) => pageRow ? pageRow(action) : action
       const target = renderedListPageIndex(
         current,
         actions.length,
@@ -76,13 +100,7 @@ export function createSearchResultNavigation(
         viewport.clientHeight,
         (index) => rowFor(actions[index]!)?.getBoundingClientRect(),
       )
-      const action = actions[target ?? current]!
-      action.focus({ preventScroll: true })
-      const row = rowFor(action)
-      if (row) {
-        const block = row.getBoundingClientRect().height > viewport.clientHeight ? "start" : "nearest"
-        row.scrollIntoView({ block, inline: "nearest" })
-      }
+      focusSearchResult(targetFor(actions[target ?? current]!, viewport))
       return
     }
 
@@ -90,7 +108,8 @@ export function createSearchResultNavigation(
     if (key === "Home") next = 0
     else if (key === "End") next = actions.length - 1
     else if (tabList) next = (next + actions.length) % actions.length
-    actions[next]?.focus()
+    const action = actions[next]
+    if (action) focusSearchResult(targetFor(action))
   }
 
   return { resultFocusTarget, handleResultKeyDown }
@@ -125,9 +144,8 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
       (event.key === "ArrowDown" || event.key === "ArrowUp")
     ) {
       const target = props.resultFocusTarget(event.key === "ArrowDown" ? "first" : "last")
-      if (target?.isConnected) {
+      if (focusSearchResult(target)) {
         event.preventDefault()
-        target.focus()
         return
       }
     }

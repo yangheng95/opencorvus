@@ -2647,10 +2647,14 @@ input keeps focus through submit and clear. Outside text composition, Enter
 belongs to an explicit search submit action or a SearchField associated with a
 form. It cannot activate that form's default submit button. Caller keyboard
 handlers can still claim an event before the primitive handles it. External input
-refs remain available to navigation owners. Memory retains its clear-triggered
-list reload; Mailbox retains its
-existing search dismissal without a clear button. There is no delayed focus
-recovery or consumer-specific duplicate focus implementation.
+refs remain available to navigation owners. Shared search result navigation uses
+the same result-row geometry for entry, adjacent focus, endpoint keys and paging
+when the list supplies a viewport. It focuses the actual action and reveals its
+row, aligning a row taller than the viewport at its start. A SearchField can also
+focus a supplied native target directly, such as the file review list or an
+installed skill disclosure. Memory retains its clear-triggered list reload;
+Mailbox retains its existing search dismissal without a clear button. There is
+no delayed focus recovery or consumer-specific duplicate focus implementation.
 Its resize separator projects the mounted sidebar's actual width and applied
 CSS scale through one local frame-scheduled geometry owner. Size and root-style
 observation retire with that open node; CSS default measurements do not become

@@ -1,0 +1,53 @@
+{
+  "active": "dynamic",
+  "results": {
+    "": [
+      {
+        "id": "advanced",
+        "label": "Advanced"
+      },
+      {
+        "id": "base",
+        "label": "Base"
+      },
+      {
+        "id": "dynamic",
+        "label": "Dynamic"
+      },
+      {
+        "id": "research-studio",
+        "label": "Research Studio"
+      },
+      {
+        "id": "squad-sdk",
+        "label": "Generate Expert Squads"
+      }
+    ],
+    "re": [
+      {
+        "id": "research-studio",
+        "label": "Research Studio"
+      },
+      {
+        "id": "advanced",
+        "label": "Advanced"
+      },
+      {
+        "id": "base",
+        "label": "Base"
+      },
+      {
+        "id": "squad-sdk",
+        "label": "Generate Expert Squads"
+      }
+    ],
+    "traceability": [
+      {
+        "id": "advanced",
+        "label": "Advanced"
+      }
+    ],
+    "handoff": []
+  },
+  "missions": []
+}

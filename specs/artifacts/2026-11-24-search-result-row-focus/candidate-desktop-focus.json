@@ -1,0 +1,1551 @@
+{
+  "squadArrowEntry": {
+    "active": "Research Studio",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 634.5625,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 578.5625
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 812.5625,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 572.5625
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1238,
+        "height": 566,
+        "offset": 20.66666603088379,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 812.5625,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 572.5625
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base"
+    ]
+  },
+  "squadArrowNext": {
+    "active": "Advanced",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 634.5625,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 578.5625
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 752.5625,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 512.5625
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1238,
+        "height": 566,
+        "offset": 80.66666412353516,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 752.5625,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 512.5625
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base"
+    ]
+  },
+  "squadArrowBack": {
+    "active": "Research Studio",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 574.5625,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 518.5625
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 752.5625,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 512.5625
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1238,
+        "height": 566,
+        "offset": 80.66666412353516,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 752.5625,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 512.5625
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base"
+    ]
+  },
+  "squadPageDown": {
+    "active": "Generate Expert Squads",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 634.5625,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 578.5625
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 638.5625,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 398.5625
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 6,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1238,
+        "height": 566,
+        "offset": 194.6666717529297,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 638.5625,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 398.5625
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ]
+  },
+  "squadPageReturn": {
+    "active": "Research Studio",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 458.5625,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 402.5625
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 638.5625,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 398.5625
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 2,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1238,
+        "height": 566,
+        "offset": 194.6666717529297,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 638.5625,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 398.5625
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ]
+  },
+  "squadBackToInput": {
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": null,
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 638.5625,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 398.5625
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 2,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1238,
+        "height": 566,
+        "offset": 194.6666717529297,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 638.5625,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 398.5625
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ]
+  },
+  "providerArrowEntry": {
+    "control": {
+      "bottom": 651.4583549499512,
+      "left": 1045.635498046875,
+      "right": 1241.604248046875,
+      "top": 606.6666870117188
+    },
+    "expanded": [],
+    "focus": "fixture-warehouse-relay",
+    "focusData": null,
+    "focusLabel": "编辑 fixture-warehouse-relay",
+    "ids": [
+      "fixture-warehouse-relay",
+      "fixture-handoff-relay",
+      "302ai",
+      "abacus",
+      "aihubmix",
+      "alibaba",
+      "alibaba-cn",
+      "amazon-bedrock",
+      "anthropic",
+      "azure",
+      "azure-cognitive-services",
+      "bailing",
+      "baseten",
+      "cerebras",
+      "chutes",
+      "cloudflare-ai-gateway",
+      "cloudflare-workers-ai",
+      "cohere",
+      "cortecs",
+      "deepinfra",
+      "deepseek",
+      "fastrouter",
+      "fireworks-ai",
+      "firmware",
+      "friendli",
+      "github-copilot",
+      "github-models",
+      "gitlab",
+      "google",
+      "groq",
+      "helicone",
+      "huggingface",
+      "iflowcn",
+      "inception",
+      "inference",
+      "io-net",
+      "kilo",
+      "kimi-for-coding",
+      "llama",
+      "llmgateway",
+      "lmstudio",
+      "lucidquery",
+      "minimax",
+      "minimax-cn",
+      "minimax-coding-plan",
+      "minimax-cn-coding-plan",
+      "mistral",
+      "moark",
+      "modelscope",
+      "moonshotai",
+      "moonshotai-cn",
+      "morph",
+      "nano-gpt",
+      "nebius",
+      "nova",
+      "novita-ai",
+      "nvidia",
+      "ollama-cloud",
+      "openai",
+      "opencorvus",
+      "openrouter",
+      "ovhcloud",
+      "perplexity",
+      "poe",
+      "privatemode-ai",
+      "requesty",
+      "sap-ai-core",
+      "scaleway",
+      "siliconflow",
+      "siliconflow-cn",
+      "snowflake-cortex",
+      "submodel",
+      "synthetic",
+      "togetherai",
+      "upstage",
+      "v0",
+      "venice",
+      "vercel",
+      "google-vertex",
+      "google-vertex-anthropic",
+      "vivgrid",
+      "vultr",
+      "wandb",
+      "xai",
+      "xiaomi",
+      "zai",
+      "zai-coding-plan",
+      "zenmux",
+      "zhipuai",
+      "zhipuai-coding-plan"
+    ],
+    "lists": [
+      {
+        "extent": 562,
+        "height": 562,
+        "offset": 0
+      },
+      {
+        "extent": 6193,
+        "height": 6193,
+        "offset": 0
+      }
+    ],
+    "query": "模型",
+    "row": {
+      "bottom": 862.1771240234375,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 581.0729370117188
+    },
+    "scroll": 58.66666793823242,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "fixture-warehouse-relay"
+    ]
+  },
+  "providerArrowEntryHeader": {
+    "actions": {
+      "bottom": 651.4583549499512,
+      "height": 44.79166793823242,
+      "left": 1045.635498046875,
+      "right": 1241.604248046875,
+      "top": 606.6666870117188
+    },
+    "box": {
+      "bottom": 862.1771240234375,
+      "height": 281.10418701171875,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 581.0729370117188
+    },
+    "details": {
+      "bottom": 785.0833358764648,
+      "height": 68.52083587646484,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 716.5625
+    },
+    "id": "fixture-warehouse-relay",
+    "main": {
+      "bottom": 706.9687728881836,
+      "height": 100.30208587646484,
+      "left": 499.1770935058594,
+      "right": 866.4583435058594,
+      "top": 606.6666870117188
+    },
+    "summary": {
+      "bottom": 633.0729370117188,
+      "height": 26.40625,
+      "left": 879.25,
+      "right": 1032.84375,
+      "top": 606.6666870117188
+    },
+    "title": {
+      "bottom": 671.4583587646484,
+      "height": 64.79167175292969,
+      "left": 499.1770935058594,
+      "right": 866.4583435058594,
+      "top": 606.6666870117188
+    }
+  },
+  "providerAdjacentBefore": {
+    "actions": {
+      "bottom": 687.8958549499512,
+      "height": 44.79166793823242,
+      "left": 1045.635498046875,
+      "right": 1241.604248046875,
+      "top": 643.1041870117188
+    },
+    "box": {
+      "bottom": 898.6146240234375,
+      "height": 281.10418701171875,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 617.5104370117188
+    },
+    "details": {
+      "bottom": 821.5208358764648,
+      "height": 68.52083587646484,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 753
+    },
+    "id": "fixture-handoff-relay",
+    "main": {
+      "bottom": 743.4062728881836,
+      "height": 100.30208587646484,
+      "left": 499.1770935058594,
+      "right": 866.4583435058594,
+      "top": 643.1041870117188
+    },
+    "summary": {
+      "bottom": 669.5104370117188,
+      "height": 26.40625,
+      "left": 879.25,
+      "right": 1032.84375,
+      "top": 643.1041870117188
+    },
+    "title": {
+      "bottom": 707.8958587646484,
+      "height": 64.79167175292969,
+      "left": 499.1770935058594,
+      "right": 866.4583435058594,
+      "top": 643.1041870117188
+    }
+  },
+  "providerAdjacentArrow": {
+    "control": {
+      "bottom": 651.8958549499512,
+      "left": 1045.635498046875,
+      "right": 1241.604248046875,
+      "top": 607.1041870117188
+    },
+    "expanded": [],
+    "focus": "fixture-handoff-relay",
+    "focusData": null,
+    "focusLabel": "编辑 fixture-handoff-relay",
+    "ids": [
+      "fixture-warehouse-relay",
+      "fixture-handoff-relay",
+      "302ai",
+      "abacus",
+      "aihubmix",
+      "alibaba",
+      "alibaba-cn",
+      "amazon-bedrock",
+      "anthropic",
+      "azure",
+      "azure-cognitive-services",
+      "bailing",
+      "baseten",
+      "cerebras",
+      "chutes",
+      "cloudflare-ai-gateway",
+      "cloudflare-workers-ai",
+      "cohere",
+      "cortecs",
+      "deepinfra",
+      "deepseek",
+      "fastrouter",
+      "fireworks-ai",
+      "firmware",
+      "friendli",
+      "github-copilot",
+      "github-models",
+      "gitlab",
+      "google",
+      "groq",
+      "helicone",
+      "huggingface",
+      "iflowcn",
+      "inception",
+      "inference",
+      "io-net",
+      "kilo",
+      "kimi-for-coding",
+      "llama",
+      "llmgateway",
+      "lmstudio",
+      "lucidquery",
+      "minimax",
+      "minimax-cn",
+      "minimax-coding-plan",
+      "minimax-cn-coding-plan",
+      "mistral",
+      "moark",
+      "modelscope",
+      "moonshotai",
+      "moonshotai-cn",
+      "morph",
+      "nano-gpt",
+      "nebius",
+      "nova",
+      "novita-ai",
+      "nvidia",
+      "ollama-cloud",
+      "openai",
+      "opencorvus",
+      "openrouter",
+      "ovhcloud",
+      "perplexity",
+      "poe",
+      "privatemode-ai",
+      "requesty",
+      "sap-ai-core",
+      "scaleway",
+      "siliconflow",
+      "siliconflow-cn",
+      "snowflake-cortex",
+      "submodel",
+      "synthetic",
+      "togetherai",
+      "upstage",
+      "v0",
+      "venice",
+      "vercel",
+      "google-vertex",
+      "google-vertex-anthropic",
+      "vivgrid",
+      "vultr",
+      "wandb",
+      "xai",
+      "xiaomi",
+      "zai",
+      "zai-coding-plan",
+      "zenmux",
+      "zhipuai",
+      "zhipuai-coding-plan"
+    ],
+    "lists": [
+      {
+        "extent": 562,
+        "height": 562,
+        "offset": 0
+      },
+      {
+        "extent": 6193,
+        "height": 6193,
+        "offset": 0
+      }
+    ],
+    "query": "模型",
+    "row": {
+      "bottom": 862.6146240234375,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 581.5104370117188
+    },
+    "scroll": 339.3333435058594,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "fixture-warehouse-relay",
+      "fixture-handoff-relay"
+    ]
+  },
+  "providerAdjacentHeader": {
+    "actions": {
+      "bottom": 651.8958549499512,
+      "height": 44.79166793823242,
+      "left": 1045.635498046875,
+      "right": 1241.604248046875,
+      "top": 607.1041870117188
+    },
+    "box": {
+      "bottom": 862.6146240234375,
+      "height": 281.10418701171875,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 581.5104370117188
+    },
+    "details": {
+      "bottom": 785.5208358764648,
+      "height": 68.52083587646484,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 717
+    },
+    "id": "fixture-handoff-relay",
+    "main": {
+      "bottom": 707.4062728881836,
+      "height": 100.30208587646484,
+      "left": 499.1770935058594,
+      "right": 866.4583435058594,
+      "top": 607.1041870117188
+    },
+    "summary": {
+      "bottom": 633.5104370117188,
+      "height": 26.40625,
+      "left": 879.25,
+      "right": 1032.84375,
+      "top": 607.1041870117188
+    },
+    "title": {
+      "bottom": 671.8958587646484,
+      "height": 64.79167175292969,
+      "left": 499.1770935058594,
+      "right": 866.4583435058594,
+      "top": 607.1041870117188
+    }
+  },
+  "providerExplicitEdit": {
+    "control": null,
+    "expanded": [],
+    "focusData": null,
+    "focusLabel": null,
+    "ids": [
+      "fixture-warehouse-relay",
+      "fixture-handoff-relay",
+      "302ai",
+      "abacus",
+      "aihubmix",
+      "alibaba",
+      "alibaba-cn",
+      "amazon-bedrock",
+      "anthropic",
+      "azure",
+      "azure-cognitive-services",
+      "bailing",
+      "baseten",
+      "cerebras",
+      "chutes",
+      "cloudflare-ai-gateway",
+      "cloudflare-workers-ai",
+      "cohere",
+      "cortecs",
+      "deepinfra",
+      "deepseek",
+      "fastrouter",
+      "fireworks-ai",
+      "firmware",
+      "friendli",
+      "github-copilot",
+      "github-models",
+      "gitlab",
+      "google",
+      "groq",
+      "helicone",
+      "huggingface",
+      "iflowcn",
+      "inception",
+      "inference",
+      "io-net",
+      "kilo",
+      "kimi-for-coding",
+      "llama",
+      "llmgateway",
+      "lmstudio",
+      "lucidquery",
+      "minimax",
+      "minimax-cn",
+      "minimax-coding-plan",
+      "minimax-cn-coding-plan",
+      "mistral",
+      "moark",
+      "modelscope",
+      "moonshotai",
+      "moonshotai-cn",
+      "morph",
+      "nano-gpt",
+      "nebius",
+      "nova",
+      "novita-ai",
+      "nvidia",
+      "ollama-cloud",
+      "openai",
+      "opencorvus",
+      "openrouter",
+      "ovhcloud",
+      "perplexity",
+      "poe",
+      "privatemode-ai",
+      "requesty",
+      "sap-ai-core",
+      "scaleway",
+      "siliconflow",
+      "siliconflow-cn",
+      "snowflake-cortex",
+      "submodel",
+      "synthetic",
+      "togetherai",
+      "upstage",
+      "v0",
+      "venice",
+      "vercel",
+      "google-vertex",
+      "google-vertex-anthropic",
+      "vivgrid",
+      "vultr",
+      "wandb",
+      "xai",
+      "xiaomi",
+      "zai",
+      "zai-coding-plan",
+      "zenmux",
+      "zhipuai",
+      "zhipuai-coding-plan"
+    ],
+    "lists": [
+      {
+        "extent": 562,
+        "height": 562,
+        "offset": 0
+      },
+      {
+        "extent": 6193,
+        "height": 6193,
+        "offset": 0
+      }
+    ],
+    "query": "模型",
+    "row": null,
+    "scroll": 998,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": []
+  },
+  "providerEditField": [
+    "\t\t\t\t\t\t\t\t83 text fixture-handoff-relay API :  http://127.0.0.1:46902/v1 2 个模型",
+    "\t\t\t\t\t\t\t\t366 text field (settable) 接口地址, Value: http://127.0.0.1:46902/v1",
+    "The focused UI element is 366 text field (settable) 接口地址, Value: http://127.0.0.1:46902/v1"
+  ],
+  "providerReturnsToSearch": {
+    "control": null,
+    "expanded": [],
+    "focusData": "provider-search-input",
+    "focusLabel": "搜索模型服务商",
+    "ids": [
+      "fixture-warehouse-relay",
+      "fixture-handoff-relay",
+      "302ai",
+      "abacus",
+      "aihubmix",
+      "alibaba",
+      "alibaba-cn",
+      "amazon-bedrock",
+      "anthropic",
+      "azure",
+      "azure-cognitive-services",
+      "bailing",
+      "baseten",
+      "cerebras",
+      "chutes",
+      "cloudflare-ai-gateway",
+      "cloudflare-workers-ai",
+      "cohere",
+      "cortecs",
+      "deepinfra",
+      "deepseek",
+      "fastrouter",
+      "fireworks-ai",
+      "firmware",
+      "friendli",
+      "github-copilot",
+      "github-models",
+      "gitlab",
+      "google",
+      "groq",
+      "helicone",
+      "huggingface",
+      "iflowcn",
+      "inception",
+      "inference",
+      "io-net",
+      "kilo",
+      "kimi-for-coding",
+      "llama",
+      "llmgateway",
+      "lmstudio",
+      "lucidquery",
+      "minimax",
+      "minimax-cn",
+      "minimax-coding-plan",
+      "minimax-cn-coding-plan",
+      "mistral",
+      "moark",
+      "modelscope",
+      "moonshotai",
+      "moonshotai-cn",
+      "morph",
+      "nano-gpt",
+      "nebius",
+      "nova",
+      "novita-ai",
+      "nvidia",
+      "ollama-cloud",
+      "openai",
+      "opencorvus",
+      "openrouter",
+      "ovhcloud",
+      "perplexity",
+      "poe",
+      "privatemode-ai",
+      "requesty",
+      "sap-ai-core",
+      "scaleway",
+      "siliconflow",
+      "siliconflow-cn",
+      "snowflake-cortex",
+      "submodel",
+      "synthetic",
+      "togetherai",
+      "upstage",
+      "v0",
+      "venice",
+      "vercel",
+      "google-vertex",
+      "google-vertex-anthropic",
+      "vivgrid",
+      "vultr",
+      "wandb",
+      "xai",
+      "xiaomi",
+      "zai",
+      "zai-coding-plan",
+      "zenmux",
+      "zhipuai",
+      "zhipuai-coding-plan"
+    ],
+    "lists": [
+      {
+        "extent": 562,
+        "height": 562,
+        "offset": 0
+      },
+      {
+        "extent": 6193,
+        "height": 6193,
+        "offset": 0
+      }
+    ],
+    "query": "模型",
+    "row": null,
+    "scroll": 50,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "fixture-warehouse-relay"
+    ]
+  },
+  "providerLastFromSearch": {
+    "control": {
+      "bottom": 715.3333549499512,
+      "left": 1147.4896240234375,
+      "right": 1241.6042098999023,
+      "top": 670.5416870117188
+    },
+    "expanded": [],
+    "focus": "zhipuai-coding-plan",
+    "focusData": "provider-catalog-configure",
+    "focusLabel": "配置 Zhipu AI Coding Plan",
+    "ids": [
+      "fixture-warehouse-relay",
+      "fixture-handoff-relay",
+      "302ai",
+      "abacus",
+      "aihubmix",
+      "alibaba",
+      "alibaba-cn",
+      "amazon-bedrock",
+      "anthropic",
+      "azure",
+      "azure-cognitive-services",
+      "bailing",
+      "baseten",
+      "cerebras",
+      "chutes",
+      "cloudflare-ai-gateway",
+      "cloudflare-workers-ai",
+      "cohere",
+      "cortecs",
+      "deepinfra",
+      "deepseek",
+      "fastrouter",
+      "fireworks-ai",
+      "firmware",
+      "friendli",
+      "github-copilot",
+      "github-models",
+      "gitlab",
+      "google",
+      "groq",
+      "helicone",
+      "huggingface",
+      "iflowcn",
+      "inception",
+      "inference",
+      "io-net",
+      "kilo",
+      "kimi-for-coding",
+      "llama",
+      "llmgateway",
+      "lmstudio",
+      "lucidquery",
+      "minimax",
+      "minimax-cn",
+      "minimax-coding-plan",
+      "minimax-cn-coding-plan",
+      "mistral",
+      "moark",
+      "modelscope",
+      "moonshotai",
+      "moonshotai-cn",
+      "morph",
+      "nano-gpt",
+      "nebius",
+      "nova",
+      "novita-ai",
+      "nvidia",
+      "ollama-cloud",
+      "openai",
+      "opencorvus",
+      "openrouter",
+      "ovhcloud",
+      "perplexity",
+      "poe",
+      "privatemode-ai",
+      "requesty",
+      "sap-ai-core",
+      "scaleway",
+      "siliconflow",
+      "siliconflow-cn",
+      "snowflake-cortex",
+      "submodel",
+      "synthetic",
+      "togetherai",
+      "upstage",
+      "v0",
+      "venice",
+      "vercel",
+      "google-vertex",
+      "google-vertex-anthropic",
+      "vivgrid",
+      "vultr",
+      "wandb",
+      "xai",
+      "xiaomi",
+      "zai",
+      "zai-coding-plan",
+      "zenmux",
+      "zhipuai",
+      "zhipuai-coding-plan"
+    ],
+    "lists": [
+      {
+        "extent": 562,
+        "height": 562,
+        "offset": 0
+      },
+      {
+        "extent": 6193,
+        "height": 6193,
+        "offset": 0
+      }
+    ],
+    "query": "模型",
+    "row": {
+      "bottom": 728.125,
+      "left": 499.1770935058594,
+      "right": 1241.6042175292969,
+      "top": 657.75
+    },
+    "scroll": 6794.66650390625,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "vultr",
+      "wandb",
+      "xai",
+      "xiaomi",
+      "zai",
+      "zai-coding-plan",
+      "zenmux",
+      "zhipuai",
+      "zhipuai-coding-plan"
+    ]
+  },
+  "providerLastReturn": {
+    "control": null,
+    "expanded": [],
+    "focusData": "provider-search-input",
+    "focusLabel": "搜索模型服务商",
+    "ids": [
+      "fixture-warehouse-relay",
+      "fixture-handoff-relay",
+      "302ai",
+      "abacus",
+      "aihubmix",
+      "alibaba",
+      "alibaba-cn",
+      "amazon-bedrock",
+      "anthropic",
+      "azure",
+      "azure-cognitive-services",
+      "bailing",
+      "baseten",
+      "cerebras",
+      "chutes",
+      "cloudflare-ai-gateway",
+      "cloudflare-workers-ai",
+      "cohere",
+      "cortecs",
+      "deepinfra",
+      "deepseek",
+      "fastrouter",
+      "fireworks-ai",
+      "firmware",
+      "friendli",
+      "github-copilot",
+      "github-models",
+      "gitlab",
+      "google",
+      "groq",
+      "helicone",
+      "huggingface",
+      "iflowcn",
+      "inception",
+      "inference",
+      "io-net",
+      "kilo",
+      "kimi-for-coding",
+      "llama",
+      "llmgateway",
+      "lmstudio",
+      "lucidquery",
+      "minimax",
+      "minimax-cn",
+      "minimax-coding-plan",
+      "minimax-cn-coding-plan",
+      "mistral",
+      "moark",
+      "modelscope",
+      "moonshotai",
+      "moonshotai-cn",
+      "morph",
+      "nano-gpt",
+      "nebius",
+      "nova",
+      "novita-ai",
+      "nvidia",
+      "ollama-cloud",
+      "openai",
+      "opencorvus",
+      "openrouter",
+      "ovhcloud",
+      "perplexity",
+      "poe",
+      "privatemode-ai",
+      "requesty",
+      "sap-ai-core",
+      "scaleway",
+      "siliconflow",
+      "siliconflow-cn",
+      "snowflake-cortex",
+      "submodel",
+      "synthetic",
+      "togetherai",
+      "upstage",
+      "v0",
+      "venice",
+      "vercel",
+      "google-vertex",
+      "google-vertex-anthropic",
+      "vivgrid",
+      "vultr",
+      "wandb",
+      "xai",
+      "xiaomi",
+      "zai",
+      "zai-coding-plan",
+      "zenmux",
+      "zhipuai",
+      "zhipuai-coding-plan"
+    ],
+    "lists": [
+      {
+        "extent": 562,
+        "height": 562,
+        "offset": 0
+      },
+      {
+        "extent": 6193,
+        "height": 6193,
+        "offset": 0
+      }
+    ],
+    "query": "模型",
+    "row": null,
+    "scroll": 50,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "fixture-warehouse-relay"
+    ]
+  },
+  "skillFirst": "The focused UI element is 101 button (collapsed) receiving-proof cedar handoff review for signed dock receipts. 已加载, Secondary Actions: Expand",
+  "skillLast": "The focused UI element is 105 button (collapsed) receiving-index cedar handoff index for sealed cartons. 已加载, Secondary Actions: Expand",
+  "skillExpanded": [
+    "\t\t\t\t\t\t\t\t\t\t101 button (collapsed) receiving-proof cedar handoff review for signed dock receipts. 已加载, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t103 text cedar handoff review for signed dock receipts.",
+    "\t\t\t\t\t\t\t\t\t\t\t111 button (expanded) receiving-index 已加载, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t\t112 text receiving-index",
+    "\t\t\t\t\t\t\t\t\t\t\t114 text cedar handoff index for sealed cartons. C:\\Users\\Public\\opencorvus-review-20261124-b536\\candidate\\change-review\\.opencorvus\\skills\\receiving-index\\SKILL.md",
+    "The focused UI element is 111 button (expanded) receiving-index 已加载, Secondary Actions: Collapse"
+  ],
+  "railEntry": {
+    "focus": "The focused UI element is 29 tab (selectable, settable, boolean) 通用, Value: 0, ID: config-tab-general",
+    "page": "\t\t\t\t\t\t\t42 tab (selected, settable, boolean) 技能库, ID: config-tab-skill, Value: 1"
+  },
+  "railLast": {
+    "focus": "The focused UI element is 48 tab (selectable, settable, boolean) 更新日志, Value: 0, ID: config-tab-changelog",
+    "page": "\t\t\t\t\t\t\t42 tab (selected, settable, boolean) 技能库, ID: config-tab-skill, Value: 1"
+  },
+  "railHome": {
+    "focus": "The focused UI element is 29 tab (selectable, settable, boolean) 通用, Value: 0, ID: config-tab-general",
+    "page": "\t\t\t\t\t\t\t42 tab (selected, settable, boolean) 技能库, ID: config-tab-skill, Value: 1"
+  },
+  "railWrap": {
+    "focus": "The focused UI element is 48 tab (selectable, settable, boolean) 更新日志, Value: 0, ID: config-tab-changelog",
+    "page": "\t\t\t\t\t\t\t42 tab (selected, settable, boolean) 技能库, ID: config-tab-skill, Value: 1"
+  },
+  "railPage": {
+    "focus": "The focused UI element is 39 tab (selectable, settable, boolean) 专家团市场, Value: 0, ID: config-tab-expert-squad-install",
+    "page": "\t\t\t\t\t\t\t42 tab (selected, settable, boolean) 技能库, ID: config-tab-skill, Value: 1"
+  },
+  "railActivated": {
+    "focus": "The focused UI element is 39 tab (selected, settable, boolean) 专家团市场, Value: 1, ID: config-tab-expert-squad-install",
+    "page": "\t\t\t\t\t\t\t39 tab (selected, settable, boolean) 专家团市场, Value: 1, ID: config-tab-expert-squad-install"
+  }
+}
