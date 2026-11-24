@@ -6962,6 +6962,9 @@ effects after all metadata renames use the existing post-commit effect owner.
 Task rename from a sidebar row uses the Task and project directory on that row.
 The current workspace selection is preserved. The shared dialog returns focus
 to the initiating row when it is still mounted.
+Task cancellation from a sidebar row sends the Task and project directory
+from the confirmed row to the existing Task cancellation endpoint. The
+composer continues to use the owner of its current Task or prompt request.
 
 Header mutations return their original promises to the current title component.
 Its selection/API scope owns duplicate-submission state and visible failures;

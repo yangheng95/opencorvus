@@ -1450,7 +1450,7 @@ async function archiveWorkLedgerMission(row: WorkLedgerMissionRow): Promise<void
 
 async function cancelWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   const authority = captureApiAuthority()
-  await cancelTask(row.id, {
+  await cancelTask({ taskID: row.id, directory: row.directory, authority }, {
     surface: "overlay.work_ledger",
     reason: "Operator cancelled the task from Work Ledger",
   })
@@ -2594,7 +2594,7 @@ function OverlayRoot() {
     }
     const taskID = activeTaskID()
     if (taskID && isTaskInterruptable()) {
-      return composerStop("task", () => cancelTask(taskID, {
+      return composerStop("task", () => cancelTask({ taskID, directory: taskOwningDirectory(taskID) }, {
         surface: "overlay.composer_stop",
         reason: "Operator stopped the active task from the composer",
       }))

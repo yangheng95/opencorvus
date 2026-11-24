@@ -838,15 +838,16 @@ export async function cancelAgentSession(taskID: string, sessionID: string): Pro
  * Cancel the given task. Direct API call, no LLM involvement.
  */
 export async function cancelTask(
-  taskID: string,
+  target: TaskRecordTarget,
   input: { surface: TaskCancellationSurface; reason: string },
 ): Promise<void> {
-  const authority = captureApiAuthority()
+  const { taskID, directory } = target
+  const authority = target.authority ?? captureApiAuthority()
   if (!taskID) return
   await requestTaskCancellation({
     authority,
     taskID,
-    directory: taskOwningDirectory(taskID),
+    directory,
     surface: input.surface,
     reason: input.reason,
   })
