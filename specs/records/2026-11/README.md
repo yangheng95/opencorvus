@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [对话内查找刷新期间保留当前阅读位置](2026-11-24-conversation-search-refresh-retains-current-result.md)
 - [对话内查找切换控件时保留当前消息](2026-11-24-conversation-search-tab-retains-current-result.md)
 - [全局查找翻页保留当前结果](2026-11-24-palette-continuation-retains-active-result.md)
 - [全局查找显示多步任务结果的完整原标题](2026-11-24-palette-full-mission-search-titles.md)
