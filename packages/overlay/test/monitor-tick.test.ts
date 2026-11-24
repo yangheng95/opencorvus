@@ -1,10 +1,43 @@
 import { describe, expect, test } from "bun:test"
 import { once } from "node:events"
 import { createServer } from "node:http"
+import { configure, DEFAULT_SERVER } from "../src/services/api"
+import { retryBackendConnection, startConnectionMonitor, stopConnectionMonitor } from "../src/services/connection"
 import { makeMonitorTick } from "../src/services/monitor-tick"
+import { appStore, setConnectionStatus } from "../src/store/app"
 
 // Transport-owner contracts only. Real page navigation is qualified manually.
 describe("connection recovery receipts", () => {
+  test("a manual retry runs the live health probe and publishes workspace recovery", async () => {
+    const paths: string[] = []
+    const server = Bun.serve({
+      hostname: "127.0.0.1",
+      port: 0,
+      fetch(request) {
+        paths.push(new URL(request.url).pathname)
+        return Response.json({ healthy: true, version: "manual-retry" })
+      },
+    })
+    const previous = appStore.connectionStatus
+    let recovery: string | undefined
+    try {
+      configure({ serverUrl: server.url.origin })
+      setConnectionStatus("offline")
+      startConnectionMonitor(() => { recovery = appStore.coreVersion }, () => recovery !== undefined, 60_000)
+      await retryBackendConnection()
+      expect({ paths, status: appStore.connectionStatus, recovery }).toEqual({
+        paths: ["/global/health"],
+        status: "online",
+        recovery: "manual-retry",
+      })
+    } finally {
+      stopConnectionMonitor()
+      setConnectionStatus(previous)
+      configure({ serverUrl: DEFAULT_SERVER })
+      await server.stop(true)
+    }
+  })
+
   test("a pending workspace recovers through real HTTP after another probe published online", async () => {
     const server = createServer((request, response) => {
       response.setHeader("content-type", "application/json")

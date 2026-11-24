@@ -48,7 +48,7 @@ import { observeContinuousGoalRefresh } from "./continuous-goal"
 import { captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 
 let sseHandle: StreamHandle | null = null
-let sseRetryTimer: any = null
+let selectedStreamRetry: { timer: ReturnType<typeof setTimeout>; run: () => void } | undefined
 let sseWatchdogTimer: ReturnType<typeof setTimeout> | null = null
 let sseTaskID = ""
 let sseSource: BoardSource | null = null
@@ -338,6 +338,26 @@ export function isSelectedTaskSSEConnected(taskID: string): boolean {
   return !!taskID && sseTaskID === taskID && sseHandle !== null && messageStore.sseStatus === "connected"
 }
 
+function cancelSelectedStreamRetry(): void {
+  if (!selectedStreamRetry) return
+  clearTimeout(selectedStreamRetry.timer)
+  selectedStreamRetry = undefined
+}
+
+function scheduleSelectedStreamRetry(action: () => void, delay: number): void {
+  cancelSelectedStreamRetry()
+  const run = () => {
+    if (selectedStreamRetry?.run !== run) return
+    cancelSelectedStreamRetry()
+    action()
+  }
+  selectedStreamRetry = { timer: setTimeout(run, delay), run }
+}
+
+export function retrySelectedStream(): void {
+  selectedStreamRetry?.run()
+}
+
 const selectedTaskRecoveryScheduler = createSelectedTaskRecoveryScheduler(startSSE)
 
 export function startSSE(source: BoardSource, after = 0, options: SseStartOptions = {}) {
@@ -395,9 +415,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
     sseTaskID = ""
     sseSource = null
     if (source.kind === "session") {
-      if (sseRetryTimer) clearTimeout(sseRetryTimer)
-      sseRetryTimer = setTimeout(() => {
-        sseRetryTimer = null
+      scheduleSelectedStreamRetry(() => {
         performSessionSseReconnect({
           source,
           directory,
@@ -408,9 +426,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
       }, STREAM_RECONNECT_DELAY_MS)
       return
     }
-    if (sseRetryTimer) clearTimeout(sseRetryTimer)
-    sseRetryTimer = setTimeout(() => {
-      sseRetryTimer = null
+    scheduleSelectedStreamRetry(() => {
       observeSseReconnect(
         "stream-close",
         performSseReconnect({
@@ -427,12 +443,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
           beforeRestart: liveReplayExpiredClose
             ? (restartedTaskID) => mergeLatestConversationTail(restartedTaskID, { directory, authority })
             : undefined,
-          scheduleRetry: (fn, ms) => {
-            sseRetryTimer = setTimeout(() => {
-              sseRetryTimer = null
-              fn()
-            }, ms)
-          },
+          scheduleRetry: scheduleSelectedStreamRetry,
           // A restart that *fails* still backs off: at that point we no longer
           // know the server is healthy.
           retryDelayMs: STREAM_RECONNECT_DELAY_MS,
@@ -533,10 +544,7 @@ export function startSSE(source: BoardSource, after = 0, options: SseStartOption
 
 function disposeSelectedStream() {
   selectedTaskStreamGeneration += 1
-  if (sseRetryTimer) {
-    clearTimeout(sseRetryTimer)
-    sseRetryTimer = null
-  }
+  cancelSelectedStreamRetry()
   clearSelectedStreamWatchdog()
   const handle = sseHandle
   const taskID = sseTaskID

@@ -10,7 +10,9 @@ import { Show, createMemo, createEffect, onCleanup } from "solid-js"
 import { messageStore } from "../store/messages"
 import { appStore } from "../store/app"
 import { openConfigDialog } from "../services/config-dialog-control"
+import { retryBackendConnection } from "../services/connection"
 import { STREAM_RECONNECT_DELAY_MS } from "../services/host-transport"
+import { retrySelectedStream } from "../services/sse"
 import { t } from "../utils/i18n"
 import { useDisclosure } from "../solid/disclosure"
 import { Button } from "./ui/Button"
@@ -81,8 +83,10 @@ export function ConnectionBanner() {
     if (timer) clearTimeout(timer)
   })
 
-  const reload = () => {
-    if (typeof location !== "undefined") location.reload()
+  const retry = () => {
+    const kind = problem()?.kind
+    if (kind === "stream") retrySelectedStream()
+    else if (kind) void retryBackendConnection()
   }
 
   return (
@@ -115,11 +119,10 @@ export function ConnectionBanner() {
           variant="ghost"
           size="sm"
           tone="neutral"
-          onClick={reload}
-          title={t("connection.banner_reload_title")}
-          data-ui="connection-banner-reload"
+          onClick={retry}
+          data-ui="connection-banner-retry"
         >
-          {t("connection.banner_reload")}
+          {t("connection.banner_retry")}
         </Button>
       </div>
     </Show>

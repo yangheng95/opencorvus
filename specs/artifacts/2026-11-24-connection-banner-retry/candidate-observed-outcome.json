@@ -1,0 +1,53 @@
+{
+  "url": "http://127.0.0.1:41802/ui/",
+  "asset": "assets/main-BMcmOYAm.js",
+  "initialPID": 34948,
+  "firstShutdownHttp": 200,
+  "listenerReleasedBeforeRetry": true,
+  "desktopAfterRetry": {
+    "time": "2026-11-24T10:21:49Z",
+    "title": "OpenCorvus",
+    "connection": "Offline",
+    "file": "checklist.txt",
+    "draftLine": "- Draft before trying to reconnect",
+    "editorState": "Unsaved changes"
+  },
+  "restartedPID": 32120,
+  "recoveryRequests": [
+    {
+      "time": "2026-11-24T10:21:55.727Z",
+      "requestID": "d2ee58c6-8d79-4405-b0c9-81c045db1d14",
+      "method": "GET",
+      "path": "/work-ledger/events",
+      "statusCode": 200
+    },
+    {
+      "time": "2026-11-24T10:21:56.137Z",
+      "requestID": "ac8ab336-cc2c-4643-b3ee-73d6d109d6ef",
+      "method": "GET",
+      "path": "/file/content",
+      "statusCode": 200
+    }
+  ],
+  "desktopAfterRecovery": {
+    "time": "2026-11-24T10:22:08Z",
+    "title": "OpenCorvus",
+    "connection": "Online",
+    "file": "checklist.txt",
+    "draftLine": "- Draft before trying to reconnect",
+    "editorState": "Unsaved changes"
+  },
+  "finalDiskAndHttp": {
+    "file": "checklist.txt",
+    "statusCode": 200,
+    "content": "Main branch checklist for branch-review\n- Check receipt queue\n"
+  },
+  "databaseCounts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  },
+  "finalShutdownHttp": 200,
+  "finalListenerReleased": true
+}

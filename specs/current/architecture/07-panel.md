@@ -3686,6 +3686,9 @@ already moved elsewhere stays there.
 
 The banner's configuration action opens the canonical Network settings section,
 where the existing server URL and authentication form are immediately available.
+The retry action keeps the current page and workspace mounted. Backend and health
+problems trigger the existing connection monitor. A selected stream problem runs
+the retry already scheduled for the current source and its recovery cursor.
 Navigation retains the configured API address; the saved settings and connection
 owner continue to control recovery.
 

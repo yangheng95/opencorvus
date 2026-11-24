@@ -330,7 +330,7 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
 
 // ── Connection monitor ──
 
-let _monitorTimer: VisibilityInterval | null = null
+let connectionMonitor: { interval: VisibilityInterval; tick: () => Promise<void> } | null = null
 let _monitorGeneration = 0
 
 /**
@@ -368,8 +368,13 @@ export function startConnectionMonitor(
       await onReconnect()
     },
   })
-  _monitorTimer = createVisibilityInterval(tick, intervalMs)
-  _monitorTimer.start()
+  const interval = createVisibilityInterval(tick, intervalMs)
+  connectionMonitor = { interval, tick }
+  interval.start()
+}
+
+export function retryBackendConnection(): Promise<void> | undefined {
+  return connectionMonitor?.tick()
 }
 
 /**
@@ -378,10 +383,8 @@ export function startConnectionMonitor(
  */
 export function stopConnectionMonitor(): void {
   _monitorGeneration += 1
-  if (_monitorTimer !== null) {
-    _monitorTimer.dispose()
-    _monitorTimer = null
-  }
+  connectionMonitor?.interval.dispose()
+  connectionMonitor = null
 }
 
 // ── resolveAutoServer ──

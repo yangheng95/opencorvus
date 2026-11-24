@@ -3,7 +3,7 @@ import { afterEach, expect, spyOn, test } from "bun:test"
 import { HOST_CAPABILITIES } from "../src/services/host-transport"
 import type { HostTransport, StreamHandlers, StreamOpenRequest, TransportRequest } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
-import { startSSE, stopSSE } from "../src/services/sse"
+import { retrySelectedStream, startSSE, stopSSE } from "../src/services/sse"
 import { STREAM_RECONNECT_DELAY_MS } from "../src/services/host-transport"
 import { setBoardStore } from "../src/store/board"
 import { messageStore } from "../src/store/messages"
@@ -193,7 +193,8 @@ for (const source of retrySources) {
       startSSE(source, 12, { directory: "/tmp/stream-lifecycle-project" })
       opens[0]!.handlers.onOpen?.()
       opens[0]!.handlers.onError(new Error("Established stream interrupted"))
-      await waitFor(() => opens.length === 2, STREAM_RECONNECT_DELAY_MS + 1000)
+      retrySelectedStream()
+      await waitFor(() => opens.length === 2)
       opens[1]!.handlers.onClose?.("retry-interrupted")
       await waitFor(() => opens.length === 3, STREAM_RECONNECT_DELAY_MS + 1000)
       opens[2]!.handlers.onOpen?.()
