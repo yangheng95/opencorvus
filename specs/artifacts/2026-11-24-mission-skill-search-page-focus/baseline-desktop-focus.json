@@ -1,0 +1,494 @@
+{
+  "enStart": {
+    "active": {
+      "skill": "handoff-global-01",
+      "tag": "BUTTON",
+      "text": "handoff-global-01ledgeraudit candidate 01 records the receipt.User global"
+    },
+    "filter": "all",
+    "ids": [
+      "handoff-global-01",
+      "handoff-global-02",
+      "handoff-global-03",
+      "handoff-global-04",
+      "handoff-global-05",
+      "handoff-global-06",
+      "handoff-global-07",
+      "handoff-project-01",
+      "handoff-project-02",
+      "handoff-project-03",
+      "handoff-project-04",
+      "handoff-project-05",
+      "handoff-project-06",
+      "handoff-project-07",
+      "handoff-project-08",
+      "handoff-project-09",
+      "handoff-project-10",
+      "handoff-project-11",
+      "handoff-project-12",
+      "handoff-project-13",
+      "handoff-project-14",
+      "handoff-project-15",
+      "handoff-project-16",
+      "handoff-project-17",
+      "handoff-project-18",
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ],
+    "list": [
+      2152,
+      2152,
+      0
+    ],
+    "query": "ledgeraudit",
+    "row": {
+      "bottom": 314.7083435058594,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": 243.1666717529297
+    },
+    "scroll": 0,
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "visible": [
+      "handoff-global-01",
+      "handoff-global-02",
+      "handoff-global-03",
+      "handoff-global-04",
+      "handoff-global-05",
+      "handoff-global-06"
+    ]
+  },
+  "enDown": {
+    "active": {
+      "skill": "handoff-global-01",
+      "tag": "BUTTON",
+      "text": "handoff-global-01ledgeraudit candidate 01 records the receipt.User global"
+    },
+    "filter": "all",
+    "ids": [
+      "handoff-global-01",
+      "handoff-global-02",
+      "handoff-global-03",
+      "handoff-global-04",
+      "handoff-global-05",
+      "handoff-global-06",
+      "handoff-global-07",
+      "handoff-project-01",
+      "handoff-project-02",
+      "handoff-project-03",
+      "handoff-project-04",
+      "handoff-project-05",
+      "handoff-project-06",
+      "handoff-project-07",
+      "handoff-project-08",
+      "handoff-project-09",
+      "handoff-project-10",
+      "handoff-project-11",
+      "handoff-project-12",
+      "handoff-project-13",
+      "handoff-project-14",
+      "handoff-project-15",
+      "handoff-project-16",
+      "handoff-project-17",
+      "handoff-project-18",
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ],
+    "list": [
+      2152,
+      2152,
+      0
+    ],
+    "query": "ledgeraudit",
+    "row": {
+      "bottom": -283.2916717529297,
+      "left": 416.6666870117187,
+      "right": 1151.3333740234375,
+      "top": -354.8333435058594
+    },
+    "scroll": 598,
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "visible": [
+      "handoff-global-07",
+      "handoff-project-01",
+      "handoff-project-02",
+      "handoff-project-03",
+      "handoff-project-04",
+      "handoff-project-05",
+      "handoff-project-06",
+      "handoff-project-07"
+    ]
+  },
+  "enOldDetail": {
+    "active": {
+      "tag": "H3",
+      "text": "handoff-global-01"
+    },
+    "detail": {
+      "description": "ledgeraudit candidate 01 records the receipt.",
+      "invocation": "@mission(\"handoff-global-01\")",
+      "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261124-b533\\opencorvus-zed-review\\config\\mission-skills\\handoff-global-01\\SKILL.md",
+      "name": "handoff-global-01"
+    },
+    "ids": [],
+    "list": [
+      null,
+      null,
+      null
+    ],
+    "row": null,
+    "scroll": 0,
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "visible": []
+  },
+  "zhStart": {
+    "active": {
+      "skill": "handoff-project-21",
+      "tag": "BUTTON",
+      "text": "handoff-project-21ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.项目"
+    },
+    "filter": "project",
+    "ids": [
+      "handoff-project-01",
+      "handoff-project-02",
+      "handoff-project-03",
+      "handoff-project-04",
+      "handoff-project-05",
+      "handoff-project-06",
+      "handoff-project-07",
+      "handoff-project-08",
+      "handoff-project-09",
+      "handoff-project-10",
+      "handoff-project-11",
+      "handoff-project-12",
+      "handoff-project-13",
+      "handoff-project-14",
+      "handoff-project-15",
+      "handoff-project-16",
+      "handoff-project-17",
+      "handoff-project-18",
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ],
+    "list": [
+      2588,
+      2588,
+      0
+    ],
+    "query": "ledgeraudit",
+    "row": {
+      "bottom": 553.0937805175781,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 412.2291870117187
+    },
+    "scroll": 2424,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ]
+  },
+  "zhUp": {
+    "active": {
+      "skill": "handoff-project-21",
+      "tag": "BUTTON",
+      "text": "handoff-project-21ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.项目"
+    },
+    "filter": "project",
+    "ids": [
+      "handoff-project-01",
+      "handoff-project-02",
+      "handoff-project-03",
+      "handoff-project-04",
+      "handoff-project-05",
+      "handoff-project-06",
+      "handoff-project-07",
+      "handoff-project-08",
+      "handoff-project-09",
+      "handoff-project-10",
+      "handoff-project-11",
+      "handoff-project-12",
+      "handoff-project-13",
+      "handoff-project-14",
+      "handoff-project-15",
+      "handoff-project-16",
+      "handoff-project-17",
+      "handoff-project-18",
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ],
+    "list": [
+      2588,
+      2588,
+      0
+    ],
+    "query": "ledgeraudit",
+    "row": {
+      "bottom": 1132.4270935058594,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 991.5625
+    },
+    "scroll": 1844.6666259765625,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "handoff-project-14",
+      "handoff-project-15",
+      "handoff-project-16",
+      "handoff-project-17"
+    ]
+  },
+  "zhOldDetail": {
+    "active": {
+      "tag": "H3",
+      "text": "handoff-project-21"
+    },
+    "detail": {
+      "description": "ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+      "invocation": "@mission(\"handoff-project-21\")",
+      "location": "C:\\Users\\Public\\opencorvus-review-20261124-b533\\baseline\\change-review\\.opencorvus\\mission-skills\\handoff-project-21\\SKILL.md",
+      "name": "handoff-project-21"
+    },
+    "ids": [],
+    "list": [
+      null,
+      null,
+      null
+    ],
+    "row": null,
+    "scroll": 125.33333587646484,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": []
+  },
+  "zhOverviewKeyboard": {
+    "back": {
+      "bottom": 77.84375381469727,
+      "top": 39.44791793823242
+    },
+    "firstAction": {
+      "bottom": 351.2500228881836,
+      "top": 312.85418701171875
+    },
+    "heading": {
+      "bottom": 163.4375,
+      "top": 129.84375
+    },
+    "pageHeading": null,
+    "scroll": 125.33333587646484,
+    "viewport": {
+      "bottom": 720,
+      "top": 57.59375
+    }
+  },
+  "zhReturn": {
+    "active": {
+      "skill": "handoff-project-21",
+      "tag": "BUTTON",
+      "text": "handoff-project-21ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.项目"
+    },
+    "filter": "project",
+    "ids": [
+      "handoff-project-01",
+      "handoff-project-02",
+      "handoff-project-03",
+      "handoff-project-04",
+      "handoff-project-05",
+      "handoff-project-06",
+      "handoff-project-07",
+      "handoff-project-08",
+      "handoff-project-09",
+      "handoff-project-10",
+      "handoff-project-11",
+      "handoff-project-12",
+      "handoff-project-13",
+      "handoff-project-14",
+      "handoff-project-15",
+      "handoff-project-16",
+      "handoff-project-17",
+      "handoff-project-18",
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ],
+    "list": [
+      2588,
+      2588,
+      0
+    ],
+    "query": "ledgeraudit",
+    "row": {
+      "bottom": 553.0937805175781,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 412.2291870117187
+    },
+    "scroll": 2424,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ]
+  },
+  "zhMouseDetail": {
+    "active": {
+      "tag": "H3",
+      "text": "handoff-project-20"
+    },
+    "detail": {
+      "description": "ledgeraudit candidate 20 records the receipt.",
+      "invocation": "@mission(\"handoff-project-20\")",
+      "location": "C:\\Users\\Public\\opencorvus-review-20261124-b533\\baseline\\change-review\\.opencorvus\\mission-skills\\handoff-project-20\\SKILL.md",
+      "name": "handoff-project-20"
+    },
+    "ids": [],
+    "list": [
+      null,
+      null,
+      null
+    ],
+    "row": null,
+    "scroll": 96.66666412353516,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": []
+  },
+  "zhOverviewMouse": {
+    "back": {
+      "bottom": 106.51042175292967,
+      "top": 68.11458587646484
+    },
+    "firstAction": {
+      "bottom": 351.1250228881836,
+      "top": 312.72918701171875
+    },
+    "heading": {
+      "bottom": 192.1041717529297,
+      "top": 158.5104217529297
+    },
+    "pageHeading": null,
+    "scroll": 96.66666412353516,
+    "viewport": {
+      "bottom": 720,
+      "top": 57.59375
+    }
+  },
+  "zhOverviewMouseShort": {
+    "back": {
+      "bottom": 106.51042175292967,
+      "top": 68.11458587646484
+    },
+    "firstAction": {
+      "bottom": 351.1250228881836,
+      "top": 312.72918701171875
+    },
+    "heading": {
+      "bottom": 192.1041717529297,
+      "top": 158.5104217529297
+    },
+    "pageHeading": {
+      "bottom": 42.52083456516266,
+      "top": -0.6770833730697632
+    },
+    "scroll": 96.66666412353516,
+    "viewport": {
+      "bottom": 720,
+      "top": 57.59375
+    }
+  },
+  "zhMouseDetailLong": {
+    "active": {
+      "tag": "H3",
+      "text": "handoff-project-21"
+    },
+    "detail": {
+      "description": "ledgeraudit candidate 21 records the receipt, aisle and source manifest, followed by the assigned reader and the sign-off for the evening handoff.",
+      "invocation": "@mission(\"handoff-project-21\")",
+      "location": "C:\\Users\\Public\\opencorvus-review-20261124-b533\\baseline\\change-review\\.opencorvus\\mission-skills\\handoff-project-21\\SKILL.md",
+      "name": "handoff-project-21"
+    },
+    "ids": [],
+    "list": [
+      null,
+      null,
+      null
+    ],
+    "row": null,
+    "scroll": 125.33333587646484,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": []
+  },
+  "zhOverviewMouseLong": {
+    "back": {
+      "bottom": 77.84375381469727,
+      "top": 39.44791793823242
+    },
+    "firstAction": {
+      "bottom": 351.2500228881836,
+      "top": 312.85418701171875
+    },
+    "heading": {
+      "bottom": 163.4375,
+      "top": 129.84375
+    },
+    "pageHeading": {
+      "bottom": 13.854167938232422,
+      "top": -29.34375
+    },
+    "scroll": 125.33333587646484,
+    "viewport": {
+      "bottom": 720,
+      "top": 57.59375
+    }
+  }
+}
