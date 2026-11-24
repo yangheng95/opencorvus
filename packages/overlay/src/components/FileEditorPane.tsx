@@ -3,9 +3,10 @@ import { base64ToUint8 } from "@opencorvus-ai/transport-protocol"
 import { ApiError, apiJson, apiRequest, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
   closeFileEditor,
-  fileEditorCheckoutRevision,
+  fileEditorDiskChangeRevision,
   fileEditorRevealRevision,
   fileEditorReserved,
+  observeFileEditorDiskChange,
   registerFileEditorBeforeNavigate,
   requestFileExplorerFolder,
   returnToFileDocument,
@@ -216,7 +217,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
   const observationKey = createMemo(() => {
     const file = contentTarget()
     if (!file || file.sourceAbsolutePath) return null
-    const checkoutRevision = fileEditorCheckoutRevision()
+    const diskChangeRevision = fileEditorDiskChangeRevision()
     const source = currentConversationFileChangeSource()
     const relevantInputs = source.directory === file.directory ? source.inputs : []
     const matchesPath = (path: string) => {
@@ -232,7 +233,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       )
       return affected ? [JSON.stringify([tool.sessionID, tool.messageID, tool.id])] : []
     })
-    return checkoutRevision || identities.length ? JSON.stringify([checkoutRevision, [...new Set(identities)].sort()]) : null
+    return diskChangeRevision || identities.length ? JSON.stringify([diskChangeRevision, [...new Set(identities)].sort()]) : null
   })
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
@@ -727,6 +728,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     isDirty: dirty,
     getRevision: () => draftRevision,
     isBusy,
+    recheckAfterReconnect: () => reload("reconnect"),
   })
   onCleanup(() => {
     revealPreview.cancel()
@@ -740,23 +742,31 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     finishLeaveDecision(false)
   })
 
-  const reload = async (): Promise<void> => {
+  async function reload(reason: "explicit" | "reconnect" = "explicit"): Promise<void> {
     const file = target()
-    if (!file || fileEditorReserved() || isBusy()) return
+    const reconnect = reason === "reconnect"
+    if (!file || fileEditorReserved() || isBusy() || (reconnect && file.sourceAbsolutePath)) return
     const generation = ++reloadGeneration
     const authority = captureApiAuthority()
-    const approvedRevision = await decideBeforeNavigate("reload")
+    const approvedRevision = reconnect ? draftRevision : await decideBeforeNavigate("reload")
     if (approvedRevision === null || approvedRevision !== draftRevision || fileEditorReserved()) return
     if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
     const requestedDraftRevision = draftRevision
     const observed = observationKey()
     setReloading(true)
-    setError(null)
+    if (!reconnect) setError(null)
     try {
       const next = await readFileContent(file, authority)
       if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
-      if (draftRevision !== requestedDraftRevision) {
-        setError({ messageKey: "file_editor.reload_edited" })
+      if (reconnect) {
+        const baseline = savedBaseline()
+        if (baseline && isEditableFileSnapshot(next) && next.revision === baseline.revision && next.resourceID === baseline.resourceID) {
+          return
+        }
+      }
+      if (draftRevision !== requestedDraftRevision || (reconnect && dirty())) {
+        if (reconnect) observeFileEditorDiskChange(file.directory)
+        else setError({ messageKey: "file_editor.reload_edited" })
         return
       }
       setLoadFailure(null)

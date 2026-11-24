@@ -1,0 +1,83 @@
+{
+  "offline": {
+    "oldPID": 23716,
+    "listenerReleased": true,
+    "original": "Main branch checklist for branch-review\n- Check receipt queue\n",
+    "offlineWrite": "Checklist changed while offline\n- Verify journal import\n",
+    "time": "2026-11-24T10:07:32.1286489+00:00"
+  },
+  "restartedPID": 27024,
+  "reopenedNotificationStreams": [
+    {
+      "method": "GET",
+      "path": "/work-ledger/events",
+      "requestID": "ce29ee1d-49ad-4c09-8d9a-1006667ccc0f",
+      "statusCode": 200,
+      "time": "2026-11-24T10:07:49.732Z"
+    },
+    {
+      "method": "GET",
+      "path": "/work-ledger/events",
+      "requestID": "b7ed7d6f-d1f7-49a3-971a-af84a43af446",
+      "statusCode": 200,
+      "time": "2026-11-24T10:07:49.734Z"
+    },
+    {
+      "method": "GET",
+      "path": "/work-ledger/events",
+      "requestID": "af6f9295-2a4d-4429-97e5-d8b0c89d53ea",
+      "statusCode": 200,
+      "time": "2026-11-24T10:07:49.761Z"
+    }
+  ],
+  "automaticFileReads": [
+    {
+      "method": "GET",
+      "path": "/file/content",
+      "requestID": "9c05d4e4-a074-4df1-8323-6ffe94ed489b",
+      "statusCode": 200,
+      "time": "2026-11-24T10:07:50.040Z"
+    },
+    {
+      "method": "GET",
+      "path": "/file/content",
+      "requestID": "cbf560f0-33b2-4e1c-9370-7c1f5f624506",
+      "statusCode": 200,
+      "time": "2026-11-24T10:07:50.589Z"
+    },
+    {
+      "method": "GET",
+      "path": "/file/content",
+      "requestID": "8974de73-9fd6-4263-bc34-7be1aff7857d",
+      "statusCode": 200,
+      "time": "2026-11-24T10:07:51.172Z"
+    }
+  ],
+  "manualCompareRead": {
+    "method": "GET",
+    "path": "/file/content",
+    "requestID": "bddd8979-7917-40e8-804b-44aea30924f4",
+    "statusCode": 200,
+    "time": "2026-11-24T10:08:08.525Z"
+  },
+  "finalDiskAndHttp": [
+    {
+      "project": "branch-review",
+      "path": "checklist.txt",
+      "content": "Checklist changed while offline\n- Verify journal import\n",
+      "http": 200
+    },
+    {
+      "project": "control-review",
+      "path": "checklist.txt",
+      "content": "Main branch checklist for control-review\n- Check receipt queue\n",
+      "http": 200
+    }
+  ],
+  "databaseCounts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  }
+}

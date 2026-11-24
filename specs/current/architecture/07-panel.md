@@ -1553,6 +1553,10 @@ and an open project file. Clean content is read again from the existing file
 endpoint. The editor keeps unsaved text and its editing base, and offers the
 ordinary disk comparison or reload action. A file opened from an explicit
 external source keeps its own reader.
+After rejoining the notification stream, the editor checks the open project file
+once against the disk snapshot. A changed clean file accepts that content. A
+changed file with edits keeps the original editing base and draft and shows the
+disk comparison action. An unchanged editable snapshot keeps the existing view.
 
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of

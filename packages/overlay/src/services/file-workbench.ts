@@ -149,12 +149,13 @@ const [selectedFileTarget, setSelectedFileTarget] = createSignal<FileEditorTarge
 const [fileWorkbenchOpen, setFileWorkbenchOpen] = createSignal(false)
 const [fileWorkbenchRevision, setFileWorkbenchRevision] = createSignal(0)
 const [fileEditorRevealRevision, setFileEditorRevealRevision] = createSignal(0)
-const [fileEditorCheckoutRevision, setFileEditorCheckoutRevision] = createSignal(0)
+const [fileEditorDiskChangeRevision, setFileEditorDiskChangeRevision] = createSignal(0)
 export interface FileEditorNavigationOwner {
   confirmLeave: () => Promise<number | null>
   getRevision: () => number
   isBusy: () => boolean
   isDirty: () => boolean
+  recheckAfterReconnect?: () => Promise<void>
 }
 export interface FileEditorCommitBoundary {
   isCurrent: () => boolean
@@ -196,7 +197,7 @@ export {
   fileWorkbenchOpen,
   fileWorkbenchRevision,
   fileEditorRevealRevision,
-  fileEditorCheckoutRevision,
+  fileEditorDiskChangeRevision,
 }
 
 export function bumpFileWorkbenchRevision(): void {
@@ -205,13 +206,21 @@ export function bumpFileWorkbenchRevision(): void {
 
 export function observeFileWorkbenchCheckout(directory: string): void {
   const key = projectDirectoryKey(directory)
-  const target = selectedFileTarget()
   batch(() => {
     if (key === projectDirectoryKey(activeProjectDirectory())) bumpFileWorkbenchRevision()
-    if (target && !target.sourceAbsolutePath && key === projectDirectoryKey(target.directory)) {
-      setFileEditorCheckoutRevision((current) => current + 1)
-    }
+    observeFileEditorDiskChange(directory)
   })
+}
+
+export function observeFileEditorDiskChange(directory: string): void {
+  const target = selectedFileTarget()
+  if (target && !target.sourceAbsolutePath && projectDirectoryKey(directory) === projectDirectoryKey(target.directory)) {
+    setFileEditorDiskChangeRevision((current) => current + 1)
+  }
+}
+
+export function recheckFileEditorAfterReconnect(): Promise<void> | undefined {
+  return fileEditorOwner()?.recheckAfterReconnect?.()
 }
 
 function joinWorkbenchPath(parent: string, child: string, directory: string): string {

@@ -1154,6 +1154,9 @@ The existing project branch notification uses this stream with the exact checkou
 directory and sequence zero. It invalidates the file workbench for that checkout.
 The VCS branch owner observes the result of a successful switch through the same
 refresh operation used by the native HEAD watcher.
+The stream's connected frame also asks the current file editor owner to check
+its project file on disk. The check uses the same file reader and target and
+connection ownership as a manual reload.
 Archive actions show their observed committed result with the shared inline
 Feedback component. Subsequent list-read errors retain that success alongside
 the read error; source/query replacement retires the feedback. Its action key

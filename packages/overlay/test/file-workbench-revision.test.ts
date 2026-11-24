@@ -4,13 +4,14 @@ import { __setHostTransportForTest } from "../src/services/host-transport-runtim
 import {
   closeFileEditor,
   createFileItem,
-  fileEditorCheckoutRevision,
+  fileEditorDiskChangeRevision,
   fileEditorRevealRevision,
   fileWorkbenchRevision,
   observeFileWorkbenchCheckout,
   openFileEditor,
   openFileReference,
   openSourceFileEditor,
+  recheckFileEditorAfterReconnect,
   registerFileEditorBeforeNavigate,
   returnToFileDocument,
   selectedFileTarget,
@@ -24,12 +25,33 @@ afterEach(async () => {
 test("a checkout notification refreshes the current file at the canonical project directory", async () => {
   const directory = "C:/Review/Branch"
   await openFileEditor("checklist.txt", { directory })
-  const before = fileEditorCheckoutRevision()
+  const before = fileEditorDiskChangeRevision()
   observeFileWorkbenchCheckout("c:\\REVIEW\\BRANCH")
-  expect({ target: selectedFileTarget(), revision: fileEditorCheckoutRevision() }).toEqual({
+  expect({ target: selectedFileTarget(), revision: fileEditorDiskChangeRevision() }).toEqual({
     target: { directory, path: "checklist.txt" },
     revision: before + 1,
   })
+})
+
+test("reconnect rechecks the exact file belonging to the current editor owner", async () => {
+  const directory = "/review-project"
+  await openFileEditor("notes.txt", { directory })
+  const checks: ReturnType<typeof selectedFileTarget>[] = []
+  const release = registerFileEditorBeforeNavigate({
+    confirmLeave: async () => null,
+    getRevision: () => 4,
+    isBusy: () => false,
+    isDirty: () => true,
+    async recheckAfterReconnect() {
+      checks.push(selectedFileTarget())
+    },
+  })
+  try {
+    await recheckFileEditorAfterReconnect()
+    expect(checks).toEqual([{ directory, path: "notes.txt" }])
+  } finally {
+    release()
+  }
 })
 
 test.each([
