@@ -1159,6 +1159,12 @@ status on this stream when working-tree monitoring supplies them. They carry the
 checkout directory and sequence zero. The open Environment or Git action panel
 reuses the same file-change refresh owner as editor writes. Git metadata paths
 retain the branch owner's separate read and notification behavior.
+For an opted-in Git checkout, the passive Git status read acquires the same
+per-project file watcher and branch observation used by runtime startup. Native
+callbacks retain the checkout's project identity even before task execution is
+initialized. Status reads keep their identity scope and their independent Git
+result if observation initialization fails. Both entry points reuse the current
+instance disposal and watcher error handling.
 The stream's connected frame also asks the current file editor owner to check
 its project file on disk. The check uses the same file reader and target and
 connection ownership as a manual reload.

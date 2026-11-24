@@ -15,6 +15,7 @@ import { ProjectInstanceContext } from "./instance-context"
 import { Project } from "./project"
 import { Filesystem } from "@/util/filesystem"
 import { FileWatcher } from "@/file/watcher"
+import { Flag } from "@/flag/flag"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { ProjectGitLock } from "@/worktree/git-lock"
 import { VcsBranchRefreshOwner } from "./vcs-branch-refresh"
@@ -734,6 +735,17 @@ export namespace Vcs {
     const initialized = Project.isGitRepo(currentProject().directory)
     if (!initialized) {
       return parse("", { initialized: false, hasRemote: false })
+    }
+    if (Flag.OPENCORVUS_EXPERIMENTAL_FILEWATCHER && !Flag.OPENCORVUS_EXPERIMENTAL_DISABLE_FILEWATCHER) {
+      try {
+        await init()
+        await FileWatcher.init()
+      } catch (error) {
+        log.warn("could not start worktree monitoring for Git status", {
+          directory: currentProject().directory,
+          error: error instanceof Error ? error.message : String(error),
+        })
+      }
     }
     // Suppress branch when no commits exist (unborn HEAD). git rev-parse
     // --abbrev-ref HEAD returns the configured default (e.g. "main") even

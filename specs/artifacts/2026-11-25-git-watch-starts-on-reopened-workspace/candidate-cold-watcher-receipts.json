@@ -1,0 +1,187 @@
+{
+  "rendererAsset": "main-EXy72qO_.js",
+  "browserUI": "http://127.0.0.1:41790/ui/",
+  "source": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-iteration-b613-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:41790",
+    "pid": 24324
+  },
+  "reopenedSaved": {
+    "sessionID": "ses_hmukY0F4XnovIMV5snyW",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+    "projectID": "prj_hg1OSrLKAzRXwQsHWrZ8",
+    "title": "B613 reopened Git review",
+    "requestID": "4d1de59e-548d-48e3-96b8-d8674e747aba"
+  },
+  "watcherBackend": "windows",
+  "fullRuntimeStartupCount": 0,
+  "externalFile": {
+    "started": "2026-11-24T21:17:29.0910385Z",
+    "checkout": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+    "file": "handoff.txt",
+    "status": [
+      " M handoff.txt"
+    ]
+  },
+  "externalBranch": {
+    "started": "2026-11-24T21:17:44.5485052Z",
+    "finished": "2026-11-24T21:17:44.6212207Z",
+    "checkout": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+    "branch": "branch-observer",
+    "gitStatus": [
+      " M handoff.txt"
+    ]
+  },
+  "nativeAndProjectedEvents": [
+    {
+      "at": "2026-11-24T21:16:58.479Z",
+      "source": "/global/event",
+      "status": 200,
+      "kind": "ready"
+    },
+    {
+      "at": "2026-11-24T21:16:58.482Z",
+      "source": "/work-ledger/events",
+      "status": 200,
+      "kind": "ready"
+    },
+    {
+      "at": "2026-11-24T21:17:29.105Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:14fbf042-9c84-464c-b6cb-b8693184ed89",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:17:29.107Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:17:29.253Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:d9cb73f4-9e8a-4d55-851c-419f089fa388",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:17:29.254Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:17:44.733Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "vcs.branch.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:17:44.733Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:ddde0847-6da7-4b9f-b7d9-4f6fdebcb25a",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review\\.git\\HEAD",
+            "event": "change"
+          }
+        }
+      }
+    }
+  ],
+  "actualGitReadReceipts": [
+    {
+      "at": "2026-11-24T21:17:12.59Z",
+      "requestID": "e9aa9209-3cb0-4b53-a113-c0f585afef04",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:17:16.692Z",
+      "requestID": "d1adf8aa-ef2d-4f1e-85d8-8d122b2279af",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:17:30.062Z",
+      "requestID": "7a794307-957d-4e87-9655-ca04a153e81b",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:17:30.969Z",
+      "requestID": "2befd2bc-939e-499f-ad11-7aa6dbcce1e5",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:17:45.856Z",
+      "requestID": "09bb2d96-780d-4506-b8f6-18dd0e2479a9",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:18:31.146Z",
+      "requestID": "0aa62c46-1dd6-449c-8e13-95e7f6771280",
+      "status": 200
+    }
+  ],
+  "restoredSessionRead": {
+    "messages": null,
+    "projectID": "prj_hg1OSrLKAzRXwQsHWrZ8",
+    "id": "ses_hmukY0F4XnovIMV5snyW",
+    "requestID": "3b47afee-1a07-4c83-8fd9-630c916ecf49"
+  },
+  "finalGit": {
+    "gitStatus": [
+      " M handoff.txt"
+    ],
+    "result": {
+      "initialized": true,
+      "branch": "branch-observer",
+      "commit": "7ce6aa3",
+      "clean": false,
+      "dirty": true,
+      "staged": 0,
+      "modified": 1,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    },
+    "commit": "7ce6aa35b501afab30864755d1d3f11149e9f6da",
+    "requestID": "0aa62c46-1dd6-449c-8e13-95e7f6771280"
+  },
+  "protectedGitignoreBytesUnchanged": true,
+  "protectedGitignoreReadOnly": true
+}

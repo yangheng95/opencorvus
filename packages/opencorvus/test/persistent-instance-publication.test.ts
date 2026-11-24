@@ -18,7 +18,7 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-test("a persistent watcher callback owns its complete database subscriber and GlobalBus publication", async () => {
+test.each(["runtime", "identity"] as const)("a persistent watcher callback owns database subscribers and publication with %s admission", async (admission) => {
   await using project = await memoryProject()
   const globalEvents: Array<{ directory?: string; payload: { type?: string } }> = []
   const onGlobalEvent = (event: { directory?: string; payload: { type?: string } }) => globalEvents.push(event)
@@ -27,7 +27,8 @@ test("a persistent watcher callback owns its complete database subscriber and Gl
   let publication!: Promise<void>
   const subscriberProjects: string[] = []
   try {
-    await Instance.provide({
+    const provide = admission === "identity" ? Instance.provideProjectIdentity : Instance.provide
+    await provide({
       directory: project.path,
       fn: async () => {
         const projectID = Instance.project.id

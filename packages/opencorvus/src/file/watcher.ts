@@ -95,6 +95,7 @@ export namespace FileWatcher {
       return Database.runOutsideContext(async () => {
         const active = await lifecycle.reenter({
           directory,
+          admission: "identity",
           fn: async () => {
             await callback()
             return true

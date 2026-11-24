@@ -1,7 +1,7 @@
 import { Context } from "../util/context"
 
 export interface InstanceLifecycleCapabilities {
-  reenter<R>(input: { directory: string; fn: () => R }): Promise<Awaited<R> | undefined>
+  reenter<R>(input: { directory: string; admission?: "identity" | "runtime"; fn: () => R }): Promise<Awaited<R> | undefined>
   registerHealthCheck(label: string, check: () => void): void
   runAsActivity<R>(fn: () => Promise<R>): Promise<R>
   runOutside<R>(fn: () => R): R
