@@ -53,6 +53,44 @@ async function request(directory: string, route: string, method = "GET") {
 }
 
 describe("cold passive workspace metadata", () => {
+  test("the active Expert Squad projects its installed identity when Git rule files cannot be written", async () => {
+    await using project = await memoryProject("passive-catalog-protected-rules")
+    await fs.mkdir(path.join(project.path, ".gitignore"))
+    await writeExpertSquadPackage({
+      directory: path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "passive", "protected-review"),
+      definition: definition("protected-review"),
+    })
+    const configPath = ConfigPaths.projectFile(project.path)
+    await fs.mkdir(path.dirname(configPath), { recursive: true })
+    await fs.writeFile(configPath, JSON.stringify({ prompt_profile: { active: "protected-review" } }))
+
+    const opened = await request(project.path, "/project/current")
+    expect(opened.status).toBe(200)
+    const projectIdentity = (await opened.json()) as { id: string; worktree: string }
+    expect(projectIdentity.worktree).toBe(project.path)
+
+    const active = {
+      effective: "protected-review",
+      project: "protected-review",
+      package_revision: { scope: "project", project_id: projectIdentity.id, namespace: "passive", id: "protected-review" },
+    }
+    const catalog = await request(project.path, "/expert-squad/catalog")
+    expect({ status: catalog.status, body: await catalog.json() }).toMatchObject({
+      status: 200,
+      body: { active, scope: { kind: "project", directory: project.path } },
+    })
+
+    const session = await Instance.provideProjectIdentity({
+      directory: project.path,
+      fn: () => Session.create({ kind: "assistant" }),
+    })
+    const sessionCatalog = await request(project.path, `/expert-squad/catalog?sessionID=${session.id}`)
+    expect({ status: sessionCatalog.status, body: await sessionCatalog.json() }).toMatchObject({
+      status: 200,
+      body: { active, scope: { kind: "session", directory: project.path, sessionID: session.id } },
+    })
+  }, 60_000)
+
   test("real SDK packages, scoped skill files and canonical memory stay readable with missing current model", async () => {
     await using project = await memoryProject("passive-metadata-owner")
     const saved = await Instance.provide({

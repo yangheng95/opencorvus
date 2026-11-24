@@ -1,0 +1,38 @@
+[
+  {
+    "route": "/expert-squad/catalog",
+    "status": 200,
+    "active": "dynamic",
+    "scope": "project",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\final\\protected-ignore",
+    "sessionID": null,
+    "name": null,
+    "request": [
+      "40059e65-4d96-43e7-ac39-b57a7bbe09e2"
+    ]
+  },
+  {
+    "route": "/expert-squad/catalog?sessionID=ses_h2E0RWGNbSKkCAvbq68p",
+    "status": 200,
+    "active": "dynamic",
+    "scope": "session",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\final\\protected-ignore",
+    "sessionID": "ses_h2E0RWGNbSKkCAvbq68p",
+    "name": null,
+    "request": [
+      "a2edeffc-aa5a-4e3d-910f-fda758d5bd19"
+    ]
+  },
+  {
+    "route": "/session/ses_h2E0RWGNbSKkCAvbq68p/config",
+    "status": 500,
+    "active": null,
+    "scope": null,
+    "directory": null,
+    "sessionID": null,
+    "name": "UnknownError",
+    "request": [
+      "c8d074d1-fbd2-4efe-95a9-859e81fa0765"
+    ]
+  }
+]

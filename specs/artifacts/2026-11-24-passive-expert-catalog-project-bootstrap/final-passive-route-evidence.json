@@ -1,0 +1,56 @@
+{
+  "passive": [
+    {
+      "route": "/project/current",
+      "status": 200,
+      "request": [
+        "609c2576-1fc4-446d-ae42-9445d3cb3c42"
+      ]
+    },
+    {
+      "route": "/config",
+      "status": 200,
+      "request": [
+        "a89b4c5f-733a-41f0-bcbf-28b7cc762d4d"
+      ]
+    },
+    {
+      "route": "/expert-squad/search",
+      "status": 200,
+      "request": [
+        "4277703b-a3ca-4d13-a8cb-793bc1328115"
+      ]
+    },
+    {
+      "route": "/mission-skill/catalog",
+      "status": 200,
+      "request": [
+        "c5e8cb20-89b2-4cb6-b59c-3e2be39f01c1"
+      ]
+    },
+    {
+      "route": "/skill/mounts?sessionID=ses_h2E0RWGNbSKkCAvbq68p",
+      "status": 200,
+      "request": [
+        "c14e1a9d-4b66-4b8c-9ec6-be917e283bef"
+      ]
+    },
+    {
+      "route": "/session/ses_h2E0RWGNbSKkCAvbq68p/message",
+      "status": 200,
+      "request": [
+        "86af2d85-2cbe-4b65-b9b0-cd56e5497020"
+      ]
+    }
+  ],
+  "physical": {
+    "trackedReadOnly": true,
+    "ignore": "# Existing team ignore policy\nlocal-build/\n",
+    "attributes": "# Existing team Git attributes\n*.txt text eol=lf\n"
+  },
+  "runtimeReadiness": {
+    "requestID": "c8d074d1-fbd2-4efe-95a9-859e81fa0765",
+    "code": "EPERM",
+    "status": 500
+  }
+}

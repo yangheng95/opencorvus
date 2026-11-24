@@ -1,0 +1,35 @@
+[
+  {
+    "route": "/expert-squad/catalog",
+    "status": 200,
+    "active": "dynamic",
+    "scope": "project",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b553\\candidate\\protected-ignore",
+    "name": null,
+    "request": [
+      "18f59eba-f5fe-448e-a781-ce97d45da8ff"
+    ]
+  },
+  {
+    "route": "/expert-squad/catalog?sessionID=ses_h6CyUGRDPc0tvor0N3GF",
+    "status": 500,
+    "active": null,
+    "scope": null,
+    "directory": null,
+    "name": "UnknownError",
+    "request": [
+      "ec80266b-3a22-47b3-9427-f195c26e44fd"
+    ]
+  },
+  {
+    "route": "/session/ses_h6CyUGRDPc0tvor0N3GF/config",
+    "status": 500,
+    "active": null,
+    "scope": null,
+    "directory": null,
+    "name": "UnknownError",
+    "request": [
+      "53df7933-7b00-4716-b3bb-c4beba4ae544"
+    ]
+  }
+]

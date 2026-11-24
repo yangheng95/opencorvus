@@ -3359,7 +3359,7 @@ export namespace PromptProfileResolver {
     const [inventory, defaultSkills] = await Promise.all([
       catalogInventory(projectDirectory),
       input.defaultSkills === undefined
-        ? Instance.provide({ directory: projectDirectory, fn: () => Skill.all() })
+        ? Instance.provideProjectIdentity({ directory: projectDirectory, fn: () => Skill.all() })
         : Promise.resolve(input.defaultSkills),
     ])
     const activePackage = await packageForActiveProfile({
@@ -3373,7 +3373,7 @@ export namespace PromptProfileResolver {
       active: activePackage,
       projectID:
         !activePackage.builtIn && activePackage.pkg.installationScope === "project"
-          ? await Instance.provide({ directory: projectDirectory, fn: () => Instance.project.id })
+          ? await Instance.provideProjectIdentity({ directory: projectDirectory, fn: () => Instance.project.id })
           : null,
       defaultSkills,
       defaultSkillsByName: skillInventoryByName(defaultSkills),

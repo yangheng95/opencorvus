@@ -22,7 +22,7 @@ export namespace EffectiveConfig {
     if (!sessionID) return Config.get()
 
     const projectDirectory = await capabilityProjectDirectory({ sessionID })
-    return Instance.provide({
+    return Instance.provideProjectIdentity({
       directory: projectDirectory,
       fn: () => Config.get(),
     })

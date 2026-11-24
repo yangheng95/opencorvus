@@ -798,6 +798,8 @@ response issues。唯一 problems 数组按数据源记录 request failure 与 c
 也必须投影到同一个反馈面；显式重试沿既有当前 scope loader 合并并发请求，不自动重试提交。
 当前 Expert Squad catalog/page 的投影耦合及有效实体集合保持既定合同；可用的其他类目仍随该快照
 展示。键入 Squad 查询与引用搜索沿现有 bounded server search，不能被描述为全量目录枚举或无网络导航。
+活跃 Expert Squad 目录在选定 Project 的身份上下文中读取同一 Skill 目录和项目安装包归属。
+这两项读取与项目和会话范围的被动目录请求使用同一身份权限；项目执行的 Git 准备由运行入口负责。
 
 随应用分发的唯一内置 Mission Skill 是 `general`。它只在用户精确选择
 `@mission("general")` 后加载，并把用户定义的目标交给既有 native Mission 协议、Mission state 与
