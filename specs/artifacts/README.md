@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [被截断会话标题的提示证据](2026-11-24-conversation-header-clipped-title-tooltip/README.md)
 - [全局查找中的已保存会话标题证据](2026-11-24-palette-full-conversation-search-titles/README.md)
 - [文件搜索刷新中的选区提示和焦点证据](2026-11-24-explorer-search-refresh-keeps-selection-context/README.md)
 - [文件资源管理器翻页的桌面证据](2026-11-24-file-explorer-page-focus/README.md)
