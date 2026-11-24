@@ -768,7 +768,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setEditOwner(null)
     setError(null)
     void loadRuns(id)
-    focusAfterRender(() => detailBackButton)
+    focusAfterRender(() => {
+      const back = detailBackButton
+      if (selectedID() !== id || showForm() || !back?.isConnected) return
+      back.closest(".config-content")?.scrollTo({ top: 0 })
+      return back
+    })
   }
 
   function beginCreate(): void {

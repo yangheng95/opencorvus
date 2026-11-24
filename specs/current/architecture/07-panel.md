@@ -2270,6 +2270,10 @@ current search, status and scope results within the Settings scroll area and
 bring the complete schedule row into view when it fits. Enter opens that
 definition's details, Escape returns to the same search, and native Tab keeps
 the separate row actions reachable.
+Opening a schedule from the list starts the shared Settings scroll area at the
+detail overview and gives focus to its return button after rendering. The
+detail's own history refresh retains the current reading position. Returning
+to the list restores the original schedule row through the current definition ID.
 Pause and Resume validate the definition ID, new revision and requested status
 in the write receipt. An uncertain receipt reads the same definition from the
 current list on the same connection, without replaying the write. The result
