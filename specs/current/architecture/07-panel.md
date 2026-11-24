@@ -2268,12 +2268,12 @@ Conversation-scoped schedules project the exact bound Session's live title and
 directory with the list and update result. The list and search use the same
 projection as the detail and deletion confirmation. Missing live Session data
 retains the actual bound ID and has an explicit presentation state.
-In a nonempty scheduled-task search, the available detail buttons use the
-shared rendered-list navigation. Page Up and Page Down move focus through the
-current search, status and scope results within the Settings scroll area and
-bring the complete schedule row into view when it fits. Enter opens that
-definition's details, Escape returns to the same search, and native Tab keeps
-the separate row actions reachable.
+The scheduled-task search field offers Down and Up to enter the first or last
+available detail button in the full or filtered list. Arrows and page keys move
+through the current search, status and scope results within the Settings scroll
+area and bring the complete schedule row into view when it fits. Enter opens
+that definition's details, Escape returns to the search field with the current
+filters, and native Tab keeps the separate row actions reachable.
 Opening a schedule from the list starts the shared Settings scroll area at the
 detail overview and gives focus to its return button after rendering. The
 detail's own history refresh retains the current reading position. Returning

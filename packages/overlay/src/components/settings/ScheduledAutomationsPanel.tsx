@@ -480,12 +480,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     return problem?.source === "delete-retry" && problem.automationID === id
   }
   const listActionDisabled = (id: string) => loading() || Boolean(busyAction()) || deletionNeedsRetry(id)
-  const canBrowseSearchResults = createMemo(() =>
-    Boolean(searchQuery()) && filteredAutomations().some(({ id }) => !listActionDisabled(id)),
-  )
+  const canBrowseAutomations = createMemo(() => filteredAutomations().some(({ id }) => !listActionDisabled(id)))
   const searchKeyboardHintID = "automations-search-keyboard-hint"
-  const searchNavigation = createSearchResultNavigation(() => {
-    if (!canBrowseSearchResults() || !listElement?.isConnected) return []
+  const automationNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseAutomations() || !listElement?.isConnected) return []
     return Array.from(listElement.querySelectorAll<HTMLButtonElement>("button.automation-list-item:enabled"))
   }, {
     returnToSearch: () => listSearchInput,
@@ -1369,13 +1367,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               value={search()}
               inputRef={(element) => (listSearchInput = element)}
               placeholder={t("automations.search_placeholder")}
-              ariaDescribedBy={canBrowseSearchResults() ? searchKeyboardHintID : undefined}
-              ariaKeyShortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
+              ariaDescribedBy={canBrowseAutomations() ? searchKeyboardHintID : undefined}
+              ariaKeyShortcuts={canBrowseAutomations() ? "ArrowUp ArrowDown" : undefined}
               onValueChange={setSearch}
-              resultFocusTarget={searchNavigation.resultFocusTarget}
+              resultFocusTarget={automationNavigation.resultFocusTarget}
               disabled={Boolean(busyAction())}
             />
-            <Show when={canBrowseSearchResults()}>
+            <Show when={canBrowseAutomations()}>
               <p id={searchKeyboardHintID} class="automations-muted automations-search-hint">
                 {t("automations.search_page_navigation")}
               </p>
@@ -1436,9 +1434,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             customContent
                             data-automation-id={automation.id}
                             data-selected={String(selectedID() === automation.id)}
-                            aria-keyshortcuts={canBrowseSearchResults() && !actionDisabled() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
+                            aria-keyshortcuts={actionDisabled() ? undefined : "ArrowUp ArrowDown PageUp PageDown Escape"}
                             disabled={actionDisabled()}
-                            onKeyDown={searchNavigation.handleResultKeyDown}
+                            onKeyDown={automationNavigation.handleResultKeyDown}
                             onClick={() => selectAutomation(automation.id)}
                           >
                             <Icon name={automation.status === "active" ? "run" : "scheduled"} />
