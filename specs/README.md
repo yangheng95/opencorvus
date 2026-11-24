@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [环境面板跟进项目工作树更新](records/2026-11/2026-11-25-environment-worktree-project-updates.md)
 - [Git 说明生成失败时保留手写正文](records/2026-11/2026-11-25-git-regeneration-retains-authored-subject.md)
 - [提交成功后保留在途编辑的新说明](records/2026-11/2026-11-25-git-commit-retains-newer-message-draft.md)
 - [文件保存后更新已打开的 Git 工作树状态](records/2026-11/2026-11-25-git-working-tree-state-after-file-save.md)
