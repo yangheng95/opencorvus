@@ -6821,6 +6821,9 @@ Settings Archive passes its current search to the existing archived Work Ledger
 reader. Search runs over the complete archive before cursor pagination. The
 effective search trims surrounding whitespace. Query replacement and API
 authority changes immediately retire the previous request, rows and cursor.
+Session updates refresh the archive when their committed change affects archive
+membership or the session belongs to the archive. The work ledger supplies both
+facts from the existing session publication.
 Nonempty input changes use the command palette's Work Ledger search delay;
 the initial read, a connection change and clearing the search read immediately.
 The result count reflects accepted rows and stays hidden while the new query

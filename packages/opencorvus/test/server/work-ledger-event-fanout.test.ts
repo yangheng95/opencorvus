@@ -340,6 +340,7 @@ test("conversation archive and restore announce the exact work record and its cu
         expect(await next("work-ledger.changed", "session.updated")).toMatchObject({
           sessionID: session.id,
           archiveUpdated: true,
+          ...(archived ? { sessionArchived: true } : {}),
           sequence: receipt.time.updated,
         })
         const search = new URLSearchParams({ search: title })
@@ -353,6 +354,56 @@ test("conversation archive and restore announce the exact work record and its cu
     } finally {
       await close()
     }
+  }
+}, 30_000)
+
+test("the public stream distinguishes ordinary renames from renamed archive members", async () => {
+  await using project = await memoryProject("archive-member-title-fanout")
+  const { active, retained } = await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const create = (title: string) => Session.create({
+        kind: "assistant", title, metadata: rightSidebarConversationMetadata("chat"),
+      })
+      const active = await create("Active review")
+      const retained = await create("Archived review")
+      await Session.setArchived({ sessionID: retained.id, time: Date.now() })
+      return { active, retained }
+    },
+  })
+  await Database.awaitEffectIdle(5_000)
+  const { next, close } = await openLedgerEvents()
+  async function rename(sessionID: string, title: string) {
+    const query = new URLSearchParams({ directory: project.path })
+    const response = await Server.App().request(`/coding/chat/session/${sessionID}?${query}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ title }),
+    })
+    expect(response.status).toBe(200)
+    return (await response.json() as { session: Session.Info }).session
+  }
+  try {
+    await next("work-ledger.connected")
+    const activeReceipt = await rename(active.id, "Revised active review")
+    expect(activeReceipt.title).toBe("Revised active review")
+    expect(await next("work-ledger.changed", "session.updated")).toEqual({
+      type: "work-ledger.changed", sourceType: "session.updated", sessionID: active.id,
+      titleChanged: true, sequence: activeReceipt.time.updated,
+    })
+    const retainedReceipt = await rename(retained.id, "Revised archived review")
+    expect(await next("work-ledger.changed", "session.updated")).toEqual({
+      type: "work-ledger.changed", sourceType: "session.updated", sessionID: retained.id,
+      titleChanged: true, sessionArchived: true, sequence: retainedReceipt.time.updated,
+    })
+    const search = new URLSearchParams({ search: "Revised" })
+    const archive = await Server.App().request(`/work-ledger/archive?${search}`)
+    expect(await archive.json()).toMatchObject({
+      rows: [{ id: retained.id, title: retainedReceipt.title, directory: project.path, archived: retainedReceipt.time.archived }],
+      nextCursor: null,
+    })
+  } finally {
+    await close()
   }
 }, 30_000)
 

@@ -41,7 +41,7 @@ import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from
 const ARCHIVE_PAGE_SIZE = 100
 const ARCHIVE_ROW_SELECTOR = "[data-archive-row-key]"
 const ARCHIVE_OPEN_ACTION_SELECTOR = 'button[data-archive-action="open"]:enabled'
-const ARCHIVE_CHANGE_SOURCES = new Set(["session.updated", "session.deleted", "task.updated", "task.archived", "task.deleted", "project.updated"])
+const ARCHIVE_CHANGE_SOURCES = new Set(["session.deleted", "task.updated", "task.archived", "task.deleted", "project.updated"])
 
 type ArchiveRead = "initial" | "append" | "refresh"
 
@@ -595,8 +595,10 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   ))
   createEffect(on([loading, busyID], scheduleArchiveRefresh))
   const unsubscribe = subscribeWorkLedgerChanges((event) => {
-    if (event.type !== "work-ledger.connected" &&
-      !(event.type === "work-ledger.changed" && ARCHIVE_CHANGE_SOURCES.has(event.sourceType))) return
+    const affectsArchive = event.type === "work-ledger.changed" && (event.sourceType === "session.updated"
+      ? event.archiveUpdated || event.sessionArchived
+      : ARCHIVE_CHANGE_SOURCES.has(event.sourceType))
+    if (event.type !== "work-ledger.connected" && !affectsArchive) return
     refreshRequested = true
     deletionConfirmation?.observe(event)
     scheduleArchiveRefresh()

@@ -41357,6 +41357,7 @@ export type WorkLedgerEventsResponses = {
         directory?: string
         projectID?: string
         sequence: number
+        sessionArchived?: true
         sessionID?: string
         sourceType: string
         taskID?: string | null

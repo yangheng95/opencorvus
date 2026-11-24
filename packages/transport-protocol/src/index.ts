@@ -517,6 +517,7 @@ export const WorkLedgerChangedEvent = z
     sessionID: z.string().optional(),
     titleChanged: z.literal(true).optional(),
     archiveUpdated: z.literal(true).optional(),
+    sessionArchived: z.literal(true).optional(),
     taskID: z.string().nullable().optional(),
     sequence: z.number(),
   })

@@ -1,0 +1,112 @@
+{
+  "observation": "An already-connected observer stayed on the archive; the server received real changes to the same fixture.",
+  "browserUI": "http://127.0.0.1:41783/ui/",
+  "asset": "main-MRIcuHmR.js",
+  "project": "prj_hzOoMbTnQJc7h2HY5yL8",
+  "publicWorkLedgerEvents": [
+    {
+      "receivedAt": "2026-11-24T20:20:30.587Z",
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hFjsS4xqhtvaQXMq3fJs",
+      "titleChanged": true,
+      "sequence": 1795551630566
+    },
+    {
+      "receivedAt": "2026-11-24T20:21:12.6Z",
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hokSgOSMoZtBUG9zHcun",
+      "titleChanged": true,
+      "sessionArchived": true,
+      "sequence": 1795551672584
+    },
+    {
+      "receivedAt": "2026-11-24T20:23:54.808Z",
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_hokSgOSMoZtBUG9zHcun",
+      "archiveUpdated": true,
+      "sequence": 1795551834776
+    }
+  ],
+  "observerArchiveReadResponses": [
+    {
+      "at": "2026-11-24T20:20:08.511Z",
+      "event": "upstream-response",
+      "id": 48,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "51f58ef2-8955-40ae-9311-bbab06d0aa91"
+    },
+    {
+      "at": "2026-11-24T20:20:56.428Z",
+      "event": "upstream-response",
+      "id": 79,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "f4e7fa82-26d7-4282-9fe7-f1644cd759cb"
+    },
+    {
+      "at": "2026-11-24T20:20:56.819Z",
+      "event": "upstream-response",
+      "id": 80,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "operations handoff",
+      "actual": "a8c10d85-e31d-470a-8b39-5e38047d2579"
+    },
+    {
+      "at": "2026-11-24T20:21:12.764Z",
+      "event": "upstream-response",
+      "id": 90,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "operations handoff",
+      "actual": "7c9efbfb-4c4c-4d85-b935-fc0425c189ec"
+    },
+    {
+      "at": "2026-11-24T20:23:54.951Z",
+      "event": "upstream-response",
+      "id": 142,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "operations handoff",
+      "actual": "e470e6b2-6221-4960-955a-3a40909372bb"
+    }
+  ],
+  "activeRenameArchiveResponsesBeforeManualReturn": 0,
+  "archivedRename": {
+    "id": "ses_hokSgOSMoZtBUG9zHcun",
+    "title": "B609 archived operations handoff",
+    "archived": 1795551180335,
+    "status": 200,
+    "requestID": "1e8f2659-ab67-444e-848e-07d30f747027"
+  },
+  "restoredSessionRead": {
+    "id": "ses_hokSgOSMoZtBUG9zHcun",
+    "status": 200,
+    "receipt": "59842c0d-fcdd-4c05-876a-df6d21d23238",
+    "archived": null,
+    "title": "B609 archived operations handoff"
+  },
+  "archiveSearchRead": {
+    "matchingRows": 0,
+    "status": 200,
+    "receipt": "632ad49e-afbf-49d9-b8ad-09a0729049b8"
+  },
+  "activeSearchRead": {
+    "status": 200,
+    "receipt": "31618b37-5349-43bd-951b-f13ceefb20c4",
+    "matchingIds": [
+      "ses_hokSgOSMoZtBUG9zHcun"
+    ]
+  }
+}

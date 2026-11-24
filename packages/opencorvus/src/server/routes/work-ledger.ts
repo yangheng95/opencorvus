@@ -91,6 +91,7 @@ function workLedgerSessionChangedEvent(
     sessionID: info.id,
     ...(titleChanged ? { titleChanged: true } : {}),
     ...(archiveUpdated ? { archiveUpdated: true } : {}),
+    ...(sourceType === Session.Event.Updated.type && info.time.archived !== undefined ? { sessionArchived: true } : {}),
     sequence,
   }
 }

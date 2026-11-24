@@ -144744,6 +144744,10 @@
                         "sequence": {
                           "type": "number"
                         },
+                        "sessionArchived": {
+                          "const": true,
+                          "type": "boolean"
+                        },
                         "sessionID": {
                           "type": "string"
                         },
