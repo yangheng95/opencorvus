@@ -1,0 +1,71 @@
+{
+  "loaded": [
+    "advanced",
+    "base",
+    "dynamic",
+    "research-studio",
+    "squad-sdk",
+    "installed-review-01",
+    "installed-review-02",
+    "installed-review-03",
+    "installed-review-04",
+    "installed-review-05",
+    "installed-review-06",
+    "installed-review-07",
+    "installed-review-08",
+    "installed-review-09",
+    "installed-review-10",
+    "installed-review-11",
+    "installed-review-12",
+    "installed-review-13",
+    "installed-review-14",
+    "installed-review-15"
+  ],
+  "continued": [
+    "installed-review-16",
+    "installed-review-17",
+    "installed-review-18",
+    "installed-review-19",
+    "installed-review-20",
+    "installed-review-21",
+    "installed-review-22"
+  ],
+  "effective": "dynamic",
+  "projectDefault": "dynamic",
+  "trackedFiles": 67,
+  "verifiedPackageFiles": 66,
+  "exactDetails": [
+    {
+      "id": "installed-review-07",
+      "label": "Installed Review 07",
+      "namespace": "visual-review",
+      "scope": "project",
+      "version": "2026.11.23.1",
+      "readme": "# Installed Review 07\n\nThis is the owned, inert project package.\n"
+    },
+    {
+      "id": "installed-review-16",
+      "label": "Installed Review 16",
+      "namespace": "visual-review",
+      "scope": "project",
+      "version": "2026.11.23.1",
+      "readme": "# Installed Review 16\n\nThis is the owned, inert project package.\n"
+    },
+    {
+      "id": "installed-review-22",
+      "label": "Installed Review 22",
+      "namespace": "visual-review",
+      "scope": "project",
+      "version": "2026.11.23.1",
+      "readme": "# Installed Review 22\n\nThis is the owned, inert project package.\n"
+    }
+  ],
+  "sqliteQuickCheck": "ok",
+  "counts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  }
+}

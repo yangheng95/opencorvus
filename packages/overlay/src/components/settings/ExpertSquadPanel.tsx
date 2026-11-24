@@ -58,6 +58,7 @@ import { Badge } from "../ui/Badge"
 import { Disclosure } from "../ui/Disclosure"
 import { DropdownMenu } from "../ui/DropdownMenu"
 import { Icon, type IconName } from "../ui/Icon"
+import { createSearchResultNavigation } from "../ui/SearchField"
 import { Tab, TabList, TabPanel, Tabs } from "../ui/Tabs"
 import { SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 import { showAppDialog } from "../../services/app-dialog"
@@ -379,6 +380,10 @@ export default function ExpertSquadPanel() {
   let diagnosticDisclosure: HTMLDetailsElement | undefined
   let diagnosticsMoreButton: HTMLButtonElement | undefined
 
+  const installedNavigation = createSearchResultNavigation(
+    () => Array.from(installedLayout?.querySelectorAll<HTMLButtonElement>('[data-ui="expert-squad-select"]:enabled') ?? []),
+    { pageViewport: (action) => action.closest<HTMLElement>(".config-content") },
+  )
   const currentScope = createMemo(() => expertSquadCatalogScope())
   const currentScopeIdentity = createMemo(() => catalogScopeIdentity(currentScope()))
   onCleanup(() => {
@@ -1705,6 +1710,9 @@ export default function ExpertSquadPanel() {
                         )}
                       </For>
                     </div>
+                    <Show when={filteredSquads().length > 1}>
+                      <p class="settings-search-keyboard-hint">{t("expert_squad.catalog_keyboard_hint")}</p>
+                    </Show>
                   </div>
                   <Show
                     when={filteredSquads().length > 0}
@@ -1751,6 +1759,8 @@ export default function ExpertSquadPanel() {
                               data-ui="expert-squad-select"
                               data-squad-id={squad.id}
                               data-squad-selection-key={selectionKey}
+                              aria-keyshortcuts={filteredSquads().length > 1 ? "ArrowUp ArrowDown PageUp PageDown" : undefined}
+                              onKeyDown={installedNavigation.handleResultKeyDown}
                               onClick={() => openInstalledDetail(selectionKey)}
                             />
                           )

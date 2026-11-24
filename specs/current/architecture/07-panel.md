@@ -6320,6 +6320,10 @@ diagnostic remains available on failure, and retiring the action's scope clears
 its result.
 Installed Expert Squad navigation focuses Back to list while the exact detail
 loads, then returns to the original physical installation row or selected filter.
+Arrow keys and Page Up or Page Down move focus among the current filter's accepted
+rows, using the settings viewport to keep the destination row visible. Opening a
+row is a separate action. The catalog footer remains in the normal Tab order and
+continues the directory on explicit activation.
 Detail tabs wrap within the available width and keep their full labels and
 manual keyboard activation in declaration order.
 The Configuration tab explains the scope returned for the selected installation.

@@ -2258,6 +2258,8 @@ button.release-notes-row:focus-visible {
 }
 
 .expert-squad-catalog-toolbar {
+  flex-wrap: wrap;
+  row-gap: var(--ui-gap-xs);
   margin-bottom: calc(-2px * var(--ui-scale));
 }
 
@@ -2301,6 +2303,11 @@ button.release-notes-row:focus-visible {
   min-height: calc(44px * var(--ui-scale));
   padding: var(--ui-gap-md) var(--ui-gap-lg);
   flex-wrap: wrap;
+  scroll-margin-block: var(--ui-gap-xs);
+}
+
+#configDialog .expert-squad-installed-row.s-row:focus-visible {
+  outline-offset: calc(-1 * var(--oc-border-width));
 }
 
 #configDialog .expert-squad-installed-row.s-row .s-row-leading {
