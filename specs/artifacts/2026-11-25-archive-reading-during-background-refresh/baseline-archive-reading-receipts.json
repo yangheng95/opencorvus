@@ -1,0 +1,92 @@
+{
+  "rendererAsset": "main-MRIcuHmR.js",
+  "sourceRevision": "eaccc981079b6cc803184b200e391d6cf87ff10b",
+  "browserUI": "http://127.0.0.1:41785/ui/",
+  "scope": "B610 Quarterly",
+  "archivedSessions": [
+    {
+      "key": "west",
+      "id": "ses_hKRwRgdeQXFrEbOtRphX",
+      "title": "B610 Quarterly West ledger",
+      "projectID": "prj_hMVoGib8zvGpE6PRre0x",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b610\\candidate\\archive-reading-review",
+      "archived": 1795552107990,
+      "titleReceipt": "d3d11ccf-9adc-45b7-97f5-ef5c3a07eb05",
+      "archiveReceipt": "de3f5785-db75-453d-9e19-8246d6ccc7c5"
+    },
+    {
+      "key": "east",
+      "id": "ses_hzse8sVAFY92d2AddKXN",
+      "title": "B610 Quarterly East ledger",
+      "projectID": "prj_hMVoGib8zvGpE6PRre0x",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b610\\candidate\\archive-reading-review",
+      "archived": 1795552108135,
+      "titleReceipt": "dbfe9231-4304-42af-a29a-aa01d325da0e",
+      "archiveReceipt": "08f70d6f-177d-4140-9892-df34274f2227"
+    },
+    {
+      "key": "control",
+      "id": "ses_hRk7LruZwq7OscawmrYE",
+      "title": "B610 Quarterly Control ledger",
+      "projectID": "prj_hMVoGib8zvGpE6PRre0x",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b610\\candidate\\archive-reading-review",
+      "archived": 1795552108262,
+      "titleReceipt": "5c4ddc00-11be-4cbf-b1ca-231e9f8905c4",
+      "archiveReceipt": "7a124f6a-2946-41fb-bfa4-8c0e03708062"
+    }
+  ],
+  "controlRename": {
+    "completedAt": "2026-11-24T20:28:58.1901952Z",
+    "id": "ses_hRk7LruZwq7OscawmrYE",
+    "title": "B610 Quarterly Control revised",
+    "archived": 1795552108262,
+    "status": 200,
+    "requestID": "424a6b5b-7bca-40d6-b80d-d0666a53daea"
+  },
+  "actualTransport": [
+    {
+      "at": "2026-11-24T20:28:38.921Z",
+      "event": "socket-open",
+      "id": 17,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T20:28:57.945Z",
+      "event": "mode",
+      "mode": "hold-archive",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:28:58.33Z",
+      "event": "upstream-response",
+      "id": 45,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": "B610 Quarterly",
+      "actual": "d152cf5d-9404-4297-9fd3-682126438b74"
+    },
+    {
+      "at": "2026-11-24T20:28:58.331Z",
+      "event": "archive-response-held",
+      "id": 45,
+      "status": 200,
+      "actual": "d152cf5d-9404-4297-9fd3-682126438b74"
+    },
+    {
+      "at": "2026-11-24T20:29:09.69Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:29:09.69Z",
+      "event": "archive-response-released",
+      "id": 45,
+      "actual": "d152cf5d-9404-4297-9fd3-682126438b74"
+    }
+  ]
+}
