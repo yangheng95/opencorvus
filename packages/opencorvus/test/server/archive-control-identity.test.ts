@@ -10,6 +10,7 @@ import { Identifier } from "@/id/id"
 import { currentMissionExecutionClosure } from "@/mission/execution-closure"
 import { ensureMissionSession } from "@/mission/session"
 import { Instance, runOutsideInstanceContext } from "@/project/instance"
+import { ProtocolStore } from "@/protocol/store"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { SessionPromptState } from "@/session/prompt/state"
@@ -120,6 +121,37 @@ test("cold Task archive settles its original opened occurrence and restoration r
   expect({ status: restored.status, body: await restored.json() }).toEqual({ status: 200, body: true })
   const final = await Instance.provideProjectIdentity({ directory: project.path, fn: projection })
   expect({ archived: final.task?.time_archived, lifecycle: final.lifecycle }).toEqual({ archived: null, lifecycle: terminal.lifecycle })
+}, 60_000)
+
+test("archived Task deletion and replay commit to the original project while another archive stays readable", async () => {
+  await using project = await memoryProject("delete-archived-task")
+  await using control = await memoryProject("delete-archived-task-control")
+  const target = await Instance.provideProjectIdentity({ directory: project.path, fn: () => openedTask() })
+  const retained = await Instance.provideProjectIdentity({ directory: control.path, fn: () => openedTask() })
+  for (const [directory, task] of [[project.path, target], [control.path, retained]] as const) {
+    const response = await request(directory, `/task/${task.id}/archive`, {
+      archived: true, surface: "api", reason: "Archive the isolated task",
+    })
+    expect({ status: response.status, body: await response.json() }).toEqual({ status: 200, body: true })
+  }
+  for (const requestID of ["archive-task-delete", "archive-task-delete-replay"]) {
+    const response = await runOutsideInstanceContext(() => Server.App().request(
+      `/task/${target.id}?${new URLSearchParams({ directory: project.path })}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", "x-opencorvus-request-id": requestID },
+        body: JSON.stringify({ surface: "api", reason: "Delete the original archived task" }),
+      },
+    ))
+    expect({ status: response.status, body: await response.json() }).toEqual({ status: 200, body: true })
+    expect(ProtocolStore.latestTaskEvent(target.id, "task.deleted")).toMatchObject({ taskID: target.id, type: "task.deleted" })
+  }
+  const response = await Server.App().request("/work-ledger/archive")
+  expect(response.status).toBe(200)
+  const { rows } = await response.json()
+  expect(rows.map((row: { id: string; directory: string }) => ({ id: row.id, directory: row.directory }))).toEqual([
+    { id: retained.id, directory: control.path },
+  ])
 }, 60_000)
 
 test("cold Mission archive closes its original child Task and restoration retains the closed occurrence", async () => {

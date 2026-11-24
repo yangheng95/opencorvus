@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import { ApiError, captureApiAuthority, configure } from "../src/services/api"
 import { ArchiveStateUnconfirmedError, settleArchiveState } from "../src/services/archive-state"
 import { setMissionArchived } from "../src/services/mission"
+import { deleteTask } from "../src/services/task"
 import { verifyWorkLedgerArchiveState } from "../src/services/work-ledger"
 import { formatErrorDetails } from "../src/utils/error-details"
 
@@ -128,4 +129,33 @@ test("a definitive restore conflict preserves the server error contract", async 
   }).catch((cause) => cause)
   expect(error).toBe(conflict)
   expect(error).toMatchObject({ status: 409, method: "PATCH", requestID: "restore-conflict" })
+})
+
+test.each([200, 404] as const)("Task deletion sends the confirmed directory and preserves the HTTP %i outcome", async (status) => {
+  const requests: Array<{ method: string; path: string; directory: string | null; body: unknown }> = []
+  const requestID = "archive-task-delete-receipt"
+  const body = status === 200 ? true : { name: "NotFoundError", data: { message: "Task not found in project" } }
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    async fetch(request) {
+      const url = new URL(request.url)
+      requests.push({ method: request.method, path: url.pathname, directory: url.searchParams.get("directory"), body: await request.json() })
+      return Response.json(body, { status, headers: { "x-opencorvus-request-id": requestID } })
+    },
+  })
+  configure({ serverUrl: server.url.origin, directory: "D:/projects/other/current-workspace" })
+  try {
+    const provenance = { surface: "overlay.archive_panel", reason: "Delete the confirmed archived task" }
+    const result = await deleteTask({ taskID, directory }, provenance).catch((cause) => cause)
+    if (status === 200) expect(result).toBe(true)
+    else {
+      expect(result).toBeInstanceOf(ApiError)
+      expect(result).toMatchObject({ status, method: "DELETE", requestID, body })
+    }
+    expect(requests).toEqual([{ method: "DELETE", path: `/task/${taskID}`, directory, body: provenance }])
+  } finally {
+    await server.stop(true)
+    configure({ serverUrl: "http://127.0.0.1:7878", directory: "" })
+  }
 })

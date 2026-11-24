@@ -110,12 +110,6 @@ function taskPath(taskID: string, suffix = ""): string {
   return taskScopedPath(taskID, taskOwningDirectory(taskID), suffix)
 }
 
-function taskRecordPath(taskID: string): string {
-  const id = String(taskID || "").trim()
-  if (!id) throw new Error("taskRecordPath requires a taskID")
-  return `task/${encodeURIComponent(id)}`
-}
-
 /** Chat request timeout. */
 const CHAT_REQUEST_TIMEOUT_MS = 10 * 60 * 1000
 
@@ -397,16 +391,18 @@ export async function retrySelectedTaskSelection(): Promise<void> {
   await selectTask(failure.taskID, { directory: failure.directory, selectionEpoch: admission.epoch, authority })
 }
 
-// ── Public: deleteTask ──
+// ── Public: setTaskArchived ──
+
+type TaskRetentionTarget = { taskID: string; directory: string; authority?: ApiAuthority }
 
 export function setTaskArchived(
-  target: { taskID: string; directory: string; authority?: ApiAuthority },
+  target: TaskRetentionTarget,
   archived: true,
   provenance: TaskCancellationRequestBodyValue,
 ): Promise<void>
-export function setTaskArchived(target: { taskID: string; directory: string; authority?: ApiAuthority }, archived: false): Promise<void>
+export function setTaskArchived(target: TaskRetentionTarget, archived: false): Promise<void>
 export async function setTaskArchived(
-  target: { taskID: string; directory: string; authority?: ApiAuthority },
+  target: TaskRetentionTarget,
   archived: boolean,
   provenance?: TaskCancellationRequestBodyValue,
 ): Promise<void> {
@@ -425,14 +421,13 @@ export async function setTaskArchived(
         }
       : { archived },
   )
-  const params = new URLSearchParams({ directory })
   const request = {
     authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   } satisfies Parameters<typeof apiJson>[1]
-  const path = `${taskRecordPath(taskID)}/archive?${params.toString()}`
+  const path = taskScopedPath(taskID, directory, "/archive")
   await settleArchiveState({
     authority,
     write: async () => {
@@ -491,19 +486,19 @@ function isCommittedTaskDeletion(error: unknown, taskID: string): error is ApiEr
 }
 
 /**
- * Delete a task by ID.
- * Does NOT show a confirmation dialog — callers must confirm before calling.
- * Returns true on durable success. Invalid client-side input returns false;
- * backend failures before commit reject so callers can surface the original error.
+ * Delete the confirmed task in its owning project.
+ * Returns true on a committed server receipt, including deletion replay.
  */
-export async function deleteTask(taskID: string, provenance: TaskCancellationRequestBodyValue, options: { authority?: ApiAuthority } = {}): Promise<boolean> {
-  const authority = options.authority ?? captureApiAuthority()
+export async function deleteTask(target: TaskRetentionTarget, provenance: TaskCancellationRequestBodyValue): Promise<boolean> {
+  const authority = target.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
-  if (!taskID) return false
+  const taskID = target.taskID.trim()
+  const directory = target.directory.trim()
+  if (!taskID || !directory) throw new Error("deleteTask: taskID and directory are required")
   const body = TaskCancellationRequestBody.parse(provenance)
   try {
-    await apiJson(
-      taskRecordPath(taskID),
+    const receipt = await apiJson<unknown>(
+      taskScopedPath(taskID, directory),
       serverSettledRequest({
         authority,
         method: "DELETE",
@@ -511,22 +506,17 @@ export async function deleteTask(taskID: string, provenance: TaskCancellationReq
         body: JSON.stringify(body),
       }),
     )
+    if (receipt !== true) throw new Error("The Task deletion receipt is invalid.")
   } catch (error) {
-    if (!isApiAuthorityCurrent(authority)) throw error
-    if (error instanceof ApiError && error.status === 404) {
-      // Desired state is already durable.
-    } else if (isCommittedTaskDeletion(error, taskID)) {
-      AppLog.warn("task", "task row deleted with artifact cleanup residue", {
-        taskID,
-        error: formatErrorDetails(error),
-        diagnosticID: `task:delete-artifact-cleanup-residue:${taskID}`,
-        diagnosticTitle: error.message,
-        diagnosticMessage: error.message,
-        diagnosticDetails: formatErrorDetails(error),
-      })
-    } else {
-      throw error
-    }
+    if (!isApiAuthorityCurrent(authority) || !isCommittedTaskDeletion(error, taskID)) throw error
+    AppLog.warn("task", "task row deleted with artifact cleanup residue", {
+      taskID,
+      error: formatErrorDetails(error),
+      diagnosticID: `task:delete-artifact-cleanup-residue:${taskID}`,
+      diagnosticTitle: error.message,
+      diagnosticMessage: error.message,
+      diagnosticDetails: formatErrorDetails(error),
+    })
   }
   if (isApiAuthorityCurrent(authority)) await reconcileRemovedTaskAfterCommit(taskID, "delete")
   return true

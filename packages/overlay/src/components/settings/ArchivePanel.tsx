@@ -409,12 +409,11 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         })
       } else {
         await deleteTask(
-          row.id,
+          { taskID: row.id, directory: row.directory, authority },
           {
             surface: "overlay.archive_panel",
             reason: "Operator deleted the archived task from Archive",
           },
-          { authority },
         )
       }
       if (!ownsAction()) return

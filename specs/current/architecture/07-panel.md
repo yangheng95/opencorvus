@@ -6699,6 +6699,10 @@ for the same row and connection. Pending deletions are kept per row while the
 page is mounted on that connection. Search, pagination and other row actions
 leave them intact. The domain's existing deletion receipt or cleanup replay
 settles the matching pending deletion before the archive refresh.
+Task deletion sends the same original Task and project directory that the
+confirmation names. The Task endpoint's committed result, cleanup receipt, or
+same-owner deletion replay authorizes the success projection. A not-found
+response stays visible as a failure.
 
 The Chat/Work, Task and Mission archive/restore endpoints use the existing
 Project identity context independently of execution-model initialization.
