@@ -1907,11 +1907,13 @@ do not establish retirement. Anchor and active drag/drop lifetime use the same
 listing fact. Already-entered filesystem actions retain their captured targets
 and guarded operation owner.
 
-A settled Explorer search discloses selected paths outside its displayed result
-set, including in multi-item menu details. Its explicit deselect action keeps
-the selection and anchor for matching paths, retains the query, and returns
-focus to the search input. Pending or failed searches cannot establish this
-partition.
+An accepted Explorer search discloses selected paths outside its displayed
+result set, including in multi-item menu details. A refresh of the same query
+keeps this disclosure and keyboard focus while its deselect action is busy.
+The settled result supplies the paths for the next deselection. The action
+keeps the selection and anchor for matching paths, retains the query, and
+returns focus to the search input. If the disclosure retires while its action
+owns focus, the search input receives focus.
 
 Explorer search rows with the same filename display enough of their actual
 parent path to distinguish the visible results. Shortened directories indicate

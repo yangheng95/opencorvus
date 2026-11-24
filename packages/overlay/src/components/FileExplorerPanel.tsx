@@ -530,13 +530,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   let virtualizer: VirtualizerHandle | undefined
   let pendingFocus: { key: string; origin: Element; scope: ExplorerOperationScope; waitingForScroll: boolean } | undefined
 
-  function focusedReadFailure(selector: string): HTMLElement | undefined {
-    const feedback = explorerElement?.ownerDocument.activeElement?.closest<HTMLElement>(selector)
-    return feedback && explorerElement?.contains(feedback) ? feedback : undefined
+  function focusedExplorerControl(selector: string): HTMLElement | undefined {
+    const control = explorerElement?.ownerDocument.activeElement?.closest<HTMLElement>(selector)
+    return control && explorerElement?.contains(control) ? control : undefined
   }
 
   function returnFocusFromDirectoryFailure(dismissing: (path: string) => boolean): void {
-    const path = focusedReadFailure("[data-explorer-directory-error]")?.dataset.explorerDirectoryError
+    const path = focusedExplorerControl("[data-explorer-directory-error]")?.dataset.explorerDirectoryError
     if (path !== undefined && dismissing(path)) {
       searchInput?.focus({ preventScroll: true })
     }
@@ -1195,7 +1195,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const readRetryPending = () => searchError() ? searchResults.loading : directoryReadPending("")
   // Transfer focus before the render removes this feedback and its controls.
   createComputed(on(searchError, (failure, previous) => {
-    if (!failure && previous && active() && focusedReadFailure("[data-explorer-search-error]")) {
+    if (!failure && previous && active() && focusedExplorerControl("[data-explorer-search-error]")) {
       searchInput?.focus({ preventScroll: true })
     }
   }))
@@ -1218,20 +1218,25 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   })
   const selectedItemList = createMemo(() => Array.from(selectedItems().values()))
   const selectedItemPathSet = createMemo(() => new Set(selectedItems().keys()))
-  const settledSearchPaths = createMemo(() => {
+  const acceptedSearchPaths = createMemo(() => {
     const search = query().trim()
-    if (!search || search !== deferredQuery() || searchResults.loading) return undefined
+    if (!search || search !== deferredQuery()) return undefined
     const result = currentSearchResult()
     if (!result || result.error) return undefined
     return new Set(rows().map((row) => selectionFromRow(row).path))
   })
   const searchSelection = createMemo(() => {
-    const visible = settledSearchPaths()
+    const visible = acceptedSearchPaths()
     if (!visible) return undefined
     const selected = selectedItemList()
     const outside = selected.filter((item) => !visible.has(item.path)).length
     return outside > 0 ? { total: selected.length, outside } : undefined
   })
+  createComputed(on(searchSelection, (selection, previous) => {
+    if (!selection && previous && active() && focusedExplorerControl(".file-explorer-search-selection")) {
+      searchInput?.focus({ preventScroll: true })
+    }
+  }))
   const currentFilePath = createMemo(() => {
     const target = selectedFileTarget()
     return target && target.directory === directory() ? normalizeExplorerPath(target.path) : ""
@@ -1405,8 +1410,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   }
 
   function deselectOutsideSearchResults(): void {
-    const visible = settledSearchPaths()
-    if (!visible || commandBusy()) return
+    const visible = acceptedSearchPaths()
+    if (!visible || searchResults.loading || commandBusy()) return
     const selection = selectedItems()
     const kept = new Map([...selection].filter(([path]) => visible.has(path)))
     if (kept.size === selection.size) return
@@ -2653,8 +2658,16 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         {(selection) => (
           <div class="file-explorer-search-selection">
             <span role="status">{selectionCountLabel(selection().total, selection().outside)}</span>
-            <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={commandBusy()}
-              onClick={deselectOutsideSearchResults}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              tone="neutral"
+              disabled={commandBusy()}
+              aria-disabled={searchResults.loading || undefined}
+              aria-busy={searchResults.loading || undefined}
+              onClick={deselectOutsideSearchResults}
+            >
               {t("explorer.deselect_outside_results")}
             </Button>
           </div>
