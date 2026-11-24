@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时计划跟进会话改名的真实桌面证据](2026-11-24-scheduled-conversation-title-peer-refresh/README.md)
 - [定时计划跟进真实项目改名的桌面证据](2026-11-24-scheduled-project-name-peer-refresh/README.md)
 - [定时计划在多个标签的真实状态证据](2026-11-24-scheduled-definition-peer-refresh/README.md)
 - [原路径缺失时保存项目内草稿副本的桌面证据](2026-11-24-save-missing-file-draft-copy/README.md)
