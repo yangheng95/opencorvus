@@ -132,7 +132,10 @@ export function MailboxPanel(props: MailboxPanelProps) {
     return Array.from(mailboxBody.querySelectorAll<HTMLButtonElement>(
       "details[open][data-project-directory] button.mailbox-item__main:enabled",
     ))
-  }, { returnToSearch: () => canBrowseSearchResults() ? searchInput : undefined })
+  }, {
+    returnToSearch: () => canBrowseSearchResults() ? searchInput : undefined,
+    pageViewport: () => mailboxBody,
+  })
   const continuationIssue = () => {
     const issue = loadIssue()
     return issue?.operation === "append" ? issue : undefined
@@ -595,7 +598,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
           </div>
           <Show when={canBrowseSearchResults()}>
             <p class="mailbox-panel__search-hint" id={searchKeyboardHintID}>
-              {t("settings.search_return_keyboard_hint")}
+              {t("mailbox.search_page_navigation")}
             </p>
           </Show>
         </Show>
@@ -795,7 +798,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
                                       tone="neutral"
                                       class="mailbox-item__main"
                                       aria-keyshortcuts={canBrowseMessages()
-                                        ? canBrowseSearchResults() ? "ArrowUp ArrowDown Escape" : "ArrowUp ArrowDown"
+                                        ? canBrowseSearchResults() ? "ArrowUp ArrowDown PageUp PageDown Escape" : "ArrowUp ArrowDown PageUp PageDown"
                                         : undefined}
                                       onKeyDown={messageNavigation.handleResultKeyDown}
                                       aria-label={

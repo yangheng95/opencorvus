@@ -1,5 +1,6 @@
 import { Show, type JSX } from "solid-js"
 import { t } from "../../utils/i18n"
+import { renderedListPageIndex } from "../../utils/rendered-list-navigation"
 import { Icon } from "./Icon"
 import { Button } from "./Button"
 import { TextField, type TextFieldSize } from "./TextField"
@@ -34,9 +35,10 @@ export interface SearchFieldProps {
 
 export function createSearchResultNavigation(
   readActions: () => readonly HTMLElement[],
-  { tabList = false, returnToSearch }: {
+  { tabList = false, returnToSearch, pageViewport }: {
     tabList?: boolean
     returnToSearch?: () => HTMLInputElement | undefined
+    pageViewport?: () => HTMLElement | undefined
   } = {},
 ) {
   function resultFocusTarget(edge: "first" | "last"): HTMLElement | undefined {
@@ -49,7 +51,8 @@ export function createSearchResultNavigation(
     const key = event.key
     const search = key === "Escape" ? returnToSearch?.() : undefined
     if (search && (!search.isConnected || search.disabled || search.readOnly)) return
-    if (!search && key !== "ArrowDown" && key !== "ArrowUp" && !(tabList && (key === "Home" || key === "End"))) return
+    const viewport = key === "PageDown" || key === "PageUp" ? pageViewport?.() : undefined
+    if (!search && !viewport && key !== "ArrowDown" && key !== "ArrowUp" && !(tabList && (key === "Home" || key === "End"))) return
 
     const actions = readActions()
     const current = actions.findIndex((action) => action === event.target)
@@ -58,6 +61,19 @@ export function createSearchResultNavigation(
     event.stopPropagation()
     if (search) {
       search.focus()
+      return
+    }
+    if (viewport) {
+      const target = renderedListPageIndex(
+        current,
+        actions.length,
+        key === "PageDown" ? 1 : -1,
+        viewport.clientHeight,
+        (index) => actions[index]?.getBoundingClientRect(),
+      )
+      const action = actions[target ?? current]!
+      action.focus({ preventScroll: true })
+      action.scrollIntoView({ block: "nearest", inline: "nearest" })
       return
     }
 

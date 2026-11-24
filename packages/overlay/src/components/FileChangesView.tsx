@@ -10,6 +10,7 @@ import {
 import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
 import { matchesSearchTerms } from "../services/text-search"
 import { localeTag, t, tc } from "../utils/i18n"
+import { renderedListPageIndex } from "../utils/rendered-list-navigation"
 import { shortRelativePath } from "../utils/tool"
 import { virtualListPageIndex } from "../utils/virtual-list-navigation"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
@@ -411,17 +412,16 @@ export function FileChangesView(props: FileChangesViewProps) {
     }
 
     const list = listEl
-    const current = renderedRow(rows[index]!)?.getBoundingClientRect()
-    if (!list || !current) return
+    if (!list) return
     const stickyInset = Number.parseFloat(getComputedStyle(list).scrollPaddingBlockStart) || 0
-    const distance = Math.max(1, list.clientHeight - stickyInset - current.height)
-    let target = adjacent
-    for (let candidate = adjacent + direction; rows[candidate]; candidate += direction) {
-      const top = renderedRow(rows[candidate]!)?.getBoundingClientRect().top
-      if (top === undefined || (top - current.top) * direction > distance) break
-      target = candidate
-    }
-    return rows[target]?.key
+    const target = renderedListPageIndex(
+      index,
+      rows.length,
+      direction,
+      list.clientHeight - stickyInset,
+      (position) => renderedRow(rows[position]!)?.getBoundingClientRect(),
+    )
+    return target === undefined ? undefined : rows[target]?.key
   }
   const keyboardDelegate = Object.assign(
     new ListKeyboardDelegate(listState.collection, () => listEl, createCollator({ usage: "search", sensitivity: "base" })),

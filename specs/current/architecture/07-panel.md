@@ -5089,7 +5089,10 @@ scroll position. Search expands to
 the canonical SearchField only after explicit activation. Search takes the second
 header row while the Inbox heading remains stable; the selection toolbar follows
 it when results are visible. Its close button and Escape use the same
-query-clearing operation. Canceling the existing delete confirmation preserves
+query-clearing operation. Focused message buttons use Page Up and Page Down to
+move the focus by approximately one viewport through the loaded records in
+expanded projects. Message disclosure and selection remain explicit actions.
+Canceling the existing delete confirmation preserves
 the current query and selected message IDs. Open Task is a separate
 hover/focus action that uses the canonical task ID and directory. The row
 exposes no archive/restore action. Neither reading
