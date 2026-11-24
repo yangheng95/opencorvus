@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务看板分页焦点的桌面证据](2026-11-24-mission-board-search-page-focus/README.md)
 - [归档搜索分页焦点的桌面证据](2026-11-24-archive-search-page-focus/README.md)
 - [收件箱真实分页焦点的证据](2026-11-24-mailbox-page-navigation-focus/README.md)
 - [被截断会话标题的提示证据](2026-11-24-conversation-header-clipped-title-tooltip/README.md)

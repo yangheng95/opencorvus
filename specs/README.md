@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [在多步任务搜索结果中分页浏览当前布局](records/2026-11/2026-11-24-mission-board-search-page-focus.md)
 - [在归档搜索中分页浏览可见记录](records/2026-11/2026-11-24-archive-search-page-focus.md)
 - [收件箱翻页时将焦点移到可见通知](records/2026-11/2026-11-24-mailbox-page-navigation-focus.md)
 - [在会话标题提示中读取被截断的原标题](records/2026-11/2026-11-24-conversation-header-clipped-title-tooltip.md)
