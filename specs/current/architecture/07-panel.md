@@ -2264,6 +2264,12 @@ Conversation-scoped schedules project the exact bound Session's live title and
 directory with the list and update result. The list and search use the same
 projection as the detail and deletion confirmation. Missing live Session data
 retains the actual bound ID and has an explicit presentation state.
+In a nonempty scheduled-task search, the available detail buttons use the
+shared rendered-list navigation. Page Up and Page Down move focus through the
+current search, status and scope results within the Settings scroll area and
+bring the complete schedule row into view when it fits. Enter opens that
+definition's details, Escape returns to the same search, and native Tab keeps
+the separate row actions reachable.
 Pause and Resume validate the definition ID, new revision and requested status
 in the write receipt. An uncertain receipt reads the same definition from the
 current list on the same connection, without replaying the write. The result

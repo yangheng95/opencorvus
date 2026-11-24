@@ -102,6 +102,7 @@
 .automation-list-row {
   position: relative;
   min-width: 0;
+  scroll-margin-block: var(--ui-gap-xs);
 }
 
 .automations-list .s-row.automation-list-item {
