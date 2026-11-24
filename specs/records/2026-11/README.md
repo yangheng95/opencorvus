@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [外部文件监视事件触发已打开编辑器核对](2026-11-25-live-native-file-changes-reach-editor.md)
 - [组合搜索优先显示匹配的子任务](2026-11-25-mission-search-prioritizes-matching-child-tasks.md)
 - [多步任务筛选保留仍存在的空项目](2026-11-25-mission-filter-retains-existing-empty-project.md)
 - [普通对话更新保留进行中的多步任务看板读取](2026-11-25-mission-board-ignores-unrelated-conversation-updates.md)

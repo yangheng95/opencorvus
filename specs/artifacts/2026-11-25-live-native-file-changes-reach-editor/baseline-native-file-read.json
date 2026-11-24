@@ -1,0 +1,31 @@
+{
+  "requestID": "1d387136-1265-41a0-b4d8-6a2d2cb027e3",
+  "path": "handoff.txt",
+  "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b618\\candidate\\mission-list-review",
+  "result": {
+    "type": "text",
+    "content": "External handoff moved to Friday.\n",
+    "revision": "ff0ce0285f42d6eff59df5e051523cde877f1da904432905e0c0aa19f9ee36de",
+    "resourceID": "87df48df56ce9e3447dc326158678a2403359f25c7d67b6c0423afd00055c22f",
+    "patch": {
+      "oldFileName": "handoff.txt",
+      "newFileName": "handoff.txt",
+      "oldHeader": "old",
+      "newHeader": "new",
+      "hunks": [
+        {
+          "oldStart": 1,
+          "oldLines": 1,
+          "newStart": 1,
+          "newLines": 1,
+          "lines": [
+            "-Initial owned file for mission-list-review",
+            "+External handoff moved to Friday."
+          ]
+        }
+      ]
+    },
+    "diff": "Index: handoff.txt\n===================================================================\n--- handoff.txt\told\n+++ handoff.txt\tnew\n@@ -1,1 +1,1 @@\n-Initial owned file for mission-list-review\n+External handoff moved to Friday.\n"
+  },
+  "status": 200
+}
