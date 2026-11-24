@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [对话内查找标记命中短语的桌面证据](2026-11-24-conversation-search-highlight-matched-phrase/README.md)
 - [对话内查找等价输入的桌面证据](2026-11-24-conversation-search-equivalent-query-focus/README.md)
 - [对话内查找原消息落点的桌面证据](2026-11-24-conversation-search-measured-message-landing/README.md)
 - [对话内查找真实刷新桌面证据](2026-11-24-conversation-search-refresh-retains-current-result/README.md)
