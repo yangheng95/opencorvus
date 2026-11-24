@@ -218,6 +218,11 @@ the open or pending branch menu. Opening it again reads the current branches.
 Opening the environment panel joins an in-progress metadata read for the same
 directory, API authority and selection. Explicit refresh and a changed project
 still establish a new read.
+While the environment panel or Git dialog is open, committed file notifications
+for the active project refresh the same metadata. File changes arriving during
+a read or Git action share one pending refresh, which keeps its directory and
+connection ownership. The Git dialog retains the written subject, and the
+commit button and shortcut require the current report of a dirty worktree.
 
 File Editor initial read failures retain one current original thrown value
 under the existing target, API authority and load/reload generations. Shared

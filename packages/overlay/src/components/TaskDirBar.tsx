@@ -35,6 +35,7 @@ import {
 import { t, tc } from "../utils/i18n"
 import { AppLog } from "../utils/log"
 import { canInitGit, initGitCurrent } from "../utils/git"
+import { projectDirectoryKey } from "../utils/project-directory"
 import {
   deleteProjectWorktree,
   deleteProjectWorktrees,
@@ -74,6 +75,7 @@ import {
   projectConfigWriteEvidence,
 } from "../services/config"
 import { loadConfigInfo } from "../services/config-load"
+import { subscribeWorkLedgerChanges } from "../services/sse"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { isAgentActivityTerminalStatus } from "../utils/agent-activity"
@@ -221,6 +223,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [gitBusy, setGitBusy] = createSignal(false)
   const [gitActionOpen, setGitActionOpen] = createSignal(false)
   const [gitActionBranch, setGitActionBranch] = createSignal<string | null>()
+  const [pendingFileMetadata, setPendingFileMetadata] = createSignal<{
+    directory: string
+    authority: ApiAuthority
+    selectionEpoch: number
+    directoryEpoch: number
+  }>()
   const [commitMessage, setCommitMessage] = createSignal("")
   const [commitMessageGenerating, setCommitMessageGenerating] = createSignal(false)
   const [gitActionError, setGitActionError] = createSignal("")
@@ -233,6 +241,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const runtimePanelOpen = createMemo(
     () => props.anchorVisible && panelOpen() && !gitActionOpen() && !localEnvironmentOpen(),
   )
+  const showingGitMetadata = () => runtimePanelOpen() || gitActionOpen()
   const [localEnvironmentName, setLocalEnvironmentName] = createSignal("")
   const [localEnvironmentVariables, setLocalEnvironmentVariables] = createStore<LocalEnvironmentVariableDraft[]>([])
   const [localEnvironmentSetupScript, setLocalEnvironmentSetupScript] = createSignal("")
@@ -275,6 +284,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     return expected !== undefined && !!current && expected !== (current.branch ?? null)
   }
   const gitActionReady = () => gitMetadataFresh() && gitActionBranch() !== undefined && !gitActionBranchChanged()
+  const canCommitGit = () => gitActionReady() && vcs()?.dirty === true &&
+    !commitMessageGenerating() && !gitBusy() && !!commitMessage().trim()
   const canDeleteAll = createMemo(() => gitMetadataFresh() && removableWorktrees().length > 0 && !bulkDeleteBusy())
   const canReadWorktrees = () => appStore.connected && !!dir().trim() && lastVcs()?.initialized === true
   const metadataRefreshLabel = () => t(metadataBusy() ? "common.loading" :
@@ -790,7 +801,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const message = commitMessage().trim()
     const directory = dir().trim()
     const expectedBranch = gitActionBranch()
-    if (!message || !directory || expectedBranch === undefined || !gitActionReady() || commitMessageGenerating() || gitBusy()) return
+    if (!directory || expectedBranch === undefined || !canCommitGit()) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
@@ -1428,6 +1439,32 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     boardStore.selectEpoch
     if (runtimePanelOpen() && appStore.connected && directory)
       untrack(() => void loadMeta(directory, authority, { joinPending: true }).catch(() => undefined))
+  })
+
+  onCleanup(subscribeWorkLedgerChanges((event) => {
+    if (event.type !== "work-ledger.file-changed" || !showingGitMetadata() || !appStore.connected) return
+    const directory = dir().trim()
+    if (!directory || projectDirectoryKey(directory) !== projectDirectoryKey(event.directory) ||
+      lastVcs()?.initialized === false) return
+    setPendingFileMetadata({
+      directory,
+      authority: captureApiAuthority(),
+      selectionEpoch: boardStore.selectEpoch,
+      directoryEpoch: settingsStore.directoryEpoch,
+    })
+  }))
+
+  createEffect(() => {
+    const request = pendingFileMetadata()
+    if (!request) return
+    if (!showingGitMetadata() || !appStore.connected || request.directoryEpoch !== settingsStore.directoryEpoch ||
+      !ownsProject(request.authority, request.directory, request.selectionEpoch)) {
+      setPendingFileMetadata(undefined)
+      return
+    }
+    if (metadataBusy() || gitBusy()) return
+    setPendingFileMetadata(undefined)
+    untrack(() => void loadMeta(request.directory, request.authority).catch(() => undefined))
   })
 
   const ActionsMenu = () => {
@@ -2286,7 +2323,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 class="project-runtime-git-dialog-action"
                 data-ui="project-runtime-commit"
-                disabled={!gitActionReady() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
+                disabled={!canCommitGit()}
                 onClick={() => void commitChanges(false)}
               >
                 <Icon name="git-compare" size="medium" />
@@ -2301,7 +2338,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   tone="neutral"
                   class="project-runtime-git-dialog-action"
                   data-ui="project-runtime-commit-and-push"
-                  disabled={!gitActionReady() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
+                  disabled={!canCommitGit()}
                   onClick={() => void commitChanges(true)}
                 >
                   <Icon name="upload" size="medium" />
