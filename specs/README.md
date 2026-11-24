@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [对话内查找切换控件时保留当前消息](records/2026-11/2026-11-24-conversation-search-tab-retains-current-result.md)
 - [全局查找翻页保留当前结果](records/2026-11/2026-11-24-palette-continuation-retains-active-result.md)
 - [全局查找显示多步任务结果的完整原标题](records/2026-11/2026-11-24-palette-full-mission-search-titles.md)
 - [项目层展开后的摘要跟随键盘项目焦点](records/2026-11/2026-11-24-work-ledger-project-preview-priority.md)
