@@ -2383,6 +2383,10 @@ of draft validation, automation lists and model details. The authoring form
 shows discovery status beside the project search. Accepted empty results and
 retained projects have distinct descriptions. A read-only retry preserves the
 query and selected target identities and returns still-owned focus to search.
+Project updates and notification stream reconnections refresh that same
+discovery in the active Scheduled tasks page. An in-flight discovery settles
+before a pending refresh, while draft inputs and selected Project IDs continue
+to belong to the existing form.
 
 Newly committed scheduled automation definitions invalidate the global list on
 the Work Ledger stream. Explicit create, edit, pause, resume and delete share

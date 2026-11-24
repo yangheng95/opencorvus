@@ -297,6 +297,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [creationRequestID, setCreationRequestID] = createSignal<string>()
   const creating = () => creationRequestID() !== undefined
   const [projectRead, setProjectRead] = createSignal<AutomationProjectRead>({ status: "reading" })
+  const [projectRefreshRequested, setProjectRefreshRequested] = createSignal(false)
   const projects = () => projectRead().projects ?? []
   const projectsByID = createMemo(() => {
     const entries = new Map<string, { name: string; directory: string }>()
@@ -1168,6 +1169,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   async function loadProjectChoices(options: { afterSave?: boolean; trigger?: HTMLButtonElement } = {}): Promise<void> {
     const previous = projectRead()
     if (options.trigger && previous.status !== "failed") return
+    setProjectRefreshRequested(false)
     const issue = projectReadIssue()
     const afterSave = options.afterSave || issue?.afterSave || false
     const sequence = ++projectLoadSequence
@@ -1274,16 +1276,26 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (!props.active) setTimeZoneOpen(false)
   })
 
-  const unsubscribeDefinitions = subscribeWorkLedgerChanges((event) => {
+  const unsubscribeScheduledChanges = subscribeWorkLedgerChanges((event) => {
     if (event.type === "work-ledger.connected" ||
       (event.type === "work-ledger.changed" && event.sourceType === "automation.definition.changed")) {
       setDefinitionRefreshRequested(true)
+    }
+    if (event.type === "work-ledger.connected" ||
+      (event.type === "work-ledger.changed" && event.sourceType === "project.updated")) {
+      setProjectRefreshRequested(true)
     }
   })
   createEffect(() => {
     if (!props.active || !definitionRefreshRequested() || loading() || busyAction()) return
     setDefinitionRefreshRequested(false)
     untrack(() => void load(undefined, { background: true, authority: captureApiAuthority() }))
+  })
+  createEffect(() => {
+    if (!props.active || !projectRefreshRequested() || busyAction()) return
+    const status = projectRead().status
+    if (status === "reading" || status === "retrying") return
+    untrack(() => void loadProjectChoices())
   })
 
   createEffect(() => {
@@ -1312,7 +1324,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   })
   onCleanup(() => {
     disposed = true
-    unsubscribeDefinitions()
+    unsubscribeScheduledChanges()
     projectLoadSequence += 1
     if (dueRefreshTimer) clearTimeout(dueRefreshTimer)
     listRequest?.abort()
