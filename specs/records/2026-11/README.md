@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件资源管理器翻页时移动实际焦点](2026-11-24-file-explorer-page-focus.md)
 - [对话内查找在摘要里标记实际命中](2026-11-24-conversation-search-highlight-matched-phrase.md)
 - [对话内查找等价输入保留当前匹配](2026-11-24-conversation-search-equivalent-query-focus.md)
 - [对话内查找把原消息留在可见区](2026-11-24-conversation-search-measured-message-landing.md)
