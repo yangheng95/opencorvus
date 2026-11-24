@@ -1,0 +1,365 @@
+{
+  "phaseEvidence": [
+    {
+      "phase": "created",
+      "definitionReadRequestID": "0d2cbf6b-0620-474a-9777-f612465b8ce2",
+      "definitions": {
+        "east": {
+          "id": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "revisionId": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "name": "Monthly handoff reminder",
+          "prompt": "East checkout. Preserve the original monthly handoff checklist.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hg97gnCjuSUt08ZdXB18"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20991201T091500\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "active",
+          "nextRun": 4099770900000,
+          "fireHistory": {
+            "requestID": "cebc2216-b1f3-4ccf-a861-32d69f763980",
+            "body": [
+              {
+                "fireId": "cal_automation_e44cb2ea282c8aeeacc3885fb3169a49",
+                "automationRevisionId": "atm_hQ4Qlnq58Z6awNVMxiMk",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099770900000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "af777b35-6641-4555-b2a3-dc7c8bfe4bb2"
+        },
+        "west": {
+          "id": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "name": "Monthly handoff reminder",
+          "prompt": "West checkout. Inspect the separate monthly inventory summary.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hxGX5lxrE64n25s6eIcj"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Etc/UTC:20991203T152000\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "active",
+          "nextRun": 4099994400000,
+          "fireHistory": {
+            "requestID": "44932d40-77b0-4f26-a7fe-9a3e8457485a",
+            "body": [
+              {
+                "fireId": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+                "automationRevisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099994400000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "0d9b69cc-2223-4892-8b52-0841430d9f0d"
+        }
+      },
+      "frontier": [
+        {
+          "definitionID": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "revisionID": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "fireID": "cal_automation_e44cb2ea282c8aeeacc3885fb3169a49",
+          "availableAt": 4099770900000
+        },
+        {
+          "definitionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "fireID": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+          "availableAt": 4099994400000
+        }
+      ],
+      "counts": {
+        "automation": 2,
+        "automation_fire": 2,
+        "automation_fire_frontier": 2,
+        "automation_fire_attempt": 0,
+        "automation_run": 0,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      }
+    },
+    {
+      "phase": "paused",
+      "definitionReadRequestID": "dcb5ba36-7849-4a5f-8ae9-aaee50677d9f",
+      "definitions": {
+        "east": {
+          "id": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "revisionId": "atm_h2oUcERL9xn8kn5oapeX",
+          "name": "Monthly handoff reminder",
+          "prompt": "East checkout. Preserve the original monthly handoff checklist.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hg97gnCjuSUt08ZdXB18"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20991201T091500\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "paused",
+          "nextRun": 4099770900000,
+          "fireHistory": {
+            "requestID": "501cf304-524b-4055-8c4c-49e96c703596",
+            "body": [
+              {
+                "fireId": "cal_automation_e44cb2ea282c8aeeacc3885fb3169a49",
+                "automationRevisionId": "atm_hQ4Qlnq58Z6awNVMxiMk",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099770900000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "9916cc2a-fb52-4dbf-a7f0-f3fc788d860e"
+        },
+        "west": {
+          "id": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "name": "Monthly handoff reminder",
+          "prompt": "West checkout. Inspect the separate monthly inventory summary.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hxGX5lxrE64n25s6eIcj"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Etc/UTC:20991203T152000\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "active",
+          "nextRun": 4099994400000,
+          "fireHistory": {
+            "requestID": "1b2b7961-7fe4-49e6-b28a-237de6ada40a",
+            "body": [
+              {
+                "fireId": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+                "automationRevisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099994400000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "d692b091-f475-4cc9-8c2a-f11c4b7cb734"
+        }
+      },
+      "frontier": [
+        {
+          "definitionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "fireID": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+          "availableAt": 4099994400000
+        }
+      ],
+      "counts": {
+        "automation": 3,
+        "automation_fire": 2,
+        "automation_fire_frontier": 1,
+        "automation_fire_attempt": 0,
+        "automation_run": 0,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "definitionReadRequestID": "eecff2ca-a457-4540-939a-eabcad4dce65",
+      "definitions": {
+        "east": {
+          "id": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "revisionId": "atm_h2oUcERL9xn8kn5oapeX",
+          "name": "Monthly handoff reminder",
+          "prompt": "East checkout. Preserve the original monthly handoff checklist.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hg97gnCjuSUt08ZdXB18"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20991201T091500\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "paused",
+          "nextRun": 4099770900000,
+          "fireHistory": {
+            "requestID": "5c2c321c-cc9a-4278-9abd-9e1020d5df26",
+            "body": [
+              {
+                "fireId": "cal_automation_e44cb2ea282c8aeeacc3885fb3169a49",
+                "automationRevisionId": "atm_hQ4Qlnq58Z6awNVMxiMk",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099770900000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "9e21dcca-1c75-475e-9ed2-a11633cfe9ff"
+        },
+        "west": {
+          "id": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "name": "Monthly handoff reminder",
+          "prompt": "West checkout. Inspect the separate monthly inventory summary.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hxGX5lxrE64n25s6eIcj"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Etc/UTC:20991203T152000\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "active",
+          "nextRun": 4099994400000,
+          "fireHistory": {
+            "requestID": "d9e4d452-4604-4798-abb0-355381e860ab",
+            "body": [
+              {
+                "fireId": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+                "automationRevisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099994400000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "1223b3d6-7492-4192-9fdc-511a8b154e0d"
+        }
+      },
+      "frontier": [
+        {
+          "definitionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "fireID": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+          "availableAt": 4099994400000
+        }
+      ],
+      "counts": {
+        "automation": 3,
+        "automation_fire": 2,
+        "automation_fire_frontier": 1,
+        "automation_fire_attempt": 0,
+        "automation_run": 0,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      }
+    },
+    {
+      "phase": "resumed",
+      "definitionReadRequestID": "f96de0f7-0ac5-45ab-9347-ced5c203c0ee",
+      "definitions": {
+        "east": {
+          "id": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "revisionId": "atm_h9mxIl5wR4IRD39snNQv",
+          "name": "Monthly handoff reminder",
+          "prompt": "East checkout. Preserve the original monthly handoff checklist.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hg97gnCjuSUt08ZdXB18"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Asia/Shanghai:20991201T091500\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "active",
+          "nextRun": 4099770900000,
+          "fireHistory": {
+            "requestID": "64237c34-c8fd-4834-9773-86713d895dba",
+            "body": [
+              {
+                "fireId": "cal_automation_58f400aed32d47c6c2aef56285075312",
+                "automationRevisionId": "atm_h9mxIl5wR4IRD39snNQv",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099770900000,
+                "state": "scheduled",
+                "attemptCount": 0
+              },
+              {
+                "fireId": "cal_automation_e44cb2ea282c8aeeacc3885fb3169a49",
+                "automationRevisionId": "atm_hQ4Qlnq58Z6awNVMxiMk",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099770900000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "bb27b90e-762f-401f-b803-4c2f710ed746"
+        },
+        "west": {
+          "id": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "name": "Monthly handoff reminder",
+          "prompt": "West checkout. Inspect the separate monthly inventory summary.",
+          "target": {
+            "scope": "project",
+            "projectIds": [
+              "prj_hxGX5lxrE64n25s6eIcj"
+            ]
+          },
+          "recurrence": "DTSTART;TZID=Etc/UTC:20991203T152000\nRRULE:FREQ=MONTHLY;COUNT=6",
+          "status": "active",
+          "nextRun": 4099994400000,
+          "fireHistory": {
+            "requestID": "52f40044-cd3d-48a7-b852-cfcf3e06da59",
+            "body": [
+              {
+                "fireId": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+                "automationRevisionId": "atm_hTWnd6PV8ihsMJ4GZROU",
+                "origin": "scheduled",
+                "scheduledDueAt": 4099994400000,
+                "state": "scheduled",
+                "attemptCount": 0
+              }
+            ]
+          },
+          "runsReadRequestID": "69321d70-1303-4d33-93ab-f8d4c4a67fb9"
+        }
+      },
+      "frontier": [
+        {
+          "definitionID": "atm_hQ4Qlnq58Z6awNVMxiMk",
+          "revisionID": "atm_h9mxIl5wR4IRD39snNQv",
+          "fireID": "cal_automation_58f400aed32d47c6c2aef56285075312",
+          "availableAt": 4099770900000
+        },
+        {
+          "definitionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "revisionID": "atm_hTWnd6PV8ihsMJ4GZROU",
+          "fireID": "cal_automation_ec7a4fc6b7b096c627690a5ad75f2a9f",
+          "availableAt": 4099994400000
+        }
+      ],
+      "counts": {
+        "automation": 4,
+        "automation_fire": 3,
+        "automation_fire_frontier": 2,
+        "automation_fire_attempt": 0,
+        "automation_run": 0,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      }
+    }
+  ],
+  "resume": {
+    "time": "2026-11-24T08:58:05.734Z",
+    "requestID": "04dfc762-db0b-4c09-a9f5-5bb9363424ca",
+    "method": "PATCH",
+    "path": "/global/automations/atm_hQ4Qlnq58Z6awNVMxiMk",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 17
+  }
+}

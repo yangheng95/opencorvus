@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [同名定时计划的暂停、重启和恢复](2026-11-24-scheduled-lifecycle-across-projects.md)
 - [已配置通道按当前配置重启](2026-11-24-managed-channel-runtime-restart.md)
 - [通道目录与项目运行准备的权限边界](2026-11-24-channel-catalog-project-startup.md)
 - [项目交付包下载的读取权限](2026-11-24-passive-project-archive-download.md)
