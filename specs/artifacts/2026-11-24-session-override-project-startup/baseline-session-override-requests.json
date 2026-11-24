@@ -1,0 +1,29 @@
+[
+  {
+    "requestID": "09341229-7de6-494e-9b9a-38421dfdf40b",
+    "route": "/session/ses_hDy2nArBHoqZr8SlIesg/config",
+    "status": 500,
+    "error": {
+      "code": "EPERM",
+      "path": "C:\\Users\\Public\\opencorvus-review-20261124-b560\\baseline\\protected-ignore/.gitignore",
+      "syscall": "open"
+    },
+    "stack": [
+      "    at async ensureProjectRuleFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:71:15)",
+      "    at async ensureGitProjectMetadata (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:79:9)",
+      "    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)",
+      "    at async bootstrapContext (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1162:30)",
+      "    at async prepareContextInTurn (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:984:13)"
+    ]
+  },
+  {
+    "requestID": "09341229-7de6-494e-9b9a-38421dfdf40b",
+    "route": "/session/ses_hDy2nArBHoqZr8SlIesg/config",
+    "status": 500
+  },
+  {
+    "requestID": "d314f69e-9c2c-4fb0-ac4b-65abab51a8a7",
+    "route": "/session/ses_hbh3G4yxL4FWFFCpgcNj/config",
+    "status": 200
+  }
+]

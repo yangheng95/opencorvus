@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [保存会话设置与项目执行准备](records/2026-11/2026-11-24-session-override-project-startup.md)
 - [文件改名冲突后的草稿与重试](records/2026-11/2026-11-24-file-draft-after-rename-conflict.md)
 - [同名定时计划的暂停、重启和恢复](records/2026-11/2026-11-24-scheduled-lifecycle-across-projects.md)
 - [已配置通道按当前配置重启](records/2026-11/2026-11-24-managed-channel-runtime-restart.md)

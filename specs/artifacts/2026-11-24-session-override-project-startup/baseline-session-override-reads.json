@@ -1,0 +1,28 @@
+[
+  {
+    "label": "change-review",
+    "sessionID": "ses_hbh3G4yxL4FWFFCpgcNj",
+    "projectID": "prj_hsC1vJXvlm3z0JMYSdVW",
+    "configOrigin": "session",
+    "sessionConfigStatus": 200,
+    "catalogStatus": 200,
+    "active": {
+      "effective": "base",
+      "project": "dynamic",
+      "session_override": "base"
+    }
+  },
+  {
+    "label": "protected-ignore",
+    "sessionID": "ses_hDy2nArBHoqZr8SlIesg",
+    "projectID": "prj_hAIlspcHOvL0kCGjkwXe",
+    "configOrigin": "project",
+    "sessionConfigStatus": 200,
+    "catalogStatus": 200,
+    "active": {
+      "effective": "dynamic",
+      "project": "dynamic",
+      "session_override": null
+    }
+  }
+]
