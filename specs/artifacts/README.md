@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [在线定时运行历史证据](2026-11-25-scheduled-run-updates-while-online/README.md)
 - [定时任务重连后的运行历史证据](2026-11-25-scheduled-run-history-after-reconnect/README.md)
 - [返回文件编辑器时的磁盘核对证据](2026-11-25-file-rechecks-disk-on-return/README.md)
 - [设置页日志导出证据](2026-11-25-log-export-survives-settings-navigation/README.md)

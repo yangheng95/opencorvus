@@ -1,0 +1,39 @@
+[
+  {
+    "at": "2026-11-24T19:47:02.444Z",
+    "event": "socket-open",
+    "id": 22,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T19:47:08.124Z",
+    "event": "upstream-response",
+    "id": 36,
+    "pathname": "/global/automations",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "6b2fc09b-e514-429f-a833-8818938ce376"
+  },
+  {
+    "at": "2026-11-24T19:47:08.373Z",
+    "event": "upstream-response",
+    "id": 40,
+    "pathname": "/global/automations/atm_hFvWDUaomDyZxPvYwxVa/runs",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "856d9b6c-9812-462f-a36c-8db4f8eee13d"
+  },
+  {
+    "at": "2026-11-24T19:47:46.933Z",
+    "event": "upstream-response",
+    "id": 55,
+    "pathname": "/global/automations/atm_hFvWDUaomDyZxPvYwxVa/runs",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "5e1483dc-72e2-4317-9baa-b471f3e0a5c2"
+  }
+]

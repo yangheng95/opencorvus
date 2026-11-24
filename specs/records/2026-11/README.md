@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [已打开的定时历史跟随实际运行回执](2026-11-25-scheduled-run-updates-while-online.md)
 - [定时任务重连时更新当前运行历史](2026-11-25-scheduled-run-history-after-reconnect.md)
 - [返回文件编辑器时核对磁盘版本](2026-11-25-file-rechecks-disk-on-return.md)
 - [日志导出跨设置页保留状态](2026-11-25-log-export-survives-settings-navigation.md)
