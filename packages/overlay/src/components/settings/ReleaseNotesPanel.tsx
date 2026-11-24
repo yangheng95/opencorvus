@@ -38,14 +38,14 @@ export default function ReleaseNotesPanel() {
   let versionHeading: HTMLHeadingElement | undefined
   let historySearchInput: HTMLInputElement | undefined
   let focusGeneration = 0
-  const hasSearchMatches = () => Boolean(query().trim() && filteredHistory().length)
-  const searchNavigation = createSearchResultNavigation(() => {
-    if (!hasSearchMatches() || !panel) return []
-    return Array.from(panel.querySelectorAll<HTMLButtonElement>("button[data-release-version]:enabled"))
-  }, {
-    returnToSearch: () => historySearchInput,
-    pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
-  })
+  const hasVersions = () => filteredHistory().length > 0
+  const historyNavigation = createSearchResultNavigation(
+    () => Array.from(panel?.querySelectorAll<HTMLButtonElement>("button[data-release-version]:enabled") ?? []),
+    {
+      returnToSearch: () => historySearchInput,
+      pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+    },
+  )
   const releaseRow = (version: string) =>
     panel?.querySelector<HTMLButtonElement>(`[data-release-version="${CSS.escape(version)}"]`) ?? undefined
   const select = (entry: ChangelogEntry | null) => {
@@ -93,9 +93,9 @@ export default function ReleaseNotesPanel() {
                 inputRef={(element) => (historySearchInput = element)}
                 value={query()}
                 placeholder={t("releases.search")}
-                ariaDescribedBy={hasSearchMatches() ? "release-notes-search-keyboard-hint" : undefined}
+                ariaDescribedBy={hasVersions() ? "release-notes-search-keyboard-hint" : undefined}
                 onValueChange={setQuery}
-                resultFocusTarget={searchNavigation.resultFocusTarget}
+                resultFocusTarget={historyNavigation.resultFocusTarget}
                 size="md"
               />
               <Button variant="outline" size="sm" tone="neutral" onClick={() => select(installed)}>
@@ -104,7 +104,7 @@ export default function ReleaseNotesPanel() {
             </div>
             <div class="release-notes-search-status">
               <span>{tc("releases.count", filteredHistory().length)}</span>
-              <Show when={hasSearchMatches()}>
+              <Show when={hasVersions()}>
                 <span id="release-notes-search-keyboard-hint">{t("releases.search_page_navigation")}</span>
               </Show>
             </div>
@@ -118,7 +118,7 @@ export default function ReleaseNotesPanel() {
                       interactive
                       class="release-notes-row"
                       data-release-version={entry.version}
-                      aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
+                      aria-keyshortcuts="ArrowUp ArrowDown PageUp PageDown Escape"
                       title={
                         <span class="release-notes-version">
                           v{entry.displayVersion}
@@ -135,7 +135,7 @@ export default function ReleaseNotesPanel() {
                         />
                       }
                       meta={<time dateTime={entry.date}>{date(entry)}</time>}
-                      onKeyDown={searchNavigation.handleResultKeyDown}
+                      onKeyDown={historyNavigation.handleResultKeyDown}
                       onClick={() => select(entry)}
                     />
                   )

@@ -1,0 +1,53 @@
+{
+  "source": "Root CHANGELOG.md through parseChangelog",
+  "compared": [
+    {
+      "first": {
+        "date": "2026-11-24",
+        "version": "0.1.54"
+      },
+      "last": {
+        "date": "2026-08-07",
+        "version": "0.0.35-beta"
+      },
+      "comparedRows": 90,
+      "collection": "baseline"
+    },
+    {
+      "first": {
+        "date": "2026-11-24",
+        "version": "0.1.54"
+      },
+      "last": {
+        "date": "2026-08-07",
+        "version": "0.0.35-beta"
+      },
+      "comparedRows": 90,
+      "collection": "candidate-en"
+    },
+    {
+      "first": {
+        "date": "2026-11-24",
+        "version": "0.1.54"
+      },
+      "last": {
+        "date": "2026-08-07",
+        "version": "0.0.35-beta"
+      },
+      "comparedRows": 90,
+      "collection": "candidate-zh"
+    }
+  ],
+  "isolatedPersistence": {
+    "sqliteQuickCheck": "ok",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0
+    },
+    "fixtureReadme": "matches commit"
+  }
+}

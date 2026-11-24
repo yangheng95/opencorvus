@@ -6452,15 +6452,15 @@ list-to-detail pattern. History search matches all terms against the same entry'
 version identifiers, canonical and displayed release dates, and current language
 notes. The preview favors the authored list item that matches the most search
 terms from the notes, with author order breaking ties. Version and date searches
-keep the first item. With a nonblank query and visible matches, the history search
-field describes the keyboard shortcut and moves focus to the first or last matching
-version button on an unmodified Down or Up key. The same search result
-navigation used by Archive moves focus between matching version buttons. Page Up
-and Page Down use the actual version rows in the Settings scroll area and bring
-the focused result into view. The history row draws its focus ring inside the
-clipped results surface so all sides are visible during keyboard browsing.
-Escape on a matching version button returns focus to the search field with
-its query intact. Escape in the focused field clears that query. The version
+keep the first item. Whenever the history shows versions, the search field
+describes the keyboard shortcuts and moves focus to the first or last visible
+version button on an unmodified Down or Up key. The same navigation used by
+Archive moves focus among the displayed version buttons in both full and filtered
+history. Page Up and Page Down use the actual version rows in the Settings scroll
+area and bring the focused row into view. The history row draws its focus ring
+inside the clipped results surface so all sides are visible during keyboard
+browsing. Escape on a version button returns focus to the search field with its
+query intact. Escape in the focused field clears a nonempty query. The version
 button keeps native Enter activation. Website and GitHub links
 supplement the offline reading surface rather than providing another content/cache
 authority.
