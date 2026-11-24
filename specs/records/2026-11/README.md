@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件保存确认后续接原来的操作](2026-11-25-file-save-continues-through-editor-admission.md)
 - [0.1.55 发布](2026-11-25-release-0.1.55.md)
 - [重命名已打开的文件时保持资源管理器焦点](2026-11-25-file-rename-keeps-explorer-focus.md)
 - [打开的全局查找跟进会话更名](2026-11-25-palette-refreshes-renamed-conversations.md)
