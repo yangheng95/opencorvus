@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [实时流恢复后的项目配置桌面证据](2026-11-24-project-config-after-stream-rejoin/README.md)
 - [跨标签项目配置的桌面证据](2026-11-24-project-config-peer-notification/README.md)
 - [文件资源管理器工具栏刷新入口的桌面证据](2026-11-24-explorer-toolbar-refresh/README.md)
 - [启动时同目录选择与权限配置的桌面证据](2026-11-24-project-mode-read-on-reselect/README.md)

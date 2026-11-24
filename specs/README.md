@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [实时流重连后核对当前项目配置](records/2026-11/2026-11-24-project-config-after-stream-rejoin.md)
 - [项目配置保存后更新同项目的其它标签页](records/2026-11/2026-11-24-project-config-peer-notification.md)
 - [在文件资源管理器工具栏直接刷新目录和搜索](records/2026-11/2026-11-24-explorer-toolbar-refresh.md)
 - [启动时重新选择同一个项目后加载已保存权限模式](records/2026-11/2026-11-24-project-mode-read-on-reselect.md)
