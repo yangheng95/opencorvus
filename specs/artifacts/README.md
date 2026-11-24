@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目连接分页的桌面证据](2026-11-24-mcp-connection-page-focus/README.md)
 - [已安装专家团详情起始位置的桌面证据](2026-11-24-installed-expert-squad-detail-start/README.md)
 - [已安装专家团分页的桌面证据](2026-11-24-installed-expert-squad-page-focus/README.md)
 - [已安装技能搜索导航的桌面证据](2026-11-24-installed-skill-search-navigation/README.md)

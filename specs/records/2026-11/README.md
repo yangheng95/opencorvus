@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目连接列表的分页焦点](2026-11-24-mcp-connection-page-focus.md)
 - [已安装专家团详情的起始位置](2026-11-24-installed-expert-squad-detail-start.md)
 - [已安装专家团目录的分页焦点](2026-11-24-installed-expert-squad-page-focus.md)
 - [已安装技能搜索的结果内导航](2026-11-24-installed-skill-search-navigation.md)

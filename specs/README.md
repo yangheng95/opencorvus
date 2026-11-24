@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [项目连接列表的分页焦点](records/2026-11/2026-11-24-mcp-connection-page-focus.md)
 - [已安装专家团详情的起始位置](records/2026-11/2026-11-24-installed-expert-squad-detail-start.md)
 - [已安装专家团目录的分页焦点](records/2026-11/2026-11-24-installed-expert-squad-page-focus.md)
 - [已安装技能搜索的结果内导航](records/2026-11/2026-11-24-installed-skill-search-navigation.md)
