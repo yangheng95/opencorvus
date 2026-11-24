@@ -1,5 +1,7 @@
 import { createSignal } from "solid-js"
 
+export type TooltipInputPriority = ReturnType<typeof createTooltipInputPriority>
+
 const documentPointer = new WeakMap<Document, { id: number; x: number; y: number }>()
 
 export function observeTooltipPointer(document: Document): () => void {

@@ -4844,11 +4844,11 @@ currently hidden unpinned Project groups. Combined work uses the inner work-row
 disclosure to report its own count.
 
 Work Ledger previews follow keyboard focus when disclosure or scrolling moves a
-different work row or kind marker under a stationary pointer. Real pointer
-movement restores the existing hover behavior. The renderer records physical
-pointer positions across the document, including menus outside the list.
-The Work Ledger and annual usage grid share that observation and each own
-their focus preference.
+different work row, kind marker, Project summary or start-work action under a
+stationary pointer. Real pointer movement restores the existing hover behavior.
+The renderer records physical pointer positions across the document, including
+menus outside the list. The Work Ledger and annual usage grid share that
+observation and each own their focus preference.
 
 The Projects toolbar provides an explicit localized `Locate current work`
 action. It derives the target from the current ledger projection and the same

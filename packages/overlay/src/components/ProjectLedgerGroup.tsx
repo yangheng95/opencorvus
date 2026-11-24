@@ -9,6 +9,7 @@ import { workLedgerSummaryAnchorRect } from "../utils/work-ledger-summary-anchor
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
 import { Tooltip } from "./ui/Tooltip"
+import type { TooltipInputPriority } from "./ui/createTooltipInputPriority"
 import { pathRevealLabelKey } from "../services/workspace"
 
 export type ProjectActionPresentation = Pick<AppDialogOpenOptions, "openingGuard" | "returnFocusTarget">
@@ -21,6 +22,7 @@ export interface ProjectLedgerGroupProps {
   onSelectProject: (directory: string) => void | Promise<void>
   projectName?: string
   directoryHint?: string
+  tooltipInput: TooltipInputPriority
   pinned?: boolean
   onPinnedChange?: (pinned: boolean) => void | Promise<void>
   onCreateChat?: (directory: string) => void | Promise<void>
@@ -197,6 +199,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
           </span>
         </Button>
         <Tooltip.Root
+          triggerOnFocusOnly={props.tooltipInput.focusOnly()}
           openDelay={350}
           closeDelay={0}
           ignoreSafeArea
@@ -213,6 +216,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
             tone="neutral"
             data-ui="project-group-select"
             aria-label={`${t("work_ledger.open_project")}: ${accessibleName()}`}
+            onPointerEnter={props.tooltipInput.trackPointer}
             onClick={() => void runProjectAction(`select:${props.directory}`, () => props.onSelectProject(props.directory))}
           >
             <span class="project-group-copy">
@@ -367,7 +371,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
             </DropdownMenu.Root>
           </Show>
           <Show when={canCreateChat()}>
-            <Tooltip.Root placement="right" gutter={8} fitViewport>
+            <Tooltip.Root triggerOnFocusOnly={props.tooltipInput.focusOnly()} placement="right" gutter={8} fitViewport>
               <Tooltip.Trigger
                 as={Button}
                 type="button"
@@ -379,6 +383,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                 disabled={busy()}
                 data-project-new-chat={props.directory}
                 aria-label={startProjectWorkLabel()}
+                onPointerEnter={props.tooltipInput.trackPointer}
                 onClick={(event) => {
                   event.stopPropagation()
                   runProjectAction(`new-chat:${props.directory}`, () => props.onCreateChat?.(props.directory))

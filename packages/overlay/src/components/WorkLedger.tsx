@@ -1,5 +1,5 @@
 import { Tooltip } from "./ui/Tooltip"
-import { createTooltipInputPriority } from "./ui/createTooltipInputPriority"
+import { createTooltipInputPriority, type TooltipInputPriority } from "./ui/createTooltipInputPriority"
 import { WorkOutcomeBadge } from "./WorkOutcomeBadge"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import {
@@ -84,7 +84,6 @@ import { useTaskRowActionsKeyboard } from "./useTaskRowActionsKeyboard"
 import { useDisclosure } from "../solid/disclosure"
 
 const WORK_LEDGER_PAGE_SIZE = 80
-type WorkRowTooltipInput = ReturnType<typeof createTooltipInputPriority>
 
 type WorkLedgerGroup = {
   renderKey: string
@@ -287,7 +286,7 @@ function missionHasVisibleStoppableTask(row: WorkLedgerMissionRow): boolean {
   return row.tasks.some(workLedgerTaskCanStop)
 }
 
-function WorkLedgerKindMark(props: { row: WorkLedgerItemRow; tooltipInput: WorkRowTooltipInput }) {
+function WorkLedgerKindMark(props: { row: WorkLedgerItemRow; tooltipInput: TooltipInputPriority }) {
   const label = () => kindLabel(props.row)
   const description = () => kindDescription(props.row)
   return (
@@ -392,7 +391,7 @@ export type WorkLedgerRenamePresentation = Pick<AppDialogOpenOptions, "openingGu
 
 function WorkLedgerRowView(props: {
   row: WorkLedgerItemRow
-  tooltipInput: WorkRowTooltipInput
+  tooltipInput: TooltipInputPriority
   conversationOrdinal?: number
   selected: boolean
   isSelected?: (row: WorkLedgerItemRow) => boolean
@@ -885,7 +884,7 @@ function WorkLedgerRowView(props: {
 
 function WorkLedgerTaskChildRow(props: {
   task: WorkLedgerTaskRow
-  tooltipInput: WorkRowTooltipInput
+  tooltipInput: TooltipInputPriority
   insertionIndex: number
   selected: boolean
   isSelected?: (row: WorkLedgerItemRow) => boolean
@@ -937,7 +936,7 @@ function WorkLedgerTaskChildRow(props: {
 
 function WorkLedgerProjectGroupView(props: {
   group: WorkLedgerGroup
-  tooltipInput: WorkRowTooltipInput
+  tooltipInput: TooltipInputPriority
   conversationOrdinal: (row: WorkLedgerItemRow) => number | undefined
   dataUi?: string
   directoryHint?: string
@@ -1026,6 +1025,7 @@ function WorkLedgerProjectGroupView(props: {
           onSelectProject={props.onSelectProject}
           projectName={projectDisplayName(props.group)}
           directoryHint={props.directoryHint}
+          tooltipInput={props.tooltipInput}
           onCreateChat={props.onCreateChat}
           onOpenProjectDirectory={props.onOpenProjectDirectory}
           onRenameProject={props.onRenameProject}
