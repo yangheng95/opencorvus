@@ -5313,6 +5313,10 @@ directory is a shared native Disclosure, open by default and independently
 collapsible around its list of message disclosures. Directory and message ID keys
 preserve Disclosure state, item expansion, focus, and DOM identity across
 same-scope backend refreshes.
+The Inbox header selects or clears the loaded messages in currently expanded
+project groups. With every group collapsed, the header checkbox is disabled.
+Collapsing a group keeps its existing explicit selections in the selection count
+and delete confirmation. Reopening a group exposes those selections again.
 
 Mailbox read ownership follows the current API connection authority, view, and
 trimmed search query. Selecting another registered project, including Open

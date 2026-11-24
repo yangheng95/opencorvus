@@ -1,0 +1,66 @@
+{
+  "status": 200,
+  "requestID": "e772652f-62f6-4963-ac86-db865773960e",
+  "page": {
+    "items": [
+      {
+        "id": "pev_g0VbvuJdh00Pqjl8a7wM",
+        "eventType": "mailbox.message",
+        "category": "notification",
+        "attention": false,
+        "subject": "Cedar bridge notice",
+        "body": "B621 Shared transfer. BRIDGE RECEIPT: The bridge register lists an eastern path.",
+        "evidenceLocators": [],
+        "sourceAgentID": "solution-architect",
+        "expertSquadID": "advanced",
+        "sessionID": "ses_-zUO45gMSzzXlWtkNxEa",
+        "taskID": "tsk_g00VbvuJdd00Alj26ZDB",
+        "taskTitle": "Shelf references review",
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b621\\candidate\\mailbox-control-review",
+        "orderKey": "v1:0001795559890905:0000000000000040:0000000000000003:protocol:pev_g0VbvuJdh00Pqjl8a7wM",
+        "createdAt": 1795559890905,
+        "readAt": 1795559890907
+      },
+      {
+        "id": "pev_g0VbvuJRo00ydRGiZG5T",
+        "eventType": "mailbox.message",
+        "category": "notification",
+        "attention": false,
+        "subject": "Cedar intake replay",
+        "body": "B621 Shared transfer. INTAKE RECEIPT: The receiving log lists three folders.",
+        "evidenceLocators": [],
+        "sourceAgentID": "solution-architect",
+        "expertSquadID": "advanced",
+        "sessionID": "ses_-zUO45gYqzzjjGxTVULS",
+        "taskID": "tsk_g00VbvuJRS00Sq9078ti",
+        "taskTitle": "Receiving register review",
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b621\\candidate\\mailbox-selection-review",
+        "orderKey": "v1:0001795559890168:0000000000000040:0000000000000005:protocol:pev_g0VbvuJRo00ydRGiZG5T",
+        "createdAt": 1795559890168,
+        "readAt": 1795559890171
+      },
+      {
+        "id": "pev_g0VbvuJRf00eWXRlSv2p",
+        "eventType": "mailbox.message",
+        "category": "notification",
+        "attention": false,
+        "subject": "Cedar cabinet audit",
+        "body": "B621 Shared transfer. CABINET RECEIPT: The ledger lists cabinet six.",
+        "evidenceLocators": [],
+        "sourceAgentID": "solution-architect",
+        "expertSquadID": "advanced",
+        "sessionID": "ses_-zUO45gYqzzjjGxTVULS",
+        "taskID": "tsk_g00VbvuJRS00Sq9078ti",
+        "taskTitle": "Receiving register review",
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b621\\candidate\\mailbox-selection-review",
+        "orderKey": "v1:0001795559890159:0000000000000040:0000000000000003:protocol:pev_g0VbvuJRf00eWXRlSv2p",
+        "createdAt": 1795559890159,
+        "readAt": 1795559890164
+      }
+    ],
+    "nextCursor": null,
+    "unreadCount": 3,
+    "activeCount": 7,
+    "archivedCount": 0
+  }
+}

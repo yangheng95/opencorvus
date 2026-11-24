@@ -92,6 +92,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const [markAllReadPending, setMarkAllReadPending] = createSignal(false)
   const [deletePending, setDeletePending] = createSignal(false)
   const [selectedMessageIDs, setSelectedMessageIDs] = createSignal<ReadonlySet<string>>(new Set<string>())
+  const [collapsedProjectDirectories, setCollapsedProjectDirectories] = createSignal<ReadonlySet<string>>(new Set<string>())
   const [expandedMessageIDs, setExpandedMessageIDs] = createSignal<ReadonlySet<string>>(new Set<string>())
   const [loadIssue, setLoadIssue] = createSignal<{ operation: "base" | "append"; cause: unknown } | null>(null)
   const requestOwner = createMailboxRequestOwner()
@@ -116,7 +117,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
     const count = activeCountText()
     return count === undefined ? t("mailbox.active") : `${t("mailbox.active")} (${count})`
   }
-  const visibleItems = items
   const currentRequestScope = () => ({ authority: currentAuthority(), view: MAILBOX_VIEW, search: currentSearch() })
   const retryUnavailable = () => loading() || !appStore.connected
   const baseLoadIssue = () => {
@@ -125,7 +125,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
   }
   const continuationUnavailable = () => retryUnavailable() || loadingMore() || !cursor() || !!baseLoadIssue()
   const searchKeyboardHintID = createUniqueId()
-  const canBrowseMessages = () => appStore.connected && hasAcceptedMailbox() && visibleItems().length > 0
+  const canBrowseMessages = () => appStore.connected && hasAcceptedMailbox() && items().length > 0
   const canBrowseSearchResults = () => searchOpen() && currentSearch() !== "" && canBrowseMessages()
   const messageNavigation = createSearchResultNavigation(() => {
     if (!canBrowseMessages() || !mailboxBody) return []
@@ -141,9 +141,9 @@ export function MailboxPanel(props: MailboxPanelProps) {
     return issue?.operation === "append" ? issue : undefined
   }
 
-  const visibleProjectGroups = createMemo<MailboxProjectGroup[]>(() => {
+  const projectGroups = createMemo<MailboxProjectGroup[]>(() => {
     const grouped = new Map<string, MailboxProjectGroup>()
-    for (const item of visibleItems()) {
+    for (const item of items()) {
       const current = grouped.get(item.taskDirectory)
       if (current) current.items.push(item)
       else {
@@ -163,12 +163,14 @@ export function MailboxPanel(props: MailboxPanelProps) {
     }
     return [...grouped.values()]
   })
-  const visibleProjectDirectories = createMemo(() => visibleProjectGroups().map((group) => group.directory))
-  const visibleProjectGroup = (directory: string) =>
-    visibleProjectGroups().find((group) => group.directory === directory)!
+  const projectDirectories = createMemo(() => projectGroups().map((group) => group.directory))
+  const projectGroup = (directory: string) => projectGroups().find((group) => group.directory === directory)!
+  const projectOpen = (directory: string) => !collapsedProjectDirectories().has(directory)
 
   const selectedCount = createMemo(() => selectedMessageIDs().size)
-  const visibleMessageIDs = createMemo(() => visibleItems().map((item) => item.id))
+  const visibleMessageIDs = createMemo(() =>
+    projectGroups().filter((group) => projectOpen(group.directory)).flatMap((group) => group.items.map((item) => item.id)),
+  )
   const allVisibleSelected = createMemo(
     () =>
       visibleMessageIDs().length > 0 && visibleMessageIDs().every((messageID) => selectedMessageIDs().has(messageID)),
@@ -176,6 +178,16 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const someVisibleSelected = createMemo(() =>
     visibleMessageIDs().some((messageID) => selectedMessageIDs().has(messageID)),
   )
+
+  function setProjectOpen(directory: string, open: boolean): void {
+    setCollapsedProjectDirectories((current) => {
+      if (current.has(directory) === !open) return current
+      const next = new Set(current)
+      if (open) next.delete(directory)
+      else next.add(directory)
+      return next
+    })
+  }
 
   function setMessageSelected(messageID: string, selected: boolean): void {
     setSelectedMessageIDs((current) => {
@@ -186,7 +198,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
   }
 
   function setVisibleMessagesSelected(selected: boolean): void {
-    const visible = new Set(visibleMessageIDs())
+    const visible = visibleMessageIDs()
     setSelectedMessageIDs((current) => {
       const next = new Set(current)
       for (const messageID of visible) selected ? next.add(messageID) : next.delete(messageID)
@@ -611,7 +623,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
             </p>
           </Show>
         </Show>
-        <Show when={visibleItems().length > 0}>
+        <Show when={items().length > 0}>
           <div class="mailbox-panel__toolbar">
             <div class="mailbox-panel__selection-summary">
               <Checkbox
@@ -619,7 +631,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
                 data-ui="mailbox-select-visible"
                 checked={allVisibleSelected()}
                 indeterminate={someVisibleSelected() && !allVisibleSelected()}
-                disabled={visibleItems().length === 0 || loading() || deletePending()}
+                disabled={visibleMessageIDs().length === 0 || loading() || deletePending()}
                 aria-label={allVisibleSelected() ? t("mailbox.clear_selection") : t("mailbox.select_visible")}
                 onChange={setVisibleMessagesSelected}
               />
@@ -701,7 +713,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
         </Show>
         <Show when={appStore.connected && (!baseLoadIssue() || canBrowseMessages())}>
           <Show
-            when={visibleItems().length > 0}
+            when={items().length > 0}
             fallback={
               <Show
                 when={!loading() && hasAcceptedMailbox()}
@@ -740,12 +752,18 @@ export function MailboxPanel(props: MailboxPanelProps) {
             }
           >
             <div class="mailbox-project-groups">
-              <For each={visibleProjectDirectories()}>
+              <For each={projectDirectories()}>
                 {(directory) => {
-                  const group = createMemo(() => visibleProjectGroup(directory))
+                  const group = createMemo(() => projectGroup(directory))
                   const messageIDs = createMemo(() => group().items.map((item) => item.id))
+                  onCleanup(() => setProjectOpen(directory, true))
                   return (
-                    <Disclosure.Root class="mailbox-project-group" data-project-directory={directory} defaultOpen>
+                    <Disclosure.Root
+                      class="mailbox-project-group"
+                      data-project-directory={directory}
+                      open={projectOpen(directory)}
+                      onOpenChange={(open) => setProjectOpen(directory, open)}
+                    >
                       <Disclosure.Trigger
                         class="mailbox-project-group__header oc-section-heading"
                         title={`${group().name}\n${directory}`}
