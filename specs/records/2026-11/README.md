@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [日志导出跨设置页保留状态](2026-11-25-log-export-survives-settings-navigation.md)
 - [已打开的全局搜索跟进归档和恢复](2026-11-25-palette-follows-archive-updates.md)
 - [文件搜索跟随切换到的 Git 分支](2026-11-25-explorer-search-after-branch-switch.md)
 - [已打开的全局查找跟进项目改名](2026-11-25-palette-refreshes-renamed-projects.md)

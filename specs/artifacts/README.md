@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [设置页日志导出证据](2026-11-25-log-export-survives-settings-navigation/README.md)
 - [会话归档和恢复的全局搜索证据](2026-11-25-palette-follows-archive-updates/README.md)
 - [折叠子目录的分支切换搜索证据](2026-11-25-explorer-search-after-branch-switch/README.md)
 - [项目改名后全局查找的实际证据](2026-11-25-palette-refreshes-renamed-projects/README.md)
