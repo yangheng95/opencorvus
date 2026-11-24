@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [折叠子目录的分支切换搜索证据](2026-11-25-explorer-search-after-branch-switch/README.md)
 - [项目改名后全局查找的实际证据](2026-11-25-palette-refreshes-renamed-projects/README.md)
 - [同一个项目用不同拼写打开时的草稿证据](2026-11-25-project-launcher-draft-canonical-path/README.md)
 - [保存成功后原操作报告忙碌的桌面证据](2026-11-25-file-save-continues-through-editor-admission/README.md)

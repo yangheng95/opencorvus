@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件搜索跟随切换到的 Git 分支](2026-11-25-explorer-search-after-branch-switch.md)
 - [已打开的全局查找跟进项目改名](2026-11-25-palette-refreshes-renamed-projects.md)
 - [同一 Windows 项目使用一份首页草稿](2026-11-25-project-launcher-draft-canonical-path.md)
 - [文件保存确认后续接原来的操作](2026-11-25-file-save-continues-through-editor-admission.md)

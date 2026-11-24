@@ -1,0 +1,123 @@
+[
+  {
+    "at": "2026-11-24T18:26:58.599Z",
+    "event": "listening",
+    "pid": 17176
+  },
+  {
+    "at": "2026-11-24T18:27:13.966Z",
+    "event": "upstream-response",
+    "id": 12,
+    "pathname": "/global/health",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "76e5b0fa-0407-4235-b2ef-66d8c4158e6c"
+  },
+  {
+    "at": "2026-11-24T18:27:13.991Z",
+    "event": "socket-open",
+    "id": 17,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:27:14.309Z",
+    "event": "upstream-response",
+    "id": 30,
+    "pathname": "/global/health",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "b9e51cb9-6e27-4b1f-badc-a815ca8ff0ba"
+  },
+  {
+    "at": "2026-11-24T18:27:14.895Z",
+    "event": "upstream-response",
+    "id": 40,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "96fea7e8-1978-4c61-9923-597b31f03e06"
+  },
+  {
+    "at": "2026-11-24T18:27:14.966Z",
+    "event": "upstream-response",
+    "id": 39,
+    "pathname": "/find/file",
+    "method": "GET",
+    "status": 200,
+    "query": "launch-plan",
+    "actual": "22fcad53-e3d1-44ca-ae57-fb0b4fe570ee"
+  },
+  {
+    "at": "2026-11-24T18:27:20.132Z",
+    "event": "mode",
+    "mode": "held",
+    "openLedgerStreams": 0,
+    "openSockets": 1
+  },
+  {
+    "at": "2026-11-24T18:27:23.15Z",
+    "event": "socket-held",
+    "id": 50,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:27:24.954Z",
+    "event": "upstream-response",
+    "id": 51,
+    "pathname": "/global/health",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "a8cd3609-15f6-4727-934e-91f6de712bd0"
+  },
+  {
+    "at": "2026-11-24T18:27:26.159Z",
+    "event": "socket-held",
+    "id": 53,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:27:29.193Z",
+    "event": "socket-held",
+    "id": 55,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:27:29.641Z",
+    "event": "upstream-response",
+    "id": 56,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "e4e1af1a-ffd7-4975-abda-9e4341d3a718"
+  },
+  {
+    "at": "2026-11-24T18:27:29.811Z",
+    "event": "mode",
+    "mode": "open",
+    "openLedgerStreams": 0,
+    "openSockets": 0
+  },
+  {
+    "at": "2026-11-24T18:27:32.205Z",
+    "event": "socket-open",
+    "id": 58,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:27:34.946Z",
+    "event": "upstream-response",
+    "id": 66,
+    "pathname": "/global/health",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "40695ac3-8b8a-4547-a5e7-6d986b4b1ffb"
+  }
+]
