@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [两个标签页修改不同设置后都能恢复](2026-11-24-preferences-across-tabs.md)
 - [别的标签页保存后及时核对已打开的项目文件](2026-11-24-open-file-live-save.md)
 - [不同标签页中的对话草稿可各自恢复](2026-11-24-composer-drafts-across-tabs.md)
 - [离线提示在当前页面发起连接重试](2026-11-24-connection-banner-retry.md)
