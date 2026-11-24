@@ -2351,8 +2351,11 @@ continues editing; explicit list return, Cancel, and a committed save finish
 authoring. A connection change retires its old form. New session-scoped drafts
 capture the exact current Session when the author chooses that scope, so a
 later workspace selection cannot change their target. Existing definitions keep
-the Session in their opening snapshot. The linked target card preserves the
-exact ID and uses the current work ledger title when available. Project targeting
+the Session and expected revision from their opening snapshot. A committed
+title change to a bound Session refreshes the same public list, including
+Sessions outside the sidebar projection. The authoring card uses the accepted
+title for that exact Session while the current definition still binds it.
+Project targeting
 searches the current discovery inventory through the existing multi-term metadata matcher, including
 the canonical localized ledger label, original name, directory and Project ID.
 The form's single selected-target owner stores registered Project IDs and

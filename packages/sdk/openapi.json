@@ -5941,6 +5941,10 @@
             "properties": {
               "info": {
                 "$ref": "#/components/schemas/Session"
+              },
+              "titleChanged": {
+                "const": true,
+                "type": "boolean"
               }
             },
             "required": [
@@ -144669,6 +144673,10 @@
                             "string",
                             "null"
                           ]
+                        },
+                        "titleChanged": {
+                          "const": true,
+                          "type": "boolean"
                         },
                         "type": {
                           "const": "work-ledger.changed",

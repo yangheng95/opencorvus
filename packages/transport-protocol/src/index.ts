@@ -514,6 +514,7 @@ export const WorkLedgerChangedEvent = z
     projectID: z.string().optional(),
     directory: z.string().optional(),
     sessionID: z.string().optional(),
+    titleChanged: z.literal(true).optional(),
     taskID: z.string().nullable().optional(),
     sequence: z.number(),
   })

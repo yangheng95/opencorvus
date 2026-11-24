@@ -1787,6 +1787,7 @@ export type EventSessionError = {
 export type EventSessionUpdated = {
   properties: {
     info: Session
+    titleChanged?: true
   }
   type: "session.updated"
 }
@@ -41344,6 +41345,7 @@ export type WorkLedgerEventsResponses = {
         sessionID?: string
         sourceType: string
         taskID?: string | null
+        titleChanged?: true
         type: "work-ledger.changed"
       }
     | {

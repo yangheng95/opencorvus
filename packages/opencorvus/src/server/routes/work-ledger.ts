@@ -73,18 +73,19 @@ function isMissionWorkLedgerSession(info: Session.Info): boolean {
 function workLedgerSessionChangedEvent(
   sourceType: string,
   info: Session.Info,
-  sequence = Number(info.time.updated) || 0,
+  { sequence = Number(info.time.updated) || 0, titleChanged }: { sequence?: number; titleChanged?: boolean } = {},
 ): WorkLedgerEventValue | null {
   const mission =
     info.kind === "mission" &&
     info.metadata &&
     typeof info.metadata === "object" &&
     typeof (info.metadata as Record<string, unknown>).mission === "object"
-  if (!mission && !isRightSidebarConversationSession(info)) return null
+  if (!titleChanged && !mission && !isRightSidebarConversationSession(info)) return null
   return {
     type: "work-ledger.changed",
     sourceType,
     sessionID: info.id,
+    ...(titleChanged ? { titleChanged: true } : {}),
     sequence,
   }
 }
@@ -119,7 +120,7 @@ function mailboxNotificationEvent(event: ProtocolEventView): WorkLedgerEventValu
   }
 }
 
-function workLedgerGlobalBusEvent(input: { payload?: unknown }): { sourceType: string; info: Session.Info } | null {
+function workLedgerGlobalBusEvent(input: { payload?: unknown }): { sourceType: string; info: Session.Info; titleChanged: boolean } | null {
   const payload = input.payload
   if (!payload || typeof payload !== "object") return null
   const envelope = payload as { type?: unknown; properties?: unknown }
@@ -131,11 +132,16 @@ function workLedgerGlobalBusEvent(input: { payload?: unknown }): { sourceType: s
   ) {
     return null
   }
-  const properties = envelope.properties
-  const info = properties && typeof properties === "object" ? (properties as { info?: unknown }).info : undefined
-  const parsed = Session.Info.safeParse(info)
+  const properties = envelope.properties && typeof envelope.properties === "object"
+    ? envelope.properties as { info?: unknown; titleChanged?: unknown }
+    : undefined
+  const parsed = Session.Info.safeParse(properties?.info)
   if (!parsed.success) return null
-  return { sourceType, info: parsed.data }
+  return {
+    sourceType,
+    info: parsed.data,
+    titleChanged: sourceType === Session.Event.Updated.type && properties?.titleChanged === true,
+  }
 }
 
 function workLedgerGlobalBusProjectEvent(input: {
@@ -420,7 +426,9 @@ export function WorkLedgerRoutes() {
             }
             const sessionEvent = workLedgerGlobalBusEvent(event)
             if (sessionEvent) {
-              const changed = workLedgerSessionChangedEvent(sessionEvent.sourceType, sessionEvent.info)
+              const changed = workLedgerSessionChangedEvent(sessionEvent.sourceType, sessionEvent.info, {
+                titleChanged: sessionEvent.titleChanged,
+              })
               if (changed) writeWorkLedgerEventData(writeData, changed)
               return
             }
@@ -438,7 +446,7 @@ export function WorkLedgerRoutes() {
             if (!statusEvent) return
             void Session.get(statusEvent.sessionID)
               .then((info) => {
-                const changed = workLedgerSessionChangedEvent(statusEvent.sourceType, info, statusEvent.sequence)
+                const changed = workLedgerSessionChangedEvent(statusEvent.sourceType, info, { sequence: statusEvent.sequence })
                 if (changed) writeWorkLedgerEventData(writeData, changed)
               })
               .catch(() => {

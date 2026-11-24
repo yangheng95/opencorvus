@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from "bun:test"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { rightSidebarConversationMetadata } from "@/chat/identity"
 import { ConfigPaths } from "@/config/paths"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
@@ -130,6 +131,69 @@ test("committed scheduled definition changes invalidate the public list after ea
     expect(await deleted.json()).toMatchObject({ id: added.id, name: "Future project handoff" })
     await expectChange()
     expect(await list()).toMatchObject([{ ...unaffected, status: "active", target: { scope: "project", projectIds: [controlID] } }])
+  } finally {
+    await close()
+  }
+}, 30_000)
+
+test("scheduled conversation titles re-read the same bound identity after sidebar and root renames", async () => {
+  await using sidebarProject = await memoryProject("scheduled-sidebar-title")
+  await using rootProject = await memoryProject("scheduled-root-title")
+  const sidebar = await Instance.provide({
+    directory: sidebarProject.path,
+    fn: () => Session.create({ kind: "assistant", title: "Sidebar original", metadata: rightSidebarConversationMetadata("chat") }),
+  })
+  const root = await Instance.provide({
+    directory: rootProject.path,
+    fn: () => Session.create({ kind: "root", title: "Root original" }),
+  })
+  async function createPlan(session: Session.Info) {
+    const result = await Server.App().request("/global/automations", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        name: `Future plan for ${session.title}`,
+        target: { scope: "session", sessionId: session.id },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=2",
+        prompt: "Verify the existing conversation binding.",
+      }),
+    })
+    expect(result.status).toBe(201)
+    return (await result.json()) as { id: string; revisionId: string; nextRun: number }
+  }
+
+  const sidebarPlan = await createPlan(sidebar)
+  const rootPlan = await createPlan(root)
+  await Database.awaitEffectIdle(5_000)
+  const { next, close } = await openLedgerEvents()
+  try {
+    await next("work-ledger.connected")
+    for (const [session, route, title] of [
+      [sidebar, `/coding/chat/session/${sidebar.id}`, "Sidebar current title"],
+      [root, `/session/${root.id}`, "Root current title"],
+    ] as const) {
+      const renamed = await Server.App().request(`${route}?${new URLSearchParams({ directory: session.directory })}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ title }),
+      })
+      expect(renamed.status).toBe(200)
+      expect(await next("work-ledger.changed", "session.updated")).toMatchObject({ sessionID: session.id, titleChanged: true })
+    }
+    const response = await Server.App().request("/global/automations")
+    expect(response.status).toBe(200)
+    expect(await response.json()).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        ...sidebarPlan,
+        target: { scope: "session", sessionId: sidebar.id },
+        targetSession: { id: sidebar.id, title: "Sidebar current title", directory: sidebar.directory },
+      }),
+      expect.objectContaining({
+        ...rootPlan,
+        target: { scope: "session", sessionId: root.id },
+        targetSession: { id: root.id, title: "Root current title", directory: root.directory },
+      }),
+    ]))
   } finally {
     await close()
   }

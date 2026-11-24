@@ -619,7 +619,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   })
   const openedSessionTarget = createMemo(() => {
     const opened = editOwner()?.definition
-    return opened?.target.scope === "session" && opened.target.sessionId === sessionTargetID() ? opened : undefined
+    if (opened?.target.scope !== "session" || opened.target.sessionId !== sessionTargetID()) return undefined
+    const current = automationsByID().get(opened.id)
+    return current?.target.scope === "session" && current.target.sessionId === opened.target.sessionId ? current : opened
   })
   const sessionTargetTitle = createMemo(() => {
     const opened = openedSessionTarget()
@@ -1277,12 +1279,17 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   })
 
   const unsubscribeScheduledChanges = subscribeWorkLedgerChanges((event) => {
-    if (event.type === "work-ledger.connected" ||
-      (event.type === "work-ledger.changed" && event.sourceType === "automation.definition.changed")) {
+    if (event.type === "work-ledger.connected") {
+      setDefinitionRefreshRequested(true)
+      setProjectRefreshRequested(true)
+      return
+    }
+    if (event.type !== "work-ledger.changed") return
+    if (event.sourceType === "automation.definition.changed" ||
+      (event.titleChanged && automations().some(({ target }) => target.scope === "session" && target.sessionId === event.sessionID))) {
       setDefinitionRefreshRequested(true)
     }
-    if (event.type === "work-ledger.connected" ||
-      (event.type === "work-ledger.changed" && event.sourceType === "project.updated")) {
+    if (event.sourceType === "project.updated") {
       setProjectRefreshRequested(true)
     }
   })

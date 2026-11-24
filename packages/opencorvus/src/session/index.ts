@@ -347,6 +347,7 @@ export namespace Session {
       "session.updated",
       z.object({
         info: Info,
+        titleChanged: z.literal(true).optional(),
       }),
     ),
     Deleted: BusEvent.define(
@@ -737,7 +738,10 @@ export namespace Session {
         .returning()
         .get()!
       const info = fromRow(row)
-      Bus.publishOwnedInTransaction(Event.Updated, { info })
+      Bus.publishOwnedInTransaction(Event.Updated, {
+        info,
+        ...(current.title !== row.title ? { titleChanged: true } : {}),
+      })
       return info
     })
   }
