@@ -1,0 +1,240 @@
+{
+  "enBlankArrow": {
+    "activeTag": "INPUT",
+    "count": 88,
+    "expanded": null,
+    "label": "Search providers",
+    "query": "",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "enFirstStaysSelected": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": 338.66668701171875,
+      "left": 404,
+      "right": 961.59375,
+      "top": 320.66668701171875
+    },
+    "count": 88,
+    "expanded": "false",
+    "label": "Configure 302.AI",
+    "query": "",
+    "rowText": "302.AI302ai",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 40
+  },
+  "enPageMovesAwayFromFocus": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": -259.3333435058594,
+      "left": 404,
+      "right": 961.59375,
+      "top": -277.3333435058594
+    },
+    "count": 88,
+    "expanded": "false",
+    "label": "Configure 302.AI",
+    "query": "",
+    "rowText": "302.AI302ai",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 638
+  },
+  "enEnterExpandsOriginalProvider": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": -308.66668701171875,
+      "left": 404,
+      "right": 987.3229370117188,
+      "top": -326.66668701171875
+    },
+    "count": 88,
+    "expanded": "true",
+    "label": "Collapse 302.AI configuration",
+    "query": "",
+    "rowText": "302.AI302ai",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 687.3333129882812
+  },
+  "enMixedWarehouseFocus": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": 363.8646049499512,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": 323.66668701171875
+    },
+    "count": 90,
+    "expanded": null,
+    "label": "Edit fixture-warehouse-relay",
+    "query": "",
+    "rowText": "Warehouse receiving model relayfixture-warehouse-relayAPI: http://127.0.0.1:46901/v1",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 40
+  },
+  "enMixedDefaultPage": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": -234.13542556762695,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": -274.3333435058594
+    },
+    "count": 90,
+    "expanded": null,
+    "label": "Edit fixture-warehouse-relay",
+    "query": "",
+    "rowText": "Warehouse receiving model relayfixture-warehouse-relayAPI: http://127.0.0.1:46901/v1",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 638
+  },
+  "enMixedEnterEditsOldWarehouse": {
+    "activeTag": "INPUT",
+    "count": 90,
+    "expanded": null,
+    "label": "",
+    "query": "",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 392.6666564941406
+  },
+  "zhMixedPageUpLeavesOldProvider": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": 1227.3334159851074,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 1198.541748046875
+    },
+    "count": 90,
+    "expanded": "false",
+    "label": "配置 Zhipu AI Coding Plan",
+    "query": "",
+    "rowText": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6238.66650390625
+  },
+  "zhMixedEnterExpandsOffscreenZhipu": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": 1227.3334159851074,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 1198.541748046875
+    },
+    "count": 90,
+    "expanded": "true",
+    "label": "收起 Zhipu AI Coding Plan 的配置",
+    "query": "",
+    "rowText": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6238.66650390625
+  },
+  "zhMixedExplicitCollapse": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": 1227.3334159851074,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 1198.541748046875
+    },
+    "count": 90,
+    "expanded": "false",
+    "label": "配置 Zhipu AI Coding Plan",
+    "query": "",
+    "rowText": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6238.66650390625
+  },
+  "zhMatchingFinalEntry": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": 707.3333549499512,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 678.5416870117188
+    },
+    "count": 90,
+    "expanded": "false",
+    "label": "配置 Zhipu AI Coding Plan",
+    "query": "模型",
+    "rowText": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zhMatchingPageMovesToActualProvider": {
+    "activeTag": "BUTTON",
+    "box": {
+      "bottom": 144.3333396911621,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 115.54167175292967
+    },
+    "count": 90,
+    "expanded": "false",
+    "label": "配置 Vultr",
+    "query": "模型",
+    "rowText": "Vultrvultr",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  }
+}

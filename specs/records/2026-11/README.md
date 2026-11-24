@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [浏览完整模型服务商目录](2026-11-24-provider-unfiltered-navigation.md)
 - [浏览完整归档及续页焦点](2026-11-24-archive-unfiltered-navigation.md)
 - [无关键词时浏览多步任务技能](2026-11-24-mission-skill-unfiltered-navigation.md)
 - [从文件标签跳转到行](2026-11-24-file-tab-go-to-line.md)

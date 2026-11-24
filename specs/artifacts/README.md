@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [完整模型服务商目录的桌面证据](2026-11-24-provider-unfiltered-navigation/README.md)
 - [完整归档键盘浏览与续页的桌面证据](2026-11-24-archive-unfiltered-navigation/README.md)
 - [无关键词浏览多步任务技能的桌面证据](2026-11-24-mission-skill-unfiltered-navigation/README.md)
 - [从文件标签跳行的桌面证据](2026-11-24-file-tab-go-to-line/README.md)
