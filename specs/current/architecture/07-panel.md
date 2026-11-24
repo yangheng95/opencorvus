@@ -1864,7 +1864,11 @@ and watched additions or removals from the existing work ledger stream. Entry
 changes collect their parent paths within the current authority and selection
 scope. Once an in-flight query or
 explicit file action settles, the ordinary listing reader checks affected open
-directories. A changed listing or an affected parent without a successful
+directories. An explicit invalidation includes an expanded directory whose
+ordinary first listing is still in flight, so the newer read owns the result
+before the earlier snapshot can publish. Periodic reads keep the existing
+observed directory selection, and required reads keep their own ownership.
+A changed listing or an affected parent without a successful
 listing refreshes the current accepted search, which also covers collapsed
 folders. File saves carrying a resource identity and watched content changes
 leave entry membership alone.

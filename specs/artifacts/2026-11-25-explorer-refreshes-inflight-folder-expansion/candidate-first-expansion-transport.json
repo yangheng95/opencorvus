@@ -1,0 +1,59 @@
+[
+  {
+    "at": "2026-11-24T23:15:30.05Z",
+    "event": "upstream-response",
+    "id": 57,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging",
+    "actual": "dc96a728-ce39-46d4-936a-6e1025289046"
+  },
+  {
+    "at": "2026-11-24T23:15:30.051Z",
+    "event": "directory-response-held",
+    "id": 57,
+    "status": 200,
+    "actual": "dc96a728-ce39-46d4-936a-6e1025289046"
+  },
+  {
+    "at": "2026-11-24T23:15:30.109Z",
+    "event": "upstream-response",
+    "id": 58,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging",
+    "actual": "a97d4e07-1288-4a5a-ab4e-5bfd19a7622b"
+  },
+  {
+    "at": "2026-11-24T23:15:30.292Z",
+    "event": "directory-response-released",
+    "id": 57,
+    "actual": "dc96a728-ce39-46d4-936a-6e1025289046"
+  },
+  {
+    "at": "2026-11-24T23:15:32.41Z",
+    "event": "upstream-response",
+    "id": 60,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging",
+    "actual": "17562114-294f-4a48-a45e-5e548f9cdaa1"
+  },
+  {
+    "at": "2026-11-24T23:15:36.21Z",
+    "event": "upstream-response",
+    "id": 63,
+    "pathname": "/file/content",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging/fresh-arrival.txt",
+    "actual": "03b2ef4a-155f-4350-9204-917c415258b3"
+  }
+]

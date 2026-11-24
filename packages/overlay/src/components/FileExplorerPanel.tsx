@@ -912,8 +912,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const changedParents = typeof target === "object" ? target : undefined
     const acceptedSearch = searchResults.loading ? undefined : currentSearchResult()
     const visiblePaths = [...new Set(["", ...expandedPaths()])].filter((path) =>
-      (path === "" || childrenByPath().has(path) || directoryErrors().has(path)) &&
-      (!changedParents || changedParents.has(path)),
+      (!changedParents || changedParents.has(path)) &&
+      (path === "" || childrenByPath().has(path) || directoryErrors().has(path) ||
+        (target !== undefined && directoryLoadTokens.has(path))),
     )
     const hasUnobservedParent = changedParents && [...changedParents].some((path) =>
       !visiblePaths.includes(path) || !childrenByPath().has(path),
