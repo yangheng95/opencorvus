@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [已安装专家团分页的桌面证据](2026-11-24-installed-expert-squad-page-focus/README.md)
 - [已安装技能搜索导航的桌面证据](2026-11-24-installed-skill-search-navigation/README.md)
 - [搜索结果键盘聚焦完整行的桌面证据](2026-11-24-search-result-row-focus/README.md)
 - [新建多步任务专家团搜索分页的桌面证据](2026-11-24-mission-squad-search-page-focus/README.md)
