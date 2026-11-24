@@ -14,7 +14,7 @@ import {
   type WorkLedgerEvent as WorkLedgerEventValue,
 } from "@opencorvus-ai/transport-protocol"
 import { GlobalBus } from "@/bus/global"
-import { isRightSidebarConversationSession } from "@/chat/session"
+import { isRightSidebarConversationSession, rightSidebarConversationExperience } from "@/chat/session"
 import { ConversationHandoffEvent } from "@/chat/handoff"
 import { MissionHandoffEvent } from "@/mission/caller-receipt"
 import { Config } from "@/config/config"
@@ -86,11 +86,13 @@ function workLedgerSessionChangedEvent(
     info.metadata &&
     typeof info.metadata === "object" &&
     typeof (info.metadata as Record<string, unknown>).mission === "object"
-  if (!titleChanged && !mission && !isRightSidebarConversationSession(info)) return null
+  const conversationExperience = rightSidebarConversationExperience(info)
+  if (!titleChanged && !mission && !conversationExperience) return null
   return {
     type: "work-ledger.changed",
     sourceType,
     sessionID: info.id,
+    ...(conversationExperience ? { conversationExperience } : {}),
     ...(titleChanged ? { titleChanged: true } : {}),
     ...(archiveUpdated ? { archiveUpdated: true } : {}),
     ...(sourceType === Session.Event.Updated.type && info.time.archived !== undefined ? { sessionArchived: true } : {}),

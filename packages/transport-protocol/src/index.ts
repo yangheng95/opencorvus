@@ -515,6 +515,7 @@ export const WorkLedgerChangedEvent = z
     projectID: z.string().optional(),
     directory: z.string().optional(),
     sessionID: z.string().optional(),
+    conversationExperience: WorkLedgerChatRow.shape.experience.optional(),
     titleChanged: z.literal(true).optional(),
     archiveUpdated: z.literal(true).optional(),
     sessionArchived: z.literal(true).optional(),

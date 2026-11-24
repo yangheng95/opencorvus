@@ -144735,6 +144735,13 @@
                           "minLength": 1,
                           "type": "string"
                         },
+                        "conversationExperience": {
+                          "enum": [
+                            "chat",
+                            "work"
+                          ],
+                          "type": "string"
+                        },
                         "directory": {
                           "type": "string"
                         },

@@ -82,6 +82,14 @@ describe("canonical Server-Sent Events payload contracts", () => {
       taskID: "task-1",
       sequence: 17,
     }
+    const conversationChange = {
+      type: "work-ledger.changed",
+      sourceType: "session.updated",
+      sessionID: "session-chat",
+      conversationExperience: "chat",
+      titleChanged: true,
+      sequence: 18,
+    }
     const handoff = {
       type: "work-ledger.mission-handoff",
       sourceType: "mission.handoff",
@@ -114,7 +122,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
       callerMessageID: "message-caller",
       sequence: 19,
     }
-    for (const event of [changed, handoff, conversationHandoff, fileChange]) {
+    for (const event of [changed, conversationChange, handoff, conversationHandoff, fileChange]) {
       expect(WorkLedgerEvent.parse(event)).toEqual(event)
       expect(WorkLedgerActionEvent.parse(event)).toEqual(event)
     }

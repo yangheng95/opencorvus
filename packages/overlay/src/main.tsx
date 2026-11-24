@@ -570,13 +570,15 @@ function requestSideChat(quotation?: Quotation, prompt?: string, sourceDraft?: S
 const [primaryCenterPanel, setPrimaryCenterPanel] = createSignal<PrimaryCenterPanel>("chat")
 const [primaryWorkspaceSurface, setPrimaryWorkspaceSurface] = createSignal<PrimaryWorkspaceSurface>("conversation")
 const [workLedgerListRefreshToken, setWorkLedgerListRefreshToken] = createSignal(0)
+const [missionBoardRefreshToken, setMissionBoardRefreshToken] = createSignal(0)
 const [workLedgerSelectionRefreshToken, setWorkLedgerSelectionRefreshToken] = createSignal(0)
 
 function refreshWorkLedgerViews(change?: WorkLedgerChangeIdentity): void {
   const scope = workLedgerRefreshScope(change, boardStore.selectedSource)
   batch(() => {
     setWorkLedgerListRefreshToken((value) => value + 1)
-    if (scope === "list-and-selection") setWorkLedgerSelectionRefreshToken((value) => value + 1)
+    if (scope.missionBoard) setMissionBoardRefreshToken((value) => value + 1)
+    if (scope.selection) setWorkLedgerSelectionRefreshToken((value) => value + 1)
   })
 }
 const [missionLauncherSubmitting, setMissionLauncherSubmitting] = createSignal(false)
@@ -946,7 +948,7 @@ async function archiveConversationHandoffCaller(
   assertApiAuthorityCurrent(authority)
   await setConversationSessionArchived({ ...target, authority }, true)
   if (!isApiAuthorityCurrent(authority)) return
-  refreshWorkLedgerViews({ sessionID: target.sessionID })
+  refreshWorkLedgerViews({ sessionID: target.sessionID, conversationExperience: target.experience })
 }
 
 function focusComposerInput(origin: Element | null): void {
@@ -1527,7 +1529,7 @@ async function stopWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
   })
   if (!isApiAuthorityCurrent(authority)) return
   if (!ok) throw new Error("Coding assistant stop failed")
-  refreshWorkLedgerViews({ sessionID: row.sessionID })
+  refreshWorkLedgerViews({ sessionID: row.sessionID, conversationExperience: row.experience })
 }
 
 async function renameWorkLedgerChat(row: WorkLedgerChatRow, presentation?: WorkLedgerRenamePresentation): Promise<void> {
@@ -1554,7 +1556,7 @@ async function renameWorkLedgerChat(row: WorkLedgerChatRow, presentation?: WorkL
       )
       if (!isApiAuthorityCurrent(authority)) return
       runPostCommitUiEffect({ id: `chat:rename:${row.sessionID}`, title: t("work_ledger.action.rename_chat") }, () =>
-        refreshWorkLedgerViews({ sessionID: row.sessionID }),
+        refreshWorkLedgerViews({ sessionID: row.sessionID, conversationExperience: row.experience }),
       )
     },
   })
@@ -1582,7 +1584,7 @@ async function archiveWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
     })
   }
   runPostCommitUiEffect({ id: `chat:archive-refresh:${row.sessionID}`, title: "Chat archive committed" }, () =>
-    refreshWorkLedgerViews({ sessionID: row.sessionID }),
+    refreshWorkLedgerViews({ sessionID: row.sessionID, conversationExperience: row.experience }),
   )
 }
 
@@ -1593,7 +1595,11 @@ async function setActiveWorkLedgerItemPinned(
   const authority = captureApiAuthority()
   await setWorkLedgerItemPinned({ row, pinned, authority })
   if (!isApiAuthorityCurrent(authority)) return
-  refreshWorkLedgerViews(row.kind === "task" ? { taskID: row.id } : { sessionID: row.sessionID })
+  if (row.kind === "task") refreshWorkLedgerViews({ taskID: row.id })
+  else refreshWorkLedgerViews({
+    sessionID: row.sessionID,
+    conversationExperience: row.kind === "chat" ? row.experience : undefined,
+  })
 }
 
 function assertDebugSelectionCurrent(source: BoardSource): void {
@@ -3107,6 +3113,7 @@ function OverlayRoot() {
           selectedTaskID={activeTaskID()}
           selectedSessionID={activeSessionID()}
           refreshToken={workLedgerListRefreshToken()}
+          missionBoardRefreshToken={missionBoardRefreshToken()}
           onOpenMissionBoard={() =>
             runMainAsync("work-ledger.open-mission-board", async () => {
               await closeConfigDialog()

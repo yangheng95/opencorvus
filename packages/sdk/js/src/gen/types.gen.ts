@@ -41354,6 +41354,7 @@ export type WorkLedgerEventsResponses = {
     | {
         archiveUpdated?: true
         automationID?: string
+        conversationExperience?: "chat" | "work"
         directory?: string
         projectID?: string
         sequence: number

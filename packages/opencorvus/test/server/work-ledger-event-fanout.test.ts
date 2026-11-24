@@ -341,6 +341,7 @@ test("conversation archive and restore announce the exact work record and its cu
         })
         expect(await next("work-ledger.changed", "session.updated")).toMatchObject({
           sessionID: session.id,
+          conversationExperience: experience,
           archiveUpdated: true,
           ...(archived ? { sessionArchived: true } : {}),
           sequence: receipt.time.updated,
@@ -391,12 +392,12 @@ test("the public stream distinguishes ordinary renames from renamed archive memb
     expect(activeReceipt.title).toBe("Revised active review")
     expect(await next("work-ledger.changed", "session.updated")).toEqual({
       type: "work-ledger.changed", sourceType: "session.updated", sessionID: active.id,
-      titleChanged: true, sequence: activeReceipt.time.updated,
+      conversationExperience: "chat", titleChanged: true, sequence: activeReceipt.time.updated,
     })
     const retainedReceipt = await rename(retained.id, "Revised archived review")
     expect(await next("work-ledger.changed", "session.updated")).toEqual({
       type: "work-ledger.changed", sourceType: "session.updated", sessionID: retained.id,
-      titleChanged: true, sessionArchived: true, sequence: retainedReceipt.time.updated,
+      conversationExperience: "chat", titleChanged: true, sessionArchived: true, sequence: retainedReceipt.time.updated,
     })
     const search = new URLSearchParams({ search: "Revised" })
     const archive = await Server.App().request(`/work-ledger/archive?${search}`)

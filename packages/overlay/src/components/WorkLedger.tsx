@@ -86,6 +86,7 @@ import { useTaskRowActionsKeyboard } from "./useTaskRowActionsKeyboard"
 import { useDisclosure } from "../solid/disclosure"
 
 const WORK_LEDGER_PAGE_SIZE = 80
+const PROJECTION_REFRESH_DELAY_MS = 120
 
 type WorkLedgerGroup = {
   renderKey: string
@@ -114,6 +115,7 @@ export interface WorkLedgerProps {
   selectedTaskID?: string
   selectedSessionID?: string
   refreshToken?: number
+  missionBoardRefreshToken: number
   onOpenMissionBoard: () => void | Promise<void>
   onSelectMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onSelectTask: (row: WorkLedgerTaskRow) => void | Promise<void>
@@ -1234,7 +1236,6 @@ export function WorkLedger(props: WorkLedgerProps) {
       setError("")
     }
     if (connectionStatus !== "online") {
-      cancelMissionBoardLoad(connectionStatus === "connecting")
       loadSequence += 1
       controller?.abort()
       controller = null
@@ -1245,10 +1246,23 @@ export function WorkLedger(props: WorkLedgerProps) {
     const timer = setTimeout(() => {
       if (!isApiAuthorityCurrent(authority)) return
       void reload(authority)
-      void reloadMissionBoard(authority)
-    }, 120)
+    }, PROJECTION_REFRESH_DELAY_MS)
     onCleanup(() => clearTimeout(timer))
     return key
+  })
+
+  createEffect(() => {
+    const authority = captureApiAuthority()
+    const connectionStatus = appStore.connectionStatus
+    props.missionBoardRefreshToken
+    if (connectionStatus !== "online") {
+      cancelMissionBoardLoad(connectionStatus === "connecting")
+      return
+    }
+    const timer = setTimeout(() => {
+      if (isApiAuthorityCurrent(authority)) void reloadMissionBoard(authority)
+    }, PROJECTION_REFRESH_DELAY_MS)
+    onCleanup(() => clearTimeout(timer))
   })
 
   onCleanup(() => {

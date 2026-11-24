@@ -33,7 +33,11 @@ export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow
 export type WorkLedgerKind = WorkLedgerItemRow["kind"]
 export type WorkLedgerChatStatus = WorkLedgerChatRow["status"]
 export type WorkLedgerPresentationStatus = "active" | "inactive"
-export type WorkLedgerChangeIdentity = { sessionID?: string; taskID?: string | null }
+export type WorkLedgerChangeIdentity = {
+  sessionID?: string
+  taskID?: string | null
+  conversationExperience?: WorkLedgerChatRow["experience"]
+}
 
 export function workLedgerActionFailureText(action: string, error: unknown, title: string) {
   if (action === "archive" && error instanceof ArchiveStateUnconfirmedError) {
@@ -48,13 +52,13 @@ export function workLedgerActionFailureText(action: string, error: unknown, titl
 export function workLedgerRefreshScope(
   change: WorkLedgerChangeIdentity | undefined,
   selected: Pick<BoardSource, "kind" | "id"> | null,
-): "list" | "list-and-selection" {
-  if (!selected) return "list"
-  if (change?.sessionID && !change.taskID) {
-    return selected.kind === "session" && selected.id === change.sessionID ? "list-and-selection" : "list"
+): { selection: boolean; missionBoard: boolean } {
+  const sessionOnly = Boolean(change?.sessionID && !change.taskID)
+  return {
+    // Task events can also change a selected Mission through a child Task.
+    selection: selected !== null && (!sessionOnly || (selected.kind === "session" && selected.id === change?.sessionID)),
+    missionBoard: !sessionOnly || !change?.conversationExperience,
   }
-  // Task events may change a selected Mission through a child Task.
-  return "list-and-selection"
 }
 
 export type {

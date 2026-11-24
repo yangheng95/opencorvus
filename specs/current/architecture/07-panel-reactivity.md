@@ -49,6 +49,16 @@ cleanup releases its subscription when the card unmounts. Switching the primary
 surface only hides the retained board, so those mounted cards keep subscribing;
 document visibility continues to own the shared clock's pause and resume.
 
+The Work Ledger and Mission board read their own projections on connection
+recovery and changes to their source facts. A Work Ledger Session notification
+can carry the validated sidebar Chat or Work experience from the original
+Session. This scopes that direct change to the Work Ledger and any matching
+selection. The Mission board keeps its existing read, including a manual
+refresh already in progress. Mission, Task, project and connection changes
+continue to refresh the board through its own invalidation and connection
+owner. A separate transition caused by a conversation, such as a Mission
+handoff, still publishes its original change.
+
 Chat, Work and Mission find-in-conversation reads the complete project-scoped
 Session snapshot; Task reads its existing complete project-scoped transcript
 with every participant's original Session identity. One message-array validator
