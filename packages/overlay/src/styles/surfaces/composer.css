@@ -1465,11 +1465,10 @@ div:has(> .composer-model-selector-popover) {
 
 .model-selector-option-id {
   min-width: 0;
-  overflow: hidden;
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .model-selector-option-check {

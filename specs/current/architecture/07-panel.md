@@ -162,6 +162,10 @@ or runnable model availability.
 Composer model groups retain each connected catalog option's canonical label
 beside its fully-qualified ID. The visible list and literal search consume that
 same option; search covers model label, model ID, provider ID and provider label.
+Within a provider group, options with the same label show their model IDs in
+the list, including in filtered views. The compact Composer button presents
+the selected model's ID in that case and retains the fully-qualified identity
+in its accessible name and tooltip.
 The model selector and Provider discovery match every whitespace-separated query
 term literally across each candidate's existing metadata fields, in any order.
 The shared metadata matcher retains canonical option IDs and list ordering;

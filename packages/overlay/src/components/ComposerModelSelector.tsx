@@ -45,6 +45,7 @@ interface ProviderGroup {
 interface ModelOption {
   id: string
   label: string
+  displayModelID?: string
 }
 
 interface ProviderAccountUsageBaseResourceKey {
@@ -124,6 +125,13 @@ function mirrorProviderGroups(): ProviderGroup[] {
     }
     group.models.push({ id: option.value, label: option.modelLabel })
     groups.set(option.providerID, group)
+  }
+  for (const group of groups.values()) {
+    const labelCounts = new Map<string, number>()
+    for (const model of group.models) labelCounts.set(model.label, (labelCounts.get(model.label) ?? 0) + 1)
+    for (const model of group.models) {
+      if ((labelCounts.get(model.label) ?? 0) > 1) model.displayModelID = splitModelID(model.id).name
+    }
   }
   return [...groups.values()].sort((left, right) => left.providerName.localeCompare(right.providerName))
 }
@@ -319,13 +327,15 @@ export function ComposerModelSelector() {
   let searchInputRef: HTMLInputElement | undefined
   const taskID = createMemo(() => activeTaskID().trim())
   const selectedModel = createMemo(() => appStore.composerModel)
+  const groups = createMemo(mirrorProviderGroups)
   const modelLabel = createMemo(() => {
     const selected = selectedModel()
     if (!selected) return t(boardStore.selectedSource ? "model_selector.model_choose" : "model_selector.model_inherit")
-    return connectedModelOptions().find((option) => option.value === selected)?.modelLabel ?? selected
+    const provider = splitModelID(selected).provider
+    const option = groups().find((group) => group.providerID === provider)?.models.find((option) => option.id === selected)
+    return option?.displayModelID ?? option?.label ?? selected
   })
   const accountUsage = createProviderAccountUsageState(selectedModel, taskID)
-  const groups = createMemo(mirrorProviderGroups)
   const catalogIssue = createMemo(() => appStore.providerLoadIssues.find((issue) => issue.resource === "catalog"))
   const retainedModelList = () => groups().length > 0 && (providerLoading() || Boolean(catalogIssue()))
   const filteredGroups = createMemo(() => {
@@ -610,7 +620,12 @@ function ProviderModelGroup(props: ProviderModelGroupProps) {
               <span class="composer-picker-option-icon" aria-hidden="true">
                 <Icon name="config-agent-models" size="compact" />
               </span>
-              <span class="composer-picker-option-label">{option.label}</span>
+              <span class={option.displayModelID ? "model-selector-option-copy" : "composer-picker-option-label"}>
+                <span class="composer-picker-option-label">{option.label}</span>
+                <Show when={option.displayModelID}>
+                  {(id) => <span class="model-selector-option-id">{id()}</span>}
+                </Show>
+              </span>
               <Show when={option.id === props.currentModel}>
                 <Icon class="model-selector-option-check" name="check" size="compact" />
               </Show>
