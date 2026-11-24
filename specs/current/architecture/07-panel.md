@@ -2244,6 +2244,8 @@ The scheduled-task list matches all space-separated terms within each definition
 metadata, including the definition's bound target fields. The shared matcher
 allows those terms to occur in any order and across fields of that definition.
 The next scheduled instant displays seconds when it falls outside a whole minute.
+Scheduled details wrap the saved provider and model identifier within its field
+so rules with similar model names remain distinguishable.
 The machine calendar service owns parsing, serialization and edit comparison,
 without a parallel hard-coded English presentation export.
 

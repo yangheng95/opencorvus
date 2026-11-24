@@ -1695,7 +1695,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </div>
                         <div>
                           <span>{t("automations.model")}</span>
-                          <strong>
+                          <strong class="automation-detail-model">
                             {automation().model
                               ? `${automation().model!.providerID}/${automation().model!.modelID}`
                               : t(

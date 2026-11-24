@@ -1,0 +1,176 @@
+{
+  "requestID": "69df7bfd-1f8e-4946-b380-5c4fb1997c8c",
+  "sameFourDefinitions": true,
+  "definitions": [
+    {
+      "id": "atm_haGinTlHxXQW5zMtGoRH",
+      "revisionId": "atm_haGinTlHxXQW5zMtGoRH",
+      "name": "Evening review East",
+      "target": {
+        "scope": "global"
+      },
+      "targetSession": null,
+      "recurrence": "DTSTART:20990108T123045Z\nRRULE:FREQ=DAILY",
+      "executionMode": "local",
+      "model": {
+        "providerID": "managed-project-compatibility-provider",
+        "modelID": "development-review-structured-response-east"
+      },
+      "reasoningEffort": null,
+      "prompt": "Review the isolated evening checklist.",
+      "status": "active",
+      "lastRun": null,
+      "nextRun": 4071558645000,
+      "failureCount": 0,
+      "lastError": null
+    },
+    {
+      "id": "atm_hmljnbpDhQ54T4BajiQe",
+      "revisionId": "atm_hmljnbpDhQ54T4BajiQe",
+      "name": "Evening review global default",
+      "target": {
+        "scope": "global"
+      },
+      "targetSession": null,
+      "recurrence": "DTSTART:20990108T123045Z\nRRULE:FREQ=DAILY",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "Review the isolated evening checklist.",
+      "status": "active",
+      "lastRun": null,
+      "nextRun": 4071558645000,
+      "failureCount": 0,
+      "lastError": null
+    },
+    {
+      "id": "atm_hhTqE04Rh8wtF5qEzL3L",
+      "revisionId": "atm_hhTqE04Rh8wtF5qEzL3L",
+      "name": "Evening review project default",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hyLNpCzCu2MDEYUGUTyL"
+        ]
+      },
+      "targetSession": null,
+      "recurrence": "DTSTART:20990108T123045Z\nRRULE:FREQ=DAILY",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "Review the isolated evening checklist.",
+      "status": "active",
+      "lastRun": null,
+      "nextRun": 4071558645000,
+      "failureCount": 0,
+      "lastError": null
+    },
+    {
+      "id": "atm_hJTY43njFp6HQz3QUTfa",
+      "revisionId": "atm_hJTY43njFp6HQz3QUTfa",
+      "name": "Evening review West",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hyLNpCzCu2MDEYUGUTyL"
+        ]
+      },
+      "targetSession": null,
+      "recurrence": "DTSTART:20990108T123045Z\nRRULE:FREQ=DAILY",
+      "executionMode": "local",
+      "model": {
+        "providerID": "managed-project-compatibility-provider",
+        "modelID": "development-review-structured-response-west"
+      },
+      "reasoningEffort": null,
+      "prompt": "Review the isolated evening checklist.",
+      "status": "active",
+      "lastRun": null,
+      "nextRun": 4071558645000,
+      "failureCount": 0,
+      "lastError": null
+    }
+  ],
+  "history": [
+    {
+      "id": "atm_haGinTlHxXQW5zMtGoRH",
+      "name": "Evening review East",
+      "historyRequestID": "be63b341-8178-42f0-8f7c-5fd4ea147733",
+      "runs": null,
+      "fire": {
+        "fireId": "cal_automation_5f06920fdde7bb0d48d4d79280191650",
+        "automationId": "atm_haGinTlHxXQW5zMtGoRH",
+        "automationRevisionId": "atm_haGinTlHxXQW5zMtGoRH",
+        "origin": "scheduled",
+        "scheduledDueAt": 4071558645000,
+        "startedAt": 1795550556312,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      }
+    },
+    {
+      "id": "atm_hmljnbpDhQ54T4BajiQe",
+      "name": "Evening review global default",
+      "historyRequestID": "58737dc2-c13a-44eb-8942-f1a420e98549",
+      "runs": null,
+      "fire": {
+        "fireId": "cal_automation_042fb56e488238e2eafab83d1ae7d8bc",
+        "automationId": "atm_hmljnbpDhQ54T4BajiQe",
+        "automationRevisionId": "atm_hmljnbpDhQ54T4BajiQe",
+        "origin": "scheduled",
+        "scheduledDueAt": 4071558645000,
+        "startedAt": 1795550556827,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      }
+    },
+    {
+      "id": "atm_hhTqE04Rh8wtF5qEzL3L",
+      "name": "Evening review project default",
+      "historyRequestID": "fcc59185-958d-4402-b0df-7f3ce13d0ebd",
+      "runs": null,
+      "fire": {
+        "fireId": "cal_automation_33c1f23d3392715f98b4bedc47a571dd",
+        "automationId": "atm_hhTqE04Rh8wtF5qEzL3L",
+        "automationRevisionId": "atm_hhTqE04Rh8wtF5qEzL3L",
+        "origin": "scheduled",
+        "scheduledDueAt": 4071558645000,
+        "startedAt": 1795550556834,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      }
+    },
+    {
+      "id": "atm_hJTY43njFp6HQz3QUTfa",
+      "name": "Evening review West",
+      "historyRequestID": "b67e268b-8f13-4c40-a7bb-887f71b64484",
+      "runs": null,
+      "fire": {
+        "fireId": "cal_automation_285d02bfe4e183de1a8119c3b435b080",
+        "automationId": "atm_hJTY43njFp6HQz3QUTfa",
+        "automationRevisionId": "atm_hJTY43njFp6HQz3QUTfa",
+        "origin": "scheduled",
+        "scheduledDueAt": 4071558645000,
+        "startedAt": 1795550556820,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      }
+    }
+  ]
+}
