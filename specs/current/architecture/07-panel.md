@@ -4700,6 +4700,11 @@ last confirmed list and preserves the original error in Details. Mutation
 receipts retain their separate ownership.
 An accepted read returns focus from its retiring diagnostic to the same
 Refresh control only if that diagnostic still owns focus.
+While open, the Worktree section refreshes on the existing `project.updated`
+notification for its selected directory or the primary worktree from its
+accepted list. A read in flight collects updates and uses the returned
+primary identity to decide whether one follow-up read is needed. A
+Work Ledger reconnect also refreshes the open section.
 
 Environment Information, Goals, Requirements, Workspace, and Tools retain one
 aligned title structure. Peer classifications share one compact 32px title-row

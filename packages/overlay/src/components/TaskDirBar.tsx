@@ -269,6 +269,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [bulkDeleteOperationDirectory, setBulkDeleteOperationDirectory] = createSignal("")
   let worktreeProjectionRetryTimer: ReturnType<typeof setTimeout> | undefined
   let worktreeProjectionGeneration = 0
+  const pendingWorktreeRefresh = new Set<string>()
   const visibleWorktrees = createMemo(() => worktrees().filter((item) => item.status !== "primary"))
   const removableWorktrees = createMemo(() => visibleWorktrees().filter((item) => item.removable))
   const bulkDeleteBusy = createMemo(() => bulkDeleteBusyFor(worktreeDirectory()))
@@ -289,7 +290,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const canCommitGit = () => gitActionReady() && vcs()?.dirty === true &&
     !commitMessageGenerating() && !gitBusy() && !!commitMessage().trim()
   const canDeleteAll = createMemo(() => gitMetadataFresh() && removableWorktrees().length > 0 && !bulkDeleteBusy())
-  const canReadWorktrees = () => appStore.connected && !!dir().trim() && lastVcs()?.initialized === true
+  const canReadWorktrees = createMemo(() => appStore.connected && !!dir().trim() && lastVcs()?.initialized === true)
   const metadataRefreshLabel = () => t(metadataBusy() ? "common.loading" :
     pathReadFailure() || gitReadFailure() ? "project_runtime.retry_metadata" : "project_runtime.refresh_metadata")
   const worktreeRefreshLabel = () =>
@@ -1105,6 +1106,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     })
   }
 
+  function matchesWorktreeProject(key: string, directory: string, items: readonly ProjectWorktreeInfo[]): boolean {
+    return projectDirectoryKey(directory) === key ||
+      items.some((item) => item.status === "primary" && projectDirectoryKey(item.directory) === key)
+  }
+
   async function syncWorktrees(
     options: { requireFresh?: boolean; authority?: ApiAuthority; selectionEpoch?: number } = {},
   ): Promise<void> {
@@ -1117,11 +1123,14 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       return
     }
     clearWorktreeProjectionRetry()
+    pendingWorktreeRefresh.clear()
     const requestGeneration = ++worktreeProjectionGeneration
     setWorktreeRead((current) => ({ ...current, loading: true }))
     try {
       const items = await loadProjectWorktrees(projectDirectory, authority)
       if (!ownsWorktreeProjection(requestGeneration, projectDirectory, authority, selectionEpoch)) return
+      const refresh = [...pendingWorktreeRefresh].some((key) => matchesWorktreeProject(key, projectDirectory, items))
+      pendingWorktreeRefresh.clear()
       if (worktreeRead().failure) {
         AppLog.info("ui", "Project worktree projection recovered", { directory: projectDirectory })
         if (
@@ -1137,6 +1146,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         setWorktreeDirectory(projectDirectory)
         setWorktreeRead({ loading: false })
       })
+      if (refresh && runtimePanelOpen() && ownsWorktreeProjection(requestGeneration, projectDirectory, authority, selectionEpoch)) {
+        void syncWorktrees({ authority, selectionEpoch })
+      }
     } catch (cause) {
       if (!ownsWorktreeProjection(requestGeneration, projectDirectory, authority, selectionEpoch)) return
       const message = errorMessage(cause)
@@ -1164,6 +1176,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   function invalidateWorktreeProjection(): void {
     worktreeProjectionGeneration += 1
+    pendingWorktreeRefresh.clear()
     clearWorktreeProjectionRetry()
   }
 
@@ -1407,7 +1420,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   createEffect(() => {
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
-    const eligible = runtimePanelOpen() && canReadWorktrees()
+    const eligible = runtimePanelOpen() && !!dir().trim() && canReadWorktrees()
     untrack(() => {
       if (eligible) void syncWorktrees({ authority, selectionEpoch })
       else clearWorktreeProjection()
@@ -1423,6 +1436,19 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   })
 
   onCleanup(subscribeWorkLedgerChanges((event) => {
+    if (event.type === "work-ledger.connected" || (event.type === "work-ledger.changed" && event.sourceType === "project.updated")) {
+      if (!runtimePanelOpen() || !canReadWorktrees()) return
+      const directory = dir().trim()
+      const changedDirectory = event.type === "work-ledger.connected" ? directory : event.directory
+      if (!changedDirectory) return
+      const key = projectDirectoryKey(changedDirectory)
+      if (worktreeRead().loading) {
+        pendingWorktreeRefresh.add(key)
+      } else if (matchesWorktreeProject(key, directory, worktrees())) {
+        void syncWorktrees()
+      }
+      return
+    }
     if (event.type !== "work-ledger.file-changed" || !showingGitMetadata() || !appStore.connected) return
     const directory = dir().trim()
     if (!directory || projectDirectoryKey(directory) !== projectDirectoryKey(event.directory) ||

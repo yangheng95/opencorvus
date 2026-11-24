@@ -1,0 +1,100 @@
+{
+  "before": {
+    "status": 200,
+    "requestID": "c5daf480-28a9-457e-9566-ceaa11d7136c",
+    "body": [
+      {
+        "name": "branch-review",
+        "branch": "main",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/branch-review",
+        "status": "primary",
+        "removable": false
+      },
+      {
+        "name": "peer-list-review",
+        "branch": "opencorvus/peer-list-review",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/branch-review/.opencorvus/.r/project/worktrees/peer-list-review",
+        "status": "managed",
+        "removable": true
+      }
+    ]
+  },
+  "create": {
+    "status": 200,
+    "requestID": "49c42020-8a2b-46a0-9a0f-90e439626610",
+    "body": {
+      "name": "peer-burst-one",
+      "branch": "opencorvus/peer-burst-one",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review\\.opencorvus\\.r\\project\\worktrees\\peer-burst-one"
+    }
+  },
+  "after": {
+    "status": 200,
+    "requestID": "dcf8da4f-a763-4ed8-a5a3-ffa0bc5cc5c5",
+    "body": [
+      {
+        "name": "branch-review",
+        "branch": "main",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/branch-review",
+        "status": "primary",
+        "removable": false
+      },
+      {
+        "name": "peer-burst-one",
+        "branch": "opencorvus/peer-burst-one",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/branch-review/.opencorvus/.r/project/worktrees/peer-burst-one",
+        "status": "managed",
+        "removable": true
+      },
+      {
+        "name": "peer-list-review",
+        "branch": "opencorvus/peer-list-review",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/branch-review/.opencorvus/.r/project/worktrees/peer-list-review",
+        "status": "managed",
+        "removable": true
+      }
+    ]
+  },
+  "events": {
+    "/global/event": [
+      {
+        "payload": {
+          "type": "project.updated",
+          "properties": {
+            "id": "prj_h0TrqweWdhdaE3wV0lEk",
+            "worktree": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review",
+            "time": {
+              "created": 1795539090588,
+              "updated": 1795539223274
+            },
+            "sandboxes": [
+              "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review\\.opencorvus\\.r\\project\\worktrees\\peer-list-review",
+              "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review\\.opencorvus\\.r\\project\\worktrees\\peer-burst-one"
+            ]
+          }
+        }
+      },
+      {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review",
+        "payload": {
+          "type": "worktree.ready",
+          "properties": {
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review\\.opencorvus\\.r\\project\\worktrees\\peer-burst-one",
+            "name": "peer-burst-one",
+            "branch": "opencorvus/peer-burst-one"
+          }
+        }
+      }
+    ],
+    "/work-ledger/events": [
+      {
+        "type": "work-ledger.changed",
+        "sourceType": "project.updated",
+        "projectID": "prj_h0TrqweWdhdaE3wV0lEk",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review",
+        "sequence": 1795539223274
+      }
+    ]
+  },
+  "streamErrors": []
+}

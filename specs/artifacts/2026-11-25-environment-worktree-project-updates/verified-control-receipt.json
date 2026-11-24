@@ -1,0 +1,85 @@
+{
+  "before": {
+    "status": 200,
+    "requestID": "b027c2ff-e8a6-41ba-b706-1a9300cacccb",
+    "body": [
+      {
+        "name": "control-review",
+        "branch": "control",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/control-review",
+        "status": "primary",
+        "removable": false
+      }
+    ]
+  },
+  "create": {
+    "status": 200,
+    "requestID": "dd0507bc-a1dc-45b8-8560-5262a83ad2dc",
+    "body": {
+      "name": "control-peer",
+      "branch": "opencorvus/control-peer",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review\\.opencorvus\\.r\\project\\worktrees\\control-peer"
+    }
+  },
+  "after": {
+    "status": 200,
+    "requestID": "d3c27224-e97d-4025-b174-2b42dedbb785",
+    "body": [
+      {
+        "name": "control-review",
+        "branch": "control",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/control-review",
+        "status": "primary",
+        "removable": false
+      },
+      {
+        "name": "control-peer",
+        "branch": "opencorvus/control-peer",
+        "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/control-review/.opencorvus/.r/project/worktrees/control-peer",
+        "status": "managed",
+        "removable": true
+      }
+    ]
+  },
+  "events": {
+    "/global/event": [
+      {
+        "payload": {
+          "type": "project.updated",
+          "properties": {
+            "id": "prj_h4F5vrZRKvblN9G5wLAs",
+            "worktree": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review",
+            "time": {
+              "created": 1795539093087,
+              "updated": 1795539263031
+            },
+            "sandboxes": [
+              "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review\\.opencorvus\\.r\\project\\worktrees\\control-peer"
+            ]
+          }
+        }
+      },
+      {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review",
+        "payload": {
+          "type": "worktree.ready",
+          "properties": {
+            "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review\\.opencorvus\\.r\\project\\worktrees\\control-peer",
+            "name": "control-peer",
+            "branch": "opencorvus/control-peer"
+          }
+        }
+      }
+    ],
+    "/work-ledger/events": [
+      {
+        "type": "work-ledger.changed",
+        "sourceType": "project.updated",
+        "projectID": "prj_h4F5vrZRKvblN9G5wLAs",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review",
+        "sequence": 1795539263031
+      }
+    ]
+  },
+  "streamErrors": []
+}

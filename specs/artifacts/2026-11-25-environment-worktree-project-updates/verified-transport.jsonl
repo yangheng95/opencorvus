@@ -1,0 +1,36 @@
+{"at": "2026-11-24T16:51:51.459Z", "event": "upstream-response", "id": 75, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/branch-review", "actual": "f4212d13-7959-4c29-8955-a1ab4a195e29"}
+{"at": "2026-11-24T16:52:04.743Z", "event": "upstream-response", "id": 121, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review", "actual": "2c2edb12-59b5-41a1-9a1f-b08e41046e71"}
+{"at": "2026-11-24T16:52:23.214Z", "event": "upstream-response", "id": 141, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review", "actual": "f0240cc5-f8bb-42d5-8dae-033af3123122"}
+{"at": "2026-11-24T16:52:33.591Z", "event": "upstream-response", "id": 151, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review", "actual": "9f70d72a-c26a-4dff-8d52-f1cfb1185a9a"}
+{"at": "2026-11-24T16:52:59.613Z", "event": "upstream-response", "id": 218, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:/Users/Public/opencorvus-review-20261125-b596/verified/branch-review/.opencorvus/.r/project/worktrees/peer-list-review", "actual": "b98c29fb-1917-419b-8658-5ec9766324be"}
+{"at": "2026-11-24T16:53:10.894Z", "event": "upstream-response", "id": 248, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review\\.opencorvus\\.r\\project\\worktrees\\peer-list-review", "actual": "cfc29b56-acab-4bb9-9f59-993126e0ac71"}
+{"at": "2026-11-24T16:53:22.685Z", "event": "mode", "mode": "hold-worktrees", "openLedgerStreams": 0, "openSockets": 6}
+{"at": "2026-11-24T16:53:26.727Z", "event": "upstream-response", "id": 267, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review", "actual": "0ddc58b0-456f-4210-b60d-a2b26d17c19a"}
+{"at": "2026-11-24T16:53:26.728Z", "event": "worktree-snapshot-held", "id": 267, "status": 200, "actual": "0ddc58b0-456f-4210-b60d-a2b26d17c19a"}
+{"at": "2026-11-24T16:53:41.332Z", "event": "worktree-snapshot-closed", "id": 267, "actual": "0ddc58b0-456f-4210-b60d-a2b26d17c19a"}
+{"at": "2026-11-24T16:53:45.007Z", "event": "upstream-response", "id": 287, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review\\.opencorvus\\.r\\project\\worktrees\\peer-list-review", "actual": "a78bdf4c-e45c-4439-91a7-a5919419f915"}
+{"at": "2026-11-24T16:53:45.008Z", "event": "worktree-snapshot-held", "id": 287, "status": 200, "actual": "a78bdf4c-e45c-4439-91a7-a5919419f915"}
+{"at": "2026-11-24T16:53:45.367Z", "event": "upstream-response", "id": 286, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review", "actual": "b0d4a025-5317-4164-8593-f5ee4ddece77"}
+{"at": "2026-11-24T16:53:45.367Z", "event": "worktree-snapshot-held", "id": 286, "status": 200, "actual": "b0d4a025-5317-4164-8593-f5ee4ddece77"}
+{"at": "2026-11-24T16:53:51.229Z", "event": "mode", "mode": "open", "openLedgerStreams": 0, "openSockets": 6}
+{"at": "2026-11-24T16:53:51.229Z", "event": "worktree-snapshot-released", "id": 287, "actual": "a78bdf4c-e45c-4439-91a7-a5919419f915"}
+{"at": "2026-11-24T16:53:51.230Z", "event": "worktree-snapshot-released", "id": 286, "actual": "b0d4a025-5317-4164-8593-f5ee4ddece77"}
+{"at": "2026-11-24T16:53:52.068Z", "event": "upstream-response", "id": 318, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review\\.opencorvus\\.r\\project\\worktrees\\peer-list-review", "actual": "a27c32b7-b415-43cf-9ef9-cb6fa8cbd420"}
+{"at": "2026-11-24T16:53:52.166Z", "event": "upstream-response", "id": 319, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review", "actual": "c7d58120-3469-49c8-bc38-493f61ded70b"}
+{"at": "2026-11-24T16:54:23.957Z", "event": "upstream-response", "id": 351, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\control-review", "actual": "e5947507-028f-4b75-994a-c43a851936eb"}
+{"at": "2026-11-24T16:54:46.785Z", "event": "mode", "mode": "held", "openLedgerStreams": 0, "openSockets": 2}
+{"at": "2026-11-24T16:54:49.794Z", "event": "socket-held", "id": 379, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:54:49.818Z", "event": "socket-held", "id": 380, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:54:52.808Z", "event": "socket-held", "id": 382, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:54:52.827Z", "event": "socket-held", "id": 384, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:54:55.819Z", "event": "socket-held", "id": 388, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:54:55.833Z", "event": "socket-held", "id": 390, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:54:58.826Z", "event": "socket-held", "id": 392, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:54:58.840Z", "event": "socket-held", "id": 394, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:55:01.833Z", "event": "socket-held", "id": 397, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:55:01.849Z", "event": "socket-held", "id": 399, "pathname": "/global/transport/stream"}
+{"at": "2026-11-24T16:55:04.226Z", "event": "mode", "mode": "open", "openLedgerStreams": 0, "openSockets": 0}
+{"at": "2026-11-24T16:55:04.841Z", "event": "socket-open", "id": 403, "pathname": "/global/transport/stream", "status": 101}
+{"at": "2026-11-24T16:55:04.866Z", "event": "socket-open", "id": 411, "pathname": "/global/transport/stream", "status": 101}
+{"at": "2026-11-24T16:55:05.762Z", "event": "upstream-response", "id": 406, "pathname": "/project/current/worktrees", "method": "GET", "status": 200, "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b596\\verified\\branch-review", "actual": "4bd18b2c-b2d6-44bb-8730-68cd0579f802"}
+{"at": "2026-11-24T16:55:40.890Z", "event": "mode", "mode": "stop", "openLedgerStreams": 0, "openSockets": 0}
