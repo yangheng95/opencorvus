@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同一文件恢复后的保存错误桌面证据](2026-11-24-file-save-missing-after-original-restored/README.md)
 - [定时计划跟进会话改名的真实桌面证据](2026-11-24-scheduled-conversation-title-peer-refresh/README.md)
 - [定时计划跟进真实项目改名的桌面证据](2026-11-24-scheduled-project-name-peer-refresh/README.md)
 - [定时计划在多个标签的真实状态证据](2026-11-24-scheduled-definition-peer-refresh/README.md)

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [原文件恢复时结清此前的保存缺失提示](records/2026-11/2026-11-24-file-save-missing-after-original-restored.md)
 - [定时计划跟进绑定会话改名](records/2026-11/2026-11-24-scheduled-conversation-title-peer-refresh.md)
 - [定时计划跟进项目改名并保留真实绑定](records/2026-11/2026-11-24-scheduled-project-name-peer-refresh.md)
 - [定时计划启停和定义修改同步到已打开页面](records/2026-11/2026-11-24-scheduled-definition-peer-refresh.md)
