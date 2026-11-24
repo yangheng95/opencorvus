@@ -143059,7 +143059,7 @@
     },
     "/vcs/commit": {
       "post": {
-        "description": "Stage every current project working-tree change and create one Git commit with the exact supplied message.",
+        "description": "Verify the confirmed Git branch, stage the current project working tree, and commit the exact supplied message.",
         "operationId": "vcs.commit",
         "parameters": [
           {
@@ -143077,6 +143077,17 @@
             "application/json": {
               "schema": {
                 "properties": {
+                  "expectedBranch": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
                   "message": {
                     "maxLength": 2000,
                     "minLength": 1,
@@ -143084,6 +143095,7 @@
                   }
                 },
                 "required": [
+                  "expectedBranch",
                   "message"
                 ],
                 "type": "object"
@@ -143406,7 +143418,7 @@
     },
     "/vcs/push": {
       "post": {
-        "description": "Push the current Git branch through its configured upstream without creating or changing remotes.",
+        "description": "Verify the confirmed Git branch and push it through the configured upstream without changing remotes.",
         "operationId": "vcs.push",
         "parameters": [
           {
@@ -143419,6 +143431,32 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "expectedBranch": {
+                    "anyOf": [
+                      {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "expectedBranch"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "content": {

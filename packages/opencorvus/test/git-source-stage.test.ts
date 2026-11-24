@@ -68,6 +68,11 @@ async function git(root: string, args: string[]) {
   return result
 }
 
+async function commitFixtureChanges(message: string) {
+  const current = await Vcs.info()
+  return Vcs.commit(message, current.branch ?? null)
+}
+
 async function cyclic(root: string) {
   await fs.appendFile(path.join(root, ".git/info/exclude"), "\n.opencorvus/\n.gitattributes\n.gitignore\n")
   await fs.mkdir(path.join(root, "data"))
@@ -83,7 +88,7 @@ test("real VCS commit stages each cyclic link once and reports the committed sou
   await Instance.provideProjectIdentity({
     directory: project.path,
     fn: async () => {
-      const committed = await Vcs.commit("Preserve actual source entries")
+      const committed = await commitFixtureChanges("Preserve actual source entries")
       expect(committed.info).toMatchObject({
         clean: true,
         dirty: false,
@@ -138,7 +143,7 @@ test("real type transitions retain their file mode, content and clean commit", a
   await Instance.provideProjectIdentity({
     directory: project.path,
     fn: async () => {
-      await Vcs.commit("Link baseline")
+      await commitFixtureChanges("Link baseline")
       await fs.unlink(path.join(project.path, "root-link"))
       await fs.writeFile(path.join(project.path, "root-link"), "ordinary replacement\n")
       expect(
@@ -149,7 +154,7 @@ test("real type transitions retain their file mode, content and clean commit", a
           deletions,
         })),
       ).toEqual([{ file: "root-link", status: "modified", additions: 1, deletions: 1 }])
-      expect((await Vcs.commit("Actual file type")).info.clean).toBe(true)
+      expect((await commitFixtureChanges("Actual file type")).info.clean).toBe(true)
       expect((await git(project.path, ["ls-tree", "HEAD", "root-link"])).text().slice(0, 11)).toBe("100644 blob")
       expect((await git(project.path, ["show", "HEAD:root-link"])).text()).toBe("ordinary replacement\n")
     },
@@ -162,12 +167,12 @@ test("same-byte file and directory replacements follow actual physical entry typ
   await Instance.provideProjectIdentity({
     directory: project.path,
     fn: async () => {
-      await Vcs.commit("Physical baseline")
+      await commitFixtureChanges("Physical baseline")
       const target = await fs.readlink(path.join(project.path, "root-link"), { encoding: "buffer" })
       await fs.unlink(path.join(project.path, "root-link"))
       await fs.writeFile(path.join(project.path, "root-link"), target)
       expect((await Vcs.info()).modified).toBe(1)
-      expect((await Vcs.commit("Same bytes, actual file")).info.clean).toBe(true)
+      expect((await commitFixtureChanges("Same bytes, actual file")).info.clean).toBe(true)
       expect((await git(project.path, ["ls-tree", "HEAD", "root-link"])).text().slice(0, 11)).toBe("100644 blob")
       expect((await git(project.path, ["show", "HEAD:root-link"])).stdout).toEqual(target)
       await fs.unlink(path.join(project.path, "root-link"))
@@ -178,7 +183,7 @@ test("same-byte file and directory replacements follow actual physical entry typ
         path.join(project.path, "root-link/back"),
         process.platform === "win32" ? "junction" : "dir",
       )
-      const committed = await Vcs.commit("Finite directory replacement")
+      const committed = await commitFixtureChanges("Finite directory replacement")
       console.log(
         "physical-directory-replacement",
         JSON.stringify({
@@ -210,12 +215,12 @@ test("staged link renames preserve the index rename and actual clean working ent
   await Instance.provideProjectIdentity({
     directory: project.path,
     fn: async () => {
-      await Vcs.commit("Rename baseline")
+      await commitFixtureChanges("Rename baseline")
       await fs.rename(path.join(project.path, "root-link"), path.join(project.path, "renamed-link"))
       await stageGitSourceEntries({ cwd: project.path })
       expect(await Vcs.info()).toMatchObject({ staged: 1, modified: 0, dirty: true, conflicts: 0 })
       expect((await gitSourceStatus({ cwd: project.path }, "lines")).text()).toBe("R  root-link -> renamed-link\n")
-      expect((await Vcs.commit("Renamed physical entry")).info.clean).toBe(true)
+      expect((await commitFixtureChanges("Renamed physical entry")).info.clean).toBe(true)
     },
   })
 }, 60_000)
@@ -226,7 +231,7 @@ test("a real unmerged link index is resolved to the actual current entry bytes",
   await Instance.provideProjectIdentity({
     directory: project.path,
     fn: async () => {
-      await Vcs.commit("Conflict baseline")
+      await commitFixtureChanges("Conflict baseline")
       const blob = (await git(project.path, ["rev-parse", "HEAD:root-link"])).text().trim()
       const records =
         `0 ${"0".repeat(blob.length)}\troot-link\0` +
@@ -274,7 +279,7 @@ test("link target edits and deletion produce actual link patches and a new clean
   await Instance.provideProjectIdentity({
     directory: project.path,
     fn: async () => {
-      await Vcs.commit("Link baseline")
+      await commitFixtureChanges("Link baseline")
       await fs.unlink(path.join(project.path, "root-link"))
       await fs.symlink(
         path.join(project.path, "data"),
@@ -297,7 +302,7 @@ test("link target edits and deletion produce actual link patches and a new clean
         { path: path.join("aliases", "root-back"), status: "deleted", added: 0, removed: 1 },
         { path: "root-link", status: "modified", added: 1, removed: 1 },
       ])
-      expect((await Vcs.commit("Updated entry identities")).info.clean).toBe(true)
+      expect((await commitFixtureChanges("Updated entry identities")).info.clean).toBe(true)
     },
   })
 }, 60_000)

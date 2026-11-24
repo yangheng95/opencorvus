@@ -100,7 +100,12 @@ test("plain directories return explicit VCS state and branch/diff prerequisite e
 test("Git writes and commit-message streaming retain their execution model error", async () => {
   await using project = await memoryProject("vcs-reader-runtime-write")
   await configure(project.path, "VcsRuntimeMarker", "runtime-current")
-  for (const [route, body] of [["/vcs/branch", { name: "runtime-current" }], ["/vcs/commit", { message: "Owned reader contract" }], ["/vcs/push", {}], ["/vcs/commit-message/stream", {}]] as const) {
+  for (const [route, body] of [
+    ["/vcs/branch", { branch: "runtime-current" }],
+    ["/vcs/commit", { message: "Owned reader contract", expectedBranch: "runtime-current" }],
+    ["/vcs/push", { expectedBranch: "runtime-current" }],
+    ["/vcs/commit-message/stream", {}],
+  ] as const) {
     await Instance.disposeAll()
     const response = await runOutsideInstanceContext(() => Server.App().request(route, {
       method: "POST", headers: { "x-opencorvus-directory": project.path, "content-type": "application/json" }, body: JSON.stringify(body),
@@ -119,6 +124,59 @@ test("branch switching retains the live branch owner before returning current in
     expect((await Vcs.switchBranch("next-current-225")).branch).toBe("next-current-225")
     expect(await Vcs.branch()).toBe("next-current-225")
     expect((await Vcs.branches()).find((branch) => branch.current)).toEqual({ name: "next-current-225", current: true })
+  } })
+}, 30_000)
+
+test("commit and push use the confirmed branch after a real checkout change", async () => {
+  await using project = await memoryProject("vcs-confirmed-branch")
+  await using remote = await tmpdir()
+  await git(remote.path, ["init", "--bare"])
+  await git(project.path, ["branch", "-m", "main"])
+  await git(project.path, ["branch", "review"])
+  await git(project.path, ["remote", "add", "origin", remote.path])
+  await git(project.path, ["push", "--set-upstream", "origin", "main", "review"])
+  const originalMain = await git(project.path, ["rev-parse", "main"])
+  const content = "Exact review fixture content"
+  const message = "Commit on the confirmed review branch"
+  await fs.writeFile(path.join(project.path, "planned.md"), content + "\n")
+
+  const post = async (route: string, body: object) => {
+    const response = await runOutsideInstanceContext(() => Server.App().request(route, {
+      method: "POST",
+      headers: { "x-opencorvus-directory": project.path, "content-type": "application/json" },
+      body: JSON.stringify(body),
+    }))
+    return { status: response.status, body: await response.json() }
+  }
+  expect(await post("/vcs/branch", { branch: "review" }))
+    .toMatchObject({ status: 200, body: { branch: "review" } })
+  const staleBranch = { status: 412, body: { name: "VcsPrerequisiteError", data: { reason: "branch_changed" } } }
+  expect(await post("/vcs/commit", { message, expectedBranch: "main" })).toMatchObject(staleBranch)
+  expect(await post("/vcs/push", { expectedBranch: "main" })).toMatchObject(staleBranch)
+  expect(await git(project.path, ["status", "--short", "--", "planned.md"])).toBe("?? planned.md")
+
+  expect(await post("/vcs/commit", { message, expectedBranch: "review" }))
+    .toMatchObject({ status: 200, body: { info: { branch: "review", clean: true } } })
+  expect(await git(project.path, ["show", "review:planned.md"])).toBe(content)
+  expect(await git(project.path, ["log", "-1", "--format=%s", "review"])).toBe(message)
+  expect(await post("/vcs/push", { expectedBranch: "review" }))
+    .toMatchObject({ status: 200, body: { info: { branch: "review", ahead: 0 } } })
+  expect(await git(remote.path, ["rev-parse", "refs/heads/review"])).toBe(await git(project.path, ["rev-parse", "review"]))
+  expect(await git(remote.path, ["rev-parse", "refs/heads/main"])).toBe(originalMain)
+}, 60_000)
+
+test("a confirmed unborn checkout creates its first local commit", async () => {
+  await using directory = await tmpdir()
+  await git(directory.path, ["init", "--initial-branch=first-branch"])
+  await git(directory.path, ["config", "user.name", "VCS fixture"])
+  await git(directory.path, ["config", "user.email", "vcs-fixture@example.invalid"])
+  await fs.writeFile(path.join(directory.path, "first.txt"), "First confirmed contents\n")
+  await Instance.provideProjectIdentity({ directory: directory.path, fn: async () => {
+    const current = await Vcs.info()
+    expect(current).toMatchObject({ initialized: true, dirty: true })
+    const first = await Vcs.commit("First local commit on the confirmed checkout", current.branch ?? null)
+    expect(first.info).toMatchObject({ branch: "first-branch", clean: true, dirty: false })
+    expect(await git(directory.path, ["show", "first-branch:first.txt"])).toBe("First confirmed contents")
   } })
 }, 30_000)
 

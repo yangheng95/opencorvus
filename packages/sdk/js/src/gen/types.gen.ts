@@ -40892,6 +40892,7 @@ export type VcsBranchesResponse = VcsBranchesResponses[keyof VcsBranchesResponse
 
 export type VcsCommitData = {
   body: {
+    expectedBranch: string | null
     message: string
   }
   path?: never
@@ -41027,7 +41028,9 @@ export type VcsDiffResponses = {
 export type VcsDiffResponse = VcsDiffResponses[keyof VcsDiffResponses]
 
 export type VcsPushData = {
-  body?: never
+  body: {
+    expectedBranch: string | null
+  }
   path?: never
   query?: {
     /**

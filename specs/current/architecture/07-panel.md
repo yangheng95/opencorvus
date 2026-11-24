@@ -4715,9 +4715,14 @@ source-identity presentation open and expand the canonical Popover.
 Git actions in Environment use the project-scoped `/vcs` contract. The
 `/vcs/commit-message/stream` Server-Sent Events (SSE) route streams one editable
 subject from the canonical Git diff and recent repository subjects through the
-configured helper model. `/vcs/commit` stages the complete current working tree
-and commits the exact displayed message; `/vcs/push` publishes through the
-branch's configured upstream. Each completed mutation reloads canonical VCS
+configured helper model. The dialog retains its confirmed branch with the
+message. If the branch changes, it retains the message and asks the operator to
+confirm the current branch before writing. `/vcs/commit` and `/vcs/push` both
+require the confirmed branch, with null denoting the VCS projection without a
+named branch. The server checks it under the same project Git lease used for
+branch switches, returning the named branch-changed prerequisite before writing
+if it differs. Commit stages the complete current working tree and records the
+exact displayed message. Push uses the branch's configured upstream. Each completed mutation reloads canonical VCS
 information instead of maintaining optimistic branch or dirty-state copies in
 the Overlay. The Environment command menu is only the trigger: the current branch,
 streamed editable subject, regenerate control, and applicable Commit / Commit &

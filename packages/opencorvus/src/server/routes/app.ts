@@ -119,7 +119,10 @@ const LogFilesResponse = z.object({
   current: z.string(),
   files: LogFileInfo.array(),
 })
-const VcsCommitInput = z.object({
+const VcsBranchConfirmation = z.object({
+  expectedBranch: Vcs.Branch.shape.name.min(1).nullable(),
+})
+const VcsCommitInput = VcsBranchConfirmation.extend({
   message: z.string().trim().min(1).max(2_000),
 })
 const VcsCommitMessageInput = z.object({
@@ -478,7 +481,7 @@ export function AppRoutes() {
       describeRoute({
         summary: "Commit current VCS changes",
         description:
-          "Stage every current project working-tree change and create one Git commit with the exact supplied message.",
+          "Verify the confirmed Git branch, stage the current project working tree, and commit the exact supplied message.",
         operationId: "vcs.commit",
         responses: {
           200: {
@@ -495,7 +498,8 @@ export function AppRoutes() {
       }),
       validator("json", VcsCommitInput),
       async (c) => {
-        return c.json(await Vcs.commit(c.req.valid("json").message))
+        const input = c.req.valid("json")
+        return c.json(await Vcs.commit(input.message, input.expectedBranch))
       },
     )
     .post(
@@ -503,7 +507,7 @@ export function AppRoutes() {
       describeRoute({
         summary: "Push current VCS branch",
         description:
-          "Push the current Git branch through its configured upstream without creating or changing remotes.",
+          "Verify the confirmed Git branch and push it through the configured upstream without changing remotes.",
         operationId: "vcs.push",
         responses: {
           200: {
@@ -518,8 +522,9 @@ export function AppRoutes() {
           ...errors(500),
         },
       }),
+      validator("json", VcsBranchConfirmation),
       async (c) => {
-        return c.json(await Vcs.push())
+        return c.json(await Vcs.push(c.req.valid("json").expectedBranch))
       },
     )
     .post(

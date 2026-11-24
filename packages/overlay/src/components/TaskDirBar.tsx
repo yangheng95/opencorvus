@@ -23,6 +23,7 @@ import { appStore } from "../store/app"
 import { activeDirectory, browseDirectory, openDirectory, pathRevealLabelKey } from "../services/workspace"
 import {
   commitVcsChanges,
+  isVcsBranchChange,
   loadMeta,
   loadVcsBranches,
   pushVcsBranch,
@@ -219,6 +220,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   let branchMenuAnchor!: HTMLButtonElement
   const [gitBusy, setGitBusy] = createSignal(false)
   const [gitActionOpen, setGitActionOpen] = createSignal(false)
+  const [gitActionBranch, setGitActionBranch] = createSignal<string | null>()
   const [commitMessage, setCommitMessage] = createSignal("")
   const [commitMessageGenerating, setCommitMessageGenerating] = createSignal(false)
   const [gitActionError, setGitActionError] = createSignal("")
@@ -267,6 +269,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const lastVcs = createMemo(projectVcsInfo)
   const vcs = createMemo(() => gitReadFailure() ? null : lastVcs())
   const gitMetadataFresh = () => !!vcs() && !boardStore.vcsLoading
+  const gitActionBranchChanged = () => {
+    const expected = gitActionBranch()
+    const current = lastVcs()
+    return expected !== undefined && !!current && expected !== (current.branch ?? null)
+  }
+  const gitActionReady = () => gitMetadataFresh() && gitActionBranch() !== undefined && !gitActionBranchChanged()
   const canDeleteAll = createMemo(() => gitMetadataFresh() && removableWorktrees().length > 0 && !bulkDeleteBusy())
   const canReadWorktrees = () => appStore.connected && !!dir().trim() && lastVcs()?.initialized === true
   const metadataRefreshLabel = () => t(metadataBusy() ? "common.loading" :
@@ -667,9 +675,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   function commitMessageKey(): string {
     const value = vcs()
     return [
+      captureApiAuthority().revision,
       dir().trim(),
       activeTaskID().trim(),
       activeSessionID().trim(),
+      value?.branch ?? "",
       value?.commit ?? "",
       value?.staged ?? 0,
       value?.modified ?? 0,
@@ -678,11 +688,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   function generateCommitMessage(force = false): void {
-    if (!gitMetadataFresh() || !vcs()?.dirty) return
+    if (!gitActionReady() || !vcs()?.dirty) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = dir().trim()
-    const key = `${authority.revision}:${commitMessageKey()}`
+    const key = commitMessageKey()
     if (!force && commitMessageGenerationKey === key && commitMessage().trim()) return
     disposeCommitMessageStream()
     commitMessageGenerationKey = key
@@ -731,6 +741,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionNotice("")
     if (nextOpen) {
       closeRuntimePanel()
+      if (!commitMessage().trim()) setGitActionBranch(vcs()?.branch ?? null)
       if (vcs()?.dirty) generateCommitMessage()
     }
     if (!nextOpen) disposeCommitMessageStream()
@@ -742,10 +753,44 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     closeRuntimePanel()
   }
 
+  function focusGitAction(): void {
+    const dialog = document.querySelector<HTMLElement>("#projectRuntimeGitDialog")
+    const target =
+      dialog?.querySelector<HTMLElement>('[data-ui="project-runtime-commit-message"]') ??
+      dialog?.querySelector<HTMLElement>('[data-ui="project-runtime-push"]') ??
+      dialog?.querySelector<HTMLElement>('[data-ui="project-runtime-git-dialog-close"]')
+    target?.focus()
+  }
+
+  function confirmCurrentGitBranch(): void {
+    if (!gitMetadataFresh() || gitBusy()) return
+    setGitActionBranch(vcs()?.branch ?? null)
+    commitMessageGenerationKey = commitMessageKey()
+    setGitActionError("")
+    focusGitAction()
+  }
+
+  async function showGitActionFailure(
+    error: unknown,
+    directory: string,
+    authority: ApiAuthority,
+    ownsPresentation: () => boolean,
+  ): Promise<void> {
+    if (!ownsPresentation()) return
+    if (!isVcsBranchChange(error)) {
+      setGitActionError(t("project_runtime.git_action_failed", { error: errorMessage(error) }))
+      return
+    }
+    setGitActionError(t("project_runtime.git_branch_changed_retry"))
+    await loadMeta(directory, authority).catch(() => undefined)
+    if (ownsPresentation() && gitActionBranchChanged()) setGitActionError("")
+  }
+
   async function commitChanges(pushAfterCommit: boolean): Promise<void> {
     const message = commitMessage().trim()
     const directory = dir().trim()
-    if (!message || !directory || !gitMetadataFresh() || commitMessageGenerating() || gitBusy()) return
+    const expectedBranch = gitActionBranch()
+    if (!message || !directory || expectedBranch === undefined || !gitActionReady() || commitMessageGenerating() || gitBusy()) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
@@ -754,22 +799,22 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionError("")
     setGitActionNotice("")
     try {
-      const result = await commitVcsChanges(message, directory, authority)
+      const result = await commitVcsChanges(message, directory, expectedBranch, authority)
+      const committedBranch = expectedBranch ?? result.info.branch ?? null
       if (ownsPresentation()) {
         setGitActionNotice(t("project_runtime.commit_success", { commit: result.commit }))
         setCommitMessage("")
+        setGitActionBranch(committedBranch)
         commitMessageGenerationKey = ""
       }
       if (pushAfterCommit) {
-        await pushVcsBranch(directory, authority)
+        await pushVcsBranch(directory, committedBranch, authority)
         if (ownsPresentation()) {
           setGitActionNotice(t("project_runtime.commit_push_success", { commit: result.commit }))
         }
       }
     } catch (error) {
-      if (ownsPresentation()) {
-        setGitActionError(t("project_runtime.git_action_failed", { error: errorMessage(error) }))
-      }
+      await showGitActionFailure(error, directory, authority, ownsPresentation)
     } finally {
       if (ownsPresentation()) setGitBusy(false)
     }
@@ -777,7 +822,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   async function pushChanges(): Promise<void> {
     const directory = dir().trim()
-    if (!directory || !gitMetadataFresh() || gitBusy()) return
+    const expectedBranch = gitActionBranch()
+    if (!directory || expectedBranch === undefined || !gitActionReady() || gitBusy()) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
@@ -786,12 +832,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionError("")
     setGitActionNotice("")
     try {
-      await pushVcsBranch(directory, authority)
+      await pushVcsBranch(directory, expectedBranch, authority)
       if (ownsPresentation()) setGitActionNotice(t("project_runtime.push_success"))
     } catch (error) {
-      if (ownsPresentation()) {
-        setGitActionError(t("project_runtime.git_action_failed", { error: errorMessage(error) }))
-      }
+      await showGitActionFailure(error, directory, authority, ownsPresentation)
     } finally {
       if (ownsPresentation()) setGitBusy(false)
     }
@@ -840,6 +884,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   })
 
   createEffect(on(() => lastVcs()?.branch, () => closeBranchMenu(), { defer: true }))
+
+  createEffect(() => {
+    if (gitActionBranchChanged()) untrack(disposeCommitMessageStream)
+  })
 
   onCleanup(() => {
     disposeCommitMessageStream()
@@ -1339,6 +1387,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setBranchError("")
     disposeCommitMessageStream()
     setGitActionOpen(false)
+    setGitActionBranch(undefined)
     setCommitMessage("")
     setGitActionError("")
     setGitActionNotice("")
@@ -2150,7 +2199,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         title={
           <span class="project-runtime-git-dialog-title">
             <Icon name="git-branch" size="medium" />
-            <span>{vcs()?.branch || t("project_runtime.local")}</span>
+            <span>{gitActionBranch() || t("project_runtime.local")}</span>
           </span>
         }
         headerActions={
@@ -2163,7 +2212,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 data-ui="project-runtime-regenerate-commit-message"
                 data-busy={commitMessageGenerating() ? "true" : "false"}
-                disabled={commitMessageGenerating() || gitBusy()}
+                disabled={!gitActionReady() || commitMessageGenerating() || gitBusy()}
                 title={t("project_runtime.commit_message_regenerate")}
                 aria-label={t("project_runtime.commit_message_regenerate")}
                 onClick={() => generateCommitMessage(true)}
@@ -2190,17 +2239,25 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         draggable={false}
         onOpenAutoFocus={(event) => {
           event.preventDefault()
-          const dialog = document.querySelector<HTMLElement>("#projectRuntimeGitDialog")
-          const target =
-            dialog?.querySelector<HTMLElement>('[data-ui="project-runtime-commit-message"]') ??
-            dialog?.querySelector<HTMLElement>('[data-ui="project-runtime-push"]') ??
-            dialog?.querySelector<HTMLElement>('[data-ui="project-runtime-git-dialog-close"]')
-          target?.focus()
+          focusGitAction()
         }}
         onClose={() => closeGitAction()}
       >
         <div class="project-runtime-git-dialog-body" data-ui="project-runtime-git-dialog">
-          <Show when={vcs()?.dirty}>
+          <Show when={gitActionBranchChanged()}>
+            <Feedback
+              tone="warning"
+              actions={
+                <Button type="button" variant="outline" size="sm" tone="neutral" disabled={!gitMetadataFresh() || gitBusy()}
+                  onClick={confirmCurrentGitBranch}>
+                  {t("project_runtime.git_use_current_branch", { branch: branchLabel() })}
+                </Button>
+              }
+            >
+              {t("project_runtime.git_branch_changed", { branch: branchLabel() })}
+            </Feedback>
+          </Show>
+          <Show when={vcs()?.dirty || commitMessage()}>
             <AutoGrowTextarea
               class="project-runtime-commit-message"
               data-ui="project-runtime-commit-message"
@@ -2229,7 +2286,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 class="project-runtime-git-dialog-action"
                 data-ui="project-runtime-commit"
-                disabled={!gitMetadataFresh() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
+                disabled={!gitActionReady() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
                 onClick={() => void commitChanges(false)}
               >
                 <Icon name="git-compare" size="medium" />
@@ -2244,7 +2301,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   tone="neutral"
                   class="project-runtime-git-dialog-action"
                   data-ui="project-runtime-commit-and-push"
-                  disabled={!gitMetadataFresh() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
+                  disabled={!gitActionReady() || commitMessageGenerating() || gitBusy() || !commitMessage().trim()}
                   onClick={() => void commitChanges(true)}
                 >
                   <Icon name="upload" size="medium" />
@@ -2260,7 +2317,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 class="project-runtime-git-dialog-action"
                 data-ui="project-runtime-push"
-                disabled={!gitMetadataFresh() || gitBusy()}
+                disabled={!gitActionReady() || gitBusy()}
                 onClick={() => void pushChanges()}
               >
                 <Icon name="upload" size="medium" />

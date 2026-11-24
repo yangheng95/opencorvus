@@ -31,8 +31,8 @@ afterEach(() => {
 
 const accepted = { commit: "accepted-commit", info: { branch: "accepted-branch" } }
 const actions = [
-  { action: "commit", route: "vcs/commit", invoke: () => commitVcsChanges("exact message", DIRECTORY), result: accepted },
-  { action: "push", route: "vcs/push", invoke: () => pushVcsBranch(DIRECTORY), result: undefined },
+  { action: "commit", route: "vcs/commit", invoke: () => commitVcsChanges("exact message", DIRECTORY, "accepted-branch"), result: accepted },
+  { action: "push", route: "vcs/push", invoke: () => pushVcsBranch(DIRECTORY, "accepted-branch"), result: undefined },
   { action: "switch-branch", route: "vcs/branch", invoke: () => switchVcsBranch("accepted-branch", DIRECTORY), result: undefined },
 ] as const
 
@@ -114,8 +114,8 @@ test("accepted commit metadata failure permits the separately accepted push and 
     return ok(refreshed)
   })
   const authority = captureApiAuthority()
-  const result = await commitVcsChanges("exact message", DIRECTORY, authority)
-  await pushVcsBranch(DIRECTORY, authority)
+  const result = await commitVcsChanges("exact message", DIRECTORY, "accepted-branch", authority)
+  await pushVcsBranch(DIRECTORY, "accepted-branch", authority)
   expect(result).toBe(accepted)
   expect(requests).toEqual(["vcs/commit", "path", "vcs", "vcs/push", "path", "vcs"])
   expect({ vcs: boardStore.vcs, directory: boardStore.vcsDirectory, error: boardStore.vcsError, loading: boardStore.vcsLoading }).toEqual({ vcs: refreshed, directory: DIRECTORY, error: null, loading: false })
@@ -235,14 +235,14 @@ describe("VCS action service", () => {
     configureApi({ directory: DIRECTORY })
     __setHostTransportForTest(transport)
 
-    const result = await commitVcsChanges("  Refine environment controls  ", DIRECTORY)
+    const result = await commitVcsChanges("  Refine environment controls  ", DIRECTORY, "feature/environment")
 
     expect(result.commit).toBe("abcd1234")
     expect(requests[0]).toMatchObject({
       path: "vcs/commit",
       method: "POST",
       query: { directory: DIRECTORY },
-      body: { kind: "json", value: { message: "Refine environment controls" } },
+      body: { kind: "json", value: { message: "Refine environment controls", expectedBranch: "feature/environment" } },
       timeoutMilliseconds: null,
     })
     expect(
@@ -290,12 +290,13 @@ describe("VCS action service", () => {
     configureApi({ directory: DIRECTORY })
     __setHostTransportForTest(transport)
 
-    await pushVcsBranch(DIRECTORY)
+    await pushVcsBranch(DIRECTORY, "feature/environment")
 
     expect(requests[0]).toMatchObject({
       path: "vcs/push",
       method: "POST",
       query: { directory: DIRECTORY },
+      body: { kind: "json", value: { expectedBranch: "feature/environment" } },
       timeoutMilliseconds: null,
     })
     expect(boardStore.vcs).toEqual(refreshed)

@@ -16,6 +16,7 @@ import { Project } from "./project"
 import { Filesystem } from "@/util/filesystem"
 import { FileWatcher } from "@/file/watcher"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { ProjectGitLock } from "@/worktree/git-lock"
 import { VcsBranchRefreshOwner } from "./vcs-branch-refresh"
 
 const log = Log.create({ service: "vcs" })
@@ -38,11 +39,31 @@ const VcsPrerequisiteError = NamedError.create(
       "merge_base_missing",
       "branch_missing",
       "branch_switch_failed",
+      "branch_changed",
       "nothing_to_commit",
     ]),
     message: z.string(),
   }),
 )
+
+function withGitWrite<T>(action: "branches" | "commit" | "push", write: (directory: string) => Promise<T>): Promise<T> {
+  const { directory, project } = currentProject()
+  if (!Project.isGitRepo(directory)) {
+    throw new VcsPrerequisiteError({ reason: "not_git", message: `vcs ${action} requires a git repository` })
+  }
+  return ProjectGitLock.withLease(
+    { projectID: project.id, primaryWorktreeDir: project.worktree },
+    () => write(directory),
+  )
+}
+
+function requireConfirmedBranch(expectedBranch: string | null, currentBranch: string | undefined): void {
+  if (expectedBranch === (currentBranch ?? null)) return
+  throw new VcsPrerequisiteError({
+    reason: "branch_changed",
+    message: "The Git branch changed after this action was prepared.",
+  })
+}
 
 type DiffOptions = {
   readonly context?: number
@@ -632,29 +653,31 @@ export namespace Vcs {
 
   export async function switchBranch(name: string): Promise<Info> {
     const requested = name.trim()
-    const localBranches = await branches()
-    if (!localBranches.some((item) => item.name === requested)) {
-      throw new PrerequisiteError({
-        reason: "branch_missing",
-        message: `vcs branch "${requested}" is not a local branch`,
-      })
-    }
-    if (localBranches.some((item) => item.name === requested && item.current)) return info()
+    return withGitWrite("branches", async (directory) => {
+      const target = (await branches()).find((branch) => branch.name === requested)
+      if (!target) {
+        throw new PrerequisiteError({
+          reason: "branch_missing",
+          message: `vcs branch "${requested}" is not a local branch`,
+        })
+      }
+      if (target.current) return info()
 
-    const checkout = await state()
-    const result = await git(["switch", "--no-guess", "--", requested], {
-      cwd: currentProject().directory,
-      timeoutProfile: "default",
-    })
-    if (result.exitCode !== 0) {
-      const detail = result.stderr.toString().trim() || result.stdout.toString().trim()
-      throw new PrerequisiteError({
-        reason: "branch_switch_failed",
-        message: `vcs switch to "${requested}" failed${detail ? `: ${detail}` : ""}`,
+      const checkout = await state()
+      const result = await git(["switch", "--no-guess", "--", requested], {
+        cwd: directory,
+        timeoutProfile: "default",
       })
-    }
-    await checkout.branchRefresh?.refresh()
-    return info()
+      if (result.exitCode !== 0) {
+        const detail = result.stderr.toString().trim() || result.stdout.toString().trim()
+        throw new PrerequisiteError({
+          reason: "branch_switch_failed",
+          message: `vcs switch to "${requested}" failed${detail ? `: ${detail}` : ""}`,
+        })
+      }
+      await checkout.branchRefresh?.refresh()
+      return info()
+    })
   }
 
   export async function recentSubjects(limit: number): Promise<string[]> {
@@ -674,45 +697,35 @@ export namespace Vcs {
       .filter(Boolean)
   }
 
-  export async function commit(message: string): Promise<CommitResult> {
+  export async function commit(message: string, expectedBranch: string | null): Promise<CommitResult> {
     const requested = message.trim()
     if (!requested) throw new Error("vcs commit requires a non-empty message")
-    const project = currentProject()
-    if (!Project.isGitRepo(project.directory)) {
-      throw new PrerequisiteError({ reason: "not_git", message: "vcs commit requires a git repository" })
-    }
-    if (!(await info()).dirty) {
-      throw new PrerequisiteError({ reason: "nothing_to_commit", message: "vcs commit requires working-tree changes" })
-    }
-    await stageGitSourceEntries({ cwd: project.directory, timeoutProfile: "default" })
-    await gitText(
-      git(["commit", "-m", requested, "--"], {
-        cwd: project.directory,
-        timeoutProfile: "default",
-      }),
-      "vcs commit",
-    )
-    const commit = await currentCommit(project.directory)
-    if (!commit) throw new Error("vcs commit completed without a HEAD commit")
-    return { commit, info: await info() }
+    return withGitWrite("commit", async (directory) => {
+      const current = await info()
+      requireConfirmedBranch(expectedBranch, current.branch)
+      if (!current.dirty) {
+        throw new PrerequisiteError({ reason: "nothing_to_commit", message: "vcs commit requires working-tree changes" })
+      }
+      await stageGitSourceEntries({ cwd: directory, timeoutProfile: "default" })
+      await gitText(
+        git(["commit", "-m", requested, "--"], { cwd: directory, timeoutProfile: "default" }),
+        "vcs commit",
+      )
+      const commit = await currentCommit(directory)
+      if (!commit) throw new Error("vcs commit completed without a HEAD commit")
+      return { commit, info: await info() }
+    })
   }
 
-  export async function push(): Promise<PushResult> {
-    const project = currentProject()
-    if (!Project.isGitRepo(project.directory)) {
-      throw new PrerequisiteError({ reason: "not_git", message: "vcs push requires a git repository" })
-    }
-    if (!(await hasHead(project.directory))) {
-      throw new PrerequisiteError({ reason: "unborn_head", message: "vcs push requires a committed HEAD" })
-    }
-    await gitText(
-      git(["push"], {
-        cwd: project.directory,
-        timeoutProfile: "network",
-      }),
-      "vcs push",
-    )
-    return { info: await info() }
+  export async function push(expectedBranch: string | null): Promise<PushResult> {
+    return withGitWrite("push", async (directory) => {
+      if (!(await hasHead(directory))) {
+        throw new PrerequisiteError({ reason: "unborn_head", message: "vcs push requires a committed HEAD" })
+      }
+      requireConfirmedBranch(expectedBranch, await currentBranch())
+      await gitText(git(["push"], { cwd: directory, timeoutProfile: "network" }), "vcs push")
+      return { info: await info() }
+    })
   }
 
   export async function info() {

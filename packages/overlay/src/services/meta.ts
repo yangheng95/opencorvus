@@ -8,6 +8,7 @@ import { formatErrorDetails } from "../utils/error-details"
 import { projectDirectoryKey } from "../utils/project-directory"
 import {
   apiJson,
+  ApiError,
   ApiAuthorityChangedError,
   captureApiAuthority,
   isApiAuthorityCurrent,
@@ -42,7 +43,7 @@ export interface VcsBranch {
 
 export interface VcsCommitResult {
   commit: string
-  info: unknown
+  info: { branch?: string }
 }
 
 export interface VcsCommitMessageStreamOptions {
@@ -305,6 +306,7 @@ export function streamVcsCommitMessage(options: VcsCommitMessageStreamOptions): 
 export async function commitVcsChanges(
   message: string,
   directory: string,
+  expectedBranch: string | null,
   authority = captureApiAuthority(),
 ): Promise<VcsCommitResult> {
   const selectionEpoch = boardStore.selectEpoch
@@ -314,21 +316,33 @@ export async function commitVcsChanges(
     authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: requested }),
+    body: JSON.stringify({ message: requested, expectedBranch }),
     timeoutMilliseconds: null,
   })
   await refreshMetaAfterAcceptedMutation("commit", directory, authority, selectionEpoch)
   return result
 }
 
-export async function pushVcsBranch(directory: string, authority = captureApiAuthority()): Promise<void> {
+export async function pushVcsBranch(
+  directory: string,
+  expectedBranch: string | null,
+  authority = captureApiAuthority(),
+): Promise<void> {
   const selectionEpoch = boardStore.selectEpoch
   await apiJson(projectScopedPath("vcs/push", directory), {
     authority,
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ expectedBranch }),
     timeoutMilliseconds: null,
   })
   await refreshMetaAfterAcceptedMutation("push", directory, authority, selectionEpoch)
+}
+
+export function isVcsBranchChange(error: unknown): boolean {
+  if (!(error instanceof ApiError) || error.status !== 412) return false
+  const body = error.body as { name?: unknown; data?: { reason?: unknown } } | null
+  return body?.name === "VcsPrerequisiteError" && body.data?.reason === "branch_changed"
 }
 
 /**

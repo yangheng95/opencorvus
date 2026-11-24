@@ -14725,11 +14725,12 @@ export class Vcs extends HeyApiClient {
   /**
    * Commit current VCS changes
    *
-   * Stage every current project working-tree change and create one Git commit with the exact supplied message.
+   * Verify the confirmed Git branch, stage the current project working tree, and commit the exact supplied message.
    */
   public commit<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
+      expectedBranch: string | null
       message: string
     },
     options?: Options<never, ThrowOnError>,
@@ -14740,6 +14741,7 @@ export class Vcs extends HeyApiClient {
         {
           args: [
             { in: "query", key: "directory" },
+            { in: "body", key: "expectedBranch" },
             { in: "body", key: "message" },
           ],
         },
@@ -14792,19 +14794,35 @@ export class Vcs extends HeyApiClient {
   /**
    * Push current VCS branch
    *
-   * Push the current Git branch through its configured upstream without creating or changing remotes.
+   * Verify the confirmed Git branch and push it through the configured upstream without changing remotes.
    */
   public push<ThrowOnError extends boolean = false>(
-    parameters?: {
+    parameters: {
       directory?: string
+      expectedBranch: string | null
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "query", key: "directory" },
+            { in: "body", key: "expectedBranch" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).post<VcsPushResponses, VcsPushErrors, ThrowOnError>({
       url: "/vcs/push",
       ...options,
       ...params,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+        ...params.headers,
+      },
     })
   }
 
