@@ -34,12 +34,13 @@ test("a checkout notification refreshes the current file at the canonical projec
 })
 
 test.each([
-  ["reconnect", undefined],
-  ["matching path", { directory: "c:\\review\\project", path: "NOTES.txt" }],
-  ["matching resource", { directory: "C:/Review/Project", path: "alias/notes.txt", resourceID: "shared-notes" }],
-] as const)("%s rechecks the exact file belonging to the current editor owner", async (_trigger, notification) => {
+  ["reconnect", undefined, "notes.txt"],
+  ["matching path", { directory: "c:\\review\\project", path: "NOTES.txt" }, "notes.txt"],
+  ["matching resource", { directory: "C:/Review/Project", path: "alias/notes.txt", resourceID: "shared-notes" }, "notes.txt"],
+  ["ancestor directory", { directory: "c:\\review\\project", path: "NOTES" }, "notes/nested/checklist.txt"],
+] as const)("%s rechecks the exact file belonging to the current editor owner", async (_trigger, notification, path) => {
   const directory = "C:/Review/Project"
-  await openFileEditor("notes.txt", { directory })
+  await openFileEditor(path, { directory })
   const checks: ReturnType<typeof selectedFileTarget>[] = []
   const release = registerFileEditorBeforeNavigate({
     confirmLeave: async () => null,
@@ -53,7 +54,7 @@ test.each([
   })
   try {
     requestOpenFileDiskCheck(notification)
-    expect(checks).toEqual([{ directory, path: "notes.txt" }])
+    expect(checks).toEqual([{ directory, path }])
   } finally {
     release()
   }

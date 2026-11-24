@@ -1562,8 +1562,9 @@ once against the disk snapshot. A changed clean file accepts that content. A
 changed file with edits keeps the original editing base and draft and shows the
 disk comparison action. An unchanged editable snapshot keeps the existing view.
 The same disk check follows a committed project file edit delivered by the Work
-Ledger stream. The directory and project-relative path match the open resource.
-A saved editable resource identity also lets a project alias observe the same
+Ledger stream. Within the owning project, the change path matches either the
+open file or one of its ancestor directories at a path component boundary. A
+saved editable resource identity also lets a project alias observe the same
 file. Pending checks wait for the current editor operation and expire with the
 owning target or server. The editor reads the current disk snapshot through its
 existing reader, including when its own save produced the event.

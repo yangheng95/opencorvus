@@ -226,11 +226,13 @@ export function requestOpenFileDiskCheck(change?: { directory: string; path: str
   if (!editor?.requestDiskCheck || !target || target.sourceAbsolutePath) return
   if (change) {
     if (projectDirectoryKey(change.directory) !== projectDirectoryKey(target.directory)) return
-    const changedPath = normalizeProjectFilePath(change.path, change.directory)
-    const openPath = normalizeProjectFilePath(target.path, target.directory)
-    const matchesPath = isWindowsPath(target.directory)
-      ? changedPath.toLowerCase() === openPath.toLowerCase()
-      : changedPath === openPath
+    let changedPath = normalizeProjectFilePath(change.path, change.directory)
+    let openPath = normalizeProjectFilePath(target.path, target.directory)
+    if (isWindowsPath(target.directory)) {
+      changedPath = changedPath.toLowerCase()
+      openPath = openPath.toLowerCase()
+    }
+    const matchesPath = changedPath === openPath || (changedPath !== "" && openPath.startsWith(`${changedPath}/`))
     if (!matchesPath && (!change.resourceID || change.resourceID !== editor.resourceID?.())) return
   }
   editor.requestDiskCheck()
