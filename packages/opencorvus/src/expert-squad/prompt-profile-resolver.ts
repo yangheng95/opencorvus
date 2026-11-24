@@ -21,6 +21,7 @@ import { DispatchAdapterContractRegistry } from "@/agent/dispatch-adapter-contra
 import { Config } from "@/config/config"
 import type { ExpertSquadPackageRevision } from "@/expert-squad/package-revision"
 import { Instance } from "@/project/instance"
+import { Project } from "@/project/project"
 import { Skill } from "@/skill/skill"
 import { defaultSkillNameFromRef } from "@/skill/default-skill-ref"
 import { Truncate } from "@/tool/truncation"
@@ -791,8 +792,14 @@ export namespace PromptProfileResolver {
     defaultSkills?: Skill.Info[]
     packageRevision?: ExpertSquadPackageRevision
   }): Promise<void> {
-    const defaultSkills =
-      input.defaultSkills ?? (await Instance.provideProjectIdentity({ directory: input.projectDirectory, fn: () => Skill.all() }))
+    let defaultSkills = input.defaultSkills
+    if (!defaultSkills) {
+      // Full runtime preparation already holds the owning identity during capability preflight.
+      const instance = Instance.current()
+      defaultSkills = instance && Project.samePath(instance.directory, input.projectDirectory)
+        ? await Skill.all()
+        : await Instance.provideProjectIdentity({ directory: input.projectDirectory, fn: () => Skill.all() })
+    }
     const defaultSkillsByName = skillInventoryByName(defaultSkills)
     const discovered = await discoverAvailableExternalPackages(input.projectDirectory)
     const projectEntriesByID = new Map(discovered.items.map((entry) => [entry.id, entry]))

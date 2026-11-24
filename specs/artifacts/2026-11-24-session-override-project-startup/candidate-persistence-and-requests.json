@@ -1,0 +1,53 @@
+{
+  "database": {
+    "sessions": [
+      {
+        "fixture": "change-review",
+        "sessionID": "ses_hQQlRRXdd3x6TDrYQQ0f",
+        "projectID": "prj_huB8gYYSW8ewoF8ZYNPG",
+        "kind": "mission",
+        "persistedPromptProfileOverride": null
+      },
+      {
+        "fixture": "protected-ignore",
+        "sessionID": "ses_haHzxpcS92pDEOKvZEfs",
+        "projectID": "prj_hFWXwZi3voizjKOZEDwV",
+        "kind": "mission",
+        "persistedPromptProfileOverride": null
+      }
+    ],
+    "rowCounts": {
+      "draftSessions": 2,
+      "taskRows": 0,
+      "messages": 0,
+      "providerRequests": 0,
+      "promptOwners": 0
+    }
+  },
+  "protectedGit": {
+    "ignoreReadOnly": true,
+    "ignoreText": "# Existing project ignore contract\nlocal-build/\n",
+    "attributesText": "# Existing text format\n*.txt text eol=lf\n",
+    "gitStatusShort": []
+  },
+  "requestsInOrder": [
+    {
+      "requestID": "3e892028-f287-400a-bca1-cbd362bf4af2",
+      "method": "PATCH",
+      "path": "/session/ses_haHzxpcS92pDEOKvZEfs/config",
+      "statusCode": 200
+    },
+    {
+      "requestID": "fc954821-0531-40b6-8da2-0384a8ddff73",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "statusCode": 200
+    },
+    {
+      "requestID": "0aa3bd24-b21d-422d-8b81-80918b4c7fa2",
+      "method": "PATCH",
+      "path": "/session/ses_haHzxpcS92pDEOKvZEfs/config",
+      "statusCode": 200
+    }
+  ]
+}

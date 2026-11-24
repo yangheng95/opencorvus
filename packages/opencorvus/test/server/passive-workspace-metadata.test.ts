@@ -46,14 +46,18 @@ function definition(id: string): ExpertSquadPackageDefinition {
   }
 }
 
-async function request(directory: string, route: string, method = "GET") {
+async function request(directory: string, route: string, method = "GET", body?: unknown) {
   return runOutsideInstanceContext(() =>
-    Server.App().request(route, { method, headers: { "x-opencorvus-directory": directory } }),
+    Server.App().request(route, {
+      method,
+      headers: { "x-opencorvus-directory": directory, ...(body === undefined ? {} : { "content-type": "application/json" }) },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    }),
   )
 }
 
 describe("cold passive workspace metadata", () => {
-  test("protected Git rule files allow exact Expert Squad and Session configuration reads", async () => {
+  test("protected Git rules allow scoped reads and an explicit Session override round trip", async () => {
     await using project = await memoryProject("passive-catalog-protected-rules")
     await fs.mkdir(path.join(project.path, ".gitignore"))
     await writeExpertSquadPackage({
@@ -93,13 +97,57 @@ describe("cold passive workspace metadata", () => {
       body: { active, scope: { kind: "session", directory: project.path, sessionID: session.id } },
     })
 
-    const sessionConfig = await request(project.path, `/session/${session.id}/config`)
+    const configRoute = `/session/${session.id}/config`
+    const sessionConfig = await request(project.path, configRoute)
     expect({ status: sessionConfig.status, body: await sessionConfig.json() }).toMatchObject({
       status: 200,
       body: {
         config: { prompt_profile: { active: "protected-review" }, agent: { chat: { temperature: 0.4 } } },
         origin: { prompt_profile: { active: "project" }, agent: { chat: { temperature: "session" } } },
       },
+    })
+
+    const set = await request(project.path, configRoute, "PATCH", { prompt_profile: { active: "base" } })
+    expect({ status: set.status, body: await set.json() }).toMatchObject({
+      status: 200,
+      body: {
+        config: { prompt_profile: { active: "base" }, agent: { chat: { temperature: 0.4 } } },
+        origin: { prompt_profile: { active: "session" }, agent: { chat: { temperature: "session" } } },
+      },
+    })
+    const saved = await Session.get(session.id)
+    expect(saved.metadata?.configOverlay).toEqual({ prompt_profile: { active: "base" }, agent: { chat: { temperature: 0.4 } } })
+    const clear = await request(project.path, configRoute, "PATCH", { prompt_profile: null })
+    expect({ status: clear.status, body: await clear.json() }).toMatchObject({
+      status: 200,
+      body: {
+        config: { prompt_profile: { active: "protected-review" }, agent: { chat: { temperature: 0.4 } } },
+        origin: { prompt_profile: { active: "project" }, agent: { chat: { temperature: "session" } } },
+      },
+    })
+    expect((await Session.get(session.id)).metadata?.configOverlay).toEqual({ agent: { chat: { temperature: 0.4 } } })
+    const unavailable = await request(project.path, configRoute, "PATCH", { model: "missing-review-provider/missing-model" })
+    expect({ status: unavailable.status, body: await unavailable.json() }).toMatchObject({
+      status: 400, body: { name: "ProviderModelNotFoundError" },
+    })
+  }, 60_000)
+
+  test("a writable project with explicit skill mounts completes cold runtime preparation", async () => {
+    await using project = await memoryProject("runtime-explicit-skill-mounts")
+    const configPath = ConfigPaths.projectFile(project.path)
+    const skillMounts = { base: { orchestrator: {} } }
+    await fs.mkdir(path.dirname(configPath), { recursive: true })
+    await fs.writeFile(configPath, JSON.stringify({ skill_mounts: skillMounts }))
+
+    const before = await request(project.path, "/config")
+    expect({ status: before.status, body: await before.json() }).toMatchObject({
+      status: 200,
+      body: { skill_mounts: skillMounts },
+    })
+    const runtime = await request(project.path, "/channel/runtime")
+    expect({ status: runtime.status, body: await runtime.json() }).toMatchObject({
+      status: 200,
+      body: { status: "disabled", channels: [] },
     })
   }, 60_000)
 

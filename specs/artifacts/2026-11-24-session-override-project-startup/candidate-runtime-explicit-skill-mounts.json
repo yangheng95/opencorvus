@@ -1,0 +1,12 @@
+{
+  "fixture": "change-review",
+  "configHttp": 200,
+  "skill_mounts": {
+    "base": {
+      "orchestrator": {}
+    }
+  },
+  "runtimeHttp": 200,
+  "runtimeStatus": "disabled",
+  "channels": []
+}

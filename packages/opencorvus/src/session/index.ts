@@ -867,7 +867,10 @@ export namespace Session {
         const owningProject = Project.get(input.projectID)
         if (!owningProject) throw new NotFoundError({ message: `Project not found: ${input.projectID}` })
         const capabilityProjectDirectory = owningProject.worktree
-        const baseConfig = await Instance.provide({ directory: capabilityProjectDirectory, fn: () => Config.get() })
+        const baseConfig = await Instance.provideProjectIdentity({
+          directory: capabilityProjectDirectory,
+          fn: () => Config.get(),
+        })
         const { nextOverlay, effective } = Config.previewOverlayUpdate(baseConfig, current, input.patch)
         const currentProfileID = Config.mergeOverlay(baseConfig, current).prompt_profile.active
         const nextProfileID = effective.prompt_profile.active

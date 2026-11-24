@@ -769,6 +769,22 @@ function assertNoStoredNull(value: unknown, path = "configOverlay"): void {
   }
 }
 
+async function validatedSessionConfigBase(sessionID: string): Promise<Config.Info> {
+  return withSkillCatalogReferenceRead(() =>
+    withConversationCapabilityReferenceRead(async () => {
+      const config = await EffectiveConfig.base({ sessionID })
+      const { validateConfigCandidate } = await import("@/config/candidate-validation")
+      await validateConfigCandidate({
+        config,
+        root: "config",
+        projectDirectory: Instance.project.worktree,
+        projectOwnedCapabilities: true,
+      })
+      return config
+    }),
+  )
+}
+
 async function sessionConfig(input: {
   sessionID: string
   projectID: string
@@ -779,20 +795,9 @@ async function sessionConfig(input: {
   // R5.1 item 2: only a root session (task root or standalone root) owns a
   // config overlay; a child session is rejected (same guard as the write path).
   Session.assertConfigurableRoot(session)
-  const readBase = () => EffectiveConfig.base({ sessionID })
   const base = input.validateProject
-    ? await withSkillCatalogReferenceRead(() => withConversationCapabilityReferenceRead(async () => {
-        const config = await readBase()
-        const { validateConfigCandidate } = await import("@/config/candidate-validation")
-        await validateConfigCandidate({
-          config,
-          root: "config",
-          projectDirectory: Instance.project.worktree,
-          projectOwnedCapabilities: true,
-        })
-        return config
-      }))
-    : await readBase()
+    ? await validatedSessionConfigBase(sessionID)
+    : await EffectiveConfig.base({ sessionID })
   const stored = session.metadata?.configOverlay ?? {}
   // R5.1 item 7: fail fast on a null or pinned key in the STORED overlay.
   // `.strict()` rejects pinned/unknown keys; assertNoStoredNull rejects nulls.
@@ -1014,7 +1019,7 @@ export const SessionRoutes = lazy(() =>
         const projectID = Instance.project.id
         await Session.assertLineageInProject({ sessionID, projectID })
         const [baseConfig, currentOverlay, projectDirectory] = await Promise.all([
-          EffectiveConfig.base({ sessionID }),
+          validatedSessionConfigBase(sessionID),
           EffectiveConfig.overlay({ sessionID }),
           EffectiveConfig.capabilityProjectDirectory({ sessionID }),
         ])

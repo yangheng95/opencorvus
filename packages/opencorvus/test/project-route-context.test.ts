@@ -84,7 +84,7 @@ describe("Project route context authority", () => {
       organize: "runtime",
       prompt: "runtime",
       config: "identity",
-      updateConfig: "runtime",
+      updateConfig: "identity",
       vcs: "identity",
       branches: "identity",
       diff: "identity",
@@ -179,7 +179,7 @@ describe("Project route context authority", () => {
       sideCreate: "identity",
       fork: "identity",
       config: "identity",
-      configWrite: "runtime",
+      configWrite: "identity",
       prompt: "runtime",
     })
   })

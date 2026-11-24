@@ -1,0 +1,30 @@
+[
+  {
+    "fixture": "change-review",
+    "sessionID": "ses_hQQlRRXdd3x6TDrYQQ0f",
+    "projectID": "prj_huB8gYYSW8ewoF8ZYNPG",
+    "configHttp": 200,
+    "catalogHttp": 200,
+    "draftBoardHttp": 200,
+    "origin": "project",
+    "effective": "dynamic",
+    "project": "dynamic",
+    "sessionOverride": null,
+    "boardLane": "backlog",
+    "pendingPrompt": "Prepare a synthetic handoff checklist for change-review. Keep this original request as a draft."
+  },
+  {
+    "fixture": "protected-ignore",
+    "sessionID": "ses_haHzxpcS92pDEOKvZEfs",
+    "projectID": "prj_hFWXwZi3voizjKOZEDwV",
+    "configHttp": 200,
+    "catalogHttp": 200,
+    "draftBoardHttp": 200,
+    "origin": "project",
+    "effective": "dynamic",
+    "project": "dynamic",
+    "sessionOverride": null,
+    "boardLane": "backlog",
+    "pendingPrompt": "Prepare a synthetic handoff checklist for protected-ignore. Keep this original request as a draft."
+  }
+]
