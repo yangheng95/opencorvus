@@ -865,7 +865,8 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
     if (!activeDirectory()) refreshWorkspaceConfiguration("")
     return
   }
-  if (event.type === "work-ledger.changed" && event.sourceType === "automation.execution.changed") return
+  if (event.type === "work-ledger.changed" &&
+    (event.sourceType === "automation.execution.changed" || event.sourceType === "file.watcher.updated")) return
   const authority = captureApiAuthority()
   const selectedSource = boardStore.selectedSource
   refreshWorkLedgerViews(event.type === "work-ledger.changed" ? event : undefined)

@@ -22,6 +22,7 @@ import { Project } from "@/project/project"
 import { Instance } from "@/project/instance"
 import { Vcs } from "@/project/vcs"
 import { File } from "@/file"
+import { FileWatcher } from "@/file/watcher"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { AutomationDefinitionChanged, AutomationExecutionChanged } from "@/scheduler/automation-service"
 import { Session, SessionStatus } from "@/session"
@@ -29,6 +30,7 @@ import { EngineService } from "@/task-api"
 import { Event as EngineEvent } from "@/engine/model"
 import { isMailboxChangeEventType } from "@/engine/mailbox"
 import { ProjectMemory } from "@/memory/project-memory"
+import { Filesystem } from "@/util/filesystem"
 import { listArchivedWorkLedger, listWorkLedger, readWorkLedgerSelection } from "@/work-ledger/projection"
 import { errors } from "../error"
 import { Event as ServerEvent } from "../event"
@@ -397,6 +399,18 @@ export function WorkLedgerRoutes() {
                 directory: event.directory,
                 path: relativePath.split(path.sep).join("/"),
                 ...(resourceID ? { resourceID } : {}),
+                sequence: 0,
+              })
+              return
+            }
+            if (event.directory && envelope?.type === FileWatcher.Event.Updated.type) {
+              const { file } = FileWatcher.Event.Updated.properties.parse(envelope.properties)
+              if (!path.isAbsolute(file) || !Filesystem.contains(event.directory, file) ||
+                Filesystem.contains(path.join(event.directory, ".git"), file)) return
+              writeWorkLedgerEventData(writeData, {
+                type: "work-ledger.changed",
+                sourceType: FileWatcher.Event.Updated.type,
+                directory: event.directory,
                 sequence: 0,
               })
               return

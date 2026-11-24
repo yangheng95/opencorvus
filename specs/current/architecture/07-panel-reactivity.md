@@ -1154,6 +1154,11 @@ The existing project branch notification uses this stream with the exact checkou
 directory and sequence zero. It invalidates the file workbench for that checkout.
 The VCS branch owner observes the result of a successful switch through the same
 refresh operation used by the native HEAD watcher.
+Native file watcher events from within a checkout also invalidate Git working
+status on this stream when working-tree monitoring supplies them. They carry the
+checkout directory and sequence zero. The open Environment or Git action panel
+reuses the same file-change refresh owner as editor writes. Git metadata paths
+retain the branch owner's separate read and notification behavior.
 The stream's connected frame also asks the current file editor owner to check
 its project file on disk. The check uses the same file reader and target and
 connection ownership as a manual reload.

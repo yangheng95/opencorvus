@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from "bun:test"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { Bus } from "@/bus"
 import { rightSidebarConversationMetadata } from "@/chat/identity"
 import { ConfigPaths } from "@/config/paths"
 import { EngineTaskTable } from "@/engine/engine.sql"
@@ -8,6 +9,7 @@ import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { File } from "@/file"
+import { FileWatcher } from "@/file/watcher"
 import { ProtocolStore } from "@/protocol/store"
 import { AutomationService } from "@/scheduler/automation-service"
 import { Server } from "@/server/server"
@@ -477,6 +479,35 @@ test("created directory members announce their exact parent path on the public s
       expect(list.status).toBe(200)
       expect(await list.json()).toMatchObject([{ name, type: "file", directoryTarget: false }])
       expect(await readFile(path.join(project.path, file), "utf8")).toBe(content)
+    }
+  } finally {
+    await close()
+  }
+}, 30_000)
+
+test("watched worktree changes invalidate Git metadata for each exact checkout", async () => {
+  await using first = await memoryProject("ledger-watched-first")
+  await using second = await memoryProject("ledger-watched-second")
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    for (const project of [first, second]) {
+      const file = path.join(project.path, ".opencorvus-test-project-identity")
+      await writeFile(file, "Externally edited worktree\n")
+      await Instance.provide({ directory: project.path, fn: async () => {
+        await Bus.publish(FileWatcher.Event.Updated, { file, event: "change" })
+      } })
+      expect(await next("work-ledger.changed", FileWatcher.Event.Updated.type)).toEqual({
+        type: "work-ledger.changed",
+        sourceType: FileWatcher.Event.Updated.type,
+        directory: project.path,
+        sequence: 0,
+      })
+      const vcs = await Server.App().request("/vcs", { headers: { "x-opencorvus-directory": project.path } })
+      expect({ status: vcs.status, body: await vcs.json() }).toMatchObject({
+        status: 200,
+        body: { initialized: true, dirty: true, modified: 1 },
+      })
     }
   } finally {
     await close()

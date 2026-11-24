@@ -1,0 +1,375 @@
+{
+  "rendererAsset": "main-EXy72qO_.js",
+  "browserUI": "http://127.0.0.1:41789/ui/",
+  "primaryProject": {
+    "sessionID": "ses_h254CgxgV5NWvGozfRsj",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+    "projectID": "prj_hhU2qo3YenNg17NrNCSt",
+    "title": "B612 external Git review",
+    "requestID": "f316d580-d742-4b71-8e83-629968df0cec"
+  },
+  "controlProject": {
+    "sessionID": "ses_h5CKCmwytorUAK8yklYS",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+    "projectID": "prj_heYhOvSKNtq2jRtOd9or",
+    "title": "B612 external control review",
+    "requestID": "fd989e2f-ae8f-42ec-941f-8401a6729159"
+  },
+  "nativeAndPublicEvents": [
+    {
+      "at": "2026-11-24T21:03:16.973Z",
+      "source": "/global/event",
+      "status": 200,
+      "kind": "ready"
+    },
+    {
+      "at": "2026-11-24T21:03:16.976Z",
+      "source": "/work-ledger/events",
+      "status": 200,
+      "kind": "ready"
+    },
+    {
+      "at": "2026-11-24T21:05:20.848Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:23810cf1-fd87-4583-8c0a-611b2ba09907",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:05:20.848Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:05:20.966Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:275a3502-304b-4662-a982-f0e9cedd3531",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:05:20.966Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:05:35.237Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:e5de2ed9-b45e-46a4-be11-e0585311b19d",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:05:35.237Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:05:35.397Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:ce3412ac-2adb-4570-b3c7-6ba6e1625f3e",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:05:35.398Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:14.199Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+        "payload": {
+          "occurrenceID": "bus-occurrence:4b646e56-3b46-4577-bb19-a21bf937ba22",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:14.199Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:14.313Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+        "payload": {
+          "occurrenceID": "bus-occurrence:d004caaa-d542-4953-8df9-628e4e23fe94",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:14.313Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:30.109Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:78d09b01-996e-4346-903b-f0d2eabfa08c",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:30.11Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:30.213Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:b9705243-76f1-4426-b57e-e31408c67518",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:06:30.214Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "file.watcher.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+        "sequence": 0
+      }
+    }
+  ],
+  "primaryWrite": {
+    "startedAt": "2026-11-24T21:05:35.2188823Z",
+    "path": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+    "finishedAt": "2026-11-24T21:05:35.2352717Z",
+    "gitStatus": [
+      " M handoff.txt"
+    ],
+    "controlStatus": []
+  },
+  "primaryObserverRead": [
+    {
+      "at": "2026-11-24T21:05:36.156Z",
+      "event": "upstream-response",
+      "id": 191,
+      "pathname": "/vcs",
+      "method": "GET",
+      "status": 200,
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+      "actual": "12f1fdfa-5a7d-410b-85ef-b9e88182c1bb"
+    },
+    {
+      "at": "2026-11-24T21:05:37.096Z",
+      "event": "upstream-response",
+      "id": 193,
+      "pathname": "/vcs",
+      "method": "GET",
+      "status": 200,
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+      "actual": "f2379480-3a38-425b-b081-bff38d88b25b"
+    }
+  ],
+  "controlWrite": {
+    "startedAt": "2026-11-24T21:06:14.1880571Z",
+    "path": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control\\handoff.txt",
+    "finishedAt": "2026-11-24T21:06:14.1984192Z",
+    "gitStatus": [
+      " M handoff.txt"
+    ]
+  },
+  "controlObserverRead": [
+    {
+      "at": "2026-11-24T21:06:15.323Z",
+      "event": "upstream-response",
+      "id": 220,
+      "pathname": "/vcs",
+      "method": "GET",
+      "status": 200,
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+      "actual": "bb1163ba-5648-4908-bf44-9c6f95c4951b"
+    },
+    {
+      "at": "2026-11-24T21:06:16.481Z",
+      "event": "upstream-response",
+      "id": 223,
+      "pathname": "/vcs",
+      "method": "GET",
+      "status": 200,
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+      "actual": "0cb16a63-759e-4370-b6c9-0cbfa28a7caa"
+    }
+  ],
+  "primaryRestore": {
+    "startAt": "2026-11-24T21:06:30.1005171Z",
+    "path": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review\\handoff.txt",
+    "finishAt": "2026-11-24T21:06:30.107372Z",
+    "gitStatus": [],
+    "controlGitStatus": [
+      " M handoff.txt"
+    ]
+  },
+  "restoreObserverRead": [
+    {
+      "at": "2026-11-24T21:06:31.039Z",
+      "event": "upstream-response",
+      "id": 234,
+      "pathname": "/vcs",
+      "method": "GET",
+      "status": 200,
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+      "actual": "53f72b3f-1531-4e69-965e-02dd7cee1218"
+    },
+    {
+      "at": "2026-11-24T21:06:31.981Z",
+      "event": "upstream-response",
+      "id": 236,
+      "pathname": "/vcs",
+      "method": "GET",
+      "status": 200,
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+      "actual": "2a0fba44-fa8d-4b0c-87ab-d25f05ffc58e"
+    }
+  ],
+  "retainedDraft": {
+    "focused": true,
+    "content": "Keep this external edit review draft",
+    "ui": "Nothing to commit."
+  },
+  "finalGit": [
+    {
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-review",
+      "head": "be780262be980d070aa5c8bb5e93b6720385fdd1",
+      "files": [],
+      "fileText": "Approved baseline for stockroom review.\r\n",
+      "vcsRequestID": "c412a870-8aa2-4239-8159-d7e342675518",
+      "vcs": {
+        "initialized": true,
+        "branch": "main",
+        "commit": "be78026",
+        "clean": true,
+        "dirty": false,
+        "staged": 0,
+        "modified": 0,
+        "untracked": 0,
+        "conflicts": 0,
+        "ahead": 0,
+        "behind": 0,
+        "hasRemote": false
+      }
+    },
+    {
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b612\\candidate\\git-external-edit-control",
+      "head": "d31e1961ca154c744204fb88c89517dfdb47820c",
+      "files": [
+        " M handoff.txt"
+      ],
+      "fileText": "Independent stockroom for control.\r\nControl external edit, different checkout.\r\n",
+      "vcsRequestID": "c5af256a-1230-4ac5-9465-bfd6aba208c2",
+      "vcs": {
+        "initialized": true,
+        "branch": "control",
+        "commit": "d31e196",
+        "clean": false,
+        "dirty": true,
+        "staged": 0,
+        "modified": 1,
+        "untracked": 0,
+        "conflicts": 0,
+        "ahead": 0,
+        "behind": 0,
+        "hasRemote": false
+      }
+    }
+  ]
+}
