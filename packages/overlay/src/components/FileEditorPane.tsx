@@ -144,7 +144,12 @@ type FileComparison = {
   | { status: "failed"; cause: unknown }
 )
 
-export function FileEditorPane(props: { onFindActionChange: (action: (() => void) | undefined) => void }) {
+export type FileEditorTextShortcuts = {
+  find: () => void
+  goToLine: (event: KeyboardEvent) => boolean
+}
+
+export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileEditorTextShortcuts | undefined) => void }) {
   const [draft, setDraft] = createSignal("")
   const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision" | "resourceID"> | null>(null)
   const [saving, setSaving] = createSignal(false)
@@ -400,8 +405,11 @@ export function FileEditorPane(props: { onFindActionChange: (action: (() => void
     })
   }
   const findInFile = () => runTextNavigation("find")
-  createEffect(() => props.onFindActionChange(textNavigationTarget() ? findInFile : undefined))
-  onCleanup(() => props.onFindActionChange(undefined))
+  const handleGoToLineShortcut = (event: KeyboardEvent) =>
+    !event.getModifierState("AltGraph") && (textNavigationTarget()?.navigation.handleGoToLineShortcut(event) ?? false)
+  const textShortcuts = { find: findInFile, goToLine: handleGoToLineShortcut }
+  createEffect(() => props.onTextShortcutsChange(textNavigationTarget() ? textShortcuts : undefined))
+  onCleanup(() => props.onTextShortcutsChange(undefined))
   const currentErrorMessage = () => {
     const failure = error()
     return failure && t(failure.messageKey)
@@ -831,10 +839,7 @@ export function FileEditorPane(props: { onFindActionChange: (action: (() => void
         )
           return
         if (event.altKey) {
-          if (
-            !event.getModifierState("AltGraph") && textContent() && !isBusy() && !fileEditorReserved() &&
-            editorNavigation()?.handleGoToLineShortcut(event)
-          ) {
+          if (handleGoToLineShortcut(event)) {
             event.preventDefault()
             event.stopPropagation()
           }

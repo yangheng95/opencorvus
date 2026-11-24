@@ -1,0 +1,42 @@
+{
+  "files": [
+    {
+      "path": "Workshop.md",
+      "read": 200,
+      "download": 200,
+      "type": "text",
+      "bytes": 341,
+      "lines": 12
+    },
+    {
+      "path": "workshop-notes/Inventory guide.md",
+      "read": 200,
+      "download": 200,
+      "type": "text",
+      "bytes": 240,
+      "lines": 10
+    },
+    {
+      "path": "workshop-notes/Dispatch checkpoints.txt",
+      "read": 200,
+      "download": 200,
+      "type": "text",
+      "bytes": 6448,
+      "lines": 124
+    },
+    {
+      "path": "workshop-notes/Equipment marker.bin",
+      "read": 200,
+      "download": 200,
+      "type": "binary",
+      "bytes": 8,
+      "lines": 0
+    }
+  ],
+  "verifiedLines": {
+    "checkpoint42": 42,
+    "checkpoint97": 97,
+    "checkpoint124": 124,
+    "shippingLabels": 8
+  }
+}

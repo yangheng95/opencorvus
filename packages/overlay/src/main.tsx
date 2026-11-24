@@ -69,7 +69,7 @@ import { QuotationSelection } from "./components/QuotationSelection"
 import { clearComposerDraftRevision, setComposerQuotation } from "./services/composer-draft"
 import type { Quotation } from "./services/quotation"
 import { RightDock, type RightDockPanel, type RightDockTab } from "./components/RightDock"
-import { FileEditorPane } from "./components/FileEditorPane"
+import { FileEditorPane, type FileEditorTextShortcuts } from "./components/FileEditorPane"
 import { MailboxPanel } from "./components/MailboxPanel"
 import { Button } from "./components/ui/Button"
 import { TabPanel } from "./components/ui/Tabs"
@@ -726,19 +726,23 @@ function focusExplorerSearchField(view: HTMLElement, selectQuery = false): boole
   return true
 }
 
-function handleRightDockFind(event: KeyboardEvent & { currentTarget: HTMLDivElement }, findInFile: (() => void) | undefined): void {
+function handleRightDockTextShortcut(
+  event: KeyboardEvent & { currentTarget: HTMLDivElement },
+  fileShortcuts: FileEditorTextShortcuts | undefined,
+): void {
   if (
-    event.defaultPrevented || event.isComposing || event.altKey || event.shiftKey ||
-    !(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "f" ||
-    !rightDockOpen()
+    event.defaultPrevented || event.isComposing || event.shiftKey ||
+    !(event.ctrlKey || event.metaKey) || !rightDockOpen()
   ) return
   const target = event.target
   const activeTab = selectedCenterWorkbenchTab()?.id
   if (!activeTab || !(target instanceof Element) || !event.currentTarget.contains(target)) return
   const fromTab = target.matches('[role="tab"][aria-selected="true"]') && target.getAttribute("data-tab") === activeTab
-  if (activeTab === "file" && fromTab && findInFile) {
-    findInFile()
-  } else if (activeTab === "explorer") {
+  const isFind = !event.altKey && event.key.toLowerCase() === "f"
+  if (activeTab === "file" && fromTab && fileShortcuts) {
+    if (isFind) fileShortcuts.find()
+    else if (!event.altKey || !fileShortcuts.goToLine(event)) return
+  } else if (activeTab === "explorer" && isFind) {
     const view = getCenterWorkbenchViews().explorer
     if (!view || (!fromTab && !view.contains(target)) || !focusExplorerSearchField(view, true)) return
     if (fromTab) cancelFileExplorerFolderReveal()
@@ -2371,7 +2375,7 @@ const paneCallbacks = {
 }
 
 function OverlayRoot() {
-  const [findInFile, setFindInFile] = createSignal<() => void>()
+  const [fileTextShortcuts, setFileTextShortcuts] = createSignal<FileEditorTextShortcuts>()
   const taskBrowserPreview = createTaskBrowserPreviewRead(() => {
     const taskID = activeBrowserPreviewTaskID()
     const directory = activeDirectory().trim()
@@ -3344,8 +3348,8 @@ function OverlayRoot() {
           onNewBrowserTab={openBlankBrowserTab}
           onClose={closeRightDockTab}
           onCloseDock={() => setRightDockVisible(false)}
-          canFindInFile={() => !!findInFile()}
-          onKeyDown={(event) => handleRightDockFind(event, findInFile())}
+          canNavigateTextFile={() => !!fileTextShortcuts()}
+          onKeyDown={(event) => handleRightDockTextShortcut(event, fileTextShortcuts())}
           onAddMenuOpenChange={setRightDockAddMenuOpen}
           overflowMenuOpen={rightDockOverflowMenuOpen}
           onOverflowMenuOpenChange={setRightDockOverflowMenuOpen}
@@ -3539,7 +3543,7 @@ function OverlayRoot() {
               id="solidFileEditorMount"
               class="center-workbench-activity chat-file-editor-activity file-editor-mount"
             >
-              <FileEditorPane onFindActionChange={(action) => setFindInFile(() => action)} />
+              <FileEditorPane onTextShortcutsChange={setFileTextShortcuts} />
             </div>
           </TabPanel>
         </RightDock>
