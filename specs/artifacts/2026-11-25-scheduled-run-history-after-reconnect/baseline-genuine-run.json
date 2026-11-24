@@ -1,0 +1,67 @@
+{
+  "requestID": "39185bbf-0ddc-4166-8ff6-16b3f8a99a4e",
+  "run": {
+    "id": "atr_automation_aec7995ea77661a3f21e8a1bbaa3b1f9",
+    "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+    "fireId": "atm_htwrEUQHgRVpAKOXuZfo",
+    "targetScope": "global",
+    "targetProjectId": "prj_hl5PNbBvnTK2C7YEvahq",
+    "session": {
+      "id": "ses_automation_0336c3f1b27f321cd2c408a44ad4a684",
+      "title": "Chat",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261125-b606\\opencorvus-scheduled-history-candidate\\data\\projects\\2026\\11\\25\\48c6220b-6819-457a-a153-ef86a997835a",
+      "kind": "assistant",
+      "experience": "chat",
+      "productPillar": null
+    },
+    "outcome": "succeeded",
+    "disposition": null,
+    "closureEventID": null,
+    "startedAt": 1795548944623,
+    "completedAt": 1795548947264,
+    "error": null
+  },
+  "fires": [
+    {
+      "fireId": "cal_automation_8b1f8611a6272183a059d72d127512cd",
+      "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+      "automationRevisionId": "atm_hFvWDUaomDyZxPvYwxVa",
+      "origin": "scheduled",
+      "scheduledDueAt": 4070952000000,
+      "startedAt": 1795548872145,
+      "completedAt": null,
+      "state": "scheduled",
+      "attemptCount": 0,
+      "retryAt": null,
+      "error": null,
+      "runs": []
+    },
+    {
+      "fireId": "atm_htwrEUQHgRVpAKOXuZfo",
+      "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+      "automationRevisionId": "atm_hFvWDUaomDyZxPvYwxVa",
+      "origin": "manual_api",
+      "scheduledDueAt": 1795548944623,
+      "startedAt": 1795548944623,
+      "completedAt": 1795548947264,
+      "state": "succeeded",
+      "attemptCount": 1,
+      "retryAt": null,
+      "error": null,
+      "runs": [
+        {
+          "id": "atr_automation_aec7995ea77661a3f21e8a1bbaa3b1f9",
+          "targetScope": "global",
+          "targetProjectId": "prj_hl5PNbBvnTK2C7YEvahq",
+          "sessionId": "ses_automation_0336c3f1b27f321cd2c408a44ad4a684",
+          "outcome": "succeeded",
+          "disposition": null,
+          "closureEventID": null,
+          "startedAt": 1795548944623,
+          "completedAt": 1795548947264,
+          "error": null
+        }
+      ]
+    }
+  ]
+}

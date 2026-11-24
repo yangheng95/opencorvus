@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时任务重连后的运行历史证据](2026-11-25-scheduled-run-history-after-reconnect/README.md)
 - [返回文件编辑器时的磁盘核对证据](2026-11-25-file-rechecks-disk-on-return/README.md)
 - [设置页日志导出证据](2026-11-25-log-export-survives-settings-navigation/README.md)
 - [会话归档和恢复的全局搜索证据](2026-11-25-palette-follows-archive-updates/README.md)

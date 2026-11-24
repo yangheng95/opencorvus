@@ -1,0 +1,129 @@
+{
+  "transports": [
+    {
+      "at": "2026-11-24T19:35:12.971Z",
+      "event": "socket-open",
+      "id": 18,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T19:35:16.377Z",
+      "event": "upstream-response",
+      "id": 37,
+      "pathname": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "5e0c0d83-751c-473f-9941-9463403151bd"
+    },
+    {
+      "at": "2026-11-24T19:35:21.325Z",
+      "event": "upstream-response",
+      "id": 41,
+      "pathname": "/global/automations/atm_hFvWDUaomDyZxPvYwxVa/runs",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "9aa116d3-6a2e-42ab-8160-77991dc386e9"
+    },
+    {
+      "at": "2026-11-24T19:35:39.463Z",
+      "event": "mode",
+      "mode": "held",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T19:35:42.484Z",
+      "event": "socket-held",
+      "id": 45,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:35:45.494Z",
+      "event": "socket-held",
+      "id": 48,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:35:48.501Z",
+      "event": "socket-held",
+      "id": 50,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:35:51.523Z",
+      "event": "socket-held",
+      "id": 52,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:35:54.534Z",
+      "event": "socket-held",
+      "id": 55,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:35:57.542Z",
+      "event": "socket-held",
+      "id": 57,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:36:00.561Z",
+      "event": "socket-held",
+      "id": 59,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:36:03.576Z",
+      "event": "socket-held",
+      "id": 61,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:36:06.13Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 0
+    },
+    {
+      "at": "2026-11-24T19:36:06.584Z",
+      "event": "socket-open",
+      "id": 64,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T19:36:06.594Z",
+      "event": "upstream-response",
+      "id": 69,
+      "pathname": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "80707452-4308-48ba-b8b4-ce4ba24f42f8"
+    },
+    {
+      "at": "2026-11-24T19:36:36.988Z",
+      "event": "upstream-response",
+      "id": 77,
+      "pathname": "/global/automations/atm_hFvWDUaomDyZxPvYwxVa/runs",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "b91ad840-b822-42b3-b78c-5c81b9705cd3"
+    }
+  ],
+  "localStream": [
+    {
+      "at": "2026-11-24T19:35:47.191Z",
+      "request": 1,
+      "model": "streaming-checker",
+      "stream": true,
+      "ownedInput": true
+    }
+  ]
+}
