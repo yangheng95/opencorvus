@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [聊天草稿同名附件的预览与移除](2026-11-24-composer-same-name-attachment-removal.md)
 - [保存会话设置与项目执行准备](2026-11-24-session-override-project-startup.md)
 - [文件改名冲突后的草稿与重试](2026-11-24-file-draft-after-rename-conflict.md)
 - [同名定时计划的暂停、重启和恢复](2026-11-24-scheduled-lifecycle-across-projects.md)

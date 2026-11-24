@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [聊天草稿同名附件的桌面证据](2026-11-24-composer-same-name-attachment-removal/README.md)
 - [会话覆盖保存的桌面证据](2026-11-24-session-override-project-startup/README.md)
 - [交接文件改名冲突的实页记录](2026-11-24-file-draft-after-rename-conflict/README.md)
 - [同名计划暂停和恢复的桌面证据](2026-11-24-scheduled-lifecycle-across-projects/README.md)

@@ -1,0 +1,50 @@
+{
+  "originals": [
+    {
+      "case": "east",
+      "filename": "receipt.txt",
+      "projectID": "prj_h7ekdh74isK360V7qrYQ",
+      "originalText": "East receipt reference E-109\nExpected total: 215 units.\n",
+      "originalByteLength": 56,
+      "originalStatus": 200,
+      "upload": {
+        "requestID": "84bea5c7-7691-48f8-ad4f-0dc1139173dd",
+        "method": "POST",
+        "path": "/attachment",
+        "statusCode": 200
+      },
+      "openedPreview": {
+        "requestID": "75dd5cd6-3108-4e61-bddc-e81261a426c1",
+        "method": "GET",
+        "path": "/attachment/prj_h7ekdh74isK360V7qrYQ/8d6bb8025833f5090d978e3783dafc337b9b2a3f2ee70e25fba8c0115e70eaaa.txt",
+        "statusCode": 200
+      }
+    },
+    {
+      "case": "west",
+      "filename": "receipt.txt",
+      "projectID": "prj_h7ekdh74isK360V7qrYQ",
+      "originalText": "West receipt reference W-287\nExpected total: 482 units.\n",
+      "originalByteLength": 56,
+      "originalStatus": 200,
+      "upload": {
+        "requestID": "950e8375-65e6-485f-9488-492130314151",
+        "method": "POST",
+        "path": "/attachment",
+        "statusCode": 200
+      },
+      "openedPreview": {
+        "requestID": "a217176a-8a8d-41fb-8795-31ad0a6b34dc",
+        "method": "GET",
+        "path": "/attachment/prj_h7ekdh74isK360V7qrYQ/d1d06d4fa858dd7c905cb5650243c1517312d9ff649c8ba21f7ed31904303186.txt",
+        "statusCode": 200
+      }
+    }
+  ],
+  "databaseCounts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  }
+}
