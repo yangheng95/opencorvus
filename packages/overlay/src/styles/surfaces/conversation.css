@@ -28,6 +28,7 @@
   /* Virtua owns item resize compensation across this complete scrollport. */
   overflow-anchor: none;
   padding-block: var(--ui-gap-xl) var(--conversation-composer-block-size);
+  scroll-padding-block-start: calc(var(--conversation-edge-fade-size) + var(--ui-gap-xs));
   scroll-padding-block-end: calc(var(--conversation-composer-block-size) + var(--conversation-edge-fade-size));
   padding-inline: var(--conversation-message-start-inset) var(--conversation-message-end-inset);
   display: flex;

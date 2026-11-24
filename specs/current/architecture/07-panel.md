@@ -2809,14 +2809,17 @@ native scroll-padding clearance, including the existing edge-fade extent, so
 browser focus scrolling can use the region above the floating Composer's paint.
 A hidden conversation retains the last clearance until its viewport can be
 measured again, preserving its native scroll range when revealed.
+The scroll-padding inset at the start clears the top fade and highlight outline
+for native focus scrolling and explicit message landings.
 The terminal file-change summary preserves its
 natural block size as a nonshrinking flex item alongside the virtual window;
 the main scrollport owns their combined overflow.
 Virtual-window measurement notifies the existing complete-scrollport follow
 controller. It does not navigate to the last virtual item, whose endpoint
 excludes the terminal summary and Composer clearance. Explicit requested-card
-navigation retains the virtualizer's item targeting; reading and preserved
-history retain their existing tracking and anchor controls.
+navigation retains the virtualizer's item targeting. The exact message or source
+landing is relative to its owning virtual item as earlier rows are measured.
+Reading and preserved history retain their existing tracking and anchor controls.
 The canonical scheduler participant message places its subject and unchanged
 body before grouped delivery references. Task and Mission consume that same
 persisted Markdown; the Overlay neither parses protocol keywords nor creates

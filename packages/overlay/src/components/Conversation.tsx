@@ -328,9 +328,9 @@ function VirtualizedConversationCards(props: {
       inline: "nearest",
       behavior: "auto",
     })
-    // The index request only mounted the card. Adopt this measured descendant
-    // landing in the same scroller so later sizing cannot realign to its index.
-    virtualizer.scrollTo(props.container.scrollTop)
+    // Keep the descendant landing relative to its item as earlier rows are measured.
+    const offset = props.container.scrollTop - virtualizer.getItemOffset(index)
+    virtualizer.scrollToIndex(index, { align: "start", offset })
     if (request.highlight) {
       if (request.messageID) {
         element.classList.add("conversation-agent-target--pulse")
