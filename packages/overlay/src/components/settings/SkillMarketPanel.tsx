@@ -73,7 +73,7 @@ import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { TextField } from "../ui/TextField"
 import { Icon } from "../ui/Icon"
-import { SearchField } from "../ui/SearchField"
+import { createSearchResultNavigation, SearchField } from "../ui/SearchField"
 import { SelectField, type SelectFieldOption } from "../ui/SelectField"
 import { SettingsDetailSection, SettingsEmpty, SettingsGroup, SettingsRow } from "./layout"
 import { createSettingsProjectFolderPicker, SettingsProjectFolderButton } from "./SettingsProjectFolderButton"
@@ -402,6 +402,17 @@ function SharedResourceManagementPanel(props: {
     return query ? skills.filter((skill) => matchesSearchTerms(query, [skill.name, skill.description])) : skills
   })
   let installedSkillList: HTMLDivElement | undefined
+  let installedSkillSearchInput: HTMLInputElement | undefined
+  const installedSkillSearchHintID = "installed-skill-search-keyboard-hint"
+  const hasInstalledSkillResults = () => matchingInstalledSkills().length > 0
+  const hasInstalledSkillQuery = () => Boolean(installedSkillQuery().trim())
+  const installedSkillNavigation = createSearchResultNavigation(() => {
+    if (!hasInstalledSkillResults() || !installedSkillList) return []
+    return Array.from(installedSkillList.querySelectorAll<HTMLElement>(".skill-installed-item > summary"))
+  }, {
+    returnToSearch: () => hasInstalledSkillQuery() ? installedSkillSearchInput : undefined,
+    pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+  })
   const mcp = createMemo(
     (): McpProjectStatusResponse => (mcpPanelActive() ? { ...appStore.mcp } : {}),
   )
@@ -1653,14 +1664,18 @@ function SharedResourceManagementPanel(props: {
                   value={installedSkillQuery()}
                   placeholder={t("skill.installed_search_placeholder")}
                   ariaLabel={t("skill.installed_search_label")}
-                  ariaKeyShortcuts="ArrowDown ArrowUp"
+                  ariaDescribedBy={hasInstalledSkillResults() && hasInstalledSkillQuery() ? installedSkillSearchHintID : undefined}
+                  ariaKeyShortcuts={hasInstalledSkillResults() ? "ArrowUp ArrowDown" : undefined}
+                  inputRef={(element) => { installedSkillSearchInput = element }}
                   onValueChange={setInstalledSkillQuery}
                   clearable
-                  resultFocusTarget={(edge) => {
-                    const rows = installedSkillList?.querySelectorAll<HTMLElement>(".skill-installed-item > summary")
-                    return rows?.[edge === "first" ? 0 : rows.length - 1]
-                  }}
+                  resultFocusTarget={installedSkillNavigation.resultFocusTarget}
                 />
+                <Show when={hasInstalledSkillResults() && hasInstalledSkillQuery()}>
+                  <p id={installedSkillSearchHintID} class="settings-search-keyboard-hint">
+                    {t("settings.search_paged_keyboard_hint")}
+                  </p>
+                </Show>
                 <Show when={matchingInstalledSkills().length === 0}>
                   <div role="status">
                     <SettingsEmpty>{t("skill.installed_search_empty")}</SettingsEmpty>
@@ -1669,7 +1684,13 @@ function SharedResourceManagementPanel(props: {
                 <For each={matchingInstalledSkills()}>
                   {(item) => (
                     <Disclosure.Root class="skill-installed-item">
-                      <Disclosure.Trigger indicatorPosition="end">
+                      <Disclosure.Trigger
+                        indicatorPosition="end"
+                        aria-keyshortcuts={hasInstalledSkillQuery()
+                          ? "ArrowUp ArrowDown PageUp PageDown Escape"
+                          : "ArrowUp ArrowDown PageUp PageDown"}
+                        on:keydown={installedSkillNavigation.handleResultKeyDown}
+                      >
                         <span class="skill-installed-copy">
                           <strong>{item.name}</strong>
                           <span class="skill-installed-preview">{item.description}</span>

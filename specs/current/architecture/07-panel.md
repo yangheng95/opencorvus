@@ -2651,8 +2651,8 @@ refs remain available to navigation owners. Shared search result navigation uses
 the same result-row geometry for entry, adjacent focus, endpoint keys and paging
 when the list supplies a viewport. It focuses the actual action and reveals its
 row, aligning a row taller than the viewport at its start. A SearchField can also
-focus a supplied native target directly, such as the file review list or an
-installed skill disclosure. Memory retains its clear-triggered list reload;
+focus a supplied native target directly, such as the file review list.
+Memory retains its clear-triggered list reload;
 Mailbox retains its existing search dismissal without a clear button. There is
 no delayed focus recovery or consumer-specific duplicate focus implementation.
 Its resize separator projects the mounted sidebar's actual width and applied
@@ -6189,7 +6189,11 @@ beside installed skills, independently of install, update, or removal notices.
 The installed list filters the accepted inventory by terms within each skill's
 name and description. Its local query survives a reload in the same scope and
 clears when that scope retires. The active project and original actions still
-own the filtered rows.
+own the filtered rows. Up, Down, Page Up and Page Down move focus among the
+current disclosure headings using the settings viewport. With a nonempty
+installed search, Escape on a result heading returns to its search field with
+the query and expanded details intact. The heading retains native disclosure
+activation and the content actions retain their Tab order.
 Without a workspace, the installed section offers the existing project folder
 picker. Selecting a directory keeps the Skill Library open and identifies the
 actual scope of its installed list and import controls. The global Skill

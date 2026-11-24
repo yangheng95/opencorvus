@@ -1317,7 +1317,7 @@ export default function ProvidersPanel() {
               clearDataTestID="provider-search-clear"
             />
             <Show when={canBrowseSearchResults()}>
-              <p id={searchKeyboardHintID} class="provider-search-keyboard-hint">
+              <p id={searchKeyboardHintID} class="settings-search-keyboard-hint">
                 {t("settings.search_paged_keyboard_hint")}
               </p>
             </Show>

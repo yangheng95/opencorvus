@@ -1019,6 +1019,12 @@ button.mission-skill-item:focus-visible {
   gap: var(--ui-gap-sm);
 }
 
+.settings-search-keyboard-hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
 .extension-settings-row .s-row-title {
   display: inline-flex;
   align-items: center;
@@ -1125,6 +1131,7 @@ button.mission-skill-item:focus-visible {
   align-items: start;
   padding: var(--ui-gap-xl) 0;
   gap: var(--ui-gap-lg);
+  scroll-margin-block: var(--ui-gap-xs);
 }
 .skill-installed-item .oc-disclosure__indicator {
   margin-top: var(--ui-gap-3xs);
@@ -3314,11 +3321,6 @@ button.release-notes-row:focus-visible {
 }
 .provider-search > .search-field {
   width: 100%;
-}
-.provider-search-keyboard-hint {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: var(--ui-font-caption);
 }
 .provider-flat-section {
   display: flex;
