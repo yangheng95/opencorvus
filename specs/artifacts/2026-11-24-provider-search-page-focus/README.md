@@ -9,3 +9,13 @@
 - [配置按钮的右边焦点轮廓在表面边界被裁切](baseline-zh-provider-configure-focus-clipped.jpg)
 - [实际桌面焦点和位置](baseline-desktop-focus.json)
 - [正式目录和自定义定义](baseline-provider-identities.json)
+
+- [英文跨组分页后名称与配置焦点均在视口内](candidate-en-provider-paging-moves-visible-focus.jpg)
+- [英文回车展开实际聚焦的 Amazon Bedrock](candidate-en-enter-opens-the-focused-provider.jpg)
+- [英文单结果打开准确中继表单](candidate-en-single-relay-edit-identity.jpg)
+- [简体中文大字号上翻后可辨认的 Vultr](candidate-zh-provider-page-up-focus-visible.jpg)
+- [OpenAI 完整焦点环及原配置控件](candidate-zh-openai-focus-ring-and-original-controls.jpg)
+- [分页离开再返回仍展开的 OpenAI](candidate-zh-paging-preserves-openai-disclosure.jpg)
+- [清除后普通目录的原生 Tab 链](candidate-zh-clear-restores-provider-catalog.jpg)
+- [候选实际桌面视口、焦点和控件顺序](candidate-desktop-focus.json)
+- [候选实际目录与项目配置身份](candidate-provider-identities.json)

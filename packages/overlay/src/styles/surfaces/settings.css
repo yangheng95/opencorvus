@@ -3358,6 +3358,7 @@ button.release-notes-row:focus-visible {
   display: flex;
   flex-direction: column;
   gap: var(--ui-gap-sm);
+  scroll-margin-block: var(--ui-gap-md);
 }
 .provider-row-title-line {
   min-width: 0;
@@ -3536,6 +3537,9 @@ button.release-notes-row:focus-visible {
 .provider-catalog-row .provider-row-title-line,
 .provider-catalog-row .provider-row-actions {
   flex-wrap: nowrap;
+}
+.provider-catalog-row .provider-row-actions {
+  padding-inline-end: var(--ui-gap-xs);
 }
 .provider-catalog-row .provider-row-key {
   display: grid;

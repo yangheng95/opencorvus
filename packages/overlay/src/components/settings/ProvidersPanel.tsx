@@ -1181,7 +1181,11 @@ export default function ProvidersPanel() {
   const searchNavigation = createSearchResultNavigation(() => {
     if (!canBrowseSearchResults() || !panel?.isConnected) return []
     return Array.from(panel.querySelectorAll<HTMLButtonElement>("button[data-provider-search-action]:enabled"))
-  }, { returnToSearch: () => providerSearchInput })
+  }, {
+    returnToSearch: () => providerSearchInput,
+    pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+    pageRow: (action) => action.closest(".provider-settings-row")?.querySelector<HTMLElement>(".provider-row-main") ?? null,
+  })
   const configuredProviderCount = createMemo(() => configuredProviderIDs().size)
   const catalogProviderCount = createMemo(() => catalogProviders().length)
   const catalogAvailable = () =>
@@ -1314,7 +1318,7 @@ export default function ProvidersPanel() {
             />
             <Show when={canBrowseSearchResults()}>
               <p id={searchKeyboardHintID} class="provider-search-keyboard-hint">
-                {t("settings.search_return_keyboard_hint")}
+                {t("settings.search_paged_keyboard_hint")}
               </p>
             </Show>
           </div>
@@ -1461,7 +1465,7 @@ export default function ProvidersPanel() {
                             tone="neutral"
                             data-provider-search-action
                             aria-label={t("provider.form.edit_title", { id: providerID })}
-                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown Escape" : undefined}
+                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
                             onKeyDown={searchNavigation.handleResultKeyDown}
                             onClick={(event) => startEdit(providerID, event.currentTarget)}
                           >
@@ -1712,7 +1716,7 @@ export default function ProvidersPanel() {
                                 : "provider.action.configure_named",
                               { name: provider().name },
                             )}
-                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown Escape" : undefined}
+                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
                             onKeyDown={searchNavigation.handleResultKeyDown}
                             title={
                               expandedCatalogProviderID() === providerID
