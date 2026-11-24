@@ -1,0 +1,52 @@
+{
+  "offline": {
+    "oldPID": 2256,
+    "listenerReleased": true,
+    "original": "Main branch checklist for branch-review\n- Check receipt queue\n",
+    "offlineWrite": "Checklist changed while offline\n- Verify journal import\n",
+    "time": "2026-11-24T17:59:11.4141682+08:00"
+  },
+  "restored": {
+    "newPID": 33080,
+    "fileReadHttp": 200,
+    "fileText": "Checklist changed while offline\n- Verify journal import\n",
+    "recordedAt": "2026-11-24T17:59:45.0497922+08:00"
+  },
+  "requests": [
+    {
+      "requestID": "49b2df6b-a5b6-45b1-bad6-7de4b69d160d",
+      "method": "GET",
+      "path": "/work-ledger/events",
+      "http": 200,
+      "time": "2026-11-24T09:59:29.06Z"
+    },
+    {
+      "requestID": "06bf8215-19a4-4056-aeb6-1893396e5881",
+      "method": "GET",
+      "path": "/work-ledger/events",
+      "http": 200,
+      "time": "2026-11-24T09:59:29.061Z"
+    },
+    {
+      "requestID": "4832f322-cec0-400f-a2b2-429acd049844",
+      "method": "GET",
+      "path": "/file/content",
+      "http": 200,
+      "time": "2026-11-24T09:59:45.046Z"
+    },
+    {
+      "requestID": "5ff4ac61-f0cc-4332-a4bf-48073e5e686a",
+      "method": "GET",
+      "path": "/file/content",
+      "http": 200,
+      "time": "2026-11-24T09:59:56.415Z"
+    },
+    {
+      "requestID": "8867d0fd-e7ee-44e2-88b4-7145ab2dcf23",
+      "method": "GET",
+      "path": "/file/content",
+      "http": 200,
+      "time": "2026-11-24T09:59:56.943Z"
+    }
+  ]
+}

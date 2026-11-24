@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [重启服务与已打开文件的桌面证据](2026-11-24-open-file-reconnect/README.md)
 - [分支切换和已打开文件的真实桌面证据](2026-11-24-open-file-branch-switch/README.md)
 - [聊天草稿同名附件的桌面证据](2026-11-24-composer-same-name-attachment-removal/README.md)
 - [会话覆盖保存的桌面证据](2026-11-24-session-override-project-startup/README.md)
