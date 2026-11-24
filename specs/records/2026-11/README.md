@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [启动时重新选择同一个项目后加载已保存权限模式](2026-11-24-project-mode-read-on-reselect.md)
 - [项目文件回到原路径时清除过期读取错误](2026-11-24-file-editor-restored-path.md)
 - [资源管理器及时显示另一标签页已创建的文件](2026-11-24-explorer-peer-change.md)
 - [项目输入模式可以保存并按项目恢复](2026-11-24-project-mode-persistence.md)
