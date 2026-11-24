@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [浏览完整项目笔记列表](2026-11-24-memory-unfiltered-navigation.md)
 - [浏览无关键词的定时任务](2026-11-24-scheduled-unfiltered-navigation.md)
 - [浏览完整模型服务商目录](2026-11-24-provider-unfiltered-navigation.md)
 - [浏览完整归档及续页焦点](2026-11-24-archive-unfiltered-navigation.md)
