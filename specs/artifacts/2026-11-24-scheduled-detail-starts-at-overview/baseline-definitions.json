@@ -1,0 +1,554 @@
+[
+  {
+    "id": "atm_h2jRmqBAXNWJ4cr0j7wC",
+    "revisionId": "atm_hQ44NbSHLZiftdNNHTLX",
+    "name": "Warehouse review SC-09",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-09 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_h484v6cdc39GO5BBr5Mr",
+    "revisionId": "atm_hynpra19eA0NommMswse",
+    "name": "Warehouse review SC-21",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-21 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_h4FDO5NbcDoisrJYNvl0",
+    "revisionId": "atm_hD8jQGWhjQa0LFsIplw4",
+    "name": "Warehouse review SC-24",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-24 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_h5QJCqasas4YkaercFM6",
+    "revisionId": "atm_hko1BBeDa3HjDxraMxZK",
+    "name": "Warehouse review SC-04",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-04 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_haHde6niQbQLNC9lMPjF",
+    "revisionId": "atm_h53Rd5nQfkKJb2jYlI9H",
+    "name": "Warehouse review SC-07",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-07 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hARRuWPSTvWOfZEwHXfl",
+    "revisionId": "atm_hy0DRFwVM5neFp1gnShl",
+    "name": "Warehouse review SC-05",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-05 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hD30MRthjSEoIJLNXKeA",
+    "revisionId": "atm_hcqAaOqkRhypgdU9ur6G",
+    "name": "Warehouse review SC-16",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-16 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hEgkLYuqUctlu8NGoeb0",
+    "revisionId": "atm_hXBWANDoLc1Hamv1wY8a",
+    "name": "Warehouse review SC-23",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-23 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hENlU1s8JXEdXIoeTvQ6",
+    "revisionId": "atm_hzLlWImhITrfldBo0Sb2",
+    "name": "Warehouse review SC-11",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-11 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hGVF1GnJ9kaMQoUjwltN",
+    "revisionId": "atm_h5xRuSMChL9msIT3kTSk",
+    "name": "Warehouse review SC-12",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-12 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hHWEPvZiRYAb7TGEb4hW",
+    "revisionId": "atm_h4RXDCaCtgOybNz9B30V",
+    "name": "Warehouse review SC-18",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-18 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hIIviI3WqWgcwrjQTpff",
+    "revisionId": "atm_hIIviI3WqWgcwrjQTpff",
+    "name": "Annual audit SC-27",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-27 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "active",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hk9Vj2xrQKxM5ZDfp6lY",
+    "revisionId": "atm_hWb03GQP9g9B2RELMqQz",
+    "name": "Warehouse review SC-14",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-14 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hKxHgdiOGBkaY5CX1kHT",
+    "revisionId": "atm_hF0icd2mTbR7XxubMvvK",
+    "name": "Warehouse review SC-26",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-26 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hlP5yg9br4DqUtoon5bn",
+    "revisionId": "atm_hhiEP9gtPZD9Na3tbS3t",
+    "name": "Warehouse review SC-08",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-08 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hnh4MA576mf8W3nuncc8",
+    "revisionId": "atm_hrP3nwAoAFAlmArnc12A",
+    "name": "Warehouse review SC-22",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-22 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hOEEfuIenDBTd2IISEof",
+    "revisionId": "atm_hnJSjkSFlMs2ueij9JhZ",
+    "name": "Warehouse review SC-15",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-15 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hoOJY0vkG4IMyN4YQkE8",
+    "revisionId": "atm_hgUyfCZ4e2HrPraFDKZL",
+    "name": "Warehouse review SC-06",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-06 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hpnRfpRhxUbJbjvyrrzW",
+    "revisionId": "atm_hT90jkxZkppNMnsXFQcW",
+    "name": "Warehouse review SC-02",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-02 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hqdzFy52t1IJ6YRrKVm9",
+    "revisionId": "atm_hSiENP48mC8YQgntE9Wy",
+    "name": "Warehouse review SC-25",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-25 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hTphzSzKw93tHmaWrK3T",
+    "revisionId": "atm_hShV2h1eRyT9reRmbHqI",
+    "name": "Warehouse review SC-19",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-19 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hTrc9MAI2aWMCZs2Bgi2",
+    "revisionId": "atm_h93lcAo5oqL2cTxz5UFP",
+    "name": "Warehouse review SC-10",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-10 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hw43cke0rDw0WfI0zE4I",
+    "revisionId": "atm_hhT6B01LrUFNysmlLj1y",
+    "name": "Warehouse review SC-13",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-13 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hX1aAcBr0vvIx5CCrt7T",
+    "revisionId": "atm_hgMDvwSZN25u98RvXCq5",
+    "name": "Warehouse review SC-01",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-01 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hyFnrKNy4kIOjr8WD5LA",
+    "revisionId": "atm_hNljBENbhODlmYvvFIHD",
+    "name": "Warehouse review SC-17",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-17 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hYJnA594BcBWNUZAh8pl",
+    "revisionId": "atm_hfktNNA6UfVhzetDGASP",
+    "name": "Warehouse review SC-03",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-03 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  {
+    "id": "atm_hZfRctrWS5SNpa1XV55l",
+    "revisionId": "atm_hH4DqOACku40DJ0fBYry",
+    "name": "Warehouse review SC-20",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hFWWob0Q3gYB5sd71ZEj"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART;TZID=America/New_York:20991123T114500\nRRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=FR",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "SC-20 original instruction. Inspect the corresponding warehouse bay and file its signed checklist.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4099481100000,
+    "failureCount": 0,
+    "lastError": null
+  }
+]

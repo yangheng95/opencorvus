@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时详情起点的真实桌面证据](2026-11-24-scheduled-detail-starts-at-overview/README.md)
 - [定时任务搜索分页的桌面证据](2026-11-24-scheduled-search-page-focus/README.md)
 - [项目笔记匹配摘要的桌面证据](2026-11-24-memory-search-matching-excerpts/README.md)
 - [项目笔记搜索名额的实页证据](2026-11-24-memory-search-distinct-notes/README.md)
