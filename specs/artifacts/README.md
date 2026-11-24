@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.55 发布证据](2026-11-25-release-0.1.55/README.md) · 原生、官网与随包日志
 - [重命名已打开文件的桌面证据](2026-11-25-file-rename-keeps-explorer-focus/README.md)
 - [全局查找跟进保存标题的页面证据](2026-11-25-palette-refreshes-renamed-conversations/README.md)
 - [环境面板接收工作树列表变化的证据](2026-11-25-environment-worktree-project-updates/README.md)

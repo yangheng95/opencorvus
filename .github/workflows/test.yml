@@ -108,7 +108,7 @@ jobs:
 
       - name: Verify CI and release workflow contracts
         if: needs.changes.outputs.scope == 'code'
-        run: bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts ./script/install-ubuntu-packages.test.ts
+        run: bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts ./script/install-ubuntu-packages.test.ts ./script/i18next-resource-contract.test.ts
 
       - name: Install critical build runtime dependencies
         if: needs.changes.outputs.scope == 'code'

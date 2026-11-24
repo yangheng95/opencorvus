@@ -4,6 +4,68 @@
 
 ## 未发布
 
+## 0.1.55 - 2026-11-25
+
+### zh-CN
+
+#### 新增
+
+- 可直接从侧栏任务行重命名任务，停止确认显示准确项目位置；归档删除和停止操作使用目标任务自己的项目。
+- 资源管理器工具栏提供刷新入口。原文件被移动或删除后，可将保留的编辑草稿另存为项目内副本。
+
+#### 调整
+
+- 改进更新日志、归档、提供商、技能、专家团、定时任务和笔记完整结果列表的键盘浏览、分页与焦点可见性；Escape 可返回现有搜索条件，详情从概览开始，返回后保留准确列表位置。
+- 笔记搜索按不同文件分配结果名额，并显示真实匹配原文；对话搜索保留刷新前结果与当前匹配，更新日志搜索直接预览命中内容。
+- 侧栏和全局搜索展示可区分的完整标题，展开入口显示隐藏记录数量；键盘聚焦的项目和工作预览保持可读。用量图表区分微小变化方向、接近零或完整的占比，放大时保留数值和表格标题。
+- 浏览器草稿和设置按实际编辑范围保存，避免不同标签页的独立输入、语言、主题或项目模式互相覆盖；重新进入项目时恢复已保存的输入模式。
+
+#### 修复
+
+- 将文档主题的 i18next 依赖统一为修复版，消除旧传递依赖中的资源深合并拒绝服务漏洞（[GHSA-6jcc-5g8w-32mx](https://github.com/advisories/GHSA-6jcc-5g8w-32mx)）。
+- 项目与全局配置、归档、定时定义及其项目名和会话标题在其他在线页面更新后，当前活跃视图自动重读；实时连接恢复后补读当前状态，保留尚未提交的表单输入和原修订冲突校验。
+- 文件在另一页保存、切换分支、移动上级目录或重新连接后，编辑器和资源管理器重新核对磁盘。保留未保存正文，正确更新缺失和变更提示，比较中的过期磁盘快照有明确标识。
+- 专家团、会话配置、通道目录和项目归档使用准确的项目读取范围，避免无关的工作区初始化阻止读取；实际执行仍保留原运行准备校验。本地开发安装的受管通道重启采用当前项目已接受的配置计划，避免配置仍在而连接被清空。
+- Git 提交和推送绑定确认时的真实分支；分支在其他页面改变时要求重新确认。环境面板跟进分支、文件保存及工作树列表变化；保存回执或提交说明重新生成失败时，保留作者后续编辑及手写正文。
+- 右侧工具从溢出菜单切换后及时交接焦点，当前文件标签支持查找和跳行快捷键；菜单与工具提示跟随真实键盘或鼠标焦点，减少错误的预览和快捷键目标。
+- 实时连接重试复用当前工作区与恢复流程，避免重载整个页面而丢失正在阅读和编辑的上下文。
+
+#### 升级影响与已知限制
+
+- 浏览器草稿和设置首次打开时自动迁移到版本化事务存储。升级后请刷新仍打开的旧版标签页；旧版与新版页面混用编辑未单独验收。
+- 直接调用 Git 提交或推送接口的客户端需随当前软件开发工具包升级，并提供确认时的 `expectedBranch` 字段（允许 `null`）。
+- 数据库保持版本 13，保留已有项目、会话和任务数据。macOS 安装包使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Rename tasks directly from sidebar rows and see the exact project location in stop confirmations. Archive deletion and stop actions use the target task's own project.
+- Refresh Explorer from its toolbar. When an original file has moved or been deleted, save the retained editor draft as a new copy within the project.
+
+#### Changed
+
+- Improve keyboard browsing, paging and visible focus across complete release history, Archive, Provider, Skill, Expert Squad, schedule and note result lists. Escape returns to the existing query, details open at their overview, and returning preserves the exact list position.
+- Allocate note search results to distinct files and show the original matching passage. Conversation search keeps its results and current match during refresh, and release search previews matching content.
+- Show distinguishing full titles in sidebar and global search, count hidden records in disclosure controls, and keep focused project and work previews readable. Usage charts identify small change directions and near-zero or complete shares, retaining values and table headers at higher zoom.
+- Save browser drafts and preferences by the actual edited scope, preserving independent input, language, theme and project mode changes across tabs. Restore the saved input mode when re-entering a project.
+
+#### Fixed
+
+- Unify the documentation theme's i18next dependency on the patched version, removing the resource deep-merge denial-of-service vulnerability in the older transitive dependency ([GHSA-6jcc-5g8w-32mx](https://github.com/advisories/GHSA-6jcc-5g8w-32mx)).
+- Active views reread project and global configuration, Archive, schedule definitions, project names and conversation titles after changes in other online pages. Reconnecting refreshes current state while retaining unsaved forms and their original revision conflict checks.
+- Recheck disk contents after another page saves a file, a branch changes, an ancestor directory moves or the connection returns. Preserve unsaved text, update missing-file and disk-change feedback, and identify stale disk snapshots in comparisons.
+- Read Expert Squad catalogs, session configuration, channel catalogs and project archives under the exact project identity, avoiding unrelated workspace initialization. Execution retains its runtime preparation checks. In local development installations, managed channel restart uses the project's accepted configuration plan instead of clearing a configured connection.
+- Bind Git commits and pushes to the branch confirmed for that action, asking for confirmation again after a peer branch change. Environment panels follow branch, file-save and worktree-list updates. Save receipts and failed commit-message regeneration preserve later edits and authored subjects.
+- Hand off focus promptly after choosing an overflow tool. Active file tabs support Find and Go to Line, and menus and tooltips follow the actual keyboard or pointer focus so previews and shortcuts target the intended item.
+- Retry live connections through the current workspace recovery flow, retaining reading and editing context instead of reloading the entire page.
+
+#### Upgrade impact and known limitations
+
+- Browser drafts and preferences migrate automatically into versioned transactional storage on first opening. Refresh old tabs after upgrading; mixed editing between old and new page versions was not separately qualified.
+- Clients calling Git commit or push endpoints directly must update with the current Software Development Kit and supply the confirmed `expectedBranch` field, which accepts `null`.
+- The database remains at version 13, retaining existing projects, conversations, and tasks. macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
+
 ## 0.1.54 - 2026-11-24
 
 ### zh-CN

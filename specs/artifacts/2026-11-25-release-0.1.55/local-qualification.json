@@ -1,0 +1,139 @@
+{
+  "version": "0.1.55",
+  "verifiedAt": "2026-11-24T17:22:45.076089+00:00",
+  "preparationBase": "9d8f085c7d46beae848833db2a757bc53db03a02",
+  "inputScope": "Shared worktree with 0.1.55 preparation; final native and website clean-source builds qualify the frozen delivery",
+  "bun": "1.4.0",
+  "results": [
+    {
+      "log": "backend-contracts.log",
+      "passed": 116,
+      "failed": 0,
+      "skipped": 0,
+      "selectedFiles": [
+        "test/project-route-context.test.ts",
+        "test/channel-catalog-state.test.ts",
+        "test/channel-supervisor-start-receipt.test.ts",
+        "test/channel-ingress-recovery.test.ts",
+        "test/server/channel-catalog-read.test.ts",
+        "test/server/passive-workspace-metadata.test.ts",
+        "test/server/project-archive-read.test.ts",
+        "test/server/archive-control-identity.test.ts",
+        "test/server/vcs-read-identity.test.ts",
+        "test/git-source-stage.test.ts",
+        "test/server/file-write-identity.test.ts",
+        "test/server/work-ledger-event-fanout.test.ts",
+        "test/memory/search-filter-order.test.ts",
+        "test/memory/search-ranking.test.ts",
+        "test/scheduler-recurrence-contract.test.ts",
+        "test/scheduler-automation-create-receipt.test.ts"
+      ]
+    },
+    {
+      "log": "backend-worktree-contracts.log",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "selectedFiles": [
+        "test/server/worktree-read-identity.test.ts"
+      ]
+    },
+    {
+      "log": "service-contracts.log",
+      "passed": 231,
+      "failed": 0,
+      "skipped": 0,
+      "selectedFiles": []
+    },
+    {
+      "log": "release-contracts.log",
+      "passed": 148,
+      "failed": 0,
+      "skipped": 1,
+      "selectedFiles": []
+    }
+  ],
+  "selectedTests": {
+    "backend": [
+      "test/project-route-context.test.ts",
+      "test/channel-catalog-state.test.ts",
+      "test/channel-supervisor-start-receipt.test.ts",
+      "test/channel-ingress-recovery.test.ts",
+      "test/server/channel-catalog-read.test.ts",
+      "test/server/passive-workspace-metadata.test.ts",
+      "test/server/project-archive-read.test.ts",
+      "test/server/archive-control-identity.test.ts",
+      "test/server/vcs-read-identity.test.ts",
+      "test/git-source-stage.test.ts",
+      "test/server/file-write-identity.test.ts",
+      "test/server/work-ledger-event-fanout.test.ts",
+      "test/memory/search-filter-order.test.ts",
+      "test/memory/search-ranking.test.ts",
+      "test/scheduler-recurrence-contract.test.ts",
+      "test/scheduler-automation-create-receipt.test.ts",
+      "test/server/worktree-read-identity.test.ts"
+    ],
+    "client": [
+      "test/archive-state.test.ts",
+      "test/chat-message-acceptance.test.ts",
+      "test/composer-draft.test.ts",
+      "test/composer-model-projection.test.ts",
+      "test/connection-settings-endpoint.test.ts",
+      "test/conversation-search.test.ts",
+      "test/file-workbench-revision.test.ts",
+      "test/history-composer-isolation.test.ts",
+      "test/locale-preference.test.ts",
+      "test/meta-project-scope.test.ts",
+      "test/meta-vcs-actions.test.ts",
+      "test/monitor-tick.test.ts",
+      "test/project-composer-preferences.test.ts",
+      "test/project-configuration-ownership.test.ts",
+      "test/settings-save-transaction.test.ts",
+      "test/task-cancellation-service.test.ts",
+      "test/task-rename-service.test.ts",
+      "test/scheduled-automations.test.ts",
+      "test/worktree-authority.test.ts",
+      "test/work-ledger-notification-stream.test.ts",
+      "test/server-base-url.test.ts"
+    ],
+    "release": [
+      "script/sync-version.test.ts",
+      "script/release-automation.test.ts",
+      "script/github-actions-workflow-contract.test.ts",
+      "packages/util/test/changelog.test.ts",
+      "packages/util/test/shell-result.test.ts",
+      "script/i18next-resource-contract.test.ts",
+      "packages/transport-protocol/test/contract.test.ts",
+      "packages/transport-protocol/test/server-base-url.test.ts",
+      "script/ci-scope.test.ts",
+      "script/install-ubuntu-packages.test.ts"
+    ]
+  },
+  "passed": 500,
+  "skipped": 1,
+  "frozenInstall": "passed; eight workspace versions and one i18next override, with the old nested version retired",
+  "audit": "actual empty vulnerability object after the targeted dependency fix",
+  "versions": "13 release-family projections aligned",
+  "authoredHistoryEntries": 91,
+  "generatedRegistry": {
+    "generatedPaths": 13,
+    "comparison": "current corresponding committed projections",
+    "result": "matched",
+    "fullSharedWorktreeCheck": false
+  },
+  "frontendBuild": "actual build and renderer public surface passed; not visual acceptance",
+  "localization": {
+    "locales": 2,
+    "keys": 3331
+  },
+  "cssTokenReferences": 9418,
+  "documentation": {
+    "operations": 353,
+    "groups": 26
+  },
+  "currentArchitectureDocuments": 20,
+  "databaseVersion": 13,
+  "websiteCheck": "104 files, zero errors, zero diagnostic warnings, 21 hints; existing theme notices retained",
+  "websiteBuild": "complete Astro build, search index and real website/runtime packaging passed on Windows",
+  "scope": "Focused real backend and pure client/data contracts; one Linux GitHub sudo-only check skipped on Windows. No UI automation, full-suite or real Provider claim"
+}

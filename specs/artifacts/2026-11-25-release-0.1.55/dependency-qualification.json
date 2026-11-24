@@ -1,0 +1,23 @@
+{
+  "version": "0.1.55",
+  "verifiedAt": "2026-11-24T17:22:45.076089+00:00",
+  "advisory": "https://github.com/advisories/GHSA-6jcc-5g8w-32mx",
+  "initialAuditExitCode": 1,
+  "affectedLockedVersion": "23.16.8",
+  "baselineInstalledThemeConsumer": "26.3.6",
+  "runtimeExploitReproduced": false,
+  "fix": "Existing root overrides pins i18next to 26.3.6; the old nested lock entry is retired",
+  "positiveActualResourceMerge": {
+    "version": "26.3.6",
+    "title": "OpenCorvus release",
+    "status": "Published",
+    "inheritedNameIsOwnResource": true,
+    "builtInCallResult": true
+  },
+  "currentAudit": {},
+  "frozenInstall": "passed",
+  "websiteChecker": "passed",
+  "websiteProductionBuild": "passed",
+  "ciGuard": "The existing verify workflow contract command runs script/i18next-resource-contract.test.ts",
+  "scope": "Lock-graph audit correction and real consumer API compatibility; no claim of observed product exploitation"
+}

@@ -410,7 +410,7 @@ describe("GitHub Actions workflow contract", () => {
       "bun run docs:check\nbun run check:architecture-index\n",
       "bun ./script/sync-version.ts --check\nbun ./script/generate.ts\nbun ./script/generated-artifacts.ts --check-clean-worktree\n",
       "bun run typecheck",
-      "bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts ./script/install-ubuntu-packages.test.ts",
+      "bun test ./script/ci-scope.test.ts ./script/github-actions-workflow-contract.test.ts ./script/install-ubuntu-packages.test.ts ./script/i18next-resource-contract.test.ts",
       "sudo --preserve-env=GITHUB_ACTIONS bash script/install-ubuntu-packages.sh ripgrep\n",
       "bun run --cwd packages/opencorvus build --single --skip-install",
     ])
