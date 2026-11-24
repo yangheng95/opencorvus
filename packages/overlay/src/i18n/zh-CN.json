@@ -1393,6 +1393,7 @@
   "project_runtime.commit_message_regenerate": "重新生成提交信息",
   "project_runtime.commit_message_failed": "无法生成提交信息：{{error}}",
   "project_runtime.commit_message_model_required": "为项目选择模型后可生成提交信息，也可以手动输入提交信息。",
+  "project_runtime.commit_message_model_required_retained": "为项目选择模型后可重新生成。当前提交信息已保留。",
   "project_runtime.commit_message_generation_failed": "无法生成提交信息。你可以手动输入提交信息；详情见诊断日志。",
   "project_runtime.commit": "提交",
   "project_runtime.commit_and_push": "提交并推送",

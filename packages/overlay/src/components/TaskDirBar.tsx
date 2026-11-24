@@ -230,7 +230,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     directoryEpoch: number
   }>()
   const [commitMessage, setCommitMessage] = createSignal("")
-  const [commitMessageGenerating, setCommitMessageGenerating] = createSignal(false)
+  const [streamedCommitMessage, setStreamedCommitMessage] = createSignal<string>()
+  const commitMessageGenerating = () => streamedCommitMessage() !== undefined
+  const [commitMessageGenerationError, setCommitMessageGenerationError] = createSignal<Error>()
   const [gitActionError, setGitActionError] = createSignal("")
   const [gitActionNotice, setGitActionNotice] = createSignal("")
   const [localEnvironmentOpen, setLocalEnvironmentOpen] = createSignal(false)
@@ -678,21 +680,19 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   }
 
   function disposeCommitMessageStream(): void {
-    commitMessageStream?.close("consumer-dispose")
+    const stream = commitMessageStream
     commitMessageStream = undefined
-    setCommitMessageGenerating(false)
+    setStreamedCommitMessage(undefined)
+    stream?.close("consumer-dispose")
   }
 
   function generateCommitMessage(): void {
-    if (!gitActionReady() || !vcs()?.dirty || gitBusy()) return
+    if (!gitActionReady() || !vcs()?.dirty || gitBusy() || commitMessageGenerating()) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = dir().trim()
-    disposeCommitMessageStream()
-    setCommitMessage("")
-    setCommitMessageGenerating(true)
-    setGitActionError("")
-    setGitActionNotice("")
+    setStreamedCommitMessage("")
+    setCommitMessageGenerationError(undefined)
     let stream: ReturnType<typeof streamVcsCommitMessage>
     const ownsStream = () => ownsProject(authority, directory, selectionEpoch) && commitMessageStream === stream
     stream = streamVcsCommitMessage({
@@ -700,27 +700,23 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       taskID: activeTaskID().trim() || undefined,
       sessionID: activeSessionID().trim() || undefined,
       onDelta: (delta) => {
-        if (ownsStream()) setCommitMessage((current) => current + delta)
+        if (ownsStream()) setStreamedCommitMessage((current) => (current ?? "") + delta)
       },
       onDone: (message) => {
         if (!ownsStream()) return
         commitMessageStream = undefined
-        setCommitMessage(message)
-        setCommitMessageGenerating(false)
+        batch(() => {
+          setCommitMessage(message)
+          setStreamedCommitMessage(undefined)
+        })
       },
       onError: (error) => {
         if (!ownsStream()) return
         commitMessageStream = undefined
-        setCommitMessageGenerating(false)
-        setGitActionError(
-          error instanceof VcsCommitMessageError
-            ? t(
-                error.code === "model_not_configured"
-                  ? "project_runtime.commit_message_model_required"
-                  : "project_runtime.commit_message_generation_failed",
-              )
-            : t("project_runtime.commit_message_failed", { error: error.message }),
-        )
+        batch(() => {
+          setStreamedCommitMessage(undefined)
+          setCommitMessageGenerationError(error)
+        })
       },
     })
     commitMessageStream = stream
@@ -732,6 +728,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionOpen(nextOpen)
     setGitActionError("")
     setGitActionNotice("")
+    setCommitMessageGenerationError(undefined)
     if (nextOpen) {
       closeRuntimePanel()
       if (!commitMessage()) {
@@ -761,6 +758,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     if (!gitMetadataFresh() || gitBusy()) return
     setGitActionBranch(vcs()?.branch ?? null)
     setGitActionError("")
+    setCommitMessageGenerationError(undefined)
     focusGitAction()
   }
 
@@ -1383,6 +1381,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionOpen(false)
     setGitActionBranch(undefined)
     setCommitMessage("")
+    setCommitMessageGenerationError(undefined)
     setGitActionError("")
     setGitActionNotice("")
   })
@@ -2231,7 +2230,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 data-ui="project-runtime-regenerate-commit-message"
                 data-busy={commitMessageGenerating() ? "true" : "false"}
-                disabled={!gitActionReady() || commitMessageGenerating() || gitBusy()}
+                disabled={!gitActionReady() || gitBusy()}
+                aria-disabled={commitMessageGenerating() || undefined}
                 title={t("project_runtime.commit_message_regenerate")}
                 aria-label={t("project_runtime.commit_message_regenerate")}
                 onClick={generateCommitMessage}
@@ -2276,11 +2276,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               {t("project_runtime.git_branch_changed", { branch: branchLabel() })}
             </Feedback>
           </Show>
-          <Show when={vcs()?.dirty || commitMessage()}>
+          <Show when={vcs()?.dirty || commitMessage() || commitMessageGenerating()}>
             <AutoGrowTextarea
               class="project-runtime-commit-message"
               data-ui="project-runtime-commit-message"
-              value={commitMessage()}
+              value={streamedCommitMessage() || commitMessage()}
               placeholder={
                 commitMessageGenerating()
                   ? t("project_runtime.commit_message_generating")
@@ -2291,6 +2291,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               onInput={(event) => {
                 commitMessageRevision += 1
                 setCommitMessage(event.currentTarget.value)
+                setCommitMessageGenerationError(undefined)
               }}
               onKeyDown={(event) => {
                 if (event.key !== "Enter" || (!event.ctrlKey && !event.metaKey)) return
@@ -2357,6 +2358,21 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               <Icon name="check" size="compact" />
               <span>{gitActionNotice()}</span>
             </div>
+          </Show>
+          <Show when={commitMessageGenerationError()} keyed>
+            {(error) => {
+              const noModel = error instanceof VcsCommitMessageError && error.code === "model_not_configured"
+              const messageKey = noModel
+                ? (commitMessage() ? "project_runtime.commit_message_model_required_retained" : "project_runtime.commit_message_model_required")
+                : error instanceof VcsCommitMessageError
+                  ? "project_runtime.commit_message_generation_failed"
+                  : "project_runtime.commit_message_failed"
+              return (
+                <Feedback tone={noModel ? "info" : "warning"} details={noModel ? undefined : formatErrorDetails(error)}>
+                  {t(messageKey, { error: error.message })}
+                </Feedback>
+              )
+            }}
           </Show>
           <Show when={gitActionError()}>
             <div class="project-runtime-operation-error" role="alert">

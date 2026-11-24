@@ -1393,6 +1393,7 @@
   "project_runtime.commit_message_regenerate": "Regenerate commit message",
   "project_runtime.commit_message_failed": "Could not generate a commit message: {{error}}",
   "project_runtime.commit_message_model_required": "Choose a model for this project to generate a commit message, or enter a message manually.",
+  "project_runtime.commit_message_model_required_retained": "Choose a model for this project to regenerate the message. Your current message is kept.",
   "project_runtime.commit_message_generation_failed": "Could not generate a commit message. You can enter a message manually; details are in the diagnostic logs.",
   "project_runtime.commit": "Commit",
   "project_runtime.commit_and_push": "Commit & Push",

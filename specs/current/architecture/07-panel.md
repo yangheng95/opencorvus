@@ -226,6 +226,10 @@ commit button and shortcut require the current report of a dirty worktree.
 An accepted commit clears only the submitted revision of its subject. Edits made
 during the request keep their text through settlement and reopening. Reopening
 with an empty subject can generate a new draft, and Regenerate remains explicit.
+Generation previews stream in the subject field. Its successful terminal message
+replaces the editable subject. Failure or cancellation keeps the previous
+subject. Generation feedback is scoped to that attempt and cleared by typing
+manually. Git write feedback retains its own operation scope.
 
 File Editor initial read failures retain one current original thrown value
 under the existing target, API authority and load/reload generations. Shared
