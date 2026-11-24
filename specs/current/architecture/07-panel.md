@@ -1570,8 +1570,10 @@ owning target or server. The editor reads the current disk snapshot through its
 existing reader, including when its own save produced the event.
 When a recheck finds the open path missing, the editor explains the missing
 path and keeps the loaded text and local draft. A later successful check clears
-the earlier reload failure. If the same resource and revision are back, the
-accepted editing base and current draft stay in place. An automatic read
+the earlier reload failure. Reading an editable snapshot at the same canonical
+resource also clears a previous save failure caused by the missing path. If
+the same resource and revision are back, the accepted editing base and current
+draft stay in place. An automatic read
 failure leaves a pending save conflict or other action failure in place.
 When a missing original path still owns an unsaved draft, its feedback offers
 an explicit Save draft copy action. The confirmation names the owning project

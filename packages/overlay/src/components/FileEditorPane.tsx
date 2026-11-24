@@ -867,9 +867,13 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       const next = await readFileContent(file, authority)
       if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
       if (checkingDisk) {
-        setError((failure) => isReloadFailure(failure) ? null : failure)
         const baseline = savedBaseline()
-        if (baseline && isEditableFileSnapshot(next) && next.revision === baseline.revision && next.resourceID === baseline.resourceID) {
+        const sameResource = baseline && isEditableFileSnapshot(next) && next.resourceID === baseline.resourceID
+        setError((failure) => {
+          if (isReloadFailure(failure) || (sameResource && failure?.messageKey === "file_editor.save_missing")) return null
+          return failure
+        })
+        if (sameResource && next.revision === baseline.revision) {
           setLoadedObservationKey(observed)
           return
         }
