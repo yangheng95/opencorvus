@@ -2668,7 +2668,9 @@ match set. That status describes the trigger independently of its page name.
 With a matching query, Down and Up from the search field focus the first and
 last actual matching tabs in rail order. The active tab participates only if it
 matches. On a matching tab, Up and Down cycle through matches, while Home and
-End focus the first and last match. Escape from a matching tab focuses the same
+End focus the first and last match. Page Up and Page Down browse matching tabs
+using the independently scrolling tab list's actual row distances and keep
+the current focus visible. Escape from a matching tab focuses the same
 search field with the query and current page intact. Escape in the populated
 search field clears the query. Focus keeps the current page open until the
 existing manual activation or explicit close.

@@ -1503,6 +1503,7 @@ button.s-row:focus-visible {
   --oc-tab-color: var(--text-strong);
 
   gap: var(--ui-gap-md);
+  scroll-margin-block: var(--ui-gap-xs);
   background: var(--oc-tab-bg);
   color: var(--oc-tab-color);
   transition:
