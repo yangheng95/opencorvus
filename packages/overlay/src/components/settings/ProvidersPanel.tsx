@@ -1176,10 +1176,10 @@ export default function ProvidersPanel() {
   const totalProviderCount = createMemo(() => unfilteredProviderEntries().length + unfilteredCatalogEntries().length)
   const visibleProviderCount = createMemo(() => providerEntries().size + catalogEntries().size)
   const hasProviderSearch = createMemo(() => providerSearch().trim().length > 0)
-  const canBrowseSearchResults = () => hasProviderSearch() && visibleProviderCount() > 0
+  const canBrowseProviders = () => visibleProviderCount() > 0
   const searchKeyboardHintID = "provider-search-keyboard-hint"
-  const searchNavigation = createSearchResultNavigation(() => {
-    if (!canBrowseSearchResults() || !panel?.isConnected) return []
+  const providerNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseProviders() || !panel?.isConnected) return []
     return Array.from(panel.querySelectorAll<HTMLButtonElement>("button[data-provider-search-action]:enabled"))
   }, {
     returnToSearch: () => providerSearchInput,
@@ -1308,15 +1308,15 @@ export default function ProvidersPanel() {
               value={providerSearch()}
               placeholder={t("provider.search.placeholder")}
               ariaLabel={t("provider.search.label")}
-              ariaDescribedBy={canBrowseSearchResults() ? searchKeyboardHintID : undefined}
-              ariaKeyShortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown" : undefined}
+              ariaDescribedBy={canBrowseProviders() ? searchKeyboardHintID : undefined}
+              ariaKeyShortcuts={canBrowseProviders() ? "ArrowUp ArrowDown" : undefined}
               onValueChange={setProviderSearch}
-              resultFocusTarget={searchNavigation.resultFocusTarget}
+              resultFocusTarget={providerNavigation.resultFocusTarget}
               inputRef={(input) => { providerSearchInput = input }}
               clearDataUI="provider-search-clear"
               clearDataTestID="provider-search-clear"
             />
-            <Show when={canBrowseSearchResults()}>
+            <Show when={canBrowseProviders()}>
               <p id={searchKeyboardHintID} class="settings-search-keyboard-hint">
                 {t("settings.search_paged_keyboard_hint")}
               </p>
@@ -1465,8 +1465,8 @@ export default function ProvidersPanel() {
                             tone="neutral"
                             data-provider-search-action
                             aria-label={t("provider.form.edit_title", { id: providerID })}
-                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
-                            onKeyDown={searchNavigation.handleResultKeyDown}
+                            aria-keyshortcuts="ArrowUp ArrowDown PageUp PageDown Escape"
+                            onKeyDown={providerNavigation.handleResultKeyDown}
                             onClick={(event) => startEdit(providerID, event.currentTarget)}
                           >
                             {t("common.edit")}
@@ -1716,8 +1716,8 @@ export default function ProvidersPanel() {
                                 : "provider.action.configure_named",
                               { name: provider().name },
                             )}
-                            aria-keyshortcuts={canBrowseSearchResults() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
-                            onKeyDown={searchNavigation.handleResultKeyDown}
+                            aria-keyshortcuts="ArrowUp ArrowDown PageUp PageDown Escape"
+                            onKeyDown={providerNavigation.handleResultKeyDown}
                             title={
                               expandedCatalogProviderID() === providerID
                                 ? t("provider.action.collapse")

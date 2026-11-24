@@ -1,0 +1,990 @@
+{
+  "en-full-search": {
+    "action": {
+      "bottom": 258.5,
+      "left": 430.6666870117187,
+      "right": 1157.3333740234375,
+      "top": 230.5
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Search providers",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "en-first-edit": {
+    "action": {
+      "bottom": 414.1666870117187,
+      "left": 1072.6771240234375,
+      "right": 1107.7396240234375,
+      "top": 386.1666870117187
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Edit fixture-warehouse-relay",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Warehouse receiving model relayfixture-warehouse-relayAPI: http://127.0.0.1:46901/v1",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 426.3646049499512,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": 386.1666870117187
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "en-start-boundary": {
+    "action": {
+      "bottom": 414.1666870117187,
+      "left": 1072.6771240234375,
+      "right": 1107.7396240234375,
+      "top": 386.1666870117187
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Edit fixture-warehouse-relay",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Warehouse receiving model relayfixture-warehouse-relayAPI: http://127.0.0.1:46901/v1",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 426.3646049499512,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": 386.1666870117187
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "en-second-edit": {
+    "action": {
+      "bottom": 567.8958740234375,
+      "left": 1072.6771240234375,
+      "right": 1107.7396240234375,
+      "top": 539.8958740234375
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Edit fixture-handoff-relay",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Handoff desk model relayfixture-handoff-relayAPI: http://127.0.0.1:46902/v1",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 580.0937919616699,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": 539.8958740234375
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "en-first-public": {
+    "action": {
+      "bottom": 717.125,
+      "left": 1073.59375,
+      "right": 1160,
+      "top": 689.125
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "Configure 302.AI",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "302.AI302ai",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 712.125,
+      "left": 404,
+      "right": 961.59375,
+      "top": 694.125
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 76.66666412353516
+  },
+  "en-page-down": {
+    "action": {
+      "bottom": 717.125,
+      "left": 1073.59375,
+      "right": 1160,
+      "top": 689.125
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "Configure Cohere",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Coherecohere",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 712.125,
+      "left": 404,
+      "right": 961.59375,
+      "top": 694.125
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 736.6666870117188
+  },
+  "en-second-page-down": {
+    "action": {
+      "bottom": 717.125,
+      "left": 1073.59375,
+      "right": 1160,
+      "top": 689.125
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "Configure iFlow",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "iFlowiflowcn",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 712.125,
+      "left": 404,
+      "right": 961.59375,
+      "top": 694.125
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 1396.6666259765625
+  },
+  "en-page-up": {
+    "action": {
+      "bottom": 67.125,
+      "left": 1073.59375,
+      "right": 1160,
+      "top": 39.125
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "Configure Cohere",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Coherecohere",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 62.125,
+      "left": 404,
+      "right": 961.59375,
+      "top": 44.125
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 1386.6666259765625
+  },
+  "en-cohere-open": {
+    "action": {
+      "bottom": 67.125,
+      "left": 1099.322998046875,
+      "right": 1160.0000839233398,
+      "top": 39.125
+    },
+    "count": 90,
+    "expanded": "true",
+    "focus": "Collapse Cohere configuration",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Coherecohere",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 62.125,
+      "left": 404,
+      "right": 987.3229370117188,
+      "top": 44.125
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 1386.6666259765625
+  },
+  "en-open-row-to-next": {
+    "action": {
+      "bottom": 160.45834350585938,
+      "left": 1073.59375,
+      "right": 1160,
+      "top": 132.45834350585938
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "Configure Cortecs",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Cortecscortecs",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 155.45834350585938,
+      "left": 404,
+      "right": 961.59375,
+      "top": 137.45834350585938
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 1386.6666259765625
+  },
+  "en-back-to-open-row": {
+    "action": {
+      "bottom": 67.125,
+      "left": 1099.322998046875,
+      "right": 1160.0000839233398,
+      "top": 39.125
+    },
+    "count": 90,
+    "expanded": "true",
+    "focus": "Collapse Cohere configuration",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Coherecohere",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 62.125,
+      "left": 404,
+      "right": 987.3229370117188,
+      "top": 44.125
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 1386.6666259765625
+  },
+  "en-cohere-closed": {
+    "action": {
+      "bottom": 67.125,
+      "left": 1073.59375,
+      "right": 1160,
+      "top": 39.125
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "Configure Cohere",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Coherecohere",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 62.125,
+      "left": 404,
+      "right": 961.59375,
+      "top": 44.125
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 1386.6666259765625
+  },
+  "en-return-to-blank-search": {
+    "action": {
+      "bottom": 258.5,
+      "left": 430.6666870117187,
+      "right": 1157.3333740234375,
+      "top": 230.5
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Search providers",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "en-from-search-first": {
+    "action": {
+      "bottom": 414.1666870117187,
+      "left": 1072.6771240234375,
+      "right": 1107.7396240234375,
+      "top": 386.1666870117187
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Edit fixture-warehouse-relay",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Warehouse receiving model relayfixture-warehouse-relayAPI: http://127.0.0.1:46901/v1",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 426.3646049499512,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": 386.1666870117187
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "en-from-search-handoff": {
+    "action": {
+      "bottom": 567.8958740234375,
+      "left": 1072.6771240234375,
+      "right": 1107.7396240234375,
+      "top": 539.8958740234375
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Edit fixture-handoff-relay",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Handoff desk model relayfixture-handoff-relayAPI: http://127.0.0.1:46902/v1",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 580.0937919616699,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": 539.8958740234375
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "en-handoff-open": {
+    "action": {
+      "bottom": 393.15625,
+      "left": 404,
+      "right": 1164,
+      "top": 363.15625
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "e.g. https://my-gateway.com/v1",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "input": "http://127.0.0.1:46902/v1",
+    "query": "",
+    "row": null,
+    "shortcuts": null,
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 415.3333435058594
+  },
+  "en-cancel-restore": {
+    "action": {
+      "bottom": 152.5625,
+      "left": 1072.6771240234375,
+      "right": 1107.7396240234375,
+      "top": 124.5625
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Edit fixture-handoff-relay",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "identity": "Handoff desk model relayfixture-handoff-relayAPI: http://127.0.0.1:46902/v1",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 164.76041793823242,
+      "left": 404,
+      "right": 917.6771240234376,
+      "top": 124.5625
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 415.3333435058594
+  },
+  "en-after-cancel-search": {
+    "action": {
+      "bottom": 258.5,
+      "left": 430.6666870117187,
+      "right": 1157.3333740234375,
+      "top": 230.5
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "Search providers",
+    "hint": "↑ ↓ Browse · PgUp/PgDn Page · Enter Open · Esc Back to search",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    },
+    "y": 0
+  },
+  "zh-full-search": {
+    "action": {
+      "bottom": 461.5000114440918,
+      "left": 541.4271240234375,
+      "right": 1231.3438110351562,
+      "top": 416.7083435058594
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zh-last-from-blank": {
+    "action": {
+      "bottom": 715.3333549499512,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 670.5416870117188
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "配置 Zhipu AI Coding Plan",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 707.3333549499512,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 678.5416870117188
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zh-end-boundary": {
+    "action": {
+      "bottom": 715.3333549499512,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 670.5416870117188
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "配置 Zhipu AI Coding Plan",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 707.3333549499512,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 678.5416870117188
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zh-page-up": {
+    "action": {
+      "bottom": 152.3333396911621,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 107.54167175292967
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "配置 Vultr",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Vultrvultr",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 144.3333396911621,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 115.54167175292967
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zh-vultr-open": {
+    "action": {
+      "bottom": 152.3333396911621,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 107.54167175292967
+    },
+    "count": 90,
+    "expanded": "true",
+    "focus": "收起 Vultr 的配置",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Vultrvultr",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 144.3333396911621,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 115.54167175292967
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zh-vultr-closed": {
+    "action": {
+      "bottom": 152.3333396911621,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 107.54167175292967
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "配置 Vultr",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Vultrvultr",
+    "input": null,
+    "query": "",
+    "row": {
+      "bottom": 144.3333396911621,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 115.54167175292967
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zh-back-to-full-search": {
+    "action": {
+      "bottom": 411.5000114440918,
+      "left": 541.4271240234375,
+      "right": 1231.3438110351562,
+      "top": 366.7083435058594
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 50
+  },
+  "zh-actual-search": {
+    "action": {
+      "bottom": 411.5000114440918,
+      "left": 541.4271240234375,
+      "right": 1176.9583740234375,
+      "top": 366.7083435058594
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "模型",
+    "query": "模型",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 50
+  },
+  "zh-filtered-last": {
+    "action": {
+      "bottom": 715.3333549499512,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 670.5416870117188
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "配置 Zhipu AI Coding Plan",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "input": null,
+    "query": "模型",
+    "row": {
+      "bottom": 707.3333549499512,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 678.5416870117188
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zh-filtered-page-up": {
+    "action": {
+      "bottom": 152.3333396911621,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 107.54167175292967
+    },
+    "count": 90,
+    "expanded": "false",
+    "focus": "配置 Vultr",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Vultrvultr",
+    "input": null,
+    "query": "模型",
+    "row": {
+      "bottom": 144.3333396911621,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 115.54167175292967
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 6794.66650390625
+  },
+  "zh-preserve-query": {
+    "action": {
+      "bottom": 411.5000114440918,
+      "left": 541.4271240234375,
+      "right": 1176.9583740234375,
+      "top": 366.7083435058594
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "模型",
+    "query": "模型",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 50
+  },
+  "zh-clear-query": {
+    "action": {
+      "bottom": 411.5000114440918,
+      "left": 541.4271240234375,
+      "right": 1231.3438110351562,
+      "top": 366.7083435058594
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 50
+  },
+  "zh-one-match": {
+    "action": {
+      "bottom": 420.1666679382324,
+      "left": 541.4271240234375,
+      "right": 1176.9583740234375,
+      "top": 375.375
+    },
+    "count": 1,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "zhipuai-coding-plan",
+    "query": "zhipuai-coding-plan",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 41.33333206176758
+  },
+  "zh-one-match-focus": {
+    "action": {
+      "bottom": 655.9896049499512,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 611.1979370117188
+    },
+    "count": 1,
+    "expanded": "false",
+    "focus": "配置 Zhipu AI Coding Plan",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "input": null,
+    "query": "zhipuai-coding-plan",
+    "row": {
+      "bottom": 647.9896049499512,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 619.1979370117188
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 41.33333206176758
+  },
+  "zh-one-match-page": {
+    "action": {
+      "bottom": 655.9896049499512,
+      "left": 1147.4896240234375,
+      "right": 1235.2083740234375,
+      "top": 611.1979370117188
+    },
+    "count": 1,
+    "expanded": "false",
+    "focus": "配置 Zhipu AI Coding Plan",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "identity": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "input": null,
+    "query": "zhipuai-coding-plan",
+    "row": {
+      "bottom": 647.9896049499512,
+      "left": 499.1770935058594,
+      "right": 968.312530517578,
+      "top": 619.1979370117188
+    },
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown Escape",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 41.33333206176758
+  },
+  "zh-one-match-back": {
+    "action": {
+      "bottom": 420.1666679382324,
+      "left": 541.4271240234375,
+      "right": 1176.9583740234375,
+      "top": 375.375
+    },
+    "count": 1,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "zhipuai-coding-plan",
+    "query": "zhipuai-coding-plan",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 41.33333206176758
+  },
+  "zh-one-match-reset": {
+    "action": {
+      "bottom": 420.1666679382324,
+      "left": 541.4271240234375,
+      "right": 1231.3438110351562,
+      "top": 375.375
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 41.33333206176758
+  },
+  "zh-empty-search": {
+    "action": {
+      "bottom": 461.5000114440918,
+      "left": 541.4271240234375,
+      "right": 1176.9583740234375,
+      "top": 416.7083435058594
+    },
+    "count": 0,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "input": "no-provider-82719",
+    "query": "no-provider-82719",
+    "row": null,
+    "shortcuts": null,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  },
+  "zh-clear-empty-search": {
+    "action": {
+      "bottom": 461.5000114440918,
+      "left": 541.4271240234375,
+      "right": 1231.3438110351562,
+      "top": 416.7083435058594
+    },
+    "count": 90,
+    "expanded": null,
+    "focus": "搜索模型服务商",
+    "hint": "↑ ↓ 浏览结果 · PgUp/PgDn 翻页 · 回车打开 · Esc 返回搜索",
+    "input": "",
+    "query": "",
+    "row": null,
+    "shortcuts": "ArrowUp ArrowDown",
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "y": 0
+  }
+}

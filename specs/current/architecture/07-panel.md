@@ -6051,12 +6051,12 @@ search terms in both row collections. Catalog rows retain active connections
 first, then configured declarations, then other entries, with name ordering
 within each group. A configuration-only catalog label uses the neutral badge;
 it does not claim authentication, runnable models or successful inference.
-Provider search offers Down and Up to enter and browse the available Edit and
-Configure buttons in display order. Those controls name their provider for
-keyboard users. Page Up and Page Down move focus within the displayed matches,
-keeping the named provider and its result action in view in the settings
+The provider search field offers Down and Up to enter the first or last available
+Edit or Configure button in the full or filtered directory. Those controls name
+their provider for keyboard users. Arrows and page keys move through the displayed
+providers in order, keeping the named provider and its action in the settings
 viewport. The provider identity anchors the page position while expanded
-connection controls retain their regular Tab order. Escape from a matching
+connection controls retain their regular Tab order. Escape from a provider
 action focuses the provider search with the query and disclosure state intact.
 An expanded catalog row places its available account connection action and then
 its API key editor directly after the Configure trigger in the native Tab order.

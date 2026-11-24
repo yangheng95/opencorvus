@@ -1,0 +1,452 @@
+[
+  {
+    "identity": "Warehouse receiving model relayfixture-warehouse-relayAPI: http://127.0.0.1:46901/v1",
+    "kind": null,
+    "label": "编辑 fixture-warehouse-relay"
+  },
+  {
+    "identity": "Handoff desk model relayfixture-handoff-relayAPI: http://127.0.0.1:46902/v1",
+    "kind": null,
+    "label": "编辑 fixture-handoff-relay"
+  },
+  {
+    "identity": "302.AI302ai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 302.AI"
+  },
+  {
+    "identity": "Abacusabacus",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Abacus"
+  },
+  {
+    "identity": "AIHubMixaihubmix",
+    "kind": "provider-catalog-configure",
+    "label": "配置 AIHubMix"
+  },
+  {
+    "identity": "Alibabaalibaba",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Alibaba"
+  },
+  {
+    "identity": "Alibaba (China)alibaba-cn",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Alibaba (China)"
+  },
+  {
+    "identity": "Amazon Bedrockamazon-bedrock",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Amazon Bedrock"
+  },
+  {
+    "identity": "Anthropicanthropic",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Anthropic"
+  },
+  {
+    "identity": "Azureazure",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Azure"
+  },
+  {
+    "identity": "Azure Cognitive Servicesazure-cognitive-services",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Azure Cognitive Services"
+  },
+  {
+    "identity": "Bailingbailing",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Bailing"
+  },
+  {
+    "identity": "Basetenbaseten",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Baseten"
+  },
+  {
+    "identity": "Cerebrascerebras",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Cerebras"
+  },
+  {
+    "identity": "Chuteschutes",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Chutes"
+  },
+  {
+    "identity": "Cloudflare AI Gatewaycloudflare-ai-gateway",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Cloudflare AI Gateway"
+  },
+  {
+    "identity": "Cloudflare Workers AIcloudflare-workers-ai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Cloudflare Workers AI"
+  },
+  {
+    "identity": "Coherecohere",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Cohere"
+  },
+  {
+    "identity": "Cortecscortecs",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Cortecs"
+  },
+  {
+    "identity": "Deep Infradeepinfra",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Deep Infra"
+  },
+  {
+    "identity": "DeepSeekdeepseek",
+    "kind": "provider-catalog-configure",
+    "label": "配置 DeepSeek"
+  },
+  {
+    "identity": "FastRouterfastrouter",
+    "kind": "provider-catalog-configure",
+    "label": "配置 FastRouter"
+  },
+  {
+    "identity": "Fireworks AIfireworks-ai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Fireworks AI"
+  },
+  {
+    "identity": "Firmwarefirmware",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Firmware"
+  },
+  {
+    "identity": "Friendlifriendli",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Friendli"
+  },
+  {
+    "identity": "GitHub Copilotgithub-copilot",
+    "kind": "provider-catalog-configure",
+    "label": "配置 GitHub Copilot"
+  },
+  {
+    "identity": "GitHub Modelsgithub-models",
+    "kind": "provider-catalog-configure",
+    "label": "配置 GitHub Models"
+  },
+  {
+    "identity": "GitLab Duogitlab",
+    "kind": "provider-catalog-configure",
+    "label": "配置 GitLab Duo"
+  },
+  {
+    "identity": "Googlegoogle",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Google"
+  },
+  {
+    "identity": "Groqgroq",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Groq"
+  },
+  {
+    "identity": "Heliconehelicone",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Helicone"
+  },
+  {
+    "identity": "Hugging Facehuggingface",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Hugging Face"
+  },
+  {
+    "identity": "iFlowiflowcn",
+    "kind": "provider-catalog-configure",
+    "label": "配置 iFlow"
+  },
+  {
+    "identity": "Inceptioninception",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Inception"
+  },
+  {
+    "identity": "Inferenceinference",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Inference"
+  },
+  {
+    "identity": "IO.NETio-net",
+    "kind": "provider-catalog-configure",
+    "label": "配置 IO.NET"
+  },
+  {
+    "identity": "Kilo Gatewaykilo",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Kilo Gateway"
+  },
+  {
+    "identity": "Kimi For Codingkimi-for-coding",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Kimi For Coding"
+  },
+  {
+    "identity": "Llamallama",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Llama"
+  },
+  {
+    "identity": "LLM Gatewayllmgateway",
+    "kind": "provider-catalog-configure",
+    "label": "配置 LLM Gateway"
+  },
+  {
+    "identity": "LMStudiolmstudio",
+    "kind": "provider-catalog-configure",
+    "label": "配置 LMStudio"
+  },
+  {
+    "identity": "LucidQuery AIlucidquery",
+    "kind": "provider-catalog-configure",
+    "label": "配置 LucidQuery AI"
+  },
+  {
+    "identity": "MiniMax (minimax.io)minimax",
+    "kind": "provider-catalog-configure",
+    "label": "配置 MiniMax (minimax.io)"
+  },
+  {
+    "identity": "MiniMax (minimaxi.com)minimax-cn",
+    "kind": "provider-catalog-configure",
+    "label": "配置 MiniMax (minimaxi.com)"
+  },
+  {
+    "identity": "MiniMax Coding Plan (minimax.io)minimax-coding-plan",
+    "kind": "provider-catalog-configure",
+    "label": "配置 MiniMax Coding Plan (minimax.io)"
+  },
+  {
+    "identity": "MiniMax Coding Plan (minimaxi.com)minimax-cn-coding-plan",
+    "kind": "provider-catalog-configure",
+    "label": "配置 MiniMax Coding Plan (minimaxi.com)"
+  },
+  {
+    "identity": "Mistralmistral",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Mistral"
+  },
+  {
+    "identity": "Moarkmoark",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Moark"
+  },
+  {
+    "identity": "ModelScopemodelscope",
+    "kind": "provider-catalog-configure",
+    "label": "配置 ModelScope"
+  },
+  {
+    "identity": "Moonshot AImoonshotai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Moonshot AI"
+  },
+  {
+    "identity": "Moonshot AI (China)moonshotai-cn",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Moonshot AI (China)"
+  },
+  {
+    "identity": "Morphmorph",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Morph"
+  },
+  {
+    "identity": "NanoGPTnano-gpt",
+    "kind": "provider-catalog-configure",
+    "label": "配置 NanoGPT"
+  },
+  {
+    "identity": "Nebius Token Factorynebius",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Nebius Token Factory"
+  },
+  {
+    "identity": "Novanova",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Nova"
+  },
+  {
+    "identity": "NovitaAInovita-ai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 NovitaAI"
+  },
+  {
+    "identity": "Nvidianvidia",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Nvidia"
+  },
+  {
+    "identity": "Ollama Cloudollama-cloud",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Ollama Cloud"
+  },
+  {
+    "identity": "OpenAIopenai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 OpenAI"
+  },
+  {
+    "identity": "OpenCorvus Zenopencorvus",
+    "kind": "provider-catalog-configure",
+    "label": "配置 OpenCorvus Zen"
+  },
+  {
+    "identity": "OpenRouteropenrouter",
+    "kind": "provider-catalog-configure",
+    "label": "配置 OpenRouter"
+  },
+  {
+    "identity": "OVHcloud AI Endpointsovhcloud",
+    "kind": "provider-catalog-configure",
+    "label": "配置 OVHcloud AI Endpoints"
+  },
+  {
+    "identity": "Perplexityperplexity",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Perplexity"
+  },
+  {
+    "identity": "Poepoe",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Poe"
+  },
+  {
+    "identity": "Privatemode AIprivatemode-ai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Privatemode AI"
+  },
+  {
+    "identity": "Requestyrequesty",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Requesty"
+  },
+  {
+    "identity": "SAP AI Coresap-ai-core",
+    "kind": "provider-catalog-configure",
+    "label": "配置 SAP AI Core"
+  },
+  {
+    "identity": "Scalewayscaleway",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Scaleway"
+  },
+  {
+    "identity": "SiliconFlowsiliconflow",
+    "kind": "provider-catalog-configure",
+    "label": "配置 SiliconFlow"
+  },
+  {
+    "identity": "SiliconFlow (China)siliconflow-cn",
+    "kind": "provider-catalog-configure",
+    "label": "配置 SiliconFlow (China)"
+  },
+  {
+    "identity": "Snowflake Cortexsnowflake-cortex",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Snowflake Cortex"
+  },
+  {
+    "identity": "submodelsubmodel",
+    "kind": "provider-catalog-configure",
+    "label": "配置 submodel"
+  },
+  {
+    "identity": "Syntheticsynthetic",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Synthetic"
+  },
+  {
+    "identity": "Together AItogetherai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Together AI"
+  },
+  {
+    "identity": "Upstageupstage",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Upstage"
+  },
+  {
+    "identity": "v0v0",
+    "kind": "provider-catalog-configure",
+    "label": "配置 v0"
+  },
+  {
+    "identity": "Venice AIvenice",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Venice AI"
+  },
+  {
+    "identity": "Vercel AI Gatewayvercel",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Vercel AI Gateway"
+  },
+  {
+    "identity": "Vertexgoogle-vertex",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Vertex"
+  },
+  {
+    "identity": "Vertex (Anthropic)google-vertex-anthropic",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Vertex (Anthropic)"
+  },
+  {
+    "identity": "Vivgridvivgrid",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Vivgrid"
+  },
+  {
+    "identity": "Vultrvultr",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Vultr"
+  },
+  {
+    "identity": "Weights & Biaseswandb",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Weights & Biases"
+  },
+  {
+    "identity": "xAIxai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 xAI"
+  },
+  {
+    "identity": "Xiaomixiaomi",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Xiaomi"
+  },
+  {
+    "identity": "Z.AIzai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Z.AI"
+  },
+  {
+    "identity": "Z.AI Coding Planzai-coding-plan",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Z.AI Coding Plan"
+  },
+  {
+    "identity": "ZenMuxzenmux",
+    "kind": "provider-catalog-configure",
+    "label": "配置 ZenMux"
+  },
+  {
+    "identity": "Zhipu AIzhipuai",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Zhipu AI"
+  },
+  {
+    "identity": "Zhipu AI Coding Planzhipuai-coding-plan",
+    "kind": "provider-catalog-configure",
+    "label": "配置 Zhipu AI Coding Plan"
+  }
+]
