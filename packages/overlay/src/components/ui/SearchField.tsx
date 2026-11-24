@@ -38,7 +38,7 @@ export function createSearchResultNavigation(
   { tabList = false, returnToSearch, pageViewport, pageRow }: {
     tabList?: boolean
     returnToSearch?: () => HTMLInputElement | undefined
-    pageViewport?: () => HTMLElement | undefined
+    pageViewport?: (action: HTMLElement) => HTMLElement | null | undefined
     pageRow?: (action: HTMLElement) => HTMLElement | null
   } = {},
 ) {
@@ -49,14 +49,17 @@ export function createSearchResultNavigation(
 
   function handleResultKeyDown(event: KeyboardEvent): void {
     if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    const control = event.target
+    if (!(control instanceof HTMLElement)) return
     const key = event.key
     const search = key === "Escape" ? returnToSearch?.() : undefined
     if (search && (!search.isConnected || search.disabled || search.readOnly)) return
-    const viewport = key === "PageDown" || key === "PageUp" ? pageViewport?.() : undefined
+    const viewport = key === "PageDown" || key === "PageUp" ? pageViewport?.(control) : undefined
     if (!search && !viewport && key !== "ArrowDown" && key !== "ArrowUp" && !(tabList && (key === "Home" || key === "End"))) return
 
-    const actions = readActions()
-    const current = actions.findIndex((action) => action === event.target)
+    const results = readActions()
+    const actions = viewport ? results.filter((action) => viewport.contains(action)) : results
+    const current = actions.indexOf(control)
     if (current < 0) return
     event.preventDefault()
     event.stopPropagation()
@@ -75,7 +78,11 @@ export function createSearchResultNavigation(
       )
       const action = actions[target ?? current]!
       action.focus({ preventScroll: true })
-      rowFor(action)?.scrollIntoView({ block: "nearest", inline: "nearest" })
+      const row = rowFor(action)
+      if (row) {
+        const block = row.getBoundingClientRect().height > viewport.clientHeight ? "start" : "nearest"
+        row.scrollIntoView({ block, inline: "nearest" })
+      }
       return
     }
 

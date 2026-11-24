@@ -171,7 +171,7 @@ function MissionBoardCard(props: {
           title={props.mission.title}
           aria-label={t("mission_board.open_mission", { title: props.mission.title })}
           aria-labelledby={props.project ? `${openLabelID}${projectLabelRefs()}` : undefined}
-          aria-keyshortcuts={props.searchResult ? "ArrowUp ArrowDown Escape" : undefined}
+          aria-keyshortcuts={props.searchResult ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
           disabled={props.actionBusy}
           onClick={props.onOpen}
         >
@@ -419,7 +419,11 @@ export function MissionBoard(props: MissionBoardProps) {
   const searchNavigation = createSearchResultNavigation(() => {
     if (!canBrowseSearchResults() || !lanesElement) return []
     return Array.from(lanesElement.querySelectorAll<HTMLButtonElement>('button[data-ui="mission-board-card-open"]:enabled'))
-  }, { returnToSearch: () => searchInput })
+  }, {
+    returnToSearch: () => searchInput,
+    pageViewport: (action) => layout() === "list" ? lanesElement : action.closest<HTMLElement>(".mission-board-lane__cards"),
+    pageRow: (action) => action.closest<HTMLElement>('[data-ui="mission-board-card"]'),
+  })
   // Moving an existing card during list reconciliation can blur its focused control.
   createComputed(
     on(visibleMissions, () => {
@@ -648,7 +652,9 @@ export function MissionBoard(props: MissionBoardProps) {
         </Button>
         <p class="mission-board__search-hint" id={searchHintID}>
           {t("mission_board.search_hint")}
-          <Show when={canBrowseSearchResults()}>{" "}{t("settings.search_return_keyboard_hint")}</Show>
+          <Show when={canBrowseSearchResults()}>
+            {" "}{t(layout() === "list" ? "mission_board.search_list_keys" : "mission_board.search_board_keys")}
+          </Show>
         </p>
         <Show when={projectDirectory()}>
           {(directory) => (

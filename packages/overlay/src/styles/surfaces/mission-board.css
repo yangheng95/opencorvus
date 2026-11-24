@@ -246,6 +246,7 @@ body {
   display: flex;
   width: 100%;
   min-height: 0;
+  scroll-margin-block: var(--ui-gap-sm);
   flex: 0 0 auto;
   flex-direction: column;
   overflow: hidden;

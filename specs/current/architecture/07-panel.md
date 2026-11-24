@@ -1994,6 +1994,14 @@ loading state, locator or data source. Parent opening, draft actions and blocked
 criteria remain separate controls; no interactive child is nested in its parent
 button. Returning to Missions retains the page's original query/project/view.
 
+In an accepted, nonempty Mission Board search, Page Up and Page Down transfer
+focus between the current Open controls using the rendered card distances. List
+layout pages through the status groups in its list viewport. Board layout pages
+within the focused card's independently scrolling column. The current card
+scrolls to its nearest complete position when it fits, or starts at its title
+when taller than the viewport. Arrow browsing, Escape back to the same query,
+and native Tab through the card's actions keep their original semantics.
+
 Blocked Mission cards expose their current outcome's complete unresolved criteria
 through the existing native Disclosure, with a localized blocked/count entry.
 The exact authored items retain their order, text and line breaks. This read-only
