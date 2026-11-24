@@ -55,6 +55,7 @@ import type { AutomationRunSession } from "../services/automations"
 import {
   workLedgerActionFailureText,
   workLedgerArchiveLabel,
+  workLedgerRenameLabel,
   type WorkLedgerItemRow,
   type WorkLedgerMissionRow,
 } from "../services/work-ledger"
@@ -69,12 +70,6 @@ type ChatExportState =
 type DebugCopyResult = { kind: "copied" } | { kind: "failed"; cause: unknown }
 type DebugCopyState = { kind: "copying" } | DebugCopyResult
 type CopyConversationDebug = (ownsAction: () => boolean) => Promise<void>
-
-function workLedgerRenameLabel(row: WorkLedgerItemRow): string {
-  if (row.kind === "mission") return t("work_ledger.action.rename_mission")
-  if (row.kind === "chat") return t("work_ledger.action.rename_chat")
-  return t("task.rename_button_title")
-}
 
 function ChatViewTitle(props: {
   active: boolean

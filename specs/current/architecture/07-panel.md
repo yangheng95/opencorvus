@@ -6959,6 +6959,9 @@ A confirmed Task rename remains successful if a subsequent list or board read
 fails. The existing read-error state and diagnostic retain that refresh failure;
 the acknowledged mutation is not reported as a rejected write. Shared refresh
 effects after all metadata renames use the existing post-commit effect owner.
+Task rename from a sidebar row uses the Task and project directory on that row.
+The current workspace selection is preserved. The shared dialog returns focus
+to the initiating row when it is still mounted.
 
 Header mutations return their original promises to the current title component.
 Its selection/API scope owns duplicate-submission state and visible failures;

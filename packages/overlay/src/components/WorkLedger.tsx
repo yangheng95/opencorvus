@@ -28,6 +28,7 @@ import {
   workLedgerArchiveLabel,
   workLedgerPresentationLabel,
   workLedgerPresentationStatus,
+  workLedgerRenameLabel,
   workLedgerTaskCanStop,
   type WorkLedgerChatRow,
   type WorkLedgerCursor,
@@ -122,7 +123,7 @@ export interface WorkLedgerProps {
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
-  onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
+  onRenameTask: (row: WorkLedgerTaskRow, presentation?: WorkLedgerRenamePresentation) => void | Promise<void>
   onArchiveTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onCreateGlobalChat: () => void | Promise<void>
   onCreateChat: (directory: string) => void | Promise<void>
@@ -403,7 +404,7 @@ function WorkLedgerRowView(props: {
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
-  onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
+  onRenameTask: WorkLedgerProps["onRenameTask"]
   onArchiveTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onStopChat: (row: WorkLedgerChatRow) => void | Promise<void>
   onRenameChat: WorkLedgerProps["onRenameChat"]
@@ -517,7 +518,6 @@ function WorkLedgerRowView(props: {
   function renameCurrentRow() {
     return runAction("rename", () => {
       const current = row()
-      if (current.kind === "task") return props.onRenameTask(current)
       const authority = captureApiAuthority()
       const ownsTarget = () => isApiAuthorityCurrent(authority) && row().id === current.id &&
         row().kind === current.kind && row().directory === current.directory
@@ -525,6 +525,7 @@ function WorkLedgerRowView(props: {
         openingGuard: () => ownsTarget() && rowActions.getMainButton()?.isConnected === true,
         returnFocusTarget: () => ownsTarget() ? rowActions.getMainButton() ?? null : null,
       }
+      if (current.kind === "task") return props.onRenameTask(current, presentation)
       if (current.kind === "mission") return props.onRenameMission(current, presentation)
       return props.onRenameChat(current, presentation)
     })
@@ -813,18 +814,16 @@ function WorkLedgerRowView(props: {
                     <Icon name="pin" />
                     {row().pinned ? t("work_ledger.action.unpin") : t("work_ledger.action.pin")}
                   </DropdownMenu.Item>
-                  <Show when={row().kind !== "task"}>
-                    <DropdownMenu.Item
-                      as="button"
-                      type="button"
-                      data-ui={`${row().kind}-row-rename`}
-                      disabled={busy()}
-                      onSelect={() => void renameCurrentRow()}
-                    >
-                      <Icon name="edit" />
-                      {t(row().kind === "mission" ? "work_ledger.action.rename_mission" : "work_ledger.action.rename_chat")}
-                    </DropdownMenu.Item>
-                  </Show>
+                  <DropdownMenu.Item
+                    as="button"
+                    type="button"
+                    data-ui={`${row().kind}-row-rename`}
+                    disabled={busy()}
+                    onSelect={() => void renameCurrentRow()}
+                  >
+                    <Icon name="edit" />
+                    {workLedgerRenameLabel(row())}
+                  </DropdownMenu.Item>
                   <DropdownMenu.Item
                     as="button"
                     type="button"
@@ -896,7 +895,7 @@ function WorkLedgerTaskChildRow(props: {
   onArchiveMission: (row: WorkLedgerMissionRow) => void | Promise<void>
   onCancelTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onDownloadTask: (row: WorkLedgerTaskRow) => void | Promise<void>
-  onRenameTask: (row: WorkLedgerTaskRow) => void | Promise<void>
+  onRenameTask: WorkLedgerProps["onRenameTask"]
   onArchiveTask: (row: WorkLedgerTaskRow) => void | Promise<void>
   onStopChat: (row: WorkLedgerChatRow) => void | Promise<void>
   onRenameChat: WorkLedgerProps["onRenameChat"]

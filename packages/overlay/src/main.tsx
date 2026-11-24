@@ -1470,9 +1470,10 @@ async function downloadWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
   })
 }
 
-async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
+async function renameWorkLedgerTask(row: WorkLedgerTaskRow, presentation?: WorkLedgerRenamePresentation): Promise<void> {
   const authority = captureApiAuthority()
   await showAppDialog({
+    ...presentation,
     title: t("task.rename_button_title"),
     input: true,
     inputLabel: t("task.rename_placeholder"),
@@ -1487,7 +1488,7 @@ async function renameWorkLedgerTask(row: WorkLedgerTaskRow): Promise<void> {
       const title = String(value || "").trim()
       if (title === (row.title || "").trim()) return
       assertApiAuthorityCurrent(authority)
-      const ok = await renameTask(row.id, title, authority)
+      const ok = await renameTask({ taskID: row.id, directory: row.directory, authority }, title)
       if (!isApiAuthorityCurrent(authority)) return
       if (!ok) throw new Error(t("task.rename_placeholder"))
       runPostCommitUiEffect({ id: `task:rename:${row.id}`, title: t("task.rename_button_title") }, () =>

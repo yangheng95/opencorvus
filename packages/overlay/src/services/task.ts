@@ -393,16 +393,16 @@ export async function retrySelectedTaskSelection(): Promise<void> {
 
 // ── Public: setTaskArchived ──
 
-type TaskRetentionTarget = { taskID: string; directory: string; authority?: ApiAuthority }
+type TaskRecordTarget = { taskID: string; directory: string; authority?: ApiAuthority }
 
 export function setTaskArchived(
-  target: TaskRetentionTarget,
+  target: TaskRecordTarget,
   archived: true,
   provenance: TaskCancellationRequestBodyValue,
 ): Promise<void>
-export function setTaskArchived(target: TaskRetentionTarget, archived: false): Promise<void>
+export function setTaskArchived(target: TaskRecordTarget, archived: false): Promise<void>
 export async function setTaskArchived(
-  target: TaskRetentionTarget,
+  target: TaskRecordTarget,
   archived: boolean,
   provenance?: TaskCancellationRequestBodyValue,
 ): Promise<void> {
@@ -489,7 +489,7 @@ function isCommittedTaskDeletion(error: unknown, taskID: string): error is ApiEr
  * Delete the confirmed task in its owning project.
  * Returns true on a committed server receipt, including deletion replay.
  */
-export async function deleteTask(target: TaskRetentionTarget, provenance: TaskCancellationRequestBodyValue): Promise<boolean> {
+export async function deleteTask(target: TaskRecordTarget, provenance: TaskCancellationRequestBodyValue): Promise<boolean> {
   const authority = target.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
   const taskID = target.taskID.trim()
@@ -530,11 +530,13 @@ export async function deleteTask(target: TaskRetentionTarget, provenance: TaskCa
  * backend failures reject; a later refresh error retains the committed result
  * and the original read error in the board store and diagnostic log.
  */
-export async function renameTask(taskID: string, title: string, authority = captureApiAuthority()): Promise<boolean> {
+export async function renameTask(target: TaskRecordTarget, title: string): Promise<boolean> {
+  const taskID = target.taskID.trim()
   if (!taskID) return false
   const trimmed = title.trim()
   if (!trimmed || trimmed.length > 200) return false
-  await apiJson(taskPath(taskID, "/title"), {
+  const authority = target.authority ?? captureApiAuthority()
+  await apiJson(taskScopedPath(taskID, target.directory, "/title"), {
     authority,
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

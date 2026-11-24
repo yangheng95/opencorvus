@@ -146,6 +146,12 @@ export function workLedgerArchiveLabel(row: WorkLedgerItemRow): string {
   return t(workLedgerTaskCanStop(row) ? "task.cancel_and_archive" : "task.archive_button_title")
 }
 
+export function workLedgerRenameLabel(row: WorkLedgerItemRow): string {
+  if (row.kind === "mission") return t("work_ledger.action.rename_mission")
+  if (row.kind === "chat") return t("work_ledger.action.rename_chat")
+  return t("task.rename_button_title")
+}
+
 export type WorkLedgerOutcomeStatus = Exclude<WorkLedgerTaskRow["lifecycleStatus"], "active"> | "blocked"
 
 export function workLedgerOutcomeStatus(row: WorkLedgerItemRow): WorkLedgerOutcomeStatus | null {
