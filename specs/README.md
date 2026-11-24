@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [组合搜索优先显示匹配的子任务](records/2026-11/2026-11-25-mission-search-prioritizes-matching-child-tasks.md)
 - [多步任务筛选保留仍存在的空项目](records/2026-11/2026-11-25-mission-filter-retains-existing-empty-project.md)
 - [普通对话更新保留进行中的多步任务看板读取](records/2026-11/2026-11-25-mission-board-ignores-unrelated-conversation-updates.md)
 - [默认设置下重开工作区仍可实时更新 Git 分支](records/2026-11/2026-11-25-default-git-branch-watch-after-reopen.md)

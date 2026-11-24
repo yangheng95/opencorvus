@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [组合搜索的子任务预览证据](2026-11-25-mission-search-prioritizes-matching-child-tasks/README.md)
 - [空项目筛选与创建目标证据](2026-11-25-mission-filter-retains-existing-empty-project/README.md)
 - [普通对话更新与任务看板读取证据](2026-11-25-mission-board-ignores-unrelated-conversation-updates/README.md)
 - [默认设置下重开工作区的分支监视证据](2026-11-25-default-git-branch-watch-after-reopen/README.md)
