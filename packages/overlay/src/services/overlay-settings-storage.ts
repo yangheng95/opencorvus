@@ -1,9 +1,10 @@
 import {
   OVERLAY_SETTINGS_STORAGE_KEY,
   parsePersistedOverlaySettings,
+  replaceProjectComposerIntent,
   type PersistedOverlaySettings,
 } from "./persisted-overlay-settings"
-import { joinServerBaseUrl, type OverlaySettingsField } from "@opencorvus-ai/transport-protocol"
+import { joinServerBaseUrl, type OverlaySettingsField, type ProjectComposerIntent } from "@opencorvus-ai/transport-protocol"
 import { openBrowserRecord, type BrowserRecord } from "./browser-record-storage"
 import { t } from "../utils/i18n"
 
@@ -60,35 +61,44 @@ export function mergeBrowserOverlaySettings(
   previous: PersistedOverlaySettings | null,
   input: PersistedOverlaySettings,
   fields: readonly OverlaySettingsField[],
+  projectComposerIntent?: ProjectComposerIntent,
 ): PersistedOverlaySettings {
   const settings = parsePersistedOverlaySettings(input)
   const requestedServer = joinServerBaseUrl(settings.serverUrl, "")
-  if (!previous) return settings
+  const current = previous ?? settings
   const selected = new Set(fields)
+  if (selected.delete("projectComposerIntents") !== (projectComposerIntent !== undefined)) {
+    throw new TypeError("A project composer setting requires its authored project intent")
+  }
   if (selected.has("serverUrl")) {
     for (const field of CONNECTION_FIELDS) selected.add(field)
   } else {
     const editingWorkspace = fields.some((field) => CONNECTION_SCOPED_FIELDS.includes(field))
     const editingConnection = fields.some((field) => CONNECTION_FIELDS.includes(field))
-    const credentialsChanged = previous.username !== settings.username || previous.password !== settings.password
+    const credentialsChanged = current.username !== settings.username || current.password !== settings.password
     if (
       (editingWorkspace && credentialsChanged) ||
-      ((editingConnection || editingWorkspace) && joinServerBaseUrl(previous.serverUrl, "").href !== requestedServer.href)
+      ((editingConnection || editingWorkspace) && joinServerBaseUrl(current.serverUrl, "").href !== requestedServer.href)
     ) {
       throw new DOMException(t("settings.concurrent_connection_changed"), "InvalidStateError")
     }
   }
   const patch = Object.fromEntries([...selected].map((field) => [field, settings[field]]))
-  return parsePersistedOverlaySettings({ ...previous, ...patch })
+  const next = { ...current, ...patch }
+  if (projectComposerIntent) {
+    next.projectComposerIntents = replaceProjectComposerIntent(current.projectComposerIntents ?? [], projectComposerIntent)
+  }
+  return parsePersistedOverlaySettings(next)
 }
 
 export async function saveBrowserOverlaySettings(
   input: PersistedOverlaySettings,
   fields: readonly OverlaySettingsField[],
+  projectComposerIntent?: ProjectComposerIntent,
 ): Promise<PersistedOverlaySettings> {
   const storage = await browserSettingsRecord()
   const outcome = await storage.write((previous) => {
-    const settings = mergeBrowserOverlaySettings(previous, input, fields)
+    const settings = mergeBrowserOverlaySettings(previous, input, fields, projectComposerIntent)
     return { records: settings, value: settings }
   })
   return outcome.value

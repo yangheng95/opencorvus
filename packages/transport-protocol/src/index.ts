@@ -1374,7 +1374,12 @@ export type NativeCommand =
   | { kind: "clipboard.readText" }
   | { kind: "clipboard.writeText"; text: string }
   | { kind: "settings.load" }
-  | { kind: "settings.save"; payload: OverlayPersistedSettings; fields: readonly OverlaySettingsField[] }
+  | {
+      kind: "settings.save"
+      payload: OverlayPersistedSettings
+      fields: readonly OverlaySettingsField[]
+      projectComposerIntent?: ProjectComposerIntent
+    }
   | { kind: "server.info" }
   | { kind: "server.restart" }
   | { kind: "devtools.toggle" }
@@ -1601,6 +1606,18 @@ function isOptionalNonBlankString(value: unknown): boolean {
   return value === undefined || isNonBlankString(value)
 }
 
+function isProjectComposerIntent(value: unknown): value is ProjectComposerIntent {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false
+  const entry = value as Record<string, unknown>
+  return (
+    Object.keys(entry).every((key) => ["serverUrl", "directory", "productPillar", "conversationTarget"].includes(key)) &&
+    isNonBlankString(entry.serverUrl) &&
+    isNonBlankString(entry.directory) &&
+    (entry.productPillar === "code" || entry.productPillar === "work") &&
+    (entry.conversationTarget === "chat" || entry.conversationTarget === "mission")
+  )
+}
+
 export function isOverlayPersistedSettings(value: unknown): value is OverlayPersistedSettings {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false
   const settings = value as Record<string, unknown>
@@ -1633,19 +1650,7 @@ export function isOverlayPersistedSettings(value: unknown): value is OverlayPers
     isOptionalNonBlankString(settings.lastSelectedModel) &&
     (settings.projectComposerIntents === undefined ||
       (Array.isArray(settings.projectComposerIntents) &&
-        settings.projectComposerIntents.every(
-          (entry) =>
-            !!entry &&
-            typeof entry === "object" &&
-            !Array.isArray(entry) &&
-            Object.keys(entry).every((key) =>
-              ["serverUrl", "directory", "productPillar", "conversationTarget"].includes(key),
-            ) &&
-            isNonBlankString(entry.serverUrl) &&
-            isNonBlankString(entry.directory) &&
-            ["code", "work"].includes(entry.productPillar) &&
-            ["chat", "mission"].includes(entry.conversationTarget),
-        )))
+        settings.projectComposerIntents.every(isProjectComposerIntent)))
   )
 }
 
@@ -1704,19 +1709,32 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
       return true
     case "clipboard.writeText":
       return typeof obj["text"] === "string" && obj["text"].length > 0
-    case "settings.save":
+    case "settings.save": {
       if (!isOverlayPersistedSettings(obj["payload"])) return false
       if (
         !Array.isArray(obj["fields"]) ||
         obj["fields"].length === 0 ||
         obj["fields"].some((field) => !(OVERLAY_PERSISTED_SETTINGS_KEYS as readonly unknown[]).includes(field))
       ) return false
+      const projectIntent = obj["projectComposerIntent"]
+      if (obj["fields"].includes("projectComposerIntents")) {
+        if (!isProjectComposerIntent(projectIntent)) return false
+        if (!obj["payload"].projectComposerIntents?.some((entry) =>
+          entry.serverUrl === projectIntent.serverUrl &&
+          entry.directory === projectIntent.directory &&
+          entry.productPillar === projectIntent.productPillar &&
+          entry.conversationTarget === projectIntent.conversationTarget
+        )) return false
+      } else if (projectIntent !== undefined) {
+        return false
+      }
       try {
         parseServerBaseUrl(obj["payload"].serverUrl)
         return true
       } catch {
         return false
       }
+    }
     case "server.info":
     case "server.restart":
     case "devtools.toggle":

@@ -505,7 +505,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           case "settings.load":
             return loadBrowserOverlaySettings()
           case "settings.save":
-            return saveBrowserOverlaySettings(command.payload, command.fields)
+            return saveBrowserOverlaySettings(command.payload, command.fields, command.projectComposerIntent)
           case "open-url": {
             // Validated first: unlike the desktop's OS opener, a page has no
             // backstop against a javascript: or data: URL.

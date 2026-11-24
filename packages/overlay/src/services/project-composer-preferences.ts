@@ -4,17 +4,13 @@ import {
   type ProjectComposerIntent,
 } from "@opencorvus-ai/transport-protocol"
 import { saveSettings, settingsStore, setSettingsStore } from "../store/settings"
-import { projectDirectoryKey } from "../utils/project-directory"
+import { projectComposerIntentKey, replaceProjectComposerIntent } from "./persisted-overlay-settings"
 
-const preferenceWrites = new Map<string, number>()
-
-function scopeKey(serverUrl: string, directory: string): string {
-  return JSON.stringify([serverUrl.trim().replace(/\/+$/, ""), projectDirectoryKey(directory)])
-}
+const pendingPreferences = new Map<string, symbol>()
 
 export function projectComposerIntent(serverUrl: string, directory: string): ComposerIntent {
-  const key = scopeKey(serverUrl, directory)
-  const saved = settingsStore.projectComposerIntents.find((entry) => scopeKey(entry.serverUrl, entry.directory) === key)
+  const key = projectComposerIntentKey({ serverUrl, directory })
+  const saved = settingsStore.projectComposerIntents.find((entry) => projectComposerIntentKey(entry) === key)
   return saved
     ? { productPillar: saved.productPillar, conversationTarget: saved.conversationTarget }
     : { ...DEFAULT_COMPOSER_INTENT }
@@ -23,19 +19,28 @@ export function projectComposerIntent(serverUrl: string, directory: string): Com
 export async function rememberProjectComposerIntent(directory: string, intent: ComposerIntent): Promise<void> {
   if (!directory.trim()) return
   const serverUrl = settingsStore.serverUrl
-  const key = scopeKey(serverUrl, directory)
-  const entry: ProjectComposerIntent = { serverUrl, directory: directory.trim(), ...intent }
-  const generation = (preferenceWrites.get(key) ?? 0) + 1
-  preferenceWrites.set(key, generation)
-  const belongs = (candidate: ProjectComposerIntent) => scopeKey(candidate.serverUrl, candidate.directory) === key
-  setSettingsStore("projectComposerIntents", (entries) => [
-    ...entries.filter((candidate) => !belongs(candidate)),
-    entry,
-  ])
+  const entry: ProjectComposerIntent = {
+    serverUrl, directory: directory.trim(), productPillar: intent.productPillar, conversationTarget: intent.conversationTarget,
+  }
+  const key = projectComposerIntentKey(entry)
+  const operation = Symbol()
+  pendingPreferences.set(key, operation)
+  const belongs = (candidate: ProjectComposerIntent) => projectComposerIntentKey(candidate) === key
+  const pending = (candidate: ProjectComposerIntent) => pendingPreferences.has(projectComposerIntentKey(candidate))
+  setSettingsStore("projectComposerIntents", (entries) => replaceProjectComposerIntent(entries, entry))
   await saveSettings({
-    fields: ["projectComposerIntents"],
+    projectComposerIntent: entry,
+    onConfirmed(confirmed) {
+      if (pendingPreferences.get(key) === operation) pendingPreferences.delete(key)
+      setSettingsStore("projectComposerIntents", (entries) => [
+        ...(confirmed.projectComposerIntents ?? []).filter((candidate) => !pending(candidate)),
+        ...entries.filter(pending),
+      ])
+      return undefined
+    },
     onFailure: ({ confirmed }) => {
-      if (preferenceWrites.get(key) !== generation) return
+      if (pendingPreferences.get(key) !== operation) return
+      pendingPreferences.delete(key)
       const saved = confirmed.projectComposerIntents?.find(belongs)
       setSettingsStore("projectComposerIntents", (entries) => [
         ...entries.filter((candidate) => !belongs(candidate)),

@@ -7,7 +7,7 @@ import { PROJECT_EDITOR_IDS, type ProjectEditorID } from "../services/host-trans
 import { getHostTransport } from "../services/host-transport-runtime"
 import { runtimeStartupTheme, sanitizeThemeForHost, type OverlayThemeID } from "../services/theme-registry"
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
-import { parsePersistedOverlaySettings } from "../services/persisted-overlay-settings"
+import { parsePersistedOverlaySettings, replaceProjectComposerIntent } from "../services/persisted-overlay-settings"
 import {
   OVERLAY_PERSISTED_SETTINGS_KEYS,
   parseServerBaseUrl,
@@ -154,6 +154,7 @@ export interface SettingsSaveAction {
   overrides?: Partial<OverlaySettings>
   /** Fields the caller edited directly, or an explicit scope for its overrides. */
   fields?: readonly OverlaySettingsField[]
+  projectComposerIntent?: ProjectComposerIntent
   /** Runs at the existing queue head; owns any reservation until this save settles. */
   prepare?: (snapshot: Readonly<OverlaySettings>) => Promise<SettingsSavePreparation>
   /** Publish an explicit saved fact synchronously before the next queued snapshot. */
@@ -250,15 +251,21 @@ export async function saveSettings(action: SettingsSaveAction): Promise<void> {
         const initialPayload = bootstrapOverlaySettings(snapshot)
         parseServerBaseUrl(initialPayload.serverUrl)
         preparation = await action.prepare?.(snapshot)
-        const payload = bootstrapOverlaySettings({ ...snapshot, ...preparation?.overrides })
+        const projectComposerIntent = action.projectComposerIntent
+        const savedIntents = confirmedPersistedSettings?.projectComposerIntents ?? []
+        const projectComposerIntents = projectComposerIntent
+          ? replaceProjectComposerIntent(savedIntents, projectComposerIntent)
+          : savedIntents
+        const payload = bootstrapOverlaySettings({ ...snapshot, ...preparation?.overrides, projectComposerIntents })
         parseServerBaseUrl(payload.serverUrl)
         const fields = [...new Set([
           ...(action.fields ?? overrideFields(action.overrides)),
           ...overrideFields(preparation?.overrides),
+          ...(projectComposerIntent ? ["projectComposerIntents" as const] : []),
         ])]
         if (fields.length === 0) throw new Error("settings.save requires a setting owned by the action")
         preparation?.assertCurrent?.()
-        const saved = await getHostTransport().native({ kind: "settings.save", payload, fields })
+        const saved = await getHostTransport().native({ kind: "settings.save", payload, fields, projectComposerIntent })
         return { kind: "saved", payload: parsePersistedOverlaySettings(saved) }
       } catch (error) {
         return { kind: "failed", error }
@@ -361,7 +368,11 @@ export function bootstrapOverlaySettings(input: Partial<OverlaySettings> = setti
     locale: input.locale ?? DEFAULT_SETTINGS.locale,
     desktopNotifications: input.desktopNotifications ?? DEFAULT_SETTINGS.desktopNotifications,
     lastSelectedModel: input.lastSelectedModel?.trim() || undefined,
-    projectComposerIntents: input.projectComposerIntents?.length ? input.projectComposerIntents : undefined,
+    projectComposerIntents: input.projectComposerIntents?.length
+      ? input.projectComposerIntents.map(({ serverUrl, directory, productPillar, conversationTarget }) => ({
+          serverUrl, directory, productPillar, conversationTarget,
+        }))
+      : undefined,
     directory: input.savedDirectory || undefined,
     preferredProjectEditor: sanitizeProjectEditor(input.preferredProjectEditor),
     workspaceTaskID,

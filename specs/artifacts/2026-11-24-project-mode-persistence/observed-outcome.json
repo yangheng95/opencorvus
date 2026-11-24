@@ -1,0 +1,41 @@
+{
+  "url": "http://127.0.0.1:41810/ui/",
+  "baseline": {
+    "pid": 25560,
+    "asset": "assets/main-h3Osq4OV.js",
+    "error": "DataCloneError",
+    "times": [
+      "2026-11-24T11:17:06.856Z",
+      "2026-11-24T11:17:46.451Z"
+    ],
+    "reopenedFirstProjectMode": "Work · Chat"
+  },
+  "candidate": {
+    "pid": 31420,
+    "asset": "assets/main-ba9hilQp.js",
+    "firstModeBeforeChangingSecond": "Code · Chat",
+    "firstModeAfterReturningFromSecond": "Code · Chat",
+    "reopenedFirstMode": "Code · Chat",
+    "reopenedSecondMode": "Work · Mission"
+  },
+  "projects": [
+    {
+      "name": "branch-review",
+      "id": "prj_hT9HKJPW7hyIW8Hq7h93",
+      "http": 200
+    },
+    {
+      "name": "control-review",
+      "id": "prj_hgPHWOjnw0VomDBOq8gS",
+      "http": 200
+    }
+  ],
+  "isolatedDatabase": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  },
+  "candidateShutdownHTTP": 200,
+  "candidateListenerReleased": true
+}

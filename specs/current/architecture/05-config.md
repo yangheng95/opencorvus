@@ -159,7 +159,7 @@ Overlay 的配置投影按当前实际目录选择读取范围：项目读取 `/
 `initGit` 默认关闭，只控制手动打开非 Git 目录时是否询问初始化；用户确认后才执行。
 客户端启动始终只读取目录现状，不自动初始化仓库。该选项在 General 的 Git 区域可见。
 - 工作区恢复：`directory` · `workspaceTaskID` · `workspaceDirectory`
-- 输入框偏好：`projectComposerIntents` 保存每个 server URL / canonical project directory 的最后一次显式 Code/Work 与 Chat/Mission 选择；历史会话浏览不写入此偏好。权限模式仍只由 Layer 1 的项目 `permission_mode` 保存。
+- 输入框偏好：`projectComposerIntents` 保存每个服务地址和规范项目目录的最后一次显式 Code/Work 与 Chat/Mission 选择。保存快照复制反应式列表中的普通数据字段。保存项目输入模式时提供确切项目条目，浏览器宿主在当前事务合入该条目，回执包含其它已提交项目偏好。本页保留自己尚未结算的项目选择。历史会话浏览不写入此偏好。权限模式仍只由 Layer 1 的项目 `permission_mode` 保存。
 - 外观：`theme` · `zoom` · `locale` · `sidebarCollapsed`
 - 布局：`sidebarWidth` · `rightDockWidth` · `workLedgerOrganization` · `workLedgerSort`
   `workLedgerSort`的现有`manual`代码表示固定创建时间顺序，界面显示“创建时间”；项目和顶层工作按创建时间升序、置顶优先，多步任务内保持原顺序。字段和枚举值不变，不增加别名或迁移路径。

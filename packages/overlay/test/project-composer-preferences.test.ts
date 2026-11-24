@@ -2,6 +2,7 @@ import { afterEach, beforeEach, expect, test } from "bun:test"
 import { isNativeCommand, isOverlayPersistedSettings } from "@opencorvus-ai/transport-protocol"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport } from "../src/services/host-transport"
+import { mergeBrowserOverlaySettings } from "../src/services/overlay-settings-storage"
 import { projectComposerIntent, rememberProjectComposerIntent } from "../src/services/project-composer-preferences"
 import {
   bootstrapOverlaySettings,
@@ -27,8 +28,9 @@ beforeEach(async () => {
           failNextSave = false
           throw new Error("Settings storage unavailable")
         }
-        persisted = JSON.parse(JSON.stringify(command.payload))
-        return command.payload
+        const snapshot = structuredClone(command)
+        persisted = mergeBrowserOverlaySettings(persisted, snapshot.payload, snapshot.fields, snapshot.projectComposerIntent)
+        return structuredClone(persisted)
       }
       throw new Error(`Unexpected native command ${command.kind}`)
     },
@@ -36,6 +38,50 @@ beforeEach(async () => {
   await loadSettings()
 })
 afterEach(() => __setHostTransportForTest(undefined))
+
+test("a reactive settings snapshot is detached and can be stored as plain project data", () => {
+  const entry = {
+    serverUrl: settingsStore.serverUrl,
+    directory: "C:/Projects/Alpha",
+    productPillar: "code",
+    conversationTarget: "chat",
+  } as const
+  setSettingsStore("projectComposerIntents", [{ ...entry }])
+  const snapshot = bootstrapOverlaySettings(settingsStore)
+  setSettingsStore("projectComposerIntents", 0, "conversationTarget", "mission")
+
+  expect(structuredClone(snapshot).projectComposerIntents).toEqual([entry])
+  expect(settingsStore.projectComposerIntents[0]?.conversationTarget).toBe("mission")
+})
+
+test("a project save preserves another tab's project setting and publishes both scopes", async () => {
+  const serverUrl = settingsStore.serverUrl
+  const remote = {
+    serverUrl,
+    directory: "C:/Projects/Alpha",
+    productPillar: "code",
+    conversationTarget: "chat",
+  } as const
+  const local = {
+    serverUrl,
+    directory: "C:/Projects/Beta",
+    productPillar: "work",
+    conversationTarget: "mission",
+  } as const
+  persisted = mergeBrowserOverlaySettings(
+    persisted,
+    { ...persisted, projectComposerIntents: [{ ...remote }] },
+    ["projectComposerIntents"],
+    remote,
+  )
+
+  await rememberProjectComposerIntent(local.directory, local)
+
+  expect(persisted.projectComposerIntents).toEqual([remote, local])
+  expect(projectComposerIntent(serverUrl, remote.directory)).toEqual({ productPillar: "code", conversationTarget: "chat" })
+  await loadSettings()
+  expect(projectComposerIntent(serverUrl, local.directory)).toEqual({ productPillar: "work", conversationTarget: "mission" })
+})
 
 test("round-trips each project's explicit intent through the shared persisted settings contract", async () => {
   await rememberProjectComposerIntent("C:\\Projects\\Alpha", { productPillar: "work", conversationTarget: "chat" })

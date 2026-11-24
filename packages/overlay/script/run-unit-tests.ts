@@ -10,7 +10,11 @@ import { prepareTestProcessSupervisor } from "../../opencorvus/script/prepare-te
 
 const OVERLAY_ROOT = path.resolve(import.meta.dir, "..")
 const UNIT_TEST_INACTIVITY_TIMEOUT_MILLISECONDS = 120_000
-const REACTIVE_SERVICE_TESTS = new Set(["meta-project-scope.test.ts", "project-configuration-ownership.test.ts"])
+const REACTIVE_SERVICE_TESTS = new Set([
+  "meta-project-scope.test.ts",
+  "project-composer-preferences.test.ts",
+  "project-configuration-ownership.test.ts",
+])
 const testProcessSupervisor = prepareTestProcessSupervisor()
 const runnerRuntime = await bootstrapIsolatedTestRuntime("runner")
 if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor
