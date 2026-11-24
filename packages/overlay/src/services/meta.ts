@@ -5,6 +5,7 @@ import { boardStore, setBoardStore } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { AppLog } from "../utils/log"
 import { formatErrorDetails } from "../utils/error-details"
+import { projectDirectoryKey } from "../utils/project-directory"
 import {
   apiJson,
   ApiAuthorityChangedError,
@@ -133,6 +134,13 @@ export async function loadMeta(directory = activeProjectDirectory(), authority =
   AppLog.debug("meta", "loadMeta failed", { errors: failures.map(String) })
   if (failures.length === 1) throw failures[0]
   throw new AggregateError(failures, failures.map(String).join("; "))
+}
+
+export async function refreshActiveProjectMetadata(changedDirectory?: string): Promise<void> {
+  const directory = activeProjectDirectory()
+  if (!directory) return
+  if (changedDirectory !== undefined && projectDirectoryKey(changedDirectory) !== projectDirectoryKey(directory)) return
+  await loadMeta(directory)
 }
 
 /** An accepted write remains accepted when only its current metadata refresh fails. */

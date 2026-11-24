@@ -11,6 +11,7 @@ import {
   createUniqueId,
   For,
   type JSX,
+  on,
   onCleanup,
   Show,
   untrack,
@@ -837,6 +838,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   createEffect(() => {
     if (!branchMenuOpen()) void closeCommandMenuSurface(branchMenuOwner)
   })
+
+  createEffect(on(() => lastVcs()?.branch, () => closeBranchMenu(), { defer: true }))
 
   onCleanup(() => {
     disposeCommitMessageStream()

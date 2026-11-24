@@ -247,6 +247,7 @@ import type { WorkLedgerChatRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from 
 import { archiveRowKey } from "./services/archive-row-key"
 import { subscribeWorkLedgerChanges, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
 import { loadConfigInfo } from "./services/config-load"
+import { refreshActiveProjectMetadata } from "./services/meta"
 import { refreshProjectMemory } from "./services/project-memory"
 import { openImagePreview } from "./services/image-preview"
 import {
@@ -845,9 +846,13 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
   if (event.type === "work-ledger.connected") {
     requestOpenFileDiskCheck()
     if (appStore.config !== null) refreshWorkspaceConfiguration(activeDirectory())
+    if (boardStore.vcsDirectory) void refreshActiveProjectMetadata().catch(() => undefined)
   }
   if (event.type === "work-ledger.changed" && event.sourceType === "vcs.branch.updated") {
-    if (event.directory) observeFileWorkbenchCheckout(event.directory)
+    if (event.directory) {
+      observeFileWorkbenchCheckout(event.directory)
+      void refreshActiveProjectMetadata(event.directory).catch(() => undefined)
+    }
     return
   }
   if (event.type === "work-ledger.changed" && event.sourceType === "project.config.changed") {

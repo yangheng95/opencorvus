@@ -1,6 +1,6 @@
 import { afterEach, expect, test } from "bun:test"
 import { createComputed, createRoot } from "solid-js"
-import { loadMeta, retireMetaProjection } from "../src/services/meta"
+import { loadMeta, refreshActiveProjectMetadata, retireMetaProjection } from "../src/services/meta"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { HostTransport, TransportRequest } from "../src/services/host-transport"
 import { boardStore, setBoardStore } from "../src/store/board"
@@ -45,6 +45,43 @@ test("metadata follows the selected session directory and exposes its non-Git fa
     loading: boardStore.vcsLoading,
     error: boardStore.vcsError,
   }).toEqual({ directory: "D:/documents", info: { initialized: false, hasRemote: false }, loading: false, error: null })
+})
+
+test("checkout notifications refresh the selected session's exact directory and Git facts", async () => {
+  const directory = "D:/projects/Current"
+  const path = { directory }
+  const vcs = { initialized: true, branch: "review", dirty: true }
+  setSettingsStore("directory", "D:/projects/previous")
+  setBoardStore({ selectedSource: { kind: "session", id: "session-current", directory } })
+  const requests: TransportRequest[] = []
+  transport((request) => {
+    requests.push(request)
+    return request.path === "path" ? path : vcs
+  })
+
+  await refreshActiveProjectMetadata("d:\\PROJECTS\\CURRENT")
+
+  expect(requests.map((request) => [request.path, request.query])).toEqual([
+    ["path", { directory }],
+    ["vcs", { directory }],
+  ])
+  expect({ path: boardStore.path, vcs: boardStore.vcs, directory: boardStore.vcsDirectory }).toEqual({ path, vcs, directory })
+})
+
+test("connection hydration confirms the active project's Git metadata again", async () => {
+  const directory = "D:/projects/current"
+  const path = { directory }
+  const original = { initialized: true, branch: "main" }
+  const checkout = { initialized: true, branch: "release", dirty: false }
+  setSettingsStore("directory", directory)
+  transport((request) => request.path === "path" ? path : original)
+  await loadMeta()
+  transport((request) => request.path === "path" ? path : checkout)
+
+  await refreshActiveProjectMetadata()
+
+  expect({ path: boardStore.path, vcs: boardStore.vcs, loading: boardStore.vcsLoading, failure: boardStore.vcsError })
+    .toEqual({ path, vcs: checkout, loading: false, failure: null })
 })
 
 test("latest metadata request owns the result when an earlier request finishes later", async () => {
