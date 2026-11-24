@@ -1,0 +1,330 @@
+[
+  {
+    "period": "day",
+    "zone": "Asia/Shanghai",
+    "summary": {
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0,
+      "averageTokensPerCall": 0,
+      "billing": {
+        "pricedTokens": 0,
+        "unpricedTokens": 0,
+        "unknownTokens": 0,
+        "percent": null
+      }
+    },
+    "range": {
+      "start": 1795449600000,
+      "end": 1795536000000
+    },
+    "first": {
+      "start": 1795449600000,
+      "end": 1795453200000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "last": {
+      "start": 1795532400000,
+      "end": 1795536000000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "count": 24,
+    "official": [
+      {
+        "id": "openai-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "anthropic-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "openrouter-account",
+        "status": "unconfigured"
+      },
+      {
+        "id": "aws-bedrock-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "azure-openai-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "vertex-ai-control-plane",
+        "status": "requires_configuration"
+      }
+    ]
+  },
+  {
+    "period": "week",
+    "zone": "Asia/Shanghai",
+    "summary": {
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0,
+      "averageTokensPerCall": 0,
+      "billing": {
+        "pricedTokens": 0,
+        "unpricedTokens": 0,
+        "unknownTokens": 0,
+        "percent": null
+      }
+    },
+    "range": {
+      "start": 1795363200000,
+      "end": 1795968000000
+    },
+    "first": {
+      "start": 1795363200000,
+      "end": 1795449600000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "last": {
+      "start": 1795881600000,
+      "end": 1795968000000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "count": 7,
+    "official": [
+      {
+        "id": "openai-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "anthropic-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "openrouter-account",
+        "status": "unconfigured"
+      },
+      {
+        "id": "aws-bedrock-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "azure-openai-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "vertex-ai-control-plane",
+        "status": "requires_configuration"
+      }
+    ]
+  },
+  {
+    "period": "month",
+    "zone": "Asia/Shanghai",
+    "summary": {
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0,
+      "averageTokensPerCall": 0,
+      "billing": {
+        "pricedTokens": 0,
+        "unpricedTokens": 0,
+        "unknownTokens": 0,
+        "percent": null
+      }
+    },
+    "range": {
+      "start": 1793462400000,
+      "end": 1796054400000
+    },
+    "first": {
+      "start": 1793462400000,
+      "end": 1793548800000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "last": {
+      "start": 1795968000000,
+      "end": 1796054400000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "count": 30,
+    "official": [
+      {
+        "id": "openai-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "anthropic-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "openrouter-account",
+        "status": "unconfigured"
+      },
+      {
+        "id": "aws-bedrock-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "azure-openai-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "vertex-ai-control-plane",
+        "status": "requires_configuration"
+      }
+    ]
+  },
+  {
+    "period": "year",
+    "zone": "Asia/Shanghai",
+    "summary": {
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0,
+      "averageTokensPerCall": 0,
+      "billing": {
+        "pricedTokens": 0,
+        "unpricedTokens": 0,
+        "unknownTokens": 0,
+        "percent": null
+      }
+    },
+    "range": {
+      "start": 1767196800000,
+      "end": 1798732800000
+    },
+    "first": {
+      "start": 1767196800000,
+      "end": 1767283200000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "last": {
+      "start": 1798646400000,
+      "end": 1798732800000,
+      "tokens": {
+        "input": 0,
+        "output": 0,
+        "reasoning": 0,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "total": 0
+      },
+      "costUSD": 0,
+      "calls": 0
+    },
+    "count": 365,
+    "official": [
+      {
+        "id": "openai-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "anthropic-organization",
+        "status": "unconfigured"
+      },
+      {
+        "id": "openrouter-account",
+        "status": "unconfigured"
+      },
+      {
+        "id": "aws-bedrock-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "azure-openai-control-plane",
+        "status": "requires_configuration"
+      },
+      {
+        "id": "vertex-ai-control-plane",
+        "status": "requires_configuration"
+      }
+    ]
+  }
+]

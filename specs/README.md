@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [用量活动图的分页焦点](records/2026-11/2026-11-24-usage-activity-page-focus.md)
 - [技能分配搜索的结果内导航](records/2026-11/2026-11-24-capability-skill-result-navigation.md)
 - [项目连接分配的分页焦点](records/2026-11/2026-11-24-mcp-assignment-page-focus.md)
 - [项目连接列表的分页焦点](records/2026-11/2026-11-24-mcp-connection-page-focus.md)
