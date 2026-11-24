@@ -12,7 +12,7 @@ import { useDisclosure } from "../../solid/disclosure"
 import { formatErrorDetails } from "../../utils/error-details"
 import { createUsageIntervalFormatter, formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t, tc } from "../../utils/i18n"
-import { renderedListPageIndex } from "../../utils/rendered-list-navigation"
+import { renderedListPageIndex, revealRenderedListRow } from "../../utils/rendered-list-navigation"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { ListboxItem, ListboxItemDescription, ListboxRoot } from "../ui/Listbox"
@@ -107,7 +107,7 @@ function UsageBucketDetails(props: { tokens: number; interval: string }) {
   )
 }
 
-function UsageActivityGrid(props: { data: UsageStatistics }) {
+function UsageActivityGrid(props: { data: UsageStatistics; section: () => HTMLElement | undefined }) {
   let scrollElement: HTMLDivElement | undefined
   const bucketElements = new Map<string, HTMLLIElement>()
   const { focusOnly, preferFocus, trackPointer } = createTooltipInputPriority()
@@ -238,6 +238,27 @@ function UsageActivityGrid(props: { data: UsageStatistics }) {
             onKeyDown={(event) => {
               if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown"].includes(event.key)) {
                 preferFocus()
+                // The listbox resolves focus after this callback, even when a boundary keeps the same bucket.
+                queueMicrotask(() => {
+                  if (!event.defaultPrevented || !scrollElement?.isConnected) return
+                  const key = listState.selectionManager().focusedKey()
+                  const bucket = key == null ? undefined : bucketElements.get(key)
+                  if (!bucket || bucket !== scrollElement.ownerDocument.activeElement) return
+
+                  const section = props.section()
+                  const viewport = section?.closest<HTMLElement>(".config-content")
+                  if (section && viewport) {
+                    const bounds = bucket.getBoundingClientRect()
+                    const visible = viewport.getBoundingClientRect()
+                    if (
+                      (bounds.top < visible.top || bounds.bottom > visible.bottom) &&
+                      section.getBoundingClientRect().height <= viewport.clientHeight
+                    ) {
+                      revealRenderedListRow(section, viewport)
+                    }
+                  }
+                  revealRenderedListRow(bucket, scrollElement)
+                })
               }
             }}
             renderItem={(item) => {
@@ -488,6 +509,7 @@ export default function UsagePanel() {
   const [read, setRead] = createSignal<UsageRead>()
   const officialSourcesDisclosure = useDisclosure()
   const timeZone = userTimeZone()
+  let activitySection: HTMLElement | undefined
   let refreshButton: HTMLButtonElement | undefined
   let retryTrigger: HTMLButtonElement | undefined
 
@@ -631,7 +653,7 @@ export default function UsagePanel() {
         )}
       </Show>
 
-      <section class="usage-section usage-section--activity">
+      <section class="usage-section usage-section--activity" ref={activitySection}>
         <header class="usage-section__head">
           <div>
             <h2>{t("usage.activity_title")}</h2>
@@ -663,7 +685,7 @@ export default function UsagePanel() {
         <Show when={data()}>
           {(resolved) => (
             <>
-              <UsageActivityGrid data={resolved()} />
+              <UsageActivityGrid data={resolved()} section={() => activitySection} />
               <Show when={resolved().current.summary.calls === 0}>
                 <p class="usage-coverage-note">{t("usage.empty_body")}</p>
               </Show>

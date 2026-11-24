@@ -2817,6 +2817,11 @@ Page Up and Page Down browse the width of the current chart viewport while
 keeping the focused weekday row in the year view. When the chart fits, they go
 to the first or last bucket in that row. At an edge focus stays on the current
 bucket, and the page keys scroll the settings normally outside the chart.
+If manual scrolling moves the focused bucket out of view, the next chart
+navigation key reveals the resulting bucket in both scroll containers. This
+also applies when the key keeps the same bucket at an edge. If the bucket is
+vertically clipped and the activity section fits in the settings viewport,
+the section returns with its heading, controls and date labels visible.
 Activity buckets and their date labels share one column grid. The year view
 uses week columns and starts each month label at the column containing its
 first bucket. Shorter periods use one row with a column for each bucket. When
