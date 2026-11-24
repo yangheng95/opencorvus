@@ -1580,6 +1580,9 @@ After rejoining the notification stream, the editor checks the open project file
 once against the disk snapshot. A changed clean file accepts that content. A
 changed file with edits keeps the original editing base and draft and shows the
 disk comparison action. An unchanged editable snapshot keeps the existing view.
+Returning to the open File tab or showing the workbench again requests the same
+check for the retained editable project snapshot, scoped to its file and current
+connection. This also observes edits made outside OpenCorvus before the return.
 The same disk check follows a committed project file edit delivered by the Work
 Ledger stream. Within the owning project, the change path matches either the
 open file or one of its ancestor directories at a path component boundary. A

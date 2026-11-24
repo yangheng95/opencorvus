@@ -1,0 +1,120 @@
+{
+  "browserRequests": [
+    {
+      "at": "2026-11-24T19:25:51.089Z",
+      "event": "upstream-response",
+      "id": 102,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/checklist.txt",
+      "actual": "86318151-26f3-4dc3-b520-42c958372365"
+    },
+    {
+      "at": "2026-11-24T19:26:10.906Z",
+      "event": "upstream-response",
+      "id": 108,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/checklist.txt",
+      "actual": "34d9b917-067c-46ab-a134-c7b2f30c30a7"
+    },
+    {
+      "at": "2026-11-24T19:26:25.253Z",
+      "event": "upstream-response",
+      "id": 112,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/checklist.txt",
+      "actual": "b8f1e58a-dafb-4f8a-8f0c-f366a40093a7"
+    },
+    {
+      "at": "2026-11-24T19:26:34.702Z",
+      "event": "upstream-response",
+      "id": 114,
+      "pathname": "/file/content",
+      "method": "PATCH",
+      "status": 409,
+      "query": null,
+      "actual": "3d3a8d15-7683-436d-99a2-98e1c803e760"
+    },
+    {
+      "at": "2026-11-24T19:26:40.726Z",
+      "event": "upstream-response",
+      "id": 118,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/checklist.txt",
+      "actual": "545c689f-0e08-44fd-a083-780b9c38161b"
+    },
+    {
+      "at": "2026-11-24T19:26:51.165Z",
+      "event": "upstream-response",
+      "id": 122,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/checklist.txt",
+      "actual": "4adea3a7-01a9-47d1-b058-2d87d7eedde1"
+    },
+    {
+      "at": "2026-11-24T19:26:51.588Z",
+      "event": "upstream-response",
+      "id": 123,
+      "pathname": "/file/content",
+      "method": "PATCH",
+      "status": 200,
+      "query": null,
+      "actual": "2fa0f1ba-8cbd-43f2-90e6-b29908709997"
+    },
+    {
+      "at": "2026-11-24T19:26:51.968Z",
+      "event": "upstream-response",
+      "id": 124,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/checklist.txt",
+      "actual": "ad658673-d7c1-4229-a60d-505725280467"
+    },
+    {
+      "at": "2026-11-24T19:27:32.386Z",
+      "event": "upstream-response",
+      "id": 133,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/checklist.txt",
+      "actual": "d8a9e5ad-37b5-49e6-86d5-889437ab540b"
+    },
+    {
+      "at": "2026-11-24T19:27:32.885Z",
+      "event": "upstream-response",
+      "id": 134,
+      "pathname": "/file/content",
+      "method": "GET",
+      "status": 200,
+      "query": "notes/reference.txt",
+      "actual": "d7f799aa-5146-46b8-8fcd-3f688820dd71"
+    }
+  ],
+  "finalReads": [
+    {
+      "path": "notes/checklist.txt",
+      "content": "Shipping checklist\n- Pickup moved to Wednesday at 11:30.\n- Draft: call the warehouse.\n",
+      "bytes": 86,
+      "status": 200,
+      "requestID": "6a7eccb4-f5ba-4062-a855-1be2d910f070"
+    },
+    {
+      "path": "notes/reference.txt",
+      "content": "Reference note untouched.\n",
+      "bytes": 26,
+      "status": 200,
+      "requestID": "5855032d-fd0d-4021-88ab-504c0eca883d"
+    }
+  ]
+}

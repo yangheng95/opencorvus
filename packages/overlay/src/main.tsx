@@ -3584,7 +3584,10 @@ function OverlayRoot() {
               id="solidFileEditorMount"
               class="center-workbench-activity chat-file-editor-activity file-editor-mount"
             >
-              <FileEditorPane onTextShortcutsChange={setFileTextShortcuts} />
+              <FileEditorPane
+                active={() => rightDockOpen() && selectedCenterWorkbenchTab()?.panel === "file"}
+                onTextShortcutsChange={setFileTextShortcuts}
+              />
             </div>
           </TabPanel>
         </RightDock>

@@ -1,4 +1,4 @@
-import { batch, createEffect, createMemo, createSignal, lazy, Match, onCleanup, Show, Switch, untrack } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, lazy, Match, on, onCleanup, Show, Switch, untrack } from "solid-js"
 import { base64ToUint8 } from "@opencorvus-ai/transport-protocol"
 import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import { ApiError, apiJson, apiRequest, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
@@ -13,6 +13,7 @@ import {
   observeFileEditorDiskChange,
   registerFileEditorBeforeNavigate,
   requestFileExplorerFolder,
+  requestOpenFileDiskCheck,
   returnToFileDocument,
   selectedFileTarget,
   type FileContent,
@@ -172,7 +173,10 @@ export type FileEditorTextShortcuts = {
   goToLine: (event: KeyboardEvent) => boolean
 }
 
-export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileEditorTextShortcuts | undefined) => void }) {
+export function FileEditorPane(props: {
+  active: () => boolean
+  onTextShortcutsChange: (shortcuts: FileEditorTextShortcuts | undefined) => void
+}) {
   const [draft, setDraft] = createSignal("")
   const [savedBaseline, setSavedBaseline] = createSignal<Pick<FileContent, "content" | "revision" | "resourceID"> | null>(null)
   const [saving, setSaving] = createSignal(false)
@@ -849,6 +853,13 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       if (file) setPendingDiskCheck({ file, authority: captureApiAuthority() })
     },
   })
+  createEffect(on(props.active, (active) => {
+    const loaded = acceptedContent()
+    if (
+      active && loaded && isEditableFileSnapshot(loaded.value) &&
+      ownsFileTarget(loaded.target) && isApiAuthorityCurrent(loaded.readerAuthority)
+    ) requestOpenFileDiskCheck()
+  }, { defer: true }))
   createEffect(() => {
     const request = pendingDiskCheck()
     if (!request) return
