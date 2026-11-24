@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [父目录改名后立即重查已打开的子文件](records/2026-11/2026-11-24-open-file-after-parent-rename.md)
 - [停止确认显示工作所属的完整项目目录](records/2026-11/2026-11-24-work-ledger-stop-project-context.md)
 - [归档记录变化后关闭过期的删除确认](records/2026-11/2026-11-24-archive-delete-confirmation-retirement.md)
 - [从侧栏取消较早任务时沿用其项目目录](records/2026-11/2026-11-24-task-cancel-from-ledger-row.md)
