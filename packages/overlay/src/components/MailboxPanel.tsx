@@ -23,6 +23,7 @@ import { workLedgerProject } from "../services/work-ledger"
 import { detailStamp, relativeTime } from "../utils/time"
 import { localeTag, t } from "../utils/i18n"
 import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
+import { revealRenderedListRow } from "../utils/rendered-list-navigation"
 import { Avatar } from "./Avatar"
 import { Icon, type IconName } from "./ui/Icon"
 import { Badge, type BadgeTone } from "./ui/Badge"
@@ -118,14 +119,13 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const visibleItems = items
   const currentRequestScope = () => ({ authority: currentAuthority(), view: MAILBOX_VIEW, search: currentSearch() })
   const retryUnavailable = () => loading() || !appStore.connected
-  const continuationUnavailable = () => retryUnavailable() || loadingMore() || !cursor()
   const baseLoadIssue = () => {
     const issue = loadIssue()
     return issue?.operation === "base" ? issue : undefined
   }
+  const continuationUnavailable = () => retryUnavailable() || loadingMore() || !cursor() || !!baseLoadIssue()
   const searchKeyboardHintID = createUniqueId()
-  const canBrowseMessages = () => appStore.connected &&
-    hasAcceptedMailbox() && !loading() && !baseLoadIssue() && visibleItems().length > 0
+  const canBrowseMessages = () => appStore.connected && hasAcceptedMailbox() && visibleItems().length > 0
   const canBrowseSearchResults = () => searchOpen() && currentSearch() !== "" && canBrowseMessages()
   const messageNavigation = createSearchResultNavigation(() => {
     if (!canBrowseMessages() || !mailboxBody) return []
@@ -329,7 +329,16 @@ export function MailboxPanel(props: MailboxPanelProps) {
     } catch (error) {
       if (disposed) return
       request.commit(currentRequestScope(), () => {
+        const viewport = mailboxBody
+        const focusedRow = !append && !baseLoadIssue()
+          ? document.activeElement?.closest<HTMLElement>("[data-message-id]")
+          : undefined
+        const rowBounds = focusedRow?.getBoundingClientRect()
+        const viewportBounds = viewport?.getBoundingClientRect()
+        const wasVisible = rowBounds && viewportBounds && rowBounds.top >= viewportBounds.top &&
+          rowBounds.bottom <= viewportBounds.bottom
         setLoadIssue({ operation: append ? "append" : "base", cause: error })
+        if (wasVisible && focusedRow && viewport?.contains(focusedRow)) revealRenderedListRow(focusedRow, viewport)
         if (append && document.activeElement === continuationButton) {
           continuationFooter?.scrollIntoView({ block: "nearest" })
         }
@@ -686,11 +695,11 @@ export function MailboxPanel(props: MailboxPanelProps) {
                 </Button>
               }
             >
-              {t("mailbox.load_failed")}
+              {t(canBrowseMessages() ? "mailbox.refresh_failed_with_messages" : "mailbox.load_failed")}
             </Feedback>
           )}
         </Show>
-        <Show when={appStore.connected && !baseLoadIssue()}>
+        <Show when={appStore.connected && (!baseLoadIssue() || canBrowseMessages())}>
           <Show
             when={visibleItems().length > 0}
             fallback={

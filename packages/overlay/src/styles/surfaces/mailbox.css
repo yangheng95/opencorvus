@@ -173,6 +173,10 @@
   gap: var(--ui-gap-sm);
 }
 
+.mailbox-panel__load-feedback + .mailbox-project-groups {
+  margin-block-start: var(--ui-gap-lg);
+}
+
 .mailbox-project-groups {
   display: grid;
   gap: var(--ui-gap-lg);

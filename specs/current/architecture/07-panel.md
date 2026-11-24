@@ -5311,7 +5311,12 @@ status in the body and retain the authored search. The next accepted read can
 show the confirmed empty mailbox or search result. Filtered results expose the same
 Load more operation; acknowledgements and invalidations revalidate the accepted
 prefix through its original oldest position before committing the fresh page
-sequence. A failed continuation preserves the accepted rows, selection,
+sequence. During a same-query refresh, accepted messages remain mounted and
+available for reading and keyboard navigation. If that refresh fails, the
+diagnostic and Retry appear alongside the readable messages. The current
+connection and query still own those messages. A fresh query or connection
+retires them, and pagination waits for the failed base read to recover.
+A failed continuation preserves the accepted rows, selection,
 disclosure and scroll context. Its footer shows the original diagnostic and
 retries that cursor in the current query. A revalidation with the same cursor
 keeps the continuation diagnostic; a new cursor replaces that retry boundary.

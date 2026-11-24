@@ -1,0 +1,357 @@
+{
+  "candidateRenderer": "main-AGxMs-3P.js",
+  "verifiedRenderer": "main-B_GCr59G.js",
+  "browserUI": "http://127.0.0.1:41787/ui/",
+  "finalViewport": {
+    "bodyTop": 226.33,
+    "focusSubject": "Cedar intake replay",
+    "originalRowBottom": 625.6,
+    "rowBottomAfterFailure": 663.6,
+    "scopedRows": 3,
+    "bodyBottom": 667.5,
+    "scrollAfterFailure": 84
+  },
+  "actualWrites": [
+    {
+      "id": "pev_g0VbvQqh800fjF6fBL1U",
+      "status": 200,
+      "requestID": "fafcfed5-aba8-4e6b-b8c8-36dc18a0920a",
+      "acceptedAt": "2026-11-24T20:46:23.3348152Z",
+      "result": {
+        "changed": true,
+        "eventID": "pev_g0VbvSAgj00KH2v9yWD8",
+        "messageID": "pev_g0VbvQqh800fjF6fBL1U",
+        "action": "archive"
+      }
+    },
+    {
+      "id": "pev_g0VbvQqh800fjF6fBL1U",
+      "status": 200,
+      "requestID": "2f0c8127-2570-4855-bd10-7798512573a7",
+      "acceptedAt": "2026-11-24T20:49:22.4929806Z",
+      "result": {
+        "changed": true,
+        "eventID": "pev_g0VbvSvIN00uP2CFwFMS",
+        "messageID": "pev_g0VbvQqh800fjF6fBL1U",
+        "action": "restore"
+      }
+    },
+    {
+      "receipt": "fe8fe3e8-4021-432b-845c-87b74be2c270",
+      "status": 200,
+      "result": {
+        "changed": true,
+        "eventID": "pev_g0VbvTGOs00osfn0NU0C",
+        "messageID": "pev_g0VbvQqh800fjF6fBL1U",
+        "action": "archive"
+      }
+    },
+    {
+      "receipt": "b183b190-82a4-4358-b4c4-623efaaf498c",
+      "status": 200,
+      "result": {
+        "changed": true,
+        "eventID": "pev_g0VbvTKNL00ejKDCEceu",
+        "messageID": "pev_g0VbvQqh800fjF6fBL1U",
+        "action": "restore"
+      }
+    }
+  ],
+  "transport": [
+    {
+      "at": "2026-11-24T20:46:06.451Z",
+      "event": "socket-open",
+      "id": 17,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T20:46:12.924Z",
+      "event": "upstream-response",
+      "id": 37,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "994373b6-8925-40d1-ab97-838db4e22dd3"
+    },
+    {
+      "at": "2026-11-24T20:46:23.172Z",
+      "event": "mode",
+      "mode": "drop-shared",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:46:23.446Z",
+      "event": "upstream-response",
+      "id": 40,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "3bd834b5-7e87-4546-ab13-add8a14bd410"
+    },
+    {
+      "at": "2026-11-24T20:46:23.447Z",
+      "event": "mailbox-response-interrupted",
+      "id": 40,
+      "actual": "3bd834b5-7e87-4546-ab13-add8a14bd410",
+      "status": 200,
+      "search": "B611 Shared transfer",
+      "bytes": 2116,
+      "sent": 32
+    },
+    {
+      "at": "2026-11-24T20:47:26.887Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 0
+    },
+    {
+      "at": "2026-11-24T20:49:05.927Z",
+      "event": "socket-open",
+      "id": 61,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T20:49:14.312Z",
+      "event": "upstream-response",
+      "id": 81,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "74e1fb62-daae-4cd2-8229-67941add910c"
+    },
+    {
+      "at": "2026-11-24T20:49:22.412Z",
+      "event": "mode",
+      "mode": "drop-shared",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:49:22.609Z",
+      "event": "upstream-response",
+      "id": 84,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "25a8c743-08f0-4626-9a17-cac1b089ea04"
+    },
+    {
+      "at": "2026-11-24T20:49:22.61Z",
+      "event": "mailbox-response-interrupted",
+      "id": 84,
+      "actual": "25a8c743-08f0-4626-9a17-cac1b089ea04",
+      "status": 200,
+      "search": "B611 Shared transfer",
+      "bytes": 2116,
+      "sent": 32
+    },
+    {
+      "at": "2026-11-24T20:49:36.059Z",
+      "event": "mode",
+      "mode": "hold-shared",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:49:40.953Z",
+      "event": "upstream-response",
+      "id": 88,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "9fc3781b-2459-4ea9-b054-e73818758ea4"
+    },
+    {
+      "at": "2026-11-24T20:49:40.954Z",
+      "event": "mailbox-response-held",
+      "id": 88,
+      "status": 200,
+      "actual": "9fc3781b-2459-4ea9-b054-e73818758ea4"
+    },
+    {
+      "at": "2026-11-24T20:49:45.808Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:49:45.809Z",
+      "event": "mailbox-response-released",
+      "id": 88,
+      "actual": "9fc3781b-2459-4ea9-b054-e73818758ea4"
+    },
+    {
+      "at": "2026-11-24T20:49:56.153Z",
+      "event": "mode",
+      "mode": "drop-shared",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:50:00.612Z",
+      "event": "upstream-response",
+      "id": 94,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 No receipt for test",
+      "actual": "31435759-3f75-4558-9623-a548a3be2dd8"
+    },
+    {
+      "at": "2026-11-24T20:50:00.612Z",
+      "event": "mailbox-response-interrupted",
+      "id": 94,
+      "actual": "31435759-3f75-4558-9623-a548a3be2dd8",
+      "status": 200,
+      "search": "B611 No receipt for test",
+      "bytes": 80,
+      "sent": 32
+    },
+    {
+      "at": "2026-11-24T20:50:04.309Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:50:08.733Z",
+      "event": "upstream-response",
+      "id": 96,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 No receipt for test",
+      "actual": "77534ab6-fbe3-41cc-8046-ff2af45df7ea"
+    },
+    {
+      "at": "2026-11-24T20:50:31.982Z",
+      "event": "upstream-response",
+      "id": 114,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "577bd8cb-462b-4bed-aa64-82de705de3e3"
+    },
+    {
+      "at": "2026-11-24T20:50:43.454Z",
+      "event": "mode",
+      "mode": "drop-shared",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:50:43.743Z",
+      "event": "upstream-response",
+      "id": 117,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "7140737b-733a-4e13-a730-682ca8dbd1c3"
+    },
+    {
+      "at": "2026-11-24T20:50:43.743Z",
+      "event": "mailbox-response-interrupted",
+      "id": 117,
+      "actual": "7140737b-733a-4e13-a730-682ca8dbd1c3",
+      "status": 200,
+      "search": "B611 Shared transfer",
+      "bytes": 2116,
+      "sent": 32
+    },
+    {
+      "at": "2026-11-24T20:50:49.399Z",
+      "event": "upstream-response",
+      "id": 119,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "c2d059e7-1523-48cf-91d4-680dbbe887a6"
+    },
+    {
+      "at": "2026-11-24T20:50:49.4Z",
+      "event": "mailbox-response-interrupted",
+      "id": 119,
+      "actual": "c2d059e7-1523-48cf-91d4-680dbbe887a6",
+      "status": 200,
+      "search": "B611 Shared transfer",
+      "bytes": 2116,
+      "sent": 32
+    },
+    {
+      "at": "2026-11-24T20:50:58.832Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:50:59.009Z",
+      "event": "upstream-response",
+      "id": 121,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "7e24ca69-0a22-4cc7-a359-612f7c49856c"
+    }
+  ],
+  "sameQuery": {
+    "unread": 2,
+    "requestID": "de765c62-f853-418e-bbb2-f02d50e344d7",
+    "matches": [
+      {
+        "id": "pev_g0VbvQqh600UYCvXKqCp",
+        "subject": "Cedar bridge notice",
+        "body": "B611 Shared transfer. BRIDGE RECEIPT: The bridge register lists an eastern path.",
+        "readAt": 1795552868129,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-control-review",
+        "taskID": "tsk_g00VbvQqh300tV9Bh34G"
+      },
+      {
+        "id": "pev_g0VbvQqc700oF2Xz6ITT",
+        "subject": "Cedar intake replay",
+        "body": "B611 Shared transfer. INTAKE RECEIPT: The receiving log lists three folders.",
+        "readAt": 1795552867820,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-reading-review",
+        "taskID": "tsk_g00VbvQqbv00a2STrK8D"
+      },
+      {
+        "id": "pev_g0VbvQqc200r7pd2n8Tj",
+        "subject": "Cedar cabinet audit",
+        "body": "B611 Shared transfer. CABINET RECEIPT: The ledger lists cabinet six.",
+        "readAt": 1795552867817,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-reading-review",
+        "taskID": "tsk_g00VbvQqbv00a2STrK8D"
+      }
+    ],
+    "active": 7
+  },
+  "control": {
+    "readAt": 1795552914623,
+    "requestID": "e217917e-2f1e-409b-9cc2-153fe6be9953",
+    "id": "pev_g0VbvQqh800fjF6fBL1U"
+  },
+  "emptyQuery": {
+    "matches": 0,
+    "requestID": "78c54dbc-6649-45eb-85aa-80104dfef3e8"
+  },
+  "riverQuery": {
+    "requestID": "ef1c60fe-9522-4242-9384-59fd4ef96497",
+    "subject": "River delivery update",
+    "id": "pev_g0VbvQqcB00jqxoSdRMh"
+  }
+}

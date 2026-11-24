@@ -630,6 +630,7 @@
   "mailbox.loading": "Loading mailbox…",
   "mailbox.connection_wait": "Waiting for the server connection.",
   "mailbox.load_failed": "Could not load the mailbox.",
+  "mailbox.refresh_failed_with_messages": "Refresh failed. Showing previously loaded messages.",
   "mailbox.load_more": "Load more",
   "mailbox.load_more_failed": "Could not load older messages.",
   "mailbox.retry_load_more": "Retry older messages",
