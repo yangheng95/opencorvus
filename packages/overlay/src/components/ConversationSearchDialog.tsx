@@ -22,7 +22,7 @@ import { conversationSourceExcerptKey, isConversationSourcePart } from "../utils
 
 type ConversationSearchRead =
   | { kind: "idle" }
-  | { kind: "loading"; previousFailure?: string }
+  | { kind: "loading"; previousFailure?: string; retainedSnapshot?: ConversationSearchSnapshot }
   | { kind: "ready"; snapshot: ConversationSearchSnapshot }
   | { kind: "failed"; details: string }
 
@@ -41,6 +41,7 @@ export function ConversationSearchDialog(props: {
   let ownsSnapshot: (() => boolean) | undefined
   const snapshot = createMemo(() => {
     const current = read()
+    if (current.kind === "loading") return current.retainedSnapshot
     return current.kind === "ready" ? current.snapshot : undefined
   })
   const hits = createMemo(() => {
@@ -83,6 +84,8 @@ export function ConversationSearchDialog(props: {
   async function load(): Promise<void> {
     const target = props.target()
     if (!props.open || !target) return
+    const current = read()
+    const retainedSnapshot = current.kind === "ready" && ownsSnapshot?.() ? current.snapshot : undefined
     controller?.abort()
     const request = new AbortController()
     controller = request
@@ -91,7 +94,7 @@ export function ConversationSearchDialog(props: {
       isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch &&
       props.target()?.kind === target.kind && props.target()?.id === target.id && props.target()?.directory === target.directory
     ownsSnapshot = owns
-    setRead({ kind: "loading", previousFailure: readFailureDetails(read()) })
+    setRead({ kind: "loading", previousFailure: readFailureDetails(current), retainedSnapshot })
     setLocateError(undefined)
     try {
       const snapshot = await loadConversationSearchSnapshot(target, { authority, signal: request.signal })

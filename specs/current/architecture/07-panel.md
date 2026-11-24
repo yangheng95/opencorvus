@@ -4207,10 +4207,12 @@ reader for the selected project and session.
 Tab moves between the conversation search input and its dialog actions while
 preserving the highlight and scroll position of the current result. The results
 keep virtual focus through the input, with arrow and page keys for navigation.
-Only a successfully validated snapshot supplies result counts and empty states.
-A read failure keeps the typed query and shows a localized Retry action with
-the original diagnostic, which remains visible during the retry. Locating a
-result can fail independently of that read.
+Refreshing the same conversation keeps the accepted results, focused match and
+scroll position visible during the read. The progress status stays active until
+the new snapshot is validated and the result count is available. A read failure
+retires the results, keeps the typed query and shows a localized Retry action
+with the original diagnostic, which remains visible during the retry.
+Locating a result can fail independently of that read.
 Chat export keeps the conversation title visible. A separate status announces
 the read and browser download handoff; an export failure remains inspectable
 with its original diagnostic until the next export or conversation change.
