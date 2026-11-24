@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [对话内查找把原消息留在可见区](records/2026-11/2026-11-24-conversation-search-measured-message-landing.md)
 - [对话内查找刷新期间保留当前阅读位置](records/2026-11/2026-11-24-conversation-search-refresh-retains-current-result.md)
 - [对话内查找切换控件时保留当前消息](records/2026-11/2026-11-24-conversation-search-tab-retains-current-result.md)
 - [全局查找翻页保留当前结果](records/2026-11/2026-11-24-palette-continuation-retains-active-result.md)

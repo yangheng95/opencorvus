@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [对话内查找原消息落点的桌面证据](2026-11-24-conversation-search-measured-message-landing/README.md)
 - [对话内查找真实刷新桌面证据](2026-11-24-conversation-search-refresh-retains-current-result/README.md)
 - [对话内查找切换控件的桌面证据](2026-11-24-conversation-search-tab-retains-current-result/README.md)
 - [全局查找翻页保留当前结果的桌面证据](2026-11-24-palette-continuation-retains-active-result/README.md)
