@@ -1,0 +1,18 @@
+# 资源管理器跟随受监视目录成员变化更新搜索
+
+## Recall
+
+- 用户要求本人独立持续迭代 OpenCorvus，先分批调查并落盘原因和影响，再实施、验收真实桌面与人工截图、聚焦正向检查、按需执行已授权模型验收，最后范围提交并正常合并和推送。上一批已打开编辑器接收路径通知的 `7e87f0a56` 已推送，本地与上游一致。
+- 已读[当前面板契约](../../current/architecture/07-panel.md)、[后台目录成员变化](2026-11-13-explorer-search-observed-directory-change.md)、[同伴创建文件](2026-11-24-explorer-peer-change.md)、[搜索在刷新时保留选中项目](2026-11-24-explorer-search-refresh-keeps-selection-context.md)、[外部文件工作记录通知](2026-11-25-live-native-file-changes-reach-editor.md)。全仓追踪 `FileWatcher.Event.Updated`、`work-ledger.file-changed`、`parentProjectPath`、`refreshActiveDirectoryListings`、`hasUnobservedParent`、`refreshActiveSearchResults`、`searchExplorerEntries` 和 `GET /find/file`，以及现资源管理器、编辑器、Git 和协议测试入口。未发现触及范围的界面自动化测试。
+
+## 实施前证据、根因与影响
+
+- 真实 Windows 开发页 `41798/ui/` 加载 `main-yiNeRCkU.js`。开启现有实验目录监视。资源管理器根目录显示折叠的 `incoming`，搜索 `gate-manifest` 返回 `incoming/warehouse/gate-manifest-existing.txt`，原真实搜索 200 `6475f2c8-a6db-4033-a298-a3744b6fb31f`。在实际折叠的后代目录外部写入 `gate-manifest-new.txt`，22:15:34.228Z 发生准确文件路径的原生 `add`，随后同一路径发出额外 `change`。真实直接搜索 200 `08744550-a85d-4377-8ac5-a27bb74f8af1` 已返回两项。
+- 浏览器 22:15:46.224Z 与 22:16:01.230Z 两次后台真实读根目录均 200，根目录成员没有变化。现有查询仍只有一项，直至 22:16:04.348Z 手动点击 Refresh（刷新）后搜索请求 `94976629-00f5-41ad-8f07-dfb137eb8996` 才返回真实两项。这里应及时显示的是当前查询中的精确外部新文件，而不是额外展开文件树。[前后截图、原生通知和请求回执](../../artifacts/2026-11-25-explorer-updates-search-for-watched-membership/README.md)
+- 此前已把监视文件路径给工作记录流，当前投影仍丢弃原 `add`、`unlink` 和 `change` 的区别。资源管理器只接纳宿主提交的成员相关 `file.edited`，避免正文保存引起列表刷新。对于实际存在的外部新增／移除，它没有排定已知父目录。同一后台轮询只检查根和已打开并加载的目录。后代折叠时，根成员没有变动，即使每次根读成功也不会更新当前搜索。根和已展开目录继续能通过原成员比较收敛。服务索引、后台读取与手动重读均正常。
+- 影响包括导入文件、移出或改名后同项目当前搜索，以及已经展开目录的即时成员显示。这是资源管理器的投影读取，非 Task、Mission 或 Session 运行、轮次、恢复、唤醒与终态，现场未发现这些异常。并发搜索变更、后台普通读与写入后的必要读、用户选区和作用域仍沿原所有者；风险是将正文修改视作成员变动、将其它项目或已经离开的查询读回、突发文件事件触发完整路径扫描。没有新增订阅、轮询或索引需要。
+
+## 方案与验收
+
+- 已有精确 `work-ledger.file-changed` 为监视集合的真实 `add` 或 `unlink` 附可选 `membershipChanged: true`，由经验证的原事件判定。原 `change` 保留精确读编辑器及 Git 所需的同一事件，未引入新通道。资源管理器继续接纳其现有宿主成员事件，也接纳本项目明确的成员变更。沿用待核对父目录集合、当前已接受查询的读回和令牌。其他文件消费者保持原作用域。同步更新公开契约及派生软件开发工具包。
+- 在保持实际子目录折叠时，向深层目录新增符合和移出符合文件，检查相同已打开查询及时呈现准确结果并能打开新文件精确正文。另一项目的同名、同查询对照保留本项目结果，普通正文修改保持原读路径。中继记录真实请求，原生流提供新增/删除/内容区别。聚焦服务测试核对真实持久路径、精确事件和公开文件查询成员，检查类型、接口生成、构建和文档，逐张人工核对实页截图。只用自建文件和本地公开服务，场景不需要模型。
