@@ -606,7 +606,7 @@ export function CommandPalette(props: {
         optionData={(command) => ({
           "data-command-id": command.id,
           "data-kind": command.kind,
-          "data-full-title": command.kind === "mission" && query() ? "" : undefined,
+          "data-full-title": query() && (command.kind === "mission" || command.kind === "chat") ? "" : undefined,
           "data-group": command.group,
           "data-group-start": command.groupStart ? "" : undefined,
         })}

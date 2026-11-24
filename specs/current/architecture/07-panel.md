@@ -2720,9 +2720,10 @@ sequential focus after changing a value with the trigger's arrow keys.
 Command palette ledger selections close the settings page through that same
 reveal lifecycle after file departure is approved and before selecting the
 exact Mission, Task or conversation.
-Ledger results share the project result's two-row layout: the original title
-uses up to two lines, with the original kind, project display name and complete
-directory below it. Project rows retain their project kind and directory hint.
+Ledger results share the project result's layout, with the original kind,
+project display name and complete directory below the title. Missions and
+conversations show the full title in a filtered result, and compact previews
+use up to two lines. Project rows retain their project kind and directory hint.
 The directory wraps within the result so identical short project names remain
 distinguishable. Group headings, recent-result counts, shortcuts and exact
 selection identities retain their existing owners; local commands keep their
@@ -6743,8 +6744,9 @@ supplies the author's text, preceded by the current language's draft label.
 The two-line preview also appears in recent work. It lives in the existing
 option description, with the same title, search criteria, selection identity,
 and read-only full request available on opening the Mission.
-Mission matches for a nonempty query wrap the complete original title before
-selection. Recent work for an empty query retains its compact title preview.
+Mission and conversation matches for a nonempty query wrap the complete
+original title before selection. Recent work for an empty query retains its
+compact title preview.
 Selecting a Project calls the same existing Project navigation owner as its sidebar header;
 it restores that Project's composer intent without creating a conversation or execution.
 Chat and
