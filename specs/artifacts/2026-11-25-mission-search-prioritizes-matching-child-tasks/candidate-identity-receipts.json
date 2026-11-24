@@ -1,0 +1,45 @@
+{
+  "mission": {
+    "requestID": "ae9fb416-a4cb-4bd3-b645-227f21010dc6",
+    "tasks": [
+      {
+        "id": "tsk_g00VbvjJ3j005yY0FTaJ",
+        "title": "Collect bay checklist",
+        "lifecycleStatus": "completed"
+      },
+      {
+        "id": "tsk_g00VbvjIq1008jetgwCb",
+        "title": "Confirm pallet totals",
+        "lifecycleStatus": "completed"
+      },
+      {
+        "id": "tsk_g00VbvjIeM00N58kettD",
+        "title": "Compile shift schedule",
+        "lifecycleStatus": "completed"
+      },
+      {
+        "id": "tsk_g00VbvjIQn00IKMIYRSD",
+        "title": "Cobalt dispatch audit",
+        "lifecycleStatus": "completed"
+      },
+      {
+        "id": "tsk_g00VbvjIBA00pW05hM9A",
+        "title": "Saffron receiving audit",
+        "lifecycleStatus": "completed"
+      }
+    ],
+    "sessionID": "ses_-zUO4Ghr3zz1QKSr0IiM",
+    "status": 200,
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b617\\candidate\\mission-list-review",
+    "missionID": "mission-b617-inventory-review"
+  },
+  "taskConversation": {
+    "requestID": "fbe5b910-3999-420b-b7b7-432380f6eda5",
+    "sessionID": "ses_-zUO4GhZCzzXXPFunPms",
+    "title": "Cobalt dispatch audit",
+    "status": 200,
+    "transcriptCount": 0,
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b617\\candidate\\mission-list-review",
+    "taskID": "tsk_g00VbvjIQn00IKMIYRSD"
+  }
+}

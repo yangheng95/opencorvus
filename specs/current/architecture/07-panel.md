@@ -4348,8 +4348,10 @@ Board search matches all query terms across the current Mission title, identitie
 project name and original/normalized path, saved request, result/blocked criteria,
 and every child Task's title and request. The existing complete Board projection
 owns these fields; the exact project filter still selects the parent Mission's
-directory. Card previews stably prioritize matching child Tasks within the same
-three-item limit without reordering stored Tasks or changing progress/counts.
+directory. Card previews prioritize child Tasks by the number of distinct query
+terms they supply beyond the parent fields. Different child Tasks can contribute
+to the same match. Ties keep their original order, and the preview retains its
+three-item limit, original Task records and progress counts.
 The localized scope hint is associated with the shared SearchField input through
 its optional `ariaDescribedBy` property. Down and Up browse the available
 matching card buttons in either Board layout. Escape from those buttons focuses

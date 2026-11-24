@@ -20,7 +20,7 @@ import { Button } from "./ui/Button"
 import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
 import { ComboboxControl } from "./ui/ComboboxControl"
-import { matchesSearchTerms } from "../services/text-search"
+import { matchesSearchParts, matchesSearchTerms, splitSearchTerms } from "../services/text-search"
 import { useNowTick } from "../services/clock"
 import { createSearchResultNavigation, SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
@@ -132,15 +132,19 @@ function MissionBoardCard(props: {
   )
   const remainingTasks = createMemo(() => Math.max(0, props.mission.tasks.length - MISSION_TASK_PREVIEW_LIMIT))
   const taskPreview = createMemo(() => {
-    if (!props.searchQuery.trim()) return props.mission.tasks.slice(0, MISSION_TASK_PREVIEW_LIMIT)
+    const tasks = props.mission.tasks
+    const terms = splitSearchTerms(props.searchQuery)
+    if (terms.length === 0) return tasks.slice(0, MISSION_TASK_PREVIEW_LIMIT)
     const parentParts = missionSearchParts(props.mission, props.project?.label)
-    return props.mission.tasks
-      .map((task, index) => ({
-        task,
-        index,
-        matching: matchesSearchTerms(props.searchQuery, [...parentParts, task.title, task.description]),
-      }))
-      .sort((left, right) => Number(right.matching) - Number(left.matching) || left.index - right.index)
+    const childTerms = [...new Set(terms)].filter((term) => !matchesSearchParts(term, parentParts))
+    if (childTerms.length === 0) return tasks.slice(0, MISSION_TASK_PREVIEW_LIMIT)
+    return tasks
+      .map((task, index) => {
+        const parts = [task.title, task.description]
+        const matchCount = childTerms.filter((term) => matchesSearchParts(term, parts)).length
+        return { task, index, matchCount }
+      })
+      .sort((left, right) => right.matchCount - left.matchCount || left.index - right.index)
       .slice(0, MISSION_TASK_PREVIEW_LIMIT)
       .map(({ task }) => task)
   })
