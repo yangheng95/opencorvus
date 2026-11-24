@@ -15,6 +15,7 @@ import {
   projectConversationAgentView,
   projectConversationView,
 } from "@/conversation/view"
+import { withConversationCapabilityReferenceRead } from "@/conversation/capability-transaction"
 import { projectMissionTurnArtifacts } from "@/conversation/turn-artifacts"
 import { Config } from "@/config/config"
 import { EffectiveConfig } from "@/config/effective"
@@ -97,6 +98,7 @@ import { NamedError } from "@opencorvus-ai/util/error"
 import { createHash } from "node:crypto"
 import { Identifier } from "@/id/id"
 import { SessionContext } from "@/session/context"
+import { withSkillCatalogReferenceRead } from "@/skill/reference-lock"
 import { projectPersistedSessionMessage } from "@/orchestrator/protocol/message-bridge"
 import {
   CONVERSATION_HISTORY_PAGE_LIMIT,
@@ -770,13 +772,27 @@ function assertNoStoredNull(value: unknown, path = "configOverlay"): void {
 async function sessionConfig(input: {
   sessionID: string
   projectID: string
+  validateProject?: true
 }): Promise<z.output<typeof SessionConfigResponse>> {
   const { sessionID, projectID } = input
   const session = await Session.assertLineageInProject({ sessionID, projectID })
   // R5.1 item 2: only a root session (task root or standalone root) owns a
   // config overlay; a child session is rejected (same guard as the write path).
   Session.assertConfigurableRoot(session)
-  const base = await EffectiveConfig.base({ sessionID })
+  const readBase = () => EffectiveConfig.base({ sessionID })
+  const base = input.validateProject
+    ? await withSkillCatalogReferenceRead(() => withConversationCapabilityReferenceRead(async () => {
+        const config = await readBase()
+        const { validateConfigCandidate } = await import("@/config/candidate-validation")
+        await validateConfigCandidate({
+          config,
+          root: "config",
+          projectDirectory: Instance.project.worktree,
+          projectOwnedCapabilities: true,
+        })
+        return config
+      }))
+    : await readBase()
   const stored = session.metadata?.configOverlay ?? {}
   // R5.1 item 7: fail fast on a null or pinned key in the STORED overlay.
   // `.strict()` rejects pinned/unknown keys; assertNoStoredNull rejects nulls.
@@ -959,6 +975,7 @@ export const SessionRoutes = lazy(() =>
           await sessionConfig({
             sessionID: c.req.valid("param").sessionID,
             projectID: Instance.project.id,
+            validateProject: true,
           }),
         )
       },

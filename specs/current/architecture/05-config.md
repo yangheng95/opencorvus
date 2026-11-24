@@ -232,6 +232,7 @@ JSON Merge Patch（JavaScript Object Notation Merge Patch，JSON 合并补丁）
 Session overlay 的 nested null 是删除当前覆盖的标记。preview 先将该标记应用到当前 overlay，再向 base 投影；缺席覆盖的删除仍形成合法空对象，删除已有覆盖恢复 base。持久 configOverlay 使用归一化后的 nextOverlay，原无 null 完整性校验保持。直接 mergeOverlay 对传入 base 的删除仍遵循同一 merge patch 语义。
 
 会话有效配置在根 Session 所属 Project 的身份上下文读取项目配置，再合并该会话的覆盖层。读取配置通过同一项目归属解析，执行入口负责取得完整 Project 运行上下文。
+会话有效配置的读取接口在该身份上下文对同一项目配置进行既有模型和能力校验，再返回配置与来源树。配置修改和执行由各自的运行入口完成。
 
 ## 跨进程 reader generation 与 runtime projection
 

@@ -64,6 +64,7 @@ describe("Project route context authority", () => {
       organize: projectRouteContextKind("/experimental/project-memory/organize", "POST"),
       prompt: projectRouteContextKind("/session/ses_1/prompt", "POST"),
       config: projectRouteContextKind("/session/ses_1/config", "GET"),
+      updateConfig: projectRouteContextKind("/session/ses_1/config", "PATCH"),
       vcs: projectRouteContextKind("/vcs", "GET"),
       branches: projectRouteContextKind("/vcs/branches", "GET"),
       diff: projectRouteContextKind("/vcs/diff", "GET"),
@@ -82,7 +83,8 @@ describe("Project route context authority", () => {
       memory: "identity",
       organize: "runtime",
       prompt: "runtime",
-      config: "runtime",
+      config: "identity",
+      updateConfig: "runtime",
       vcs: "identity",
       branches: "identity",
       diff: "identity",
@@ -111,7 +113,7 @@ describe("Project route context authority", () => {
       archive: "identity",
       selection: "runtime",
       abort: "identity",
-      sessionConfig: "runtime",
+      sessionConfig: "identity",
     })
   })
   test("assigns archive and restore controls to Project identity for every public owner", () => {
@@ -176,7 +178,7 @@ describe("Project route context authority", () => {
       status: "identity",
       sideCreate: "identity",
       fork: "identity",
-      config: "runtime",
+      config: "identity",
       configWrite: "runtime",
       prompt: "runtime",
     })

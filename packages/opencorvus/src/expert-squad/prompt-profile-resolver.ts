@@ -792,7 +792,7 @@ export namespace PromptProfileResolver {
     packageRevision?: ExpertSquadPackageRevision
   }): Promise<void> {
     const defaultSkills =
-      input.defaultSkills ?? (await Instance.provide({ directory: input.projectDirectory, fn: () => Skill.all() }))
+      input.defaultSkills ?? (await Instance.provideProjectIdentity({ directory: input.projectDirectory, fn: () => Skill.all() }))
     const defaultSkillsByName = skillInventoryByName(defaultSkills)
     const discovered = await discoverAvailableExternalPackages(input.projectDirectory)
     const projectEntriesByID = new Map(discovered.items.map((entry) => [entry.id, entry]))

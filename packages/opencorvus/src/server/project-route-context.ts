@@ -101,7 +101,7 @@ const PROJECT_IDENTITY_CONVERSATION_ROUTE_PATTERNS = [
   /^GET \/coding\/(?:chat|work)\/session\/[^/]+$/,
   /^PATCH \/coding\/(?:chat|work)\/session\/[^/]+$/,
   /^GET \/session\/[^/]+$/,
-  /^GET \/session\/[^/]+\/(?:children|todo|turn-artifacts)$/,
+  /^GET \/session\/[^/]+\/(?:children|todo|turn-artifacts|config)$/,
   /^GET \/session\/[^/]+\/conversation$/,
   /^GET \/session\/[^/]+\/conversation\/history$/,
   /^GET \/session\/[^/]+\/interactive-artifact\/[^/]+$/,

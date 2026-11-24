@@ -53,7 +53,7 @@ async function request(directory: string, route: string, method = "GET") {
 }
 
 describe("cold passive workspace metadata", () => {
-  test("the active Expert Squad projects its installed identity when Git rule files cannot be written", async () => {
+  test("protected Git rule files allow exact Expert Squad and Session configuration reads", async () => {
     await using project = await memoryProject("passive-catalog-protected-rules")
     await fs.mkdir(path.join(project.path, ".gitignore"))
     await writeExpertSquadPackage({
@@ -62,7 +62,7 @@ describe("cold passive workspace metadata", () => {
     })
     const configPath = ConfigPaths.projectFile(project.path)
     await fs.mkdir(path.dirname(configPath), { recursive: true })
-    await fs.writeFile(configPath, JSON.stringify({ prompt_profile: { active: "protected-review" } }))
+    await fs.writeFile(configPath, JSON.stringify({ prompt_profile: { active: "protected-review" }, skill_mounts: {} }))
 
     const opened = await request(project.path, "/project/current")
     expect(opened.status).toBe(200)
@@ -82,12 +82,24 @@ describe("cold passive workspace metadata", () => {
 
     const session = await Instance.provideProjectIdentity({
       directory: project.path,
-      fn: () => Session.create({ kind: "assistant" }),
+      fn: () => Session.create({
+        kind: "assistant",
+        metadata: { configOverlay: { agent: { chat: { temperature: 0.4 } } } },
+      }),
     })
     const sessionCatalog = await request(project.path, `/expert-squad/catalog?sessionID=${session.id}`)
     expect({ status: sessionCatalog.status, body: await sessionCatalog.json() }).toMatchObject({
       status: 200,
       body: { active, scope: { kind: "session", directory: project.path, sessionID: session.id } },
+    })
+
+    const sessionConfig = await request(project.path, `/session/${session.id}/config`)
+    expect({ status: sessionConfig.status, body: await sessionConfig.json() }).toMatchObject({
+      status: 200,
+      body: {
+        config: { prompt_profile: { active: "protected-review" }, agent: { chat: { temperature: 0.4 } } },
+        origin: { prompt_profile: { active: "project" }, agent: { chat: { temperature: "session" } } },
+      },
     })
   }, 60_000)
 
