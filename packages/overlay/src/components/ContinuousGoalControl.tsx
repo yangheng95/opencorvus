@@ -22,7 +22,13 @@ import {
   type ContinuousGoalUpdateInput,
 } from "../services/continuous-goal"
 import { formatErrorDetails } from "../services/diagnostics"
-import { composerDraftText, composerQuotation, setComposerDraft } from "../services/composer-draft"
+import {
+  captureComposerDraftRevision,
+  clearComposerDraftRevision,
+  composerDraftText,
+  composerQuotation,
+  type ComposerDraftRevision,
+} from "../services/composer-draft"
 import { activeDirectory } from "../services/workspace"
 import { workLedgerProject } from "../services/work-ledger"
 import { projectDisplayName } from "../utils/project-directory"
@@ -54,9 +60,8 @@ export type GoalFormRequest = {
 
 type GoalCreationDraft = {
   scope: string
-  key?: string
-  text: string
   objective: string
+  revision?: ComposerDraftRevision
   tokens: string
   turns: string
   budgetOptionsOpen: boolean
@@ -324,7 +329,10 @@ export function ContinuousGoalControl(props: {
         const scope = JSON.stringify([captureApiAuthority().revision, props.selectionEpoch, source()?.key, current?.id, key, text])
         setEditing(undefined)
         if (createDraft()?.scope !== scope) {
-          setCreateDraft({ scope, key, text, objective: text, tokens: "", turns: "", budgetOptionsOpen: false })
+          setCreateDraft({
+            scope, objective: text, revision: captureComposerDraftRevision(key),
+            tokens: "", turns: "", budgetOptionsOpen: false,
+          })
         }
       } else {
         setEditing(current)
@@ -423,8 +431,8 @@ export function ContinuousGoalControl(props: {
           : await createContinuousGoal(current.target, body, current.authority)
       if (!owns(current.key)) return
       const draft = "objective" in body ? createDraft() : undefined
-      if (draft?.key && !pendingComposerContext() && composerDraftText(draft.key) === draft.text) {
-        setComposerDraft(draft.key, "")
+      if (draft?.revision && !pendingComposerContext()) {
+        void clearComposerDraftRevision(draft.revision)
       }
       if ("objective" in body) setCreateDraft(undefined)
       attempt = undefined

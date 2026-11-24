@@ -2506,6 +2506,15 @@ card is presentation of that draft. Submission serializes the quotation as a
 visible Markdown blockquote in the real user Message, using the same text for
 storage, rendering and model input. Side replies can be quoted back into the
 main composer for the user to review and send.
+Composer drafts are local to the current browser origin. On upgrade, the draft
+database imports and retires the previous browser storage entry after committing
+the import. Each mutation reads and changes the current owning scope in one
+database transaction. Multiple tabs can therefore author different drafts
+independently. Tabs learn of a committed write and read the database again.
+The writing area projects each tab's pending edits immediately. A send reuses
+or reserves its request identity in a transaction before being dispatched.
+Acceptance retires the precise revision when it still matches the committed
+draft.
 The main `/side` command retains its authored source draft until the existing
 Side request consumer confirms that the new Session and target draft are ready,
 or that an empty command has opened an existing side conversation. The request

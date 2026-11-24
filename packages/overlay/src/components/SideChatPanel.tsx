@@ -25,7 +25,8 @@ import {
   composerQuotation,
   setComposerDraft,
   setComposerQuotation,
-  clearComposerDraft,
+  captureComposerDraftRevision,
+  clearComposerDraftRevision,
   composerSubmission,
   sameComposerDraftRevision,
   type ComposerDraftRevision,
@@ -370,10 +371,12 @@ export function SideChatPanel(props: {
     const owns = () => current === generation && selected() === target.sessionID && isApiAuthorityCurrent(authority)
     const draftKey = key()
     const quoted = composerQuotation(draftKey)
-    const submission = composerSubmission(draftKey, quotedPrompt(text, quoted))
     setSending(true)
     setError("")
     try {
+      const submission = await composerSubmission(draftKey, quotedPrompt(text, quoted))
+      if (!owns()) return
+      const revision = captureComposerDraftRevision(draftKey)
       scrollToLatest()
       await apiJson(sideChatPath(target, "/message"), {
         authority,
@@ -388,10 +391,10 @@ export function SideChatPanel(props: {
       })
       if (
         isApiAuthorityCurrent(authority) &&
-        composerDraftStore.drafts[draftKey]?.submission?.messageID === submission.messageID &&
-        quotedPrompt(composerDraftText(draftKey).trim(), composerQuotation(draftKey)) === submission.text
+        revision?.entry.submission?.messageID === submission.messageID &&
+        quotedPrompt(revision.entry.text.trim(), revision.entry.quotation) === submission.text
       )
-        clearComposerDraft(draftKey)
+        await clearComposerDraftRevision(revision)
     } catch (error) {
       if (owns()) report(error)
     } finally {

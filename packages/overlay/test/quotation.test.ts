@@ -25,15 +25,15 @@ describe("quotation submission and scoped draft data", () => {
       side: { text: "Side question", updated: 3 },
     })
   })
-  test("an unchanged submission retains its identity through retries and serialized draft restoration", () => {
+  test("an unchanged submission retains its identity through retries and serialized draft restoration", async () => {
     setComposerDraft("side-retry", "Explain")
-    const first = composerSubmission("side-retry", quotedPrompt("Explain", quotation))
-    expect(composerSubmission("side-retry", first.text)).toEqual(first)
+    const first = await composerSubmission("side-retry", quotedPrompt("Explain", quotation))
+    expect(await composerSubmission("side-retry", first.text)).toEqual(first)
     expect(
       parseComposerDraftRecords(JSON.stringify({ side: { text: "Explain", updated: 1, quotation, submission: first } }))
         .side?.submission,
     ).toEqual(first)
-    const revised = composerSubmission("side-retry", quotedPrompt("Explain in Chinese", quotation))
+    const revised = await composerSubmission("side-retry", quotedPrompt("Explain in Chinese", quotation))
     expect(new Set([first.messageID, revised.messageID]).size).toBe(2)
   })
 })

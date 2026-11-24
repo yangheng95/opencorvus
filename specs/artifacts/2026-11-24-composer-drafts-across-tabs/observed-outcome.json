@@ -1,0 +1,47 @@
+{
+  "url": "http://127.0.0.1:41804/ui/",
+  "baseline": {
+    "pid": 37664,
+    "asset": "assets/main-BMcmOYAm.js",
+    "alphaAfterOpening": "",
+    "betaAfterOpening": "Beta draft: verify the second inventory sheet."
+  },
+  "candidate": {
+    "pid": 8664,
+    "asset": "assets/main-Dl_6pzo5.js",
+    "migratedBeta": "Beta draft: verify the second inventory sheet.",
+    "alphaAfterOpening": "Alpha draft after upgrade: reconcile the sample invoices.",
+    "betaAfterOpening": "Beta draft after upgrade: verify the second inventory sheet."
+  },
+  "final": {
+    "pid": 13748,
+    "asset": "assets/main-BjF2PpWt.js",
+    "betaAfterRuntimeRestart": "Beta draft after upgrade: verify the second inventory sheet.",
+    "alphaAfterOpening": "Alpha final draft: reconcile the sample invoices.",
+    "betaAfterOpening": "Beta final draft: verify the inventory sheet."
+  },
+  "sessions": [
+    {
+      "id": "ses_hCOUJJIT5bzwKCNKd9I0",
+      "title": "Draft review Alpha",
+      "sessionHTTP": 200,
+      "historyHTTP": 200,
+      "history": []
+    },
+    {
+      "id": "ses_hR8FglWTK594GlGPLXvu",
+      "title": "Draft review Beta",
+      "sessionHTTP": 200,
+      "historyHTTP": 200,
+      "history": []
+    }
+  ],
+  "database": {
+    "session": 2,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  },
+  "finalShutdownHTTP": 200,
+  "finalListenerReleased": true
+}

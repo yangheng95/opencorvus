@@ -31,45 +31,45 @@ describe("composer draft records", () => {
     expect(sameComposerDraftRevision(first, second)).toBe(true)
   })
 
-  test("confirmed handoff retains the target question and consumes its unchanged source command", () => {
+  test("confirmed handoff retains the target question and consumes its unchanged source command", async () => {
     setComposerDraftStore("drafts", reconcile({ source: { text: "/side author question", updated: 100 } }))
     const source = captureComposerDraftRevision("source")!
     setComposerDraft("side", "author question")
-    expect(clearComposerDraftRevision(source)).toBe(true)
+    expect(await clearComposerDraftRevision(source)).toBe(true)
     expect(composerDraftStore.drafts).toEqual({ side: { text: "author question", updated: expect.any(Number) } })
   })
 
-  test("confirmed handoff retains both the original target question and newer source input", () => {
+  test("confirmed handoff retains both the original target question and newer source input", async () => {
     setComposerDraftStore("drafts", reconcile({ source: { text: "/side original question", updated: 100 } }))
     const source = captureComposerDraftRevision("source")!
     setComposerDraft("source", "new independent input")
     setComposerDraft("side", "original question")
-    clearComposerDraftRevision(source)
+    await clearComposerDraftRevision(source)
     expect(composerDraftStore.drafts).toEqual({ source: { text: "new independent input", updated: expect.any(Number) }, side: { text: "original question", updated: expect.any(Number) } })
   })
 
-  test("consumes the acknowledged revision while retaining independent input", () => {
+  test("consumes the acknowledged revision while retaining independent input", async () => {
     setComposerDraftStore("drafts", reconcile({ current: { text: "accepted input", updated: 100 }, other: { text: "later work", updated: 200 } }))
     const revision = captureComposerDraftRevision("current")!
-    expect(clearComposerDraftRevision(revision)).toBe(true)
+    expect(await clearComposerDraftRevision(revision)).toBe(true)
     expect(composerDraftStore.drafts).toEqual({ other: { text: "later work", updated: 200 } })
   })
 
-  test("a late receipt preserves the current authored revision", () => {
+  test("a late receipt preserves the current authored revision", async () => {
     setComposerDraftStore("drafts", reconcile({ current: { text: "first input", updated: 100 } }))
     const revision = captureComposerDraftRevision("current")!
     setComposerDraftStore("drafts", "current", { text: "new input", updated: 200 })
-    clearComposerDraftRevision(revision)
+    await clearComposerDraftRevision(revision)
     expect(composerDraftStore.drafts.current).toEqual({ text: "new input", updated: 200 })
   })
 
-  test("a late receipt preserves an independently changed quotation", () => {
+  test("a late receipt preserves an independently changed quotation", async () => {
     const first = { text: "first quote", sessionID: "ses_a", messageID: "msg_a" }
     const next = { text: "new quote", sessionID: "ses_b", messageID: "msg_b" }
     setComposerDraftStore("drafts", reconcile({ current: { text: "input", quotation: first, updated: 100 } }))
     const revision = captureComposerDraftRevision("current")!
     setComposerDraftStore("drafts", "current", "quotation", next)
-    clearComposerDraftRevision(revision)
+    await clearComposerDraftRevision(revision)
     expect(composerDraftStore.drafts.current).toEqual({ text: "input", quotation: next, updated: 100 })
   })
 
@@ -80,11 +80,11 @@ describe("composer draft records", () => {
     expect(composerDraftStore.drafts.current).toEqual({ text: "author prose", quotation, updated: expect.any(Number) })
   })
 
-  test("request identity survives serialization with author prose in its original field", () => {
+  test("request identity survives serialization with author prose in its original field", async () => {
     setComposerDraftStore("drafts", reconcile({ current: { text: "author prose", updated: 100 } }))
     const content = JSON.stringify({ parts: [{ type: "text", text: "author prose" }], model: { providerID: "openai", modelID: "gpt-6.1-sol" } })
-    const submission = composerSubmission("current", content)
-    expect(composerSubmission("current", content)).toEqual(submission)
+    const submission = await composerSubmission("current", content)
+    expect(await composerSubmission("current", content)).toEqual(submission)
     expect(parseComposerDraftRecords(JSON.stringify(composerDraftStore.drafts))).toEqual({ current: { text: "author prose", updated: expect.any(Number), submission } })
   })
 

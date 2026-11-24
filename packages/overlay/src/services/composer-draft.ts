@@ -2,6 +2,13 @@ import { createStore, reconcile } from "solid-js/store"
 import { parseQuotation, type Quotation } from "./quotation"
 import { randomUUID } from "../utils/random-id"
 import { composerMentionDirectiveRanges, setComposerMentionDirectiveSelected } from "./composer-mention"
+import {
+  openComposerDraftDatabase,
+  readComposerDraftDatabase,
+  writeComposerDraftDatabase,
+  type DraftMutation,
+  type DraftMutationResult,
+} from "./composer-draft-storage"
 
 export interface ComposerDraftEntry {
   text: string
@@ -12,7 +19,8 @@ export interface ComposerDraftEntry {
 
 export type ComposerDraftRecords = Record<string, ComposerDraftEntry>
 
-export const COMPOSER_DRAFT_STORAGE_KEY = "oc_composer_drafts_v1"
+const LEGACY_DRAFT_STORAGE_KEY = "oc_composer_drafts_v1"
+const DRAFT_CHANNEL_NAME = "opencorvus-composer-drafts"
 export const MAX_COMPOSER_DRAFTS = 120
 
 export function normalizeComposerDraftKey(key: string | null | undefined): string {
@@ -51,11 +59,27 @@ function connectionIndependentRecords(records: ComposerDraftRecords): ComposerDr
 
 let preparedDeparture: { records: ComposerDraftRecords } | undefined
 
-/** All ordinary writes update this transaction's parsed projection before writing the sole store. */
-function writeComposerDraftRecords(records: ComposerDraftRecords): void {
-  if (preparedDeparture) preparedDeparture.records = connectionIndependentRecords(records)
-  setComposerDraftStore("drafts", reconcile(records))
-  persistComposerDraftRecords(records)
+function departComposerDrafts(
+  currentKey: string,
+  records: ComposerDraftRecords,
+  detached: ComposerDraftRecords,
+  updated: number,
+) {
+  const retiredReferences = Object.entries(records).some(
+    ([key, entry]) => !!entry.quotation || !!entry.submission || entry.text !== detached[key]?.text,
+  )
+  const next = { ...detached }
+  const currentText = next[currentKey]?.text
+  if (currentText) {
+    const launcher = workspaceComposerDraftKey("", "", "")
+    const previous = next[launcher]?.text ?? ""
+    next[launcher] = {
+      text: previous && currentKey !== launcher ? `${previous}\n\n${currentText}` : currentText,
+      updated,
+    }
+    if (currentKey !== launcher) delete next[currentKey]
+  }
+  return { records: pruneComposerDraftRecords(next), value: retiredReferences }
 }
 
 /** A temporary preparation of the existing store; confirmed commit performs no parsing. */
@@ -69,24 +93,14 @@ export function prepareComposerDraftDeparture(currentKey: string): { commit: () 
   return {
     release,
     commit: () => {
-      const retiredReferences = Object.entries(composerDraftStore.drafts).some(
-        ([key, entry]) => !!entry.quotation || !!entry.submission || entry.text !== prepared.records[key]?.text,
-      )
-      const next = { ...prepared.records }
-      const currentText = next[currentKey]?.text
-      if (currentText) {
-        const launcher = workspaceComposerDraftKey("", "", "")
-        const previous = next[launcher]?.text ?? ""
-        next[launcher] = {
-          text: previous && currentKey !== launcher ? `${previous}\n\n${currentText}` : currentText,
-          updated: Date.now(),
-        }
-        if (currentKey !== launcher) delete next[currentKey]
-      }
-      const retained = pruneComposerDraftRecords(next)
+      const updated = Date.now()
+      const preview = departComposerDrafts(currentKey, composerDraftStore.drafts, prepared.records, updated)
       release()
-      writeComposerDraftRecords(retained)
-      return retiredReferences
+      void mutateComposerDrafts(
+        (records) => departComposerDrafts(currentKey, records, connectionIndependentRecords(records), updated),
+        preview,
+      )
+      return preview.value
     },
   }
 }
@@ -150,42 +164,106 @@ export function nextComposerDraftRecords(input: {
   return pruneComposerDraftRecords(next, input.maxEntries ?? MAX_COMPOSER_DRAFTS)
 }
 
-function storage(): Storage | null {
-  try {
-    if (typeof window === "undefined") return null
-    return window.localStorage ?? null
-  } catch {
-    return null
-  }
+function readLegacyDrafts(): ComposerDraftRecords {
+  return pruneComposerDraftRecords(parseComposerDraftRecords(localStorage.getItem(LEGACY_DRAFT_STORAGE_KEY)))
 }
 
-function loadComposerDraftRecords(): ComposerDraftRecords {
-  const target = storage()
-  if (!target) return {}
+function retireLegacyDrafts(): void {
   try {
-    return pruneComposerDraftRecords(parseComposerDraftRecords(target.getItem(COMPOSER_DRAFT_STORAGE_KEY)))
-  } catch {
-    return {}
-  }
-}
-
-function persistComposerDraftRecords(records: ComposerDraftRecords): void {
-  const target = storage()
-  if (!target) return
-  try {
-    if (Object.keys(records).length === 0) {
-      target.removeItem(COMPOSER_DRAFT_STORAGE_KEY)
-    } else {
-      target.setItem(COMPOSER_DRAFT_STORAGE_KEY, JSON.stringify(records))
-    }
+    localStorage.removeItem(LEGACY_DRAFT_STORAGE_KEY)
   } catch (err) {
-    console.warn("[composer-draft] failed to persist scoped draft", err)
+    console.warn("[composer-draft] could not remove the migrated draft entry", err)
   }
 }
 
-export const [composerDraftStore, setComposerDraftStore] = createStore({
-  drafts: loadComposerDraftRecords(),
+export const [composerDraftStore, setComposerDraftStore] = createStore<{ drafts: ComposerDraftRecords }>({
+  drafts: {},
 })
+
+interface DraftStorageOwner {
+  database: Promise<IDBDatabase>
+  channel: BroadcastChannel
+}
+
+let draftStorage: DraftStorageOwner | undefined
+const pendingDraftPreviews = new Set<DraftMutation<unknown>>()
+
+function publishDrafts(records: ComposerDraftRecords): void {
+  if (preparedDeparture) preparedDeparture.records = connectionIndependentRecords(records)
+  setComposerDraftStore("drafts", reconcile(records))
+}
+
+function publishCommittedDrafts(records: ComposerDraftRecords): void {
+  for (const preview of pendingDraftPreviews) records = preview(records).records
+  publishDrafts(records)
+}
+
+function retireDraftStorage(owner: DraftStorageOwner): void {
+  if (draftStorage !== owner) return
+  draftStorage = undefined
+  pendingDraftPreviews.clear()
+  owner.channel.close()
+  void owner.database.then((database) => database.close(), () => {})
+}
+
+function reportDraftStorageError(owner: DraftStorageOwner, error: unknown): void {
+  if (draftStorage !== owner) return
+  retireDraftStorage(owner)
+  console.warn("[composer-draft] persistent draft storage became unavailable", error)
+}
+
+export function startComposerDraftStorage(): () => void {
+  const owner: DraftStorageOwner = {
+    channel: new BroadcastChannel(DRAFT_CHANNEL_NAME),
+    database: openComposerDraftDatabase({ read: readLegacyDrafts, retire: retireLegacyDrafts }),
+  }
+  draftStorage = owner
+  const refresh = () => {
+    void owner.database
+      .then(readComposerDraftDatabase)
+      .then((records) => {
+        if (draftStorage === owner) publishCommittedDrafts(records)
+      }, (error) => reportDraftStorageError(owner, error))
+  }
+  owner.channel.onmessage = refresh
+  refresh()
+  return () => retireDraftStorage(owner)
+}
+
+function mutateComposerDrafts<T>(
+  mutate: DraftMutation<T>,
+  preview?: true | DraftMutationResult<T>,
+): Promise<T> {
+  const owner = draftStorage
+  const current = composerDraftStore.drafts
+  if (!owner) {
+    const result = preview && preview !== true ? preview : mutate(current)
+    publishDrafts(result.records)
+    return Promise.resolve(result.value)
+  }
+  const local = preview === true ? mutate(current) : preview
+  if (local) {
+    pendingDraftPreviews.add(mutate)
+    publishDrafts(local.records)
+  }
+  return owner.database.then((database) => writeComposerDraftDatabase(database, mutate)).then(
+    ({ records, value }) => {
+      if (draftStorage === owner) {
+        pendingDraftPreviews.delete(mutate)
+        publishCommittedDrafts(records)
+        owner.channel.postMessage(null)
+      }
+      return value
+    },
+    (error) => {
+      reportDraftStorageError(owner, error)
+      if (local) return local.value
+      const result = mutate(composerDraftStore.drafts)
+      publishDrafts(result.records)
+      return result.value
+    },
+  )
+}
 
 export function composerDraftText(key: string | null | undefined): string {
   const normalized = normalizeComposerDraftKey(key)
@@ -193,14 +271,13 @@ export function composerDraftText(key: string | null | undefined): string {
 }
 
 export function setComposerDraft(key: string | null | undefined, text: string): void {
-  if (!normalizeComposerDraftKey(key)) return
-  const next = nextComposerDraftRecords({
-    records: composerDraftStore.drafts,
-    key,
-    text,
-    updated: Date.now(),
-  })
-  writeComposerDraftRecords(next)
+  const normalized = normalizeComposerDraftKey(key)
+  if (!normalized) return
+  const updated = Date.now()
+  void mutateComposerDrafts((records) => ({
+    records: nextComposerDraftRecords({ records, key: normalized, text, updated }),
+    value: undefined,
+  }), true)
 }
 
 /** Transfer input to its admitted workspace scope while preserving independently authored drafts. */
@@ -208,20 +285,15 @@ export function moveComposerDraft(sourceKey: string, targetKey: string): void {
   const source = normalizeComposerDraftKey(sourceKey)
   const target = normalizeComposerDraftKey(targetKey)
   if (!source || !target || source === target) return
-  const entry = composerDraftStore.drafts[source]
-  const destination = composerDraftStore.drafts[target]
-  if (!entry || destination?.text || destination?.quotation) return
-  const next = {
-    ...composerDraftStore.drafts,
-    [target]: { text: entry.text, quotation: entry.quotation, updated: Date.now() },
-  }
-  delete next[source]
-  writeComposerDraftRecords(pruneComposerDraftRecords(next))
-}
-
-export function clearComposerDraft(key: string | null | undefined): void {
-  setComposerQuotation(key, undefined)
-  setComposerDraft(key, "")
+  const updated = Date.now()
+  void mutateComposerDrafts((records) => {
+    const entry = records[source]
+    const destination = records[target]
+    if (!entry || destination?.text || destination?.quotation) return { records, value: undefined }
+    const next = { ...records, [target]: { text: entry.text, quotation: entry.quotation, updated } }
+    delete next[source]
+    return { records: pruneComposerDraftRecords(next), value: undefined }
+  }, true)
 }
 
 export interface ComposerDraftRevision {
@@ -254,35 +326,44 @@ export function sameComposerDraftRevision(a: ComposerDraftRevision, b: ComposerD
 }
 
 /** Consume only the unchanged author's record after its real acceptance receipt. */
-export function clearComposerDraftRevision(revision: ComposerDraftRevision): boolean {
-  const current = composerDraftStore.drafts[revision.key]
-  if (!current || !sameComposerDraftRevision(revision, { key: revision.key, entry: current })) return false
-  clearComposerDraft(revision.key)
-  return true
+export function clearComposerDraftRevision(revision: ComposerDraftRevision): Promise<boolean> {
+  return mutateComposerDrafts((records) => {
+    const current = records[revision.key]
+    if (!current || !sameComposerDraftRevision(revision, { key: revision.key, entry: current })) {
+      return { records, value: false }
+    }
+    const next = { ...records }
+    delete next[revision.key]
+    return { records: next, value: true }
+  })
 }
 
 /** A confirmed operator cancellation retires its retry identity, preserving prose. */
 export function forgetComposerSubmission(key: string, messageID: string): void {
-  const current = composerDraftStore.drafts[key]
-  if (current?.submission?.messageID !== messageID) return
-  const { submission, ...entry } = current
-  writeComposerDraftRecords(pruneComposerDraftRecords({
-    ...composerDraftStore.drafts,
-    [key]: { ...entry, updated: Date.now() },
-  }))
+  const updated = Date.now()
+  void mutateComposerDrafts((records) => {
+    const current = records[key]
+    if (current?.submission?.messageID !== messageID) return { records, value: undefined }
+    const { submission, ...entry } = current
+    return {
+      records: pruneComposerDraftRecords({ ...records, [key]: { ...entry, updated } }),
+      value: undefined,
+    }
+  }, true)
 }
 
 /** Retain one identity for exact serialized request content across transport retries. */
-export function composerSubmission(key: string, text: string): { messageID: string; text: string } {
-  const current = composerDraftStore.drafts[key]
-  if (current?.submission?.text === text) return current.submission
+export function composerSubmission(key: string, text: string): Promise<{ messageID: string; text: string }> {
   const submission = { messageID: `msg_${randomUUID()}`, text }
-  const next = {
-    ...composerDraftStore.drafts,
-    [key]: { ...current, text: current?.text ?? text, updated: Date.now(), submission },
-  }
-  writeComposerDraftRecords(next)
-  return submission
+  const updated = Date.now()
+  return mutateComposerDrafts((records) => {
+    const current = records[key]
+    if (current?.submission?.text === text) return { records, value: current.submission }
+    return {
+      records: { ...records, [key]: { ...current, text: current?.text ?? text, updated, submission } },
+      value: submission,
+    }
+  })
 }
 
 export function composerQuotation(key: string | null | undefined): Quotation | undefined {
@@ -292,13 +373,13 @@ export function composerQuotation(key: string | null | undefined): Quotation | u
 export function setComposerQuotation(key: string | null | undefined, quotation: Quotation | undefined): void {
   const normalized = normalizeComposerDraftKey(key)
   if (!normalized) return
-  const next = pruneComposerDraftRecords({
-    ...composerDraftStore.drafts,
-    [normalized]: {
-      text: composerDraftText(key),
-      updated: Date.now(),
-      ...(quotation ? { quotation } : {}),
-    },
-  })
-  writeComposerDraftRecords(next)
+  const updated = Date.now()
+  const source = quotation ? { ...quotation } : undefined
+  void mutateComposerDrafts((records) => ({
+    records: pruneComposerDraftRecords({
+      ...records,
+      [normalized]: { text: records[normalized]?.text ?? "", updated, ...(source ? { quotation: source } : {}) },
+    }),
+    value: undefined,
+  }), true)
 }

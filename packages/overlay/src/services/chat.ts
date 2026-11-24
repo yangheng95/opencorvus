@@ -293,8 +293,11 @@ export async function promptSessionMessage(input: {
       model,
     }
     const messageID = input.composerDraftKey
-      ? composerSubmission(input.composerDraftKey, JSON.stringify(body)).messageID
+      ? (await composerSubmission(input.composerDraftKey, JSON.stringify(body))).messageID
       : `msg_${requestID}`
+    assertApiAuthorityCurrent(authority)
+    if (controller.signal.aborted) throw controller.signal.reason ?? new DOMException("Chat request aborted", "AbortError")
+    if (!ownsProjection()) throw new DOMException("Chat request source superseded", "AbortError")
     input.onDispatch?.()
     setChatRequest({ ...request, messageID, composerDraftKey: input.composerDraftKey, onAccepted: input.onAccepted })
     const accepted = projectedConversationMessageFacts([input.sessionID]).find((message) => message.id === messageID && message.role === "user")
@@ -401,8 +404,10 @@ export async function panelMessage(
         : {}),
     }
     const authorRequestID = options.composerDraftKey
-      ? composerSubmission(options.composerDraftKey, JSON.stringify(body)).messageID
+      ? (await composerSubmission(options.composerDraftKey, JSON.stringify(body))).messageID
       : requestID
+    assertApiAuthorityCurrent(authority)
+    if (epoch !== boardStore.selectEpoch) throw new DOMException("Chat request source superseded", "AbortError")
     request = {
       ...requestBase,
       target: { kind: "task", taskID, directory },

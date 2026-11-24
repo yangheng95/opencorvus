@@ -66,7 +66,7 @@ import { ScreenshotBrowserPanel } from "./components/ScreenshotBrowserPanel"
 import { SubagentConversationPanel } from "./components/SubagentConversationPanel"
 import { SideChatPanel, type SideChatRequest } from "./components/SideChatPanel"
 import { QuotationSelection } from "./components/QuotationSelection"
-import { clearComposerDraftRevision, setComposerQuotation } from "./services/composer-draft"
+import { clearComposerDraftRevision, setComposerQuotation, startComposerDraftStorage } from "./services/composer-draft"
 import type { Quotation } from "./services/quotation"
 import { RightDock, type RightDockPanel, type RightDockTab } from "./components/RightDock"
 import { FileEditorPane, type FileEditorTextShortcuts } from "./components/FileEditorPane"
@@ -3487,7 +3487,7 @@ function OverlayRoot() {
               source={sideChatSource()}
               request={sideChatRequest()}
               consumeRequest={(request) => {
-                if (request.sourceDraft) clearComposerDraftRevision(request.sourceDraft)
+                if (request.sourceDraft) void clearComposerDraftRevision(request.sourceDraft)
                 setSideChatRequest((current) => (current === request ? undefined : current))
               }}
               onQuoteInMain={quoteInMain}
@@ -3598,6 +3598,7 @@ const startup = (window as Window & { __opencorvusStartup?: { ready: Promise<voi
   .__opencorvusStartup
 if (!startup) throw new Error("Overlay startup lifecycle contract is missing from index.html")
 await startup.ready
+disposers.push(startComposerDraftStorage())
 // The static loading surface is present before this module is evaluated so the
 // native window never exposes an empty WebView. Solid appends to its host, so
 // remove that one pre-mount child before the application takes ownership.

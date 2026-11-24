@@ -318,7 +318,7 @@ async function createConversationSessionFromPath(options: {
   path: string
   experience: ConversationExperience
   signal?: AbortSignal
-  body: () => Record<string, unknown>
+  body: () => Promise<Record<string, unknown>>
   composerDraftKey?: string
   onSessionCreated?: (sessionID: string) => void
 }): Promise<string> {
@@ -327,11 +327,15 @@ async function createConversationSessionFromPath(options: {
   const selectionEpoch = options.selectionEpoch
   if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Conversation creation superseded", "AbortError")
   assertNotAborted(options.signal)
+  const body = await options.body()
+  assertApiAuthorityCurrent(authority)
+  if (!ownsWorkspaceSelection(selectionEpoch)) throw new DOMException("Conversation creation superseded", "AbortError")
+  assertNotAborted(options.signal)
   const response = (await apiJson(options.path, {
     authority,
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(options.body()),
+    body: JSON.stringify(body),
     signal: options.signal,
   })) as ConversationSessionResponse
   if (!isApiAuthorityCurrent(authority)) return sessionIDFromResponse(response)
@@ -361,15 +365,15 @@ async function createConversationSessionFromPath(options: {
   }
 }
 
-function conversationCreationRequestBody(scope: readonly string[], options: {
+async function conversationCreationRequestBody(scope: readonly string[], options: {
   experience: ConversationExperience
   composerDraftKey?: string
   model?: string
-}): Record<string, unknown> {
+}): Promise<Record<string, unknown>> {
   const model = options.model?.trim() || undefined
   const draftKey = options.composerDraftKey
   const requestID = draftKey && captureComposerDraftRevision(draftKey)
-    ? composerSubmission(draftKey, JSON.stringify([...scope, options.experience, model ?? null])).messageID
+    ? (await composerSubmission(draftKey, JSON.stringify([...scope, options.experience, model ?? null]))).messageID
     : randomUUID()
   return { requestID, ...(model ? { model } : {}) }
 }

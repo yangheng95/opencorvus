@@ -1212,15 +1212,23 @@ export function ChatComposer(props: ChatComposerProps) {
           if (current) props.onAcceptedSubmit()
           if (!isApiAuthorityCurrent(authority) || !revision || revision.entry.text !== authoredText) return
           if (current && !sameAttachmentReferences(attachments(), sentAttachments)) return
-          if (!clearComposerDraftRevision(revision)) return
-          if (!current) return
-          writeText("")
-          setCaretPosition(0)
-          resetMentionInteraction()
-          setAttachments([])
-          if (textareaRef?.isConnected) {
-            try { textareaRef.setSelectionRange(0, 0) } catch { /* detached native input */ }
-          }
+          void clearComposerDraftRevision(revision).then((cleared) => {
+            if (
+              !cleared ||
+              !current ||
+              !ownsScope() ||
+              composerDraftText(scope.key) ||
+              composerQuotation(scope.key) ||
+              !sameAttachmentReferences(attachments(), sentAttachments)
+            ) return
+            writeText("")
+            setCaretPosition(0)
+            resetMentionInteraction()
+            setAttachments([])
+            if (textareaRef?.isConnected) {
+              try { textareaRef.setSelectionRange(0, 0) } catch { /* detached native input */ }
+            }
+          })
         },
       }
       await props.onSubmit(

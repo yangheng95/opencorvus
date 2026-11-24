@@ -96,10 +96,16 @@ test("an unresolved canonical model returns its preparation error with the autho
 
 test("a real matching user receipt acknowledges the request before its HTTP error settles", async () => {
   const pending = Promise.withResolvers<TransportResponse>()
+  const dispatched = Promise.withResolvers<void>()
   const events: string[] = []
   let sent: Record<string, any> = {}
-  transport(request => { sent = body(request); return pending.promise })
+  transport(request => {
+    sent = body(request)
+    dispatched.resolve()
+    return pending.promise
+  })
   const sending = promptSessionMessage({ sessionID: "ses_owned", directory, text: "author input", model, composerDraftKey: "current", onDispatch: () => events.push("dispatch"), onAccepted: () => events.push("accepted") }).catch(error => error)
+  await dispatched.promise
   acknowledgeChatRequestMessage({ id: sent.messageID, sessionID: "ses_owned", role: "user" })
   expect(events).toEqual(["dispatch", "accepted"])
   pending.resolve(response({ message: "response interrupted" }, 502))
@@ -117,14 +123,14 @@ test("a successful Session response confirms acceptance before a malformed proje
 })
 
 test("confirmed Session Stop preserves prose and makes the next send a new intent", async () => {
-  const first = composerSubmission("current", "request content")
+  const first = await composerSubmission("current", "request content")
   const requests: string[] = []
   transport(request => { requests.push(request.path); return response(true) })
   setChatRequest({ authority: captureApiAuthority(), requestID: "local_owned", controller: new AbortController(), target: { kind: "session", sessionID: "ses_owned", directory }, composerDraftKey: "current", messageID: first.messageID })
   expect(await stopChatRequest()).toBe(true)
   expect(requests).toEqual(["session/ses_owned/abort"])
   expect(composerDraftStore.drafts.current).toEqual({ text: "author input", updated: expect.any(Number) })
-  const next = composerSubmission("current", "request content")
+  const next = await composerSubmission("current", "request content")
   expect(new Set([first.messageID, next.messageID]).size).toBe(2)
 })
 
@@ -169,19 +175,25 @@ test("Task follow-up retries reuse the authored request and acknowledge the retu
 test("confirmed Mission Stop retires the exact dispatched wake identity and retains authored input", async () => {
   setWorkLedgerRuntimeRows([WorkLedgerMissionRow.parse({ kind: "mission", id: "owned-mission", missionID: "owned-mission", sessionID: "ses_owned", title: "Owned Mission", directory, created: 1, started: 1, updated: 2, pinned: false, interruptible: true, outcome: null, productPillar: "code", taskStats: { total: 0, running: 0, inactive: 0 }, pendingInteractions: 0, tasks: [] })])
   const pending = Promise.withResolvers<TransportResponse>()
+  const dispatched = Promise.withResolvers<void>()
   const paths: string[] = []
   let sent: Record<string, any> = {}
   transport(request => {
     paths.push(request.path)
-    if (request.path === "mission/wake") { sent = body(request); return pending.promise }
+    if (request.path === "mission/wake") {
+      sent = body(request)
+      dispatched.resolve()
+      return pending.promise
+    }
     return response(true)
   })
   const sending = promptSessionMessage({ sessionID: "ses_owned", directory, text: "author input", model, composerDraftKey: "current" })
+  await dispatched.promise
   expect(messageStore.chatRequest).toMatchObject({ messageID: sent.requestID, composerDraftKey: "current", target: { kind: "mission", missionID: "owned-mission", directory } })
   expect(await stopChatRequest()).toBe(true)
   expect(paths).toEqual(["mission/wake", "mission/owned-mission/abort"])
   expect(composerDraftStore.drafts.current).toEqual({ text: "author input", updated: expect.any(Number) })
-  const next = composerSubmission("current", "next request")
+  const next = await composerSubmission("current", "next request")
   expect(new Set([sent.requestID, next.messageID]).size).toBe(2)
   pending.resolve(response({ message: "request cancelled" }, 409))
   expect(await sending).toBe(undefined)

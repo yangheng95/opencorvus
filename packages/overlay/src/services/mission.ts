@@ -29,7 +29,7 @@ import {
   TaskCancellationRequestBody,
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
-import { apiJson, ApiError, captureApiAuthority, serverSettledRequest, type ApiAuthority } from "./api"
+import { apiJson, ApiError, assertApiAuthorityCurrent, captureApiAuthority, serverSettledRequest, type ApiAuthority } from "./api"
 import { matchesArchiveState, settleArchiveState } from "./archive-state"
 import { settleMutationReceipt } from "./mutation-receipt"
 import { loadWorkLedgerSelection, verifyWorkLedgerArchiveState } from "./work-ledger"
@@ -267,6 +267,8 @@ export async function loadTaskStatus(input: TaskStatusRequest): Promise<TaskStat
 }
 
 export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeResult> {
+  const authority = input.authority ?? captureApiAuthority()
+  assertApiAuthorityCurrent(authority)
   const directory = input.directory.trim()
   if (!directory) throw new Error("wakeMission: directory is required")
   const text = input.text.trim()
@@ -290,15 +292,17 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
   } satisfies MissionWakeBody
   if (input.requestID === undefined) {
     body.requestID = input.composerDraftKey
-      ? composerSubmission(input.composerDraftKey, JSON.stringify(body)).messageID
+      ? (await composerSubmission(input.composerDraftKey, JSON.stringify(body))).messageID
       : randomUUID()
   }
+  assertApiAuthorityCurrent(authority)
+  if (input.signal?.aborted) throw input.signal.reason ?? new DOMException("Mission request aborted", "AbortError")
   const params = new URLSearchParams({ directory })
   input.onDispatch?.(body.requestID)
   const result = await apiJson<MissionWakeResponse>(
     `mission/wake?${params.toString()}`,
     serverSettledRequest({
-      authority: input.authority,
+      authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
