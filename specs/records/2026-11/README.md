@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [收件箱翻页时将焦点移到可见通知](2026-11-24-mailbox-page-navigation-focus.md)
 - [在会话标题提示中读取被截断的原标题](2026-11-24-conversation-header-clipped-title-tooltip.md)
 - [全局查找显示已保存会话的完整标题](2026-11-24-palette-full-conversation-search-titles.md)
 - [文件搜索刷新时保留已接受的选区提示和焦点](2026-11-24-explorer-search-refresh-keeps-selection-context.md)
