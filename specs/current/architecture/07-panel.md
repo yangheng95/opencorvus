@@ -1868,6 +1868,9 @@ directories. An explicit invalidation includes an expanded directory whose
 ordinary first listing is still in flight, so the newer read owns the result
 before the earlier snapshot can publish. Periodic reads keep the existing
 observed directory selection, and required reads keep their own ownership.
+For an affected collapsed directory, the owned membership notice retires its
+cached listing and any pending ordinary read. The next expansion uses the
+standard listing reader with the other directories' caches still available.
 A changed listing or an affected parent without a successful
 listing refreshes the current accepted search, which also covers collapsed
 folders. File saves carrying a resource identity and watched content changes

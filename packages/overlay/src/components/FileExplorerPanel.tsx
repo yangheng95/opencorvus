@@ -911,7 +911,19 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!ownsExplorerOperation(scope)) return
     const changedParents = typeof target === "object" ? target : undefined
     const acceptedSearch = searchResults.loading ? undefined : currentSearchResult()
-    const visiblePaths = [...new Set(["", ...expandedPaths()])].filter((path) =>
+    const expanded = new Set(["", ...expandedPaths()])
+    const expired = changedParents && new Set([...changedParents].filter((path) =>
+      !expanded.has(path) && !requiredDirectoryLoadTokens.has(path) &&
+      (childrenByPath().has(path) || directoryLoadTokens.has(path)),
+    ))
+    if (expired?.size) {
+      for (const path of expired) directoryLoadTokens.delete(path)
+      batch(() => {
+        setChildrenByPath((current) => new Map([...current].filter(([path]) => !expired.has(path))))
+        setLoadingPaths((current) => new Set([...current].filter((path) => !expired.has(path))))
+      })
+    }
+    const visiblePaths = [...expanded].filter((path) =>
       (!changedParents || changedParents.has(path)) &&
       (path === "" || childrenByPath().has(path) || directoryErrors().has(path) ||
         (target !== undefined && directoryLoadTokens.has(path))),

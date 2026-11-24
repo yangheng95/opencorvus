@@ -1,0 +1,35 @@
+{
+  "held": {
+    "at": "2026-11-24T23:24:59.951Z",
+    "event": "directory-response-held",
+    "id": 121,
+    "status": 200,
+    "actual": "508acee5-5860-44c5-b9ec-39c883e9ecad"
+  },
+  "before": {
+    "requestID": "92f26171-4381-4939-83a9-ed0fb7285b4f",
+    "paths": [
+      "staging\\initial-note.txt"
+    ]
+  },
+  "event": {
+    "at": "2026-11-24T23:25:10.962Z",
+    "source": "/work-ledger/events",
+    "row": {
+      "type": "work-ledger.file-changed",
+      "sourceType": "file.watcher.updated",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b624\\candidate\\explorer-reopen-review",
+      "path": "staging/fresh-arrival.txt",
+      "membershipChanged": true,
+      "sequence": 0
+    }
+  },
+  "after": {
+    "requestID": "e30f5136-b104-4a41-978b-78b2e9f62068",
+    "paths": [
+      "staging\\fresh-arrival.txt",
+      "staging\\initial-note.txt"
+    ]
+  },
+  "releasingAt": "2026-11-24T23:25:11.402Z"
+}

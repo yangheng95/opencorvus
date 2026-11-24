@@ -1,0 +1,36 @@
+{
+  "action": "Add",
+  "writtenAt": "2026-11-24T23:24:18.0722439+00:00",
+  "native": {
+    "at": "2026-11-24T23:24:18.083Z",
+    "source": "/global/event",
+    "row": {
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b624\\candidate\\explorer-reopen-review",
+      "payload": {
+        "occurrenceID": "bus-occurrence:637e8f11-26cc-40c4-80a3-1682ec9acc4e",
+        "type": "file.watcher.updated",
+        "properties": {
+          "file": "C:\\Users\\Public\\opencorvus-review-20261125-b624\\candidate\\explorer-reopen-review\\staging\\fresh-arrival.txt",
+          "event": "add"
+        }
+      }
+    }
+  },
+  "notification": {
+    "at": "2026-11-24T23:24:18.083Z",
+    "source": "/work-ledger/events",
+    "row": {
+      "type": "work-ledger.file-changed",
+      "sourceType": "file.watcher.updated",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b624\\candidate\\explorer-reopen-review",
+      "path": "staging/fresh-arrival.txt",
+      "membershipChanged": true,
+      "sequence": 0
+    }
+  },
+  "requestID": "92cca7e1-5a0a-48fc-b1a9-d1e2a03dd1b5",
+  "paths": [
+    "staging\\fresh-arrival.txt",
+    "staging\\initial-note.txt"
+  ]
+}
