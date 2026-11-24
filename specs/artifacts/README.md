@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目模式保存与恢复的桌面证据](2026-11-24-project-mode-persistence/README.md)
 - [两个标签页修改外观偏好的桌面证据](2026-11-24-preferences-across-tabs/README.md)
 - [同一项目文件跨标签页保存的桌面证据](2026-11-24-open-file-live-save/README.md)
 - [两个标签页写入草稿的桌面证据](2026-11-24-composer-drafts-across-tabs/README.md)
