@@ -102,7 +102,7 @@ export namespace MemorySearch {
           )})`
         : sql``
     const matches = sql`
-      SELECT mc.id as chunk_id, mc.file_id, mc.time_created, memory_fts.rank as rank
+      SELECT mc.id as chunk_id, mc.file_id, mc.time_created, memory_fts.rank as rank, memory_fts.rowid as fts_rowid
       FROM memory_fts
       JOIN memory_chunk mc ON mc.id = memory_fts.chunk_id
       JOIN memory_file mf ON mf.id = mc.file_id
@@ -111,7 +111,8 @@ export namespace MemorySearch {
         ${kindFilter}
         ${sourceFilter}
     `
-    const candidateWindow = input.resultUnit === "file"
+    const fileResults = input.resultUnit === "file"
+    const candidateWindow = fileResults
       ? sql`
           WITH matches AS MATERIALIZED (${matches}), ranked AS (
             SELECT *, ROW_NUMBER() OVER (
@@ -119,27 +120,22 @@ export namespace MemorySearch {
             ) AS file_position
             FROM matches
           )
-          SELECT chunk_id, rank
+          SELECT chunk_id, rank, fts_rowid
           FROM ranked
           WHERE file_position = 1
           ORDER BY rank, time_created DESC, chunk_id
           LIMIT ${candidates}
         `
       : sql`${matches} ORDER BY memory_fts.rank LIMIT ${candidates}`
+    const excerptColumn = fileResults
+      ? sql`, (
+          SELECT snippet(memory_fts, 0, '', '', '…', 12)
+          FROM memory_fts
+          WHERE memory_fts MATCH ${query} AND memory_fts.rowid = candidate.fts_rowid
+        ) AS excerpt`
+      : sql``
     const rows = Database.use((db) =>
-      db.all<{
-        chunk_id: string
-        file_id: string
-        title: string
-        content: string
-        source: MemorySource
-        kind: MemoryKind
-        key: string | null
-        importance: number
-        confidence: number
-        time_created: number
-        rank: number
-      }>(sql`
+      db.all<ScoredCandidateRow>(sql`
         SELECT
           mc.id as chunk_id,
           mc.file_id,
@@ -151,7 +147,7 @@ export namespace MemorySearch {
           mf.importance,
           mf.confidence,
           mc.time_created,
-          candidate.rank
+          candidate.rank${excerptColumn}
         FROM (${candidateWindow}) candidate
         JOIN memory_chunk mc ON mc.id = candidate.chunk_id
         JOIN memory_file mf ON mf.id = mc.file_id
@@ -197,6 +193,7 @@ export namespace MemorySearch {
     confidence: number
     time_created: number
     rank: number
+    excerpt?: string
   }
 
   /**
@@ -229,6 +226,7 @@ export namespace MemorySearch {
         fileId: row.file_id,
         fileTitle: row.title,
         content: row.content,
+        ...(row.excerpt === undefined ? {} : { excerpt: row.excerpt }),
         scope: "project",
         source: row.source,
         kind: row.kind,

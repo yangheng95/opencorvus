@@ -90,6 +90,33 @@ describe("Memory exact filter ordering", () => {
     })
   })
 
+  test("file excerpts show the stored accented match beyond a shared opening", async () => {
+    await using project = await memoryProject("memory-file-excerpt")
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const projectId = Instance.project.id
+        const opening = "Keep the delivery record and the signed checklist at the receiving desk. ".repeat(8)
+        const morningText = opening + "The priority is café intakeledger for station seven."
+        const nightText = opening + "The priority is intakeledger for the south ramp."
+        const morning = Memory.writeFile({ projectId, source: "user", kind: "note", title: "Morning", content: morningText })
+        const night = Memory.writeFile({ projectId, source: "user", kind: "note", title: "Night", content: nightText })
+        const broad = Memory.search({ projectId, query: "intakeledger", resultUnit: "file" })
+        expect(broad).toEqual(expect.arrayContaining([
+          expect.objectContaining({ fileId: morning.id, content: morningText, excerpt: expect.stringContaining("café intakeledger for station seven") }),
+          expect.objectContaining({ fileId: night.id, content: nightText, excerpt: expect.stringContaining("intakeledger for the south ramp") }),
+        ]))
+
+        const accented = Memory.search({ projectId, query: "CAFE intakeledger", resultUnit: "file" })
+        expect(accented).toMatchObject([{
+          fileId: morning.id,
+          content: morningText,
+          excerpt: expect.stringContaining("café intakeledger"),
+        }])
+      },
+    })
+  })
+
   test("ranks across kinds by relevance instead of letting kind weight override the score", async () => {
     await using project = await memoryProject()
     await Instance.provide({

@@ -855,6 +855,15 @@ button.s-row:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.knowledge-item-excerpt {
+  display: -webkit-box;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
 .knowledge-item-meta-row {
   display: flex;
   align-items: center;

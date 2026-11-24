@@ -26961,6 +26961,10 @@ export type PanelKnowledgeMemorySearchResponses = {
     chunkId: string
     confidence: number
     content: string
+    /**
+     * Original text around the match in file results.
+     */
+    excerpt?: string
     fileId: string
     fileTitle: string
     importance: number

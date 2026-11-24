@@ -359,7 +359,9 @@ The panel requests file results from the project-scoped note search. The full-te
 candidate window admits one matching passage per stored file before either limit,
 so a long note cannot consume another note's result slot. Each file result still
 carries the selected original passage, score and exact file identity for opening
-its full text. Chunk-level tool and context searches retain their passage contract.
+its full text. Its preview shows the full-text engine's plain excerpt from that
+same passage and query, preserving the source spelling. Chunk-level tool and
+context searches retain their passage contract.
 Up and Down move among enabled note buttons in the accepted search results. The
 search field can enter the first or last result when its text still matches the
 submitted query. Escape on an accepted result returns focus to the search field

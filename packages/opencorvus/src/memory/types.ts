@@ -51,6 +51,7 @@ export interface MemorySearchResult {
   fileId: string
   fileTitle: string
   content: string
+  excerpt?: string
   scope: MemoryScope
   source: MemorySource
   kind: MemoryKind

@@ -21,7 +21,7 @@ import { SettingsEmpty } from "./settings/layout"
 
 type MemoryFile = Pick<PanelKnowledgeMemoryListResponse[number], "id" | "title" | "scope" | "source"> & {
   score?: number
-  snippet?: string
+  excerpt?: string
   timeUpdated?: number
 }
 
@@ -269,7 +269,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
           scope: result.scope,
           source: result.source,
           score: result.score,
-          snippet: result.content ? result.content.slice(0, 200) : "",
+          excerpt: result.excerpt,
         })))
         setFilesSource(source)
       })
@@ -584,8 +584,8 @@ export function MemoryPanel(props: MemoryPanelProps) {
                           {knowledgeScopeLabel(f.scope)}
                         </Badge>
                       </span>
-                      <Show when={!!f.snippet}>
-                        <span class="knowledge-item-meta">{f.snippet}</span>
+                      <Show when={f.excerpt}>
+                        <span class="knowledge-item-meta knowledge-item-excerpt">{f.excerpt}</span>
                       </Show>
                     </Button>
                     <ArmedConfirmButton

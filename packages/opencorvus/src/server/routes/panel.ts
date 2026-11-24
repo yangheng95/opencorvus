@@ -203,6 +203,7 @@ export function PanelRoutes() {
                         fileId: z.string(),
                         fileTitle: z.string(),
                         content: z.string(),
+                        excerpt: z.string().optional().describe("Original text around the match in file results."),
                         scope: z.string(),
                         source: z.string(),
                         kind: z.string(),

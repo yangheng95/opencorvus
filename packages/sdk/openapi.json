@@ -96384,6 +96384,10 @@
                       "content": {
                         "type": "string"
                       },
+                      "excerpt": {
+                        "description": "Original text around the match in file results.",
+                        "type": "string"
+                      },
                       "fileId": {
                         "type": "string"
                       },
