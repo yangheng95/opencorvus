@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目笔记按笔记分配搜索名额](2026-11-24-memory-search-distinct-notes.md)
 - [在多步任务搜索结果中分页浏览当前布局](2026-11-24-mission-board-search-page-focus.md)
 - [在归档搜索中分页浏览可见记录](2026-11-24-archive-search-page-focus.md)
 - [收件箱翻页时将焦点移到可见通知](2026-11-24-mailbox-page-navigation-focus.md)
