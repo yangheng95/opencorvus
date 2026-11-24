@@ -40,6 +40,17 @@ test("JSON returns the complete original snapshot and current canonical title fi
   })
 })
 
+test("both download names retain each segment of a title with path separators", () => {
+  const snapshot = { ...original, session: { ...original.session, title: "Finance / Budget \\ Q4 report" } }
+  const json = conversationExport(snapshot, { ...options, format: "json" })
+  const markdown = conversationExport(snapshot, { ...options, format: "markdown" })
+
+  expect(json.filename).toBe("Finance _ Budget _ Q4 report - ses_export.json")
+  expect(markdown.filename).toBe("Finance _ Budget _ Q4 report - ses_export.md")
+  expect(JSON.parse(json.text)).toEqual(snapshot)
+  expect(markdown.text.split("\n", 1)[0]).toBe("# Finance / Budget \\\\ Q4 report")
+})
+
 test("a conversation beyond a history page preserves every original message in order", () => {
   const messages = Array.from({ length: 121 }, (_, index) => ({
     info: { ...original.messages[0].info, id: `msg_${index}`, time: { created: now + index } },

@@ -52,7 +52,8 @@ export function conversationExport(exported: ExportSessionResponse, options: {
 }): { filename: string; mime: string; text: string } {
   if (options.format !== "json" && options.format !== "markdown") throw new ConversationExportError("INVALID_CONVERSATION_EXPORT", "format")
   const { session, sessionID, title, created, updated, messages } = readConversationSnapshot(exported, options.sessionID)
-  const basename = `${title || sessionID} - ${sessionID}`
+  const filenameTitle = (title || sessionID).replace(/[\\/]/g, "_")
+  const basename = `${filenameTitle} - ${sessionID}`
   if (options.format === "json") return {
     filename: artifactFilename(`${basename}.json`),
     mime: "application/json;charset=utf-8",

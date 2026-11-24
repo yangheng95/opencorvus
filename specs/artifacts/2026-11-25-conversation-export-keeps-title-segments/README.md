@@ -5,3 +5,8 @@
 - [完整聊天标题与真实导出菜单](baseline-title-and-export-menu.png)。
 - [JSON 页面反馈](baseline-json-export.png)，[Markdown 页面反馈](baseline-markdown-export.png)。
 - [两个浏览器下载的文件名、字节数及正文比对](baseline-download-receipt.json)。
+
+## 修复后
+
+- [JSON 页面反馈](candidate-json-export.png)，[Markdown 页面反馈](candidate-markdown-export.png)。
+- [浏览器保存的完整文件名](candidate-download-receipt.json)，[导出前后快照及下载内容比对](candidate-source-after-export.json)。
