@@ -12,9 +12,13 @@ function collapseSearchWhitespace(text: string): string {
   return text.trim().replace(/\s+/gu, " ")
 }
 
+export function normalizeConversationSearchQuery(query: string): string {
+  return normalizeSearchText(collapseSearchWhitespace(query))
+}
+
 /** Search the complete captured snapshot in producer order, independently of mounted cards. */
 export function findConversationMessages(snapshot: ConversationSearchSnapshot, query: string): ConversationSearchHit[] {
-  const needle = normalizeSearchText(collapseSearchWhitespace(query))
+  const needle = normalizeConversationSearchQuery(query)
   if (!needle) return []
   return snapshot.messages.flatMap((message) => {
     const failure = assistantMessageFailure(message.info)

@@ -6,7 +6,7 @@ import { Feedback } from "./ui/Feedback"
 import { SourceSearchContext, sourceLabel } from "./SourceParts"
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { loadConversationSearchSnapshot, type ConversationSearchSnapshot, type ConversationSearchTarget } from "../services/conversation-snapshot"
-import { findConversationMessages, type ConversationSearchHit } from "../services/conversation-search"
+import { findConversationMessages, normalizeConversationSearchQuery, type ConversationSearchHit } from "../services/conversation-search"
 import { loadOlderConversationHistory, ownsConversationHistory } from "../services/conversation"
 import { renderedConversationCardTargetForMessage } from "../services/tree-writer"
 import { requestConversationCardScroll } from "../services/conversation-scroll"
@@ -60,7 +60,7 @@ export function ConversationSearchDialog(props: {
     if (current.kind === "loading") return t("common.loading")
     if (locating()) return t("chat.search_locating")
     if (current.kind !== "ready") return
-    if (query().trim()) {
+    if (query()) {
       const count = hits().length
       return t(count === 1 ? "chat.search_result" : "chat.search_results", { count: count.toLocaleString(getLocale()) })
     }
@@ -180,7 +180,9 @@ export function ConversationSearchDialog(props: {
       listboxClass="cmdk-list" optionClass="cmdk-item" optionLabelClass="cmdk-item-label"
       inputID="conversationSearchInput" listboxID="conversationSearchListbox" inputRef={(element) => { input = element }}
       options={hits()} optionValue="id" optionTextValue={hitLabel} optionLabel={hitLabel} value={null}
-      open={props.open} onInputChange={setQuery} defaultFilter={() => true} allowsEmptyCollection closeOnSelection={false}
+      open={props.open} defaultFilter={() => true} allowsEmptyCollection closeOnSelection={false}
+      onInputChange={(value) => setQuery(normalizeConversationSearchQuery(value))}
+      preserveFocusedOptionOnInputChange={(value) => normalizeConversationSearchQuery(value) === query()}
       noResetInputOnBlur
       preserveListFocusOnTab
       onInputKeyDown={(event) => {
@@ -197,7 +199,7 @@ export function ConversationSearchDialog(props: {
       </span>}
       optionData={(hit) => ({ "data-message-id": hit.id })}
       emptyContent={<Show when={snapshot()}>{(accepted) => <div class="cmdk-empty">{
-        t(query().trim() ? "chat.search_empty" : accepted().messages.length ? "chat.search_hint" : "chat.search_no_messages")
+        t(query() ? "chat.search_empty" : accepted().messages.length ? "chat.search_hint" : "chat.search_no_messages")
       }</div>}</Show>}
     />
     <Show when={feedback()}>{(error) => <Feedback class="conversation-search-feedback" tone="error" details={error().details}>
