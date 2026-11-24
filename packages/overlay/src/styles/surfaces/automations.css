@@ -465,7 +465,6 @@
   border-bottom: 0;
 }
 
-.automation-run-row__session,
 .automation-run-row__error {
   overflow: hidden;
   color: var(--text-muted);
@@ -475,12 +474,24 @@
 }
 
 .automation-run-row [data-ui="automation-open-session"] {
+  height: auto;
   min-width: 0;
   justify-content: flex-start;
-  overflow: hidden;
   color: var(--accent);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+.automation-run-row__session-label {
+  display: grid;
+  min-width: 0;
+  gap: var(--ui-gap-xs);
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.automation-run-row__project {
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
 }
 
 .automation-run-row__error {

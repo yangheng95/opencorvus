@@ -452,6 +452,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       return matchesSearchTerms(query, fields)
     })
   })
+  function projectTargetLabel(id: string): string {
+    const project = projectsByID().get(id)
+    if (!project) return id
+    const hint = projectHints().get(project.directory)
+    return hint ? t("automations.project_target_with_hint", { name: project.name, directory: hint }) : project.name
+  }
+
   function targetLabel({ target, targetSession }: AutomationView): string {
     if (target.scope === "session") {
       if (!targetSession) return t("automations.session_target_with_id", {
@@ -463,12 +470,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         ? t("automations.session_target_with_id", { name: title, session: target.sessionId }) : title
     }
     if (target.scope === "global") return t("automations.scope.global")
-    return projectListFormat().format(target.projectIds.map((id) => {
-      const project = projectsByID().get(id)
-      if (!project) return id
-      const hint = projectHints().get(project.directory)
-      return hint ? t("automations.project_target_with_hint", { name: project.name, directory: hint }) : project.name
-    }))
+    return projectListFormat().format(target.projectIds.map(projectTargetLabel))
+  }
+
+  function runProjectLabel(run: AutomationRunView): string | undefined {
+    return run.targetScope === "project" && run.targetProjectId
+      ? projectTargetLabel(run.targetProjectId)
+      : undefined
   }
   function deletionLabel(automation: AutomationView): string {
     return automation.target.scope === "global"
@@ -1821,7 +1829,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                                         <span>{formatTimestamp(run().startedAt)}</span>
                                         <Show
                                           when={run().session}
-                                          fallback={<span class="automation-run-row__session">—</span>}
+                                          fallback={<span class="automation-run-row__project">{runProjectLabel(run()) ?? "—"}</span>}
                                         >
                                           {(session) => (
                                             <Button
@@ -1834,7 +1842,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                                               onClick={() => void openRunSession(session())}
                                             >
                                               <Icon name="message" />
-                                              {session().title || session().id}
+                                              <span class="automation-run-row__session-label">
+                                                <span>{session().title || session().id}</span>
+                                                <Show when={runProjectLabel(run())}>
+                                                  {(label) => <span class="automation-run-row__project">{label()}</span>}
+                                                </Show>
+                                              </span>
                                             </Button>
                                           )}
                                         </Show>

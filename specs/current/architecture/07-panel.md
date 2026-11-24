@@ -2290,6 +2290,11 @@ and failure label that retained view without hiding its Session links. The
 history heading owns one focusable Refresh/Retry action and the original
 diagnostic stays available during retry. Only a current read replaces the
 accepted rows. Stable Run IDs keep unchanged Session controls in place.
+Project Run rows identify their own target using the existing project label and
+directory disambiguation, or the stored Project ID when metadata is unavailable.
+The visible Session link names both the original Session and its target project.
+Rows without a Session still identify their project. Definition edits do not
+change the project identity used by earlier Run rows.
 Rejoining the work ledger stream refreshes the scheduled definitions and the
 run history of the still-selected definition. The current connection owns
 both reads, and the existing history read retires older in-flight results.
