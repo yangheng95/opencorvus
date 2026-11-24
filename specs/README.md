@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [返回文件编辑器时核对磁盘版本](records/2026-11/2026-11-25-file-rechecks-disk-on-return.md)
 - [日志导出跨设置页保留状态](records/2026-11/2026-11-25-log-export-survives-settings-navigation.md)
 - [已打开的全局搜索跟进归档和恢复](records/2026-11/2026-11-25-palette-follows-archive-updates.md)
 - [文件搜索跟随切换到的 Git 分支](records/2026-11/2026-11-25-explorer-search-after-branch-switch.md)
