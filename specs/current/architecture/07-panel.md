@@ -1860,12 +1860,14 @@ selection epoch changes keep their existing reset and late-receipt fences.
 The active property means tool-open, so its one existing 15-second directory
 poll continues while hidden. Existing selected-panel CSS owns visibility.
 The active Explorer also consumes project-scoped host file change notifications
-from the existing work ledger stream. Entry changes collect their parent paths
-within the current authority and selection scope. Once an in-flight query or
+and watched additions or removals from the existing work ledger stream. Entry
+changes collect their parent paths within the current authority and selection
+scope. Once an in-flight query or
 explicit file action settles, the ordinary listing reader checks affected open
 directories. A changed listing or an affected parent without a successful
 listing refreshes the current accepted search, which also covers collapsed
-folders. File saves carrying a resource identity leave entry membership alone.
+folders. File saves carrying a resource identity and watched content changes
+leave entry membership alone.
 An accepted branch change for the same project or recovery of the work ledger
 stream requests the current visible listings and accepted search together.
 The search refreshes even when visible directory membership stays the same.

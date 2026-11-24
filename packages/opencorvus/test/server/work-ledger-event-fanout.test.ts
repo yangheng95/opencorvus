@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test"
-import { mkdir, readFile, writeFile } from "node:fs/promises"
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { Bus } from "@/bus"
 import { rightSidebarConversationMetadata } from "@/chat/identity"
@@ -518,6 +518,46 @@ test("watched worktree changes identify each exact file and its Git checkout", a
         status: 200,
         body: { initialized: true, dirty: true, modified: 1 },
       })
+    }
+  } finally {
+    await close()
+  }
+}, 30_000)
+
+test("watched additions and removals identify their nested directory and current search members", async () => {
+  await using project = await memoryProject("ledger-watched-membership")
+  const folder = path.join(project.path, "incoming", "warehouse")
+  await mkdir(folder, { recursive: true })
+  const existingName = "gate-manifest-existing.txt"
+  const newName = "gate-manifest-new.txt"
+  const newPath = path.join(folder, newName)
+  const relative = (name: string) => `incoming/warehouse/${name}`
+  await writeFile(path.join(folder, existingName), "Original manifest\n")
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    await writeFile(newPath, "Incoming manifest\n")
+    for (const [event, expected] of [
+      ["add", [relative(existingName), relative(newName)]],
+      ["unlink", [relative(existingName)]],
+    ] as const) {
+      if (event === "unlink") await rename(newPath, path.join(folder, "transferred.txt"))
+      await Instance.provide({ directory: project.path, fn: async () => {
+        await Bus.publish(FileWatcher.Event.Updated, { file: newPath, event })
+      } })
+      expect(await next("work-ledger.file-changed", FileWatcher.Event.Updated.type)).toEqual({
+        type: "work-ledger.file-changed",
+        sourceType: FileWatcher.Event.Updated.type,
+        directory: project.path,
+        path: relative(newName),
+        membershipChanged: true,
+        sequence: 0,
+      })
+      const response = await Server.App().request("/find/file?query=gate-manifest", {
+        headers: { "x-opencorvus-directory": project.path },
+      })
+      const paths = (await response.json() as string[]).map((entry) => entry.replaceAll("\\", "/")).sort()
+      expect({ status: response.status, paths }).toEqual({ status: 200, paths: expected })
     }
   } finally {
     await close()

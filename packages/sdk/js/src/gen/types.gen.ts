@@ -41367,6 +41367,7 @@ export type WorkLedgerEventsResponses = {
       }
     | {
         directory: string
+        membershipChanged?: true
         path: string
         resourceID?: string
         sequence: 0

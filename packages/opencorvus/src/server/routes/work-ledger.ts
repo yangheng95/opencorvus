@@ -406,7 +406,7 @@ export function WorkLedgerRoutes() {
               return
             }
             if (event.directory && envelope?.type === FileWatcher.Event.Updated.type) {
-              const { file } = FileWatcher.Event.Updated.properties.parse(envelope.properties)
+              const { file, event: change } = FileWatcher.Event.Updated.properties.parse(envelope.properties)
               if (!path.isAbsolute(file) || !Filesystem.contains(event.directory, file) ||
                 Filesystem.contains(path.join(event.directory, ".git"), file)) return
               const relativePath = path.relative(event.directory, file)
@@ -416,6 +416,7 @@ export function WorkLedgerRoutes() {
                 sourceType: FileWatcher.Event.Updated.type,
                 directory: event.directory,
                 path: relativePath.split(path.sep).join("/") || ".",
+                ...(change === "add" || change === "unlink" ? { membershipChanged: true } : {}),
                 sequence: 0,
               })
               return

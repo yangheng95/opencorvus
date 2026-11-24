@@ -530,6 +530,7 @@ export const WorkLedgerFileChangedEvent = z
     sourceType: z.enum(["file.edited", "file.watcher.updated"]),
     directory: z.string().min(1),
     path: z.string().min(1),
+    membershipChanged: z.literal(true).optional(),
     resourceID: z.string().min(1).optional(),
     sequence: z.literal(0),
   })

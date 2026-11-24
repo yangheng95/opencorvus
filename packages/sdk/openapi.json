@@ -144790,6 +144790,10 @@
                           "minLength": 1,
                           "type": "string"
                         },
+                        "membershipChanged": {
+                          "const": true,
+                          "type": "boolean"
+                        },
                         "path": {
                           "minLength": 1,
                           "type": "string"

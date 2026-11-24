@@ -117,6 +117,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
       path: "notes/checklist.txt",
       sequence: 0,
     }
+    const watchedMembership = { ...watchedFileChange, membershipChanged: true }
     const conversationHandoff = {
       type: "work-ledger.conversation-handoff",
       sourceType: "conversation.handoff",
@@ -129,7 +130,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
       callerMessageID: "message-caller",
       sequence: 19,
     }
-    for (const event of [changed, conversationChange, handoff, conversationHandoff, fileChange, watchedFileChange]) {
+    for (const event of [changed, conversationChange, handoff, conversationHandoff, fileChange, watchedFileChange, watchedMembership]) {
       expect(WorkLedgerEvent.parse(event)).toEqual(event)
       expect(WorkLedgerActionEvent.parse(event)).toEqual(event)
     }
