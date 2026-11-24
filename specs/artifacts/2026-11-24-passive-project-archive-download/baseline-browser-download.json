@@ -1,0 +1,38 @@
+{
+  "downloadBytes": 4388,
+  "sourceFiles": [
+    "project/.gitattributes",
+    "project/.gitignore",
+    "project/.opencorvus/opencorvus.jsonc",
+    "project/draft-notes.txt",
+    "project/handoff.txt"
+  ],
+  "manifest": {
+    "schema": "opencorvus.mission-project-archive.v1",
+    "exportedAt": "2026-11-24T08:16:13.649Z",
+    "missionID": "draft-9ef975b18666798f41d29c9fc1cef081",
+    "sessionID": "ses_huXZJfZH4Exz4Q72oZVD",
+    "title": "Project handoff export - change-review",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\baseline\\change-review",
+    "project": {
+      "id": "prj_hTJrmynSRL8IGYy6G8Vu",
+      "worktree": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\baseline\\change-review"
+    },
+    "projectFileRoot": "project/",
+    "projectFileSelection": "Git index + Git ignore-filtered physical entries + OpenCorvus runtime filter",
+    "projectFileCount": 5,
+    "executionFlowRoot": "opencorvus-mission-execution-flow/",
+    "executionFiles": [
+      "manifest.json",
+      "mission.json",
+      "status.json",
+      "tasks.json",
+      "transcript.json"
+    ],
+    "executionFlowBounds": {
+      "maxStringChars": 16384,
+      "maxArrayItems": 500,
+      "maxDepth": 12
+    }
+  }
+}

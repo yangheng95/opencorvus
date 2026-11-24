@@ -1,0 +1,27 @@
+[
+  {
+    "requestID": "7fdba811-31b8-46bc-b017-be2858f3da6b",
+    "route": "/mission/draft-02f9e428cf451064463504cee666a98e/project-archive",
+    "status": 500,
+    "code": "EPERM",
+    "path": "C:\\Users\\Public\\opencorvus-review-20261124-b555\\baseline\\protected-ignore/.gitignore",
+    "syscall": "open",
+    "stack": [
+      "    at async ensureProjectRuleFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:71:15)",
+      "    at async ensureGitProjectMetadata (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:79:9)",
+      "    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)",
+      "    at async bootstrapContext (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1162:30)",
+      "    at async prepareContextInTurn (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:984:13)"
+    ]
+  },
+  {
+    "requestID": "7fdba811-31b8-46bc-b017-be2858f3da6b",
+    "route": "/mission/draft-02f9e428cf451064463504cee666a98e/project-archive",
+    "status": 500
+  },
+  {
+    "requestID": "898013c4-2bf5-480b-abea-61142093e770",
+    "route": "/mission/draft-9ef975b18666798f41d29c9fc1cef081/project-archive",
+    "status": 200
+  }
+]

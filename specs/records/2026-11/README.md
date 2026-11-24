@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目交付包下载的读取权限](2026-11-24-passive-project-archive-download.md)
 - [已保存会话的配置读取与项目运行准备](2026-11-24-passive-session-config-read.md)
 - [专家团目录读取不应阻断草稿保存](2026-11-24-passive-expert-catalog-project-bootstrap.md)
 - [多步任务草稿的保存、重启与并发审阅](2026-11-24-mission-draft-lifecycle-review.md)
