@@ -1,0 +1,197 @@
+[
+  {
+    "at": "2026-11-24T18:17:11.009Z",
+    "event": "upstream-response",
+    "id": 83,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor Dispatch Forum",
+    "actual": "7b574e96-eb5a-4f08-9032-9d2a1e66bdf0"
+  },
+  {
+    "at": "2026-11-24T18:17:12.235Z",
+    "event": "upstream-response",
+    "id": 113,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Granite Transfer Forum",
+    "actual": "31b31c88-c66a-4cbe-adfa-b7510854992f"
+  },
+  {
+    "at": "2026-11-24T18:17:13.244Z",
+    "event": "upstream-response",
+    "id": 148,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Freight checklist",
+    "actual": "b01459e1-6a2d-4694-b329-ac576f6f7925"
+  },
+  {
+    "at": "2026-11-24T18:17:27.636Z",
+    "event": "upstream-response",
+    "id": 165,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Freight checklist",
+    "actual": "b7f1506a-421a-495d-9944-1cbc98e49ee0"
+  },
+  {
+    "at": "2026-11-24T18:17:36.798Z",
+    "event": "upstream-response",
+    "id": 169,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor Dispatch Forum",
+    "actual": "2757b1dd-c5ef-46fc-8375-81c6209fd72d"
+  },
+  {
+    "at": "2026-11-24T18:17:36.807Z",
+    "event": "upstream-response",
+    "id": 170,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Freight checklist",
+    "actual": "3583309c-d645-4509-b304-3a2f7fe34a53"
+  },
+  {
+    "at": "2026-11-24T18:17:36.813Z",
+    "event": "upstream-response",
+    "id": 171,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Granite Transfer Forum",
+    "actual": "1cc4cea7-3243-49d8-a3a3-680684dbd25e"
+  },
+  {
+    "at": "2026-11-24T18:17:36.816Z",
+    "event": "upstream-response",
+    "id": 172,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Freight checklist",
+    "actual": "ceea4fac-132c-4f5d-a998-4d55236be016"
+  },
+  {
+    "at": "2026-11-24T18:17:59.595Z",
+    "event": "upstream-response",
+    "id": 219,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Granite Transfer Forum",
+    "actual": "cba966fe-0a00-497a-803f-eb63ee957c7d"
+  },
+  {
+    "at": "2026-11-24T18:18:06.104Z",
+    "event": "socket-open",
+    "id": 251,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:18:06.508Z",
+    "event": "upstream-response",
+    "id": 258,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Copper Freight Board",
+    "actual": "5f752e7d-2a54-4d3c-8042-701cfc0edb7d"
+  },
+  {
+    "at": "2026-11-24T18:18:11.075Z",
+    "event": "mode",
+    "mode": "held",
+    "openLedgerStreams": 0,
+    "openSockets": 1
+  },
+  {
+    "at": "2026-11-24T18:18:14.088Z",
+    "event": "socket-held",
+    "id": 266,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:18:17.118Z",
+    "event": "socket-held",
+    "id": 268,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:18:20.142Z",
+    "event": "socket-held",
+    "id": 271,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:18:23.151Z",
+    "event": "socket-held",
+    "id": 273,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:18:26.168Z",
+    "event": "socket-held",
+    "id": 275,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:18:27.501Z",
+    "event": "mode",
+    "mode": "open",
+    "openLedgerStreams": 0,
+    "openSockets": 0
+  },
+  {
+    "at": "2026-11-24T18:18:29.177Z",
+    "event": "socket-open",
+    "id": 278,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:18:29.19Z",
+    "event": "upstream-response",
+    "id": 283,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Copper Freight Board",
+    "actual": "4acc79e7-9189-4a45-9eda-42b819a34d6b"
+  },
+  {
+    "at": "2026-11-24T18:18:40.838Z",
+    "event": "socket-open",
+    "id": 307,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:18:41.253Z",
+    "event": "upstream-response",
+    "id": 314,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "West audit preparation",
+    "actual": "edca70a3-59eb-447e-8269-a76f8d114362"
+  },
+  {
+    "at": "2026-11-24T18:18:50.005Z",
+    "event": "upstream-response",
+    "id": 321,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "West audit preparation",
+    "actual": "9391205a-821f-45b7-b6b1-d68782d1a065"
+  }
+]
