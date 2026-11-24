@@ -229,6 +229,36 @@ export async function loadWorkLedgerSelection(input: WorkLedgerSelectionTarget):
   ))
 }
 
+export class ArchiveDeletionTargetChangedError extends Error {
+  override readonly name = "ArchiveDeletionTargetChangedError"
+
+  constructor(cause?: unknown) {
+    super("The original archive record is no longer available in the confirmed archive state.", { cause })
+  }
+}
+
+export async function requireCurrentArchiveDeletionTarget(
+  row: WorkLedgerItemRow,
+  { authority, signal }: { authority: ApiAuthority; signal?: AbortSignal },
+): Promise<void> {
+  const current = await loadWorkLedgerSelection({
+    kind: row.kind === "task" ? "task" : "session",
+    id: row.kind === "task" ? row.id : row.sessionID,
+    directory: row.directory,
+    authority,
+    signal,
+  }).catch((cause) => {
+    if (cause instanceof ApiError && cause.status === 404) throw new ArchiveDeletionTargetChangedError(cause)
+    throw cause
+  })
+  const sameOwner = current.kind === row.kind && current.id === row.id &&
+    projectDirectoryKey(current.directory) === projectDirectoryKey(row.directory) &&
+    (row.kind === "task" || (current.kind !== "task" && current.sessionID === row.sessionID)) &&
+    (row.kind !== "chat" || (current.kind === "chat" && current.experience === row.experience))
+  if (!sameOwner) throw new Error("The archive confirmation read returned a different Work Ledger identity.")
+  if (row.archived === undefined || current.archived !== row.archived) throw new ArchiveDeletionTargetChangedError()
+}
+
 export type WorkLedgerSelectionRead =
   | { kind: "current"; key: string; row: WorkLedgerItemRow }
   | { kind: "unavailable"; key: string; row: WorkLedgerItemRow | null; cause: unknown }

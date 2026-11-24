@@ -3,7 +3,7 @@ import { ApiError, captureApiAuthority, configure } from "../src/services/api"
 import { ArchiveStateUnconfirmedError, settleArchiveState } from "../src/services/archive-state"
 import { setMissionArchived } from "../src/services/mission"
 import { deleteTask } from "../src/services/task"
-import { verifyWorkLedgerArchiveState } from "../src/services/work-ledger"
+import { ArchiveDeletionTargetChangedError, requireCurrentArchiveDeletionTarget, verifyWorkLedgerArchiveState } from "../src/services/work-ledger"
 import { formatErrorDetails } from "../src/utils/error-details"
 
 const directory = "D:/projects/one/archive-receipt"
@@ -26,7 +26,7 @@ const restoredTask = {
   source: "user",
   productPillar: "work",
   pendingInteractions: 0,
-}
+} as const
 
 test("an intact restore receipt supplies the original server result", async () => {
   const receipt = { session: { id: "ses_original", title: "Keep the original conversation" } }
@@ -154,6 +154,36 @@ test.each([200, 404] as const)("Task deletion sends the confirmed directory and 
       expect(result).toMatchObject({ status, method: "DELETE", requestID, body })
     }
     expect(requests).toEqual([{ method: "DELETE", path: `/task/${taskID}`, directory, body: provenance }])
+  } finally {
+    await server.stop(true)
+    configure({ serverUrl: "http://127.0.0.1:7878", directory: "" })
+  }
+})
+
+test.each([
+  { label: "same archive time", archiveTime: 8, current: true },
+  { label: "restored", archiveTime: undefined, current: false },
+  { label: "archived again", archiveTime: 10, current: false },
+])("archive confirmation reads the exact record when it is $label", async ({ archiveTime, current }) => {
+  const reads: Array<{ path: string; directory: string | null }> = []
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port: 0,
+    fetch(request) {
+      const url = new URL(request.url)
+      reads.push({ path: url.pathname, directory: url.searchParams.get("directory") })
+      return Response.json({ ...restoredTask, archived: archiveTime })
+    },
+  })
+  configure({ serverUrl: server.url.origin, directory: "D:/projects/other/workspace" })
+  try {
+    const checked = requireCurrentArchiveDeletionTarget(
+      { ...restoredTask, archived: 8 },
+      { authority: captureApiAuthority() },
+    )
+    if (current) expect(await checked).toBeUndefined()
+    else await expect(checked).rejects.toBeInstanceOf(ArchiveDeletionTargetChangedError)
+    expect(reads).toEqual([{ path: `/work-ledger/selection/task/${taskID}`, directory }])
   } finally {
     await server.stop(true)
     configure({ serverUrl: "http://127.0.0.1:7878", directory: "" })

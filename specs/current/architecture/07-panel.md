@@ -6693,7 +6693,10 @@ replacement selection retires that handoff. Ordinary Settings dismissal keeps
 its original return focus.
 Restore and permanent deletion have separate actions. The shared confirmation
 dialog identifies the archived record by title, work kind, project and directory.
-It binds the confirmation to the current query, row and API authority. An
+It binds the confirmation to the current query, row and API authority. Changes
+to that exact record and reconnection verify the original archive time with the
+canonical selection read. A changed archive state retires the owning dialog.
+Confirmation rechecks the same state before dispatching a new deletion. An
 uncertain deletion keeps the original diagnostics and offers an explicit retry
 for the same row and connection. Pending deletions are kept per row while the
 page is mounted on that connection. Search, pagination and other row actions

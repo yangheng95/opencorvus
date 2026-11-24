@@ -708,6 +708,8 @@
   "archive.delete_permanently": "Permanently delete {{title}} from {{project}}",
   "archive.delete_confirm": "Permanently remove “{{title}}” from the workspace?",
   "archive.delete_confirm_title": "Permanently delete",
+  "archive.delete_confirmation_changed": "The archive record changed before deletion.",
+  "archive.delete_confirmation_check_failed": "Could not verify the current archive record.",
   "archive.delete_target": "{{title}} · {{kind}} · {{project}}",
   "archive.delete_unconfirmed": "Deletion unconfirmed",
   "archive.retry_delete": "Retry deletion",

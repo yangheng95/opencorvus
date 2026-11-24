@@ -4,12 +4,15 @@ import {
   ApiAuthorityChangedError,
   captureApiAuthority,
   isApiAuthorityCurrent,
+  mergeAbortSignals,
   type ApiAuthority,
 } from "../../services/api"
 import {
   WORK_LEDGER_SEARCH_DELAY_MS,
+  ArchiveDeletionTargetChangedError,
   loadArchivedWorkLedger,
   normalizeWorkLedgerSearch,
+  requireCurrentArchiveDeletionTarget,
   workLedgerProject,
   type WorkLedgerCursor,
   type WorkLedgerItemRow,
@@ -22,7 +25,7 @@ import { restoreArchivedWork } from "../../services/restore-archived-work"
 import { deleteMission } from "../../services/mission"
 import { deleteTask } from "../../services/task"
 import { deleteConversationSession } from "../../services/conversation-session"
-import { subscribeWorkLedgerChanges } from "../../services/sse"
+import { subscribeWorkLedgerChanges, type WorkLedgerStreamEvent } from "../../services/sse"
 import { conversationExperienceIcon, conversationExperienceLabel } from "../../services/conversation-experience"
 import { formatErrorDetails, reportError, reportSuccess, runPostCommitUiEffect } from "../../services/diagnostics"
 import { detailStamp } from "../../utils/time"
@@ -51,6 +54,7 @@ type UnconfirmedDeletion = { row: WorkLedgerItemRow; authority: ApiAuthority; ca
 
 function archiveFailureSummary({ operation, cause }: ArchiveFailure): string {
   if (cause instanceof ArchiveStateUnconfirmedError) return t("archive.restore_unconfirmed")
+  if (cause instanceof ArchiveDeletionTargetChangedError) return t("archive.delete_confirmation_changed")
   if (operation === "restore") return t("archive.restore_failed")
   if (operation === "delete") return t("archive.delete_failed")
   if (operation === "refresh") return t("archive.refresh_failed")
@@ -121,7 +125,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   let headingElement: HTMLSpanElement | undefined
   let continuationElement: HTMLDivElement | undefined
   let continuationButton: HTMLButtonElement | undefined
-  let confirmingDeletion = false
+  let deletionConfirmation: { lifetime: AbortController; observe: (event: WorkLedgerStreamEvent) => void } | undefined
   let refreshRequested = false
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -323,10 +327,10 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   }
 
   function scheduleArchiveRefresh() {
-    if (!refreshRequested || refreshTimer !== undefined || loading() || busyID() || confirmingDeletion) return
+    if (!refreshRequested || refreshTimer !== undefined || loading() || busyID() || deletionConfirmation) return
     refreshTimer = setTimeout(() => {
       refreshTimer = undefined
-      if (loading() || busyID() || confirmingDeletion) return
+      if (loading() || busyID() || deletionConfirmation) return
       refreshRequested = false
       void load("refresh")
     }, WORK_LEDGER_SEARCH_DELAY_MS)
@@ -496,18 +500,45 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   }
 
   const confirmRowDeletion = async (row: WorkLedgerItemRow, trigger: HTMLButtonElement) => {
-    if (confirmingDeletion) return
+    if (deletionConfirmation) return
     const authority = captureApiAuthority()
     const generation = requestGeneration
+    const lifetime = new AbortController()
+    let recheck: AbortController | undefined
     const ownsConfirmation = () => ownsRequest(generation, authority) && !busyID() && !loading() &&
-      trigger.isConnected && !deletionUnconfirmed(row)
+      trigger.isConnected && !deletionUnconfirmed(row) && !lifetime.signal.aborted
+    const failureID = `settings:archive:delete:${row.kind}:${row.id}`
+    const verify = async (signal: AbortSignal) => {
+      if (!ownsConfirmation() || signal.aborted) return
+      try {
+        await requireCurrentArchiveDeletionTarget(row, { authority, signal })
+      } catch (cause) {
+        if (!ownsConfirmation() || signal.aborted) return
+        if (!(cause instanceof ArchiveDeletionTargetChangedError)) throw cause
+        recordFailure(failureID, "delete", cause)
+        lifetime.abort()
+      }
+    }
+    deletionConfirmation = {
+      lifetime,
+      observe(event) {
+        if (event.type !== "work-ledger.connected" &&
+          !(event.type === "work-ledger.changed" &&
+            (row.kind === "task" ? event.taskID === row.id : event.sessionID === row.sessionID))) return
+        recheck?.abort()
+        recheck = new AbortController()
+        const signal = mergeAbortSignals(lifetime.signal, recheck.signal)
+        void verify(signal).catch((cause) => {
+          if (ownsConfirmation() && !signal.aborted) reportArchiveError(failureID, t("archive.load_failed"), cause)
+        })
+      },
+    }
     const message = [
       t("archive.delete_confirm", { title: row.title || row.id }),
       "",
       `${kindLabel(row)} · ${archiveProjectName(row)}`,
       row.directory,
     ].join("\n")
-    confirmingDeletion = true
     try {
       const result = await showAppDialog({
         title: t("archive.delete_confirm_title"),
@@ -516,14 +547,19 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         cancel: true,
         okTone: "danger",
         okLabel: t("archive.delete_confirm_title"),
+        signal: lifetime.signal,
+        cancelWhileSubmitting: true,
         openingGuard: ownsConfirmation,
-        returnFocusTarget: () => ownsConfirmation() ? trigger : null,
+        returnFocusTarget: () => ownsConfirmation() ? trigger : searchInput ?? null,
+        onConfirm: (_value, signal) => verify(signal ? mergeAbortSignals(lifetime.signal, signal) : lifetime.signal),
+        confirmErrorSummary: () => t("archive.delete_confirmation_check_failed"),
       })
       if (result.confirmed && ownsConfirmation()) await runRowAction(row, "delete", { authority, trigger })
     } catch (cause) {
-      if (ownsConfirmation()) recordFailure(`settings:archive:delete:${row.kind}:${row.id}`, "delete", cause)
+      if (ownsConfirmation()) recordFailure(failureID, "delete", cause)
     } finally {
-      confirmingDeletion = false
+      lifetime.abort()
+      deletionConfirmation = undefined
       scheduleArchiveRefresh()
     }
   }
@@ -532,6 +568,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     [() => captureApiAuthority().revision, query],
     ([revision, term], previous) => {
       // Retire the previous result and cursor as soon as the effective query changes.
+      deletionConfirmation?.lifetime.abort()
       clearArchiveRefresh()
       requestGeneration += 1
       controller?.abort()
@@ -561,10 +598,12 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     if (event.type !== "work-ledger.connected" &&
       !(event.type === "work-ledger.changed" && ARCHIVE_CHANGE_SOURCES.has(event.sourceType))) return
     refreshRequested = true
+    deletionConfirmation?.observe(event)
     scheduleArchiveRefresh()
   })
   onCleanup(() => {
     unsubscribe()
+    deletionConfirmation?.lifetime.abort()
     clearArchiveRefresh()
     requestGeneration += 1
     controller?.abort()

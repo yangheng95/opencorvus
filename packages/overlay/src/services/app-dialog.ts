@@ -42,6 +42,7 @@ export type AppDialogOptions = {
 }
 
 export type AppDialogOpenOptions = AppDialogOptions & {
+  signal?: AbortSignal
   openingGuard?: () => boolean
   validateInput?: (value: string) => string | undefined
   onConfirm?: (value: string | null, signal?: AbortSignal) => Promise<void>
@@ -103,7 +104,7 @@ function validatedChoiceValue(options: AppDialogOptions): string {
 
 function openingAllowed(options: AppDialogOpenOptions): boolean {
   try {
-    return options.openingGuard?.() ?? true
+    return !options.signal?.aborted && (options.openingGuard?.() ?? true)
   } catch {
     return false
   }
@@ -113,7 +114,12 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
   const selectValue = validatedChoiceValue(options)
   const epoch = ++appDialogSeq
   const occlusionOwner = `app-dialog:${epoch}`
-  return new Promise<AppDialogResult>((resolve, reject) => {
+  let cancelOnAbort: (() => void) | undefined
+  const result = new Promise<AppDialogResult>((resolve, reject) => {
+    if (options.signal) {
+      cancelOnAbort = () => { void finishAppDialog(false, epoch).catch(reject) }
+      options.signal.addEventListener("abort", cancelOnAbort, { once: true })
+    }
     void runAppDialogTransition(async () => {
       if (epoch !== appDialogSeq || !openingAllowed(options)) {
         resolve({ confirmed: false, value: null })
@@ -194,6 +200,9 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
         if (!committed) await revealNativeSurfaces(occlusionOwner)
       }
     }).catch(reject)
+  })
+  return result.finally(() => {
+    if (cancelOnAbort) options.signal?.removeEventListener("abort", cancelOnAbort)
   })
 }
 

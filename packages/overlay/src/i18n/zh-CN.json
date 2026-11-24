@@ -708,6 +708,8 @@
   "archive.delete_permanently": "永久删除 {{project}} 中的 {{title}}",
   "archive.delete_confirm": "从工作区永久移除“{{title}}”？",
   "archive.delete_confirm_title": "永久删除",
+  "archive.delete_confirmation_changed": "此记录的归档状态已变更。",
+  "archive.delete_confirmation_check_failed": "无法核对当前归档记录。",
   "archive.delete_target": "{{title}} · {{kind}} · {{project}}",
   "archive.delete_unconfirmed": "删除待确认",
   "archive.retry_delete": "重试删除",
