@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [归档记录变化后关闭过期的删除确认](2026-11-24-archive-delete-confirmation-retirement.md)
 - [从侧栏取消较早任务时沿用其项目目录](2026-11-24-task-cancel-from-ledger-row.md)
 - [从工作侧栏改名独立任务并保留当前工作](2026-11-24-task-rename-from-ledger-row.md)
 - [独立任务归档删除沿用确认的项目目录](2026-11-24-archived-task-delete-project-owner.md)
