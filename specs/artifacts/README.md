@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [主输入区模型选择器重开证据](2026-11-25-composer-clears-search-on-close/README.md)
 - [主输入区同名模型的实际选择证据](2026-11-25-composer-identifies-same-name-models/README.md)
 - [折叠目录缓存收到成员变更的现场证据](2026-11-25-explorer-reloads-changed-collapsed-folders/README.md)
 - [目录首次展开遇到外部写入的现场证据](2026-11-25-explorer-refreshes-inflight-folder-expansion/README.md)

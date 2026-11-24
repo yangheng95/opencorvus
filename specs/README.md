@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [主输入区关闭模型选择器时重置搜索](records/2026-11/2026-11-25-composer-clears-search-on-close.md)
 - [主输入区区分同一服务商下的同名模型](records/2026-11/2026-11-25-composer-identifies-same-name-models.md)
 - [折叠目录发生变更后重新展开时读取当前成员](records/2026-11/2026-11-25-explorer-reloads-changed-collapsed-folders.md)
 - [首次展开目录时接纳外部新增的文件](records/2026-11/2026-11-25-explorer-refreshes-inflight-folder-expansion.md)
