@@ -1,0 +1,64 @@
+[
+  {
+    "archive": true,
+    "status": 200,
+    "requestID": "347acf2d-1247-4827-be12-55e2ebb8ad86",
+    "time": {
+      "created": 1795546135508,
+      "updated": 1795546154482,
+      "archived": 1795546154482
+    },
+    "notification": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_h6DL0StXaW9epTupKWOX",
+      "sequence": 1795546154482
+    }
+  },
+  {
+    "archive": false,
+    "status": 200,
+    "requestID": "3f4ccd30-505a-4ffe-b614-5ad74bfa73a9",
+    "time": {
+      "created": 1795546135508,
+      "updated": 1795546154541
+    },
+    "notification": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_h6DL0StXaW9epTupKWOX",
+      "sequence": 1795546154541
+    }
+  },
+  {
+    "archive": true,
+    "status": 200,
+    "requestID": "692d500a-986f-4f29-8602-a34ac8bd7bc4",
+    "time": {
+      "created": 1795546135508,
+      "updated": 1795546154594,
+      "archived": 1795546154594
+    },
+    "notification": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_h6DL0StXaW9epTupKWOX",
+      "sequence": 1795546154594
+    }
+  },
+  {
+    "archive": false,
+    "status": 200,
+    "requestID": "0dac6eaa-d340-4c17-b00e-b6842dd5747f",
+    "time": {
+      "created": 1795546135508,
+      "updated": 1795546154644
+    },
+    "notification": {
+      "type": "work-ledger.changed",
+      "sourceType": "session.updated",
+      "sessionID": "ses_h6DL0StXaW9epTupKWOX",
+      "sequence": 1795546154644
+    }
+  }
+]
