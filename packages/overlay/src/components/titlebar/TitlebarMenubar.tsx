@@ -307,7 +307,7 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
     const next = sanitizeZoom(value / 100)
     setSettingsStore("zoom", next)
     applyZoom(next)
-    await saveSettings()
+    await saveSettings({ fields: ["zoom"] })
   }
 
   async function resetLayout() {
@@ -316,7 +316,7 @@ export function TitlebarMenubar(props: { onNewChat: () => Promise<void> }) {
       sidebarCollapsed: false,
     })
     try {
-      await saveSettings()
+      await saveSettings({ fields: ["sidebarWidth", "sidebarCollapsed"] })
     } finally {
       closeMenu()
     }

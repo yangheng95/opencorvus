@@ -412,7 +412,7 @@ describe("native command validation", () => {
   test("persists the last selected model through the native settings contract", () => {
     const payload = JSON.parse(JSON.stringify({ ...persistedSettings, lastSelectedModel: "openai/gpt-5" }))
     expect(isOverlayPersistedSettings(payload)).toBe(true)
-    expect(isNativeCommand({ kind: "settings.save", payload })).toBe(true)
+    expect(isNativeCommand({ kind: "settings.save", payload, fields: ["serverUrl"] })).toBe(true)
     expect(payload.lastSelectedModel).toBe("openai/gpt-5")
   })
 
@@ -421,7 +421,7 @@ describe("native command validation", () => {
     (theme) => {
       const payload = JSON.parse(JSON.stringify({ ...persistedSettings, theme }))
       expect(isOverlayPersistedSettings(payload)).toBe(true)
-      expect(isNativeCommand({ kind: "settings.save", payload })).toBe(true)
+      expect(isNativeCommand({ kind: "settings.save", payload, fields: ["theme"] })).toBe(true)
       expect(payload.theme).toBe(theme)
     },
   )
@@ -477,7 +477,7 @@ describe("native command validation", () => {
       },
       { kind: "clipboard.readText" },
       { kind: "clipboard.writeText", text: "debug bundle" },
-      { kind: "settings.save", payload: persistedSettings },
+      { kind: "settings.save", payload: persistedSettings, fields: ["theme"] },
       { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace" },
       { kind: "workspace.openProjectEditor", editor: "cursor", path: "D:/workspace/a.ts", line: 42 },
       { kind: "workspace.openProjectEditor", editor: "vscode", path: "D:/workspace/a.ts", line: 42, column: 7 },

@@ -2,6 +2,7 @@ import { afterEach, beforeEach, expect, test } from "bun:test"
 import type { HostTransport } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import type { PersistedOverlaySettings } from "../src/services/persisted-overlay-settings"
+import { mergeBrowserOverlaySettings } from "../src/services/overlay-settings-storage"
 import { ServerBaseUrlError } from "@opencorvus-ai/transport-protocol"
 import { apiHeaders, configure } from "../src/services/api-state"
 import {
@@ -61,9 +62,9 @@ beforeEach(async () => {
       writes.push(payload)
       events.push(`persist:${payload.serverUrl}`)
       await beforePersist(payload, writes.length)
-      persisted = payload
+      persisted = mergeBrowserOverlaySettings(persisted, payload, command.fields)
       events.push(`confirmed:${payload.serverUrl}`)
-      return true
+      return persisted
     },
   } as HostTransport)
   await loadSettings()
@@ -73,6 +74,37 @@ afterEach(() => {
   __setHostTransportForTest(undefined)
   applySettings(DEFAULT_SETTINGS)
   configure({ username: DEFAULT_SETTINGS.username, password: "" })
+})
+
+test("two independently authored preferences both appear in the next saved receipt", async () => {
+  const firstTab = { ...initial, locale: "zh-CN" }
+  persisted = mergeBrowserOverlaySettings(persisted, firstTab, ["locale"])
+
+  await saveSettings({ overrides: { theme: "dark" } })
+
+  expect(confirmedPersistedSettingsSnapshot()).toEqual({ ...initial, locale: "zh-CN", theme: "dark" })
+  expect(persisted).toEqual(confirmedPersistedSettingsSnapshot())
+})
+
+test("a layout reset clears its optional width, while the latest unrelated preferences are retained", () => {
+  const firstTab = { ...initial, locale: "zh-CN", sidebarWidth: 320 }
+  const secondTab = { ...initial, sidebarCollapsed: false, sidebarWidth: undefined }
+
+  const reset = mergeBrowserOverlaySettings(firstTab, secondTab, ["sidebarCollapsed", "sidebarWidth"])
+
+  expect(reset).toEqual({ ...firstTab, sidebarCollapsed: false, sidebarWidth: undefined })
+})
+
+test("a restore write for a different saved server produces a named conflict", () => {
+  const current = { ...initial, serverUrl: SERVER_B, workspaceTaskID: "task-b" }
+  const stale = { ...initial, workspaceTaskID: "task-new-on-a" }
+
+  try {
+    mergeBrowserOverlaySettings(current, stale, ["workspaceTaskID"])
+    throw new Error("Expected a saved server conflict")
+  } catch (error) {
+    expect(error).toMatchObject({ name: "InvalidStateError" })
+  }
 })
 
 test("confirmed connection publication precedes a queued preference snapshot and survives cold read", async () => {
@@ -142,7 +174,7 @@ test("native failure reports the confirmed A document and a later explicit retry
   }).toEqual({ applied: SERVER_B, durable: SERVER_B, confirmed: SERVER_B })
 })
 
-test("queued B and C transactions merge the latest unrelated workspace and preference fields", async () => {
+test("queued connection, workspace and appearance saves confirm the fields their actions own", async () => {
   const started = deferred()
   const release = deferred()
   beforePersist = async (_payload, call) => {
@@ -152,14 +184,16 @@ test("queued B and C transactions merge the latest unrelated workspace and prefe
   }
   const first = saveSettings({ overrides: { serverUrl: SERVER_B }, onConfirmed: publishConnection })
   const second = saveSettings({ overrides: { serverUrl: SERVER_C }, onConfirmed: publishConnection })
-  const preference = saveSettings({ overrides: { sidebarWidth: 320 } })
   await started.promise
   setSettingsStore({ workspaceTaskID: "task-owned-new", workspaceDirectory: "C:/owned-fixture/project-new" })
+  const workspace = saveSettings({ fields: ["workspaceTaskID", "workspaceDirectory"] })
+  const preference = saveSettings({ overrides: { sidebarWidth: 320 } })
   release.resolve()
-  await Promise.all([first, second, preference])
+  await Promise.all([first, second, workspace, preference])
   const nextWorkspace = { workspaceTaskID: "task-owned-new", workspaceDirectory: "C:/owned-fixture/project-new" }
   expect(writes).toEqual([
     { ...initial, serverUrl: SERVER_B },
+    { ...initial, ...nextWorkspace, serverUrl: SERVER_C },
     { ...initial, ...nextWorkspace, serverUrl: SERVER_C },
     { ...initial, ...nextWorkspace, serverUrl: SERVER_C, sidebarWidth: 320 },
   ])
@@ -172,9 +206,11 @@ test("queued B and C transactions merge the latest unrelated workspace and prefe
     `publish:${SERVER_C}`,
     `persist:${SERVER_C}`,
     `confirmed:${SERVER_C}`,
+    `persist:${SERVER_C}`,
+    `confirmed:${SERVER_C}`,
   ])
   expect(settingsStore.serverUrl).toBe(SERVER_C)
-  expect(confirmedPersistedSettingsSnapshot()).toEqual(writes[2])
+  expect(confirmedPersistedSettingsSnapshot()).toEqual(writes[3])
 })
 
 test("activation failure exposes its durable fact and the queue admits the next explicit transaction", async () => {

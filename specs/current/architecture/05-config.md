@@ -137,12 +137,12 @@ Overlay 的配置投影按当前实际目录选择读取范围：项目读取 `/
 不用核对结果推断原请求身份，不重发写入。匹配时将读取接受的配置作为新基线；不同或读取失败保留草稿。
 
 - **单一协议**：`OverlayPersistedSettings` 是唯一持久化文档结构。必填字段、可选字段、枚举、数值范围与非空约束由 `@opencorvus-ai/transport-protocol` 定义；部分文档和未知字段都是无效输入。
-- **Browser host**：在 localStorage 的唯一键 `oc_settings` 中存放完整文档。
+- **Browser host**：在本浏览器来源的 IndexedDB（Indexed Database，索引数据库）中保存单一完整文档。首次打开新版数据库事务从旧键 `oc_settings` 导入，完成后退休旧键。
 - **Browser host 初始连接**：缺少持久文档时，`DEFAULT_SERVER` 以同源发布模块的 `/ui/assets/` 目录确定服务 origin 和部署前缀。网页路径可含任意层级，部署前缀也可含 `ui`。独立宿主使用共享环回默认，有完整持久文档时采用已保存的地址。
 - **Tauri host**：在应用配置目录的 `overlay.jsonc` 中存放同一文档，写入使用同目录临时文件原子替换。
 - **加载边界**：Browser 直接使用 TypeScript 严格 parser；Tauri 先用 Rust 的同构严格 schema 拒绝未知或无效字段，返回 Overlay 后再经过 TypeScript parser。文档不存在时，由 TypeScript `DEFAULT_SETTINGS` 唯一提供默认值。
 - **地址读取与使用**：完整偏好文档的结构读取和 server base 的运行资格分开。历史文档中的非空非法地址仍原样可读并完成 settings hydration，供 Network 修正；不会悄悄覆盖为默认服务器。保存与 API/资源目标构造共享唯一运行态 URL parser，先解析 base 再拼接相对路径，保留其 authority、HTTP(S) 路径前缀、IPv6 与编码路径。query、fragment（含空分隔符）和嵌入 user-info 都被明确拒绝；认证仍由独立 username/password 字段拥有。离线但合法的地址允许保存，不以健康探测作为准入条件。ServerBaseUrlError 的五个原因是 malformed、unsupported_protocol、query、fragment、user_info；不携带原始 URL 或包含它的 cause。原生 String IPC 使用同名原因与安全消息。保存值及历史 projectComposerIntents 的 server 身份不被运行态 URL 序列化重写。
-- **保存事务**：所有客户端偏好写入复用唯一串行 `saveSettings` 队列，轮到当前动作时才获取完整文档快照。原生持久化确认后先更新 `confirmedPersistedSettings`，再执行调用者显式提供的同步 `onConfirmed`，最后释放下一次写入；不会默认应用所有 overrides。视图关闭不能取消已持久事实的发布。持久化失败保留既有 `onFailure` 契约；确认回调失败返回带 `persisted=true` 和原始 cause 的 `SettingsActivationError`，表示已保存但客户端激活失败，不回滚或伪称保存失败，错误对象不携带完整偏好文档。后续合法写入仍按原队列继续，此边界不涉及 Task/Mission/Session 执行轮次。
+- **保存事务**：客户端偏好写入复用每页的 `saveSettings` 串行队列。当前动作到队列头时提供文档快照及实际修改字段。浏览器宿主在单个读写事务中将这些字段合入最新持久文档，再返回完整的确认值。不同标签修改不同字段可各自保留。连接地址和认证同组保存，工作区恢复字段与当前持久连接的地址及凭据核对。原生宿主通过原本机文件写入确认完整快照。确认后更新 `confirmedPersistedSettings` 并执行现有同步 `onConfirmed`，再释放下一次写入。当前页面只有动作所有者激活当前意图。视图关闭不能取消已持久事实的发布。持久化失败保留既有 `onFailure` 契约。确认回调失败返回带 `persisted=true` 和原始 cause 的 `SettingsActivationError`，后续合法写入仍按原队列继续。
 - **边界**：不同步到 server Config，也不是 LLM prompt 或 agent capability 的配置源。它只拥有当前客户端的连接、呈现、工作区恢复和桌面集成。
 - **界面语言**：Appearance、命令面板、标题栏及 native-menu 使用同一个 `applyLocalePreference`。原异步语言资源 tail 与 generation 保留，成功由唯一 `saveSettings` 完整文档确认；host 保存失败使用该队列回执提供的当前 confirmed locale 恢复呈现与偏好，原错误可见并释放原 tail。连接与 Project 选择不会成为客户端语言保存的前提，也不触发项目行为 locale 写入。
 - **连接准入与文件预留**：Connection Save 在同一队列头完成 prepare；它可提供文档 overrides、原资源/请求归属复核、同步 confirmed commit 和必释放的 reservation。手动保存时用 `joinServerBaseUrl` 比较实际请求基地址。相同请求目标沿用已应用的地址拼写，保留工作区与其偏好键。保存回执和 Network 表单使用实际确认的地址。同一目标的凭据更新保留工作区，并推进请求归属。手动保存不同目标属于明确工作区离开意图，复用现 workspace admission/selectEpoch 与 file navigation owner；旧文件的 Save/Discard/Cancel 决定在写入偏好前取得，批准的文件与草稿 revision 在写入期间保持预留。确认后同步关闭该文件、推进既有工作区/目录轮次、清空 saved directory 与 work-item 指针、退役旧投影，再通过唯一 API configure 发布新连接；失败只释放准备，保留原编辑器和真实已成功文件写入。原生管理器确认同 owned-root 进程轮换也保留工作区，复用 API authority 更新并显式标 connecting 等待既有 monitor 重新绑定。离开策略以有效请求地址为依据，无需推断数据库身份。

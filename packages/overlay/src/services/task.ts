@@ -306,7 +306,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
     // task the user just deselected.
     setSettingsStore("workspaceTaskID", "")
     setSettingsStore("workspaceDirectory", "")
-    await saveSettings()
+    await saveSettings({ fields: ["workspaceTaskID", "workspaceDirectory"] })
     return
   }
 
@@ -376,7 +376,7 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
     const restoreDir = workspaceRestoreDirectory(selectedDirectory)
     setSettingsStore("workspaceTaskID", nextTaskID)
     setSettingsStore("workspaceDirectory", restoreDir)
-    await saveSettings()
+    await saveSettings({ fields: ["workspaceTaskID", "workspaceDirectory"] })
     if (!stale()) replaceWorkspaceLocation({ kind: "task", taskID: nextTaskID })
   } finally {
     // Only clear the progress flag if we are still the active selection.

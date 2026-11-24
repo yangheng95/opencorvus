@@ -78,7 +78,7 @@ describe("operational server base contract", () => {
     }
     expect(isOverlayPersistedSettings(saved)).toBe(true)
     const corrected = { ...saved, serverUrl: "http://offline.example.invalid:17999" }
-    expect(isNativeCommand({ kind: "settings.save", payload: corrected })).toBe(true)
+    expect(isNativeCommand({ kind: "settings.save", payload: corrected, fields: ["serverUrl"] })).toBe(true)
     expect(corrected.projectComposerIntents).toEqual(saved.projectComposerIntents)
   })
 })

@@ -31,6 +31,7 @@ import {
   productPillarFromConversationExperience,
   resolveComposerIntentRoute,
   type ComposerIntent,
+  type OverlaySettingsField,
 } from "@opencorvus-ai/transport-protocol"
 import { WorkLedger, type WorkLedgerRenamePresentation } from "./components/WorkLedger"
 import type { ProjectActionPresentation } from "./components/ProjectLedgerGroup"
@@ -473,8 +474,8 @@ runMainAsync("native-window.close-lifecycle", async () => {
   disposers.push(dispose)
 })
 
-function persistMainSettings(scope: string): void {
-  runMainAsync(scope, () => saveSettings())
+function persistMainSettings(scope: string, field: OverlaySettingsField): void {
+  runMainAsync(scope, () => saveSettings({ fields: [field] }))
 }
 
 window.addEventListener(
@@ -2383,7 +2384,7 @@ const paneCallbacks = {
     setSettingsStore({
       ...(sidebarWidth != null ? { sidebarWidth } : {}),
     })
-    persistMainSettings("settings.persist-pane-width")
+    if (sidebarWidth != null) persistMainSettings("settings.persist-pane-width", "sidebarWidth")
   },
 }
 
@@ -3043,7 +3044,7 @@ function OverlayRoot() {
               if (show && sidebarNeedsReadingSpace()) setRightDockVisible(false)
               setSettingsStore("sidebarCollapsed", !show)
             })
-            persistMainSettings("settings.persist-sidebar-collapse")
+            persistMainSettings("settings.persist-sidebar-collapse", "sidebarCollapsed")
           }}
         >
           <Icon name="panel-left" />
@@ -3674,7 +3675,7 @@ function stopRightDockResize(): void {
   applyPendingRightDockResize()
   rightDockResizeActive = false
   delete document.body.dataset.rightDockResizing
-  persistMainSettings("settings.persist-right-dock-resize")
+  persistMainSettings("settings.persist-right-dock-resize", "rightDockWidth")
 }
 
 function resizeRightDockByKeyboard(event: KeyboardEvent): void {
@@ -3696,7 +3697,7 @@ function resizeRightDockByKeyboard(event: KeyboardEvent): void {
   event.preventDefault()
   setSettingsStore("rightDockWidth", clampRightDockWidth(width))
   renderRightDockWidth()
-  persistMainSettings("settings.persist-right-dock-keyboard")
+  persistMainSettings("settings.persist-right-dock-keyboard", "rightDockWidth")
 }
 
 {

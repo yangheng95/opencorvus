@@ -1374,7 +1374,7 @@ export type NativeCommand =
   | { kind: "clipboard.readText" }
   | { kind: "clipboard.writeText"; text: string }
   | { kind: "settings.load" }
-  | { kind: "settings.save"; payload: OverlayPersistedSettings }
+  | { kind: "settings.save"; payload: OverlayPersistedSettings; fields: readonly OverlaySettingsField[] }
   | { kind: "server.info" }
   | { kind: "server.restart" }
   | { kind: "devtools.toggle" }
@@ -1519,7 +1519,7 @@ function isBrowserPreviewNativeSelectionPresentation(
   )
 }
 
-const OVERLAY_PERSISTED_SETTINGS_KEYS = [
+export const OVERLAY_PERSISTED_SETTINGS_KEYS = [
   "serverUrl",
   "autoServer",
   "password",
@@ -1542,6 +1542,8 @@ const OVERLAY_PERSISTED_SETTINGS_KEYS = [
   "lastSelectedModel",
   "projectComposerIntents",
 ] as const
+
+export type OverlaySettingsField = (typeof OVERLAY_PERSISTED_SETTINGS_KEYS)[number]
 
 const SERVER_BASE_URL_MESSAGES = {
   malformed: "Server URL is not a valid absolute URL.",
@@ -1704,6 +1706,11 @@ export function isNativeCommand(value: unknown): value is NativeCommand {
       return typeof obj["text"] === "string" && obj["text"].length > 0
     case "settings.save":
       if (!isOverlayPersistedSettings(obj["payload"])) return false
+      if (
+        !Array.isArray(obj["fields"]) ||
+        obj["fields"].length === 0 ||
+        obj["fields"].some((field) => !(OVERLAY_PERSISTED_SETTINGS_KEYS as readonly unknown[]).includes(field))
+      ) return false
       try {
         parseServerBaseUrl(obj["payload"].serverUrl)
         return true

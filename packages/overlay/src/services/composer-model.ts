@@ -116,6 +116,7 @@ async function rememberComposerModel(
   setSettingsStore("lastSelectedModel", model)
   if (!boardStore.selectedSource) restoreDraftComposerModel()
   await saveSettings({
+    fields: ["lastSelectedModel"],
     onFailure: ({ confirmed }) => {
       if (selectionGeneration !== composerModelSelectionGeneration || !isApiAuthorityCurrent(authority)) return
       setSettingsStore("lastSelectedModel", confirmed.lastSelectedModel ?? "")

@@ -195,7 +195,7 @@ function installTransport(failHistory: boolean) {
       }
     },
     async native(command) {
-      if (command.kind === "settings.save") return true
+      if (command.kind === "settings.save") return command.payload
       throw new Error(`Unexpected native service ${command.kind}`)
     },
   }

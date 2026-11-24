@@ -28,7 +28,7 @@ beforeEach(async () => {
           throw new Error("Settings storage unavailable")
         }
         persisted = JSON.parse(JSON.stringify(command.payload))
-        return true
+        return command.payload
       }
       throw new Error(`Unexpected native command ${command.kind}`)
     },

@@ -8,8 +8,14 @@ import { getHostTransport } from "../services/host-transport-runtime"
 import { runtimeStartupTheme, sanitizeThemeForHost, type OverlayThemeID } from "../services/theme-registry"
 import type { PersistedOverlaySettings } from "../services/persisted-overlay-settings"
 import { parsePersistedOverlaySettings } from "../services/persisted-overlay-settings"
-import type { ProjectComposerIntent, WorkLedgerOrganization, WorkLedgerSort } from "@opencorvus-ai/transport-protocol"
-import { parseServerBaseUrl } from "@opencorvus-ai/transport-protocol"
+import {
+  OVERLAY_PERSISTED_SETTINGS_KEYS,
+  parseServerBaseUrl,
+  type OverlaySettingsField,
+  type ProjectComposerIntent,
+  type WorkLedgerOrganization,
+  type WorkLedgerSort,
+} from "@opencorvus-ai/transport-protocol"
 import { runtimeLocale, sanitizeLocale } from "../utils/i18n"
 
 // ── Types ──
@@ -146,6 +152,8 @@ export const [settingsStore, setSettingsStore] = createStore<OverlaySettings>({ 
 
 export interface SettingsSaveAction {
   overrides?: Partial<OverlaySettings>
+  /** Fields the caller edited directly, or an explicit scope for its overrides. */
+  fields?: readonly OverlaySettingsField[]
   /** Runs at the existing queue head; owns any reservation until this save settles. */
   prepare?: (snapshot: Readonly<OverlaySettings>) => Promise<SettingsSavePreparation>
   /** Publish an explicit saved fact synchronously before the next queued snapshot. */
@@ -220,7 +228,14 @@ export function applySettings(input: Partial<OverlaySettings>): void {
 
 // ── saveSettings ──
 
-export async function saveSettings(action: SettingsSaveAction = {}): Promise<void> {
+function overrideFields(overrides: Partial<OverlaySettings> | undefined): OverlaySettingsField[] {
+  if (!overrides) return []
+  return OVERLAY_PERSISTED_SETTINGS_KEYS.filter((field) =>
+    Object.hasOwn(overrides, field) || (field === "directory" && Object.hasOwn(overrides, "savedDirectory")),
+  )
+}
+
+export async function saveSettings(action: SettingsSaveAction): Promise<void> {
   const previous = settingsSaveTail
   let release!: () => void
   settingsSaveTail = new Promise<void>((resolve) => {
@@ -237,10 +252,14 @@ export async function saveSettings(action: SettingsSaveAction = {}): Promise<voi
         preparation = await action.prepare?.(snapshot)
         const payload = bootstrapOverlaySettings({ ...snapshot, ...preparation?.overrides })
         parseServerBaseUrl(payload.serverUrl)
+        const fields = [...new Set([
+          ...(action.fields ?? overrideFields(action.overrides)),
+          ...overrideFields(preparation?.overrides),
+        ])]
+        if (fields.length === 0) throw new Error("settings.save requires a setting owned by the action")
         preparation?.assertCurrent?.()
-        const saved = await getHostTransport().native({ kind: "settings.save", payload })
-        if (saved !== true) throw new Error("settings.save did not confirm persistence")
-        return { kind: "saved", payload }
+        const saved = await getHostTransport().native({ kind: "settings.save", payload, fields })
+        return { kind: "saved", payload: parsePersistedOverlaySettings(saved) }
       } catch (error) {
         return { kind: "failed", error }
       }

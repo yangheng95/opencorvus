@@ -87,7 +87,7 @@ beforeEach(() => {
       throw new Error("stream is outside this model projection fixture")
     },
     async native(command) {
-      if (command.kind === "settings.save") return true
+      if (command.kind === "settings.save") return command.payload
       throw new Error("unexpected native command")
     },
   }

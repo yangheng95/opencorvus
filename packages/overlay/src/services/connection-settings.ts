@@ -55,6 +55,7 @@ export async function saveConnectionSettings(input: ConnectionSettingsInput): Pr
   let receipt: ConnectionSettingsSaveReceipt | undefined
   await saveSettings({
     overrides: requested,
+    fields: endpointChanged ? ["serverUrl", "username", "password"] : ["username", "password"],
     prepare: async () => {
       assertApiAuthorityCurrent(authority)
       const close = await prepareDeparture?.()

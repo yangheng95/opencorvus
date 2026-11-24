@@ -45,7 +45,7 @@ function install() {
       if (command.kind === "settings.save") {
         await persist(command.payload)
         persisted = structuredClone(command.payload)
-        return true
+        return command.payload
       }
       throw new Error(`Unexpected configuration fixture command ${command.kind}`)
     },

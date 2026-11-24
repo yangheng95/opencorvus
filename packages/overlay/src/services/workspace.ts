@@ -322,7 +322,7 @@ export async function closeProject(): Promise<void> {
   })
   if (admission.kind === "unchanged") return
   if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
-  await saveSettings()
+  await saveSettings({ fields: ["directory", "workspaceTaskID", "workspaceDirectory"] })
   if (!ownsWorkspaceSelection(admission.epoch)) throw new DOMException("Project closing superseded", "AbortError")
   if (isApiAuthorityCurrent(authority)) refreshDirectoryFreeConfig(authority, admission.epoch)
 }
@@ -416,7 +416,7 @@ export async function leaveUnavailableProject(directory: string): Promise<void> 
       workspaceDirectory: "",
     })
   }
-  await saveSettings()
+  await saveSettings({ fields: ["directory", "workspaceTaskID", "workspaceDirectory"] })
   if (recoveryEpoch !== undefined && ownsWorkspaceSelection(recoveryEpoch) && isApiAuthorityCurrent(authority))
     refreshDirectoryFreeConfig(authority, recoveryEpoch)
 }
@@ -1154,7 +1154,9 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
   if (options.persist !== false) {
     // Persist the cleared workspace memory through the settings owner before
     // the switch continues, so a reload cannot restore the previous directory.
-    await saveSettings()
+    await saveSettings({
+      fields: save === null ? ["workspaceTaskID", "workspaceDirectory"] : ["directory", "workspaceTaskID", "workspaceDirectory"],
+    })
   }
 
   if (!owns()) return false

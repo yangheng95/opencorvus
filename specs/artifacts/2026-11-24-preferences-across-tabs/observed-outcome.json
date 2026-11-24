@@ -1,0 +1,35 @@
+{
+  "url": "http://127.0.0.1:41808/ui/",
+  "baseline": {
+    "pid": 13736,
+    "asset": "assets/main-CSsBVckX.js",
+    "verifiedLocaleBeforeTheme": "zh-CN",
+    "localeAfterThemeAndReopen": "en-US",
+    "themeAfterThemeAndReopen": "light"
+  },
+  "candidate": {
+    "pid": 24960,
+    "asset": "assets/main-h3Osq4OV.js",
+    "migrated": {
+      "locale": "en-US",
+      "theme": "light"
+    },
+    "localeThenTheme": {
+      "locale": "zh-CN",
+      "theme": "dark"
+    },
+    "themeThenLocale": {
+      "locale": "en-US",
+      "theme": "light"
+    },
+    "restoredLauncherDraft": "Unsent note: verify the settings review sheet."
+  },
+  "isolatedDatabase": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  },
+  "candidateShutdownHTTP": 200,
+  "candidateListenerReleased": true
+}

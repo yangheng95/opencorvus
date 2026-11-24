@@ -2,13 +2,7 @@ import { createStore, reconcile } from "solid-js/store"
 import { parseQuotation, type Quotation } from "./quotation"
 import { randomUUID } from "../utils/random-id"
 import { composerMentionDirectiveRanges, setComposerMentionDirectiveSelected } from "./composer-mention"
-import {
-  openComposerDraftDatabase,
-  readComposerDraftDatabase,
-  writeComposerDraftDatabase,
-  type DraftMutation,
-  type DraftMutationResult,
-} from "./composer-draft-storage"
+import { openBrowserRecord, type BrowserRecord, type BrowserRecordMutation } from "./browser-record-storage"
 
 export interface ComposerDraftEntry {
   text: string
@@ -18,6 +12,8 @@ export interface ComposerDraftEntry {
 }
 
 export type ComposerDraftRecords = Record<string, ComposerDraftEntry>
+type DraftMutationResult<T> = BrowserRecordMutation<ComposerDraftRecords, T>
+type DraftMutation<T> = (records: ComposerDraftRecords) => DraftMutationResult<T>
 
 const LEGACY_DRAFT_STORAGE_KEY = "oc_composer_drafts_v1"
 const DRAFT_CHANNEL_NAME = "opencorvus-composer-drafts"
@@ -181,7 +177,7 @@ export const [composerDraftStore, setComposerDraftStore] = createStore<{ drafts:
 })
 
 interface DraftStorageOwner {
-  database: Promise<IDBDatabase>
+  database: Promise<BrowserRecord<ComposerDraftRecords>>
   channel: BroadcastChannel
 }
 
@@ -215,12 +211,17 @@ function reportDraftStorageError(owner: DraftStorageOwner, error: unknown): void
 export function startComposerDraftStorage(): () => void {
   const owner: DraftStorageOwner = {
     channel: new BroadcastChannel(DRAFT_CHANNEL_NAME),
-    database: openComposerDraftDatabase({ read: readLegacyDrafts, retire: retireLegacyDrafts }),
+    database: openBrowserRecord({
+      name: "opencorvus-composer-drafts",
+      store: "drafts",
+      key: "records",
+      migration: { read: readLegacyDrafts, retire: retireLegacyDrafts },
+    }),
   }
   draftStorage = owner
   const refresh = () => {
     void owner.database
-      .then(readComposerDraftDatabase)
+      .then((database) => database.read())
       .then((records) => {
         if (draftStorage === owner) publishCommittedDrafts(records)
       }, (error) => reportDraftStorageError(owner, error))
@@ -246,7 +247,7 @@ function mutateComposerDrafts<T>(
     pendingDraftPreviews.add(mutate)
     publishDrafts(local.records)
   }
-  return owner.database.then((database) => writeComposerDraftDatabase(database, mutate)).then(
+  return owner.database.then((database) => database.write(mutate)).then(
     ({ records, value }) => {
       if (draftStorage === owner) {
         pendingDraftPreviews.delete(mutate)

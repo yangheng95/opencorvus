@@ -35,7 +35,7 @@ beforeEach(async () => {
         saves.push(document)
         await persist(document)
         persisted = document
-        return true
+        return command.payload
       }
       throw new Error(`Unexpected locale host command ${command.kind}`)
     },

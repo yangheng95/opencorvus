@@ -33,6 +33,7 @@ export async function rememberProjectComposerIntent(directory: string, intent: C
     entry,
   ])
   await saveSettings({
+    fields: ["projectComposerIntents"],
     onFailure: ({ confirmed }) => {
       if (preferenceWrites.get(key) !== generation) return
       const saved = confirmed.projectComposerIntents?.find(belongs)

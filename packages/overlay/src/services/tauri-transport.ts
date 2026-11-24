@@ -505,7 +505,7 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           case "settings.load":
             return loadBrowserOverlaySettings()
           case "settings.save":
-            return saveBrowserOverlaySettings(command.payload)
+            return saveBrowserOverlaySettings(command.payload, command.fields)
           case "open-url": {
             // Validated first: unlike the desktop's OS opener, a page has no
             // backstop against a javascript: or data: URL.
@@ -593,8 +593,11 @@ export function createTauriTransport(kind: Extract<HostKind, "tauri" | "browser"
           return invokeTauri("overlay_clipboard_write_text", { text: command.text })
         case "settings.load":
           return invokeTauri("overlay_settings_load")
-        case "settings.save":
-          return invokeTauri("overlay_settings_save", { settings: command.payload })
+        case "settings.save": {
+          const saved = await invokeTauri("overlay_settings_save", { settings: command.payload })
+          if (saved !== true) throw new Error("settings.save did not confirm persistence")
+          return command.payload
+        }
         case "server.info":
           return invokeTauri("overlay_server_info")
         case "server.restart":

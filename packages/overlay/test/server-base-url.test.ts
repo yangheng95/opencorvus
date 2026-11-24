@@ -2,19 +2,12 @@ import { afterEach, expect, test } from "bun:test"
 import { ServerBaseUrlError } from "@opencorvus-ai/transport-protocol"
 import { apiUrl, configure, getServerUrl } from "../src/services/api-state"
 import { resolveResourceUrl } from "../src/services/api"
-import {
-  BROWSER_OVERLAY_SETTINGS_KEY,
-  loadBrowserOverlaySettings,
-  saveBrowserOverlaySettings,
-} from "../src/services/overlay-settings-storage"
+import { mergeBrowserOverlaySettings } from "../src/services/overlay-settings-storage"
 import { bootstrapOverlaySettings, DEFAULT_SETTINGS } from "../src/store/settings"
 
 const originalUrl = getServerUrl()
-const originalStorage = Object.getOwnPropertyDescriptor(globalThis, "localStorage")
 afterEach(() => {
   configure({ serverUrl: originalUrl, directory: "" })
-  if (originalStorage) Object.defineProperty(globalThis, "localStorage", originalStorage)
-  else Reflect.deleteProperty(globalThis, "localStorage")
 })
 
 test("preserves the selected base authority, prefix and API-owned directory query", () => {
@@ -67,8 +60,7 @@ test("projects host resources with their own query and preserves independent abs
     expect(resolveResourceUrl(raw)).toBe(raw)
 })
 
-test("Browser storage reads an old invalid base and persists a valid correction with the original identity/history", () => {
-  // In-memory Storage is an adapter fixture, not a DOM or browser rendering test.
+test("browser settings can correct a previously saved invalid base and preserve its other fields", () => {
   const saved = bootstrapOverlaySettings({
     ...DEFAULT_SETTINGS,
     serverUrl: "not a url",
@@ -79,32 +71,9 @@ test("Browser storage reads an old invalid base and persists a valid correction 
       { serverUrl: "old bad address", directory: "C:/owned", productPillar: "work", conversationTarget: "mission" },
     ],
   })
-  const entries = new Map<string, string>([[BROWSER_OVERLAY_SETTINGS_KEY, JSON.stringify(saved)]])
-  const storage: Storage = {
-    get length() {
-      return entries.size
-    },
-    clear() {
-      entries.clear()
-    },
-    getItem(key) {
-      return entries.get(key) ?? null
-    },
-    key(index) {
-      return [...entries.keys()][index] ?? null
-    },
-    removeItem(key) {
-      entries.delete(key)
-    },
-    setItem(key, value) {
-      entries.set(key, value)
-    },
-  }
-  Object.defineProperty(globalThis, "localStorage", { configurable: true, value: storage })
-  expect(loadBrowserOverlaySettings()).toEqual(saved)
   let failure: unknown
   try {
-    saveBrowserOverlaySettings(saved)
+    mergeBrowserOverlaySettings(saved, saved, ["serverUrl"])
   } catch (error) {
     failure = error
   }
@@ -113,9 +82,6 @@ test("Browser storage reads an old invalid base and persists a valid correction 
     reason: "malformed",
     message: "Server URL is not a valid absolute URL.",
   })
-  expect(JSON.parse(storage.getItem(BROWSER_OVERLAY_SETTINGS_KEY)!)).toEqual(saved)
   const corrected = { ...saved, serverUrl: "  https://EXAMPLE.invalid:443/prefix/  " }
-  expect(saveBrowserOverlaySettings(corrected)).toBe(true)
-  expect(loadBrowserOverlaySettings()).toEqual(corrected)
-  expect(JSON.parse(storage.getItem(BROWSER_OVERLAY_SETTINGS_KEY)!)).toEqual(corrected)
+  expect(mergeBrowserOverlaySettings(saved, corrected, ["serverUrl"])).toEqual(corrected)
 })

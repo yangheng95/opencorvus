@@ -40,7 +40,7 @@ async function start(serverUrl: string) {
       if (command.kind === "settings.load") return structuredClone(persisted)
       if (command.kind !== "settings.save") throw new Error(`Unexpected settings action: ${command.kind}`)
       persisted = structuredClone(command.payload)
-      return true
+      return command.payload
     },
   } as HostTransport)
   await loadSettings()

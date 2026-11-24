@@ -24,7 +24,6 @@ import {
   loadSettings,
   settingsStore,
   setSettingsStore,
-  saveSettings,
   bumpDirectoryEpoch,
   bumpWorkspaceEpoch,
 } from "../store/settings"
@@ -424,17 +423,6 @@ export function teardownApp(): void {
   stopConnectionMonitor()
   stopSSE()
   stopWorkLedgerSSE()
-}
-
-/**
- * Persist current settings through the active host and re-apply the API client.
- * Thin wrapper so callers don't need to import from multiple modules.
- */
-export function persistAndSyncSettings(): void {
-  void saveSettings().catch((error) => {
-    console.error("[init] persist settings failed", error)
-  })
-  syncApiConfig()
 }
 
 // ── Workspace restoration ──
