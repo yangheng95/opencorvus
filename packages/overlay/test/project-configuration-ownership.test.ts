@@ -4,11 +4,11 @@ import { captureApiAuthority, configure } from "../src/services/api"
 import { queryWithDirectory } from "../src/services/api-state"
 import { currentProjectConfigRequestOptions, patchConfig, patchGlobalConfig, reloadProjectScope, updateConfig, updateGlobalConfig } from "../src/services/config"
 import { loadConfigInfo, loadProviderInfo } from "../src/services/config-load"
-import { setPermissionMode } from "../src/services/permission-mode"
+import { currentPermissionMode, setPermissionMode } from "../src/services/permission-mode"
 import { boardStore, setBoardStore } from "../src/store/board"
 import { appStore, setAppStore } from "../src/store/app"
 import { applySettings, bootstrapOverlaySettings, DEFAULT_SETTINGS, loadSettings, settingsStore, setSettingsStore } from "../src/store/settings"
-import { activeDirectory, closeProject, leaveUnavailableProject, requestWorkspaceSelection } from "../src/services/workspace"
+import { activeDirectory, applyDirectory, closeProject, leaveUnavailableProject, requestWorkspaceSelection } from "../src/services/workspace"
 import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 import { setLocale } from "../src/utils/i18n"
@@ -106,6 +106,38 @@ test("admitted transient A/B/A selections advance the shared selection epoch bef
   })
   expect(await requestWorkspaceSelection(sourceA)).toEqual({ kind: "unchanged" })
   expect(boardStore.selectEpoch).toBe(epoch + 2)
+})
+
+test("reselecting the saved project publishes missing configuration for the current selection", async () => {
+  setBoardStore({ selectedSource: null, board: null })
+  setSettingsStore({ directory, savedDirectory: directory })
+  setAppStore("config", null)
+  const startup = Promise.withResolvers<TransportResponse<unknown>>()
+  reply = async (request) => request.path === "config" ? startup.promise : ok([])
+  const startupLoad = loadConfigInfo()
+  await new Promise<void>((resolve) => setImmediate(resolve))
+
+  const selection = await requestWorkspaceSelection()
+  expect(selection.kind).toBe("admitted")
+  if (selection.kind !== "admitted") throw new Error("Expected the current project to admit selection")
+  const accepted = { permission_mode: "ask", locale: "zh-CN" }
+  const channels = [{ id: "reselected-channel", status: "missing" }]
+  requests = []
+  reply = async (request) => ok(request.path === "config" ? accepted : channels)
+  expect(await applyDirectory(directory, { save: true, selectionEpoch: selection.epoch })).toBe(true)
+  await new Promise<void>((resolve) => setImmediate(resolve))
+  startup.resolve(ok({ permission_mode: "full_access", locale: "en-US" }))
+  await startupLoad
+
+  expect(requests.map(({ method, path, query }) => [method, path, query?.directory])).toEqual([
+    ["GET", "config", directory],
+    ["GET", "channel", directory],
+  ])
+  expect({ mode: currentPermissionMode(), config: appStore.config, channels: appStore.channelCatalog }).toEqual({
+    mode: "ask",
+    config: accepted,
+    channels: { directory, authorityRevision: captureApiAuthority().revision, entries: channels },
+  })
 })
 
 test.each([

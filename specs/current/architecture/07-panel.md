@@ -6347,8 +6347,11 @@ The Composer and General authorization controls project only a confirmed
 `permission_mode` from the current accepted configuration snapshot. An unloaded
 or unrecognized mode remains unavailable; neither surface substitutes Full
 access. The Composer retains its settings entry while mode choices wait for a
-confirmed value. General offers an explicit reload through the existing scoped
-configuration reader and shows the original load diagnostic beside the mode.
+confirmed value. Reselecting the open project while startup is incomplete reads
+missing configuration under the new selection. The Composer remains available
+while the channel catalog settles. General offers an explicit reload through
+the existing scoped configuration reader and shows the original load diagnostic
+beside the mode.
 Reload remains focusable while busy. A successful read moves still-owned focus
 to the actual confirmed option. This view state does not change server
 authorization or create a second permission policy.

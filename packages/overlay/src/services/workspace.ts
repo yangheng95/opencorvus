@@ -52,6 +52,7 @@ import { nativeMessage, showAppDialog, type AppDialogOpenOptions } from "./app-d
 import { nativeOpen } from "../utils/native"
 import { checkConnection } from "./connection"
 import { reloadProjectScope } from "./config"
+import { loadConfigInfo } from "./config-load"
 import { stopSSE } from "./sse"
 import { refreshProjectMemory } from "./project-memory"
 import { activeProjectDirectory, restoreWorkspaceDirectory, setProjectDirectoryContext } from "./project-directory"
@@ -1092,7 +1093,17 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
       stopSSE()
       clearSelectedWorkItem()
     }
-    console.log("[applyDir] skipped (same)", { next, save, dir: curDir, saved: curSaved })
+    if (next && appStore.connected && appStore.config === null && activeProjectDirectory() === next) {
+      // The new selection can retire the startup read even when the directory is the same.
+      void loadConfigInfo(undefined, {
+        authority,
+        directory: next,
+        isCurrentDirectory: (directory) => directory === next && owns(),
+      }).catch((error) => {
+        if (owns()) AppLog.error("project-load", "Project configuration refresh failed", { directory: next, error: String(error) })
+      })
+    }
+    console.log("[applyDir] directory unchanged", { next, save, dir: curDir, saved: curSaved })
     return true
   }
 
