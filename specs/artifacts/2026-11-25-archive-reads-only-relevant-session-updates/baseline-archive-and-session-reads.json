@@ -1,0 +1,38 @@
+{
+  "sessionReads": [
+    {
+      "id": "ses_hokSgOSMoZtBUG9zHcun",
+      "title": "B609 archived checklist",
+      "archived": 1795551180335,
+      "projectID": "prj_hzOoMbTnQJc7h2HY5yL8",
+      "requestID": "f3a3008b-31c4-404b-a3e4-f0d69b121102"
+    },
+    {
+      "id": "ses_hFjsS4xqhtvaQXMq3fJs",
+      "title": "B609 active review revised",
+      "archived": null,
+      "projectID": "prj_hzOoMbTnQJc7h2HY5yL8",
+      "requestID": "896f80f5-ffe3-47f8-b7ee-9b777b1f2388"
+    }
+  ],
+  "archiveReadRequestID": "0ffab616-8e15-40b0-be1b-7fc311189464",
+  "archive": {
+    "rows": [
+      {
+        "kind": "chat",
+        "experience": "chat",
+        "id": "ses_hokSgOSMoZtBUG9zHcun",
+        "sessionID": "ses_hokSgOSMoZtBUG9zHcun",
+        "title": "B609 archived checklist",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b609\\candidate\\branch-review",
+        "created": 1795551180162,
+        "started": 1795551180162,
+        "updated": 1795551180336,
+        "pinned": false,
+        "archived": 1795551180335,
+        "status": "idle"
+      }
+    ],
+    "nextCursor": null
+  }
+}

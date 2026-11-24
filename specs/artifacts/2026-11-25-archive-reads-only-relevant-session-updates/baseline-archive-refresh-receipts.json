@@ -1,0 +1,45 @@
+{
+  "rename": {
+    "receipt": {
+      "requestID": "26cb6492-8001-407c-b8ed-e63d92c101ac",
+      "method": "PATCH",
+      "path": "/coding/chat/session/ses_hFjsS4xqhtvaQXMq3fJs",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 51
+    },
+    "at": "2026-11-24T20:14:03.357Z"
+  },
+  "archive": [
+    {
+      "at": "2026-11-24T20:13:53.125Z",
+      "event": "mode",
+      "mode": "hold-archive",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:14:03.508Z",
+      "event": "upstream-response",
+      "id": 52,
+      "pathname": "/work-ledger/archive",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "2d6396ef-4bed-4033-b61c-206a57ce85ae"
+    },
+    {
+      "at": "2026-11-24T20:14:03.509Z",
+      "event": "archive-response-held",
+      "id": 52,
+      "status": 200,
+      "actual": "2d6396ef-4bed-4033-b61c-206a57ce85ae"
+    },
+    {
+      "at": "2026-11-24T20:14:18.529Z",
+      "event": "archive-response-closed",
+      "id": 52,
+      "actual": "2d6396ef-4bed-4033-b61c-206a57ce85ae"
+    }
+  ]
+}
