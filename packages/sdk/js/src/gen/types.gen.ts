@@ -1786,6 +1786,7 @@ export type EventSessionError = {
 
 export type EventSessionUpdated = {
   properties: {
+    archiveUpdated?: true
     info: Session
     titleChanged?: true
   }
@@ -1986,6 +1987,7 @@ export type EventTaskRewound = {
 
 export type EventTaskUpdated = {
   properties: {
+    archiveUpdated?: true
     summary: string
     taskID: string
   }
@@ -41342,6 +41344,7 @@ export type WorkLedgerEventsResponses = {
         type: "work-ledger.heartbeat"
       }
     | {
+        archiveUpdated?: true
         directory?: string
         projectID?: string
         sequence: number

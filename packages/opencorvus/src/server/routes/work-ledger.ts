@@ -73,7 +73,11 @@ function isMissionWorkLedgerSession(info: Session.Info): boolean {
 function workLedgerSessionChangedEvent(
   sourceType: string,
   info: Session.Info,
-  { sequence = Number(info.time.updated) || 0, titleChanged }: { sequence?: number; titleChanged?: boolean } = {},
+  { sequence = Number(info.time.updated) || 0, titleChanged, archiveUpdated }: {
+    sequence?: number
+    titleChanged?: boolean
+    archiveUpdated?: boolean
+  } = {},
 ): WorkLedgerEventValue | null {
   const mission =
     info.kind === "mission" &&
@@ -86,6 +90,7 @@ function workLedgerSessionChangedEvent(
     sourceType,
     sessionID: info.id,
     ...(titleChanged ? { titleChanged: true } : {}),
+    ...(archiveUpdated ? { archiveUpdated: true } : {}),
     sequence,
   }
 }
@@ -120,7 +125,7 @@ function mailboxNotificationEvent(event: ProtocolEventView): WorkLedgerEventValu
   }
 }
 
-function workLedgerGlobalBusEvent(input: { payload?: unknown }): { sourceType: string; info: Session.Info; titleChanged: boolean } | null {
+function workLedgerGlobalBusEvent(input: { payload?: unknown }) {
   const payload = input.payload
   if (!payload || typeof payload !== "object") return null
   const envelope = payload as { type?: unknown; properties?: unknown }
@@ -133,7 +138,7 @@ function workLedgerGlobalBusEvent(input: { payload?: unknown }): { sourceType: s
     return null
   }
   const properties = envelope.properties && typeof envelope.properties === "object"
-    ? envelope.properties as { info?: unknown; titleChanged?: unknown }
+    ? envelope.properties as { info?: unknown; titleChanged?: unknown; archiveUpdated?: unknown }
     : undefined
   const parsed = Session.Info.safeParse(properties?.info)
   if (!parsed.success) return null
@@ -141,6 +146,7 @@ function workLedgerGlobalBusEvent(input: { payload?: unknown }): { sourceType: s
     sourceType,
     info: parsed.data,
     titleChanged: sourceType === Session.Event.Updated.type && properties?.titleChanged === true,
+    archiveUpdated: sourceType === Session.Event.Updated.type && properties?.archiveUpdated === true,
   }
 }
 
@@ -401,6 +407,7 @@ export function WorkLedgerRoutes() {
                 sourceType: EngineEvent.TaskUpdated.type,
                 taskID: task.taskID,
                 directory: event.directory,
+                ...(task.archiveUpdated ? { archiveUpdated: true } : {}),
                 // Metadata publications invalidate current reads without advancing a Protocol cursor.
                 sequence: 0,
               })
@@ -428,6 +435,7 @@ export function WorkLedgerRoutes() {
             if (sessionEvent) {
               const changed = workLedgerSessionChangedEvent(sessionEvent.sourceType, sessionEvent.info, {
                 titleChanged: sessionEvent.titleChanged,
+                archiveUpdated: sessionEvent.archiveUpdated,
               })
               if (changed) writeWorkLedgerEventData(writeData, changed)
               return

@@ -1,0 +1,41 @@
+{
+  "archive": true,
+  "status": 200,
+  "requestID": "bf5f5319-f9ac-43f8-b8aa-5a232f1884df",
+  "time": {
+    "created": 1795546616152,
+    "updated": 1795546644445,
+    "archived": 1795546644445
+  },
+  "notification": {
+    "type": "work-ledger.changed",
+    "sourceType": "session.updated",
+    "sessionID": "ses_hOgmvqXtwBPOBoSWQCE2",
+    "archiveUpdated": true,
+    "sequence": 1795546644445
+  },
+  "formalSearch": {
+    "kind": "mission",
+    "id": "draft-1fa651cf1d1e59ff478c1024029daa89",
+    "missionID": "draft-1fa651cf1d1e59ff478c1024029daa89",
+    "sessionID": "ses_hOgmvqXtwBPOBoSWQCE2",
+    "title": "Harbor archive projection review",
+    "pendingPromptText": "Review the offline handoff documents.",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b603\\candidate\\other-project",
+    "created": 1795546616152,
+    "started": 1795546616152,
+    "updated": 1795546644445,
+    "pinned": false,
+    "archived": 1795546644445,
+    "interruptible": false,
+    "outcome": null,
+    "productPillar": "work",
+    "taskStats": {
+      "total": 0,
+      "running": 0,
+      "inactive": 0
+    },
+    "pendingInteractions": 0,
+    "tasks": []
+  }
+}

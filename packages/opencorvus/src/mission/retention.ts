@@ -132,7 +132,7 @@ export function commitMissionArchiveRetention(input: {
       .get()
     if (!row) throw new Error(`Mission ${input.missionID} Session disappeared during retention update`)
     const info = Session.fromRow(row)
-    Bus.publishOwnedInTransaction(Session.Event.Updated, { info })
+    Bus.publishOwnedInTransaction(Session.Event.Updated, { info, archiveUpdated: true })
     return { status: "committed" as const, value: info }
   })
 }

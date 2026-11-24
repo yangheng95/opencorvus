@@ -2586,6 +2586,7 @@ export namespace EngineService {
           publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
             taskID,
             summary: "Task archived",
+            archiveUpdated: true,
           })
         })
       } finally {
@@ -2602,6 +2603,7 @@ export namespace EngineService {
         publication = Bus.publishOwnedInTransaction(Event.TaskUpdated, {
           taskID,
           summary: "Task restored",
+          archiveUpdated: true,
         })
       })
     }

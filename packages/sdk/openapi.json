@@ -5939,6 +5939,10 @@
         "properties": {
           "properties": {
             "properties": {
+              "archiveUpdated": {
+                "const": true,
+                "type": "boolean"
+              },
               "info": {
                 "$ref": "#/components/schemas/Session"
               },
@@ -6657,6 +6661,10 @@
         "properties": {
           "properties": {
             "properties": {
+              "archiveUpdated": {
+                "const": true,
+                "type": "boolean"
+              },
               "summary": {
                 "type": "string"
               },
@@ -144691,6 +144699,10 @@
                     {
                       "additionalProperties": false,
                       "properties": {
+                        "archiveUpdated": {
+                          "const": true,
+                          "type": "boolean"
+                        },
                         "directory": {
                           "type": "string"
                         },

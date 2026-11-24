@@ -1265,7 +1265,11 @@ export const Event = {
   TaskCreated: BusEvent.define("task.created", z.object({ taskID: Identifier.schema("task"), summary: z.string() }), {
     tier: 3,
   }),
-  TaskUpdated: BusEvent.define("task.updated", z.object({ taskID: Identifier.schema("task"), summary: z.string() }), {
+  TaskUpdated: BusEvent.define("task.updated", z.object({
+    taskID: Identifier.schema("task"),
+    summary: z.string(),
+    archiveUpdated: z.literal(true).optional(),
+  }), {
     tier: 3,
   }),
   TaskDeleted: BusEvent.define(

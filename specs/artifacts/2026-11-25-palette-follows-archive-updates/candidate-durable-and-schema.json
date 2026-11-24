@@ -1,0 +1,58 @@
+{
+  "openapiArchiveNotices": {
+    "sessionUpdated": {
+      "type": "boolean",
+      "const": true
+    },
+    "taskUpdated": {
+      "type": "boolean",
+      "const": true
+    },
+    "workLedger": {
+      "type": "boolean",
+      "const": true
+    }
+  },
+  "integrity": "ok",
+  "sessions": [
+    {
+      "id": "ses_hOgmvqXtwBPOBoSWQCE2",
+      "project_id": "prj_hF6Uvf7iZgzdKpoSh0RJ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b603\\candidate\\other-project",
+      "kind": "mission",
+      "title": "Harbor archive projection review",
+      "time_archived": null
+    },
+    {
+      "id": "ses_h6DL0StXaW9epTupKWOX",
+      "project_id": "prj_hF6Uvf7iZgzdKpoSh0RJ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b603\\candidate\\other-project",
+      "kind": "mission",
+      "title": "Harbor mission retention",
+      "time_archived": null
+    },
+    {
+      "id": "ses_herAmClldujIFFgyIqCs",
+      "project_id": "prj_hF6Uvf7iZgzdKpoSh0RJ",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b603\\candidate\\other-project",
+      "kind": "assistant",
+      "title": "Harbor retention handoff",
+      "time_archived": null
+    },
+    {
+      "id": "ses_hheytojNaqorrcqz9K9r",
+      "project_id": "prj_hM9ZR1KEUrXjEAzuyAFI",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b603\\candidate\\branch-review",
+      "kind": "assistant",
+      "title": "Harbor retention observer",
+      "time_archived": null
+    }
+  ],
+  "counts": {
+    "message": 0,
+    "part": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0,
+    "provider_activity_outcome": 0
+  }
+}

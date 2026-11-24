@@ -325,7 +325,7 @@ function commitMissionRetentionGateInTransaction(
       .returning()
       .get()
     if (!row) throw new Error(`Mission ${input.closure.missionID} Session disappeared before archive gate`)
-    Bus.publishOwnedInTransaction(Session.Event.Updated, { info: Session.fromRow(row) })
+    Bus.publishOwnedInTransaction(Session.Event.Updated, { info: Session.fromRow(row), archiveUpdated: true })
     return
   }
   if (input.closure.source === "mission.delete") {

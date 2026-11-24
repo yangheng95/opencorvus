@@ -1,0 +1,120 @@
+[
+  {
+    "at": "2026-11-24T18:55:42.434Z",
+    "event": "socket-open",
+    "id": 19,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:55:42.804Z",
+    "event": "upstream-response",
+    "id": 33,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor retention handoff",
+    "actual": "76ae3db1-6236-4f6f-980f-e3902f816b13"
+  },
+  {
+    "at": "2026-11-24T18:55:43.31Z",
+    "event": "socket-open",
+    "id": 49,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:55:43.705Z",
+    "event": "upstream-response",
+    "id": 68,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor retention",
+    "actual": "b8d6eb2f-9a58-4be5-8409-48139f81aeb3"
+  },
+  {
+    "at": "2026-11-24T18:56:09.35Z",
+    "event": "upstream-response",
+    "id": 80,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor retention handoff",
+    "actual": "73fc39ce-4be6-4aa1-ad03-b0a7e3b57245"
+  },
+  {
+    "at": "2026-11-24T18:56:09.363Z",
+    "event": "upstream-response",
+    "id": 81,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor retention",
+    "actual": "b94e1209-3edd-4aa7-98ad-472ea89f2620"
+  },
+  {
+    "at": "2026-11-24T18:56:29.728Z",
+    "event": "upstream-response",
+    "id": 90,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor retention handoff",
+    "actual": "52793f54-e2c0-4676-8343-7275d8c74295"
+  },
+  {
+    "at": "2026-11-24T18:56:29.742Z",
+    "event": "upstream-response",
+    "id": 91,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor retention",
+    "actual": "f0c0e5b1-5d1f-483e-944c-b7819467bfd8"
+  },
+  {
+    "at": "2026-11-24T18:56:31.188Z",
+    "event": "socket-open",
+    "id": 120,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:57:01.857Z",
+    "event": "socket-open",
+    "id": 147,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:57:02.276Z",
+    "event": "upstream-response",
+    "id": 154,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor archive projection review",
+    "actual": "331889ab-bc7a-4024-b444-1043bd4dcb49"
+  },
+  {
+    "at": "2026-11-24T18:57:24.467Z",
+    "event": "upstream-response",
+    "id": 163,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor archive projection review",
+    "actual": "24c51151-cc84-45a1-b615-9322000e2411"
+  },
+  {
+    "at": "2026-11-24T18:57:33.961Z",
+    "event": "upstream-response",
+    "id": 167,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Harbor archive projection review",
+    "actual": "b01bfb0f-03ff-4dbe-adb6-152506c2b27f"
+  }
+]

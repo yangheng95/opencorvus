@@ -226,12 +226,16 @@ test("Mission archive and restore invalidate the public archive query for the ex
   const target = await createDraft(project.path)
   const retained = await createDraft(control.path)
   await setArchived(retained, true)
-  for (const [archived, expected] of [[true, [target, retained]], [false, [retained]]] as const) {
+  for (const archived of [true, false, true, false]) {
+    const expected = archived ? [target, retained] : [retained]
     const { next, close } = await openLedgerEvents()
     try {
       expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
       await setArchived(target, archived)
-      expect(await next("work-ledger.changed", "session.updated")).toMatchObject({ sessionID: target.sessionID })
+      expect(await next("work-ledger.changed", "session.updated")).toMatchObject({
+        sessionID: target.sessionID,
+        archiveUpdated: true,
+      })
       const response = await Server.App().request(`/work-ledger/archive?${new URLSearchParams({ search })}`)
       expect(response.status).toBe(200)
       const { rows } = WorkLedgerArchiveList.parse(await response.json())
@@ -239,6 +243,52 @@ test("Mission archive and restore invalidate the public archive query for the ex
       for (const draft of expected) {
         expect(rows.find((row) => row.sessionID === draft.sessionID)).toMatchObject({
           kind: "mission", missionID: draft.missionID, directory: draft.directory, title: search,
+        })
+      }
+    } finally {
+      await close()
+    }
+  }
+}, 30_000)
+
+test("conversation archive and restore announce the exact work record and its current search membership", async () => {
+  await using chatProject = await memoryProject("chat-archive-search")
+  await using workProject = await memoryProject("work-archive-search")
+  for (const [experience, project] of [["chat", chatProject], ["work", workProject]] as const) {
+    const title = `Original ${experience} handoff`
+    const session = await Instance.provide({
+      directory: project.path,
+      fn: () => Session.create({ kind: "assistant", title, metadata: rightSidebarConversationMetadata(experience) }),
+    })
+    await Database.awaitEffectIdle(5_000)
+    const { next, close } = await openLedgerEvents()
+    try {
+      await next("work-ledger.connected")
+      for (const archived of [true, false]) {
+        const archiveQuery = new URLSearchParams({ directory: project.path })
+        const change = await Server.App().request(`/coding/${experience}/session/${session.id}/archive?${archiveQuery}`, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ archived }),
+        })
+        expect(change.status).toBe(200)
+        const receipt = (await change.json() as { session: Session.Info }).session
+        expect({ id: receipt.id, projectID: receipt.projectID, archived: receipt.time.archived ?? null }).toEqual({
+          id: session.id,
+          projectID: session.projectID,
+          archived: archived ? expect.any(Number) : null,
+        })
+        expect(await next("work-ledger.changed", "session.updated")).toMatchObject({
+          sessionID: session.id,
+          archiveUpdated: true,
+          sequence: receipt.time.updated,
+        })
+        const search = new URLSearchParams({ search: title })
+        const path = archived ? "/work-ledger/archive" : "/work-ledger"
+        const response = await Server.App().request(`${path}?${search}`)
+        expect(response.status).toBe(200)
+        expect(await response.json()).toMatchObject({
+          rows: [{ kind: "chat", sessionID: session.id, experience, title, directory: project.path }],
         })
       }
     } finally {
@@ -455,6 +505,7 @@ test("global ledger stream fans out durable Task events to every affected projec
         sourceType: "task.updated",
         taskID: renamed.taskID,
         directory: renamed.project.path,
+        archiveUpdated: true,
         sequence: 0,
       })
       const record = Database.use(db => db.select().from(EngineTaskTable).where(eq(EngineTaskTable.id, renamed.taskID)).get())!

@@ -6922,11 +6922,12 @@ scope, archive visibility, and selection identity.
 Surrounding whitespace preserves the current effective query, accepted results,
 cursor and diagnostics. The input keeps the operator's text.
 While open, the palette refreshes that same query on confirmed Session title
-changes, Project updates and connection recovery from the shared Work Ledger
-stream. It rebuilds the accepted result range from the first page before
-replacing the rows and cursor. Notifications received during an active read
-share one follow-up. The existing footer retries the failed read from its
-original starting point.
+changes, Project updates, archive and restore updates, and connection recovery
+from the shared Work Ledger stream. Archive notices come from the existing
+committed work record update. The palette rebuilds the accepted result range
+from the first page before replacing the rows and cursor. Notifications
+received during an active read share one follow-up. The existing footer retries
+the failed read from its original starting point.
 The global search Dialog owns closing; Tab can move from the query to its
 footer without clearing the query. One footer action continues or retries
 the current page and holds keyboard focus while it remains available. When

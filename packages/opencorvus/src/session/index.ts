@@ -348,6 +348,7 @@ export namespace Session {
       z.object({
         info: Info,
         titleChanged: z.literal(true).optional(),
+        archiveUpdated: z.literal(true).optional(),
       }),
     ),
     Deleted: BusEvent.define(
@@ -1000,7 +1001,7 @@ export namespace Session {
           .get()
         if (!row) throw new NotFoundError({ message: `Session not found: ${input.sessionID}` })
         const info = fromRow(row)
-        Bus.publishOwnedInTransaction(Event.Updated, { info })
+        Bus.publishOwnedInTransaction(Event.Updated, { info, archiveUpdated: true })
         return info
       })
     },

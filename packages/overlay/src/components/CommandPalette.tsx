@@ -430,7 +430,7 @@ export function CommandPalette(props: {
   onCleanup(() => ledgerSearch?.controller.abort())
   onCleanup(subscribeWorkLedgerChanges((event) => {
     const searchChanged = event.type === "work-ledger.changed" &&
-      (event.titleChanged || event.sourceType === "project.updated")
+      (event.titleChanged || event.archiveUpdated || event.sourceType === "project.updated")
     if (!searchChanged && event.type !== "work-ledger.connected") return
     const search = ledgerSearch
     if (!search || !ownsSearch(search)) return
