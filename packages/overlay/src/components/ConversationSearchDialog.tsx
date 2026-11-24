@@ -179,6 +179,7 @@ export function ConversationSearchDialog(props: {
       options={hits()} optionValue="id" optionTextValue={hitLabel} optionLabel={hitLabel} value={null}
       open={props.open} onInputChange={setQuery} defaultFilter={() => true} allowsEmptyCollection closeOnSelection={false}
       noResetInputOnBlur
+      preserveListFocusOnTab
       onInputKeyDown={(event) => {
         if (event.key !== "Escape" || event.isComposing) return
         event.preventDefault()

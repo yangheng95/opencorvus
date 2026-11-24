@@ -4204,6 +4204,9 @@ Conversation search reads the selected Task transcript or Chat session export.
 Search and conversation download use the standard read deadline alongside their
 explicit close or selection cancellation. Both use the same session export
 reader for the selected project and session.
+Tab moves between the conversation search input and its dialog actions while
+preserving the highlight and scroll position of the current result. The results
+keep virtual focus through the input, with arrow and page keys for navigation.
 Only a successfully validated snapshot supplies result counts and empty states.
 A read failure keeps the typed query and shows a localized Retry action with
 the original diagnostic, which remains visible during the retry. Locating a
