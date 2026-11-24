@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [停止确认显示工作所属的完整项目目录](records/2026-11/2026-11-24-work-ledger-stop-project-context.md)
 - [归档记录变化后关闭过期的删除确认](records/2026-11/2026-11-24-archive-delete-confirmation-retirement.md)
 - [从侧栏取消较早任务时沿用其项目目录](records/2026-11/2026-11-24-task-cancel-from-ledger-row.md)
 - [从工作侧栏改名独立任务并保留当前工作](records/2026-11/2026-11-24-task-rename-from-ledger-row.md)

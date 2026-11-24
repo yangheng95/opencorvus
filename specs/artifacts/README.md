@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [同名任务的停止确认桌面证据](2026-11-24-work-ledger-stop-project-context/README.md)
 - [归档恢复与已打开删除确认的桌面证据](2026-11-24-archive-delete-confirmation-retirement/README.md)
 - [较早任务侧栏取消的桌面证据](2026-11-24-task-cancel-from-ledger-row/README.md)
 - [较早任务的侧栏改名桌面证据](2026-11-24-task-rename-from-ledger-row/README.md)
