@@ -67,10 +67,18 @@ export interface VcsCommitMessageStreamOptions {
  * pushes data into the stores. Worktrees remain Task dispatch resources and
  * are not projected as Goal fields.
  */
-let metaRequest = 0
+type MetadataRead = {
+  directory: string
+  authorityRevision: number
+  selectionEpoch: number
+  directoryEpoch: number
+  completion?: Promise<void>
+}
+
+let currentMetadataRead: MetadataRead | undefined
 
 export function retireMetaProjection(clear = true): void {
-  metaRequest += 1
+  currentMetadataRead = undefined
   setBoardStore({
     metadataAuthorityRevision: null,
     pathLoading: false,
@@ -81,21 +89,33 @@ export function retireMetaProjection(clear = true): void {
   })
 }
 
-export async function loadMeta(directory = activeProjectDirectory(), authority = captureApiAuthority()): Promise<void> {
+export async function loadMeta(
+  directory = activeProjectDirectory(),
+  authority = captureApiAuthority(),
+  { joinPending = false } = {},
+): Promise<void> {
   assertApiAuthorityCurrent(authority)
   if (directory !== activeProjectDirectory()) return
-  const selectionEpoch = boardStore.selectEpoch
-  const epoch = settingsStore.directoryEpoch
-  const request = ++metaRequest
   if (!directory) {
     retireMetaProjection()
     return
   }
+  const selectionEpoch = boardStore.selectEpoch
+  const directoryEpoch = settingsStore.directoryEpoch
+  const pending = currentMetadataRead
+  if (
+    joinPending && pending?.completion && pending.directory === directory &&
+    pending.authorityRevision === authority.revision && pending.selectionEpoch === selectionEpoch &&
+    pending.directoryEpoch === directoryEpoch
+  ) return pending.completion
+
+  const read: MetadataRead = { directory, authorityRevision: authority.revision, selectionEpoch, directoryEpoch }
+  currentMetadataRead = read
   const isCurrent = () =>
     isApiAuthorityCurrent(authority) &&
-    request === metaRequest &&
+    currentMetadataRead === read &&
     selectionEpoch === boardStore.selectEpoch &&
-    epoch === settingsStore.directoryEpoch &&
+    directoryEpoch === settingsStore.directoryEpoch &&
     directory === activeProjectDirectory()
   const sameScope = boardStore.vcsDirectory === directory && boardStore.metadataAuthorityRevision === authority.revision
   setBoardStore({
@@ -125,16 +145,20 @@ export async function loadMeta(directory = activeProjectDirectory(), authority =
       throw cause
     },
   )
-  const results = await Promise.allSettled([pathRead, vcsRead])
-  if (!isCurrent()) {
-    if (request === metaRequest) setBoardStore({ pathLoading: false, vcsLoading: false })
-    return
-  }
-  const failures = results.flatMap((result) => result.status === "rejected" ? [result.reason as unknown] : [])
-  if (!failures.length) return
-  AppLog.debug("meta", "loadMeta failed", { errors: failures.map(String) })
-  if (failures.length === 1) throw failures[0]
-  throw new AggregateError(failures, failures.map(String).join("; "))
+  read.completion = Promise.allSettled([pathRead, vcsRead]).then((results) => {
+    if (!isCurrent()) {
+      if (currentMetadataRead === read) setBoardStore({ pathLoading: false, vcsLoading: false })
+      return
+    }
+    const failures = results.flatMap((result) => result.status === "rejected" ? [result.reason as unknown] : [])
+    if (!failures.length) return
+    AppLog.debug("meta", "loadMeta failed", { errors: failures.map(String) })
+    if (failures.length === 1) throw failures[0]
+    throw new AggregateError(failures, failures.map(String).join("; "))
+  }).finally(() => {
+    if (currentMetadataRead === read) currentMetadataRead = undefined
+  })
+  return read.completion
 }
 
 export async function refreshActiveProjectMetadata(changedDirectory?: string): Promise<void> {

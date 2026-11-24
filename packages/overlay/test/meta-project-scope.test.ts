@@ -84,6 +84,28 @@ test("connection hydration confirms the active project's Git metadata again", as
     .toEqual({ path, vcs: checkout, loading: false, failure: null })
 })
 
+test("opening the environment shares the current project's pending path and Git reads", async () => {
+  const directory = "D:/project"
+  const path = { directory }
+  const checkout = { initialized: true, branch: "review" }
+  const gitRead = Promise.withResolvers<unknown>()
+  const requested: string[] = []
+  setSettingsStore("directory", directory)
+  transport((request) => {
+    requested.push(request.path)
+    return request.path === "path" ? path : gitRead.promise
+  })
+
+  const refresh = loadMeta()
+  const opening = loadMeta(directory, undefined, { joinPending: true })
+  gitRead.resolve(checkout)
+  await Promise.all([refresh, opening])
+
+  expect(requested).toEqual(["path", "vcs"])
+  expect({ path: boardStore.path, vcs: boardStore.vcs, busy: boardStore.vcsLoading })
+    .toEqual({ path, vcs: checkout, busy: false })
+})
+
 test("latest metadata request owns the result when an earlier request finishes later", async () => {
   setSettingsStore("directory", "D:/project")
   let finishFirst!: (value: unknown) => void
@@ -203,7 +225,7 @@ test.each(["response", "error"] as const)("successor metadata retains busy owner
   const previous = loadMeta()
   await started[0].promise
   setBoardStore({ selectEpoch: 21, selectedSource: { kind: "session", id: "ses_b", directory: "D:/owned/meta-b" } })
-  const current = loadMeta()
+  const current = loadMeta(undefined, undefined, { joinPending: true })
   await started[1].promise
   // A stale explicit refresh must leave the actual B request and its visible state intact.
   await loadMeta("D:/owned/meta-a")

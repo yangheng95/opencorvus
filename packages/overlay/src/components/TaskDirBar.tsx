@@ -1427,7 +1427,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const authority = captureApiAuthority()
     boardStore.selectEpoch
     if (runtimePanelOpen() && appStore.connected && directory)
-      untrack(() => void loadMeta(directory, authority).catch(() => undefined))
+      untrack(() => void loadMeta(directory, authority, { joinPending: true }).catch(() => undefined))
   })
 
   const ActionsMenu = () => {

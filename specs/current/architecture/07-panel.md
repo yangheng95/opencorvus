@@ -215,6 +215,9 @@ The existing Work Ledger branch notification refreshes this same metadata when
 it matches the active directory. A new connection also revalidates active
 metadata already projected in the panel. A confirmed branch change retires
 the open or pending branch menu. Opening it again reads the current branches.
+Opening the environment panel joins an in-progress metadata read for the same
+directory, API authority and selection. Explicit refresh and a changed project
+still establish a new read.
 
 File Editor initial read failures retain one current original thrown value
 under the existing target, API authority and load/reload generations. Shared
