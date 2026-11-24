@@ -1,0 +1,512 @@
+{
+  "enStart": {
+    "active": "Research Studio",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 587.2291870117188,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 531.2291870117188
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 765.2291870117188,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 525.2291870117188
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1170,
+        "height": 566,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 765.2291870117188,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 525.2291870117188
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base"
+    ]
+  },
+  "enDown": {
+    "active": "Research Studio",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 470.5625,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 414.5625
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 765.2291870117188,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 525.2291870117188
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 116.66666412353516,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1170,
+        "height": 566,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 765.2291870117188,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 525.2291870117188
+    },
+    "visible": [
+      "Base",
+      "Generate Expert Squads",
+      "Dynamic"
+    ]
+  },
+  "enWrongSelection": {
+    "active": "Research Studio",
+    "activeElement": "INPUT",
+    "checked": [
+      "Research Studio",
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 470.5625,
+      "left": 346.66668701171875,
+      "right": 933.3333740234376,
+      "top": 414.5625
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 765.2291870117188,
+          "left": 340.66668701171875,
+          "right": 939.3333740234376,
+          "top": 525.2291870117188
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 357,
+        "height": 240,
+        "offset": 116.66666412353516,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 638.6666717529297,
+          "left": 336.66668701171875,
+          "right": 943.3333740234376,
+          "top": 72.22917175292969
+        },
+        "c": "mission-create-form",
+        "extent": 1170,
+        "height": 566,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 704,
+          "left": 320,
+          "right": 960,
+          "top": 16
+        },
+        "c": "dialog-form",
+        "extent": 687,
+        "height": 687,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 765.2291870117188,
+      "left": 340.66668701171875,
+      "right": 939.3333740234376,
+      "top": 525.2291870117188
+    },
+    "visible": [
+      "Base",
+      "Generate Expert Squads",
+      "Dynamic"
+    ]
+  },
+  "zhStart": {
+    "active": "Generate Expert Squads",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 413.25,
+      "left": 170.25,
+      "right": 1109.75,
+      "top": 352.46875
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 525.34375,
+          "left": 160.65625,
+          "right": 1119.34375,
+          "top": 141.34375
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 427,
+        "height": 384,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 590.6771087646484,
+          "left": 154.2604217529297,
+          "right": 1125.7396087646484,
+          "top": 114.76042175292967
+        },
+        "c": "mission-create-form",
+        "extent": 1923,
+        "height": 476,
+        "offset": 806.6666870117188,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 694.3958549499512,
+          "left": 128,
+          "right": 1152,
+          "top": 25.604167938232425
+        },
+        "c": "dialog-form",
+        "extent": 667,
+        "height": 667,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 525.34375,
+      "left": 160.65625,
+      "right": 1119.34375,
+      "top": 141.34375
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads",
+      "Dynamic"
+    ]
+  },
+  "zhUp": {
+    "active": "Generate Expert Squads",
+    "activeElement": "INPUT",
+    "checked": [
+      "Dynamic"
+    ],
+    "matches": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads"
+    ],
+    "query": "re",
+    "retained": [
+      "Dynamic"
+    ],
+    "row": {
+      "bottom": 829.25,
+      "left": 170.25,
+      "right": 1109.75,
+      "top": 768.46875
+    },
+    "scrolls": [
+      {
+        "bounds": {
+          "bottom": 941.34375,
+          "left": 160.65625,
+          "right": 1119.34375,
+          "top": 557.34375
+        },
+        "c": "mission-create-form__expert-squad-list",
+        "extent": 427,
+        "height": 384,
+        "offset": 0,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 590.6771087646484,
+          "left": 154.2604217529297,
+          "right": 1125.7396087646484,
+          "top": 114.76042175292967
+        },
+        "c": "mission-create-form",
+        "extent": 1923,
+        "height": 476,
+        "offset": 390.6666564941406,
+        "y": "auto"
+      },
+      {
+        "bounds": {
+          "bottom": 694.3958549499512,
+          "left": 128,
+          "right": 1152,
+          "top": 25.604167938232425
+        },
+        "c": "dialog-form",
+        "extent": 667,
+        "height": 667,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "hidden"
+      },
+      {
+        "bounds": {
+          "bottom": 720,
+          "left": 0,
+          "right": 1280,
+          "top": 0
+        },
+        "c": "",
+        "extent": 720,
+        "height": 720,
+        "offset": 0,
+        "y": "clip"
+      }
+    ],
+    "view": {
+      "bottom": 941.34375,
+      "left": 160.65625,
+      "right": 1119.34375,
+      "top": 557.34375
+    },
+    "visible": [
+      "Research Studio",
+      "Advanced",
+      "Base",
+      "Generate Expert Squads",
+      "Dynamic"
+    ]
+  }
+}
