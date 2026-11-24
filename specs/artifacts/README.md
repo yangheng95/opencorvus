@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目文件恢复后编辑器提示的桌面证据](2026-11-24-file-editor-restored-path/README.md)
 - [跨标签文件创建后的目录和搜索证据](2026-11-24-explorer-peer-change/README.md)
 - [项目模式保存与恢复的桌面证据](2026-11-24-project-mode-persistence/README.md)
 - [两个标签页修改外观偏好的桌面证据](2026-11-24-preferences-across-tabs/README.md)

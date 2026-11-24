@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [项目文件回到原路径时清除过期读取错误](records/2026-11/2026-11-24-file-editor-restored-path.md)
 - [资源管理器及时显示另一标签页已创建的文件](records/2026-11/2026-11-24-explorer-peer-change.md)
 - [项目输入模式可以保存并按项目恢复](records/2026-11/2026-11-24-project-mode-persistence.md)
 - [两个标签页修改不同设置后都能恢复](records/2026-11/2026-11-24-preferences-across-tabs.md)
