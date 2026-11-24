@@ -1,0 +1,30 @@
+{
+  "fixtureScope": "C:\\Users\\Public\\opencorvus-review-20261124-b556\\baseline\\local-matrix",
+  "channelListStatus": 200,
+  "channelListRequest": "4f43aa04-c483-4a4a-a2ed-3656a5dfe60c",
+  "matrix": {
+    "id": "matrix",
+    "status": "configured",
+    "runtime_status": "running",
+    "runtime_detail": "Managed runtime active for matrix."
+  },
+  "runtimeStatus": 200,
+  "runtime": {
+    "status": "running",
+    "channels": [
+      "matrix"
+    ],
+    "running": true
+  },
+  "handshakeCount": 1,
+  "firstHandshake": {
+    "method": "GET",
+    "path": "/_matrix/client/v3/account/whoami",
+    "at": "2026-11-24T08:32:01.665Z"
+  },
+  "firstSync": {
+    "method": "GET",
+    "path": "/_matrix/client/v3/sync",
+    "at": "2026-11-24T08:32:01.671Z"
+  }
+}

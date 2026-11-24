@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [通道目录启动边界的实际证据](2026-11-24-channel-catalog-project-startup/README.md)
 - [项目交付包下载的桌面证据](2026-11-24-passive-project-archive-download/README.md)
 - [已保存会话配置读取的桌面证据](2026-11-24-passive-session-config-read/README.md)
 - [保存草稿前的专家团目录读取证据](2026-11-24-passive-expert-catalog-project-bootstrap/README.md)

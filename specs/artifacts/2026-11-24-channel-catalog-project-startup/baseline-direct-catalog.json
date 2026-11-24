@@ -1,0 +1,85 @@
+[
+  {
+    "label": "protected-ignore",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b556\\baseline\\protected-ignore",
+    "projectID": "prj_hUPWJnQyUP0qsmHPBTbs",
+    "configStatus": 200,
+    "channelStatus": 500,
+    "channelRequestID": "44f6345f-9036-446e-8bd0-b7f148875037",
+    "error": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "label": "change-review",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261124-b556\\baseline\\change-review",
+    "projectID": "prj_hRwiNkgtswdl4aodIQjw",
+    "configStatus": 200,
+    "channelStatus": 200,
+    "channelRequestID": "23324d78-6f12-4abd-b5fa-bc645d772642",
+    "count": 27,
+    "irc": {
+      "id": "irc",
+      "name": "IRC",
+      "status": "disabled",
+      "runtime_status": "unavailable",
+      "runtime_detail": "The provider requires the OpenClaw application runtime instead of a thin standalone contract.",
+      "fields": [
+        {
+          "key": "enabled",
+          "labelKey": "channel.field.irc.enabled",
+          "type": "boolean"
+        },
+        {
+          "key": "host",
+          "labelKey": "channel.field.irc.host",
+          "type": "text",
+          "placeholder": {
+            "kind": "example",
+            "value": "irc.libera.chat"
+          }
+        },
+        {
+          "key": "nick",
+          "labelKey": "channel.field.irc.nick",
+          "type": "text",
+          "placeholder": {
+            "kind": "example",
+            "value": "opencorvus"
+          }
+        },
+        {
+          "key": "port",
+          "labelKey": "channel.field.irc.port",
+          "type": "text",
+          "placeholder": {
+            "kind": "example",
+            "value": "6697"
+          }
+        },
+        {
+          "key": "tls",
+          "labelKey": "channel.field.irc.tls",
+          "type": "boolean"
+        },
+        {
+          "key": "password",
+          "labelKey": "channel.field.irc.password",
+          "type": "secret"
+        },
+        {
+          "key": "channels",
+          "labelKey": "channel.field.irc.channels",
+          "type": "text",
+          "placeholder": {
+            "kind": "example",
+            "value": "#general,#bots"
+          }
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "requestID": "6d2fd50d-2d8c-4392-9ef7-c7e71f3c091c",
+    "method": "GET",
+    "path": "/channel",
+    "status": 500,
+    "error": {
+      "code": "EPERM",
+      "path": "C:\\Users\\Public\\opencorvus-review-20261124-b556\\baseline\\protected-ignore/.gitignore",
+      "syscall": "open"
+    },
+    "stack": [
+      "    at async ensureProjectRuleFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:71:15)",
+      "    at async ensureGitProjectMetadata (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:79:9)",
+      "    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)",
+      "    at async bootstrapContext (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1162:30)",
+      "    at async prepareContextInTurn (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:984:13)"
+    ]
+  },
+  {
+    "requestID": "9ae0c7a3-b25d-42b0-bf8e-97f3b1c76752",
+    "method": "GET",
+    "path": "/channel",
+    "status": 500,
+    "error": {
+      "code": "EPERM",
+      "path": "C:\\Users\\Public\\opencorvus-review-20261124-b556\\baseline\\protected-ignore/.gitignore",
+      "syscall": "open"
+    },
+    "stack": [
+      "    at async ensureProjectRuleFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:71:15)",
+      "    at async ensureGitProjectMetadata (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\git-project-metadata.ts:79:9)",
+      "    at async stage (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\open-lifecycle.ts:38:28)",
+      "    at async bootstrapContext (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:1162:30)",
+      "    at async prepareContextInTurn (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\instance.ts:984:13)"
+    ]
+  }
+]

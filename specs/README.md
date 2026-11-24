@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [通道目录与项目运行准备的权限边界](records/2026-11/2026-11-24-channel-catalog-project-startup.md)
 - [项目交付包下载的读取权限](records/2026-11/2026-11-24-passive-project-archive-download.md)
 - [已保存会话的配置读取与项目运行准备](records/2026-11/2026-11-24-passive-session-config-read.md)
 - [专家团目录读取不应阻断草稿保存](records/2026-11/2026-11-24-passive-expert-catalog-project-bootstrap.md)
