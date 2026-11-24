@@ -490,5 +490,79 @@
       "bottom": 720,
       "top": 57.59375
     }
+  },
+  "zhAdjacentKeyboardFocus": {
+    "active": {
+      "skill": "handoff-project-20",
+      "tag": "BUTTON",
+      "text": "handoff-project-20ledgeraudit candidate 20 records the receipt.项目"
+    },
+    "filter": "project",
+    "ids": [
+      "handoff-project-01",
+      "handoff-project-02",
+      "handoff-project-03",
+      "handoff-project-04",
+      "handoff-project-05",
+      "handoff-project-06",
+      "handoff-project-07",
+      "handoff-project-08",
+      "handoff-project-09",
+      "handoff-project-10",
+      "handoff-project-11",
+      "handoff-project-12",
+      "handoff-project-13",
+      "handoff-project-14",
+      "handoff-project-15",
+      "handoff-project-16",
+      "handoff-project-17",
+      "handoff-project-18",
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ],
+    "list": [
+      2588,
+      2588,
+      0
+    ],
+    "query": "ledgeraudit",
+    "row": {
+      "bottom": 412.2291793823242,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 297.7708435058594
+    },
+    "scroll": 2424,
+    "viewport": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    },
+    "visible": [
+      "handoff-project-19",
+      "handoff-project-20",
+      "handoff-project-21"
+    ]
+  },
+  "zhFocusRing": {
+    "focusVisible": true,
+    "list": {
+      "bottom": 553.09375,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": -2035.375
+    },
+    "name": "handoff-project-20",
+    "offset": "1.33333px",
+    "outline": "0.666667px",
+    "overflowX": "hidden",
+    "row": {
+      "bottom": 412.2291793823242,
+      "left": 519.0416870117188,
+      "right": 1221.7396240234375,
+      "top": 297.7708435058594
+    }
   }
 }

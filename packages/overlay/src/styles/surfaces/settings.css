@@ -483,6 +483,11 @@ button.s-row:focus-visible {
 
 .mission-skill-item {
   padding-inline: 0;
+  scroll-margin-block: var(--ui-gap-xs);
+}
+
+button.mission-skill-item:focus-visible {
+  outline-offset: calc(-1 * var(--oc-border-width));
 }
 
 .mission-skill-item .s-row-leading {

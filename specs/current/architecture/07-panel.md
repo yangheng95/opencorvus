@@ -6293,7 +6293,10 @@ same column with a Back to list action. Mission Skill details resolve the opened
 name in the current scope's accepted catalog independently of list filters. When
 that name leaves the catalog, its heading and Back to list remain with a localized
 unavailable message. Navigation focuses the opened heading and returns to the
-exact visible row or the current catalog search.
+exact visible row or the current catalog search. Explicitly opening a Mission
+Skill starts the settings viewport at the detail overview. Page Up and Page Down
+move among rendered results for the current query and source filter, with focus
+following the visible target row.
 Mission Skill list rows show up to two lines of the same description used in the
 detail, with localized built-in copy and project or global descriptions as authored.
 Mission Skill invocation and path actions show their result at the action's

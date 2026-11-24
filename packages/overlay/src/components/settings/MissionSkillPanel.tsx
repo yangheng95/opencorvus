@@ -141,7 +141,11 @@ export default function MissionSkillPanel() {
     return name === undefined ? undefined : skills().find((skill) => skill.name === name)
   })
 
-  function changeCatalogView(change: () => void, target: () => HTMLElement | null | undefined) {
+  function changeCatalogView(
+    change: () => void,
+    target: () => HTMLElement | null | undefined,
+    { startAtTop = false }: { startAtTop?: boolean } = {},
+  ) {
     const scope = currentScopeIdentity()
     const origin = document.activeElement
     const generation = ++focusGeneration
@@ -150,7 +154,9 @@ export default function MissionSkillPanel() {
       if (generation !== focusGeneration || currentScopeIdentity() !== scope || !panel?.isConnected) return
       if (document.activeElement !== origin && document.activeElement !== document.body) return
       const element = target()
-      if (element?.isConnected) element.focus()
+      if (!element?.isConnected) return
+      if (startAtTop) element.closest(".config-content")?.scrollTo({ top: 0 })
+      element.focus({ preventScroll: startAtTop })
     })
   }
 
@@ -158,6 +164,7 @@ export default function MissionSkillPanel() {
     changeCatalogView(
       () => setSelectedName(name),
       () => selectedName() === name ? detailHeading : undefined,
+      { startAtTop: true },
     )
   }
 
@@ -299,7 +306,10 @@ export default function MissionSkillPanel() {
   const searchNavigation = createSearchResultNavigation(() => {
     if (!hasSearchMatches() || !panel) return []
     return Array.from(panel.querySelectorAll<HTMLButtonElement>('button[data-ui="mission-skill-item"]:enabled'))
-  }, { returnToSearch: () => searchInput })
+  }, {
+    returnToSearch: () => searchInput,
+    pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+  })
   const searchKeyboardHintID = "mission-skill-search-keyboard-hint"
   const refreshBusy = () => !scopeUnavailable() && loading()
   const scopeStatus = createMemo(() => {
@@ -429,7 +439,7 @@ export default function MissionSkillPanel() {
                 </For>
               </div>
               <Show when={hasSearchMatches()}>
-                <p id={searchKeyboardHintID} class="mission-skill-search-hint">{t("settings.search_return_keyboard_hint")}</p>
+                <p id={searchKeyboardHintID} class="mission-skill-search-hint">{t("settings.search_paged_keyboard_hint")}</p>
               </Show>
             </SettingsToolbar>
 
@@ -465,7 +475,7 @@ export default function MissionSkillPanel() {
                               class="mission-skill-item"
                               data-ui="mission-skill-item"
                               data-skill-name={skill.name}
-                              aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown Escape" : undefined}
+                              aria-keyshortcuts={hasSearchMatches() ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
                               interactive
                               leading={<Icon name="workflow" />}
                               title={skill.name}

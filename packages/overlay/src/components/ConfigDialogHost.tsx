@@ -798,7 +798,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               clearDataUI="config-search-clear"
             />
             <Show when={hasSettingsSearchMatches()}>
-              <p id="config-search-keyboard-hint" class="config-search-keyboard-hint">{t("settings.search_tab_page_navigation")}</p>
+              <p id="config-search-keyboard-hint" class="config-search-keyboard-hint">{t("settings.search_paged_keyboard_hint")}</p>
             </Show>
             <Show when={normalizedSettingsSearch() && matchedConfigTabIDs().size === 0}>
               <div role="status">
