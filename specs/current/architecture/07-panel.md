@@ -6611,8 +6611,11 @@ available Open action with Down or Up. It exposes the localized guidance
 when a matching action is usable and otherwise preserves normal input behavior.
 From a focused matching Open action, Down and Up move to the adjacent available
 Open action in the same accepted results through the shared search result
-navigation. Escape returns focus to the editable search field with the accepted
-query and results intact. Tab keeps the usual row action order.
+navigation. Page Up and Page Down move through that collection by approximately
+one settings viewport, using the full result row for measurement and visibility.
+The resulting Open action receives focus. Escape returns focus to the editable
+search field with the accepted query and results intact. Tab keeps the usual row
+action order.
 Active and archived Work Ledger list requests keep the standard read deadline
 even when their caller provides a cancellation signal. Timeout preserves its
 diagnostic and the existing read error recovery; query replacement still retires

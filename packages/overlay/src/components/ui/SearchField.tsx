@@ -35,10 +35,11 @@ export interface SearchFieldProps {
 
 export function createSearchResultNavigation(
   readActions: () => readonly HTMLElement[],
-  { tabList = false, returnToSearch, pageViewport }: {
+  { tabList = false, returnToSearch, pageViewport, pageRow }: {
     tabList?: boolean
     returnToSearch?: () => HTMLInputElement | undefined
     pageViewport?: () => HTMLElement | undefined
+    pageRow?: (action: HTMLElement) => HTMLElement | null
   } = {},
 ) {
   function resultFocusTarget(edge: "first" | "last"): HTMLElement | undefined {
@@ -64,16 +65,17 @@ export function createSearchResultNavigation(
       return
     }
     if (viewport) {
+      const rowFor = (action: HTMLElement) => pageRow ? pageRow(action) : action
       const target = renderedListPageIndex(
         current,
         actions.length,
         key === "PageDown" ? 1 : -1,
         viewport.clientHeight,
-        (index) => actions[index]?.getBoundingClientRect(),
+        (index) => rowFor(actions[index]!)?.getBoundingClientRect(),
       )
       const action = actions[target ?? current]!
       action.focus({ preventScroll: true })
-      action.scrollIntoView({ block: "nearest", inline: "nearest" })
+      rowFor(action)?.scrollIntoView({ block: "nearest", inline: "nearest" })
       return
     }
 

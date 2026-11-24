@@ -3539,6 +3539,7 @@ button.s-row:focus-visible {
 }
 
 .archive-row {
+  scroll-margin-block: var(--ui-gap-xs);
   min-width: 0;
 }
 
