@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [收件箱折叠项目中的批量选择证据](2026-11-25-mailbox-selects-only-visible-project-messages/README.md)
 - [定时运行记录与项目归属证据](2026-11-25-scheduled-history-identifies-project-run-target/README.md)
 - [目录监视与资源管理器搜索证据](2026-11-25-explorer-updates-search-for-watched-membership/README.md)
 - [文件监视通知与编辑器实时核对证据](2026-11-25-live-native-file-changes-reach-editor/README.md)

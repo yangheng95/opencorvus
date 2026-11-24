@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [收件箱批量选择仅包含展开项目中的消息](records/2026-11/2026-11-25-mailbox-selects-only-visible-project-messages.md)
 - [定时运行历史显示每条记录的项目](records/2026-11/2026-11-25-scheduled-history-identifies-project-run-target.md)
 - [资源管理器跟随受监视目录成员变化更新搜索](records/2026-11/2026-11-25-explorer-updates-search-for-watched-membership.md)
 - [外部文件监视事件触发已打开编辑器核对](records/2026-11/2026-11-25-live-native-file-changes-reach-editor.md)
