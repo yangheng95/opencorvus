@@ -74,6 +74,71 @@ async function openLedgerEvents() {
   }
 }
 
+test("the committed side chat list publishes its exact source on membership changes", async () => {
+  await using project = await memoryProject("side-chat-membership-fanout")
+  await using control = await memoryProject("side-chat-membership-control")
+  const createSource = (directory: string) => Instance.provide({ directory, fn: async () => {
+    const source = await Session.create({ kind: "assistant", title: "Side chat source" })
+    const retained = await Session.fork({ sessionID: source.id, purpose: "side-chat" })
+    return { source, retained }
+  } })
+  const target = await createSource(project.path)
+  const other = await createSource(control.path)
+  await Database.awaitEffectIdle(5_000)
+  const { next, close } = await openLedgerEvents()
+
+  function listPath(source: Session.Info) {
+    return `/session/${source.id}/side-chat?${new URLSearchParams({ directory: source.directory })}`
+  }
+  async function expectList(source: Session.Info, sessionIDs: string[]) {
+    const response = await Server.App().request(listPath(source))
+    expect(response.status).toBe(200)
+    const items = await response.json() as Session.Info[]
+    expect(items.map((item) => item.id)).toEqual(sessionIDs)
+  }
+
+  try {
+    await next("work-ledger.connected")
+    const created = await Server.App().request(listPath(target.source), { method: "POST" })
+    expect(created.status).toBe(200)
+    const side = await created.json() as Session.Info
+    const route = `/session/${side.id}?${new URLSearchParams({ directory: target.source.directory })}`
+    async function expectMembership(sourceType: string) {
+      expect(await next("work-ledger.side-chat-changed", sourceType)).toEqual({
+        type: "work-ledger.side-chat-changed",
+        sourceType,
+        projectID: target.source.projectID,
+        directory: target.source.directory,
+        sourceSessionID: target.source.id,
+        sessionID: side.id,
+        sequence: 0,
+      })
+    }
+
+    await expectMembership("session.created")
+    await expectList(target.source, [side.id, target.retained.id])
+    for (const archived of [Date.now(), null]) {
+      const response = await Server.App().request(route, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ time: { archived } }),
+      })
+      expect(response.status).toBe(200)
+      await expectMembership("session.updated")
+      await expectList(target.source, archived ? [target.retained.id] : [side.id, target.retained.id])
+    }
+
+    const removed = await Server.App().request(route, { method: "DELETE" })
+    expect(removed.status).toBe(200)
+    expect(await removed.json()).toMatchObject({ status: "physically_deleted", sessionID: side.id })
+    await expectMembership("session.deleted")
+    await expectList(target.source, [target.retained.id])
+    await expectList(other.source, [other.retained.id])
+  } finally {
+    await close()
+  }
+}, 30_000)
+
 test("committed scheduled definition changes invalidate the public list after each revision", async () => {
   await using project = await memoryProject("automation-definition-fanout")
   await using control = await memoryProject("automation-definition-fanout-control")

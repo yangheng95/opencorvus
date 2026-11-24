@@ -1,10 +1,21 @@
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { BusEvent } from "@/bus/bus-event"
 
 export const SideChatIdentity = z.object({
   sourceSessionID: z.string().min(1),
   inheritedMessageIDs: z.array(z.string()),
 })
+
+export const SideChatDeleted = BusEvent.define(
+  "side-chat.deleted",
+  z.object({
+    projectID: z.string().min(1),
+    directory: z.string().min(1),
+    sourceSessionID: SideChatIdentity.shape.sourceSessionID,
+    sessionID: z.string().min(1),
+  }),
+)
 
 export function sideChatIdentity(metadata: Record<string, unknown> | undefined) {
   if (!metadata?.sideChat) return undefined

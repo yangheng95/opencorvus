@@ -39,8 +39,8 @@ export interface SideChatSession {
 export function sideChatPath(target: SideChatSource, suffix: string): string {
   return `session/${encodeURIComponent(target.sessionID)}${suffix}?${new URLSearchParams({ directory: target.directory })}`
 }
-export function listSideChats(source: SideChatSource): Promise<SideChatSession[]> {
-  return apiJson(sideChatPath(source, "/side-chat"), { authority: source.authority })
+export function listSideChats(source: SideChatSource, signal: AbortSignal): Promise<SideChatSession[]> {
+  return apiJson(sideChatPath(source, "/side-chat"), { authority: source.authority, signal })
 }
 export function createSideChat(source: SideChatSource): Promise<SideChatSession> {
   return apiJson(sideChatPath(source, "/side-chat"), { method: "POST", authority: source.authority })

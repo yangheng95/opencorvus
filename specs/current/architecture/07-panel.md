@@ -2482,6 +2482,17 @@ its canonical list settles, creating the first only when that list is empty.
 Explicit New side chat, quotations and questions create a fresh fork. List
 failures remain lookup errors and retry the same lookup, rather than implying
 an empty history. The internal request carries that explicit opening intent.
+Committed Side chat creation, archive, restore and deletion publish the exact
+source and member Session through the existing Work Ledger stream. The open
+panel refreshes its canonical source list on matching membership changes and
+stream reconnection. An accepted list refresh keeps its selected Session,
+transcript and draft while that Session remains in the list. A refresh failure
+shows the diagnostic and retry alongside the last accepted list. Source and
+connection authority retire prior reads, and a concurrent local creation settles
+before the pending list refresh can replace the accepted membership.
+Side chat deletion publishes its membership identities from the same committed
+retained or physical deletion transaction. The notice carries the source and
+removed Session identities without retaining the removed Session contents.
 Each side chat is an independent assistant Session root. `metadata.sideChat` records its source
 Session and inherited Message identities; this reference is not an execution
 parent edge. The canonical atomic fork copies only completed reference history,

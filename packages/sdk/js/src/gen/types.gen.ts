@@ -41399,6 +41399,15 @@ export type WorkLedgerEventsResponses = {
         type: "work-ledger.conversation-handoff"
       }
     | {
+        directory: string
+        projectID: string
+        sequence: 0
+        sessionID: string
+        sourceSessionID: string
+        sourceType: "session.created" | "session.updated" | "session.deleted"
+        type: "work-ledger.side-chat-changed"
+      }
+    | {
         messageID: string
         sequence: number
         sourceType: string

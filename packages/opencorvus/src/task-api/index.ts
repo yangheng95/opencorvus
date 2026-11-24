@@ -89,6 +89,7 @@ import { decodeRawBase64Payload } from "@/session/text-mime"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionStatus } from "@/session/status"
 import { rightSidebarConversationExperience } from "@/chat/identity"
+import { SideChatDeleted, SideChatIdentity } from "@/chat/side-chat-identity"
 import { Database, NotFoundError, and, eq, inArray, isNull, isSqliteUniqueConstraintError, sql } from "@/storage/db"
 import { Log } from "@/util/log"
 import { Filesystem } from "@/util/filesystem"
@@ -651,6 +652,17 @@ function appendSessionDeletedBoundaryInTransaction(db: Database.TxOrDb, sessionI
     source: "session.delete",
     payload: null,
   })
+}
+
+function publishSideChatDeletedInTransaction(session: Session.Info): void {
+  const sideChat = SideChatIdentity.safeParse(session.metadata?.sideChat)
+  if (!sideChat.success) return
+  const owner = { projectID: session.projectID, directory: session.directory }
+  Bus.publishProjectOwnedInTransaction(SideChatDeleted, {
+    ...owner,
+    sourceSessionID: sideChat.data.sourceSessionID,
+    sessionID: session.id,
+  }, owner)
 }
 
 function assertTasksRemainTerminalForPhysicalDelete(db: Database.TxOrDb, tasks: readonly TaskRow[]): void {
@@ -3579,6 +3591,7 @@ export namespace EngineService {
             })
             for (const task of tasksForDelete) appendTaskDeletedBoundaryInTransaction(db, task)
             for (const id of ids) appendSessionDeletedBoundaryInTransaction(db, id)
+            publishSideChatDeletedInTransaction(root)
             // The durable session.deleted Protocol fact above is the deletion
             // authority. The Session Bus event is only an in-process projection for
             // a retained runtime; deleting a persisted Session whose repository is
@@ -3717,6 +3730,7 @@ export namespace EngineService {
         for (const boundary of deletionBoundaries) {
           ProtocolStore.appendPhysicalSessionDeletedInTransaction(boundary)
         }
+        publishSideChatDeletedInTransaction(root)
         Database.effect(() => Database.incrementalVacuum())
       })
       committed = true

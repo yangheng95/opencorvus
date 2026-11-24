@@ -841,6 +841,7 @@ function refreshWorkspaceConfiguration(directory: string): void {
 }
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
+  if (event.type === "work-ledger.side-chat-changed") return
   if (event.type === "work-ledger.file-changed") {
     requestOpenFileDiskCheck(event)
     return

@@ -14916,7 +14916,7 @@ export class WorkLedger extends HeyApiClient {
   /**
    * Subscribe to Work Ledger change notifications
    *
-   * Unified Work Ledger Server-Sent Events (SSE) stream. Generic Mission, Chat, Work, Task, and Project changes tell clients to refetch /work-ledger; conversation handoffs carry exact caller and target lineage for activation followed by caller archival.
+   * Unified Work Ledger Server-Sent Events (SSE) stream. Generic Mission, Chat, Work, Task, and Project changes tell clients to refetch /work-ledger. Conversation handoffs carry exact caller and target lineage. Side chat membership changes identify the source whose list needs to refresh.
    */
   public events<ThrowOnError extends boolean = false>(
     options?: Options<never, ThrowOnError, WorkLedgerEventsResponse>,

@@ -1,0 +1,270 @@
+[
+  {
+    "at": "2026-11-24T22:58:02.66Z",
+    "event": "socket-open",
+    "id": 22,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T22:58:04.782Z",
+    "event": "socket-open",
+    "id": 43,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T22:58:09.751Z",
+    "event": "upstream-response",
+    "id": 52,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "66a89da4-e5cf-4f7d-ac1e-7754c38b640a"
+  },
+  {
+    "at": "2026-11-24T22:58:09.807Z",
+    "event": "socket-open",
+    "id": 56,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T22:58:22.625Z",
+    "event": "upstream-response",
+    "id": 64,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "750b7a09-6641-4ef2-bc20-ebe99536d8cc"
+  },
+  {
+    "at": "2026-11-24T22:59:08.295Z",
+    "event": "upstream-response",
+    "id": 88,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "e36a795e-2407-40d0-be7d-45762c7d63e2"
+  },
+  {
+    "at": "2026-11-24T22:59:22.751Z",
+    "event": "upstream-response",
+    "id": 96,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "6818b03c-a164-434a-ac22-6adf3f0514f4"
+  },
+  {
+    "at": "2026-11-24T22:59:35.119Z",
+    "event": "mode",
+    "mode": "drop-shared",
+    "openLedgerStreams": 0,
+    "openSockets": 3
+  },
+  {
+    "at": "2026-11-24T22:59:41.535Z",
+    "event": "upstream-response",
+    "id": 107,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "8f54638a-d2d7-42ed-83c6-d3fea9d02b00"
+  },
+  {
+    "at": "2026-11-24T22:59:41.536Z",
+    "event": "side-chat-list-response-interrupted",
+    "id": 107,
+    "actual": "8f54638a-d2d7-42ed-83c6-d3fea9d02b00",
+    "status": 200,
+    "search": null,
+    "bytes": 1701,
+    "sent": 32
+  },
+  {
+    "at": "2026-11-24T22:59:51.26Z",
+    "event": "mode",
+    "mode": "open",
+    "openLedgerStreams": 0,
+    "openSockets": 3
+  },
+  {
+    "at": "2026-11-24T22:59:58.39Z",
+    "event": "upstream-response",
+    "id": 117,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "4a92f602-1f19-4d6e-a4b5-cfe517c54e4c"
+  },
+  {
+    "at": "2026-11-24T23:00:09.103Z",
+    "event": "mode",
+    "mode": "held",
+    "openLedgerStreams": 0,
+    "openSockets": 3
+  },
+  {
+    "at": "2026-11-24T23:00:12.123Z",
+    "event": "socket-held",
+    "id": 129,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T23:00:12.134Z",
+    "event": "socket-held",
+    "id": 130,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T23:00:12.15Z",
+    "event": "socket-held",
+    "id": 131,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T23:00:15.14Z",
+    "event": "socket-held",
+    "id": 137,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T23:00:15.165Z",
+    "event": "socket-held",
+    "id": 138,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T23:00:15.181Z",
+    "event": "socket-held",
+    "id": 140,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T23:00:17.416Z",
+    "event": "mode",
+    "mode": "open",
+    "openLedgerStreams": 0,
+    "openSockets": 0
+  },
+  {
+    "at": "2026-11-24T23:00:18.154Z",
+    "event": "socket-open",
+    "id": 144,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T23:00:18.167Z",
+    "event": "upstream-response",
+    "id": 150,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "317d1361-8719-49de-94c8-580a8bf0b443"
+  },
+  {
+    "at": "2026-11-24T23:00:18.198Z",
+    "event": "socket-open",
+    "id": 152,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T23:00:18.214Z",
+    "event": "socket-open",
+    "id": 156,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T23:02:42.006Z",
+    "event": "socket-open",
+    "id": 185,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T23:02:42.071Z",
+    "event": "socket-open",
+    "id": 193,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T23:02:48.275Z",
+    "event": "upstream-response",
+    "id": 215,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "01fa9bd9-7601-4d63-a00a-c77654cc7e53"
+  },
+  {
+    "at": "2026-11-24T23:02:48.314Z",
+    "event": "socket-open",
+    "id": 218,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T23:02:48.879Z",
+    "event": "socket-open",
+    "id": 223,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T23:03:02.761Z",
+    "event": "mode",
+    "mode": "drop-shared",
+    "openLedgerStreams": 0,
+    "openSockets": 3
+  },
+  {
+    "at": "2026-11-24T23:03:03.009Z",
+    "event": "upstream-response",
+    "id": 232,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "bbff506e-a7b7-4fc6-82b9-83ddffe8f47d"
+  },
+  {
+    "at": "2026-11-24T23:03:03.01Z",
+    "event": "side-chat-list-response-interrupted",
+    "id": 232,
+    "actual": "bbff506e-a7b7-4fc6-82b9-83ddffe8f47d",
+    "status": 200,
+    "search": null,
+    "bytes": 2555,
+    "sent": 32
+  },
+  {
+    "at": "2026-11-24T23:03:13.019Z",
+    "event": "mode",
+    "mode": "open",
+    "openLedgerStreams": 0,
+    "openSockets": 3
+  },
+  {
+    "at": "2026-11-24T23:03:18.647Z",
+    "event": "upstream-response",
+    "id": 242,
+    "pathname": "/session/ses_hMAuuk19aX4W2AsCeJj8/side-chat",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "actual": "e29ec804-4c6b-43e7-8d0a-a2277fdd51d9"
+  }
+]

@@ -16,6 +16,7 @@ import {
 import { GlobalBus } from "@/bus/global"
 import { isRightSidebarConversationSession, rightSidebarConversationExperience } from "@/chat/session"
 import { ConversationHandoffEvent } from "@/chat/handoff"
+import { SideChatDeleted, SideChatIdentity } from "@/chat/side-chat-identity"
 import { MissionHandoffEvent } from "@/mission/caller-receipt"
 import { Config } from "@/config/config"
 import { Project } from "@/project/project"
@@ -81,6 +82,19 @@ function workLedgerSessionChangedEvent(
     archiveUpdated?: boolean
   } = {},
 ): WorkLedgerEventValue | null {
+  if (sourceType === Session.Event.Created.type ||
+    (sourceType === Session.Event.Updated.type && archiveUpdated)) {
+    const sideChat = SideChatIdentity.safeParse(info.metadata?.sideChat)
+    if (sideChat.success) return {
+      type: "work-ledger.side-chat-changed",
+      sourceType,
+      projectID: info.projectID,
+      directory: info.directory,
+      sourceSessionID: sideChat.data.sourceSessionID,
+      sessionID: info.id,
+      sequence: 0,
+    }
+  }
   const mission =
     info.kind === "mission" &&
     info.metadata &&
@@ -326,7 +340,7 @@ export function WorkLedgerRoutes() {
       describeRoute({
         summary: "Subscribe to Work Ledger change notifications",
         description:
-          "Unified Work Ledger Server-Sent Events (SSE) stream. Generic Mission, Chat, Work, Task, and Project changes tell clients to refetch /work-ledger; conversation handoffs carry exact caller and target lineage for activation followed by caller archival.",
+          "Unified Work Ledger Server-Sent Events (SSE) stream. Generic Mission, Chat, Work, Task, and Project changes tell clients to refetch /work-ledger. Conversation handoffs carry exact caller and target lineage. Side chat membership changes identify the source whose list needs to refresh.",
         operationId: "workLedger.events",
         responses: {
           200: {
@@ -371,6 +385,15 @@ export function WorkLedgerRoutes() {
           }
           const globalBusListener = bind((event: { directory?: string; payload?: unknown }) => {
             const envelope = event.payload as { type?: unknown; properties?: unknown } | undefined
+            if (envelope?.type === SideChatDeleted.type) {
+              writeWorkLedgerEventData(writeData, {
+                type: "work-ledger.side-chat-changed",
+                sourceType: Session.Event.Deleted.type,
+                ...SideChatDeleted.properties.parse(envelope.properties),
+                sequence: 0,
+              })
+              return
+            }
             if (event.directory === "global" && envelope?.type === AutomationExecutionChanged.type) {
               const { automationID } = AutomationExecutionChanged.properties.parse(envelope.properties)
               writeWorkLedgerEventData(writeData, {

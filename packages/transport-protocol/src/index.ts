@@ -566,19 +566,29 @@ export const WorkLedgerConversationHandoffEvent = z
   })
   .strict()
 
+const WorkLedgerSideChatChangedEvent = z
+  .object({
+    type: z.literal("work-ledger.side-chat-changed"),
+    sourceType: z.enum(["session.created", "session.updated", "session.deleted"]),
+    projectID: z.string().min(1),
+    directory: z.string().min(1),
+    sourceSessionID: z.string().min(1),
+    sessionID: z.string().min(1),
+    sequence: z.literal(0),
+  })
+  .strict()
+
 export const WorkLedgerActionEvent = z.discriminatedUnion("type", [
   WorkLedgerChangedEvent,
   WorkLedgerFileChangedEvent,
   WorkLedgerMissionHandoffEvent,
   WorkLedgerConversationHandoffEvent,
+  WorkLedgerSideChatChangedEvent,
 ])
 export const WorkLedgerEvent = z.discriminatedUnion("type", [
   WorkLedgerConnectedEvent,
   WorkLedgerHeartbeatEvent,
-  WorkLedgerChangedEvent,
-  WorkLedgerFileChangedEvent,
-  WorkLedgerMissionHandoffEvent,
-  WorkLedgerConversationHandoffEvent,
+  ...WorkLedgerActionEvent.options,
   MailboxChangeStreamEvent,
 ])
 export type WorkLedgerActionEvent = z.infer<typeof WorkLedgerActionEvent>

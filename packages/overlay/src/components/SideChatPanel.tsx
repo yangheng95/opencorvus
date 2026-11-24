@@ -1,4 +1,4 @@
-import { For, Show, createEffect, createMemo, createSignal, on, onCleanup, untrack } from "solid-js"
+import { For, Show, batch, createEffect, createMemo, createSignal, on, onCleanup, untrack } from "solid-js"
 import { Key } from "@solid-primitives/keyed"
 import { apiJson, captureApiAuthority, getServerUrl, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { boardStore } from "../store/board"
@@ -34,6 +34,7 @@ import {
 import { quotedPrompt, type Quotation } from "../services/quotation"
 import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "../services/subagent-conversation"
 import { formatErrorDetails } from "../services/diagnostics"
+import { subscribeWorkLedgerChanges } from "../services/sse"
 import { pauseAutoScrollForReading, setupAutoScroll, type AutoScrollController } from "../utils/dom-utils"
 import { captureConversationReadingAnchor, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
 import { assistantMessageFailure, conversationMessageHasDisplayContent, isCardBodyMessagePart, isMessageAbortedError } from "../utils/message-part"
@@ -51,6 +52,7 @@ import { InteractionCard, type InteractionData } from "./InteractionCard"
 import { ContinuousGoalControl } from "./ContinuousGoalControl"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { parseComposerCommand } from "../utils/composer-command"
+import { projectDirectoryKey } from "../utils/project-directory"
 
 export interface SideChatRequest {
   source: SideChatSource
@@ -108,6 +110,7 @@ export function SideChatPanel(props: {
   const [connected, setConnected] = createSignal(false)
   const [creating, setCreating] = createSignal(false)
   const [sessionListState, setSessionListState] = createSignal<"idle" | "loading" | "ready" | "error">("idle")
+  const [listRefreshError, setListRefreshError] = createSignal<unknown>()
   const [sending, setSending] = createSignal(false)
   const [active, setActive] = createSignal(false)
   const [interactions, setInteractions] = createSignal<InteractionData[]>([])
@@ -123,9 +126,13 @@ export function SideChatPanel(props: {
   })
   const [tracking, setTracking] = createSignal(true)
   let generation = 0
+  let listRead: AbortController | undefined
+  let listRefreshPending = false
   let attemptedRequest: SideChatRequest | undefined
   let scroll!: HTMLDivElement
   let textarea: HTMLTextAreaElement | undefined
+  let listTrigger: HTMLButtonElement | undefined
+  let listRetry: HTMLButtonElement | undefined
   let follow: AutoScrollController | undefined
   let reader: { key: string; sourceKey: string; sessionID: string; authority: ApiAuthority; epoch: number; controller: AutoScrollController; restoring: boolean } | undefined
   const sourceKey = () => `${captureApiAuthority().revision}\0${JSON.stringify(props.source)}`
@@ -162,35 +169,77 @@ export function SideChatPanel(props: {
   }
   onCleanup(() => {
     generation++
+    listRead?.abort()
+    listRead = undefined
   })
-  async function loadSessions() {
-    const current = ++generation
-    const authority = captureApiAuthority()
+
+  function flushListRefresh() {
+    if (!listRefreshPending || listRead || creating() || sessionListState() !== "ready") return
+    listRefreshPending = false
+    void loadSessions("refresh")
+  }
+
+  function requestListRefresh() {
+    if (!props.source) return
+    listRefreshPending = true
+    flushListRefresh()
+  }
+
+  async function loadSessions(mode: "initial" | "refresh" = "initial") {
     const source = props.source
-    setSessionListState(source ? "loading" : "idle")
-    setSessions([])
-    setSelected("")
-    setTranscript(undefined)
-    setError("")
-    setCreating(false)
+    if (mode === "initial") {
+      generation++
+      listRead?.abort()
+      listRead = undefined
+      listRefreshPending = false
+      batch(() => {
+        setSessionListState(source ? "loading" : "idle")
+        setSessions([])
+        setSelected("")
+        setTranscript(undefined)
+        setError("")
+        setListRefreshError(undefined)
+        setCreating(false)
+      })
+    }
     if (!source) return
+    const authority = captureApiAuthority()
+    const request = new AbortController()
+    listRead = request
+    const owns = () => listRead === request && !request.signal.aborted && isApiAuthorityCurrent(authority)
     try {
-      const items = await listSideChats({ ...source, authority })
-      if (current !== generation || !isApiAuthorityCurrent(authority)) return
-      setSessions((current) => [
-        ...current,
-        ...items.filter((item) => !current.some((saved) => saved.id === item.id)),
-      ])
-      setSelected((current) => current || items[0]?.id || "")
-      setSessionListState("ready")
+      const items = await listSideChats({ ...source, authority }, request.signal)
+      if (!owns()) return
+      const retryFocused = document.activeElement === listRetry
+      batch(() => {
+        setSessions(items)
+        setSelected((current) => items.some((item) => item.id === current) ? current : items[0]?.id ?? "")
+        setListRefreshError(undefined)
+        setSessionListState("ready")
+      })
+      if (retryFocused && document.activeElement === document.body) listTrigger?.focus()
     } catch (error) {
-      if (current === generation && isApiAuthorityCurrent(authority)) {
+      if (!owns()) return
+      if (mode === "refresh") setListRefreshError(() => error)
+      else {
         setSessionListState("error")
         report(error)
+      }
+    } finally {
+      if (listRead === request) {
+        listRead = undefined
+        flushListRefresh()
       }
     }
   }
   createEffect(on(sourceKey, () => void loadSessions()))
+  onCleanup(subscribeWorkLedgerChanges((event) => {
+    const source = props.source
+    if (!source) return
+    if (event.type === "work-ledger.connected" ||
+      (event.type === "work-ledger.side-chat-changed" && event.sourceSessionID === source.sessionID &&
+        projectDirectoryKey(event.directory) === projectDirectoryKey(source.directory))) requestListRefresh()
+  }))
   function currentDraftRequest(request: SideChatRequest): SideChatRequest {
     const current = props.request
     return current?.sourceDraft && request.sourceDraft &&
@@ -211,6 +260,11 @@ export function SideChatPanel(props: {
     if (source.authority && !isApiAuthorityCurrent(source.authority)) return
     const owns = () => current === generation && isApiAuthorityCurrent(authority)
     setCreating(true)
+    if (listRead) {
+      listRead.abort()
+      listRead = undefined
+      listRefreshPending = true
+    }
     setError("")
     try {
       const created = await createSideChat({ ...source, authority })
@@ -229,7 +283,10 @@ export function SideChatPanel(props: {
         report(error)
       }
     } finally {
-      if (owns()) setCreating(false)
+      if (owns()) {
+        setCreating(false)
+        flushListRefresh()
+      }
     }
   }
   createEffect(() => {
@@ -433,6 +490,7 @@ export function SideChatPanel(props: {
           optionValue="id"
           optionTextValue={sessionLabel}
           ariaLabel={t("side_chat.choose")}
+          triggerRef={(element) => { listTrigger = element }}
           renderValue={(item) => (
             <span class="side-chat-panel__selection">
               <Icon name="side-chat" />
@@ -454,6 +512,15 @@ export function SideChatPanel(props: {
         </Button>
       </div>
       <p class="side-chat-panel__hint">{t("side_chat.description")}</p>
+      <Show when={listRefreshError()}>{(issue) => (
+        <Feedback tone="error" details={formatErrorDetails(issue())} actions={
+          <Button ref={(element) => { listRetry = element }} type="button" variant="outline" size="sm" tone="neutral" onClick={requestListRefresh}>
+            {t("side_chat.retry")}
+          </Button>
+        }>
+          {t("side_chat.list_refresh_failed")}
+        </Feedback>
+      )}</Show>
       <Show when={selected() && props.source}>
         <ContinuousGoalControl
           compact
