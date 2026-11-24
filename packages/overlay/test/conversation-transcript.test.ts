@@ -19,8 +19,8 @@ test("Task transcript retains original participants, source records and producer
   expect(snapshot.messages.map(message => message.original)).toEqual(transcript)
   expect(snapshot.messages[1].original).toBe(transcript[1])
   expect(findConversationMessages(snapshot, "decimal")).toEqual([
-    { id: "msg_request", role: "user", author: "mission", created, preview: "核对 Decimal 账单🙂" },
-    { id: "msg_delivery", role: "assistant", author: "dynamic-builder", created: created + 1, preview: "Decimal 已精确合计" },
+    { id: "msg_request", role: "user", author: "mission", created, preview: { before: "核对 ", match: "Decimal", after: " 账单🙂" } },
+    { id: "msg_delivery", role: "assistant", author: "dynamic-builder", created: created + 1, preview: { before: "", match: "Decimal", after: " 已精确合计" } },
   ])
 })
 

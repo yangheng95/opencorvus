@@ -78,7 +78,9 @@ export function ConversationSearchDialog(props: {
   const hitLabel = (hit: ConversationSearchHit) => {
     const source = hitSource(hit)
     const author = hitAuthorLabel(hit)
-    return source ? `${author} · ${sourceLabel(source)} · ${hit.preview}` : `${author} · ${hit.preview}`
+    const { before, match, after } = hit.preview
+    const preview = before + match + after
+    return source ? `${author} · ${sourceLabel(source)} · ${preview}` : `${author} · ${preview}`
   }
 
   async function load(): Promise<void> {
@@ -195,7 +197,7 @@ export function ConversationSearchDialog(props: {
       renderOptionLabel={(hit) => <span class="conversation-search-hit">
         <span class="conversation-search-hit__meta"><strong>{hitAuthorLabel(hit)}</strong><time>{date().format(hit.created)}</time></span>
         <Show when={hitSource(hit)}>{(source) => <SourceSearchContext source={source()} />}</Show>
-        <span>{hit.preview}</span>
+        <span>{hit.preview.before}<mark class="conversation-search-hit__match">{hit.preview.match}</mark>{hit.preview.after}</span>
       </span>}
       optionData={(hit) => ({ "data-message-id": hit.id })}
       emptyContent={<Show when={snapshot()}>{(accepted) => <div class="cmdk-empty">{

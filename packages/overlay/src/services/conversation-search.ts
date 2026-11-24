@@ -4,7 +4,7 @@ import type { ConversationSearchSnapshot } from "./conversation-snapshot"
 import { conversationSourceLocation, isConversationSourcePart } from "../utils/conversation-source"
 
 export type ConversationSearchHit = Pick<ConversationSearchSnapshot["messages"][number], "id" | "role" | "author" | "created"> & {
-  preview: string
+  preview: { before: string; match: string; after: string }
   sourceId?: string
 }
 
@@ -50,11 +50,23 @@ export function findConversationMessages(snapshot: ConversationSearchSnapshot, q
       offset = segmentEnd + 1
     }
     const points = Array.from(previewBody)
-    let folded = 0, position = 0
-    while (position < points.length && folded < previewIndex) folded += points[position++].toLowerCase().length
-    const start = Math.max(0, position - 50), end = Math.min(points.length, position + Array.from(needle).length + 100)
+    let folded = 0
+    let matchStart = 0
+    let matchEnd = 0
+    const foldedMatchEnd = previewIndex + needle.length
+    while (matchEnd < points.length && folded < foldedMatchEnd) {
+      folded += points[matchEnd].toLowerCase().length
+      matchEnd += 1
+      if (folded <= previewIndex) matchStart = matchEnd
+    }
+    const start = Math.max(0, matchStart - 50)
+    const end = Math.min(points.length, matchEnd + 100)
     return [{ id: message.id, role: message.role, author: message.author, created: message.created,
-      preview: `${start ? "…" : ""}${points.slice(start, end).join("")}${end < points.length ? "…" : ""}`,
+      preview: {
+        before: `${start ? "…" : ""}${points.slice(start, matchStart).join("")}`,
+        match: points.slice(matchStart, matchEnd).join(""),
+        after: `${points.slice(matchEnd, end).join("")}${end < points.length ? "…" : ""}`,
+      },
       ...(sourceId ? { sourceId } : {}), }]
   })
 }

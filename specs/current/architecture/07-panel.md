@@ -4212,6 +4212,8 @@ preserving the highlight and scroll position of the current result. The results
 keep virtual focus through the input, with arrow and page keys for navigation.
 Equivalent edits to the query's casing or whitespace preserve the focused match
 and list position while the input presents the operator's original text.
+Each result preview marks the matched phrase from the search projection,
+preserving the original excerpt text and its complete accessible name.
 Refreshing the same conversation keeps the accepted results, focused match and
 scroll position visible during the read. The progress status stays active until
 the new snapshot is validated and the result count is available. A read failure

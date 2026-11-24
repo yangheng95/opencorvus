@@ -23,6 +23,12 @@
   font-size: var(--ui-font-caption);
 }
 
+.conversation-search-hit__match {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+  color: inherit;
+  font-weight: var(--ui-font-weight-strong);
+}
+
 .conversation-search-hit__source {
   display: flex;
   flex-direction: column;
