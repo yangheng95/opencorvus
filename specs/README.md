@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [完整版本历史的键盘浏览](records/2026-11/2026-11-24-release-history-unfiltered-navigation.md)
 - [手动滚动后恢复用量区间焦点](records/2026-11/2026-11-24-usage-activity-focus-after-scroll.md)
 - [用量活动图的分页焦点](records/2026-11/2026-11-24-usage-activity-page-focus.md)
 - [技能分配搜索的结果内导航](records/2026-11/2026-11-24-capability-skill-result-navigation.md)
