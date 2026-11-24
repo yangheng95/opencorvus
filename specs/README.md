@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [已保存会话的配置读取与项目运行准备](records/2026-11/2026-11-24-passive-session-config-read.md)
 - [专家团目录读取不应阻断草稿保存](records/2026-11/2026-11-24-passive-expert-catalog-project-bootstrap.md)
 - [多步任务草稿的保存、重启与并发审阅](records/2026-11/2026-11-24-mission-draft-lifecycle-review.md)
 - [浏览完整项目笔记列表](records/2026-11/2026-11-24-memory-unfiltered-navigation.md)

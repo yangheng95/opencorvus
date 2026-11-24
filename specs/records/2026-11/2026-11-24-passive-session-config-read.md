@@ -1,0 +1,19 @@
+# 已保存会话的配置读取与项目运行准备
+
+## Recall
+
+用户要求本人独立持续调查，近期把重心改到完整产品流程。每批先保存根因和影响，再进行真实桌面复核、正向检查、范围提交及正常上游同步。第 553 批 `25128bba7` 已与真实远端一致，原 177 项工作区状态保留。本轮已读 [草稿流程](2026-11-24-mission-draft-lifecycle-review.md)、[受保护项目的专家团读取](2026-11-24-passive-expert-catalog-project-bootstrap.md)、[配置架构](../../current/architecture/05-config.md)和[面板架构](../../current/architecture/07-panel.md)。全仓查 `getSessionConfig`、`session.config.get`、`projectRouteContextKind`、`sessionConfig`、`EffectiveConfig.base`、`validateConfigCandidate`、候选配置的锁及并行读取、错误合同的正式测试。重点是让已经保存且可读的草稿展示其实际配置，并保留无效模型和会话归属错误。实际不发送消息、不调用模型。
+
+## 基线、根因和影响
+
+`41700/ui/` 加载正式 `main-DPV2Gw9j.js`。通过正式接口分别在 `change-review` 和 `protected-ignore` 建立真实待办草稿。桌面从看板进入 `protected-ignore` 后，完整原请求正常显示，输入区仍报告 “Model configuration unavailable”。页面细节指向请求 `3bfb4188-630b-4c26-9221-5221d8339eca`，正式日志证实在 Git 准备阶段打开只读 `.gitignore` 时得到 `EPERM` 并返回 500。普通项目通过相同入口打开后，真实草稿与模型选择控件正常。对应两个会话的数据及专家团目录均为 200，只有受保护项目的会话配置读取返回 500；受保护项目原 Git 文件无改动。两项目均无模型请求。[真实桌面与接口状态](../../artifacts/2026-11-24-passive-session-config-read/README.md)
+
+`projectComposerModelFromSession` 仅需当前会话的配置模型字段，通过 `getSessionConfig` 请求 `GET /session/:id/config`。服务 `sessionConfig` 读取准确项目下已持久化的根会话，核对其身份及根作用域，沿上批修复后的 `EffectiveConfig.base` 读取项目配置，合并持久覆盖并返回来源树。路由中间层将 GET 归到完整运行上下文，在上述函数运行前启动 Git 规则写入、终端准备、插件及恢复安装。模型等配置验证目前也由这一启动路径间接承担。此前的会话历史和被动详情测试利用配置读取返回具体的 `ProviderModelNotFoundError` 作为真实非法模型对照，说明需要保留验证而非简单切换权限。
+
+影响限 `/session/:id/config` 的正向读取及绑定的输入区和助手配置选择。保留真实项目归属、根会话限制、配置来源及覆盖层、自定义模型验证和既有错误合同。会话配置写入、执行、授权、Git 初始化的内容及运行恢复仍由明确入口负责。复用现有项目配置校验，其技能挂载默认目录读取还会通过 `Instance.provide` 再启动完整上下文，需要把这一项保持在身份权限。其余 `Instance.provide` 的运行投影及主动工具路径不改，本批没有执行轮次、调度、队列、唤醒、并发恢复或终态异常证据。相关风险包括无效模型被误报为有效、会话隐藏项目差异、校验时选错锁顺序或写回执重新进入验证。
+
+## 实施与验收
+
+将精确的 Session 配置 GET 放入已有身份权限。读取同一个项目基础配置时持有与运行预检一致的技能目录和会话能力引用读取权限，再调用同一个 `validateConfigCandidate`。保留对归属、根会话、覆盖来源与模型的检查。只在 GET 引入当前读取所需验证，PATCH 的已提交响应继续沿其原运行权限与既有写入校验。使候选配置验证中的默认技能目录读取沿现有身份范围，仍使用同一技能目录与版本。
+
+聚焦正向真路由检查受保护冷项目的配置、来源树及准确会话归属，并用已有真实无效模型响应检查验证仍存在。对照读权限、显式写及执行运行权限。真实桌面打开受保护和普通项目的两条已保存草稿，复核原文、当前模型控件和配置读数；对照实际物理 Git 原文、只读标志、两条待办记录及零执行。完成类型、正式路径、文档与架构检查，关停专用服务并提交、合并和正常推送。

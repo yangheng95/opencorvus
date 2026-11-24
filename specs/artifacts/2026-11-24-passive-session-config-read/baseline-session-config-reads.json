@@ -1,0 +1,89 @@
+{
+  "browser": {
+    "requestID": "3bfb4188-630b-4c26-9221-5221d8339eca",
+    "route": "/session/ses_hj4CQy5iNQ9F8rQJ7H3Y/config",
+    "status": 500,
+    "code": "EPERM",
+    "file": ".gitignore"
+  },
+  "readings": [
+    {
+      "project": "change-review",
+      "route": "/session/ses_h89fxckbsD1NxJTwvBI5",
+      "status": 200,
+      "requestID": [
+        "d70da2be-436f-4aca-95bf-70449f58a79b"
+      ],
+      "error": null,
+      "active": null,
+      "sessionID": "ses_h89fxckbsD1NxJTwvBI5",
+      "title": "Session configuration review - change-review",
+      "configOrigin": null
+    },
+    {
+      "project": "change-review",
+      "route": "/session/ses_h89fxckbsD1NxJTwvBI5/config",
+      "status": 200,
+      "requestID": [
+        "008c6abb-4c97-43bd-bbbd-3badfed7fa43"
+      ],
+      "error": null,
+      "active": null,
+      "sessionID": null,
+      "title": null,
+      "configOrigin": "project"
+    },
+    {
+      "project": "change-review",
+      "route": "/expert-squad/catalog?sessionID=ses_h89fxckbsD1NxJTwvBI5",
+      "status": 200,
+      "requestID": [
+        "d4e8fadb-b1b3-495c-b182-c4ea8032826e"
+      ],
+      "error": null,
+      "active": "dynamic",
+      "sessionID": null,
+      "title": null,
+      "configOrigin": null
+    },
+    {
+      "project": "protected-ignore",
+      "route": "/session/ses_hj4CQy5iNQ9F8rQJ7H3Y",
+      "status": 200,
+      "requestID": [
+        "fcf7f5aa-79cc-4abb-9ed6-4fd4c18268cd"
+      ],
+      "error": null,
+      "active": null,
+      "sessionID": "ses_hj4CQy5iNQ9F8rQJ7H3Y",
+      "title": "Session configuration review - protected-ignore",
+      "configOrigin": null
+    },
+    {
+      "project": "protected-ignore",
+      "route": "/session/ses_hj4CQy5iNQ9F8rQJ7H3Y/config",
+      "status": 500,
+      "requestID": [
+        "fda232b7-f744-447d-8375-7d07a674c60e"
+      ],
+      "error": "UnknownError",
+      "active": null,
+      "sessionID": null,
+      "title": null,
+      "configOrigin": null
+    },
+    {
+      "project": "protected-ignore",
+      "route": "/expert-squad/catalog?sessionID=ses_hj4CQy5iNQ9F8rQJ7H3Y",
+      "status": 200,
+      "requestID": [
+        "89e9bbc8-2a80-4fbe-90fa-d93a0c1751c5"
+      ],
+      "error": null,
+      "active": "dynamic",
+      "sessionID": null,
+      "title": null,
+      "configOrigin": null
+    }
+  ]
+}
