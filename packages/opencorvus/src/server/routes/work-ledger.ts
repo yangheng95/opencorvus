@@ -17,6 +17,7 @@ import { GlobalBus } from "@/bus/global"
 import { isRightSidebarConversationSession } from "@/chat/session"
 import { ConversationHandoffEvent } from "@/chat/handoff"
 import { MissionHandoffEvent } from "@/mission/caller-receipt"
+import { Config } from "@/config/config"
 import { Project } from "@/project/project"
 import { Instance } from "@/project/instance"
 import { Vcs } from "@/project/vcs"
@@ -366,10 +367,11 @@ export function WorkLedgerRoutes() {
               })
               return
             }
-            if (envelope?.type === Vcs.Event.BranchUpdated.type && event.directory) {
+            if (event.directory &&
+              (envelope?.type === Vcs.Event.BranchUpdated.type || envelope?.type === Config.Event.ProjectChanged.type)) {
               writeWorkLedgerEventData(writeData, {
                 type: "work-ledger.changed",
-                sourceType: Vcs.Event.BranchUpdated.type,
+                sourceType: envelope.type,
                 directory: event.directory,
                 sequence: 0,
               })

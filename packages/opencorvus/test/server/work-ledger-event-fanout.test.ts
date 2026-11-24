@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from "bun:test"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { ConfigPaths } from "@/config/paths"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
@@ -140,6 +141,44 @@ test("created directory members announce their exact parent path on the public s
       expect(await list.json()).toMatchObject([{ name, type: "file", directoryTarget: false }])
       expect(await readFile(path.join(project.path, file), "utf8")).toBe(content)
     }
+  } finally {
+    await close()
+  }
+}, 30_000)
+
+test("an accepted project configuration change announces its project on the public stream", async () => {
+  await using first = await memoryProject("ledger-config-first")
+  await using second = await memoryProject("ledger-config-second")
+  for (const project of [first, second]) {
+    const config = ConfigPaths.projectFile(project.path)
+    await mkdir(path.dirname(config), { recursive: true })
+    await writeFile(config, JSON.stringify({ permission_mode: "full_access" }))
+  }
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    const app = Server.App()
+    const headers = { "x-opencorvus-directory": first.path, "content-type": "application/json" }
+    const saved = await app.request("/config", {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ permission_mode: "ask" }),
+    })
+    expect(saved.status).toBe(200)
+    expect(await saved.json()).toMatchObject({ permission_mode: "ask" })
+    expect(await next("work-ledger.changed", "project.config.changed")).toEqual({
+      type: "work-ledger.changed",
+      sourceType: "project.config.changed",
+      directory: first.path,
+      sequence: 0,
+    })
+    const firstRead = await app.request("/config", { headers })
+    const secondRead = await app.request("/config", { headers: { "x-opencorvus-directory": second.path } })
+    expect(firstRead.status).toBe(200)
+    expect(await firstRead.json()).toMatchObject({ permission_mode: "ask" })
+    expect(secondRead.status).toBe(200)
+    expect(await secondRead.json()).toMatchObject({ permission_mode: "full_access" })
+    expect(JSON.parse(await readFile(ConfigPaths.projectFile(first.path), "utf8"))).toMatchObject({ permission_mode: "ask" })
   } finally {
     await close()
   }

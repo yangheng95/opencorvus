@@ -246,6 +246,7 @@ import {
 import type { WorkLedgerChatRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "./services/work-ledger"
 import { archiveRowKey } from "./services/archive-row-key"
 import { subscribeWorkLedgerChanges, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
+import { loadConfigInfo } from "./services/config-load"
 import { refreshProjectMemory } from "./services/project-memory"
 import { openImagePreview } from "./services/image-preview"
 import {
@@ -840,6 +841,16 @@ function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
     return
   }
   const authority = captureApiAuthority()
+  if (event.type === "work-ledger.changed" && event.sourceType === "project.config.changed") {
+    const directory = activeDirectory()
+    if (!directory || !event.directory || projectDirectoryKey(directory) !== projectDirectoryKey(event.directory)) return
+    void loadConfigInfo(undefined, { authority, directory }).catch((error) => {
+      if (isApiAuthorityCurrent(authority) && activeDirectory() === directory) {
+        AppLog.warn("config", "Project configuration refresh failed", { directory, error: String(error) })
+      }
+    })
+    return
+  }
   const selectedSource = boardStore.selectedSource
   refreshWorkLedgerViews(event.type === "work-ledger.changed" ? event : undefined)
   if (event.type === "work-ledger.changed" && event.sourceType === "project.memory.notice.changed") {
