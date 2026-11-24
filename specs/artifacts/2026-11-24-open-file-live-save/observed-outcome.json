@@ -1,0 +1,56 @@
+{
+  "url": "http://127.0.0.1:41806/ui/",
+  "baselinePID": 37616,
+  "baselineAsset": "assets/main-BjF2PpWt.js",
+  "baselineSaveRequestID": "c3bbd102-e565-4339-be3a-4dfe3f3466f1",
+  "baselineConflictRequestID": "7d5a88e7-c6f4-4682-85ae-11b7de4cc77e",
+  "candidatePID": 22268,
+  "candidateAsset": "assets/main-CSsBVckX.js",
+  "readsImmediatelyAfterFinalSave": [
+    { "requestID": "44df4788-5878-496b-8a76-8f5491d4db0e", "http": 200 },
+    { "requestID": "3d8fa5fc-1d7c-4c18-92f1-6406834c25a5", "http": 200 },
+    { "requestID": "6d47e8b1-dc34-4b0f-973a-5bc87f6b178c", "http": 200 }
+  ],
+  "candidateMutations": [
+    {
+      "time": "2026-11-24T10:53:41.661Z",
+      "requestID": "6954f331-a584-49b1-a240-7ea0533b252b",
+      "http": 200
+    },
+    {
+      "time": "2026-11-24T10:53:56.928Z",
+      "requestID": "278e0d9e-bb7a-45a2-bd6c-202ed91b09de",
+      "http": 200
+    },
+    {
+      "time": "2026-11-24T10:54:16.323Z",
+      "requestID": "e726fff3-cc87-46df-814b-d967d1839b19",
+      "http": 200
+    },
+    {
+      "time": "2026-11-24T10:54:39.793Z",
+      "requestID": "4d4e2a86-859e-42f6-a4ea-331a8a392fba",
+      "http": 409
+    }
+  ],
+  "finalDiskAndHttp": [
+    {
+      "path": "checklist.txt",
+      "http": 200,
+      "content": "Shipment review\n- Confirm packing list\n- Confirm the carrier pickup window\n- Book the Monday pickup"
+    },
+    {
+      "path": "reference.txt",
+      "http": 200,
+      "content": "Independent file for review\n- Keep original reference\n"
+    }
+  ],
+  "isolatedDatabase": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "provider_activity_request": 0
+  },
+  "finalShutdownHTTP": 200,
+  "finalListenerReleased": true
+}

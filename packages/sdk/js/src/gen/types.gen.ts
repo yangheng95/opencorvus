@@ -1183,6 +1183,7 @@ export type EventFileEdited = {
           kind: "task"
           taskID: string
         }
+    resourceID?: string
   }
   type: "file.edited"
 }
@@ -41335,6 +41336,14 @@ export type WorkLedgerEventsResponses = {
         sourceType: string
         taskID?: string | null
         type: "work-ledger.changed"
+      }
+    | {
+        directory: string
+        path: string
+        resourceID?: string
+        sequence: 0
+        sourceType: "file.edited"
+        type: "work-ledger.file-changed"
       }
     | {
         callerExperience: "chat" | "work"

@@ -16,7 +16,7 @@ import {
 import { activeProjectDirectory, projectScopedPath } from "./project-directory"
 import type { FileDocumentPosition, FileRevealLocation } from "../utils/file-reference"
 import { projectDirectoryKey } from "../utils/project-directory"
-import { isAbsoluteServerPath, normalizeProjectFilePath } from "../utils/server-path"
+import { isAbsoluteServerPath, isWindowsPath, normalizeProjectFilePath } from "../utils/server-path"
 import { relativePathFrom } from "../utils/tool"
 
 export type FileNode = SdkFileNode
@@ -155,7 +155,8 @@ export interface FileEditorNavigationOwner {
   getRevision: () => number
   isBusy: () => boolean
   isDirty: () => boolean
-  recheckAfterReconnect?: () => Promise<void>
+  resourceID?: () => string | undefined
+  requestDiskCheck?: () => void
 }
 export interface FileEditorCommitBoundary {
   isCurrent: () => boolean
@@ -219,8 +220,20 @@ export function observeFileEditorDiskChange(directory: string): void {
   }
 }
 
-export function recheckFileEditorAfterReconnect(): Promise<void> | undefined {
-  return fileEditorOwner()?.recheckAfterReconnect?.()
+export function requestOpenFileDiskCheck(change?: { directory: string; path: string; resourceID?: string }): void {
+  const target = selectedFileTarget()
+  const editor = fileEditorOwner()
+  if (!editor?.requestDiskCheck || !target || target.sourceAbsolutePath) return
+  if (change) {
+    if (projectDirectoryKey(change.directory) !== projectDirectoryKey(target.directory)) return
+    const changedPath = normalizeProjectFilePath(change.path, change.directory)
+    const openPath = normalizeProjectFilePath(target.path, target.directory)
+    const matchesPath = isWindowsPath(target.directory)
+      ? changedPath.toLowerCase() === openPath.toLowerCase()
+      : changedPath === openPath
+    if (!matchesPath && (!change.resourceID || change.resourceID !== editor.resourceID?.())) return
+  }
+  editor.requestDiskCheck()
 }
 
 function joinWorkbenchPath(parent: string, child: string, directory: string): string {

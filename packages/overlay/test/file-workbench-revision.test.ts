@@ -11,7 +11,7 @@ import {
   openFileEditor,
   openFileReference,
   openSourceFileEditor,
-  recheckFileEditorAfterReconnect,
+  requestOpenFileDiskCheck,
   registerFileEditorBeforeNavigate,
   returnToFileDocument,
   selectedFileTarget,
@@ -33,8 +33,12 @@ test("a checkout notification refreshes the current file at the canonical projec
   })
 })
 
-test("reconnect rechecks the exact file belonging to the current editor owner", async () => {
-  const directory = "/review-project"
+test.each([
+  ["reconnect", undefined],
+  ["matching path", { directory: "c:\\review\\project", path: "NOTES.txt" }],
+  ["matching resource", { directory: "C:/Review/Project", path: "alias/notes.txt", resourceID: "shared-notes" }],
+] as const)("%s rechecks the exact file belonging to the current editor owner", async (_trigger, notification) => {
+  const directory = "C:/Review/Project"
   await openFileEditor("notes.txt", { directory })
   const checks: ReturnType<typeof selectedFileTarget>[] = []
   const release = registerFileEditorBeforeNavigate({
@@ -42,12 +46,13 @@ test("reconnect rechecks the exact file belonging to the current editor owner", 
     getRevision: () => 4,
     isBusy: () => false,
     isDirty: () => true,
-    async recheckAfterReconnect() {
+    resourceID: () => "shared-notes",
+    requestDiskCheck() {
       checks.push(selectedFileTarget())
     },
   })
   try {
-    await recheckFileEditorAfterReconnect()
+    requestOpenFileDiskCheck(notification)
     expect(checks).toEqual([{ directory, path: "notes.txt" }])
   } finally {
     release()

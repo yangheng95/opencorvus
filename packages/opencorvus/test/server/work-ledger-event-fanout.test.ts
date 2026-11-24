@@ -1,8 +1,11 @@
 import { afterEach, expect, test } from "bun:test"
+import { mkdir, readFile, writeFile } from "node:fs/promises"
+import path from "node:path"
 import { EngineTaskTable } from "@/engine/engine.sql"
 import { appendTaskOpenedInTransaction } from "@/engine/task-lifecycle"
 import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
+import { File } from "@/file"
 import { ProtocolStore } from "@/protocol/store"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
@@ -65,6 +68,45 @@ async function openLedgerEvents() {
     },
   }
 }
+
+test("committed file writes announce their real path and resource on the public stream in each project", async () => {
+  await using first = await memoryProject("ledger-file-first")
+  await using second = await memoryProject("ledger-file-second")
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    const file = "notes/checklist.txt"
+    for (const [index, project] of [first, second].entries()) {
+      const full = path.join(project.path, file)
+      await mkdir(path.dirname(full), { recursive: true })
+      await writeFile(full, "Original checklist\n")
+      const headers = { "x-opencorvus-directory": project.path, "content-type": "application/json" }
+      const read = await Server.App().request(`/file/content?${new URLSearchParams({ path: file })}`, { headers })
+      expect(read.status).toBe(200)
+      const original = File.Content.parse(await read.json())
+      const content = `Committed checklist for project ${index + 1}\n`
+      const saved = await Server.App().request("/file/content", {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ path: `./${file}`, content, expectedRevision: original.revision }),
+      })
+      expect(saved.status).toBe(200)
+      const snapshot = File.Content.parse(await saved.json())
+      expect(snapshot).toMatchObject({ content, resourceID: original.resourceID })
+      expect(await next("work-ledger.file-changed", "file.edited")).toEqual({
+        type: "work-ledger.file-changed",
+        sourceType: "file.edited",
+        directory: project.path,
+        path: file,
+        resourceID: snapshot.resourceID,
+        sequence: 0,
+      })
+      expect(await readFile(full, "utf8")).toBe(content)
+    }
+  } finally {
+    await close()
+  }
+}, 30_000)
 
 test("global ledger stream fans out durable Task events to every affected projection across projects", async () => {
   await using first = await memoryProject("ledger-first")

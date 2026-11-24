@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
+import path from "node:path"
 import z from "zod"
 import {
   WorkLedgerArchiveList,
@@ -19,6 +20,7 @@ import { MissionHandoffEvent } from "@/mission/caller-receipt"
 import { Project } from "@/project/project"
 import { Instance } from "@/project/instance"
 import { Vcs } from "@/project/vcs"
+import { File } from "@/file"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
@@ -349,6 +351,21 @@ export function WorkLedgerRoutes() {
           }
           const globalBusListener = bind((event: { directory?: string; payload?: unknown }) => {
             const envelope = event.payload as { type?: unknown; properties?: unknown } | undefined
+            if (envelope?.type === File.Event.Edited.type && event.directory) {
+              const { file, processAuthority, resourceID } = File.Event.Edited.properties.parse(envelope.properties)
+              if (processAuthority.kind !== "host") return
+              const relativePath = path.relative(event.directory, path.resolve(processAuthority.cwd, file))
+              if (!relativePath || relativePath.split(path.sep)[0] === ".." || path.isAbsolute(relativePath)) return
+              writeWorkLedgerEventData(writeData, {
+                type: "work-ledger.file-changed",
+                sourceType: File.Event.Edited.type,
+                directory: event.directory,
+                path: relativePath.split(path.sep).join("/"),
+                ...(resourceID ? { resourceID } : {}),
+                sequence: 0,
+              })
+              return
+            }
             if (envelope?.type === Vcs.Event.BranchUpdated.type && event.directory) {
               writeWorkLedgerEventData(writeData, {
                 type: "work-ledger.changed",

@@ -3615,6 +3615,10 @@
                     "type": "object"
                   }
                 ]
+              },
+              "resourceID": {
+                "minLength": 1,
+                "type": "string"
               }
             },
             "required": [
@@ -144637,6 +144641,43 @@
                       "required": [
                         "type",
                         "sourceType",
+                        "sequence"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "directory": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "resourceID": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sequence": {
+                          "const": 0,
+                          "type": "number"
+                        },
+                        "sourceType": {
+                          "const": "file.edited",
+                          "type": "string"
+                        },
+                        "type": {
+                          "const": "work-ledger.file-changed",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "sourceType",
+                        "directory",
+                        "path",
                         "sequence"
                       ],
                       "type": "object"

@@ -237,6 +237,10 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
   })
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
+  const [pendingDiskCheck, setPendingDiskCheck] = createSignal<{
+    file: FileEditorTarget
+    authority: ReturnType<typeof captureApiAuthority>
+  }>()
   const revealFocusOrigin = createMemo(() => {
     fileEditorRevealRevision()
     return document.activeElement
@@ -728,7 +732,22 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     isDirty: dirty,
     getRevision: () => draftRevision,
     isBusy,
-    recheckAfterReconnect: () => reload("reconnect"),
+    resourceID: () => savedBaseline()?.resourceID,
+    requestDiskCheck: () => {
+      const file = target()
+      if (file) setPendingDiskCheck({ file, authority: captureApiAuthority() })
+    },
+  })
+  createEffect(() => {
+    const request = pendingDiskCheck()
+    if (!request) return
+    if (!ownsFileTarget(request.file) || !isApiAuthorityCurrent(request.authority)) {
+      setPendingDiskCheck(undefined)
+      return
+    }
+    if (isBusy() || fileEditorReserved() || downloading() || leaveDialogOpen()) return
+    setPendingDiskCheck(undefined)
+    untrack(() => void reload("disk-check"))
   })
   onCleanup(() => {
     revealPreview.cancel()
@@ -742,30 +761,30 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     finishLeaveDecision(false)
   })
 
-  async function reload(reason: "explicit" | "reconnect" = "explicit"): Promise<void> {
+  async function reload(reason: "explicit" | "disk-check" = "explicit"): Promise<void> {
     const file = target()
-    const reconnect = reason === "reconnect"
-    if (!file || fileEditorReserved() || isBusy() || (reconnect && file.sourceAbsolutePath)) return
+    const checkingDisk = reason === "disk-check"
+    if (!file || fileEditorReserved() || isBusy() || (checkingDisk && file.sourceAbsolutePath)) return
     const generation = ++reloadGeneration
     const authority = captureApiAuthority()
-    const approvedRevision = reconnect ? draftRevision : await decideBeforeNavigate("reload")
+    const approvedRevision = checkingDisk ? draftRevision : await decideBeforeNavigate("reload")
     if (approvedRevision === null || approvedRevision !== draftRevision || fileEditorReserved()) return
     if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
     const requestedDraftRevision = draftRevision
     const observed = observationKey()
     setReloading(true)
-    if (!reconnect) setError(null)
+    if (!checkingDisk) setError(null)
     try {
       const next = await readFileContent(file, authority)
       if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
-      if (reconnect) {
+      if (checkingDisk) {
         const baseline = savedBaseline()
         if (baseline && isEditableFileSnapshot(next) && next.revision === baseline.revision && next.resourceID === baseline.resourceID) {
           return
         }
       }
-      if (draftRevision !== requestedDraftRevision || (reconnect && dirty())) {
-        if (reconnect) observeFileEditorDiskChange(file.directory)
+      if (draftRevision !== requestedDraftRevision || (checkingDisk && dirty())) {
+        if (checkingDisk) observeFileEditorDiskChange(file.directory)
         else setError({ messageKey: "file_editor.reload_edited" })
         return
       }

@@ -519,6 +519,17 @@ export const WorkLedgerChangedEvent = z
   })
   .strict()
 
+export const WorkLedgerFileChangedEvent = z
+  .object({
+    type: z.literal("work-ledger.file-changed"),
+    sourceType: z.literal("file.edited"),
+    directory: z.string().min(1),
+    path: z.string().min(1),
+    resourceID: z.string().min(1).optional(),
+    sequence: z.literal(0),
+  })
+  .strict()
+
 export const WorkLedgerMissionHandoffEvent = z
   .object({
     type: z.literal("work-ledger.mission-handoff"),
@@ -551,6 +562,7 @@ export const WorkLedgerConversationHandoffEvent = z
 
 export const WorkLedgerActionEvent = z.discriminatedUnion("type", [
   WorkLedgerChangedEvent,
+  WorkLedgerFileChangedEvent,
   WorkLedgerMissionHandoffEvent,
   WorkLedgerConversationHandoffEvent,
 ])
@@ -558,6 +570,7 @@ export const WorkLedgerEvent = z.discriminatedUnion("type", [
   WorkLedgerConnectedEvent,
   WorkLedgerHeartbeatEvent,
   WorkLedgerChangedEvent,
+  WorkLedgerFileChangedEvent,
   WorkLedgerMissionHandoffEvent,
   WorkLedgerConversationHandoffEvent,
   MailboxChangeStreamEvent,

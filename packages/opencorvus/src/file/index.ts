@@ -570,6 +570,7 @@ export namespace File {
       "file.edited",
       z.object({
         file: z.string(),
+        resourceID: z.string().min(1).optional(),
         processAuthority: z.discriminatedUnion("kind", [
           z.object({ kind: z.literal("host"), cwd: z.string().min(1) }).strict(),
           z.object({ kind: z.literal("task"), taskID: z.string().min(1), cwd: z.string().min(1) }).strict(),
@@ -578,17 +579,18 @@ export namespace File {
     ),
   }
 
-  async function notifyEdited(files: readonly string[]): Promise<void> {
+  async function notifyEdited(files: readonly { file: string; resourceID?: string }[]): Promise<void> {
     const settled = await Promise.allSettled(
-      files.map((file) =>
+      files.map(({ file, resourceID }) =>
         Bus.publishOwned(Event.Edited, {
           file,
+          ...(resourceID ? { resourceID } : {}),
           processAuthority: { kind: "host", cwd: Instance.directory },
         }),
       ),
     )
     const failures = settled.flatMap((result, index) =>
-      result.status === "rejected" ? [{ file: files[index], error: result.reason }] : [],
+      result.status === "rejected" ? [{ file: files[index]?.file, error: result.reason }] : [],
     )
     if (failures.length > 0) {
       log.warn("post-commit file notifications failed", {
@@ -1159,7 +1161,7 @@ export namespace File {
           await Filesystem.writeAtomic(currentPhysical, bytes, existing.mode & 0o777)
           await Format.file(currentPhysical, { kind: "host", cwd: Instance.directory })
           const committed = await readResolvedContent(file, currentPhysical, identity)
-          await notifyEdited([file])
+          await notifyEdited([{ file, resourceID: committed.resourceID }])
           // Describe this commit even when an external writer changes the file during notification.
           return committed
         }),
@@ -1452,7 +1454,7 @@ export namespace File {
       await Format.file(full, { kind: "host", cwd: Instance.directory })
     }
 
-    await notifyEdited([file])
+    await notifyEdited([{ file }])
     return nodeForPath(full)
   }
 
@@ -1507,7 +1509,7 @@ export namespace File {
       }
       throw error
     }
-    await notifyEdited([source, target])
+    await notifyEdited([{ file: source }, { file: target }])
     return {
       previousPath: source,
       path: target,
@@ -1611,7 +1613,7 @@ export namespace File {
       }
       throw error
     }
-    await notifyEdited([source, target])
+    await notifyEdited([{ file: source }, { file: target }])
     return {
       sourcePath: source,
       path: target,
@@ -1630,7 +1632,7 @@ export namespace File {
     } else {
       await fs.promises.unlink(full)
     }
-    await notifyEdited([file])
+    await notifyEdited([{ file }])
     return { path: file }
   }
 

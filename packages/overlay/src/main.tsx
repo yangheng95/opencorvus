@@ -85,7 +85,7 @@ import {
   fileEditorReserved,
   observeFileWorkbenchCheckout,
   openFileReference,
-  recheckFileEditorAfterReconnect,
+  requestOpenFileDiskCheck,
   selectedFileTarget,
 } from "./services/file-workbench"
 import { initApp } from "./services/init"
@@ -827,8 +827,12 @@ function isMissionSessionSource(): boolean {
 }
 
 function handleWorkLedgerStreamEvent(event: WorkLedgerStreamEvent): void {
+  if (event.type === "work-ledger.file-changed") {
+    requestOpenFileDiskCheck(event)
+    return
+  }
   if (event.type === "work-ledger.connected") {
-    void runMainAsync("file-editor.reconnect", recheckFileEditorAfterReconnect)
+    requestOpenFileDiskCheck()
   }
   if (event.type === "work-ledger.changed" && event.sourceType === "vcs.branch.updated") {
     if (event.directory) observeFileWorkbenchCheckout(event.directory)

@@ -94,6 +94,14 @@ describe("canonical Server-Sent Events payload contracts", () => {
       callerMessageID: "message-caller",
       sequence: 18,
     }
+    const fileChange = {
+      type: "work-ledger.file-changed",
+      sourceType: "file.edited",
+      directory: "/repo",
+      path: "notes/checklist.txt",
+      resourceID: "persisted-resource-id",
+      sequence: 0,
+    }
     const conversationHandoff = {
       type: "work-ledger.conversation-handoff",
       sourceType: "conversation.handoff",
@@ -106,7 +114,7 @@ describe("canonical Server-Sent Events payload contracts", () => {
       callerMessageID: "message-caller",
       sequence: 19,
     }
-    for (const event of [changed, handoff, conversationHandoff]) {
+    for (const event of [changed, handoff, conversationHandoff, fileChange]) {
       expect(WorkLedgerEvent.parse(event)).toEqual(event)
       expect(WorkLedgerActionEvent.parse(event)).toEqual(event)
     }
