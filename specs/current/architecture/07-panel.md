@@ -223,6 +223,9 @@ for the active project refresh the same metadata. File changes arriving during
 a read or Git action share one pending refresh, which keeps its directory and
 connection ownership. The Git dialog retains the written subject, and the
 commit button and shortcut require the current report of a dirty worktree.
+An accepted commit clears only the submitted revision of its subject. Edits made
+during the request keep their text through settlement and reopening. Reopening
+with an empty subject can generate a new draft, and Regenerate remains explicit.
 
 File Editor initial read failures retain one current original thrown value
 under the existing target, API authority and load/reload generations. Shared

@@ -256,7 +256,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   let localEnvironmentVariableID = 0
   let gitOperationID = 0
   let commitMessageStream: ReturnType<typeof streamVcsCommitMessage> | undefined
-  let commitMessageGenerationKey = ""
+  let commitMessageRevision = 0
   const [worktrees, setWorktrees] = createSignal<ProjectWorktreeInfo[]>([])
   const [worktreeDirectory, setWorktreeDirectory] = createSignal("")
   const [worktreeRead, setWorktreeRead] = createSignal<{ loading: boolean; failure?: { cause: unknown } }>({ loading: false })
@@ -683,30 +683,12 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setCommitMessageGenerating(false)
   }
 
-  function commitMessageKey(): string {
-    const value = vcs()
-    return [
-      captureApiAuthority().revision,
-      dir().trim(),
-      activeTaskID().trim(),
-      activeSessionID().trim(),
-      value?.branch ?? "",
-      value?.commit ?? "",
-      value?.staged ?? 0,
-      value?.modified ?? 0,
-      value?.untracked ?? 0,
-    ].join(":")
-  }
-
-  function generateCommitMessage(force = false): void {
-    if (!gitActionReady() || !vcs()?.dirty) return
+  function generateCommitMessage(): void {
+    if (!gitActionReady() || !vcs()?.dirty || gitBusy()) return
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = dir().trim()
-    const key = commitMessageKey()
-    if (!force && commitMessageGenerationKey === key && commitMessage().trim()) return
     disposeCommitMessageStream()
-    commitMessageGenerationKey = key
     setCommitMessage("")
     setCommitMessageGenerating(true)
     setGitActionError("")
@@ -752,8 +734,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setGitActionNotice("")
     if (nextOpen) {
       closeRuntimePanel()
-      if (!commitMessage().trim()) setGitActionBranch(vcs()?.branch ?? null)
-      if (vcs()?.dirty) generateCommitMessage()
+      if (!commitMessage()) {
+        setGitActionBranch(vcs()?.branch ?? null)
+        generateCommitMessage()
+      }
     }
     if (!nextOpen) disposeCommitMessageStream()
   }
@@ -776,7 +760,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   function confirmCurrentGitBranch(): void {
     if (!gitMetadataFresh() || gitBusy()) return
     setGitActionBranch(vcs()?.branch ?? null)
-    commitMessageGenerationKey = commitMessageKey()
     setGitActionError("")
     focusGitAction()
   }
@@ -802,6 +785,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const directory = dir().trim()
     const expectedBranch = gitActionBranch()
     if (!directory || expectedBranch === undefined || !canCommitGit()) return
+    const submittedMessageRevision = commitMessageRevision
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const operationID = ++gitOperationID
@@ -814,9 +798,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       const committedBranch = expectedBranch ?? result.info.branch ?? null
       if (ownsPresentation()) {
         setGitActionNotice(t("project_runtime.commit_success", { commit: result.commit }))
-        setCommitMessage("")
+        if (commitMessageRevision === submittedMessageRevision) setCommitMessage("")
         setGitActionBranch(committedBranch)
-        commitMessageGenerationKey = ""
       }
       if (pushAfterCommit) {
         await pushVcsBranch(directory, committedBranch, authority)
@@ -1402,7 +1385,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setCommitMessage("")
     setGitActionError("")
     setGitActionNotice("")
-    commitMessageGenerationKey = ""
   })
 
   onCleanup(invalidateWorktreeProjection)
@@ -2252,7 +2234,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 disabled={!gitActionReady() || commitMessageGenerating() || gitBusy()}
                 title={t("project_runtime.commit_message_regenerate")}
                 aria-label={t("project_runtime.commit_message_regenerate")}
-                onClick={() => generateCommitMessage(true)}
+                onClick={generateCommitMessage}
               >
                 <Icon name={commitMessageGenerating() ? "loading" : "refresh"} />
               </Button>
@@ -2306,7 +2288,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               }
               aria-label={t("project_runtime.commit_message")}
               readOnly={commitMessageGenerating()}
-              onInput={(event) => setCommitMessage(event.currentTarget.value)}
+              onInput={(event) => {
+                commitMessageRevision += 1
+                setCommitMessage(event.currentTarget.value)
+              }}
               onKeyDown={(event) => {
                 if (event.key !== "Enter" || (!event.ctrlKey && !event.metaKey)) return
                 event.preventDefault()
