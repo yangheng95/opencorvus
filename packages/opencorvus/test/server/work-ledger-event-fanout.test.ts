@@ -9,6 +9,7 @@ import { Identifier } from "@/id/id"
 import { Instance } from "@/project/instance"
 import { File } from "@/file"
 import { ProtocolStore } from "@/protocol/store"
+import { AutomationService } from "@/scheduler/automation-service"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { Database, eq } from "@/storage/db"
@@ -135,6 +136,64 @@ test("committed scheduled definition changes invalidate the public list after ea
     await close()
   }
 }, 30_000)
+
+test.each(["succeeded", "retry_wait"] as const)(
+  "a committed scheduled %s receipt invalidates its exact definition",
+  async (outcome) => {
+    await using project = await memoryProject("automation-execution-fanout")
+    await using peer = await memoryProject("automation-execution-fanout-control")
+    const projectID = await Instance.provide({ directory: project.path, fn: () => Instance.project.id })
+    const peerID = await Instance.provide({ directory: peer.path, fn: () => Instance.project.id })
+    const schedule = {
+      recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY",
+      prompt: "Verify the committed scheduled execution.",
+    }
+    const primary = await AutomationService.create({
+      ...schedule, name: "Execution under review", target: { scope: "project", projectIds: [projectID] },
+    })
+    const control = await AutomationService.create({
+      ...schedule, name: "Other project execution", target: { scope: "project", projectIds: [peerID] },
+    })
+    await Database.awaitEffectIdle(5_000)
+    using wake = AutomationService.TestHooks.installWakeExecutor(async (input) => ({
+      sessionID: input.sessionID!,
+      messageID: input.messageID!,
+      activation: Promise.resolve({ owner: new AbortController().signal }),
+      completion: Promise.resolve(outcome === "succeeded"
+        ? { ok: true as const }
+        : { ok: false as const, error: "Retryable review result" }),
+    }))
+    const { next, close } = await openLedgerEvents()
+    const route = `/global/automations/${primary.id}`
+    try {
+      await next("work-ledger.connected")
+      const response = await Server.App().request(`${route}/run`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ requestID: `execution-fanout-${outcome}` }),
+      })
+      expect(response.status).toBe(200)
+      const accepted = await response.json()
+      expect(accepted).toMatchObject([{ automationId: primary.id, targetProjectId: projectID, outcome }])
+      expect(await next("work-ledger.changed", "automation.execution.changed")).toEqual({
+        type: "work-ledger.changed", sourceType: "automation.execution.changed", automationID: primary.id, sequence: 0,
+      })
+      const history = await Server.App().request(`${route}/runs`)
+      expect(await history.json()).toEqual(accepted)
+      const list = await Server.App().request("/global/automations")
+      const projected = (await list.json()) as Array<{ id: string }>
+      expect(projected.find(({ id }) => id === primary.id)).toMatchObject({
+        revisionId: primary.revisionId, target: { scope: "project", projectIds: [projectID] }, lastRun: accepted[0].startedAt,
+      })
+      expect(projected.find(({ id }) => id === control.id)).toMatchObject({
+        revisionId: control.revisionId, target: { scope: "project", projectIds: [peerID] }, lastRun: null,
+      })
+    } finally {
+      await close()
+    }
+  },
+  30_000,
+)
 
 test("scheduled conversation titles re-read the same bound identity after sidebar and root renames", async () => {
   await using sidebarProject = await memoryProject("scheduled-sidebar-title")

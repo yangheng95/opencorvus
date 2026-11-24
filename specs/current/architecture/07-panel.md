@@ -2287,6 +2287,10 @@ accepted rows. Stable Run IDs keep unchanged Session controls in place.
 Rejoining the work ledger stream refreshes the scheduled definitions and the
 run history of the still-selected definition. The current connection owns
 both reads, and the existing history read retires older in-flight results.
+A committed recurring execution publishes a refresh notification for its
+definition. Connected panels refresh the summaries and recheck the history
+when that rule is selected. Explicit Refresh reads the selected history and
+refreshes its summary through the same definition list.
 
 Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing

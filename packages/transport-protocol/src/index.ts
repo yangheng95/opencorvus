@@ -511,6 +511,7 @@ export const WorkLedgerChangedEvent = z
   .object({
     type: z.literal("work-ledger.changed"),
     sourceType: z.string(),
+    automationID: z.string().min(1).optional(),
     projectID: z.string().optional(),
     directory: z.string().optional(),
     sessionID: z.string().optional(),

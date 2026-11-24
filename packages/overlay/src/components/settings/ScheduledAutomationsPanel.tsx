@@ -102,6 +102,10 @@ type AutomationRunState = {
   error?: AutomationError
 }
 
+type AutomationRefreshRequest =
+  | { kind: "definition" | "reconnect" }
+  | { kind: "execution"; automationID: string }
+
 type BasicAutomationRecurrence = Exclude<AutomationRecurrencePreset, "custom">
 
 interface AutomationSuggestion {
@@ -275,7 +279,7 @@ function automationFailure(error: unknown, operationKey: string): AutomationErro
 export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPanelProps) {
   const [automations, setAutomations] = createSignal<AutomationView[]>([])
   const automationsByID = createMemo(() => new Map(automations().map((automation) => [automation.id, automation])))
-  const [requestedRefresh, setRequestedRefresh] = createSignal<"definition" | "reconnect">()
+  const [requestedRefresh, setRequestedRefresh] = createSignal<AutomationRefreshRequest>()
   const [selectedID, setSelectedID] = createSignal("")
   const [manualRunRevision, setManualRunRevision] = createSignal(0)
   const hasUnconfirmedRun = (id: string) => {
@@ -742,7 +746,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setRunState(undefined)
   }
 
-  async function loadRuns(automationID: string, options: { skipPending?: boolean } = {}): Promise<void> {
+  async function loadRuns(automationID: string, options: { skipPending?: boolean; refreshSummary?: boolean } = {}): Promise<void> {
     if (disposed || !automationID || selectedID() !== automationID) return
     const current = selectedRunState()
     if (options.skipPending && current?.pending) return
@@ -755,7 +759,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const items = current?.items
     setRunState({ automationID, authority, pending: true, items, error: current?.error })
     try {
-      const history = await listAutomationRuns(automationID, request.signal)
+      const [history] = await Promise.all([
+        listAutomationRuns(automationID, request.signal),
+        options.refreshSummary ? load(automationID, { background: true, authority }) : undefined,
+      ])
       if (owns()) setRunState({ automationID, authority, pending: false, items: history })
     } catch (cause) {
       if (owns()) {
@@ -1263,12 +1270,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
   }
 
-  async function refreshScheduledAutomations(reason: "definition" | "reconnect" | "due"): Promise<void> {
+  async function refreshScheduledAutomations(request: AutomationRefreshRequest | { kind: "due" }): Promise<void> {
     const preferredID = selectedID()
     const authority = captureApiAuthority()
     await load(preferredID, { background: true, authority })
-    if (reason !== "definition" && preferredID && selectedID() === preferredID && isApiAuthorityCurrent(authority)) {
-      await loadRuns(preferredID, { skipPending: reason === "due" })
+    const refreshHistory = request.kind === "reconnect" || request.kind === "due" ||
+      (request.kind === "execution" && request.automationID === preferredID)
+    if (refreshHistory && preferredID && selectedID() === preferredID && isApiAuthorityCurrent(authority)) {
+      await loadRuns(preferredID, { skipPending: request.kind === "due" })
     }
   }
 
@@ -1283,24 +1292,30 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   const unsubscribeScheduledChanges = subscribeWorkLedgerChanges((event) => {
     if (event.type === "work-ledger.connected") {
-      setRequestedRefresh("reconnect")
+      setRequestedRefresh({ kind: "reconnect" })
       setProjectRefreshRequested(true)
       return
     }
     if (event.type !== "work-ledger.changed") return
-    if (event.sourceType === "automation.definition.changed" ||
+    const executionChanged = event.sourceType === "automation.execution.changed"
+    if (executionChanged || event.sourceType === "automation.definition.changed" ||
       (event.titleChanged && automations().some(({ target }) => target.scope === "session" && target.sessionId === event.sessionID))) {
-      setRequestedRefresh((current) => current ?? "definition")
+      const automationID = event.automationID
+      setRequestedRefresh((current) => {
+        if (current?.kind === "reconnect") return current
+        if (executionChanged && automationID && automationID === selectedID()) return { kind: "execution", automationID }
+        return current ?? { kind: "definition" }
+      })
     }
     if (event.sourceType === "project.updated") {
       setProjectRefreshRequested(true)
     }
   })
   createEffect(() => {
-    const reason = requestedRefresh()
-    if (!props.active || !reason || loading() || busyAction()) return
+    const request = requestedRefresh()
+    if (!props.active || !request || loading() || busyAction()) return
     setRequestedRefresh(undefined)
-    untrack(() => void refreshScheduledAutomations(reason))
+    untrack(() => void refreshScheduledAutomations(request))
   })
   createEffect(() => {
     if (!props.active || !projectRefreshRequested() || busyAction()) return
@@ -1324,7 +1339,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     dueRefreshTimer = setTimeout(
       () => {
         dueRefreshTimer = undefined
-        void refreshScheduledAutomations("due")
+        void refreshScheduledAutomations({ kind: "due" })
       },
       Math.min(delay, MAX_BROWSER_TIMER_DELAY_MS),
     )
@@ -1762,7 +1777,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                             aria-disabled={Boolean(busyAction()) || selectedRunState()?.pending || undefined}
                             aria-busy={selectedRunState()?.pending || undefined}
                             onClick={() => {
-                              if (!busyAction()) void loadRuns(automation().id, { skipPending: true })
+                              if (!busyAction()) void loadRuns(automation().id, { skipPending: true, refreshSummary: true })
                             }}
                           >
                             <Icon name="refresh" />

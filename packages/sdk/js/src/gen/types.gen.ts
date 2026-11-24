@@ -958,6 +958,7 @@ export type Event =
   | EventAgentExecutionLifecycle
   | EventArtifactPersisted
   | EventAutomationDefinitionChanged
+  | EventAutomationExecutionChanged
   | EventCommandExecuted
   | EventConfigChanged
   | EventConversationHandoff
@@ -1146,6 +1147,13 @@ export type EventAutomationDefinitionChanged = {
     change: "created" | "updated" | "deleted"
   }
   type: "automation.definition.changed"
+}
+
+export type EventAutomationExecutionChanged = {
+  properties: {
+    automationID: string
+  }
+  type: "automation.execution.changed"
 }
 
 export type EventCommandExecuted = {
@@ -41345,6 +41353,7 @@ export type WorkLedgerEventsResponses = {
       }
     | {
         archiveUpdated?: true
+        automationID?: string
         directory?: string
         projectID?: string
         sequence: number

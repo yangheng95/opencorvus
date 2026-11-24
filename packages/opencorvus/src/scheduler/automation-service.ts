@@ -101,12 +101,24 @@ export const AutomationDefinitionChanged = BusEvent.define("automation.definitio
   automationID: z.string().min(1),
   change: z.enum(["created", "updated", "deleted"]),
 }))
+export const AutomationExecutionChanged = BusEvent.define("automation.execution.changed", z.object({
+  automationID: z.string().min(1),
+}))
 
 function publishAutomationDefinitionChange(properties: z.output<typeof AutomationDefinitionChanged.properties>) {
   Database.effect(async () => {
     await GlobalBus.emit("event", {
       directory: "global",
       payload: { type: AutomationDefinitionChanged.type, properties },
+    })
+  })
+}
+
+function publishAutomationExecutionChange(automationID: string): void {
+  Database.effect(async () => {
+    await GlobalBus.emit("event", {
+      directory: "global",
+      payload: { type: AutomationExecutionChanged.type, properties: { automationID } },
     })
   })
 }
@@ -2186,6 +2198,7 @@ export namespace AutomationService {
             ownerOccurrenceID: owner,
             now,
           })
+          publishAutomationExecutionChange(job.id)
           return true
         }
         return false
@@ -2398,6 +2411,7 @@ export namespace AutomationService {
           ownerOccurrenceID: owner,
           now: committedAt,
         })
+        publishAutomationExecutionChange(job.id)
       })
       log.info("automation fire completed", {
         jobId: job.id,
@@ -3183,6 +3197,7 @@ export namespace AutomationService {
         ownerOccurrenceID: owner,
         now,
       })
+      if (job.kind === "recurring") publishAutomationExecutionChange(job.id)
       return true
     })
 
