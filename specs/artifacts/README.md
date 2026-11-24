@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [收件箱刷新失败的阅读证据](2026-11-25-mailbox-keeps-reading-after-refresh-failure/README.md)
 - [归档后台刷新期间的阅读与焦点证据](2026-11-25-archive-reading-during-background-refresh/README.md)
 - [归档页的会话更新读取证据](2026-11-25-archive-reads-only-relevant-session-updates/README.md)
 - [定时详情模型标识的桌面证据](2026-11-25-scheduled-details-show-full-model-identity/README.md)

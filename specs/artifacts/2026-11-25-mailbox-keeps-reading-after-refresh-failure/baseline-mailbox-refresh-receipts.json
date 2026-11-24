@@ -1,0 +1,163 @@
+{
+  "rendererAsset": "main-BL9BfK-8.js",
+  "browserUI": "http://127.0.0.1:41787/ui/",
+  "scope": "B611 Shared transfer",
+  "peerAcknowledgement": {
+    "id": "pev_g0VbvQqh800fjF6fBL1U",
+    "subject": "Map shelf receipt",
+    "status": 200,
+    "requestID": "fcfcc014-5d9f-45c9-a932-e071b5407045",
+    "acceptedAt": "2026-11-24T20:41:54.646012Z",
+    "result": {
+      "changed": true,
+      "eventID": "pev_g0VbvR2n200JgOyIU0XA",
+      "messageID": "pev_g0VbvQqh800fjF6fBL1U",
+      "action": "read"
+    }
+  },
+  "publicReadsBefore": {
+    "matches": [
+      {
+        "id": "pev_g0VbvQqh600UYCvXKqCp",
+        "subject": "Cedar bridge notice",
+        "body": "B611 Shared transfer. BRIDGE RECEIPT: The bridge register lists an eastern path.",
+        "readAt": 1795552868129,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-control-review",
+        "taskID": "tsk_g00VbvQqh300tV9Bh34G"
+      },
+      {
+        "id": "pev_g0VbvQqc700oF2Xz6ITT",
+        "subject": "Cedar intake replay",
+        "body": "B611 Shared transfer. INTAKE RECEIPT: The receiving log lists three folders.",
+        "readAt": 1795552867820,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-reading-review",
+        "taskID": "tsk_g00VbvQqbv00a2STrK8D"
+      },
+      {
+        "id": "pev_g0VbvQqc200r7pd2n8Tj",
+        "subject": "Cedar cabinet audit",
+        "body": "B611 Shared transfer. CABINET RECEIPT: The ledger lists cabinet six.",
+        "readAt": 1795552867817,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-reading-review",
+        "taskID": "tsk_g00VbvQqbv00a2STrK8D"
+      }
+    ],
+    "active": 7,
+    "unread": 3,
+    "control": [
+      {
+        "id": "pev_g0VbvQqh800fjF6fBL1U",
+        "subject": "Map shelf receipt",
+        "readAt": null,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-control-review",
+        "taskID": "tsk_g00VbvQqh300tV9Bh34G"
+      }
+    ],
+    "filteredReceipt": "50fbe3b4-3af9-42cb-a36b-5243fe1c392c",
+    "controlReceipt": "3d229387-5bc3-4c3f-abba-8a148bd38ad9"
+  },
+  "publicReadsAfter": {
+    "matches": [
+      {
+        "id": "pev_g0VbvQqh600UYCvXKqCp",
+        "subject": "Cedar bridge notice",
+        "body": "B611 Shared transfer. BRIDGE RECEIPT: The bridge register lists an eastern path.",
+        "readAt": 1795552868129,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-control-review",
+        "taskID": "tsk_g00VbvQqh300tV9Bh34G"
+      },
+      {
+        "id": "pev_g0VbvQqc700oF2Xz6ITT",
+        "subject": "Cedar intake replay",
+        "body": "B611 Shared transfer. INTAKE RECEIPT: The receiving log lists three folders.",
+        "readAt": 1795552867820,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-reading-review",
+        "taskID": "tsk_g00VbvQqbv00a2STrK8D"
+      },
+      {
+        "id": "pev_g0VbvQqc200r7pd2n8Tj",
+        "subject": "Cedar cabinet audit",
+        "body": "B611 Shared transfer. CABINET RECEIPT: The ledger lists cabinet six.",
+        "readAt": 1795552867817,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-reading-review",
+        "taskID": "tsk_g00VbvQqbv00a2STrK8D"
+      }
+    ],
+    "active": 7,
+    "unread": 2,
+    "control": [
+      {
+        "id": "pev_g0VbvQqh800fjF6fBL1U",
+        "subject": "Map shelf receipt",
+        "readAt": 1795552914623,
+        "taskDirectory": "C:\\Users\\Public\\opencorvus-review-20261125-b611\\candidate\\mailbox-control-review",
+        "taskID": "tsk_g00VbvQqh300tV9Bh34G"
+      }
+    ],
+    "filteredReceipt": "a684e5a6-c3d9-49dd-83d6-e964c3803e24",
+    "controlReceipt": "9815a13f-3283-453a-b555-3a158ee326c5"
+  },
+  "transport": [
+    {
+      "at": "2026-11-24T20:41:30.172Z",
+      "event": "socket-open",
+      "id": 17,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T20:41:43.907Z",
+      "event": "upstream-response",
+      "id": 38,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "a453d67b-e4de-4681-b917-197b94a97d8d"
+    },
+    {
+      "at": "2026-11-24T20:41:54.468Z",
+      "event": "mode",
+      "mode": "drop-shared",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:41:54.758Z",
+      "event": "upstream-response",
+      "id": 41,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "f2ae6105-3844-40ce-9938-0bb398dd849a"
+    },
+    {
+      "at": "2026-11-24T20:41:54.759Z",
+      "event": "mailbox-response-interrupted",
+      "id": 41,
+      "actual": "f2ae6105-3844-40ce-9938-0bb398dd849a",
+      "status": 200,
+      "search": "B611 Shared transfer",
+      "bytes": 2116,
+      "sent": 32
+    },
+    {
+      "at": "2026-11-24T20:42:04.316Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T20:42:08.834Z",
+      "event": "upstream-response",
+      "id": 44,
+      "pathname": "/mailbox",
+      "method": "GET",
+      "status": 200,
+      "query": "B611 Shared transfer",
+      "actual": "b97f5898-8a30-4dec-b442-983ac4ab8d1f"
+    }
+  ]
+}

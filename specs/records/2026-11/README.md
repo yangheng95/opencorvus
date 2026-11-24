@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [收件箱刷新失败时保留正在阅读的消息](2026-11-25-mailbox-keeps-reading-after-refresh-failure.md)
 - [归档列表后台刷新期间仍可阅读已接受的结果](2026-11-25-archive-reading-during-background-refresh.md)
 - [归档页按会话实际归档状态刷新](2026-11-25-archive-reads-only-relevant-session-updates.md)
 - [定时任务详情显示完整模型标识](2026-11-25-scheduled-details-show-full-model-identity.md)
