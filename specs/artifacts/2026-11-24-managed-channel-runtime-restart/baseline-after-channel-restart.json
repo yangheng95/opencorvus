@@ -1,0 +1,36 @@
+[
+  {
+    "project": "east",
+    "catalogStatus": 200,
+    "runtimeRequestID": "71cc450c-09c6-4751-a5e9-25c201e78228",
+    "matrix": {
+      "status": "configured",
+      "runtime_status": "disabled",
+      "runtime_detail": "No managed channel runtime configured."
+    },
+    "runtime": {
+      "status": "disabled",
+      "running": false,
+      "channels": [],
+      "detail": "No managed channel runtime configured."
+    }
+  },
+  {
+    "project": "west",
+    "catalogStatus": 200,
+    "runtimeRequestID": "1aff5b56-f694-4837-870f-7df27eb740c1",
+    "matrix": {
+      "status": "configured",
+      "runtime_status": "running",
+      "runtime_detail": "Managed runtime active for matrix."
+    },
+    "runtime": {
+      "status": "running",
+      "running": true,
+      "channels": [
+        "matrix"
+      ],
+      "detail": "Managed runtime active for matrix."
+    }
+  }
+]

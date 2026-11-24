@@ -1,0 +1,122 @@
+{
+  "requests": [
+    {
+      "time": "2026-11-24T08:44:59.590Z",
+      "requestID": "c8983795-9868-40bd-9b01-a548cfb1a3a7",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "started"
+    },
+    {
+      "time": "2026-11-24T08:45:00.235Z",
+      "requestID": "c8983795-9868-40bd-9b01-a548cfb1a3a7",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 645
+    },
+    {
+      "time": "2026-11-24T08:45:00.252Z",
+      "requestID": "6c7b4d7d-a30c-4f0a-85f0-161d9959efcc",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "started"
+    },
+    {
+      "time": "2026-11-24T08:45:00.805Z",
+      "requestID": "6c7b4d7d-a30c-4f0a-85f0-161d9959efcc",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 553
+    },
+    {
+      "time": "2026-11-24T08:45:00.826Z",
+      "requestID": "2f92c880-7c5b-4783-9735-ea9a6b58de2c",
+      "method": "POST",
+      "path": "/channel/runtime/restart",
+      "status": "started"
+    },
+    {
+      "time": "2026-11-24T08:45:01.063Z",
+      "requestID": "2f92c880-7c5b-4783-9735-ea9a6b58de2c",
+      "method": "POST",
+      "path": "/channel/runtime/restart",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 237
+    },
+    {
+      "time": "2026-11-24T08:45:01.066Z",
+      "requestID": "14ae8ecc-4736-4e7e-878a-133a04a929c8",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "started"
+    },
+    {
+      "time": "2026-11-24T08:45:01.067Z",
+      "requestID": "14ae8ecc-4736-4e7e-878a-133a04a929c8",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    },
+    {
+      "time": "2026-11-24T08:45:01.069Z",
+      "requestID": "794ca39d-7d53-4b24-82e6-84d0b063e453",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "started"
+    },
+    {
+      "time": "2026-11-24T08:45:01.070Z",
+      "requestID": "794ca39d-7d53-4b24-82e6-84d0b063e453",
+      "method": "GET",
+      "path": "/channel/runtime",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 1
+    }
+  ],
+  "lastEastSync": {
+    "project": "east",
+    "operation": "sync",
+    "cursor": 87,
+    "at": "2026-11-24T08:45:00.657Z"
+  },
+  "firstWestSyncAfterRestart": {
+    "project": "west",
+    "operation": "sync",
+    "cursor": 55,
+    "at": "2026-11-24T08:45:01.203Z"
+  },
+  "handshakesBeforeRestart": [
+    {
+      "project": "east",
+      "operation": "account/whoami",
+      "cursor": 1,
+      "at": "2026-11-24T08:44:25.660Z"
+    },
+    {
+      "project": "west",
+      "operation": "account/whoami",
+      "cursor": 1,
+      "at": "2026-11-24T08:44:39.233Z"
+    },
+    {
+      "project": "east",
+      "operation": "account/whoami",
+      "cursor": 2,
+      "at": "2026-11-24T08:45:00.222Z"
+    },
+    {
+      "project": "west",
+      "operation": "account/whoami",
+      "cursor": 2,
+      "at": "2026-11-24T08:45:00.794Z"
+    }
+  ]
+}
