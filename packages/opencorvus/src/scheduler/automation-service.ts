@@ -1,4 +1,6 @@
 import { randomUUID } from "node:crypto"
+import { BusEvent } from "@/bus/bus-event"
+import { GlobalBus } from "@/bus/global"
 import { Database, NotFoundError, and, desc, eq, inArray, isNull, ne, or, sql } from "@/storage/db"
 import {
   AutomationDefinitionTombstoneTable,
@@ -94,6 +96,20 @@ import { GlobalCreationAllocation } from "@/project/global-creation-allocation"
 import { assertSchedulerProjectOwner, schedulerProjectDisposition } from "./project-owner"
 
 export { AutomationRunOutcomes }
+
+export const AutomationDefinitionChanged = BusEvent.define("automation.definition.changed", z.object({
+  automationID: z.string().min(1),
+  change: z.enum(["created", "updated", "deleted"]),
+}))
+
+function publishAutomationDefinitionChange(properties: z.output<typeof AutomationDefinitionChanged.properties>) {
+  Database.effect(async () => {
+    await GlobalBus.emit("event", {
+      directory: "global",
+      payload: { type: AutomationDefinitionChanged.type, properties },
+    })
+  })
+}
 
 export type AutomationTarget =
   | { scope: "session"; sessionId: string }
@@ -769,6 +785,7 @@ export namespace AutomationService {
       }
       const inserted = tx.select().from(AutomationTable).where(eq(AutomationTable.id, id)).get()!
       ensureScheduledAutomationFireFrontierInTransaction(tx, inserted, Recurrence.nextRun(recurrence, now), now)
+      publishAutomationDefinitionChange({ automationID: id, change: "created" })
       return definitionReceiptInTransaction(tx, inserted)
     })
   }
@@ -899,6 +916,7 @@ export namespace AutomationService {
       } else {
         clearAutomationFireFrontierInTransaction(tx, inserted.definition_id)
       }
+      publishAutomationDefinitionChange({ automationID: inserted.definition_id, change: "updated" })
       return inserted
     })
   }
@@ -1459,6 +1477,7 @@ export namespace AutomationService {
       }
       const latest = assertMutationDefinitionInTransaction(db, id, expectedRevisionId)
       appendAutomationTombstoneInTransaction(db, latest, Date.now(), { id: tombstoneID, causation })
+      publishAutomationDefinitionChange({ automationID: id, change: "deleted" })
       return { id, name: latest.name }
     })
   }

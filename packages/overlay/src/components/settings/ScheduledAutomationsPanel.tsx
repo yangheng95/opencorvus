@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, Show, type Accessor } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, For, onCleanup, onMount, Show, untrack, type Accessor } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
 import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { formatErrorDetails } from "../../utils/error-details"
@@ -45,6 +45,7 @@ import { loadProviderInfo } from "../../services/config-load"
 import { connectedModelOptions, type ConnectedModelOption } from "../../services/llm"
 import { closeConfigDialog } from "../../services/config-dialog-control"
 import { workLedgerSessionExecution } from "../../services/work-ledger"
+import { subscribeWorkLedgerChanges } from "../../services/sse"
 import { localeTag, t } from "../../utils/i18n"
 import { randomUUID } from "../../utils/random-id"
 import { projectDirectoryHints, projectLedgerDisplayName } from "../../utils/project-directory"
@@ -273,6 +274,8 @@ function automationFailure(error: unknown, operationKey: string): AutomationErro
 
 export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPanelProps) {
   const [automations, setAutomations] = createSignal<AutomationView[]>([])
+  const automationsByID = createMemo(() => new Map(automations().map((automation) => [automation.id, automation])))
+  const [definitionRefreshRequested, setDefinitionRefreshRequested] = createSignal(false)
   const [selectedID, setSelectedID] = createSignal("")
   const [manualRunRevision, setManualRunRevision] = createSignal(0)
   const hasUnconfirmedRun = (id: string) => {
@@ -387,7 +390,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let disposed = false
   let errorFeedbackElement: HTMLDivElement | undefined
   let errorRetryButton: HTMLButtonElement | undefined
-  const selected = createMemo(() => automations().find((automation) => automation.id === selectedID()) ?? null)
+  const selected = createMemo(() => automationsByID().get(selectedID()) ?? null)
   const selectedRecurrence = createMemo(() => {
     const definition = selected()
     return definition ? parseAutomationRecurrence(definition.recurrence) : undefined
@@ -679,7 +682,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       const items = await listAutomations(request.signal, authority)
       if (!owns()) return
       if (background) {
-        setAutomations(items)
+        batch(() => {
+          setAutomations(items)
+          if (selectedID() && !selected()) setSelectedID("")
+          if (error()?.source === "list-load") setError(null)
+        })
       } else {
         const hadRetryFocus = Boolean(confirmation || initialLoadError()) && document.activeElement === errorRetryButton
         const nextID = preferredID && items.some((item) => item.id === preferredID) ? preferredID : ""
@@ -1267,6 +1274,18 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (!props.active) setTimeZoneOpen(false)
   })
 
+  const unsubscribeDefinitions = subscribeWorkLedgerChanges((event) => {
+    if (event.type === "work-ledger.connected" ||
+      (event.type === "work-ledger.changed" && event.sourceType === "automation.definition.changed")) {
+      setDefinitionRefreshRequested(true)
+    }
+  })
+  createEffect(() => {
+    if (!props.active || !definitionRefreshRequested() || loading() || busyAction()) return
+    setDefinitionRefreshRequested(false)
+    untrack(() => void load(undefined, { background: true, authority: captureApiAuthority() }))
+  })
+
   createEffect(() => {
     if (dueRefreshTimer) clearTimeout(dueRefreshTimer)
     dueRefreshTimer = undefined
@@ -1293,6 +1312,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   })
   onCleanup(() => {
     disposed = true
+    unsubscribeDefinitions()
     projectLoadSequence += 1
     if (dueRefreshTimer) clearTimeout(dueRefreshTimer)
     listRequest?.abort()
@@ -1420,59 +1440,62 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                 }
               >
                 <div class="automations-rows">
-                  <For each={filteredAutomations()}>
-                    {(automation) => {
-                      const parsed = parseAutomationRecurrence(automation.recurrence)
-                      const summary = createMemo(() => recurrenceSummary(parsed))
-                      const actionDisabled = () => listActionDisabled(automation.id)
-                      return (
-                        <div class="automation-list-row">
-                          <SettingsRow
-                            as="button"
-                            class="automation-list-item"
-                            interactive
-                            customContent
-                            data-automation-id={automation.id}
-                            data-selected={String(selectedID() === automation.id)}
-                            aria-keyshortcuts={actionDisabled() ? undefined : "ArrowUp ArrowDown PageUp PageDown Escape"}
-                            disabled={actionDisabled()}
-                            onKeyDown={automationNavigation.handleResultKeyDown}
-                            onClick={() => selectAutomation(automation.id)}
-                          >
-                            <Icon name={automation.status === "active" ? "run" : "scheduled"} />
-                            <span class="automation-list-item__copy">
-                              <span class="automation-list-item__top">
-                                <strong title={automation.name}>{automation.name}</strong>
-                                <span title={targetLabel(automation)}>{targetLabel(automation)}</span>
-                              </span>
-                              <span class="automation-list-item__timing">
-                                <span class="automation-list-item__next">
-                                  {deletionNeedsRetry(automation.id) ? t("automations.deletion_unconfirmed") : automation.status === "active"
-                                    ? t("automations.next_run", { value: nextRunValue(automation) })
-                                    : nextRunValue(automation)}
+                  <For each={filteredAutomations().map(({ id }) => id)}>
+                    {(id) => (
+                      <Show when={automationsByID().get(id)}>
+                        {(automation) => {
+                          const summary = createMemo(() => recurrenceSummary(parseAutomationRecurrence(automation().recurrence)))
+                          const actionDisabled = () => listActionDisabled(id)
+                          return (
+                            <div class="automation-list-row">
+                              <SettingsRow
+                                as="button"
+                                class="automation-list-item"
+                                interactive
+                                customContent
+                                data-automation-id={id}
+                                data-selected={String(selectedID() === id)}
+                                aria-keyshortcuts={actionDisabled() ? undefined : "ArrowUp ArrowDown PageUp PageDown Escape"}
+                                disabled={actionDisabled()}
+                                onKeyDown={automationNavigation.handleResultKeyDown}
+                                onClick={() => selectAutomation(id)}
+                              >
+                                <Icon name={automation().status === "active" ? "run" : "scheduled"} />
+                                <span class="automation-list-item__copy">
+                                  <span class="automation-list-item__top">
+                                    <strong title={automation().name}>{automation().name}</strong>
+                                    <span title={targetLabel(automation())}>{targetLabel(automation())}</span>
+                                  </span>
+                                  <span class="automation-list-item__timing">
+                                    <span class="automation-list-item__next">
+                                      {deletionNeedsRetry(id) ? t("automations.deletion_unconfirmed") : automation().status === "active"
+                                        ? t("automations.next_run", { value: nextRunValue(automation()) })
+                                        : nextRunValue(automation())}
+                                    </span>
+                                    <span class="automation-list-item__rule" title={summary()}>
+                                      {summary()}
+                                    </span>
+                                  </span>
                                 </span>
-                                <span class="automation-list-item__rule" title={summary()}>
-                                  {summary()}
-                                </span>
-                              </span>
-                            </span>
-                          </SettingsRow>
-                          <Button
-                            type="button"
-                            class="automation-list-delete"
-                            variant="ghost"
-                            size="mini"
-                            tone="danger"
-                            title={deletionLabel(automation)}
-                            aria-label={deletionLabel(automation)}
-                            disabled={actionDisabled()}
-                            onClick={() => void confirmRemoveAutomation(automation)}
-                          >
-                            <Icon name="delete" />
-                          </Button>
-                        </div>
-                      )
-                    }}
+                              </SettingsRow>
+                              <Button
+                                type="button"
+                                class="automation-list-delete"
+                                variant="ghost"
+                                size="mini"
+                                tone="danger"
+                                title={deletionLabel(automation())}
+                                aria-label={deletionLabel(automation())}
+                                disabled={actionDisabled()}
+                                onClick={() => void confirmRemoveAutomation(automation())}
+                              >
+                                <Icon name="delete" />
+                              </Button>
+                            </div>
+                          )
+                        }}
+                      </Show>
+                    )}
                   </For>
                 </div>
               </Show>

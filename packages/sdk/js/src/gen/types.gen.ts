@@ -957,6 +957,7 @@ export type Event =
   | EventAgentCoordinationResponded
   | EventAgentExecutionLifecycle
   | EventArtifactPersisted
+  | EventAutomationDefinitionChanged
   | EventCommandExecuted
   | EventConfigChanged
   | EventConversationHandoff
@@ -1137,6 +1138,14 @@ export type EventArtifactPersisted = {
     taskID: string
   }
   type: "artifact.persisted"
+}
+
+export type EventAutomationDefinitionChanged = {
+  properties: {
+    automationID: string
+    change: "created" | "updated" | "deleted"
+  }
+  type: "automation.definition.changed"
 }
 
 export type EventCommandExecuted = {

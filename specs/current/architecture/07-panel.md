@@ -2384,6 +2384,14 @@ shows discovery status beside the project search. Accepted empty results and
 retained projects have distinct descriptions. A read-only retry preserves the
 query and selected target identities and returns still-owned focus to search.
 
+Newly committed scheduled automation definitions invalidate the global list on
+the Work Ledger stream. Explicit create, edit, pause, resume and delete share
+this notice after their definition transaction. The active Scheduled tasks
+page reads the existing list in the background after a notice or stream
+reconnection, deferring to foreground work. Rows use their stable automation IDs.
+An edit keeps its authored values and the revision it started from. Submission
+continues to require that revision even if a peer changed the displayed list.
+
 Standard schedule authoring displays the start date, clock and date chooser in
 the current application language. Keyboard segments and the calendar project
 the same civil date or wall-clock minute held by the form. Only a complete edit

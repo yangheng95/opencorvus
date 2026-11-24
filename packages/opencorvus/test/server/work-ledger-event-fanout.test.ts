@@ -70,6 +70,71 @@ async function openLedgerEvents() {
   }
 }
 
+test("committed scheduled definition changes invalidate the public list after each revision", async () => {
+  await using project = await memoryProject("automation-definition-fanout")
+  await using control = await memoryProject("automation-definition-fanout-control")
+  const projectID = await Instance.provide({ directory: project.path, fn: () => Instance.project.id })
+  const controlID = await Instance.provide({ directory: control.path, fn: () => Instance.project.id })
+  async function create(name: string, projectID: string) {
+    const response = await Server.App().request("/global/automations", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        name,
+        target: { scope: "project", projectIds: [projectID] },
+        recurrence: "DTSTART:20990101T000000Z\nRRULE:FREQ=DAILY;COUNT=2",
+        prompt: "Verify the future scheduled definition projection.",
+      }),
+    })
+    expect(response.status).toBe(201)
+    return (await response.json()) as { id: string; revisionId: string }
+  }
+  async function list() {
+    const response = await Server.App().request("/global/automations")
+    expect(response.status).toBe(200)
+    return (await response.json()) as Array<{ id: string; revisionId: string; status: string }>
+  }
+
+  const unaffected = await create("Other project", controlID)
+  await Database.awaitEffectIdle(5_000)
+  const { next, close } = await openLedgerEvents()
+  async function expectChange() {
+    expect(await next("work-ledger.changed", "automation.definition.changed")).toEqual({
+      type: "work-ledger.changed",
+      sourceType: "automation.definition.changed",
+      sequence: 0,
+    })
+  }
+  try {
+    await next("work-ledger.connected")
+    const added = await create("Future project handoff", projectID)
+    await expectChange()
+    expect((await list()).find(({ id }) => id === added.id)).toMatchObject({ ...added, status: "active" })
+
+    const route = `/global/automations/${added.id}`
+    const paused = await Server.App().request(route, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ status: "paused", expectedRevisionId: added.revisionId }),
+    })
+    expect(paused.status).toBe(200)
+    const current = (await paused.json()) as { revisionId: string }
+    await expectChange()
+    expect((await list()).find(({ id }) => id === added.id)).toMatchObject({
+      id: added.id, revisionId: current.revisionId, status: "paused",
+    })
+
+    const query = new URLSearchParams({ expectedRevisionId: current.revisionId })
+    const deleted = await Server.App().request(`${route}?${query}`, { method: "DELETE" })
+    expect(deleted.status).toBe(200)
+    expect(await deleted.json()).toMatchObject({ id: added.id, name: "Future project handoff" })
+    await expectChange()
+    expect(await list()).toMatchObject([{ ...unaffected, status: "active", target: { scope: "project", projectIds: [controlID] } }])
+  } finally {
+    await close()
+  }
+}, 30_000)
+
 test("Mission archive and restore invalidate the public archive query for the exact original Session", async () => {
   await using project = await memoryProject("archive-notification")
   await using control = await memoryProject("archive-notification-control")

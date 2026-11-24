@@ -2890,6 +2890,9 @@
             "$ref": "#/components/schemas/Event.artifact.persisted"
           },
           {
+            "$ref": "#/components/schemas/Event.automation.definition.changed"
+          },
+          {
             "$ref": "#/components/schemas/Event.command.executed"
           },
           {
@@ -3429,6 +3432,40 @@
           },
           "type": {
             "const": "artifact.persisted",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.automation.definition.changed": {
+        "properties": {
+          "properties": {
+            "properties": {
+              "automationID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "change": {
+                "enum": [
+                  "created",
+                  "updated",
+                  "deleted"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "automationID",
+              "change"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "automation.definition.changed",
             "type": "string"
           }
         },

@@ -23,6 +23,7 @@ import { Instance } from "@/project/instance"
 import { Vcs } from "@/project/vcs"
 import { File } from "@/file"
 import { ProtocolStore, type ProtocolEventView } from "@/protocol/store"
+import { AutomationDefinitionChanged } from "@/scheduler/automation-service"
 import { Session, SessionStatus } from "@/session"
 import { EngineService } from "@/task-api"
 import { Event as EngineEvent } from "@/engine/model"
@@ -353,10 +354,11 @@ export function WorkLedgerRoutes() {
           }
           const globalBusListener = bind((event: { directory?: string; payload?: unknown }) => {
             const envelope = event.payload as { type?: unknown; properties?: unknown } | undefined
-            if (envelope?.type === ServerEvent.Disposed.type && event.directory === "global") {
+            if (event.directory === "global" &&
+              (envelope?.type === ServerEvent.Disposed.type || envelope?.type === AutomationDefinitionChanged.type)) {
               writeWorkLedgerEventData(writeData, {
                 type: "work-ledger.changed",
-                sourceType: ServerEvent.Disposed.type,
+                sourceType: envelope.type,
                 sequence: 0,
               })
               return
