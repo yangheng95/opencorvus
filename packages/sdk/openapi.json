@@ -3064,6 +3064,9 @@
             "$ref": "#/components/schemas/Event.session.updated"
           },
           {
+            "$ref": "#/components/schemas/Event.side-chat.deleted"
+          },
+          {
             "$ref": "#/components/schemas/Event.task_plan.updated"
           },
           {
@@ -5986,6 +5989,46 @@
           },
           "type": {
             "const": "session.updated",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.side-chat.deleted": {
+        "properties": {
+          "properties": {
+            "properties": {
+              "directory": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "projectID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sessionID": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "sourceSessionID": {
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "projectID",
+              "directory",
+              "sourceSessionID",
+              "sessionID"
+            ],
+            "type": "object"
+          },
+          "type": {
+            "const": "side-chat.deleted",
             "type": "string"
           }
         },

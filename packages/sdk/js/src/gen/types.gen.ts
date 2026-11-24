@@ -1015,6 +1015,7 @@ export type Event =
   | EventSessionDiff
   | EventSessionError
   | EventSessionUpdated
+  | EventSideChatDeleted
   | EventTaskPlanUpdated
   | EventTaskCancellationRequested
   | EventTaskCancelled
@@ -1799,6 +1800,16 @@ export type EventSessionUpdated = {
     titleChanged?: true
   }
   type: "session.updated"
+}
+
+export type EventSideChatDeleted = {
+  properties: {
+    directory: string
+    projectID: string
+    sessionID: string
+    sourceSessionID: string
+  }
+  type: "side-chat.deleted"
 }
 
 export type EventTaskCancellationRequested = {
