@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [对话内查找等价输入保留当前匹配](2026-11-24-conversation-search-equivalent-query-focus.md)
 - [对话内查找把原消息留在可见区](2026-11-24-conversation-search-measured-message-landing.md)
 - [对话内查找刷新期间保留当前阅读位置](2026-11-24-conversation-search-refresh-retains-current-result.md)
 - [对话内查找切换控件时保留当前消息](2026-11-24-conversation-search-tab-retains-current-result.md)

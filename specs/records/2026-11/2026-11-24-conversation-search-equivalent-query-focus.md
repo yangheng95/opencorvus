@@ -1,0 +1,21 @@
+# 对话内查找等价输入保留当前匹配
+
+## Recall
+
+- 用户要求本人独立持续迭代。先调查根因和影响并记录在规格，再以真实桌面操作、人工截图、聚焦正向测试验证，提交、合并上游及普通推送，进入下一批。第 516 批 `8d6d2e1b1` 已确认推送且分支 0/0，既有 177 项工作区状态逐项保留。
+- 已读 `ConversationSearchDialog`、`conversation-search`、`text-search`、共享 `ComboboxControl`、全局 `CommandPalette` 等价查询保留机制、锁定的 Kobalte 输入实现、测试 `conversation-search` 与快照／转录，以及[可见空白匹配](2026-11-23-conversation-search-visible-spacing.md)、[查找 Tab 焦点](2026-11-24-conversation-search-tab-retains-current-result.md)和[面板架构](../../current/architecture/07-panel.md)。全仓核对 `preserveFocusedOptionOnInputChange`、`normalizeSearchText`、`findConversationMessages`、状态计数、快照读取和定位入口。
+- 验收在英文 100% 和简体中文 160% 的真实桌面用 14 条持久消息查找。选到 DR-13 后增加尾空格或改变大小写和内部等价空白，仍有同一组 14 个有序身份，维持 DR-13、滚动、原始可编辑值和光标。Enter 直接高亮原始 DR-13；真正变更查找时选择新匹配，并复核空白查询、退出和原会话。只操作隔离页面，人工复看截图，无界面自动化或模型调用。
+
+## 根因与影响（实施前）
+
+真实基线 `127.0.0.1:41330/ui/` 加载 `main-CCtk3-Yz.js`。会话 `ses_hYXfmBLQSmmWLl6fSLiv` 通过现有本地 Shell（命令解释器）保存 14 条原始输入和各自的实际完成回执。英文进入对话查找输入 `Dispatch receipt seal` 时实际匹配 14 个有序消息，方向键选到 DR-13。按一个空格后光标正常从 21 到 22，结果仍有 14 条，选中项却变成 DR-01、滚动从 69.33 变成 4。直接 Enter，实际主会话高亮的是 `msg_ReviewDispatch51701baseline`。
+
+中文 160% 把同一查询换成 `DISPATCH   receipt    seal`，14 个有序消息身份逐项相同，输入仍显示原始大小写与空白，选中项从 DR-13 变为 DR-01，滚动 540 降到 7.33。复核了五张原页面截图和真实结果身份。[观察](../../artifacts/2026-11-24-conversation-search-equivalent-query-focus/README.md)
+
+Kobalte 在输入变更回调之后无条件清空当前焦点键。对话查找以原始字符串更新消费者，但关键词已在 `findConversationMessages` 内折叠空白、裁剪和统一大小写，最终集合未变化。共享组件见到键为空时初始化到第一个选项。既有空白修复让字符串搜索一致，Tab 修复和刷新保留分别处理显式动作，均未接入共享的等价输入焦点恢复。全局查找已利用同一机制识别其自身的工作记录等价条件，当前修复复用该输入协议，用对话内查找自身的规范化函数确定同一搜索。
+
+影响为普通对话及 Task（任务）转录通过同一查找页面时的活动结果、输入光标、列表滚动和按 Enter 的真实定位。现有搜索文字、Unicode（统一码）偏移、来源定位、读取、文件、错误、数据库／公共接口、权限、配置及其它查找面不变。未观察到执行调度、队列、唤醒、恢复或终态异常。实际命令回执已完成，只读查找在客户端重置选中项。
+
+## 方案（修改前）
+
+将现有 `findConversationMessages` 的查询规范化提成该服务的同一个函数，既供过滤，也供对话查找的等价条件。让面板的查询状态存储接受的规范词；实际输入框仍由 Kobalte 负责显示逐字键入的原值、选区和光标。使用已有 `preserveFocusedOptionOnInputChange` 让等价输入维持同一集合的活动消息和滚动。真实词变化继续以新匹配和空查询为准；无需额外选中项、定时器、存储或请求。使用现有聚焦查找、转录与读取用例，并验收类型、语言、样式、正式构建、文档和架构索引。
