@@ -1,0 +1,18 @@
+# 普通对话更新保留进行中的多步任务看板读取
+
+## Recall
+
+- 用户要求自行持续迭代 OpenCorvus。每批调查界面、功能和缺陷，先落盘根因与影响，再实现、验证真实桌面、人工复核截图、按需执行有授权的模型验收，并提交和正常推送。用户明确要求独立工作。本批从多步任务（Mission）看板手动刷新开始，核对同工作区普通对话的实际变更。
+- 已读仓库规则、[实时投影](../../current/architecture/07-panel-reactivity.md)、[任务控制面](../../current/architecture/task-control-plane.md)、[草稿生命周期](2026-11-24-mission-draft-lifecycle-review.md)、[实时工作记录刷新](2026-11-12-work-ledger-selection-invalidation.md)、[工作记录读取截止](2026-11-09-work-ledger-list-read-deadline.md)和[活动／归档会话通知](2026-11-25-archive-reads-only-relevant-session-updates.md)。全仓核对 `workLedgerSessionChangedEvent`、`WorkLedgerChangedEvent`、`rightSidebarConversationExperience`、`workLedgerRefreshScope`、`refreshWorkLedgerViews`、`workLedgerListRefreshToken`、`reloadMissionBoard`、`cancelMissionBoardLoad`、`retireMissionBoardProjection`、`listGlobalMissionSessions` 和 `missionRecord` 的定义、生产输入和测试。此次检索的验收路径未发现界面自动化测试。
+
+## 复现与因果
+
+- 在隔离的开发服务上创建真实草稿 `draft-9d8982f25f704b77be88749fa865bea6`，处于 Backlog（待办），同一项目另开真实普通对话 `ses_hUYsFnBhmKipzPbiLPAs`。旧版桌面实际点击 Refresh Missions（刷新多步任务）。中继暂缓转交真实已返回的第一个响应体，保留原服务端状态和请求身份。响应 `61191b27-7b43-4ba2-9193-409c54c01099` 在 21:34:01.549Z 开始暂缓。另从公开接口更名普通对话获得 200 `8c870ece-4f8c-4fd8-9d70-6f8db9d84af0`，精确会话读取核对改名成功。第一条原本成功的看板响应在 21:34:01.907Z 被客户端提前关闭，21:34:01.909Z 后端处理另一条看板请求 `fcc02745-3645-4dbf-8a17-c0aadf07a14c`。同一真实草稿的标题、正文和更新时间仍为原值。释放响应后，原看板重新可用。[基线截图与原请求](../../artifacts/2026-11-25-mission-board-ignores-unrelated-conversation-updates/README.md)
+- 通用工作记录事件已经把活动会话变更传到应用主体，但只投影会话 ID 和标题／归档事实。应用对普通对话和 Mission 更新递增同一个列表刷新标记。工作记录的同一个反应式回调用该标记同时读取侧栏和看板，后一个读取无条件取消上一次加载。去抖只合并启动前近邻事件，已在途的手动读取仍被替换。看板保留上一次完整结果，因此不一定表现为空白。真实影响是进行中的读取被提前丢弃、额外查询和延长加载态。连续事件在慢读取下可能重复触发，现场实测的是一次替换。
+- 共享投影审计覆盖会话创建、更新、删除和活动状态，任务协议正常／终态事件，项目变更、交接、初次载入、连接退役和重连，以及本地写入回执。看板查询以 Mission 会话种类、原持久元数据和归档／清除状态识别记录，任务成员来自精确项目、Mission、Session 三元组，当前执行和终态来自原投影。普通右侧 Chat（对话）和 Work（工作对话）是有持久身份的 assistant 会话，两者的直接会话信息从未进入看板。会话状态发布同样可从原会话确认身份。Work 触发的交接可以产生真实 Mission 或 Task 变更，这些独立事实仍需看板读取。任务终态、启动恢复前后、计划触发、并行执行和跨项目落库遵循原生产路径。本批观察到的是只读刷新请求调度，和运行器唤醒、会话轮次、模型输入、任务持久状态或恢复机制没有共同取消控制器；未启动新的模型轮次。
+
+## 方案与验收
+
+- 工作记录会话通知从已验证的原会话投影可选 `conversationExperience`，复用现有右侧 Chat／Work 身份校验及协议中的工作记录对话枚举。应用仍对全部通知递增工作记录列表和适用的选择刷新。用专属标记通知唯一的 Mission 看板读取，在明确已知的普通对话更新／本地相关回执时只刷新适用侧栏。其他事件和本地未知调用保留原保守重读。任务成员、Mission、自身范围、交接、项目、连接恢复仍使用原权威路由。
+- 把看板刷新与侧栏刷新拆成独立反应式所有者，各自保留去抖和当前连接归属。看板隐藏时仍供任务导航摘要读取。精确保持原手动刷新、失败重试、分页合并、连接取消、原结果保留和页面布局。资源只有现有 `GET /mission` 和现有看板服务。同步生成应用程序接口和软件开发工具包（SDK）契约。
+- 使用聚焦正向公开接口检查，核对 Chat、Work 的真实改名事实和 Mission 编辑后读取的精确记录。前端执行工作记录刷新范围、连接退役、任务与会话流检查。真实开发桌面在已确认草稿下点击手动刷新，另行保存同项目普通对话，并确认侧栏读到新标题、看板原请求实际完成和刷新按钮恢复。再编辑原 Mission 请求，另一个打开的看板要实时读到同一草稿的新正文。截图人工核对，运行类型、构建及文档检查。本批验证读侧和草稿保存，场景不需要真实模型。
