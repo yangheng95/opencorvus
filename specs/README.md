@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [更新日志历史翻页跟随当前版本焦点](records/2026-11/2026-11-24-release-history-page-focus.md)
 - [从定时任务列表打开详情时看到计划概要](records/2026-11/2026-11-24-scheduled-detail-starts-at-overview.md)
 - [定时任务搜索结果分页随焦点浏览](records/2026-11/2026-11-24-scheduled-search-page-focus.md)
 - [项目笔记搜索摘要显示原文命中片段](records/2026-11/2026-11-24-memory-search-matching-excerpts.md)
