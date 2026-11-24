@@ -2284,6 +2284,9 @@ and failure label that retained view without hiding its Session links. The
 history heading owns one focusable Refresh/Retry action and the original
 diagnostic stays available during retry. Only a current read replaces the
 accepted rows. Stable Run IDs keep unchanged Session controls in place.
+Rejoining the work ledger stream refreshes the scheduled definitions and the
+run history of the still-selected definition. The current connection owns
+both reads, and the existing history read retires older in-flight results.
 
 Scheduled automation basic fields own an explicit start date, time, time zone
 and weekly day. The date/weekday of today are creation defaults only; changing

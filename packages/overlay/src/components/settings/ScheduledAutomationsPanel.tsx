@@ -275,7 +275,7 @@ function automationFailure(error: unknown, operationKey: string): AutomationErro
 export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPanelProps) {
   const [automations, setAutomations] = createSignal<AutomationView[]>([])
   const automationsByID = createMemo(() => new Map(automations().map((automation) => [automation.id, automation])))
-  const [definitionRefreshRequested, setDefinitionRefreshRequested] = createSignal(false)
+  const [requestedRefresh, setRequestedRefresh] = createSignal<"definition" | "reconnect">()
   const [selectedID, setSelectedID] = createSignal("")
   const [manualRunRevision, setManualRunRevision] = createSignal(0)
   const hasUnconfirmedRun = (id: string) => {
@@ -1263,10 +1263,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
   }
 
-  async function refreshDueAutomation(): Promise<void> {
+  async function refreshScheduledAutomations(reason: "definition" | "reconnect" | "due"): Promise<void> {
     const preferredID = selectedID()
-    await load(preferredID, { background: true })
-    if (preferredID && selectedID() === preferredID) await loadRuns(preferredID, { skipPending: true })
+    const authority = captureApiAuthority()
+    await load(preferredID, { background: true, authority })
+    if (reason !== "definition" && preferredID && selectedID() === preferredID && isApiAuthorityCurrent(authority)) {
+      await loadRuns(preferredID, { skipPending: reason === "due" })
+    }
   }
 
   createEffect(() => {
@@ -1280,23 +1283,24 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   const unsubscribeScheduledChanges = subscribeWorkLedgerChanges((event) => {
     if (event.type === "work-ledger.connected") {
-      setDefinitionRefreshRequested(true)
+      setRequestedRefresh("reconnect")
       setProjectRefreshRequested(true)
       return
     }
     if (event.type !== "work-ledger.changed") return
     if (event.sourceType === "automation.definition.changed" ||
       (event.titleChanged && automations().some(({ target }) => target.scope === "session" && target.sessionId === event.sessionID))) {
-      setDefinitionRefreshRequested(true)
+      setRequestedRefresh((current) => current ?? "definition")
     }
     if (event.sourceType === "project.updated") {
       setProjectRefreshRequested(true)
     }
   })
   createEffect(() => {
-    if (!props.active || !definitionRefreshRequested() || loading() || busyAction()) return
-    setDefinitionRefreshRequested(false)
-    untrack(() => void load(undefined, { background: true, authority: captureApiAuthority() }))
+    const reason = requestedRefresh()
+    if (!props.active || !reason || loading() || busyAction()) return
+    setRequestedRefresh(undefined)
+    untrack(() => void refreshScheduledAutomations(reason))
   })
   createEffect(() => {
     if (!props.active || !projectRefreshRequested() || busyAction()) return
@@ -1320,7 +1324,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     dueRefreshTimer = setTimeout(
       () => {
         dueRefreshTimer = undefined
-        void refreshDueAutomation()
+        void refreshScheduledAutomations("due")
       },
       Math.min(delay, MAX_BROWSER_TIMER_DELAY_MS),
     )

@@ -1,0 +1,294 @@
+{
+  "target": {
+    "runs": [
+      {
+        "id": "atr_automation_0c1e15e1ea58be31d6de1d48db3e5205",
+        "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "fireId": "atm_hoqYruQpS6gwtZOt59OW",
+        "targetScope": "global",
+        "targetProjectId": "prj_hec6wTVFZND72NYi4nY6",
+        "session": {
+          "id": "ses_automation_a2a11d5b08f2240b87f37ecc3e0e8175",
+          "title": "Chat",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261125-b606\\opencorvus-scheduled-history-candidate\\data\\projects\\2026\\11\\25\\c8a27870-bbe9-4e1a-a502-777e43012460",
+          "kind": "assistant",
+          "experience": "chat",
+          "productPillar": null
+        },
+        "outcome": "succeeded",
+        "disposition": null,
+        "closureEventID": null,
+        "startedAt": 1795549260772,
+        "completedAt": 1795549263251,
+        "error": null
+      },
+      {
+        "id": "atr_automation_aec7995ea77661a3f21e8a1bbaa3b1f9",
+        "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "fireId": "atm_htwrEUQHgRVpAKOXuZfo",
+        "targetScope": "global",
+        "targetProjectId": "prj_hl5PNbBvnTK2C7YEvahq",
+        "session": {
+          "id": "ses_automation_0336c3f1b27f321cd2c408a44ad4a684",
+          "title": "Chat",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261125-b606\\opencorvus-scheduled-history-candidate\\data\\projects\\2026\\11\\25\\48c6220b-6819-457a-a153-ef86a997835a",
+          "kind": "assistant",
+          "experience": "chat",
+          "productPillar": null
+        },
+        "outcome": "succeeded",
+        "disposition": null,
+        "closureEventID": null,
+        "startedAt": 1795548944623,
+        "completedAt": 1795548947264,
+        "error": null
+      }
+    ],
+    "fires": [
+      {
+        "fireId": "cal_automation_8b1f8611a6272183a059d72d127512cd",
+        "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "automationRevisionId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "origin": "scheduled",
+        "scheduledDueAt": 4070952000000,
+        "startedAt": 1795548872145,
+        "completedAt": null,
+        "state": "scheduled",
+        "attemptCount": 0,
+        "retryAt": null,
+        "error": null,
+        "runs": []
+      },
+      {
+        "fireId": "atm_hoqYruQpS6gwtZOt59OW",
+        "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "automationRevisionId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "origin": "manual_api",
+        "scheduledDueAt": 1795549260772,
+        "startedAt": 1795549260772,
+        "completedAt": 1795549263251,
+        "state": "succeeded",
+        "attemptCount": 1,
+        "retryAt": null,
+        "error": null,
+        "runs": [
+          {
+            "id": "atr_automation_0c1e15e1ea58be31d6de1d48db3e5205",
+            "targetScope": "global",
+            "targetProjectId": "prj_hec6wTVFZND72NYi4nY6",
+            "sessionId": "ses_automation_a2a11d5b08f2240b87f37ecc3e0e8175",
+            "outcome": "succeeded",
+            "disposition": null,
+            "closureEventID": null,
+            "startedAt": 1795549260772,
+            "completedAt": 1795549263251,
+            "error": null
+          }
+        ]
+      },
+      {
+        "fireId": "atm_htwrEUQHgRVpAKOXuZfo",
+        "automationId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "automationRevisionId": "atm_hFvWDUaomDyZxPvYwxVa",
+        "origin": "manual_api",
+        "scheduledDueAt": 1795548944623,
+        "startedAt": 1795548944623,
+        "completedAt": 1795548947264,
+        "state": "succeeded",
+        "attemptCount": 1,
+        "retryAt": null,
+        "error": null,
+        "runs": [
+          {
+            "id": "atr_automation_aec7995ea77661a3f21e8a1bbaa3b1f9",
+            "targetScope": "global",
+            "targetProjectId": "prj_hl5PNbBvnTK2C7YEvahq",
+            "sessionId": "ses_automation_0336c3f1b27f321cd2c408a44ad4a684",
+            "outcome": "succeeded",
+            "disposition": null,
+            "closureEventID": null,
+            "startedAt": 1795548944623,
+            "completedAt": 1795548947264,
+            "error": null
+          }
+        ]
+      }
+    ],
+    "requestID": "f3e68910-f79e-4668-9dd9-f36f466eaefc"
+  },
+  "control": {
+    "runs": null,
+    "fires": {
+      "fireId": "cal_automation_fe8ca3c42c90ab2729137cc540771db3",
+      "automationId": "atm_hQrsG7GYtLYIKGKeoTII",
+      "automationRevisionId": "atm_hQrsG7GYtLYIKGKeoTII",
+      "origin": "scheduled",
+      "scheduledDueAt": 4070952000000,
+      "startedAt": 1795548894982,
+      "completedAt": null,
+      "state": "scheduled",
+      "attemptCount": 0,
+      "retryAt": null,
+      "error": null,
+      "runs": []
+    },
+    "requestID": "c1bb8a21-f67e-44e8-ac90-e4fd51115454"
+  },
+  "transports": [
+    {
+      "at": "2026-11-24T19:40:34.792Z",
+      "event": "socket-open",
+      "id": 17,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T19:40:40.465Z",
+      "event": "upstream-response",
+      "id": 38,
+      "pathname": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "3860e32e-4e44-401f-8306-947efd88577b"
+    },
+    {
+      "at": "2026-11-24T19:40:40.722Z",
+      "event": "upstream-response",
+      "id": 42,
+      "pathname": "/global/automations/atm_hFvWDUaomDyZxPvYwxVa/runs",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "d13030d3-7544-4272-a329-2ff041531579"
+    },
+    {
+      "at": "2026-11-24T19:40:56.516Z",
+      "event": "mode",
+      "mode": "held",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T19:40:59.524Z",
+      "event": "socket-held",
+      "id": 46,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:41:02.567Z",
+      "event": "socket-held",
+      "id": 48,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:41:05.581Z",
+      "event": "socket-held",
+      "id": 50,
+      "pathname": "/global/transport/stream"
+    },
+    {
+      "at": "2026-11-24T19:41:08.141Z",
+      "event": "mode",
+      "mode": "hold-history",
+      "openLedgerStreams": 0,
+      "openSockets": 0
+    },
+    {
+      "at": "2026-11-24T19:41:08.595Z",
+      "event": "socket-open",
+      "id": 53,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T19:41:08.609Z",
+      "event": "upstream-response",
+      "id": 58,
+      "pathname": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "8e04c1ba-8bc2-438f-b778-57f17af86376"
+    },
+    {
+      "at": "2026-11-24T19:41:08.618Z",
+      "event": "upstream-response",
+      "id": 60,
+      "pathname": "/global/automations/atm_hFvWDUaomDyZxPvYwxVa/runs",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "8c60b930-cc44-4c33-b89c-fda47eb315cb"
+    },
+    {
+      "at": "2026-11-24T19:41:08.619Z",
+      "event": "history-response-held",
+      "id": 60,
+      "status": 200,
+      "actual": "8c60b930-cc44-4c33-b89c-fda47eb315cb"
+    },
+    {
+      "at": "2026-11-24T19:41:19.411Z",
+      "event": "mode",
+      "mode": "open",
+      "openLedgerStreams": 0,
+      "openSockets": 1
+    },
+    {
+      "at": "2026-11-24T19:41:19.412Z",
+      "event": "history-response-released",
+      "id": 60,
+      "actual": "8c60b930-cc44-4c33-b89c-fda47eb315cb"
+    },
+    {
+      "at": "2026-11-24T19:41:39.017Z",
+      "event": "socket-open",
+      "id": 91,
+      "pathname": "/global/transport/stream",
+      "status": 101
+    },
+    {
+      "at": "2026-11-24T19:41:39.567Z",
+      "event": "upstream-response",
+      "id": 97,
+      "pathname": "/global/automations",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "bc7feef4-e044-4d89-b7b9-3d12bc22d3c9"
+    },
+    {
+      "at": "2026-11-24T19:41:47.518Z",
+      "event": "upstream-response",
+      "id": 103,
+      "pathname": "/global/automations/atm_hQrsG7GYtLYIKGKeoTII/runs",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "79122000-8f59-4409-84c2-e2b4ff8be2c2"
+    }
+  ],
+  "localStream": [
+    {
+      "at": "2026-11-24T19:35:47.191Z",
+      "request": 1,
+      "model": "streaming-checker",
+      "stream": true,
+      "ownedInput": true
+    },
+    {
+      "at": "2026-11-24T19:41:03.193Z",
+      "request": 2,
+      "model": "streaming-checker",
+      "stream": true,
+      "ownedInput": true
+    }
+  ],
+  "checker": {
+    "httpRequests": 207,
+    "localProviderRequests": 12,
+    "outcome": "passed",
+    "findings": []
+  }
+}
