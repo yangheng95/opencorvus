@@ -1,0 +1,24 @@
+[
+  {
+    "at": "2026-11-24T23:18:52.44Z",
+    "event": "upstream-response",
+    "id": 55,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging",
+    "actual": "ee5e4b39-05a9-4639-92b7-69164c98d4c3"
+  },
+  {
+    "at": "2026-11-24T23:19:22.096Z",
+    "event": "upstream-response",
+    "id": 67,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging",
+    "actual": "694b080e-2c8a-46e7-a4cd-d055597140df"
+  }
+]

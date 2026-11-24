@@ -1,0 +1,20 @@
+{
+  "writtenAt": "2026-11-24T23:19:05.2195908+00:00",
+  "event": {
+    "at": "2026-11-24T23:19:05.239Z",
+    "source": "/work-ledger/events",
+    "row": {
+      "type": "work-ledger.file-changed",
+      "sourceType": "file.watcher.updated",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b624\\candidate\\explorer-reopen-review",
+      "path": "staging/fresh-arrival.txt",
+      "membershipChanged": true,
+      "sequence": 0
+    }
+  },
+  "directRequestID": "eddaef88-fe6d-4ca3-81f5-663977814b2f",
+  "paths": [
+    "staging\\fresh-arrival.txt",
+    "staging\\initial-note.txt"
+  ]
+}
