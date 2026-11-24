@@ -1,0 +1,58 @@
+[
+  {
+    "at": "2026-11-24T18:13:20.062Z",
+    "event": "socket-open",
+    "id": 17,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  },
+  {
+    "at": "2026-11-24T18:13:20.422Z",
+    "event": "upstream-response",
+    "id": 31,
+    "pathname": "/work-ledger",
+    "method": "GET",
+    "status": 200,
+    "query": "Amber Dispatch",
+    "actual": "2bda6907-7be3-4144-b090-9fc8fa7a8a2c"
+  },
+  {
+    "at": "2026-11-24T18:13:25.015Z",
+    "event": "mode",
+    "mode": "held",
+    "openLedgerStreams": 0,
+    "openSockets": 1
+  },
+  {
+    "at": "2026-11-24T18:13:28.036Z",
+    "event": "socket-held",
+    "id": 39,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:13:31.042Z",
+    "event": "socket-held",
+    "id": 41,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:13:34.053Z",
+    "event": "socket-held",
+    "id": 44,
+    "pathname": "/global/transport/stream"
+  },
+  {
+    "at": "2026-11-24T18:13:34.25Z",
+    "event": "mode",
+    "mode": "open",
+    "openLedgerStreams": 0,
+    "openSockets": 0
+  },
+  {
+    "at": "2026-11-24T18:13:37.07Z",
+    "event": "socket-open",
+    "id": 46,
+    "pathname": "/global/transport/stream",
+    "status": 101
+  }
+]
