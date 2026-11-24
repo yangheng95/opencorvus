@@ -1,0 +1,121 @@
+{
+  "fireStatus": 200,
+  "fireRequestID": "957f7291-c6c9-42a8-95ef-f820a652a782",
+  "fires": [
+    {
+      "fireId": "cal_automation_bc7ca413ba04be626a1cc8d463d58e99",
+      "automationId": "atm_hbBD27XDLCIWgnAlPnym",
+      "automationRevisionId": "atm_hbBD27XDLCIWgnAlPnym",
+      "origin": "scheduled",
+      "scheduledDueAt": 4070940600000,
+      "startedAt": 1795559216935,
+      "completedAt": null,
+      "state": "scheduled",
+      "attemptCount": 0,
+      "retryAt": null,
+      "error": null,
+      "runs": []
+    },
+    {
+      "fireId": "atm_hOkL44VNcCEEEfX57ANt",
+      "automationId": "atm_hbBD27XDLCIWgnAlPnym",
+      "automationRevisionId": "atm_hbBD27XDLCIWgnAlPnym",
+      "origin": "manual_api",
+      "scheduledDueAt": 1795559259271,
+      "startedAt": 1795559259271,
+      "completedAt": 1795559260628,
+      "state": "succeeded",
+      "attemptCount": 1,
+      "retryAt": null,
+      "error": null,
+      "runs": [
+        {
+          "id": "atr_automation_1880b8e10d8ee60f094fe1aa6104ee60",
+          "targetScope": "project",
+          "targetProjectId": "prj_hkky9aOurY7MhqLzyWZO",
+          "sessionId": "ses_automation_c4de7ee6d3dcfd57882f717a97226ecd",
+          "outcome": "succeeded",
+          "disposition": null,
+          "closureEventID": null,
+          "startedAt": 1795559259271,
+          "completedAt": 1795559260628,
+          "error": null
+        },
+        {
+          "id": "atr_automation_bf9547a860222f8599258c2d539d3439",
+          "targetScope": "project",
+          "targetProjectId": "prj_hpBug6gslpV18vIoHsLt",
+          "sessionId": "ses_automation_1294467cb2894bcd0ae56025788ba1f2",
+          "outcome": "succeeded",
+          "disposition": null,
+          "closureEventID": null,
+          "startedAt": 1795559259271,
+          "completedAt": 1795559260628,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "history": [
+    {
+      "id": "atr_automation_bf9547a860222f8599258c2d539d3439",
+      "automationId": "atm_hbBD27XDLCIWgnAlPnym",
+      "fireId": "atm_hOkL44VNcCEEEfX57ANt",
+      "targetScope": "project",
+      "targetProjectId": "prj_hpBug6gslpV18vIoHsLt",
+      "session": {
+        "id": "ses_automation_1294467cb2894bcd0ae56025788ba1f2",
+        "title": "B620 Two-project handoff",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b620\\candidate\\control-review",
+        "kind": "assistant",
+        "experience": "work",
+        "productPillar": null
+      },
+      "outcome": "succeeded",
+      "disposition": null,
+      "closureEventID": null,
+      "startedAt": 1795559259271,
+      "completedAt": 1795559260628,
+      "error": null
+    },
+    {
+      "id": "atr_automation_1880b8e10d8ee60f094fe1aa6104ee60",
+      "automationId": "atm_hbBD27XDLCIWgnAlPnym",
+      "fireId": "atm_hOkL44VNcCEEEfX57ANt",
+      "targetScope": "project",
+      "targetProjectId": "prj_hkky9aOurY7MhqLzyWZO",
+      "session": {
+        "id": "ses_automation_c4de7ee6d3dcfd57882f717a97226ecd",
+        "title": "B620 Two-project handoff",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b620\\candidate\\mission-list-review",
+        "kind": "assistant",
+        "experience": "work",
+        "productPillar": null
+      },
+      "outcome": "succeeded",
+      "disposition": null,
+      "closureEventID": null,
+      "startedAt": 1795559259271,
+      "completedAt": 1795559260628,
+      "error": null
+    }
+  ],
+  "historyStatus": 200,
+  "checker": [
+    {
+      "at": "2026-11-24T22:27:40.455Z",
+      "request": 1,
+      "model": "streaming-checker",
+      "stream": true,
+      "ownedInput": true
+    },
+    {
+      "at": "2026-11-24T22:27:40.586Z",
+      "request": 2,
+      "model": "streaming-checker",
+      "stream": true,
+      "ownedInput": true
+    }
+  ],
+  "historyRequestID": "3bfeabae-4213-4e66-8cc0-d1b48eb5d1c5"
+}

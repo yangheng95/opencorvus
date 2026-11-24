@@ -1,0 +1,30 @@
+{
+  "definition": {
+    "id": "atm_hbBD27XDLCIWgnAlPnym",
+    "revisionId": "atm_hbBD27XDLCIWgnAlPnym",
+    "name": "B620 Two-project handoff",
+    "target": {
+      "scope": "project",
+      "projectIds": [
+        "prj_hkky9aOurY7MhqLzyWZO",
+        "prj_hpBug6gslpV18vIoHsLt"
+      ]
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART:20990101T085000Z\nRRULE:FREQ=DAILY;COUNT=2",
+    "executionMode": "local",
+    "model": {
+      "providerID": "scheduled-target-review",
+      "modelID": "streaming-checker"
+    },
+    "reasoningEffort": null,
+    "prompt": "MULTIPROJECT_RUN_HISTORY_LOCAL_MARKER. Record the isolated schedule receipt for this project.",
+    "status": "active",
+    "lastRun": null,
+    "nextRun": 4070940600000,
+    "failureCount": 0,
+    "lastError": null
+  },
+  "status": 200,
+  "requestID": "600c84de-7f3d-4aa5-acfe-d2b5b8a6142c"
+}

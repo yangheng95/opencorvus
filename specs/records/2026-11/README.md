@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [定时运行历史显示每条记录的项目](2026-11-25-scheduled-history-identifies-project-run-target.md)
 - [资源管理器跟随受监视目录成员变化更新搜索](2026-11-25-explorer-updates-search-for-watched-membership.md)
 - [外部文件监视事件触发已打开编辑器核对](2026-11-25-live-native-file-changes-reach-editor.md)
 - [组合搜索优先显示匹配的子任务](2026-11-25-mission-search-prioritizes-matching-child-tasks.md)
