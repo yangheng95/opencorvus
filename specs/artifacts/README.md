@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [全局查找翻页保留当前结果的桌面证据](2026-11-24-palette-continuation-retains-active-result/README.md)
 - [全局查找的多步任务原标题桌面证据](2026-11-24-palette-full-mission-search-titles/README.md)
 - [工作侧栏项目摘要输入优先级的真实桌面截图](2026-11-24-work-ledger-project-preview-priority/README.md)
 - [项目路径提示视口裁切与修复的真实桌面截图](2026-11-24-work-ledger-project-tooltip-viewport/README.md)
