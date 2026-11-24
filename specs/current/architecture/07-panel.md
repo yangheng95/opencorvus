@@ -1609,7 +1609,11 @@ retain explicit current-language feedback and original diagnostics. Reading,
 refreshing and closing a comparison preserve the draft and editing base.
 For a dirty writable text file, a different current disk snapshot with a revision
 offers an explicit Keep draft and use this disk base action. It asks the operator
-to review and merge the wanted changes first. This same file owner updates its
+to review and merge the wanted changes first. If the automatic disk check
+observes a different editable revision or confirms the target is unavailable
+for editing, the comparison keeps its displayed snapshot and marks it out of
+date. The UI directs the operator to Read disk again and holds adoption until
+the displayed snapshot matches the accepted read. This same file owner updates its
 existing content/base to that displayed snapshot and closes the comparison;
 the authored draft and pending leave decision remain owned by their existing
 signals. It writes no file or navigation approval. A later explicit Save still

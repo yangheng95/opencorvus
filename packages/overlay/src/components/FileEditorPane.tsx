@@ -159,6 +159,7 @@ type FileComparison = {
   authority: ApiAuthority
   controller: AbortController
   observationKey: string | null
+  observedDiskRevision?: string | null
 } & (
   | { status: "loading" }
   | { status: "loaded"; content: FileContent | null }
@@ -454,6 +455,18 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     const read = comparison()
     return read?.status === "loaded" ? read.content : null
   }
+  const comparisonOutdated = () => {
+    const read = comparison()
+    return read?.status === "loaded" && isEditableFileSnapshot(read.content) &&
+      read.observedDiskRevision !== undefined && read.observedDiskRevision !== read.content.revision
+  }
+  const observeComparedDiskRevision = (file: FileEditorTarget, revision: string | null) => {
+    setComparison((read) => {
+      if (!read || read.status === "failed" || read.observedDiskRevision === revision ||
+        !sameFileResourceTarget(read.target, file) || !isApiAuthorityCurrent(read.authority)) return read
+      return { ...read, observedDiskRevision: revision }
+    })
+  }
   const comparisonPair = createMemo(() => {
     const baseline = savedBaseline()
     if (!baseline) return undefined
@@ -476,13 +489,15 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     const disk = comparisonDiskContent()
     if (
       !read || !canEdit(disk) || !disk?.revision || !writable() || !dirty() ||
-      isBusy() || fileEditorReserved() || read.controller.signal.aborted ||
+      read.controller.signal.aborted ||
       !ownsFileTarget(read.target) || !isApiAuthorityCurrent(read.authority) ||
       disk.revision === savedBaseline()?.revision
     ) return null
     return disk
   }
+  const comparisonAdoptionUnavailable = () => isBusy() || fileEditorReserved() || comparisonOutdated()
   const adoptComparedDiskBase = () => {
+    if (comparisonAdoptionUnavailable()) return
     const read = comparison()
     const disk = comparedDiskForBase()
     const revision = disk?.revision
@@ -507,13 +522,19 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     const controller = new AbortController()
     const request = { target: file, authority, controller, observationKey: observationKey() }
     setComparison({ ...request, status: "loading" })
-    const current = () => comparison()?.controller === controller && !controller.signal.aborted &&
-      ownsFileTarget(file) && isApiAuthorityCurrent(authority)
+    const current = () => {
+      const read = comparison()
+      if (read?.status !== "loading" || read.controller !== controller || controller.signal.aborted ||
+        !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return undefined
+      return read
+    }
     try {
       const next = await readFileContent(file, authority, controller.signal)
-      if (current()) setComparison({ ...request, status: "loaded", content: next })
+      const read = current()
+      if (read) setComparison({ ...read, status: "loaded", content: next })
     } catch (cause) {
-      if (current()) setComparison({ ...request, status: "failed", cause })
+      const read = current()
+      if (read) setComparison({ ...read, status: "failed", cause })
     }
   }
   const canSaveDraftCopy = () => {
@@ -868,12 +889,14 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
       if (checkingDisk) {
         const baseline = savedBaseline()
-        const sameResource = baseline && isEditableFileSnapshot(next) && next.resourceID === baseline.resourceID
+        const disk = isEditableFileSnapshot(next) ? next : null
+        observeComparedDiskRevision(file, disk?.revision ?? null)
+        const sameResource = baseline && disk && disk.resourceID === baseline.resourceID
         setError((failure) => {
           if (isReloadFailure(failure) || (sameResource && failure?.messageKey === "file_editor.save_missing")) return null
           return failure
         })
-        if (sameResource && next.revision === baseline.revision) {
+        if (sameResource && disk.revision === baseline.revision) {
           setLoadedObservationKey(observed)
           return
         }
@@ -887,11 +910,11 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       applyContent(next && { value: next, target: file, readerAuthority: authority }, observed)
     } catch (cause) {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
+        const missing = fileReadFailureKind(cause) === "missing"
+        if (checkingDisk && missing) observeComparedDiskRevision(file, null)
         if (loadFailure()) setLoadFailure({ error: cause })
         else {
-          const messageKey = fileReadFailureKind(cause) === "missing"
-            ? "file_editor.reload_missing"
-            : "file_editor.reload_failed"
+          const messageKey = missing ? "file_editor.reload_missing" : "file_editor.reload_failed"
           setError((failure) => checkingDisk && failure && !isReloadFailure(failure) ? failure : { messageKey, cause })
         }
       }
@@ -1411,7 +1434,8 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
               {t(comparisonReading() ? "common.loading" : "file_editor.compare_refresh")}
             </Button>
             <Show when={comparedDiskForBase()}>
-              <Button type="button" variant="outline" size="md" tone="accent" onClick={adoptComparedDiskBase}>
+              <Button type="button" variant="outline" size="md" tone="accent"
+                aria-disabled={comparisonAdoptionUnavailable() || undefined} onClick={adoptComparedDiskBase}>
                 {t("file_editor.compare_adopt_disk")}
               </Button>
             </Show>
@@ -1428,8 +1452,12 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
                 <bdi>{projectFileLocation(read().target)}</bdi>
               </p>
               <p class="file-comparison-hint">{t("file_editor.compare_hint")}</p>
-              <Show when={comparedDiskForBase()}>
-                <Feedback tone="warning">{t("file_editor.compare_adopt_hint")}</Feedback>
+              <Show when={comparisonOutdated()} fallback={
+                <Show when={comparedDiskForBase()}>
+                  <Feedback tone="warning">{t("file_editor.compare_adopt_hint")}</Feedback>
+                </Show>
+              }>
+                <Feedback tone="warning">{t("file_editor.compare_disk_outdated")}</Feedback>
               </Show>
               <SegmentedControl<ComparisonMode>
                 value={comparisonMode()} onChange={setComparisonMode} ariaLabel={t("file_editor.compare_versions")}
