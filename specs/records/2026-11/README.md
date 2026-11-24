@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目配置跨标签刷新时保留设置草稿](2026-11-24-settings-drafts-on-project-refresh.md)
 - [全局输入栏同步已保存的默认配置](2026-11-24-global-config-peer-notification.md)
 - [实时流重连后核对当前项目配置](2026-11-24-project-config-after-stream-rejoin.md)
 - [项目配置保存后更新同项目的其它标签页](2026-11-24-project-config-peer-notification.md)
