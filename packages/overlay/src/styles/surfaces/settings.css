@@ -1839,6 +1839,14 @@ button.mission-skill-item:focus-visible {
   padding: var(--ui-gap-xl);
 }
 
+#mcpList .extension-settings-row {
+  scroll-margin-block: var(--ui-gap-xs);
+}
+
+#mcpList .extension-settings-row .s-row-actions {
+  padding-inline-end: var(--ui-gap-xs);
+}
+
 /* ── About panel (settings tab) ──────────────────────────── */
 
 .about-panel {

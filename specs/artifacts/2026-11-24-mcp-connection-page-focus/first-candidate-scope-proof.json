@@ -1,0 +1,276 @@
+{
+  "statuses": {
+    "status-review-01": {
+      "status": "disabled"
+    },
+    "status-review-02": {
+      "status": "disabled"
+    },
+    "status-review-03": {
+      "status": "disabled"
+    },
+    "status-review-04": {
+      "status": "disabled"
+    },
+    "status-review-05": {
+      "status": "disabled"
+    },
+    "status-review-06": {
+      "status": "disabled"
+    },
+    "status-review-07": {
+      "status": "disabled"
+    },
+    "status-review-08": {
+      "status": "disabled"
+    },
+    "status-review-09": {
+      "status": "disabled"
+    },
+    "status-review-10": {
+      "status": "disabled"
+    },
+    "status-review-11": {
+      "status": "disabled"
+    },
+    "status-review-12": {
+      "status": "disabled"
+    },
+    "status-review-13": {
+      "status": "disabled"
+    },
+    "status-review-14": {
+      "status": "disabled"
+    },
+    "status-review-15": {
+      "status": "disabled"
+    },
+    "status-review-16": {
+      "status": "disabled"
+    },
+    "status-review-17": {
+      "status": "disabled"
+    },
+    "status-review-18": {
+      "status": "disabled"
+    },
+    "status-review-19": {
+      "status": "disabled"
+    },
+    "status-review-20": {
+      "status": "disabled"
+    },
+    "status-review-21": {
+      "status": "disabled"
+    },
+    "status-review-22": {
+      "status": "disabled"
+    },
+    "status-review-23": {
+      "status": "disabled"
+    }
+  },
+  "authoredDefinitions": [
+    "status-review-01",
+    "status-review-02",
+    "status-review-03",
+    "status-review-04",
+    "status-review-05",
+    "status-review-06",
+    "status-review-07",
+    "status-review-08",
+    "status-review-09",
+    "status-review-10",
+    "status-review-11",
+    "status-review-12",
+    "status-review-13",
+    "status-review-14",
+    "status-review-15",
+    "status-review-16",
+    "status-review-17",
+    "status-review-18",
+    "status-review-19",
+    "status-review-20",
+    "status-review-21",
+    "status-review-22",
+    "status-review-23"
+  ],
+  "verifiedFiles": [
+    ".opencorvus/opencorvus.jsonc",
+    "README.md"
+  ],
+  "standardConfigInitialization": [
+    "$schema",
+    "terminal"
+  ],
+  "sqliteQuickCheck": "ok",
+  "executionCounts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  },
+  "mcpRouteStarts": {
+    "GET": 72,
+    "POST": 0,
+    "DELETE": 0
+  },
+  "observedReadbacks": [
+    {
+      "requestID": "aa13212f-cefc-4205-a695-1f3c2fee1e1c",
+      "time": "2026-11-24T05:14:41.228Z",
+      "status": 200
+    },
+    {
+      "requestID": "4e76b6ab-2e1f-4cdf-8bb8-fdb51d63fa8e",
+      "time": "2026-11-24T05:14:42.241Z",
+      "status": 200
+    },
+    {
+      "requestID": "def76c57-778a-45fe-9dcb-cc70d90ebf56",
+      "time": "2026-11-24T05:14:43.237Z",
+      "status": 200
+    },
+    {
+      "requestID": "ef086cdf-5ce6-4e9c-90f3-26820bf21a89",
+      "time": "2026-11-24T05:14:44.240Z",
+      "status": 200
+    },
+    {
+      "requestID": "caf3aa04-8ea5-4f9e-9c11-a1018bc2460c",
+      "time": "2026-11-24T05:14:45.236Z",
+      "status": 200
+    },
+    {
+      "requestID": "ca08f68b-5a88-4c84-b4b5-6e989ea5e3b3",
+      "time": "2026-11-24T05:14:46.237Z",
+      "status": 200
+    },
+    {
+      "requestID": "e38cc792-175a-44fa-8d1b-517e893ddca4",
+      "time": "2026-11-24T05:14:47.234Z",
+      "status": 200
+    },
+    {
+      "requestID": "acf9ac9e-24a1-4815-90e8-73977d87d4d3",
+      "time": "2026-11-24T05:14:48.239Z",
+      "status": 200
+    },
+    {
+      "requestID": "dd38ff5c-4584-4ad8-8b4f-a67e2d9194b4",
+      "time": "2026-11-24T05:14:49.236Z",
+      "status": 200
+    },
+    {
+      "requestID": "f5b90dee-34f0-432a-8c2e-c30d0aeaafc2",
+      "time": "2026-11-24T05:14:50.237Z",
+      "status": 200
+    },
+    {
+      "requestID": "033419fb-4d7f-4b65-ae6d-2d032e158467",
+      "time": "2026-11-24T05:14:51.235Z",
+      "status": 200
+    },
+    {
+      "requestID": "673ff08c-4247-4970-a83a-d2bd2d87b41e",
+      "time": "2026-11-24T05:14:52.237Z",
+      "status": 200
+    },
+    {
+      "requestID": "98b96e16-beb8-4515-9c92-140f764dafa5",
+      "time": "2026-11-24T05:14:53.240Z",
+      "status": 200
+    },
+    {
+      "requestID": "80258bc3-98a7-4324-b696-2d04d9701811",
+      "time": "2026-11-24T05:14:54.238Z",
+      "status": 200
+    },
+    {
+      "requestID": "5d3aff04-2d6b-47e7-a677-d141b7579602",
+      "time": "2026-11-24T05:14:55.236Z",
+      "status": 200
+    },
+    {
+      "requestID": "83e34f75-6d9d-457b-9888-53a9ceb73a00",
+      "time": "2026-11-24T05:14:56.240Z",
+      "status": 200
+    },
+    {
+      "requestID": "16cec8cf-4da2-4e55-9fd8-648cb7814c9a",
+      "time": "2026-11-24T05:14:57.237Z",
+      "status": 200
+    },
+    {
+      "requestID": "0f755651-42ae-4639-803a-e8372ea1318a",
+      "time": "2026-11-24T05:14:58.236Z",
+      "status": 200
+    },
+    {
+      "requestID": "4acb4fdf-7fdf-4c24-bcbb-a304d86ccb7c",
+      "time": "2026-11-24T05:14:59.228Z",
+      "status": 200
+    },
+    {
+      "requestID": "b7efdbe0-2176-4577-8c1f-58a0bd4a4434",
+      "time": "2026-11-24T05:15:00.226Z",
+      "status": 200
+    },
+    {
+      "requestID": "54746f79-e16a-4cf5-a581-bc7ee9ef5167",
+      "time": "2026-11-24T05:15:01.228Z",
+      "status": 200
+    },
+    {
+      "requestID": "48353ce4-6a4d-4aca-9eb4-fd4db7019377",
+      "time": "2026-11-24T05:15:02.238Z",
+      "status": 200
+    },
+    {
+      "requestID": "d294206a-0238-4a2e-8ed5-d3a9010ba768",
+      "time": "2026-11-24T05:15:03.227Z",
+      "status": 200
+    },
+    {
+      "requestID": "e36a4d3f-222f-4ff9-bbb7-23b2778ae289",
+      "time": "2026-11-24T05:15:04.239Z",
+      "status": 200
+    },
+    {
+      "requestID": "02ab081a-8760-4b46-9445-5d02a3ff321b",
+      "time": "2026-11-24T05:15:05.237Z",
+      "status": 200
+    },
+    {
+      "requestID": "26766ea2-1d72-4c20-bac1-8257b56edcb1",
+      "time": "2026-11-24T05:15:06.230Z",
+      "status": 200
+    },
+    {
+      "requestID": "e18a18fe-6558-46d6-83bb-aae88319c80a",
+      "time": "2026-11-24T05:15:07.231Z",
+      "status": 200
+    },
+    {
+      "requestID": "ea20fe9c-43fb-4d12-89f7-86f4d0d07a62",
+      "time": "2026-11-24T05:15:08.239Z",
+      "status": 200
+    },
+    {
+      "requestID": "b914f506-4205-45b0-9494-9cc349060efc",
+      "time": "2026-11-24T05:15:09.238Z",
+      "status": 200
+    },
+    {
+      "requestID": "81d76940-a832-46cf-9efe-6f195f6fde18",
+      "time": "2026-11-24T05:15:10.234Z",
+      "status": 200
+    },
+    {
+      "requestID": "332206d7-9937-4535-9a82-d9b64270abb1",
+      "time": "2026-11-24T05:15:11.232Z",
+      "status": 200
+    }
+  ]
+}

@@ -1774,6 +1774,7 @@
   "mcp.status.needs_client_registration": "需要客户端注册",
   "mcp.configured_status": "服务连接",
   "mcp.configured_status_help": "当前项目已配置 MCP 服务的连接状态。",
+  "mcp.connection_keyboard_hint": "↑ ↓ 浏览连接 · PgUp/PgDn 翻页",
   "mcp.status_read_failed": "无法读取连接状态，正在自动重试。",
   "mcp.reply_http_error": "服务器返回 HTTP {{status}}。",
   "mcp.reply_unconfirmed": "此次操作未收到可确认的回执。",

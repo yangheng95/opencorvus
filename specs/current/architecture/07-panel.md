@@ -6211,6 +6211,9 @@ The row and readback notice use the runtime reason to label a manual
 disconnect. Configuration-disabled rows use their standard disabled label.
 Connection rows quote exact empty names and names with leading or trailing
 whitespace so configured names remain visually distinct.
+Arrow keys and Page Up or Page Down move focus among rendered connection actions
+in the current project. Each destination shows its full connection row within
+the settings viewport. The actions retain their normal Tab order and activation.
 An exact project connection that needs OAuth exposes an Authorize action.
 The existing project authorization endpoint prepares its browser address. The
 dialog opens that address from a user action while the project and connection

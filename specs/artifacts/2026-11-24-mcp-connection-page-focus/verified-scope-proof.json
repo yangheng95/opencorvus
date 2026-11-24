@@ -1,0 +1,171 @@
+{
+  "statuses": {
+    "status-review-01": {
+      "status": "disabled"
+    },
+    "status-review-02": {
+      "status": "disabled"
+    },
+    "status-review-03": {
+      "status": "disabled"
+    },
+    "status-review-04": {
+      "status": "disabled"
+    },
+    "status-review-05": {
+      "status": "disabled"
+    },
+    "status-review-06": {
+      "status": "disabled"
+    },
+    "status-review-07": {
+      "status": "disabled"
+    },
+    "status-review-08": {
+      "status": "disabled"
+    },
+    "status-review-09": {
+      "status": "disabled"
+    },
+    "status-review-10": {
+      "status": "disabled"
+    },
+    "status-review-11": {
+      "status": "disabled"
+    },
+    "status-review-12": {
+      "status": "disabled"
+    },
+    "status-review-13": {
+      "status": "disabled"
+    },
+    "status-review-14": {
+      "status": "disabled"
+    },
+    "status-review-15": {
+      "status": "disabled"
+    },
+    "status-review-16": {
+      "status": "disabled"
+    },
+    "status-review-17": {
+      "status": "disabled"
+    },
+    "status-review-18": {
+      "status": "disabled"
+    },
+    "status-review-19": {
+      "status": "disabled"
+    },
+    "status-review-20": {
+      "status": "disabled"
+    },
+    "status-review-21": {
+      "status": "disabled"
+    },
+    "status-review-22": {
+      "status": "disabled"
+    },
+    "status-review-23": {
+      "status": "disabled"
+    }
+  },
+  "authoredDefinitions": [
+    "status-review-01",
+    "status-review-02",
+    "status-review-03",
+    "status-review-04",
+    "status-review-05",
+    "status-review-06",
+    "status-review-07",
+    "status-review-08",
+    "status-review-09",
+    "status-review-10",
+    "status-review-11",
+    "status-review-12",
+    "status-review-13",
+    "status-review-14",
+    "status-review-15",
+    "status-review-16",
+    "status-review-17",
+    "status-review-18",
+    "status-review-19",
+    "status-review-20",
+    "status-review-21",
+    "status-review-22",
+    "status-review-23"
+  ],
+  "verifiedFiles": [
+    ".opencorvus/opencorvus.jsonc",
+    "README.md"
+  ],
+  "standardConfigInitialization": [
+    "$schema",
+    "terminal"
+  ],
+  "sqliteQuickCheck": "ok",
+  "executionCounts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  },
+  "mcpRouteStarts": {
+    "GET": 31,
+    "POST": 0,
+    "DELETE": 0
+  },
+  "observedReadbacks": [
+    {
+      "requestID": "15f899bb-bbf4-47e1-a67a-f68bf496dd59",
+      "time": "2026-11-24T05:18:52.672Z",
+      "status": 200
+    },
+    {
+      "requestID": "8ed9b1ca-71e5-482c-a835-d1be43f705e1",
+      "time": "2026-11-24T05:18:53.677Z",
+      "status": 200
+    },
+    {
+      "requestID": "444bf561-066e-4e5f-88c2-ff7b5b608f5f",
+      "time": "2026-11-24T05:18:54.682Z",
+      "status": 200
+    },
+    {
+      "requestID": "30284076-b961-4573-a4b6-7bb3770d439d",
+      "time": "2026-11-24T05:18:55.680Z",
+      "status": 200
+    },
+    {
+      "requestID": "c0b4ee1c-6a5d-4334-9a6d-82f0bb166cad",
+      "time": "2026-11-24T05:18:56.679Z",
+      "status": 200
+    },
+    {
+      "requestID": "84bde4af-abaa-47cb-8388-1a24479fb233",
+      "time": "2026-11-24T05:18:57.669Z",
+      "status": 200
+    },
+    {
+      "requestID": "362b8027-9235-45a3-83fa-07adc90c9bd5",
+      "time": "2026-11-24T05:18:58.669Z",
+      "status": 200
+    },
+    {
+      "requestID": "4e587508-8aef-41c8-b5e9-5a9f2e16f36a",
+      "time": "2026-11-24T05:18:59.677Z",
+      "status": 200
+    },
+    {
+      "requestID": "9df0f30f-581f-4f8c-b7e4-c50bb98983b2",
+      "time": "2026-11-24T05:19:00.675Z",
+      "status": 200
+    },
+    {
+      "requestID": "870961c9-3d8c-469e-ad77-fb112f345577",
+      "time": "2026-11-24T05:19:01.678Z",
+      "status": 200
+    }
+  ]
+}

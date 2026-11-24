@@ -1,0 +1,894 @@
+{
+  "enStart": {
+    "action": {
+      "bottom": 323.16668701171875,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 299.16668701171875
+    },
+    "active": "Connect to status-review-01",
+    "row": {
+      "bottom": 331.16668701171875,
+      "left": 416,
+      "right": 1152,
+      "top": 291.16668701171875
+    },
+    "rowName": "status-review-01",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enStartBoundary": {
+    "action": {
+      "bottom": 323.16668701171875,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 299.16668701171875
+    },
+    "active": "Connect to status-review-01",
+    "row": {
+      "bottom": 331.16668701171875,
+      "left": 416,
+      "right": 1152,
+      "top": 291.16668701171875
+    },
+    "rowName": "status-review-01",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enAdjacent": {
+    "action": {
+      "bottom": 363.1666870117187,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 339.16668701171875
+    },
+    "active": "Connect to status-review-02",
+    "row": {
+      "bottom": 371.1666870117187,
+      "left": 416,
+      "right": 1152,
+      "top": 331.16668701171875
+    },
+    "rowName": "status-review-02",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enPageDown": {
+    "action": {
+      "bottom": 707.8333740234375,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 683.8333740234375
+    },
+    "active": "Connect to status-review-18",
+    "row": {
+      "bottom": 715.8333740234375,
+      "left": 416,
+      "right": 1152,
+      "top": 675.8333740234375
+    },
+    "rowName": "status-review-18",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 295.3333435058594,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "poll": {
+    "from": "2026-11-24T05:18:52.140Z",
+    "before": {
+      "action": {
+        "bottom": 707.8333740234375,
+        "left": 1087.3333740234375,
+        "right": 1148.00004196167,
+        "top": 683.8333740234375
+      },
+      "active": "Connect to status-review-18",
+      "row": {
+        "bottom": 715.8333740234375,
+        "left": 416,
+        "right": 1152,
+        "top": 675.8333740234375
+      },
+      "rowName": "status-review-18",
+      "rows": [
+        "status-review-01",
+        "status-review-02",
+        "status-review-03",
+        "status-review-04",
+        "status-review-05",
+        "status-review-06",
+        "status-review-07",
+        "status-review-08",
+        "status-review-09",
+        "status-review-10",
+        "status-review-11",
+        "status-review-12",
+        "status-review-13",
+        "status-review-14",
+        "status-review-15",
+        "status-review-16",
+        "status-review-17",
+        "status-review-18",
+        "status-review-19",
+        "status-review-20",
+        "status-review-21",
+        "status-review-22",
+        "status-review-23"
+      ],
+      "scroll": 295.3333435058594,
+      "view": {
+        "bottom": 720,
+        "left": 288,
+        "right": 1280,
+        "top": 36
+      }
+    },
+    "to": "2026-11-24T05:19:01.750Z",
+    "after": {
+      "action": {
+        "bottom": 707.8333740234375,
+        "left": 1087.3333740234375,
+        "right": 1148.00004196167,
+        "top": 683.8333740234375
+      },
+      "active": "Connect to status-review-18",
+      "row": {
+        "bottom": 715.8333740234375,
+        "left": 416,
+        "right": 1152,
+        "top": 675.8333740234375
+      },
+      "rowName": "status-review-18",
+      "rows": [
+        "status-review-01",
+        "status-review-02",
+        "status-review-03",
+        "status-review-04",
+        "status-review-05",
+        "status-review-06",
+        "status-review-07",
+        "status-review-08",
+        "status-review-09",
+        "status-review-10",
+        "status-review-11",
+        "status-review-12",
+        "status-review-13",
+        "status-review-14",
+        "status-review-15",
+        "status-review-16",
+        "status-review-17",
+        "status-review-18",
+        "status-review-19",
+        "status-review-20",
+        "status-review-21",
+        "status-review-22",
+        "status-review-23"
+      ],
+      "scroll": 295.3333435058594,
+      "view": {
+        "bottom": 720,
+        "left": 288,
+        "right": 1280,
+        "top": 36
+      }
+    }
+  },
+  "enRing": {
+    "actionEnd": 1148.00004196167,
+    "active": "Connect to status-review-18",
+    "focus": true,
+    "overflow": "hidden",
+    "shadow": "rgba(91, 141, 239, 0.24) 0px 0px 0px 2px",
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown",
+    "surfaceEnd": 1152
+  },
+  "enPageEnd": {
+    "action": {
+      "bottom": 707.8333740234375,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 683.8333740234375
+    },
+    "active": "Connect to status-review-23",
+    "row": {
+      "bottom": 715.8333740234375,
+      "left": 416,
+      "right": 1152,
+      "top": 675.8333740234375
+    },
+    "rowName": "status-review-23",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 495.3333435058594,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enEndBoundary": {
+    "action": {
+      "bottom": 707.8333740234375,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 683.8333740234375
+    },
+    "active": "Connect to status-review-23",
+    "row": {
+      "bottom": 715.8333740234375,
+      "left": 416,
+      "right": 1152,
+      "top": 675.8333740234375
+    },
+    "rowName": "status-review-23",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 495.3333435058594,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enPageBack": {
+    "action": {
+      "bottom": 71.83333587646484,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 47.83333587646485
+    },
+    "active": "Connect to status-review-07",
+    "row": {
+      "bottom": 79.83333587646484,
+      "left": 416,
+      "right": 1152,
+      "top": 39.83333587646485
+    },
+    "rowName": "status-review-07",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 491.3333435058594,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enPageToFirst": {
+    "action": {
+      "bottom": 71.83333587646484,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 47.83333587646485
+    },
+    "active": "Connect to status-review-01",
+    "row": {
+      "bottom": 79.83333587646484,
+      "left": 416,
+      "right": 1152,
+      "top": 39.83333587646485
+    },
+    "rowName": "status-review-01",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 251.3333282470703,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enNativeAction": {
+    "action": {
+      "bottom": 167.75,
+      "left": 1076.1771240234375,
+      "right": 1164.0000457763672,
+      "top": 139.75
+    },
+    "active": "Delete All",
+    "row": null,
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enNativeFirst": {
+    "action": {
+      "bottom": 323.16668701171875,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 299.16668701171875
+    },
+    "active": "Connect to status-review-01",
+    "row": {
+      "bottom": 331.16668701171875,
+      "left": 416,
+      "right": 1152,
+      "top": 291.16668701171875
+    },
+    "rowName": "status-review-01",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "enNativeNext": {
+    "action": {
+      "bottom": 363.1666870117187,
+      "left": 1087.3333740234375,
+      "right": 1148.00004196167,
+      "top": 339.16668701171875
+    },
+    "active": "Connect to status-review-02",
+    "row": {
+      "bottom": 371.1666870117187,
+      "left": 416,
+      "right": 1152,
+      "top": 331.16668701171875
+    },
+    "rowName": "status-review-02",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "zhStart": {
+    "action": {
+      "bottom": 643.5104598999023,
+      "left": 1157.0833740234375,
+      "right": 1216.0104598999023,
+      "top": 605.1146240234375
+    },
+    "active": "连接到 status-review-23",
+    "row": {
+      "bottom": 656.3229370117188,
+      "left": 518.375,
+      "right": 1222.40625,
+      "top": 592.3229370117188
+    },
+    "rowName": "status-review-23",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 1326.6666259765625,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    }
+  },
+  "zhEnd": {
+    "action": {
+      "bottom": 643.5104598999023,
+      "left": 1157.0833740234375,
+      "right": 1216.0104598999023,
+      "top": 605.1146240234375
+    },
+    "active": "连接到 status-review-23",
+    "row": {
+      "bottom": 656.3229370117188,
+      "left": 518.375,
+      "right": 1222.40625,
+      "top": 592.3229370117188
+    },
+    "rowName": "status-review-23",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 1326.6666259765625,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    }
+  },
+  "zhAdjacent": {
+    "action": {
+      "bottom": 579.5104598999023,
+      "left": 1157.0833740234375,
+      "right": 1216.0104598999023,
+      "top": 541.1146240234375
+    },
+    "active": "连接到 status-review-22",
+    "row": {
+      "bottom": 592.3229370117188,
+      "left": 518.375,
+      "right": 1222.40625,
+      "top": 528.3229370117188
+    },
+    "rowName": "status-review-22",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 1326.6666259765625,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    }
+  },
+  "zhBackPage": {
+    "action": {
+      "bottom": 114.84375762939452,
+      "left": 1157.0833740234375,
+      "right": 1216.0104598999023,
+      "top": 76.44792175292969
+    },
+    "active": "连接到 status-review-13",
+    "row": {
+      "bottom": 127.65625,
+      "left": 518.375,
+      "right": 1222.40625,
+      "top": 63.65625
+    },
+    "rowName": "status-review-13",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 1215.3333740234375,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    }
+  },
+  "zhRing": {
+    "actionEnd": 1216.0104598999023,
+    "active": "连接到 status-review-13",
+    "focus": true,
+    "overflow": "hidden",
+    "shadow": "rgba(91, 141, 239, 0.24) 0px 0px 0px 3.2px",
+    "shortcuts": "ArrowUp ArrowDown PageUp PageDown",
+    "surfaceEnd": 1222.40625
+  },
+  "zhForwardPage": {
+    "action": {
+      "bottom": 690.8437728881836,
+      "left": 1157.0833740234375,
+      "right": 1216.0104598999023,
+      "top": 652.4479370117188
+    },
+    "active": "连接到 status-review-22",
+    "row": {
+      "bottom": 703.65625,
+      "left": 518.375,
+      "right": 1222.40625,
+      "top": 639.65625
+    },
+    "rowName": "status-review-22",
+    "rows": [
+      "status-review-01",
+      "status-review-02",
+      "status-review-03",
+      "status-review-04",
+      "status-review-05",
+      "status-review-06",
+      "status-review-07",
+      "status-review-08",
+      "status-review-09",
+      "status-review-10",
+      "status-review-11",
+      "status-review-12",
+      "status-review-13",
+      "status-review-14",
+      "status-review-15",
+      "status-review-16",
+      "status-review-17",
+      "status-review-18",
+      "status-review-19",
+      "status-review-20",
+      "status-review-21",
+      "status-review-22",
+      "status-review-23"
+    ],
+    "scroll": 1215.3333740234375,
+    "view": {
+      "bottom": 720,
+      "left": 460.78125,
+      "right": 1280,
+      "top": 57.59375
+    }
+  },
+  "zhReturnSettings": {
+    "action": {
+      "bottom": 579.0937652587891,
+      "left": 6.395833492279053,
+      "right": 96.00000524520874,
+      "top": 502.3020935058594
+    },
+    "active": "设置",
+    "row": null,
+    "rows": [],
+    "view": null
+  }
+}

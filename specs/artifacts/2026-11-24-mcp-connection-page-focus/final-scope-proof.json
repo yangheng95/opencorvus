@@ -1,0 +1,41 @@
+{
+  "statuses": {
+    "scope-review-first": {
+      "status": "disabled"
+    },
+    "browser": {
+      "status": "disabled",
+      "scope": "execution"
+    },
+    "scope-review-last": {
+      "status": "disabled"
+    }
+  },
+  "authoredDefinitions": [
+    "scope-review-first",
+    "browser",
+    "scope-review-last"
+  ],
+  "verifiedFiles": [
+    ".opencorvus/opencorvus.jsonc",
+    "README.md"
+  ],
+  "standardConfigInitialization": [
+    "$schema",
+    "terminal"
+  ],
+  "sqliteQuickCheck": "ok",
+  "executionCounts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0
+  },
+  "mcpRouteStarts": {
+    "GET": 16,
+    "POST": 0,
+    "DELETE": 0
+  },
+  "observedReadbacks": []
+}

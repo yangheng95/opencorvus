@@ -1,0 +1,114 @@
+{
+  "start": {
+    "action": {
+      "bottom": 323.16668701171875,
+      "left": 1091.3333740234375,
+      "right": 1152.00004196167,
+      "top": 299.16668701171875
+    },
+    "active": "Connect to scope-review-first",
+    "row": {
+      "bottom": 331.16668701171875,
+      "left": 416,
+      "right": 1152,
+      "top": 291.16668701171875
+    },
+    "rowName": "scope-review-first",
+    "rows": [
+      "scope-review-first",
+      "browser",
+      "scope-review-last"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "next": {
+    "action": {
+      "bottom": 413.5625,
+      "left": 1091.3333740234375,
+      "right": 1152.00004196167,
+      "top": 389.5625
+    },
+    "active": "Connect to scope-review-last",
+    "row": {
+      "bottom": 421.5625,
+      "left": 416,
+      "right": 1152,
+      "top": 381.5625
+    },
+    "rowName": "scope-review-last",
+    "rows": [
+      "scope-review-first",
+      "browser",
+      "scope-review-last"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "pageReturn": {
+    "action": {
+      "bottom": 323.16668701171875,
+      "left": 1091.3333740234375,
+      "right": 1152.00004196167,
+      "top": 299.16668701171875
+    },
+    "active": "Connect to scope-review-first",
+    "row": {
+      "bottom": 331.16668701171875,
+      "left": 416,
+      "right": 1152,
+      "top": 291.16668701171875
+    },
+    "rowName": "scope-review-first",
+    "rows": [
+      "scope-review-first",
+      "browser",
+      "scope-review-last"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  },
+  "nativeNext": {
+    "action": {
+      "bottom": 413.5625,
+      "left": 1091.3333740234375,
+      "right": 1152.00004196167,
+      "top": 389.5625
+    },
+    "active": "Connect to scope-review-last",
+    "row": {
+      "bottom": 421.5625,
+      "left": 416,
+      "right": 1152,
+      "top": 381.5625
+    },
+    "rowName": "scope-review-last",
+    "rows": [
+      "scope-review-first",
+      "browser",
+      "scope-review-last"
+    ],
+    "scroll": 0,
+    "view": {
+      "bottom": 720,
+      "left": 288,
+      "right": 1280,
+      "top": 36
+    }
+  }
+}

@@ -82,6 +82,7 @@ import { SettingsProjectScope } from "./SettingsProjectScope"
 // ── Types ──
 
 type SkillItem = SkillInstalledResponse[number]
+type ProjectMcpConnection = McpProjectStatusResponse[string]
 
 interface WebkitFileSystemEntry {
   isFile: boolean
@@ -111,6 +112,24 @@ interface SkillDropPayload {
 }
 
 // ── Helpers ──
+
+function isExecutionOwnedMcpConnection(connection: ProjectMcpConnection | undefined): boolean {
+  return !!connection && "scope" in connection && connection.scope === "execution"
+}
+
+function mcpConnectionAction(connection: ProjectMcpConnection | undefined): "mcp.connect" | "mcp.disconnect" | "mcp.authorize" | undefined {
+  if (!connection || isExecutionOwnedMcpConnection(connection)) return
+  switch (connection.status) {
+    case "disabled":
+    case "disconnected":
+    case "failed":
+      return "mcp.connect"
+    case "connected":
+      return "mcp.disconnect"
+    case "needs_auth":
+      return "mcp.authorize"
+  }
+}
 
 function skillRemoveKind(item: SkillItem): string {
   if (String(item.source_type) === "managed_market") return "market"
@@ -428,6 +447,15 @@ function SharedResourceManagementPanel(props: {
       scope.directory === owner.directory && isApiAuthorityCurrent(scope.authority)
   }
   const mcpEntries = createMemo(() => mcpStatusCurrent() ? Object.entries(mcp()) : [])
+  let mcpList: HTMLDivElement | undefined
+  const canBrowseMcpActions = createMemo(() => mcpEntries().filter(([, connection]) => mcpConnectionAction(connection)).length > 1)
+  const mcpConnectionNavigation = createSearchResultNavigation(
+    () => Array.from(mcpList?.querySelectorAll<HTMLButtonElement>('[data-ui="mcp-connection-action"]:enabled') ?? []),
+    {
+      pageViewport: (action) => action.closest<HTMLElement>(".config-content"),
+      pageRow: (action) => action.closest<HTMLElement>(".extension-settings-row"),
+    },
+  )
   const mcpReadFailure = createMemo(() => {
     const read = mcpStatusRead()
     return read?.status === "failed" && ownsMcpScope(read) ? read : undefined
@@ -2017,7 +2045,14 @@ function SharedResourceManagementPanel(props: {
             <SettingsDetailSection
               class="extension-list"
               title={<span ref={mcpStatusHeading} tabIndex={-1}>{t("mcp.configured_status")}</span>}
-              description={t("mcp.configured_status_help")}
+              description={
+                <>
+                  {t("mcp.configured_status_help")}
+                  <Show when={canBrowseMcpActions()}>
+                    <p class="settings-search-keyboard-hint">{t("mcp.connection_keyboard_hint")}</p>
+                  </Show>
+                </>
+              }
               actions={
                 <Show when={loading()} fallback={<Show when={mcpStatusCurrent()}><Badge tone="neutral">{mcpEntries().length}</Badge></Show>}>
                   <Badge tone="neutral">{t("common.loading")}</Badge>
@@ -2031,7 +2066,7 @@ function SharedResourceManagementPanel(props: {
                   </Feedback>
                 )}
               </Show>
-              <div id="mcpList">
+              <div id="mcpList" ref={mcpList}>
                 <Show
                   when={mcpEntries().length > 0}
                   fallback={
@@ -2046,20 +2081,13 @@ function SharedResourceManagementPanel(props: {
                       const displayName = () => displayMcpName(name())
                       const connection = () => entry()[1]
                       const status = () => connection()?.status
-                      const executionOwned = () => {
-                        const value = connection()
-                        return value && "scope" in value && value.scope === "execution"
-                      }
+                      const executionOwned = () => isExecutionOwnedMcpConnection(connection())
                       const label = () => mcpConnectionStatusOrDisabledLabel(status(), connection())
                       const detail = () => {
                         const value = connection()
                         if (executionOwned()) return t("mcp.status.execution_owned")
                         return value && "error" in value ? value.error : undefined
                       }
-                      const needsAuthorization = () => status() === "needs_auth"
-                      const controllable = () => !executionOwned() &&
-                        (needsAuthorization() || ["connected", "disabled", "disconnected", "failed"].includes(status() || ""))
-                      const action = () => status() === "connected" ? "mcp.disconnect" : "mcp.connect"
                       return (
                         <SettingsRow
                           class="extension-settings-row"
@@ -2071,25 +2099,30 @@ function SharedResourceManagementPanel(props: {
                               <Show when={!executionOwned() || status() === "disabled"}>
                                 <Badge tone={mcpConnectionStatusOrDisabledTone(status())}>{label()}</Badge>
                               </Show>
-                              <Show when={controllable()}>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  tone="neutral"
-                                  aria-disabled={loading() || undefined}
-                                  aria-busy={loading() || undefined}
-                                  aria-label={t(needsAuthorization() ? "mcp.authorize_server" : `${action()}_server`, { name: displayName() })}
-                                  onClick={(event) => {
-                                    if (needsAuthorization()) {
-                                      void handleMcpAuthorization(name(), displayName(), event.currentTarget)
-                                    } else {
-                                      void handleMcpConnection(name(), status() === "connected")
-                                    }
-                                  }}
-                                >
-                                  {t(needsAuthorization() ? "mcp.authorize" : action())}
-                                </Button>
+                              <Show when={mcpConnectionAction(connection())}>
+                                {(action) => (
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    tone="neutral"
+                                    data-ui="mcp-connection-action"
+                                    aria-disabled={loading() || undefined}
+                                    aria-busy={loading() || undefined}
+                                    aria-label={t(`${action()}_server`, { name: displayName() })}
+                                    aria-keyshortcuts={canBrowseMcpActions() ? "ArrowUp ArrowDown PageUp PageDown" : undefined}
+                                    onKeyDown={mcpConnectionNavigation.handleResultKeyDown}
+                                    onClick={(event) => {
+                                      if (action() === "mcp.authorize") {
+                                        void handleMcpAuthorization(name(), displayName(), event.currentTarget)
+                                      } else {
+                                        void handleMcpConnection(name(), action() === "mcp.disconnect")
+                                      }
+                                    }}
+                                  >
+                                    {t(action())}
+                                  </Button>
+                                )}
                               </Show>
                             </>
                           }
