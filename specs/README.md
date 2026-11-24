@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [首次展开目录时接纳外部新增的文件](records/2026-11/2026-11-25-explorer-refreshes-inflight-folder-expansion.md)
 - [开着的旁聊面板跟进同源会话列表](records/2026-11/2026-11-25-side-chat-list-follows-source-membership.md)
 - [收件箱批量选择仅包含展开项目中的消息](records/2026-11/2026-11-25-mailbox-selects-only-visible-project-messages.md)
 - [定时运行历史显示每条记录的项目](records/2026-11/2026-11-25-scheduled-history-identifies-project-run-target.md)

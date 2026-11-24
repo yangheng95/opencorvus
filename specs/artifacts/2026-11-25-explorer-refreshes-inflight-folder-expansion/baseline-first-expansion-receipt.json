@@ -1,0 +1,35 @@
+{
+  "held": {
+    "at": "2026-11-24T23:09:35.876Z",
+    "event": "directory-response-held",
+    "id": 65,
+    "status": 200,
+    "actual": "9333a136-a78d-4edb-9a34-67f0ea30b472"
+  },
+  "before": {
+    "requestID": "abc7b80d-f6fb-4a37-8674-349f7feecc66",
+    "paths": [
+      "staging\\initial-note.txt"
+    ]
+  },
+  "event": {
+    "at": "2026-11-24T23:09:35.987Z",
+    "source": "/work-ledger/events",
+    "row": {
+      "type": "work-ledger.file-changed",
+      "sourceType": "file.watcher.updated",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b623\\candidate\\explorer-expansion-review",
+      "path": "staging/fresh-arrival.txt",
+      "membershipChanged": true,
+      "sequence": 0
+    }
+  },
+  "after": {
+    "requestID": "b8923c8f-9b2c-4923-9c2a-7cc7e36eaade",
+    "paths": [
+      "staging\\fresh-arrival.txt",
+      "staging\\initial-note.txt"
+    ]
+  },
+  "releasingAt": "2026-11-24T23:09:36.409Z"
+}

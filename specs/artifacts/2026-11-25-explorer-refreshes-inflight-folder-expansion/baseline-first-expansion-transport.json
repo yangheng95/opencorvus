@@ -1,0 +1,37 @@
+[
+  {
+    "at": "2026-11-24T23:09:35.875Z",
+    "event": "upstream-response",
+    "id": 65,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging",
+    "actual": "9333a136-a78d-4edb-9a34-67f0ea30b472"
+  },
+  {
+    "at": "2026-11-24T23:09:35.876Z",
+    "event": "directory-response-held",
+    "id": 65,
+    "status": 200,
+    "actual": "9333a136-a78d-4edb-9a34-67f0ea30b472"
+  },
+  {
+    "at": "2026-11-24T23:09:36.519Z",
+    "event": "directory-response-released",
+    "id": 65,
+    "actual": "9333a136-a78d-4edb-9a34-67f0ea30b472"
+  },
+  {
+    "at": "2026-11-24T23:09:39.053Z",
+    "event": "upstream-response",
+    "id": 68,
+    "pathname": "/file",
+    "method": "GET",
+    "status": 200,
+    "query": null,
+    "file": "staging",
+    "actual": "2799cb7b-61f4-48df-ad94-d340705d1f67"
+  }
+]

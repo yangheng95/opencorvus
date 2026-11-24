@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [目录首次展开遇到外部写入的现场证据](2026-11-25-explorer-refreshes-inflight-folder-expansion/README.md)
 - [同源旁聊的名单同步证据](2026-11-25-side-chat-list-follows-source-membership/README.md)
 - [收件箱折叠项目中的批量选择证据](2026-11-25-mailbox-selects-only-visible-project-messages/README.md)
 - [定时运行记录与项目归属证据](2026-11-25-scheduled-history-identifies-project-run-target/README.md)
