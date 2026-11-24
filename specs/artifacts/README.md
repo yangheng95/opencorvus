@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [手动滚动后用量区间焦点的桌面证据](2026-11-24-usage-activity-focus-after-scroll/README.md)
 - [用量活动图分页的桌面证据](2026-11-24-usage-activity-page-focus/README.md)
 - [技能分配搜索的桌面证据](2026-11-24-capability-skill-result-navigation/README.md)
 - [连接分配分页的桌面证据](2026-11-24-mcp-assignment-page-focus/README.md)
