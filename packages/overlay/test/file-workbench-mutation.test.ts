@@ -10,6 +10,7 @@ import {
   uploadDroppedFiles,
   deleteFileItem,
   fileWorkbenchOpen,
+  fileEditorAdmissionPhase,
   fileEditorReserved,
   prepareFileEditorClose,
   fileWorkbenchRevision,
@@ -280,12 +281,17 @@ test("prepared close holds the approved draft until durable commit and commits i
     isDirty: () => true,
     isBusy: () => false,
   })
-  const result = await prepareFileEditorClose({ isCurrent: () => currentView, commit: () => commits.push("durable B") })
+  const preparation = prepareFileEditorClose({ isCurrent: () => currentView, commit: () => commits.push("durable B") })
+  expect({ phase: fileEditorAdmissionPhase(), target: selectedFileTarget()?.path }).toEqual({
+    phase: "preparing", target: "draft.md",
+  })
+  const result = await preparation
   expect(result.status).toBe("ready")
   if (result.status !== "ready") throw new Error("Expected ready admission")
   expect({ held: fileEditorReserved(), current: result.handle.isCurrent(), target: selectedFileTarget()?.path }).toEqual({
     held: true, current: true, target: "draft.md",
   })
+  expect(fileEditorAdmissionPhase()).toBe("reserved")
   expect(await prepareFileEditorClose()).toEqual({ status: "busy" })
   await openFileEditor("other.md", { directory: "/b" })
   await expect(deleteFileItem("draft.md", { directory: "/a" })).rejects.toMatchObject({ name: "AbortError", reason: "busy" })
@@ -298,6 +304,7 @@ test("prepared close holds the approved draft until durable commit and commits i
   expect({ commits, held: fileEditorReserved(), target: selectedFileTarget(), revision }).toEqual({
     commits: ["durable B"], held: false, target: null, revision: 7,
   })
+  expect(fileEditorAdmissionPhase()).toBe("idle")
 })
 
 test("failed persistence releases admission and retains the exact saved or dirty owner revision", async () => {
@@ -410,6 +417,7 @@ test("authority renewal during a file decision yields its typed retirement and p
     isBusy: () => false,
   })
   const preparation = prepareFileEditorClose()
+  expect(fileEditorAdmissionPhase()).toBe("preparing")
   renewApiAuthority()
   approve(9)
   await expect(preparation).rejects.toMatchObject({
@@ -418,6 +426,7 @@ test("authority renewal during a file decision yields its typed retirement and p
   expect({ held: fileEditorReserved(), target: selectedFileTarget() }).toEqual({
     held: false, target: { directory: "/a", path: "draft.md" },
   })
+  expect(fileEditorAdmissionPhase()).toBe("idle")
 })
 
 

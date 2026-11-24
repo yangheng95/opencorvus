@@ -1659,7 +1659,12 @@ delegating valid text endpoints to the same presentation; editor comparisons
 never synthesize change receipts or Artifacts.
 
 Explorer move/rename/delete asks that same file owner before mutating an opened
-resource or its ancestor. The file-workbench service reconciles every successful
+resource or its ancestor. The shared file admission holds its preparation
+through the approved draft decision, then becomes the reservation for the
+requested operation. The decision can save the draft while preparing.
+Background reads for the current editor wait through preparation and reservation,
+and resume from their existing observation once the owner releases it.
+The file-workbench service reconciles every successful
 physical result immediately. Explorer refreshes all completed members even when
 a later batch member fails, without owning a second editor target mapping.
 

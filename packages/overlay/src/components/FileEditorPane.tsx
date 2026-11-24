@@ -8,6 +8,7 @@ import {
   createFileItem,
   fileEditorDiskChangeRevision,
   fileEditorRevealRevision,
+  fileEditorAdmissionPhase,
   fileEditorReserved,
   observeFileEditorDiskChange,
   registerFileEditorBeforeNavigate,
@@ -691,10 +692,11 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     const observed = observationKey()
     const revealRevision = fileEditorRevealRevision()
     const revealRequested = revealRevision !== previousRevealRevision
+    const admissionActive = fileEditorAdmissionPhase() !== "idle"
     untrack(() => {
       const identity = identityOf(file)
       if (identity === activeTargetIdentity && contentAuthority && isApiAuthorityCurrent(contentAuthority)) {
-        if (dirty() || saving() || reloading() || downloading() || fileEditorReserved()) return
+        if (dirty() || saving() || reloading() || downloading() || admissionActive) return
         if (content() && observed === loadedObservationKey()) return
       }
       retireComparison()
@@ -854,7 +856,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       setPendingDiskCheck(undefined)
       return
     }
-    if (isBusy() || fileEditorReserved() || downloading() || leaveDialogOpen()) return
+    if (isBusy() || fileEditorAdmissionPhase() !== "idle" || downloading() || leaveDialogOpen()) return
     setPendingDiskCheck(undefined)
     untrack(() => void reload("disk-check"))
   })

@@ -1,0 +1,68 @@
+{
+  "reads": [
+    {
+      "project": "branch-review",
+      "path": "notes/final.txt",
+      "status": 200,
+      "requestID": "9a9e3ad4-aec3-4bbb-9757-93e5db3d962e",
+      "body": {
+        "type": "text",
+        "content": "Isolated checklist for admission review.\r\nFirst saved note.\r\nSaved before conflict.",
+        "revision": "3eae46f9fe3e39a5171b7efc4956ff65fdbbd53c1cef82e14b321a6ca65d88ac",
+        "resourceID": "fed6e890b926f30f373e714a525224c93b4cf3755c826fa89494d83a82b35d75"
+      }
+    },
+    {
+      "project": "branch-review",
+      "path": "notes/sibling.txt",
+      "status": 200,
+      "requestID": "4ef9d6d8-5985-4eca-9b3c-045e52d6cc12",
+      "body": {
+        "type": "text",
+        "content": "An independent sibling file.\r\n",
+        "revision": "cb99ef61d22d68ca4655e32f6b868741fbf9973cb7a04d8e2d14e557f97f2add",
+        "resourceID": "02940b6c76c1f04ff59e7d6f9ed1e96559ae963b4bf9a90eb830460be1334d8f"
+      }
+    },
+    {
+      "project": "control-review",
+      "path": "notes/checklist.txt",
+      "status": 200,
+      "requestID": "0c4c260b-7600-4257-b975-fb30e780b8df",
+      "body": {
+        "type": "text",
+        "content": "Independent checklist in the control project.\r\nSeparate control draft.",
+        "revision": "58d9a2a7daaa213696b08a35da561d88cbcc1f770a4df76386d0a957d5ed540f",
+        "resourceID": "e318978d2e055c171a88f988d2f8dd48787049c22e3a7077aebeeb45559a84e5",
+        "patch": {
+          "oldFileName": "notes/checklist.txt",
+          "newFileName": "notes/checklist.txt",
+          "oldHeader": "old",
+          "newHeader": "new",
+          "hunks": [
+            {
+              "oldStart": 1,
+              "oldLines": 1,
+              "newStart": 1,
+              "newLines": 2,
+              "lines": [
+                " Independent checklist in the control project.\r",
+                "+Separate control draft.",
+                "\\ No newline at end of file"
+              ]
+            }
+          ]
+        },
+        "diff": "Index: notes/checklist.txt\n===================================================================\n--- notes/checklist.txt\told\n+++ notes/checklist.txt\tnew\n@@ -1,1 +1,2 @@\n Independent checklist in the control project.\r\n+Separate control draft.\n\\ No newline at end of file\n"
+      }
+    }
+  ],
+  "branchFiles": [
+    "final.txt",
+    "sibling.txt"
+  ],
+  "controlFiles": [
+    "checklist.txt",
+    "sibling.txt"
+  ]
+}

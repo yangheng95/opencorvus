@@ -164,8 +164,9 @@ export interface FileEditorCommitBoundary {
 }
 const [fileEditorOwner, setFileEditorOwner] = createSignal<FileEditorNavigationOwner>()
 let fileEditorNavigationGeneration = 0
-const [fileEditorReserved, setFileEditorReserved] = createSignal(false)
-export { fileEditorReserved }
+const [fileEditorAdmission, setFileEditorAdmission] = createSignal<{ phase: "preparing" | "reserved" }>()
+export const fileEditorAdmissionPhase = () => fileEditorAdmission()?.phase ?? "idle"
+export const fileEditorReserved = () => fileEditorAdmissionPhase() === "reserved"
 
 export interface FileEditorCloseHandle {
   isCurrent: () => boolean
@@ -353,51 +354,56 @@ async function prepareFileEditorTarget(
   const generation = ++fileEditorNavigationGeneration
   const owner = fileEditorOwner()
   if (owner?.isBusy()) return { status: "busy" }
-  const revision = needsDecision && owner ? await owner.confirmLeave() : (owner?.getRevision() ?? 0)
-  assertApiAuthorityCurrent(authority)
-  if (revision === null) return { status: "cancelled" }
-  if (
-    generation !== fileEditorNavigationGeneration ||
-    fileEditorReserved() ||
-    fileEditorOwner() !== owner ||
-    !sameFileEditorResource(current, selectedFileTarget()) ||
-    (owner && revision !== owner.getRevision()) ||
-    (boundary && !boundary.isCurrent())
-  )
-    return { status: "superseded" }
-  if (owner?.isBusy()) return { status: "busy" }
-  let held = true
-  setFileEditorReserved(true)
-  const release = () => {
-    if (!held) return
-    held = false
-    setFileEditorReserved(false)
-  }
-  return {
-    status: "ready",
-    handle: {
-      isCurrent: () =>
-        held &&
-        generation === fileEditorNavigationGeneration &&
-        sameFileEditorResource(current, selectedFileTarget()) &&
-        fileEditorOwner() === owner &&
-        (!owner || owner.getRevision() === revision) &&
-        isApiAuthorityCurrent(authority) &&
-        (!boundary || boundary.isCurrent()),
-      commit: () => {
-        if (!held) return
-        batch(() => {
-          const next = target()
-          if (!sameFileEditorTarget(current, next)) commitFileEditorTarget(next)
-          try {
-            boundary?.commit()
-          } finally {
-            release()
-          }
-        })
+  const preparation = { phase: "preparing" } as const
+  setFileEditorAdmission(preparation)
+  try {
+    const revision = needsDecision && owner ? await owner.confirmLeave() : (owner?.getRevision() ?? 0)
+    assertApiAuthorityCurrent(authority)
+    if (revision === null) return { status: "cancelled" }
+    if (
+      generation !== fileEditorNavigationGeneration ||
+      fileEditorAdmission() !== preparation ||
+      fileEditorOwner() !== owner ||
+      !sameFileEditorResource(current, selectedFileTarget()) ||
+      (owner && revision !== owner.getRevision()) ||
+      (boundary && !boundary.isCurrent())
+    ) {
+      return { status: "superseded" }
+    }
+    if (owner?.isBusy()) return { status: "busy" }
+    const reservation = { phase: "reserved" } as const
+    setFileEditorAdmission(reservation)
+    const release = () => {
+      if (fileEditorAdmission() === reservation) setFileEditorAdmission(undefined)
+    }
+    return {
+      status: "ready",
+      handle: {
+        isCurrent: () =>
+          fileEditorAdmission() === reservation &&
+          generation === fileEditorNavigationGeneration &&
+          sameFileEditorResource(current, selectedFileTarget()) &&
+          fileEditorOwner() === owner &&
+          (!owner || owner.getRevision() === revision) &&
+          isApiAuthorityCurrent(authority) &&
+          (!boundary || boundary.isCurrent()),
+        commit: () => {
+          if (fileEditorAdmission() !== reservation) return
+          batch(() => {
+            const next = target()
+            if (!sameFileEditorTarget(current, next)) commitFileEditorTarget(next)
+            try {
+              boundary?.commit()
+            } finally {
+              release()
+            }
+          })
+        },
+        release,
       },
-      release,
-    },
+    }
+  } finally {
+    if (fileEditorAdmission() === preparation) setFileEditorAdmission(undefined)
   }
 }
 
