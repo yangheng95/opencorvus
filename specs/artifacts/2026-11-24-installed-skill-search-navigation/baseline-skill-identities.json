@@ -1,0 +1,127 @@
+[
+  {
+    "name": "browser-use",
+    "description": "Research and operate rendered web pages through OpenCorvus Browser tools, including authenticated workflows and visual inspection.",
+    "location": "builtin:browser-use"
+  },
+  {
+    "name": "computer-use",
+    "description": "Operate native desktop apps through OpenCorvus Computer tools when the task requires their visible interface.",
+    "location": "builtin:computer-use"
+  },
+  {
+    "name": "design-taste-frontend",
+    "description": "Apply context-aware visual judgment to frontend product design and redesign work. Infer the design language from the accepted brief and evidence, use mature design systems, avoid generic generated-interface patterns, and finish through real rendered-page inspection.",
+    "location": "builtin:design-taste-frontend"
+  },
+  {
+    "name": "grill-me",
+    "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.",
+    "location": "builtin:grill-me"
+  },
+  {
+    "name": "research-report",
+    "description": "Produce a multi-source research report — comparison matrix, capability survey, market analysis, recommendation document — backed by `websearch` (and `webfetch` only after `websearch` returns a concrete URL). Activate when the deliverable is a markdown report rather than running software, and the work is fundamentally synthesising prose from external sources rather than writing code. Signals — the brief asks for 报告 / 调研 / 对比 / 分析 / 综述 / 功能矩阵 / 评估 / 建议 / report / comparison / matrix / analysis / survey / recommendation; or compares named third-party products / platforms / vendors; or asks for a structured insight + recommendation document. Do NOT activate for code tasks, even when the code happens to consume third-party APIs.",
+    "location": "builtin:research-report"
+  },
+  {
+    "name": "work-artifacts",
+    "description": "Produce editable PPTX presentations, DOCX documents and XLSX spreadsheets through the single OpenCorvus Work Artifact Harness. Use the exact mounted typed profile. DOCX supports ordered title, heading and body paragraphs; XLSX supports bounded worksheets and literal cells. Fresh PNG review and derived PDF previews accompany DOCX/XLSX delivery. Does not edit existing files or author formulas, macros, PDF source, OCR, archives or media.",
+    "location": "builtin:work-artifacts"
+  },
+  {
+    "name": "wheel-storage",
+    "description": "Clean wheel storage references.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\wheel-storage\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-18",
+    "description": "receivingledger sealed manifest 18 traces the signed aisle receipt to the evening inventory report and its reviewer.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-18\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-16",
+    "description": "receivingledger sealed manifest 16.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-16\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-17",
+    "description": "receivingledger sealed manifest 17.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-17\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-15",
+    "description": "receivingledger sealed manifest 15 traces the signed aisle receipt to the evening inventory report and its reviewer.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-15\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-13",
+    "description": "receivingledger sealed manifest 13.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-13\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-14",
+    "description": "receivingledger sealed manifest 14.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-14\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-12",
+    "description": "receivingledger sealed manifest 12 traces the signed aisle receipt to the evening inventory report and its reviewer.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-12\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-11",
+    "description": "receivingledger sealed manifest 11.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-11\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-10",
+    "description": "receivingledger sealed manifest 10.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-10\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-09",
+    "description": "receivingledger sealed manifest 09 traces the signed aisle receipt to the evening inventory report and its reviewer.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-09\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-08",
+    "description": "receivingledger sealed manifest 08.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-08\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-07",
+    "description": "receivingledger sealed manifest 07.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-07\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-04",
+    "description": "receivingledger sealed manifest 04.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-04\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-06",
+    "description": "receivingledger sealed manifest 06 traces the signed aisle receipt to the evening inventory report and its reviewer.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-06\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-03",
+    "description": "receivingledger sealed manifest 03 traces the signed aisle receipt to the evening inventory report and its reviewer.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-03\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-05",
+    "description": "receivingledger sealed manifest 05.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-05\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-02",
+    "description": "receivingledger sealed manifest 02.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-02\\SKILL.md"
+  },
+  {
+    "name": "receiving-skill-01",
+    "description": "receivingledger sealed manifest 01.",
+    "location": "C:\\Users\\Public\\opencorvus-review-20261124-b537\\baseline\\change-review\\.opencorvus\\skills\\receiving-skill-01\\SKILL.md"
+  }
+]

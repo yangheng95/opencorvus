@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [已安装技能搜索的结果内导航](2026-11-24-installed-skill-search-navigation.md)
 - [搜索结果方向键的行焦点](2026-11-24-search-result-row-focus.md)
 - [新建多步任务专家团结果的分页焦点](2026-11-24-mission-squad-search-page-focus.md)
 - [服务商搜索结果的分页焦点](2026-11-24-provider-search-page-focus.md)
