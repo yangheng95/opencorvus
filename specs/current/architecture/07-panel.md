@@ -1573,6 +1573,12 @@ path and keeps the loaded text and local draft. A later successful check clears
 the earlier reload failure. If the same resource and revision are back, the
 accepted editing base and current draft stay in place. An automatic read
 failure leaves a pending save conflict or other action failure in place.
+When a missing original path still owns an unsaved draft, its feedback offers
+an explicit Save draft copy action. The confirmation names the owning project
+and takes a distinct project-relative file path. The existing create operation
+submits the current draft text and retains its normal conflict and formatting
+contracts. After a successful create, the feedback names the receipt path for
+that draft. The original editor retains its own path and unsaved changes.
 
 The same file owner offers a read-only disk comparison in its header and named
 save-conflict feedback, including its unsaved decision. One cancellable read of

@@ -1,8 +1,11 @@
 import { batch, createEffect, createMemo, createSignal, lazy, Match, onCleanup, Show, Switch, untrack } from "solid-js"
 import { base64ToUint8 } from "@opencorvus-ai/transport-protocol"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import { ApiError, apiJson, apiRequest, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
+import { showAppDialog } from "../services/app-dialog"
 import {
   closeFileEditor,
+  createFileItem,
   fileEditorDiskChangeRevision,
   fileEditorRevealRevision,
   fileEditorReserved,
@@ -22,8 +25,10 @@ import { localeTag, t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import {
+  classifyProjectPathInput,
   decodeMarkdownFilePath,
   isAbsoluteServerPath,
+  isWindowsPath,
   normalizeProjectFilePath,
   parentProjectPath,
   pathWithForwardSeparators,
@@ -174,6 +179,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
   const [textView, setTextView] = createSignal<"source" | "preview" | null>(null)
   const [editorNavigation, setEditorNavigation] = createSignal<CodeEditorNavigation>()
   const [error, setError] = createSignal<FileEditorFailure | null>(null)
+  const [savedDraftCopyPath, setSavedDraftCopyPath] = createSignal<string>()
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
   const [leaveSaving, setLeaveSaving] = createSignal(false)
@@ -199,6 +205,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
   let activeTargetIdentity = ""
   let contentAuthority: ApiAuthority | undefined
   let downloadController: AbortController | undefined
+  let draftCopyDialog: AbortController | undefined
   const [markdownPreview, setMarkdownPreview] = createSignal<HTMLElement>()
   const [linkedSectionMiss, setLinkedSectionMiss] = createSignal<{ revision: number; text: string }>()
   const [imagePreviewTrigger, setImagePreviewTrigger] = createSignal<HTMLButtonElement>()
@@ -509,6 +516,73 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       if (current()) setComparison({ ...request, status: "failed", cause })
     }
   }
+  const canSaveDraftCopy = () => {
+    const key = error()?.messageKey
+    return dirty() && (key === "file_editor.reload_missing" || key === "file_editor.save_missing")
+  }
+
+  async function saveDraftCopy(opener: HTMLButtonElement): Promise<void> {
+    const file = target()
+    if (!file || !canSaveDraftCopy() || isBusy() || fileEditorReserved() || draftCopyDialog) return
+    const authority = captureApiAuthority()
+    const generation = loadGeneration
+    const dialog = new AbortController()
+    draftCopyDialog = dialog
+    const owns = () => generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)
+    const windows = isWindowsPath(file.directory)
+    const originalPath = normalizeProjectFilePath(file.path, file.directory)
+    let destination = ""
+    try {
+      await showAppDialog({
+        kind: "file-draft-copy",
+        title: t("file_editor.save_draft_copy"),
+        message: t("file_editor.draft_copy_destination", { directory: file.directory }),
+        input: true,
+        inputLabel: t("file_editor.draft_copy_path"),
+        inputValue: `recovered-${originalPath.split("/").at(-1)}`,
+        inputRequired: true,
+        cancel: true,
+        okLabel: t("file_editor.save_draft_copy"),
+        signal: dialog.signal,
+        openingGuard: owns,
+        returnFocusTarget: () => owns() ? opener : null,
+        validateInput: (value) => {
+          if (classifyProjectPathInput(value, file.directory) === "rooted") return t("explorer.destination_relative_required")
+          const path = normalizeProjectFilePath(value, file.directory)
+          if (path.split("/").some((name) => classifyEntryBasename(name, windows) !== "valid")) {
+            return t("file_editor.draft_copy_invalid_path")
+          }
+          if (windows ? path.toLowerCase() === originalPath.toLowerCase() : path === originalPath) {
+            return t("file_editor.draft_copy_distinct_path")
+          }
+        },
+        confirmErrorSummary: (cause) => {
+          if (cause instanceof ApiError && cause.status === 409 &&
+            (cause.body as { name?: unknown } | null)?.name === "FileConflictError") {
+            return t("explorer.error.destination_exists", { path: destination })
+          }
+          return t("file_editor.draft_copy_failed")
+        },
+        onConfirm: async (value) => {
+          if (!owns()) return
+          if (!dirty()) throw new Error(t("file_editor.draft_copy_changed"))
+          destination = normalizeProjectFilePath(value ?? "", file.directory)
+          const revision = draftRevision
+          try {
+            const copy = await createFileItem({ path: destination, type: "file", content: draft() }, { directory: file.directory, authority })
+            if (owns() && revision === draftRevision) setSavedDraftCopyPath(copy.path)
+          } catch (cause) {
+            if (owns()) throw cause
+          }
+        },
+      })
+    } catch (cause) {
+      if (owns()) setError({ messageKey: "file_editor.draft_copy_failed", cause })
+    } finally {
+      if (draftCopyDialog === dialog) draftCopyDialog = undefined
+    }
+  }
+
   const saveComparisonAction = () => needsDiskComparison() ? (
       <Button type="button" variant="outline" size="sm" tone="neutral"
         disabled={!resourceReady() || fileEditorReserved()} aria-disabled={comparisonUnavailable() || undefined}
@@ -516,6 +590,14 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
         {t("file_editor.compare")}
       </Button>
   ) : undefined
+
+  const fileFeedbackAction = () => canSaveDraftCopy() ? (
+      <Button type="button" variant="outline" size="sm" tone="neutral"
+        disabled={!resourceReady() || fileEditorReserved()} aria-disabled={isBusy() || undefined}
+        onClick={(event) => void saveDraftCopy(event.currentTarget)}>
+        {t("file_editor.save_draft_copy")}
+      </Button>
+  ) : saveComparisonAction()
 
   const retireDownload = () => {
     downloadController?.abort()
@@ -576,6 +658,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     setAcceptedContent(loaded)
     setLoadedObservationKey(next ? observed : null)
     setError(null)
+    setSavedDraftCopyPath(undefined)
     draftRevision += 1
     setDraft(canEdit(next) ? next!.content : "")
     setSavedBaseline(canEdit(next) ? { content: next!.content, revision: next!.revision, resourceID: next!.resourceID } : null)
@@ -595,6 +678,9 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
       }
       retireComparison()
       retireDownload()
+      draftCopyDialog?.abort()
+      draftCopyDialog = undefined
+      setSavedDraftCopyPath(undefined)
       previewReadingPosition = undefined
       const retainDraft = identity === activeTargetIdentity && dirty()
       if (identity !== activeTargetIdentity) {
@@ -697,6 +783,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
   const updateDraft = (next: string) => {
     if (fileEditorReserved()) return
     draftRevision += 1
+    setSavedDraftCopyPath(undefined)
     setDraft(next)
   }
 
@@ -754,6 +841,7 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
     revealPreview.cancel()
     retireComparison()
     retireDownload()
+    draftCopyDialog?.abort()
     loadGeneration += 1
     reloadGeneration += 1
     saveGeneration += 1
@@ -1197,9 +1285,12 @@ export function FileEditorPane(props: { onTextShortcutsChange: (shortcuts: FileE
               class="file-editor-error file-editor-compare-feedback"
             tone={isUnconfirmedSave(failure().messageKey) ? "warning" : "error"}
             details={fileErrorDetails(failure())}
-            actions={saveComparisonAction()}
+            actions={fileFeedbackAction()}
           >
             {currentErrorMessage()}
+            <Show when={canSaveDraftCopy() && savedDraftCopyPath()}>
+              {(path) => <p>{t("file_editor.draft_copy_saved", { path: path() })}</p>}
+            </Show>
           </Feedback>
         }
         </Show>
