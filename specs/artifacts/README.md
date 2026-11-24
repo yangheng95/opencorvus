@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [较早任务的侧栏改名桌面证据](2026-11-24-task-rename-from-ledger-row/README.md)
 - [独立任务归档删除的项目归属桌面证据](2026-11-24-archived-task-delete-project-owner/README.md)
 - [归档跨标签刷新的桌面证据](2026-11-24-archive-cross-tab-refresh/README.md)
 - [设置草稿和跨标签刷新的桌面证据](2026-11-24-settings-drafts-on-project-refresh/README.md)

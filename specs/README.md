@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从工作侧栏改名独立任务并保留当前工作](records/2026-11/2026-11-24-task-rename-from-ledger-row.md)
 - [独立任务归档删除沿用确认的项目目录](records/2026-11/2026-11-24-archived-task-delete-project-owner.md)
 - [已打开的归档列表同步其他标签的变更](records/2026-11/2026-11-24-archive-cross-tab-refresh.md)
 - [项目配置跨标签刷新时保留设置草稿](records/2026-11/2026-11-24-settings-drafts-on-project-refresh.md)
