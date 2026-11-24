@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [重开已有工作区后的 Git 监视证据](2026-11-25-git-watch-starts-on-reopened-workspace/README.md)
 - [原生文件监视和 Git 状态实证](2026-11-25-git-refreshes-after-watched-worktree-edits/README.md)
 - [收件箱刷新失败的阅读证据](2026-11-25-mailbox-keeps-reading-after-refresh-failure/README.md)
 - [归档后台刷新期间的阅读与焦点证据](2026-11-25-archive-reading-during-background-refresh/README.md)

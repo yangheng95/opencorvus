@@ -1,0 +1,110 @@
+{
+  "rendererAsset": "main-EXy72qO_.js",
+  "browserUI": "http://127.0.0.1:41790/ui/",
+  "originalProcess": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-iteration-b613-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:41790",
+    "pid": 27652
+  },
+  "reopenedProcess": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-iteration-b613-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:41790",
+    "pid": 18408
+  },
+  "savedConversation": {
+    "sessionID": "ses_hmukY0F4XnovIMV5snyW",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b613\\candidate\\git-reopen-review",
+    "projectID": "prj_hg1OSrLKAzRXwQsHWrZ8",
+    "title": "B613 reopened Git review",
+    "requestID": "4d1de59e-548d-48e3-96b8-d8674e747aba"
+  },
+  "openWatcherReads": [
+    {
+      "at": "2026-11-24T21:12:58.455Z",
+      "source": "/global/event",
+      "status": 200,
+      "kind": "ready"
+    },
+    {
+      "at": "2026-11-24T21:12:58.458Z",
+      "source": "/work-ledger/events",
+      "status": 200,
+      "kind": "ready"
+    }
+  ],
+  "watcherStartStages": 0,
+  "actualGit": {
+    "writeAt": "2026-11-24T21:13:24.3574582Z",
+    "beforeReceipt": "57f218cc-cb6b-416b-9d36-9c8720792111",
+    "before": {
+      "initialized": true,
+      "branch": "main",
+      "commit": "7ce6aa3",
+      "clean": true,
+      "dirty": false,
+      "staged": 0,
+      "modified": 0,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    },
+    "afterReceipt": "90f75390-65a6-43f2-a18f-a36518ec07d2",
+    "after": {
+      "initialized": true,
+      "branch": "branch-observer",
+      "commit": "7ce6aa3",
+      "clean": false,
+      "dirty": true,
+      "staged": 0,
+      "modified": 1,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    },
+    "status": [
+      " M handoff.txt"
+    ],
+    "gitignoreReadOnly": true
+  },
+  "gitReadReceipts": [
+    {
+      "at": "2026-11-24T21:12:37.896Z",
+      "id": "aed8646c-52db-44cd-af74-401a4b5cb57c",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:12:38.88Z",
+      "id": "0a8e104b-bced-4254-8657-448a4b32739d",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:12:43.641Z",
+      "id": "97059836-d200-439d-a417-67be8111cd84",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:13:24.308Z",
+      "id": "57f218cc-cb6b-416b-9d36-9c8720792111",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:13:25.394Z",
+      "id": "90f75390-65a6-43f2-a18f-a36518ec07d2",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:13:33.057Z",
+      "id": "7398bb4c-f3e9-45a8-95a7-df8263a591d3",
+      "status": 200
+    }
+  ],
+  "protectedGitignoreUnchanged": true
+}
