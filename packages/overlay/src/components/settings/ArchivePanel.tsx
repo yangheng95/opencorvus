@@ -27,6 +27,7 @@ import { formatErrorDetails, reportError, reportSuccess, runPostCommitUiEffect }
 import { detailStamp } from "../../utils/time"
 import { localeTag, t } from "../../utils/i18n"
 import { projectLedgerDisplayName } from "../../utils/project-directory"
+import { revealRenderedListRow } from "../../utils/rendered-list-navigation"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
 import { Icon, type IconName } from "../ui/Icon"
@@ -35,6 +36,7 @@ import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from
 
 const ARCHIVE_PAGE_SIZE = 100
 const ARCHIVE_ROW_SELECTOR = "[data-archive-row-key]"
+const ARCHIVE_OPEN_ACTION_SELECTOR = 'button[data-archive-action="open"]:enabled'
 
 type ArchiveRead = "initial" | "append" | "refresh"
 
@@ -132,14 +134,15 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const hasRefreshFailure = createMemo(() => panelFailure()?.operation === "refresh")
   const deletionUnconfirmed = (row: WorkLedgerItemRow) => unconfirmedDeletions().has(archiveRowKey(row))
   const canOpenRow = (row: WorkLedgerItemRow) => !busyID() && !loading() && !deletionUnconfirmed(row)
-  const canBrowseSearchResults = () => Boolean(query()) && rows().some(canOpenRow)
+  const canBrowseRows = () => rows().some(canOpenRow)
+  const archiveViewport = () => panelElement?.closest<HTMLElement>(".config-content") ?? undefined
 
-  const searchNavigation = createSearchResultNavigation(() => {
-    if (!canBrowseSearchResults() || !panelElement) return []
-    return Array.from(panelElement.querySelectorAll<HTMLButtonElement>('button[data-archive-action="open"]:enabled'))
+  const archiveNavigation = createSearchResultNavigation(() => {
+    if (!canBrowseRows() || !panelElement) return []
+    return Array.from(panelElement.querySelectorAll<HTMLButtonElement>(ARCHIVE_OPEN_ACTION_SELECTOR))
   }, {
     returnToSearch: () => searchInput,
-    pageViewport: () => panelElement?.closest<HTMLElement>(".config-content") ?? undefined,
+    pageViewport: archiveViewport,
     pageRow: (action) => action.closest<HTMLElement>(ARCHIVE_ROW_SELECTOR),
   })
 
@@ -275,7 +278,13 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         if (controller === requestController) controller = undefined
         setLoading(false)
         if (focusRow) {
-          findArchiveRow(archiveRowKey(focusRow))?.querySelector<HTMLButtonElement>('[data-archive-action="open"]')?.focus()
+          const row = findArchiveRow(archiveRowKey(focusRow))
+          const action = row?.querySelector<HTMLButtonElement>(ARCHIVE_OPEN_ACTION_SELECTOR)
+          const viewport = archiveViewport()
+          if (row && action && viewport) {
+            action.focus({ preventScroll: true })
+            revealRenderedListRow(row, viewport)
+          }
         } else if (append && continuationFailure() && continuationElement?.contains(document.activeElement)) {
           continuationElement.scrollIntoView({ block: "nearest" })
         }
@@ -552,9 +561,9 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         inputRef={(element) => (searchInput = element)}
         value={search()}
         placeholder={t("archive.search_placeholder")}
-        ariaDescribedBy={canBrowseSearchResults() ? "archive-search-keyboard-hint" : undefined}
+        ariaDescribedBy={canBrowseRows() ? "archive-search-keyboard-hint" : undefined}
         onValueChange={setSearch}
-        resultFocusTarget={searchNavigation.resultFocusTarget}
+        resultFocusTarget={archiveNavigation.resultFocusTarget}
         disabled={!!busyID()}
       />
       <SettingsDetailSection
@@ -566,7 +575,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         description={
           <>
             {t("archive.description")}
-            <Show when={canBrowseSearchResults()}>
+            <Show when={canBrowseRows()}>
               <div id="archive-search-keyboard-hint">{t("archive.search_page_navigation")}</div>
             </Show>
           </>
@@ -634,10 +643,10 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       size="sm"
                       tone="neutral"
                       aria-label={archiveActionText("archive.open_item", row)}
-                      aria-keyshortcuts={query() && canOpenRow(row) ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
+                      aria-keyshortcuts={canOpenRow(row) ? "ArrowUp ArrowDown PageUp PageDown Escape" : undefined}
                       data-archive-action="open"
                       disabled={!canOpenRow(row)}
-                      onKeyDown={searchNavigation.handleResultKeyDown}
+                      onKeyDown={archiveNavigation.handleResultKeyDown}
                       onClick={(event) => void props.onOpenItem(row, event.currentTarget)}
                     >
                       {t("archive.open")}

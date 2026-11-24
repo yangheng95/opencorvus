@@ -6676,13 +6676,13 @@ Nonempty input changes use the command palette's Work Ledger search delay;
 the initial read, a connection change and clearing the search read immediately.
 The result count reflects accepted rows and stays hidden while the new query
 awaits its first result or has a read error before accepting any rows.
-For a nonempty search the shared SearchField can focus the first or last
-available Open action with Down or Up. It exposes the localized guidance
-when a matching action is usable and otherwise preserves normal input behavior.
-From a focused matching Open action, Down and Up move to the adjacent available
-Open action in the same accepted results through the shared search result
-navigation. Page Up and Page Down move through that collection by approximately
-one settings viewport, using the full result row for measurement and visibility.
+The shared SearchField can focus the first or last accepted Open action with
+Down or Up in both the full archive and a filtered list. It exposes localized
+guidance when an action is usable and otherwise preserves normal input behavior.
+From a focused Open action, Down and Up move to the adjacent available
+Open action in the current loaded collection. Page Up and Page Down move through
+that collection by approximately one settings viewport, using the full result row
+for measurement and visibility.
 The resulting Open action receives focus. Escape returns focus to the editable
 search field with the accepted query and results intact. Tab keeps the usual row
 action order.
@@ -6704,8 +6704,8 @@ while the read is pending. A successful retry transfers focus to the section
 heading only if that trigger still owns it, before the feedback is retired.
 Continuing while the Load more button has focus preserves that focus during the
 read. On success, if the operator is still on that button, focus moves to Open
-on the first appended row. If the cursor is exhausted with no new rows, focus
-moves to Open on the last retained row.
+on the first appended row and scrolls the whole row into view. If the cursor is
+exhausted with no new rows, focus moves to Open on the last retained row.
 After a committed row action, the same reader follows canonical cursor pages
 through the previously loaded surviving tail, or through exhaustion. Its boundary
 uses the public pinned/updated/kind:id order, independently of directory-scoped
