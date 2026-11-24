@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
+import { Config } from "@/config/config"
 import {
   ChannelIngress,
   ChannelIngressInput,
@@ -219,6 +220,7 @@ export const ChannelRoutes = lazy(() =>
         },
       }),
       async (c) => {
+        await Config.getForProjectRuntime()
         return c.json(await ChannelSupervisor.restart())
       },
     ),

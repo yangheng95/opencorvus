@@ -325,6 +325,8 @@ their exact existing contracts across retry and restart.
 
 `engine_channel_binding` 表在 `engine/engine.sql.ts` 定义，记录 `(platform, channel, thread) ↔ task_id` 绑定关系。
 
+显式重启先汇合当前项目配置结算，再由通道所有者在同一生命周期队列下按最近接受的运行计划重新连接。回执使用实际启动结果，作用域随请求项目确定。
+
 ## workspace —— 多工作区代理
 
 **代码**：`src/workspace/`

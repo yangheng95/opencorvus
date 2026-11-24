@@ -20,10 +20,15 @@ async function writeChannelConfig(directory: string, channel: Config.Info["chann
   await fs.writeFile(file, JSON.stringify({ channel }))
 }
 
-async function readCatalog(directory: string) {
-  const response = await runOutsideInstanceContext(() => Server.App().request("/channel", {
-    headers: { "x-opencorvus-directory": directory },
+function request(directory: string, route: string, init?: RequestInit) {
+  return runOutsideInstanceContext(() => Server.App().request(route, {
+    ...init,
+    headers: { "x-opencorvus-directory": directory, "content-type": "application/json" },
   }))
+}
+
+async function readCatalog(directory: string) {
+  const response = await request(directory, "/channel")
   expect(response.status).toBe(200)
   return ChannelRegistry.Info.array().parse(await response.json())
 }
@@ -43,42 +48,45 @@ test("cold protected projects expose the current channel catalog and exact scope
   ])
 }, 60_000)
 
-test("a cold protected catalog publishes the existing managed runtime after one real startup handshake", async () => {
-  await using project = await memoryProject("channel-catalog-real-adapter")
-  await using unavailable = await memoryProject("channel-catalog-failed-adapter")
-  await fs.mkdir(path.join(project.path, ".gitignore"))
-  await fs.mkdir(path.join(unavailable.path, ".gitignore"))
-  const requests = { whoami: 0, sync: 0, declined: 0 }
+function startMatrixPeer() {
+  const handshakes = new Map<string, number>()
   const firstSync = Promise.withResolvers<void>()
   const peer = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
     async fetch(request) {
-      switch (new URL(request.url).pathname) {
-        case "/_matrix/client/v3/account/whoami":
-          requests.whoami++
-          await Bun.sleep(50)
-          return Response.json({ user_id: "@owned-test:local" })
-        case "/_matrix/client/v3/sync":
-          requests.sync++
-          firstSync.resolve()
-          await Bun.sleep(50)
-          return Response.json({ next_batch: String(requests.sync), rooms: { join: {} } })
-        case "/unavailable/_matrix/client/v3/account/whoami":
-          requests.declined++
-          return new Response("Local handshake unavailable", { status: 503 })
-        default:
-          return new Response("Unexpected local protocol path", { status: 404 })
+      const match = /^(?:\/(west|alternate|unavailable))?\/_matrix\/client\/v3\/(account\/whoami|sync)$/.exec(
+        new URL(request.url).pathname,
+      )
+      if (!match) return new Response("Unexpected local protocol path", { status: 404 })
+      const [, scope = "primary", operation] = match
+      if (operation === "account/whoami") {
+        handshakes.set(scope, (handshakes.get(scope) ?? 0) + 1)
+        await Bun.sleep(50)
+        if (scope === "unavailable") return new Response("Local handshake unavailable", { status: 503 })
+        return Response.json({ user_id: `@owned-${scope}:local` })
       }
+      firstSync.resolve()
+      await Bun.sleep(50)
+      return Response.json({ next_batch: "polled", rooms: { join: {} } })
     },
   })
+  return { peer, handshakes, firstSync: firstSync.promise }
+}
+
+test("a cold protected catalog publishes the existing managed runtime after one real startup handshake", async () => {
+  await using project = await memoryProject("channel-catalog-real-adapter")
+  await using unavailable = await memoryProject("channel-catalog-failed-adapter")
+  await fs.mkdir(path.join(project.path, ".gitignore"))
+  await fs.mkdir(path.join(unavailable.path, ".gitignore"))
+  const { peer, handshakes, firstSync } = startMatrixPeer()
   try {
     setServerUrl(peer.url)
     await writeChannelConfig(project.path, {
       matrix: { enabled: true, homeserver: peer.url.origin, token: crypto.randomUUID() },
     })
     const first = await Promise.all([readCatalog(project.path), readCatalog(project.path)])
-    await firstSync.promise
+    await firstSync
     const repeated = await readCatalog(project.path)
 
     const running = { id: "matrix", status: "configured", runtime_status: "running" }
@@ -102,10 +110,57 @@ test("a cold protected catalog publishes the existing managed runtime after one 
     ])
     const stillRunning = await readCatalog(project.path)
     expect(stillRunning.find((entry) => entry.id === "matrix")).toMatchObject(running)
-    expect({ runningAttempts: requests.whoami, declinedAttempts: requests.declined }).toEqual({
+    expect({ runningAttempts: handshakes.get("primary"), declinedAttempts: handshakes.get("unavailable") }).toEqual({
       runningAttempts: 1,
       declinedAttempts: 1,
     })
+  } finally {
+    await Instance.disposeAll()
+    await peer.stop()
+  }
+}, 60_000)
+
+test("managed restart reopens the selected project's accepted adapter without changing another project's connection", async () => {
+  await using east = await memoryProject("channel-managed-restart-east")
+  await using west = await memoryProject("channel-managed-restart-west")
+  const { peer, handshakes } = startMatrixPeer()
+  try {
+    setServerUrl(peer.url)
+    await writeChannelConfig(east.path, {
+      matrix: { enabled: true, homeserver: peer.url.origin, token: crypto.randomUUID() },
+    })
+    await writeChannelConfig(west.path, {
+      matrix: { enabled: true, homeserver: new URL("/west", peer.url).href, token: crypto.randomUUID() },
+    })
+    const running = { status: "running", channels: ["matrix"], running: true }
+    for (const project of [east, west]) {
+      const before = await request(project.path, "/channel/runtime")
+      expect({ status: before.status, body: await before.json() }).toMatchObject({ status: 200, body: running })
+    }
+    const initial = { east: handshakes.get("primary")!, west: handshakes.get("west")! }
+
+    const restarted = await request(east.path, "/channel/runtime/restart", { method: "POST" })
+    expect({ status: restarted.status, body: await restarted.json() }).toMatchObject({ status: 200, body: running })
+    expect({ east: handshakes.get("primary"), west: handshakes.get("west") }).toEqual({
+      east: initial.east + 1,
+      west: initial.west,
+    })
+
+    const alternate = new URL("/alternate", peer.url).href
+    const saved = await request(east.path, "/config", {
+      method: "PATCH",
+      body: JSON.stringify({ channel: { matrix: { homeserver: alternate } } }),
+    })
+    expect(saved.status).toBe(200)
+    const secondStart = handshakes.get("alternate")!
+    expect(secondStart).toBe(1)
+    const latest = await request(east.path, "/channel/runtime/restart", { method: "POST" })
+    expect({ status: latest.status, body: await latest.json() }).toMatchObject({ status: 200, body: running })
+    expect({ original: handshakes.get("primary"), latest: handshakes.get("alternate"), west: handshakes.get("west") })
+      .toEqual({ original: initial.east + 1, latest: secondStart + 1, west: initial.west })
+
+    const other = await request(west.path, "/channel/runtime")
+    expect({ status: other.status, body: await other.json() }).toMatchObject({ status: 200, body: running })
   } finally {
     await Instance.disposeAll()
     await peer.stop()

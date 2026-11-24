@@ -1,0 +1,60 @@
+{
+  "runtimeRequests": [
+    {
+      "time": "2026-11-24T08:50:47.369Z",
+      "requestID": "6234c7f8-41f3-4856-92e2-3071e59d670e",
+      "method": "POST",
+      "path": "/channel/runtime/restart",
+      "status": "started"
+    },
+    {
+      "time": "2026-11-24T08:50:47.597Z",
+      "requestID": "6234c7f8-41f3-4856-92e2-3071e59d670e",
+      "method": "POST",
+      "path": "/channel/runtime/restart",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 228
+    },
+    {
+      "time": "2026-11-24T08:50:48.071Z",
+      "requestID": "7e694535-8fd9-4ab3-a7f7-23db33949259",
+      "method": "POST",
+      "path": "/channel/runtime/restart",
+      "status": "started"
+    },
+    {
+      "time": "2026-11-24T08:50:48.412Z",
+      "requestID": "7e694535-8fd9-4ab3-a7f7-23db33949259",
+      "method": "POST",
+      "path": "/channel/runtime/restart",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 341
+    }
+  ],
+  "subsequentSyncs": {
+    "alternate": {
+      "project": "alternate",
+      "operation": "sync",
+      "cursor": 3,
+      "at": "2026-11-24T08:50:48.821Z"
+    },
+    "west": {
+      "project": "west",
+      "operation": "sync",
+      "cursor": 323,
+      "at": "2026-11-24T08:50:48.440Z"
+    }
+  },
+  "counts": {
+    "session": 0,
+    "message": 0,
+    "engine_task": 0,
+    "automation": 0,
+    "provider_activity_request": 0,
+    "channel_ingress_accepted": 0,
+    "channel_ingress_outcome": 0,
+    "engine_channel_binding": 0
+  }
+}

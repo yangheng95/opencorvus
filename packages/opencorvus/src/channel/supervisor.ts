@@ -11,6 +11,7 @@ const log = Log.create({ service: "channel.supervisor" })
 type RuntimeStatus = "disabled" | "unavailable" | "starting" | "running" | "stopped" | "error"
 
 type InProcessRuntime = { channels: readonly string[]; stop(): Promise<void> }
+type RuntimePlan = ReturnType<typeof desired>
 
 type State = {
   runtime?: InProcessRuntime
@@ -18,7 +19,7 @@ type State = {
   lifecycleTail: Promise<void>
   status: RuntimeStatus
   detail: string
-  signature?: string
+  plan?: RuntimePlan
   channels: string[]
   logs: string[]
 }
@@ -52,7 +53,7 @@ export namespace ChannelSupervisor {
     const current = await state()
     return withLifecycleOwner(current, async () => {
       const next = desired(config)
-      if (current.signature === next.signature && current.runtime && current.status === "running") {
+      if (current.plan?.signature === next.signature && current.runtime && current.status === "running") {
         return snapshot(current)
       }
       await syncRuntime(current, next)
@@ -62,13 +63,13 @@ export namespace ChannelSupervisor {
 
   export async function initialize(config: Record<string, unknown>) {
     const current = await state()
-    if (current.signature !== undefined) {
-      // A concurrent first read can already have published the desired signature.
+    if (current.plan) {
+      // A concurrent first read can already have accepted the plan.
       await current.lifecycleTail
       return snapshot(current)
     }
     return withLifecycleOwner(current, async () => {
-      if (current.signature === undefined) {
+      if (!current.plan) {
         try {
           await syncRuntime(current, desired(config))
         } catch (error) {
@@ -79,11 +80,12 @@ export namespace ChannelSupervisor {
     })
   }
 
-  export async function restart(config?: Record<string, unknown>) {
+  export async function restart() {
     const current = await state()
     return withLifecycleOwner(current, async () => {
-      const next = desired(config)
-      await syncRuntime(current, next, true)
+      const plan = current.plan
+      if (!plan) throw new Error("Managed channel restart requires an accepted project configuration.")
+      await syncRuntime(current, plan, true)
       return snapshot(current)
     })
   }
@@ -187,18 +189,17 @@ function desired(config?: Record<string, unknown>) {
   }
 }
 
-async function syncRuntime(current: State, next: ReturnType<typeof desired>, force = false) {
+async function syncRuntime(current: State, next: RuntimePlan, force = false) {
   await stop(current)
+  current.plan = next
   if (!next.env) {
     current.status = next.status
     current.detail = next.detail
-    current.signature = ""
     current.channels = []
     return
   }
   current.status = "starting"
   current.detail = force ? `Restarting managed runtime for ${next.channels.join(", ")}.` : next.detail
-  current.signature = next.signature
   current.channels = []
 
   try {

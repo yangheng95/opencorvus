@@ -1,0 +1,129 @@
+{
+  "runtime": [
+    {
+      "project": "east",
+      "phase": "before",
+      "route": "/channel/runtime",
+      "method": "GET",
+      "status": 200,
+      "requestID": "00edf83c-5746-40df-b988-08dd3a727b68",
+      "runtime": {
+        "status": "running",
+        "detail": "Managed runtime active for matrix.",
+        "running": true,
+        "channels": [
+          "matrix"
+        ]
+      }
+    },
+    {
+      "project": "west",
+      "phase": "before",
+      "route": "/channel/runtime",
+      "method": "GET",
+      "status": 200,
+      "requestID": "f9014a44-242a-4d52-8dc4-3e7f2d25a857",
+      "runtime": {
+        "status": "running",
+        "detail": "Managed runtime active for matrix.",
+        "running": true,
+        "channels": [
+          "matrix"
+        ]
+      }
+    },
+    {
+      "project": "east",
+      "phase": "first-restart",
+      "route": "/channel/runtime/restart",
+      "method": "POST",
+      "status": 200,
+      "requestID": "6234c7f8-41f3-4856-92e2-3071e59d670e",
+      "runtime": {
+        "status": "running",
+        "detail": "Managed runtime active for matrix.",
+        "running": true,
+        "channels": [
+          "matrix"
+        ]
+      }
+    },
+    {
+      "project": "east",
+      "phase": "restart-new-config",
+      "route": "/channel/runtime/restart",
+      "method": "POST",
+      "status": 200,
+      "requestID": "7e694535-8fd9-4ab3-a7f7-23db33949259",
+      "runtime": {
+        "status": "running",
+        "detail": "Managed runtime active for matrix.",
+        "running": true,
+        "channels": [
+          "matrix"
+        ]
+      }
+    },
+    {
+      "project": "east",
+      "phase": "after",
+      "route": "/channel/runtime",
+      "method": "GET",
+      "status": 200,
+      "requestID": "839c76ae-ba6c-4ea9-b0f8-219eae382a49",
+      "runtime": {
+        "status": "running",
+        "detail": "Managed runtime active for matrix.",
+        "running": true,
+        "channels": [
+          "matrix"
+        ]
+      }
+    },
+    {
+      "project": "west",
+      "phase": "after",
+      "route": "/channel/runtime",
+      "method": "GET",
+      "status": 200,
+      "requestID": "aa88e4d1-3e59-4504-a2a7-70303eb719f7",
+      "runtime": {
+        "status": "running",
+        "detail": "Managed runtime active for matrix.",
+        "running": true,
+        "channels": [
+          "matrix"
+        ]
+      }
+    }
+  ],
+  "configurationChange": {
+    "scope": "C:\\Users\\Public\\opencorvus-review-20261124-b557\\candidate\\east-polling",
+    "homeserver": "http://127.0.0.1:41731/alternate",
+    "status": 200,
+    "requestID": "a0b91e85-5022-4e19-a93b-efe14d16ab39"
+  },
+  "handshakes": {
+    "before": {
+      "east": 3,
+      "west": 3,
+      "alternate": 0
+    },
+    "afterFirstRestart": {
+      "east": 4,
+      "west": 3,
+      "alternate": 0
+    },
+    "afterSavedConfig": {
+      "east": 4,
+      "west": 3,
+      "alternate": 1
+    },
+    "afterLatestRestart": {
+      "east": 4,
+      "west": 3,
+      "alternate": 2
+    }
+  },
+  "persistedFilesComparedByteForByte": true
+}
