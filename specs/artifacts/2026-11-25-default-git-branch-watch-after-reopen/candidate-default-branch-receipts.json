@@ -1,0 +1,148 @@
+{
+  "rendererAsset": "main-EXy72qO_.js",
+  "browserUI": "http://127.0.0.1:41791/ui/",
+  "runtime": {
+    "schemaVersion": 1,
+    "occurrenceID": "owned-iteration-b614-candidate",
+    "outcome": "listening",
+    "url": "http://127.0.0.1:41791",
+    "pid": 18364
+  },
+  "savedConversation": {
+    "sessionID": "ses_h9vN1lVMkZezTMJXrVl3",
+    "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b614\\candidate\\git-default-branch-review",
+    "projectID": "prj_hgdJDjTVOacaD9pWKdjd",
+    "title": "B614 default Git branch review",
+    "requestID": "9c8a97ab-7946-4dc9-9094-df2f823f9c7c"
+  },
+  "actualExternalSwitch": {
+    "started": "2026-11-24T21:26:30.1729791Z",
+    "replacedHeadAt": "2026-11-24T21:26:30.2596491Z",
+    "commit": "b12b36e303aeecc1271a0080abb518ce7ce68619",
+    "branch": "default-observer",
+    "gitStatus": []
+  },
+  "worktreeMonitoringEnabled": false,
+  "completeRuntimeBootstrapCount": 0,
+  "nativeHeadAndProjectedEvents": [
+    {
+      "at": "2026-11-24T21:25:59.279Z",
+      "source": "/global/event",
+      "status": 200,
+      "kind": "ready"
+    },
+    {
+      "at": "2026-11-24T21:25:59.282Z",
+      "source": "/work-ledger/events",
+      "status": 200,
+      "kind": "ready"
+    },
+    {
+      "at": "2026-11-24T21:26:30.518Z",
+      "source": "/work-ledger/events",
+      "row": {
+        "type": "work-ledger.changed",
+        "sourceType": "vcs.branch.updated",
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b614\\candidate\\git-default-branch-review",
+        "sequence": 0
+      }
+    },
+    {
+      "at": "2026-11-24T21:26:30.518Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b614\\candidate\\git-default-branch-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:25f6aed3-e2b2-4437-96f2-69d862818d05",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b614\\candidate\\git-default-branch-review\\.git\\HEAD",
+            "event": "change"
+          }
+        }
+      }
+    },
+    {
+      "at": "2026-11-24T21:26:30.668Z",
+      "source": "/global/event",
+      "row": {
+        "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b614\\candidate\\git-default-branch-review",
+        "payload": {
+          "occurrenceID": "bus-occurrence:36a0f34a-9e7e-4a8b-ad18-0477609e6f46",
+          "type": "file.watcher.updated",
+          "properties": {
+            "file": "C:\\Users\\Public\\opencorvus-review-20261125-b614\\candidate\\git-default-branch-review\\.git\\HEAD",
+            "event": "change"
+          }
+        }
+      }
+    }
+  ],
+  "actualGitReadReceipts": [
+    {
+      "at": "2026-11-24T21:26:12.29Z",
+      "route": "/vcs",
+      "id": "2405c07c-ec4c-4406-ad29-f70db3f51707",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:26:19.323Z",
+      "route": "/vcs",
+      "id": "1c1720ef-aaa6-4119-bfda-b099b6a787dd",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:26:19.82Z",
+      "route": "/vcs/branches",
+      "id": "6ed2b3d4-20e8-49f9-a504-a3ea64371dff",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:26:31.765Z",
+      "route": "/vcs",
+      "id": "cb0f8fc9-1a09-42a3-83a8-f9fbaa5f8d69",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:26:38.238Z",
+      "route": "/vcs/branches",
+      "id": "bcfa8a95-6b91-4f19-8ca4-057ff11f88db",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:27:25.677Z",
+      "route": "/vcs",
+      "id": "2978a864-fad7-4b3f-a4ca-7acc9ac24a95",
+      "status": 200
+    },
+    {
+      "at": "2026-11-24T21:27:25.99Z",
+      "route": "/vcs/branches",
+      "id": "f683b76e-9730-4780-85e6-c49232bfd059",
+      "status": 200
+    }
+  ],
+  "finalRead": {
+    "protectedGitignoreBytesUnchanged": true,
+    "checkedBranch": "default-observer",
+    "sessionReceipt": "44d587c6-4742-47dd-a7db-ab08b40f989d",
+    "vcs": {
+      "initialized": true,
+      "branch": "default-observer",
+      "commit": "b12b36e",
+      "clean": true,
+      "dirty": false,
+      "staged": 0,
+      "modified": 0,
+      "untracked": 0,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    },
+    "protectedGitignoreReadOnly": true,
+    "vcsReceipt": "2978a864-fad7-4b3f-a4ca-7acc9ac24a95",
+    "branchesReceipt": "f683b76e-9730-4780-85e6-c49232bfd059",
+    "messageCount": 0
+  }
+}

@@ -360,24 +360,27 @@ export namespace FileWatcher {
       const lifecycle = InstanceLifecycleContext.use()
       const runPersistentCallback = persistentCallbackRunner(lifecycle)
       const cfg = await Config.get()
-      const backend = (() => {
-        if (process.platform === "win32") return "windows"
-        if (process.platform === "darwin") return "fs-events"
-        if (process.platform === "linux") return "inotify"
-        throw new Error(`watcher backend not supported on platform: ${process.platform}`)
-      })()
-
-      const parcelWatcher = parcel()
-      log.info("watcher backend", { platform: process.platform, backend })
-
       const cfgIgnores = cfg.watcher?.ignore ?? []
       const projectDirectory = ProjectInstanceContext.use().directory
-      const subscribe = (dir: string, ignore: string[]) =>
-        subscribeWithParcel(parcelWatcher, dir, ignore, backend, runPersistentCallback)
 
       const initialized = await initializeSubscriptions(async (subscriptions) => {
         if (Flag.OPENCORVUS_EXPERIMENTAL_FILEWATCHER) {
-          subscriptions.push(await subscribe(projectDirectory, [...FileIgnore.PATTERNS, ...cfgIgnores]))
+          const backend = (() => {
+            if (process.platform === "win32") return "windows"
+            if (process.platform === "darwin") return "fs-events"
+            if (process.platform === "linux") return "inotify"
+            throw new Error(`watcher backend not supported on platform: ${process.platform}`)
+          })()
+          log.info("watcher backend", { platform: process.platform, backend })
+          subscriptions.push(
+            await subscribeWithParcel(
+              parcel(),
+              projectDirectory,
+              [...FileIgnore.PATTERNS, ...cfgIgnores],
+              backend,
+              runPersistentCallback,
+            ),
+          )
         }
 
         if (Project.isGitRepo(projectDirectory)) {

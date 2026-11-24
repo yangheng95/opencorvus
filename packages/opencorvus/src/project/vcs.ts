@@ -736,7 +736,7 @@ export namespace Vcs {
     if (!initialized) {
       return parse("", { initialized: false, hasRemote: false })
     }
-    if (Flag.OPENCORVUS_EXPERIMENTAL_FILEWATCHER && !Flag.OPENCORVUS_EXPERIMENTAL_DISABLE_FILEWATCHER) {
+    if (!Flag.OPENCORVUS_EXPERIMENTAL_DISABLE_FILEWATCHER) {
       try {
         await init()
         await FileWatcher.init()

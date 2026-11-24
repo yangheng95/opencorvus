@@ -658,6 +658,37 @@ test("global ledger stream fans out durable Task events to every affected projec
   }
 }, 30_000)
 
+test("a passive Git read observes external branch switches through the default HEAD watcher", async () => {
+  await using project = await memoryProject("ledger-passive-head-watch")
+  const branch = "external-observer"
+  const options = { cwd: project.path, timeoutProfile: "default" } as const
+  expect((await hostGit(["branch", branch], options)).exitCode).toBe(0)
+  const { next, close } = await openLedgerEvents()
+  try {
+    expect((await next("work-ledger.connected")).type).toBe("work-ledger.connected")
+    const read = () => Server.App().request("/vcs", { headers: { "x-opencorvus-directory": project.path } })
+    const initial = await read()
+    const before = await initial.json() as { branch: string; commit: string }
+    expect({ status: initial.status, ...before }).toMatchObject({
+      status: 200, initialized: true, clean: true, commit: expect.any(String),
+    })
+    expect((await hostGit(["switch", branch], options)).exitCode).toBe(0)
+    expect(await next("work-ledger.changed", "vcs.branch.updated")).toEqual({
+      type: "work-ledger.changed",
+      sourceType: "vcs.branch.updated",
+      directory: project.path,
+      sequence: 0,
+    })
+    const after = await read()
+    expect({ status: after.status, body: await after.json() }).toMatchObject({
+      status: 200,
+      body: { branch, commit: before.commit, clean: true },
+    })
+  } finally {
+    await close()
+  }
+}, 30_000)
+
 test("accepted branch switches announce their exact workspaces on the public stream", async () => {
   await using first = await memoryProject("ledger-switch-first")
   await using second = await memoryProject("ledger-switch-second")
