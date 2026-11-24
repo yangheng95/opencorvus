@@ -1,0 +1,487 @@
+{
+  "catalog": [
+    {
+      "id": "privatemode-ai",
+      "name": "Privatemode AI",
+      "modelCount": 5
+    },
+    {
+      "id": "moonshotai-cn",
+      "name": "Moonshot AI (China)",
+      "modelCount": 6
+    },
+    {
+      "id": "firmware",
+      "name": "Firmware",
+      "modelCount": 22
+    },
+    {
+      "id": "nova",
+      "name": "Nova",
+      "modelCount": 2
+    },
+    {
+      "id": "lucidquery",
+      "name": "LucidQuery AI",
+      "modelCount": 2
+    },
+    {
+      "id": "moonshotai",
+      "name": "Moonshot AI",
+      "modelCount": 6
+    },
+    {
+      "id": "302ai",
+      "name": "302.AI",
+      "modelCount": 64
+    },
+    {
+      "id": "zai-coding-plan",
+      "name": "Z.AI Coding Plan",
+      "modelCount": 8
+    },
+    {
+      "id": "ollama-cloud",
+      "name": "Ollama Cloud",
+      "modelCount": 29
+    },
+    {
+      "id": "xiaomi",
+      "name": "Xiaomi",
+      "modelCount": 1
+    },
+    {
+      "id": "alibaba",
+      "name": "Alibaba",
+      "modelCount": 39
+    },
+    {
+      "id": "xai",
+      "name": "xAI",
+      "modelCount": 22
+    },
+    {
+      "id": "vultr",
+      "name": "Vultr",
+      "modelCount": 5
+    },
+    {
+      "id": "nvidia",
+      "name": "Nvidia",
+      "modelCount": 70
+    },
+    {
+      "id": "cohere",
+      "name": "Cohere",
+      "modelCount": 7
+    },
+    {
+      "id": "upstage",
+      "name": "Upstage",
+      "modelCount": 3
+    },
+    {
+      "id": "groq",
+      "name": "Groq",
+      "modelCount": 9
+    },
+    {
+      "id": "bailing",
+      "name": "Bailing",
+      "modelCount": 2
+    },
+    {
+      "id": "github-copilot",
+      "name": "GitHub Copilot",
+      "modelCount": 19
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral",
+      "modelCount": 26
+    },
+    {
+      "id": "abacus",
+      "name": "Abacus",
+      "modelCount": 55
+    },
+    {
+      "id": "vercel",
+      "name": "Vercel AI Gateway",
+      "modelCount": 184
+    },
+    {
+      "id": "nebius",
+      "name": "Nebius Token Factory",
+      "modelCount": 15
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "modelCount": 3
+    },
+    {
+      "id": "alibaba-cn",
+      "name": "Alibaba (China)",
+      "modelCount": 61
+    },
+    {
+      "id": "google-vertex-anthropic",
+      "name": "Vertex (Anthropic)",
+      "modelCount": 9
+    },
+    {
+      "id": "novita-ai",
+      "name": "NovitaAI",
+      "modelCount": 79
+    },
+    {
+      "id": "venice",
+      "name": "Venice AI",
+      "modelCount": 26
+    },
+    {
+      "id": "siliconflow-cn",
+      "name": "SiliconFlow (China)",
+      "modelCount": 72
+    },
+    {
+      "id": "vivgrid",
+      "name": "Vivgrid",
+      "modelCount": 5
+    },
+    {
+      "id": "chutes",
+      "name": "Chutes",
+      "modelCount": 62
+    },
+    {
+      "id": "kimi-for-coding",
+      "name": "Kimi For Coding",
+      "modelCount": 2
+    },
+    {
+      "id": "cortecs",
+      "name": "Cortecs",
+      "modelCount": 16
+    },
+    {
+      "id": "github-models",
+      "name": "GitHub Models",
+      "modelCount": 55
+    },
+    {
+      "id": "togetherai",
+      "name": "Together AI",
+      "modelCount": 16
+    },
+    {
+      "id": "azure",
+      "name": "Azure",
+      "modelCount": 93
+    },
+    {
+      "id": "baseten",
+      "name": "Baseten",
+      "modelCount": 6
+    },
+    {
+      "id": "moark",
+      "name": "Moark",
+      "modelCount": 2
+    },
+    {
+      "id": "siliconflow",
+      "name": "SiliconFlow",
+      "modelCount": 74
+    },
+    {
+      "id": "helicone",
+      "name": "Helicone",
+      "modelCount": 91
+    },
+    {
+      "id": "huggingface",
+      "name": "Hugging Face",
+      "modelCount": 16
+    },
+    {
+      "id": "opencorvus",
+      "name": "OpenCorvus Zen",
+      "modelCount": 29
+    },
+    {
+      "id": "fastrouter",
+      "name": "FastRouter",
+      "modelCount": 14
+    },
+    {
+      "id": "minimax",
+      "name": "MiniMax (minimax.io)",
+      "modelCount": 2
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "modelCount": 26
+    },
+    {
+      "id": "google-vertex",
+      "name": "Vertex",
+      "modelCount": 20
+    },
+    {
+      "id": "cloudflare-workers-ai",
+      "name": "Cloudflare Workers AI",
+      "modelCount": 54
+    },
+    {
+      "id": "inception",
+      "name": "Inception",
+      "modelCount": 2
+    },
+    {
+      "id": "wandb",
+      "name": "Weights & Biases",
+      "modelCount": 10
+    },
+    {
+      "id": "cloudflare-ai-gateway",
+      "name": "Cloudflare AI Gateway",
+      "modelCount": 64
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI",
+      "modelCount": 40
+    },
+    {
+      "id": "zhipuai-coding-plan",
+      "name": "Zhipu AI Coding Plan",
+      "modelCount": 8
+    },
+    {
+      "id": "minimax-cn",
+      "name": "MiniMax (minimaxi.com)",
+      "modelCount": 2
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity",
+      "modelCount": 3
+    },
+    {
+      "id": "openrouter",
+      "name": "OpenRouter",
+      "modelCount": 149
+    },
+    {
+      "id": "zenmux",
+      "name": "ZenMux",
+      "modelCount": 55
+    },
+    {
+      "id": "minimax-coding-plan",
+      "name": "MiniMax Coding Plan (minimax.io)",
+      "modelCount": 2
+    },
+    {
+      "id": "ovhcloud",
+      "name": "OVHcloud AI Endpoints",
+      "modelCount": 13
+    },
+    {
+      "id": "v0",
+      "name": "v0",
+      "modelCount": 3
+    },
+    {
+      "id": "iflowcn",
+      "name": "iFlow",
+      "modelCount": 14
+    },
+    {
+      "id": "synthetic",
+      "name": "Synthetic",
+      "modelCount": 26
+    },
+    {
+      "id": "deepinfra",
+      "name": "Deep Infra",
+      "modelCount": 9
+    },
+    {
+      "id": "zhipuai",
+      "name": "Zhipu AI",
+      "modelCount": 8
+    },
+    {
+      "id": "submodel",
+      "name": "submodel",
+      "modelCount": 9
+    },
+    {
+      "id": "nano-gpt",
+      "name": "NanoGPT",
+      "modelCount": 21
+    },
+    {
+      "id": "zai",
+      "name": "Z.AI",
+      "modelCount": 8
+    },
+    {
+      "id": "inference",
+      "name": "Inference",
+      "modelCount": 9
+    },
+    {
+      "id": "requesty",
+      "name": "Requesty",
+      "modelCount": 20
+    },
+    {
+      "id": "morph",
+      "name": "Morph",
+      "modelCount": 3
+    },
+    {
+      "id": "lmstudio",
+      "name": "LMStudio",
+      "modelCount": 3
+    },
+    {
+      "id": "friendli",
+      "name": "Friendli",
+      "modelCount": 7
+    },
+    {
+      "id": "sap-ai-core",
+      "name": "SAP AI Core",
+      "modelCount": 15
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "modelCount": 21
+    },
+    {
+      "id": "aihubmix",
+      "name": "AIHubMix",
+      "modelCount": 37
+    },
+    {
+      "id": "gitlab",
+      "name": "GitLab Duo",
+      "modelCount": 8
+    },
+    {
+      "id": "fireworks-ai",
+      "name": "Fireworks AI",
+      "modelCount": 17
+    },
+    {
+      "id": "io-net",
+      "name": "IO.NET",
+      "modelCount": 17
+    },
+    {
+      "id": "modelscope",
+      "name": "ModelScope",
+      "modelCount": 7
+    },
+    {
+      "id": "azure-cognitive-services",
+      "name": "Azure Cognitive Services",
+      "modelCount": 91
+    },
+    {
+      "id": "llama",
+      "name": "Llama",
+      "modelCount": 7
+    },
+    {
+      "id": "scaleway",
+      "name": "Scaleway",
+      "modelCount": 14
+    },
+    {
+      "id": "amazon-bedrock",
+      "name": "Amazon Bedrock",
+      "modelCount": 67
+    },
+    {
+      "id": "poe",
+      "name": "Poe",
+      "modelCount": 115
+    },
+    {
+      "id": "minimax-cn-coding-plan",
+      "name": "MiniMax Coding Plan (minimaxi.com)",
+      "modelCount": 2
+    },
+    {
+      "id": "cerebras",
+      "name": "Cerebras",
+      "modelCount": 3
+    },
+    {
+      "id": "llmgateway",
+      "name": "LLM Gateway",
+      "modelCount": 184
+    },
+    {
+      "id": "snowflake-cortex",
+      "name": "Snowflake Cortex",
+      "modelCount": 21
+    },
+    {
+      "id": "kilo",
+      "name": "Kilo Gateway",
+      "modelCount": 1
+    },
+    {
+      "id": "fixture-warehouse-relay",
+      "name": "Warehouse receiving model relay",
+      "modelCount": 1
+    },
+    {
+      "id": "fixture-handoff-relay",
+      "name": "Handoff desk model relay",
+      "modelCount": 2
+    }
+  ],
+  "custom": {
+    "fixture-warehouse-relay": {
+      "name": "Warehouse receiving model relay",
+      "api": "http://127.0.0.1:46901/v1",
+      "env": [],
+      "models": {
+        "warehouse-label-model": {
+          "name": "warehouse-label-model",
+          "tool_call": true
+        }
+      }
+    },
+    "fixture-handoff-relay": {
+      "name": "Handoff desk model relay",
+      "api": "http://127.0.0.1:46902/v1",
+      "env": [],
+      "models": {
+        "handoff-small-model": {
+          "name": "handoff-small-model",
+          "tool_call": true
+        },
+        "handoff-large-model": {
+          "name": "handoff-large-model",
+          "tool_call": true
+        }
+      }
+    }
+  },
+  "connectedIds": [
+    "fixture-warehouse-relay",
+    "fixture-handoff-relay"
+  ],
+  "issues": []
+}

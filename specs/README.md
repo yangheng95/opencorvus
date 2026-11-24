@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [服务商搜索结果的分页焦点](records/2026-11/2026-11-24-provider-search-page-focus.md)
 - [多步任务技能搜索的分页焦点](records/2026-11/2026-11-24-mission-skill-search-page-focus.md)
 - [项目笔记搜索的分页焦点](records/2026-11/2026-11-24-memory-search-page-focus.md)
 - [设置侧栏匹配标签的分页焦点](records/2026-11/2026-11-24-settings-search-tab-page-focus.md)
