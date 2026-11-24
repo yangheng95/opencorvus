@@ -1,6 +1,8 @@
 import { createStore, reconcile } from "solid-js/store"
-import { parseQuotation, type Quotation } from "./quotation"
+import { parseQuotation, quotedPrompt, type Quotation } from "./quotation"
 import { randomUUID } from "../utils/random-id"
+import { projectDirectoryKey } from "../utils/project-directory"
+import { isWindowsPath } from "../utils/server-path"
 import { composerMentionDirectiveRanges, setComposerMentionDirectiveSelected } from "./composer-mention"
 import { openBrowserRecord, type BrowserRecord, type BrowserRecordMutation } from "./browser-record-storage"
 
@@ -30,7 +32,37 @@ export function composerDraftKey(...parts: string[]): string {
 export function workspaceComposerDraftKey(taskID: string, sessionID: string, directory: string): string {
   if (taskID) return composerDraftKey("task", taskID)
   if (sessionID) return composerDraftKey("session", sessionID)
-  return directory ? composerDraftKey("launcher", "new", directory) : composerDraftKey("launcher", "new")
+  if (!directory) return composerDraftKey("launcher", "new")
+  const project = isWindowsPath(directory) ? projectDirectoryKey(directory) : directory
+  return composerDraftKey("launcher", "new", project)
+}
+
+function migratedProjectDraftKey(key: string): string {
+  const prefix = "launcher:new:"
+  if (!key.startsWith(prefix)) return key
+  try {
+    const directory = decodeURIComponent(key.slice(prefix.length))
+    return isWindowsPath(directory) ? workspaceComposerDraftKey("", "", directory) : key
+  } catch {
+    return key
+  }
+}
+
+export function migrateProjectComposerDrafts(records: ComposerDraftRecords): ComposerDraftRecords {
+  const groups = new Map<string, ComposerDraftEntry[]>()
+  for (const [key, entry] of Object.entries(records)) {
+    const projectKey = migratedProjectDraftKey(key)
+    const group = groups.get(projectKey)
+    if (group) group.push(entry)
+    else groups.set(projectKey, [entry])
+  }
+  return Object.fromEntries([...groups].map(([key, entries]) => {
+    if (entries.length === 1) return [key, entries[0]!]
+    entries.sort((left, right) => left.updated - right.updated)
+    const latest = entries.at(-1)!
+    const texts = [...new Set(entries.map((entry) => quotedPrompt(entry.text, entry.quotation)))]
+    return [key, texts.length === 1 ? latest : { text: texts.join("\n\n"), updated: latest.updated }]
+  }))
 }
 
 function connectionIndependentText(text: string): string {
@@ -216,6 +248,7 @@ export function startComposerDraftStorage(): () => void {
       store: "drafts",
       key: "records",
       migration: { read: readLegacyDrafts, retire: retireLegacyDrafts },
+      upgrade: { version: 2, migrate: migrateProjectComposerDrafts },
     }),
   }
   draftStorage = owner

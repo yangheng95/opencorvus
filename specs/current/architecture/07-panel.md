@@ -2582,8 +2582,12 @@ storage, rendering and model input. Side replies can be quoted back into the
 main composer for the user to review and send.
 Composer drafts are local to the current browser origin. On upgrade, the draft
 database imports and retires the previous browser storage entry after committing
-the import. Each mutation reads and changes the current owning scope in one
-database transaction. Multiple tabs can therefore author different drafts
+the import. Windows project launchers use the existing project directory
+identity. A versioned database upgrade consolidates earlier spellings. It keeps
+a single complete draft and combines distinct authored sections in the editable
+draft in chronological order. Other project and conversation drafts retain
+their established scopes. Each mutation reads and changes the current owning
+scope in one database transaction. Multiple tabs can author different drafts
 independently. Tabs learn of a committed write and read the database again.
 The writing area projects each tab's pending edits immediately. A send reuses
 or reserves its request identity in a transaction before being dispatched.

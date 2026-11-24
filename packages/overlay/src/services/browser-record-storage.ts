@@ -16,16 +16,36 @@ export function openBrowserRecord<RecordValue>(options: {
   store: string
   key: string
   migration: { read: () => RecordValue; retire: () => void }
+  upgrade?: { version: number; migrate: (records: RecordValue) => RecordValue }
 }): Promise<BrowserRecord<RecordValue>> {
-  const { name, store, key, migration } = options
+  const { name, store, key, migration, upgrade } = options
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 1)
-    request.onupgradeneeded = () => {
-      try {
-        request.result.createObjectStore(store).put(migration.read(), key)
-      } catch (error) {
+    const request = indexedDB.open(name, upgrade?.version ?? 1)
+    request.onupgradeneeded = ({ oldVersion }) => {
+      const abort = (error: unknown) => {
         request.transaction?.abort()
         reject(error)
+      }
+      try {
+        const objectStore = oldVersion === 0
+          ? request.result.createObjectStore(store)
+          : request.transaction!.objectStore(store)
+        const writeMigrated = (read: () => RecordValue) => {
+          try {
+            const records = read()
+            objectStore.put(upgrade ? upgrade.migrate(records) : records, key)
+          } catch (error) {
+            abort(error)
+          }
+        }
+        if (oldVersion === 0) {
+          writeMigrated(migration.read)
+        } else {
+          const read = objectStore.get(key)
+          read.onsuccess = () => writeMigrated(() => read.result)
+        }
+      } catch (error) {
+        abort(error)
       }
     }
     request.onerror = () => reject(request.error)

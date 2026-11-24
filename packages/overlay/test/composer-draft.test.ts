@@ -7,6 +7,7 @@ import {
   clearComposerDraftRevision,
   composerSubmission,
   forgetComposerSubmission,
+  migrateProjectComposerDrafts,
   moveComposerDraft,
   nextComposerDraftRecords,
   parseComposerDraftRecords,
@@ -20,6 +21,72 @@ import {
 afterEach(() => setComposerDraftStore("drafts", reconcile({})))
 
 describe("composer draft records", () => {
+  test("Windows launcher drafts use the same project key for equivalent directory spellings", () => {
+    const canonical = composerDraftKey("launcher", "new", "c:/projects/alpha")
+    expect([
+      workspaceComposerDraftKey("", "", "C:\\Projects\\Alpha"),
+      workspaceComposerDraftKey("", "", "c:/projects/ALPHA/"),
+      workspaceComposerDraftKey("", "", "/projects/Alpha"),
+      workspaceComposerDraftKey("", "ses_project", "C:/Projects/Alpha"),
+    ]).toEqual([
+      canonical,
+      canonical,
+      composerDraftKey("launcher", "new", "/projects/Alpha"),
+      composerDraftKey("session", "ses_project"),
+    ])
+  })
+
+  test("the project draft upgrade retains different authored sections and quotation text in order", () => {
+    const first = composerDraftKey("launcher", "new", "C:\\Projects\\Alpha")
+    const later = composerDraftKey("launcher", "new", "C:/Projects/ALPHA")
+    const independent = composerDraftKey("launcher", "new", "/projects/Alpha")
+    const conversation = composerDraftKey("session", "ses_saved")
+    const independentDraft = { text: "separate project", updated: 150 }
+    const sessionDraft = { text: "saved conversation reply", updated: 200 }
+    expect(migrateProjectComposerDrafts({
+      [later]: { text: "second launcher draft", updated: 300 },
+      [independent]: independentDraft,
+      [first]: {
+        text: "first launcher draft",
+        quotation: { text: "the original reference", sessionID: "ses_ref", messageID: "msg_ref" },
+        submission: { messageID: "msg_first", text: "first exact request" },
+        updated: 100,
+      },
+      [conversation]: sessionDraft,
+    })).toEqual({
+      [composerDraftKey("launcher", "new", "c:/projects/alpha")]: {
+        text: "> the original reference\n\nfirst launcher draft\n\nsecond launcher draft",
+        updated: 300,
+      },
+      [independent]: independentDraft,
+      [conversation]: sessionDraft,
+    })
+  })
+
+  test("the project draft upgrade keeps a single complete draft and the latest equivalent author record", () => {
+    const quote = { text: "reference", sessionID: "ses_ref", messageID: "msg_ref" }
+    const alpha = {
+      text: "alpha question",
+      quotation: quote,
+      submission: { messageID: "msg_alpha", text: "alpha request" },
+      updated: 100,
+    }
+    const beta = {
+      text: "beta question",
+      quotation: quote,
+      submission: { messageID: "msg_beta", text: "beta request" },
+      updated: 300,
+    }
+    expect(migrateProjectComposerDrafts({
+      [composerDraftKey("launcher", "new", "C:\\Alpha")]: alpha,
+      [composerDraftKey("launcher", "new", "C:/BETA/")]: { ...beta, updated: 200 },
+      [composerDraftKey("launcher", "new", "C:\\Beta")]: beta,
+    })).toEqual({
+      [composerDraftKey("launcher", "new", "c:/alpha")]: alpha,
+      [composerDraftKey("launcher", "new", "c:/beta")]: beta,
+    })
+  })
+
   test("matches independent snapshots of the same complete author revision", () => {
     setComposerDraftStore("drafts", reconcile({ source: {
       text: "author question", updated: 100,
