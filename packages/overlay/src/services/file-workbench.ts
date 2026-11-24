@@ -339,7 +339,6 @@ function sameFileEditorTarget(left: FileEditorTarget | null, right: FileEditorTa
 function commitFileEditorTarget(target: FileEditorTarget | null): void {
   setSelectedFileTarget(target)
   setFileWorkbenchOpen(!!target)
-  if (target) setFileEditorRevealRevision((current) => current + 1)
 }
 
 async function prepareFileEditorTarget(
@@ -389,9 +388,7 @@ async function prepareFileEditorTarget(
         if (!held) return
         batch(() => {
           const next = target()
-          if (sameFileEditorTarget(current, next)) {
-            if (next) setFileEditorRevealRevision((value) => value + 1)
-          } else commitFileEditorTarget(next)
+          if (!sameFileEditorTarget(current, next)) commitFileEditorTarget(next)
           try {
             boundary?.commit()
           } finally {
@@ -423,7 +420,10 @@ async function requestFileEditorTarget(
   try {
     assertApiAuthorityCurrent(authority)
     if (!result.handle.isCurrent()) return false
-    result.handle.commit()
+    batch(() => {
+      result.handle.commit()
+      if (target) setFileEditorRevealRevision((value) => value + 1)
+    })
     return true
   } finally {
     result.handle.release()

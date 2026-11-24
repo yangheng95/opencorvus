@@ -1,0 +1,57 @@
+{
+  "listing": {
+    "status": 200,
+    "requestID": "cf898848-5326-4147-9fa5-81dd2a144a73",
+    "body": [
+      {
+        "name": "ready.txt",
+        "path": "handoff-notes\\ready.txt",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b598\\verified\\branch-review\\handoff-notes\\ready.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "sibling.txt",
+        "path": "handoff-notes\\sibling.txt",
+        "absolute": "C:\\Users\\Public\\opencorvus-review-20261125-b598\\verified\\branch-review\\handoff-notes\\sibling.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      }
+    ]
+  },
+  "reads": [
+    {
+      "path": "handoff-notes/ready.txt",
+      "status": 200,
+      "requestID": "634a8932-d7d4-4d9a-9d64-d1b5d45ab5ed",
+      "body": {
+        "type": "text",
+        "content": "Isolated checklist for file rename review.\r\nSaved before rename.",
+        "revision": "b0f1c7b2c9f58ceab02db3d4de386ae2a71812b6da346add1ccbcc0637720e56",
+        "resourceID": "7637a0178b18e9b1b5a5ac74bf2bef15cb152ec935fb9f3f7fe9959c3b1ed19f"
+      }
+    },
+    {
+      "path": "handoff-notes/sibling.txt",
+      "status": 200,
+      "requestID": "10b0d08f-11c0-4f51-bc45-2131241afb06",
+      "body": {
+        "type": "text",
+        "content": "An independent sibling file.\r\n",
+        "revision": "c85324f08278e348e2fe6775838cf4f9f42edf0f69835788d5654ac15f7ac2bb",
+        "resourceID": "0558969901c947aa4e1a0de263228e020fdf3b93a1e168f6aac5555640b405ab"
+      }
+    }
+  ],
+  "physical": [
+    "ready.txt",
+    "sibling.txt"
+  ],
+  "gitStatus": [
+    " D notes/checklist.txt",
+    " D notes/sibling.txt",
+    "?? handoff-notes/"
+  ]
+}

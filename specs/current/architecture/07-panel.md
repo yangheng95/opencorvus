@@ -5560,7 +5560,9 @@ retain their destination focus. File presentation observes only the canonical
 open flag and explicit reveal revision through Solid's `on` utility. Reading the
 current primary surface inside that handler cannot turn a page switch into a
 new file reveal. New and repeated explicit file requests still reveal the File
-tab through the existing opener.
+tab through the existing opener. Explorer move and rename receipts update an
+affected open file's target in place, leaving Explorer active for its existing
+selection and focus handoff.
 Compression does not change tab density, ordering, selection, close behavior,
 or focus ownership. Open-tab membership preserves insertion order while one
 selected-tab ID independently owns activation, so switching tabs never moves a
