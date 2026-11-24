@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [项目笔记搜索摘要显示原文命中片段](records/2026-11/2026-11-24-memory-search-matching-excerpts.md)
 - [项目笔记按笔记分配搜索名额](records/2026-11/2026-11-24-memory-search-distinct-notes.md)
 - [在多步任务搜索结果中分页浏览当前布局](records/2026-11/2026-11-24-mission-board-search-page-focus.md)
 - [在归档搜索中分页浏览可见记录](records/2026-11/2026-11-24-archive-search-page-focus.md)

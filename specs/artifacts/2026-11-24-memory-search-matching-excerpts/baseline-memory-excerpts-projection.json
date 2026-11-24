@@ -1,0 +1,85 @@
+{
+  "queryResults": {
+    "intakeledger": [
+      {
+        "chunkId": "mck_g0Vbr7GSx00gAmOuMpP8",
+        "fileId": "mem_g0Vbr7GSx00ajUrTYXoK",
+        "fileTitle": "Night dispatch checklist",
+        "content": "Bring the original handoff folder to the stock desk near the entrance and place it in the tray facing the loading doors. Record the date on the front page and confirm the rows are numbered in order before the evening shift starts. Every supervisor keeps a signed copy at the end of the aisle. A spare paper label is beside the checklist binder. Each shift keeps its own record of routine cart movements and shelf checks. Keep notes together so staff can compare signatures. If a cart is missing, check the holding area and log its previous position before reporting the count. Late dispatch requires barcoded intakeledger bins by the south ramp. Ask the lead on duty to check the blue receipt. The rest of the front page records carrier name, arrival time, bay number, and the initials of the employee who accepted the shipment. We compare this with the paper record on the last day of the week.",
+        "scope": "project",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "score": 0.21694248186451398,
+        "timeCreated": 1795489095291
+      },
+      {
+        "chunkId": "mck_g0Vbr7GSu00tapQYWRAe",
+        "fileId": "mem_g0Vbr7GSs00bPXtzZf1d",
+        "fileTitle": "Morning dock special instructions",
+        "content": "Bring the original handoff folder to the stock desk near the entrance and place it in the tray facing the loading doors. Record the date on the front page and confirm the rows are numbered in order before the evening shift starts. Every supervisor keeps a signed copy at the end of the aisle. A spare paper label is beside the checklist binder. Each shift keeps its own record of routine cart movements and shelf checks. Keep notes together so staff can compare signatures. If a cart is missing, check the holding area and log its previous position before reporting the count. The actual priority is café intakeledger at station seven. Keep the green receipt with the original inspection slip. The rest of the front page records carrier name, arrival time, bay number, and the initials of the employee who accepted the shipment. We compare this with the paper record on the last day of the week.",
+        "scope": "project",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "score": 0.21694248328933052,
+        "timeCreated": 1795489095288
+      }
+    ],
+    "CAFE intakeledger": [
+      {
+        "chunkId": "mck_g0Vbr7GSu00tapQYWRAe",
+        "fileId": "mem_g0Vbr7GSs00bPXtzZf1d",
+        "fileTitle": "Morning dock special instructions",
+        "content": "Bring the original handoff folder to the stock desk near the entrance and place it in the tray facing the loading doors. Record the date on the front page and confirm the rows are numbered in order before the evening shift starts. Every supervisor keeps a signed copy at the end of the aisle. A spare paper label is beside the checklist binder. Each shift keeps its own record of routine cart movements and shelf checks. Keep notes together so staff can compare signatures. If a cart is missing, check the holding area and log its previous position before reporting the count. The actual priority is café intakeledger at station seven. Keep the green receipt with the original inspection slip. The rest of the front page records carrier name, arrival time, bay number, and the initials of the employee who accepted the shipment. We compare this with the paper record on the last day of the week.",
+        "scope": "project",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "score": 0.35640044644317787,
+        "timeCreated": 1795489095288
+      }
+    ],
+    "servicebench": [
+      {
+        "chunkId": "mck_g0Vbr7GT000ibgk9Fq2q",
+        "fileId": "mem_g0Vbr7GSz006FVdHcZ8p",
+        "fileTitle": "Checks before forklift maintenance",
+        "content": "servicebench. The service panel manual is in the cabinet by the west wall.",
+        "scope": "project",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "score": 0.5056019942241118,
+        "timeCreated": 1795489095294
+      }
+    ],
+    "unmapped-927555": []
+  },
+  "positions": [
+    {
+      "title": "Night dispatch checklist",
+      "id": "mem_g0Vbr7GSx00ajUrTYXoK",
+      "chunkId": "mck_g0Vbr7GSx00gAmOuMpP8",
+      "matchPosition": 609,
+      "opening": "Bring the original handoff folder to the stock desk near the entrance and place it in the tray facing the loading doors. Record the date on the front page and confirm the rows are numbered in order be"
+    },
+    {
+      "title": "Morning dock special instructions",
+      "id": "mem_g0Vbr7GSs00bPXtzZf1d",
+      "chunkId": "mck_g0Vbr7GSu00tapQYWRAe",
+      "matchPosition": 605,
+      "opening": "Bring the original handoff folder to the stock desk near the entrance and place it in the tray facing the loading doors. Record the date on the front page and confirm the rows are numbered in order be"
+    }
+  ],
+  "prototype": [
+    [
+      "Morning dock special instructions",
+      "…The actual priority is café intakeledger at station seven. Keep the green…"
+    ]
+  ]
+}
