@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时计划跟进项目改名并保留真实绑定](records/2026-11/2026-11-24-scheduled-project-name-peer-refresh.md)
 - [定时计划启停和定义修改同步到已打开页面](records/2026-11/2026-11-24-scheduled-definition-peer-refresh.md)
 - [原路径缺失时将编辑草稿保存为项目副本](records/2026-11/2026-11-24-save-missing-file-draft-copy.md)
 - [父目录改名后立即重查已打开的子文件](records/2026-11/2026-11-24-open-file-after-parent-rename.md)
