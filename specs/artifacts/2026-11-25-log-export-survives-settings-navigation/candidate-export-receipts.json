@@ -1,0 +1,83 @@
+{
+  "requests": [
+    {
+      "at": "2026-11-24T19:12:02.481Z",
+      "event": "upstream-response",
+      "id": 103,
+      "pathname": "/log/export",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "34895655-5dd1-4729-aa13-c7b4f6e080be"
+    },
+    {
+      "at": "2026-11-24T19:12:02.481Z",
+      "event": "export-response-held",
+      "id": 103,
+      "status": 200,
+      "actual": "34895655-5dd1-4729-aa13-c7b4f6e080be"
+    },
+    {
+      "at": "2026-11-24T19:12:56.620Z",
+      "event": "export-response-released",
+      "id": 103,
+      "actual": "34895655-5dd1-4729-aa13-c7b4f6e080be"
+    },
+    {
+      "at": "2026-11-24T19:13:27.384Z",
+      "event": "upstream-response",
+      "id": 115,
+      "pathname": "/log/export",
+      "method": "GET",
+      "status": 500,
+      "query": null,
+      "actual": "d81f6477-f8e9-4ab7-8d92-e82162256908"
+    },
+    {
+      "at": "2026-11-24T19:13:58.790Z",
+      "event": "upstream-response",
+      "id": 130,
+      "pathname": "/log/export",
+      "method": "GET",
+      "status": 200,
+      "query": null,
+      "actual": "1b3f5fda-c86c-4ef7-97a2-a4551f436429"
+    }
+  ],
+  "browserDownloads": [
+    {
+      "requestID": "34895655-5dd1-4729-aa13-c7b4f6e080be",
+      "filename": "opencorvus-log-support-20261124T191202Z.zip",
+      "bytes": 8482,
+      "archiveEntries": [
+        "README.txt",
+        "manifest.json",
+        "logs/raw/dev.log",
+        "logs/formatted/dev.log",
+        "logs/raw/support-bundle-fixture.log",
+        "logs/formatted/support-bundle-fixture.log"
+      ],
+      "manifestSchema": "opencorvus.log-support-bundle.v1",
+      "manifestLogCount": 2,
+      "manifestMatchesIsolatedLogDirectory": true,
+      "rawFixtureBytesMatch": 100
+    },
+    {
+      "requestID": "1b3f5fda-c86c-4ef7-97a2-a4551f436429",
+      "filename": "opencorvus-log-support-20261124T191358Z.zip",
+      "bytes": 11683,
+      "archiveEntries": [
+        "README.txt",
+        "manifest.json",
+        "logs/raw/dev.log",
+        "logs/formatted/dev.log",
+        "logs/raw/support-bundle-fixture.log",
+        "logs/formatted/support-bundle-fixture.log"
+      ],
+      "manifestSchema": "opencorvus.log-support-bundle.v1",
+      "manifestLogCount": 2,
+      "manifestMatchesIsolatedLogDirectory": true,
+      "rawFixtureBytesMatch": 100
+    }
+  ]
+}

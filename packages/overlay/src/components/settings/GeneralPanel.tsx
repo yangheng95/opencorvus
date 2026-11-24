@@ -3,7 +3,7 @@ import { createMemo, createSignal, For, onCleanup, Show } from "solid-js"
 import { t } from "../../utils/i18n"
 import { settingsStore, setSettingsStore, saveSettings } from "../../store/settings"
 import { ensureDesktopNotificationPermission } from "../../services/desktop-notifications"
-import { downloadLogSupportBundle } from "../../services/log-export"
+import { logExportOutcome, startLogSupportBundleExport } from "../../services/log-export"
 import { appStore } from "../../store/app"
 import { Button } from "../ui/Button"
 import { Switch } from "../ui/Switch"
@@ -11,8 +11,6 @@ import { PermissionsSettingsGroup } from "./PermissionsPanel"
 import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 import { inSecureContext } from "../../utils/secure-context"
 import { formatErrorDetails } from "../../utils/error-details"
-
-type LogExportNotice = { status: "complete" } | { status: "failed"; error: unknown }
 
 const projectReadSummaries = [
   { resource: "tasks", message: () => t("settings.project_read_issue.tasks") },
@@ -26,12 +24,11 @@ const desktopNotificationErrorSubscribers = new Set<(value: string) => void>()
 
 export default function GeneralPanel() {
   const [desktopNotificationError, setDesktopNotificationError] = createSignal(persistedDesktopNotificationError)
-  const [logExporting, setLogExporting] = createSignal(false)
   const [gitPreferenceError, setGitPreferenceError] = createSignal("")
-  const [logExportNotice, setLogExportNotice] = createSignal<LogExportNotice | null>(null)
+  const logExporting = () => logExportOutcome()?.status === "pending"
   const logExportFeedback = createMemo(() => {
-    const notice = logExportNotice()
-    if (!notice) return undefined
+    const notice = logExportOutcome()
+    if (!notice || notice.status === "pending") return undefined
     return notice.status === "complete"
       ? { tone: "success" as const, message: t("settings.log_export_complete"), details: undefined }
       : {
@@ -84,18 +81,8 @@ export default function GeneralPanel() {
     }
   }
 
-  async function handleLogExport() {
-    if (logExporting() || !appStore.connected) return
-    setLogExporting(true)
-    setLogExportNotice(null)
-    try {
-      await downloadLogSupportBundle()
-      setLogExportNotice({ status: "complete" })
-    } catch (exportError) {
-      setLogExportNotice({ status: "failed", error: exportError })
-    } finally {
-      setLogExporting(false)
-    }
+  function handleLogExport() {
+    if (appStore.connected) void startLogSupportBundleExport()
   }
 
   return (

@@ -6418,6 +6418,11 @@ assignment section does not connect, assign, or change access to a server.
 General presents Permissions first, followed by one compact Preferences and
 diagnostics group for desktop notifications, Git preferences and log export.
 The group's localized heading also supplies the General page's search terms.
+The log export service owns pending status and the last outcome for the
+renderer and its current server connection. Switching Settings sections or
+reopening Settings projects the same operation, and the next explicit export
+replaces the previous outcome. A connection change retires its in-flight
+feedback. Success reports that the browser received the download handoff.
 Above those groups, the active project's task list, metadata, and extension
 read failures each have one localized summary per resource. The disclosure
 keeps all original diagnostics for that resource. Configuration failures remain
