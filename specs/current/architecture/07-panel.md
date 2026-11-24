@@ -6726,6 +6726,8 @@ supplies the author's text, preceded by the current language's draft label.
 The two-line preview also appears in recent work. It lives in the existing
 option description, with the same title, search criteria, selection identity,
 and read-only full request available on opening the Mission.
+Mission matches for a nonempty query wrap the complete original title before
+selection. Recent work for an empty query retains its compact title preview.
 Selecting a Project calls the same existing Project navigation owner as its sidebar header;
 it restores that Project's composer intent without creating a conversation or execution.
 Chat and

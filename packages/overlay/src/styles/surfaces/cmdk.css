@@ -332,12 +332,15 @@
 }
 
 .cmdk-item[data-kind] .cmdk-item-label {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.cmdk-item[data-kind]:not([data-full-title]) .cmdk-item-label {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  white-space: normal;
-  overflow-wrap: anywhere;
 }
 
 .cmdk-item[data-kind] .cmdk-item-hint {
