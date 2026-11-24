@@ -6968,6 +6968,9 @@ to the initiating row when it is still mounted.
 Task cancellation from a sidebar row sends the Task and project directory
 from the confirmed row to the existing Task cancellation endpoint. The
 composer continues to use the owner of its current Task or prompt request.
+Sidebar stop confirmations show the original work's project name and full
+directory together with its title. This applies to background activity and
+work across projects with the same display name.
 
 Header mutations return their original promises to the current title component.
 Its selection/API scope owns duplicate-submission state and visible failures;

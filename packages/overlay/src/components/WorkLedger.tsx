@@ -28,6 +28,7 @@ import {
   workLedgerArchiveLabel,
   workLedgerPresentationLabel,
   workLedgerPresentationStatus,
+  workLedgerProject,
   workLedgerRenameLabel,
   workLedgerTaskCanStop,
   type WorkLedgerChatRow,
@@ -164,7 +165,7 @@ function rowDirectory(row: WorkLedgerRow): string {
   return row.directory || ""
 }
 
-function projectDisplayName(group: WorkLedgerGroup): string {
+function projectDisplayName(group: { directory: string; project?: Pick<WorkLedgerProjectRow, "title"> }): string {
   return projectLedgerDisplayName({
     directory: group.directory,
     customName: group.project?.title,
@@ -556,11 +557,17 @@ function WorkLedgerRowView(props: {
     const background = current.kind === "chat" && current.status === "idle"
     const ownsTarget = () => isApiAuthorityCurrent(authority) && row().id === current.id &&
       row().kind === current.kind && row().directory === current.directory
+    const description = t(background ? "coding_assistant.background_stop_confirm.message"
+      : "work_ledger.stop_confirm.message", { title: current.title || current.id })
+    const project = projectDisplayName({
+      directory: current.directory,
+      project: workLedgerProject(current.directory),
+    })
+    const projectContext = [project, current.directory].filter(Boolean).join("\n")
     const confirmation = await showAppDialog({
       title: background ? t("coding_assistant.background_stop_confirm.title")
         : t("work_ledger.stop_confirm.title", { kind: stopKindLabel(current) }),
-      message: t(background ? "coding_assistant.background_stop_confirm.message"
-        : "work_ledger.stop_confirm.message", { title: current.title || current.id }),
+      message: [description, projectContext].join("\n\n"),
       cancel: true,
       okLabel: t(background ? "coding_assistant.background_stop_confirm.action" : "work_ledger.stop_confirm.action"),
       okTone: "danger",
