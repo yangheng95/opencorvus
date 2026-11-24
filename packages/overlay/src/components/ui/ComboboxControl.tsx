@@ -1,5 +1,5 @@
 import * as Combobox from "@kobalte/core/combobox"
-import { createEffect, Show, type JSX } from "solid-js"
+import { createEffect, Show, splitProps, type JSX } from "solid-js"
 import { localeTag, t } from "../../utils/i18n"
 import { topLayerPortalMount } from "../../utils/top-layer"
 import { Icon } from "./Icon"
@@ -29,6 +29,7 @@ export interface ComboboxControlProps<T extends object> {
   disallowEmptySelection?: boolean
   closeOnSelection?: boolean
   noResetInputOnBlur?: boolean
+  preserveListFocusOnTab?: boolean
   class?: string
   controlClass?: string
   inputClass?: string
@@ -53,6 +54,22 @@ export interface ComboboxControlProps<T extends object> {
   renderOptionTooltip?: (option: T) => JSX.Element | undefined
   optionData?: (option: T) => ComboboxDataAttributes
   emptyContent?: JSX.Element
+}
+
+function PersistentComboboxInput(props: JSX.InputHTMLAttributes<HTMLInputElement>): JSX.Element {
+  const [local, inputProps] = splitProps(props, ["onKeyDown"])
+  return (
+    <input
+      {...inputProps}
+      onKeyDown={(event) => {
+        // The enclosing dialog owns Tab navigation while these results stay open.
+        if (event.key === "Tab") return
+        const handler = local.onKeyDown
+        if (typeof handler === "function") handler(event)
+        else if (handler) handler[0](handler[1], event)
+      }}
+    />
+  )
 }
 
 function ComboboxFocus(props: {
@@ -181,7 +198,11 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
 
   const listbox = () => (
     <>
-      <Combobox.Listbox id={props.listboxID} class={listboxClass()} />
+      <Combobox.Listbox
+        id={props.listboxID}
+        class={listboxClass()}
+        tabIndex={props.preserveListFocusOnTab ? -1 : undefined}
+      />
       <ComboboxEmptyState>
         <Show when={props.emptyContent}>
           {(content) =>
@@ -246,6 +267,7 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
           <Icon name="search" size="compact" />
         </Show>
         <Combobox.Input
+          as={props.preserveListFocusOnTab ? PersistentComboboxInput : "input"}
           id={props.inputID}
           ref={(element) => {
             input = element

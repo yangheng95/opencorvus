@@ -557,6 +557,7 @@ export function CommandPalette(props: {
         value={null}
         open={palette.open()}
         noResetInputOnBlur
+        preserveListFocusOnTab
         onInputKeyDown={(event) => {
           if (event.key !== "Escape" || event.isComposing) return
           event.preventDefault()

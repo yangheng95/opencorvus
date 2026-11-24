@@ -6749,7 +6749,11 @@ child-row relevance keep their original complete-substring query contract.
 Content, source, log and table searches retain their literal-text semantics.
 
 Filtering precedes group headings and numeric shortcuts. Ctrl+1 through Ctrl+9
-select those same currently listed work items. When a completed continuation or
+select those same currently listed work items. Tab moves between the search
+input and the dialog's actions. The listbox uses the input's virtual focus,
+including arrow and page navigation, and stays out of the sequential focus
+order even when it scrolls. Moving to a dialog action preserves the focused
+result and the current list position. When a completed continuation or
 retry removes its focused button, only that still-current operation may restore
 the search input, and only if focus has fallen to the document body. It preserves
 scroll position and does not override a new user focus target.
