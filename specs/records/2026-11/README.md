@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [工作对话跨标签归档恢复时保留未发送草稿](2026-11-25-work-draft-through-archive-restore.md)
 - [审阅搜索可直接匹配界面显示的文件名](2026-11-25-review-search-matches-displayed-filename.md)
 - [同名搜索结果翻页时保留会话选择](2026-11-25-palette-paged-same-title-selection.md)
 - [全局搜索区分同名工作对话](2026-11-25-palette-distinguishes-same-title-conversations.md)
