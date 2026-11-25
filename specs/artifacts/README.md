@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [保存快照比较的实页与存储回执](2026-11-25-saved-session-review-proves-snapshot-comparisons/README.md)
 - [工作对话审阅的实页回执](2026-11-25-review-verifies-work-conversation-scope/README.md)
 - [聊天页头真实操作反馈对照](2026-11-25-chat-header-keeps-action-feedback-readable/README.md)
 - [长标题聊天下载的实页回执](2026-11-25-conversation-download-keeps-long-title-identity/README.md)

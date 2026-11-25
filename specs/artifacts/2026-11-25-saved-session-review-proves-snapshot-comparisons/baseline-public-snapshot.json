@@ -1,0 +1,57 @@
+{
+  "sessionID": "ses_hdYutfJdkkEU3dDRxoMw",
+  "projectID": "prj_htxf7ckeH6202brGd9ll",
+  "sourceRequestID": "f6b8a0e1-4241-4d6d-a437-76b24d6c9e4a",
+  "comparisons": [
+    {
+      "file": "b631-history/added.txt",
+      "before": "",
+      "after": "New verified review fact.\nSecond historical line.\n",
+      "additions": 2,
+      "deletions": 0,
+      "status": "added"
+    },
+    {
+      "file": "b631-history/empty.txt",
+      "before": "",
+      "after": "",
+      "additions": 0,
+      "deletions": 0,
+      "status": "added"
+    },
+    {
+      "file": "b631-history/modified.txt",
+      "before": "Previous saved milestone.\n",
+      "after": "Revised saved milestone.\n",
+      "additions": 1,
+      "deletions": 1,
+      "status": "modified"
+    },
+    {
+      "file": "b631-history/retired.txt",
+      "before": "Retired historical entry.\n",
+      "after": "",
+      "additions": 0,
+      "deletions": 1,
+      "status": "deleted"
+    },
+    {
+      "file": "b631-history/sample.bin",
+      "before": "",
+      "after": "",
+      "additions": 0,
+      "deletions": 0,
+      "status": "added"
+    },
+    {
+      "file": "b631-history/was-empty.txt",
+      "before": "",
+      "after": "An existing empty file gained content.\n",
+      "additions": 1,
+      "deletions": 0,
+      "status": "modified"
+    }
+  ],
+  "emptyFileBytes": 0,
+  "binaryFileBytes": 6
+}

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [保存的会话快照提供可验证的历史比较](records/2026-11/2026-11-25-saved-session-review-proves-snapshot-comparisons.md)
 - [工作对话切换后的文件审阅核验](records/2026-11/2026-11-25-review-verifies-work-conversation-scope.md)
 - [聊天页头为操作反馈保留可读空间](records/2026-11/2026-11-25-chat-header-keeps-action-feedback-readable.md)
 - [长标题聊天导出保留会话标识并可下载](records/2026-11/2026-11-25-conversation-download-keeps-long-title-identity.md)
