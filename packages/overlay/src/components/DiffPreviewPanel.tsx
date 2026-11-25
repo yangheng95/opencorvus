@@ -22,6 +22,7 @@ import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
 import { t } from "../utils/i18n"
+import { filePathLabel } from "../utils/server-path"
 import { shortRelativePath } from "../utils/tool"
 import { formatErrorDetails } from "../utils/error-details"
 import { RecordedToolComparisons } from "./RecordedToolComparisons"
@@ -125,24 +126,26 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
   // Compute header content in a memo so Panel's Show reads a stable reference,
   // avoiding double-creation of DOM nodes from the ternary getter.
   const headerContent = createMemo((): JSX.Element | undefined => {
-    if (!props.target?.filePath) return undefined
+    const path = props.target?.filePath
+    if (!path) return undefined
+    const label = filePathLabel(path)
     return (
       <>
         <div class="diff-preview-copy" classList={{ "diff-preview-copy--rename": !!renamePaths() }}>
           <Show when={renamePaths()} keyed fallback={
-            <span class="diff-preview-path" title={props.target?.filePath || ""}>
-              {props.target?.filePath}
+            <span class="diff-preview-path" title={label}>
+              {label}
             </span>
           }>
             {(paths) => (
               <dl class="diff-preview-paths">
                 <dt class="diff-preview-scope">{t("diff.original_path")}</dt>
-                <dd class="diff-preview-path" title={paths.previousPath}>
-                  {shortRelativePath(paths.previousPath, props.directory)}
+                <dd class="diff-preview-path" title={filePathLabel(paths.previousPath)}>
+                  {filePathLabel(shortRelativePath(paths.previousPath, props.directory))}
                 </dd>
                 <dt class="diff-preview-scope">{t("diff.destination_path")}</dt>
-                <dd class="diff-preview-path" title={paths.openPath}>
-                  {shortRelativePath(paths.openPath, props.directory)}
+                <dd class="diff-preview-path" title={filePathLabel(paths.openPath)}>
+                  {filePathLabel(shortRelativePath(paths.openPath, props.directory))}
                 </dd>
               </dl>
             )}
@@ -168,7 +171,11 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
           tone="accent"
           disabled={!props.currentFilePath || !props.directory.trim() || opening() || fileEditorReserved()}
           aria-busy={opening() || undefined}
-          aria-label={props.currentFilePath ? `${t("diff.open_current_file")}: ${props.currentFilePath}` : t("diff.open_current_file")}
+          aria-label={
+            props.currentFilePath
+              ? `${t("diff.open_current_file")}: ${filePathLabel(props.currentFilePath)}`
+              : t("diff.open_current_file")
+          }
           title={t("diff.open_current_file_hint")}
           onClick={() => void openCurrentFile()}
         >

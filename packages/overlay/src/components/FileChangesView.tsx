@@ -11,6 +11,7 @@ import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type Diff
 import { matchesSearchTerms } from "../services/text-search"
 import { localeTag, t, tc } from "../utils/i18n"
 import { renderedListPageIndex } from "../utils/rendered-list-navigation"
+import { filePathLabel } from "../utils/server-path"
 import { shortRelativePath } from "../utils/tool"
 import { virtualListPageIndex } from "../utils/virtual-list-navigation"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
@@ -114,7 +115,7 @@ function groupTitle(group: ChangeGroup): string {
 function ChangeRowContent(props: { row: ChangeRowModel; showScope: boolean }) {
   return (
     <FileRowContent
-      name={props.row.fileName}
+      name={filePathLabel(props.row.fileName)}
       icon="file-document"
       detail={props.row.directory}
       prefix={
@@ -156,7 +157,7 @@ function ChangeRow(props: {
       class="oc-file-row change-row"
       data-clickable="true"
       data-change-index={props.row.index}
-      title={props.row.item.file}
+      title={filePathLabel(props.row.item.file)}
       id={`change-row-${props.row.index}`}
       onClick={open}
       onKeyDown={(event) => {
@@ -285,8 +286,8 @@ export function FileChangesView(props: FileChangesViewProps) {
           index,
           fileName: path.fileName,
           directory: item.previousPath
-            ? t("files.rename_from", { path: shortRelativePath(item.previousPath, props.directory) })
-            : path.directory,
+            ? t("files.rename_from", { path: filePathLabel(shortRelativePath(item.previousPath, props.directory)) })
+            : filePathLabel(path.directory),
           groupLabel: label,
           groupTitle: title,
           searchText: fileSearchText(

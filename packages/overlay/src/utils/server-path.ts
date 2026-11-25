@@ -103,6 +103,16 @@ export function parentProjectPath(path: string, directory: string): string {
   return parts.join("/")
 }
 
+/** Single-line file labels keep significant spaces visible and distinguishable in accessible names. */
+export function filePathLabel(path: string): string {
+  if (!/(^|\/) | (?=\/|$)| {2}|[\u0000-\u001f"]/u.test(path)) return path
+
+  return JSON.stringify(path).replace(/(^"|\/)( +)| +(?=\/|"$)| {2,}/gu, (match, prefix, leadingSpaces) => {
+    const spaces = leadingSpaces ?? match
+    return (prefix ?? "") + "\\u0020".repeat(spaces.length)
+  })
+}
+
 /** How many trailing segments each visible path needs to distinguish it from its peers. */
 export function shortestDistinctPathSuffixLengths(paths: readonly (readonly string[])[]): number[] {
   return paths.map((parts, index) => {

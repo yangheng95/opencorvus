@@ -29,6 +29,7 @@ import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import {
   classifyProjectPathInput,
   decodeMarkdownFilePath,
+  filePathLabel,
   isAbsoluteServerPath,
   isWindowsPath,
   normalizeProjectFilePath,
@@ -277,6 +278,7 @@ export function FileEditorPane(props: {
   const fileTitle = createMemo(() => displayName() ?? pathWithForwardSeparators(
     path(), target()?.sourceAbsolutePath || target()?.directory || "",
   ).split("/").at(-1) ?? "")
+  const fileTitleLabel = createMemo(() => displayName() ?? filePathLabel(fileTitle()))
   const fileLocation = createMemo(() => pathWithForwardSeparators(
     path(), target()?.directory || "",
   ))
@@ -1042,8 +1044,8 @@ export function FileEditorPane(props: {
                 <Icon name="nav-back" />
               </Button>
             </Show>
-            <div class="file-editor-title" title={[displayName(), target()?.sourceAbsolutePath || path()].filter(Boolean).join("\n")}>
-              <span class="file-editor-title-name">{fileTitle()}</span>
+            <div class="file-editor-title" title={[displayName(), filePathLabel(target()?.sourceAbsolutePath || path())].filter(Boolean).join("\n")}>
+              <span class="file-editor-title-name">{fileTitleLabel()}</span>
             </div>
           </div>
           <div class="file-editor-actions">
@@ -1150,8 +1152,8 @@ export function FileEditorPane(props: {
               disabled={!resourceReady() || fileEditorReserved()}
               aria-disabled={isBusy() || fileEditorReserved() || undefined}
               onClick={() => void closeCurrentFile()}
-              title={t("file_editor.close", { path: fileTitle() })}
-              aria-label={t("file_editor.close", { path: fileTitle() })}
+              title={t("file_editor.close", { path: fileTitleLabel() })}
+              aria-label={t("file_editor.close", { path: fileTitleLabel() })}
             >
               <Icon name="close" />
             </Button>
@@ -1159,7 +1161,7 @@ export function FileEditorPane(props: {
           <Show when={showFileLocation() || writable()}>
             <div class="file-editor-meta">
               <Show when={showFileLocation()}>
-                <span class="file-editor-title-path" title={path()}>{fileLocation()}</span>
+                <span class="file-editor-title-path" title={filePathLabel(path())}>{filePathLabel(fileLocation())}</span>
               </Show>
               <Show when={writable()}>
                 <span class="file-editor-save-status" role="status" aria-atomic="true" data-dirty={dirty() && !saving() || undefined}>
@@ -1294,7 +1296,7 @@ export function FileEditorPane(props: {
                     lineRange={target()?.range}
                     revealRevision={fileEditorRevealRevision()}
                     revealFocusOrigin={revealFocusOrigin()}
-                    ariaLabel={fileTitle()}
+                    ariaLabel={fileTitleLabel()}
                     onValueChange={updateDraft}
                     onNavigationReady={setEditorNavigation}
                     onGoToLineShortcut={() => runTextNavigation("goToLine")}
@@ -1310,7 +1312,7 @@ export function FileEditorPane(props: {
                       ref={setMarkdownPreview}
                       class="file-editor-markdown-preview md-content"
                       tabIndex={0}
-                      aria-label={`${fileTitle()} · ${t("file_editor.view_preview")}`}
+                      aria-label={`${fileTitleLabel()} · ${t("file_editor.view_preview")}`}
                     >
                       <StaticTextPart text={draft()} images={previewImages()} onRendered={revealRenderedDocument()} />
                     </section>
@@ -1418,7 +1420,7 @@ export function FileEditorPane(props: {
       <Dialog
         id="fileEditorComparisonDialog"
         open={comparison() !== null}
-        title={t("file_editor.compare_title", { path: fileTitle() })}
+        title={t("file_editor.compare_title", { path: fileTitleLabel() })}
         wide
         formClass="file-comparison-frame"
         onClose={retireComparison}

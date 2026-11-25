@@ -494,6 +494,11 @@ complete in accessible text and the original title. This reads the existing targ
 under the server's path syntax, with no new navigation or resource identity.
 Read-only absolute Sources retain their existing authored name, badge and full-path
 title; internal attachment storage locations do not become new heading content.
+The conversation summary, Review and file workbench share a single-line path
+label for filesystem names. Spaces at a path segment's edges and repeated spaces
+use explicit escapes within a quoted representation. The same representation
+supplies accessible names. File selection, reading, writes and downloads retain
+the original path and filename. Authored display names retain their own wording.
 Body-reference click delegation also retains the exact already parsed path
 attribute, including whitespace decoded from an authored Markdown destination.
 Empty-attribute validation does not supply a trimmed replacement resource.

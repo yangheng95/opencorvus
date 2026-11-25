@@ -14,6 +14,7 @@ import {
   mergeChangeGroups,
 } from "../utils/file-change-summary"
 import { localeTag, t, tc } from "../utils/i18n"
+import { filePathLabel } from "../utils/server-path"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { FileRowContent } from "./ui/FileRow"
@@ -128,7 +129,7 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
                   size="sm"
                   tone="neutral"
                   class="conversation-artifact-summary__file oc-file-row"
-                  title={row.file}
+                  title={filePathLabel(row.file)}
                   onClick={() => {
                     requestReviewFocus({
                       taskID: activeTaskID(),
@@ -138,7 +139,7 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
                   }}
                 >
                   <FileRowContent
-                    name={row.file}
+                    name={filePathLabel(row.file)}
                     icon="file-document"
                     trailing={
                       <span class="conversation-artifact-summary__file-stats">

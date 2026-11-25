@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import {
   classifyProjectPathInput,
   decodeMarkdownFilePath,
+  filePathLabel,
   normalizeProjectFilePath,
   normalizeWorkspaceDirectoryInput,
   parentProjectPath,
@@ -12,6 +13,16 @@ import {
   shortestDistinctPathSuffixLengths,
 } from "../src/utils/server-path"
 import { projectDirectoryKey } from "../src/utils/project-directory"
+
+test("file label keeps ordinary names and gives significant spaces a reversible single-line form", () => {
+  expect(filePathLabel("Plans/Parcel manifest.txt")).toBe("Plans/Parcel manifest.txt")
+  const name = "  b632-parcel.txt"
+  expect(filePathLabel(name)).toBe('"\\u0020\\u0020b632-parcel.txt"')
+  const nested = "North / inbound  parcel.txt "
+  expect(filePathLabel(nested)).toBe('"North\\u0020/\\u0020inbound\\u0020\\u0020parcel.txt\\u0020"')
+  const quoted = '"\\u0020parcel"\t.txt'
+  expect(JSON.parse(filePathLabel(quoted))).toBe(quoted)
+})
 
 test.each([
   ['  "C:\\Work\\Team folder"  ', "C:\\Work\\Team folder"],
