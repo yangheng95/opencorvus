@@ -1,0 +1,27 @@
+{
+  "requestID": "f105143d-ec58-4096-9939-df637a1ddbd7",
+  "status": 200,
+  "body": [
+    {
+      "missionID": "draft-65b52651b2b42e29ba91603fe2160338",
+      "sessionID": "ses_heddhGci5I5tTdL5nprg",
+      "title": "B647 Parcel dispatch review",
+      "directory": "C:\\Users\\Public\\opencorvus-review-20261125-b625\\candidate\\model-identity-review",
+      "created": 1795579063148,
+      "updated": 1795579063148,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Review the isolated parcel handoff. Keep this Mission as a draft during verification."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  ]
+}
