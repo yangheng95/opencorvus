@@ -1,0 +1,46 @@
+{
+  "query": "B636 Freight schedule index",
+  "first": {
+    "sourceRequestID": "77b46967-9f4d-4103-b921-79bc2a6a1f95",
+    "sessionIDs": [
+      "ses_hKoPHSWOHEHKaKstNk1K",
+      "ses_hOBjoUes4ANmZMtXyhDS",
+      "ses_hWdgDEpLY8yx2pJmSTgd",
+      "ses_h1QDxWoYKOhNk539zFti",
+      "ses_hUUpoF9woxKRZYfUHi4z",
+      "ses_hawxlKYyKafDUnxilzGH",
+      "ses_h6qG1omtcPRLDNpe5GiS",
+      "ses_hQQou7dtNlHwOYTlLTw0",
+      "ses_hjqsn1GF3vuqW8V7XW9Y",
+      "ses_he9k5lUkqq8Wq4D42HnD",
+      "ses_hScIWlJPH0DMyoy14HQo",
+      "ses_hveZAMAQzqHfzP8RPY8t"
+    ],
+    "nextCursor": {
+      "pinned": false,
+      "updated": 1795570068796,
+      "rowKey": "chat:ses_hveZAMAQzqHfzP8RPY8t"
+    }
+  },
+  "following": {
+    "sourceRequestID": "8be4f4ae-7a11-4632-b14f-bae303bd8b2f",
+    "sessionIDs": [
+      "ses_hZ2DhauZkSMsvb5IQzrM",
+      "ses_hlcl7HNiW21UXI6gDPiE"
+    ],
+    "nextCursor": null
+  },
+  "allResultsRequestID": "0b1d75fd-c658-4d3d-8e33-e4e8fdcb8d6e",
+  "readTargets": [
+    {
+      "sessionID": "ses_hveZAMAQzqHfzP8RPY8t",
+      "sourceRequestID": "1799aecc-1644-49a7-a79f-c3910ffc842e",
+      "entries": 0
+    },
+    {
+      "sessionID": "ses_hZ2DhauZkSMsvb5IQzrM",
+      "sourceRequestID": "a46c4cf5-47b1-47dc-a003-552caa2d42c3",
+      "entries": 0
+    }
+  ]
+}

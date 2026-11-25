@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [同名搜索结果翻页时保留会话选择](2026-11-25-palette-paged-same-title-selection.md)
 - [全局搜索区分同名工作对话](2026-11-25-palette-distinguishes-same-title-conversations.md)
 - [旁聊草稿在等价项目路径和新标签中保持归属](2026-11-25-side-chat-drafts-through-equivalent-directories.md)
 - [右侧工作台折叠重开时保留草稿并核对磁盘](2026-11-25-file-draft-through-dock-collapse.md)
