@@ -1,0 +1,29 @@
+{
+  "files": [
+    {
+      "file": "b633-return-draft.txt",
+      "diskBytes": 69,
+      "content": "Warehouse moved the pickup to Monday.\nDraft: confirm the loading bay.",
+      "sourceRequestID": "579c24b1-e3fd-4612-83ac-7d08f2777e3b"
+    },
+    {
+      "file": "b632-parcel.txt",
+      "diskBytes": 55,
+      "content": "Different parcel for the path without a leading space.\n",
+      "sourceRequestID": "70c6b6db-6ee6-4f68-a897-a9abbbad2327"
+    }
+  ],
+  "replacedContent": "Warehouse moved the pickup to Friday.\n",
+  "controlledExternalReads": [
+    {
+      "state": "clean-editor while entire dock was collapsed",
+      "sourceRequestID": "0f51f77b-ddcf-4f33-b998-4c122e363c31",
+      "content": "Warehouse moved the pickup to Friday.\n"
+    },
+    {
+      "state": "dirty editor while entire dock was collapsed",
+      "sourceRequestID": "09ed0dde-85be-456d-a693-55351d6a0ff4",
+      "content": "Warehouse moved the pickup to Monday.\n"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [右侧工作台折叠重开时保留草稿并核对磁盘](2026-11-25-file-draft-through-dock-collapse.md)
 - [审阅可区分带边缘空格的文件名](2026-11-25-review-distinguishes-filename-spaces.md)
 - [保存的会话快照提供可验证的历史比较](2026-11-25-saved-session-review-proves-snapshot-comparisons.md)
 - [工作对话切换后的文件审阅核验](2026-11-25-review-verifies-work-conversation-scope.md)

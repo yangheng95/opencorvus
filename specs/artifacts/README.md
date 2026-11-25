@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工作台折叠后的草稿与磁盘证据](2026-11-25-file-draft-through-dock-collapse/README.md)
 - [带边缘空格的审阅路径证据](2026-11-25-review-distinguishes-filename-spaces/README.md)
 - [保存快照比较的实页与存储回执](2026-11-25-saved-session-review-proves-snapshot-comparisons/README.md)
 - [工作对话审阅的实页回执](2026-11-25-review-verifies-work-conversation-scope/README.md)
