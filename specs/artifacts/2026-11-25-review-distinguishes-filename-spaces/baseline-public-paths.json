@@ -1,0 +1,25 @@
+{
+  "sessionID": "ses_hFPvdDQvE7PNzOFkQxlf",
+  "sourceRequestID": "8770cfa3-6ba8-426a-8fdf-ed071c64957e",
+  "comparisons": [
+    {
+      "file": "  b632-parcel.txt",
+      "before": "",
+      "after": "Parcel for the path with two leading spaces.\n",
+      "additions": 1,
+      "deletions": 0,
+      "status": "added",
+      "comparisonKind": "text"
+    },
+    {
+      "file": "b632-parcel.txt",
+      "before": "",
+      "after": "Different parcel for the path without a leading space.\n",
+      "additions": 1,
+      "deletions": 0,
+      "status": "added",
+      "comparisonKind": "text"
+    }
+  ],
+  "transcriptEntries": 0
+}

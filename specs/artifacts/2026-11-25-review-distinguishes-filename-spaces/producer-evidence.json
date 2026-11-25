@@ -1,0 +1,26 @@
+{
+  "sessionID": "ses_hFPvdDQvE7PNzOFkQxlf",
+  "projectID": "prj_htxf7ckeH6202brGd9ll",
+  "before": "29d7eee51116e16bc73a75ad1d94537f240e9605",
+  "after": "67efae9fd957af347d42bed9d5d3d4a2781cc8c6",
+  "changes": [
+    {
+      "file": "  b632-parcel.txt",
+      "before": "",
+      "after": "Parcel for the path with two leading spaces.\n",
+      "additions": 1,
+      "deletions": 0,
+      "status": "added",
+      "comparisonKind": "text"
+    },
+    {
+      "file": "b632-parcel.txt",
+      "before": "",
+      "after": "Different parcel for the path without a leading space.\n",
+      "additions": 1,
+      "deletions": 0,
+      "status": "added",
+      "comparisonKind": "text"
+    }
+  ]
+}
