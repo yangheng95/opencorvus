@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [旁聊草稿与同一项目目录的实页证据](2026-11-25-side-chat-drafts-through-equivalent-directories/README.md)
 - [工作台折叠后的草稿与磁盘证据](2026-11-25-file-draft-through-dock-collapse/README.md)
 - [带边缘空格的审阅路径证据](2026-11-25-review-distinguishes-filename-spaces/README.md)
 - [保存快照比较的实页与存储回执](2026-11-25-saved-session-review-proves-snapshot-comparisons/README.md)
