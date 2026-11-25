@@ -16,7 +16,7 @@ import {
 import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, mergeAbortSignals, type ApiAuthority } from "./api"
 import { ArchiveStateUnconfirmedError } from "./archive-state"
 import { createSignal } from "solid-js"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
 import { projectDirectoryKey } from "../utils/project-directory"
 import { DEFAULT_REQUEST_TIMEOUT_MILLISECONDS } from "./host-transport"
@@ -37,6 +37,43 @@ export type WorkLedgerChangeIdentity = {
   sessionID?: string
   taskID?: string | null
   conversationExperience?: WorkLedgerChatRow["experience"]
+}
+
+export function workLedgerConversationTitle(
+  row: Pick<WorkLedgerChatRow, "title" | "id">,
+  ordinal?: number,
+): string {
+  const title = row.title || row.id
+  return ordinal === undefined ? title : t("work_ledger.conversation_duplicate_title", {
+    index: new Intl.NumberFormat(localeTag()).format(ordinal),
+    title,
+  })
+}
+
+export function workLedgerConversationOrdinals(rows: readonly WorkLedgerRow[]): ReadonlyMap<string, number> {
+  const conversations = new Map<string, WorkLedgerChatRow>()
+  for (const row of rows) {
+    if (row.kind === "chat") conversations.set(row.id, row)
+  }
+
+  const byTitle = new Map<string, WorkLedgerChatRow[]>()
+  for (const row of conversations.values()) {
+    const title = workLedgerConversationTitle(row)
+    const group = byTitle.get(title) ?? []
+    group.push(row)
+    byTitle.set(title, group)
+  }
+
+  const ordinals = new Map<string, number>()
+  for (const group of byTitle.values()) {
+    if (group.length < 2) continue
+    group.sort((left, right) => {
+      const earlier = left.created - right.created
+      return earlier || (left.id < right.id ? -1 : left.id > right.id ? 1 : 0)
+    })
+    group.forEach((row, index) => ordinals.set(row.id, index + 1))
+  }
+  return ordinals
 }
 
 export function workLedgerActionFailureText(action: string, error: unknown, title: string) {

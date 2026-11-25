@@ -6118,6 +6118,10 @@ Projects, pinned, single-list, and Recents presentations reuse one assignment;
 their sort order and duplicate row appearances do not change that assignment.
 The row, its tooltip, and its action label use the same display title. The
 stored title and exact conversation target remain unchanged.
+The command palette uses the same title presentation for Chat and Work results
+within its loaded result set. The ordinal is independent of keyboard shortcut
+position and applies to both the visible result and its accessible name.
+Search queries and activation retain the original title and Session identity.
 The same row tooltip uses each Work Ledger record's actual timestamp meaning.
 For Mission and Chat/Work it labels the record's creation time, including a
 saved draft or empty conversation. For top-level and nested Tasks it labels

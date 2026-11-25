@@ -28,6 +28,8 @@ import {
   WORK_LEDGER_SEARCH_DELAY_MS,
   loadWorkLedger,
   normalizeWorkLedgerSearch,
+  workLedgerConversationOrdinals,
+  workLedgerConversationTitle,
   workLedgerProject,
   type WorkLedgerChatRow,
   type WorkLedgerCursor,
@@ -195,7 +197,9 @@ export function CommandPalette(props: {
       })
     }
 
-    for (const row of ledgerRows()) {
+    const ledger = ledgerRows()
+    const conversationOrdinals = workLedgerConversationOrdinals(ledger)
+    for (const row of ledger) {
       cmds.push({
         id: `ledger:${row.kind}:${row.id}`,
         kind: row.kind,
@@ -204,7 +208,9 @@ export function CommandPalette(props: {
           customName: row.title,
           unknownName: t("task.project.unknown"),
           implicitProjectName: t("work_ledger.implicit_project_row"),
-        }) : row.title || row.id,
+        }) : row.kind === "chat"
+          ? workLedgerConversationTitle(row, conversationOrdinals.get(row.id))
+          : row.title || row.id,
         hint: rowCommandHint(row),
         pendingMissionRequest: row.kind === "mission" ? row.pendingPromptText : undefined,
         group: t("cmdk.group.work"),
