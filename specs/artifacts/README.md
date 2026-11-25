@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工作对话审阅的实页回执](2026-11-25-review-verifies-work-conversation-scope/README.md)
 - [聊天页头真实操作反馈对照](2026-11-25-chat-header-keeps-action-feedback-readable/README.md)
 - [长标题聊天下载的实页回执](2026-11-25-conversation-download-keeps-long-title-identity/README.md)
 - [聊天导出文件名的实页回执](2026-11-25-conversation-export-keeps-title-segments/README.md)
