@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [多步任务草稿的字段校验与实际保存](records/2026-11/2026-11-25-mission-draft-validation-and-save-review.md)
 - [编辑、草稿下载与保存的原字节核验](records/2026-11/2026-11-25-editor-mixed-endings-and-signature-review.md)
 - [同标题记忆的项目范围与原文核验](records/2026-11/2026-11-25-memory-project-search-review.md)
 - [返回二进制预览时核对原文件](records/2026-11/2026-11-25-pdf-workbench-live-replacement.md)
