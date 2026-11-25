@@ -90,16 +90,33 @@ function incomplete(
 }
 export function savedSessionChangeGroups(raw: unknown, sessionID: string): ChangeGroup[] {
   if (!Array.isArray(raw)) return []
-  const changes = raw.flatMap((item, fileIndex): FileChange[] =>
-    record(item) && text(item.file)
-      ? [
-          {
-            ...incomplete(item.file, [{ sessionID, fileIndex }], "saved_session_flags_missing"),
-            status: status(item.status),
-          },
-        ]
-      : [],
-  )
+  const changes = raw.flatMap((item, fileIndex): FileChange[] => {
+    if (!record(item) || !text(item.file)) return []
+    const file = item.file
+    const physicalStatus = status(item.status)
+    const receipts = [{ sessionID, fileIndex }]
+    const identity = { file, openPath: file, status: physicalStatus }
+    if (item.comparisonKind === "binary") {
+      return [{ ...identity, isText: false, additions: null, deletions: null, evidence: { kind: "complete", receipts } }]
+    }
+    if (
+      item.comparisonKind === "text" && physicalStatus &&
+      typeof item.before === "string" && typeof item.after === "string" &&
+      (physicalStatus !== "added" || item.before === "") && (physicalStatus !== "deleted" || item.after === "") &&
+      [item.additions, item.deletions].every((count) => Number.isSafeInteger(count) && count >= 0)
+    ) {
+      return [{
+        ...identity,
+        isText: true,
+        before: item.before,
+        after: item.after,
+        additions: item.additions,
+        deletions: item.deletions,
+        evidence: { kind: "complete", receipts },
+      }]
+    }
+    return [{ ...incomplete(file, receipts, "saved_session_flags_missing"), status: physicalStatus }]
+  })
   return changes.length
     ? [
         {

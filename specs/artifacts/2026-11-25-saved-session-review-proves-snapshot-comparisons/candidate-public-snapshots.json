@@ -1,0 +1,130 @@
+[
+  {
+    "case": "Legacy",
+    "sessionID": "ses_hdYutfJdkkEU3dDRxoMw",
+    "projectID": "prj_htxf7ckeH6202brGd9ll",
+    "conversationRequestID": "9d8c98a4-738a-4c3e-b5f9-37961aec7580",
+    "diffRequestID": "aa391ac2-04ea-448e-aaa6-920aba8781d1",
+    "transcriptEntries": 0,
+    "comparisons": [
+      {
+        "file": "b631-history/added.txt",
+        "before": "",
+        "after": "New verified review fact.\nSecond historical line.\n",
+        "additions": 2,
+        "deletions": 0,
+        "status": "added",
+        "comparisonKind": "unknown"
+      },
+      {
+        "file": "b631-history/empty.txt",
+        "before": "",
+        "after": "",
+        "additions": 0,
+        "deletions": 0,
+        "status": "added",
+        "comparisonKind": "unknown"
+      },
+      {
+        "file": "b631-history/modified.txt",
+        "before": "Previous saved milestone.\n",
+        "after": "Revised saved milestone.\n",
+        "additions": 1,
+        "deletions": 1,
+        "status": "modified",
+        "comparisonKind": "unknown"
+      },
+      {
+        "file": "b631-history/retired.txt",
+        "before": "Retired historical entry.\n",
+        "after": "",
+        "additions": 0,
+        "deletions": 1,
+        "status": "deleted",
+        "comparisonKind": "unknown"
+      },
+      {
+        "file": "b631-history/sample.bin",
+        "before": "",
+        "after": "",
+        "additions": 0,
+        "deletions": 0,
+        "status": "added",
+        "comparisonKind": "unknown"
+      },
+      {
+        "file": "b631-history/was-empty.txt",
+        "before": "",
+        "after": "An existing empty file gained content.\n",
+        "additions": 1,
+        "deletions": 0,
+        "status": "modified",
+        "comparisonKind": "unknown"
+      }
+    ]
+  },
+  {
+    "case": "Current",
+    "sessionID": "ses_htFi9QEcmWlKaLHInZqn",
+    "projectID": "prj_htxf7ckeH6202brGd9ll",
+    "conversationRequestID": "e6118831-3b0a-4056-9c46-cb5e392370e8",
+    "diffRequestID": "009232ae-7fb9-4e4a-940f-4f410b4e52be",
+    "transcriptEntries": 0,
+    "comparisons": [
+      {
+        "file": "b631-history/added.txt",
+        "before": "",
+        "after": "New verified review fact.\nSecond historical line.\n",
+        "additions": 2,
+        "deletions": 0,
+        "status": "added",
+        "comparisonKind": "text"
+      },
+      {
+        "file": "b631-history/empty.txt",
+        "before": "",
+        "after": "",
+        "additions": 0,
+        "deletions": 0,
+        "status": "added",
+        "comparisonKind": "text"
+      },
+      {
+        "file": "b631-history/modified.txt",
+        "before": "Previous saved milestone.\n",
+        "after": "Revised saved milestone.\n",
+        "additions": 1,
+        "deletions": 1,
+        "status": "modified",
+        "comparisonKind": "text"
+      },
+      {
+        "file": "b631-history/retired.txt",
+        "before": "Retired historical entry.\n",
+        "after": "",
+        "additions": 0,
+        "deletions": 1,
+        "status": "deleted",
+        "comparisonKind": "text"
+      },
+      {
+        "file": "b631-history/sample.bin",
+        "before": "",
+        "after": "",
+        "additions": 0,
+        "deletions": 0,
+        "status": "added",
+        "comparisonKind": "binary"
+      },
+      {
+        "file": "b631-history/was-empty.txt",
+        "before": "",
+        "after": "An existing empty file gained content.\n",
+        "additions": 1,
+        "deletions": 0,
+        "status": "modified",
+        "comparisonKind": "text"
+      }
+    ]
+  }
+]

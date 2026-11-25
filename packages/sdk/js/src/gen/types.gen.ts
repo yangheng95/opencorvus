@@ -2470,6 +2470,7 @@ export type FileDiff = {
   additions: number
   after: string
   before: string
+  comparisonKind?: "text" | "binary" | "unknown"
   deletions: number
   file: string
   status?: "added" | "deleted" | "modified"

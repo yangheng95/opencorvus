@@ -1,5 +1,6 @@
 import path from "path"
 import fs from "fs/promises"
+import { isUtf8 } from "node:buffer"
 import { Log } from "../util/log"
 import { Flag } from "../flag/flag"
 import z from "zod"
@@ -22,6 +23,7 @@ import type {
   FileDiff as _FileDiffType,
   Patch as _PatchType,
   PatchEvidenceSummary as _PatchEvidenceSummaryType,
+  SavedSnapshotFileDiff,
 } from "./types"
 import {
   SnapshotEmptyTreeError as _SnapshotEmptyTreeError,
@@ -272,10 +274,10 @@ export namespace Snapshot {
   // Re-exported from ./types — see Patch above for rationale.
   export const FileDiff = _FileDiff
   export type FileDiff = _FileDiffType
-  export async function diffFull(from: string, to: string): Promise<FileDiff[]> {
+  export async function diffFull(from: string, to: string): Promise<SavedSnapshotFileDiff[]> {
     const git = gitdir()
     await ensureGitDir(git)
-    const result: FileDiff[] = []
+    const result: SavedSnapshotFileDiff[] = []
     const status = new Map<string, "added" | "deleted" | "modified">()
 
     const statuses = await gitText(
@@ -296,6 +298,7 @@ export namespace Snapshot {
           "diff",
           "--no-ext-diff",
           "--name-status",
+          "-z",
           "--no-renames",
           from,
           to,
@@ -307,12 +310,14 @@ export namespace Snapshot {
       "diffFull name-status",
     )
 
-    for (const line of statuses.trim().split("\n")) {
-      if (!line) continue
-      const [code, file] = line.split("\t")
-      if (!code || !file) continue
-      const kind = code.startsWith("A") ? "added" : code.startsWith("D") ? "deleted" : "modified"
-      status.set(file, kind)
+    const statusFields = statuses.split("\0")
+    for (let index = 0; index + 1 < statusFields.length; index += 2) {
+      const code = statusFields[index]?.[0]
+      const file = statusFields[index + 1]
+      if (!file) continue
+      if (code === "A") status.set(file, "added")
+      if (code === "D") status.set(file, "deleted")
+      if (code === "M" || code === "T") status.set(file, "modified")
     }
 
     const numstat = await gitText(
@@ -334,6 +339,7 @@ export namespace Snapshot {
           "--no-ext-diff",
           "--no-renames",
           "--numstat",
+          "-z",
           from,
           to,
           "--",
@@ -345,10 +351,13 @@ export namespace Snapshot {
     )
     const textFiles: string[] = []
     const rows: Array<{ additions: string; deletions: string; file: string; isBinaryFile: boolean }> = []
-    for (const line of numstat.trim().split("\n")) {
-      if (!line) continue
-      const [additions, deletions, file] = line.split("\t")
-      if (!additions || !deletions || !file) continue
+    for (const entry of numstat.split("\0")) {
+      const firstTab = entry.indexOf("\t")
+      const secondTab = entry.indexOf("\t", firstTab + 1)
+      if (firstTab < 1 || secondTab <= firstTab + 1 || secondTab === entry.length - 1) continue
+      const additions = entry.slice(0, firstTab)
+      const deletions = entry.slice(firstTab + 1, secondTab)
+      const file = entry.slice(secondTab + 1)
       const isBinaryFile = additions === "-" && deletions === "-"
       rows.push({ additions, deletions, file, isBinaryFile })
       if (!isBinaryFile) textFiles.push(file)
@@ -363,23 +372,34 @@ export namespace Snapshot {
       if (row.isBinaryFile) continue
       const beforeObject = fromObjects.get(row.file)
       const afterObject = toObjects.get(row.file)
-      if (beforeObject) objectIDs.add(beforeObject)
-      if (afterObject) objectIDs.add(afterObject)
+      if (beforeObject) objectIDs.add(beforeObject.id)
+      if (afterObject) objectIDs.add(afterObject.id)
     }
     const objectText = await catFileBatch(git, [...objectIDs])
 
     for (const row of rows) {
-      const before = row.isBinaryFile ? "" : (objectText.get(fromObjects.get(row.file) ?? "") ?? "")
-      const after = row.isBinaryFile ? "" : (objectText.get(toObjects.get(row.file) ?? "") ?? "")
-      const added = row.isBinaryFile ? 0 : parseInt(row.additions)
-      const deleted = row.isBinaryFile ? 0 : parseInt(row.deletions)
+      const beforeObject = fromObjects.get(row.file)
+      const afterObject = toObjects.get(row.file)
+      const before = beforeObject && objectText.get(beforeObject.id)
+      const after = afterObject && objectText.get(afterObject.id)
+      const beforeText = before?.isText && beforeObject?.mode.startsWith("100")
+      const afterText = after?.isText && afterObject?.mode.startsWith("100")
+      const physicalStatus = status.get(row.file)
+      const verifiedSides =
+        (physicalStatus === "added" && !beforeObject && afterText) ||
+        (physicalStatus === "deleted" && beforeText && !afterObject) ||
+        (physicalStatus === "modified" && beforeText && afterText)
+      const added = row.isBinaryFile ? 0 : Number(row.additions)
+      const deleted = row.isBinaryFile ? 0 : Number(row.deletions)
+      const verifiedCounts = Number.isSafeInteger(added) && added >= 0 && Number.isSafeInteger(deleted) && deleted >= 0
       result.push({
         file: row.file,
-        before,
-        after,
+        before: before?.text ?? "",
+        after: after?.text ?? "",
         additions: Number.isFinite(added) ? added : 0,
         deletions: Number.isFinite(deleted) ? deleted : 0,
-        status: status.get(row.file) ?? "modified",
+        status: physicalStatus ?? "modified",
+        comparisonKind: row.isBinaryFile ? "binary" : verifiedSides && verifiedCounts ? "text" : "unknown",
       })
     }
     return result
@@ -563,7 +583,7 @@ export namespace Snapshot {
   }
 
   async function treeObjects(git: string, hash: string, files: string[]) {
-    const objects = new Map<string, string>()
+    const objects = new Map<string, { id: string; mode: string }>()
     if (files.length === 0) return objects
     for (const chunk of chunks(files, 200)) {
       const text = await gitText(
@@ -573,6 +593,7 @@ export namespace Snapshot {
             `core.symlinks=${coreSymlinks}`,
             "-c",
             "core.quotepath=false",
+            "--literal-pathspecs",
             "--git-dir",
             git,
             "--work-tree",
@@ -594,16 +615,16 @@ export namespace Snapshot {
         if (tab < 0) throw new Error(`unexpected ls-tree entry: ${entry}`)
         const header = entry.slice(0, tab)
         const file = entry.slice(tab + 1)
-        const [, type, object] = header.split(" ")
-        if (type !== "blob" || !object) continue
-        objects.set(file, object)
+        const [mode, type, id] = header.split(" ")
+        if (type !== "blob" || !mode || !id) continue
+        objects.set(file, { id, mode })
       }
     }
     return objects
   }
 
   async function catFileBatch(git: string, objects: string[]) {
-    const out = new Map<string, string>()
+    const out = new Map<string, { text: string; isText: boolean }>()
     if (objects.length === 0) return out
     // git()'s spawn flow can't pipe stdin (it sets stdin: "ignore"), so this
     // path uses Process.spawn directly. To match the rest of util/git, give
@@ -638,7 +659,7 @@ export namespace Snapshot {
       }
 
       const bytes = stdout
-      const decoder = new TextDecoder()
+      const decoder = new TextDecoder("utf-8", { ignoreBOM: true })
       let offset = 0
       while (offset < bytes.length) {
         const lineEnd = bytes.indexOf(10, offset)
@@ -652,7 +673,8 @@ export namespace Snapshot {
         }
         const end = offset + size
         if (end > bytes.length) throw new Error(`snapshot cat-file truncated blob: ${object}`)
-        out.set(object, decoder.decode(bytes.subarray(offset, end)))
+        const body = bytes.subarray(offset, end)
+        out.set(object, { text: decoder.decode(body), isText: isUtf8(body) && !body.includes(0) })
         offset = end
         if (offset < bytes.length) {
           if (bytes[offset] !== 10) throw new Error(`snapshot cat-file missing separator after ${object}`)

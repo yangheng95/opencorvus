@@ -1,4 +1,5 @@
 import { fn } from "@/util/fn"
+import { isUtf8 } from "node:buffer"
 import z from "zod"
 import { Log } from "@/util/log"
 import { Session } from "."
@@ -6,28 +7,75 @@ import { Session } from "."
 import { Message } from "./message"
 import { Identifier } from "@/id/id"
 import { Snapshot } from "@/snapshot"
+import { FileDiff, SavedSnapshotFileDiff } from "@/snapshot/types"
 
 import { Bus } from "@/bus"
 import { Filesystem } from "@/util/filesystem"
+import { withSharedJsonFactLock } from "@/util/process-lock"
 import { Instance } from "@/project/instance"
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 
 export namespace SessionSummary {
   const log = Log.create({ service: "session.summary" })
+  const legacyDiff = FileDiff.omit({ comparisonKind: true }).loose().array()
+  const storedDiff = z.strictObject({
+    version: z.literal(2),
+    changes: SavedSnapshotFileDiff.loose().array(),
+  })
+  const emptyDiff: z.infer<typeof storedDiff> = { version: 2, changes: [] }
+  const diffLocks = new Map<string, Promise<unknown>>()
+  const gitPathEscapes: Record<string, string> = {
+    a: "\x07", b: "\b", t: "\t", n: "\n", v: "\v", f: "\f", r: "\r", '"': '"', "\\": "\\",
+  }
 
-  export async function readDiff(sessionID: string): Promise<Snapshot.FileDiff[]> {
-    const target = ProjectRuntimePaths.sessionDiffPath(Instance.directory, Instance.project.id, sessionID)
+  function diffPath(sessionID: string) {
+    return ProjectRuntimePaths.sessionDiffPath(Instance.directory, Instance.project.id, sessionID)
+  }
+
+  async function readStoredDiff(target: string): Promise<unknown> {
     try {
-      return await Filesystem.readJson<Snapshot.FileDiff[]>(target)
+      return await Filesystem.readJson<unknown>(target)
     } catch (error) {
-      if ((error as NodeJS.ErrnoException)?.code === "ENOENT") return []
+      if ((error as NodeJS.ErrnoException)?.code === "ENOENT") return emptyDiff
       throw error
     }
   }
 
-  export async function writeDiff(sessionID: string, diff: Snapshot.FileDiff[]): Promise<void> {
-    const target = ProjectRuntimePaths.sessionDiffPath(Instance.directory, Instance.project.id, sessionID)
-    await Filesystem.writeAtomic(target, JSON.stringify(diff, null, 2))
+  function withDiffLock<T>(target: string, run: () => Promise<T>): Promise<T> {
+    return withSharedJsonFactLock({
+      locks: diffLocks,
+      filepath: target,
+      empty: JSON.stringify(emptyDiff),
+      run,
+    })
+  }
+
+  function writeStoredDiff(target: string, changes: SavedSnapshotFileDiff[]): Promise<void> {
+    const record = storedDiff.parse({ version: 2, changes })
+    return Filesystem.writeAtomic(target, JSON.stringify(record, null, 2))
+  }
+
+  export async function readDiff(sessionID: string): Promise<SavedSnapshotFileDiff[]> {
+    const target = diffPath(sessionID)
+    const stored = await readStoredDiff(target)
+    if (!Array.isArray(stored)) return storedDiff.parse(stored).changes
+
+    return withDiffLock(target, async () => {
+      const current = await readStoredDiff(target)
+      if (!Array.isArray(current)) return storedDiff.parse(current).changes
+      const changes = legacyDiff.parse(current).map((item) => ({
+        ...item,
+        file: unquoteGitPath(item.file),
+        comparisonKind: "unknown" as const,
+      }))
+      await writeStoredDiff(target, changes)
+      return changes
+    })
+  }
+
+  export async function writeDiff(sessionID: string, diff: SavedSnapshotFileDiff[]): Promise<void> {
+    const target = diffPath(sessionID)
+    await withDiffLock(target, () => writeStoredDiff(target, diff))
   }
 
   function storageErrorMessage(error: unknown): string {
@@ -38,7 +86,7 @@ export namespace SessionSummary {
 
   export async function publishDiff(input: {
     sessionID: string
-    diff: Snapshot.FileDiff[]
+    diff: SavedSnapshotFileDiff[]
   }): Promise<{ stored: true } | { stored: false; error: string }> {
     try {
       await writeDiff(input.sessionID, input.diff)
@@ -58,59 +106,20 @@ export namespace SessionSummary {
   }
 
   function unquoteGitPath(input: string) {
-    if (!input.startsWith('"')) return input
-    if (!input.endsWith('"')) return input
-    const body = input.slice(1, -1)
-    const bytes: number[] = []
-
-    for (let i = 0; i < body.length; i++) {
-      const char = body[i]!
-      if (char !== "\\") {
-        bytes.push(char.charCodeAt(0))
-        continue
+    if (input.length < 2 || !input.startsWith('"') || !input.endsWith('"')) return input
+    // Git can quote a control character while emitting adjacent Unicode as literal UTF-8.
+    const parts = input.slice(1, -1).split(/\\([0-3][0-7]{2}|[abtnvfr"\\])/u)
+    const bytes: Buffer[] = []
+    for (const [index, part] of parts.entries()) {
+      if (index % 2 === 0) {
+        if (/[\\"]/u.test(part)) return input
+        bytes.push(Buffer.from(part))
+      } else {
+        bytes.push(part.length === 3 ? Buffer.from([parseInt(part, 8)]) : Buffer.from(gitPathEscapes[part]!))
       }
-
-      const next = body[i + 1]
-      if (!next) {
-        bytes.push("\\".charCodeAt(0))
-        continue
-      }
-
-      if (next >= "0" && next <= "7") {
-        const chunk = body.slice(i + 1, i + 4)
-        const match = chunk.match(/^[0-7]{1,3}/)
-        if (!match) {
-          bytes.push(next.charCodeAt(0))
-          i++
-          continue
-        }
-        bytes.push(parseInt(match[0], 8))
-        i += match[0].length
-        continue
-      }
-
-      const escaped =
-        next === "n"
-          ? "\n"
-          : next === "r"
-            ? "\r"
-            : next === "t"
-              ? "\t"
-              : next === "b"
-                ? "\b"
-                : next === "f"
-                  ? "\f"
-                  : next === "v"
-                    ? "\v"
-                    : next === "\\" || next === '"'
-                      ? next
-                      : undefined
-
-      bytes.push((escaped ?? next).charCodeAt(0))
-      i++
     }
-
-    return Buffer.from(bytes).toString()
+    const decoded = Buffer.concat(bytes)
+    return isUtf8(decoded) && !decoded.includes(0) ? decoded.toString() : input
   }
 
   export const summarize = fn(
@@ -157,23 +166,7 @@ export namespace SessionSummary {
       sessionID: Identifier.schema("session"),
       messageID: Identifier.schema("message").optional(),
     }),
-    async (input) => {
-      const diffs = await readDiff(input.sessionID)
-      const next = diffs.map((item) => {
-        const file = unquoteGitPath(item.file)
-        if (file === item.file) return item
-        return {
-          ...item,
-          file,
-        }
-      })
-      const changed = next.some((item, i) => item.file !== diffs[i]?.file)
-      if (changed)
-        writeDiff(input.sessionID, next).catch((err) => {
-          log.warn("session_diff storage write failed", { sessionID: input.sessionID, error: String(err) })
-        })
-      return next
-    },
+    (input) => readDiff(input.sessionID),
   )
 
   export async function computeDiff(input: { messages: Message.WithParts[] }) {

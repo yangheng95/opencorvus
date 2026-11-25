@@ -175,6 +175,31 @@ test("saved session and immutable build observations retain their actual file de
   } }] })[0].changes[0]).toMatchObject({ file, openPath: file, status: "added", evidence: { kind: "complete" } })
 })
 
+test("saved session comparisons retain verified text, empty files and binary evidence", () => {
+  const empty = { before: "", after: "", additions: 0, deletions: 0, status: "added" }
+  const [group] = savedSessionChangeGroups([
+    { ...empty, file: "review.txt", comparisonKind: "text", after: "Saved line.\n", additions: 1 },
+    { ...empty, file: "empty.txt", comparisonKind: "text" },
+    { ...empty, file: "sample.bin", comparisonKind: "binary" },
+    { ...empty, file: "legacy.txt", comparisonKind: "unknown" },
+  ], "ses_saved")
+
+  expect(group.changes).toEqual([
+    { file: "review.txt", openPath: "review.txt", status: "added", isText: true,
+      before: "", after: "Saved line.\n", additions: 1, deletions: 0,
+      evidence: { kind: "complete", receipts: [{ sessionID: "ses_saved", fileIndex: 0 }] } },
+    { file: "empty.txt", openPath: "empty.txt", status: "added", isText: true,
+      before: "", after: "", additions: 0, deletions: 0,
+      evidence: { kind: "complete", receipts: [{ sessionID: "ses_saved", fileIndex: 1 }] } },
+    { file: "sample.bin", openPath: "sample.bin", status: "added", isText: false,
+      additions: null, deletions: null,
+      evidence: { kind: "complete", receipts: [{ sessionID: "ses_saved", fileIndex: 2 }] } },
+    { file: "legacy.txt", openPath: "legacy.txt", status: "added", additions: null, deletions: null,
+      evidence: { kind: "incomplete", reason: "saved_session_flags_missing",
+        receipts: [{ sessionID: "ses_saved", fileIndex: 3 }] } },
+  ])
+})
+
 test("the shared reader accepts the exact immutable deferred outcome", async () => {
   const deferredPart = { ...part, state: { ...state, output: "Recorded immutable outcome\n".repeat(200) } }
   const serialized = JSON.stringify(deferredPart.state)

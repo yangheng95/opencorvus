@@ -28,11 +28,15 @@ export const FileDiff = z
     additions: z.number(),
     deletions: z.number(),
     status: z.enum(["added", "deleted", "modified"]).optional(),
+    comparisonKind: z.enum(["text", "binary", "unknown"]).optional(),
   })
   .meta({
     ref: "FileDiff",
   })
 export type FileDiff = z.infer<typeof FileDiff>
+
+export const SavedSnapshotFileDiff = FileDiff.required({ comparisonKind: true })
+export type SavedSnapshotFileDiff = z.infer<typeof SavedSnapshotFileDiff>
 
 export const GitObjectContent = z
   .object({

@@ -43,10 +43,8 @@ import { SessionEvents } from "./events"
 import { Instance } from "../project/instance"
 import path from "path"
 import { fn } from "@/util/fn"
-import { Snapshot } from "@/snapshot"
 import { FileDiff as SnapshotFileDiff } from "@/snapshot/types"
 import { Filesystem } from "@/util/filesystem"
-import { ProjectRuntimePaths } from "@/project/runtime-paths"
 
 import type { Provider } from "@/provider/provider"
 import { CapabilityRules } from "@/capability/rules"
@@ -1080,16 +1078,6 @@ export namespace Session {
       })
     },
   )
-
-  export const diff = fn(Identifier.schema("session"), async (sessionID) => {
-    const target = ProjectRuntimePaths.sessionDiffPath(Instance.directory, Instance.project.id, sessionID)
-    try {
-      return await Filesystem.readJson<Snapshot.FileDiff[]>(target)
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException)?.code === "ENOENT") return []
-      throw error
-    }
-  })
 
   export const messages = fn(
     z.object({

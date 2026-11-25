@@ -8685,6 +8685,14 @@
           "before": {
             "type": "string"
           },
+          "comparisonKind": {
+            "enum": [
+              "text",
+              "binary",
+              "unknown"
+            ],
+            "type": "string"
+          },
           "deletions": {
             "type": "number"
           },

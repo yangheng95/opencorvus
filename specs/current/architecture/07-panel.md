@@ -1021,8 +1021,11 @@ mutation causality. Missing/deferred/control/error/changed-batch or unsupported
 lifecycle evidence remains explicitly incomplete; a single actual completed Tool
 comparison remains separately inspectable. Write path coverage supplies no invented
 after text. Canonical deferred mutation receipts remain visible even with no known
-path. Current saved Session Snapshot DTO lacks binary/absence flags and is therefore
-incomplete; current Build nullable object evidence is validated at its sole adapter.
+path. Saved Session comparisons present text when the snapshot producer verified
+the original endpoints, file type and line counts. Verified binary comparisons
+retain their non-text state and unavailable line counts. Older records without
+that evidence retain their original paths and explicit incomplete presentation.
+Build nullable object evidence is validated at its sole adapter.
 
 Large completed Edit and Apply Patch results retain bounded per-file observations
 from their producer metadata: original file index, exact path/move path, explicit
