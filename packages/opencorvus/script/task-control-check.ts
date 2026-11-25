@@ -13,6 +13,9 @@ import {
   type IsolatedTestRuntime,
 } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
+import { CreateTaskInput } from "../src/engine/model"
+import { PromptProfile } from "../src/agent/prompt-profile"
+import { Config } from "../src/config/config"
 
 const ALLOW_REAL_PROVIDER = "TASK_CONTROL_CHECK_ALLOW_REAL_PROVIDER"
 const AUTH_SOURCE = "TASK_CONTROL_CHECK_AUTH_SOURCE"
@@ -410,9 +413,10 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/engine/runtime"),
     import("@/engine/store"),
   ])
-  await Instance.provide({ directory: projectDirectory, fn: async () => {
+  const promptProfile = await Instance.provide({ directory: projectDirectory, fn: async () => {
     const projected = await Provider.getModel(selectedModel.slice(0, separator), selectedModel.slice(separator + 1))
     if (projected.api.id !== audit.modelID) throw new Error("Authorized model is not projected to the exact requested API model")
+    return PromptProfile.activeID(await Config.get())
   } })
   const preparedServer = await requireRecoveredServerRuntime(
     await listenWithRecoveredServerRuntime({
@@ -493,13 +497,14 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     return await json<{ task_id: string }>(createUrl, {
       method: "POST",
       headers: { "content-type": "application/json", "x-opencorvus-request-id": `task-control-${Date.now()}` },
-      body: JSON.stringify({
+      body: JSON.stringify(CreateTaskInput.parse({
         productPillar: "code",
+        promptProfile,
         source: "task-control-check",
         title: input.title,
         request: input.request,
         ...(process.env[MODEL]?.trim() ? { model: process.env[MODEL]!.trim() } : {}),
-      }),
+      })),
     })
   }
 

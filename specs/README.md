@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [真实任务控制与交付验收](records/2026-11/2026-11-26-real-task-control-and-delivery.md)
 - [暂存区与工作树分离时的 Git 读取核验](records/2026-11/2026-11-25-git-index-and-worktree-read-review.md)
 - [多步任务草稿的字段校验与实际保存](records/2026-11/2026-11-25-mission-draft-validation-and-save-review.md)
 - [编辑、草稿下载与保存的原字节核验](records/2026-11/2026-11-25-editor-mixed-endings-and-signature-review.md)

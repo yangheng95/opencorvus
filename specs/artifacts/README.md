@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [真实任务控制与交付证据](2026-11-26-real-task-control-and-delivery/README.md)
 - [Git 索引与工作树读取的证据](2026-11-25-git-index-and-worktree-read-review/README.md)
 - [草稿字段校验与实际保存的证据](2026-11-25-mission-draft-validation-and-save-review/README.md)
 - [文本原字节核验的证据](2026-11-25-editor-mixed-endings-and-signature-review/README.md)

@@ -1,0 +1,72 @@
+{
+  "authorizedTotal": 32,
+  "observedTotal": 32,
+  "remaining": 0,
+  "models": {
+    "gpt-6.1-sol": 32
+  },
+  "streaming": {
+    "True": 32
+  },
+  "httpStatus": {
+    "200": 32
+  },
+  "readerStates": {
+    "settled": 32
+  },
+  "readerTerminals": {
+    "eof": 32
+  },
+  "agents": {
+    "memory": 4,
+    "chat": 2,
+    "orchestrator": 10,
+    "dynamic-builder": 16
+  },
+  "runs": [
+    {
+      "run": "baseline",
+      "status": "failed",
+      "exitCode": 1,
+      "observedRequests": 2,
+      "credentialCleanup": "passed",
+      "phases": [
+        {
+          "phase": "seed-ingress",
+          "status": "failed"
+        },
+        {
+          "phase": "seed-cancellation",
+          "status": "unavailable"
+        },
+        {
+          "phase": "verify",
+          "status": "unavailable"
+        }
+      ],
+      "failure": "HTTP 400: promptProfile is required"
+    },
+    {
+      "run": "after",
+      "status": "budget_exhausted",
+      "exitCode": 1,
+      "observedRequests": 30,
+      "credentialCleanup": "passed",
+      "phases": [
+        {
+          "phase": "seed-ingress",
+          "status": "budget_exhausted"
+        },
+        {
+          "phase": "seed-cancellation",
+          "status": "unavailable"
+        },
+        {
+          "phase": "verify",
+          "status": "unavailable"
+        }
+      ],
+      "failure": "Request budget exhausted before progress response; cancellation and restart phases were not entered"
+    }
+  ]
+}
