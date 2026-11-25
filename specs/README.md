@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [同标题记忆的项目范围与原文核验](records/2026-11/2026-11-25-memory-project-search-review.md)
 - [返回二进制预览时核对原文件](records/2026-11/2026-11-25-pdf-workbench-live-replacement.md)
 - [暂停计划的并发编辑与显式重新保存核验](records/2026-11/2026-11-25-scheduled-concurrent-edit-review.md)
 - [文件搜索键盘和批量目标的实页核验](records/2026-11/2026-11-25-explorer-keyboard-selection-and-batch-targets.md)
