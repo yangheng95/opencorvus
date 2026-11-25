@@ -502,8 +502,10 @@ the original path and filename. Authored display names retain their own wording.
 Review search matches the displayed filename, directory and path label alongside
 the original recorded paths, using the same per-record matching as change types.
 Explorer applies that same representation to tree rows, search rows, path hints
-and selection names. A complete displayed path label resolves by exact comparison
-against the same type-filtered project index and returns the original path.
+and selection names. Search result labels use the same canonical project path as
+activation, according to the server's path syntax. A complete displayed path label
+resolves by exact comparison against the same type-filtered project index and
+returns the original path.
 Explorer operation descriptions, target details, results and path error summaries
 use that same label. Editable values and every file operation retain original paths;
 the empty project-root path continues to use the localized root-directory name.

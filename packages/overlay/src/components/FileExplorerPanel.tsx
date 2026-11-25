@@ -2484,7 +2484,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const rowDropDirectory = () => contextTargetDirectory(item())
       const label = () => isDirectory()
         ? t("explorer.folder_search_result", { path: filePathLabel(item().path) })
-        : filePathLabel(row().entry.path)
+        : filePathLabel(item().path)
       return (
         <ContextMenu.Root>
           <ContextMenu.Trigger
