@@ -1,0 +1,52 @@
+[
+  {
+    "route": "/find/file",
+    "params": {
+      "query": "\"\\u0020\\u0020b640 signed-note.txt\"",
+      "type": "file"
+    },
+    "requestID": "62e006cc-20db-4f3d-be2a-f019274e6000",
+    "body": [
+      "  b640 signed-note.txt"
+    ]
+  },
+  {
+    "route": "/file/content",
+    "params": {
+      "path": "  b632-parcel.txt"
+    },
+    "requestID": "ddfdc6e3-2e4e-4491-9bd6-c37b380f0151",
+    "body": {
+      "type": "text",
+      "content": "Parcel for the path with two leading spaces.\n",
+      "revision": "19de6764b6b825f8f454a8e0cc10382338661dbf0ba0bc51a8f0ec5c8606bc05",
+      "resourceID": "d441a4fad68bbdc44f0842bc5eb283c25dfbbf1a5c793d215a910b660316ff98"
+    }
+  },
+  {
+    "route": "/file/content",
+    "params": {
+      "path": "b632-parcel.txt"
+    },
+    "requestID": "e9348e1f-95ec-4305-bcee-c91e88d24efc",
+    "body": {
+      "type": "text",
+      "content": "Different parcel for the path without a leading space.\n",
+      "revision": "9eeabf3c86fea52e9eb46b9e4e5d3c7e558ee26083381c84ad2a5b0aa35da894",
+      "resourceID": "458454b03b3af3c0c8014966a328ecdeb7e8786510722ff4016d203ab3cc68fb"
+    }
+  },
+  {
+    "route": "/file/content",
+    "params": {
+      "path": "  b640 signed-note.txt"
+    },
+    "requestID": "d7e8f5b3-feb4-4b96-8b43-b09ff1784ba2",
+    "body": {
+      "type": "text",
+      "content": "",
+      "revision": "60125c3ddd448a5361140add75f6861bd99914b7bca4e5b87f0f600cce900421",
+      "resourceID": "df1af9b4234d176e39a39d3b3e9955994fd687da35b03ec48206b97d286afa4c"
+    }
+  }
+]

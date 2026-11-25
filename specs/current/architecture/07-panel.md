@@ -504,6 +504,9 @@ the original recorded paths, using the same per-record matching as change types.
 Explorer applies that same representation to tree rows, search rows, path hints
 and selection names. A complete displayed path label resolves by exact comparison
 against the same type-filtered project index and returns the original path.
+Explorer operation descriptions, target details, results and path error summaries
+use that same label. Editable values and every file operation retain original paths;
+the empty project-root path continues to use the localized root-directory name.
 Body-reference click delegation also retains the exact already parsed path
 attribute, including whitespace decoded from an authored Markdown destination.
 Empty-attribute validation does not supply a trimmed replacement resource.

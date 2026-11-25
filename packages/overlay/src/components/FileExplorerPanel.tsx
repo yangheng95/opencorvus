@@ -230,7 +230,7 @@ function operationFailureMessage(operation: ExplorerFailureOperation): string {
 }
 
 function explorerDirectoryDisplayPath(path: string | undefined): string | undefined {
-  return path === "" ? t("explorer.root_directory") : path
+  return path === "" ? t("explorer.root_directory") : path === undefined ? undefined : filePathLabel(path)
 }
 
 function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation, fallback = operationFailureMessage(operation)): string {
@@ -243,7 +243,7 @@ function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation, f
     const summary = (key: string, field: string) => {
       const value = data?.[field]
       return typeof value === "string"
-        ? t(key, { path: field === "targetDir" || (field === "path" && operation === "load") ? explorerDirectoryDisplayPath(value) : value })
+        ? t(key, { path: field === "targetDir" || (field === "path" && operation === "load") ? explorerDirectoryDisplayPath(value) : filePathLabel(value) })
         : fallback
     }
     switch (body.name) {
@@ -307,7 +307,7 @@ function outcomeFailureMessage(outcome: ExplorerOutcome, failure: ExplorerOutcom
   const message = isStoppedFailure(failure)
     ? t("explorer.operation_stopped")
     : fileErrorSummary(failure.error, outcome.operation)
-  return failure.path ? t("explorer.member_failure", { path: failure.path, message }) : message
+  return failure.path ? t("explorer.member_failure", { path: filePathLabel(failure.path), message }) : message
 }
 
 function postOpenMessage(result: NonNullable<ExplorerOutcome["postOpen"]>): string {
@@ -315,7 +315,7 @@ function postOpenMessage(result: NonNullable<ExplorerOutcome["postOpen"]>): stri
     result.status === "failed" && !isStoppedFailure(result)
       ? fileErrorSummary(result.error, "open")
       : t("explorer.open_stopped")
-  return t("explorer.member_failure", { path: result.path, message })
+  return t("explorer.member_failure", { path: filePathLabel(result.path), message })
 }
 
 function postOpenDetails(result: NonNullable<ExplorerOutcome["postOpen"]>): string | undefined {
@@ -361,7 +361,7 @@ function feedbackMessage(feedback: ExplorerFeedback): string {
           return t("explorer.operation_cancelled")
         return t("explorer.no_completed_items")
       }
-      const path = feedback.completed[0]!.path
+      const path = filePathLabel(feedback.completed[0]!.path)
       switch (feedback.operation) {
         case "create-file":
         case "create-directory":
@@ -1492,11 +1492,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     const [first] = targets
     const count = new Intl.NumberFormat(localeTag()).format(targets.length)
     const summary = targets.length === 1 && first
-      ? t(`explorer.${action}_message`, { path: first.path })
+      ? t(`explorer.${action}_message`, { path: filePathLabel(first.path) })
       : t(`explorer.${action}_many_message`, { count })
     return {
       message: targets.length < selectedCount ? `${summary}\n${t("explorer.transfer_includes_children")}` : summary,
-      details: targets.length > 1 ? targets.map((item) => item.path).join("\n") : undefined,
+      details: targets.length > 1 ? targets.map((item) => filePathLabel(item.path)).join("\n") : undefined,
     }
   }
 
@@ -1969,7 +1969,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const result = await showAppDialog({
         kind: `file-${operation}`,
         title: t(`explorer.${operation}`),
-        message: t(`explorer.${operation}_message`, { path: item.path }),
+        message: t(`explorer.${operation}_message`, { path: filePathLabel(item.path) }),
         input: true,
         inputLabel: t(renaming ? "explorer.new_name" : "explorer.destination_path"),
         inputValue: renaming ? item.name : item.path,
@@ -2103,7 +2103,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const result = await showAppDialog({
         kind: "file-copy",
         title: t("explorer.copy"),
-        message: t("explorer.copy_message", { path: item.path }),
+        message: t("explorer.copy_message", { path: filePathLabel(item.path) }),
         input: true,
         inputLabel: t("explorer.destination_path"),
         inputValue: joinExplorerPath(parentPath(item.path), copyNameSuggestion(item.path)),
@@ -2241,7 +2241,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       title: t("explorer.delete"),
       message:
         items.length === 1
-          ? t("explorer.delete_message", { path: items[0]?.path ?? "" })
+          ? t("explorer.delete_message", { path: filePathLabel(items[0]?.path ?? "") })
           : t("explorer.delete_many_message", { count: items.length }),
       okLabel: t("explorer.confirm_delete"),
       okTone: "danger",
@@ -2475,7 +2475,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const directoryHint = () => searchDirectoryHints().get(row().entry.path)
       const directoryDetail = () => {
         const hint = directoryHint()
-        return filePathLabel(hint === undefined ? dirname(item().path) : explorerDirectoryDisplayPath(hint))
+        return hint === undefined ? filePathLabel(dirname(item().path)) : explorerDirectoryDisplayPath(hint)
       }
       const isSearchRowSelected = () => isSelected(item())
       const isSearchRowCurrent = () => currentFilePath() === item().path
@@ -2778,7 +2778,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                     class="file-explorer-feedback"
                     tone="error"
                     data-explorer-directory-error={path}
-                    title={failure().reveal ? undefined : t("explorer.directory_load_failed", { path })}
+                    title={failure().reveal ? undefined : t("explorer.directory_load_failed", { path: explorerDirectoryDisplayPath(path) })}
                     details={formatErrorDetails(failure().error) || undefined}
                     actions={
                       <Button
@@ -2796,9 +2796,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                     }
                   >
                     {failure().reveal?.notListed
-                      ? t("explorer.directory_not_listed", { path })
+                      ? t("explorer.directory_not_listed", { path: explorerDirectoryDisplayPath(path) })
                       : fileErrorSummary(failure().error, "load", failure().reveal
-                        ? t("explorer.directory_load_failed", { path })
+                        ? t("explorer.directory_load_failed", { path: explorerDirectoryDisplayPath(path) })
                         : undefined)}
                   </Feedback>
                 )}
