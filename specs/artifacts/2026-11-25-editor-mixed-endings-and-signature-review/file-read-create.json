@@ -1,0 +1,26 @@
+{
+  "mode": "create",
+  "path": "C:\\Users\\Public\\opencorvus-review-20261125-b625\\candidate\\model-identity-review\\b646-mixed-utf8-bom.txt",
+  "status": 200,
+  "requestID": "8b31ab02-2cce-4207-ab79-5daca10aca82",
+  "body": {
+    "type": "text",
+    "content": "﻿B646 Shipping ledger\r\nParcel A uses the first boundary.\nParcel B uses the second boundary.\rLast original row.",
+    "revision": "6be9c36840fef6b0fdd9f4549f1fb196a4e5d14c424df4d8d9f3ed7931b28048",
+    "resourceID": "5e03a6c55c791c6252fafd9f89a2aed9eddca5a8feefc4f3a5b2ab9da4027858"
+  },
+  "disk": {
+    "byteLength": 112,
+    "signatureBytes": [
+      239,
+      187,
+      191
+    ],
+    "separators": [
+      "CRLF",
+      "LF",
+      "CR"
+    ],
+    "text": "﻿B646 Shipping ledger\r\nParcel A uses the first boundary.\nParcel B uses the second boundary.\rLast original row."
+  }
+}

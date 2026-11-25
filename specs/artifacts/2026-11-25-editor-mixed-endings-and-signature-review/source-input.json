@@ -1,0 +1,34 @@
+{
+  "directory": "C:/Users/Public/opencorvus-review-20261125-b625/candidate/model-identity-review",
+  "filename": "b646-mixed-utf8-bom.txt",
+  "original": {
+    "byteLength": 112,
+    "signatureBytes": [
+      239,
+      187,
+      191
+    ],
+    "separators": [
+      "CRLF",
+      "LF",
+      "CR"
+    ],
+    "text": "﻿B646 Shipping ledger\r\nParcel A uses the first boundary.\nParcel B uses the second boundary.\rLast original row."
+  },
+  "draft": {
+    "byteLength": 139,
+    "signatureBytes": [
+      239,
+      187,
+      191
+    ],
+    "separators": [
+      "CRLF",
+      "LF",
+      "CR",
+      "CRLF"
+    ],
+    "text": "﻿B646 Shipping ledger\r\nParcel A uses the first boundary.\nParcel B uses the second boundary.\rLast original row.\r\nReviewed646 — 已复核"
+  },
+  "expectedDownloadPath": "C:\\Users\\hengu\\Downloads\\b646-mixed-utf8-bom.txt"
+}
