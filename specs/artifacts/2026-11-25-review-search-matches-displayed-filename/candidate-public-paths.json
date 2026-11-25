@@ -1,0 +1,37 @@
+{
+  "sessionID": "ses_hFPvdDQvE7PNzOFkQxlf",
+  "conversationSourceRequestID": "4e8e1c89-6976-4844-885f-7e945302dfd4",
+  "transcriptEntries": 0,
+  "comparisons": [
+    {
+      "file": "  b632-parcel.txt",
+      "before": "",
+      "after": "Parcel for the path with two leading spaces.\n",
+      "additions": 1,
+      "deletions": 0,
+      "status": "added",
+      "comparisonKind": "text"
+    },
+    {
+      "file": "b632-parcel.txt",
+      "before": "",
+      "after": "Different parcel for the path without a leading space.\n",
+      "additions": 1,
+      "deletions": 0,
+      "status": "added",
+      "comparisonKind": "text"
+    }
+  ],
+  "currentFiles": [
+    {
+      "path": "  b632-parcel.txt",
+      "content": "Parcel for the path with two leading spaces.\n",
+      "sourceRequestID": "6f33f559-5d82-436e-abfe-275070e0bffc"
+    },
+    {
+      "path": "b632-parcel.txt",
+      "content": "Different parcel for the path without a leading space.\n",
+      "sourceRequestID": "d2e13425-019b-4263-a3bd-7f2ff293b3d8"
+    }
+  ]
+}

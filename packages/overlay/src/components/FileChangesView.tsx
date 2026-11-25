@@ -57,6 +57,7 @@ interface ChangeRowModel {
   key: string
   index: number
   fileName: string
+  pathLabel: string
   directory: string
   groupLabel: string
   groupTitle: string
@@ -115,7 +116,7 @@ function groupTitle(group: ChangeGroup): string {
 function ChangeRowContent(props: { row: ChangeRowModel; showScope: boolean }) {
   return (
     <FileRowContent
-      name={filePathLabel(props.row.fileName)}
+      name={props.row.fileName}
       icon="file-document"
       detail={props.row.directory}
       prefix={
@@ -157,7 +158,7 @@ function ChangeRow(props: {
       class="oc-file-row change-row"
       data-clickable="true"
       data-change-index={props.row.index}
-      title={filePathLabel(props.row.item.file)}
+      title={props.row.pathLabel}
       id={`change-row-${props.row.index}`}
       onClick={open}
       onKeyDown={(event) => {
@@ -276,6 +277,11 @@ export function FileChangesView(props: FileChangesViewProps) {
       const groupKey = scopedGroupKey(group)
       return group.changes.map((item) => {
         const path = splitFilePath(item.file)
+        const fileName = filePathLabel(path.fileName)
+        const pathLabel = filePathLabel(item.file)
+        const directory = item.previousPath
+          ? t("files.rename_from", { path: filePathLabel(shortRelativePath(item.previousPath, props.directory)) })
+          : filePathLabel(path.directory)
         const status = changeStatusLabel(item.status, item.previousPath)
         const physicalStatus = changeStatusLabel(item.status)
         const row: ChangeRowModel = {
@@ -284,14 +290,17 @@ export function FileChangesView(props: FileChangesViewProps) {
           item,
           key: JSON.stringify([groupKey, item.file]),
           index,
-          fileName: path.fileName,
-          directory: item.previousPath
-            ? t("files.rename_from", { path: filePathLabel(shortRelativePath(item.previousPath, props.directory)) })
-            : filePathLabel(path.directory),
+          fileName,
+          pathLabel,
+          directory,
           groupLabel: label,
           groupTitle: title,
           searchText: fileSearchText(
-            [item.file, item.openPath, item.previousPath ?? "", status, physicalStatus, label, title].join(" "),
+            [
+              item.file, item.openPath, item.previousPath ?? "",
+              fileName, pathLabel, directory, filePathLabel(item.openPath),
+              status, physicalStatus, label, title,
+            ].join(" "),
           ),
         }
         index += 1

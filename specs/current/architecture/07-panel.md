@@ -499,6 +499,8 @@ label for filesystem names. Spaces at a path segment's edges and repeated spaces
 use explicit escapes within a quoted representation. The same representation
 supplies accessible names. File selection, reading, writes and downloads retain
 the original path and filename. Authored display names retain their own wording.
+Review search matches the displayed filename, directory and path label alongside
+the original recorded paths, using the same per-record matching as change types.
 Body-reference click delegation also retains the exact already parsed path
 attribute, including whitespace decoded from an authored Markdown destination.
 Empty-attribute validation does not supply a trimmed replacement resource.
