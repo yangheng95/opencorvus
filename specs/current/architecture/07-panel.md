@@ -2777,11 +2777,13 @@ submitted term owns the result styling and the localized result, empty and
 failure text. One label identifies a nonempty result group. Editing a draft
 keeps the submitted term, its results and their expanded source until the next
 explicit submission, clear, or scope retirement.
-Within the returned relevance window, Notes search projects one row per original
-file ID, using that file's first ranked chunk for its score and excerpt. File
-order follows those first appearances. Expansion and deletion retain file
-identity; expansion reads the complete original file. The backend's ranked chunk
-response and the existing twenty-chunk request window retain their semantics.
+Notes search requests file results with a twenty-file limit. Before the bounded
+candidate window, the backend selects one representative matching chunk per
+original file using full-text rank, then stored chunk time and identity for ties.
+Each result retains that chunk's score and original excerpt; the common relevance
+ranking orders the returned files. Expansion and deletion retain file identity;
+expansion reads the complete original file. Other consumers keep the declared
+chunk-result semantics when they omit the result unit or request chunks.
 The expanded original content is a named, focusable reading region. Its current
 language names the region with the original file title; native keyboard scrolling
 and text selection remain available inside the existing content boundary. Local
