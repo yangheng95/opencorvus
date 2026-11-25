@@ -1,0 +1,37 @@
+[
+  {
+    "file": "source-revision-a.pdf",
+    "pages": [
+      {
+        "page": 1,
+        "title": "Receiving cover",
+        "marker": "REVISION-A / PAGE-1"
+      },
+      {
+        "page": 2,
+        "title": "Archive checklist",
+        "marker": "REVISION-A / PAGE-2"
+      },
+      {
+        "page": 3,
+        "title": "End-of-shift archive",
+        "marker": "REVISION-A / PAGE-3"
+      }
+    ]
+  },
+  {
+    "file": "source-revision-b.pdf",
+    "pages": [
+      {
+        "page": 1,
+        "title": "Current delivery cover",
+        "marker": "REVISION-B / PAGE-1"
+      },
+      {
+        "page": 2,
+        "title": "Revised cargo summary",
+        "marker": "REVISION-B / PAGE-2"
+      }
+    ]
+  }
+]

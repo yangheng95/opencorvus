@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [返回二进制预览时核对原文件](records/2026-11/2026-11-25-pdf-workbench-live-replacement.md)
 - [暂停计划的并发编辑与显式重新保存核验](records/2026-11/2026-11-25-scheduled-concurrent-edit-review.md)
 - [文件搜索键盘和批量目标的实页核验](records/2026-11/2026-11-25-explorer-keyboard-selection-and-batch-targets.md)
 - [嵌套文件搜索标签使用当前规范项目路径](records/2026-11/2026-11-25-explorer-search-canonical-path-label.md)
