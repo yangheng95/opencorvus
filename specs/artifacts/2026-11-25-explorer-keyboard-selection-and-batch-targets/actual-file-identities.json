@@ -1,0 +1,22 @@
+[
+  {
+    "path": "b632-parcel.txt",
+    "requestID": "0bb202cb-4c64-482b-99d2-1b152ec4337d",
+    "body": {
+      "type": "text",
+      "content": "Different parcel for the path without a leading space.\n",
+      "revision": "9eeabf3c86fea52e9eb46b9e4e5d3c7e558ee26083381c84ad2a5b0aa35da894",
+      "resourceID": "458454b03b3af3c0c8014966a328ecdeb7e8786510722ff4016d203ab3cc68fb"
+    }
+  },
+  {
+    "path": "  b632-parcel.txt",
+    "requestID": "1d1cf2d9-8735-44e6-abbf-d8c895625731",
+    "body": {
+      "type": "text",
+      "content": "Parcel for the path with two leading spaces.\n",
+      "revision": "19de6764b6b825f8f454a8e0cc10382338661dbf0ba0bc51a8f0ec5c8606bc05",
+      "resourceID": "d441a4fad68bbdc44f0842bc5eb283c25dfbbf1a5c793d215a910b660316ff98"
+    }
+  }
+]

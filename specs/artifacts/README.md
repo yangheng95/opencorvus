@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文件搜索键盘与选区证据](2026-11-25-explorer-keyboard-selection-and-batch-targets/README.md)
 - [嵌套文件显示路径与搜索证据](2026-11-25-explorer-search-canonical-path-label/README.md)
 - [文件操作路径说明证据](2026-11-25-explorer-operation-path-labels/README.md)
 - [资源管理器文件名和搜索证据](2026-11-25-explorer-distinguishes-filename-spaces/README.md)
