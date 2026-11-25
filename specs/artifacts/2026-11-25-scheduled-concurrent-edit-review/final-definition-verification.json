@@ -1,0 +1,34 @@
+[
+  {
+    "suffix": "",
+    "status": 200,
+    "requestID": "548a5e07-eccb-4484-90f1-41fd47df095e",
+    "body": [
+      {
+        "id": "atm_hjj4YkNySJQP4Gtt24nF",
+        "revisionId": "atm_hZvceXQ0lk29lGC7bRIO",
+        "name": "B643 Warehouse remote revision",
+        "target": {
+          "scope": "global"
+        },
+        "targetSession": null,
+        "recurrence": "DTSTART:20990618T090000Z\nRRULE:FREQ=DAILY;COUNT=1",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Review the isolated dispatch plan. Keep this definition paused during verification.\nRemote editor accepted the warehouse dispatch note.\nB643 Local draft: retain the dispatch checklist.\nLocal note: compare the remote warehouse edit before saving.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4085456400000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  {
+    "suffix": "/atm_hjj4YkNySJQP4Gtt24nF/runs",
+    "status": 200,
+    "requestID": "03d8118f-af49-4199-a16b-a4c1ca306a03",
+    "body": []
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "id": "atm_hjj4YkNySJQP4Gtt24nF",
+  "revisionId": "atm_hnsCmZXqHegLRzSWUwvx",
+  "name": "B643 Paused dispatch review",
+  "target": {
+    "scope": "global"
+  },
+  "targetSession": null,
+  "recurrence": "DTSTART:20990618T090000Z\nRRULE:FREQ=DAILY;COUNT=1",
+  "executionMode": "local",
+  "model": null,
+  "reasoningEffort": null,
+  "prompt": "Review the isolated dispatch plan. Keep this definition paused during verification.",
+  "status": "paused",
+  "lastRun": null,
+  "nextRun": 4085456400000,
+  "failureCount": 0,
+  "lastError": null
+}

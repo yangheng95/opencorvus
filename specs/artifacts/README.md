@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [暂停计划并发编辑的证据](2026-11-25-scheduled-concurrent-edit-review/README.md)
 - [文件搜索键盘与选区证据](2026-11-25-explorer-keyboard-selection-and-batch-targets/README.md)
 - [嵌套文件显示路径与搜索证据](2026-11-25-explorer-search-canonical-path-label/README.md)
 - [文件操作路径说明证据](2026-11-25-explorer-operation-path-labels/README.md)

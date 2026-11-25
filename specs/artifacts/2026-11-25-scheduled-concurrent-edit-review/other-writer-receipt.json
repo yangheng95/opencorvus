@@ -1,0 +1,29 @@
+{
+  "input": {
+    "requestID": "7fae58e5-bacf-4f03-b123-34bde17ccf2d",
+    "expectedRevisionId": "atm_hnsCmZXqHegLRzSWUwvx",
+    "name": "B643 Warehouse remote revision",
+    "prompt": "Review the isolated dispatch plan. Keep this definition paused during verification.\nRemote editor accepted the warehouse dispatch note."
+  },
+  "status": 200,
+  "requestID": "f18f2d0a-6485-4747-92a7-18d6bef97153",
+  "body": {
+    "id": "atm_hjj4YkNySJQP4Gtt24nF",
+    "revisionId": "atm_h9VgS5qIozN3DLL0da1g",
+    "name": "B643 Warehouse remote revision",
+    "target": {
+      "scope": "global"
+    },
+    "targetSession": null,
+    "recurrence": "DTSTART:20990618T090000Z\nRRULE:FREQ=DAILY;COUNT=1",
+    "executionMode": "local",
+    "model": null,
+    "reasoningEffort": null,
+    "prompt": "Review the isolated dispatch plan. Keep this definition paused during verification.\nRemote editor accepted the warehouse dispatch note.",
+    "status": "paused",
+    "lastRun": null,
+    "nextRun": 4085456400000,
+    "failureCount": 0,
+    "lastError": null
+  }
+}
