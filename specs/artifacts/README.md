@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [审阅使用显示文件名搜索的桌面证据](2026-11-25-review-search-matches-displayed-filename/README.md)
 - [同名搜索翻页的实页与公开回执](2026-11-25-palette-paged-same-title-selection/README.md)
 - [同名搜索结果与实际会话目标](2026-11-25-palette-distinguishes-same-title-conversations/README.md)
 - [旁聊草稿与同一项目目录的实页证据](2026-11-25-side-chat-drafts-through-equivalent-directories/README.md)

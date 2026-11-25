@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [审阅搜索可直接匹配界面显示的文件名](records/2026-11/2026-11-25-review-search-matches-displayed-filename.md)
 - [同名搜索结果翻页时保留会话选择](records/2026-11/2026-11-25-palette-paged-same-title-selection.md)
 - [全局搜索区分同名工作对话](records/2026-11/2026-11-25-palette-distinguishes-same-title-conversations.md)
 - [旁聊草稿在等价项目路径和新标签中保持归属](records/2026-11/2026-11-25-side-chat-drafts-through-equivalent-directories.md)
