@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [嵌套文件搜索标签使用当前规范项目路径](records/2026-11/2026-11-25-explorer-search-canonical-path-label.md)
 - [文件操作确认和结果明确显示带空格的目标](records/2026-11/2026-11-25-explorer-operation-path-labels.md)
 - [资源管理器区分带空格的文件名并接入同一显示名搜索](records/2026-11/2026-11-25-explorer-distinguishes-filename-spaces.md)
 - [工作对话跨标签归档恢复时保留未发送草稿](records/2026-11/2026-11-25-work-draft-through-archive-restore.md)

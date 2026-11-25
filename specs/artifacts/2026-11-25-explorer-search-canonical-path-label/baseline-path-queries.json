@@ -1,0 +1,24 @@
+[
+  {
+    "query": "\"\\u0020\\u0020b639 inbound\\\\receipt.txt\"",
+    "requestID": "bfcbc9b0-9e80-41ee-84f2-12e665603928",
+    "paths": []
+  },
+  {
+    "query": "\"\\u0020\\u0020b639 inbound/receipt.txt\"",
+    "requestID": "d7e315f1-83da-4c16-9cd3-64ec471eb32b",
+    "paths": [
+      "  b639 inbound\\receipt.txt"
+    ]
+  },
+  {
+    "route": "/file/content",
+    "requestID": "70800b88-6737-4763-a3c6-c7128368ee9b",
+    "body": {
+      "type": "text",
+      "content": "Inbound folder has a significant leading space.\n",
+      "revision": "467005517086cdf02d033bfc3374c4c7a8ab5b7f363b4332bc79c1fbdd344019",
+      "resourceID": "1c926c6a3095d516dac6d39873e8b15fe807501438551a3dd523bc95d7e23810"
+    }
+  }
+]
