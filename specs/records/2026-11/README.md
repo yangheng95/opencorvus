@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [聊天页头为操作反馈保留可读空间](2026-11-25-chat-header-keeps-action-feedback-readable.md)
 - [长标题聊天导出保留会话标识并可下载](2026-11-25-conversation-download-keeps-long-title-identity.md)
 - [聊天导出文件保留完整标题文本](2026-11-25-conversation-export-keeps-title-segments.md)
 - [主输入区关闭模型选择器时重置搜索](2026-11-25-composer-clears-search-on-close.md)
