@@ -6812,10 +6812,12 @@ original Project lineage check. The download contains the canonical Session
 metadata and all persisted Message/Part values for that Session, including
 history outside the loaded viewport; it is not a Task/Mission archive or a child
 Session tree export. The browser saves JSON and Markdown through the existing
-Blob download primitive. Both filenames retain the title's text and Session
-identity, replacing title slashes and backslashes with underscores before
-applying the shared filename rules. The exported content preserves the source
-title.
+Blob download primitive. Both filenames share a stem with the exact Session
+identity. Title slashes and backslashes become underscores before applying the
+shared filename rules. The title portion fits on a Unicode code point boundary
+within a 200-byte UTF-8 filename budget, reserving the Session identity and
+longer format extension in both formats. The exported content preserves the
+complete source title.
 
 The request captures API authority, selection lifetime and original Session/
 directory. Scope changes and disposal abort it; only the same current target

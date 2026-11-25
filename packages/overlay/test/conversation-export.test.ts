@@ -51,6 +51,26 @@ test("both download names retain each segment of a title with path separators", 
   expect(markdown.text.split("\n", 1)[0]).toBe("# Finance / Budget \\\\ Q4 report")
 })
 
+test("overlong download titles fit at a Unicode boundary and preserve the actual session identity", () => {
+  const prefix = "界".repeat(60)
+  const title = prefix + "😀 Additional review details"
+  const session = { ...original.session, title }
+  const snapshot = { session, messages: [] }
+  const json = conversationExport(snapshot, { ...options, format: "json" })
+  const markdown = conversationExport(snapshot, { ...options, format: "markdown" })
+
+  expect(json.filename).toBe(prefix + " - ses_export.json")
+  expect(markdown.filename).toBe(prefix + " - ses_export.md")
+  expect(JSON.parse(json.text)).toEqual(snapshot)
+  expect(markdown.text.split("\n", 1)[0]).toBe("# " + title)
+
+  const anotherSession = { ...session, id: "ses_second" }
+  const another = conversationExport({ session: anotherSession, messages: [] }, {
+    ...options, sessionID: anotherSession.id, format: "json",
+  })
+  expect(another.filename).toBe(prefix + " - ses_second.json")
+})
+
 test("a conversation beyond a history page preserves every original message in order", () => {
   const messages = Array.from({ length: 121 }, (_, index) => ({
     info: { ...original.messages[0].info, id: `msg_${index}`, time: { created: now + index } },

@@ -17,6 +17,10 @@ export type ConversationExportLabels = {
   failed: string
 }
 
+// Leave space for the download directory, browser metadata, and duplicate names.
+const CONVERSATION_FILENAME_BYTE_LIMIT = 200
+const UTF8_ENCODER = new TextEncoder()
+
 function htmlText(value: string): string {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
 }
@@ -53,7 +57,11 @@ export function conversationExport(exported: ExportSessionResponse, options: {
   if (options.format !== "json" && options.format !== "markdown") throw new ConversationExportError("INVALID_CONVERSATION_EXPORT", "format")
   const { session, sessionID, title, created, updated, messages } = readConversationSnapshot(exported, options.sessionID)
   const filenameTitle = (title || sessionID).replace(/[\\/]/g, "_")
-  const basename = `${filenameTitle} - ${sessionID}`
+  const identitySuffix = ` - ${sessionID}`
+  const suffixBytes = UTF8_ENCODER.encode(`${identitySuffix}.json`).byteLength
+  const titleBudget = Math.max(0, CONVERSATION_FILENAME_BYTE_LIMIT - suffixBytes)
+  const { read } = UTF8_ENCODER.encodeInto(filenameTitle, new Uint8Array(titleBudget))
+  const basename = `${filenameTitle.slice(0, read)}${identitySuffix}`
   if (options.format === "json") return {
     filename: artifactFilename(`${basename}.json`),
     mime: "application/json;charset=utf-8",
