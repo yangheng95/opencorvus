@@ -4434,8 +4434,10 @@ retires the results, keeps the typed query and shows a localized Retry action
 with the original diagnostic, which remains visible during the retry.
 Locating a result can fail independently of that read.
 Chat export keeps the conversation title visible. A separate status announces
-the read and browser download handoff; an export failure remains inspectable
+the read and browser download handoff. An export failure remains inspectable
 with its original diagnostic until the next export or conversation change.
+The title takes the space remaining after action feedback and controls, up to
+its natural inline width.
 Conversation diagnostic copy also keeps the original title. Its initiating
 conversation selection, connection and action own clipboard handoff and
 feedback; a completed read from a retired action cannot affect a later selection.

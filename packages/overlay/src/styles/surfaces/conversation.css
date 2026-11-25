@@ -1355,8 +1355,9 @@
 }
 
 .chat-title {
-  flex: 0 1 auto;
+  flex: 1 1 0;
   min-width: 0;
+  max-inline-size: max-content;
 }
 
 .chat-title-usage-trigger {
