@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [资源管理器文件名和搜索证据](2026-11-25-explorer-distinguishes-filename-spaces/README.md)
 - [工作对话归档恢复和草稿的证据](2026-11-25-work-draft-through-archive-restore/README.md)
 - [审阅使用显示文件名搜索的桌面证据](2026-11-25-review-search-matches-displayed-filename/README.md)
 - [同名搜索翻页的实页与公开回执](2026-11-25-palette-paged-same-title-selection/README.md)
