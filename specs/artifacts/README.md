@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文本原字节核验的证据](2026-11-25-editor-mixed-endings-and-signature-review/README.md)
 - [同标题记忆范围核验的证据](2026-11-25-memory-project-search-review/README.md)
 - [二进制预览返回核对的证据](2026-11-25-pdf-workbench-live-replacement/README.md)
 - [暂停计划并发编辑的证据](2026-11-25-scheduled-concurrent-edit-review/README.md)
