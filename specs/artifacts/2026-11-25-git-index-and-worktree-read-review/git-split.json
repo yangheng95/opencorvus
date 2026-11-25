@@ -1,0 +1,71 @@
+{
+  "mode": "split",
+  "directory": "C:/Users/Public/opencorvus-review-20261125-b625/candidate/model-identity-review",
+  "filename": "  b648-index ledger.txt",
+  "head": "a163e913be1a6cac894d330f2937856d8d27b393",
+  "branch": "main",
+  "indexEntries": "100644 452708509def41ac28320f4b62f941e13b150e63 0\t  b648-index ledger.txt\u0000",
+  "gitStatus": "AM   b648-index ledger.txt\u0000??   b632-parcel.txt\u0000??   b639 inbound/receipt.txt\u0000??   b640 signed-note.txt\u0000?? .gitattributes\u0000?? .gitignore\u0000?? .opencorvus/b631-retired-fixture.txt\u0000?? .opencorvus/b633-before-replacement.txt\u0000?? .opencorvus/opencorvus.jsonc\u0000?? b630-review-north-notes.txt\u0000?? b630-review-north.txt\u0000?? b630-review-south-notes.txt\u0000?? b630-review-south.txt\u0000?? b631-history/added.txt\u0000?? b631-history/empty.txt\u0000?? b631-history/modified.txt\u0000?? b631-history/sample.bin\u0000?? b631-history/was-empty.txt\u0000?? b632-parcel.txt\u0000?? b633-return-draft.txt\u0000?? b644-live-manual.pdf\u0000?? b644-live-poster.png\u0000?? b644-payload.bin\u0000?? b646-mixed-utf8-bom.txt\u0000",
+  "indexContent": "B648 staged parcel.\n",
+  "diskContent": "B648 staged parcel.\nB648 later worktree parcel.\n",
+  "vcs": {
+    "status": 200,
+    "requestID": "f21ec3dd-2f2f-419f-8766-72590687feaa",
+    "body": {
+      "initialized": true,
+      "branch": "main",
+      "commit": "a163e91",
+      "clean": false,
+      "dirty": true,
+      "staged": 1,
+      "modified": 1,
+      "untracked": 23,
+      "conflicts": 0,
+      "ahead": 0,
+      "behind": 0,
+      "hasRemote": false
+    }
+  },
+  "diff": {
+    "status": 200,
+    "requestID": "57354874-22fd-443e-bc9e-d54c6f20e2f3",
+    "body": [
+      {
+        "file": "  b648-index ledger.txt",
+        "patch": "diff --git a/  b648-index ledger.txt b/  b648-index ledger.txt\nnew file mode 100644\nindex 0000000..628131d\n--- /dev/null\n+++ b/  b648-index ledger.txt\t\n@@ -0,0 +1,2 @@\n+B648 staged parcel.\n+B648 later worktree parcel.\n",
+        "additions": 2,
+        "deletions": 0,
+        "status": "added"
+      }
+    ]
+  },
+  "content": {
+    "status": 200,
+    "requestID": "d1b0b805-be29-4fba-b215-59faea3eba0b",
+    "body": {
+      "type": "text",
+      "content": "B648 staged parcel.\nB648 later worktree parcel.\n",
+      "revision": "116b0651a3ed6ff9b5ec43f2e74049f2b534eaac1cff4e637354b02857de6a4c",
+      "resourceID": "3b10a21cd10468539a7b37b55726c2e4278cca75a6d232e636fb6939209100ee",
+      "patch": {
+        "oldFileName": "  b648-index ledger.txt",
+        "newFileName": "  b648-index ledger.txt",
+        "oldHeader": "old",
+        "newHeader": "new",
+        "hunks": [
+          {
+            "oldStart": 0,
+            "oldLines": 0,
+            "newStart": 1,
+            "newLines": 2,
+            "lines": [
+              "+B648 staged parcel.",
+              "+B648 later worktree parcel."
+            ]
+          }
+        ]
+      },
+      "diff": "Index:   b648-index ledger.txt\n===================================================================\n---   b648-index ledger.txt\told\n+++   b648-index ledger.txt\tnew\n@@ -0,0 +1,2 @@\n+B648 staged parcel.\n+B648 later worktree parcel.\n"
+    }
+  }
+}
