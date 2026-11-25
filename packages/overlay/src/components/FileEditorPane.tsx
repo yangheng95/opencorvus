@@ -858,7 +858,7 @@ export function FileEditorPane(props: {
   createEffect(on(props.active, (active) => {
     const loaded = acceptedContent()
     if (
-      active && loaded && isEditableFileSnapshot(loaded.value) &&
+      active && loaded &&
       ownsFileTarget(loaded.target) && isApiAuthorityCurrent(loaded.readerAuthority)
     ) requestOpenFileDiskCheck()
   }, { defer: true }))

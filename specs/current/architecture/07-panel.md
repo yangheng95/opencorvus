@@ -1606,8 +1606,11 @@ once against the disk snapshot. A changed clean file accepts that content. A
 changed file with edits keeps the original editing base and draft and shows the
 disk comparison action. An unchanged editable snapshot keeps the existing view.
 Returning to the open File tab or showing the workbench again requests the same
-check for the retained editable project snapshot, scoped to its file and current
+check for the retained accepted project content, scoped to its file and current
 connection. This also observes edits made outside OpenCorvus before the return.
+Read-only encoded previews derive their source from the accepted bytes. Identical
+bytes retain the existing PDF page and image view; changed bytes enter the same
+preview resource lifecycle. Download-only binary content accepts current metadata.
 The same disk check follows a committed project file edit or a change observed
 by the enabled worktree file watcher. The Work Ledger stream carries the original
 source and validated project-relative path in its existing file-change event.
