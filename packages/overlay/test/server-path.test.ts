@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test"
+import { filePathLabel } from "@opencorvus-ai/util/file-path-label"
 import {
   classifyProjectPathInput,
   decodeMarkdownFilePath,
-  filePathLabel,
   normalizeProjectFilePath,
   normalizeWorkspaceDirectoryInput,
   parentProjectPath,

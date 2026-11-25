@@ -11,7 +11,7 @@ import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type Diff
 import { matchesSearchTerms } from "../services/text-search"
 import { localeTag, t, tc } from "../utils/i18n"
 import { renderedListPageIndex } from "../utils/rendered-list-navigation"
-import { filePathLabel } from "../utils/server-path"
+import { filePathLabel } from "@opencorvus-ai/util/file-path-label"
 import { shortRelativePath } from "../utils/tool"
 import { virtualListPageIndex } from "../utils/virtual-list-navigation"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"

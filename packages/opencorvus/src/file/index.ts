@@ -19,6 +19,7 @@ import fuzzysort from "fuzzysort"
 import { Global } from "../global"
 import { NamedError } from "@opencorvus-ai/util/error"
 import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
+import { filePathLabel } from "@opencorvus-ai/util/file-path-label"
 import { randomUUID } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import { withKeyedLock } from "../util/lock"
@@ -1807,7 +1808,6 @@ export namespace File {
     const pathText = text.length >= 2 && text.startsWith('"') && text.endsWith('"') ? text.slice(1, -1) : text
     const absolutePath = path.isAbsolute(pathText) ? pathText : undefined
     const directory = Instance.directory
-    if (absolutePath && !Filesystem.contains(directory, absolutePath)) return []
     const query = searchKey(text)
     const limit = input.limit ?? 100
     const kind = input.type ?? (input.dirs === false ? "file" : "all")
@@ -1839,7 +1839,16 @@ export namespace File {
     const items =
       kind === "file" ? result.files : kind === "directory" ? result.dirs : [...result.files, ...result.dirs].sort()
 
+    if (text.startsWith('"') && text.endsWith('"')) {
+      const labelledPath = items.find((item) => {
+        const candidate = searchKey(item)
+        return filePathLabel(candidate) === text || filePathLabel(candidate.replace(/\/$/, "")) === text
+      })
+      if (labelledPath !== undefined) return [labelledPath]
+    }
+
     if (absolutePath) {
+      if (!Filesystem.contains(directory, absolutePath)) return []
       const indexedPath = items.find((item) => path.relative(absolutePath, path.join(directory, item)) === "")
       return indexedPath === undefined ? [] : [indexedPath]
     }

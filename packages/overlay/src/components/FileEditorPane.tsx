@@ -1,6 +1,7 @@
 import { batch, createEffect, createMemo, createSignal, lazy, Match, on, onCleanup, Show, Switch, untrack } from "solid-js"
 import { base64ToUint8 } from "@opencorvus-ai/transport-protocol"
 import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
+import { filePathLabel } from "@opencorvus-ai/util/file-path-label"
 import { ApiError, apiJson, apiRequest, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { showAppDialog } from "../services/app-dialog"
 import {
@@ -29,7 +30,6 @@ import { restoreRightDockFocus } from "../utils/right-dock-focus"
 import {
   classifyProjectPathInput,
   decodeMarkdownFilePath,
-  filePathLabel,
   isAbsoluteServerPath,
   isWindowsPath,
   normalizeProjectFilePath,

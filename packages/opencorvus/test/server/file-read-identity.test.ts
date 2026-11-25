@@ -95,6 +95,31 @@ test("native and portable directory queries retain visible and hidden directory 
   }
 }, 30_000)
 
+test("displayed path labels find the original file and directory identities", async () => {
+  await using project = await memoryProject("file-search-display-label")
+  await configure(project.path, "Displayed path search project\n")
+  const names = ["parcel.txt", "  parcel.txt", "literal-u0020.txt"]
+  for (const name of names) await fs.writeFile(path.join(project.path, name), "Original " + name + "\n")
+  const directoryName = "  inbound"
+  await fs.mkdir(path.join(project.path, directoryName))
+  const queries = [
+    { query: '"\\u0020\\u0020parcel.txt"', type: "file", expected: "  parcel.txt" },
+    { query: '"\\u0020\\u0020inbound"', type: "directory", expected: directoryName + "/" },
+    { query: '"\\u0020\\u0020inbound/"', type: "directory", expected: directoryName + "/" },
+    { query: "literal-u0020.txt", type: "file", expected: "literal-u0020.txt" },
+  ]
+  for (const { query, type, expected } of queries) {
+    expect(await read(project.path, "/find/file?" + new URLSearchParams({ query, type, limit: "1" })))
+      .toEqual({ status: 200, body: [expected] })
+  }
+  const found = await read(project.path, "/find/file?query=parcel.txt&type=file")
+  expect(found).toEqual({ status: 200, body: ["parcel.txt", "  parcel.txt"] })
+  for (const name of names) {
+    const opened = await read(project.path, "/file/content?" + new URLSearchParams({ path: name }))
+    expect(opened).toMatchObject({ status: 200, body: { type: "text", content: "Original " + name + "\n" } })
+  }
+}, 30_000)
+
 test("source readers retain explicit path and missing-file error contracts", async () => {
   await using project = await memoryProject("file-reader-errors")
   await configure(project.path, "FileReaderMarker\n")

@@ -14,7 +14,7 @@ import {
   mergeChangeGroups,
 } from "../utils/file-change-summary"
 import { localeTag, t, tc } from "../utils/i18n"
-import { filePathLabel } from "../utils/server-path"
+import { filePathLabel } from "@opencorvus-ai/util/file-path-label"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { FileRowContent } from "./ui/FileRow"

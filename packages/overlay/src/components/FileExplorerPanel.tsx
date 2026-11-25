@@ -14,6 +14,7 @@ import {
   type Accessor,
 } from "solid-js"
 import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
+import { filePathLabel } from "@opencorvus-ai/util/file-path-label"
 import { ContextMenu } from "./ui/ContextMenu"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { dialogOpeningFocusTarget } from "./ui/Dialog"
@@ -2474,7 +2475,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const directoryHint = () => searchDirectoryHints().get(row().entry.path)
       const directoryDetail = () => {
         const hint = directoryHint()
-        return hint === undefined ? dirname(item().path) : explorerDirectoryDisplayPath(hint)
+        return filePathLabel(hint === undefined ? dirname(item().path) : explorerDirectoryDisplayPath(hint))
       }
       const isSearchRowSelected = () => isSelected(item())
       const isSearchRowCurrent = () => currentFilePath() === item().path
@@ -2482,8 +2483,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       const isSearchRowDropTarget = () => dropTargetRowPath() === item().path
       const rowDropDirectory = () => contextTargetDirectory(item())
       const label = () => isDirectory()
-        ? t("explorer.folder_search_result", { path: item().path })
-        : row().entry.path
+        ? t("explorer.folder_search_result", { path: filePathLabel(item().path) })
+        : filePathLabel(row().entry.path)
       return (
         <ContextMenu.Root>
           <ContextMenu.Trigger
@@ -2532,7 +2533,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             onDrop={(event) => void handleExplorerDrop(event, rowDropDirectory())}
             onClick={(event) => handleRowClick(event, item(), activate)}
           >
-            <FileRowContent name={item().name} icon={isDirectory() ? "folder" : "file-document"} detail={directoryDetail()} />
+            <FileRowContent name={filePathLabel(item().name)} icon={isDirectory() ? "folder" : "file-document"} detail={directoryDetail()} />
           </ContextMenu.Trigger>
           {renderItemContextMenu(item, () => ({ isDirectory: isDirectory(), activate }))}
         </ContextMenu.Root>
@@ -2552,7 +2553,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     }
     const selectedLabel = () => {
       if (!isNodeSelected()) return undefined
-      const label = t("explorer.selected_path_hint", { path: node().path })
+      const label = t("explorer.selected_path_hint", { path: filePathLabel(node().path) })
       const status = readStatus()
       return status ? `${label} · ${status}` : label
     }
@@ -2590,7 +2591,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           aria-keyshortcuts={EXPLORER_ROW_KEY_SHORTCUTS}
           draggable={!commandBusy()}
           style={{ "--file-explorer-row-depth": String(row().depth) }}
-          title={node().path}
+          title={filePathLabel(node().path)}
           onContextMenu={() => prepareContextSelection(item())}
           onDragStart={(event) => beginExplorerRowDrag(event, item())}
           onDragEnd={clearExplorerDrag}
@@ -2613,7 +2614,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           onClick={(event) => handleRowClick(event, item(), activate)}
         >
           <FileRowContent
-            name={node().name}
+            name={filePathLabel(node().name)}
             icon={isDirectory() ? (row().expanded ? "folder-open" : "folder") : "file-document"}
             expandable={isDirectory()}
             expanded={row().expanded}
