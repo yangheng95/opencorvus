@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [全局搜索区分同名工作对话](records/2026-11/2026-11-25-palette-distinguishes-same-title-conversations.md)
 - [旁聊草稿在等价项目路径和新标签中保持归属](records/2026-11/2026-11-25-side-chat-drafts-through-equivalent-directories.md)
 - [右侧工作台折叠重开时保留草稿并核对磁盘](records/2026-11/2026-11-25-file-draft-through-dock-collapse.md)
 - [审阅可区分带边缘空格的文件名](records/2026-11/2026-11-25-review-distinguishes-filename-spaces.md)
