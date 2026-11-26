@@ -1,0 +1,199 @@
+{
+  "status": "passed",
+  "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+  "artifactID": "art_g0Vc7iRlf00l8ubieX3b",
+  "finalMessageID": "msg_g0Vc7iRpY00kgKCotpuZ",
+  "sourceBytes": 8016,
+  "previewBytes": 147137,
+  "paragraphs": 20,
+  "bodyCharacters": 1540,
+  "pdfPages": 2,
+  "pdfFullTextCoverage": true,
+  "headings": [
+    {
+      "paragraph": 1,
+      "text": "销售分析｜销售经理审阅稿",
+      "firstBodyPrefix": "本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录",
+      "pdfPage": 1,
+      "nativeKeepNext": true,
+      "nativeKeepLines": true
+    },
+    {
+      "paragraph": 2,
+      "text": "一、来源与分析范围",
+      "firstBodyPrefix": "本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录",
+      "pdfPage": 1,
+      "nativeKeepNext": true,
+      "nativeKeepLines": true
+    },
+    {
+      "paragraph": 5,
+      "text": "二、订单计数与净金额口径",
+      "firstBodyPrefix": "订单数按每笔原始记录计一笔，不去重，也不剔除退款和零金额记录。净金额将所有金额相",
+      "pdfPage": 1,
+      "nativeKeepNext": true,
+      "nativeKeepLines": true
+    },
+    {
+      "paragraph": 8,
+      "text": "三、原始订单逐笔说明",
+      "firstBodyPrefix": "原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2",
+      "pdfPage": 1,
+      "nativeKeepNext": true,
+      "nativeKeepLines": true
+    },
+    {
+      "paragraph": 12,
+      "text": "四、分区与总体结果",
+      "firstBodyPrefix": "华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔",
+      "pdfPage": 1,
+      "nativeKeepNext": true,
+      "nativeKeepLines": true
+    },
+    {
+      "paragraph": 15,
+      "text": "五、谨慎业务解读",
+      "firstBodyPrefix": "已知事实是，在这五笔记录内，华东净金额高于华南，且唯一退款发生在华东，唯一零金额",
+      "pdfPage": 1,
+      "nativeKeepNext": true,
+      "nativeKeepLines": true
+    },
+    {
+      "paragraph": 18,
+      "text": "六、销售经理可执行的核对事项",
+      "firstBodyPrefix": "建议先逐笔核对五个订单编号、原行序、区域、金额与备注，确认导出范围完整且无重复录",
+      "pdfPage": 2,
+      "nativeKeepNext": true,
+      "nativeKeepLines": true
+    }
+  ],
+  "renders": [
+    {
+      "page": 1,
+      "bytes": 228852,
+      "reviewedURL": "/attachment/prj_haW9BdBH559F4Yw143ch/abf40bc56b3e817c08928993fa85e98f1be96dd247dbdd98b59755014a44f876.png",
+      "deliveredURL": "/attachment/prj_haW9BdBH559F4Yw143ch/abf40bc56b3e817c08928993fa85e98f1be96dd247dbdd98b59755014a44f876.png",
+      "sameCanonicalBytes": true,
+      "multimodalToolImage": true
+    },
+    {
+      "page": 2,
+      "bytes": 54584,
+      "reviewedURL": "/attachment/prj_haW9BdBH559F4Yw143ch/72e2639e28fc400da567496ddb98fda62ad362bc0472c4d590615fb08302eff9.png",
+      "deliveredURL": "/attachment/prj_haW9BdBH559F4Yw143ch/72e2639e28fc400da567496ddb98fda62ad362bc0472c4d590615fb08302eff9.png",
+      "sameCanonicalBytes": true,
+      "multimodalToolImage": true
+    }
+  ],
+  "originalRowsPreserved": {
+    "message": 74,
+    "part": 188,
+    "tool_part_request": 62,
+    "tool_part_outcome": 62,
+    "interactive_artifact": 5
+  },
+  "run15MessagesPreserved": [
+    "msg_aff7142a-3600-4161-a6fa-6e772ae9bea8",
+    "msg_g0Vc7dTJV00fWrxkqG1x",
+    "msg_g0Vc7dW4200r1Qc1DeMT",
+    "msg_g0Vc7dYKA00c9VRURapg",
+    "msg_g0Vc7daRg00yxbNO3Imj",
+    "msg_g0Vc7ddXf00S3Vy9Z4ul",
+    "msg_g0Vc7dgMN00Ue6rB5UwS",
+    "msg_g0Vc7djcu00IwOb4EU6v"
+  ],
+  "originalFilesPreserved": [
+    {
+      "file": "sales.csv",
+      "bytes": 181,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "sales_summary.py",
+      "bytes": 7650,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "summary.json",
+      "bytes": 238,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "test_sales_summary.py",
+      "bytes": 10107,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "区域汇总.csv",
+      "bytes": 59,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "销售报告.md",
+      "bytes": 1408,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售核对.xlsx",
+      "bytes": 6793,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售经理审阅稿.docx",
+      "bytes": 7997,
+      "preservedExactBytes": true
+    }
+  ],
+  "downloads": [
+    {
+      "filename": "销售经理审阅稿-分页修订.docx",
+      "bytes": 8016,
+      "canonicalBytes": true
+    },
+    {
+      "filename": "销售经理审阅稿-分页修订-preview.pdf",
+      "bytes": 147137,
+      "canonicalBytes": true
+    }
+  ],
+  "finalReceipt": {
+    "schema_version": 1,
+    "profile": "office.document@1",
+    "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/1a5213e27c4622750cd2bce5116fa3612dcf2d2a536d208085dc98ebe3cc4908.docx",
+    "source_sha": "1a5213e27c4622750cd2bce5116fa3612dcf2d2a536d208085dc98ebe3cc4908",
+    "runtime": {
+      "id": "officecli",
+      "version": "1.0.158",
+      "lock_revision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "package_sha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "renderer": {
+      "id": "officecli-html-browser@1",
+      "version": "157.0.8103.38; pagedjs@0.4.3; layout@1",
+      "playwright_version": "1.59.1",
+      "node_version": "25.7.0"
+    },
+    "resource_usage": {
+      "input_bytes": 8016,
+      "runtime_output_bytes": 64925,
+      "render_bytes": 430573,
+      "wall_clock_ms": 10904
+    },
+    "renders": [
+      {
+        "page": 1,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/abf40bc56b3e817c08928993fa85e98f1be96dd247dbdd98b59755014a44f876.png",
+        "sha": "abf40bc56b3e817c08928993fa85e98f1be96dd247dbdd98b59755014a44f876"
+      },
+      {
+        "page": 2,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/72e2639e28fc400da567496ddb98fda62ad362bc0472c4d590615fb08302eff9.png",
+        "sha": "72e2639e28fc400da567496ddb98fda62ad362bc0472c4d590615fb08302eff9"
+      }
+    ],
+    "preview": {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/90c6f177d3019df3e9ccba955d148267a7614dfec170b7407faa6cf30da97fd7.pdf",
+      "sha": "90c6f177d3019df3e9ccba955d148267a7614dfec170b7407faa6cf30da97fd7"
+    }
+  }
+}

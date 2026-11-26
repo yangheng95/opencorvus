@@ -686,14 +686,15 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   字面值工作表 authoring，不声明 transform。
   新DOCX/XLSX作者filename复用同一Windows名称组件分类，保留额外的首点/空白及扩展名限制，
   在私有workspace写入前返回原schema校验错误；既有产物清单与源文件身份不改写。
-  DOCX 通过有序 title/heading/paragraph 计划写入；
+  DOCX 通过有序 title/heading/paragraph 计划写入；title/heading 明确写入原生 keepNext、
+  keepLines，使标题与下段同页并保留标题自身行，普通正文允许自然跨页。
   XLSX 通过有界工作表、列标题和显式字符串/数字/布尔/空单元格计划写入，不接受公式、宏或原始命令；
   同一 batch 在全部单元格完成后按实际内容 autofit 原生列宽。逐表 PNG 按内容宽度包含工作表名称，
   保持真实列宽与渲染限额，不把省略号或空白画布视为可读性通过。
   XLSX 审阅图片在既有列宽内换行并按内容增长行高，不沿用交互 HTML 的单元格省略号裁切；
   同一审阅样式在逐表图片和 PDF 渲染前应用，仍由原尺寸和字节限额约束。
   XLSX 的每张 PDF 页面由对应工作表真实内容边界加固定页边生成，保留不同工作表的独立宽高；
-  DOCX 继续使用 A4。预览尺寸不修改原生源文件。
+  DOCX 使用原生页面尺寸/页边距（当前作者为 A4）。预览尺寸不修改原生源文件。
   所有格式在私有 workspace 单次 batch 完成写入并检查完整原生结果；DOCX/XLSX 在发布源附件前
   还必须从实际文件完整读回段落/单元格，与 typed plan 对应。PDF 源文件生产、existing-file
   editing 与其他格式必须在同一 harness 完成 profile qualification 后扩展 discriminated schema，
@@ -707,7 +708,17 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   原始 issues 完整出现在既有 Tool 结果，不合成消息或改写收据。
   DOCX/XLSX 复用既有 Browser Runtime 的 Node sidecar，在独立 headless 页面阻断外部资源，
   从固定 OfficeCLI HTML 输出派生逐页/逐表 PNG 与 PDF 预览，禁止直接启动用户 Office 或连接
-  用户浏览器。HTML 以私有输入文件传给 sidecar，避免 Windows 命令行容量限制。原始 DOCX/XLSX
+  用户浏览器。HTML 以私有输入文件传给 sidecar，避免 Windows 命令行容量限制。
+  DOCX 先以惰性 HTML 解析移除交互脚本，保留全部原生页面内容与样式，再由唯一嵌入的
+  Paged.js 0.4.3 分页；不执行 OfficeCLI 旧手工分页。命名 CSS 页面沿用原生尺寸与页边距，
+  无名 @page 从同一原生几何设置物理纸张，显式选择器绑定分节名称；当前新建段落profile
+  只资格认证统一物理尺寸，混合尺寸输入返回明确错误，禁止静默套用首张纸。
+  标题使用 break-after/inside avoid，正文使用 widows/orphans，长段落由分页库自然拆分。
+  相邻标题作为一个语义组应用相同break约束，保留整条标题链与后续正文，正文不进入不可拆盒。
+  空导航锚点/隐藏空块标记退出审阅流；已有内联样式缺省 display 落实为浏览器实际计算值，
+  使上游分页库正确识别可见段落。脚本及原 MIT 许可作为文本资源随执行文件嵌入，私有文件
+  传入同一 Node sidecar，收据现有 renderer.version 绑定实际浏览器、分页库及布局适配版本。
+  PNG 与 PDF 使用同一完成的分页 flow；XLSX 保留原逐表路径。原始 DOCX/XLSX
   附件为主交付，派生 PDF 使用既有 `file-preview@1`；receipt 同时绑定预览与 renderer 身份。
   需要保存到项目目录时，现有通用 `write` 接受与文本 `content` 互斥的 `attachmentUrl`，
   通过当前执行 Project 的 verified AttachmentStore 快照取得精确字节，沿用相同路径授权、

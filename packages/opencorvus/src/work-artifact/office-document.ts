@@ -221,6 +221,7 @@ export async function authorOfficeArtifact(input: Operation) {
             spaceAfter: paragraph.kind === "paragraph" ? "8pt" : "12pt",
             firstLineIndent: paragraph.kind === "paragraph" ? "22pt" : "0pt",
             bold: String(paragraph.kind !== "paragraph"),
+            ...(paragraph.kind !== "paragraph" ? { keepNext: "true", keepLines: "true" } : {}),
           }
           commands.push({ command: "add", parent: "/body", type: "p", props })
         }

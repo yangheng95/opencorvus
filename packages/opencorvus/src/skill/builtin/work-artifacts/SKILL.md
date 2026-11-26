@@ -1,6 +1,6 @@
 ---
 name: work-artifacts
-description: Produce editable PPTX presentations, DOCX documents and XLSX spreadsheets through the single OpenCorvus Work Artifact Harness. Use the exact mounted typed profile. DOCX supports ordered title, heading and body paragraphs; XLSX supports bounded worksheets and literal cells. Fresh PNG review and derived PDF previews accompany DOCX/XLSX delivery. Does not edit existing files or author formulas, macros, PDF source, OCR, archives or media.
+description: Produce editable PPTX presentations, DOCX documents and XLSX spreadsheets through the single OpenCorvus Work Artifact Harness. Use the exact mounted typed profile. DOCX supports ordered title, heading and body paragraphs, with titles/headings kept with the following paragraph; a complete paragraph plan can create a new version while preserving the original. XLSX supports bounded worksheets and literal cells. Fresh PNG review and derived PDF previews accompany DOCX/XLSX delivery. Does not edit existing files or author formulas, macros, PDF source, OCR, archives or media.
 aliases:
   - structured artifact production
   - presentation authoring

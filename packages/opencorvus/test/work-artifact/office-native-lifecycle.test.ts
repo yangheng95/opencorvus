@@ -1,10 +1,14 @@
 import { afterAll, expect, test } from "bun:test"
 import fs from "node:fs/promises"
 import path from "node:path"
+import { pathToFileURL } from "node:url"
+import { TextWriter, Uint8ArrayReader, ZipReader } from "@zip.js/zip.js"
 import { Instance } from "../../src/project/instance"
+import { Session } from "../../src/session"
 import { AttachmentStore } from "../../src/storage/attachment-store"
 import { Process } from "../../src/util/process"
 import { runPackagedWorkArtifactAcceptance } from "../../src/work-artifact/packaged-acceptance"
+import { authorOfficeArtifact, validateOfficeArtifact } from "../../src/work-artifact/office-document"
 import {
   prepareWorkArtifactRuntimeEnvironment,
   type WorkArtifactPresentationDependencies,
@@ -120,6 +124,101 @@ for (const profile of ["office.document@1", "office.spreadsheet@1"] as const) {
               "计划36小时，实际25小时，差值−11小时。",
               "来源 sales.csv，净金额35.60；退款金额-2.05。",
             ])
+            const sourcePath = AttachmentStore.resolveAbsolute(Instance.project.id, `${result.source_sha}.docx`)!
+            const zip = new ZipReader(new Uint8ArrayReader(Uint8Array.from(await fs.readFile(sourcePath))))
+            try {
+              const entries = await zip.getEntries()
+              const entry = entries.find((entry) => entry.filename === "word/document.xml")!
+              const xml = await entry.getData!(new TextWriter())
+              const paragraphs = [...xml.matchAll(/<w:p\b[^>]*>[\s\S]*?<\/w:p>/g)].map((match) => match[0])
+              for (const paragraph of paragraphs.slice(0, 2)) {
+                expect(paragraph).toMatch(/<w:keepNext(?:\s+w:val="(?:true|1|on)")?\s*\/>/)
+                expect(paragraph).toMatch(/<w:keepLines(?:\s+w:val="(?:true|1|on)")?\s*\/>/)
+              }
+            } finally {
+              await zip.close()
+            }
+
+            // Native document acceptance, not a product UI/browser test: the
+            // output is an editable DOCX, rendered PNGs and a searchable PDF.
+            const paragraphs = [
+              { kind: "title", text: "Pagination acceptance" },
+              {
+                kind: "paragraph",
+                text: Array.from(
+                  { length: 55 },
+                  (_, index) =>
+                    `Opening ${index + 1}: This paragraph keeps every original sentence in its supplied order.`,
+                ).join(" "),
+              },
+              { kind: "heading", text: "Review details" },
+              { kind: "heading", text: "Continuous heading" },
+              {
+                kind: "paragraph",
+                text: Array.from(
+                  { length: 80 },
+                  (_, index) =>
+                    `Entry ${index + 1}: Long paragraphs flow across pages with all source characters preserved.`,
+                ).join(" "),
+              },
+              { kind: "heading", text: "Closing review" },
+              { kind: "paragraph", text: "The final body ends here, with the source total 35.60 and refund -2.05." },
+            ] as const
+            const session = await Session.create({ kind: "orchestrator", title: "Native pagination acceptance" })
+            const operation = {
+              executionAuthority: {
+                kind: "conversation" as const,
+                sessionID: session.id,
+                projectID: Instance.project.id,
+                directory: project.path,
+              },
+              abort: new AbortController().signal,
+              extra: { projectID: Instance.project.id },
+              dependencies,
+            }
+            const authored = await authorOfficeArtifact({
+              ...operation,
+              raw: { profile, filename: "pagination.docx", locale: "zh-CN", paragraphs },
+            })
+            const validation = await validateOfficeArtifact({
+              ...operation,
+              raw: { profile, source_url: authored.reference.url },
+            })
+            const pdfjs = await import(
+              pathToFileURL(
+                path.resolve(import.meta.dir, "../../../overlay/node_modules/pdfjs-dist/legacy/build/pdf.mjs"),
+              ).href
+            )
+            const pdf = await pdfjs.getDocument({
+              data: new Uint8Array(
+                await fs.readFile(
+                  AttachmentStore.resolveAbsolute(Instance.project.id, `${validation.preview.sha}.pdf`)!,
+                ),
+              ),
+            }).promise
+            try {
+              const pages: string[] = []
+              for (let page = 1; page <= pdf.numPages; page++) {
+                const nativePage = await pdf.getPage(page)
+                expect(Math.abs(nativePage.view[2] - nativePage.view[0] - 595.3)).toBeLessThan(0.5)
+                expect(Math.abs(nativePage.view[3] - nativePage.view[1] - 841.9)).toBeLessThan(0.5)
+                const content = await nativePage.getTextContent()
+                pages.push(content.items.map((item: { str?: string }) => item.str ?? "").join(""))
+              }
+              const normalize = (text: string) => text.normalize("NFKC").replace(/\s+/g, "")
+              expect(normalize(pages.join(""))).toBe(normalize(paragraphs.map((paragraph) => paragraph.text).join("")))
+              expect(pdf.numPages).toBeGreaterThan(2)
+              expect(validation.renders.length).toBe(pdf.numPages)
+              expect(validation.receipt.payload.renderer.version.split("; ")[1]).toBe("pagedjs@0.4.3")
+              expect(validation.receipt.payload.renderer.version.split("; ")[2]).toBe("layout@1")
+              const details = pages.find((page) => page.includes("Review details"))!
+              expect(details).toContain("Continuous heading")
+              expect(details).toContain("Entry 1:")
+              const closing = pages.find((page) => page.includes("Closing review"))!
+              expect(closing).toContain("The final body ends here")
+            } finally {
+              await pdf.destroy()
+            }
           }
         },
       })

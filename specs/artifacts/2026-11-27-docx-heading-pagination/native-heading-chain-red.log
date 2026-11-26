@@ -1,0 +1,36 @@
+$ bun script/run-tests.ts test/work-artifact/office-native-lifecycle.test.ts
+    Finished `release` profile [optimized] target(s) in 0.05s
+[1/1] START test/work-artifact/office-native-lifecycle.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Warning: TT: undefined function: 3
+Warning: TT: undefined function: 3
+210 |               expect(pdf.numPages).toBeGreaterThan(2)
+211 |               expect(validation.renders.length).toBe(pdf.numPages)
+212 |               expect(validation.receipt.payload.renderer.version.split("; ")[1]).toBe("pagedjs@0.4.3")
+213 |               expect(validation.receipt.payload.renderer.version.split("; ")[2]).toBe("layout@1")
+214 |               const details = pages.find((page) => page.includes("Review details"))!
+215 |               expect(details).toContain("Continuous heading")
+                                    ^
+error: expect(received).toContain(expected)
+
+Expected to contain: "Continuous heading"
+Received: "Pagination acceptanceOpening 1: This paragraph keeps every original sentence in its supplied order.Opening 2: This paragraph keeps every original sentence in its supplied order. Opening3: This paragraph keeps every original sentence in its supplied order. Opening 4: Thisparagraph keeps every original sentence in its supplied order. Opening 5: Thisparagraph keeps every original sentence in its supplied order. Opening 6: Thisparagraph keeps every original sentence in its supplied order. Opening 7: Thisparagraph keeps every original sentence in its supplied order. Opening 8: Thisparagraph keeps every original sentence in its supplied order. Opening 9: Thisparagraph keeps every original sentence in its supplied order. Opening 10: Thisparagraph keeps every original sentence in its supplied order. Opening 11: Thisparagraph keeps every original sentence in its supplied order. Opening 12: Thisparagraph keeps every original sentence in its supplied order. Opening 13: Thisparagraph keeps every original sentence in its supplied order. Opening 14: Thisparagraph keeps every original sentence in its supplied order. Opening 15: Thisparagraph keeps every original sentence in its supplied order. Opening 16: Thisparagraph keeps every original sentence in its supplied order. Opening 17: Thisparagraph keeps every original sentence in its supplied order. Opening 18: Thisparagraph keeps every original sentence in its supplied order. Opening 19: Thisparagraph keeps every original sentence in its supplied order. Opening 20: Thisparagraph keeps every original sentence in its supplied order. Opening 21: Thisparagraph keeps every original sentence in its supplied order. Opening 22: Thisparagraph keeps every original sentence in its supplied order. Opening 23: Thisparagraph keeps every original sentence in its supplied order. Opening 24: Thisparagraph keeps every original sentence in its supplied order. Opening 25: Thisparagraph keeps every original sentence in its supplied order. Opening 26: Thisparagraph keeps every original sentence in its supplied order. Opening 27: Thisparagraph keeps every original sentence in its supplied order. Opening 28: Thisparagraph keeps every original sentence in its supplied order. Opening 29: Thisparagraph keeps every original sentence in its supplied order. Opening 30: Thisparagraph keeps every original sentence in its supplied order. Opening 31: Thisparagraph keeps every original sentence in its supplied order. Opening 32: Thisparagraph keeps every original sentence in its supplied order. Opening 33: Thisparagraph keeps every original sentence in its supplied order. Opening 34: Thisparagraph keeps every original sentence in its supplied order. Opening 35: Thisparagraph keeps every original sentence in its supplied order. Opening 36: Thisparagraph keeps every original sentence in its supplied order. Opening 37: Thisparagraph keeps every original sentence in its supplied order. Opening 38: Thisparagraph keeps every original sentence in its supplied order. Opening 39: Thisparagraph keeps every original sentence in its supplied order. Opening 40: Thisparagraph keeps every original sentence in its supplied order. Opening 41: Thisparagraph keeps every original sentence in its supplied order. Opening 42: Thisparagraph keeps every original sentence in its supplied order. Opening 43: Thisparagraph keeps every original sentence in its supplied order. Opening 44: Thisparagraph keeps every original sentence in its supplied order. Opening 45: Thisparagraph keeps every original sentence in its supplied order. Opening 46: Thisparagraph keeps every original sentence in its supplied order. Opening 47: Thisparagraph keeps every original sentence in its supplied order. Opening 48: Thisparagraph keeps every original sentence in its supplied order. Opening 49: Thisparagraph keeps every original sentence in its supplied order. Opening 50: Thisparagraph keeps every original sentence in its supplied order. Opening 51: Thisparagraph keeps every original sentence in its supplied order. Opening 52: Thisparagraph keeps every original sentence in its supplied order. Opening 53: Thisparagraph keeps every original sentence in its supplied order. Opening 54: Thisparagraph keeps every original sentence in its supplied order. Opening 55: Thisparagraph keeps every original sentence in its supplied order.Review details"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\office-native-lifecycle.test.ts:215:31)
+(fail) office.document@1 native author, inspect, validate and receipt-authorized delivery [61573.79ms]
+(skip) office.spreadsheet@1 native author, inspect, validate and receipt-authorized delivery
+
+ 0 pass
+ 1 skip
+ 1 fail
+ 18 expect() calls
+Ran 2 tests across 1 file. [63.44s]
+[1/1] DONE test/work-artifact/office-native-lifecycle.test.ts exit=1 duration=63.93s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\office-native-lifecycle.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\office-native-lifecycle.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-kkyxbu
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

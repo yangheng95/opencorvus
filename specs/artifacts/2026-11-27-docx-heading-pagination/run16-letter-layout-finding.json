@@ -1,0 +1,60 @@
+{
+  "status": "unmet",
+  "artifactID": "art_g0Vc7fP5H00nwMZnoQTV",
+  "sourceURL": "/attachment/prj_haW9BdBH559F4Yw143ch/1a5213e27c4622750cd2bce5116fa3612dcf2d2a536d208085dc98ebe3cc4908.docx",
+  "sourceBytes": 8016,
+  "expectedNativePageTwips": {
+    "width": 11906,
+    "height": 16838
+  },
+  "actualPreviewPoints": [
+    612,
+    792
+  ],
+  "actualReviewImagePixels": [
+    816,
+    1056
+  ],
+  "rootCause": "Paged.js named pagebox dimensions did not establish physical sheet dimensions; inline page name was not parsed as CSS declaration. Correct using shared unnamed sheet geometry and explicit named section selector.",
+  "nativeSourcePreservedForFreshValidation": true,
+  "finalReceipt": {
+    "schema_version": 1,
+    "profile": "office.document@1",
+    "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/1a5213e27c4622750cd2bce5116fa3612dcf2d2a536d208085dc98ebe3cc4908.docx",
+    "source_sha": "1a5213e27c4622750cd2bce5116fa3612dcf2d2a536d208085dc98ebe3cc4908",
+    "runtime": {
+      "id": "officecli",
+      "version": "1.0.158",
+      "lock_revision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "package_sha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "renderer": {
+      "id": "officecli-html-browser@1",
+      "version": "157.0.8103.38; pagedjs@0.4.3",
+      "playwright_version": "1.59.1",
+      "node_version": "25.7.0"
+    },
+    "resource_usage": {
+      "input_bytes": 8016,
+      "runtime_output_bytes": 64925,
+      "render_bytes": 424461,
+      "wall_clock_ms": 10893
+    },
+    "renders": [
+      {
+        "page": 1,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/35f623c0989e865e4be53c16c3d6b1fd2b2ddd1fb0084293d42b164671565fd0.png",
+        "sha": "35f623c0989e865e4be53c16c3d6b1fd2b2ddd1fb0084293d42b164671565fd0"
+      },
+      {
+        "page": 2,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/ce6999e3bfbc4fbc6498ef057ea406dc8fedbfd2d9293703d8f06b8b4d05f019.png",
+        "sha": "ce6999e3bfbc4fbc6498ef057ea406dc8fedbfd2d9293703d8f06b8b4d05f019"
+      }
+    ],
+    "preview": {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/cb42399ba117cec0d37fe9d52f9669578aa432c6d2b7495c03f2cc3ee1cfa13f.pdf",
+      "sha": "cb42399ba117cec0d37fe9d52f9669578aa432c6d2b7495c03f2cc3ee1cfa13f"
+    }
+  }
+}

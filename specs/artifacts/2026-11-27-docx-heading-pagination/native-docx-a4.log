@@ -1,0 +1,17 @@
+$ bun script/run-tests.ts test/work-artifact/office-native-lifecycle.test.ts
+    Finished `release` profile [optimized] target(s) in 0.04s
+[1/1] START test/work-artifact/office-native-lifecycle.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+Warning: TT: undefined function: 3
+Warning: TT: undefined function: 3
+(pass) office.document@1 native author, inspect, validate and receipt-authorized delivery [63242.69ms]
+(skip) office.spreadsheet@1 native author, inspect, validate and receipt-authorized delivery
+
+ 1 pass
+ 1 skip
+ 0 fail
+ 20 expect() calls
+Ran 2 tests across 1 file. [65.12s]
+[1/1] DONE test/work-artifact/office-native-lifecycle.test.ts exit=0 duration=65.72s

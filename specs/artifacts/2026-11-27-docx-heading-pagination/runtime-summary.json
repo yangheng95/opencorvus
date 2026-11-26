@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "totalRequests": 44,
+  "businessRequests": 36,
+  "preflightRequests": 8,
+  "runs": [
+    {
+      "label": "run15",
+      "requests": 10,
+      "preflightRequests": 2,
+      "businessRequests": 8,
+      "exactStreamingSolHTTP200SettledEOF": true,
+      "originalHandleJoinedExitCode": 0,
+      "copiesRetired": true,
+      "closedPort": 50950
+    },
+    {
+      "label": "run16",
+      "requests": 17,
+      "preflightRequests": 2,
+      "businessRequests": 15,
+      "exactStreamingSolHTTP200SettledEOF": true,
+      "originalHandleJoinedExitCode": 0,
+      "copiesRetired": true,
+      "closedPort": 57844
+    },
+    {
+      "label": "run17",
+      "requests": 2,
+      "preflightRequests": 2,
+      "businessRequests": 0,
+      "exactStreamingSolHTTP200SettledEOF": true,
+      "originalHandleJoinedExitCode": 0,
+      "copiesRetired": true,
+      "closedPort": 55103
+    },
+    {
+      "label": "run18",
+      "requests": 15,
+      "preflightRequests": 2,
+      "businessRequests": 13,
+      "exactStreamingSolHTTP200SettledEOF": true,
+      "originalHandleJoinedExitCode": 0,
+      "copiesRetired": true,
+      "closedPort": 59172
+    }
+  ]
+}
