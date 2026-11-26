@@ -3,6 +3,8 @@ import { decodeProviderStreamError } from "@opencorvus-ai/transport-protocol"
 import { ProviderError } from "@/provider/error"
 import { Message } from "@/session/message"
 import { collectLLMText, DefaultLLMActivityPolicy, type LLMActivityEvent } from "@/llm/activity"
+import { APICallError, StreamProviderError, streamText } from "ai"
+import { createOpenAI } from "@ai-sdk/openai"
 
 // Shape captured from the actual skill-loader-341 Provider occurrence.
 const overload = {
@@ -37,6 +39,77 @@ test("actual overload maps to a readable APIError with its diagnostic body", () 
   })
 })
 
+test("SDK stream overload retains its typed Provider diagnostic and redacted source payload", () => {
+  const original = { ...overload, password: "SYNTHETIC SDK VALUE" }
+  const error = new StreamProviderError({
+    message: overload.error.message,
+    code: overload.error.code,
+    type: overload.error.type,
+    isRetryable: true,
+    data: original,
+  })
+  const canonical = Message.fromError(error, { providerID: "openai" })
+  expect(canonical).toMatchObject({ name: "APIError", data: { message: overload.error.message, isRetryable: false } })
+  if (canonical.name !== "APIError") throw new Error("Expected the canonical APIError")
+  expect(JSON.parse(canonical.data.responseBody!)).toEqual({
+    type: "error",
+    error: { type: overload.error.type, code: overload.error.code, message: overload.error.message },
+    data: { ...overload, password: "<redacted>" },
+  })
+  expect(DefaultLLMActivityPolicy.classify(error, {})).toBe("provider_stream_error")
+})
+
+test("SDK context code reaches the current overflow recovery classification", () => {
+  const error = new StreamProviderError({ code: "context_length_exceeded", message: "Declared capacity was exceeded." })
+  expect(DefaultLLMActivityPolicy.classify(error, {})).toBe("context_overflow")
+  expect(Message.fromError(error, { providerID: "openai" })).toMatchObject({
+    name: "ContextOverflowError", data: { message: error.message },
+  })
+})
+
+for (const outputStarted of [false, true]) test(`real SDK HTTP errors ${outputStarted ? "after" : "before"} output enter the canonical Provider error contract`, async () => {
+  const requests: Array<{ model: string; stream: boolean }> = []
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, async fetch(request) {
+    const input = await request.json() as { model: string; stream: boolean }
+    requests.push({ model: input.model, stream: input.stream })
+    const events = [...(outputStarted ? [
+      { type: "response.created", response: { id: "response-contract", created_at: 1, model: "stream-contract" } },
+      { type: "response.output_item.added", output_index: 0, item: { type: "message", id: "message-contract" } },
+      { type: "response.output_text.delta", item_id: "message-contract", output_index: 0, delta: "Retained partial output." },
+    ] : []), overload]
+    return new Response(events.map(event => `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`).join(""), {
+      headers: { "content-type": "text/event-stream" },
+    })
+  } })
+  try {
+    const provider = createOpenAI({ apiKey: "local-stream-contract", baseURL: new URL("v1", server.url).toString() })
+    const callbackErrors: unknown[] = []
+    const result = streamText({ model: provider.responses("stream-contract"), prompt: "Read the current record.", maxRetries: 0,
+      onError: ({ error }) => { callbackErrors.push(error) },
+    })
+    const errors: unknown[] = []
+    const text: string[] = []
+    for await (const part of result.fullStream) {
+      if (part.type === "error") errors.push(part.error)
+      if (part.type === "text-delta") text.push(part.text)
+    }
+    expect(requests).toEqual([{ model: "stream-contract", stream: true }])
+    if (outputStarted) expect(text).toEqual(["Retained partial output."])
+    expect(callbackErrors).toEqual(errors)
+    expect(errors.map((error) => ({
+      errorType: StreamProviderError.isInstance(error) ? "stream" : APICallError.isInstance(error) ? "api-call" : "other",
+      canonical: Message.fromError(error, { providerID: "openai" }),
+      classification: DefaultLLMActivityPolicy.classify(error, {}),
+    }))).toMatchObject([{
+      errorType: outputStarted ? "stream" : "api-call",
+      canonical: { name: "APIError", data: { message: overload.error.message, isRetryable: !outputStarted,
+        ...(outputStarted ? {} : { statusCode: 503 }),
+      } },
+      classification: outputStarted ? "provider_stream_error" : "server_5xx",
+    }])
+  } finally { await server.stop(true) }
+})
+
 test("stream diagnostics use structured redaction and retain ordinary coordinates", () => {
   const input = { ...overload, password: "SYNTHETIC TWO WORDS", request_id: "req_stream" }
   expect(ProviderError.parseStreamError(input)).toEqual({
@@ -53,7 +126,10 @@ test("flat quota and context failures retain their explicit contracts", () => {
     .toMatchObject({ type: "context_overflow", message: "Input too long." })
 })
 
-test("consumed output followed by a Provider error settles as an explicit failed activity", async () => {
+for (const [label, error] of [
+  ["raw", overload],
+  ["SDK", new StreamProviderError({ message: overload.error.message, type: overload.error.type, code: overload.error.code, data: overload })],
+] as const) test(`consumed output followed by a ${label} Provider error settles as an explicit failed activity`, async () => {
   const events: LLMActivityEvent[] = []
   const deltas: string[] = []
   const result = await collectLLMText({
@@ -64,11 +140,11 @@ test("consumed output followed by a Provider error settles as an explicit failed
     onTextDelta: (delta) => { deltas.push(delta) },
     start: () => ({ stream: (async function* () {
       yield { type: "text-delta", text: "Partial answer" }
-      yield { type: "error", error: overload }
+      yield { type: "error", error }
     })() }),
   }).catch((error) => error)
   expect(deltas).toEqual(["Partial answer"])
-  expect(result).toMatchObject({ cls: "provider_stream_error", attempts: 0, cause: overload })
+  expect(result).toMatchObject({ cls: "provider_stream_error", attempts: 0, cause: error })
   expect(events.filter((event) => event.type === "terminal")).toMatchObject([
     { outcome: "failed", cls: "provider_stream_error" },
   ])

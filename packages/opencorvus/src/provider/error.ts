@@ -1,4 +1,4 @@
-import { APICallError } from "ai"
+import { APICallError, StreamProviderError } from "ai"
 import { decodeProviderStreamError } from "@opencorvus-ai/transport-protocol"
 import { STATUS_CODES } from "http"
 import { createScanner, parseTree, type Node as JSONNode } from "jsonc-parser"
@@ -405,7 +405,11 @@ export namespace ProviderError {
       }
 
   export function parseStreamError(input: unknown): ParsedStreamError | undefined {
-    const decoded = decodeProviderStreamError(input)
+    const decoded = decodeProviderStreamError(StreamProviderError.isInstance(input) ? {
+      type: "error",
+      error: { type: input.type, code: input.code, message: input.message },
+      data: input.data,
+    } : input)
     if (!decoded) return
     const body = decoded.body
     const responseBody = redactSensitiveProviderPayload(JSON.stringify(body))

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [无次数上限真实任务恢复的证据](2026-11-27-real-task-recovery-without-request-ceiling/README.md)
 - [真实任务控制与交付证据](2026-11-26-real-task-control-and-delivery/README.md)
 - [Git 索引与工作树读取的证据](2026-11-25-git-index-and-worktree-read-review/README.md)
 - [草稿字段校验与实际保存的证据](2026-11-25-mission-draft-validation-and-save-review/README.md)

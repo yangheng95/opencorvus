@@ -1,0 +1,730 @@
+{
+  "authorizedCeiling": null,
+  "observedTotal": 181,
+  "models": {
+    "gpt-6.1-sol": 181
+  },
+  "streaming": {
+    "True": 181
+  },
+  "httpStatus": {
+    "200": 179,
+    "None": 2
+  },
+  "readerStates": {
+    "settled": 176,
+    "reading": 3,
+    "fetch_failed": 1,
+    "awaiting_response": 1
+  },
+  "readerTerminals": {
+    "eof": 174,
+    "unavailable": 5,
+    "aborted": 2
+  },
+  "runs": [
+    {
+      "run": "run1",
+      "exitCode": 1,
+      "maxRequests": null,
+      "observedRequests": 58,
+      "accountingComplete": false,
+      "status": "failed",
+      "credentialCleanup": "passed",
+      "phases": [
+        {
+          "phase": "seed-ingress",
+          "status": "failed"
+        },
+        {
+          "phase": "seed-cancellation",
+          "status": "unavailable"
+        },
+        {
+          "phase": "verify",
+          "status": "unavailable"
+        }
+      ],
+      "failureEvidence": {
+        "phase": "seed-ingress",
+        "taskID": "tsk_g00Vc6RG7s00NSSwd2vN",
+        "currentProjectID": "prj_hiQswPGat50WHwicMEgZ",
+        "taskStatus": "failed",
+        "startedIncompleteTaskIDs": [],
+        "ownedPromptSessions": [],
+        "wakes": [],
+        "lineages": [
+          {
+            "id": "art_g0Vc6RNYl00M2kikICjK",
+            "status": "dispatch-lineage"
+          },
+          {
+            "id": "art_g0Vc6RZWd00UZvjb4Wrk",
+            "status": "dispatch-lineage"
+          },
+          {
+            "id": "art_g0Vc6Rz6800zKCsfvlHG",
+            "status": "dispatch-lineage"
+          }
+        ],
+        "recoveryArtifacts": [
+          {
+            "id": "art_hCdi7EitVvvIhoqAeLkA",
+            "kind": "task-infrastructure-error",
+            "status": "build-host-observation"
+          },
+          {
+            "id": "art_g0Vc6RUrq00Im7oeVLnv",
+            "kind": "task-infrastructure-error",
+            "status": "dispatch-agent"
+          }
+        ],
+        "executionCount": 8,
+        "recentProtocolEvents": [
+          {
+            "id": "pev_g0Vc6S6qA007V7ohfZQ4",
+            "type": "artifact.persisted",
+            "emittedAt": 1795715708218
+          },
+          {
+            "id": "pev_g0Vc6S6qB00Axt9xOHuo",
+            "type": "agent.coordination.requested",
+            "sessionID": "ses_hSXKHQSfhkKoSZyCynd3",
+            "emittedAt": 1795715708219
+          },
+          {
+            "id": "pev_g0Vc6S6rt00T3BGGfA9z",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hSXKHQSfhkKoSZyCynd3",
+            "emittedAt": 1795715708325
+          },
+          {
+            "id": "pev_g0Vc6S6su00o5A0jwjfg",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hSXKHQSfhkKoSZyCynd3",
+            "emittedAt": 1795715708388
+          },
+          {
+            "id": "pev_g0Vc6S7Sg00E3fDL9lhe",
+            "type": "artifact.persisted",
+            "emittedAt": 1795715710606
+          },
+          {
+            "id": "pev_g0Vc6S7Sx00X1JgncPJl",
+            "type": "artifact.persisted",
+            "emittedAt": 1795715710623
+          },
+          {
+            "id": "pev_g0Vc6S7em00UxGe1lm8p",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715711355
+          },
+          {
+            "id": "pev_g0Vc6S7iV00xqYaS9sBt",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715711587
+          },
+          {
+            "id": "pev_g0Vc6S8ZG00nc8jH7ciE",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715714857
+          },
+          {
+            "id": "pev_g0Vc6S8bI00laGQmXcs4",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715714984
+          },
+          {
+            "id": "pev_g0Vc6SB8800Iz5bu9U9c",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715724708
+          },
+          {
+            "id": "pev_g0Vc6SB9q004l2NwPGhz",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715724814
+          },
+          {
+            "id": "pev_g0Vc6SCQh00NPhIJ4txu",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715729703
+          },
+          {
+            "id": "pev_g0Vc6SCTU00zQpaN41q4",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715729876
+          },
+          {
+            "id": "pev_g0Vc6SEMU00lXRhg7cem",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715737130
+          },
+          {
+            "id": "pev_g0Vc6SEPP00kr5s2gc0I",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715737311
+          },
+          {
+            "id": "pev_g0Vc6SGxM005mP06V55w",
+            "type": "task.failed",
+            "emittedAt": 1795715747102
+          },
+          {
+            "id": "pev_g0Vc6SGzA00XHOVphd7N",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715747216
+          },
+          {
+            "id": "pev_g0Vc6SH2300xoRkvlEBk",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtYicnzzvCrX4iRlE",
+            "emittedAt": 1795715747394
+          },
+          {
+            "id": "pev_g0Vc6SH2T00d21jSPMot",
+            "type": "artifact.persisted",
+            "emittedAt": 1795715747421
+          }
+        ]
+      },
+      "error": "progress response while child remains live produced no meaningful activity for 180000ms"
+    },
+    {
+      "run": "run2",
+      "exitCode": 1,
+      "maxRequests": null,
+      "observedRequests": 41,
+      "accountingComplete": true,
+      "status": "failed",
+      "credentialCleanup": "passed",
+      "phases": [
+        {
+          "phase": "seed-ingress",
+          "status": "passed"
+        },
+        {
+          "phase": "seed-cancellation",
+          "status": "passed"
+        },
+        {
+          "phase": "verify",
+          "status": "failed"
+        }
+      ],
+      "failureEvidence": {
+        "phase": "verify",
+        "taskID": "tsk_g00Vc6UCRj00oqO6drwk",
+        "currentProjectID": "prj_hNyiWx7jIveEe9ulnm1L",
+        "taskStatus": "cancelled",
+        "startedIncompleteTaskIDs": [],
+        "ownedPromptSessions": [],
+        "wakes": [],
+        "lineages": [
+          {
+            "id": "art_g0Vc6UJQk00OPv0z0iJG",
+            "status": "dispatch-lineage"
+          },
+          {
+            "id": "art_g0Vc6V4w9008Pk5DqGP2",
+            "status": "dispatch-lineage"
+          }
+        ],
+        "recoveryArtifacts": [
+          {
+            "id": "art_hh61bt37L79vtafxCuE6",
+            "kind": "task-infrastructure-error",
+            "status": "dispatch-agent"
+          }
+        ],
+        "executionCount": 6,
+        "recentProtocolEvents": [
+          {
+            "id": "pev_g0Vc6V1eY00cTi8ShxHa",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716403262
+          },
+          {
+            "id": "pev_g0Vc6V1gJ0053D28K6U3",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716403371
+          },
+          {
+            "id": "pev_g0Vc6V2ar00eGV2pLHq7",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716406877
+          },
+          {
+            "id": "pev_g0Vc6V2ck00yCPKoOSyl",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716406994
+          },
+          {
+            "id": "pev_g0Vc6V4wO00M5gofJI3y",
+            "type": "artifact.persisted",
+            "emittedAt": 1795716415900
+          },
+          {
+            "id": "pev_g0Vc6V5ik00o9Gws2f8d",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716418898
+          },
+          {
+            "id": "pev_g0Vc6V5jC000MsY5KqFd",
+            "type": "artifact.persisted",
+            "emittedAt": 1795716418926
+          },
+          {
+            "id": "pev_g0Vc6V5nu00b635X84rF",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hG8OPacYzNpsH2noEpY0",
+            "emittedAt": 1795716419218
+          },
+          {
+            "id": "pev_g0Vc6V5q000aB717OGHM",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hG8OPacYzNpsH2noEpY0",
+            "emittedAt": 1795716419348
+          },
+          {
+            "id": "pev_g0Vc6V60Z00w0n5rjD27",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716420002
+          },
+          {
+            "id": "pev_g0Vc6V63V00ttvpOmtmb",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716420185
+          },
+          {
+            "id": "pev_g0Vc6V71200ek0Ffni3L",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hG8OPacYzNpsH2noEpY0",
+            "emittedAt": 1795716423876
+          },
+          {
+            "id": "pev_g0Vc6V72000A1ZHKAxE4",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hG8OPacYzNpsH2noEpY0",
+            "emittedAt": 1795716423936
+          },
+          {
+            "id": "pev_g0Vc6V7N900wggo347aD",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtVmMDzzSwDGko9wo",
+            "emittedAt": 1795716425247
+          },
+          {
+            "id": "pev_g0Vc6V7P400VHDlh6sdg",
+            "type": "artifact.persisted",
+            "emittedAt": 1795716425366
+          },
+          {
+            "id": "pev_g0Vc6V7Tz004X0yoDO7O",
+            "type": "task.cancellation.requested",
+            "emittedAt": 1795716425670
+          },
+          {
+            "id": "pev_g0Vc6V7UQ00CU28ZQoo6",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hG8OPacYzNpsH2noEpY0",
+            "emittedAt": 1795716425697
+          },
+          {
+            "id": "pev_g0Vc6V7Uf00zyhml91QY",
+            "type": "session.error",
+            "sessionID": "ses_hG8OPacYzNpsH2noEpY0",
+            "emittedAt": 1795716425713
+          },
+          {
+            "id": "pev_g0Vc6V7VE00k0SwLLShm",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hG8OPacYzNpsH2noEpY0",
+            "emittedAt": 1795716425748
+          },
+          {
+            "id": "pev_g0Vc6VA6a00OiNn3NE9c",
+            "type": "task.cancelled",
+            "emittedAt": 1795716435750
+          }
+        ]
+      },
+      "error": "Cancellation left 1 supervised process(es) live"
+    },
+    {
+      "run": "run3",
+      "exitCode": 1,
+      "maxRequests": null,
+      "observedRequests": 41,
+      "accountingComplete": true,
+      "status": "failed",
+      "credentialCleanup": "passed",
+      "phases": [
+        {
+          "phase": "seed-ingress",
+          "status": "passed"
+        },
+        {
+          "phase": "seed-cancellation",
+          "status": "passed"
+        },
+        {
+          "phase": "verify",
+          "status": "failed"
+        }
+      ],
+      "failureEvidence": {
+        "phase": "verify",
+        "taskID": "tsk_g00Vc6W4O400V66P0zdO",
+        "currentProjectID": "prj_hHTHh9162WKHSPQOmczO",
+        "taskStatus": "cancelled",
+        "startedIncompleteTaskIDs": [],
+        "ownedPromptSessions": [],
+        "processMetrics": {
+          "live": 1,
+          "owners": {
+            "process:run-host": {
+              "count": 1,
+              "pids": [
+                6816
+              ]
+            }
+          }
+        },
+        "taskProcessMetrics": {
+          "live": 0,
+          "owners": {}
+        },
+        "wakes": [],
+        "lineages": [
+          {
+            "id": "art_g0Vc6WB1W00GY8fD2fWt",
+            "status": "dispatch-lineage"
+          },
+          {
+            "id": "art_g0Vc6WwpV00ERsgt48ho",
+            "status": "dispatch-lineage"
+          }
+        ],
+        "recoveryArtifacts": [
+          {
+            "id": "art_hGntToeig6wpDBQXkvKV",
+            "kind": "task-infrastructure-error",
+            "status": "dispatch-agent"
+          }
+        ],
+        "executionCount": 6,
+        "recentProtocolEvents": [
+          {
+            "id": "pev_g0Vc6Wsfd00irUpkDypD",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716845389
+          },
+          {
+            "id": "pev_g0Vc6Wsh500dCnWS45lD",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716845479
+          },
+          {
+            "id": "pev_g0Vc6WuH500ZBYBrdRgz",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716851555
+          },
+          {
+            "id": "pev_g0Vc6WuIO002aLLT2CQZ",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716851636
+          },
+          {
+            "id": "pev_g0Vc6Wwpk00LWcE8JTnw",
+            "type": "artifact.persisted",
+            "emittedAt": 1795716861392
+          },
+          {
+            "id": "pev_g0Vc6Wxev00uMdT0oLCh",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716864564
+          },
+          {
+            "id": "pev_g0Vc6WxfM00lcpZJT1gS",
+            "type": "artifact.persisted",
+            "emittedAt": 1795716864592
+          },
+          {
+            "id": "pev_g0Vc6WxkF00ASvEePUgS",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hHeteJtQUUnBRTPmCoqA",
+            "emittedAt": 1795716864895
+          },
+          {
+            "id": "pev_g0Vc6Wxmq00dWzroVPGS",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hHeteJtQUUnBRTPmCoqA",
+            "emittedAt": 1795716865055
+          },
+          {
+            "id": "pev_g0Vc6Wxue00k9LnWExVo",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716865540
+          },
+          {
+            "id": "pev_g0Vc6WxxQ00ErnvCndj4",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716865711
+          },
+          {
+            "id": "pev_g0Vc6Wz12004YPVNa16u",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hHeteJtQUUnBRTPmCoqA",
+            "emittedAt": 1795716869779
+          },
+          {
+            "id": "pev_g0Vc6Wz2d00eqEDjJZ00",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hHeteJtQUUnBRTPmCoqA",
+            "emittedAt": 1795716869879
+          },
+          {
+            "id": "pev_g0Vc6Wz4N004V7xWvtsq",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_-zUNtTuVszzR8sED8S3V",
+            "emittedAt": 1795716869987
+          },
+          {
+            "id": "pev_g0Vc6Wz6N0043sJFIwXW",
+            "type": "artifact.persisted",
+            "emittedAt": 1795716870111
+          },
+          {
+            "id": "pev_g0Vc6WzDA00tshK0dfUS",
+            "type": "task.cancellation.requested",
+            "emittedAt": 1795716870531
+          },
+          {
+            "id": "pev_g0Vc6WzDa00ps3hW07bs",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hHeteJtQUUnBRTPmCoqA",
+            "emittedAt": 1795716870558
+          },
+          {
+            "id": "pev_g0Vc6WzDk00VR47NMoan",
+            "type": "session.error",
+            "sessionID": "ses_hHeteJtQUUnBRTPmCoqA",
+            "emittedAt": 1795716870568
+          },
+          {
+            "id": "pev_g0Vc6WzE200ZKXL1mnQy",
+            "type": "agent.execution.lifecycle",
+            "sessionID": "ses_hHeteJtQUUnBRTPmCoqA",
+            "emittedAt": 1795716870586
+          },
+          {
+            "id": "pev_g0Vc6X1q200JkAf1w44w",
+            "type": "task.cancelled",
+            "emittedAt": 1795716880628
+          }
+        ]
+      },
+      "error": "Cancellation left supervised processes live: {\"processMetrics\":{\"live\":1,\"owners\":{\"process:run-host\":{\"count\":1,\"pids\":[6816]}}},\"taskProcessMetrics\":{\"live\":0,\"owners\":{}}}"
+    },
+    {
+      "run": "run4",
+      "exitCode": 0,
+      "maxRequests": null,
+      "observedRequests": 41,
+      "accountingComplete": true,
+      "status": "passed",
+      "credentialCleanup": "passed",
+      "phases": [
+        {
+          "phase": "seed-ingress",
+          "status": "passed"
+        },
+        {
+          "phase": "seed-cancellation",
+          "status": "passed"
+        },
+        {
+          "phase": "verify",
+          "status": "passed"
+        }
+      ],
+      "result": {
+        "status": "passed",
+        "taskID": "tsk_g00Vc6XvsG00uCbRWrO3",
+        "lifecycleConvergence": {
+          "taskID": "tsk_g00Vc6XOYf00cAQ6V7v2",
+          "childSessionID": "ses_hhUD3VA6IUfParaQ1iZR",
+          "lifecycleEventID": "pev_g0Vc6XrQ1009PJDsdsH6",
+          "wakeID": "art_hmxGKuw8XFI0i21F5Llw",
+          "lifecycleEmittedAt": 1795717078905,
+          "taskCompletedAt": 1795717093625
+        },
+        "progressIngressID": "art_h8Rlk6udtBkGLcyWyIo6",
+        "recoveryIngressIDs": [
+          "art_huus3St4IUqc10rdB0jD",
+          "art_hvmJwNmXv23sC3JUvXOv"
+        ],
+        "recoveryActivationTimes": [
+          1795717277900,
+          1795717297631
+        ],
+        "childSessionID": "ses_hXENQnI2RZDdtQLVlgSU",
+        "progressRunningWithinMs": 267.1866999999911,
+        "workerProcess": {
+          "live": 1,
+          "owners": {
+            "unclassified": {
+              "count": 1,
+              "pids": [
+                32984
+              ]
+            }
+          }
+        },
+        "cancellationWorkerProcess": {
+          "live": 1,
+          "owners": {
+            "task-control-inherited-stream": {
+              "count": 1,
+              "pids": [
+                28128
+              ]
+            }
+          }
+        },
+        "inheritedProcessPIDs": [
+          28128,
+          16684
+        ],
+        "survivingOldPIDs": [],
+        "workerRemainedLiveThroughProgress": true,
+        "cancellationRequestEventID": "pev_g0Vc6YobB00Qb6dscQck",
+        "cancellationRequestEventEmittedAt": 1795717306393,
+        "cancellationAcceptedWithinMs": 66.01660000000265,
+        "cancellationTerminalWithinMs": 10081,
+        "cancellationObservedAfterTerminalMs": 20350,
+        "cancellationTerminalEvents": 1,
+        "ingressDispositions": [
+          {
+            "id": "art_hv7Yojv0GMXpHZZ1Kk8g",
+            "label": "terminal_inapplicable"
+          },
+          {
+            "id": "art_h8Rlk6udtBkGLcyWyIo6",
+            "label": "terminal_inapplicable"
+          },
+          {
+            "id": "art_huus3St4IUqc10rdB0jD",
+            "label": "terminal_inapplicable"
+          },
+          {
+            "id": "art_hvmJwNmXv23sC3JUvXOv",
+            "label": "terminal_inapplicable"
+          },
+          {
+            "id": "art_hEuyjET865Mrn88lDLC7",
+            "label": "terminal_inapplicable"
+          }
+        ],
+        "dispatchSettlements": [
+          {
+            "id": "art_g0Vc6YCjZ00w3p1FQpnS",
+            "taskID": "tsk_g00Vc6XvsG00uCbRWrO3",
+            "locator": {
+              "source": "engine_artifact",
+              "artifact_id": "art_g0Vc6YCjZ00w3p1FQpnS",
+              "catalog_revision": 15,
+              "expected_sha256": "5e15c660422a93aa7000fdc7c6d135b5276eadc9769da31679d8248bc099ec89"
+            },
+            "kind": "dispatch_settlement",
+            "label": "dispatch-settlement",
+            "payload": {
+              "task_id": "tsk_g00Vc6XvsG00uCbRWrO3",
+              "dispatch_lineage_id": "art_g0Vc6Y2EX00mVdwGmsGi",
+              "dispatch_id": "art_hNL9l0zkXnzIGfaEbQjH",
+              "session_id": "ses_hXENQnI2RZDdtQLVlgSU",
+              "outcome": {
+                "kind": "infrastructure_failure",
+                "operation": "recover-abandoned-dispatch",
+                "message": "Worker Session ses_hXENQnI2RZDdtQLVlgSU for dispatch art_hNL9l0zkXnzIGfaEbQjH lost its delivery owner before any terminal lifecycle was recorded",
+                "recovery_authority": {
+                  "occurrence_status": "occurrence_committed",
+                  "dispatch_lineage_id": "art_g0Vc6Y2EX00mVdwGmsGi",
+                  "dispatch_id": "art_hNL9l0zkXnzIGfaEbQjH"
+                },
+                "session_id": "ses_hXENQnI2RZDdtQLVlgSU",
+                "error_name": "AbandonedDispatchError",
+                "infrastructure_error": {
+                  "source": "engine_artifact",
+                  "artifact_id": "art_ht3OWBXMBudlQXs2kbHu",
+                  "catalog_revision": 14,
+                  "expected_sha256": "cc53d63093e46c4d738adb7159e8f92c17093d812b842cab030f67a181fcda0c"
+                },
+                "worker_turn": {
+                  "descriptor_id": "wtd_g0Vc6Y2oe00jHsoLLPxK",
+                  "descriptor_hash": "4e13617c861846f65a832336e32fdfe14d62a9fc31db4099dd085004d244b419",
+                  "input_message_id": "msg_g0Vc6Y2oX00el3udFBM7",
+                  "current_dispatch_id": "art_hNL9l0zkXnzIGfaEbQjH"
+                }
+              },
+              "time_created": 1795717160840
+            },
+            "time": {
+              "created": 1795717160840,
+              "updated": 1795717160840
+            }
+          }
+        ],
+        "physicalExecutionFrontier": {
+          "status": "settled",
+          "promptOwners": [],
+          "startedIncomplete": []
+        },
+        "processMetrics": {
+          "live": 1,
+          "owners": {
+            "process:run-host": {
+              "count": 1,
+              "pids": [
+                28660
+              ]
+            }
+          }
+        },
+        "taskProcessMetrics": {
+          "live": 0,
+          "owners": {}
+        },
+        "restartPhases": [
+          "pending_ingress",
+          "pending_cancellation"
+        ]
+      }
+    }
+  ]
+}

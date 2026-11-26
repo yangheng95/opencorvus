@@ -1,0 +1,24 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\provider-stream-error.test.ts:
+(pass) typed nested and flat stream events expose Provider message and code [2.24ms]
+(pass) actual overload maps to a readable APIError with its diagnostic body [1.56ms]
+(pass) SDK stream overload retains its typed Provider diagnostic and redacted source payload [1.30ms]
+(pass) SDK context code reaches the current overflow recovery classification [0.46ms]
+(pass) real SDK HTTP errors before output enter the canonical Provider error contract [35.31ms]
+(pass) real SDK HTTP errors after output enter the canonical Provider error contract [15.90ms]
+(pass) stream diagnostics use structured redaction and retain ordinary coordinates [0.32ms]
+(pass) flat quota and context failures retain their explicit contracts [0.27ms]
+(pass) consumed output followed by a raw Provider error settles as an explicit failed activity [3.04ms]
+(pass) consumed output followed by a SDK Provider error settles as an explicit failed activity [0.41ms]
+
+test\provider-error-redaction.test.ts:
+(pass) ProviderError redacts provider credential fragments while preserving diagnostics [0.08ms]
+(pass) ProviderError projects safe response-header diagnostics without transient credentials [0.39ms]
+(pass) ProviderError redacts complete structured credential fields while preserving safe coordinates [3.41ms]
+(pass) ProviderError returns redacted stream error contracts for every recognized provider error [0.65ms]
+
+ 14 pass
+ 0 fail
+ 45 expect() calls
+Ran 14 tests across 2 files. [991.00ms]

@@ -229,7 +229,7 @@ async function runPhaseProcess(
   phase: string,
   runtimeRoot: string,
   isolatedRuntime: IsolatedTestRuntime,
-  remainingBudget: number,
+  remainingBudget: number | null,
   redactor: CredentialRedactor,
 ): Promise<string> {
   const openCorvusRuntimeRoot = path.join(runtimeRoot, "runtime")
@@ -305,8 +305,10 @@ async function runPhaseProcess(
 }
 
 async function runDriver() {
-  const maxRequests = Number(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256")
-  if (!Number.isSafeInteger(maxRequests) || maxRequests <= 0) throw new Error("Total request budget must be a positive integer")
+  const maxRequests: number | null = JSON.parse(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256")
+  if (maxRequests !== null && (!Number.isSafeInteger(maxRequests) || maxRequests <= 0)) {
+    throw new Error("Total request budget must be null or a positive integer")
+  }
   let remainingBudget = maxRequests
   const redactor = new CredentialRedactor()
   redactor.collect(process.env)
@@ -330,8 +332,8 @@ async function runDriver() {
     for (const phase of ["seed-ingress", "seed-cancellation", "verify"]) {
       await runPhaseProcess(phase, runtimeRoot, isolatedRuntime, remainingBudget, redactor)
       const receipt = JSON.parse(await fs.readFile(path.join(runtimeRoot, `${phase}.audit.json`), "utf8"))
-      if (!Array.isArray(receipt.requests) || receipt.requests.length > remainingBudget) throw new Error("Invalid phase request accounting")
-      remainingBudget -= receipt.requests.length
+      if (!Array.isArray(receipt.requests) || (remainingBudget !== null && receipt.requests.length > remainingBudget)) throw new Error("Invalid phase request accounting")
+      if (remainingBudget !== null) remainingBudget -= receipt.requests.length
     }
   } catch (error) {
     primaryFailure = error
@@ -386,7 +388,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
   if (!credential) throw new Error("Authorized Provider credential is unavailable in the isolated runtime")
   const copiedAuthority = credential.type === "oauth" ? { copiedOAuthExpiresAt: credential.expires } : undefined
   if (copiedAuthority) assertCopiedOAuthAccess(copiedAuthority.copiedOAuthExpiresAt)
-  using audit = new RealProviderAudit(selectedModel.slice(separator + 1), Number(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256"), undefined, copiedAuthority)
+  using audit = new RealProviderAudit(selectedModel.slice(separator + 1), JSON.parse(process.env.TASK_CONTROL_CHECK_MAX_REQUESTS ?? "256"), undefined, copiedAuthority)
   process.stdout.write(`[task-control phase] ${phase} credential-present kind=${credential.type} copied-oauth-refresh=forbidden\n`)
   const [
     { Provider },
@@ -801,8 +803,9 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
       throw new Error(`Cancellation left nonterminal ingress: ${JSON.stringify(unsettledIngresses)}`)
     }
     const processMetrics = ProcessSupervisor.metricsSnapshot()
-    if (processMetrics.live !== 0)
-      throw new Error(`Cancellation left ${processMetrics.live} supervised process(es) live`)
+    const taskProcessMetrics = ProcessSupervisor.taskMetricsSnapshot(taskID)
+    if (taskProcessMetrics.live !== 0)
+      throw new Error(`Cancellation left Task-owned supervised processes live: ${JSON.stringify({ taskProcessMetrics, processMetrics })}`)
     const oldProcessPIDs = [
       ...Object.values(checkpoint.workerProcess?.owners ?? {}).flatMap((owner) => owner.pids),
       ...Object.values(checkpoint.cancellationWorkerProcess?.owners ?? {}).flatMap((owner) => owner.pids),
@@ -844,6 +847,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         dispatchSettlements,
         physicalExecutionFrontier: { status: "settled", promptOwners, startedIncomplete },
         processMetrics,
+        taskProcessMetrics,
         restartPhases: ["pending_ingress", "pending_cancellation"],
       })}\n`,
     )
@@ -894,6 +898,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
               taskStatus: current.task.status,
               startedIncompleteTaskIDs: listStartedIncompleteTaskIDs({ projectID: Instance.project.id }),
               ownedPromptSessions,
+              processMetrics: ProcessSupervisor.metricsSnapshot(),
+              taskProcessMetrics: ProcessSupervisor.taskMetricsSnapshot(taskID),
               // `interruptedSessionEvidence` came from a projection removed in 627146cc when
               // execution state converged on immutable facts. The dynamic destructure kept
               // resolving to `undefined`, so this diagnostic threw for every task that had a

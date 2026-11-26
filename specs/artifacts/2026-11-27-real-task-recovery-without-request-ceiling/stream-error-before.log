@@ -1,0 +1,102 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\provider-stream-error.test.ts:
+47 |     type: overload.error.type,
+48 |     isRetryable: true,
+49 |     data: original,
+50 |   })
+51 |   const canonical = Message.fromError(error, { providerID: "openai" })
+52 |   expect(canonical).toMatchObject({ name: "APIError", data: { message: overload.error.message, isRetryable: false } })
+                         ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "data": {
+-     "isRetryable": false,
+-     "message": "Our servers are currently overloaded. Please try again later.",
++     "message": "AI_StreamProviderError: Our servers are currently overloaded. Please try again later.",
+    },
+-   "name": "APIError",
++   "name": "UnknownError",
+  }
+
+- Expected  - 3
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-stream-error.test.ts:52:21)
+(fail) SDK stream overload retains its typed Provider diagnostic and redacted source payload [5.77ms]
+59 |   expect(DefaultLLMActivityPolicy.classify(error, {})).toBe("provider_stream_error")
+60 | })
+61 |
+62 | test("SDK context code reaches the current overflow recovery classification", () => {
+63 |   const error = new StreamProviderError({ code: "context_length_exceeded", message: "Declared capacity was exceeded." })
+64 |   expect(DefaultLLMActivityPolicy.classify(error, {})).toBe("context_overflow")
+                                                            ^
+error: expect(received).toBe(expected)
+
+Expected: "context_overflow"
+Received: "unknown"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-stream-error.test.ts:64:56)
+(fail) SDK context code reaches the current overflow recovery classification [0.78ms]
+8068 | 	const code = getStringOrNumber(details.code) ?? getStringOrNumber(outer.code);
+8069 | 	const explicitStatusCode = getHttpStatusCode(details.statusCode) ?? getHttpStatusCode(outer.statusCode) ?? getHttpStatusCode(details.status_code) ?? getHttpStatusCode(outer.status_code) ?? getHttpStatusCode(details.status) ?? getHttpStatusCode(outer.status) ?? getHttpStatusCode(details.code) ?? getHttpStatusCode(outer.code);
+8070 | 	const messageMetadata = inferExactMessageMetadata(details.message);
+8071 | 	const statusCode = explicitStatusCode ?? messageMetadata?.statusCode;
+8072 | 	const explicitRetryability = getBoolean(details.isRetryable) ?? getBoolean(outer.isRetryable) ?? getBoolean(details.is_retryable) ?? getBoolean(outer.is_retryable);
+8073 | 	return new StreamProviderError({
+               ^
+AI_StreamProviderError: Our servers are currently overloaded. Please try again later.
+      cause: undefined,
+       type: "service_unavailable_error",
+ statusCode: 503,
+ isRetryable: true,
+       data: {
+  type: "error",
+  sequence_number: 2,
+  error: [Object ...],
+},
+ vercel.ai.error: true,
+ vercel.ai.error.AI_StreamProviderError: true,
+       code: "server_is_overloaded"
+
+      at normalizeStreamProviderError (D:\myhexin-local\opencorvus\node_modules\.bun\ai@7.0.138+fd89d974ba0fd62b\node_modules\ai\dist\index.js:8073:9)
+      at transform (D:\myhexin-local\opencorvus\node_modules\.bun\ai@7.0.138+fd89d974ba0fd62b\node_modules\ai\dist\index.js:8286:13)
+
+ 95 |     expect(text).toEqual(["Retained partial output."])
+ 96 |     expect(errors.map((error) => ({
+ 97 |       sdkError: StreamProviderError.isInstance(error),
+ 98 |       canonical: Message.fromError(error, { providerID: "openai" }),
+ 99 |       classification: DefaultLLMActivityPolicy.classify(error, {}),
+100 |     }))).toMatchObject([{
+               ^
+error: expect(received).toMatchObject(expected)
+
+  [
+    {
+      "canonical": {
+        "data": {
+-         "isRetryable": false,
+-         "message": "Our servers are currently overloaded. Please try again later.",
++         "message": "AI_StreamProviderError: Our servers are currently overloaded. Please try again later.",
+        },
+-       "name": "APIError",
++       "name": "UnknownError",
+      },
+-     "classification": "provider_stream_error",
++     "classification": "unknown",
+      "sdkError": true,
+    },
+  ]
+
+- Expected  - 4
++ Received  + 3
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\provider-stream-error.test.ts:100:10)
+(fail) real SDK HTTP stream errors enter the canonical Provider error contract [59.07ms]
+
+ 0 pass
+ 5 filtered out
+ 3 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [1058.00ms]
