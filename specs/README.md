@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [历史代码变更的比较与阅读](records/2026-11/2026-11-27-historical-code-review.md)
 - [后续代码修订与历史产物身份](records/2026-11/2026-11-27-followup-artifact-version-identity.md)
 - [实际代码修改与产物交付](records/2026-11/2026-11-27-real-code-and-artifact-delivery.md)
 - [Task 根输入的物理进程所有者恢复](records/2026-11/2026-11-27-task-ingress-process-owner-recovery.md)

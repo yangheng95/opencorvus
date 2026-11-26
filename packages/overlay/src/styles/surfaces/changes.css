@@ -101,8 +101,19 @@
   min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+  grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
   border-top: var(--oc-border-width) solid var(--divider-soft);
+}
+
+.changes-review-content {
+  display: contents;
+}
+
+.changes-review-workspace > .changes-file-controls {
+  grid-column: 2;
+  grid-row: 1;
+  border-left: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .changes-diff-pane,
@@ -121,6 +132,8 @@
 }
 
 .changes-diff-pane {
+  grid-column: 1;
+  grid-row: 1 / 3;
   display: flex;
   overflow: hidden;
   background: var(--chat-canvas);
@@ -132,6 +145,8 @@
 }
 
 .changes-file-pane {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -191,19 +206,42 @@
 @container file-review (width < 800px) {
   .changes-review-workspace {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .changes-review-content {
+    grid-column: 1;
+    grid-row: 2;
+    display: grid;
+    grid-template-rows: fit-content(40%) minmax(0, 1fr);
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .changes-review-content:has(.changes-list[data-virtualized="true"]) {
+    grid-template-rows: minmax(0, 2fr) minmax(0, 3fr);
+  }
+
+  .changes-review-workspace > .changes-file-controls {
+    grid-column: 1;
+    border-left: 0;
   }
 
   .changes-file-pane {
-    display: grid;
-    grid-row: 1 / 3;
-    grid-template-rows: subgrid;
+    grid-column: 1;
+    grid-row: 1;
     border-left: 0;
     border-bottom: var(--oc-border-width) solid var(--divider-soft);
   }
 
   .changes-diff-pane {
-    grid-row: 3;
+    grid-row: 2;
+  }
+
+  .changes-review-workspace[data-file-list-visible="false"] .changes-review-content {
+    grid-row: 1;
+    grid-template-rows: minmax(0, 1fr);
   }
 
   .changes-diff-pane .diff-preview-body--text {
@@ -345,7 +383,7 @@
 }
 
 .changes-list {
-  flex: 1 1 0;
+  flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;

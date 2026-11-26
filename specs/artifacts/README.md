@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [历史代码比较证据](2026-11-27-historical-code-review/README.md)
 - [后续修订与历史产物证据](2026-11-27-followup-artifact-version-identity/README.md)
 - [实际代码与产物交付证据](2026-11-27-real-code-and-artifact-delivery/README.md)
 - [Task 根输入物理所有者恢复证据](2026-11-27-task-ingress-process-owner-recovery/README.md)

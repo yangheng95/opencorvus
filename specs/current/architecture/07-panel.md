@@ -979,6 +979,13 @@ file and aggregate-count explanations open in the shared non-modal Reading guide
 popover. It anchors to the toolbar without resizing the records or comparison.
 The actual record count, unknown aggregate indicator and individual-comparison
 evidence limitations remain visible. No separate data projection or window is used.
+In a narrow Review, filters keep their own content-height track. The record list
+and comparison share the remaining-height container: ordinary short lists shrink
+to their contents within a bounded scroll area, while virtual lists retain their
+allocated viewport. Hiding the list hides its original filters and records, with
+both containers named by the same visibility control, and releases the comparison
+space without resetting selection or filters. Wide Review keeps the side-by-side
+comparison and list, with filters aligned above that list.
 
 When an interval requires separate original Tool comparisons, the existing
 receipt list retains its producer order. The last listed comparison starts open

@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "source": "Read-only original SQLite rows compared field-by-field with previously published facts; no titles or model claims used as proof",
+  "rows": [
+    {
+      "table": "engine_task",
+      "id": "tsk_g00Vc6rEH000wydhL06W",
+      "originalFieldsCompared": 17,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "engine_task",
+      "id": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "originalFieldsCompared": 17,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "engine_artifact",
+      "id": "art_g0Vc6t2nd000qWgoL5Eu",
+      "originalFieldsCompared": 21,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "engine_artifact",
+      "id": "art_g0Vc70Abx005xM3QX1if",
+      "originalFieldsCompared": 21,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "protocol_event",
+      "id": "pev_g0Vc6t3TP00jNxU885Xl",
+      "originalFieldsCompared": 19,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "protocol_event",
+      "id": "pev_g0Vc70BGb00zYYvzV0AT",
+      "originalFieldsCompared": 19,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "part",
+      "id": "prt_g0Vc70btv00JuSPotqNe",
+      "originalFieldsCompared": 5,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "message",
+      "id": "msg_g0Vc70bLT00wyyEmqvB7",
+      "originalFieldsCompared": 6,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "tool_part_request",
+      "id": "prt_g0Vc70ZMJ00MZVlCs25i",
+      "originalFieldsCompared": 4,
+      "equalsPreviouslyPublishedFacts": true
+    },
+    {
+      "table": "tool_part_outcome",
+      "id": "prt_hRzmLjfb5rL7KKti9J7E",
+      "originalFieldsCompared": 4,
+      "equalsPreviouslyPublishedFacts": true
+    }
+  ],
+  "projectHead": "f7bf091156c9b137c4eb3d5b822721294e9a8f24"
+}

@@ -222,6 +222,7 @@ export function FileChangesView(props: FileChangesViewProps) {
   const [statusFilter, setStatusFilter] = createSignal<ChangeStatusFilter>("all")
   const [hideNonTextFiles, setHideNonTextFiles] = createSignal(false)
   const [fileListVisible, setFileListVisible] = createSignal(true)
+  const fileControlsID = createUniqueId()
   const fileListID = createUniqueId()
   const filterKeyboardHintID = createUniqueId()
   const sharedVirtualGroupID = createUniqueId()
@@ -610,7 +611,7 @@ export function FileChangesView(props: FileChangesViewProps) {
               size="sm"
               tone="neutral"
               aria-expanded={fileListVisible()}
-              aria-controls={fileListID}
+              aria-controls={`${fileControlsID} ${fileListID}`}
               onClick={() => setFileListVisible((visible) => !visible)}
             >
               {t(fileListVisible() ? "files.hide_record_list" : "files.show_record_list")}
@@ -639,214 +640,218 @@ export function FileChangesView(props: FileChangesViewProps) {
           </Popover.Root>
         </div>
         <div class="changes-review-workspace" data-file-list-visible={allRows().length > 1 && fileListVisible()}>
-          <section class="changes-diff-pane" aria-label={t("workspace.diff")}>
-            <Show
-              when={filteredRows().length > 0}
-              fallback={
-                <div class="changes-filter-empty">
-                  <Feedback tone="neutral" actions={
-                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={clearFilters}>
-                      {t("files.clear_filters")}
-                    </Button>
-                  }>
-                    {t("files.clear_filters_hint")}
-                  </Feedback>
-                </div>
-              }
-            >
-              <DiffPreviewPanel
-                target={selectedDiffTarget()}
-                currentFilePath={selectedRow()?.item.openPath}
-                scopeKey={props.scopeKey || ""}
-                groups={groups()}
-                directory={props.directory}
-              />
-            </Show>
-          </section>
-
           <Show when={allRows().length > 1}>
-            <aside id={fileListID} class="changes-file-pane" hidden={!fileListVisible()} aria-label={t("section.files")}>
-              <div class="changes-file-controls">
-                <Show when={shouldShowFilter()}>
-                  <div class="changes-toolbar">
-                    <SearchField
-                      clearable
-                      class="changes-filter-field"
-                      inputRef={(element) => {
-                        filterInputEl = element
-                      }}
-                      inputDataUI="file-changes-search-input"
-                      value={filterQuery()}
-                      placeholder={t("files.filter_placeholder")}
-                      ariaDescribedBy={canBrowseFilterResults() ? filterKeyboardHintID : undefined}
-                      ariaKeyShortcuts={canBrowseFilterResults() ? "ArrowUp ArrowDown" : undefined}
-                      resultFocusTarget={() => canBrowseFilterResults() ? listEl : undefined}
-                      onValueChange={setFilterQuery}
-                      onKeyDown={onFilterKeyDown}
-                      clearLabel={t("files.clear_filter")}
-                      clearDataUI="file-changes-search-clear"
+            <div id={fileControlsID} class="changes-file-controls" hidden={!fileListVisible()}>
+              <Show when={shouldShowFilter()}>
+                <div class="changes-toolbar">
+                  <SearchField
+                    clearable
+                    class="changes-filter-field"
+                    inputRef={(element) => {
+                      filterInputEl = element
+                    }}
+                    inputDataUI="file-changes-search-input"
+                    value={filterQuery()}
+                    placeholder={t("files.filter_placeholder")}
+                    ariaDescribedBy={canBrowseFilterResults() ? filterKeyboardHintID : undefined}
+                    ariaKeyShortcuts={canBrowseFilterResults() ? "ArrowUp ArrowDown" : undefined}
+                    resultFocusTarget={() => canBrowseFilterResults() ? listEl : undefined}
+                    onValueChange={setFilterQuery}
+                    onKeyDown={onFilterKeyDown}
+                    clearLabel={t("files.clear_filter")}
+                    clearDataUI="file-changes-search-clear"
+                  />
+                </div>
+              </Show>
+
+              <Show when={canBrowseFilterResults()}>
+                <p class="changes-status-explanation" id={filterKeyboardHintID}>{t("files.filter_keyboard_hint")}</p>
+              </Show>
+
+              <Show when={allRows().length > 0}>
+                <div class="changes-status-strip">
+                  <div class="changes-status-filter-group">
+                    <SegmentedControl<ChangeStatusFilter>
+                      options={statusFilterOptions()}
+                      value={statusFilter()}
+                      onChange={setStatusFilter}
+                      onActivate={setStatusFilter}
+                      ariaLabel={t("files.status_filter_label")}
+                      class="changes-status-filter"
+                      itemAttributes={(option) => ({
+                        "data-ui": "file-changes-status-filter-option",
+                        "data-status": option.value,
+                        "data-size": "sm",
+                      })}
                     />
                   </div>
-                </Show>
-
-                <Show when={canBrowseFilterResults()}>
-                  <p class="changes-status-explanation" id={filterKeyboardHintID}>{t("files.filter_keyboard_hint")}</p>
-                </Show>
-
-                <Show when={allRows().length > 0}>
-                  <div class="changes-status-strip">
-                    <div class="changes-status-filter-group">
-                      <SegmentedControl<ChangeStatusFilter>
-                        options={statusFilterOptions()}
-                        value={statusFilter()}
-                        onChange={setStatusFilter}
-                        onActivate={setStatusFilter}
-                        ariaLabel={t("files.status_filter_label")}
-                        class="changes-status-filter"
-                        itemAttributes={(option) => ({
-                          "data-ui": "file-changes-status-filter-option",
-                          "data-status": option.value,
-                          "data-size": "sm",
-                        })}
-                      />
-                    </div>
-                    <div class="changes-filter-summary">
-                      <Checkbox
-                        class="changes-non-text-filter"
-                        data-ui="file-changes-non-text-filter"
-                        checked={hideNonTextFiles()}
-                        onChange={setHideNonTextFiles}
-                      >
-                        {t("files.hide_non_text")}
-                      </Checkbox>
-                      <p class="changes-status-explanation" role="status" aria-atomic="true">
-                        {t("files.filter_result_count", {
-                          shown: filteredRows().length.toLocaleString(localeTag()),
-                          total: allRows().length.toLocaleString(localeTag()),
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                </Show>
-
-                <Show when={statusFilter() === "changed"}>
-                  <p class="changes-status-explanation">{t("files.status.changed_hint")}</p>
-                </Show>
-              </div>
-              <ListboxRoot<ChangeRowModel>
-                ref={listEl}
-                class="changes-list"
-                density="default"
-                data-grouped={hasGroupLabels() ? "true" : "false"}
-                data-virtualized={shouldVirtualizeRows() ? "true" : "false"}
-                aria-label={t("section.files")}
-                aria-describedby={fileListVisible() && sharedVirtualGroup() ? sharedVirtualGroupID : undefined}
-                state={listState}
-                keyboardDelegate={keyboardDelegate}
-                disallowEmptySelection={disallowEmptySelection()}
-                virtualized
-                scrollToItem={scrollToFocusedRow}
-                onKeyDown={onListShortcutKeyDown}
-                onFocusOut={(event) => {
-                  if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) {
-                    pendingVirtualRowFocus = undefined
-                  }
-                }}
-              >
-                {(collection) => {
-                  const nodeByKey = createMemo(() => {
-                    const map = new Map<string, ChangeRowCollectionNode>()
-                    for (const node of collection()) {
-                      if (node.type === "item") map.set(node.key, node as ChangeRowCollectionNode)
-                    }
-                    return map
-                  })
-                  const nodeForRow = (row: ChangeRowModel): ChangeRowCollectionNode => {
-                    const node = nodeByKey().get(row.key)
-                    if (!node) throw new Error(`missing file change row node: ${row.key}`)
-                    return node
-                  }
-
-                  return (
-                    <Show
-                      when={filteredRows().length > 0}
-                      fallback={<p class="empty-hint changes-empty-hint">{t("files.no_matches")}</p>}
+                  <div class="changes-filter-summary">
+                    <Checkbox
+                      class="changes-non-text-filter"
+                      data-ui="file-changes-non-text-filter"
+                      checked={hideNonTextFiles()}
+                      onChange={setHideNonTextFiles}
                     >
+                      {t("files.hide_non_text")}
+                    </Checkbox>
+                    <p class="changes-status-explanation" role="status" aria-atomic="true">
+                      {t("files.filter_result_count", {
+                        shown: filteredRows().length.toLocaleString(localeTag()),
+                        total: allRows().length.toLocaleString(localeTag()),
+                      })}
+                    </p>
+                  </div>
+                </div>
+              </Show>
+
+              <Show when={statusFilter() === "changed"}>
+                <p class="changes-status-explanation">{t("files.status.changed_hint")}</p>
+              </Show>
+            </div>
+          </Show>
+          <div class="changes-review-content">
+            <section class="changes-diff-pane" aria-label={t("workspace.diff")}>
+              <Show
+                when={filteredRows().length > 0}
+                fallback={
+                  <div class="changes-filter-empty">
+                    <Feedback tone="neutral" actions={
+                      <Button type="button" variant="outline" size="sm" tone="neutral" onClick={clearFilters}>
+                        {t("files.clear_filters")}
+                      </Button>
+                    }>
+                      {t("files.clear_filters_hint")}
+                    </Feedback>
+                  </div>
+                }
+              >
+                <DiffPreviewPanel
+                  target={selectedDiffTarget()}
+                  currentFilePath={selectedRow()?.item.openPath}
+                  scopeKey={props.scopeKey || ""}
+                  groups={groups()}
+                  directory={props.directory}
+                />
+              </Show>
+            </section>
+
+            <Show when={allRows().length > 1}>
+              <aside id={fileListID} class="changes-file-pane" hidden={!fileListVisible()} aria-label={t("section.files")}>
+                <ListboxRoot<ChangeRowModel>
+                  ref={listEl}
+                  class="changes-list"
+                  density="default"
+                  data-grouped={hasGroupLabels() ? "true" : "false"}
+                  data-virtualized={shouldVirtualizeRows() ? "true" : "false"}
+                  aria-label={t("section.files")}
+                  aria-describedby={fileListVisible() && sharedVirtualGroup() ? sharedVirtualGroupID : undefined}
+                  state={listState}
+                  keyboardDelegate={keyboardDelegate}
+                  disallowEmptySelection={disallowEmptySelection()}
+                  virtualized
+                  scrollToItem={scrollToFocusedRow}
+                  onKeyDown={onListShortcutKeyDown}
+                  onFocusOut={(event) => {
+                    if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) {
+                      pendingVirtualRowFocus = undefined
+                    }
+                  }}
+                >
+                  {(collection) => {
+                    const nodeByKey = createMemo(() => {
+                      const map = new Map<string, ChangeRowCollectionNode>()
+                      for (const node of collection()) {
+                        if (node.type === "item") map.set(node.key, node as ChangeRowCollectionNode)
+                      }
+                      return map
+                    })
+                    const nodeForRow = (row: ChangeRowModel): ChangeRowCollectionNode => {
+                      const node = nodeByKey().get(row.key)
+                      if (!node) throw new Error(`missing file change row node: ${row.key}`)
+                      return node
+                    }
+
+                    return (
                       <Show
-                        when={shouldVirtualizeRows()}
-                        fallback={
-                          <For each={visibleGroups().map((entry) => entry.key)}>
-                            {(key) => (
-                              <Show when={visibleGroups().find((entry) => entry.key === key)}>
-                                {(entry) => (
-                                  <div class="changes-list-group" data-group-id={entry().group.id}>
-                                    <Show when={hasGroupLabels()}>
-                                      <div class="changes-group-header oc-section-heading" title={entry().title}>
-                                        <span class="changes-group-label">{entry().label}</span>
-                                        <span class="changes-group-meta">
-                                          <Show when={entry().group.commitRef}>
-                                            <span class="changes-group-commit">
-                                              {shortCommit(entry().group.commitRef)}
-                                            </span>
-                                          </Show>
-                                          <span>{entry().rows.length}</span>
-                                        </span>
+                        when={filteredRows().length > 0}
+                        fallback={<p class="empty-hint changes-empty-hint">{t("files.no_matches")}</p>}
+                      >
+                        <Show
+                          when={shouldVirtualizeRows()}
+                          fallback={
+                            <For each={visibleGroups().map((entry) => entry.key)}>
+                              {(key) => (
+                                <Show when={visibleGroups().find((entry) => entry.key === key)}>
+                                  {(entry) => (
+                                    <div class="changes-list-group" data-group-id={entry().group.id}>
+                                      <Show when={hasGroupLabels()}>
+                                        <div class="changes-group-header oc-section-heading" title={entry().title}>
+                                          <span class="changes-group-label">{entry().label}</span>
+                                          <span class="changes-group-meta">
+                                            <Show when={entry().group.commitRef}>
+                                              <span class="changes-group-commit">
+                                                {shortCommit(entry().group.commitRef)}
+                                              </span>
+                                            </Show>
+                                            <span>{entry().rows.length}</span>
+                                          </span>
+                                        </div>
+                                      </Show>
+                                      <div class="changes-list-chunk" data-group-id={entry().group.id} data-active="true">
+                                        <For each={entry().rows.map((row) => row.key)}>
+                                          {(rowKey) => (
+                                            <Show when={filteredRows().find((row) => row.key === rowKey)}>
+                                              {(row) => (
+                                                <ChangeRow
+                                                  node={nodeForRow(row())}
+                                                  row={row()}
+                                                  showScope={false}
+                                                  onSelect={selectRow}
+                                                />
+                                              )}
+                                            </Show>
+                                          )}
+                                        </For>
                                       </div>
-                                    </Show>
-                                    <div class="changes-list-chunk" data-group-id={entry().group.id} data-active="true">
-                                      <For each={entry().rows.map((row) => row.key)}>
-                                        {(rowKey) => (
-                                          <Show when={filteredRows().find((row) => row.key === rowKey)}>
-                                            {(row) => (
-                                              <ChangeRow
-                                                node={nodeForRow(row())}
-                                                row={row()}
-                                                showScope={false}
-                                                onSelect={selectRow}
-                                              />
-                                            )}
-                                          </Show>
-                                        )}
-                                      </For>
                                     </div>
-                                  </div>
+                                  )}
+                                </Show>
+                              )}
+                            </For>
+                          }
+                        >
+                          <Virtualizer
+                            ref={(handle) => {
+                              rowVirtualizer = handle
+                            }}
+                            data={filteredRows().map((row) => row.key)}
+                            bufferSize={VIRTUAL_CHANGE_ROW_BUFFER_PIXELS}
+                            itemSize={ESTIMATED_CHANGE_ROW_HEIGHT}
+                            as={ChangesVirtualWindow}
+                            item={(itemProps) => <ChangesVirtualItem {...itemProps} onLayout={settleVirtualRowFocus} />}
+                            onScrollEnd={settleVirtualRowFocus}
+                          >
+                            {(key) => (
+                              <Show when={filteredRows().find((row) => row.key === key)}>
+                                {(row) => (
+                                  <ChangeRow
+                                    node={nodeForRow(row())}
+                                    row={row()}
+                                    showScope={hasGroupLabels() && !sharedVirtualGroup()}
+                                    onSelect={selectRow}
+                                  />
                                 )}
                               </Show>
                             )}
-                          </For>
-                        }
-                      >
-                        <Virtualizer
-                          ref={(handle) => {
-                            rowVirtualizer = handle
-                          }}
-                          data={filteredRows().map((row) => row.key)}
-                          bufferSize={VIRTUAL_CHANGE_ROW_BUFFER_PIXELS}
-                          itemSize={ESTIMATED_CHANGE_ROW_HEIGHT}
-                          as={ChangesVirtualWindow}
-                          item={(itemProps) => <ChangesVirtualItem {...itemProps} onLayout={settleVirtualRowFocus} />}
-                          onScrollEnd={settleVirtualRowFocus}
-                        >
-                          {(key) => (
-                            <Show when={filteredRows().find((row) => row.key === key)}>
-                              {(row) => (
-                                <ChangeRow
-                                  node={nodeForRow(row())}
-                                  row={row()}
-                                  showScope={hasGroupLabels() && !sharedVirtualGroup()}
-                                  onSelect={selectRow}
-                                />
-                              )}
-                            </Show>
-                          )}
-                        </Virtualizer>
+                          </Virtualizer>
+                        </Show>
                       </Show>
-                    </Show>
-                  )
-                }}
-              </ListboxRoot>
-            </aside>
-          </Show>
+                    )
+                  }}
+                </ListboxRoot>
+              </aside>
+            </Show>
+          </div>
         </div>
       </Show>
       <Show when={files().length === 0 && !summary().hasUnresolvedChanges}>

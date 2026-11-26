@@ -1,0 +1,25 @@
+{
+  "label": "run7",
+  "pid": 37348,
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery",
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+  "model": "openai/gpt-6.1-sol",
+  "sourceRun": "run6",
+  "auditPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\run7-model-request-audit.json",
+  "startedAt": 1795725714330,
+  "state": "exited",
+  "requests": 2,
+  "preflight": {
+    "sessionID": "ses_hDM1fe7CQLumErEIDfFx",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "url": "http://127.0.0.1:58102/",
+  "uiURL": "http://127.0.0.1:58102/ui/?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-test-run-vN8ljL%5Crunner-32260-XefI2X%5Cartifact-delivery%5Cproject",
+  "stopReason": "owned_stop_request",
+  "finishedAt": 1795725876828,
+  "exitCode": 0,
+  "credentialCleanup": "passed"
+}

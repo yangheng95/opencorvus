@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "overlayTypecheck": "tsc --noEmit, exit 0",
+  "overlayBuild": "Node.js Vite build and renderer-public-surface, exit 0; main-zHqQKjbz.js",
+  "i18n": "2 locales, 3335 top-level keys",
+  "cssTokens": "9423 references, 269 tokens, 60 stylesheets, 423 TS/TSX files",
+  "docsCheck": "353 operations, 26 groups",
+  "architectureIndex": "20 current documents, every link live",
+  "diffCheck": "owned working changes and staged changes, exit 0",
+  "scope": "Static auxiliary checks only; native interactions and personally viewed run8 screenshots provide visual acceptance"
+}

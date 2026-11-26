@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "comparisons": [
+    {
+      "phase": "initial",
+      "file": "sales_summary.py",
+      "tool": "apply_patch",
+      "partID": "prt_g0Vc6rP97007hZwnAL3x",
+      "messageID": "msg_hUZMMOrqs6lMwkvrMLLv",
+      "sessionID": "ses_-zUNt8kZSzzpOVkee6eY",
+      "fileIndex": 0,
+      "status": 200,
+      "comparisonType": "add",
+      "beforeBytes": 0,
+      "afterBytes": 5970,
+      "beforeExpectedOriginalEqual": true,
+      "afterExpectedOriginalEqual": true,
+      "source": "Canonical persisted Tool Part HTTP reader; expected original bytes are prior published resources and the actual final primary files"
+    },
+    {
+      "phase": "initial",
+      "file": "test_sales_summary.py",
+      "tool": "apply_patch",
+      "partID": "prt_g0Vc6rP97007hZwnAL3x",
+      "messageID": "msg_hUZMMOrqs6lMwkvrMLLv",
+      "sessionID": "ses_-zUNt8kZSzzpOVkee6eY",
+      "fileIndex": 1,
+      "status": 200,
+      "comparisonType": "add",
+      "beforeBytes": 0,
+      "afterBytes": 6363,
+      "beforeExpectedOriginalEqual": true,
+      "afterExpectedOriginalEqual": true,
+      "source": "Canonical persisted Tool Part HTTP reader; expected original bytes are prior published resources and the actual final primary files"
+    },
+    {
+      "phase": "followup",
+      "file": "sales_summary.py",
+      "tool": "apply_patch",
+      "partID": "prt_g0Vc6ynew002IMz7DQsg",
+      "messageID": "msg_hPaXP9edb9qqouTZmHYR",
+      "sessionID": "ses_-zUNt1IWizzuVdSlkZY3",
+      "fileIndex": 0,
+      "status": 200,
+      "comparisonType": "update",
+      "beforeBytes": 5970,
+      "afterBytes": 7650,
+      "beforeExpectedOriginalEqual": true,
+      "afterExpectedOriginalEqual": true,
+      "source": "Canonical persisted Tool Part HTTP reader; expected original bytes are prior published resources and the actual final primary files"
+    },
+    {
+      "phase": "followup",
+      "file": "test_sales_summary.py",
+      "tool": "apply_patch",
+      "partID": "prt_g0Vc6ynew002IMz7DQsg",
+      "messageID": "msg_hPaXP9edb9qqouTZmHYR",
+      "sessionID": "ses_-zUNt1IWizzuVdSlkZY3",
+      "fileIndex": 1,
+      "status": 200,
+      "comparisonType": "update",
+      "beforeBytes": 6363,
+      "afterBytes": 10107,
+      "beforeExpectedOriginalEqual": true,
+      "afterExpectedOriginalEqual": true,
+      "source": "Canonical persisted Tool Part HTTP reader; expected original bytes are prior published resources and the actual final primary files"
+    }
+  ]
+}
