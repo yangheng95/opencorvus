@@ -1,0 +1,161 @@
+{
+  "status": "passed",
+  "source": "Actual HTTP readers, canonical Tool Parts, Marked Markdown tables, native browser downloads, original CSV and immutable original Git files",
+  "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+  "finalMessageID": "msg_g0Vc7DBj400FcVCq16iL",
+  "finalCompletedAt": 1795726936013,
+  "artifacts": [
+    "art_g0Vc7D4cK00oOPAMPwq4",
+    "art_g0Vc7DBhO00vqAn4lown"
+  ],
+  "tools": [
+    {
+      "id": "prt_g0Vc7Cz1m00ewg8Y9Twd",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc7D0P600um6OnAKGF",
+      "tool": "bash",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc7D3Af00a12mLtNhL",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc7D5H900F3jc2Ju1e",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "orders": 5,
+  "netAmount": "35.60",
+  "reportTables": [
+    {
+      "header": [
+        "指标",
+        "结果"
+      ],
+      "rows": [
+        [
+          "总订单数",
+          "5"
+        ],
+        [
+          "净金额",
+          "35.60"
+        ],
+        [
+          "正金额订单数",
+          "3"
+        ],
+        [
+          "正金额合计",
+          "37.65"
+        ],
+        [
+          "退款笔数",
+          "1"
+        ],
+        [
+          "退款金额合计（带符号）",
+          "-2.05"
+        ],
+        [
+          "零金额笔数",
+          "1"
+        ]
+      ]
+    },
+    {
+      "header": [
+        "区域",
+        "订单数（含退款及零金额）",
+        "净金额"
+      ],
+      "rows": [
+        [
+          "华东",
+          "3",
+          "28.25"
+        ],
+        [
+          "华南",
+          "2",
+          "7.35"
+        ],
+        [
+          "合计",
+          "5",
+          "35.60"
+        ]
+      ]
+    }
+  ],
+  "downloads": [
+    {
+      "filename": "销售订单完整明细 (1).csv",
+      "bytes": 308,
+      "rows": 5,
+      "completeOriginalOrder": true
+    },
+    {
+      "filename": "销售订单完整明细 (2).csv",
+      "bytes": 308,
+      "rows": 5,
+      "completeOriginalOrder": true
+    },
+    {
+      "filename": "销售订单完整明细.csv",
+      "bytes": 308,
+      "rows": 5,
+      "completeOriginalOrder": true
+    },
+    {
+      "filename": "销售分析报告.md",
+      "bytes": 3756,
+      "equalsPublishedMarkdown": true
+    },
+    {
+      "filename": "区域汇总 (2).csv",
+      "bytes": 59,
+      "rows": 2,
+      "equalsOriginalResourceBytes": true,
+      "completeOriginalOrder": true
+    }
+  ],
+  "protectedFiles": [
+    {
+      "file": "sales.csv",
+      "bytes": 181,
+      "equalsPreviouslyPublishedOriginalBytes": true
+    },
+    {
+      "file": "sales_summary.py",
+      "bytes": 7650,
+      "equalsPreviouslyPublishedOriginalBytes": true
+    },
+    {
+      "file": "test_sales_summary.py",
+      "bytes": 10107,
+      "equalsPreviouslyPublishedOriginalBytes": true
+    },
+    {
+      "file": "summary.json",
+      "bytes": 238,
+      "equalsPreviouslyPublishedOriginalBytes": true
+    },
+    {
+      "file": "销售报告.md",
+      "bytes": 1408,
+      "equalsPreviouslyPublishedOriginalBytes": true
+    },
+    {
+      "file": "区域汇总.csv",
+      "bytes": 59,
+      "equalsPreviouslyPublishedOriginalBytes": true
+    }
+  ]
+}

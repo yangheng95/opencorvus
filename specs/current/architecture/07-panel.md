@@ -5768,6 +5768,10 @@ initially empty columns. Query, current presentation and declared column types
 derive one controlled filter input, so locale changes refresh matching rows as
 well as cells without replacing the mounted table's query or sorting state.
 Pagination retains TanStack's existing reset behavior when filtered results change.
+When a Table query or sorting is active, its toolbar explains in the current
+product language that downloads include the full table in its original row order.
+This reads the existing local view state; native Table exports and original CSV
+file exports retain their existing complete-data sources and bytes.
 Authored labels and exported payload values retain their original identities.
 
 Editable Code presents this local lifetime beside the editor, asks the operator

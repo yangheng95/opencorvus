@@ -8,7 +8,7 @@ import {
   type ColumnDef,
   type SortingState,
 } from "@tanstack/solid-table"
-import { For, createMemo, createSignal } from "solid-js"
+import { For, Show, createMemo, createSignal } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import type { ArtifactExport } from "../../services/artifact-export"
 import { createArtifactTablePresentation } from "../../services/artifact-table"
@@ -93,6 +93,9 @@ export function TableArtifact(props: {
             total: props.payload.rows.length,
           })}
         </span>
+        <Show when={filter().trim() || sorting().length > 0}>
+          <p class="msg-artifact-table__download-note">{t("artifact.table.download_scope")}</p>
+        </Show>
       </div>
       <div class="msg-artifact-table__scroll">
         <table class="msg-artifact-table">

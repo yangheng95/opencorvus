@@ -1799,7 +1799,13 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact-table__toolbar {
+  flex-wrap: wrap;
   border-bottom: var(--oc-border-width) solid var(--border);
+}
+
+.msg-artifact-table__download-note {
+  flex-basis: 100%;
+  margin: 0;
 }
 
 .msg-artifact-table__toolbar .search-field {
