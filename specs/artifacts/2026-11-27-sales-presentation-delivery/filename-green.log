@@ -1,0 +1,56 @@
+$ bun script/run-tests.ts test/work-artifact/filename.test.ts test/windows-device-entry-contracts.test.ts "--test-name-pattern=author|new Office inputs"
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Finished `release` profile [optimized] target(s) in 0.04s
+[1/2] START test/work-artifact/filename.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) pptx author preserves the portable filename 销售经理简报 [1.28ms]
+(pass) pptx author preserves the portable filename Résumé - 核对 [0.05ms]
+(pass) pptx author preserves the portable filename sales-review [0.07ms]
+(pass) pptx author maps CON to its explicit filename error [0.60ms]
+(pass) pptx author maps COM¹ to its explicit filename error [0.12ms]
+(pass) pptx author maps LPT² to its explicit filename error [0.04ms]
+(pass) pptx author maps 报告:原文 to its explicit filename error [0.05ms]
+(pass) pptx author maps ../报告 to its explicit filename error [0.07ms]
+(pass) docx author preserves the portable filename 销售经理简报 [0.87ms]
+(pass) docx author preserves the portable filename Résumé - 核对 [0.05ms]
+(pass) docx author preserves the portable filename sales-review [0.02ms]
+(pass) docx author maps CON to its explicit filename error [0.07ms]
+(pass) docx author maps COM¹ to its explicit filename error [0.05ms]
+(pass) docx author maps LPT² to its explicit filename error [0.04ms]
+(pass) docx author maps 报告:原文 to its explicit filename error [0.04ms]
+(pass) docx author maps ../报告 to its explicit filename error [0.04ms]
+(pass) xlsx author preserves the portable filename 销售经理简报 [1.18ms]
+(pass) xlsx author preserves the portable filename Résumé - 核对 [0.07ms]
+(pass) xlsx author preserves the portable filename sales-review [0.07ms]
+(pass) xlsx author maps CON to its explicit filename error [0.11ms]
+(pass) xlsx author maps COM¹ to its explicit filename error [0.09ms]
+(pass) xlsx author maps LPT² to its explicit filename error [0.09ms]
+(pass) xlsx author maps 报告:原文 to its explicit filename error [0.07ms]
+(pass) xlsx author maps ../报告 to its explicit filename error [0.11ms]
+
+ 24 pass
+ 0 fail
+ 24 expect() calls
+Ran 24 tests across 1 file. [2.50s]
+[1/2] DONE test/work-artifact/filename.test.ts exit=0 duration=3.11s
+[2/2] START test/windows-device-entry-contracts.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) new Office inputs return the validation error for device alias COM¹ [8.86ms]
+(pass) new Office inputs return the validation error for device alias com² [0.20ms]
+(pass) new Office inputs return the validation error for device alias COM³ [0.14ms]
+(pass) new Office inputs return the validation error for device alias LPT¹ [0.20ms]
+(pass) new Office inputs return the validation error for device alias lpt² [0.19ms]
+(pass) new Office inputs return the validation error for device alias LPT³ [0.20ms]
+(pass) ordinary author inputs and runtime identities retain their exact public outputs [0.74ms]
+
+ 7 pass
+ 25 filtered out
+ 0 fail
+ 16 expect() calls
+Ran 7 tests across 1 file. [971.00ms]
+[2/2] DONE test/windows-device-entry-contracts.test.ts exit=0 duration=1.10s

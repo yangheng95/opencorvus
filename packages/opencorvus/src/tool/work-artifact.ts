@@ -78,7 +78,7 @@ export function createWorkArtifactTools(
 
   const author = Tool.define<typeof AuthorWorkArtifactInput, Record<string, unknown>>("work_artifact_author", {
     description:
-      "Author one Work Artifact from a bounded profile-discriminated plan: office.presentation@1 creates PPTX slides; office.document@1 creates ordered DOCX paragraphs with titles/headings kept with the following paragraph in the editable file and preview, while body text can span pages; office.spreadsheet@1 creates XLSX literal cells. A complete paragraph plan read from an existing document can create a new version under a new filename. Does not edit existing files or accept raw commands, formulas, XML, shell text, filesystem paths, or remote URLs. The editable file is the primary deliverable.",
+      "Author one Work Artifact from a bounded profile-discriminated plan: office.presentation@1 creates PPTX slides with native charts and optional data_label_number_format for label precision (for example 0.00 for amounts); office.document@1 creates ordered DOCX paragraphs with titles/headings kept with the following paragraph in the editable file and preview, while body text can span pages; office.spreadsheet@1 creates XLSX literal cells. A complete paragraph plan read from an existing document can create a new version under a new filename. Does not edit existing files or accept raw commands, formulas, XML, shell text, filesystem paths, or remote URLs. The editable file is the primary deliverable.",
     parameters: AuthorWorkArtifactInput,
     async execute(args, ctx) {
       if (args.profile !== "office.presentation@1") {

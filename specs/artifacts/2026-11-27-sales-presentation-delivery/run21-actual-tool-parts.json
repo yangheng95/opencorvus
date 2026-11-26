@@ -1,0 +1,1211 @@
+[
+  {
+    "id": "prt_g0Vc7rJpZ00TdCT19eXF",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rI1P004I03xnIKw",
+    "type": "tool",
+    "callID": "call_JOagl38BDJLf3eJvudMkxgQw",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts"
+      },
+      "output": "<skill_content name=\"work-artifacts\">\n# Skill: work-artifacts\n\n# Work Artifacts\n\nProduce the requested editable file as the deliverable and use fresh derived\nrenders as review evidence. Never substitute an outline, HTML page, screenshot\ncollection, or semantic Interactive Artifact for the requested source file.\n\n## Workflow\n\n1. Read `references/common-lifecycle.md`.\n2. Read the matching profile reference before authoring:\n   `references/office-presentation.md`, `references/office-document.md`, or\n   `references/office-spreadsheet.md`.\n3. Call `work_artifact_author` with an exact qualified `profile` and a complete\n   typed plan.\n4. Inspect the returned canonical attachment with `work_artifact_inspect`.\n5. Validate that exact attachment with `work_artifact_validate`.\n6. Inspect every fresh render. Repair the typed authoring plan and repeat the\n   full lifecycle when a render is incomplete or visually weak.\n7. Read `references/review.md` and resolve confirmed review findings.\n8. Give `work_artifact_deliver` the exact final validation receipt. Delivery\n   revalidates and rerenders the candidate; only the current authorized Work\n   conversation or Expert Squad delivery owner publishes it.\n\nWhen the user requests a project file path, save the exact delivered source with\nthe ordinary `write` tool using `attachmentUrl` and `filePath`. This preserves the\nbinary bytes; it does not invoke an Office runtime or replace the canonical source.\n\nRead `references/security.md` before using user-supplied images or handling a\nrequest involving external links, macros, embedded objects, media, templates,\nor an existing file.\n\nBase directory for this skill: file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-vN8ljL/runner-32260-XefI2X/artifact-delivery/runtime/cache/builtin-skills/601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7\nLoad a relative supporting file by calling `skill` again with `name: \"work-artifacts\"` and the exact `file` path below. Do not pass the materialized base directory to the project `read` tool.\nNote: file list is sampled.\n\n<skill_files>\n<file>PROVENANCE.md</file>\n<file>references/common-lifecycle.md</file>\n<file>references/office-document.md</file>\n<file>references/office-presentation.md</file>\n<file>references/office-spreadsheet.md</file>\n<file>references/review.md</file>\n<file>references/security.md</file>\n</skill_files>\n</skill_content>",
+      "title": "Loaded skill: work-artifacts",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "agent": "work",
+        "scope": "session",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736492689,
+        "end": 1795736494833
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0abeac9d9a844d1f016b08c3ac974887d0b98a8c7b6a7c5983"
+      }
+    },
+    "orderKey": "v1:0001795736494320:0000000000000031:0000000000000000:part:prt_g0Vc7rJpZ00TdCT19eXF"
+  },
+  {
+    "id": "prt_g0Vc7rLVY00oeCZ7Zz3b",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rKR400wdd6OFmwz",
+    "type": "tool",
+    "callID": "call_wkpou6eZC92UpJPYIkzVTtXH",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts",
+        "file": "references/common-lifecycle.md"
+      },
+      "output": "<skill_file name=\"work-artifacts\" path=\"references/common-lifecycle.md\">\n1: # Work Artifact lifecycle\n2: \n3: - Treat the requested editable file as the primary deliverable.\n4: - Use only profiles listed by the mounted typed tool schema. Do not infer\n5:   support from a filename extension, installed viewer, or underlying binary.\n6: - Keep authoring input complete, ordered, bounded, and tied to the intended\n7:   audience, purpose, format, sources, and acceptance criteria.\n8: - Use canonical attachments instead of local filesystem paths or remote URLs.\n9: - Validate the exact authored attachment. Preserve the returned validation\n10:   receipt with its source, runtime, and render digests.\n11: - Review the actual fresh renders. A successful command, zero issue count,\n12:   schema result, or file existence is not visual acceptance.\n13: - Deliver only with the exact receipt for the final candidate. Never alter a\n14:   receipt or reuse one after reauthoring.\n\n(End of file - total 14 lines)\n</skill_file>",
+      "title": "Loaded skill file: references/common-lifecycle.md",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "file": "references/common-lifecycle.md",
+        "agent": "work",
+        "scope": "session",
+        "preview": "# Work Artifact lifecycle\n\n- Treat the requested editable file as the primary deliverable.\n- Use only profiles listed by the mounted typed tool schema. Do not infer\n  support from a filename extension, installed viewer, or underlying binary.\n- Keep authoring input complete, ordered, bounded, and tied to the intended\n  audience, purpose, format, sources, and acceptance criteria.\n- Use canonical attachments instead of local filesystem paths or remote URLs.\n- Validate the exact authored attachment. Preserve the returned validation\n  receipt with its source, runtime, and render digests.\n- Review the actual fresh renders. A successful command, zero issue count,\n  schema result, or file existence is not visual acceptance.\n- Deliver only with the exact receipt for the final candidate. Never alter a\n  receipt or reuse one after reauthoring.",
+        "truncated": false,
+        "lines": 14,
+        "totalLines": 14
+      },
+      "time": {
+        "start": 1795736499136,
+        "end": 1795736500532
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0cfe55d1726ffd6f016b08c3b30c5487d0bfefd1c180820cdd"
+      }
+    },
+    "orderKey": "v1:0001795736500144:0000000000000031:0000000000000000:part:prt_g0Vc7rLVY00oeCZ7Zz3b"
+  },
+  {
+    "id": "prt_g0Vc7rN42009obLp6cUr",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rLup00gvMP4rw2t",
+    "type": "tool",
+    "callID": "call_qB9sEs2LEJKlTc3KetgaZ4Kh",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts",
+        "file": "references/office-presentation.md"
+      },
+      "output": "<skill_file name=\"work-artifacts\" path=\"references/office-presentation.md\">\n1: # Qualified office.presentation@1 profile\n2: \n3: Create a new 16:9 PPTX presentation from typed text, shape, picture, and chart\n4: elements. Editing, preserving, or round-tripping an existing PPTX/POTX is not\n5: qualified.\n6: \n7: ## Story and layout\n8: \n9: - Give each slide one audience-facing takeaway and use a point-making title.\n10: - Prefer a clear sequence: context, evidence, implication, decision, next step.\n11: - Keep a consistent margin, type scale, color system, and alignment grid.\n12: - Keep paragraphs readable at presentation distance and use charts only when\n13:   they materially improve comparison or magnitude.\n14: - Give each chart one coherent unit and scale. Use separate plots, a justified\n15:   labelled secondary axis, or an explicit normalized index for heterogeneous\n16:   metrics; never encode source notes as chart data.\n17: - Use supplied image attachments only when they add evidence or meaning; add\n18:   useful alt text and preserve their aspect ratio.\n19: \n20: ## Source and typed input\n21: \n22: - Use only content, claims, and images available through the request, project,\n23:   attachments, connected tools, or cited research.\n24: - Do not invent metrics, quotes, logos, or source claims.\n25: - Supply a safe basename ending in `.pptx` and all ordered slides in one call.\n26: - All `x`, `y`, `width`, and `height` values are centimeters, never inches or pixels. The 16:9 slide is exactly 33.867 cm wide by 19.05 cm high.\n27: - Keep every element within those centimeter slide bounds and allocate enough physical height for the requested font size and line count.\n28: - Reference pictures only with canonical attachment URLs.\n29: - Set `data_label_number_format` when displayed chart values need a specific\n30:   precision, for example `0.00` for amounts to two decimal places. This writes\n31:   the native chart label format and keeps the underlying values editable.\n32:   Automatic labels may round or abbreviate values; check the actual labels in\n33:   every fresh rendered slide against the source values and intended precision.\n\n(End of file - total 33 lines)\n</skill_file>",
+      "title": "Loaded skill file: references/office-presentation.md",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "file": "references/office-presentation.md",
+        "agent": "work",
+        "scope": "session",
+        "preview": "# Qualified office.presentation@1 profile\n\nCreate a new 16:9 PPTX presentation from typed text, shape, picture, and chart\nelements. Editing, preserving, or round-tripping an existing PPTX/POTX is not\nqualified.\n\n## Story and layout\n\n- Give each slide one audience-facing takeaway and use a point-making title.\n- Prefer a clear sequence: context, evidence, implication, decision, next step.\n- Keep a consistent margin, type scale, color system, and alignment grid.\n- Keep paragraphs readable at presentation distance and use charts only when\n  they materially improve comparison or magnitude.\n- Give each chart one coherent unit and scale. Use separate plots, a justified\n  labelled secondary axis, or an explicit normalized index for heterogeneous\n  metrics; never encode source notes as chart data.\n- Use supplied image attachments only when they add evidence or meaning; add\n  useful alt text and preserve their aspect ratio.\n\n## Source and typed input",
+        "truncated": false,
+        "lines": 33,
+        "totalLines": 33
+      },
+      "time": {
+        "start": 1795736505118,
+        "end": 1795736506188
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_00b55582874c9cdb016b08c3b9087887d0ac89dc660088ac3c"
+      }
+    },
+    "orderKey": "v1:0001795736506079:0000000000000031:0000000000000000:part:prt_g0Vc7rN42009obLp6cUr"
+  },
+  {
+    "id": "prt_g0Vc7rOcS00VTdBhGtr0",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rNNo00DlCFyO9mf",
+    "type": "tool",
+    "callID": "call_9OpnmwGtZy9rybGCIuOELYww",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "sales.csv"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\sales.csv</path>\n<type>file</type>\n<content>1: 订单编号,区域,金额,备注\n2: A001,华东,10.10,普通订单\n3: A002,华东,20.20,中文客户\n4: A003,华东,-2.05,退款\n5: A004,华南,0.00,免费样品\n6: A005,华南,7.35,普通订单\n\n(End of file - total 6 lines)\n</content>",
+      "title": "sales.csv",
+      "metadata": {
+        "preview": "订单编号,区域,金额,备注\nA001,华东,10.10,普通订单\nA002,华东,20.20,中文客户\nA003,华东,-2.05,退款\nA004,华南,0.00,免费样品\nA005,华南,7.35,普通订单",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 6,
+        "totalLines": 6
+      },
+      "time": {
+        "start": 1795736511096,
+        "end": 1795736511992
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_043558c5f8125d39016b08c3bf026087d0a4f1c8793a10962f"
+      }
+    },
+    "orderKey": "v1:0001795736511655:0000000000000031:0000000000000000:part:prt_g0Vc7rOcS00VTdBhGtr0"
+  },
+  {
+    "id": "prt_g0Vc7rQ7A00SXT0aGsRq",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rOvZ00GxdGHYdV3",
+    "type": "tool",
+    "callID": "call_w4yaIdsJPj5fSh0RXwYzenPU",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "deliverables"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\deliverables</path>\n<type>directory</type>\n<entries>\n销售核对.xlsx\n销售经理审阅稿-分页修订.docx\n销售经理审阅稿.docx\n销售经理简报.pptx\n\n(4 entries)\n</entries>",
+      "title": "deliverables",
+      "metadata": {
+        "preview": "销售核对.xlsx\n销售经理审阅稿-分页修订.docx\n销售经理审阅稿.docx\n销售经理简报.pptx",
+        "truncated": false,
+        "loaded": [],
+        "readType": "directory",
+        "offset": 1,
+        "lines": 4,
+        "totalLines": 4
+      },
+      "time": {
+        "start": 1795736516844,
+        "end": 1795736517706
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_05cd2232f19b4fe2016b08c3c4c02887d082aae88b7e5ac962"
+      }
+    },
+    "orderKey": "v1:0001795736517377:0000000000000031:0000000000000000:part:prt_g0Vc7rQ7A00SXT0aGsRq"
+  },
+  {
+    "id": "prt_g0Vc7rRd900Wi3IuC4Mj",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rQOi00iq90TF6Es",
+    "type": "tool",
+    "callID": "call_i1DYEPkbUpChmONrRn8Nnigr",
+    "tool": "bash",
+    "state": {
+      "status": "completed",
+      "input": {
+        "command": "python -c \"import csv,json; from decimal import Decimal; from collections import defaultdict; rows=list(csv.DictReader(open('sales.csv',encoding='utf-8-sig',newline=''))); regions=defaultdict(lambda:[0,Decimal('0')]); amounts=[Decimal(r['金额']) for r in rows]; [(regions[r['区域']].__setitem__(0,regions[r['区域']][0]+1),regions[r['区域']].__setitem__(1,regions[r['区域']][1]+a)) for r,a in zip(rows,amounts)]; print(json.dumps({'orders':len(rows),'net':str(sum(amounts)),'regions':{k:[v[0],str(v[1])] for k,v in regions.items()},'refunds':sum(a<0 for a in amounts),'refund_amount':str(sum(a for a in amounts if a<0)),'zeros':sum(a==0 for a in amounts)},ensure_ascii=True)); assert sum(v[0] for v in regions.values())==len(rows); assert sum(v[1] for v in regions.values())==sum(amounts)\"",
+        "description": "Recompute current CSV independently with Decimal arithmetic"
+      },
+      "output": "{\"orders\": 5, \"net\": \"35.60\", \"regions\": {\"\\u534e\\u4e1c\": [3, \"28.25\"], \"\\u534e\\u5357\": [2, \"7.35\"]}, \"refunds\": 1, \"refund_amount\": \"-2.05\", \"zeros\": 1}\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+      "title": "Recompute current CSV independently with Decimal arithmetic",
+      "metadata": {
+        "refused": false,
+        "command": "python -c \"import csv,json; from decimal import Decimal; from collections import defaultdict; rows=list(csv.DictReader(open('sales.csv',encoding='utf-8-sig',newline=''))); regions=defaultdict(lambda:[0,Decimal('0')]); amounts=[Decimal(r['金额']) for r in rows]; [(regions[r['区域']].__setitem__(0,regions[r['区域']][0]+1),regions[r['区域']].__setitem__(1,regions[r['区域']][1]+a)) for r,a in zip(rows,amounts)]; print(json.dumps({'orders':len(rows),'net':str(sum(amounts)),'regions':{k:[v[0],str(v[1])] for k,v in regions.items()},'refunds':sum(a<0 for a in amounts),'refund_amount':str(sum(a for a in amounts if a<0)),'zeros':sum(a==0 for a in amounts)},ensure_ascii=True)); assert sum(v[0] for v in regions.values())==len(rows); assert sum(v[1] for v in regions.values())==sum(amounts)\"",
+        "output": "{\"orders\": 5, \"net\": \"35.60\", \"regions\": {\"\\u534e\\u4e1c\": [3, \"28.25\"], \"\\u534e\\u5357\": [2, \"7.35\"]}, \"refunds\": 1, \"refund_amount\": \"-2.05\", \"zeros\": 1}\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 155,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Recompute current CSV independently with Decimal arithmetic",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736522671,
+        "end": 1795736528852
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_01daf9661aebc2c5016b08c3ca92f887d08aef0efe7eee0ccd"
+      }
+    },
+    "orderKey": "v1:0001795736528153:0000000000000031:0000000000000000:part:prt_g0Vc7rRd900Wi3IuC4Mj"
+  },
+  {
+    "id": "prt_g0Vc7rV98004CpL9MeQ3",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rTJF00xmDuepWaM",
+    "type": "tool",
+    "callID": "call_FNslCf0QYKKZK8hg7ijNyBqO",
+    "tool": "work_artifact_author",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.presentation@1",
+        "filename": "销售经理简报-精度修订.pptx",
+        "locale": "zh-CN",
+        "aspect_ratio": "16:9",
+        "slides": [
+          {
+            "title": "5笔订单，净金额35.60",
+            "background": "#F5F7FB",
+            "elements": [
+              {
+                "x": 1.7,
+                "y": 0.7,
+                "width": 30.4,
+                "height": 0.9,
+                "kind": "text",
+                "text": "销售经理简报  /  01 总览",
+                "font_size": 14,
+                "color": "#2563EB",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 1.9,
+                "width": 30.4,
+                "height": 1.5,
+                "kind": "text",
+                "text": "5笔订单，净金额35.60",
+                "font_size": 32,
+                "color": "#14243B",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.5,
+                "y": 4.5,
+                "width": 7.2,
+                "height": 4,
+                "kind": "text",
+                "text": "订单总数\n5 笔",
+                "font_size": 28,
+                "color": "#14243B",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "middle",
+                "fill": "#FFFFFF",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 9.4,
+                "y": 4.5,
+                "width": 7.2,
+                "height": 4,
+                "kind": "text",
+                "text": "净金额\n35.60",
+                "font_size": 28,
+                "color": "#2563EB",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "middle",
+                "fill": "#FFFFFF",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 17.3,
+                "y": 4.5,
+                "width": 7.2,
+                "height": 4,
+                "kind": "text",
+                "text": "退款\n1 笔",
+                "font_size": 28,
+                "color": "#B45309",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "middle",
+                "fill": "#FFFFFF",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 25.2,
+                "y": 4.5,
+                "width": 7.2,
+                "height": 4,
+                "kind": "text",
+                "text": "零金额\n1 笔",
+                "font_size": 28,
+                "color": "#14243B",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "middle",
+                "fill": "#FFFFFF",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.9,
+                "y": 9.3,
+                "width": 30,
+                "height": 2.3,
+                "kind": "text",
+                "text": "退款：A003，金额 -2.05，已扣减净金额。\n零金额：A004，金额 0.00，备注“免费样品”。",
+                "font_size": 20,
+                "color": "#334155",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.9,
+                "y": 12.3,
+                "width": 30,
+                "height": 2.5,
+                "kind": "text",
+                "text": "统计口径：每笔原记录计1笔，含退款和零金额。\n净金额＝全部带符号金额之和；十进制独立复算，精确到分。",
+                "font_size": 20,
+                "color": "#334155",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 16.5,
+                "width": 30.4,
+                "height": 1.8,
+                "kind": "text",
+                "text": "来源：项目根目录 sales.csv 全部5笔，覆盖华东、华南。\n未提供日期、币种、成本或目标；本简报不作推定。",
+                "font_size": 13,
+                "color": "#64748B",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              }
+            ]
+          },
+          {
+            "title": "本样本内，华东净金额与订单数均较高",
+            "background": "#F5F7FB",
+            "elements": [
+              {
+                "x": 1.7,
+                "y": 0.7,
+                "width": 30.4,
+                "height": 0.9,
+                "kind": "text",
+                "text": "销售经理简报  /  02 区域比较",
+                "font_size": 14,
+                "color": "#2563EB",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 1.9,
+                "width": 30.4,
+                "height": 1.5,
+                "kind": "text",
+                "text": "本样本内，华东净金额与订单数均较高",
+                "font_size": 30,
+                "color": "#14243B",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 4.4,
+                "width": 14.4,
+                "height": 9.8,
+                "kind": "chart",
+                "chart_type": "column",
+                "title": "区域净金额｜金额，币种未提供",
+                "categories": [
+                  "华东",
+                  "华南"
+                ],
+                "series": [
+                  {
+                    "name": "净金额（金额）",
+                    "values": [
+                      28.25,
+                      7.35
+                    ]
+                  }
+                ],
+                "colors": [
+                  "#2563EB"
+                ],
+                "legend": "none",
+                "data_labels": "value",
+                "data_label_number_format": "0.00"
+              },
+              {
+                "x": 17.5,
+                "y": 4.4,
+                "width": 14.4,
+                "height": 9.8,
+                "kind": "chart",
+                "chart_type": "column",
+                "title": "区域订单数｜单位：笔",
+                "categories": [
+                  "华东",
+                  "华南"
+                ],
+                "series": [
+                  {
+                    "name": "订单数（笔）",
+                    "values": [
+                      3,
+                      2
+                    ]
+                  }
+                ],
+                "colors": [
+                  "#0F766E"
+                ],
+                "legend": "none",
+                "data_labels": "value",
+                "data_label_number_format": "0"
+              },
+              {
+                "x": 1.9,
+                "y": 15.1,
+                "width": 30,
+                "height": 1.4,
+                "kind": "text",
+                "text": "区域合计：净金额 28.25＋7.35＝35.60；订单数 3＋2＝5笔。",
+                "font_size": 20,
+                "color": "#334155",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 17.2,
+                "width": 30.4,
+                "height": 1.1,
+                "kind": "text",
+                "text": "来源：sales.csv 独立复算；两图各用独立数值轴，金额含退款，笔数含退款及零金额。",
+                "font_size": 13,
+                "color": "#64748B",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              }
+            ]
+          },
+          {
+            "title": "先核对退款和样品，再作经营判断",
+            "background": "#F5F7FB",
+            "elements": [
+              {
+                "x": 1.7,
+                "y": 0.7,
+                "width": 30.4,
+                "height": 0.9,
+                "kind": "text",
+                "text": "销售经理简报  /  03 审阅与行动",
+                "font_size": 14,
+                "color": "#2563EB",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 1.9,
+                "width": 30.4,
+                "height": 1.5,
+                "kind": "text",
+                "text": "先核对退款和样品，再作经营判断",
+                "font_size": 30,
+                "color": "#14243B",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 4.2,
+                "width": 14.2,
+                "height": 1.3,
+                "kind": "text",
+                "text": "已知事实与解读边界",
+                "font_size": 24,
+                "color": "#14243B",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 5.6,
+                "width": 14.2,
+                "height": 3.7,
+                "kind": "text",
+                "text": "• 仅有5笔记录；华东1笔退款，华南1笔免费样品。\n• 华东净金额较高，只描述本样本，不代表长期表现。",
+                "font_size": 20,
+                "color": "#334155",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 10.1,
+                "width": 14.2,
+                "height": 4.8,
+                "kind": "text",
+                "text": "数据缺失：日期、币种、成本、目标均未提供。\n因此不能判断增长趋势、利润或目标达成率；净金额不等于利润或已收款。",
+                "font_size": 20,
+                "color": "#334155",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 17.7,
+                "y": 4.2,
+                "width": 14.4,
+                "height": 1.3,
+                "kind": "text",
+                "text": "经理核对行动（建议）",
+                "font_size": 24,
+                "color": "#2563EB",
+                "font": "Arial",
+                "bold": true,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 17.7,
+                "y": 5.6,
+                "width": 14.4,
+                "height": 10.1,
+                "kind": "text",
+                "text": "1  退款 A003：核对 -2.05、退款凭证、审批及原销售关联。\n\n2  样品 A004：核对 0.00、发放与领取记录、审批；补取成本，零售价不等于零成本。\n\n3  数据范围：确认5笔是否完整，补齐日期、币种、成本和目标后再评价经营表现。",
+                "font_size": 20,
+                "color": "#334155",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              },
+              {
+                "x": 1.7,
+                "y": 16.5,
+                "width": 30.4,
+                "height": 1.8,
+                "kind": "text",
+                "text": "建议是待执行的核查方向，并非已发现异常或违规。\n来源：当前项目根目录 sales.csv；未使用外部资料。",
+                "font_size": 13,
+                "color": "#64748B",
+                "font": "Arial",
+                "bold": false,
+                "align": "left",
+                "valign": "top",
+                "fill": "none",
+                "line": "none",
+                "geometry": "rect"
+              }
+            ]
+          }
+        ]
+      },
+      "output": "{\"profile\":\"office.presentation@1\",\"source\":{\"sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"mime\":\"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\"size\":16259,\"filename\":\"销售经理简报-精度修订.pptx\"},\"slides\":[{\"slide\":1,\"title\":\"5笔订单，净金额35.60\"},{\"slide\":2,\"title\":\"本样本内，华东净金额与订单数均较高\"},{\"slide\":3,\"title\":\"先核对退款和样品，再作经营判断\"}],\"next\":\"Call work_artifact_inspect and then work_artifact_validate on source.url before delivery.\"}",
+      "title": "Authored 销售经理简报-精度修订.pptx",
+      "metadata": {
+        "sourceSha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+        "slideCount": 3,
+        "profile": "office.presentation@1",
+        "runtime": "OfficeCLI v1.0.158",
+        "runtimeLockRevision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+        "runtimePackageSha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736536186,
+        "end": 1795736582012
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_030142fc1c36906c016b08c3d8153887d08da2b112073848b6"
+      }
+    },
+    "orderKey": "v1:0001795736572099:0000000000000031:0000000000000000:part:prt_g0Vc7rV98004CpL9MeQ3"
+  },
+  {
+    "id": "prt_g0Vc7riL000qlXa5rLsK",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rh7g00npCEIB3Wo",
+    "type": "tool",
+    "callID": "call_g9bdnBwztaLKqcUw99Pnr2IF",
+    "tool": "work_artifact_inspect",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.presentation@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx"
+      },
+      "output": "{\"profile\":\"office.presentation@1\",\"source\":{\"sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"mime\":\"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\"size\":16259,\"filename\":\"销售经理简报-精度修订.pptx\"},\"inspection\":{\"entryCount\":28,\"uncompressedBytes\":53493,\"slideCount\":3},\"next\":\"For a newly authored presentation, call work_artifact_validate on this exact source URL.\"}",
+      "title": "Inspected 销售经理简报-精度修订.pptx",
+      "metadata": {
+        "profile": "office.presentation@1",
+        "sourceSha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+        "slideCount": 3,
+        "entryCount": 28,
+        "uncompressedBytes": 53493,
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736586894,
+        "end": 1795736594642
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0f754d63a65fdb4a016b08c40acf6c87d09f409aeec6679042"
+      }
+    },
+    "orderKey": "v1:0001795736588679:0000000000000031:0000000000000000:part:prt_g0Vc7riL000qlXa5rLsK"
+  },
+  {
+    "id": "prt_g0Vc7rlmC00dzUCd469I",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rkOu00kRheLesw1",
+    "type": "tool",
+    "callID": "call_OVO3yqTqb6WvApOvWycljjTX",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.presentation@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx"
+      },
+      "output": "{\"source\":{\"sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"mime\":\"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\"size\":16259,\"filename\":\"销售经理简报-精度修订.pptx\"},\"inspection\":{\"entryCount\":28,\"uncompressedBytes\":53493,\"slideCount\":3},\"validation\":{\"success\":true,\"data\":{\"count\":0,\"errors\":[]}},\"issues\":{\"success\":true,\"data\":{\"count\":0,\"issues\":[]}},\"renders\":[{\"slide\":1,\"sha\":\"b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png\",\"mime\":\"image/png\",\"size\":65488,\"filename\":\"slide-1.png\"},{\"slide\":2,\"sha\":\"10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png\",\"mime\":\"image/png\",\"size\":58523,\"filename\":\"slide-2.png\"},{\"slide\":3,\"sha\":\"f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png\",\"mime\":\"image/png\",\"size\":89853,\"filename\":\"slide-3.png\"}],\"resource_usage\":{\"input_bytes\":16259,\"runtime_output_bytes\":23332,\"render_bytes\":213864,\"wall_clock_ms\":12918},\"validation_receipt\":{\"sha\":\"a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1190,\"filename\":\"work-artifact-validation-receipt.json\"},\"validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.presentation@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"source_sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"resource_usage\":{\"input_bytes\":16259,\"runtime_output_bytes\":23332,\"render_bytes\":213864,\"wall_clock_ms\":12918},\"renders\":[{\"slide\":1,\"sha\":\"b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png\"},{\"slide\":2,\"sha\":\"10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png\"},{\"slide\":3,\"sha\":\"f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png\"}]},\"next\":\"Inspect every render. After resolving findings, pass this exact receipt to work_artifact_deliver.\"}",
+      "title": "Validated 销售经理简报-精度修订.pptx",
+      "metadata": {
+        "sourceSha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+        "slideCount": 3,
+        "entryCount": 28,
+        "uncompressedBytes": 53493,
+        "profile": "office.presentation@1",
+        "runtime": "OfficeCLI v1.0.158",
+        "receiptSha": "a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736600112,
+        "end": 1795736615168
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7rpgx00xvD6mYDno",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rkOu00kRheLesw1",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163.json"
+        },
+        {
+          "id": "prt_g0Vc7rpgx01yeBKVqJB2",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rkOu00kRheLesw1",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png"
+        },
+        {
+          "id": "prt_g0Vc7rpgx02qmoKxuMgw",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rkOu00kRheLesw1",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png"
+        },
+        {
+          "id": "prt_g0Vc7rpgx03GMnUyqhiV",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rkOu00kRheLesw1",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_01e58a8301a7c424016b08c41804dc87d0a748f6e0c16dd5f2"
+      }
+    },
+    "orderKey": "v1:0001795736602175:0000000000000031:0000000000000000:part:prt_g0Vc7rlmC00dzUCd469I"
+  },
+  {
+    "id": "prt_g0Vc7rr8S00b41TRriUJ",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rpl000yrIQ307hr",
+    "type": "tool",
+    "callID": "call_1R7oDiQxT5lCu5JzVpCH61gH",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts",
+        "file": "references/review.md"
+      },
+      "output": "<skill_file name=\"work-artifacts\" path=\"references/review.md\">\n1: # Presentation review\n2: \n3: Inspect every fresh PNG: each PPTX slide, DOCX page, or XLSX worksheet.\n4: For DOCX/XLSX also open the derived PDF preview. Verify complete paragraphs,\n5: rows, columns, numeric totals and page boundaries against the requested source.\n6: \n7: For every slide, verify required content, clipping, readability, hierarchy,\n8: alignment, spacing, contrast, chart categories/series/units/scale, image aspect\n9: ratio and alt text, placeholders, blank regions, and required sources.\n10: \n11: Do not put heterogeneous units such as currency, counts, and percentages on a\n12: single raw-value axis. Use separate charts, a clearly labelled and justified\n13: secondary axis, or an explicit normalized-index comparison. Keep source and\n14: provenance notes as text, never as dummy chart categories or series. Repair a\n15: chart when scale dominance makes any meaningful series illegible.\n16: \n17: Across the deck, verify narrative order, visual consistency, intentional\n18: density, requested conclusion/action, filename, and title.\n19: \n20: An independent child review is advisory evidence. The parent Work conversation\n21: owns corrections, final validation, exact receipt selection, and delivery.\n\n(End of file - total 21 lines)\n</skill_file>",
+      "title": "Loaded skill file: references/review.md",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "file": "references/review.md",
+        "agent": "work",
+        "scope": "session",
+        "preview": "# Presentation review\n\nInspect every fresh PNG: each PPTX slide, DOCX page, or XLSX worksheet.\nFor DOCX/XLSX also open the derived PDF preview. Verify complete paragraphs,\nrows, columns, numeric totals and page boundaries against the requested source.\n\nFor every slide, verify required content, clipping, readability, hierarchy,\nalignment, spacing, contrast, chart categories/series/units/scale, image aspect\nratio and alt text, placeholders, blank regions, and required sources.\n\nDo not put heterogeneous units such as currency, counts, and percentages on a\nsingle raw-value axis. Use separate charts, a clearly labelled and justified\nsecondary axis, or an explicit normalized-index comparison. Keep source and\nprovenance notes as text, never as dummy chart categories or series. Repair a\nchart when scale dominance makes any meaningful series illegible.\n\nAcross the deck, verify narrative order, visual consistency, intentional\ndensity, requested conclusion/action, filename, and title.\n\nAn independent child review is advisory evidence. The parent Work conversation",
+        "truncated": false,
+        "lines": 21,
+        "totalLines": 21
+      },
+      "time": {
+        "start": 1795736620712,
+        "end": 1795736622355
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0bc73ad0220aea71016b08c42c962087d0bca1b188e89ffbc2"
+      }
+    },
+    "orderKey": "v1:0001795736622017:0000000000000031:0000000000000000:part:prt_g0Vc7rr8S00b41TRriUJ"
+  },
+  {
+    "id": "prt_g0Vc7rsox00H443W1JUa",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rrbk005b0kEirE7",
+    "type": "tool",
+    "callID": "call_hwxrDfJIL3NsHpuW1cuylPk8",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png"
+      },
+      "output": "Image read successfully",
+      "title": "slide-1.png",
+      "metadata": {
+        "preview": "Image read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      },
+      "time": {
+        "start": 1795736627191,
+        "end": 1795736628814
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7rtF600FCUcDhizT",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rrbk005b0kEirE7",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0af52df92fa46d0b016b08c433056887d082fda2ac935833d0"
+      }
+    },
+    "orderKey": "v1:0001795736628747:0000000000000031:0000000000000000:part:prt_g0Vc7rsox00H443W1JUa"
+  },
+  {
+    "id": "prt_g0Vc7ruMK00xniHL9hAV",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rtIV00OGLzpr085",
+    "type": "tool",
+    "callID": "call_djSvD2FKTHijHJchaRso482n",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png"
+      },
+      "output": "Image read successfully",
+      "title": "slide-2.png",
+      "metadata": {
+        "preview": "Image read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      },
+      "time": {
+        "start": 1795736633104,
+        "end": 1795736635307
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7ruvo00qaoJV8rXT",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rtIV00OGLzpr085",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0c361f5b3511b91b016b08c439031087d0bb71e5fd8b25f7f9"
+      }
+    },
+    "orderKey": "v1:0001795736634634:0000000000000031:0000000000000000:part:prt_g0Vc7ruMK00xniHL9hAV"
+  },
+  {
+    "id": "prt_g0Vc7rwO900NSzahaF41",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7ruzG00ods5R7zt5",
+    "type": "tool",
+    "callID": "call_P9HslkAuza9P4HKrnRAaBKSE",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png"
+      },
+      "output": "Image read successfully",
+      "title": "slide-3.png",
+      "metadata": {
+        "preview": "Image read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      },
+      "time": {
+        "start": 1795736640905,
+        "end": 1795736642978
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7rwvY00tsshEwuzr",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7ruzG00ods5R7zt5",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_006be813aca2ff5a016b08c440ca5487d083e822b2ffe0efa6"
+      }
+    },
+    "orderKey": "v1:0001795736642559:0000000000000031:0000000000000000:part:prt_g0Vc7rwO900NSzahaF41"
+  },
+  {
+    "id": "prt_g0Vc7ryv200YD4Mw0uD2",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7rwzH00GpIba17gX",
+    "type": "tool",
+    "callID": "call_sBU5iTixT1mh6aRJiLucqgG1",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·精度修订",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163.json",
+        "validation_receipt_sha": "a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": "5笔订单、净金额35.60；退款及零金额各1笔，明确来源与统计口径。"
+          },
+          {
+            "slide": 2,
+            "title": "区域比较：精确原生标签",
+            "markdown": "两个独立原生图表。金额柱上原生标签28.25、7.35，数字格式0.00；订单数3、2笔。"
+          },
+          {
+            "slide": 3,
+            "title": "谨慎解读与核对行动",
+            "markdown": "明确日期、币种、成本和目标缺失；区分已知事实与退款/样品核对建议。"
+          }
+        ]
+      },
+      "output": "{\"artifactID\":\"art_g0Vc7s5Ye005Xo5lmnrm\",\"source\":{\"sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"mime\":\"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\"size\":16259,\"filename\":\"销售经理简报-精度修订.pptx\"},\"renders\":[{\"sha\":\"b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png\",\"mime\":\"image/png\",\"size\":65488,\"filename\":\"slide-1.png\"},{\"sha\":\"10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png\",\"mime\":\"image/png\",\"size\":58523,\"filename\":\"slide-2.png\"},{\"sha\":\"f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png\",\"mime\":\"image/png\",\"size\":89853,\"filename\":\"slide-3.png\"}],\"final_validation_receipt\":{\"sha\":\"9cd02ee74c0a5308b8b05fa7f53d2c1905d0b2ce1822c26aade0589b3b1da3e3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/9cd02ee74c0a5308b8b05fa7f53d2c1905d0b2ce1822c26aade0589b3b1da3e3.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1190,\"filename\":\"work-artifact-validation-receipt.json\"},\"final_validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.presentation@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"source_sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"resource_usage\":{\"input_bytes\":16259,\"runtime_output_bytes\":23332,\"render_bytes\":213864,\"wall_clock_ms\":12608},\"renders\":[{\"slide\":1,\"sha\":\"b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png\"},{\"slide\":2,\"sha\":\"10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png\"},{\"slide\":3,\"sha\":\"f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png\"}]},\"fidelity\":\"OfficeCLI v1.0.158 package validation and render evidence; Microsoft PowerPoint pixel fidelity is not claimed.\"}",
+      "title": "销售经理简报·精度修订",
+      "metadata": {
+        "artifactID": "art_g0Vc7s5Ye005Xo5lmnrm",
+        "renderer": "presentation@1",
+        "sourceSha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+        "slideCount": 3,
+        "profile": "office.presentation@1",
+        "runtime": "OfficeCLI v1.0.158",
+        "validationReceiptSha": "9cd02ee74c0a5308b8b05fa7f53d2c1905d0b2ce1822c26aade0589b3b1da3e3",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736650632,
+        "end": 1795736676158
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7s5Yh005if7yQKML",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rwzH00GpIba17gX",
+          "type": "file",
+          "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "filename": "销售经理简报-精度修订.pptx",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx"
+        },
+        {
+          "id": "prt_g0Vc7s5Yh01PwrkjIhin",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rwzH00GpIba17gX",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/9cd02ee74c0a5308b8b05fa7f53d2c1905d0b2ce1822c26aade0589b3b1da3e3.json"
+        },
+        {
+          "id": "prt_g0Vc7s5Yh02k02XhodFW",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rwzH00GpIba17gX",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png"
+        },
+        {
+          "id": "prt_g0Vc7s5Yh039H6xr2G9E",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rwzH00GpIba17gX",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png"
+        },
+        {
+          "id": "prt_g0Vc7s5Yh04xCfWjdXS5",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7rwzH00GpIba17gX",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_05a83bde7839daae016b08c44a807087d0ad4ea8ed64af0506"
+      }
+    },
+    "orderKey": "v1:0001795736657509:0000000000000031:0000000000000000:part:prt_g0Vc7ryv200YD4Mw0uD2"
+  },
+  {
+    "id": "prt_g0Vc7s6ox003lE5zBw1n",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7s5cy000xRbKm49l",
+    "type": "tool",
+    "callID": "call_FlXqZbS2gQ7dbEiHpuiJvm7x",
+    "tool": "write",
+    "state": {
+      "status": "completed",
+      "input": {
+        "attachmentUrl": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\deliverables\\销售经理简报-精度修订.pptx"
+      },
+      "output": "Wrote attachment file successfully.",
+      "title": "deliverables\\销售经理简报-精度修订.pptx",
+      "metadata": {
+        "filepath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\deliverables\\销售经理简报-精度修订.pptx",
+        "exists": false,
+        "source": {
+          "sha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+          "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "size": 16259,
+          "filename": "销售经理简报-精度修订.pptx"
+        },
+        "bytes": 16259,
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736681007,
+        "end": 1795736684257
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_085f7f8b3f5970ed016b08c468ebcc87d0a59d93d3ed054013"
+      }
+    },
+    "orderKey": "v1:0001795736683916:0000000000000031:0000000000000000:part:prt_g0Vc7s6ox003lE5zBw1n"
+  },
+  {
+    "id": "prt_g0Vc7s9H100UaLdbqo9E",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7s7iF00lAHg3mx46",
+    "type": "tool",
+    "callID": "call_V9dMD7zI7EHBPLuqIyh0F1ic",
+    "tool": "bash",
+    "state": {
+      "status": "completed",
+      "input": {
+        "command": "python -c \"from pathlib import Path; import zipfile,xml.etree.ElementTree as E,posixpath; p=Path('deliverables/销售经理简报-精度修订.pptx'); a=Path(r'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\.opencorvus\\.r\\project\\attachments\\f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d\\57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx'); assert p.read_bytes()==a.read_bytes(); z=zipfile.ZipFile(p); ns={'p':'http://schemas.openxmlformats.org/presentationml/2006/main','c':'http://schemas.openxmlformats.org/drawingml/2006/chart'}; root=E.fromstring(z.read('ppt/presentation.xml')); size=root.find('p:sldSz',ns); assert len(root.find('p:sldIdLst',ns))==3; assert int(size.get('cx'))*9==int(size.get('cy'))*16; rels=E.fromstring(z.read('ppt/slides/_rels/slide2.xml.rels')); charts=[posixpath.normpath(posixpath.join('/ppt/slides',r.get('Target'))).removeprefix('/') for r in rels if r.get('Type').endswith('/chart')]; assert len(charts)==2; found=[]; expected={('28.25','7.35'):'0.00',('3','2'):'0'}; [(lambda chart:(found.append((tuple(v.text for v in chart.findall('.//c:val//c:pt/c:v',ns)),chart.find('.//c:dLbls/c:numFmt',ns).attrib,chart.find('.//c:dLbls/c:showVal',ns).get('val'))),None))(E.fromstring(z.read(n))) for n in charts]; print('Chart values, native label number formats, showVal:',found); assert all(fmt['formatCode']==expected[values] and show=='1' for values,fmt,show in found); assert len(E.fromstring(z.read('ppt/slides/slide2.xml')).findall('.//c:chart',ns))==2; print('PASS: final canonical/project bytes identical;',p.stat().st_size,'bytes; 3 slides, 16:9, two native charts, amount labels 0.00 and count labels 0.')\"",
+        "description": "Verify saved identity and exact native data-label formats"
+      },
+      "output": "Chart values, native label number formats, showVal: [(('28.25', '7.35'), {'formatCode': '0.00', 'sourceLinked': '0'}, '1'), (('3', '2'), {'formatCode': '0', 'sourceLinked': '0'}, '1')]\r\nPASS: final canonical/project bytes identical; 16259 bytes; 3 slides, 16:9, two native charts, amount labels 0.00 and count labels 0.\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+      "title": "Verify saved identity and exact native data-label formats",
+      "metadata": {
+        "refused": false,
+        "command": "python -c \"from pathlib import Path; import zipfile,xml.etree.ElementTree as E,posixpath; p=Path('deliverables/销售经理简报-精度修订.pptx'); a=Path(r'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\.opencorvus\\.r\\project\\attachments\\f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d\\57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx'); assert p.read_bytes()==a.read_bytes(); z=zipfile.ZipFile(p); ns={'p':'http://schemas.openxmlformats.org/presentationml/2006/main','c':'http://schemas.openxmlformats.org/drawingml/2006/chart'}; root=E.fromstring(z.read('ppt/presentation.xml')); size=root.find('p:sldSz',ns); assert len(root.find('p:sldIdLst',ns))==3; assert int(size.get('cx'))*9==int(size.get('cy'))*16; rels=E.fromstring(z.read('ppt/slides/_rels/slide2.xml.rels')); charts=[posixpath.normpath(posixpath.join('/ppt/slides',r.get('Target'))).removeprefix('/') for r in rels if r.get('Type').endswith('/chart')]; assert len(charts)==2; found=[]; expected={('28.25','7.35'):'0.00',('3','2'):'0'}; [(lambda chart:(found.append((tuple(v.text for v in chart.findall('.//c:val//c:pt/c:v',ns)),chart.find('.//c:dLbls/c:numFmt',ns).attrib,chart.find('.//c:dLbls/c:showVal',ns).get('val'))),None))(E.fromstring(z.read(n))) for n in charts]; print('Chart values, native label number formats, showVal:',found); assert all(fmt['formatCode']==expected[values] and show=='1' for values,fmt,show in found); assert len(E.fromstring(z.read('ppt/slides/slide2.xml')).findall('.//c:chart',ns))==2; print('PASS: final canonical/project bytes identical;',p.stat().st_size,'bytes; 3 slides, 16:9, two native charts, amount labels 0.00 and count labels 0.')\"",
+        "output": "Chart values, native label number formats, showVal: [(('28.25', '7.35'), {'formatCode': '0.00', 'sourceLinked': '0'}, '1'), (('3', '2'), {'formatCode': '0', 'sourceLinked': '0'}, '1')]\r\nPASS: final canonical/project bytes identical; 16259 bytes; 3 slides, 16:9, two native charts, amount labels 0.00 and count labels 0.\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 321,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify saved identity and exact native data-label formats",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736690435,
+        "end": 1795736703807
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0e5bf2593fe30794016b08c472518087d0a590bec9839a9c89"
+      }
+    },
+    "orderKey": "v1:0001795736702881:0000000000000031:0000000000000000:part:prt_g0Vc7s9H100UaLdbqo9E"
+  },
+  {
+    "id": "prt_g0Vc7sEEX006ExMfQ6rU",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7sCna00Z2eWgqBym",
+    "type": "tool",
+    "callID": "call_VbqNxzVmSCxGmrppMyrRLR9f",
+    "tool": "memory",
+    "state": {
+      "status": "completed",
+      "input": {
+        "action": "write",
+        "title": "销售简报精度修订版已交付",
+        "content": "当前请求完成：新建deliverables/销售经理简报-精度修订.pptx（16259字节），未覆盖旧PPTX/已有业务文件。重新读sales.csv并用Decimal独立复算5笔/35.60；华东3/28.25，华南2/7.35，退款1/-2.05、零金额1。重读work-artifacts演示文稿技能，作者原生data_label_number_format='0.00'显示金额柱上28.25、7.35，订单数原生格式'0'显示3、2。inspect、validate成功；实际读取全部3新PNG，未修改图片、加边或安装依赖。正式deliver artifact art_g0Vc7s5Ye005Xo5lmnrm，规范原件/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx；预览同前缀b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png、10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png、f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png。保存确切附件后直接字节比较一致；ZIP确认3页16:9，两chart对象，数值正确，dLbls numFmt分别0.00/0，sourceLinked=0，showVal=1。无子代理/Task/Mission/提交/推送。",
+        "kind": "episode"
+      },
+      "output": "{\"fileId\":\"mem_g0Vc7sGhh00UOSKMSFQh\",\"title\":\"销售简报精度修订版已交付\",\"kind\":\"episode\",\"importance\":52,\"confidence\":68}",
+      "title": "Saved: 销售简报精度修订版已交付",
+      "metadata": {
+        "truncated": false
+      },
+      "time": {
+        "start": 1795736709501,
+        "end": 1795736719001
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0f48e46635ed032e016b08c48568a487d0b0da550b92e3a272"
+      }
+    },
+    "orderKey": "v1:0001795736718912:0000000000000031:0000000000000000:part:prt_g0Vc7sEEX006ExMfQ6rU"
+  }
+]

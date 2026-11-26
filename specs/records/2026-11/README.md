@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [中文销售简报的原生 PPTX 交付](2026-11-27-sales-presentation-delivery.md)
 - [Word 标题与正文的分页语义](2026-11-27-docx-heading-pagination.md)
 - [销售经理 Word 审阅稿真实交付](2026-11-27-sales-document-delivery.md)
 - [销售 Excel 原文件与预览交付](2026-11-27-sales-workbook-delivery.md)

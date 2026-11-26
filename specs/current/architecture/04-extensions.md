@@ -684,8 +684,11 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   resource、runtime、限制和 qualification 的唯一公开目录；当前声明 `office.presentation@1`
   的新 PPTX、`office.document@1` 的新 DOCX 段落文档和 `office.spreadsheet@1` 的新 XLSX
   字面值工作表 authoring，不声明 transform。
-  新DOCX/XLSX作者filename复用同一Windows名称组件分类，保留额外的首点/空白及扩展名限制，
+  新PPTX/DOCX/XLSX作者filename复用同一名称builder和Windows名称组件分类，支持安全Unicode名称，
+  保留额外的首点/空白及扩展名限制；不维护独立ASCII白名单，
   在私有workspace写入前返回原schema校验错误；既有产物清单与源文件身份不改写。
+  PPTX原生图表计划通过可选`data_label_number_format`直接投影OfficeCLI的`dataLabels.numFmt`，
+  例如`0.00`保留金额标签的两位小数；自动标签可能舍入，必须复核实际渲染与源数值。
   DOCX 通过有序 title/heading/paragraph 计划写入；title/heading 明确写入原生 keepNext、
   keepLines，使标题与下段同页并保留标题自身行，普通正文允许自然跨页。
   XLSX 通过有界工作表、列标题和显式字符串/数字/布尔/空单元格计划写入，不接受公式、宏或原始命令；

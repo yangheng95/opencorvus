@@ -1,0 +1,16 @@
+{
+  "label": "run20",
+  "pid": 15972,
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery",
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+  "model": "openai/gpt-6.1-sol",
+  "sourceRun": "run19",
+  "auditPath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\run20-model-request-audit.json",
+  "startedAt": 1795736344128,
+  "state": "exited",
+  "requests": 0,
+  "error": "Error: Work Artifact package digest mismatch: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261127-sales-workbook\\host\\bin\\officecli.exe\n    at verifyWorkArtifactTargetPackageManifest (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\work-artifact\\runtime\\package-manifest.ts:285:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\work-artifact\\presentation.ts:442:28)",
+  "finishedAt": 1795736344570,
+  "exitCode": 1,
+  "credentialCleanup": "passed"
+}

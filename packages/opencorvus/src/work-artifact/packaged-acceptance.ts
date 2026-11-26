@@ -140,10 +140,11 @@ export async function runPackagedWorkArtifactAcceptance(input: {
                       chart_type: "column",
                       title: "Qualified values",
                       categories: ["A", "B"],
-                      series: [{ name: "Value", values: [1, 2] }],
+                      series: [{ name: "Value", values: [28.25, 7.35] }],
                       colors: ["#2563EB"],
                       legend: "bottom",
                       data_labels: "value",
+                      data_label_number_format: "0.00",
                     },
                     {
                       kind: "picture",

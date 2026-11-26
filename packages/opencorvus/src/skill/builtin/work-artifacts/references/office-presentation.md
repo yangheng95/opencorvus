@@ -26,3 +26,8 @@ qualified.
 - All `x`, `y`, `width`, and `height` values are centimeters, never inches or pixels. The 16:9 slide is exactly 33.867 cm wide by 19.05 cm high.
 - Keep every element within those centimeter slide bounds and allocate enough physical height for the requested font size and line count.
 - Reference pictures only with canonical attachment URLs.
+- Set `data_label_number_format` when displayed chart values need a specific
+  precision, for example `0.00` for amounts to two decimal places. This writes
+  the native chart label format and keeps the underlying values editable.
+  Automatic labels may round or abbreviate values; check the actual labels in
+  every fresh rendered slide against the source values and intended precision.

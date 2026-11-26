@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "totalRequests": 66,
+  "businessRequests": 62,
+  "preflightRequests": 4,
+  "runs": [
+    {
+      "label": "run19",
+      "requests": 45,
+      "preflightRequests": 2,
+      "businessRequests": 43,
+      "exactStreamingSolHTTP200SettledEOF": true,
+      "originalHandleJoinedExitCode": 0,
+      "copiesRetired": true,
+      "closedPort": 51950
+    },
+    {
+      "label": "run21",
+      "requests": 21,
+      "preflightRequests": 2,
+      "businessRequests": 19,
+      "exactStreamingSolHTTP200SettledEOF": true,
+      "originalHandleJoinedExitCode": 0,
+      "copiesRetired": true,
+      "closedPort": 58652
+    }
+  ],
+  "failedRun": {
+    "label": "run20",
+    "requests": 0,
+    "exitCode": 1,
+    "reason": "Fixed runtime package rejected the auto-updated probe executable before model preflight; original vendor executable restored, manifest unchanged, original qualification rerun."
+  }
+}

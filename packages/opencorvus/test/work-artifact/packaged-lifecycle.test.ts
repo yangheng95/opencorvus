@@ -11,7 +11,7 @@ import { Process } from "../../src/util/process"
 import { AttachmentStore } from "../../src/storage/attachment-store"
 import sharp from "sharp"
 import { prepareWorkArtifactRuntimeEnvironment, type WorkArtifactPresentationDependencies } from "../../src/work-artifact/presentation"
-import { WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST, WorkArtifactTargetPackageManifestSchema } from "../../src/work-artifact/runtime/package-manifest"
+import { WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST, WorkArtifactTargetPackageManifestSchema, verifyWorkArtifactTargetPackageManifest } from "../../src/work-artifact/runtime/package-manifest"
 import { officeCliRuntime, parseWorkArtifactRuntimeLock, WORK_ARTIFACT_RUNTIME_LOCK_PACKAGE_PATH } from "../../src/work-artifact/runtime/runtime-lock"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
@@ -30,6 +30,7 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
   const lock = parseWorkArtifactRuntimeLock(
     JSON.parse(await fs.readFile(path.join(root, ...WORK_ARTIFACT_RUNTIME_LOCK_PACKAGE_PATH.split("/")), "utf8")),
   )
+  await verifyWorkArtifactTargetPackageManifest({ root, target: manifest.target, lock })
   const runtime = officeCliRuntime(lock)
   const executableEntry = manifest.files.find((file) => file.kind === "executable")!
   const executable = path.join(root, ...executableEntry.path.split("/"))
@@ -93,22 +94,31 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
         "qualification-picture.png",
       )
       const authored = await tools.author.init().then((tool) => tool.execute({
-        profile: "office.presentation@1", filename: "packaged-qualification.pptx", locale: "en-US", aspect_ratio: "16:9",
+        profile: "office.presentation@1", filename: "演示资格验证.pptx", locale: "en-US", aspect_ratio: "16:9",
         slides: [{
           title: "Packaged qualification",
           background: "#FFFFFF",
           elements: [{
             kind: "chart", x: 2, y: 2, width: 29, height: 14, chart_type: "column",
             title: "Qualified values", categories: ["A", "B"],
-            series: [{ name: "Value", values: [1, 2] }], colors: ["#2563EB"],
-            legend: "bottom", data_labels: "value",
+            series: [{ name: "Value", values: [28.25, 7.35] }], colors: ["#2563EB"],
+            legend: "bottom", data_labels: "value", data_label_number_format: "0.00",
           }, {
             kind: "picture", x: 29.5, y: 0.5, width: 2, height: 2,
             source_url: picture.url, alt: "Qualification blue square",
           }],
         }],
       }, context))
-      const source = JSON.parse(authored.output).source as { url: string; sha: string }
+      const source = JSON.parse(authored.output).source as { url: string; sha: string; filename: string }
+      const sourcePath = AttachmentStore.resolveAbsolute(Instance.project.id, path.basename(source.url))!
+      const chart = await dependencies.runOfficeCli({
+        executionAuthority: authority, args: ["get", sourcePath, "/slide[1]/chart[1]", "--json"],
+        cwd: project.path, abort: context.abort, timeoutMs: 45_000, maxOutputBytes: 1024 * 1024,
+      })
+      expect(chart.code).toBe(0)
+      expect(JSON.parse(chart.stdout.toString()).data.results[0].format).toMatchObject({
+        "dataLabels": "value", "dataLabels.numFmt": "0.00", "series1": "Value:28.25,7.35",
+      })
       const inspected = await tools.inspect.init().then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
       const validated = await tools.validate.init().then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
       const validation = JSON.parse(validated.output)
@@ -126,6 +136,9 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
         slides: [{ slide: 1, title: "Packaged qualification", markdown: "Real packaged runtime evidence." }],
       }, context))
       await Session.updateMessage({ ...assistant, time: { ...assistant.time, completed: Date.now() }, finish: "tool-calls" })
+      expect({ authored: source.filename, delivered: JSON.parse(delivered.output).source.filename }).toEqual({
+        authored: "演示资格验证.pptx", delivered: "演示资格验证.pptx",
+      })
       expect({
         sourceSha: source.sha,
         inspectedSha: JSON.parse(inspected.output).source.sha,

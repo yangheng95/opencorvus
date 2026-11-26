@@ -1,0 +1,195 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0Vc7p5Du00vgZy8riHV",
+  "finalMessageID": "msg_g0Vc7pS2b00QIImc19aY",
+  "sourceBytes": 16302,
+  "slides": [
+    {
+      "slide": 1,
+      "path": "ppt/slides/slide1.xml",
+      "editableTextElements": 9,
+      "fullPlannedTextCovered": true,
+      "nativeCharts": []
+    },
+    {
+      "slide": 2,
+      "path": "ppt/slides/slide2.xml",
+      "editableTextElements": 6,
+      "fullPlannedTextCovered": true,
+      "nativeCharts": [
+        "ppt/slides/charts/chart1.xml",
+        "ppt/slides/charts/chart2.xml"
+      ]
+    },
+    {
+      "slide": 3,
+      "path": "ppt/slides/slide3.xml",
+      "editableTextElements": 8,
+      "fullPlannedTextCovered": true,
+      "nativeCharts": []
+    }
+  ],
+  "nativeCharts": [
+    {
+      "path": "ppt/slides/charts/chart1.xml",
+      "categories": [
+        "华东",
+        "华南"
+      ],
+      "values": [
+        "28.25",
+        "7.35"
+      ],
+      "regionValues": {
+        "华东": "28.25",
+        "华南": "7.35"
+      },
+      "measure": "net_amount",
+      "nativeDataStorage": "c:val/c:numLit",
+      "desktopEditDataQualification": "unverified"
+    },
+    {
+      "path": "ppt/slides/charts/chart2.xml",
+      "categories": [
+        "华东",
+        "华南"
+      ],
+      "values": [
+        "3",
+        "2"
+      ],
+      "regionValues": {
+        "华东": "3",
+        "华南": "2"
+      },
+      "measure": "order_count",
+      "nativeDataStorage": "c:val/c:numLit",
+      "desktopEditDataQualification": "unverified"
+    }
+  ],
+  "renders": [
+    {
+      "slide": 1,
+      "bytes": 67055,
+      "size": [
+        1280,
+        720
+      ],
+      "sameCanonicalReviewBytes": true,
+      "multimodalToolImage": true,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/9608cc3b22c3eb3f40d66ef49007e5a62749a6cc5e67453f14dd08819f929f10.png"
+    },
+    {
+      "slide": 2,
+      "bytes": 61844,
+      "size": [
+        1280,
+        720
+      ],
+      "sameCanonicalReviewBytes": true,
+      "multimodalToolImage": true,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/79597f1709bd7004a0292655ab2ca6004f5cbb62e307ca1620bc3ad5a3f3b634.png"
+    },
+    {
+      "slide": 3,
+      "bytes": 91961,
+      "size": [
+        1280,
+        720
+      ],
+      "sameCanonicalReviewBytes": true,
+      "multimodalToolImage": true,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/19b1f9a277ba04d41e8a4ea36286f6a17ed199387774d86f6befd61cb4c4cfbc.png"
+    }
+  ],
+  "preservedRows": {
+    "message": 87,
+    "part": 223,
+    "tool_part_request": 73,
+    "tool_part_outcome": 73,
+    "interactive_artifact": 6
+  },
+  "preservedFiles": [
+    {
+      "file": "sales.csv",
+      "bytes": 181,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "sales_summary.py",
+      "bytes": 7650,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "summary.json",
+      "bytes": 238,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "test_sales_summary.py",
+      "bytes": 10107,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "区域汇总.csv",
+      "bytes": 59,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "销售报告.md",
+      "bytes": 1408,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售核对.xlsx",
+      "bytes": 6793,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售经理审阅稿-分页修订.docx",
+      "bytes": 8016,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售经理审阅稿.docx",
+      "bytes": 7997,
+      "preservedExactBytes": true
+    }
+  ],
+  "downloads": [],
+  "finalReceipt": {
+    "schema_version": 1,
+    "profile": "office.presentation@1",
+    "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/bc9044445e327f9ef56efe996135aa64933f4889ceace910da3af7092fbe2ba9.pptx",
+    "source_sha": "bc9044445e327f9ef56efe996135aa64933f4889ceace910da3af7092fbe2ba9",
+    "runtime": {
+      "id": "officecli",
+      "version": "1.0.158",
+      "lock_revision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "package_sha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "resource_usage": {
+      "input_bytes": 16302,
+      "runtime_output_bytes": 24248,
+      "render_bytes": 220860,
+      "wall_clock_ms": 12491
+    },
+    "renders": [
+      {
+        "slide": 1,
+        "sha": "9608cc3b22c3eb3f40d66ef49007e5a62749a6cc5e67453f14dd08819f929f10",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/9608cc3b22c3eb3f40d66ef49007e5a62749a6cc5e67453f14dd08819f929f10.png"
+      },
+      {
+        "slide": 2,
+        "sha": "79597f1709bd7004a0292655ab2ca6004f5cbb62e307ca1620bc3ad5a3f3b634",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/79597f1709bd7004a0292655ab2ca6004f5cbb62e307ca1620bc3ad5a3f3b634.png"
+      },
+      {
+        "slide": 3,
+        "sha": "19b1f9a277ba04d41e8a4ea36286f6a17ed199387774d86f6befd61cb4c4cfbc",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/19b1f9a277ba04d41e8a4ea36286f6a17ed199387774d86f6befd61cb4c4cfbc.png"
+      }
+    ]
+  }
+}

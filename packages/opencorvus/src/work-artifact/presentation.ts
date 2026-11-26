@@ -23,6 +23,7 @@ import {
   type WorkArtifactRuntimeLock,
 } from "./runtime/runtime-lock"
 import { verifyWorkArtifactTargetPackageManifest } from "./runtime/package-manifest"
+import { workArtifactFilename } from "./filename"
 
 // PPTX means PowerPoint Open XML Presentation.
 export const PPTX_MIME = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
@@ -174,6 +175,15 @@ const ChartElement = BaseElement.extend({
   colors: z.array(Color).min(1).max(12),
   legend: z.enum(["none", "top", "bottom", "left", "right"]).default("bottom"),
   data_labels: z.enum(["none", "value", "percent", "category"]).default("none"),
+  data_label_number_format: z
+    .string()
+    .trim()
+    .min(1)
+    .max(64)
+    .describe(
+      "Native OOXML data-label number format, for example 0.00 for exact two-decimal amounts. Automatic labels may round or abbreviate values; inspect the rendered labels.",
+    )
+    .optional(),
 }).strict()
 
 export const PresentationElement = z
@@ -208,13 +218,7 @@ export const PresentationElement = z
 export const AuthorWorkArtifactInput = z
   .object({
     profile: z.literal("office.presentation@1"),
-    filename: z
-      .string()
-      .trim()
-      .min(6)
-      .max(120)
-      .regex(/^[A-Za-z0-9][A-Za-z0-9._ -]*\.pptx$/i)
-      .refine((value) => path.basename(value) === value, "filename must be a basename"),
+    filename: workArtifactFilename("pptx"),
     locale: z
       .string()
       .regex(/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/)
@@ -699,6 +703,7 @@ async function authorCommands(
             colors: element.colors.map(stripColor).join(","),
             legend: element.legend,
             dataLabels: element.data_labels,
+            ...(element.data_label_number_format ? { "dataLabels.numFmt": element.data_label_number_format } : {}),
           },
         })
         continue

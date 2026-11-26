@@ -1,0 +1,61 @@
+{
+  "id": "art_g0Vc7p5Du00vgZy8riHV",
+  "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+  "messageID": "msg_g0Vc7oxmO00L3Q8VFWVI",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "销售经理简报",
+    "renderer": "presentation@1",
+    "aspectRatio": "16:9",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "订单与净金额总览",
+        "markdown": "5笔订单，净金额35.60；退款及零金额各1笔。",
+        "image": {
+          "sha": "9608cc3b22c3eb3f40d66ef49007e5a62749a6cc5e67453f14dd08819f929f10",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/9608cc3b22c3eb3f40d66ef49007e5a62749a6cc5e67453f14dd08819f929f10.png",
+          "mime": "image/png",
+          "size": 67055,
+          "filename": "slide-1.png"
+        },
+        "imageAlt": "Rendered slide 1: 订单与净金额总览"
+      },
+      {
+        "id": "slide-2",
+        "title": "华东与华南区域比较",
+        "markdown": "两个独立原生可编辑图表：区域净金额与区域订单数。",
+        "image": {
+          "sha": "79597f1709bd7004a0292655ab2ca6004f5cbb62e307ca1620bc3ad5a3f3b634",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/79597f1709bd7004a0292655ab2ca6004f5cbb62e307ca1620bc3ad5a3f3b634.png",
+          "mime": "image/png",
+          "size": 61844,
+          "filename": "slide-2.png"
+        },
+        "imageAlt": "Rendered slide 2: 华东与华南区域比较"
+      },
+      {
+        "id": "slide-3",
+        "title": "审慎解读与经理核对行动",
+        "markdown": "已知事实、数据缺失，以及退款和免费样品核对建议。",
+        "image": {
+          "sha": "19b1f9a277ba04d41e8a4ea36286f6a17ed199387774d86f6befd61cb4c4cfbc",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/19b1f9a277ba04d41e8a4ea36286f6a17ed199387774d86f6befd61cb4c4cfbc.png",
+          "mime": "image/png",
+          "size": 91961,
+          "filename": "slide-3.png"
+        },
+        "imageAlt": "Rendered slide 3: 审慎解读与经理核对行动"
+      }
+    ]
+  },
+  "downloads": [
+    {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/bc9044445e327f9ef56efe996135aa64933f4889ceace910da3af7092fbe2ba9.pptx",
+      "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "filename": "销售经理简报.pptx"
+    }
+  ],
+  "timeCreated": 1795735959882,
+  "timeUpdated": 1795735959882
+}

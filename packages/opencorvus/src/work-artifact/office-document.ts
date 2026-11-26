@@ -3,7 +3,7 @@ import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import fs from "node:fs/promises"
 import path from "node:path"
 import z from "zod"
-import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
+import { workArtifactFilename } from "./filename"
 import { WorkArtifactProfileRegistry } from "./profile-registry"
 import {
   defaultWorkArtifactPresentationDependencies,
@@ -33,24 +33,10 @@ const Locale = z
   .string()
   .regex(/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/)
   .default("en-US")
-function filename(extension: "docx" | "xlsx") {
-  return z
-    .string()
-    .trim()
-    .min(6)
-    .max(120)
-    .refine(
-      (value) =>
-        classifyEntryBasename(value, true) === "valid" &&
-        !/^[. ]/.test(value) &&
-        value.toLowerCase().endsWith(`.${extension}`),
-      `filename must be a safe ${extension} basename`,
-    )
-}
 export const AuthorOfficeDocumentInput = z
   .object({
     profile: z.literal("office.document@1"),
-    filename: filename("docx"),
+    filename: workArtifactFilename("docx"),
     locale: Locale,
     paragraphs: z
       .array(
@@ -69,7 +55,7 @@ const Cell = z.union([Text, z.number().finite(), z.boolean(), z.null()])
 export const AuthorOfficeSpreadsheetInput = z
   .object({
     profile: z.literal("office.spreadsheet@1"),
-    filename: filename("xlsx"),
+    filename: workArtifactFilename("xlsx"),
     locale: Locale,
     sheets: z
       .array(

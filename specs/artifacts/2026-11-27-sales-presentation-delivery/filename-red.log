@@ -1,0 +1,214 @@
+$ bun script/run-tests.ts test/work-artifact/filename.test.ts
+    Finished `release` profile [optimized] target(s) in 0.06s
+[1/1] START test/work-artifact/filename.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+13 |             throw new core.$ZodAsyncError();
+14 |         }
+15 |         if (result.issues.length) {
+16 |             const e = new (_params?.Err ?? _Err)(result.issues.map((iss) => util.finalizeIssue(iss, ctx, core.config())));
+17 |             util.captureStackTrace(e, _params?.callee ?? fn);
+18 |             throw e;
+                       ^
+ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "regex",
+    "pattern": "/^[A-Za-z0-9][A-Za-z0-9._ -]*\\.pptx$/i",
+    "path": [
+      "filename"
+    ],
+    "message": "Invalid string: must match pattern /^[A-Za-z0-9][A-Za-z0-9._ -]*\\.pptx$/i"
+  }
+]
+      at fn (D:\myhexin-local\opencorvus\node_modules\.bun\zod@4.6.6\node_modules\zod\v4\core\parse.js:18:19)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts:15:21)
+(fail) pptx author preserves the portable filename 销售经理简报 [2.28ms]
+13 |             throw new core.$ZodAsyncError();
+14 |         }
+15 |         if (result.issues.length) {
+16 |             const e = new (_params?.Err ?? _Err)(result.issues.map((iss) => util.finalizeIssue(iss, ctx, core.config())));
+17 |             util.captureStackTrace(e, _params?.callee ?? fn);
+18 |             throw e;
+                       ^
+ZodError: [
+  {
+    "origin": "string",
+    "code": "invalid_format",
+    "format": "regex",
+    "pattern": "/^[A-Za-z0-9][A-Za-z0-9._ -]*\\.pptx$/i",
+    "path": [
+      "filename"
+    ],
+    "message": "Invalid string: must match pattern /^[A-Za-z0-9][A-Za-z0-9._ -]*\\.pptx$/i"
+  }
+]
+      at fn (D:\myhexin-local\opencorvus\node_modules\.bun\zod@4.6.6\node_modules\zod\v4\core\parse.js:18:19)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts:15:21)
+(fail) pptx author preserves the portable filename Résumé - 核对 [0.28ms]
+(pass) pptx author preserves the portable filename sales-review [0.09ms]
+16 |     })
+17 |   }
+18 |   for (const basename of ["CON", "COM¹", "LPT²", "报告:原文", "../报告"]) {
+19 |     test(`${extension} author maps ${basename} to its explicit filename error`, () => {
+20 |       const result = schema.safeParse({ ...plan, filename: `${basename}.${extension}` })
+21 |       expect(result.error?.issues.map(({ code, path, message }) => ({ code, path, message }))).toEqual([
+                                                                                                    ^
+error: expect(received).toEqual(expected)
+
+- [
+-   {
+-     "code": "custom",
+-     "message": "filename must be a safe pptx basename",
+-     "path": [
+-       "filename",
+-     ],
+-   },
+- ]
++ undefined
+
+- Expected  - 9
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts:21:96)
+(fail) pptx author maps CON to its explicit filename error [0.43ms]
+16 |     })
+17 |   }
+18 |   for (const basename of ["CON", "COM¹", "LPT²", "报告:原文", "../报告"]) {
+19 |     test(`${extension} author maps ${basename} to its explicit filename error`, () => {
+20 |       const result = schema.safeParse({ ...plan, filename: `${basename}.${extension}` })
+21 |       expect(result.error?.issues.map(({ code, path, message }) => ({ code, path, message }))).toEqual([
+                                                                                                    ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "code": "custom",
+-     "message": "filename must be a safe pptx basename",
++     "code": "invalid_format",
++     "message": "Invalid string: must match pattern /^[A-Za-z0-9][A-Za-z0-9._ -]*\.pptx$/i",
+      "path": [
+        "filename",
+      ],
+    },
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts:21:96)
+(fail) pptx author maps COM¹ to its explicit filename error [0.40ms]
+16 |     })
+17 |   }
+18 |   for (const basename of ["CON", "COM¹", "LPT²", "报告:原文", "../报告"]) {
+19 |     test(`${extension} author maps ${basename} to its explicit filename error`, () => {
+20 |       const result = schema.safeParse({ ...plan, filename: `${basename}.${extension}` })
+21 |       expect(result.error?.issues.map(({ code, path, message }) => ({ code, path, message }))).toEqual([
+                                                                                                    ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "code": "custom",
+-     "message": "filename must be a safe pptx basename",
++     "code": "invalid_format",
++     "message": "Invalid string: must match pattern /^[A-Za-z0-9][A-Za-z0-9._ -]*\.pptx$/i",
+      "path": [
+        "filename",
+      ],
+    },
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts:21:96)
+(fail) pptx author maps LPT² to its explicit filename error [0.24ms]
+16 |     })
+17 |   }
+18 |   for (const basename of ["CON", "COM¹", "LPT²", "报告:原文", "../报告"]) {
+19 |     test(`${extension} author maps ${basename} to its explicit filename error`, () => {
+20 |       const result = schema.safeParse({ ...plan, filename: `${basename}.${extension}` })
+21 |       expect(result.error?.issues.map(({ code, path, message }) => ({ code, path, message }))).toEqual([
+                                                                                                    ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "code": "custom",
+-     "message": "filename must be a safe pptx basename",
++     "code": "invalid_format",
++     "message": "Invalid string: must match pattern /^[A-Za-z0-9][A-Za-z0-9._ -]*\.pptx$/i",
+      "path": [
+        "filename",
+      ],
+    },
+  ]
+
+- Expected  - 2
++ Received  + 2
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts:21:96)
+(fail) pptx author maps 报告:原文 to its explicit filename error [0.19ms]
+16 |     })
+17 |   }
+18 |   for (const basename of ["CON", "COM¹", "LPT²", "报告:原文", "../报告"]) {
+19 |     test(`${extension} author maps ${basename} to its explicit filename error`, () => {
+20 |       const result = schema.safeParse({ ...plan, filename: `${basename}.${extension}` })
+21 |       expect(result.error?.issues.map(({ code, path, message }) => ({ code, path, message }))).toEqual([
+                                                                                                    ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
++     "code": "invalid_format",
++     "message": "Invalid string: must match pattern /^[A-Za-z0-9][A-Za-z0-9._ -]*\.pptx$/i",
++     "path": [
++       "filename",
++     ],
++   },
++   {
+      "code": "custom",
+-     "message": "filename must be a safe pptx basename",
++     "message": "filename must be a basename",
+      "path": [
+        "filename",
+      ],
+    },
+  ]
+
+- Expected  - 1
++ Received  + 8
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts:21:96)
+(fail) pptx author maps ../报告 to its explicit filename error [0.34ms]
+(pass) docx author preserves the portable filename 销售经理简报 [1.35ms]
+(pass) docx author preserves the portable filename Résumé - 核对 [0.06ms]
+(pass) docx author preserves the portable filename sales-review [0.07ms]
+(pass) docx author maps CON to its explicit filename error [0.08ms]
+(pass) docx author maps COM¹ to its explicit filename error [0.06ms]
+(pass) docx author maps LPT² to its explicit filename error [0.05ms]
+(pass) docx author maps 报告:原文 to its explicit filename error [0.04ms]
+(pass) docx author maps ../报告 to its explicit filename error [0.03ms]
+(pass) xlsx author preserves the portable filename 销售经理简报 [1.13ms]
+(pass) xlsx author preserves the portable filename Résumé - 核对 [0.12ms]
+(pass) xlsx author preserves the portable filename sales-review [0.20ms]
+(pass) xlsx author maps CON to its explicit filename error [0.26ms]
+(pass) xlsx author maps COM¹ to its explicit filename error [0.14ms]
+(pass) xlsx author maps LPT² to its explicit filename error [0.10ms]
+(pass) xlsx author maps 报告:原文 to its explicit filename error [0.07ms]
+(pass) xlsx author maps ../报告 to its explicit filename error [0.10ms]
+
+ 17 pass
+ 7 fail
+ 22 expect() calls
+Ran 24 tests across 1 file. [1.91s]
+[1/1] DONE test/work-artifact/filename.test.ts exit=1 duration=2.41s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\filename.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-UzYP0Q
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

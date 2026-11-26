@@ -1,0 +1,58 @@
+$ bun script/run-tests.ts test/work-artifact/packaged-lifecycle.test.ts
+    Finished `release` profile [optimized] target(s) in 0.05s
+[1/1] START test/work-artifact/packaged-lifecycle.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+ 96 |           } catch (error) {
+ 97 |             if (error instanceof z.ZodError && toolInfo.formatValidationError) {
+ 98 |               throw new Error(toolInfo.formatValidationError(error), { cause: error })
+ 99 |             }
+100 |             const err = asError(error)
+101 |             throw new Error(
+                            ^
+error: The work_artifact_author tool was called with invalid arguments: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "data_label_number_format"
+    ],
+    "path": [
+      "slides",
+      0,
+      "elements",
+      0
+    ],
+    "message": "Unrecognized key: \"data_label_number_format\""
+  }
+].
+Please rewrite the input so it satisfies the expected schema.
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\tool.ts:101:23)
+
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "data_label_number_format"
+    ],
+    "path": [
+      "slides",
+      0,
+      "elements",
+      0
+    ],
+    "message": "Unrecognized key: \"data_label_number_format\""
+  }
+]
+(fail) packaged Work Artifact runtime completes the production typed Tool lifecycle [2128.22ms]
+
+ 0 pass
+ 1 fail
+Ran 1 test across 1 file. [4.80s]
+[1/1] DONE test/work-artifact/packaged-lifecycle.test.ts exit=1 duration=5.33s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-p0JBcI
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1
