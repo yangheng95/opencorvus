@@ -1,0 +1,24 @@
+$ bun script/run-tests.ts test/work-artifact/task-workspace-authority.test.ts
+    Finished `release` profile [optimized] target(s) in 0.04s
+[1/1] START test/work-artifact/task-workspace-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Task and conversation Work Artifact workspaces map to their project-scoped runtime roots [1.17ms]
+(pass) Task Work Artifact runtime workspace is admitted by the immutable native process authority [2488.78ms]
+(pass) Work Artifact runtime issues retain informational diagnostics [1.23ms]
+(pass) Work Artifact runtime issues return a complete empty report [0.06ms]
+(pass) Work Artifact runtime issues return repair evidence for error [0.16ms]
+(pass) Work Artifact runtime issues return repair evidence for warning [0.03ms]
+(pass) Work Artifact runtime issues return repair evidence for mixed warning and information [0.02ms]
+(pass) Work Artifact runtime issues return repair evidence for unknown severity [0.63ms]
+(pass) Work Artifact runtime issues return repair evidence for missing severity [0.11ms]
+(pass) Work Artifact runtime issues return repair evidence for incomplete count [0.03ms]
+(pass) Work Artifact runtime issues return repair evidence for missing issue list [0.03ms]
+(pass) qualified presentation authoring schema declares centimeter coordinates [5.80ms]
+
+ 12 pass
+ 0 fail
+ 13 expect() calls
+Ran 12 tests across 1 file. [4.43s]
+[1/1] DONE test/work-artifact/task-workspace-authority.test.ts exit=0 duration=4.93s

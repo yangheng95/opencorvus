@@ -1,0 +1,25 @@
+$ bun script/run-tests.ts test/work-artifact/office-native-lifecycle.test.ts test/work-artifact/packaged-lifecycle.test.ts
+    Finished `release` profile [optimized] target(s) in 0.04s
+[1/2] START test/work-artifact/office-native-lifecycle.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) office.document@1 native author, inspect, validate and receipt-authorized delivery [42414.64ms]
+(pass) office.spreadsheet@1 native author, inspect, validate and receipt-authorized delivery [41627.27ms]
+
+ 2 pass
+ 0 fail
+ 8 expect() calls
+Ran 2 tests across 1 file. [85.97s]
+[1/2] DONE test/work-artifact/office-native-lifecycle.test.ts exit=0 duration=86.47s
+[2/2] START test/work-artifact/packaged-lifecycle.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) packaged Work Artifact runtime completes the production typed Tool lifecycle [43438.35ms]
+
+ 1 pass
+ 0 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [44.35s]
+[2/2] DONE test/work-artifact/packaged-lifecycle.test.ts exit=0 duration=44.46s

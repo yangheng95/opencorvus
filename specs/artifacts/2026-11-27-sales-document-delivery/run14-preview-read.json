@@ -1,0 +1,178 @@
+{
+  "source": {
+    "sha": "2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82",
+    "url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "size": 7997,
+    "filename": "销售经理审阅稿.docx"
+  },
+  "preview": {
+    "sha": "a63f7718e4934cb1ebe0ce080f013df66b2eba4396d0692aea3dbddf3bb890db",
+    "url": "/attachment/prj_haW9BdBH559F4Yw143ch/a63f7718e4934cb1ebe0ce080f013df66b2eba4396d0692aea3dbddf3bb890db.pdf",
+    "mime": "application/pdf",
+    "size": 149493,
+    "filename": "销售经理审阅稿-preview.pdf"
+  },
+  "headers": {
+    "Content-Type": "application/pdf",
+    "Cache-Control": "public, max-age=31536000, immutable",
+    "X-Content-Type-Options": "nosniff",
+    "Content-Disposition": "inline; filename*=UTF-8''%E9%94%80%E5%94%AE%E7%BB%8F%E7%90%86%E5%AE%A1%E9%98%85%E7%A8%BF-preview.pdf",
+    "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "Vary": "Origin",
+    "x-opencorvus-request-id": "1c997a2b-15b0-4edc-bdda-340bea59d65d",
+    "Date": "Thu, 26 Nov 2026 22:07:54 GMT",
+    "Content-Length": "149493"
+  },
+  "pngPages": 2,
+  "pdfPages": 2,
+  "pageText": [
+    "销售分析｜销售经理审阅稿\n⼀、来源与分析范围\n本稿直接依据当前项⽬根⽬录真实的 sales.csv 编制，重新读取全部原始记录并独\n⽴复算，不以既有脚本、旧报告或已交付⼯作簿代替本次核对。⽂件包含订单编号、区\n域、⾦额、备注四个字段，共五笔数据，覆盖华东与华南。下⽂原⾏序从⾸笔数据起编\n号，不含表头，逐笔陈述保持源⽂件顺序。\n原数据未提供⽇期、统计期间、币种、成本或销售⽬标，因此本稿不补设这些信\n息。⾦额统⼀保留两位⼩数，但不标注未经确认的货币单位。这⾥的净⾦额仅表示记录\n⾦额的带符号合计，不等同于利润、已收款或某⼀期间的完整销售收⼊。\n⼆、订单计数与净⾦额⼝径\n订单数按每笔原始记录计⼀笔，不去重，也不剔除退款和零⾦额记录。净⾦额将所\n有⾦额相加，正数增加、负数扣减、零值不改变结果。按原区域名称分组，不合并或重\n命名区域。⾦额从源⽂本以⼗进制精确运算独⽴累加，精确到分，避免⽤⼆进制浮点近\n似值作为统计依据。\n退款以⾦额⼩于零为判断条件，不仅依据备注；零⾦额以⾦额等于零判断，不作为\n退款。本次⼀笔退款和⼀笔零⾦额均计⼊总订单数，其⾦额分别扣减净⾦额和贡献零\n值。这⼀⼝径⽤于全部明细、分区与总体，确保层级之间可相互核对。\n三、原始订单逐笔说明\n原⾏序1：订单编号A001，区域华东，⾦额10.10，备注“普通订单”。原⾏序2：订单编\n号A002，区域华东，⾦额20.20，备注“中⽂客户”。这两笔为正⾦额记录，按原⽂保留编\n号、区域和备注，不据备注推断客户⾝份或订单⽇期。\n原⾏序3：订单编号A003，区域华东，⾦额-2.05，备注“退款”。该笔计为⼀笔订单及\n⼀笔退款，⾦额按负数纳⼊华东与总体净额，不转换为正⾦额，也不删除记录。源⽂件\n没有说明它对应哪⼀笔原销售，不据编号相邻关系建⽴关联。\n原⾏序4：订单编号A004，区域华南，⾦额0.00，备注“免费样品”。该笔仍计⼀笔订\n单，不计退款。原⾏序5：订单编号A005，区域华南，⾦额7.35，备注“普通订单”。零⾦额\n不表示没有业务活动，但其成本和审批情况在源数据中均未知。\n四、分区与总体结果\n华东共3笔，净⾦额为10.10加20.20减2.05，结果28.25；华南共2笔，净⾦额为0.00\n加7.35，结果7.35。总体共5笔，净⾦额35.60。分区订单数3加2等于5，分区净⾦额28.25\n加7.35等于35.60，与逐笔汇总⼀致。\n按⾦额性质再次核对：正⾦额3笔，合计37.65；退款1笔，带符号⾦额合计-2.05；零\n⾦额1笔，合计0.00。三类笔数合计5，⾦额合计37.65减2.05加0.00等于35.60，未遗漏退\n款或免费样品记录。\n五、谨慎业务解读",
+    "已知事实是，在这五笔记录内，华东净⾦额⾼于华南，且唯⼀退款发⽣在华东，唯\n⼀零⾦额记录位于华南。样本很⼩，不能据此推断区域⻓期表现、增⻓趋势、销售⼈员\n能⼒或客户质量。缺少期间、成本与⽬标，也⽆法判断同⽐环⽐、⽑利或达成率。\n管理建议与事实应分开理解：可优先了解退款原因和免费样品的后续转化，但这只\n是核查⽅向，不代表已经发现异常、损失或流程违规。若要评价区域效率，应先补⻬统\n⼀期间、有效订单定义和可⽐较的业务背景，再开展分析。\n六、销售经理可执⾏的核对事项\n建议先逐笔核对五个订单编号、原⾏序、区域、⾦额与备注，确认导出范围完整且\n⽆重复录⼊；再查A003的退款凭证、审批及原销售关联，确认负号和⾦额正确；对A004\n核对样品发放依据、领取对象及审批，另⾏取得成本资料，不将零售价误读为零成本。\n最后请向数据负责⼈确认⽇期范围、币种、成本⼝径及⽬标来源，并核实本⽂件是\n否为完整业务范围。在补充资料前，审阅结论宜限定为本⽂件五笔记录的数量及净⾦额\n核对；任何经营评价或后续建议均应注明依据与尚待确认的信息，避免将本次样本结论\n外推。"
+  ],
+  "comparison": "Whitespace and NFKC plus Unicode 17 Equivalent_Unified_Ideograph for visually equivalent CJK radicals; this is body coverage, not a claim of identical PDF text code points. Source DOCX is exact.",
+  "equivalenceSource": "https://www.unicode.org/Public/17.0.0/ucd/EquivalentUnifiedIdeograph.txt",
+  "paragraphCoverage": [
+    {
+      "paragraph": 1,
+      "kind": "title",
+      "characters": 12,
+      "pdfStart": 0,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 2,
+      "kind": "heading",
+      "characters": 9,
+      "pdfStart": 12,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 3,
+      "kind": "paragraph",
+      "characters": 137,
+      "pdfStart": 21,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 4,
+      "kind": "paragraph",
+      "characters": 105,
+      "pdfStart": 156,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 5,
+      "kind": "heading",
+      "characters": 12,
+      "pdfStart": 261,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 6,
+      "kind": "paragraph",
+      "characters": 121,
+      "pdfStart": 273,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 7,
+      "kind": "paragraph",
+      "characters": 104,
+      "pdfStart": 394,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 8,
+      "kind": "heading",
+      "characters": 10,
+      "pdfStart": 498,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 9,
+      "kind": "paragraph",
+      "characters": 112,
+      "pdfStart": 508,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 10,
+      "kind": "paragraph",
+      "characters": 108,
+      "pdfStart": 620,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 11,
+      "kind": "paragraph",
+      "characters": 115,
+      "pdfStart": 728,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 12,
+      "kind": "heading",
+      "characters": 9,
+      "pdfStart": 843,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 13,
+      "kind": "paragraph",
+      "characters": 120,
+      "pdfStart": 852,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 14,
+      "kind": "paragraph",
+      "characters": 103,
+      "pdfStart": 972,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 15,
+      "kind": "heading",
+      "characters": 8,
+      "pdfStart": 1075,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 16,
+      "kind": "paragraph",
+      "characters": 110,
+      "pdfStart": 1083,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 17,
+      "kind": "paragraph",
+      "characters": 100,
+      "pdfStart": 1193,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 18,
+      "kind": "heading",
+      "characters": 14,
+      "pdfStart": 1293,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 19,
+      "kind": "paragraph",
+      "characters": 116,
+      "pdfStart": 1307,
+      "coveredInOrder": true
+    },
+    {
+      "paragraph": 20,
+      "kind": "paragraph",
+      "characters": 115,
+      "pdfStart": 1423,
+      "coveredInOrder": true
+    }
+  ],
+  "allParagraphsCoveredInOrder": true
+}

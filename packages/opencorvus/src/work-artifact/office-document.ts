@@ -11,6 +11,7 @@ import {
   parseWorkArtifactRuntimeJson,
   assertCompleteWorkArtifactBatch,
   assertZeroWorkArtifactRuntimeIssueCount,
+  assertWorkArtifactRuntimeIssues,
   projectID,
   readBoundedFile,
   requireOperationBudget,
@@ -370,7 +371,7 @@ export async function validateOfficeArtifact(input: Operation) {
       const validation = await native.json(["validate", sourcePath, "--json"])
       assertZeroWorkArtifactRuntimeIssueCount(validation, "OfficeCLI validation")
       const issues = await native.json(["view", sourcePath, "issues", "--json"])
-      assertZeroWorkArtifactRuntimeIssueCount(issues, "OfficeCLI issue inspection")
+      assertWorkArtifactRuntimeIssues(issues, "OfficeCLI issue inspection")
       const html = await native.run(["view", sourcePath, "html"])
       const rendered = await renderOfficeHtml({
         html: html.stdout.toString("utf8"),

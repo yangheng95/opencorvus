@@ -1,0 +1,375 @@
+[
+  {
+    "id": "prt_g0Vc7QeDa00U2nyyTpy2",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7QcCI00RUvEL3Mnu",
+    "type": "tool",
+    "callID": "call_4GsvWxUNXjSU35NG0hzGeZc8",
+    "tool": "work_artifact_author",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.document@1",
+        "filename": "销售经理审阅稿.docx",
+        "locale": "zh-CN",
+        "paragraphs": [
+          {
+            "kind": "title",
+            "text": "销售分析｜销售经理审阅稿"
+          },
+          {
+            "kind": "heading",
+            "text": "一、来源与分析范围"
+          },
+          {
+            "kind": "paragraph",
+            "text": "本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录并独立复算，不以既有脚本、旧报告或已交付工作簿代替本次核对。文件包含订单编号、区域、金额、备注四个字段，共五笔数据，覆盖华东与华南。下文原行序从首笔数据起编号，不含表头，逐笔陈述保持源文件顺序。"
+          },
+          {
+            "kind": "paragraph",
+            "text": "原数据未提供日期、统计期间、币种、成本或销售目标，因此本稿不补设这些信息。金额统一保留两位小数，但不标注未经确认的货币单位。这里的净金额仅表示记录金额的带符号合计，不等同于利润、已收款或某一期间的完整销售收入。"
+          },
+          {
+            "kind": "heading",
+            "text": "二、订单计数与净金额口径"
+          },
+          {
+            "kind": "paragraph",
+            "text": "订单数按每笔原始记录计一笔，不去重，也不剔除退款和零金额记录。净金额将所有金额相加，正数增加、负数扣减、零值不改变结果。按原区域名称分组，不合并或重命名区域。金额从源文本以十进制精确运算独立累加，精确到分，避免用二进制浮点近似值作为统计依据。"
+          },
+          {
+            "kind": "paragraph",
+            "text": "退款以金额小于零为判断条件，不仅依据备注；零金额以金额等于零判断，不作为退款。本次一笔退款和一笔零金额均计入总订单数，其金额分别扣减净金额和贡献零值。这一口径用于全部明细、分区与总体，确保层级之间可相互核对。"
+          },
+          {
+            "kind": "heading",
+            "text": "三、原始订单逐笔说明"
+          },
+          {
+            "kind": "paragraph",
+            "text": "原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2：订单编号A002，区域华东，金额20.20，备注“中文客户”。这两笔为正金额记录，按原文保留编号、区域和备注，不据备注推断客户身份或订单日期。"
+          },
+          {
+            "kind": "paragraph",
+            "text": "原行序3：订单编号A003，区域华东，金额-2.05，备注“退款”。该笔计为一笔订单及一笔退款，金额按负数纳入华东与总体净额，不转换为正金额，也不删除记录。源文件没有说明它对应哪一笔原销售，不据编号相邻关系建立关联。"
+          },
+          {
+            "kind": "paragraph",
+            "text": "原行序4：订单编号A004，区域华南，金额0.00，备注“免费样品”。该笔仍计一笔订单，不计退款。原行序5：订单编号A005，区域华南，金额7.35，备注“普通订单”。零金额不表示没有业务活动，但其成本和审批情况在源数据中均未知。"
+          },
+          {
+            "kind": "heading",
+            "text": "四、分区与总体结果"
+          },
+          {
+            "kind": "paragraph",
+            "text": "华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔，净金额为0.00加7.35，结果7.35。总体共5笔，净金额35.60。分区订单数3加2等于5，分区净金额28.25加7.35等于35.60，与逐笔汇总一致。"
+          },
+          {
+            "kind": "paragraph",
+            "text": "按金额性质再次核对：正金额3笔，合计37.65；退款1笔，带符号金额合计-2.05；零金额1笔，合计0.00。三类笔数合计5，金额合计37.65减2.05加0.00等于35.60，未遗漏退款或免费样品记录。"
+          },
+          {
+            "kind": "heading",
+            "text": "五、谨慎业务解读"
+          },
+          {
+            "kind": "paragraph",
+            "text": "已知事实是，在这五笔记录内，华东净金额高于华南，且唯一退款发生在华东，唯一零金额记录位于华南。样本很小，不能据此推断区域长期表现、增长趋势、销售人员能力或客户质量。缺少期间、成本与目标，也无法判断同比环比、毛利或达成率。"
+          },
+          {
+            "kind": "paragraph",
+            "text": "管理建议与事实应分开理解：可优先了解退款原因和免费样品的后续转化，但这只是核查方向，不代表已经发现异常、损失或流程违规。若要评价区域效率，应先补齐统一期间、有效订单定义和可比较的业务背景，再开展分析。"
+          },
+          {
+            "kind": "heading",
+            "text": "六、销售经理可执行的核对事项"
+          },
+          {
+            "kind": "paragraph",
+            "text": "建议先逐笔核对五个订单编号、原行序、区域、金额与备注，确认导出范围完整且无重复录入；再查A003的退款凭证、审批及原销售关联，确认负号和金额正确；对A004核对样品发放依据、领取对象及审批，另行取得成本资料，不将零售价误读为零成本。"
+          },
+          {
+            "kind": "paragraph",
+            "text": "最后请向数据负责人确认日期范围、币种、成本口径及目标来源，并核实本文件是否为完整业务范围。在补充资料前，审阅结论宜限定为本文件五笔记录的数量及净金额核对；任何经营评价或后续建议均应注明依据与尚待确认的信息，避免将本次样本结论外推。"
+          }
+        ]
+      },
+      "output": "{\"profile\":\"office.document@1\",\"source\":{\"sha\":\"2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx\",\"mime\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"size\":7997,\"filename\":\"销售经理审阅稿.docx\"},\"next\":\"Inspect and validate this exact source URL. Review every returned render before delivery.\"}",
+      "title": "Authored 销售经理审阅稿.docx",
+      "metadata": {
+        "profile": "office.document@1",
+        "sourceSha": "2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795730136202,
+        "end": 1795730173157
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0f0dececa7fa5c39016b08aad8191887d094215faef7e8705e"
+      }
+    },
+    "orderKey": "v1:0001795730162454:0000000000000031:0000000000000000:part:prt_g0Vc7QeDa00U2nyyTpy2"
+  },
+  {
+    "id": "prt_g0Vc7Qq6f00m79wFTbqt",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7QnrE009VHsiwLLj",
+    "type": "tool",
+    "callID": "call_VZphSZbMsJapw1YwoIAN3AAm",
+    "tool": "work_artifact_inspect",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.document@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx"
+      },
+      "output": "{\"source\":{\"sha\":\"2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx\",\"mime\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"size\":7997,\"filename\":\"销售经理审阅稿.docx\"},\"content\":{\"success\":true,\"data\":{\"totalElements\":21,\"elements\":[{\"path\":\"/body/p[@paraId=00100000]\",\"type\":\"paragraph\",\"text\":\"销售分析｜销售经理审阅稿\"},{\"path\":\"/body/p[@paraId=00100002]\",\"type\":\"paragraph\",\"text\":\"一、来源与分析范围\"},{\"path\":\"/body/p[@paraId=00100004]\",\"type\":\"paragraph\",\"text\":\"本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录并独立复算，不以既有脚本、旧报告或已交付工作簿代替本次核对。文件包含订单编号、区域、金额、备注四个字段，共五笔数据，覆盖华东与华南。下文原行序从首笔数据起编号，不含表头，逐笔陈述保持源文件顺序。\"},{\"path\":\"/body/p[@paraId=00100006]\",\"type\":\"paragraph\",\"text\":\"原数据未提供日期、统计期间、币种、成本或销售目标，因此本稿不补设这些信息。金额统一保留两位小数，但不标注未经确认的货币单位。这里的净金额仅表示记录金额的带符号合计，不等同于利润、已收款或某一期间的完整销售收入。\"},{\"path\":\"/body/p[@paraId=00100008]\",\"type\":\"paragraph\",\"text\":\"二、订单计数与净金额口径\"},{\"path\":\"/body/p[@paraId=0010000A]\",\"type\":\"paragraph\",\"text\":\"订单数按每笔原始记录计一笔，不去重，也不剔除退款和零金额记录。净金额将所有金额相加，正数增加、负数扣减、零值不改变结果。按原区域名称分组，不合并或重命名区域。金额从源文本以十进制精确运算独立累加，精确到分，避免用二进制浮点近似值作为统计依据。\"},{\"path\":\"/body/p[@paraId=0010000C]\",\"type\":\"paragraph\",\"text\":\"退款以金额小于零为判断条件，不仅依据备注；零金额以金额等于零判断，不作为退款。本次一笔退款和一笔零金额均计入总订单数，其金额分别扣减净金额和贡献零值。这一口径用于全部明细、分区与总体，确保层级之间可相互核对。\"},{\"path\":\"/body/p[@paraId=0010000E]\",\"type\":\"paragraph\",\"text\":\"三、原始订单逐笔说明\"},{\"path\":\"/body/p[@paraId=00100010]\",\"type\":\"paragraph\",\"text\":\"原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2：订单编号A002，区域华东，金额20.20，备注“中文客户”。这两笔为正金额记录，按原文保留编号、区域和备注，不据备注推断客户身份或订单日期。\"},{\"path\":\"/body/p[@paraId=00100012]\",\"type\":\"paragraph\",\"text\":\"原行序3：订单编号A003，区域华东，金额-2.05，备注“退款”。该笔计为一笔订单及一笔退款，金额按负数纳入华东与总体净额，不转换为正金额，也不删除记录。源文件没有说明它对应哪一笔原销售，不据编号相邻关系建立关联。\"},{\"path\":\"/body/p[@paraId=00100014]\",\"type\":\"paragraph\",\"text\":\"原行序4：订单编号A004，区域华南，金额0.00，备注“免费样品”。该笔仍计一笔订单，不计退款。原行序5：订单编号A005，区域华南，金额7.35，备注“普通订单”。零金额不表示没有业务活动，但其成本和审批情况在源数据中均未知。\"},{\"path\":\"/body/p[@paraId=00100016]\",\"type\":\"paragraph\",\"text\":\"四、分区与总体结果\"},{\"path\":\"/body/p[@paraId=00100018]\",\"type\":\"paragraph\",\"text\":\"华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔，净金额为0.00加7.35，结果7.35。总体共5笔，净金额35.60。分区订单数3加2等于5，分区净金额28.25加7.35等于35.60，与逐笔汇总一致。\"},{\"path\":\"/body/p[@paraId=0010001A]\",\"type\":\"paragraph\",\"text\":\"按金额性质再次核对：正金额3笔，合计37.65；退款1笔，带符号金额合计-2.05；零金额1笔，合计0.00。三类笔数合计5，金额合计37.65减2.05加0.00等于35.60，未遗漏退款或免费样品记录。\"},{\"path\":\"/body/p[@paraId=0010001C]\",\"type\":\"paragraph\",\"text\":\"五、谨慎业务解读\"},{\"path\":\"/body/p[@paraId=0010001E]\",\"type\":\"paragraph\",\"text\":\"已知事实是，在这五笔记录内，华东净金额高于华南，且唯一退款发生在华东，唯一零金额记录位于华南。样本很小，不能据此推断区域长期表现、增长趋势、销售人员能力或客户质量。缺少期间、成本与目标，也无法判断同比环比、毛利或达成率。\"},{\"path\":\"/body/p[@paraId=00100020]\",\"type\":\"paragraph\",\"text\":\"管理建议与事实应分开理解：可优先了解退款原因和免费样品的后续转化，但这只是核查方向，不代表已经发现异常、损失或流程违规。若要评价区域效率，应先补齐统一期间、有效订单定义和可比较的业务背景，再开展分析。\"},{\"path\":\"/body/p[@paraId=00100022]\",\"type\":\"paragraph\",\"text\":\"六、销售经理可执行的核对事项\"},{\"path\":\"/body/p[@paraId=00100024]\",\"type\":\"paragraph\",\"text\":\"建议先逐笔核对五个订单编号、原行序、区域、金额与备注，确认导出范围完整且无重复录入；再查A003的退款凭证、审批及原销售关联，确认负号和金额正确；对A004核对样品发放依据、领取对象及审批，另行取得成本资料，不将零售价误读为零成本。\"},{\"path\":\"/body/p[@paraId=00100026]\",\"type\":\"paragraph\",\"text\":\"最后请向数据负责人确认日期范围、币种、成本口径及目标来源，并核实本文件是否为完整业务范围。在补充资料前，审阅结论宜限定为本文件五笔记录的数量及净金额核对；任何经营评价或后续建议均应注明依据与尚待确认的信息，避免将本次样本结论外推。\"}]}},\"inspection\":{\"entryCount\":11,\"uncompressedBytes\":18766},\"profile\":\"office.document@1\",\"next\":\"Validate this exact source URL before delivery.\"}",
+      "title": "Inspected 销售经理审阅稿.docx",
+      "metadata": {
+        "profile": "office.document@1",
+        "sourceSha": "2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82",
+        "entryCount": 11,
+        "uncompressedBytes": 18766,
+        "truncated": false
+      },
+      "time": {
+        "start": 1795730181901,
+        "end": 1795730190886
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0b448d25e7ee6418016b08ab05cc2487d0b802e05c606cd8a4"
+      }
+    },
+    "orderKey": "v1:0001795730183740:0000000000000031:0000000000000000:part:prt_g0Vc7Qq6f00m79wFTbqt"
+  },
+  {
+    "id": "prt_g0Vc7QuMO00i7GnnJ0DG",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7QsTI00aryR90RFt",
+    "type": "tool",
+    "callID": "call_3urggNzQ9V6MBkN1jjIphNWT",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.document@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx"
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "OfficeCLI issue inspection reported Office issues: {\"count\":6,\"issues\":[{\"id\":\"C1\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100004]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录并独立复算，不以既有脚本、旧报告或已交付工作簿代替本次核对。文件包含订单编号、区域、金额、备注四个字段，共五笔数据，覆盖华东与华南。下文原行序从首笔数据起编号，不含表头，逐笔陈述保持源文件顺序。\"},{\"id\":\"C2\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100010]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2：订单编号A002，区域华东，金额20.20，备注“中文客户”。这两笔为正金额记录，按原文保留编号、区域和备注，不据备注推断客户身份或订单日期。\"},{\"id\":\"C3\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100012]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序3：订单编号A003，区域华东，金额-2.05，备注“退款”。该笔计为一笔订单及一笔退款，金额按负数纳入华东与总体净额，不转换为正金额，也不删除记录。源文件没有说明它对应哪一笔原销售，不据编号相邻关系建立关联。\"},{\"id\":\"C4\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100014]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序4：订单编号A004，区域华南，金额0.00，备注“免费样品”。该笔仍计一笔订单，不计退款。原行序5：订单编号A005，区域华南，金额7.35，备注“普通订单”。零金额不表示没有业务活动，但其成本和审批情况在源数据中均未知。\"},{\"id\":\"C5\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100018]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔，净金额为0.00加7.35，结果7.35。总体共5笔，净金额35.60。分区订单数3加2等于5，分区净金额28.25加7.35等于35.60，与逐笔汇总一致。\"},{\"id\":\"C6\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=0010001A]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"按金额性质再次核对：正金额3笔，合计37.65；退款1笔，带符号金额合计-2.05；零金额1笔，合计0.00。三类笔数合计5，金额合计37.65减2.05加0.00等于35.60，未遗漏退款或免费样品记录。\"}]}",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_3urggNzQ9V6MBkN1jjIphNWT",
+          "toolName": "work_artifact_validate"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0a67c837a2129a3a016b08ab1627c887d08c151a564a4480ae"
+        }
+      },
+      "time": {
+        "start": 1795730198252,
+        "end": 1795730208262
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0a67c837a2129a3a016b08ab1627c887d08c151a564a4480ae"
+      }
+    },
+    "orderKey": "v1:0001795730199865:0000000000000031:0000000000000000:part:prt_g0Vc7QuMO00i7GnnJ0DG"
+  },
+  {
+    "id": "prt_g0Vc7TB3e00Jb500AJPQ",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7T9Ag00ZGBQSNZ0q",
+    "type": "tool",
+    "callID": "call_WIryjzmdzqIe6gCuHZHedmHm",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.document@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx"
+      },
+      "output": "{\"source\":{\"sha\":\"2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx\",\"mime\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"size\":7997,\"filename\":\"销售经理审阅稿.docx\"},\"inspection\":{\"unitCount\":1,\"entryCount\":11,\"uncompressedBytes\":18766},\"validation\":{\"success\":true,\"data\":{\"count\":0,\"errors\":[]}},\"issues\":{\"success\":true,\"data\":{\"count\":6,\"issues\":[{\"id\":\"C1\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100004]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录并独立复算，不以既有脚本、旧报告或已交付工作簿代替本次核对。文件包含订单编号、区域、金额、备注四个字段，共五笔数据，覆盖华东与华南。下文原行序从首笔数据起编号，不含表头，逐笔陈述保持源文件顺序。\"},{\"id\":\"C2\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100010]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2：订单编号A002，区域华东，金额20.20，备注“中文客户”。这两笔为正金额记录，按原文保留编号、区域和备注，不据备注推断客户身份或订单日期。\"},{\"id\":\"C3\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100012]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序3：订单编号A003，区域华东，金额-2.05，备注“退款”。该笔计为一笔订单及一笔退款，金额按负数纳入华东与总体净额，不转换为正金额，也不删除记录。源文件没有说明它对应哪一笔原销售，不据编号相邻关系建立关联。\"},{\"id\":\"C4\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100014]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序4：订单编号A004，区域华南，金额0.00，备注“免费样品”。该笔仍计一笔订单，不计退款。原行序5：订单编号A005，区域华南，金额7.35，备注“普通订单”。零金额不表示没有业务活动，但其成本和审批情况在源数据中均未知。\"},{\"id\":\"C5\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100018]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔，净金额为0.00加7.35，结果7.35。总体共5笔，净金额35.60。分区订单数3加2等于5，分区净金额28.25加7.35等于35.60，与逐笔汇总一致。\"},{\"id\":\"C6\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=0010001A]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"按金额性质再次核对：正金额3笔，合计37.65；退款1笔，带符号金额合计-2.05；零金额1笔，合计0.00。三类笔数合计5，金额合计37.65减2.05加0.00等于35.60，未遗漏退款或免费样品记录。\"}]}},\"renders\":[{\"page\":1,\"sha\":\"c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png\",\"mime\":\"image/png\",\"size\":194003,\"filename\":\"docx-page-1.png\"},{\"page\":2,\"sha\":\"528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png\",\"mime\":\"image/png\",\"size\":92188,\"filename\":\"docx-page-2.png\"}],\"preview\":{\"sha\":\"a63f7718e4934cb1ebe0ce080f013df66b2eba4396d0692aea3dbddf3bb890db\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/a63f7718e4934cb1ebe0ce080f013df66b2eba4396d0692aea3dbddf3bb890db.pdf\",\"mime\":\"application/pdf\",\"size\":149493,\"filename\":\"销售经理审阅稿-preview.pdf\"},\"resource_usage\":{\"input_bytes\":7997,\"runtime_output_bytes\":64925,\"render_bytes\":435684,\"wall_clock_ms\":12241},\"validation_receipt\":{\"sha\":\"a593f0dbf0ae6d62bfd5555d2e41ba68064029304f6bb811575a8ff38752c64e\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/a593f0dbf0ae6d62bfd5555d2e41ba68064029304f6bb811575a8ff38752c64e.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1308,\"filename\":\"work-artifact-validation-receipt.json\"},\"validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.document@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx\",\"source_sha\":\"2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"renderer\":{\"id\":\"officecli-html-browser@1\",\"version\":\"157.0.8103.38\",\"playwright_version\":\"1.59.1\",\"node_version\":\"25.7.0\"},\"resource_usage\":{\"input_bytes\":7997,\"runtime_output_bytes\":64925,\"render_bytes\":435684,\"wall_clock_ms\":12241},\"renders\":[{\"page\":1,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png\",\"sha\":\"c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852\"},{\"page\":2,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png\",\"sha\":\"528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5\"}],\"preview\":{\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/a63f7718e4934cb1ebe0ce080f013df66b2eba4396d0692aea3dbddf3bb890db.pdf\",\"sha\":\"a63f7718e4934cb1ebe0ce080f013df66b2eba4396d0692aea3dbddf3bb890db\"}},\"next\":\"Inspect every render, then deliver this exact source and receipt.\"}",
+      "title": "Validated 销售经理审阅稿.docx",
+      "metadata": {
+        "profile": "office.document@1",
+        "sourceSha": "2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82",
+        "pageCount": 2,
+        "receiptSha": "a593f0dbf0ae6d62bfd5555d2e41ba68064029304f6bb811575a8ff38752c64e",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795730739094,
+        "end": 1795730753350
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7TElU00f9Uh0fTRH",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7T9Ag00ZGBQSNZ0q",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/a593f0dbf0ae6d62bfd5555d2e41ba68064029304f6bb811575a8ff38752c64e.json"
+        },
+        {
+          "id": "prt_g0Vc7TElU01oi6nnDh7X",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7T9Ag00ZGBQSNZ0q",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "docx-page-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png"
+        },
+        {
+          "id": "prt_g0Vc7TElU02RIx44WtA3",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7T9Ag00ZGBQSNZ0q",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "docx-page-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0dc53ff412fb9eb2016b08ad33001c87d0916663e4d05bd071"
+      }
+    },
+    "orderKey": "v1:0001795730740757:0000000000000031:0000000000000000:part:prt_g0Vc7TB3e00Jb500AJPQ"
+  },
+  {
+    "id": "prt_g0Vc7TOzN00Xyrw3UTq7",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7TMJE00f01Oj6s32",
+    "type": "tool",
+    "callID": "call_79xNpAxqaoidNd1GNFIGBzsa",
+    "tool": "work_artifact_inspect",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.document@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx"
+      },
+      "output": "{\"source\":{\"sha\":\"2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx\",\"mime\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"size\":7997,\"filename\":\"销售经理审阅稿.docx\"},\"content\":{\"success\":true,\"data\":{\"totalElements\":21,\"elements\":[{\"path\":\"/body/p[@paraId=00100000]\",\"type\":\"paragraph\",\"text\":\"销售分析｜销售经理审阅稿\"},{\"path\":\"/body/p[@paraId=00100002]\",\"type\":\"paragraph\",\"text\":\"一、来源与分析范围\"},{\"path\":\"/body/p[@paraId=00100004]\",\"type\":\"paragraph\",\"text\":\"本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录并独立复算，不以既有脚本、旧报告或已交付工作簿代替本次核对。文件包含订单编号、区域、金额、备注四个字段，共五笔数据，覆盖华东与华南。下文原行序从首笔数据起编号，不含表头，逐笔陈述保持源文件顺序。\"},{\"path\":\"/body/p[@paraId=00100006]\",\"type\":\"paragraph\",\"text\":\"原数据未提供日期、统计期间、币种、成本或销售目标，因此本稿不补设这些信息。金额统一保留两位小数，但不标注未经确认的货币单位。这里的净金额仅表示记录金额的带符号合计，不等同于利润、已收款或某一期间的完整销售收入。\"},{\"path\":\"/body/p[@paraId=00100008]\",\"type\":\"paragraph\",\"text\":\"二、订单计数与净金额口径\"},{\"path\":\"/body/p[@paraId=0010000A]\",\"type\":\"paragraph\",\"text\":\"订单数按每笔原始记录计一笔，不去重，也不剔除退款和零金额记录。净金额将所有金额相加，正数增加、负数扣减、零值不改变结果。按原区域名称分组，不合并或重命名区域。金额从源文本以十进制精确运算独立累加，精确到分，避免用二进制浮点近似值作为统计依据。\"},{\"path\":\"/body/p[@paraId=0010000C]\",\"type\":\"paragraph\",\"text\":\"退款以金额小于零为判断条件，不仅依据备注；零金额以金额等于零判断，不作为退款。本次一笔退款和一笔零金额均计入总订单数，其金额分别扣减净金额和贡献零值。这一口径用于全部明细、分区与总体，确保层级之间可相互核对。\"},{\"path\":\"/body/p[@paraId=0010000E]\",\"type\":\"paragraph\",\"text\":\"三、原始订单逐笔说明\"},{\"path\":\"/body/p[@paraId=00100010]\",\"type\":\"paragraph\",\"text\":\"原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2：订单编号A002，区域华东，金额20.20，备注“中文客户”。这两笔为正金额记录，按原文保留编号、区域和备注，不据备注推断客户身份或订单日期。\"},{\"path\":\"/body/p[@paraId=00100012]\",\"type\":\"paragraph\",\"text\":\"原行序3：订单编号A003，区域华东，金额-2.05，备注“退款”。该笔计为一笔订单及一笔退款，金额按负数纳入华东与总体净额，不转换为正金额，也不删除记录。源文件没有说明它对应哪一笔原销售，不据编号相邻关系建立关联。\"},{\"path\":\"/body/p[@paraId=00100014]\",\"type\":\"paragraph\",\"text\":\"原行序4：订单编号A004，区域华南，金额0.00，备注“免费样品”。该笔仍计一笔订单，不计退款。原行序5：订单编号A005，区域华南，金额7.35，备注“普通订单”。零金额不表示没有业务活动，但其成本和审批情况在源数据中均未知。\"},{\"path\":\"/body/p[@paraId=00100016]\",\"type\":\"paragraph\",\"text\":\"四、分区与总体结果\"},{\"path\":\"/body/p[@paraId=00100018]\",\"type\":\"paragraph\",\"text\":\"华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔，净金额为0.00加7.35，结果7.35。总体共5笔，净金额35.60。分区订单数3加2等于5，分区净金额28.25加7.35等于35.60，与逐笔汇总一致。\"},{\"path\":\"/body/p[@paraId=0010001A]\",\"type\":\"paragraph\",\"text\":\"按金额性质再次核对：正金额3笔，合计37.65；退款1笔，带符号金额合计-2.05；零金额1笔，合计0.00。三类笔数合计5，金额合计37.65减2.05加0.00等于35.60，未遗漏退款或免费样品记录。\"},{\"path\":\"/body/p[@paraId=0010001C]\",\"type\":\"paragraph\",\"text\":\"五、谨慎业务解读\"},{\"path\":\"/body/p[@paraId=0010001E]\",\"type\":\"paragraph\",\"text\":\"已知事实是，在这五笔记录内，华东净金额高于华南，且唯一退款发生在华东，唯一零金额记录位于华南。样本很小，不能据此推断区域长期表现、增长趋势、销售人员能力或客户质量。缺少期间、成本与目标，也无法判断同比环比、毛利或达成率。\"},{\"path\":\"/body/p[@paraId=00100020]\",\"type\":\"paragraph\",\"text\":\"管理建议与事实应分开理解：可优先了解退款原因和免费样品的后续转化，但这只是核查方向，不代表已经发现异常、损失或流程违规。若要评价区域效率，应先补齐统一期间、有效订单定义和可比较的业务背景，再开展分析。\"},{\"path\":\"/body/p[@paraId=00100022]\",\"type\":\"paragraph\",\"text\":\"六、销售经理可执行的核对事项\"},{\"path\":\"/body/p[@paraId=00100024]\",\"type\":\"paragraph\",\"text\":\"建议先逐笔核对五个订单编号、原行序、区域、金额与备注，确认导出范围完整且无重复录入；再查A003的退款凭证、审批及原销售关联，确认负号和金额正确；对A004核对样品发放依据、领取对象及审批，另行取得成本资料，不将零售价误读为零成本。\"},{\"path\":\"/body/p[@paraId=00100026]\",\"type\":\"paragraph\",\"text\":\"最后请向数据负责人确认日期范围、币种、成本口径及目标来源，并核实本文件是否为完整业务范围。在补充资料前，审阅结论宜限定为本文件五笔记录的数量及净金额核对；任何经营评价或后续建议均应注明依据与尚待确认的信息，避免将本次样本结论外推。\"}]}},\"inspection\":{\"entryCount\":11,\"uncompressedBytes\":18766},\"profile\":\"office.document@1\",\"next\":\"Validate this exact source URL before delivery.\"}",
+      "title": "Inspected 销售经理审阅稿.docx",
+      "metadata": {
+        "profile": "office.document@1",
+        "sourceSha": "2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82",
+        "entryCount": 11,
+        "uncompressedBytes": 18766,
+        "truncated": false
+      },
+      "time": {
+        "start": 1795730792645,
+        "end": 1795730801851
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_04235ecbf290258c016b08ad6886d887d099260b97b860a01a"
+      }
+    },
+    "orderKey": "v1:0001795730794706:0000000000000031:0000000000000000:part:prt_g0Vc7TOzN00Xyrw3UTq7"
+  },
+  {
+    "id": "prt_g0Vc7TXzu00cSWweCx6f",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7TVAP00MyhORSQib",
+    "type": "tool",
+    "callID": "call_yvrl6Pl8RneF7VcEahWFpHxN",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.document@1",
+        "title": "销售经理审阅稿｜可编辑 Word 原件及逐页预览",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/a593f0dbf0ae6d62bfd5555d2e41ba68064029304f6bb811575a8ff38752c64e.json",
+        "validation_receipt_sha": "a593f0dbf0ae6d62bfd5555d2e41ba68064029304f6bb811575a8ff38752c64e"
+      },
+      "output": "{\"artifactID\":\"art_g0Vc7Tc090066od6LQPJ\",\"source\":{\"sha\":\"2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx\",\"mime\":\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\",\"size\":7997,\"filename\":\"销售经理审阅稿.docx\"},\"preview\":{\"sha\":\"954b774ef0852a26722a53ae09ea6888358f887e5d98fa0e241354645b1592f7\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/954b774ef0852a26722a53ae09ea6888358f887e5d98fa0e241354645b1592f7.pdf\",\"mime\":\"application/pdf\",\"size\":149493,\"filename\":\"销售经理审阅稿-preview.pdf\"},\"renders\":[{\"page\":1,\"sha\":\"c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png\",\"mime\":\"image/png\",\"size\":194003,\"filename\":\"docx-page-1.png\"},{\"page\":2,\"sha\":\"528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png\",\"mime\":\"image/png\",\"size\":92188,\"filename\":\"docx-page-2.png\"}],\"final_validation_receipt\":{\"sha\":\"e46e78308b8bad29b29ab078207e97300d4be8aa6a12517994f06060e4de0cb6\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/e46e78308b8bad29b29ab078207e97300d4be8aa6a12517994f06060e4de0cb6.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1308,\"filename\":\"work-artifact-validation-receipt.json\"},\"final_validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.document@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx\",\"source_sha\":\"2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"renderer\":{\"id\":\"officecli-html-browser@1\",\"version\":\"157.0.8103.38\",\"playwright_version\":\"1.59.1\",\"node_version\":\"25.7.0\"},\"resource_usage\":{\"input_bytes\":7997,\"runtime_output_bytes\":64925,\"render_bytes\":435684,\"wall_clock_ms\":10927},\"renders\":[{\"page\":1,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png\",\"sha\":\"c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852\"},{\"page\":2,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png\",\"sha\":\"528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5\"}],\"preview\":{\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/954b774ef0852a26722a53ae09ea6888358f887e5d98fa0e241354645b1592f7.pdf\",\"sha\":\"954b774ef0852a26722a53ae09ea6888358f887e5d98fa0e241354645b1592f7\"}},\"fidelity\":\"OfficeCLI package validation and local browser-derived review; Microsoft Office pixel fidelity is not claimed.\"}",
+      "title": "销售经理审阅稿｜可编辑 Word 原件及逐页预览",
+      "metadata": {
+        "artifactID": "art_g0Vc7Tc090066od6LQPJ",
+        "renderer": "file-preview@1",
+        "profile": "office.document@1",
+        "sourceSha": "2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82",
+        "pageCount": 2,
+        "validationReceiptSha": "e46e78308b8bad29b29ab078207e97300d4be8aa6a12517994f06060e4de0cb6",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795730827274,
+        "end": 1795730842673
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7Tc0C00TOGE6kxEv",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7TVAP00MyhORSQib",
+          "type": "file",
+          "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "filename": "销售经理审阅稿.docx",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx"
+        },
+        {
+          "id": "prt_g0Vc7Tc0D00qcU2Tfb0c",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7TVAP00MyhORSQib",
+          "type": "file",
+          "mime": "application/pdf",
+          "filename": "销售经理审阅稿-preview.pdf",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/954b774ef0852a26722a53ae09ea6888358f887e5d98fa0e241354645b1592f7.pdf"
+        },
+        {
+          "id": "prt_g0Vc7Tc0D01WwVTV4mrY",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7TVAP00MyhORSQib",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/e46e78308b8bad29b29ab078207e97300d4be8aa6a12517994f06060e4de0cb6.json"
+        },
+        {
+          "id": "prt_g0Vc7Tc0D022MgQVLtIJ",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7TVAP00MyhORSQib",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "docx-page-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png"
+        },
+        {
+          "id": "prt_g0Vc7Tc0D03tXmne6wiw",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7TVAP00MyhORSQib",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "docx-page-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_08f797ffc79df428016b08ad8b29bc87d0926617c24a62f93f"
+      }
+    },
+    "orderKey": "v1:0001795730831327:0000000000000031:0000000000000000:part:prt_g0Vc7TXzu00cSWweCx6f"
+  }
+]

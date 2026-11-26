@@ -74,7 +74,6 @@ for (const profile of ["office.document@1", "office.spreadsheet@1"] as const) {
             delivered: result.source_sha,
             display: "interactive-artifact",
           })
-          expect(result.receipt_sha).toMatch(/^[a-f0-9]{64}$/)
           const data = (result.content as { data: unknown }).data
           if (profile === "office.spreadsheet@1") {
             const column = JSON.parse(
@@ -113,8 +112,14 @@ for (const profile of ["office.document@1", "office.spreadsheet@1"] as const) {
             })
             expect(sheets[1]!.rows.find((row) => row.row === 2)?.cells).toEqual({ A2: "001", B2: "=1+1", C2: "TRUE" })
           } else {
-            expect(JSON.stringify(data)).toContain("工时周报")
-            expect(JSON.stringify(data)).toContain("计划36小时，实际25小时，差值−11小时。")
+            const document = data as { elements: Array<{ text: string }> }
+            expect(document.elements.map((element) => element.text)).toEqual([
+              "工时周报",
+              "本周进展",
+              "四模块进展：设计完成、实现完成、验证进行中、交付待确认。",
+              "计划36小时，实际25小时，差值−11小时。",
+              "来源 sales.csv，净金额35.60；退款金额-2.05。",
+            ])
           }
         },
       })

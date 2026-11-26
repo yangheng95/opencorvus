@@ -1,0 +1,29 @@
+$ bun script/run-tests.ts test/work-artifact/task-workspace-authority.test.ts "--test-name-pattern=Work Artifact runtime issues retain informational diagnostics"
+    Finished `release` profile [optimized] target(s) in 0.94s
+[1/1] START test/work-artifact/task-workspace-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+794 |   const data = result.data
+795 |   if (!data || typeof data !== "object" || Array.isArray(data) || (data as Record<string, unknown>).count !== 0) {
+796 |     const evidence = JSON.stringify(data ?? null)
+797 |     throw new Error(
+798 |       `${label} reported Office issues: ${evidence.length > 4096 ? `${evidence.slice(0, 4096)}…` : evidence}`,
+799 |     )
+          ^
+error: OfficeCLI issue inspection reported Office issues: {"count":2,"issues":[{"id":"C1","type":1,"severity":2,"path":"/body/p[1]","message":"Mixed CJK/Latin punctuation","context":"来源 sales.csv，净金额35.60。"},{"id":"C2","type":1,"severity":2,"path":"/body/p[2]","message":"Editorial information","suggestion":"Review the wording"}]}
+      at assertZeroWorkArtifactRuntimeIssueCount (D:\myhexin-local\opencorvus\packages\opencorvus\src\work-artifact\presentation.ts:799:5)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\task-workspace-authority.test.ts:122:10)
+(fail) Work Artifact runtime issues retain informational diagnostics [0.48ms]
+
+ 0 pass
+ 11 filtered out
+ 1 fail
+Ran 1 test across 1 file. [2.09s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\task-workspace-authority.test.ts
+[1/1] DONE test/work-artifact/task-workspace-authority.test.ts exit=1 duration=2.69s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\task-workspace-authority.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-Mn5g37
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

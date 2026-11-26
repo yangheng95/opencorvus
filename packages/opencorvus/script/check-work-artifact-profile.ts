@@ -19,6 +19,7 @@ import { WorkArtifactQualificationRegistry } from "../src/work-artifact/qualific
 import { GENERATED_WORK_ARTIFACT_QUALIFICATION_MATRIX } from "../src/work-artifact/qualification-matrix.generated"
 import {
   assertZeroWorkArtifactRuntimeIssueCount,
+  assertWorkArtifactRuntimeIssues,
   assertWorkArtifactRenderPng,
   inspectPptxPackage,
   parseWorkArtifactRuntimeJson,
@@ -212,7 +213,7 @@ async function checkPackagedLifecycle(packageRoot: string, profile: WorkArtifact
       `${runtime.id} validate`,
     )
     const issues = await runRuntime(executable, ["view", source, "issues", "--json"], workspace, lock)
-    assertZeroWorkArtifactRuntimeIssueCount(
+    assertWorkArtifactRuntimeIssues(
       parseWorkArtifactRuntimeJson(Buffer.from(issues.stdout), `${runtime.id} issues`),
       `${runtime.id} issues`,
     )

@@ -790,14 +790,37 @@ export function assertCompleteWorkArtifactBatch(result: Record<string, unknown>,
     throw new WorkArtifactBatchError(result.data)
 }
 
+function workArtifactRuntimeIssueError(result: Record<string, unknown>, label: string): Error {
+  const evidence = JSON.stringify(result.data ?? null)
+  return new Error(
+    `${label} reported Office issues: ${evidence.length > 4096 ? `${evidence.slice(0, 4096)}…` : evidence}`,
+  )
+}
+
 export function assertZeroWorkArtifactRuntimeIssueCount(result: Record<string, unknown>, label: string): void {
   const data = result.data
-  if (!data || typeof data !== "object" || Array.isArray(data) || (data as Record<string, unknown>).count !== 0) {
-    const evidence = JSON.stringify(data ?? null)
-    throw new Error(
-      `${label} reported Office issues: ${evidence.length > 4096 ? `${evidence.slice(0, 4096)}…` : evidence}`,
-    )
-  }
+  if (!data || typeof data !== "object" || Array.isArray(data) || (data as Record<string, unknown>).count !== 0)
+    throw workArtifactRuntimeIssueError(result, label)
+}
+
+// The pinned OfficeCLI DocumentIssue protocol uses Error=0, Warning=1, Info=2.
+// Information remains visible in the original Tool result for editorial review.
+const WorkArtifactRuntimeIssueReport = z
+  .object({
+    count: z.number().int().nonnegative(),
+    issues: z.array(z.object({ severity: z.union([z.literal(0), z.literal(1), z.literal(2)]) }).passthrough()),
+  })
+  .passthrough()
+
+export function assertWorkArtifactRuntimeIssues(result: Record<string, unknown>, label: string) {
+  const parsed = WorkArtifactRuntimeIssueReport.safeParse(result.data)
+  if (
+    !parsed.success ||
+    parsed.data.count !== parsed.data.issues.length ||
+    parsed.data.issues.some((issue) => issue.severity !== 2)
+  )
+    throw workArtifactRuntimeIssueError(result, label)
+  return parsed.data
 }
 
 export async function authorWorkArtifactPresentation(input: {
@@ -1306,7 +1329,7 @@ export async function validateWorkArtifactPresentation(input: {
       const validation = parseJsonResult(await run(["validate", sourcePath, "--json"]), "OfficeCLI validate")
       assertZeroWorkArtifactRuntimeIssueCount(validation, "OfficeCLI validation")
       const issues = parseJsonResult(await run(["view", sourcePath, "issues", "--json"]), "OfficeCLI issues")
-      assertZeroWorkArtifactRuntimeIssueCount(issues, "OfficeCLI issue inspection")
+      assertWorkArtifactRuntimeIssues(issues, "OfficeCLI issue inspection")
       const renders: z.output<typeof RenderReference>[] = []
       for (let slide = 1; slide <= inspection.slideCount; slide++) {
         const rendered = await run(["view", sourcePath, "svg", "--start", String(slide), "--end", String(slide)])

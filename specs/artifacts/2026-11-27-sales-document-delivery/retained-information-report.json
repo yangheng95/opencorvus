@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "failedToolPartID": "prt_g0Vc7QuMO00i7GnnJ0DG",
+  "completedToolPartID": "prt_g0Vc7TB3e00Jb500AJPQ",
+  "originalReportRetainedExactly": true,
+  "report": {
+    "count": 6,
+    "issues": [
+      {
+        "id": "C1",
+        "type": 1,
+        "severity": 2,
+        "path": "/body/p[@paraId=00100004]/r[1]",
+        "message": "Mixed CJK/Latin punctuation",
+        "context": "本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录并独立复算，不以既有脚本、旧报告或已交付工作簿代替本次核对。文件包含订单编号、区域、金额、备注四个字段，共五笔数据，覆盖华东与华南。下文原行序从首笔数据起编号，不含表头，逐笔陈述保持源文件顺序。"
+      },
+      {
+        "id": "C2",
+        "type": 1,
+        "severity": 2,
+        "path": "/body/p[@paraId=00100010]/r[1]",
+        "message": "Mixed CJK/Latin punctuation",
+        "context": "原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2：订单编号A002，区域华东，金额20.20，备注“中文客户”。这两笔为正金额记录，按原文保留编号、区域和备注，不据备注推断客户身份或订单日期。"
+      },
+      {
+        "id": "C3",
+        "type": 1,
+        "severity": 2,
+        "path": "/body/p[@paraId=00100012]/r[1]",
+        "message": "Mixed CJK/Latin punctuation",
+        "context": "原行序3：订单编号A003，区域华东，金额-2.05，备注“退款”。该笔计为一笔订单及一笔退款，金额按负数纳入华东与总体净额，不转换为正金额，也不删除记录。源文件没有说明它对应哪一笔原销售，不据编号相邻关系建立关联。"
+      },
+      {
+        "id": "C4",
+        "type": 1,
+        "severity": 2,
+        "path": "/body/p[@paraId=00100014]/r[1]",
+        "message": "Mixed CJK/Latin punctuation",
+        "context": "原行序4：订单编号A004，区域华南，金额0.00，备注“免费样品”。该笔仍计一笔订单，不计退款。原行序5：订单编号A005，区域华南，金额7.35，备注“普通订单”。零金额不表示没有业务活动，但其成本和审批情况在源数据中均未知。"
+      },
+      {
+        "id": "C5",
+        "type": 1,
+        "severity": 2,
+        "path": "/body/p[@paraId=00100018]/r[1]",
+        "message": "Mixed CJK/Latin punctuation",
+        "context": "华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔，净金额为0.00加7.35，结果7.35。总体共5笔，净金额35.60。分区订单数3加2等于5，分区净金额28.25加7.35等于35.60，与逐笔汇总一致。"
+      },
+      {
+        "id": "C6",
+        "type": 1,
+        "severity": 2,
+        "path": "/body/p[@paraId=0010001A]/r[1]",
+        "message": "Mixed CJK/Latin punctuation",
+        "context": "按金额性质再次核对：正金额3笔，合计37.65；退款1笔，带符号金额合计-2.05；零金额1笔，合计0.00。三类笔数合计5，金额合计37.65减2.05加0.00等于35.60，未遗漏退款或免费样品记录。"
+      }
+    ]
+  }
+}

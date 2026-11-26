@@ -8,10 +8,7 @@ import { Instance } from "../../src/project/instance"
 import { ProjectRuntimePaths } from "../../src/project/runtime-paths"
 import { Database } from "../../src/storage/db"
 import { Process } from "../../src/util/process"
-import {
-  assertZeroWorkArtifactRuntimeIssueCount,
-  workArtifactWorkspaceRoot,
-} from "../../src/work-artifact/presentation"
+import { assertWorkArtifactRuntimeIssues, workArtifactWorkspaceRoot } from "../../src/work-artifact/presentation"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterAll(async () => {
@@ -111,16 +108,57 @@ test("Task Work Artifact runtime workspace is admitted by the immutable native p
   })
 })
 
-test("Work Artifact issue failures preserve bounded OfficeCLI repair evidence", () => {
-  expect(() =>
-    assertZeroWorkArtifactRuntimeIssueCount(
-      { data: { count: 1, issues: [{ slide: 1, code: "content-overflow", message: "Chart exceeds slide bounds" }] } },
-      "OfficeCLI issue inspection",
-    ),
-  ).toThrow(
-    'OfficeCLI issue inspection reported Office issues: {"count":1,"issues":[{"slide":1,"code":"content-overflow","message":"Chart exceeds slide bounds"}]}',
-  )
+test("Work Artifact runtime issues retain informational diagnostics", () => {
+  const data = {
+    count: 2,
+    issues: [
+      {
+        id: "C1",
+        type: 1,
+        severity: 2,
+        path: "/body/p[1]",
+        message: "Mixed CJK/Latin punctuation",
+        context: "来源 sales.csv，净金额35.60。",
+      },
+      {
+        id: "C2",
+        type: 1,
+        severity: 2,
+        path: "/body/p[2]",
+        message: "Editorial information",
+        suggestion: "Review the wording",
+      },
+    ],
+  }
+  expect(assertWorkArtifactRuntimeIssues({ data }, "OfficeCLI issue inspection")).toEqual(data)
 })
+
+test("Work Artifact runtime issues return a complete empty report", () => {
+  const data = { count: 0, issues: [] }
+  expect(assertWorkArtifactRuntimeIssues({ data }, "OfficeCLI issue inspection")).toEqual(data)
+})
+
+for (const [name, data] of [
+  ["error", { count: 1, issues: [{ id: "S1", type: 2, severity: 0, path: "/body", message: "Missing style" }] }],
+  [
+    "warning",
+    {
+      count: 1,
+      issues: [{ id: "O1", type: 0, severity: 1, path: "/slide[1]", message: "Chart exceeds slide bounds" }],
+    },
+  ],
+  ["mixed warning and information", { count: 2, issues: [{ severity: 2 }, { severity: 1 }] }],
+  ["unknown severity", { count: 1, issues: [{ severity: 3 }] }],
+  ["missing severity", { count: 1, issues: [{ message: "Unclassified issue" }] }],
+  ["incomplete count", { count: 2, issues: [{ severity: 2 }] }],
+  ["missing issue list", { count: 0 }],
+] as const) {
+  test(`Work Artifact runtime issues return repair evidence for ${name}`, () => {
+    expect(() => assertWorkArtifactRuntimeIssues({ data }, "OfficeCLI issue inspection")).toThrow(
+      `OfficeCLI issue inspection reported Office issues: ${JSON.stringify(data)}`,
+    )
+  })
+}
 
 test("qualified presentation authoring schema declares centimeter coordinates", async () => {
   const { AuthorWorkArtifactInput } = await import("../../src/work-artifact/presentation")

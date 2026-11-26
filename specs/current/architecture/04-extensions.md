@@ -700,6 +700,11 @@ work_artifact_deliver` typed tools，不拥有第二套 serializer。profile reg
   禁止增加平行格式 Skill、库或兼容 tool identity。`validate` 生成由 canonical Attachment Store
   持久化、与 source SHA、profile、runtime lock revision、最终 package SHA 和 fresh render SHA
   绑定的 receipt；`deliver` 只消费该精确 receipt，并在发布前重新执行完整校验和逐页渲染。
+  OfficeCLI 的结构 `validate` 结果要求错误计数为零；`view issues` 使用同一共享诊断合同，
+  要求完整计数/数组及固定 runtime 的明确 severity。Error/Warning 阻断，Info 保留原始路径、
+  正文和建议交给模型审阅，并继续生成实际渲染；不按消息关键词、文件名或格式放行。
+  不完整报告和未知 severity 仍返回有界原生证据错误。PPTX、DOCX、XLSX 和包资格共用此合同，
+  原始 issues 完整出现在既有 Tool 结果，不合成消息或改写收据。
   DOCX/XLSX 复用既有 Browser Runtime 的 Node sidecar，在独立 headless 页面阻断外部资源，
   从固定 OfficeCLI HTML 输出派生逐页/逐表 PNG 与 PDF 预览，禁止直接启动用户 Office 或连接
   用户浏览器。HTML 以私有输入文件传给 sidecar，避免 Windows 命令行容量限制。原始 DOCX/XLSX

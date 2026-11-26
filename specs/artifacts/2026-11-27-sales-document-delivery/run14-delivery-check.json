@@ -1,0 +1,253 @@
+{
+  "status": "passed",
+  "source": "Actual canonical HTTP readers, real Office Tool Parts and receipt, OOXML ordered paragraphs, PDF page text coverage, actual native browser downloads and original database/project bytes",
+  "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+  "artifactID": "art_g0Vc7Tc090066od6LQPJ",
+  "finalMessageID": "msg_g0Vc7Tc3N00I2AEfWCyf",
+  "completedAt": 1795730860964,
+  "sourceBytes": 7997,
+  "previewBytes": 149493,
+  "paragraphs": 20,
+  "chineseCharacters": 1218,
+  "pdfPages": 2,
+  "paragraphCoverage": [
+    {
+      "paragraph": 1,
+      "pdfStart": 0,
+      "characters": 12
+    },
+    {
+      "paragraph": 2,
+      "pdfStart": 12,
+      "characters": 9
+    },
+    {
+      "paragraph": 3,
+      "pdfStart": 21,
+      "characters": 137
+    },
+    {
+      "paragraph": 4,
+      "pdfStart": 156,
+      "characters": 105
+    },
+    {
+      "paragraph": 5,
+      "pdfStart": 261,
+      "characters": 12
+    },
+    {
+      "paragraph": 6,
+      "pdfStart": 273,
+      "characters": 121
+    },
+    {
+      "paragraph": 7,
+      "pdfStart": 394,
+      "characters": 104
+    },
+    {
+      "paragraph": 8,
+      "pdfStart": 498,
+      "characters": 10
+    },
+    {
+      "paragraph": 9,
+      "pdfStart": 508,
+      "characters": 112
+    },
+    {
+      "paragraph": 10,
+      "pdfStart": 620,
+      "characters": 108
+    },
+    {
+      "paragraph": 11,
+      "pdfStart": 728,
+      "characters": 115
+    },
+    {
+      "paragraph": 12,
+      "pdfStart": 843,
+      "characters": 9
+    },
+    {
+      "paragraph": 13,
+      "pdfStart": 852,
+      "characters": 120
+    },
+    {
+      "paragraph": 14,
+      "pdfStart": 972,
+      "characters": 103
+    },
+    {
+      "paragraph": 15,
+      "pdfStart": 1075,
+      "characters": 8
+    },
+    {
+      "paragraph": 16,
+      "pdfStart": 1083,
+      "characters": 110
+    },
+    {
+      "paragraph": 17,
+      "pdfStart": 1193,
+      "characters": 100
+    },
+    {
+      "paragraph": 18,
+      "pdfStart": 1293,
+      "characters": 14
+    },
+    {
+      "paragraph": 19,
+      "pdfStart": 1307,
+      "characters": 116
+    },
+    {
+      "paragraph": 20,
+      "pdfStart": 1423,
+      "characters": 115
+    }
+  ],
+  "renders": [
+    {
+      "page": 1,
+      "bytes": 194003,
+      "validationURL": "/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png",
+      "deliveredURL": "/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png",
+      "sameCanonicalRenderBytes": true,
+      "boundToValidationToolMultimodalOutput": true
+    },
+    {
+      "page": 2,
+      "bytes": 92188,
+      "validationURL": "/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png",
+      "deliveredURL": "/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png",
+      "sameCanonicalRenderBytes": true,
+      "boundToValidationToolMultimodalOutput": true
+    }
+  ],
+  "preservedRows": {
+    "message": 39,
+    "part": 102,
+    "tool_part_request": 33,
+    "tool_part_outcome": 33,
+    "interactive_artifact": 3
+  },
+  "preservedFiles": [
+    {
+      "file": "sales.csv",
+      "bytes": 181,
+      "preservedExactOriginalBytes": true
+    },
+    {
+      "file": "sales_summary.py",
+      "bytes": 7650,
+      "preservedExactOriginalBytes": true
+    },
+    {
+      "file": "summary.json",
+      "bytes": 238,
+      "preservedExactOriginalBytes": true
+    },
+    {
+      "file": "test_sales_summary.py",
+      "bytes": 10107,
+      "preservedExactOriginalBytes": true
+    },
+    {
+      "file": "区域汇总.csv",
+      "bytes": 59,
+      "preservedExactOriginalBytes": true
+    },
+    {
+      "file": "销售报告.md",
+      "bytes": 1408,
+      "preservedExactOriginalBytes": true
+    },
+    {
+      "file": "deliverables/销售核对.xlsx",
+      "bytes": 6793,
+      "preservedExactOriginalBytes": true
+    }
+  ],
+  "downloads": [
+    {
+      "filename": "销售经理审阅稿.docx",
+      "bytes": 7997,
+      "equalsDeliveredCanonicalBytes": true
+    },
+    {
+      "filename": "销售经理审阅稿-preview.pdf",
+      "bytes": 149493,
+      "equalsDeliveredCanonicalBytes": true
+    }
+  ],
+  "headers": {
+    "source": {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "X-Content-Type-Options": "nosniff",
+      "Content-Disposition": "attachment; filename*=UTF-8''%E9%94%80%E5%94%AE%E7%BB%8F%E7%90%86%E5%AE%A1%E9%98%85%E7%A8%BF.docx",
+      "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "Vary": "Origin",
+      "x-opencorvus-request-id": "0e3a9625-b6d6-4606-af01-b601c2f162f7",
+      "Date": "Thu, 26 Nov 2026 22:11:30 GMT",
+      "Content-Length": "7997"
+    },
+    "preview": {
+      "Content-Type": "application/pdf",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "X-Content-Type-Options": "nosniff",
+      "Content-Disposition": "inline; filename*=UTF-8''%E9%94%80%E5%94%AE%E7%BB%8F%E7%90%86%E5%AE%A1%E9%98%85%E7%A8%BF-preview.pdf",
+      "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "Vary": "Origin",
+      "x-opencorvus-request-id": "01d76c68-75d7-473b-8af7-ca928e4ddb48",
+      "Date": "Thu, 26 Nov 2026 22:11:30 GMT",
+      "Content-Length": "149493"
+    }
+  },
+  "finalReceipt": {
+    "schema_version": 1,
+    "profile": "office.document@1",
+    "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx",
+    "source_sha": "2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82",
+    "runtime": {
+      "id": "officecli",
+      "version": "1.0.158",
+      "lock_revision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "package_sha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "renderer": {
+      "id": "officecli-html-browser@1",
+      "version": "157.0.8103.38",
+      "playwright_version": "1.59.1",
+      "node_version": "25.7.0"
+    },
+    "resource_usage": {
+      "input_bytes": 7997,
+      "runtime_output_bytes": 64925,
+      "render_bytes": 435684,
+      "wall_clock_ms": 10927
+    },
+    "renders": [
+      {
+        "page": 1,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852.png",
+        "sha": "c6f47590d9d3db5e0f2fb2ffca79afc743d2aec7e0af13b9c4c1c3ea181f3852"
+      },
+      {
+        "page": 2,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5.png",
+        "sha": "528f389f460c8a8c606987030c75d832d6c1190c850580ed9ca38faa745069e5"
+      }
+    ],
+    "preview": {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/954b774ef0852a26722a53ae09ea6888358f887e5d98fa0e241354645b1592f7.pdf",
+      "sha": "954b774ef0852a26722a53ae09ea6888358f887e5d98fa0e241354645b1592f7"
+    }
+  }
+}
