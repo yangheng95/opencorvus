@@ -1,0 +1,434 @@
+[
+  {
+    "id": "prt_g0Vc7JOQv00joMVRT9w3",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7JNn70020SHiFE6M",
+    "type": "tool",
+    "callID": "call_58882dd7ea414fd8ab5695fc027640ac",
+    "tool": "work_artifact_author",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "filename": "销售核对.xlsx",
+        "locale": "zh-CN",
+        "sheets": [
+          {
+            "name": "订单明细",
+            "columns": [
+              "原行序",
+              "订单编号",
+              "区域",
+              "金额",
+              "备注",
+              "退款"
+            ],
+            "rows": [
+              [
+                1,
+                "A001",
+                "华东",
+                10.1,
+                "普通订单",
+                false
+              ],
+              [
+                2,
+                "A002",
+                "华东",
+                20.2,
+                "中文客户",
+                false
+              ],
+              [
+                3,
+                "A003",
+                "华东",
+                -2.05,
+                "退款",
+                true
+              ],
+              [
+                4,
+                "A004",
+                "华南",
+                0,
+                "免费样品",
+                false
+              ],
+              [
+                5,
+                "A005",
+                "华南",
+                7.35,
+                "普通订单",
+                false
+              ]
+            ]
+          },
+          {
+            "name": "区域汇总",
+            "columns": [
+              "区域",
+              "订单数",
+              "净金额"
+            ],
+            "rows": [
+              [
+                "华东",
+                3,
+                28.25
+              ],
+              [
+                "华南",
+                2,
+                7.35
+              ],
+              [
+                "全体合计",
+                5,
+                35.6
+              ]
+            ]
+          },
+          {
+            "name": "统计说明",
+            "columns": [
+              "项目",
+              "说明或数值"
+            ],
+            "rows": [
+              [
+                "真实来源",
+                "当前项目根目录 sales.csv"
+              ],
+              [
+                "源字段",
+                "订单编号、区域、金额、备注"
+              ],
+              [
+                "统计范围",
+                "源文件全部5笔，保持原行序"
+              ],
+              [
+                "原行序",
+                "从首笔数据起编号，不含表头"
+              ],
+              [
+                "订单计数",
+                "每笔原记录计1笔，不去重"
+              ],
+              [
+                "退款计数",
+                "负金额计入订单数及退款笔数"
+              ],
+              [
+                "零金额计数",
+                "零金额计入订单数，不计退款"
+              ],
+              [
+                "净金额口径",
+                "正数加计、负数扣减、零值不增减"
+              ],
+              [
+                "区域口径",
+                "保留原区域名称分组"
+              ],
+              [
+                "金额精度",
+                "原文本以Decimal独立累加到分"
+              ],
+              [
+                "总订单数",
+                5
+              ],
+              [
+                "总净金额",
+                35.6
+              ],
+              [
+                "退款笔数",
+                1
+              ],
+              [
+                "退款金额（带符号）",
+                -2.05
+              ],
+              [
+                "零金额笔数",
+                1
+              ],
+              [
+                "零金额合计",
+                0
+              ],
+              [
+                "正金额笔数",
+                3
+              ],
+              [
+                "正金额合计",
+                37.65
+              ],
+              [
+                "区域计数核对",
+                "3 + 2 = 5"
+              ],
+              [
+                "区域金额核对",
+                "28.25 + 7.35 = 35.60"
+              ],
+              [
+                "金额性质核对",
+                "37.65 - 2.05 + 0.00 = 35.60"
+              ],
+              [
+                "退款记录",
+                "A003，金额-2.05，退款为TRUE"
+              ],
+              [
+                "零金额记录",
+                "A004，金额0.00，退款为FALSE"
+              ],
+              [
+                "数据类型",
+                "金额和计数为数值；退款为布尔"
+              ],
+              [
+                "显示说明",
+                "35.6等于35.60；0等于0.00"
+              ],
+              [
+                "币种与期间",
+                "源文件未提供，不作推定"
+              ],
+              [
+                "工作簿内容",
+                "均为明确值，无公式或外部链接"
+              ]
+            ]
+          }
+        ]
+      },
+      "output": "{\"profile\":\"office.spreadsheet@1\",\"source\":{\"sha\":\"27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6793,\"filename\":\"销售核对.xlsx\"},\"next\":\"Inspect and validate this exact source URL. Review every returned render before delivery.\"}",
+      "title": "Authored 销售核对.xlsx",
+      "metadata": {
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795728407229,
+        "end": 1795728430412
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_02f165be68387ded016b08a41717cc87d0814e6a7b219189df"
+      }
+    },
+    "orderKey": "v1:0001795728420216:0000000000000031:0000000000000000:part:prt_g0Vc7JOQv00joMVRT9w3"
+  },
+  {
+    "id": "prt_g0Vc7JV7c00GQN2h2k0v",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7JUU600qXvyXKAXy",
+    "type": "tool",
+    "callID": "call_2a7f6894cf0642439205dc5ec0449965",
+    "tool": "work_artifact_inspect",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx"
+      },
+      "output": "{\"source\":{\"sha\":\"27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6793,\"filename\":\"销售核对.xlsx\"},\"content\":{\"success\":true,\"data\":{\"sheets\":[{\"name\":\"订单明细\",\"rows\":[{\"row\":1,\"cells\":{\"A1\":\"原行序\",\"B1\":\"订单编号\",\"C1\":\"区域\",\"D1\":\"金额\",\"E1\":\"备注\",\"F1\":\"退款\"}},{\"row\":2,\"cells\":{\"A2\":\"1\",\"B2\":\"A001\",\"C2\":\"华东\",\"D2\":\"10.1\",\"E2\":\"普通订单\",\"F2\":\"FALSE\"}},{\"row\":3,\"cells\":{\"A3\":\"2\",\"B3\":\"A002\",\"C3\":\"华东\",\"D3\":\"20.2\",\"E3\":\"中文客户\",\"F3\":\"FALSE\"}},{\"row\":4,\"cells\":{\"A4\":\"3\",\"B4\":\"A003\",\"C4\":\"华东\",\"D4\":\"-2.05\",\"E4\":\"退款\",\"F4\":\"TRUE\"}},{\"row\":5,\"cells\":{\"A5\":\"4\",\"B5\":\"A004\",\"C5\":\"华南\",\"D5\":\"0\",\"E5\":\"免费样品\",\"F5\":\"FALSE\"}},{\"row\":6,\"cells\":{\"A6\":\"5\",\"B6\":\"A005\",\"C6\":\"华南\",\"D6\":\"7.35\",\"E6\":\"普通订单\",\"F6\":\"FALSE\"}}]},{\"name\":\"区域汇总\",\"rows\":[{\"row\":1,\"cells\":{\"A1\":\"区域\",\"B1\":\"订单数\",\"C1\":\"净金额\"}},{\"row\":2,\"cells\":{\"A2\":\"华东\",\"B2\":\"3\",\"C2\":\"28.25\"}},{\"row\":3,\"cells\":{\"A3\":\"华南\",\"B3\":\"2\",\"C3\":\"7.35\"}},{\"row\":4,\"cells\":{\"A4\":\"全体合计\",\"B4\":\"5\",\"C4\":\"35.6\"}}]},{\"name\":\"统计说明\",\"rows\":[{\"row\":1,\"cells\":{\"A1\":\"项目\",\"B1\":\"说明或数值\"}},{\"row\":2,\"cells\":{\"A2\":\"真实来源\",\"B2\":\"当前项目根目录 sales.csv\"}},{\"row\":3,\"cells\":{\"A3\":\"源字段\",\"B3\":\"订单编号、区域、金额、备注\"}},{\"row\":4,\"cells\":{\"A4\":\"统计范围\",\"B4\":\"源文件全部5笔，保持原行序\"}},{\"row\":5,\"cells\":{\"A5\":\"原行序\",\"B5\":\"从首笔数据起编号，不含表头\"}},{\"row\":6,\"cells\":{\"A6\":\"订单计数\",\"B6\":\"每笔原记录计1笔，不去重\"}},{\"row\":7,\"cells\":{\"A7\":\"退款计数\",\"B7\":\"负金额计入订单数及退款笔数\"}},{\"row\":8,\"cells\":{\"A8\":\"零金额计数\",\"B8\":\"零金额计入订单数，不计退款\"}},{\"row\":9,\"cells\":{\"A9\":\"净金额口径\",\"B9\":\"正数加计、负数扣减、零值不增减\"}},{\"row\":10,\"cells\":{\"A10\":\"区域口径\",\"B10\":\"保留原区域名称分组\"}},{\"row\":11,\"cells\":{\"A11\":\"金额精度\",\"B11\":\"原文本以Decimal独立累加到分\"}},{\"row\":12,\"cells\":{\"A12\":\"总订单数\",\"B12\":\"5\"}},{\"row\":13,\"cells\":{\"A13\":\"总净金额\",\"B13\":\"35.6\"}},{\"row\":14,\"cells\":{\"A14\":\"退款笔数\",\"B14\":\"1\"}},{\"row\":15,\"cells\":{\"A15\":\"退款金额（带符号）\",\"B15\":\"-2.05\"}},{\"row\":16,\"cells\":{\"A16\":\"零金额笔数\",\"B16\":\"1\"}},{\"row\":17,\"cells\":{\"A17\":\"零金额合计\",\"B17\":\"0\"}},{\"row\":18,\"cells\":{\"A18\":\"正金额笔数\",\"B18\":\"3\"}},{\"row\":19,\"cells\":{\"A19\":\"正金额合计\",\"B19\":\"37.65\"}},{\"row\":20,\"cells\":{\"A20\":\"区域计数核对\",\"B20\":\"3 + 2 = 5\"}},{\"row\":21,\"cells\":{\"A21\":\"区域金额核对\",\"B21\":\"28.25 + 7.35 = 35.60\"}},{\"row\":22,\"cells\":{\"A22\":\"金额性质核对\",\"B22\":\"37.65 - 2.05 + 0.00 = 35.60\"}},{\"row\":23,\"cells\":{\"A23\":\"退款记录\",\"B23\":\"A003，金额-2.05，退款为TRUE\"}},{\"row\":24,\"cells\":{\"A24\":\"零金额记录\",\"B24\":\"A004，金额0.00，退款为FALSE\"}},{\"row\":25,\"cells\":{\"A25\":\"数据类型\",\"B25\":\"金额和计数为数值；退款为布尔\"}},{\"row\":26,\"cells\":{\"A26\":\"显示说明\",\"B26\":\"35.6等于35.60；0等于0.00\"}},{\"row\":27,\"cells\":{\"A27\":\"币种与期间\",\"B27\":\"源文件未提供，不作推定\"}},{\"row\":28,\"cells\":{\"A28\":\"工作簿内容\",\"B28\":\"均为明确值，无公式或外部链接\"}}]}]}},\"inspection\":{\"entryCount\":12,\"uncompressedBytes\":15469,\"sheetCount\":3},\"profile\":\"office.spreadsheet@1\",\"next\":\"Validate this exact source URL before delivery.\"}",
+      "title": "Inspected 销售核对.xlsx",
+      "metadata": {
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f",
+        "entryCount": 12,
+        "uncompressedBytes": 15469,
+        "sheetCount": 3,
+        "truncated": false
+      },
+      "time": {
+        "start": 1795728432940,
+        "end": 1795728441439
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0250267c5a464136016b08a430d0a087d0b1ea3211eff86615"
+      }
+    },
+    "orderKey": "v1:0001795728434430:0000000000000031:0000000000000000:part:prt_g0Vc7JV7c00GQN2h2k0v"
+  },
+  {
+    "id": "prt_g0Vc7JY0B00Y64r9mMsl",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7JXLy00RJYLhr06a",
+    "type": "tool",
+    "callID": "call_78c31a6a130847f9a8288be6d5ab9ef1",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx"
+      },
+      "output": "{\"source\":{\"sha\":\"27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6793,\"filename\":\"销售核对.xlsx\"},\"inspection\":{\"unitCount\":3,\"entryCount\":12,\"uncompressedBytes\":15469},\"validation\":{\"success\":true,\"data\":{\"count\":0,\"errors\":[]}},\"issues\":{\"success\":true,\"data\":{\"count\":0,\"issues\":[]}},\"renders\":[{\"page\":1,\"sha\":\"349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png\",\"mime\":\"image/png\",\"size\":16911,\"filename\":\"xlsx-page-1.png\"},{\"page\":2,\"sha\":\"868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png\",\"mime\":\"image/png\",\"size\":8826,\"filename\":\"xlsx-page-2.png\"},{\"page\":3,\"sha\":\"68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png\",\"mime\":\"image/png\",\"size\":78850,\"filename\":\"xlsx-page-3.png\"}],\"preview\":{\"sha\":\"bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d.pdf\",\"mime\":\"application/pdf\",\"size\":389261,\"filename\":\"销售核对-preview.pdf\"},\"resource_usage\":{\"input_bytes\":6793,\"runtime_output_bytes\":25555,\"render_bytes\":493848,\"wall_clock_ms\":11237},\"validation_receipt\":{\"sha\":\"15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1509,\"filename\":\"work-artifact-validation-receipt.json\"},\"validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.spreadsheet@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx\",\"source_sha\":\"27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"renderer\":{\"id\":\"officecli-html-browser@1\",\"version\":\"157.0.8103.38\",\"playwright_version\":\"1.59.1\",\"node_version\":\"25.7.0\"},\"resource_usage\":{\"input_bytes\":6793,\"runtime_output_bytes\":25555,\"render_bytes\":493848,\"wall_clock_ms\":11237},\"renders\":[{\"page\":1,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png\",\"sha\":\"349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a\"},{\"page\":2,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png\",\"sha\":\"868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4\"},{\"page\":3,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png\",\"sha\":\"68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857\"}],\"preview\":{\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d.pdf\",\"sha\":\"bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d\"}},\"next\":\"Inspect every render, then deliver this exact source and receipt.\"}",
+      "title": "Validated 销售核对.xlsx",
+      "metadata": {
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f",
+        "pageCount": 3,
+        "receiptSha": "15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795728444011,
+        "end": 1795728456977
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7JbNB008tG2tMGDh",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JXLy00RJYLhr06a",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212.json"
+        },
+        {
+          "id": "prt_g0Vc7JbNB013Zq0A0SLr",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JXLy00RJYLhr06a",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png"
+        },
+        {
+          "id": "prt_g0Vc7JbNB02UJWuX66VS",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JXLy00RJYLhr06a",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png"
+        },
+        {
+          "id": "prt_g0Vc7JbNB03BI25Rd0eN",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JXLy00RJYLhr06a",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0d8c6e24d8352acb016b08a43be16887d08910170f0769d4f0"
+      }
+    },
+    "orderKey": "v1:0001795728445485:0000000000000031:0000000000000000:part:prt_g0Vc7JY0B00Y64r9mMsl"
+  },
+  {
+    "id": "prt_g0Vc7JwiM004PiFon2nQ",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7JvAk00TipN3jH2E",
+    "type": "tool",
+    "callID": "call_kn4k2FZaB8SvDWere1NTEhTP",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.spreadsheet@1",
+        "title": "销售核对｜可编辑 Excel 原文件及逐表预览",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212.json",
+        "validation_receipt_sha": "15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212"
+      },
+      "output": "{\"artifactID\":\"art_g0Vc7K0fT00TiJdVRV0q\",\"source\":{\"sha\":\"27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx\",\"mime\":\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\"size\":6793,\"filename\":\"销售核对.xlsx\"},\"preview\":{\"sha\":\"b4f2a6989b9915861878c853a54beeb3a63dac35cd3857c2d797f266845432fa\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/b4f2a6989b9915861878c853a54beeb3a63dac35cd3857c2d797f266845432fa.pdf\",\"mime\":\"application/pdf\",\"size\":389261,\"filename\":\"销售核对-preview.pdf\"},\"renders\":[{\"page\":1,\"sha\":\"349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png\",\"mime\":\"image/png\",\"size\":16911,\"filename\":\"xlsx-page-1.png\"},{\"page\":2,\"sha\":\"868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png\",\"mime\":\"image/png\",\"size\":8826,\"filename\":\"xlsx-page-2.png\"},{\"page\":3,\"sha\":\"68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png\",\"mime\":\"image/png\",\"size\":78850,\"filename\":\"xlsx-page-3.png\"}],\"final_validation_receipt\":{\"sha\":\"25cf21f501e27669702a4976b6d0337278a18b2c8f696fbf43dad669717e45cd\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/25cf21f501e27669702a4976b6d0337278a18b2c8f696fbf43dad669717e45cd.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1509,\"filename\":\"work-artifact-validation-receipt.json\"},\"final_validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.spreadsheet@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx\",\"source_sha\":\"27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"renderer\":{\"id\":\"officecli-html-browser@1\",\"version\":\"157.0.8103.38\",\"playwright_version\":\"1.59.1\",\"node_version\":\"25.7.0\"},\"resource_usage\":{\"input_bytes\":6793,\"runtime_output_bytes\":25555,\"render_bytes\":493848,\"wall_clock_ms\":10736},\"renders\":[{\"page\":1,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png\",\"sha\":\"349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a\"},{\"page\":2,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png\",\"sha\":\"868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4\"},{\"page\":3,\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png\",\"sha\":\"68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857\"}],\"preview\":{\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/b4f2a6989b9915861878c853a54beeb3a63dac35cd3857c2d797f266845432fa.pdf\",\"sha\":\"b4f2a6989b9915861878c853a54beeb3a63dac35cd3857c2d797f266845432fa\"}},\"fidelity\":\"OfficeCLI package validation and local browser-derived review; Microsoft Office pixel fidelity is not claimed.\"}",
+      "title": "销售核对｜可编辑 Excel 原文件及逐表预览",
+      "metadata": {
+        "artifactID": "art_g0Vc7K0fT00TiJdVRV0q",
+        "renderer": "file-preview@1",
+        "profile": "office.spreadsheet@1",
+        "sourceSha": "27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f",
+        "pageCount": 3,
+        "validationReceiptSha": "25cf21f501e27669702a4976b6d0337278a18b2c8f696fbf43dad669717e45cd",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795728539006,
+        "end": 1795728554209
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7K0fW00FHO4Lr2nF",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JvAk00TipN3jH2E",
+          "type": "file",
+          "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "filename": "销售核对.xlsx",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx"
+        },
+        {
+          "id": "prt_g0Vc7K0fW01rEELqjV0S",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JvAk00TipN3jH2E",
+          "type": "file",
+          "mime": "application/pdf",
+          "filename": "销售核对-preview.pdf",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/b4f2a6989b9915861878c853a54beeb3a63dac35cd3857c2d797f266845432fa.pdf"
+        },
+        {
+          "id": "prt_g0Vc7K0fW02n73w2DzPU",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JvAk00TipN3jH2E",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/25cf21f501e27669702a4976b6d0337278a18b2c8f696fbf43dad669717e45cd.json"
+        },
+        {
+          "id": "prt_g0Vc7K0fW03itHTPFZxg",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JvAk00TipN3jH2E",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png"
+        },
+        {
+          "id": "prt_g0Vc7K0fW0486jlxqyU1",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JvAk00TipN3jH2E",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png"
+        },
+        {
+          "id": "prt_g0Vc7K0fW05WvvD8hu8U",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7JvAk00TipN3jH2E",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "xlsx-page-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0bfc0fdd55e8f590016b08a49ae80487d0894847b1442c4576"
+      }
+    },
+    "orderKey": "v1:0001795728543164:0000000000000031:0000000000000000:part:prt_g0Vc7JwiM004PiFon2nQ"
+  }
+]

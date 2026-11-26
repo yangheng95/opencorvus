@@ -17,7 +17,7 @@ export function FilePreviewArtifact(props: {
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="File" downloads={props.downloads}>
       <Switch>
         <Match when={props.payload.kind === "pdf"}>
-          <PdfPreview url={props.payload.source.url} label={props.payload.title} />
+          <PdfPreview url={props.payload.source.url} label={props.payload.title} filename={props.payload.source.filename} />
         </Match>
         <Match when={props.payload.kind === "text"}>
           <ResourceTextPreview

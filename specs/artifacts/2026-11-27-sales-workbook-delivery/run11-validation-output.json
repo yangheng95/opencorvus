@@ -1,0 +1,120 @@
+{
+  "source": {
+    "sha": "27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f",
+    "url": "/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx",
+    "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "size": 6793,
+    "filename": "销售核对.xlsx"
+  },
+  "inspection": {
+    "unitCount": 3,
+    "entryCount": 12,
+    "uncompressedBytes": 15469
+  },
+  "validation": {
+    "success": true,
+    "data": {
+      "count": 0,
+      "errors": []
+    }
+  },
+  "issues": {
+    "success": true,
+    "data": {
+      "count": 0,
+      "issues": []
+    }
+  },
+  "renders": [
+    {
+      "page": 1,
+      "sha": "349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png",
+      "mime": "image/png",
+      "size": 16911,
+      "filename": "xlsx-page-1.png"
+    },
+    {
+      "page": 2,
+      "sha": "868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png",
+      "mime": "image/png",
+      "size": 8826,
+      "filename": "xlsx-page-2.png"
+    },
+    {
+      "page": 3,
+      "sha": "68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png",
+      "mime": "image/png",
+      "size": 78850,
+      "filename": "xlsx-page-3.png"
+    }
+  ],
+  "preview": {
+    "sha": "bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d",
+    "url": "/attachment/prj_haW9BdBH559F4Yw143ch/bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d.pdf",
+    "mime": "application/pdf",
+    "size": 389261,
+    "filename": "销售核对-preview.pdf"
+  },
+  "resource_usage": {
+    "input_bytes": 6793,
+    "runtime_output_bytes": 25555,
+    "render_bytes": 493848,
+    "wall_clock_ms": 11237
+  },
+  "validation_receipt": {
+    "sha": "15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212",
+    "url": "/attachment/prj_haW9BdBH559F4Yw143ch/15e8084ff24d9fb8b14ef12ec3bea900ae8e1ffe8d9660df7478b24ac0949212.json",
+    "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+    "size": 1509,
+    "filename": "work-artifact-validation-receipt.json"
+  },
+  "validation_receipt_payload": {
+    "schema_version": 1,
+    "profile": "office.spreadsheet@1",
+    "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx",
+    "source_sha": "27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f",
+    "runtime": {
+      "id": "officecli",
+      "version": "1.0.158",
+      "lock_revision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "package_sha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "renderer": {
+      "id": "officecli-html-browser@1",
+      "version": "157.0.8103.38",
+      "playwright_version": "1.59.1",
+      "node_version": "25.7.0"
+    },
+    "resource_usage": {
+      "input_bytes": 6793,
+      "runtime_output_bytes": 25555,
+      "render_bytes": 493848,
+      "wall_clock_ms": 11237
+    },
+    "renders": [
+      {
+        "page": 1,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png",
+        "sha": "349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a"
+      },
+      {
+        "page": 2,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png",
+        "sha": "868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4"
+      },
+      {
+        "page": 3,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png",
+        "sha": "68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857"
+      }
+    ],
+    "preview": {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d.pdf",
+      "sha": "bde3b004480e588673d3e5c99370066ed8180aeee4a94b4f886c7ac2d597d42d"
+    }
+  },
+  "next": "Inspect every render, then deliver this exact source and receipt."
+}

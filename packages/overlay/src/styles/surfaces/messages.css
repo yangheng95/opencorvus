@@ -1822,6 +1822,13 @@ button.msg-source-chip .msg-source-chip__filename {
   border-bottom: var(--oc-border-width) solid var(--border);
 }
 
+.msg-artifact-file__preview-filename {
+  flex-basis: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .msg-artifact-file__page-controls,
 .msg-artifact-file__zoom-controls {
   display: flex;

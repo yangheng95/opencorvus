@@ -21,6 +21,7 @@ type PdfReadingPosition =
 export function PdfPreview(props: {
   url: string
   label: string
+  filename?: string
   class?: string
   onNavigationReady?: (element: HTMLDivElement) => void
 }) {
@@ -487,6 +488,13 @@ export function PdfPreview(props: {
                 {t("artifact.file.zoom_in")}
               </Button>
             </div>
+            <Show when={props.filename}>
+              {(filename) => (
+                <p class="msg-artifact-file__preview-filename">
+                  {t("artifact.file.preview_filename", { filename: filename() })}
+                </p>
+              )}
+            </Show>
           </div>
           <Show when={pageDraft()?.invalid}>
             <Feedback id={pageErrorID} tone="error">

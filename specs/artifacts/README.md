@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [销售工作簿真实交付证据](2026-11-27-sales-workbook-delivery/README.md)
 - [通用工作真实销售分析证据](2026-11-27-work-sales-analysis/README.md)
 - [历史代码比较证据](2026-11-27-historical-code-review/README.md)
 - [后续修订与历史产物证据](2026-11-27-followup-artifact-version-identity/README.md)

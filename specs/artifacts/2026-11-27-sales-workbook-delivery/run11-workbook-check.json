@@ -1,0 +1,184 @@
+{
+  "status": "passed",
+  "source": "Actual HTTP attachment/artifact readers, completed Office Tool Parts, original canonical receipt, openpyxl literal cell types, source CSV, actual native browser downloads and exact original database facts",
+  "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+  "finalMessageID": "msg_g0Vc7K0hY00gQzd8c0Jm",
+  "finalCompletedAt": 1795728572905,
+  "artifactID": "art_g0Vc7K0fT00TiJdVRV0q",
+  "sourceBytes": 6793,
+  "previewBytes": 389261,
+  "sheets": [
+    "订单明细",
+    "区域汇总",
+    "统计说明"
+  ],
+  "orders": 5,
+  "netAmount": "35.60",
+  "refunds": 1,
+  "zeros": 1,
+  "originalRowsPreserved": {
+    "message": 6,
+    "part": 17,
+    "tool_part_request": 4,
+    "tool_part_outcome": 4,
+    "interactive_artifact": 2
+  },
+  "originalFilesPreserved": [
+    {
+      "file": "sales.csv",
+      "bytes": 181,
+      "equalsOriginalBeforeRequest": true
+    },
+    {
+      "file": "sales_summary.py",
+      "bytes": 7650,
+      "equalsOriginalBeforeRequest": true
+    },
+    {
+      "file": "summary.json",
+      "bytes": 238,
+      "equalsOriginalBeforeRequest": true
+    },
+    {
+      "file": "test_sales_summary.py",
+      "bytes": 10107,
+      "equalsOriginalBeforeRequest": true
+    },
+    {
+      "file": "区域汇总.csv",
+      "bytes": 59,
+      "equalsOriginalBeforeRequest": true
+    },
+    {
+      "file": "销售报告.md",
+      "bytes": 1408,
+      "equalsOriginalBeforeRequest": true
+    }
+  ],
+  "officeToolParts": [
+    {
+      "id": "prt_g0Vc7JOQv00joMVRT9w3",
+      "tool": "work_artifact_author",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc7JV7c00GQN2h2k0v",
+      "tool": "work_artifact_inspect",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc7JY0B00Y64r9mMsl",
+      "tool": "work_artifact_validate",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc7JwiM004PiFon2nQ",
+      "tool": "work_artifact_deliver",
+      "status": "completed"
+    }
+  ],
+  "renderReads": [
+    {
+      "page": 1,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png",
+      "bytes": 16911,
+      "boundToCompletedValidationToolMultimodalOutput": true,
+      "equalsPersonallyViewedOriginalRender": true
+    },
+    {
+      "page": 2,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png",
+      "bytes": 8826,
+      "boundToCompletedValidationToolMultimodalOutput": true,
+      "equalsPersonallyViewedOriginalRender": true
+    },
+    {
+      "page": 3,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png",
+      "bytes": 78850,
+      "boundToCompletedValidationToolMultimodalOutput": true,
+      "equalsPersonallyViewedOriginalRender": true
+    }
+  ],
+  "downloads": [
+    {
+      "filename": "销售核对.xlsx",
+      "bytes": 6793,
+      "equalsDeliveredCanonicalBytes": true
+    },
+    {
+      "filename": "销售核对-preview.pdf",
+      "bytes": 389261,
+      "equalsDeliveredCanonicalBytes": true
+    }
+  ],
+  "headers": {
+    "source": {
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "X-Content-Type-Options": "nosniff",
+      "Content-Disposition": "attachment; filename*=UTF-8''%E9%94%80%E5%94%AE%E6%A0%B8%E5%AF%B9.xlsx",
+      "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "Vary": "Origin",
+      "x-opencorvus-request-id": "cad13338-3d36-40ed-9985-8fc3cb9daa12",
+      "Date": "Thu, 26 Nov 2026 21:37:47 GMT",
+      "Content-Length": "6793"
+    },
+    "preview": {
+      "Content-Type": "application/pdf",
+      "Cache-Control": "public, max-age=31536000, immutable",
+      "X-Content-Type-Options": "nosniff",
+      "Content-Disposition": "inline; filename*=UTF-8''%E9%94%80%E5%94%AE%E6%A0%B8%E5%AF%B9-preview.pdf",
+      "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+      "Vary": "Origin",
+      "x-opencorvus-request-id": "f4818b5a-9547-4283-8309-5b0d6295f2c6",
+      "Date": "Thu, 26 Nov 2026 21:37:47 GMT",
+      "Content-Length": "389261"
+    }
+  },
+  "finalReceipt": {
+    "schema_version": 1,
+    "profile": "office.spreadsheet@1",
+    "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f.xlsx",
+    "source_sha": "27ac7d4a2dce00c66da1aaa39a9f22f4aedbe850d59a16c947d1ca0efd1d920f",
+    "runtime": {
+      "id": "officecli",
+      "version": "1.0.158",
+      "lock_revision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "package_sha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "renderer": {
+      "id": "officecli-html-browser@1",
+      "version": "157.0.8103.38",
+      "playwright_version": "1.59.1",
+      "node_version": "25.7.0"
+    },
+    "resource_usage": {
+      "input_bytes": 6793,
+      "runtime_output_bytes": 25555,
+      "render_bytes": 493848,
+      "wall_clock_ms": 10736
+    },
+    "renders": [
+      {
+        "page": 1,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a.png",
+        "sha": "349b4d00147dc03817edc43f1e4b8fd9398c246f7aeed3766b9cb03f19e28e0a"
+      },
+      {
+        "page": 2,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4.png",
+        "sha": "868e7f8d974ddd90c643d2340c71bb79be190a43983e430c9051f0a9af153ed4"
+      },
+      {
+        "page": 3,
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857.png",
+        "sha": "68d072e3f405d251915bd410f5cb86990bddbc268592ecd7623ee5856087f857"
+      }
+    ],
+    "preview": {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/b4f2a6989b9915861878c853a54beeb3a63dac35cd3857c2d797f266845432fa.pdf",
+      "sha": "b4f2a6989b9915861878c853a54beeb3a63dac35cd3857c2d797f266845432fa"
+    }
+  }
+}

@@ -571,6 +571,11 @@ types come from the qualified profile registry and use attachment disposition
 for editable Office sources, including direct links in messages; PDF and other safe preview types
 remain inline, while types outside the supported inline set and Office registry,
 including active SVG, remain download-only octet-stream with nosniff.
+For a PDF File Preview artifact, the shared PDF toolbar names the actual
+preview file from the published source's optional filename in the current
+product language. The authored title and download list keep their own identities;
+an Office source and its derived PDF remain distinct, with the original bytes
+and existing preview navigation unchanged.
 Canonical image display requests `image-display`; the server reads the verified
 publication media and selects the existing `image-preview` rendition for SVG:
 lossless WebP, at most 4096 by 4096 pixels, without enlargement. It shares

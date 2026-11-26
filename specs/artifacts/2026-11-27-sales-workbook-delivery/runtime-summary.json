@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "label": "run11",
+      "requests": 22,
+      "preflightRequests": 2,
+      "workSessionRequests": 20,
+      "allStreamingExactSolHTTP200ReaderSettledEOF": true,
+      "originalProcessHandleJoinedExitCode": 0,
+      "credentialAndCatalogCopiesRetired": true,
+      "ownedPortClosed": 56355
+    },
+    {
+      "label": "run12",
+      "requests": 2,
+      "preflightRequests": 2,
+      "workSessionRequests": 0,
+      "allStreamingExactSolHTTP200ReaderSettledEOF": true,
+      "originalProcessHandleJoinedExitCode": 0,
+      "credentialAndCatalogCopiesRetired": true,
+      "ownedPortClosed": 55523
+    }
+  ],
+  "totalRequests": 24,
+  "workRequests": 20,
+  "preflightRequests": 4
+}
