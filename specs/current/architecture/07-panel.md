@@ -1028,6 +1028,10 @@ the existing Project-identity context. The POST byte-read request does not requi
 an available execution model. Task/Project ownership, original snapshot identity,
 resource integrity and byte ranges remain mandatory; execution configuration and
 prompt routes retain full runtime validation.
+The shared, initially collapsed file information derives a snapshot identifier
+from the already-read original locator for both whole snapshots and individual
+resources, including files opened within a snapshot. Callers do not supply a
+second presentation identity; labels follow the current locale.
 
 Normal multi-Edit composition requires the same real accepted input batch,
 Session/actor, exact endpoint lineage and completed normal step controls with

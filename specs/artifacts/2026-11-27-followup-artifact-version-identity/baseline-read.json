@@ -1,0 +1,148 @@
+{
+  "status": "passed",
+  "taskID": "tsk_g00Vc6rEH000wydhL06W",
+  "decisionID": "art_g0Vc6t2nd000qWgoL5Eu",
+  "primaryHead": "db01a7d40204eea743140fe7e2c7abcd6e04d4a2",
+  "files": [
+    {
+      "path": "sales_summary.py",
+      "bytes": 5970,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-5969/5970",
+        "Content-Type": "text/x-python",
+        "ETag": "\"sha256:31999a4c763bf48e94d7b4fbacf4889ef0b8cd24dfafa927f47ccf17c991b11e\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "4453f32c-7017-4744-9df4-586ad9a60817",
+        "Date": "Thu, 26 Nov 2026 20:02:47 GMT",
+        "Content-Length": "5970"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "sales_summary.py",
+          "media_type": "text/x-python",
+          "bytes": 5970,
+          "sha256": "31999a4c763bf48e94d7b4fbacf4889ef0b8cd24dfafa927f47ccf17c991b11e"
+        }
+      },
+      "priorPublishedBytesEqual": true,
+      "preRevisionPrimaryBytesEqual": true
+    },
+    {
+      "path": "test_sales_summary.py",
+      "bytes": 6363,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-6362/6363",
+        "Content-Type": "text/x-python",
+        "ETag": "\"sha256:65d52b04b8d5d73cd924ce8bf7ab3925ba49b8a4b7e6e08c3278d2b7f6355f1e\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "dbe59e19-3d04-4be4-8533-97ba81ebd298",
+        "Date": "Thu, 26 Nov 2026 20:02:47 GMT",
+        "Content-Length": "6363"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "test_sales_summary.py",
+          "media_type": "text/x-python",
+          "bytes": 6363,
+          "sha256": "65d52b04b8d5d73cd924ce8bf7ab3925ba49b8a4b7e6e08c3278d2b7f6355f1e"
+        }
+      },
+      "priorPublishedBytesEqual": true,
+      "preRevisionPrimaryBytesEqual": true
+    },
+    {
+      "path": "summary.json",
+      "bytes": 238,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-237/238",
+        "Content-Type": "application/json",
+        "ETag": "\"sha256:603b0f11584d7013e06306eb46297ab093f204b6de5cbe08ff879fc78f35ef8d\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "9b4c3f1c-e919-4a80-8f4e-60405cea64f2",
+        "Date": "Thu, 26 Nov 2026 20:02:47 GMT",
+        "Content-Length": "238"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "summary.json",
+          "media_type": "application/json",
+          "bytes": 238,
+          "sha256": "603b0f11584d7013e06306eb46297ab093f204b6de5cbe08ff879fc78f35ef8d"
+        }
+      },
+      "priorPublishedBytesEqual": true,
+      "preRevisionPrimaryBytesEqual": true
+    },
+    {
+      "path": "销售报告.md",
+      "bytes": 1113,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-1112/1113",
+        "Content-Type": "text/markdown",
+        "ETag": "\"sha256:8cea0f68f5d4d7bab30c1450372e0234905506c1c1c151edf4f31155e12553de\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "2997f40e-92a9-4af9-9b6b-b7a03f4437e2",
+        "Date": "Thu, 26 Nov 2026 20:02:47 GMT",
+        "Content-Length": "1113"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "销售报告.md",
+          "media_type": "text/markdown",
+          "bytes": 1113,
+          "sha256": "8cea0f68f5d4d7bab30c1450372e0234905506c1c1c151edf4f31155e12553de"
+        }
+      },
+      "priorPublishedBytesEqual": true,
+      "preRevisionPrimaryBytesEqual": true
+    }
+  ]
+}

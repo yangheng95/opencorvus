@@ -174,13 +174,19 @@ function artifactByteCount(bytes: number): string {
   return t("chat.artifacts.byte_count", { count: new Intl.NumberFormat(localeTag()).format(bytes) })
 }
 
-function ArtifactFileInformation(props: { content: ConversationArtifactContent; snapshotID?: string }) {
+function ArtifactFileInformation(props: { content: ConversationArtifactContent }) {
+  const snapshotID = () => {
+    const locator = props.content.locator as CanonicalArtifactReadLocator
+    if (locator.source === "task_artifact_resource") return locator.ref.snapshot.snapshot_id
+    if (locator.source === "task_artifact_snapshot") return locator.snapshot.snapshot_id
+    return undefined
+  }
   return (
     <Disclosure.Root class="conversation-artifact-inspector__file-information" size="sm">
       <Disclosure.Trigger>{t("chat.artifacts.file_information")}</Disclosure.Trigger>
       <Disclosure.Content>
         <dl class="conversation-artifact-inspector__file-facts">
-          <Show when={props.snapshotID}>
+          <Show when={snapshotID()}>
             {(snapshotID) => (
               <div>
                 <dt>{t("chat.artifacts.snapshot_id")}</dt>
@@ -406,7 +412,7 @@ function SnapshotArtifactView(props: {
   return (
     <ArtifactFrame title={props.displayTitle ?? t("chat.artifacts.saved_files")} kind={t("chat.artifacts.snapshot_kind")} expandable={false}>
       <div class="conversation-artifact-inspector__snapshot">
-        <ArtifactFileInformation content={props.content} snapshotID={snapshot().snapshot_id} />
+        <ArtifactFileInformation content={props.content} />
         <div class="conversation-artifact-inspector__toolbar">
           <SearchField
             clearable

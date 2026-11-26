@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "requests": 70,
+  "model": "openai/gpt-6.1-sol",
+  "streaming": true,
+  "allReadersSettled": true,
+  "runs": {
+    "run3": {
+      "requests": 68,
+      "agents": {
+        "memory": 2,
+        "chat": 1,
+        "mission": 16,
+        "orchestrator": 24,
+        "base-tester": 25
+      },
+      "readerTerminals": {
+        "eof": 68
+      }
+    },
+    "run4": {
+      "requests": 2,
+      "agents": {
+        "memory": 1,
+        "chat": 1
+      },
+      "readerTerminals": {
+        "eof": 2
+      }
+    }
+  },
+  "scope": "run3 performs actual native-UI followup input and new Task code/test/publication/Mission completion; run4 uses two exact-model credential/catalog preflight calls and views/downloads/byte-reads those same completed facts with the new UI, not a second execution of the feature request"
+}

@@ -1,0 +1,80 @@
+{
+  "status": "passed",
+  "assets": [
+    "assets/main-BCK4tWr9.js"
+  ],
+  "reads": [
+    {
+      "taskID": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "path": "sales_summary.py",
+      "bytes": 7650,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "dc5c047a-98d9-5702-a51c-99ee41e49c60"
+    },
+    {
+      "taskID": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "path": "test_sales_summary.py",
+      "bytes": 10107,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "dc5c047a-98d9-5702-a51c-99ee41e49c60"
+    },
+    {
+      "taskID": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "path": "summary.json",
+      "bytes": 238,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "dc5c047a-98d9-5702-a51c-99ee41e49c60"
+    },
+    {
+      "taskID": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "path": "销售报告.md",
+      "bytes": 1408,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "dc5c047a-98d9-5702-a51c-99ee41e49c60"
+    },
+    {
+      "taskID": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "path": "区域汇总.csv",
+      "bytes": 59,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "dc5c047a-98d9-5702-a51c-99ee41e49c60"
+    },
+    {
+      "taskID": "tsk_g00Vc6rEH000wydhL06W",
+      "path": "sales_summary.py",
+      "bytes": 5970,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9"
+    },
+    {
+      "taskID": "tsk_g00Vc6rEH000wydhL06W",
+      "path": "test_sales_summary.py",
+      "bytes": 6363,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9"
+    },
+    {
+      "taskID": "tsk_g00Vc6rEH000wydhL06W",
+      "path": "summary.json",
+      "bytes": 238,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9"
+    },
+    {
+      "taskID": "tsk_g00Vc6rEH000wydhL06W",
+      "path": "销售报告.md",
+      "bytes": 1113,
+      "status": 200,
+      "expectedOriginalBytesEqual": true,
+      "snapshotID": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9"
+    }
+  ]
+}
