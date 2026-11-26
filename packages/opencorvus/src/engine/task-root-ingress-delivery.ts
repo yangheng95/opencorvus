@@ -62,6 +62,7 @@ import {
 } from "@/protocol/task-root-message-schema"
 import {
   EngineControlActivationLeaseTable,
+  EngineControlActivationLeaseGrantTable,
   EngineInteractionRequestTable,
   EngineArtifactTable,
   EngineTaskRootIngressTable,
@@ -89,11 +90,14 @@ import type {
   InteractionFact,
   TaskLifecycleFact,
   TaskRootIngressProjection,
+  TaskRootIngressFacts,
 } from "./task-root-ingress-reducer"
 import {
   CANCELLATION_RECONCILE_WAKE_MS,
   classifyTaskRootIngressWake,
   reduceTaskRootIngressFacts,
+  latestTaskRootIngressLease,
+  taskRootIngressActivationConsumed,
   taskRootIngressSemanticAttemptIDs,
   taskRootIngressSemanticTurnIDs,
 } from "./task-root-ingress-reducer"
@@ -104,8 +108,8 @@ import {
   type TaskControlScanResult,
 } from "./task-control-driver"
 import { TaskRootIngressIntegrityError } from "./task-root-ingress-integrity"
-import { joinProcessLiveness, observeProcessLiveness } from "./process-liveness"
-import { currentControlLease } from "./control-lease"
+import { joinProcessLiveness, observeProcessLiveness, ProcessLivenessOwnerUnavailableError } from "./process-liveness"
+import { currentControlLease, currentControlLeaseInTransaction, releaseControlLeaseInTransaction, releaseControlLeaseOnErrorPath } from "./control-lease"
 import { TaskRootIngressError, taskRootDirectory } from "./task-directory"
 import { findDispatchLineageByDispatchID } from "./dispatch-lineage"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
@@ -154,6 +158,9 @@ const completionHooks = new Set<Promise<void>>()
 const activeProjectDirectories = new Set<string>()
 let operatorGateWriterForTest: ((input: Parameters<typeof recordTaskInfrastructureError>[0]) => void) | undefined
 let afterSourceReconciliationForTest: ((input: { taskID: string; pass: number }) => void | Promise<void>) | undefined
+let beforeTaskRootOwnerSettlementForTest:
+  | ((input: { ingressID: string; activationID: string }) => void | Promise<void>)
+  | undefined
 let beforeDispatchSettlementDeliveryForTest:
   | ((input: { taskID: string; dispatchID: string; settlementArtifactID: string }) => void | Promise<void>)
   | undefined
@@ -997,54 +1004,68 @@ function evidenceFor(ingressID: string): TaskRootIngressEvidence {
   })
 }
 
-/** Terminalize exact assistants abandoned behind expired Task-root leases
- * before reduction chooses exhaustion or a successor activation. This is
- * physical crash recovery only; it never starts a Provider step. */
-async function terminalizeExpiredTaskRootAssistants(ingressID: string, now: number): Promise<number> {
-  const candidates = Database.use((db) => {
-    const ingress = db
-      .select()
-      .from(EngineTaskRootIngressTable)
-      .where(eq(EngineTaskRootIngressTable.id, ingressID))
-      .get()
-    if (!ingress) throw new Error(`Task-root ingress not found: ${ingressID}`)
-    const expiredLeases = db
-      .select({ id: EngineControlActivationLeaseTable.id, expiresAt: EngineControlActivationLeaseTable.expires_at })
-      .from(EngineControlActivationLeaseTable)
-      .where(
-        and(
-          eq(EngineControlActivationLeaseTable.target, "task_root_ingress"),
-          eq(EngineControlActivationLeaseTable.target_id, ingressID),
-          sql`${EngineControlActivationLeaseTable.expires_at} <= ${now}`,
-        ),
-      )
-      .all()
-    const expiredByID = new Map(expiredLeases.map((lease) => [lease.id, lease.expiresAt]))
-    if (expiredLeases.length === 0) return []
-    return db
-      .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data })
-      .from(MessageTable)
-      .where(
-        sql`json_extract(${MessageTable.data}, '$.activationID') IN (${sql.join(
-          expiredLeases.map((lease) => sql`${lease.id}`),
-          sql`, `,
-        )})`,
-      )
-      .all()
-      .flatMap((row) => {
-        const assistant = Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.sessionID })
-        if (assistant.time.completed !== undefined || !assistant.activationID) return []
-        const completedAt = expiredByID.get(assistant.activationID)
-        if (completedAt === undefined) {
-          throw new TaskRootIngressIntegrityError(
-            ingressID,
-            `Expired Task-root assistant ${assistant.id} has no matching activation lease`,
-          )
-        }
-        return [{ sessionID: row.sessionID, messageID: row.id, completedAt }]
-      })
+/** Observe the exact physical executor before settling its original activation
+ * or admitting a successor. Expiry alone cannot end a live peer's effects. */
+async function recoverTaskRootActivationOwner(
+  facts: TaskRootIngressFacts,
+  now: number,
+  observe: RuntimeProcessOccurrenceObserver = cachedRuntimeProcessOccurrenceObserver(),
+): Promise<{ changed?: boolean; wakeAt?: number }> {
+  const latest = latestTaskRootIngressLease(facts)
+  if (!latest || taskRootIngressActivationConsumed(facts, latest.id)) return {}
+  const local = latest.ownerOccurrenceID === ownerOccurrenceID()
+  if (local && latest.expiresAt > now) return {}
+  const ingressID = facts.ingress.id
+  const snapshot = Database.use((db) => {
+    const lease = currentControlLeaseInTransaction(db, "task_root_ingress", ingressID)
+    if (!lease || lease.id !== latest.id || lease.expires_at !== latest.expiresAt ||
+      lease.owner_occurrence_id !== latest.ownerOccurrenceID) return
+    const grant = db.select().from(EngineControlActivationLeaseGrantTable)
+      .where(eq(EngineControlActivationLeaseGrantTable.lease_id, lease.id))
+      .orderBy(desc(EngineControlActivationLeaseGrantTable.ordinal)).get()
+    if (!grant || lease.expires_at > grant.expires_at) {
+      throw new ProcessLivenessOwnerUnavailableError(`Task-root activation ${lease.id} has inconsistent lease grants`)
+    }
+    const task = db.select({ rootSessionID: EngineTaskTable.session_id }).from(EngineTaskTable)
+      .where(eq(EngineTaskTable.id, facts.ingress.taskID)).get()
+    if (!task?.rootSessionID) throw new TaskRootIngressIntegrityError(ingressID, "Task has no root Session")
+    return { lease, grant, rootSessionID: task.rootSessionID }
   })
-  if (candidates.length === 0) return 0
+  if (!snapshot) return { changed: true }
+  if (local) {
+    const { SessionPromptState } = await import("@/session/prompt/state")
+    if (SessionPromptState.hasTaskRootIngressOwner(snapshot.rootSessionID, ingressID)) {
+      return { wakeAt: now + TASK_CONTROL_HEARTBEAT_MS }
+    }
+  } else if (observeProcessLiveness(latest.ownerOccurrenceID, observe) !== "dead_or_reused") {
+    return { wakeAt: latest.expiresAt > now
+      ? Math.min(latest.expiresAt, now + TASK_CONTROL_HEARTBEAT_MS)
+      : now + TASK_CONTROL_HEARTBEAT_MS }
+  }
+  const sameSnapshot = (db: Database.TxOrDb) => {
+    const lease = currentControlLeaseInTransaction(db, "task_root_ingress", ingressID)
+    const grant = db.select().from(EngineControlActivationLeaseGrantTable)
+      .where(eq(EngineControlActivationLeaseGrantTable.lease_id, snapshot.lease.id))
+      .orderBy(desc(EngineControlActivationLeaseGrantTable.ordinal)).get()
+    return lease?.id === snapshot.lease.id && lease.owner_occurrence_id === snapshot.lease.owner_occurrence_id &&
+      lease.expires_at === snapshot.lease.expires_at && grant?.ordinal === snapshot.grant.ordinal &&
+      grant.expires_at === snapshot.grant.expires_at
+  }
+  if (beforeTaskRootOwnerSettlementForTest) {
+    await beforeTaskRootOwnerSettlementForTest({ ingressID, activationID: latest.id })
+  }
+  if (!Database.immediateTransaction(sameSnapshot)) return { changed: true }
+  const candidates = Database.use((db) => db
+    .select({ id: MessageTable.id, sessionID: MessageTable.session_id, data: MessageTable.data })
+    .from(MessageTable)
+    .where(sql`json_extract(${MessageTable.data}, '$.activationID') = ${latest.id}`)
+    .all()
+    .flatMap((row) => {
+      const assistant = Message.Assistant.parse({ ...row.data, id: row.id, sessionID: row.sessionID })
+      return assistant.time.completed === undefined
+        ? [{ sessionID: row.sessionID, messageID: row.id, completedAt: now }]
+        : []
+    }))
   const bySession = new Map<string, typeof candidates>()
   for (const candidate of candidates) {
     bySession.set(candidate.sessionID, [...(bySession.get(candidate.sessionID) ?? []), candidate])
@@ -1062,7 +1083,23 @@ async function terminalizeExpiredTaskRootAssistants(ingressID: string, now: numb
       terminalized += messages.length
     }
   }
-  return terminalized
+  const settlement = Database.immediateTransaction((db) => {
+    if (!sameSnapshot(db)) return { changed: true, released: false }
+    const released = releaseControlLeaseInTransaction(db, {
+      target: "task_root_ingress", targetID: ingressID, leaseID: snapshot.lease.id,
+      ownerOccurrenceID: snapshot.lease.owner_occurrence_id, now: Date.now(),
+    })
+    return { changed: released, released }
+  })
+  const released = settlement.released
+  if (terminalized || released) {
+    log.warn("recovered Task-root activation after physical owner settlement", {
+      taskID: facts.ingress.taskID, ingressID, activationID: latest.id,
+      ownerOccurrenceID: latest.ownerOccurrenceID, evidence: local ? "local_execution_settled" : "process_dead_or_reused",
+      terminalized, leaseReleased: released,
+    })
+  }
+  return { changed: terminalized > 0 || settlement.changed }
 }
 
 type ActivationAttempt =
@@ -1077,6 +1114,7 @@ async function activate(input: {
 }): Promise<ActivationAttempt> {
   let reservation: RuntimeExecutionReservation | undefined
   let bound = false
+  let activation: { id: string; ownerOccurrenceID: string } | undefined
   reservation = RuntimeExecutionSettlement.reserve(
     "task_control_activation",
     `task-control:${input.taskID}:${input.ingressID}`,
@@ -1110,6 +1148,7 @@ async function activate(input: {
       return faulted
     }
     const ownerID = ownerOccurrenceID()
+    const runTaskIngress = runner()
     const liveness = driverState().liveness
     const acquired = acquireTaskRootIngressLease({
       ingressID: input.ingressID,
@@ -1126,10 +1165,11 @@ async function activate(input: {
       // `ready` would arm no timer at all and strand the Task.
       return { activated: false, projection: acquired.projection }
     }
+    activation = { id: acquired.activationID, ownerOccurrenceID: ownerID }
     // The lease transaction may have applied this exact Mission input. Rebuild from its immutable outcome.
     event = eventForIngress(ingress)
     const runActivation = () =>
-      runner()({
+      runTaskIngress({
         taskID: input.taskID,
         event,
         signal: reservation.signal,
@@ -1183,6 +1223,12 @@ async function activate(input: {
     if (renewalFailure) throw renewalFailure
     return { activated: true }
   } catch (error) {
+    if (activation) {
+      releaseControlLeaseOnErrorPath({
+        target: "task_root_ingress", targetID: input.ingressID, leaseID: activation.id,
+        ownerOccurrenceID: activation.ownerOccurrenceID, now: Date.now(),
+      })
+    }
     if (!bound) reservation.settle()
     throw error
   }
@@ -1832,7 +1878,7 @@ async function scanTaskControlPlane(
   return await Database.runOutsideContext(() => reenterActiveInstance({
     directory,
     fn: () => scanTaskRuntimeControlPlane(taskID, context),
-  })) ?? { activated: 0 }
+  })) ?? { activated: 0, noProgress: true }
 }
 
 async function scanTaskRuntimeControlPlane(taskID: string, context: TaskControlScanContext): Promise<TaskControlScanResult> {
@@ -1917,8 +1963,17 @@ async function scanTaskRuntimeControlPlane(taskID: string, context: TaskControlS
           stopTask = true
           break
         }
-        if ((await terminalizeExpiredTaskRootAssistants(ingress.id, now)) > 0) continue
-        const projection = projectTaskRootIngress(ingress.id, now, readTaskRootIngressEvidence)
+        const facts = Database.use((db) => taskRootIngressFactsInTransaction(db, ingress.id, readTaskRootIngressEvidence))
+        const projection = reduceTaskRootIngressFacts(facts, now)
+        if (!["resolved", "terminal_inapplicable", "input_rejected", "operator_abandoned", "host_fault"].includes(projection.state)) {
+          const ownership = await recoverTaskRootActivationOwner(facts, now)
+          if (ownership.changed) continue
+          if (ownership.wakeAt !== undefined) {
+            wakeAt = ownership.wakeAt
+            stopTask = true
+            break
+          }
+        }
         if (projection.state === "resolved" || projection.state === "terminal_inapplicable" || projection.state === "input_rejected") {
           recordAbsorbingTaskRootIngressDisposition({
             taskID,
@@ -2880,6 +2935,17 @@ export async function waitForIngressDeliveryHooksForTest(): Promise<void> {
 }
 
 export const TestHooks = {
+  recoverTaskRootActivationOwner(ingressID: string, now: number, observe?: RuntimeProcessOccurrenceObserver) {
+    const facts = Database.use((db) => taskRootIngressFactsInTransaction(db, ingressID, readTaskRootIngressEvidence))
+    return recoverTaskRootActivationOwner(facts, now, observe)
+  },
+  replaceBeforeTaskRootOwnerSettlement(
+    hook: (input: { ingressID: string; activationID: string }) => void | Promise<void>,
+  ): Disposable {
+    const prior = beforeTaskRootOwnerSettlementForTest
+    beforeTaskRootOwnerSettlementForTest = hook
+    return { [Symbol.dispose]() { beforeTaskRootOwnerSettlementForTest = prior } }
+  },
   reconcileAbandonedDispatches(taskID: string) {
     return reconcileAbandonedDispatches(taskID)
   },

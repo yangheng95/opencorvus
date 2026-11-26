@@ -1,0 +1,180 @@
+{
+  "run": "run3",
+  "checkerExitCode": 0,
+  "checkpoint": {
+    "taskID": "tsk_g00Vc6nckL00D3DkZhiU",
+    "lifecycleConvergence": {
+      "taskID": "tsk_g00Vc6nJFZ00d0Ql7dKk",
+      "childSessionID": "ses_hJ2hCLS8a0eKmVMXV2a1",
+      "lifecycleEventID": "pev_g0Vc6nWMN00FqeCcV3br",
+      "wakeID": "art_hiiV27o8vpVRRQREarXe",
+      "lifecycleEmittedAt": 1795720811203,
+      "taskCompletedAt": 1795720833234
+    },
+    "progressIngressID": "art_hpEwvnNwbiUSL6DxU4OE",
+    "recoveryIngressIDs": [
+      "art_h1D86OrNNdg0m9OQTglo",
+      "art_hRQBRrtcKT1pBxDaA9mW"
+    ],
+    "childSessionID": "ses_hd6fh0zGsme7FEeyXFro",
+    "progressRunningWithinMs": 443.21510000000126,
+    "workerProcess": {
+      "live": 1,
+      "owners": {
+        "unclassified": {
+          "count": 1,
+          "pids": [
+            6708
+          ]
+        }
+      }
+    },
+    "recoveryActivationTimes": [
+      1795720901922,
+      1795720929903
+    ],
+    "recoveryListenerPublishedAt": 1795720900693,
+    "recoveryFirstActivationAt": 1795720901922,
+    "recoveryFirstActivationID": "act_g0Vc6ntxe00hROClv9Hs",
+    "recoveryFirstAssistantMessageID": "msg_hmcIIq2u6opWxS1uZc26",
+    "recoveryFirstAssistantCreatedAt": 1795720902241,
+    "recoveryFirstProviderRequestID": "act_g0Vc6nvhc00gMg4sQ8YB",
+    "recoveryFirstProviderStartedAt": 1795720908620,
+    "recoveryExecutionAfterListenerMs": 1548,
+    "recoveryActivationAfterListenerMs": 1229,
+    "recoveryActivationOwnerOccurrenceIDs": [
+      "a61baee9-c339-4030-947f-926cb7b4c9bc",
+      "a61baee9-c339-4030-947f-926cb7b4c9bc"
+    ],
+    "cancellationAcceptedWithinMs": 81.29500000000553,
+    "cancellationRequestEventID": "pev_g0Vc6o2zJ00uAUCedPUH",
+    "cancellationRequestEventEmittedAt": 1795720936624,
+    "cancellationRequestedAt": 1795720936617,
+    "cancellationWorkerProcess": {
+      "live": 1,
+      "owners": {
+        "task-control-inherited-stream": {
+          "count": 1,
+          "pids": [
+            3908
+          ]
+        }
+      }
+    },
+    "inheritedProcessPIDs": [
+      3908,
+      1708
+    ]
+  },
+  "inputs": [
+    {
+      "ingressID": "art_h1D86OrNNdg0m9OQTglo",
+      "leases": [
+        {
+          "id": "act_g0Vc6nsqN00A2tBQwhAq",
+          "owner_occurrence_id": "81be598f-0045-4ac5-8aae-28b2f390890d",
+          "time_activated": 1795720897629,
+          "expires_at": 1795720901919,
+          "processIdentity": {
+            "pid": 3128,
+            "processInstanceID": "win32:639313175489669671",
+            "occurrenceID": "81be598f-0045-4ac5-8aae-28b2f390890d"
+          },
+          "grants": [
+            {
+              "ordinal": 1,
+              "expires_at": 1795721017629,
+              "time_created": 1795720897629
+            }
+          ],
+          "assistants": []
+        },
+        {
+          "id": "act_g0Vc6ntxe00hROClv9Hs",
+          "owner_occurrence_id": "a61baee9-c339-4030-947f-926cb7b4c9bc",
+          "time_activated": 1795720901922,
+          "expires_at": 1795721021922,
+          "processIdentity": {
+            "pid": 8136,
+            "processInstanceID": "win32:639313176983147470",
+            "occurrenceID": "a61baee9-c339-4030-947f-926cb7b4c9bc"
+          },
+          "grants": [
+            {
+              "ordinal": 1,
+              "expires_at": 1795721021922,
+              "time_created": 1795720901922
+            }
+          ],
+          "assistants": [
+            {
+              "id": "msg_hmcIIq2u6opWxS1uZc26",
+              "sessionID": "ses_-zUNtCLxOzziL6W5JYtI",
+              "createdAt": 1795720902241,
+              "completedAt": 1795720929848,
+              "error": null,
+              "text": [
+                "Recovery message one received and answered before recovery message two. The diagnostic worker was interrupted; I’ll resume its read-only inspection without changing any files."
+              ],
+              "providerRequests": [
+                {
+                  "id": "act_g0Vc6nvhc00gMg4sQ8YB",
+                  "time_created": 1795720908620
+                },
+                {
+                  "id": "act_g0Vc6nxPC00f1N819GCj",
+                  "time_created": 1795720915166
+                },
+                {
+                  "id": "act_g0Vc6nygu006nMC9uyuO",
+                  "time_created": 1795720920108
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ingressID": "art_hRQBRrtcKT1pBxDaA9mW",
+      "leases": [
+        {
+          "id": "act_g0Vc6o1Ew008FDKzzeTk",
+          "owner_occurrence_id": "a61baee9-c339-4030-947f-926cb7b4c9bc",
+          "time_activated": 1795720929903,
+          "expires_at": 1795721049903,
+          "processIdentity": {
+            "pid": 8136,
+            "processInstanceID": "win32:639313176983147470",
+            "occurrenceID": "a61baee9-c339-4030-947f-926cb7b4c9bc"
+          },
+          "grants": [
+            {
+              "ordinal": 1,
+              "expires_at": 1795721049903,
+              "time_created": 1795720929903
+            }
+          ],
+          "assistants": [
+            {
+              "id": "msg_h60GiQnG6Ra0Fvn0oQqz",
+              "sessionID": "ses_-zUNtCLxOzziL6W5JYtI",
+              "createdAt": 1795720930544,
+              "completedAt": 1795720936165,
+              "error": null,
+              "text": [
+                "Recovery message two received and answered after recovery message one. The worker has resumed its read-only diagnostic inspection; I have not stopped or cancelled it."
+              ],
+              "providerRequests": [
+                {
+                  "id": "act_g0Vc6o1a800gpwhOEra1",
+                  "time_created": 1795720931220
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

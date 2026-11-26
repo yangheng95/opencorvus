@@ -1,0 +1,113 @@
+{
+  "sourceCommit": "d18ef4be96b2846dd53ac63043fe43a83979e5ef",
+  "baselineRun": "run4",
+  "taskID": "tsk_g00Vc6XvsG00uCbRWrO3",
+  "recoveryIngressIDs": [
+    "art_huus3St4IUqc10rdB0jD",
+    "art_hvmJwNmXv23sC3JUvXOv"
+  ],
+  "recoveryActivationTimes": [
+    1795717277900,
+    1795717297631
+  ],
+  "leases": [
+    {
+      "id": "act_g0Vc6YBxv00NgR6PVrx2",
+      "target": "task_root_ingress",
+      "target_id": "art_huus3St4IUqc10rdB0jD",
+      "owner_occurrence_id": "92f86205-e5b6-4601-ae84-b3580c55a736",
+      "time_activated": 1795717157885,
+      "expires_at": 1795717277885,
+      "grants": [
+        {
+          "ordinal": 1,
+          "expires_at": 1795717277885,
+          "time_created": 1795717157885
+        }
+      ],
+      "processIdentity": {
+        "pid": 24512,
+        "processInstanceID": "win32:639313137549556575",
+        "occurrenceID": "92f86205-e5b6-4601-ae84-b3580c55a736"
+      }
+    },
+    {
+      "id": "act_g0Vc6YhBg00iz8evhvTv",
+      "target": "task_root_ingress",
+      "target_id": "art_huus3St4IUqc10rdB0jD",
+      "owner_occurrence_id": "25c70f1b-24aa-4b49-99b5-6f126a5e59ea",
+      "time_activated": 1795717277900,
+      "expires_at": 1795717397900,
+      "grants": [
+        {
+          "ordinal": 1,
+          "expires_at": 1795717397900,
+          "time_created": 1795717277900
+        }
+      ],
+      "processIdentity": {
+        "pid": 30776,
+        "processInstanceID": "win32:639313139583231717",
+        "occurrenceID": "25c70f1b-24aa-4b49-99b5-6f126a5e59ea"
+      }
+    },
+    {
+      "id": "act_g0Vc6YmJt001bDOW1CIa",
+      "target": "task_root_ingress",
+      "target_id": "art_hvmJwNmXv23sC3JUvXOv",
+      "owner_occurrence_id": "25c70f1b-24aa-4b49-99b5-6f126a5e59ea",
+      "time_activated": 1795717297631,
+      "expires_at": 1795717417631,
+      "grants": [
+        {
+          "ordinal": 1,
+          "expires_at": 1795717417631,
+          "time_created": 1795717297631
+        }
+      ],
+      "processIdentity": {
+        "pid": 30776,
+        "processInstanceID": "win32:639313139583231717",
+        "occurrenceID": "25c70f1b-24aa-4b49-99b5-6f126a5e59ea"
+      }
+    }
+  ],
+  "dispatchSettlements": [
+    {
+      "id": "art_g0Vc6YCjZ00w3p1FQpnS",
+      "time_created": 1795717160840,
+      "payload": {
+        "task_id": "tsk_g00Vc6XvsG00uCbRWrO3",
+        "dispatch_lineage_id": "art_g0Vc6Y2EX00mVdwGmsGi",
+        "dispatch_id": "art_hNL9l0zkXnzIGfaEbQjH",
+        "session_id": "ses_hXENQnI2RZDdtQLVlgSU",
+        "outcome": {
+          "kind": "infrastructure_failure",
+          "operation": "recover-abandoned-dispatch",
+          "message": "Worker Session ses_hXENQnI2RZDdtQLVlgSU for dispatch art_hNL9l0zkXnzIGfaEbQjH lost its delivery owner before any terminal lifecycle was recorded",
+          "recovery_authority": {
+            "occurrence_status": "occurrence_committed",
+            "dispatch_lineage_id": "art_g0Vc6Y2EX00mVdwGmsGi",
+            "dispatch_id": "art_hNL9l0zkXnzIGfaEbQjH"
+          },
+          "session_id": "ses_hXENQnI2RZDdtQLVlgSU",
+          "error_name": "AbandonedDispatchError",
+          "infrastructure_error": {
+            "source": "engine_artifact",
+            "artifact_id": "art_ht3OWBXMBudlQXs2kbHu",
+            "catalog_revision": 14,
+            "expected_sha256": "cc53d63093e46c4d738adb7159e8f92c17093d812b842cab030f67a181fcda0c"
+          },
+          "worker_turn": {
+            "descriptor_id": "wtd_g0Vc6Y2oe00jHsoLLPxK",
+            "descriptor_hash": "4e13617c861846f65a832336e32fdfe14d62a9fc31db4099dd085004d244b419",
+            "input_message_id": "msg_g0Vc6Y2oX00el3udFBM7",
+            "current_dispatch_id": "art_hNL9l0zkXnzIGfaEbQjH"
+          }
+        },
+        "time_created": 1795717160840
+      }
+    }
+  ],
+  "boundary": "Read-only retained real-provider database; no credentials or source mutation"
+}

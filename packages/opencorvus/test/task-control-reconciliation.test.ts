@@ -42,6 +42,7 @@ import { MessageTable, ToolPartOutcomeTable, ToolPartRequestTable } from "@/sess
 import { recordProviderActivityEvent } from "@/session/provider-activity-facts"
 import { Database, and, asc, eq } from "@/storage/db"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { recordTestProcessIdentity } from "./fixture/process-liveness"
 
 afterEach(async () => {
   await Instance.disposeAll()
@@ -92,6 +93,7 @@ async function createExpiredDecisionGapFixture(input: {
       now: startedAt + 1,
     })
   })
+  recordTestProcessIdentity(`${input.label}-dead-owner`, "dead")
   const lease = acquireTaskRootIngressLease({
     ingressID: ingress.id,
     ownerOccurrenceID: `${input.label}-dead-owner`,

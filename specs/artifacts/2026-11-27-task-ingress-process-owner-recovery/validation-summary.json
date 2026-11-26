@@ -1,0 +1,42 @@
+{
+  "focusedTests": {
+    "status": "passed",
+    "files": 5,
+    "tests": 75,
+    "assertions": 153
+  },
+  "ownerTests": {
+    "status": "passed",
+    "tests": 10,
+    "assertions": 28
+  },
+  "typescript": {
+    "status": "passed",
+    "scope": "checker, new owner tests and reachable core declarations"
+  },
+  "docs": {
+    "status": "passed",
+    "operations": 353,
+    "groups": 26
+  },
+  "architectureIndex": {
+    "status": "passed",
+    "currentDocuments": 20
+  },
+  "leaseOwnerCheck": {
+    "status": "passed",
+    "owners": 18,
+    "acquireSites": 25
+  },
+  "realAcceptance": {
+    "status": "passed",
+    "run": "run3",
+    "requests": 42,
+    "streaming": true
+  },
+  "visualReview": {
+    "status": "personally viewed",
+    "method": "real CUA page interaction and screenshots",
+    "uiAutomationTests": 0
+  }
+}

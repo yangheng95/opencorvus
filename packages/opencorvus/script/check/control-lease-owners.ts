@@ -83,7 +83,7 @@ const DECLARED_OWNERS: Record<string, Declaration> = {
     targets: ["task_root_ingress"],
     sites: 1,
     release:
-      "The shared primitive owns physical acquire and renewal. Exact assistant/effect receipts consume an activation and authorize the next semantic activation to supersede that lease; the ingress's final projection is absorbing.",
+      "The shared primitive owns physical acquire and renewal. Exact assistant/effect receipts consume an activation and authorize the next semantic activation to supersede that lease; the ingress's final projection is absorbing. Task-root delivery validates its executor before acquire and hands back its exact lease on execution failure. Recovery observes the original physical owner before interruption or successor admission and revalidates the exact lease and latest grant before an early release; natural expiry retains its time.",
   },
   "mission/execution-closure.ts": {
     targets: ["lifecycle"],

@@ -2741,7 +2741,7 @@ export namespace SessionLoop {
       if (candidate.info.role !== "assistant") continue
       const now = completedAt ?? defaultCompletedAt
       const interruption = new Error(
-        `Previous process ended before Session ${sessionID} completed assistant message ${candidate.info.id}`,
+        `Previous execution ended before Session ${sessionID} completed assistant message ${candidate.info.id}`,
       )
       interruption.name = "ProcessExecutionInterruptedError"
       const interruptedFrontiers = candidate.parts.filter(

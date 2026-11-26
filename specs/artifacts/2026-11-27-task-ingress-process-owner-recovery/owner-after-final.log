@@ -1,0 +1,15 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\task-root-process-owner.test.ts:
+(pass) the original accepted input resolves promptly after its real process exits with an unexpired lease [1681.49ms]
+(pass) a physically live peer completes its original accepted result across the activation deadline [1920.31ms]
+(pass) a dead peer's exact partial invocation settles before its accepted input resumes [1713.12ms]
+(pass) an unobservable physical owner retains its original accepted completion contract [1992.81ms]
+(pass) missing physical identity returns its typed error and the same input recovers after identity admission [1683.40ms]
+(pass) a concurrent successor owns its exact lease and then delivers its original input after physical exit [1704.67ms]
+(pass) parallel Projects deliver their own original results while one physical owner recovers [3855.35ms]
+
+ 7 pass
+ 0 fail
+ 20 expect() calls
+Ran 7 tests across 1 file. [16.17s]

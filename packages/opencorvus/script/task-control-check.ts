@@ -54,7 +54,7 @@ type TaskRootIngress = {
   ingressID: string
   sourceID: string
   sequence: number
-  activations: Array<{ activationID: string; activatedAt: number }>
+  activations: Array<{ activationID: string; activatedAt: number; ownerOccurrenceID: string }>
   decisions: Array<{ receiptID: string; command: string }>
   projection: { state: string; boundary?: string }
 }
@@ -92,6 +92,16 @@ type Checkpoint = {
   cancellationRequestEventEmittedAt?: number
   cancellationRequestedAt?: number
   recoveryActivationTimes?: number[]
+  recoveryListenerPublishedAt?: number
+  recoveryFirstActivationAt?: number
+  recoveryFirstActivationID?: string
+  recoveryFirstAssistantMessageID?: string
+  recoveryFirstAssistantCreatedAt?: number
+  recoveryFirstProviderRequestID?: string
+  recoveryFirstProviderStartedAt?: number
+  recoveryExecutionAfterListenerMs?: number
+  recoveryActivationAfterListenerMs?: number
+  recoveryActivationOwnerOccurrenceIDs?: string[]
   cancellationWorkerProcess?: { live: number; owners: Record<string, { count: number; pids: number[] }> }
   inheritedProcessPIDs?: number[]
 }
@@ -395,7 +405,8 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     { SessionStatus },
     { listenWithRecoveredServerRuntime, requireRecoveredServerRuntime },
     { assertStartedTaskProjectRecoverySucceeded, recoverStartedTaskExecutions },
-    { Database },
+    { Database, eq, asc, sql },
+    { MessageTable, ProviderActivityRequestTable },
     { Instance },
     { ProcessSupervisor },
     { ProtocolStore },
@@ -408,6 +419,7 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/cli/server-runtime"),
     import("@/engine/host-recovery"),
     import("@/storage/db"),
+    import("@/session/session.sql"),
     import("@/project/instance"),
     import("@/shell/process-supervisor"),
     import("@/protocol/store"),
@@ -415,23 +427,23 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
     import("@/engine/runtime"),
     import("@/engine/store"),
   ])
-  const promptProfile = await Instance.provide({ directory: projectDirectory, fn: async () => {
+  const promptProfile = await Instance.provideProjectIdentity({ directory: projectDirectory, fn: async () => {
     const projected = await Provider.getModel(selectedModel.slice(0, separator), selectedModel.slice(separator + 1))
     if (projected.api.id !== audit.modelID) throw new Error("Authorized model is not projected to the exact requested API model")
     return PromptProfile.activeID(await Config.get())
   } })
-  const preparedServer = await requireRecoveredServerRuntime(
-    await listenWithRecoveredServerRuntime({
-      options: { hostname: "127.0.0.1", port: 0, randomPort: true },
-      recover: async () => {
-        assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions())
-      },
-      disposeInstances: () => Instance.disposeAll(),
-    }),
-  )
+  const listeningServer = await listenWithRecoveredServerRuntime({
+    options: { hostname: "127.0.0.1", port: 0, randomPort: true },
+    recover: async () => {
+      assertStartedTaskProjectRecoverySucceeded(await recoverStartedTaskExecutions())
+    },
+    disposeInstances: () => Instance.disposeAll(),
+  })
+  const listenerPublishedAt = Date.now()
+  audit.localOrigins.add(listeningServer.server.url.origin)
+  const preparedServer = await requireRecoveredServerRuntime(listeningServer)
   process.stdout.write(`[task-control phase] ${phase} production recovery ready\n`)
   const server = preparedServer.server
-  audit.localOrigins.add(server.url.origin)
   const base = server.url.toString().replace(/\/$/, "")
   const abortStream = new AbortController()
   let taskID = ""
@@ -699,14 +711,41 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
 
     if (phase === "seed-cancellation") {
       if (!stream) throw new Error("Cancellation seed requires the real Task event stream")
+      const { currentRuntimeOccurrenceID } = await import("@/runtime/process-occurrence")
+      const recoveryOwnerOccurrenceID = currentRuntimeOccurrenceID()
       const recovered = await stream.waitFor("FIFO ingress recovery after backend restart", async () => {
         await board()
         const debug = await debugProjection()
         const ingresses = checkpoint.recoveryIngressIDs.map((id) => debug.find((ingress) => ingress.ingressID === id))
         if (!ingresses.every((ingress) => ingress?.projection.state === "resolved")) return undefined
         const activationTimes = ingresses.map((ingress) => ingress?.activations.at(-1)?.activatedAt ?? 0)
-        return activationTimes[0]! > 0 && activationTimes[0]! <= activationTimes[1]! ? activationTimes : undefined
+        const ownerOccurrenceIDs = ingresses.map((ingress) => ingress?.activations.at(-1)?.ownerOccurrenceID)
+        if (ownerOccurrenceIDs.some((owner) => owner !== recoveryOwnerOccurrenceID)) {
+          throw new Error("Recovery requires both accepted inputs to execute under the current physical process occurrence")
+        }
+        const firstActivation = ingresses[0]?.activations.find(
+          (activation) => activation.ownerOccurrenceID === recoveryOwnerOccurrenceID,
+        )
+        if (!firstActivation) throw new Error("Recovery requires the first exact current-process activation")
+        return activationTimes[0]! > 0 && activationTimes[0]! <= activationTimes[1]!
+          ? { activationTimes, firstActivation, ownerOccurrenceIDs: ownerOccurrenceIDs as string[] }
+          : undefined
       })
+      const admission = Database.use((db) => db.select({
+        assistantMessageID: MessageTable.id,
+        assistantCreatedAt: MessageTable.time_created,
+        providerRequestID: ProviderActivityRequestTable.id,
+        providerStartedAt: ProviderActivityRequestTable.time_created,
+      }).from(MessageTable).innerJoin(ProviderActivityRequestTable, eq(ProviderActivityRequestTable.assistant_message_id, MessageTable.id))
+        .where(sql`json_extract(${MessageTable.data}, '$.activationID') = ${recovered.firstActivation.activationID}`)
+        .orderBy(asc(ProviderActivityRequestTable.time_created), asc(ProviderActivityRequestTable.id)).get())
+      if (!admission) throw new Error("The first recovered activation requires its real assistant and streamed Provider activity")
+      const recoveryActivationAfterListenerMs = recovered.firstActivation.activatedAt - listenerPublishedAt
+      const recoveryExecutionAfterListenerMs = admission.assistantCreatedAt - listenerPublishedAt
+      if (recoveryExecutionAfterListenerMs >= 5_000) {
+        throw new Error(`First recovered execution admission took ${recoveryExecutionAfterListenerMs}ms after listener publication`)
+      }
+      process.stdout.write(`[task-control phase] ${phase} first recovered execution after listener=${recoveryExecutionAfterListenerMs}ms\n`)
       const inherited = await ProcessSupervisor.spawnTaskCommand(
         { taskID, cwd: projectDirectory },
         {
@@ -749,7 +788,17 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         checkpointPath,
         JSON.stringify({
           ...checkpoint,
-          recoveryActivationTimes: recovered,
+          recoveryActivationTimes: recovered.activationTimes,
+          recoveryListenerPublishedAt: listenerPublishedAt,
+          recoveryFirstActivationAt: recovered.firstActivation.activatedAt,
+          recoveryFirstActivationID: recovered.firstActivation.activationID,
+          recoveryFirstAssistantMessageID: admission.assistantMessageID,
+          recoveryFirstAssistantCreatedAt: admission.assistantCreatedAt,
+          recoveryFirstProviderRequestID: admission.providerRequestID,
+          recoveryFirstProviderStartedAt: admission.providerStartedAt,
+          recoveryExecutionAfterListenerMs,
+          recoveryActivationAfterListenerMs,
+          recoveryActivationOwnerOccurrenceIDs: recovered.ownerOccurrenceIDs,
           cancellationAcceptedWithinMs,
           cancellationRequestEventID: receipt.requestEventID,
           cancellationRequestEventEmittedAt,
@@ -830,6 +879,16 @@ async function runServerPhase(phase: string, runtimeRoot: string) {
         progressIngressID: checkpoint.progressIngressID,
         recoveryIngressIDs: checkpoint.recoveryIngressIDs,
         recoveryActivationTimes: checkpoint.recoveryActivationTimes,
+        recoveryListenerPublishedAt: checkpoint.recoveryListenerPublishedAt,
+        recoveryFirstActivationAt: checkpoint.recoveryFirstActivationAt,
+        recoveryFirstActivationID: checkpoint.recoveryFirstActivationID,
+        recoveryFirstAssistantMessageID: checkpoint.recoveryFirstAssistantMessageID,
+        recoveryFirstAssistantCreatedAt: checkpoint.recoveryFirstAssistantCreatedAt,
+        recoveryFirstProviderRequestID: checkpoint.recoveryFirstProviderRequestID,
+        recoveryFirstProviderStartedAt: checkpoint.recoveryFirstProviderStartedAt,
+        recoveryExecutionAfterListenerMs: checkpoint.recoveryExecutionAfterListenerMs,
+        recoveryActivationAfterListenerMs: checkpoint.recoveryActivationAfterListenerMs,
+        recoveryActivationOwnerOccurrenceIDs: checkpoint.recoveryActivationOwnerOccurrenceIDs,
         childSessionID: checkpoint.childSessionID,
         progressRunningWithinMs: checkpoint.progressRunningWithinMs,
         workerProcess: checkpoint.workerProcess,

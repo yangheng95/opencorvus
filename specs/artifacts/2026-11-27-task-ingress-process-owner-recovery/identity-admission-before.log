@@ -1,0 +1,32 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\task-root-process-owner.test.ts:
+20 | test("an identity discovery retains its original Task until initialized execution completes it", async () => {
+21 |   await using project = await memoryProject()
+22 |   const frame = await Instance.provideProjectIdentity({ directory: project.path, fn: async () => {
+23 |     const current = await taskFrame(project.path)
+24 |     await reconcileTaskControlPlane(current.taskID)
+25 |     expect(taskControlDriverSnapshot()).toMatchObject([{ taskID: current.taskID, running: false, failures: 1 }])
+                                             ^
+error: expect(received).toMatchObject(expected)
+
+- [
+-   {
+-     "failures": 1,
+-     "running": false,
+-     "taskID": "tsk_g00Vc6n0rE00DcwnLNN8",
+-   },
+- ]
++ []
+
+- Expected  - 7
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\task-root-process-owner.test.ts:25:41)
+(fail) an identity discovery retains its original Task until initialized execution completes it [1367.18ms]
+
+ 0 pass
+ 9 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [3.03s]

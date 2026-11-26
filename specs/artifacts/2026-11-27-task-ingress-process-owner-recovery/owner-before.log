@@ -1,0 +1,49 @@
+bun test v1.4.3 (c6da4a4d3)
+
+C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261127-dead-owner-recovery\owner-observation.test.ts:
+75 |     using runner = TestHooks.replaceTaskIngressRunner({ runner: async input => {
+76 |       if (!input.activationID || !input.predecessorID) throw new Error("Expected exact resumed activation")
+77 |       return finish(await invocation(frame, input.activationID, input.predecessorID), "Recovered original input")
+78 |     } })
+79 |     await reconcileTaskControlPlane(frame.taskID)
+80 |     expect(projectTaskRootIngress(frame.ingress.id, Date.now(), readTaskRootIngressEvidence)).toMatchObject({ state: "resolved" })
+                                                                                                   ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "state": "resolved",
++   "activationID": "act_g0Vc6cvJN00go9GPoK5v",
++   "expiresAt": 1795718405505,
++   "ownerOccurrenceID": "cal_g0Vc6cvJ7000eng2hLqH",
++   "state": "leased",
+  }
+
+- Expected  - 1
++ Received  + 4
+
+      at <anonymous> (C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261127-dead-owner-recovery\owner-observation.test.ts:80:95)
+(fail) the original accepted input resolves promptly after its real process exits with an unexpired lease [1336.61ms]
+2450 |           const outcomeID = toolOutcomePartIdentity(id)
+2451 |           const existingOutcome = db.select().from(ToolPartOutcomeTable)
+2452 |             .where(eq(ToolPartOutcomeTable.request_part_id, id)).get()
+2453 |           if (existingOutcome) {
+2454 |             if (existingOutcome.id !== outcomeID || !equivalentToolOutcome(existingOutcome.data, outcome)) {
+2455 |               throw new HostProcessingFaultError(`Tool outcome Part ${outcomeID} conflicts with its immutable receipt`)
+                           ^
+HostProcessingFaultError: Tool outcome Part prt_hFTx4s8zhYMC80EvSbrP conflicts with its immutable receipt
+      at write (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2455:21)
+      at run (node:async_hooks:144:29)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1660:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1913:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+06fa307ed8f6659d\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:401:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+06fa307ed8f6659d\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at immediateTransaction (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1911:31)
+      at updatePartRow (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2522:19)
+      at updatePartImpl (D:\myhexin-local\opencorvus\packages\opencorvus\src\session\index.ts:2644:39)
+(fail) a physically live peer completes its original accepted result across the activation deadline [1976.15ms]
+
+ 0 pass
+ 2 fail
+ 3 expect() calls
+Ran 2 tests across 1 file. [4.75s]

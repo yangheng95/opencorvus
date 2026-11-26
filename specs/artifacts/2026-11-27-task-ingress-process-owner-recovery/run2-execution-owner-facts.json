@@ -1,0 +1,63 @@
+{
+  "run": "run2",
+  "checkerExitCode": 1,
+  "checkpoint": {
+    "taskID": "tsk_g00Vc6lJKt00QGd0fwg2",
+    "lifecycleConvergence": {
+      "taskID": "tsk_g00Vc6l0zm008LEf6Kg3",
+      "childSessionID": "ses_h2IZdJ0ivKAkKMof9sur",
+      "lifecycleEventID": "pev_g0Vc6lDfn00eZ5qVato9",
+      "wakeID": "art_hFHgJOAgYlMfdOqUM9Xa",
+      "lifecycleEmittedAt": 1795720262714,
+      "taskCompletedAt": 1795720282199
+    },
+    "progressIngressID": "art_hl2zk9y9nlpo6EU3aKGM",
+    "recoveryIngressIDs": [
+      "art_hSFOHq9x7exDGXP93X4S",
+      "art_hgHzwvQQnJZvxD4ikPoJ"
+    ],
+    "childSessionID": "ses_hiwouEXgKLXaHA2yJQQE",
+    "progressRunningWithinMs": 211.81340000001364,
+    "workerProcess": {
+      "live": 1,
+      "owners": {
+        "unclassified": {
+          "count": 1,
+          "pids": [
+            20280
+          ]
+        }
+      }
+    }
+  },
+  "inputs": [
+    {
+      "ingressID": "art_hSFOHq9x7exDGXP93X4S",
+      "leases": [
+        {
+          "id": "act_g0Vc6lcwB009kZ27vPyq",
+          "owner_occurrence_id": "f9af686e-4dfd-44df-ac3e-2082327eb7f7",
+          "time_activated": 1795720359829,
+          "expires_at": 1795720479829,
+          "processIdentity": {
+            "pid": 21980,
+            "processInstanceID": "win32:639313169999381976",
+            "occurrenceID": "f9af686e-4dfd-44df-ac3e-2082327eb7f7"
+          },
+          "grants": [
+            {
+              "ordinal": 1,
+              "expires_at": 1795720479829,
+              "time_created": 1795720359829
+            }
+          ],
+          "assistants": []
+        }
+      ]
+    },
+    {
+      "ingressID": "art_hgHzwvQQnJZvxD4ikPoJ",
+      "leases": []
+    }
+  ]
+}

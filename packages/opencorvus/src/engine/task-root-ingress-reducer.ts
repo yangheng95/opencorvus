@@ -184,7 +184,7 @@ function validDecisionSet(facts: TaskRootIngressFacts): readonly DecisionFact[] 
   return decisions.toSorted((left, right) => left.id.localeCompare(right.id))
 }
 
-function activationConsumed(facts: TaskRootIngressFacts, activationID: string): boolean {
+export function taskRootIngressActivationConsumed(facts: TaskRootIngressFacts, activationID: string): boolean {
   const outcomes = activityOutcomeByRequest(facts)
   const outstanding = facts.activityRequests.some(
     (request) => request.activationID === activationID && (outcomes.get(request.id)?.length ?? 0) === 0,
@@ -380,7 +380,7 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
   if (decisions) return { state: "resolved", decisionIDs: decisions.map((decision) => decision.id) }
 
   const latest = latestTaskRootIngressLease(facts)
-  if (latest && latest.expiresAt > now && !activationConsumed(facts, latest.id)) {
+  if (latest && latest.expiresAt > now && !taskRootIngressActivationConsumed(facts, latest.id)) {
     return {
       state: "leased",
       activationID: latest.id,
@@ -399,7 +399,7 @@ export function reduceTaskRootIngressFacts(facts: TaskRootIngressFacts, now: num
     (request) =>
       (outcomes.get(request.id)?.length ?? 0) === 0 &&
       !pendingReconciliationRequests.has(request.id) &&
-      (!latest || latest.expiresAt <= now || activationConsumed(facts, request.activationID)),
+      (!latest || latest.expiresAt <= now || taskRootIngressActivationConsumed(facts, request.activationID)),
   )
   if (unknown.length > 0)
     return { state: "reconcile_required", requestIDs: unknown.map((request) => request.id).toSorted() }

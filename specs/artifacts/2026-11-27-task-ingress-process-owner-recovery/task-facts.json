@@ -1,0 +1,4362 @@
+[
+  {
+    "run": "run1",
+    "id": "tsk_g00Vc6gjg300v7mxvY7D",
+    "project_id": "prj_hJ1ors4kozPuj9mgCtkJ",
+    "session_id": "ses_-zUNtJG3dzzCDO2wDfOZ",
+    "title": "Real terminal lifecycle convergence",
+    "request": "Dispatch the current workflow's appropriate implementation worker to inspect task-control-fixture.ts with the current projected production tools. When that worker reaches its exact terminal completed lifecycle, use that current result and complete this Task in the same control wake. Do not leave the Task active, wait for another message, or describe a terminal worker as still running.",
+    "time_created": 1795719194099,
+    "events": [
+      {
+        "id": "pev_g0Vc6gjwv00bQUn7KoA6",
+        "type": "task.execution.opened",
+        "session_id": "ses_-zUNtJG3dzzCDO2wDfOZ",
+        "seq": 3,
+        "emitted_at": 1795719194099,
+        "payload": {
+          "execution_epoch": 1
+        }
+      },
+      {
+        "id": "pev_g0Vc6gjwz00vtaJnJdxE",
+        "type": "task.created",
+        "session_id": null,
+        "seq": 4,
+        "emitted_at": 1795719195148,
+        "payload": {
+          "summary": "Task started"
+        }
+      },
+      {
+        "id": "pev_g0Vc6gl4u00QugTfEfap",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 5,
+        "emitted_at": 1795719199484,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gl6z00d3MlPtuPQ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 6,
+        "emitted_at": 1795719199613,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gm5u00mb5b7DeMG",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 7,
+        "emitted_at": 1795719203389,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gm6r00NPv0wMoks",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 8,
+        "emitted_at": 1795719203449,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gn0I00fba3qe8Lp",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 9,
+        "emitted_at": 1795719206886,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gn1i000tPVYf962",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 10,
+        "emitted_at": 1795719206973,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gnm800TayfJqd1L",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 11,
+        "emitted_at": 1795719209852,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gnnz00mLMh08z8m",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 12,
+        "emitted_at": 1795719209967,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6goei009e6TlsP9w",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 13,
+        "emitted_at": 1795719213236,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gofk00gfLN8apoO",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 14,
+        "emitted_at": 1795719213300,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6grco00QvN3qxYQv",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 16,
+        "emitted_at": 1795719224649,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hQFDYHLlwGsP6e38FVyp_art_hQFDYHLlwGsP6e38FVyp",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6grje00vkEIIexNZ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 18,
+        "emitted_at": 1795719225074,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6grmq00bBBLTOJ2t",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 19,
+        "emitted_at": 1795719225272,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gsaQ00gN3M23k7b",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 20,
+        "emitted_at": 1795719228345,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gsc500AyMaha0zs",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 21,
+        "emitted_at": 1795719228449,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gtbz00TTxTTDWEU",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 22,
+        "emitted_at": 1795719232287,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gte8004kDXfIWMG",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 23,
+        "emitted_at": 1795719232419,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6guGM00UzA9og43Z",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 24,
+        "emitted_at": 1795719234790,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6guHe007rwGJad5T",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 25,
+        "emitted_at": 1795719234869,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gvAe00qVIO2k1KK",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 26,
+        "emitted_at": 1795719238280,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gvBx00RvM6DhsZz",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 27,
+        "emitted_at": 1795719238361,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gw0300x4GbFMdw9",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 28,
+        "emitted_at": 1795719241467,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gw2300lpAIlAr2l",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 29,
+        "emitted_at": 1795719241590,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gwvc0002aOU6Fxm",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 30,
+        "emitted_at": 1795719245036,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gwwj00fGSvHcp9q",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 31,
+        "emitted_at": 1795719245104,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gyCE00qrcQZhF0l",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 32,
+        "emitted_at": 1795719249910,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gyCU00LcnF254Hq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 33,
+        "emitted_at": 1795719249926,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gyD400zEv5bsgQN",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+        "seq": 34,
+        "emitted_at": 1795719249962,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6grVK00fJjGNXeEG",
+          "status": {
+            "type": "terminal",
+            "reason": "completed",
+            "final_message_id": "msg_g0Vc6gwpv00qlCKLtIvD"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gzGS00B2sDCyYVW",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 37,
+        "emitted_at": 1795719254016,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpHOhzwEpf2QYpqPIxm1_art_hpHOhzwEpf2QYpqPIxm1",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6gzJn004ICxeDQ4a",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 38,
+        "emitted_at": 1795719254222,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpHOhzwEpf2QYpqPIxm1_art_hpHOhzwEpf2QYpqPIxm1",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h09500BRiyCzqeR",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 39,
+        "emitted_at": 1795719257403,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpHOhzwEpf2QYpqPIxm1_art_hpHOhzwEpf2QYpqPIxm1",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h0CV00jU55pspDf",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 40,
+        "emitted_at": 1795719257615,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpHOhzwEpf2QYpqPIxm1_art_hpHOhzwEpf2QYpqPIxm1",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h32I005gYW3IGUt",
+        "type": "task.completed",
+        "session_id": null,
+        "seq": 41,
+        "emitted_at": 1795719266039,
+        "payload": {
+          "execution_epoch": 1,
+          "summary": "The implementation worker completed the requested read-only inspection of task-control-fixture.ts using the projected production file reader. Its exact final report confirms the file exports taskControlFixture, explicitly typed string, with value 'ready', and that the project file matches the completely read and selected captured input. No edits or additional outputs were requested or made. The current authoritative worker lifecycle establishes completed work, with no remaining running worker or unresolved inspection obligation. This Task is completed in the same control wake as that result; no further message or wait is needed. The result was delivered conversationally, so no file deliverable is designated."
+        }
+      },
+      {
+        "id": "pev_g0Vc6h33h00hK2y4N6kQ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 43,
+        "emitted_at": 1795719268601,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpHOhzwEpf2QYpqPIxm1_art_hpHOhzwEpf2QYpqPIxm1",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h35B00xd4E5ODLi",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+        "seq": 44,
+        "emitted_at": 1795719268692,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpHOhzwEpf2QYpqPIxm1_art_hpHOhzwEpf2QYpqPIxm1",
+          "status": {
+            "type": "terminal",
+            "reason": "completed"
+          }
+        }
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "art_g0Vc6gqjn00Y9F0zDopa",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_hhe5ZNuk27jzgcehYeeM",
+          "task_id": "tsk_g00Vc6gjg300v7mxvY7D",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+          "orchestrator_message_id": "msg_hNknT4ZYBf3txxYSdZbu",
+          "tool_part_id": "prt_g0Vc6gpCV00Ge6f9j01n",
+          "tool_call_id": "call_21bdd5970b0043b0b4b117fd9093f340",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_hhe5ZNuk27jzgcehYeeM",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "b066cb35-2e2c-4e4d-b8f0-7d68215f7027"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Inspect task-control-fixture.ts in the current project using your current projected production tools. This is a bounded read-only inspection, not an implementation request: do not edit files. Discover the published fixture input in this Task's artifact catalog, read it completely and select it; also inspect the actual project file using an available production read tool. Report its actual content, the observed declaration/value, any discrepancy between captured and current input, and the evidence of inspection. Finish your work with a concise final report. No extra testing, documents, or independent review is required for this inspection-only request.",
+            "reason": "The operator explicitly requests an implementation worker to inspect the fixture before the task is closed."
+          },
+          "time_created": 1795719221238
+        },
+        "time_created": 1795719221238
+      },
+      {
+        "id": "art_g0Vc6gz5j00e3fkb1xmv",
+        "kind": "dispatch_settlement",
+        "label": "dispatch-settlement",
+        "payload": {
+          "task_id": "tsk_g00Vc6gjg300v7mxvY7D",
+          "dispatch_lineage_id": "art_g0Vc6gqjn00Y9F0zDopa",
+          "dispatch_id": "art_hhe5ZNuk27jzgcehYeeM",
+          "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+          "outcome": {
+            "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+            "final_message_id": "msg_g0Vc6gwpv00qlCKLtIvD",
+            "kind": "terminal_success"
+          },
+          "time_created": 1795719253349
+        },
+        "time_created": 1795719253349
+      },
+      {
+        "id": "art_g0Vc6h2OQ00n7tcG2Gv3",
+        "kind": "task_completion_decision",
+        "label": "TaskCompletionDecision",
+        "payload": {
+          "orchestrator_session_id": "ses_-zUNtJF4lzzs5vs52jFX",
+          "orchestrator_message_id": "msg_hHNfhYORaGztu09pEmE2",
+          "tool_call_id": "call_c17cf67c24d54d17822d945f39e57c41",
+          "tool_part_id": "prt_g0Vc6h1Ao00fsIKFOU5w",
+          "evidence_locators": [
+            {
+              "source": "session_message",
+              "session_id": "ses_hqChDKdTkZrGYZwdGgVq",
+              "message_id": "msg_g0Vc6gwpv00qlCKLtIvD"
+            },
+            {
+              "source": "session",
+              "session_id": "ses_-zUNtJF4lzzs5vs52jFX"
+            }
+          ],
+          "deliverable_artifact_locators": [],
+          "worker_artifact_locators": [],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "time_recorded": 1795719266039
+        },
+        "time_created": 1795719266039
+      }
+    ]
+  },
+  {
+    "run": "run1",
+    "id": "tsk_g00Vc6h39H00P19QTgOV",
+    "project_id": "prj_hJ1ors4kozPuj9mgCtkJ",
+    "session_id": "ses_-zUNtIwdfzzFhQLOjf2X",
+    "title": "Real task control convergence",
+    "request": "Immediately dispatch one implementation worker to inspect task-control-fixture.ts with the current projected production tools. Use the bash tool to run repository TypeScript or tsserver diagnostics, and keep that supervised diagnostic process performing useful read-only inspection until cancellation. Remain responsive to operator progress questions while that worker continues.",
+    "time_created": 1795719268947,
+    "events": [
+      {
+        "id": "pev_g0Vc6h3NC0076lypEAFL",
+        "type": "task.execution.opened",
+        "session_id": "ses_-zUNtIwdfzzFhQLOjf2X",
+        "seq": 3,
+        "emitted_at": 1795719268947,
+        "payload": {
+          "execution_epoch": 1
+        }
+      },
+      {
+        "id": "pev_g0Vc6h3NE00saaBzRVW6",
+        "type": "task.created",
+        "session_id": null,
+        "seq": 4,
+        "emitted_at": 1795719269812,
+        "payload": {
+          "summary": "Task started"
+        }
+      },
+      {
+        "id": "pev_g0Vc6h4Ru00zClk5F4gl",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 5,
+        "emitted_at": 1795719273945,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h4Tb00YZTJfHag1",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 6,
+        "emitted_at": 1795719274051,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h5Me008s2anpV96",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 7,
+        "emitted_at": 1795719277464,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h5Nk00GXAdfPmzM",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 8,
+        "emitted_at": 1795719277531,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h66d00fathb4B4Q",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 9,
+        "emitted_at": 1795719280314,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h67q00E3mArBuCy",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 10,
+        "emitted_at": 1795719280390,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h75g00UDHO5TnHM",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 11,
+        "emitted_at": 1795719284100,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6h76y00n4M2dzjIH",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 12,
+        "emitted_at": 1795719284180,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hACY00zZ8GcJn8N",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 14,
+        "emitted_at": 1795719296057,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hcsmGm4fCMIXWzCV3J3S_art_hcsmGm4fCMIXWzCV3J3S",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hAIp00fQXdwxmGE",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 16,
+        "emitted_at": 1795719296447,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hAL300Vwk5fffuQ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 17,
+        "emitted_at": 1795719296585,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hBEP00blItKwjvj",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 18,
+        "emitted_at": 1795719300017,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hBFK000bJBaF9ML",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 19,
+        "emitted_at": 1795719300074,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hBvV004xsX85LQx",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 20,
+        "emitted_at": 1795719302688,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hBwk00iwBzUJKkI",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 21,
+        "emitted_at": 1795719302766,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hChQ00Td7eTaydG",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 22,
+        "emitted_at": 1795719305660,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hCiN00fLCorZHAx",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 23,
+        "emitted_at": 1795719305718,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hDRq00PefbN41ot",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 24,
+        "emitted_at": 1795719308538,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hDSm00WWSP1MTCW",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 25,
+        "emitted_at": 1795719308596,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hEVL0017rebT9nA",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 26,
+        "emitted_at": 1795719312599,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hEWN00EVtX7KSQ3",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 27,
+        "emitted_at": 1795719312662,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hFBL00S878ByEF6",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 28,
+        "emitted_at": 1795719315203,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hFCg00WFUnacRyT",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 29,
+        "emitted_at": 1795719315286,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hFvF00tZZUsZpy0",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 30,
+        "emitted_at": 1795719318049,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hFwH00D98lXIgoL",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 31,
+        "emitted_at": 1795719318113,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hGgQ00d6xDCVZq6",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 32,
+        "emitted_at": 1795719320974,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_hVZbCFjlwmWt2g8RjKQu"
+        }
+      },
+      {
+        "id": "pev_g0Vc6hGow00XPrWoAWtX",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 33,
+        "emitted_at": 1795719321502,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hGqS00aPHVaggu1",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 34,
+        "emitted_at": 1795719321596,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hGyF00zvNb28NJN",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 35,
+        "emitted_at": 1795719322079,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hTgcS1fZxtUP4JaC5cCZ_art_hTgcS1fZxtUP4JaC5cCZ",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hH2100zv2kdKeLq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 36,
+        "emitted_at": 1795719322313,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hTgcS1fZxtUP4JaC5cCZ_art_hTgcS1fZxtUP4JaC5cCZ",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hHzH00KO7AgXRaA",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 37,
+        "emitted_at": 1795719325987,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hTgcS1fZxtUP4JaC5cCZ_art_hTgcS1fZxtUP4JaC5cCZ",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hI0f00Orr9zu2hY",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 38,
+        "emitted_at": 1795719326073,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hTgcS1fZxtUP4JaC5cCZ_art_hTgcS1fZxtUP4JaC5cCZ",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hIWS00BZlie6R33",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 39,
+        "emitted_at": 1795719328044,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hIYA00NqMkbRA1a",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 40,
+        "emitted_at": 1795719328150,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hJ2t00lH6ouLaZF",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 41,
+        "emitted_at": 1795719330055,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hTgcS1fZxtUP4JaC5cCZ_art_hTgcS1fZxtUP4JaC5cCZ",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hJ6j007IcAJb79G",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 43,
+        "emitted_at": 1795719330293,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_hz68tVFiRs1aLt84wwmJ"
+        }
+      },
+      {
+        "id": "pev_g0Vc6hJ9L00KsQBbhxdW",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 44,
+        "emitted_at": 1795719330454,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_h9kyu7MkRBWskyfocZK4"
+        }
+      },
+      {
+        "id": "pev_g0Vc6hJx200qtV0qjPBO",
+        "type": "task.infrastructure.failed",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 46,
+        "emitted_at": 1795719333536,
+        "payload": {
+          "component": "dispatch-agent",
+          "operation": "recover-abandoned-dispatch",
+          "summary": "dispatch-agent infrastructure failure",
+          "details": "Worker Session ses_hWNaWjTgJKpBPDdU78tI for dispatch art_h41Kd4MOMTAdtqhySrw2 lost its delivery owner before any terminal lifecycle was recorded",
+          "errorName": "AbandonedDispatchError",
+          "evidenceLocators": [
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hBAD3Wjim4Vfk30EHHYt",
+              "catalog_revision": 14,
+              "expected_sha256": "fee4ff4414dc8fcba380ca699d37982c4e647a04cc3401f7b2b360d789b179cb"
+            }
+          ]
+        }
+      },
+      {
+        "id": "pev_g0Vc6hJxV000aNc26qs0",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 48,
+        "emitted_at": 1795719333565,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hA7100R6FBKGh9A",
+          "status": {
+            "type": "terminal",
+            "reason": "error",
+            "error": "Worker Session ses_hWNaWjTgJKpBPDdU78tI for dispatch art_h41Kd4MOMTAdtqhySrw2 lost its delivery owner before any terminal lifecycle was recorded"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hpO600MoJehO7Zf",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 49,
+        "emitted_at": 1795719454377,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hpSD00YthS2XKRk",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 50,
+        "emitted_at": 1795719454632,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hqda00bcrmFm2A2",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 51,
+        "emitted_at": 1795719459182,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hqfT001CcZMZThW",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 52,
+        "emitted_at": 1795719459298,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hrQK00JLYBlXnJe",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 53,
+        "emitted_at": 1795719462204,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hrRf00QE0RDqH3J",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 54,
+        "emitted_at": 1795719462287,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6htJa00RmmUjzVhs",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 55,
+        "emitted_at": 1795719469474,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6htLO00nGyfksoNr",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 56,
+        "emitted_at": 1795719469586,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hvgE00OdFwjfgrb",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 58,
+        "emitted_at": 1795719478565,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hyEqsp49vVX86P1kVfYK_msg_hhiBpOZ9DbG9y9Uy74Al",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hvmk00BxjJ2XUFP",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 60,
+        "emitted_at": 1795719478970,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hvp200s0F4wUEny",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 61,
+        "emitted_at": 1795719479111,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hvyY00DLiXoSSfI",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 62,
+        "emitted_at": 1795719479702,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hdVDcvUJzyAVCdBqos9T_art_hdVDcvUJzyAVCdBqos9T",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hw3900G8wBbWXwr",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 63,
+        "emitted_at": 1795719479987,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hdVDcvUJzyAVCdBqos9T_art_hdVDcvUJzyAVCdBqos9T",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hwwZ00lJ1Zz3EC1",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 64,
+        "emitted_at": 1795719483422,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hwxR00IBISQzBtJ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 65,
+        "emitted_at": 1795719483477,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hxMu00n7rjjovCh",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 66,
+        "emitted_at": 1795719485056,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hdVDcvUJzyAVCdBqos9T_art_hdVDcvUJzyAVCdBqos9T",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hxOx00Hl8f2PC8T",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 67,
+        "emitted_at": 1795719485183,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hdVDcvUJzyAVCdBqos9T_art_hdVDcvUJzyAVCdBqos9T",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hy4U00s7YsDFyMp",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 68,
+        "emitted_at": 1795719487758,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hy5N00J7jvSdFtY",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 69,
+        "emitted_at": 1795719487813,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hyOW00h21f9SMT0",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+        "seq": 70,
+        "emitted_at": 1795719489000,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hdVDcvUJzyAVCdBqos9T_art_hdVDcvUJzyAVCdBqos9T",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hyVy00d2OZxqcI1",
+        "type": "task.cancellation.requested",
+        "session_id": null,
+        "seq": 72,
+        "emitted_at": 1795719489462,
+        "payload": {
+          "execution_epoch": 1,
+          "actor": "user",
+          "surface": "api",
+          "reason": "real task-control checker cancellation",
+          "summary": "Cancellation requested: real task-control checker cancellation"
+        }
+      },
+      {
+        "id": "pev_g0Vc6hyWU00wMHYlE9ks",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 73,
+        "emitted_at": 1795719489493,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6hyXE00W8pSBsnik",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+        "seq": 75,
+        "emitted_at": 1795719489540,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6hvaR004UXAwKPO3",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6i18d00xA3Oc96kZ",
+        "type": "task.cancelled",
+        "session_id": null,
+        "seq": 76,
+        "emitted_at": 1795719499545,
+        "payload": {
+          "execution_epoch": 1,
+          "summary": "Task cancelled",
+          "error": "task cancelled"
+        }
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "art_g0Vc6h9XE00auVgfgm9P",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_h41Kd4MOMTAdtqhySrw2",
+          "task_id": "tsk_g00Vc6h39H00P19QTgOV",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+          "orchestrator_message_id": "msg_hx1Tt2wMS6WFqPRhlaAQ",
+          "tool_part_id": "prt_g0Vc6h7c900b4iwR5w7C",
+          "tool_call_id": "call_725beb6eafc048fb8a71aef779a60100",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_h41Kd4MOMTAdtqhySrw2",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "b066cb35-2e2c-4e4d-b8f0-7d68215f7027"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Inspect task-control-fixture.ts in the exact current project using your projected production tools. Discover the published fixture input in the same-Task artifact catalog, completely read and select it. Use bash to inspect available repository TypeScript tooling and execute real TypeScript or tsserver diagnostics, using noEmit/read-only options. Do not edit files, install dependencies, or commit. Keep the diagnostic process supervised and performing useful read-only inspection until cancellation; do not finish after a single successful check, use a dummy sleep as the work, or leave a detached unsupervised process. Prefer the existing compiler watch or a supervised tsserver diagnostic session, with useful read-only inspection and bounded output while it runs. Preserve command, working directory, tool version, diagnostic results, and any actual blocker in evidence. Remain responsive to progress inquiries and cancellation. Report concrete findings rather than claiming clean diagnostics without executing them. If tooling needs recovery, investigate available local tools read-only and report the exact limitation rather than altering the repository. This is ongoing supervision, not an implementation-change request.",
+            "reason": "The operator explicitly requests one implementation worker to run and supervise read-only repository TypeScript diagnostics until cancellation."
+          },
+          "time_created": 1795719293495
+        },
+        "time_created": 1795719293495
+      },
+      {
+        "id": "art_g0Vc6hJx900dD2Af7NLt",
+        "kind": "dispatch_settlement",
+        "label": "dispatch-settlement",
+        "payload": {
+          "task_id": "tsk_g00Vc6h39H00P19QTgOV",
+          "dispatch_lineage_id": "art_g0Vc6h9XE00auVgfgm9P",
+          "dispatch_id": "art_h41Kd4MOMTAdtqhySrw2",
+          "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+          "outcome": {
+            "kind": "infrastructure_failure",
+            "operation": "recover-abandoned-dispatch",
+            "message": "Worker Session ses_hWNaWjTgJKpBPDdU78tI for dispatch art_h41Kd4MOMTAdtqhySrw2 lost its delivery owner before any terminal lifecycle was recorded",
+            "recovery_authority": {
+              "occurrence_status": "occurrence_committed",
+              "dispatch_lineage_id": "art_g0Vc6h9XE00auVgfgm9P",
+              "dispatch_id": "art_h41Kd4MOMTAdtqhySrw2"
+            },
+            "session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+            "error_name": "AbandonedDispatchError",
+            "infrastructure_error": {
+              "source": "engine_artifact",
+              "artifact_id": "art_hBAD3Wjim4Vfk30EHHYt",
+              "catalog_revision": 14,
+              "expected_sha256": "fee4ff4414dc8fcba380ca699d37982c4e647a04cc3401f7b2b360d789b179cb"
+            },
+            "worker_turn": {
+              "descriptor_id": "wtd_g0Vc6hA7900P5yg7EDk2",
+              "descriptor_hash": "91148fd3a4512912bba7263bff300760d632242b47d3f8411a0c52c0eb6042e2",
+              "input_message_id": "msg_g0Vc6hA7100R6FBKGh9A",
+              "current_dispatch_id": "art_h41Kd4MOMTAdtqhySrw2"
+            }
+          },
+          "time_created": 1795719333543
+        },
+        "time_created": 1795719333543
+      },
+      {
+        "id": "art_g0Vc6hv2X00whoEkkDZ6",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_hyICYrKPrkxHsNNS3ni5",
+          "task_id": "tsk_g00Vc6h39H00P19QTgOV",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtIvgUzzXGolzaLpC",
+          "orchestrator_message_id": "msg_hOMrpkaASx0QAcSTln9x",
+          "tool_part_id": "prt_g0Vc6htoA005a0bWwK52",
+          "tool_call_id": "call_7227c464ecba4da19523e634c8bbd25b",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_hWNaWjTgJKpBPDdU78tI",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_h41Kd4MOMTAdtqhySrw2",
+          "continuation_of_dispatch_id": "art_h41Kd4MOMTAdtqhySrw2",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "e4c1dbaf-1f3e-4dae-b5f4-f8b232fb01cb"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Inspect task-control-fixture.ts in the exact current project using your projected production tools. Discover the published fixture input in the same-Task artifact catalog, completely read and select it. Use bash to inspect available repository TypeScript tooling and execute real TypeScript or tsserver diagnostics, using noEmit/read-only options. Do not edit files, install dependencies, or commit. Keep the diagnostic process supervised and performing useful read-only inspection until cancellation; do not finish after a single successful check, use a dummy sleep as the work, or leave a detached unsupervised process. Prefer the existing compiler watch or a supervised tsserver diagnostic session, with useful read-only inspection and bounded output while it runs. Preserve command, working directory, tool version, diagnostic results, and any actual blocker in evidence. Remain responsive to progress inquiries and cancellation. Report concrete findings rather than claiming clean diagnostics without executing them. If tooling needs recovery, investigate available local tools read-only and report the exact limitation rather than altering the repository. This is ongoing supervision, not an implementation-change request.",
+            "reason": "The operator explicitly requests one implementation worker to run and supervise read-only repository TypeScript diagnostics until cancellation."
+          },
+          "time_created": 1795719476104
+        },
+        "time_created": 1795719476104
+      }
+    ]
+  },
+  {
+    "run": "run2",
+    "id": "tsk_g00Vc6l0zm008LEf6Kg3",
+    "project_id": "prj_h4bMva9GU35xizy76OrF",
+    "session_id": "ses_-zUNtEylyzznNDKFdy4q",
+    "title": "Real terminal lifecycle convergence",
+    "request": "Dispatch the current workflow's appropriate implementation worker to inspect task-control-fixture.ts with the current projected production tools. When that worker reaches its exact terminal completed lifecycle, use that current result and complete this Task in the same control wake. Do not leave the Task active, wait for another message, or describe a terminal worker as still running.",
+    "time_created": 1795720213982,
+    "events": [
+      {
+        "id": "pev_g0Vc6l1F000DGGCFdlhn",
+        "type": "task.execution.opened",
+        "session_id": "ses_-zUNtEylyzznNDKFdy4q",
+        "seq": 3,
+        "emitted_at": 1795720213982,
+        "payload": {
+          "execution_epoch": 1
+        }
+      },
+      {
+        "id": "pev_g0Vc6l1F500TZbePDBxE",
+        "type": "task.created",
+        "session_id": null,
+        "seq": 4,
+        "emitted_at": 1795720214931,
+        "payload": {
+          "summary": "Task started"
+        }
+      },
+      {
+        "id": "pev_g0Vc6l2Rj00L3AGhRoIi",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 5,
+        "emitted_at": 1795720219558,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l2Tw00fdadvLK5z",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 6,
+        "emitted_at": 1795720219695,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l3Xj00fjYdouN5G",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 7,
+        "emitted_at": 1795720223775,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l3YW00I58I3WAAd",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 8,
+        "emitted_at": 1795720223824,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l4IP00rrYHPdFeR",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 9,
+        "emitted_at": 1795720226669,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l4Jr00Yfys2Vkka",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 10,
+        "emitted_at": 1795720226758,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l57900U9u84ogoa",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 11,
+        "emitted_at": 1795720229814,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l58400NT3kNEoHf",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 12,
+        "emitted_at": 1795720229872,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l7hB00PyOCeNIwx",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 14,
+        "emitted_at": 1795720239737,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hJR6EUHeWmTOZvtG3yFX_art_hJR6EUHeWmTOZvtG3yFX",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l7lG00oAdSX2evR",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 16,
+        "emitted_at": 1795720239990,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l7mQ005LmcSu74L",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 17,
+        "emitted_at": 1795720240062,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l8Zc00vhn7OlFSw",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 18,
+        "emitted_at": 1795720243111,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l8al00cCW3e68hS",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 19,
+        "emitted_at": 1795720243183,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l9Kv000iackFN6i",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 20,
+        "emitted_at": 1795720246045,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6l9MU00kaQrMZkKf",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 21,
+        "emitted_at": 1795720246142,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lA1v00aKejqx7Qa",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 22,
+        "emitted_at": 1795720248711,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lA2s006uBLpGIqG",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 23,
+        "emitted_at": 1795720248770,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lAla00BhvJTm65C",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 24,
+        "emitted_at": 1795720251542,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lAn400TNiFMXmit",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 25,
+        "emitted_at": 1795720251634,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lBZu00SNOAuhvXt",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 26,
+        "emitted_at": 1795720254662,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lBan00tOZ9ZO4up",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 27,
+        "emitted_at": 1795720254717,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lCYE004Hqos2c3B",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 28,
+        "emitted_at": 1795720258401,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lCZj00Cb6UuqE2h",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 29,
+        "emitted_at": 1795720258495,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lDf500hNy0tfgct",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 30,
+        "emitted_at": 1795720262671,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lDfG00pN2fr4gpB",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 31,
+        "emitted_at": 1795720262682,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lDfn00eZ5qVato9",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+        "seq": 32,
+        "emitted_at": 1795720262714,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6l7c600B5DQFJvCa",
+          "status": {
+            "type": "terminal",
+            "reason": "completed",
+            "final_message_id": "msg_g0Vc6lCVL00Tm4dBUrYz"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lEOQ00USb0vGaM8",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 35,
+        "emitted_at": 1795720265482,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lER100W5TsRJLnw",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 36,
+        "emitted_at": 1795720265643,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lFL100ivdxRO3gi",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 37,
+        "emitted_at": 1795720269115,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lFMl00uz0eh1UcK",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 38,
+        "emitted_at": 1795720269223,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lGa100b9Xty8q7O",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 39,
+        "emitted_at": 1795720273889,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lGbn006HWRADT9L",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 40,
+        "emitted_at": 1795720273999,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lJG700y1vuuvIIG",
+        "type": "task.completed",
+        "session_id": null,
+        "seq": 41,
+        "emitted_at": 1795720282199,
+        "payload": {
+          "execution_epoch": 1,
+          "summary": "The implementation worker finished the requested read-only inspection of task-control-fixture.ts using its projected production read tool. Its exact final report and the recorded file-read output confirm the primary-project file exports taskControlFixture as a string with value 'ready', matching the previously read and selected input snapshot. The current completion notification confirms the worker has finished; no worker work remains running. No mutations or tests were needed or performed. The inspection result was delivered conversationally, so no separate output file is required. This concludes the Task in the same response handling the worker's completion."
+        }
+      },
+      {
+        "id": "pev_g0Vc6lJHH00Rr0Wh11Lh",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 43,
+        "emitted_at": 1795720284259,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lJJw0085fj6Zf6V",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtExhHzzfNURha1p1",
+        "seq": 44,
+        "emitted_at": 1795720284424,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hFHgJOAgYlMfdOqUM9Xa_art_hFHgJOAgYlMfdOqUM9Xa",
+          "status": {
+            "type": "terminal",
+            "reason": "completed"
+          }
+        }
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "art_g0Vc6l75900X0yklyuVJ",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_hwWKRbqgLAjGUaUeB4ll",
+          "task_id": "tsk_g00Vc6l0zm008LEf6Kg3",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtExhHzzfNURha1p1",
+          "orchestrator_message_id": "msg_h78OMTdjXqowLSroWgD2",
+          "tool_part_id": "prt_g0Vc6l5g200R4yM8WhET",
+          "tool_call_id": "call_6d95f0fa91f848079977c14da0da8c52",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_hwWKRbqgLAjGUaUeB4ll",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "f9af686e-4dfd-44df-ac3e-2082327eb7f7"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Inspect task-control-fixture.ts using your current projected production tools. Discover, completely read, and select the exact published input resource for this file from this Task's catalog; also inspect the actual primary-project file with your production read tool. Report its contents and meaning and whether the actual file agrees with the published input. This is read-only: do not edit files, run unnecessary tests, or broaden scope. Finish your responsibility with a concise evidence-grounded report; the orchestrator will use your finished result to conclude the Task immediately. No standalone document is requested.",
+            "reason": "The operator explicitly requests an implementation worker to inspect the fixture and a task conclusion immediately after the worker finishes."
+          },
+          "time_created": 1795720237379
+        },
+        "time_created": 1795720237379
+      },
+      {
+        "id": "art_g0Vc6lEEx00rqIN6OuVk",
+        "kind": "dispatch_settlement",
+        "label": "dispatch-settlement",
+        "payload": {
+          "task_id": "tsk_g00Vc6l0zm008LEf6Kg3",
+          "dispatch_lineage_id": "art_g0Vc6l75900X0yklyuVJ",
+          "dispatch_id": "art_hwWKRbqgLAjGUaUeB4ll",
+          "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+          "outcome": {
+            "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+            "final_message_id": "msg_g0Vc6lCVL00Tm4dBUrYz",
+            "kind": "terminal_success"
+          },
+          "time_created": 1795720264894
+        },
+        "time_created": 1795720264894
+      },
+      {
+        "id": "art_g0Vc6lIk6008eH1giqw4",
+        "kind": "task_completion_decision",
+        "label": "TaskCompletionDecision",
+        "payload": {
+          "orchestrator_session_id": "ses_-zUNtExhHzzfNURha1p1",
+          "orchestrator_message_id": "msg_hXLhEC0oUtrwNFgtGQ9X",
+          "tool_call_id": "call_cebbed079761414aaff71d0b6be99011",
+          "tool_part_id": "prt_g0Vc6lHeM00s36eGAAQM",
+          "evidence_locators": [
+            {
+              "source": "session_message",
+              "session_id": "ses_h2IZdJ0ivKAkKMof9sur",
+              "message_id": "msg_g0Vc6lCVL00Tm4dBUrYz"
+            },
+            {
+              "source": "session",
+              "session_id": "ses_-zUNtExhHzzfNURha1p1"
+            }
+          ],
+          "deliverable_artifact_locators": [],
+          "worker_artifact_locators": [],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "time_recorded": 1795720282199
+        },
+        "time_created": 1795720282199
+      }
+    ]
+  },
+  {
+    "run": "run2",
+    "id": "tsk_g00Vc6lJKt00QGd0fwg2",
+    "project_id": "prj_h4bMva9GU35xizy76OrF",
+    "session_id": "ses_-zUNtEgRvzzFtuD205s9",
+    "title": "Real task control convergence",
+    "request": "Immediately dispatch one implementation worker to inspect task-control-fixture.ts with the current projected production tools. Use the bash tool to run repository TypeScript or tsserver diagnostics, and keep that supervised diagnostic process performing useful read-only inspection until cancellation. Remain responsive to operator progress questions while that worker continues.",
+    "time_created": 1795720284483,
+    "events": [
+      {
+        "id": "pev_g0Vc6lJYX01OG4AjC8mz",
+        "type": "task.execution.opened",
+        "session_id": "ses_-zUNtEgRvzzFtuD205s9",
+        "seq": 3,
+        "emitted_at": 1795720284483,
+        "payload": {
+          "execution_epoch": 1
+        }
+      },
+      {
+        "id": "pev_g0Vc6lJYZ00lLLpvtoVG",
+        "type": "task.created",
+        "session_id": null,
+        "seq": 4,
+        "emitted_at": 1795720285331,
+        "payload": {
+          "summary": "Task started"
+        }
+      },
+      {
+        "id": "pev_g0Vc6lKlb00kLnTaZCIL",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 5,
+        "emitted_at": 1795720289983,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lKnK00cXdDXOUVG",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 6,
+        "emitted_at": 1795720290090,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lLnu00g4tZNWivR",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 7,
+        "emitted_at": 1795720293970,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lLon00TiHyVCGfj",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 8,
+        "emitted_at": 1795720294024,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lMcB00C0ontlXpQ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 9,
+        "emitted_at": 1795720297087,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lMd800qQtSa90R3",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 10,
+        "emitted_at": 1795720297146,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lOZN004UfPxpn5S",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 11,
+        "emitted_at": 1795720304601,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lOao00Ar1K4I43A",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 12,
+        "emitted_at": 1795720304690,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lRXr00bfw4op3Iq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 14,
+        "emitted_at": 1795720316038,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hna27ypKSvIiNg9BMUiB_art_hna27ypKSvIiNg9BMUiB",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lRd700tggOIr6gP",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 16,
+        "emitted_at": 1795720316364,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lRec00xC29bUXSN",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 17,
+        "emitted_at": 1795720316458,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lSaw00hM4zXVJOq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 18,
+        "emitted_at": 1795720320074,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lSbn00WXv5UqIdu",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 19,
+        "emitted_at": 1795720320127,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lTLz00LUol6Oa5I",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 20,
+        "emitted_at": 1795720322991,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lTMv009TNFVQiWD",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 21,
+        "emitted_at": 1795720323048,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lU3F00QoN2K83lP",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 22,
+        "emitted_at": 1795720325673,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lU4C00OhCEceR1C",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 23,
+        "emitted_at": 1795720325732,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lUxz00rkIIizU24",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 24,
+        "emitted_at": 1795720329191,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lUyv008Q4VVApns",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 25,
+        "emitted_at": 1795720329249,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lWIJ00lgQzRZK1b",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 26,
+        "emitted_at": 1795720334295,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lWJV00d5Fjr47JH",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 27,
+        "emitted_at": 1795720334369,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lWxw008Vz33Z78b",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 28,
+        "emitted_at": 1795720336876,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lWyy00Wj4cjyPgD",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 29,
+        "emitted_at": 1795720336940,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lXnr003UqWfpUci",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 30,
+        "emitted_at": 1795720340095,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lXpD0081KO801Fq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 31,
+        "emitted_at": 1795720340179,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lYOe00QMA5FgLqx",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 32,
+        "emitted_at": 1795720342376,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lYPa00zz2WgNFWs",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 33,
+        "emitted_at": 1795720342434,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lZ9T002eCeFGuBi",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 34,
+        "emitted_at": 1795720345278,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lZAT001NpoQbELY",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 35,
+        "emitted_at": 1795720345341,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6laTL001JZcQU4m0",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 36,
+        "emitted_at": 1795720350354,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_hfAaf5rfCEY9J3JtE490"
+        }
+      },
+      {
+        "id": "pev_g0Vc6ladg00QuK1ItT72",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 37,
+        "emitted_at": 1795720350996,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hl2zk9y9nlpo6EU3aKGM_art_hl2zk9y9nlpo6EU3aKGM",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lah100H9zyGqExW",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 38,
+        "emitted_at": 1795720351202,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hl2zk9y9nlpo6EU3aKGM_art_hl2zk9y9nlpo6EU3aKGM",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6laok00ID80u1mTq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 39,
+        "emitted_at": 1795720351681,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6laqi00OdbLnOcAT",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 40,
+        "emitted_at": 1795720351804,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lbtx00uHXdjp1UY",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 41,
+        "emitted_at": 1795720355849,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hl2zk9y9nlpo6EU3aKGM_art_hl2zk9y9nlpo6EU3aKGM",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lbvj006PRyqkc4I",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 42,
+        "emitted_at": 1795720355959,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hl2zk9y9nlpo6EU3aKGM_art_hl2zk9y9nlpo6EU3aKGM",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lc7t00c87VOXQIr",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 43,
+        "emitted_at": 1795720356713,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lc9V009MuhtU19k",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+        "seq": 44,
+        "emitted_at": 1795720356813,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6lRTH000RQfDnul0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lctR00q7npdkfAm",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+        "seq": 45,
+        "emitted_at": 1795720359661,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hl2zk9y9nlpo6EU3aKGM_art_hl2zk9y9nlpo6EU3aKGM",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6lcvh00Dk2gGrSuU",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 47,
+        "emitted_at": 1795720359801,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_h8Fgwnxls6D1vmeDDnnO"
+        }
+      },
+      {
+        "id": "pev_g0Vc6lcyX00PgDhLLn9I",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 48,
+        "emitted_at": 1795720359976,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_hNQylZIbgD35ZKrs9MuG"
+        }
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "art_g0Vc6lQx900EABQz6TQW",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_h0NVnMP5YSjXXy9j8pAO",
+          "task_id": "tsk_g00Vc6lJKt00QGd0fwg2",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtEfMezzopJ7SVMeK",
+          "orchestrator_message_id": "msg_h5tQZYfm6kIx29gEcb6e",
+          "tool_part_id": "prt_g0Vc6lP1e00Xz1DoL0ef",
+          "tool_call_id": "call_992f95f59ec44a3e81657da75b6e1864",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_hiwouEXgKLXaHA2yJQQE",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_h0NVnMP5YSjXXy9j8pAO",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "f9af686e-4dfd-44df-ac3e-2082327eb7f7"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Outcome: inspect task-control-fixture.ts with your currently projected production tools and use bash to run repository TypeScript or tsserver diagnostics. Keep that supervised diagnostic process performing useful read-only inspection until cancellation; do not finish after a single check. Scope: the exact current primary project directory, no source or configuration edits, no emitted build files, no dependency installation. Discover and completely read/select the published fixture input from this Task's catalog, then inspect relevant live repository compiler configuration and available local TypeScript tooling as necessary. Prefer an existing compiler's noEmit watch diagnostics or a supervised tsserver diagnostic session that checks the fixture and responds to changes; avoid meaningless sleeps or repeated canned output. Execute via bash, retain process supervision and meaningful command/output evidence, and remain able to receive cancellation. Report initial diagnostic findings and any concrete tooling blocker promptly through available coordination, without asking whether to continue. Preserve all existing files and unrelated processes. This responsibility explicitly remains ongoing until cancellation; provide progress when meaningful and do not prematurely declare completion.",
+            "reason": "The operator explicitly requests one implementation worker running supervised read-only TypeScript inspection until cancellation."
+          },
+          "time_created": 1795720313763
+        },
+        "time_created": 1795720313763
+      }
+    ]
+  },
+  {
+    "run": "run3",
+    "id": "tsk_g00Vc6nJFZ00d0Ql7dKk",
+    "project_id": "prj_hHAmn2h92M0RBNg3MQco",
+    "session_id": "ses_-zUNtCgVWzzoIj9x4pAi",
+    "title": "Real terminal lifecycle convergence",
+    "request": "Dispatch the current workflow's appropriate implementation worker to inspect task-control-fixture.ts with the current projected production tools. When that worker reaches its exact terminal completed lifecycle, use that current result and complete this Task in the same control wake. Do not leave the Task active, wait for another message, or describe a terminal worker as still running.",
+    "time_created": 1795720760809,
+    "events": [
+      {
+        "id": "pev_g0Vc6nJV200ksgDISP0S",
+        "type": "task.execution.opened",
+        "session_id": "ses_-zUNtCgVWzzoIj9x4pAi",
+        "seq": 3,
+        "emitted_at": 1795720760809,
+        "payload": {
+          "execution_epoch": 1
+        }
+      },
+      {
+        "id": "pev_g0Vc6nJV500G5x2qd5cK",
+        "type": "task.created",
+        "session_id": null,
+        "seq": 4,
+        "emitted_at": 1795720761771,
+        "payload": {
+          "summary": "Task started"
+        }
+      },
+      {
+        "id": "pev_g0Vc6nKZ7006avksfvgj",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 5,
+        "emitted_at": 1795720765864,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nKat00WPW8KFf2m",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 6,
+        "emitted_at": 1795720765975,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nLWC004PjJlEGM6",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 7,
+        "emitted_at": 1795720769528,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nLXN00OlD6w32rK",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 8,
+        "emitted_at": 1795720769601,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nMMR00ef5An0ElW",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 9,
+        "emitted_at": 1795720772767,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nMNj00atcNl6Ovw",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 10,
+        "emitted_at": 1795720772847,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nNMw00C7Ibww1Db",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 11,
+        "emitted_at": 1795720776642,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nNO400IHv30O66v",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 12,
+        "emitted_at": 1795720776712,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nPxk00FEnF9aumb",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 14,
+        "emitted_at": 1795720786612,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_ha7UFJWuXFpgkEvhfjXG_art_ha7UFJWuXFpgkEvhfjXG",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nQ3E002P9UsQ1nZ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 16,
+        "emitted_at": 1795720786952,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nQ6C00H2YHiABMm",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 17,
+        "emitted_at": 1795720787136,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nR8b00aOxv92Mab",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 18,
+        "emitted_at": 1795720791128,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nRA800UiIntx5h9",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 19,
+        "emitted_at": 1795720791223,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nRuG00xQS96xMNu",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 20,
+        "emitted_at": 1795720794083,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nRvg00jxr5OSVth",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 21,
+        "emitted_at": 1795720794172,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nSdO00LQTA2mkJJ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 22,
+        "emitted_at": 1795720796882,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nSfV003kXz3t1BV",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 23,
+        "emitted_at": 1795720797013,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nTOb00fwbb8fuI3",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 24,
+        "emitted_at": 1795720799809,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nTQI00s6XS5whA1",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 25,
+        "emitted_at": 1795720799913,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nUPt00zNb9eAMVV",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 26,
+        "emitted_at": 1795720803733,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nUQx00JdxS7y6of",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 27,
+        "emitted_at": 1795720803798,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nV5v00cRwxnjLoB",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 28,
+        "emitted_at": 1795720806338,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nV7600PvsNUantm",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 29,
+        "emitted_at": 1795720806412,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nWL000wrtAU7EBx",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 30,
+        "emitted_at": 1795720811118,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nWLJ005rELIOp3v",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 31,
+        "emitted_at": 1795720811136,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nWMN00FqeCcV3br",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+        "seq": 32,
+        "emitted_at": 1795720811203,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nPqh00JuHkJfGVL",
+          "status": {
+            "type": "terminal",
+            "reason": "completed",
+            "final_message_id": "msg_g0Vc6nV1I00xNdOdAbFr"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nXNX007pRwefGNn",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 35,
+        "emitted_at": 1795720815118,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nXRO00yLiW0oTdf",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 36,
+        "emitted_at": 1795720815358,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nYhZ00Su6o2fYUo",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 37,
+        "emitted_at": 1795720820205,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nYjR00aNF71054N",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 38,
+        "emitted_at": 1795720820321,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6na1L00oyx09Ccna",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 39,
+        "emitted_at": 1795720825275,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6na2b00Oyt6XMUJX",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 40,
+        "emitted_at": 1795720825353,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6ncg1007QFBWARpm",
+        "type": "task.completed",
+        "session_id": null,
+        "seq": 41,
+        "emitted_at": 1795720833234,
+        "payload": {
+          "execution_epoch": 1,
+          "summary": "The implementation worker finished the requested read-only inspection of task-control-fixture.ts using its projected production read tool. Its exact final report and recorded read output confirm the actual project file contains the single exported string constant taskControlFixture with value 'ready', matching the captured input. The current authoritative worker completion fact is settled, with no worker work remaining. No edits or runtime tests were requested or performed. The inspection result was delivered conversationally, so no additional file deliverable is needed. This closes the Task in the same control wake as the worker completion."
+        }
+      },
+      {
+        "id": "pev_g0Vc6nciP00sgKtihgLi",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 43,
+        "emitted_at": 1795720835633,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6ncjW007wKN8SH7I",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+        "seq": 44,
+        "emitted_at": 1795720835702,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hiiV27o8vpVRRQREarXe_art_hiiV27o8vpVRRQREarXe",
+          "status": {
+            "type": "terminal",
+            "reason": "completed"
+          }
+        }
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "art_g0Vc6nPBt003GtzyFC3N",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_hcIMD12mHdNvV2XNGBKi",
+          "task_id": "tsk_g00Vc6nJFZ00d0Ql7dKk",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+          "orchestrator_message_id": "msg_hzbWPcB2TWxREPSf3lzG",
+          "tool_part_id": "prt_g0Vc6nNt600tYDVzZLFn",
+          "tool_call_id": "call_a78d9189163747aca6c4edbb895b0c58",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_hcIMD12mHdNvV2XNGBKi",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "81be598f-0045-4ac5-8aae-28b2f390890d"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Inspect task-control-fixture.ts using your current projected production tools. Discover the captured input resource through this Task's artifact catalog, read it completely and select it as your input evidence. Inspect the actual project file with your production read tool and report what it contains, identifying the checks actually performed. This is a bounded read-only inspection: do not edit any files or perform unrelated implementation. Finish your turn with a concise attributable inspection report; publish evidence only if your contract requires it. The original operator asks that the parent task close immediately upon your finished result, so do not leave work pending or ask for unnecessary confirmation.",
+            "reason": "The requested implementation-worker inspection is ready, with the exact input file captured."
+          },
+          "time_created": 1795720783644
+        },
+        "time_created": 1795720783644
+      },
+      {
+        "id": "art_g0Vc6nX9t00RclohSZrb",
+        "kind": "dispatch_settlement",
+        "label": "dispatch-settlement",
+        "payload": {
+          "task_id": "tsk_g00Vc6nJFZ00d0Ql7dKk",
+          "dispatch_lineage_id": "art_g0Vc6nPBt003GtzyFC3N",
+          "dispatch_id": "art_hcIMD12mHdNvV2XNGBKi",
+          "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+          "outcome": {
+            "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+            "final_message_id": "msg_g0Vc6nV1I00xNdOdAbFr",
+            "kind": "terminal_success"
+          },
+          "time_created": 1795720814272
+        },
+        "time_created": 1795720814272
+      },
+      {
+        "id": "art_g0Vc6nc5m00FtHXHMBku",
+        "kind": "task_completion_decision",
+        "label": "TaskCompletionDecision",
+        "payload": {
+          "orchestrator_session_id": "ses_-zUNtCfbBzzPjCA5PaT7",
+          "orchestrator_message_id": "msg_hngavyEEaylAF9zhCyGM",
+          "tool_call_id": "call_0b8a747fbe5d4350905cf6e83d56d031",
+          "tool_part_id": "prt_g0Vc6nb1M00D0hJVRboB",
+          "evidence_locators": [
+            {
+              "source": "session_message",
+              "session_id": "ses_hJ2hCLS8a0eKmVMXV2a1",
+              "message_id": "msg_g0Vc6nV1I00xNdOdAbFr"
+            }
+          ],
+          "deliverable_artifact_locators": [],
+          "worker_artifact_locators": [],
+          "accepted_delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "time_recorded": 1795720833234
+        },
+        "time_created": 1795720833234
+      }
+    ]
+  },
+  {
+    "run": "run3",
+    "id": "tsk_g00Vc6nckL00D3DkZhiU",
+    "project_id": "prj_hHAmn2h92M0RBNg3MQco",
+    "session_id": "ses_-zUNtCN2hzzQFExVzF9j",
+    "title": "Real task control convergence",
+    "request": "Immediately dispatch one implementation worker to inspect task-control-fixture.ts with the current projected production tools. Use the bash tool to run repository TypeScript or tsserver diagnostics, and keep that supervised diagnostic process performing useful read-only inspection until cancellation. Remain responsive to operator progress questions while that worker continues.",
+    "time_created": 1795720835753,
+    "events": [
+      {
+        "id": "pev_g0Vc6ncxo00H4RIcaCtW",
+        "type": "task.execution.opened",
+        "session_id": "ses_-zUNtCN2hzzQFExVzF9j",
+        "seq": 3,
+        "emitted_at": 1795720835753,
+        "payload": {
+          "execution_epoch": 1
+        }
+      },
+      {
+        "id": "pev_g0Vc6ncxq00Xtc6Kj9Dg",
+        "type": "task.created",
+        "session_id": null,
+        "seq": 4,
+        "emitted_at": 1795720836589,
+        "payload": {
+          "summary": "Task started"
+        }
+      },
+      {
+        "id": "pev_g0Vc6neE600IEx4Cj3qx",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 5,
+        "emitted_at": 1795720841442,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6neG600l4L5mGPKX",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 6,
+        "emitted_at": 1795720841566,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nfNf00aetvCdbm5",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 7,
+        "emitted_at": 1795720845878,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nfPC0074OcDpooN",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 8,
+        "emitted_at": 1795720845974,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6ng9800QyoMBJjW0",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 9,
+        "emitted_at": 1795720848822,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6ngAO007DqxjASrd",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 10,
+        "emitted_at": 1795720848900,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6ngvn00KMoaJm0RG",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 11,
+        "emitted_at": 1795720851839,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6ngx400c7ZXYTarQ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 12,
+        "emitted_at": 1795720851918,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nhp400D4HwSIKtn",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 13,
+        "emitted_at": 1795720855266,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nhpz00sUvm23ZGZ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 14,
+        "emitted_at": 1795720855323,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nkjE00f4AeZ00TT",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 16,
+        "emitted_at": 1795720866436,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hffqFS3uqa2r9xOlRdi4_art_hffqFS3uqa2r9xOlRdi4",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nkoc00oOB6N8eD2",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 18,
+        "emitted_at": 1795720866770,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nkqD00nLnvOp47G",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 19,
+        "emitted_at": 1795720866869,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nldR00JaRm1d407",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 20,
+        "emitted_at": 1795720869921,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nlec00Va80176fX",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 21,
+        "emitted_at": 1795720869994,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nmL800gPuqlmjR2",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 22,
+        "emitted_at": 1795720872630,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nmMK00cdLmRZvcc",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 23,
+        "emitted_at": 1795720872703,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nnF3000qLoi12nH",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 24,
+        "emitted_at": 1795720876097,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nnG100kYg3GUoxV",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 25,
+        "emitted_at": 1795720876157,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nnwC00nEI4NDOCB",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 26,
+        "emitted_at": 1795720878771,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nnx700nMoHrzfvq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 27,
+        "emitted_at": 1795720878829,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6noe200XG2P7NTGc",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 28,
+        "emitted_at": 1795720881490,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nofF00ZzwSjWINe",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 29,
+        "emitted_at": 1795720881565,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6npZY00O9zWgC7tl",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 30,
+        "emitted_at": 1795720885056,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6npaz00ytOQUsnO4",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 31,
+        "emitted_at": 1795720885145,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nqDf00kS1Ul4fIN",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 32,
+        "emitted_at": 1795720887543,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nqEZ00BNcitv1D9",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 33,
+        "emitted_at": 1795720887599,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nqyF00SgJX64XHi",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 34,
+        "emitted_at": 1795720890430,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_hrKXPoEsWMbaqJhpqqne"
+        }
+      },
+      {
+        "id": "pev_g0Vc6nr4800gnEkUW7ss",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 35,
+        "emitted_at": 1795720890796,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nr6D00SbNdq86fH",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 36,
+        "emitted_at": 1795720890925,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nrDl009hy1l9VHg",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 37,
+        "emitted_at": 1795720891392,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpEwvnNwbiUSL6DxU4OE_art_hpEwvnNwbiUSL6DxU4OE",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nrHC00DzEgEXBS5",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 38,
+        "emitted_at": 1795720891606,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpEwvnNwbiUSL6DxU4OE_art_hpEwvnNwbiUSL6DxU4OE",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nru500pNrMwyo9B",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 39,
+        "emitted_at": 1795720894017,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nrve00UBWsiHW5a",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 40,
+        "emitted_at": 1795720894114,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nsnE005Ta0xPn3v",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 41,
+        "emitted_at": 1795720897436,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hpEwvnNwbiUSL6DxU4OE_art_hpEwvnNwbiUSL6DxU4OE",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nsp600C7upcpSFi",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 42,
+        "emitted_at": 1795720897552,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_h5iwPCCAOVDvT1S82QRr"
+        }
+      },
+      {
+        "id": "pev_g0Vc6nsrx00cAOkMjjeU",
+        "type": "task.message",
+        "session_id": null,
+        "seq": 44,
+        "emitted_at": 1795720897729,
+        "payload": {
+          "source": "operator.check",
+          "summary": "Operator message recorded",
+          "messageID": "msg_hcWRvVUY1TBEFqe87HJO"
+        }
+      },
+      {
+        "id": "pev_g0Vc6ntwj00MnkeLofQL",
+        "type": "task.infrastructure.failed",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 46,
+        "emitted_at": 1795720901869,
+        "payload": {
+          "component": "dispatch-agent",
+          "operation": "recover-abandoned-dispatch",
+          "summary": "dispatch-agent infrastructure failure",
+          "details": "Worker Session ses_hd6fh0zGsme7FEeyXFro for dispatch art_ht2gcVKI7l8Dvdr639en lost its delivery owner before any terminal lifecycle was recorded",
+          "errorName": "AbandonedDispatchError",
+          "evidenceLocators": [
+            {
+              "source": "engine_artifact",
+              "artifact_id": "art_hqAX5p842W6mAKOghdxI",
+              "catalog_revision": 14,
+              "expected_sha256": "39bcf1b71051e88e8ac0ee48408ff937cdbb83a840411734cd8577bcbda8cd88"
+            }
+          ]
+        }
+      },
+      {
+        "id": "pev_g0Vc6ntxA00H72yJr69g",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 48,
+        "emitted_at": 1795720901895,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6nkdg00sNEsi5qr0",
+          "status": {
+            "type": "terminal",
+            "reason": "error",
+            "error": "Worker Session ses_hd6fh0zGsme7FEeyXFro for dispatch art_ht2gcVKI7l8Dvdr639en lost its delivery owner before any terminal lifecycle was recorded"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nvdd007toH5Totq",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 49,
+        "emitted_at": 1795720908373,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_h1D86OrNNdg0m9OQTglo_art_h1D86OrNNdg0m9OQTglo",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nviD00L0myz1nv9",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 50,
+        "emitted_at": 1795720908657,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_h1D86OrNNdg0m9OQTglo_art_h1D86OrNNdg0m9OQTglo",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nxO4004mUQFIiFP",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 51,
+        "emitted_at": 1795720915095,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_h1D86OrNNdg0m9OQTglo_art_h1D86OrNNdg0m9OQTglo",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nxPn00I94rC6VZm",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 52,
+        "emitted_at": 1795720915203,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_h1D86OrNNdg0m9OQTglo_art_h1D86OrNNdg0m9OQTglo",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nyf500Lz4PFn9dI",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 53,
+        "emitted_at": 1795720919994,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_h1D86OrNNdg0m9OQTglo_art_h1D86OrNNdg0m9OQTglo",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6nyhB00WpYk8lu70",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 54,
+        "emitted_at": 1795720920125,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_h1D86OrNNdg0m9OQTglo_art_h1D86OrNNdg0m9OQTglo",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o1EN00vKjWTS0bo",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 56,
+        "emitted_at": 1795720929870,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_h1D86OrNNdg0m9OQTglo_art_h1D86OrNNdg0m9OQTglo",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o1KE00Z9L0lTBbl",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 58,
+        "emitted_at": 1795720930234,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6o17m00q8jtryYDn",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o1M1008RWCDNfKj",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 59,
+        "emitted_at": 1795720930345,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6o17m00q8jtryYDn",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o1Vi00mRUolqViw",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 60,
+        "emitted_at": 1795720930945,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hRQBRrtcKT1pBxDaA9mW_art_hRQBRrtcKT1pBxDaA9mW",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o1aV000ijoqpiGC",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 61,
+        "emitted_at": 1795720931243,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hRQBRrtcKT1pBxDaA9mW_art_hRQBRrtcKT1pBxDaA9mW",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o2FV00TxOnYj6pZ",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 62,
+        "emitted_at": 1795720933785,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6o17m00q8jtryYDn",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o2GW00Yq7HcTngl",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 63,
+        "emitted_at": 1795720933848,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6o17m00q8jtryYDn",
+          "status": {
+            "type": "streaming"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o2sE00nk1e2ZiXP",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+        "seq": 64,
+        "emitted_at": 1795720936186,
+        "payload": {
+          "inputMessageID": "msg_task-root-control_art_hRQBRrtcKT1pBxDaA9mW_art_hRQBRrtcKT1pBxDaA9mW",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o2zJ00uAUCedPUH",
+        "type": "task.cancellation.requested",
+        "session_id": null,
+        "seq": 66,
+        "emitted_at": 1795720936624,
+        "payload": {
+          "execution_epoch": 1,
+          "actor": "user",
+          "surface": "api",
+          "reason": "real task-control checker cancellation",
+          "summary": "Cancellation requested: real task-control checker cancellation"
+        }
+      },
+      {
+        "id": "pev_g0Vc6o2zk00jvbjtAPkc",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 67,
+        "emitted_at": 1795720936652,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6o17m00q8jtryYDn",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o30K00TB5HTZid7",
+        "type": "agent.execution.lifecycle",
+        "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+        "seq": 69,
+        "emitted_at": 1795720936688,
+        "payload": {
+          "inputMessageID": "msg_g0Vc6o17m00q8jtryYDn",
+          "status": {
+            "type": "idle"
+          }
+        }
+      },
+      {
+        "id": "pev_g0Vc6o5cE00R1DQG5Ii5",
+        "type": "task.cancelled",
+        "session_id": null,
+        "seq": 70,
+        "emitted_at": 1795720946724,
+        "payload": {
+          "execution_epoch": 1,
+          "summary": "Task cancelled",
+          "error": "task cancelled"
+        }
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "art_g0Vc6nk4I00aNPdEUHtM",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_ht2gcVKI7l8Dvdr639en",
+          "task_id": "tsk_g00Vc6nckL00D3DkZhiU",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+          "orchestrator_message_id": "msg_hKiB94bFCPg9OEdiHeyT",
+          "tool_part_id": "prt_g0Vc6niHy00VRliqJM71",
+          "tool_call_id": "call_202796731b1744d3a74e62b5cf21714a",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_hd6fh0zGsme7FEeyXFro",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_ht2gcVKI7l8Dvdr639en",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "81be598f-0045-4ac5-8aae-28b2f390890d"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Inspect task-control-fixture.ts in the current Task project using your projected production tools. Discover and read/select the published fixture input from the Task catalog. Use bash to run real repository TypeScript or tsserver diagnostics, using installed tooling and noEmit/read-only settings. Discover local tooling/configuration as necessary; do not install dependencies, edit sources, commit, or emit build artifacts. Keep the supervised diagnostic process doing useful read-only inspection until explicit cancellation; do not finish after one diagnostic pass or use idle sleep as a substitute. Prefer a supervised TypeScript watch or tsserver diagnostic session, inspecting meaningful diagnostics/configuration as appropriate, without busy-spinning. Record exact working directory, commands, diagnostic results and limitations. Remain available to progress questions while inspection continues. Do not self-cancel or stop the requested ongoing inspection merely because the fixture has no errors.",
+            "reason": "The operator requests one implementation worker to inspect the fixture and keep supervised read-only diagnostics running until cancellation."
+          },
+          "time_created": 1795720863898
+        },
+        "time_created": 1795720863898
+      },
+      {
+        "id": "art_g0Vc6ntwp00KST1TDBlq",
+        "kind": "dispatch_settlement",
+        "label": "dispatch-settlement",
+        "payload": {
+          "task_id": "tsk_g00Vc6nckL00D3DkZhiU",
+          "dispatch_lineage_id": "art_g0Vc6nk4I00aNPdEUHtM",
+          "dispatch_id": "art_ht2gcVKI7l8Dvdr639en",
+          "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+          "outcome": {
+            "kind": "infrastructure_failure",
+            "operation": "recover-abandoned-dispatch",
+            "message": "Worker Session ses_hd6fh0zGsme7FEeyXFro for dispatch art_ht2gcVKI7l8Dvdr639en lost its delivery owner before any terminal lifecycle was recorded",
+            "recovery_authority": {
+              "occurrence_status": "occurrence_committed",
+              "dispatch_lineage_id": "art_g0Vc6nk4I00aNPdEUHtM",
+              "dispatch_id": "art_ht2gcVKI7l8Dvdr639en"
+            },
+            "session_id": "ses_hd6fh0zGsme7FEeyXFro",
+            "error_name": "AbandonedDispatchError",
+            "infrastructure_error": {
+              "source": "engine_artifact",
+              "artifact_id": "art_hqAX5p842W6mAKOghdxI",
+              "catalog_revision": 14,
+              "expected_sha256": "39bcf1b71051e88e8ac0ee48408ff937cdbb83a840411734cd8577bcbda8cd88"
+            },
+            "worker_turn": {
+              "descriptor_id": "wtd_g0Vc6nkdn00RYE8ECjjx",
+              "descriptor_hash": "5da5e2521b8b46e1720e92b59f6ef5be28d70cd98cc1d374e2ed21c8841fe77c",
+              "input_message_id": "msg_g0Vc6nkdg00sNEsi5qr0",
+              "current_dispatch_id": "art_ht2gcVKI7l8Dvdr639en"
+            }
+          },
+          "time_created": 1795720901874
+        },
+        "time_created": 1795720901874
+      },
+      {
+        "id": "art_g0Vc6o0ZH00z5BpGqnUp",
+        "kind": "dispatch_lineage",
+        "label": "dispatch-lineage",
+        "payload": {
+          "dispatch_id": "art_hYjJ2irkItz2z54RaUWU",
+          "task_id": "tsk_g00Vc6nckL00D3DkZhiU",
+          "execution_epoch": 1,
+          "orchestrator_session_id": "ses_-zUNtCLxOzziL6W5JYtI",
+          "orchestrator_message_id": "msg_hmcIIq2u6opWxS1uZc26",
+          "tool_part_id": "prt_g0Vc6nzFG00WuYMyXo1B",
+          "tool_call_id": "call_9294679775d1434c82b732d6522a5315",
+          "tool_name": "dispatch_agents",
+          "collection_member_index": 0,
+          "collection_member_count": 1,
+          "child_session_id": "ses_hd6fh0zGsme7FEeyXFro",
+          "target_agent_id": "dynamic-builder",
+          "projected_worker_identity": {
+            "agentID": "dynamic-builder",
+            "baseRole": "build",
+            "sessionKind": "build",
+            "dispatchAdapterID": "build",
+            "runtimeTemplateABIVersion": 1,
+            "dispatchAdapterABIVersion": 1,
+            "projectionHash": "1241ae239663e8a3a8f6aa25629d41cadfe4a79cc316a68451c85c126bef451e"
+          },
+          "work_scope": {
+            "kind": "task"
+          },
+          "delivery_slice_revision_ids": [],
+          "workflow_binding": {
+            "kind": "direct",
+            "package_revision": {
+              "scope": "built_in",
+              "project_id": null,
+              "namespace": "builtin",
+              "id": "dynamic",
+              "version": "2026.11.07.1",
+              "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+            }
+          },
+          "workflow_node_id": null,
+          "workflow_occurrence_id": "art_ht2gcVKI7l8Dvdr639en",
+          "continuation_of_dispatch_id": "art_ht2gcVKI7l8Dvdr639en",
+          "delivery_owner": {
+            "kind": "runtime_process",
+            "process_occurrence_id": "a61baee9-c339-4030-947f-926cb7b4c9bc"
+          },
+          "adapter_input": {
+            "goal_ids": [],
+            "request": "Inspect task-control-fixture.ts in the current Task project using your projected production tools. Discover and read/select the published fixture input from the Task catalog. Use bash to run real repository TypeScript or tsserver diagnostics, using installed tooling and noEmit/read-only settings. Discover local tooling/configuration as necessary; do not install dependencies, edit sources, commit, or emit build artifacts. Keep the supervised diagnostic process doing useful read-only inspection until explicit cancellation; do not finish after one diagnostic pass or use idle sleep as a substitute. Prefer a supervised TypeScript watch or tsserver diagnostic session, inspecting meaningful diagnostics/configuration as appropriate, without busy-spinning. Record exact working directory, commands, diagnostic results and limitations. Remain available to progress questions while inspection continues. Do not self-cancel or stop the requested ongoing inspection merely because the fixture has no errors.",
+            "reason": "The operator requests one implementation worker to inspect the fixture and keep supervised read-only diagnostics running until cancellation."
+          },
+          "time_created": 1795720927323
+        },
+        "time_created": 1795720927323
+      }
+    ]
+  }
+]

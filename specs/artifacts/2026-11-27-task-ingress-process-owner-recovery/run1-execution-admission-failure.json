@@ -1,0 +1,84 @@
+{
+  "run": "run1",
+  "originalCheckerExitCode": 0,
+  "batchAcceptance": "rejected",
+  "reason": "An allocated lease did not prove executable recovery; its runner was unconfigured and the next real activation waited for expiry.",
+  "listenerPublishedAt": 1795719333377,
+  "firstAllocatedActivationAt": 1795719333596,
+  "firstAllocatedActivationAfterListenerMs": 219,
+  "activations": [
+    {
+      "id": "act_g0Vc6hJ7700fbxs3CArz",
+      "owner_occurrence_id": "b066cb35-2e2c-4e4d-b8f0-7d68215f7027",
+      "time_activated": 1795719330314,
+      "expires_at": 1795719333593,
+      "assistants": [
+        {
+          "id": "msg_hhiBpOZ9DbG9y9Uy74Al",
+          "sessionID": "ses_-zUNtIvgUzzXGolzaLpC",
+          "createdAt": 1795719330594,
+          "completedAt": 1795719333581,
+          "providerRequests": []
+        }
+      ]
+    },
+    {
+      "id": "act_g0Vc6hJy600xCp8XRQh9",
+      "owner_occurrence_id": "e4c1dbaf-1f3e-4dae-b5f4-f8b232fb01cb",
+      "time_activated": 1795719333596,
+      "expires_at": 1795719453596,
+      "assistants": []
+    },
+    {
+      "id": "act_g0Vc6hpBq00G7DBVteId",
+      "owner_occurrence_id": "e4c1dbaf-1f3e-4dae-b5f4-f8b232fb01cb",
+      "time_activated": 1795719453613,
+      "expires_at": 1795719573613,
+      "assistants": [
+        {
+          "id": "msg_hOMrpkaASx0QAcSTln9x",
+          "sessionID": "ses_-zUNtIvgUzzXGolzaLpC",
+          "createdAt": 1795719453847,
+          "completedAt": 1795719478521,
+          "providerRequests": [
+            {
+              "id": "act_g0Vc6hpRV00uUlc3fNIY",
+              "time_created": 1795719454589
+            },
+            {
+              "id": "act_g0Vc6hqfB001CyK3VVIl",
+              "time_created": 1795719459281
+            },
+            {
+              "id": "act_g0Vc6hrRO00OPMnDEoQj",
+              "time_created": 1795719462270
+            },
+            {
+              "id": "act_g0Vc6htL600ZIhoiwM0m",
+              "time_created": 1795719469568
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "driverFaults": [
+    {
+      "level": "error",
+      "time": "2026-11-26T18:55:33.647Z",
+      "service": "engine.task-control-driver",
+      "logDomain": "non-session",
+      "data": {
+        "taskID": "tsk_g00Vc6h39H00P19QTgOV",
+        "pass": 0,
+        "failures": 1,
+        "error": {
+          "type": "Error",
+          "message": "Task-root fact runner is not configured for this instance",
+          "stack": "Error: Task-root fact runner is not configured for this instance\n    at runner (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-root-ingress-delivery.ts:215:30)\n    at runActivation (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-root-ingress-delivery.ts:1169:7)\n    at activate (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-root-ingress-delivery.ts:1177:100)\n    at scanTaskRuntimeControlPlane (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-root-ingress-delivery.ts:2011:33)"
+        }
+      },
+      "message": "Task-control scan faulted; re-armed under backoff"
+    }
+  ]
+}

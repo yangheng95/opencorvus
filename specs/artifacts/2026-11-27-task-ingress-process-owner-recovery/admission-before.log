@@ -1,0 +1,53 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\task-root-process-owner.test.ts:
+254 |   await using project = await memoryProject()
+255 |   await Instance.provide({ directory: project.path, fn: async () => {
+256 |     const frame = await taskFrame(project.path)
+257 |     const error = await reconcileTaskControlPlane(frame.taskID).catch(error => error)
+258 |     expect(error).toMatchObject({ message: "Task-root fact runner is not configured for this instance" })
+259 |     expect(projectTaskRootIngress(frame.ingress.id, Date.now(), readTaskRootIngressEvidence)).toEqual({ state: "ready" })
+                                                                                                    ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "state": "ready",
++   "activationID": "act_g0Vc6jwLi00AvwbxfXgz",
++   "expiresAt": 1795720077789,
++   "ownerOccurrenceID": "test-runtime:33956",
++   "state": "leased",
+  }
+
+- Expected  - 1
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\task-root-process-owner.test.ts:259:95)
+(fail) an unavailable executor returns its configuration error and the original input executes after binding [1378.55ms]
+278 |     const originalFailure = new Error("Original executor admission failure")
+279 |     {
+280 |       using failure = TestHooks.replaceTaskIngressRunner({ runner: async () => { throw originalFailure } })
+281 |       const error = await reconcileTaskControlPlane(frame.taskID).catch(error => error)
+282 |       expect(error).toBe(originalFailure)
+283 |       expect(projectTaskRootIngress(frame.ingress.id, Date.now(), readTaskRootIngressEvidence)).toEqual({ state: "ready" })
+                                                                                                      ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "state": "ready",
++   "activationID": "act_g0Vc6jwgh00mM7vsaizR",
++   "expiresAt": 1795720079091,
++   "ownerOccurrenceID": "test-runtime:33956",
++   "state": "leased",
+  }
+
+- Expected  - 1
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\task-root-process-owner.test.ts:283:97)
+(fail) an executor's original failure settles its physical claim before the same input completes [1306.78ms]
+
+ 0 pass
+ 7 filtered out
+ 2 fail
+ 4 expect() calls
+Ran 2 tests across 1 file. [4.09s]
