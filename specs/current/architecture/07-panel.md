@@ -3018,6 +3018,11 @@ own colors. Page typography follows the sole shared typography authority.
 Handoff context keeps its existing disclosure state and reads at natural height
 within the conversation width. Authored paragraph line boundaries and long
 identifiers remain readable in main/child transcripts and progress previews.
+Disclosure names distinguish a delegated participant message, a message whose
+original TextPart explicitly has `kind=control`, and a progress-card input
+preview. Visible labels and accessible names share the current locale. This
+presentation reads original Part types, never prose keywords, and does not
+change authorship, message grouping, content, or disclosure ownership.
 An explicit expansion releases the nearest transcript's existing follow mode
 before layout grows, preserving the operator's reading position.
 The main conversation scrollport keeps native scroll anchoring disabled in both

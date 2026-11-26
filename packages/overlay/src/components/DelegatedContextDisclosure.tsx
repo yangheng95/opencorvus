@@ -5,8 +5,10 @@ import { pauseAutoScrollForReading } from "../utils/dom-utils"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 
-export function DelegatedContextDisclosure(props: { id: string; children: JSX.Element }) {
+export function DelegatedContextDisclosure(props: { id: string; kind: "message" | "control" | "input"; children: JSX.Element }) {
   const expanded = () => conversationDisclosureExpanded(props.id)
+  const label = () => t(props.kind === "control" ? "transcript.control_context"
+    : props.kind === "input" ? "transcript.input_context" : "transcript.delegated_context")
   return (
     <section class="msg-delegated-context" data-expanded={expanded() ? "true" : "false"}>
       <Button
@@ -17,7 +19,7 @@ export function DelegatedContextDisclosure(props: { id: string; children: JSX.El
         data-chrome="context-disclosure"
         data-ui="delegated-context-toggle"
         aria-expanded={expanded()}
-        aria-label={t("transcript.delegated_context")}
+        aria-label={label()}
         onClick={(event) => {
           event.stopPropagation()
           if (!expanded()) pauseAutoScrollForReading(event.currentTarget)
@@ -27,7 +29,7 @@ export function DelegatedContextDisclosure(props: { id: string; children: JSX.El
         <span class="msg-delegated-context__icon">
           <Icon name="git-branch" />
         </span>
-        <span class="msg-delegated-context__label">{t("transcript.delegated_context")}</span>
+        <span class="msg-delegated-context__label">{label()}</span>
         <span class="msg-transcript-disclosure__marker msg-delegated-context__marker">
           <Icon name={expanded() ? "chevron-down" : "chevron"} />
         </span>

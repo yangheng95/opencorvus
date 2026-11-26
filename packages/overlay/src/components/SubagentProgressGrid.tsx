@@ -160,7 +160,7 @@ function SubagentProgressCard(props: { row: Accessor<SubagentSessionRow>; onOpen
       >
         <Show when={inputPreview()}>
           {(preview) => (
-            <DelegatedContextDisclosure id={`delegated-context:subagent:${sessionID()}`}>
+            <DelegatedContextDisclosure id={`delegated-context:subagent:${sessionID()}`} kind="input">
               <StaticTextPart text={preview()} />
             </DelegatedContextDisclosure>
           )}

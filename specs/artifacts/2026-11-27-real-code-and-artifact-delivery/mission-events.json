@@ -1,0 +1,1072 @@
+[
+  {
+    "id": "pev_hW9e9lu7I0cLQkYAdCpp",
+    "kind": "event",
+    "type": "mission.execution.opened",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "mission.wake",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": "140e984e-dc70-5519-a811-9e6de3e257ca",
+    "reply_to": null,
+    "seq": 1,
+    "deadline_ms": null,
+    "emitted_at": 1795721641869,
+    "payload": {
+      "missionID": "wake-41533dcb3a7872e5ed27052c4983e777",
+      "requestID": "msg_91160424-efef-4b4a-a583-31921b58edc1",
+      "requestFingerprint": "fd909c7786cb8079eca7d99df9f5e34e449d5396d76729315b2aa702ae280512"
+    }
+  },
+  {
+    "id": "pev_g0Vc6r13m00F2oIfdFq7",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 2,
+    "deadline_ms": null,
+    "emitted_at": 1795721644198,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r14u00K99YvspoV",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 3,
+    "deadline_ms": null,
+    "emitted_at": 1795721644268,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r22E00DmUJCzkCA",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 4,
+    "deadline_ms": null,
+    "emitted_at": 1795721647946,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r22t00SZzXnlQiS",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 5,
+    "deadline_ms": null,
+    "emitted_at": 1795721647987,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r2n9002g9AN1Nu8",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 6,
+    "deadline_ms": null,
+    "emitted_at": 1795721650855,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r2nc00hON7SCiWO",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 7,
+    "deadline_ms": null,
+    "emitted_at": 1795721650884,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r4A000azngSTuy7",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 8,
+    "deadline_ms": null,
+    "emitted_at": 1795721656116,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r4AV000RQNpr1Du",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 9,
+    "deadline_ms": null,
+    "emitted_at": 1795721656147,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r4qg006Ov8fdnRT",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 10,
+    "deadline_ms": null,
+    "emitted_at": 1795721658762,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r4rU00pJ8qjbGhW",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 11,
+    "deadline_ms": null,
+    "emitted_at": 1795721658812,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r5h400wBTDAlxSf",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 12,
+    "deadline_ms": null,
+    "emitted_at": 1795721662010,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6r5hy0020SF7fH11",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 13,
+    "deadline_ms": null,
+    "emitted_at": 1795721662066,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6rA6B008xKxgLnrA",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 14,
+    "deadline_ms": null,
+    "emitted_at": 1795721678943,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6rA6k002HKZbdeV3",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 15,
+    "deadline_ms": null,
+    "emitted_at": 1795721678977,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6rEas005W9oTXuIo",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 16,
+    "deadline_ms": null,
+    "emitted_at": 1795721696222,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6rEe700FUQtnMgFI",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 17,
+    "deadline_ms": null,
+    "emitted_at": 1795721696423,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6rFdp00xF1GMB1VY",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 18,
+    "deadline_ms": null,
+    "emitted_at": 1795721700249,
+    "payload": {
+      "inputMessageID": "msg_hmhVc7hcpi3DlxmG1iRr",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "id": "pev_hJZJlsh2qmeZeqXgz44i",
+    "kind": "event",
+    "type": "scheduler.message",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "scheduler-endpoint:{\"kind\":\"task_scheduler\",\"project_id\":\"prj_haW9BdBH559F4Yw143ch\",\"task_id\":\"tsk_g00Vc6rEH000wydhL06W\",\"root_session_id\":\"ses_-zUNt8lWpzz4OB7haLgK\"}",
+    "target": "scheduler-endpoint:{\"kind\":\"mission_scheduler\",\"project_id\":\"prj_haW9BdBH559F4Yw143ch\",\"mission_id\":\"wake-41533dcb3a7872e5ed27052c4983e777\",\"session_id\":\"ses_-zUNt8zYJzzVZK3isz0S\"}",
+    "causation_id": "pev_g0Vc6t3TP00jNxU885Xl",
+    "correlation_id": "pev_g0Vc6t3TP00jNxU885Xl",
+    "reply_to": null,
+    "seq": 19,
+    "deadline_ms": null,
+    "emitted_at": 1795722127363,
+    "payload": {
+      "protocol": "scheduler-message-v3",
+      "invocation_id": "task-terminal:pev_g0Vc6t3TP00jNxU885Xl",
+      "message_kind": "notification",
+      "thread_id": "task:tsk_g00Vc6rEH000wydhL06W:lifecycle",
+      "source_terminal_event_id": "pev_g0Vc6t3TP00jNxU885Xl",
+      "source_task_execution_epoch": 1,
+      "target_task_execution_epoch": null,
+      "source_body_sha256": "a09453ec57eafdc50b91010ee9e31a5c630301eb174d23be82d99e50145ddf65",
+      "subject": "Task tsk_g00Vc6rEH000wydhL06W completed"
+    }
+  },
+  {
+    "id": "pev_g0Vc6t3ry00RCmwQZssK",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 20,
+    "deadline_ms": null,
+    "emitted_at": 1795722131654,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t3wi00UtF82SgF9",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 21,
+    "deadline_ms": null,
+    "emitted_at": 1795722131948,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t50E00RtTj6ksq2",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 22,
+    "deadline_ms": null,
+    "emitted_at": 1795722136010,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t51000M0CO0nOSM",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 23,
+    "deadline_ms": null,
+    "emitted_at": 1795722136057,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t5mK00ZYgKT8NN9",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 24,
+    "deadline_ms": null,
+    "emitted_at": 1795722138992,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t5n100mcYadnRvn",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 25,
+    "deadline_ms": null,
+    "emitted_at": 1795722139035,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t7pR00553gcgZxo",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 26,
+    "deadline_ms": null,
+    "emitted_at": 1795722146872,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t7qB00BEVdqa7S0",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 27,
+    "deadline_ms": null,
+    "emitted_at": 1795722146919,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t9Tb00dJ4XenBLh",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 28,
+    "deadline_ms": null,
+    "emitted_at": 1795722153206,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6t9Ua00S9qjXzGrK",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 29,
+    "deadline_ms": null,
+    "emitted_at": 1795722153268,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tAiM00WaKiceXaT",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 30,
+    "deadline_ms": null,
+    "emitted_at": 1795722157966,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tAjN00zC3ob3OZT",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 31,
+    "deadline_ms": null,
+    "emitted_at": 1795722158029,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tCdt00yjR9HxA4x",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 32,
+    "deadline_ms": null,
+    "emitted_at": 1795722165377,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tCel00qnX6Mi2zw",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 33,
+    "deadline_ms": null,
+    "emitted_at": 1795722165431,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tJUN00JZdsNeeaO",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 34,
+    "deadline_ms": null,
+    "emitted_at": 1795722191694,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tJWD00RNMh3dvr1",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 35,
+    "deadline_ms": null,
+    "emitted_at": 1795722191809,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tPmS002W952NNEL",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 36,
+    "deadline_ms": null,
+    "emitted_at": 1795722215880,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tPn400vr0FX2BIH",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 37,
+    "deadline_ms": null,
+    "emitted_at": 1795722215918,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tRfT001t9cFI7vn",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 38,
+    "deadline_ms": null,
+    "emitted_at": 1795722223135,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tRg800TqjAsy7tw",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 39,
+    "deadline_ms": null,
+    "emitted_at": 1795722223176,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "streaming"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6tTKY00wbEGP9HiF",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 40,
+    "deadline_ms": null,
+    "emitted_at": 1795722229525,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "idle"
+      }
+    }
+  },
+  {
+    "id": "pev_g0Vc6ty0F00Q303k3ZwW",
+    "kind": "event",
+    "type": "agent.execution.lifecycle",
+    "aggregate_type": "session",
+    "aggregate_id": "ses_-zUNt8zYJzzVZK3isz0S",
+    "project_id": null,
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "session.bridge",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 41,
+    "deadline_ms": null,
+    "emitted_at": 1795722347431,
+    "payload": {
+      "inputMessageID": "msg_hy8TNZBjC2s9TQGjkLz6",
+      "status": {
+        "type": "idle"
+      }
+    }
+  }
+]

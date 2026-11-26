@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "totalRequests": 77,
+  "runs": {
+    "run1": {
+      "requests": 75,
+      "agents": {
+        "memory": 2,
+        "chat": 1,
+        "mission": 18,
+        "orchestrator": 33,
+        "base-tester": 21
+      },
+      "readerTerminals": {
+        "eof": 74,
+        "error": 1
+      }
+    },
+    "run2": {
+      "requests": 2,
+      "agents": {
+        "memory": 1,
+        "chat": 1
+      },
+      "readerTerminals": {
+        "eof": 2
+      }
+    }
+  },
+  "model": "openai/gpt-6.1-sol",
+  "streaming": true,
+  "httpStatus": 200,
+  "allReadersSettled": true,
+  "scope": "run1 includes actual UI-created Mission/Task, normal product tester and preflight; run2 is paired-auth/model preflight plus viewing and byte-reading the same completed Task after UI rebuild, not a second execution of that task"
+}

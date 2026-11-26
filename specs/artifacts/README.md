@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [实际代码与产物交付证据](2026-11-27-real-code-and-artifact-delivery/README.md)
 - [Task 根输入物理所有者恢复证据](2026-11-27-task-ingress-process-owner-recovery/README.md)
 - [无次数上限真实任务恢复的证据](2026-11-27-real-task-recovery-without-request-ceiling/README.md)
 - [真实任务控制与交付证据](2026-11-26-real-task-control-and-delivery/README.md)

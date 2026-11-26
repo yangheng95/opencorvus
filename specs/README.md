@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [实际代码修改与产物交付](records/2026-11/2026-11-27-real-code-and-artifact-delivery.md)
 - [Task 根输入的物理进程所有者恢复](records/2026-11/2026-11-27-task-ingress-process-owner-recovery.md)
 - [无请求次数上限的真实任务恢复验收](records/2026-11/2026-11-27-real-task-recovery-without-request-ceiling.md)
 - [真实任务控制与交付验收](records/2026-11/2026-11-26-real-task-control-and-delivery.md)

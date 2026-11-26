@@ -1,0 +1,242 @@
+{
+  "status": "passed",
+  "taskID": "tsk_g00Vc6rEH000wydhL06W",
+  "decisionID": "art_g0Vc6t2nd000qWgoL5Eu",
+  "commands": [
+    {
+      "args": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "unittest",
+        "-v",
+        "test_sales_summary.py"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "test_actual_csv (test_sales_summary.SalesSummaryTests.test_actual_csv) ... ok\ntest_bad_shape_and_headers (test_sales_summary.SalesSummaryTests.test_bad_shape_and_headers) ... ok\ntest_empty_data (test_sales_summary.SalesSummaryTests.test_empty_data) ... ok\ntest_escaped_csv_original_regions_and_cli (test_sales_summary.SalesSummaryTests.test_escaped_csv_original_regions_and_cli) ... ok\ntest_input_cannot_be_output (test_sales_summary.SalesSummaryTests.test_input_cannot_be_output) ... ok\ntest_invalid_amounts_api_and_cli (test_sales_summary.SalesSummaryTests.test_invalid_amounts_api_and_cli) ... ok\ntest_refund_and_zero (test_sales_summary.SalesSummaryTests.test_refund_and_zero) ... ok\ntest_reordered_headers_and_empty_region (test_sales_summary.SalesSummaryTests.test_reordered_headers_and_empty_region) ... ok\ntest_sum_before_rounding_and_large_precision (test_sales_summary.SalesSummaryTests.test_sum_before_rounding_and_large_precision) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 1.196s\n\nOK\n"
+    },
+    {
+      "args": [
+        "C:\\Python314\\python.exe",
+        "-X",
+        "utf8",
+        "sales_summary.py",
+        "sales.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261127-artifact-delivery\\run1-functional\\summary.json",
+        "--report",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261127-artifact-delivery\\run1-functional\\销售报告.md"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "expected": {
+    "order_count": 5,
+    "total_amount": "35.60",
+    "by_region": {
+      "华东": {
+        "order_count": 3,
+        "total_amount": "28.25"
+      },
+      "华南": {
+        "order_count": 2,
+        "total_amount": "7.35"
+      }
+    }
+  },
+  "actual": {
+    "order_count": 5,
+    "total_amount": "35.60",
+    "by_region": {
+      "华东": {
+        "order_count": 3,
+        "total_amount": "28.25"
+      },
+      "华南": {
+        "order_count": 2,
+        "total_amount": "7.35"
+      }
+    }
+  },
+  "inputBytes": 181,
+  "inputExact": true,
+  "published": [
+    {
+      "path": "sales_summary.py",
+      "bytes": 5970,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-5969/5970",
+        "Content-Type": "text/x-python",
+        "ETag": "\"sha256:31999a4c763bf48e94d7b4fbacf4889ef0b8cd24dfafa927f47ccf17c991b11e\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "dd637686-6654-4391-83d8-50f06d657ad8",
+        "Date": "Thu, 26 Nov 2026 19:43:57 GMT",
+        "Content-Length": "5970"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "sales_summary.py",
+          "media_type": "text/x-python",
+          "bytes": 5970,
+          "sha256": "31999a4c763bf48e94d7b4fbacf4889ef0b8cd24dfafa927f47ccf17c991b11e"
+        }
+      },
+      "primaryBytesEqual": true
+    },
+    {
+      "path": "test_sales_summary.py",
+      "bytes": 6363,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-6362/6363",
+        "Content-Type": "text/x-python",
+        "ETag": "\"sha256:65d52b04b8d5d73cd924ce8bf7ab3925ba49b8a4b7e6e08c3278d2b7f6355f1e\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "34885eb7-3023-4cc2-aa6a-776eaee9709c",
+        "Date": "Thu, 26 Nov 2026 19:43:57 GMT",
+        "Content-Length": "6363"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "test_sales_summary.py",
+          "media_type": "text/x-python",
+          "bytes": 6363,
+          "sha256": "65d52b04b8d5d73cd924ce8bf7ab3925ba49b8a4b7e6e08c3278d2b7f6355f1e"
+        }
+      },
+      "primaryBytesEqual": true
+    },
+    {
+      "path": "summary.json",
+      "bytes": 238,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-237/238",
+        "Content-Type": "application/json",
+        "ETag": "\"sha256:603b0f11584d7013e06306eb46297ab093f204b6de5cbe08ff879fc78f35ef8d\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "0b261fb9-afa5-412f-8604-f02f648a5b69",
+        "Date": "Thu, 26 Nov 2026 19:43:57 GMT",
+        "Content-Length": "238"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "summary.json",
+          "media_type": "application/json",
+          "bytes": 238,
+          "sha256": "603b0f11584d7013e06306eb46297ab093f204b6de5cbe08ff879fc78f35ef8d"
+        }
+      },
+      "primaryBytesEqual": true
+    },
+    {
+      "path": "销售报告.md",
+      "bytes": 1113,
+      "status": 200,
+      "headers": {
+        "Content-Disposition": "inline",
+        "Content-Range": "bytes 0-1112/1113",
+        "Content-Type": "text/markdown",
+        "ETag": "\"sha256:8cea0f68f5d4d7bab30c1450372e0234905506c1c1c151edf4f31155e12553de\"",
+        "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+        "Vary": "Origin",
+        "x-opencorvus-request-id": "0a833c21-cebb-4a64-b0bf-a1a5b3a7c1b9",
+        "Date": "Thu, 26 Nov 2026 19:43:57 GMT",
+        "Content-Length": "1113"
+      },
+      "locator": {
+        "source": "task_artifact_resource",
+        "ref": {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          },
+          "tree": "resources",
+          "path": "销售报告.md",
+          "media_type": "text/markdown",
+          "bytes": 1113,
+          "sha256": "8cea0f68f5d4d7bab30c1450372e0234905506c1c1c151edf4f31155e12553de"
+        }
+      },
+      "primaryBytesEqual": true
+    }
+  ],
+  "uiDownloadVerification": {
+    "status": "passed",
+    "files": [
+      {
+        "path": "sales_summary.py",
+        "downloadPath": "C:\\Users\\hengu\\Downloads\\sales_summary.py",
+        "bytes": 5970,
+        "primaryBytesEqual": true,
+        "modifiedAt": 1795722281.139608,
+        "method": "Native CUA click on each original-file download button; actual browser download file compared with delivered primary bytes"
+      },
+      {
+        "path": "test_sales_summary.py",
+        "downloadPath": "C:\\Users\\hengu\\Downloads\\test_sales_summary.py",
+        "bytes": 6363,
+        "primaryBytesEqual": true,
+        "modifiedAt": 1795722288.0819552,
+        "method": "Native CUA click on each original-file download button; actual browser download file compared with delivered primary bytes"
+      },
+      {
+        "path": "summary.json",
+        "downloadPath": "C:\\Users\\hengu\\Downloads\\summary.json",
+        "bytes": 238,
+        "primaryBytesEqual": true,
+        "modifiedAt": 1795722292.054175,
+        "method": "Native CUA click on each original-file download button; actual browser download file compared with delivered primary bytes"
+      },
+      {
+        "path": "销售报告.md",
+        "downloadPath": "C:\\Users\\hengu\\Downloads\\销售报告.md",
+        "bytes": 1113,
+        "primaryBytesEqual": true,
+        "modifiedAt": 1795722277.3069746,
+        "method": "Native CUA click on each original-file download button; actual browser download file compared with delivered primary bytes"
+      }
+    ]
+  }
+}

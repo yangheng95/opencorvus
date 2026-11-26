@@ -1,0 +1,340 @@
+{
+  "task": {
+    "id": "tsk_g00Vc6rEH000wydhL06W",
+    "project_id": "prj_haW9BdBH559F4Yw143ch",
+    "session_id": "ses_-zUNt8lWpzz4OB7haLgK",
+    "request_id": null,
+    "global_creation_allocation_id": null,
+    "source": "mission",
+    "product_pillar": "code",
+    "title": "完成销售汇总功能交付",
+    "request": "在当前主项目完成并交付整个销售汇总小功能，作为一个完整任务收尾。用户要求：输入为根目录 sales.csv，中文 UTF-8 表头为订单编号、区域、金额、备注；保留输入 CSV 原始内容。实现 sales_summary.py，仅使用 Python 标准库，以 Decimal 准确统计订单总数、净金额、各区域订单数/净金额，负金额为退款，支持零金额。JSON 金额为保留两位小数的字符串；顶层字段 order_count、total_amount、by_region，by_region 以原区域名为键，其值含 order_count、total_amount。命令必须可用且实际运行：python sales_summary.py sales.csv --output summary.json --report 销售报告.md。中文 Markdown 报告解释统计口径并给出汇总表。编写 test_sales_summary.py，覆盖本 CSV 的正常统计、退款、零金额及无效金额映射到明确错误的契约；实际运行 unittest 和上述命令，修复问题。最终 sales_summary.py、test_sales_summary.py、summary.json、销售报告.md 必须在主项目，并发布这四个原文件的可下载产物，不得只发布无文件资源的说明或 JSON 包装。中文汇报实际测试结果并交付报告。\n执行指导（非额外用户要求）：先检查适用项目规则及真实 CSV，明确无效金额接口与必要舍入口径并在测试/报告中表达。验证金额非有限值等有意义边界、原区域名不被规范化、UTF-8 与 CSV 正规转义处理；合理覆盖契约支持的合法输入变化。对主项目最终入口实际执行，独立根据原 CSV 建立总计和分区预期值，不仅相信生产者自测。记录输入原内容未改动的直接证据。发布文件后确认原文件可打开/下载且与最终主项目版本对应。代码实现、测试、修复、独立审查、输出生成、最终文件发布均在本任务内部完成；不新增平台或浏览器交付要求。遵循项目本身的提交/合并契约；本请求不授权远端推送。最终提交规范的完成证据、实际命令/结果、四文件下载资源，并将供 Mission 接受的最终交付产物在完成决定中声明。",
+    "attachments": null,
+    "system_artifacts": [],
+    "priority": "normal",
+    "budget": null,
+    "metadata": {
+      "actor": "mission",
+      "mission": {
+        "id": "wake-41533dcb3a7872e5ed27052c4983e777",
+        "session_id": "ses_-zUNt8zYJzzVZK3isz0S"
+      },
+      "checks": {
+        "artifact": {
+          "require_changed_files": true,
+          "require_diff": true,
+          "mode": "strict"
+        },
+        "judge": {
+          "enabled": true,
+          "mode": "strict"
+        },
+        "spec_check": {
+          "enabled": true,
+          "mode": "strict"
+        }
+      }
+    },
+    "time_archived": null,
+    "time_pinned": null,
+    "time_created": 1795721694990
+  },
+  "completionEvent": {
+    "id": "pev_g0Vc6t3TP00jNxU885Xl",
+    "kind": "event",
+    "type": "task.completed",
+    "aggregate_type": "task",
+    "aggregate_id": "tsk_g00Vc6rEH000wydhL06W",
+    "project_id": "prj_haW9BdBH559F4Yw143ch",
+    "task_id": null,
+    "session_id": null,
+    "interaction_id": null,
+    "stream_id": null,
+    "source": "state.task",
+    "target": null,
+    "causation_id": null,
+    "correlation_id": null,
+    "reply_to": null,
+    "seq": 121,
+    "deadline_ms": null,
+    "emitted_at": 1795722127363,
+    "payload": {
+      "execution_epoch": 1,
+      "summary": "销售汇总完整交付：主项目四文件 sales_summary.py、test_sales_summary.py、summary.json、销售报告.md 已实现、生成、发布原文件资源并本地提交 db01a7d，未推送。仅使用标准库，Decimal 精确求和后 ROUND_HALF_UP 输出两位金额字符串，退款、零金额及原区域名保持契约；SalesDataError/CLI 状态码2及行号明确拒绝无效和非有限金额。主项目实际运行 unittest 9项全通过及指定命令退出0；独立审查用 Fraction 从原 CSV 复算5笔35.60、华东3笔28.25、华南2笔7.35，并执行最终CLI合法CSV变化与拒绝测试。独立审查确认输入初始快照、后续快照、原Git字节和当前181字节逐字节一致，四原文件可完整获取读取且与最终主项目一致。审查唯一提交待办由所有者提交关闭，提交后 git diff HEAD 指定五路径为空，未改变已审查产品内容。所有审查已结束，无功能阻断；四文件作为供用户及Mission接受的最终交付资源明确声明，已用中文交付实际结果和报告汇总。"
+    }
+  },
+  "completionDecision": {
+    "id": "art_g0Vc6t2nd000qWgoL5Eu",
+    "task_id": "tsk_g00Vc6rEH000wydhL06W",
+    "kind": "task_completion_decision",
+    "label": "TaskCompletionDecision",
+    "payload": {
+      "orchestrator_session_id": "ses_-zUNt8kZSzzpOVkee6eY",
+      "orchestrator_message_id": "msg_hvszEtn3fyhMsDA34y4a",
+      "tool_call_id": "call_45df9507d35b4e6cbd3430865503f049",
+      "tool_part_id": "prt_g0Vc6swvT00RUPynA5N3",
+      "evidence_locators": [
+        {
+          "source": "session",
+          "session_id": "ses_-zUNt8kZSzzpOVkee6eY"
+        },
+        {
+          "source": "session_message",
+          "session_id": "ses_hY7lrJZDTpDS2gQEMddm",
+          "message_id": "msg_g0Vc6shEA00modFNYqoR"
+        },
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hGzqXaF0BHL9aeCA49R7",
+          "catalog_revision": 5,
+          "expected_sha256": "614dc200ebb3204b581cdad62ee37430649e6b6832e12591053fe10e76e9115a"
+        },
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_haW9BdBH559F4Yw143ch",
+            "task_id": "tsk_g00Vc6rEH000wydhL06W",
+            "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+            "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+          }
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_haW9BdBH559F4Yw143ch",
+              "task_id": "tsk_g00Vc6rEH000wydhL06W",
+              "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+              "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+            },
+            "tree": "resources",
+            "path": "sales_summary.py",
+            "media_type": "text/x-python",
+            "bytes": 5970,
+            "sha256": "31999a4c763bf48e94d7b4fbacf4889ef0b8cd24dfafa927f47ccf17c991b11e"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_haW9BdBH559F4Yw143ch",
+              "task_id": "tsk_g00Vc6rEH000wydhL06W",
+              "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+              "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+            },
+            "tree": "resources",
+            "path": "test_sales_summary.py",
+            "media_type": "text/x-python",
+            "bytes": 6363,
+            "sha256": "65d52b04b8d5d73cd924ce8bf7ab3925ba49b8a4b7e6e08c3278d2b7f6355f1e"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_haW9BdBH559F4Yw143ch",
+              "task_id": "tsk_g00Vc6rEH000wydhL06W",
+              "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+              "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+            },
+            "tree": "resources",
+            "path": "summary.json",
+            "media_type": "application/json",
+            "bytes": 238,
+            "sha256": "603b0f11584d7013e06306eb46297ab093f204b6de5cbe08ff879fc78f35ef8d"
+          }
+        },
+        {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_haW9BdBH559F4Yw143ch",
+              "task_id": "tsk_g00Vc6rEH000wydhL06W",
+              "snapshot_id": "8a63a4e0-5de4-596d-a51d-9dcdbddbb8d9",
+              "manifest_sha256": "2e4b42a06b896d17f0ee2dfac6fd5c7948c0c94e41b7b2b3eb9dc21bb7aa3d71"
+            },
+            "tree": "resources",
+            "path": "销售报告.md",
+            "media_type": "text/markdown",
+            "bytes": 1113,
+            "sha256": "8cea0f68f5d4d7bab30c1450372e0234905506c1c1c151edf4f31155e12553de"
+          }
+        }
+      ],
+      "worker_artifact_locators": [
+        {
+          "source": "engine_artifact",
+          "artifact_id": "art_hGzqXaF0BHL9aeCA49R7",
+          "catalog_revision": 5,
+          "expected_sha256": "614dc200ebb3204b581cdad62ee37430649e6b6832e12591053fe10e76e9115a"
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_binding": {
+        "kind": "direct",
+        "package_revision": {
+          "scope": "built_in",
+          "project_id": null,
+          "namespace": "builtin",
+          "id": "base",
+          "version": "2026.11.07.1",
+          "package_digest": "701d742b575358ddfeb59c480b3d17b974b105b6949ea90fcd4f3733750c5b8c"
+        }
+      },
+      "time_recorded": 1795722127363
+    },
+    "payload_sha256": "3330594992e3db0752f029fc169bc967294d512d49550355984c83985e0e05f7",
+    "payload_bytes": 3222,
+    "payload_block_sha256s": "[\"3330594992e3db0752f029fc169bc967294d512d49550355984c83985e0e05f7\"]",
+    "payload_block_index_sha256": "a81de0f8c58642917c87c1c04a884fd482b4a70eed41f63d6157bf12716c4d49",
+    "catalog_artifact_type": "opencorvus/core/task_completion_decision",
+    "catalog_schema_diagnostic": null,
+    "catalog_producer": "{\"owner_kind\":\"core\",\"component_id\":\"engine-artifact\",\"operation_id\":\"task_completion_decision\"}",
+    "catalog_import_source_task_id": null,
+    "catalog_resource_count": 0,
+    "catalog_resource_media_types": "[]",
+    "catalog_search_text": "opencorvus/core/task_completion_decision\nengine-artifact\ntask_completion_decision",
+    "catalog_search_text_truncated": 0,
+    "catalog_metadata_sha256": "15cf6a4c25332866cf1e9efa694f4ea13e71d20050fc3ee3010d1c125e512705",
+    "catalog_revision": 7,
+    "time_created": 1795722127363,
+    "time_updated": 1795722127363
+  },
+  "finalMessages": [
+    {
+      "id": "msg_g0Vc6tRbC003tOSbijET",
+      "session_id": "ses_-zUNt8zYJzzVZK3isz0S",
+      "time_created": 1795722222870,
+      "time_updated": 1795722229500,
+      "data": {
+        "author": "mission",
+        "role": "assistant",
+        "time": {
+          "created": 1795722222870,
+          "completed": 1795722229500
+        },
+        "parentID": "msg_hy8TNZBjC2s9TQGjkLz6",
+        "acceptedInputMessageIDs": [
+          "msg_hy8TNZBjC2s9TQGjkLz6"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "mission",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 79871,
+          "input": 1436,
+          "output": 227,
+          "reasoning": 0,
+          "cache": {
+            "read": 78208,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795722222870:0000000000000030:0000000000000000:message:msg_g0Vc6tRbC003tOSbijET"
+      },
+      "parts": [
+        {
+          "id": "prt_g0Vc6tS6x001lEki5WdP",
+          "message_id": "msg_g0Vc6tRbC003tOSbijET",
+          "time_created": 1795722224839,
+          "time_updated": 1795722229326,
+          "data": {
+            "type": "text",
+            "text": "已完成整个销售汇总小功能，并通过独立复核。\n\n- **实际测试**：`python -m unittest -v`，9 项测试全部通过。\n- **实际运行**：指定命令退出码为 0，已生成 `summary.json` 和 `销售报告.md`。\n- **统计结果**：共 5 笔订单，净金额 **35.60 元**；华东 3 笔、28.25 元，华南 2 笔、7.35 元。\n- **输入保护**：原始 `sales.csv` 内容未改动。\n- **文件交付**：代码、测试、JSON 和中文报告均已放入主项目，并发布为可下载的原文件；已核对与主项目逐字节一致。\n\n上方《销售汇总功能交付与验证结果》包含报告摘要、验证详情和原文件资源定位。可在本任务的已发布文件资源中打开或下载四个文件，其中 `销售报告.md` 是完整中文报告。",
+            "time": {
+              "start": 1795722224839,
+              "end": 1795722229326
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_044ebb892cb061fd016b088bf09a3c87d0ab9d9de8e34ed2e9",
+                "phase": "final_answer"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "msg_g0Vc6shEA00modFNYqoR",
+      "session_id": "ses_hY7lrJZDTpDS2gQEMddm",
+      "time_created": 1795722044618,
+      "time_updated": 1795722055990,
+      "data": {
+        "author": "base-tester",
+        "role": "assistant",
+        "time": {
+          "created": 1795722044618,
+          "completed": 1795722055990
+        },
+        "parentID": "msg_g0Vc6s06j00iMkhCZBoV",
+        "acceptedInputMessageIDs": [
+          "msg_g0Vc6s06j00iMkhCZBoV"
+        ],
+        "modelID": "gpt-6.1-sol",
+        "providerID": "openai",
+        "agent": "base-tester",
+        "path": {
+          "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+          "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project"
+        },
+        "cost": 0,
+        "tokens": {
+          "total": 64208,
+          "input": 246,
+          "output": 474,
+          "reasoning": 0,
+          "cache": {
+            "read": 63488,
+            "write": 0
+          }
+        },
+        "billing": {
+          "status": "priced"
+        },
+        "finish": "stop",
+        "orderKey": "v1:0001795722044618:0000000000000030:0000000000000000:message:msg_g0Vc6shEA00modFNYqoR"
+      },
+      "parts": [
+        {
+          "id": "prt_g0Vc6shin00ICYMu3eTh",
+          "message_id": "msg_g0Vc6shEA00modFNYqoR",
+          "time_created": 1795722046517,
+          "time_updated": 1795722055768,
+          "data": {
+            "type": "text",
+            "text": "**独立审查结论：产品功能及原文件发布验收通过；任务整体收尾仍待实现者完成 Git 提交。**\n\n### 已验证\n- 从原 CSV 独立读取并用 `Fraction` 核算，未使用生产者汇总函数推导预期：\n\n  | 范围 | 订单数 | 净金额 |\n  | --- | ---: | ---: |\n  | 全部 | 5 | 35.60 |\n  | 华东 | 3 | 28.25 |\n  | 华南 | 2 | 7.35 |\n\n- 在当前主项目实际执行：\n  - `python -m unittest -v`：**9 项通过**。\n  - `python sales_summary.py sales.csv --output summary.json --report 销售报告.md`：**退出码 0**；JSON 和中文报告均符合独立预期。\n- 独立通过最终 CLI 检查 CSV 转义、UTF-8 BOM、跨行字段、原区域名空格保留、退款与零金额、精确累加后正负舍入、大数相消、重排表头及空数据。\n- 7 类无效金额均返回退出码 2，标准错误包含行号；输入及已有输出保持不变。`SalesDataError` 接口亦由实际运行的测试覆盖。\n- 已完整获取并读取四个发布资源，与当前主项目四文件**逐字节一致**。\n- 原 `sales.csv` 的实现前快照、后续快照、Git HEAD 原始字节及本轮执行后的文件**完全一致**，共 181 字节。\n\n### 剩余收尾\n未发现功能缺陷或交付内容阻断。但四个交付文件当前仍未提交；应由实现者完成自己的提交，再进行最终用户交付。我未修订产品文件，也未推送远端。\n\n**审查证据已发布**：`base/test-report`「销售汇总独立审查证据」  \n精确引用：`engine_artifact / art_hGzqXaF0BHL9aeCA49R7 / catalog_revision 5`。",
+            "time": {
+              "start": 1795722046517,
+              "end": 1795722055767
+            },
+            "metadata": {
+              "openai": {
+                "itemId": "msg_09b3da2ae798a95a016b088b3e47e887d09a46648c4210e05d",
+                "phase": "final_answer"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

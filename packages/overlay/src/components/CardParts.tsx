@@ -498,7 +498,10 @@ function PartCollection(props: PartCollectionProps) {
 
 function DelegatedContextParts(props: PartCollectionProps & { messageID: string }) {
   return (
-    <DelegatedContextDisclosure id={`delegated-context:message:${props.messageID}`}>
+    <DelegatedContextDisclosure
+      id={`delegated-context:message:${props.messageID}`}
+      kind={props.parts.some((part) => part.type === "text" && part.kind === "control") ? "control" : "message"}
+    >
       <PartCollection {...props} />
     </DelegatedContextDisclosure>
   )
