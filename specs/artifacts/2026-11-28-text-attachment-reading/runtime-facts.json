@@ -1,0 +1,210 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "label": "run125",
+      "originalExecHandle": 99882,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hp5LYyQla8rdN7svtQ6y",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795811497268,
+        "settledAt": 1795811497268,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 9,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run126",
+      "originalExecHandle": 27071,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hsPWPPBQottBnpIWIXND",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795811764033,
+        "settledAt": 1795811764033,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 2,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run127",
+      "originalExecHandle": 58566,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hMsFooC6iclsrnvB5udm",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795812282462,
+        "settledAt": 1795812282462,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 2,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "modelRequestLimit": null,
+  "businessDispatch": {
+    "originalExecHandle": 98062,
+    "joinedExitCode": 0,
+    "realPublicUploadAndSessionMessage": true,
+    "browserLocalFileChooserUpload": "not completed; extension file URL access unchanged"
+  },
+  "checks": {
+    "typecheck": {
+      "originalExecHandle": 54452,
+      "joinedExitCode": 0
+    },
+    "candidateBuild": {
+      "originalExecHandle": 9420,
+      "joinedExitCode": 0,
+      "viteSeconds": 61
+    },
+    "finalBuild": {
+      "originalExecHandle": 90356,
+      "joinedExitCode": 0,
+      "viteSeconds": 55.43,
+      "rendererPublicSurface": "passed"
+    },
+    "locales": 2,
+    "localeKeys": 3375,
+    "cssReferences": 9453,
+    "cssGlobals": 269,
+    "cssStyleFiles": 60,
+    "cssSources": 427
+  },
+  "desktop": {
+    "ownedTabsClosed": [
+      "241805356",
+      "241805359",
+      "241805364",
+      "241805368"
+    ],
+    "localeRestored": "zh-CN",
+    "themeRestored": "system",
+    "nativeJpegCount": 16,
+    "before": 3,
+    "failedCandidate": 2,
+    "intermediate": 3,
+    "final": 8,
+    "personallyReviewed": true,
+    "uiAutomatedTests": 0
+  },
+  "scope": "real historical attachment and naturally published original-file preview; native find 118/159, goto130/167, lifecycle, English dark, raw downloads/copy; draft preview not visually verified"
+}

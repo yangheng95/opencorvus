@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "members": [
+    {
+      "name": "source/sales_summary.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/sales.csv",
+      "bytes": 181,
+      "equalsOriginal": true
+    },
+    {
+      "name": "download/file-preview.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "download/history.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/original.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    }
+  ],
+  "nativeJpegsCopiedUnchanged": 16,
+  "method": "direct bytes from actual source, clipboard and saved downloads; staged members must be checked again"
+}

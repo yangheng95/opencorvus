@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "label": "run125",
+  "sessionID": "ses_hnRBgDeHMTXQ8ZFMQmMJ",
+  "messageID": "msg_8079350d-b76e-4998-91df-71204c4bfa57",
+  "originalAttachmentBytes": 7650,
+  "completeReads": [
+    {
+      "name": "sales_summary.py",
+      "lines": 167
+    },
+    {
+      "name": "sales.csv",
+      "lines": 6
+    }
+  ],
+  "canonicalUserFilePart": true,
+  "publicArtifactSourceEqualsUploadReference": true,
+  "artifactID": "art_g0VcCuGBf00v1T810ddp",
+  "toolParts": 5,
+  "final": "stop",
+  "scope": "real upload, public user File Part, full visible read results and natural publish; no UI assertions"
+}

@@ -682,6 +682,15 @@ CodeEditor. Successfully loaded zero-byte text is valid content and displays the
 same read-only editor as nonempty text. Loading and resource failure remain
 separate from content truthiness; no replacement characters, alternate attachment
 contract or parallel loading state is introduced.
+The shared ResourceTextPreview places visible Find and Go to line actions beside
+each accepted text reader, including draft previews, historical attachments and
+file-preview artifacts. The actions consume the current CodeEditor's navigation
+handle and retire with it. They retain the same source, editor, query and readonly
+contract; loading or failed reads do not create a second navigation owner.
+An expanded text File frame allocates the toolbar's natural height and the
+reader's remaining height in one grid, retaining the editor's status and native
+search panel inside that reader. PDF and natural-height attachment layouts keep
+their own existing geometry.
 
 The main Composer owner derives ready, submitting or unavailable from the existing
 connection/workspace admission and launcher submission signals. ChatComposer

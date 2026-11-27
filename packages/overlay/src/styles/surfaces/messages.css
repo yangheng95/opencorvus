@@ -2066,6 +2066,15 @@ button.msg-source-chip .msg-source-chip__filename {
   overflow: clip;
 }
 
+.resource-text-preview__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  gap: var(--ui-gap-xs);
+  padding: var(--ui-gap-xs) var(--ui-gap-sm);
+  border-bottom: var(--oc-border-width) solid var(--border);
+}
+
 .resource-text-preview {
   border: var(--oc-border-width) solid transparent;
 }
@@ -2443,6 +2452,12 @@ button.msg-source-chip .msg-source-chip__filename {
   height: 100%;
   min-height: 0;
   max-height: none;
+}
+
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="File"] .msg-artifact__body:has(> .resource-text-preview) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
 }
 
 .msg-artifact-dashboard__filters,

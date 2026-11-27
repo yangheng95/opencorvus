@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文本附件阅读证据](2026-11-28-text-attachment-reading/README.md)
 - [代码交付语言证据](2026-11-28-code-artifact-language/README.md)
 - [代码交付阅读证据](2026-11-28-code-artifact-reading/README.md)
 - [销售交接演示备注证据](2026-11-28-presentation-notes/README.md)

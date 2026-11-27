@@ -1,0 +1,82 @@
+{
+  "info": {
+    "author": "user",
+    "role": "user",
+    "time": {
+      "created": 1795811048758
+    },
+    "agent": "work",
+    "model": {
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol"
+    },
+    "tools": {
+      "delegate_agent": true,
+      "panel_expert_squad_inspect": true,
+      "panel_query_task": true,
+      "panel_query_task_artifacts": true,
+      "panel_create_task": true,
+      "panel_wake_mission": true,
+      "panel_wake_work": true,
+      "panel_send_task_message": true,
+      "panel_respond_interaction": true,
+      "panel_cancel_task": true,
+      "panel_update_checks": true,
+      "panel_select_workspace": true,
+      "panel_update_goal": true,
+      "panel_delete_goal": true,
+      "question": true,
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "search_code": true,
+      "edit": true,
+      "write": true,
+      "apply_patch": true,
+      "todo": true,
+      "schedule": true
+    },
+    "extra": {
+      "project_memory_user_input": {
+        "version": 1,
+        "surface": "session.prompt",
+        "literalText": "请完整阅读这条消息附带的 sales_summary.py 原件，以及项目中的 sales.csv，完成一次脚本交接核对。请说明命令行必选参数和可选参数、区域 CSV 的排序规则、退款与零金额的统计口径，以及输入没有提供、不能自行假定的业务维度。给出原有参数的正确使用示例即可，不执行脚本或测试，不创建任何输出或修改项目文件，不创建 Task 或 Mission，不委派，也不安装依赖。\n\n请同时用 file-preview@1 原件预览卡引用本消息的这份脚本附件，标题为“销售脚本附件｜原件交接阅读”；source 必须来自本消息真实已有的附件引用，不猜测 URL 或身份字段，不复制生成新文件，不用 code@1 重发全文。最后的核对说明使用简体中文，代码、参数和源文件身份保留原文。\n"
+      },
+      "publicSessionPromptIdentity": {
+        "version": 1,
+        "fingerprint": "85a375378632a9bab87c222e8fb8aa13e9ad1bb381d421d59a26dee11dd60713"
+      },
+      "surface": "right-sidebar",
+      "source": "right-sidebar-conversation",
+      "experience": "work"
+    },
+    "orderKey": "v1:0001795811048758:0000000000000030:0000000000000000:message:msg_8079350d-b76e-4998-91df-71204c4bfa57",
+    "id": "msg_8079350d-b76e-4998-91df-71204c4bfa57",
+    "sessionID": "ses_hnRBgDeHMTXQ8ZFMQmMJ"
+  },
+  "parts": [
+    {
+      "id": "prt_g0VcCu9Gq00CGDZmazIy",
+      "sessionID": "ses_hnRBgDeHMTXQ8ZFMQmMJ",
+      "messageID": "msg_8079350d-b76e-4998-91df-71204c4bfa57",
+      "orderKey": "v1:0001795811048763:0000000000000031:0000000000000000:part:prt_g0VcCu9Gq00CGDZmazIy",
+      "type": "text",
+      "text": "请完整阅读这条消息附带的 sales_summary.py 原件，以及项目中的 sales.csv，完成一次脚本交接核对。请说明命令行必选参数和可选参数、区域 CSV 的排序规则、退款与零金额的统计口径，以及输入没有提供、不能自行假定的业务维度。给出原有参数的正确使用示例即可，不执行脚本或测试，不创建任何输出或修改项目文件，不创建 Task 或 Mission，不委派，也不安装依赖。\n\n请同时用 file-preview@1 原件预览卡引用本消息的这份脚本附件，标题为“销售脚本附件｜原件交接阅读”；source 必须来自本消息真实已有的附件引用，不猜测 URL 或身份字段，不复制生成新文件，不用 code@1 重发全文。最后的核对说明使用简体中文，代码、参数和源文件身份保留原文。\n",
+      "metadata": {
+        "catalog_snapshot_ref": "/attachment/prj_haW9BdBH559F4Yw143ch/7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391.json",
+        "catalog_snapshot_hash": "7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391"
+      }
+    },
+    {
+      "id": "prt_g0VcCu9Gq01iPZFC0JBs",
+      "sessionID": "ses_hnRBgDeHMTXQ8ZFMQmMJ",
+      "messageID": "msg_8079350d-b76e-4998-91df-71204c4bfa57",
+      "orderKey": "v1:0001795811048766:0000000000000031:0000000000000000:part:prt_g0VcCu9Gq01iPZFC0JBs",
+      "type": "file",
+      "mime": "text/x-python",
+      "filename": "sales_summary.py",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/df6968df4d37aecd108339b0b612b98c8220f3ebfbf143ebb50a6feb7836c3e5.py",
+      "presentation": "attachment-index"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { Show, createResource } from "solid-js"
+import { Show, createResource, createSignal } from "solid-js"
 import { decodeText, TextDecodingError } from "@opencorvus-ai/util/text-decoding"
 import {
   assertApiAuthorityCurrent,
@@ -8,7 +8,7 @@ import {
 } from "../services/api"
 import { formatErrorDetails } from "../utils/error-details"
 import { t } from "../utils/i18n"
-import { CodeEditor } from "./ui/CodeEditor"
+import { CodeEditor, type CodeEditorNavigation } from "./ui/CodeEditor"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 import { DownloadLink } from "./OriginalFileDownload"
@@ -73,6 +73,7 @@ export function ResourceTextDownload(props: { read: TextRead; filename: string; 
 }
 
 export function ResourceTextPreview(props: { read: TextRead; filename: string; label: string }) {
+  const [navigation, setNavigation] = createSignal<CodeEditorNavigation>()
   const decodingError = () => {
     const value = props.read.content()?.value
     return value instanceof TextDecodingError ? value : undefined
@@ -116,20 +117,37 @@ export function ResourceTextPreview(props: { read: TextRead; filename: string; l
         fallback={<div class="msg-artifact-file__loading" role="status">{t("artifact.file.loading_text")}</div>}
       >
         {(content) => (
-          <CodeEditor
-            class="msg-artifact-code resource-text-preview"
-            value={content().value}
-            path={props.filename}
-            ariaLabel={props.label}
-            readOnly
-            shouldFocusOnMount={() => {
-              const origin = content().focusOrigin
-              return !!origin && (
-                document.activeElement === origin || (!origin.isConnected && document.activeElement === document.body)
-              )
-            }}
-            onValueChange={() => undefined}
-          />
+          <>
+            <div class="resource-text-preview__toolbar">
+              <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={!navigation()}
+                title={`${t("code_editor.find")} (Ctrl/Cmd+F)`}
+                aria-label={`${t("code_editor.find")}: ${props.label}`}
+                onClick={() => navigation()?.find()}>
+                {t("code_editor.find")}
+              </Button>
+              <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={!navigation()}
+                title={`${t("code_editor.go_to_line")} (Ctrl/Cmd+Alt+G)`}
+                aria-label={`${t("code_editor.go_to_line")}: ${props.label}`}
+                onClick={() => navigation()?.goToLine()}>
+                {t("code_editor.go_to_line")}
+              </Button>
+            </div>
+            <CodeEditor
+              class="msg-artifact-code resource-text-preview"
+              value={content().value}
+              path={props.filename}
+              ariaLabel={props.label}
+              readOnly
+              shouldFocusOnMount={() => {
+                const origin = content().focusOrigin
+                return !!origin && (
+                  document.activeElement === origin || (!origin.isConnected && document.activeElement === document.body)
+                )
+              }}
+              onValueChange={() => undefined}
+              onNavigationReady={setNavigation}
+            />
+          </>
         )}
       </Show>
     </Show>
