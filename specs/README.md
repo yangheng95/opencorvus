@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [销售看板筛选在正文与交付预览间的连续性](records/2026-11/2026-11-28-dashboard-reading-state.md)
 - [项目交付预览关闭后的键盘位置](records/2026-11/2026-11-28-delivery-preview-focus.md)
 - [从交付文件浏览来源快照](records/2026-11/2026-11-27-source-snapshot-browser.md)
 - [快照文件浏览与结构化交付回看](records/2026-11/2026-11-27-snapshot-resource-review.md)

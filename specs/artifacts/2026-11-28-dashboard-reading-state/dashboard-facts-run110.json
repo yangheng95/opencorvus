@@ -1,0 +1,71 @@
+{
+  "status": "passed",
+  "label": "run110",
+  "sessionID": "ses_hV1OnPAfOAfCSKWMunWr",
+  "artifactID": "art_g0Vc91zED00L3QeOwJ39",
+  "httpStatus": 200,
+  "equalsOriginalPublication": true,
+  "dataRows": 5,
+  "metrics": "unchanged declared whole-source values",
+  "selections": [
+    {
+      "region": null,
+      "refund": null,
+      "orders": 5,
+      "net": "35.60",
+      "ordersIDs": [
+        "A001",
+        "A002",
+        "A003",
+        "A004",
+        "A005"
+      ]
+    },
+    {
+      "region": "华东",
+      "refund": "是",
+      "orders": 1,
+      "net": "-2.05",
+      "ordersIDs": [
+        "A003"
+      ]
+    },
+    {
+      "region": "华南",
+      "refund": "是",
+      "orders": 0,
+      "net": "0.00",
+      "ordersIDs": []
+    },
+    {
+      "region": "华南",
+      "refund": "否",
+      "orders": 2,
+      "net": "7.35",
+      "ordersIDs": [
+        "A004",
+        "A005"
+      ]
+    },
+    {
+      "region": "华东",
+      "refund": null,
+      "orders": 3,
+      "net": "28.25",
+      "ordersIDs": [
+        "A001",
+        "A002",
+        "A003"
+      ]
+    }
+  ],
+  "viewIDs": [
+    "filtered-summary",
+    "order-amounts",
+    "regional-net"
+  ],
+  "filterIDs": [
+    "region",
+    "refund"
+  ]
+}

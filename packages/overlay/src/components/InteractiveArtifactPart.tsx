@@ -183,7 +183,7 @@ export function InteractiveArtifactPart(props: { part: unknown }) {
                 <SpreadsheetArtifact payload={record().payload as SpreadsheetPayload} />
               </Match>
               <Match when={record().payload.renderer === "dashboard@1"}>
-                <DashboardArtifact payload={record().payload as DashboardPayload} />
+                <DashboardArtifact stateKey={readingStateKey()} payload={record().payload as DashboardPayload} />
               </Match>
               <Match when={record().payload.renderer === "timeline@1"}>
                 <TimelineArtifact payload={record().payload as TimelinePayload} />

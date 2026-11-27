@@ -24,6 +24,7 @@ export type ConversationArtifactDisplayState = {
   selectedResourceKey?: string
   tableSorting?: { id: string; desc: boolean }[]
   tablePageIndex?: number
+  dashboardFilters?: Record<string, string | number | boolean | null | undefined>
 }
 
 type ConversationUiState = {

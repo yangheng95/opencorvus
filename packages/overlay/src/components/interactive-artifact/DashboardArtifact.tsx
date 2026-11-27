@@ -6,6 +6,7 @@ import { createInlineVegaView } from "./inline-vega-view"
 import { SelectControl } from "../ui/SelectControl"
 import { Button } from "../ui/Button"
 import { Feedback } from "../ui/Feedback"
+import { conversationArtifactDisplayState, setConversationArtifactDisplayState } from "../../store/conversation-ui"
 
 type DashboardPayload = Extract<InteractiveArtifactPayload, { renderer: "dashboard@1" }>
 type DashboardViewPayload = DashboardPayload["views"][number]
@@ -76,14 +77,17 @@ function DashboardFilterControl(props: {
   )
 }
 
-export function DashboardArtifact(props: { payload: DashboardPayload }) {
+export function DashboardArtifact(props: { payload: DashboardPayload; stateKey: string }) {
   const numbers = createMemo(() => new Intl.NumberFormat(localeTag(), { maximumFractionDigits: 20 }))
   const percentages = createMemo(() => new Intl.NumberFormat(localeTag(), { style: "percent", maximumFractionDigits: 1 }))
-  const [filters, setFilters] = createSignal<Record<string, DashboardRow[string] | undefined>>({})
+  const filters = createMemo(() => ({ ...conversationArtifactDisplayState(props.stateKey)?.dashboardFilters }))
+  const selectedFilter = (id: string) => Object.hasOwn(filters(), id) ? filters()[id] : undefined
+  const setFilters = (dashboardFilters: Record<string, DashboardRow[string] | undefined>) =>
+    setConversationArtifactDisplayState(props.stateKey, { dashboardFilters })
   const filtered = createMemo(() =>
     props.payload.data.filter((row) =>
       props.payload.filters.every((filter) => {
-        const selected = filters()[filter.id]
+        const selected = selectedFilter(filter.id)
         return selected === undefined || Object.is(row[filter.field], selected)
       }),
     ),
@@ -119,8 +123,8 @@ export function DashboardArtifact(props: { payload: DashboardPayload }) {
               {(filter) => (
                 <DashboardFilterControl
                   filter={filter}
-                  selected={filters()[filter.id]}
-                  onChange={(value) => setFilters((current) => ({ ...current, [filter.id]: value }))}
+                  selected={selectedFilter(filter.id)}
+                  onChange={(value) => setFilters({ ...filters(), [filter.id]: value })}
                 />
               )}
             </For>

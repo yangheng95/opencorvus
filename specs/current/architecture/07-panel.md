@@ -5811,14 +5811,14 @@ Model Context Protocol Apps bridge. Heavy renderers are loaded only when their
 artifact is visible. It never infers a renderer from a title, file extension,
 URL, or HTML content. Sorting, filtering, pagination, code editing, slide and
 sheet navigation, graph/timeline/tree exploration, terminal transcript search,
-3D camera control, and other interactions remain presentation-only. Table and
-Tree reading intent uses the bounded conversation presentation owner below;
+3D camera control, and other interactions remain presentation-only. Table, Tree
+and Dashboard reading intent uses the bounded conversation presentation owner below;
 other renderer-local choices retain their existing lifetimes.
 
 Native Tree query uses the existing artifact presentation record, and each
 branch uses the existing bounded disclosure record under its artifact/node
 identity. The shared content owner derives the same required artifact-reader
-identity for Table and Tree: actual Session/artifact for a publication, and
+identity for Table, Tree and Dashboard: actual Session/artifact for a publication, and
 Task/canonical resource locator for an inspected file. These choices follow API
 authority/source isolation and survive preview closure or work selection changes
 within the retained 50-conversation/200-entry memory bounds; reload persistence
@@ -6185,6 +6185,14 @@ no-match feedback in place of blank Views. Clearing filters restores the same
 inline source rows through the existing View lifecycle. Dashboard plot containers
 use their native rendered height, including an explicit height in the published
 specification; ordinary plots keep the shared default measurement.
+Dashboard filter selections use that same bounded artifact reading record in
+the current API/source scope. Inline and project-delivery previews of a real
+Session/artifact share the original scalar choices and Clear filters action;
+returning to that source restores them within the retained memory bounds.
+Only presentation intent is retained, with undefined meaning All and null,
+false, zero and empty strings retaining their declared scalar identity.
+The published rows, metric literals and View specifications keep their original
+contracts; this does not add reload persistence or another data cache.
 Floating controls, option tooltips and artifact-download portals use their
 trigger's nearest dialog or artifact popover owner, including the current
 workspace or MCP pip. Modal descendants remain inside that dialog's accessible
