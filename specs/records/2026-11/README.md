@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [动态工具执行错误分类](2026-11-27-dynamic-tool-error-classification.md)
 - [可编辑销售表格的公式与导出复验](2026-11-27-live-spreadsheet-values-and-export.md)
 - [新工作销售核对的来源事实复验](2026-11-27-sales-source-fact-review.md)
 - [文件状态统一原生 Git 差异统计](2026-11-27-file-status-native-diff.md)

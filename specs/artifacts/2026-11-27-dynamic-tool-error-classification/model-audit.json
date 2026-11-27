@@ -1,0 +1,151 @@
+[
+  {
+    "label": "run39",
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "preflight": {
+      "sessionID": "ses_hZcHFtkTueuOIEyhwdA2",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "providerDrain": {
+      "startedAt": 1795752086244,
+      "settledAt": 1795752086244,
+      "allReadersSettled": true
+    },
+    "exitCode": 0,
+    "credentialCopiesRetired": true,
+    "projectConfigRestored": true,
+    "port": 53837,
+    "portClosed": true
+  },
+  {
+    "label": "run40",
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "preflight": {
+      "sessionID": "ses_hMZrqjICZJQw8KfQyc0j",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "providerDrain": {
+      "startedAt": 1795752264073,
+      "settledAt": 1795752279613,
+      "allReadersSettled": true
+    },
+    "exitCode": 0,
+    "credentialCopiesRetired": true,
+    "projectConfigRestored": true,
+    "port": 56115,
+    "portClosed": true
+  }
+]

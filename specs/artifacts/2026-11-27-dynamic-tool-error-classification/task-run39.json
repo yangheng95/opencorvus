@@ -1,0 +1,6 @@
+{
+  "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+  "prompt": [
+    "请通过项目已配置的 sales_source 只读服务，分别读取 sales-latest.csv 和 sales.csv，核对两份来源是否可用。某个文件缺失时明确给出实际失败原因，然后依据可读到的真实文件给销售经理简要列出订单数、净金额、分区域结果，以及退款和零金额的计数口径；不要猜测币种。不改任何项目文件，不创建 Task/Mission、不分派团队工作，不提交或推送项目。"
+  ]
+}

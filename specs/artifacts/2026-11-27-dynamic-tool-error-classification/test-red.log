@@ -1,0 +1,55 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\session\processor-producer-boundary.test.ts:
+67 |     })
+68 |     const parts = (await MessageStore.parts(processor.message.id)).filter((part) => part.type === "tool")
+69 |     for (const name of names.slice(0, 4)) {
+70 |       const classification = name.endsWith("input") ? "tool-input-invalid" : "tool-execution"
+71 |       const part = parts.find((part) => part.tool === name)!
+72 |       expect(part).toMatchObject({
+                        ^
+error: expect(received).toMatchObject(expected)
+
+  {
+    "callID": "dynamic-execution-call",
++   "id": "prt_g0Vc8uNmP00E2k5RIzZd",
++   "messageID": "msg_g0Vc8uNl700piwzh9uzd",
++   "orderKey": "v1:0001795751999191:0000000000000031:0000000000000000:part:prt_g0Vc8uNmP00E2k5RIzZd",
++   "sessionID": "ses_-zUNr5cFEzzOVF57JkLR",
+    "state": {
+      "failure": {
+-       "classification": "tool-execution",
++       "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "dynamic-execution-call",
+          "toolName": "dynamic-execution",
+        },
+-       "kind": "tool-execution",
++       "kind": "tool-input-invalid",
++       "message": "Actual dynamic source execution failed",
++       "name": "Error",
+        "originSite": "session.processor.tool-error",
+      },
+      "input": {},
+      "status": "error",
++     "time": {
++       "end": 1795751999229,
++       "start": 1795751999189,
++     },
+    },
++   "tool": "dynamic-execution",
++   "type": "tool",
+  }
+
+- Expected  - 2
++ Received  + 14
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\processor-producer-boundary.test.ts:72:20)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\session\processor-producer-boundary.test.ts:511:13)
+(fail) real SDK input rejection and dynamic execution failures persist their actual failure stage [1787.67ms]
+
+ 0 pass
+ 16 filtered out
+ 1 fail
+ 1 expect() calls
+Ran 1 test across 1 file. [3.58s]

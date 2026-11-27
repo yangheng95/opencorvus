@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "label": "run40",
+  "protectedFiles": 21,
+  "protectedRows": 1846,
+  "projectHEAD": "f7bf091156c9b137c4eb3d5b822721294e9a8f24",
+  "failureClassification": "tool-execution",
+  "failurePart": "prt_g0Vc8v1eJ00JPPIpFXgs",
+  "successfulPart": "prt_g0Vc8v2OD00wwu156dnV",
+  "sourceCalls": [
+    {
+      "filename": "sales-latest.csv",
+      "outcome": "error",
+      "code": "ENOENT",
+      "at": 1795752152789
+    },
+    {
+      "filename": "sales.csv",
+      "outcome": "read",
+      "bytes": 181,
+      "at": 1795752155675
+    }
+  ],
+  "integrity": "ok",
+  "historicalResultsPreserved": true
+}

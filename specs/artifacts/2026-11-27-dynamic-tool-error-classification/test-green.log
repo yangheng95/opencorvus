@@ -1,0 +1,29 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\session\processor-producer-boundary.test.ts:
+(pass) real SDK input rejection and dynamic execution failures persist their actual failure stage [1696.32ms]
+(pass) tool-error preserves the actual successful permission result [1633.65ms]
+(pass) consumer-error preserves the actual successful permission result [1485.07ms]
+(pass) real idle retry scopes pending JSON observations to each actual attempt before external cancellation [1696.53ms]
+(pass) a silent managed Tool finishes beyond the parent pause observation window [1704.36ms]
+(pass) an unmanaged SDK Tool retains the finite paused-boundary error [1826.65ms]
+(pass) parallel SDK calls retain their own finite execution owners [2201.51ms]
+(pass) the SDK wrapper preserves a Tool's direct AsyncIterable output [1427.80ms]
+(pass) a committed producer operation yields unsafe retry before consumer Tool admission [1701.60ms]
+(pass) processor observation records accepted and rejected current event identities in the canonical Task trace [1594.16ms]
+(pass) abort during an awaited caller hook publishes its immediate hook phase and a separately settled observation [1503.15ms]
+(pass) an aborted current attempt records its exact pending JSON structure through the canonical Trace owner [1506.61ms]
+(pass) a throwing diagnostic trace recorder preserves the original successful processor output [1572.44ms]
+(pass) pending Tool input publishes its real partial snapshot before complete [2008.37ms]
+(pass) pending Tool input publishes its real partial snapshot before cancel [1987.10ms]
+(pass) a delta received during slow draft publication produces a complete latest snapshot [2246.42ms]
+(pass) cancelling paused step preparation settles its activity only after the producer relinquishes it [1627.24ms]
+
+test\session\tool-failure-metadata.test.ts:
+(pass) ordinary errors retain the explicit caller diagnostic record [0.14ms]
+(pass) named provider diagnostics and caller provenance persist in the actual Tool outcome [1314.59ms]
+
+ 19 pass
+ 0 fail
+ 66 expect() calls
+Ran 19 tests across 2 files. [32.50s]

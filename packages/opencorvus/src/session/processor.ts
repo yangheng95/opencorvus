@@ -941,6 +941,9 @@ export namespace SessionProcessor {
                     recordObservation("settled")
                   },
                 }
+                // The SDK stringifies input errors before tool-error. Preserve the
+                // preceding validation fact; dynamic alone also describes MCP execution.
+                const invalidToolCalls = new Set<string>()
                 const preparedSteps: Array<{ snapshot: string | undefined }> = []
                 let preparation: Promise<unknown> | undefined
                 await using _preparationSettlement = {
@@ -1200,6 +1203,7 @@ export namespace SessionProcessor {
                             `Unexpected tool call ${value.toolCallId} started after coordination handoff ${coordinationHandoff.request_id}`,
                           )
                         }
+                        if (value.dynamic && value.invalid === true) invalidToolCalls.add(value.toolCallId)
                         markToolExecutionStarted(run.attempt)
                         // Pause the chunk-driven idle monitor while the SDK runs the
                         // tool's `execute`. Long-running tools (build agent ~100-300s,
@@ -1343,10 +1347,9 @@ export namespace SessionProcessor {
                           if (match && (match.state.status === "running" || match.state.status === "pending")) {
                             const resolvedInput =
                               value.input === undefined ? match.state.input : cloneToolInputForPersistence(value.input)
-                            const classification =
-                              (value as { dynamic?: boolean }).dynamic === true
-                                ? "tool-input-invalid"
-                                : "tool-execution"
+                            const classification = invalidToolCalls.delete(value.toolCallId)
+                              ? "tool-input-invalid"
+                              : "tool-execution"
                             const failure = toolFailureCauseFromUnknown({
                               error: value.error,
                               originSite: "session.processor.tool-error",

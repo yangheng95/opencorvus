@@ -1,0 +1,148 @@
+[
+  {
+    "id": "prt_g0Vc8uAfJ007g08aTmmX",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "messageID": "msg_g0Vc8uA1X009FNnKROrO",
+    "type": "tool",
+    "callID": "call_26c9ba761dc64d2991e5eafe30dac5ba",
+    "tool": "sales_source_read_sales_source",
+    "state": {
+      "status": "error",
+      "input": {
+        "filename": "sales-latest.csv"
+      },
+      "failure": {
+        "kind": "tool-input-invalid",
+        "name": "McpError",
+        "message": "MCP error -32603: Sales source sales-latest.csv: ENOENT",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "call_26c9ba761dc64d2991e5eafe30dac5ba",
+          "toolName": "sales_source_read_sales_source"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0d746482e87e8344016b09000ca76487d088ac5eec72488b48"
+        }
+      },
+      "time": {
+        "start": 1795751948777,
+        "end": 1795751949095
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0d746482e87e8344016b09000ca76487d088ac5eec72488b48"
+      }
+    },
+    "orderKey": "v1:0001795751948973:0000000000000031:0000000000000000:part:prt_g0Vc8uAfJ007g08aTmmX"
+  },
+  {
+    "id": "prt_g0Vc8uBMX0090ctQG5Sj",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "messageID": "msg_g0Vc8uAlS00kdIEC8vHv",
+    "type": "tool",
+    "callID": "call_d82c23f5ae4d42d8bdf92c5c6589e169",
+    "tool": "sales_source_read_sales_source",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filename": "sales.csv"
+      },
+      "output": "订单编号,区域,金额,备注\nA001,华东,10.10,普通订单\nA002,华东,20.20,中文客户\nA003,华东,-2.05,退款\nA004,华南,0.00,免费样品\nA005,华南,7.35,普通订单\n",
+      "title": "",
+      "metadata": {
+        "mcp_tool_result": {
+          "is_error": false
+        },
+        "truncated": false
+      },
+      "time": {
+        "start": 1795751951457,
+        "end": 1795751951915
+      },
+      "attachments": []
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_04f9845a61505224016b09000f58e487d0a146c11b58d399b8"
+      }
+    },
+    "orderKey": "v1:0001795751951634:0000000000000031:0000000000000000:part:prt_g0Vc8uBMX0090ctQG5Sj"
+  },
+  {
+    "id": "prt_g0Vc8v1eJ00JPPIpFXgs",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "messageID": "msg_g0Vc8v12W00LwjQQbwti",
+    "type": "tool",
+    "callID": "call_f2bc285e3d0040e89d4cc8bbed330320",
+    "tool": "sales_source_read_sales_source",
+    "state": {
+      "status": "error",
+      "input": {
+        "filename": "sales-latest.csv"
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "McpError",
+        "message": "MCP error -32603: Sales source sales-latest.csv: ENOENT",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_f2bc285e3d0040e89d4cc8bbed330320",
+          "toolName": "sales_source_read_sales_source"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f96209316a9da3f016b0900d8575487d0ad6ce79e3b3d2dad"
+        }
+      },
+      "time": {
+        "start": 1795752152447,
+        "end": 1795752152796
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0f96209316a9da3f016b0900d8575487d0ad6ce79e3b3d2dad"
+      }
+    },
+    "orderKey": "v1:0001795752152660:0000000000000031:0000000000000000:part:prt_g0Vc8v1eJ00JPPIpFXgs"
+  },
+  {
+    "id": "prt_g0Vc8v2OD00wwu156dnV",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "messageID": "msg_g0Vc8v1l600KeQc90GiZ",
+    "type": "tool",
+    "callID": "call_faa348f579c9417496d20d32d031ecea",
+    "tool": "sales_source_read_sales_source",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filename": "sales.csv"
+      },
+      "output": "订单编号,区域,金额,备注\nA001,华东,10.10,普通订单\nA002,华东,20.20,中文客户\nA003,华东,-2.05,退款\nA004,华南,0.00,免费样品\nA005,华南,7.35,普通订单\n",
+      "title": "",
+      "metadata": {
+        "mcp_tool_result": {
+          "is_error": false
+        },
+        "truncated": false
+      },
+      "time": {
+        "start": 1795752155293,
+        "end": 1795752155681
+      },
+      "attachments": []
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0f9469e7c3747daa016b0900db2e9887d096c22c53d6e924ea"
+      }
+    },
+    "orderKey": "v1:0001795752155461:0000000000000031:0000000000000000:part:prt_g0Vc8v2OD00wwu156dnV"
+  }
+]

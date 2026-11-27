@@ -1,6 +1,6 @@
 import { afterEach, expect, spyOn, test } from "bun:test"
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test"
-import { tool } from "ai"
+import { dynamicTool, tool } from "ai"
 import z from "zod"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -15,7 +15,7 @@ import { Instance } from "@/project/instance"
 import { Session } from "@/session"
 import { SessionProcessor } from "@/session/processor"
 import { ExecutionCancellationError, createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
-import { ProviderActivityOutcomeTable } from "@/session/session.sql"
+import { ProviderActivityOutcomeTable, ToolPartOutcomeTable } from "@/session/session.sql"
 import { Database } from "@/storage/db"
 import { Snapshot } from "@/snapshot"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
@@ -38,6 +38,59 @@ afterEach(async () => {
   await Instance.disposeAll()
   await resetMemoryDatabase()
 })
+
+test("real SDK input rejection and dynamic execution failures persist their actual failure stage", async () => {
+  await processorFixture(async ({ process, processor }) => {
+    const names = ["dynamic-execution", "static-input", "dynamic-input", "static-execution", "successful"]
+    using provider = spyOn(Provider, "getLanguage").mockResolvedValue(toolCallModel(names))
+    await process({
+      "dynamic-execution": dynamicTool({
+        inputSchema: z.object({}),
+        execute: async () => { throw new Error("Actual dynamic source execution failed") },
+      }),
+      "static-input": tool({
+        inputSchema: z.object({ filename: z.string() }),
+        execute: async ({ filename }) => ({ title: filename, output: filename, metadata: {} }),
+      }),
+      "dynamic-input": dynamicTool({
+        inputSchema: z.object({ filename: z.string() }),
+        execute: async (input) => ({ title: "Source", output: JSON.stringify(input), metadata: {} }),
+      }),
+      "static-execution": tool({
+        inputSchema: z.object({}),
+        execute: async () => { throw new Error("Actual static source execution failed") },
+      }),
+      successful: dynamicTool({
+        inputSchema: z.object({}),
+        execute: async () => ({ title: "Source", output: "Actual successful source", metadata: {} }),
+      }),
+    })
+    const parts = (await MessageStore.parts(processor.message.id)).filter((part) => part.type === "tool")
+    for (const name of names.slice(0, 4)) {
+      const classification = name.endsWith("input") ? "tool-input-invalid" : "tool-execution"
+      const part = parts.find((part) => part.tool === name)!
+      expect(part).toMatchObject({
+        callID: `${name}-call`,
+        state: { status: "error", input: {}, failure: {
+          kind: classification, classification, originSite: "session.processor.tool-error",
+          data: { toolCallId: `${name}-call`, toolName: name },
+        } },
+      })
+      const outcome = Database.use((db) => db.select().from(ToolPartOutcomeTable).all())
+        .find((row) => row.request_part_id === part.id)
+      expect(outcome?.data).toMatchObject({ outcome: "failed", failure: part.state.status === "error" ? part.state.failure : undefined })
+    }
+    expect(parts.find((part) => part.tool === "dynamic-execution")).toMatchObject({
+      state: { failure: { name: "Error", message: "Actual dynamic source execution failed" } },
+    })
+    expect(parts.find((part) => part.tool === "static-execution")).toMatchObject({
+      state: { failure: { name: "Error", message: "Actual static source execution failed" } },
+    })
+    expect(parts.find((part) => part.tool === "successful")).toMatchObject({
+      callID: "successful-call", state: { status: "completed", input: {}, output: "Actual successful source" },
+    })
+  })
+}, 30_000)
 
 for (const boundary of ["tool-error", "consumer-error"] as const) {
   test(`${boundary} preserves the actual successful permission result`, async () => {

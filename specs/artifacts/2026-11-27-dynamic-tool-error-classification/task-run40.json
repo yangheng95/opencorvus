@@ -1,0 +1,6 @@
+{
+  "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+  "prompt": [
+    "请通过同一个 sales_source 只读服务重新实际读取 sales-latest.csv 和 sales.csv，各读一次，重新核对可用性和现有来源的订单数、净金额、区域结果、退款与零金额口径。不要复用上一轮工具结果替代本次读取，也不猜测币种。只在当前对话回答，不修改项目文件、不创建 Task/Mission、不分派、不提交或推送项目。"
+  ]
+}
