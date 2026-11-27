@@ -1487,6 +1487,13 @@ the same bounded inner scroller. Native workspace expansion leaves that selector
 and uses the existing filling layout; closing returns the same mounted editor
 to content sizing. Editor state, measurement and keyboard ownership remain with
 the existing CodeEditor and CodeMirror owners.
+CodeArtifact exposes explicit Find and Go to line actions through the existing
+CodeEditor's navigation-ready handle. The same mounted editor owns the native
+query, line prompt, focus and cursor in both published and resource-inspector
+Code frames. Actions become available with that handle and retire with its
+cleanup; no separate query or navigation state is introduced. Local editable
+copies continue exporting their current source without changing the original
+publication or project file.
 An absolute Source target displays a localized read-only badge in the file
 toolbar's save position. This status derives from the same target that owns
 the editor's read-only mode; editable project-file targets retain their save action.

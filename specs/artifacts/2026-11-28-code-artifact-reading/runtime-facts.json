@@ -1,0 +1,159 @@
+{
+  "runs": [
+    {
+      "label": "run121",
+      "pid": 17392,
+      "url": "http://127.0.0.1:60641/",
+      "sourceRun": "run120",
+      "preflight": {
+        "sessionID": "ses_hq0ugMJgwsI4f06h8EQW",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 33123,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795807202816,
+        "settledAt": 1795807202816,
+        "allReadersSettled": true
+      },
+      "pairedCredentialCatalogCleanup": "passed",
+      "state": "exited",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run122",
+      "pid": 12404,
+      "url": "http://127.0.0.1:57348/",
+      "sourceRun": "run121",
+      "preflight": {
+        "sessionID": "ses_hqHXoGyj1prQanOkc3ZS",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 14610,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795807949572,
+        "settledAt": 1795807949572,
+        "allReadersSettled": true
+      },
+      "pairedCredentialCatalogCleanup": "passed",
+      "state": "exited",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "realStreamingRequests": 9,
+  "businessWorkTasks": 1,
+  "preflightRequests": 4,
+  "build": {
+    "originalHandle": 86106,
+    "joinedExitCode": 0,
+    "reportedDuration": "1m 3s",
+    "rendererSurface": "passed"
+  },
+  "checks": {
+    "overlayTypecheck": "passed (93948 exit 0)",
+    "i18n": "2 locales / 3375 keys",
+    "css": "9448 references / 269 globals / 60 styles / 427 sources",
+    "docs": "353 ops / 26 groups",
+    "architecture": "20 documents"
+  },
+  "screenshots": {
+    "total": 17,
+    "before": 4,
+    "final": 11,
+    "intermediate": 2,
+    "format": "unaltered native JPEG, all manually viewed",
+    "intermediateFiles": [
+      "intermediate-expanded-find-before-measure.jpg",
+      "intermediate-local-edit-before-paint.jpg"
+    ],
+    "observation": "Initial captures preceded settled visual updates; following captures confirmed exact original line 118 and the actual local edit. No source loss or persistent mismatch established."
+  },
+  "closedTabs": [
+    "241805314",
+    "241805318",
+    "241805323",
+    "241805327"
+  ],
+  "restoredPreferences": {
+    "locale": "zh-CN",
+    "theme": "system"
+  },
+  "scopeLimits": [
+    "Actual 167-line Python authored editable code and original Task read-only inspector",
+    "Relative/percentage/column prompts, multi-device and 1000000-character source not visually accepted"
+  ],
+  "uiAutomatedTests": "none",
+  "originalUnrelatedStatusLines": 178
+}

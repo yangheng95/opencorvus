@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "label": "run121",
+  "sessionID": "ses_hbHgpKBKSDtWIm1P4Y1b",
+  "artifactID": "art_g0VcCd1uK00FbkoVOSPf",
+  "reads": [
+    {
+      "filename": "sales_summary.py",
+      "completeLines": 167
+    },
+    {
+      "filename": "sales.csv",
+      "completeLines": 6
+    }
+  ],
+  "authoredSourceBytes": 7650,
+  "publicationMatchesFullOriginal": true,
+  "final": "stop",
+  "toolParts": 3
+}

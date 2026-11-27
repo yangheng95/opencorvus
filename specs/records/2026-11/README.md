@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [销售汇总代码交付的定位与临时阅读](2026-11-28-code-artifact-reading.md)
 - [销售交接演示的逐页讲者备注](2026-11-28-presentation-notes.md)
 - [0.1.56 发布](2026-11-28-release-0.1.56.md)
 - [从真实销售脚本生成和导出处理流程图](2026-11-28-diagram-delivery.md)

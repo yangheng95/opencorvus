@@ -1,6 +1,7 @@
 import { createMemo, createSignal, Show } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { CodeEditor } from "../ui/CodeEditor"
+import { CodeEditor, type CodeEditorNavigation } from "../ui/CodeEditor"
+import { Button } from "../ui/Button"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { t } from "../../utils/i18n"
 import { CODE_EXTENSIONS } from "../../services/artifact-export"
@@ -15,9 +16,28 @@ export function artifactCodeFilename(language: ArtifactCodeLanguage, filename?: 
 export function CodeArtifact(props: { payload: CodePayload }) {
   const [source, setSource] = createSignal(props.payload.source)
   const modified = createMemo(() => source() !== props.payload.source)
+  const [navigation, setNavigation] = createSignal<CodeEditorNavigation>()
 
   return (
-    <ArtifactFrame payload={{ ...props.payload, source: source() }} title={props.payload.title} kind="Code">
+    <ArtifactFrame
+      payload={{ ...props.payload, source: source() }}
+      title={props.payload.title}
+      kind="Code"
+      headerActions={
+        <>
+          <Button variant="ghost" size="sm" tone="neutral" disabled={!navigation()}
+            title={`${t("code_editor.find")} (Ctrl/Cmd+F)`}
+            onClick={() => navigation()?.find()}>
+            {t("code_editor.find")}
+          </Button>
+          <Button variant="ghost" size="sm" tone="neutral" disabled={!navigation()}
+            title={`${t("code_editor.go_to_line")} (Ctrl/Cmd+Alt+G)`}
+            onClick={() => navigation()?.goToLine()}>
+            {t("code_editor.go_to_line")}
+          </Button>
+        </>
+      }
+    >
       <div class="msg-artifact-code__toolbar">
         <div class="msg-artifact-code__details">
           <span>{props.payload.filename ?? props.payload.language}</span>
@@ -37,6 +57,7 @@ export function CodeArtifact(props: { payload: CodePayload }) {
         ariaLabel={props.payload.title}
         readOnly={!props.payload.editable}
         onValueChange={setSource}
+        onNavigationReady={setNavigation}
       />
     </ArtifactFrame>
   )
