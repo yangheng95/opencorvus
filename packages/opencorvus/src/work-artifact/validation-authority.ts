@@ -1,4 +1,5 @@
 import { Session } from "@/session"
+import { NamedError } from "@opencorvus-ai/util/error"
 import type { Message } from "@/session/message"
 import { WORK_ARTIFACT_VALIDATE_TOOL_ID } from "./profile-registry"
 import z from "zod"
@@ -8,6 +9,11 @@ import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import { OfficeValidationReceiptPayload, prepareOfficeDeliverable } from "./office-document"
 
 const ReceiptPayload = z.union([WorkArtifactValidationReceiptPayload, OfficeValidationReceiptPayload])
+
+export const WorkArtifactReceiptSourceError = NamedError.create(
+  "WorkArtifactReceiptSourceError",
+  z.object({ message: z.string(), receiptUrl: z.string(), receiptSha: z.string() }),
+)
 
 const AuthorityOutput = z.object({
   validation_receipt: z.object({
@@ -54,11 +60,13 @@ export function requireWorkArtifactValidationAuthorityFromFacts(input: {
       }
     }
   }
-  throw new Error(
-    `validation receipt has no completed host-owned ${WORK_ARTIFACT_VALIDATE_TOOL_ID} authority in this Session. ` +
+  throw new WorkArtifactReceiptSourceError({
+    receiptUrl: input.receiptUrl,
+    receiptSha: input.receiptSha,
+    message: `validation receipt has no completed host-owned ${WORK_ARTIFACT_VALIDATE_TOOL_ID} authority in this Session. ` +
       `received: url ${JSON.stringify(input.receiptUrl)} sha ${JSON.stringify(input.receiptSha)}, ` +
       `expected: a receipt published by a completed ${WORK_ARTIFACT_VALIDATE_TOOL_ID} call in the same Session.`,
-  )
+  })
 }
 
 export async function requireWorkArtifactValidationAuthority(input: {

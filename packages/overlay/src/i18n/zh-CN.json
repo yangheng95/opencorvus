@@ -1306,6 +1306,8 @@
   "settings.page_load_retry": "请检查连接后重试，也可以切换到其他设置页。",
   "tool.file_write_conflict": "文件已更改，请重新读取",
   "tool.file_not_found": "找不到文件或文件夹",
+  "tool.work_artifact_receipt_source": "校验收据来源不匹配",
+  "tool.work_artifact_receipt_source_hint": "请使用当前对话中“校验文件与预览”生成的收据。",
   "tool.metadata": "详情",
   "markdown.rendering": "正在渲染…",
   "markdown.render_failed": "Markdown 渲染失败：{{message}}",

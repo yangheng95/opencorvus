@@ -1,0 +1,47 @@
+$ bun script/run-tests.ts test/work-artifact/packaged-lifecycle.test.ts
+    Finished `release` profile [optimized] target(s) in 0.06s
+[1/1] START test/work-artifact/packaged-lifecycle.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+137 |       }
+138 |       expect(toolFailureCauseFromUnknown({
+139 |         error: unpublishedReceiptError,
+140 |         originSite: "qualification.work-artifact.receipt-source",
+141 |         classification: "tool-execution",
+142 |       })).toMatchObject({
+                ^
+error: expect(received).toMatchObject(expected)
+
+  {
+-   "data": {
+-     "canonical_error_metadata": {
+-       "receiptSha": "68ea0028694c9459d2b2eb116dd30dd95061fa2aa4344aaa4e06b4751a0d4138",
+-       "receiptUrl": "/attachment/prj_hQhUCa00apXNV9LgeHCX/68ea0028694c9459d2b2eb116dd30dd95061fa2aa4344aaa4e06b4751a0d4138.json",
+-     },
+-   },
++   "classification": "tool-execution",
+    "kind": "tool-execution",
+-   "name": "WorkArtifactReceiptSourceError",
++   "message": "validation receipt has no completed host-owned work_artifact_validate authority in this Session. received: url "/attachment/prj_hQhUCa00apXNV9LgeHCX/68ea0028694c9459d2b2eb116dd30dd95061fa2aa4344aaa4e06b4751a0d4138.json" sha "68ea0028694c9459d2b2eb116dd30dd95061fa2aa4344aaa4e06b4751a0d4138", expected: a receipt published by a completed work_artifact_validate call in the same Session.",
++   "name": "Error",
++   "originSite": "qualification.work-artifact.receipt-source",
+  }
+
+- Expected  - 7
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts:142:11)
+(fail) packaged Work Artifact runtime completes the production typed Tool lifecycle [28188.23ms]
+
+ 0 pass
+ 1 fail
+ 3 expect() calls
+Ran 1 test across 1 file. [30.11s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts
+[1/1] DONE test/work-artifact/packaged-lifecycle.test.ts exit=1 duration=30.60s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-hofVmf
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

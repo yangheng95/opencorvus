@@ -6,6 +6,7 @@ import { Identifier } from "../../src/id/id"
 import { findInteractiveArtifact } from "../../src/interactive-artifact/persist"
 import { Instance } from "../../src/project/instance"
 import { Session } from "../../src/session"
+import { toolFailureCauseFromUnknown } from "../../src/session/tool-failure-cause"
 import { Tool } from "../../src/tool/tool"
 import { createWorkArtifactTools } from "../../src/tool/work-artifact"
 import { Process } from "../../src/util/process"
@@ -14,6 +15,7 @@ import sharp from "sharp"
 import { prepareWorkArtifactRuntimeEnvironment, type WorkArtifactPresentationDependencies } from "../../src/work-artifact/presentation"
 import { WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST, WorkArtifactTargetPackageManifestSchema, verifyWorkArtifactTargetPackageManifest } from "../../src/work-artifact/runtime/package-manifest"
 import { officeCliRuntime, parseWorkArtifactRuntimeLock, WORK_ARTIFACT_RUNTIME_LOCK_PACKAGE_PATH } from "../../src/work-artifact/runtime/runtime-lock"
+import { requireWorkArtifactValidationAuthority } from "../../src/work-artifact/validation-authority"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 const packageRoot = process.env.OPENCORVUS_WORK_ARTIFACT_PACKAGE_ROOT
@@ -123,6 +125,32 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
       const inspected = await tools.inspect.init().then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
       const validated = await tools.validate.init().then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
       const validation = JSON.parse(validated.output)
+      let unpublishedReceiptError: unknown
+      try {
+        await requireWorkArtifactValidationAuthority({
+          sessionID: session.id,
+          receiptUrl: validation.validation_receipt.url,
+          receiptSha: validation.validation_receipt.sha,
+        })
+      } catch (error) {
+        unpublishedReceiptError = error
+      }
+      expect(
+        toolFailureCauseFromUnknown({
+          error: unpublishedReceiptError,
+          originSite: "qualification.work-artifact.receipt-source",
+          classification: "tool-execution",
+        }),
+      ).toMatchObject({
+        kind: "tool-execution",
+        name: "WorkArtifactReceiptSourceError",
+        data: {
+          canonical_error_metadata: {
+            receiptUrl: validation.validation_receipt.url,
+            receiptSha: validation.validation_receipt.sha,
+          },
+        },
+      })
       const now = Date.now()
       await Session.updatePart({
         id: Identifier.ascending("part"), sessionID: session.id, messageID: assistant.id, type: "tool",

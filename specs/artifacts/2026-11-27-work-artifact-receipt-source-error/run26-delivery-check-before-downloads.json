@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0Vc8DklF00HzIg1Ss2Z",
+  "deliveryToolPartID": "prt_g0Vc8DeNV00ZxCj0j8p3",
+  "finalMessageID": "msg_g0Vc8DkqP00ipVRfz0fs",
+  "sourceBytes": 16259,
+  "sourceExactlyUnchanged": true,
+  "slides": [
+    {
+      "slide": 1,
+      "title": "订单与净金额总览",
+      "imageAlt": "订单与净金额总览",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png",
+      "size": [
+        1280,
+        720
+      ],
+      "bytes": 95190,
+      "samePriorReviewedImage": true
+    },
+    {
+      "slide": 2,
+      "title": "区域对比：金额与笔数",
+      "imageAlt": "区域对比：金额与笔数",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png",
+      "size": [
+        1280,
+        720
+      ],
+      "bytes": 60144,
+      "samePriorReviewedImage": true
+    },
+    {
+      "slide": 3,
+      "title": "事实、缺口与后续行动",
+      "imageAlt": "事实、缺口与后续行动",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png",
+      "size": [
+        1280,
+        720
+      ],
+      "bytes": 152183,
+      "samePriorReviewedImage": true
+    }
+  ],
+  "preservedRows": {
+    "message": 161,
+    "part": 433,
+    "tool_part_request": 140,
+    "tool_part_outcome": 140,
+    "interactive_artifact": 10
+  },
+  "preservedFiles": [
+    {
+      "name": ".gitattributes",
+      "bytes": 150,
+      "preservedExactBytes": true
+    },
+    {
+      "name": ".gitignore",
+      "bytes": 16,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "README.md",
+      "bytes": 96,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "sales.csv",
+      "bytes": 181,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "sales_summary.py",
+      "bytes": 7650,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "summary.json",
+      "bytes": 238,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "test_sales_summary.py",
+      "bytes": 10107,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "区域汇总.csv",
+      "bytes": 59,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "销售报告.md",
+      "bytes": 1408,
+      "preservedExactBytes": true
+    },
+    {
+      "name": ".opencorvus/opencorvus.jsonc",
+      "bytes": 1398,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售核对.xlsx",
+      "bytes": 6793,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理审阅稿-分页修订.docx",
+      "bytes": 8016,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理审阅稿.docx",
+      "bytes": 7997,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理简报-精度修订.pptx",
+      "bytes": 16259,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理简报.pptx",
+      "bytes": 16302,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "review/区域对比（原图）.png",
+      "bytes": 60144,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "review/图片审阅.md",
+      "bytes": 311,
+      "preservedExactBytes": true
+    }
+  ],
+  "downloads": [],
+  "naturalToolErrors": [
+    {
+      "toolPartID": "prt_g0Vc8Dauf00r3J7M3hBX",
+      "tool": "work_artifact_deliver",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "WorkArtifactReceiptSourceError",
+        "message": "WorkArtifactReceiptSourceError: validation receipt has no completed host-owned work_artifact_validate authority in this Session. received: url \"/attachment/prj_haW9BdBH559F4Yw143ch/98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87.json\" sha \"98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87\", expected: a receipt published by a completed work_artifact_validate call in the same Session.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_ZylZ6z1CTUGR7GifD0hJr8me",
+          "toolName": "work_artifact_deliver",
+          "canonical_error_metadata": {
+            "receiptUrl": "/attachment/prj_haW9BdBH559F4Yw143ch/98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87.json",
+            "receiptSha": "98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87"
+          }
+        }
+      }
+    }
+  ]
+}

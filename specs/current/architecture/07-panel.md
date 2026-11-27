@@ -373,6 +373,12 @@ preview. Its download uses the declared name with the existing export filename
 sanitizer. Media without a declared filename leave naming to the browser; an image
 description or webpage title never supplies a download filename.
 
+Work Artifact receipt provenance failures use the canonical
+`WorkArtifactReceiptSourceError` name and structured receipt identity. The shared
+Tool failure presentation localizes its compact headline and actionable message;
+the original diagnostic and canonical metadata remain in the existing details.
+Historical generic errors retain their recorded facts without text-based reclassification.
+
 User-message PDF parts retain their chronological position and show their file
 label in a compact native disclosure by default. Expanding it loads the same
 PDF reader and original download; its reading viewport scrolls within a bound.

@@ -1306,6 +1306,8 @@
   "settings.page_load_retry": "Check your connection and try again, or open another settings page.",
   "tool.file_write_conflict": "File changed; read it again",
   "tool.file_not_found": "File or folder not found",
+  "tool.work_artifact_receipt_source": "Validation receipt source mismatch",
+  "tool.work_artifact_receipt_source_hint": "Use a receipt produced by Validate file and previews in this conversation.",
   "tool.metadata": "Details",
   "markdown.rendering": "Rendering…",
   "markdown.render_failed": "Markdown rendering failed: {{message}}",

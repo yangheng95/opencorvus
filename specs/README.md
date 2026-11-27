@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [工作文件校验收据来源错误的明确类型与当前语言摘要](records/2026-11/2026-11-27-work-artifact-receipt-source-error.md)
 - [图片预览下载保留原文件名](records/2026-11/2026-11-27-image-preview-download-name.md)
 - [演示文稿图片说明保留真实页标题](records/2026-11/2026-11-27-presentation-image-description.md)
 - [PPTX 物理字号与最终审阅图绑定](records/2026-11/2026-11-27-presentation-review-render-contract.md)

@@ -39,17 +39,20 @@ export function toolFailurePresentation(value: unknown): {
   const parsed = ToolFailureCause.safeParse(value)
   if (parsed.success) {
     const missing = parsed.data.kind === "tool-execution" && parsed.data.name === "FileNotFoundError"
+    const receiptSource = parsed.data.kind === "tool-execution" && parsed.data.name === "WorkArtifactReceiptSourceError"
     const metadata = parsed.data.data?.canonical_error_metadata
     const path = record(metadata) ? (metadata as Record<string, unknown>).path : undefined
     const headline = missing
       ? t("tool.file_not_found")
       : parsed.data.kind === "tool-execution" && parsed.data.name === "FileWriteConflictError"
         ? t("tool.file_write_conflict")
-        : undefined
+        : receiptSource
+          ? t("tool.work_artifact_receipt_source")
+          : undefined
     return {
       message: missing
         ? typeof path === "string" ? t("explorer.error.not_found", { path }) : headline!
-        : parsed.data.message,
+        : receiptSource ? t("tool.work_artifact_receipt_source_hint") : parsed.data.message,
       ...(headline ? { headline } : {}),
       diagnostic: renderToolFailureCause(parsed.data),
       cancelled: parsed.data.kind === "MessageAbortedError" && parsed.data.name === "MessageAbortedError",
