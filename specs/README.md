@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [真实核对命令的终端记录与搜索](records/2026-11/2026-11-27-terminal-review.md)
 - [多页表格数值精度与真实清单往返](records/2026-11/2026-11-27-table-precision.md)
 - [作者图表配置与主题缺省的优先级](records/2026-11/2026-11-27-chart-author-style.md)
 - [原生图表导出的主题底色](records/2026-11/2026-11-27-chart-export-surface.md)

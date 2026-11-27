@@ -5794,6 +5794,16 @@ sheet navigation, graph/timeline/tree exploration, terminal transcript search,
 3D camera control, and other presentation-only interactions remain
 renderer-local.
 
+Terminal transcript search uses one native SearchAddon: Enter and the next-match
+button invoke the same forward navigation, while input edits retain incremental
+search. Clearing delegates the empty term to that same native search operation,
+which retires both decorations and the selected match, restoring full-text copy.
+Its metadata grid stays within the artifact width: the working directory wraps
+on its own row, followed
+by the shrinking command and visible exit status. The original command remains
+available through its native title; immutable output and full-text exports retain
+their published content.
+
 Native Table cells format actual booleans, numbers and dates with the current
 product locale. Boolean columns do not apply truthiness to mixed scalar source
 values: a string `"false"` remains that string in a boolean column. The shared

@@ -118,7 +118,7 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
     >
       <div class="msg-artifact-terminal__meta">
         <span>{props.payload.workingDirectory}</span>
-        <code>{props.payload.command}</code>
+        <code title={props.payload.command}>{props.payload.command}</code>
         <span data-exit-code={props.payload.exitCode}>
           {props.payload.exitCode === undefined
             ? t("artifact.terminal.exit_unknown")
@@ -131,13 +131,10 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
           value={query()}
           placeholder={t("artifact.terminal.search")}
           size="sm"
+          onSubmit={findNext}
           onValueChange={(value) => {
             setQuery(value)
-            if (value) {
-              search?.findNext(value, searchOptions(true))
-            } else {
-              search?.clearDecorations()
-            }
+            search?.findNext(value, searchOptions(true))
           }}
         />
         <Button variant="ghost" size="sm" tone="neutral" disabled={!query()} onClick={findNext}>

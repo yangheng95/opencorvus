@@ -2639,7 +2639,18 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact-terminal__meta {
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+}
+
+.msg-artifact-terminal__meta > span:first-child {
+  grid-column: 1 / -1;
+  overflow-wrap: anywhere;
+}
+
+.msg-artifact-terminal__meta > span[data-exit-code] {
+  white-space: nowrap;
 }
 
 .msg-artifact-terminal__meta code {

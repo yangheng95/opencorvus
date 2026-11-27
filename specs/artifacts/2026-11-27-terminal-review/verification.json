@@ -1,0 +1,183 @@
+{
+  "status": "passed",
+  "requests": 12,
+  "runs": [
+    {
+      "label": "run64",
+      "requests": 8,
+      "preflight": {
+        "sessionID": "ses_h1G8OCvIWSfMvKCdMLf7",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795768160718,
+        "settledAt": 1795768160719,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 29527,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run65",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hQn7Xrq5D2xghsFHPMpc",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795768403918,
+        "settledAt": 1795768403918,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 4396,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run66",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hwBW6z1iNwj7NU7aOneT",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795768687339,
+        "settledAt": 1795768687339,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 40859,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 18,
+  "nativeFinalScreenshots": 7,
+  "sourceRows": 53,
+  "terminalLines": 62,
+  "actualDownloadBytes": 4351,
+  "checks": {
+    "exactActualToolOutput": "4351 bytes, command/workingDirectory/exit0 and full 53 source rows",
+    "protectedFiles": 23,
+    "protectedOldRows": 2091,
+    "sqliteIntegrity": "ok",
+    "nativeEnterAndButton": "two Enter presses select record34, next button selects record35",
+    "nativeClearCopy": "selected 华东 -> clear -> full62 lines in Chinese/light and English/dark",
+    "nativeMetadata": "working directory and shrinking command with visible exit0, inline and expanded",
+    "nativeLocale": "current-language terminal/search/navigation/exit labels; author text preserved",
+    "nativeScroll": "actual native scroll to row53 and final source row count",
+    "download": "4351-byte native TXT with search active, full original transcript; exact member retained in ZIP",
+    "typecheck": "passed",
+    "build": "53.16s, original final build handle70932 joined exit0",
+    "rendererPublicSurface": "passed",
+    "css": "passed via packages/overlay declared check:css-tokens",
+    "docs": "353 operations / 26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Terminal-only presentation changes; no global body layout change or scheduler state mutation.",
+    "No mobile or external native terminal/Office acceptance.",
+    "Theme refresh retains query; current match follows the existing native search behavior rather than a new persisted cursor.",
+    "Full copy comparisons normalize platform newline representation; native download identity is exact and its ZIP preserves CRLF."
+  ]
+}
