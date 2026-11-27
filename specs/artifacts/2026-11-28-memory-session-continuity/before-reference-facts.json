@@ -1,0 +1,9 @@
+{
+  "scope": "actual location parser data; not UI automation",
+  "authored": "records.csv:1–5",
+  "reference": {
+    "path": "records.csv:1–5"
+  },
+  "range": null,
+  "observation": "numeric en-dash suffix remains inside path, so the shared codespan path grammar cannot admit the actual citation"
+}

@@ -1,0 +1,12 @@
+{
+  "filename": "MEMORY.MD",
+  "scope": "project",
+  "content": "# Project Memory\n\n## Active task\nPrepare a Chinese review/handoff note for the incoming colleague, using only the current project's `handoff.md`, and publish it as this round's document.\n\n## Agreed review rules\n- Count orders by record rows.\n- Retain refunds as negative amounts.\n- Do not infer trends when dates are missing.\n\n## Required content and evidence handling\n- Identify the responsible people and checkpoints explicitly stated in `handoff.md`.\n- Clearly distinguish statements in the source from anything actually verified during this round.\n- Cite genuine sources; do not invent evidence or imply that unperformed checks were completed.\n\n## Scope and execution constraints\n- Read only the current project's `handoff.md`.\n- Do not execute scripts, modify files, or delegate.\n- The publication request does not remove the prohibition on modifying files.\n\n## Current state\nOnly the user's task and conventions are available in the supplied evidence. The contents of `handoff.md`, named owners, checkpoints, verification findings, and publication outcome are not yet established.\n",
+  "revision": 1,
+  "tokenCount": 272,
+  "status": "idle",
+  "pendingCount": 0,
+  "droppedPendingCount": 0,
+  "timeCreated": 1795821073294,
+  "timeUpdated": 1795821080617
+}

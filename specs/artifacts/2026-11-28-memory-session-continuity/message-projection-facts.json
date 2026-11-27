@@ -1,0 +1,65 @@
+{
+  "scope": "reviewable public message fields, visible text/tool/source/publication/step parts; Provider reasoning and opaque protocol metadata are not archived. Full original API objects remain private and were compared before projection; product messages and storage are untouched.",
+  "files": [
+    {
+      "file": "run140-north-messages.json",
+      "sourceMessages": 5,
+      "projectedMessages": 5,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDg1xE00XC13H1vLh",
+          "type": "reasoning"
+        },
+        {
+          "partID": "prt_g0VcDg31600cQx9QYrVk",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run141-north-messages.json",
+      "sourceMessages": 5,
+      "projectedMessages": 5,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDg1xE00XC13H1vLh",
+          "type": "reasoning"
+        },
+        {
+          "partID": "prt_g0VcDg31600cQx9QYrVk",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run140-south-messages.json",
+      "sourceMessages": 5,
+      "projectedMessages": 5,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDg1qM00E4BfQNMcv",
+          "type": "reasoning"
+        },
+        {
+          "partID": "prt_g0VcDg2jo00rL1c4OZOL",
+          "type": "reasoning"
+        }
+      ]
+    },
+    {
+      "file": "run141-south-messages.json",
+      "sourceMessages": 5,
+      "projectedMessages": 5,
+      "omittedProviderReasoningParts": [
+        {
+          "partID": "prt_g0VcDg1qM00E4BfQNMcv",
+          "type": "reasoning"
+        },
+        {
+          "partID": "prt_g0VcDg2jo00rL1c4OZOL",
+          "type": "reasoning"
+        }
+      ]
+    }
+  ]
+}

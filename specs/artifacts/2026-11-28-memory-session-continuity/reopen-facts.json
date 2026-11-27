@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "projects": [
+    {
+      "key": "north",
+      "projectID": "prj_hZ6Mj0J1wZUIfIIkFSeE",
+      "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+      "samePublicMessages": true,
+      "sameArtifacts": true,
+      "sameMemory": true,
+      "revision": 2,
+      "status": "idle",
+      "pendingCount": 0,
+      "sourceRecordBytes": 111,
+      "sourceHandoffBytes": 153
+    },
+    {
+      "key": "south",
+      "projectID": "prj_he6efZFwavshsL4BEGOG",
+      "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+      "samePublicMessages": true,
+      "sameArtifacts": true,
+      "sameMemory": true,
+      "revision": 2,
+      "status": "idle",
+      "pendingCount": 0,
+      "sourceRecordBytes": 111,
+      "sourceHandoffBytes": 159
+    }
+  ],
+  "scope": "candidate public persistence and original files; UI handled separately"
+}

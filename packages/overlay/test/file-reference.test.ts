@@ -91,6 +91,17 @@ test("a source-style range becomes the same inclusive workbench range", () => {
   expect(fileReferenceRange(parseFileReference("资料/范围示例.txt:20-22"))).toEqual({ startLine: 20, endLine: 22 })
 })
 
+test.each([
+  ["records.csv:1–5", { path: "records.csv", line: 1, endLine: 5 }, { startLine: 1, endLine: 5 }],
+  ["资料/范围示例.csv:20–22", { path: "资料/范围示例.csv", line: 20, endLine: 22 }, { startLine: 20, endLine: 22 }],
+  ["C:\\repo\\records.csv:5–8", { path: "C:\\repo\\records.csv", line: 5, endLine: 8 }, { startLine: 5, endLine: 8 }],
+  ["records.csv:5–5", { path: "records.csv", line: 5, endLine: 5 }, { startLine: 5, endLine: 5 }],
+])("an authored en-dash range maps to the complete inclusive file location: %s", (raw, expected, range) => {
+  const reference = parseFileReference(raw as string)
+  expect(reference).toEqual(expected)
+  expect(fileReferenceReveal(reference)).toEqual(range)
+})
+
 test.each(["src/example.ts:0-2", "src/example.ts:20-0", "src/example.ts:22-20", "src/example.ts:20-9007199254740992"])(
   "an uninterpreted colon range retains the original reference: %s", (raw) => {
     expect(parseFileReference(raw)).toEqual({ path: raw })

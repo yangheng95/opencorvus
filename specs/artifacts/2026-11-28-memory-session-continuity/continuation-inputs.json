@@ -1,0 +1,34 @@
+[
+  {
+    "key": "north",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+    "projectID": "prj_hZ6Mj0J1wZUIfIIkFSeE",
+    "filename": "records.csv",
+    "original": "记录编号,类型,金额\nN01,普通订单,12.50\nN02,退款,-2.50\nN03,免费样品,0.00\nN04,普通订单,8.00\n",
+    "request": "请在这个新对话中接续本项目的交接工作。这次新增了 records.csv，请只读这份新文件，沿用本项目已有的统计与解释约定，为接班同事发表一份中文记录复核文档。给出可核对的记录数量、净金额、退款与样品的处理方式，明确现有资料能支持哪些结论，并引用实际来源。只做阅读与文档发表，不执行脚本、不修改文件、不委派。",
+    "requestID": "6d9bd1e4-9383-447b-af95-ff347348e998",
+    "messageID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+    "expected": {
+      "records": 4,
+      "netAmount": "18.00",
+      "refund": "-2.50",
+      "sample": "0.00"
+    }
+  },
+  {
+    "key": "south",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-south",
+    "projectID": "prj_he6efZFwavshsL4BEGOG",
+    "filename": "records.csv",
+    "original": "记录编号,类型,金额\nS01,普通订单,20.00\nS02,退款,-3.00\nS03,免费样品,0.00\nS04,普通订单,5.00\n",
+    "request": "请在这个新对话中接续本项目的交接工作。这次新增了 records.csv，请只读这份新文件，沿用本项目已有的统计与解释约定，为接班同事发表一份中文记录复核文档。给出可核对的记录数量、净金额、退款与样品的处理方式，明确现有资料能支持哪些结论，并引用实际来源。只做阅读与文档发表，不执行脚本、不修改文件、不委派。",
+    "requestID": "5694a50d-e5b4-44f2-9452-16e6201b5b1f",
+    "messageID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+    "expected": {
+      "records": 4,
+      "netAmount": "22.00",
+      "refund": "-3.00",
+      "sample": "0.00"
+    }
+  }
+]

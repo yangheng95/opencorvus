@@ -22,7 +22,8 @@ const FILE_REFERENCE_WORKBENCH_ONLY_ATTRIBUTE = "data-file-workbench-only"
 // Lazy path half plus an anchored numeric tail, so a Windows drive letter
 // (`C:\repo\a.ts`) is never mistaken for a location separator: the tail must
 // run to the end of the string as digits.
-const LOCATION_SUFFIX_RE = /^(.+?)(?::(\d+)(?::(\d+)|-(\d+))?|#L(\d+)(?:-L(\d+))?)$/
+// Numeric colon ranges also retain the EN DASH used in authored prose.
+const LOCATION_SUFFIX_RE = /^(.+?)(?::(\d+)(?::(\d+)|[-–](\d+))?|#L(\d+)(?:-L(\d+))?)$/
 
 export interface FileReferenceLocation {
   line: number

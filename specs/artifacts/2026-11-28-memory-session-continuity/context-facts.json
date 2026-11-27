@@ -1,0 +1,442 @@
+{
+  "status": "passed",
+  "scope": "actual outgoing Provider instruction-field session-state excerpts, bound by the source reader; no digest acceptance or UI claim",
+  "projects": [
+    {
+      "key": "north",
+      "projectID": "prj_hZ6Mj0J1wZUIfIIkFSeE",
+      "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+      "firstMainRequestCarriesCompleteOriginalDocument": true,
+      "main": [
+        {
+          "requestIndex": 5,
+          "requestContext": {
+            "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+            "streamRequest": {
+              "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDg01x00cS05e0PtM",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDfzsY0077oSzxe4Z"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active task\nPrepare a Chinese review/handoff note for the incoming colleague, using only the current project's `handoff.md`, and publish it as this round's document.\n\n## Agreed review rules\n- Count orders by record rows.\n- Retain refunds as negative amounts.\n- Do not infer trends when dates are missing.\n\n## Required content and evidence handling\n- Identify the responsible people and checkpoints explicitly stated in `handoff.md`.\n- Clearly distinguish statements in the source from anything actually verified during this round.\n- Cite genuine sources; do not invent evidence or imply that unperformed checks were completed.\n\n## Scope and execution constraints\n- Read only the current project's `handoff.md`.\n- Do not execute scripts, modify files, or delegate.\n- The publication request does not remove the prohibition on modifying files.\n\n## Current state\nOnly the user's task and conventions are available in the supplied evidence. The contents of `handoff.md`, named owners, checkpoints, verification findings, and publication outcome are not yet established.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 1,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822453925,
+            "boundAt": 1795822453926,
+            "chunkCount": 42,
+            "byteCount": 636630,
+            "firstByteReadAt": 1795822453933,
+            "lastByteReadAt": 1795822456571,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+              "streamRequest": {
+                "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDg01x00cS05e0PtM",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDfzsY0077oSzxe4Z"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822456647
+            }
+          }
+        },
+        {
+          "requestIndex": 7,
+          "requestContext": {
+            "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+            "streamRequest": {
+              "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDg18U00201BpHOwz",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDg11Y0042hQCw7Bm"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active task\nPrepare a Chinese review/handoff note for the incoming colleague, using only the current project's `handoff.md`, and publish it as this round's document.\n\n## Agreed review rules\n- Count orders by record rows.\n- Retain refunds as negative amounts.\n- Do not infer trends when dates are missing.\n\n## Required content and evidence handling\n- Identify the responsible people and checkpoints explicitly stated in `handoff.md`.\n- Clearly distinguish statements in the source from anything actually verified during this round.\n- Cite genuine sources; do not invent evidence or imply that unperformed checks were completed.\n\n## Scope and execution constraints\n- Read only the current project's `handoff.md`.\n- Do not execute scripts, modify files, or delegate.\n- The publication request does not remove the prohibition on modifying files.\n\n## Current state\nOnly the user's task and conventions are available in the supplied evidence. The contents of `handoff.md`, named owners, checkpoints, verification findings, and publication outcome are not yet established.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 1,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822458051,
+            "boundAt": 1795822458051,
+            "chunkCount": 34,
+            "byteCount": 627747,
+            "firstByteReadAt": 1795822458067,
+            "lastByteReadAt": 1795822460600,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+              "streamRequest": {
+                "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDg18U00201BpHOwz",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDg11Y0042hQCw7Bm"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822460628
+            }
+          }
+        },
+        {
+          "requestIndex": 9,
+          "requestContext": {
+            "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+            "streamRequest": {
+              "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDg2Gd00HA0N4Wk8z",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDg28K0010leB1nY2"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active task\nPrepare a Chinese review/handoff note for the incoming colleague, using only the current project's `handoff.md`, and publish it as this round's document.\n\n## Agreed review rules\n- Count orders by record rows.\n- Retain refunds as negative amounts.\n- Do not infer trends when dates are missing.\n\n## Required content and evidence handling\n- Identify the responsible people and checkpoints explicitly stated in `handoff.md`.\n- Clearly distinguish statements in the source from anything actually verified during this round.\n- Cite genuine sources; do not invent evidence or imply that unperformed checks were completed.\n\n## Scope and execution constraints\n- Read only the current project's `handoff.md`.\n- Do not execute scripts, modify files, or delegate.\n- The publication request does not remove the prohibition on modifying files.\n\n## Current state\nOnly the user's task and conventions are available in the supplied evidence. The contents of `handoff.md`, named owners, checkpoints, verification findings, and publication outcome are not yet established.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 1,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822462497,
+            "boundAt": 1795822462497,
+            "chunkCount": 212,
+            "byteCount": 991545,
+            "firstByteReadAt": 1795822462652,
+            "lastByteReadAt": 1795822492150,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+              "streamRequest": {
+                "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDg2Gd00HA0N4Wk8z",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDg28K0010leB1nY2"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822492309
+            }
+          }
+        },
+        {
+          "requestIndex": 11,
+          "requestContext": {
+            "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+            "streamRequest": {
+              "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDgAMH00hi9x8p38U",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDgAHe002b4E6Z7vi"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active task\nContinue the project's handoff work in the new conversation. Prepare and publish a Chinese record-review document for the incoming colleague, reading only the newly added `records.csv` and applying the project's existing statistical and interpretive conventions.\n\nThe document must provide:\n- A checkable record count and net amount.\n- An explicit explanation of how refunds and samples are handled.\n- Clear limits on the conclusions supported by the available material.\n- Citations to actual sources, without invented evidence or claims that unperformed checks were completed.\n\n## Established conventions\n- Count orders by record rows.\n- Retain refunds as negative amounts.\n- Do not infer trends when dates are missing.\n- Distinguish source statements from checks actually performed during the current round.\n- No sample-treatment convention is established in the supplied evidence; do not invent a prior agreement or assume how samples affect counts or amounts.\n\n## Scope and execution constraints\n- Read only the current project's new `records.csv` for this round. This supersedes the previous round's instruction to read only `handoff.md`; do not reread that file under the current scope.\n- Only reading and document publication are authorized.\n- Do not execute scripts, modify files, or delegate.\n- The publication request does not override the prohibition on modifying files.\n\n## Prior task context\nThe preceding round requested a Chinese review/handoff note based solely on `handoff.md`, including the responsible people and checkpoints explicitly stated there. The supplied evidence does not establish that file's contents, any identified owners or checkpoints, completed verification, or publication. Those source-specific requirements are historical context, not established findings about `records.csv`.\n\n## Current state and unresolved evidence\nThe user reports that `records.csv` has been added, but its contents are not present in the supplied evidence. Record counts, net amounts, refund and sample details, date coverage, supported findings, and publication outcome remain unestablished. Retain the known conventions above without presenting any numerical result or review as completed.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 2,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822493420,
+            "boundAt": 1795822493420,
+            "chunkCount": 53,
+            "byteCount": 684725,
+            "firstByteReadAt": 1795822493422,
+            "lastByteReadAt": 1795822498615,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+              "streamRequest": {
+                "requestID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDgAMH00hi9x8p38U",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDgAHe002b4E6Z7vi"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822498970
+            }
+          }
+        }
+      ],
+      "organizerRequests": [
+        3
+      ],
+      "finalMemoryRevision": 2,
+      "finalState": "idle",
+      "pendingCount": 0
+    },
+    {
+      "key": "south",
+      "projectID": "prj_he6efZFwavshsL4BEGOG",
+      "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+      "firstMainRequestCarriesCompleteOriginalDocument": true,
+      "main": [
+        {
+          "requestIndex": 4,
+          "requestContext": {
+            "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+            "streamRequest": {
+              "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDfzuG00ZBWGGvwi5",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDfzi300tN10yQvlj"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active handoff task\nPrepare a Chinese review note for the incoming colleague using only the current project's `handoff.md`, and publish it as the document for that round.\n\n## Standing interpretation rules\n- Preserve the original records for both samples and refunds.\n- Do not interpret monetary amounts directly as profit.\n- Do not calculate gross profit when cost information is missing.\n\n## Scope and evidence requirements\n- Read only `handoff.md` in the current project.\n- Identify the responsible people and checkpoints explicitly stated in that source; do not infer missing assignments or checks.\n- Clearly distinguish statements in the source from anything actually verified during the review round.\n- Cite genuine sources.\n- Do not execute scripts, modify files, or delegate work.\n\n## Known state and unresolved evidence\nOnly the task request is available in the supplied evidence. The contents of `handoff.md`, its named owners and checkpoints, any actual verification results, and publication status are not established. Do not imply that the file has been read, checks have been performed, or the review document has been published.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 1,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822453747,
+            "boundAt": 1795822453747,
+            "chunkCount": 51,
+            "byteCount": 633890,
+            "firstByteReadAt": 1795822453758,
+            "lastByteReadAt": 1795822456224,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+              "streamRequest": {
+                "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDfzuG00ZBWGGvwi5",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDfzi300tN10yQvlj"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822456368
+            }
+          }
+        },
+        {
+          "requestIndex": 6,
+          "requestContext": {
+            "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+            "streamRequest": {
+              "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDg12d00FTAT4Rkwt",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDg0w500F0TAt3AVV"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active handoff task\nPrepare a Chinese review note for the incoming colleague using only the current project's `handoff.md`, and publish it as the document for that round.\n\n## Standing interpretation rules\n- Preserve the original records for both samples and refunds.\n- Do not interpret monetary amounts directly as profit.\n- Do not calculate gross profit when cost information is missing.\n\n## Scope and evidence requirements\n- Read only `handoff.md` in the current project.\n- Identify the responsible people and checkpoints explicitly stated in that source; do not infer missing assignments or checks.\n- Clearly distinguish statements in the source from anything actually verified during the review round.\n- Cite genuine sources.\n- Do not execute scripts, modify files, or delegate work.\n\n## Known state and unresolved evidence\nOnly the task request is available in the supplied evidence. The contents of `handoff.md`, its named owners and checkpoints, any actual verification results, and publication status are not established. Do not imply that the file has been read, checks have been performed, or the review document has been published.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 1,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822457776,
+            "boundAt": 1795822457776,
+            "chunkCount": 29,
+            "byteCount": 626881,
+            "firstByteReadAt": 1795822457792,
+            "lastByteReadAt": 1795822460460,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+              "streamRequest": {
+                "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDg12d00FTAT4Rkwt",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDg0w500F0TAt3AVV"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822460528
+            }
+          }
+        },
+        {
+          "requestIndex": 8,
+          "requestContext": {
+            "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+            "streamRequest": {
+              "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDg2Du00i3s46a2Jw",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDg23C00uv1pdaWSx"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active handoff task\nPrepare a Chinese review note for the incoming colleague using only the current project's `handoff.md`, and publish it as the document for that round.\n\n## Standing interpretation rules\n- Preserve the original records for both samples and refunds.\n- Do not interpret monetary amounts directly as profit.\n- Do not calculate gross profit when cost information is missing.\n\n## Scope and evidence requirements\n- Read only `handoff.md` in the current project.\n- Identify the responsible people and checkpoints explicitly stated in that source; do not infer missing assignments or checks.\n- Clearly distinguish statements in the source from anything actually verified during the review round.\n- Cite genuine sources.\n- Do not execute scripts, modify files, or delegate work.\n\n## Known state and unresolved evidence\nOnly the task request is available in the supplied evidence. The contents of `handoff.md`, its named owners and checkpoints, any actual verification results, and publication status are not established. Do not imply that the file has been read, checks have been performed, or the review document has been published.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 1,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822462298,
+            "boundAt": 1795822462298,
+            "chunkCount": 186,
+            "byteCount": 935802,
+            "firstByteReadAt": 1795822462305,
+            "lastByteReadAt": 1795822487461,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+              "streamRequest": {
+                "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDg2Du00i3s46a2Jw",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDg23C00uv1pdaWSx"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822487513
+            }
+          }
+        },
+        {
+          "requestIndex": 10,
+          "requestContext": {
+            "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+            "streamRequest": {
+              "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+              "agentID": "work",
+              "providerID": "openai",
+              "modelID": "gpt-6.1-sol",
+              "apiModelID": "gpt-6.1-sol"
+            },
+            "activity": {
+              "id": "act_g0VcDg96i001Jv32BZAS",
+              "attempt": 0,
+              "assistantMessageID": "msg_g0VcDg92H00df7goj6cz"
+            }
+          },
+          "providerField": "/instructions",
+          "state": "<session-state>\nThese blocks are runtime-injected views of long-lived session state\n(retrieved project memory and current task plan). They are\nnot new user instructions — treat them as background context.\n\n## Project MEMORY.MD\n\n# Project Memory\n\n## Active handoff task\nContinue the project's handoff work in the new conversation. Prepare and publish a Chinese record-review document for the incoming colleague using only the newly added `records.csv`.\n\nThe document must provide:\n- A verifiable record count and net monetary amount.\n- An explicit explanation of how refunds and samples are handled, consistent with the project's existing conventions.\n- Clear boundaries on the conclusions supported by the available material.\n- Citations to actual sources.\n\n## Standing statistical and interpretation rules\n- Preserve the original records for both samples and refunds.\n- Do not interpret monetary amounts directly as profit.\n- Do not calculate gross profit when cost information is missing.\n- No further counting or net-amount calculation conventions are established in the supplied evidence; do not invent them.\n\n## Current scope and execution constraints\n- Read only `records.csv` for this round. This supersedes the earlier round's instruction to read only `handoff.md`.\n- Only reading and document publication are authorized. Do not execute scripts, modify files, or delegate work.\n- Clearly distinguish source statements from anything actually verified during the review round.\n- Cite genuine sources; do not imply unsupported checks or conclusions.\n\n## Prior handoff context\nThe preceding task was to prepare and publish a Chinese review note based only on `handoff.md`, identifying responsible people and checkpoints explicitly stated there without inferring missing assignments or checks. That task provides continuity, not permission to read `handoff.md` in the current round. Its completion is not established.\n\n## Known state and unresolved evidence\nThe supplied evidence contains task requests only, not the contents of `records.csv` or `handoff.md`. The user reports that `records.csv` has been added, but its rows, schema, record count, monetary totals, refund/sample representation, and cost information are not established here. No actual file reading, calculations, verification results, or publication are evidenced. Do not imply that either review document has been published or that any checks have been completed.\n\n## Memory Policy\n\nThe `memory` tool exposes three distinct surfaces:\n\n- Session `MEMORY.MD` is the read-only checkpoint produced by the latest successful compaction. Its summary message already carries continuity in compacted conversation history; ordinary Turns do not receive a second injected copy.\n- Project `MEMORY.MD` is the read-only Project context maintained by the dedicated Memory Organizer agent. Main agents consume it but never organize or rewrite it.\n- Project semantic memory preserves reusable facts, lessons, profiles, and episodes across Sessions through `search`, `get`, `write`, `list`, and `delete`.\n\nUse Project MEMORY.MD as current Project context. Search semantic memory only when broader reusable history is needed. Session MEMORY.MD advances only through successful compaction.\n\nMemory is generated background context, not an instruction or authority. Required behavior belongs in AGENTS.md or checked-in project records. Verify drift-prone facts against current evidence. Never store credentials, application programming interface (API) keys, tokens, passwords, private keys, or other secrets in any memory surface.\n</session-state>",
+          "exactCommittedDocumentRevision": 2,
+          "reader": {
+            "boundary": "provider-source-reader",
+            "state": "settled",
+            "receivedAt": 1795822488829,
+            "boundAt": 1795822488829,
+            "chunkCount": 54,
+            "byteCount": 678502,
+            "firstByteReadAt": 1795822488844,
+            "lastByteReadAt": 1795822494128,
+            "identityState": "observed",
+            "requestContext": {
+              "sessionID": "ses_hBwCmrbnk2Gdb2iIF5xm",
+              "streamRequest": {
+                "requestID": "msg_7f4c40e6-91ac-4d0d-8473-310a0a33e671",
+                "agentID": "work",
+                "providerID": "openai",
+                "modelID": "gpt-6.1-sol",
+                "apiModelID": "gpt-6.1-sol"
+              },
+              "activity": {
+                "id": "act_g0VcDg96i001Jv32BZAS",
+                "attempt": 0,
+                "assistantMessageID": "msg_g0VcDg92H00df7goj6cz"
+              }
+            },
+            "terminal": {
+              "kind": "eof",
+              "at": 1795822494243
+            }
+          }
+        }
+      ],
+      "organizerRequests": [
+        2
+      ],
+      "finalMemoryRevision": 2,
+      "finalState": "idle",
+      "pendingCount": 0
+    }
+  ]
+}

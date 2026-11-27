@@ -1,0 +1,51 @@
+{
+  "key": "north",
+  "projectID": "prj_hZ6Mj0J1wZUIfIIkFSeE",
+  "sessionID": "ses_hOeOgkoHSBbKzXu0Jvk1",
+  "messageID": "msg_1f1fb468-605d-4810-a837-5a88f5ce877e",
+  "finish": "stop",
+  "tools": [
+    {
+      "id": "prt_g0VcDg0vY007tndvwfnZ",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcDg1xP005OiJw7Azz",
+      "tool": "skill",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcDg32P00eZ1JGJnTx",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "art_g0VcDgAGQ00voBk4DA4D",
+      "title": "新增记录复核与交接说明（中文）",
+      "renderer": "document@1"
+    }
+  ],
+  "expectedArithmetic": {
+    "records": 4,
+    "netAmount": "18.00",
+    "refund": "-2.50",
+    "sample": "0.00"
+  },
+  "modelRequests": 5,
+  "memory": {
+    "filename": "MEMORY.MD",
+    "scope": "project",
+    "content": "# Project Memory\n\n## Active task\nContinue the project's handoff work in the new conversation. Prepare and publish a Chinese record-review document for the incoming colleague, reading only the newly added `records.csv` and applying the project's existing statistical and interpretive conventions.\n\nThe document must provide:\n- A checkable record count and net amount.\n- An explicit explanation of how refunds and samples are handled.\n- Clear limits on the conclusions supported by the available material.\n- Citations to actual sources, without invented evidence or claims that unperformed checks were completed.\n\n## Established conventions\n- Count orders by record rows.\n- Retain refunds as negative amounts.\n- Do not infer trends when dates are missing.\n- Distinguish source statements from checks actually performed during the current round.\n- No sample-treatment convention is established in the supplied evidence; do not invent a prior agreement or assume how samples affect counts or amounts.\n\n## Scope and execution constraints\n- Read only the current project's new `records.csv` for this round. This supersedes the previous round's instruction to read only `handoff.md`; do not reread that file under the current scope.\n- Only reading and document publication are authorized.\n- Do not execute scripts, modify files, or delegate.\n- The publication request does not override the prohibition on modifying files.\n\n## Prior task context\nThe preceding round requested a Chinese review/handoff note based solely on `handoff.md`, including the responsible people and checkpoints explicitly stated there. The supplied evidence does not establish that file's contents, any identified owners or checkpoints, completed verification, or publication. Those source-specific requirements are historical context, not established findings about `records.csv`.\n\n## Current state and unresolved evidence\nThe user reports that `records.csv` has been added, but its contents are not present in the supplied evidence. Record counts, net amounts, refund and sample details, date coverage, supported findings, and publication outcome remain unestablished. Retain the known conventions above without presenting any numerical result or review as completed.\n",
+    "revision": 2,
+    "tokenCount": 559,
+    "status": "idle",
+    "pendingCount": 0,
+    "droppedPendingCount": 0,
+    "timeCreated": 1795821073294,
+    "timeUpdated": 1795822464324
+  },
+  "scope": "actual public runtime, original source and outgoing Provider system blocks; semantic output and UI require personal review"
+}
