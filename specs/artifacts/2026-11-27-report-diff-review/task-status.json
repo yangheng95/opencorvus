@@ -1,0 +1,89 @@
+{
+  "sessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+  "finish": "stop",
+  "error": null,
+  "tools": [
+    {
+      "id": "prt_g0VcA483e00WXUuXkmop",
+      "messageID": "msg_g0VcA46xS00hDzTXuKBa",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcA48zI00vmu51a5yB",
+      "messageID": "msg_g0VcA48Mp00l3a1eNFHk",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcA4AHR00sMu0P9PL0",
+      "messageID": "msg_g0VcA494O00UNEYiQy4N",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcA4B4100Es4sNhGgh",
+      "messageID": "msg_g0VcA4ARa00tlKw69n8R",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

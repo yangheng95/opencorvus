@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "sessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+  "artifactID": "art_g0VcA4KoP0021bOpRlt0",
+  "renderer": "diff@1",
+  "language": "markdown",
+  "sourceDocuments": [
+    {
+      "side": "original",
+      "path": "销售报告.md",
+      "nativeBytes": 1408,
+      "publishedBytes": 1384,
+      "publishedLines": 24,
+      "content": "exact source text, platform newlines normalized"
+    },
+    {
+      "side": "modified",
+      "path": "交付复核/销售复核 #1.md",
+      "nativeBytes": 4141,
+      "publishedBytes": 4141,
+      "publishedLines": 67,
+      "content": "exact source text, platform newlines normalized"
+    }
+  ]
+}

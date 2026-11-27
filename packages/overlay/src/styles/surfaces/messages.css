@@ -2001,6 +2001,20 @@ button.msg-source-chip .msg-source-chip__filename {
   background: transparent;
 }
 
+.msg-artifact-diff {
+  overflow: hidden;
+}
+
+.msg-artifact-diff > .cm-mergeView {
+  height: 100%;
+  max-height: inherit;
+  overflow: auto;
+}
+
+.msg-artifact-diff .cm-mergeViewEditor {
+  overflow: clip;
+}
+
 .resource-text-preview {
   border: var(--oc-border-width) solid transparent;
 }
@@ -2334,6 +2348,7 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diagram"] .msg-artifact-diagram,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diff"] .msg-artifact-diff,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Chart"] .msg-artifact-chart--vega,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Candlestick"] .msg-artifact-chart,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Map"] .msg-artifact-map,

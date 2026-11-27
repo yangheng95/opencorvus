@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [报告差异阅读证据](2026-11-27-report-diff-review/README.md)
 - [真实核对命令的终端记录证据](2026-11-27-terminal-review/README.md)
 - [多页表格数值与原始清单证据](2026-11-27-table-precision/README.md)
 - [作者图表配置优先级证据](2026-11-27-chart-author-style/README.md)

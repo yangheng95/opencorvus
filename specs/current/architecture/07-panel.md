@@ -5804,6 +5804,15 @@ by the shrinking command and visible exit status. The original command remains
 available through its native title; immutable output and full-text exports retain
 their published content.
 
+Native Diff retains its existing 220–560px inline reading budget and
+fills the available body when expanded. The library's cm-mergeView root owns
+the scrolling within that host; the outer artifact does not scroll its growing
+editor content. Merge's native automatic editor/scroller heights remain intact,
+while side wrappers clip content without becoming nested scroll containers.
+Both sides share the designed scroll owner, allowing native sticky search panels
+to stay with the visible reading area. Published text, read-only access and patch exports retain
+the same source.
+
 Native Table cells format actual booleans, numbers and dates with the current
 product locale. Boolean columns do not apply truthiness to mixed scalar source
 values: a string `"false"` remains that string in a boolean column. The shared

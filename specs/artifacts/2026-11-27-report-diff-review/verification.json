@@ -1,0 +1,183 @@
+{
+  "status": "passed",
+  "requests": 12,
+  "runs": [
+    {
+      "label": "run67",
+      "requests": 8,
+      "preflight": {
+        "sessionID": "ses_hayQXBQVNy1Ll4TtMtus",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795769433132,
+        "settledAt": 1795769433132,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 50095,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run68",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_h3J1FRSH0ZXANdrGJoHS",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795769709483,
+        "settledAt": 1795769709483,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 68124,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run69",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hLp5viY4TIqMriGoLzYv",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795770085156,
+        "settledAt": 1795770085156,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 58683,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 13,
+  "nativePassedScreenshots": 6,
+  "queryEntryScreenshots": 2,
+  "patchBytes": 5676,
+  "patchHunks": 1,
+  "checks": {
+    "source": "both full documents, 1384/4141 published bytes; original CRLF normalized by source read",
+    "protectedFiles": 23,
+    "protectedOldRows": 2124,
+    "sqliteIntegrity": "ok",
+    "nativeSearch": "original28.25 and modified退款 matches coexist with native sticky search panels",
+    "nativeButtons": "Next/Previous reach first and last actual refund occurrences while panels stay visible",
+    "nativeLocale": "both queries persist through collapse/expand and English/dark; labels translated, author text unchanged",
+    "nativePatch": "real final5676-byte download parsed/applied using declared diff8.0.3; exact published modified, same full physical source text with platform newline normalization",
+    "nativeCopy": "5676-byte complete patch parsed/applied; platform clipboard newline representation normalized",
+    "typecheck": "passed, TypeScript unchanged by final CSS-only revision",
+    "build": "51.45s, final build handle60117 joined exit0",
+    "rendererPublicSurface": "passed",
+    "css": "passed via declared overlay script",
+    "docs": "353 operations /26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "No meaningful long unchanged span in the two whole-document replacements; no new fold-button acceptance claimed.",
+    "Inline min/max220–560 preserved in CSS; a separate very short Diff was not manually published.",
+    "entry-* show query entry/commit intermediate states; only final-* count as passed visible matching plus panel evidence.",
+    "Desktop-only Diff artifact; no mobile, Office or global file-diff acceptance.",
+    "No Task/Mission/Session scheduling or terminal-convergence anomaly."
+  ]
+}
