@@ -1,0 +1,161 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0Vc8JddB00rifxkPyIl",
+  "finalMessageID": "msg_g0Vc8K6FX00urN4ihkRp",
+  "sourceBytes": 16266,
+  "authorToolPartID": "prt_g0Vc8IwHq00CzAGJqOhW",
+  "deliveryToolPartID": "prt_g0Vc8JXWw0010zHtb7l3",
+  "nativeCharts": [
+    {
+      "part": "ppt/slides/charts/chart1.xml",
+      "regions": {
+        "华东": "28.25",
+        "华南": "7.35"
+      },
+      "dataLabelSizePt": 18,
+      "axisLabelSizesPt": [
+        16,
+        16
+      ],
+      "nativeNumberFormat": "0.00"
+    },
+    {
+      "part": "ppt/slides/charts/chart2.xml",
+      "regions": {
+        "华东": "3",
+        "华南": "2"
+      },
+      "dataLabelSizePt": 18,
+      "axisLabelSizesPt": [
+        16,
+        16
+      ],
+      "nativeNumberFormat": "0"
+    }
+  ],
+  "slides": [
+    {
+      "slide": 1,
+      "title": "订单与净金额总览",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/5fcfc0a99f5f062559b7d824ee7eaba1b643fdb51a88fbe962b92293cada2046.png",
+      "bytes": 100597,
+      "modelReadActualImage": true
+    },
+    {
+      "slide": 2,
+      "title": "区域对比：金额与笔数",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/df7c8cd38e0e845c99ca9d0d95a142899c297c4abbc9041c7d793135e3e796c1.png",
+      "bytes": 57808,
+      "modelReadActualImage": true
+    },
+    {
+      "slide": 3,
+      "title": "事实、缺口与后续行动",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1496f4c618ab96d2164bcc2d967169cbb88766d96b334bea8ce2d15e0517f73b.png",
+      "bytes": 151620,
+      "modelReadActualImage": true
+    }
+  ],
+  "preservedRows": {
+    "message": 165,
+    "part": 444,
+    "tool_part_request": 142,
+    "tool_part_outcome": 142,
+    "interactive_artifact": 11
+  },
+  "preservedFiles": [
+    {
+      "name": ".gitattributes",
+      "bytes": 150,
+      "preservedExactBytes": true
+    },
+    {
+      "name": ".gitignore",
+      "bytes": 16,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "README.md",
+      "bytes": 96,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "sales.csv",
+      "bytes": 181,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "sales_summary.py",
+      "bytes": 7650,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "summary.json",
+      "bytes": 238,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "test_sales_summary.py",
+      "bytes": 10107,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "区域汇总.csv",
+      "bytes": 59,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "销售报告.md",
+      "bytes": 1408,
+      "preservedExactBytes": true
+    },
+    {
+      "name": ".opencorvus/opencorvus.jsonc",
+      "bytes": 1398,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售核对.xlsx",
+      "bytes": 6793,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理审阅稿-分页修订.docx",
+      "bytes": 8016,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理审阅稿.docx",
+      "bytes": 7997,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理简报-精度修订.pptx",
+      "bytes": 16259,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理简报.pptx",
+      "bytes": 16302,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "review/区域对比（原图）.png",
+      "bytes": 60144,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "review/图片审阅.md",
+      "bytes": 311,
+      "preservedExactBytes": true
+    }
+  ],
+  "downloads": [
+    {
+      "filename": "销售经理简报-清晰图表.pptx",
+      "bytes": 16266,
+      "canonicalSourceBytes": true
+    }
+  ],
+  "naturalToolErrors": []
+}

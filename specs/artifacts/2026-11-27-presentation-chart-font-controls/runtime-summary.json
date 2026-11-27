@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "requests": 21,
+  "businessRequests": 19,
+  "preflightRequests": 2,
+  "agents": {
+    "memory": 2,
+    "chat": 1,
+    "work": 16,
+    "compaction": 2
+  },
+  "exactStreamingSolHTTP200SettledEOF": true,
+  "originalHandleJoinedExitCode": 0,
+  "credentialAndCatalogCopiesRetired": true,
+  "ownedPortClosed": 61964,
+  "nativePositiveTests": 1,
+  "positiveAssertions": 6,
+  "realProfileChecker": "office.presentation@1 --host-runtime-smoke",
+  "manualDesktopPages": [
+    1,
+    2,
+    3
+  ],
+  "canonicalBrowserDownloadBytes": 16266,
+  "protectedFiles": 17,
+  "protectedRows": 904,
+  "finalAgent": "work",
+  "finalFinish": "stop",
+  "actualToolCounts": {
+    "skill": 4,
+    "read": 5,
+    "work_artifact_author": 1,
+    "work_artifact_inspect": 1,
+    "work_artifact_validate": 1,
+    "bash": 1,
+    "work_artifact_deliver": 1,
+    "write": 1,
+    "RetainCompactionUserText": 1
+  },
+  "knownLimitation": "Pinned upstream chart SVG font unit conversion; native Office Edit Data blocked by first-use account prompt."
+}

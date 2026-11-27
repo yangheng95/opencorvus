@@ -145,6 +145,8 @@ export async function runPackagedWorkArtifactAcceptance(input: {
                       legend: "bottom",
                       data_labels: "value",
                       data_label_number_format: "0.00",
+                      data_label_font_size_pt: 18,
+                      axis_font_size_pt: 16,
                     },
                     {
                       kind: "picture",

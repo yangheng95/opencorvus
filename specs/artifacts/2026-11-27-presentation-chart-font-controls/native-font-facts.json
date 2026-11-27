@@ -1,0 +1,51 @@
+{
+  "runtime": "OfficeCLI 1.0.158",
+  "managedClosureFilesVerified": 5,
+  "originalPreservedSourceBytes": 16259,
+  "ownedProbeBytes": 16331,
+  "nativeFontUnits": "hundredths of a point",
+  "charts": [
+    {
+      "part": "ppt/slides/charts/chart1.xml",
+      "dataLabelNativeFontSize": "1800",
+      "axisNativeFontSizes": [
+        "1600",
+        "1600"
+      ]
+    },
+    {
+      "part": "ppt/slides/charts/chart2.xml",
+      "dataLabelNativeFontSize": "1800",
+      "axisNativeFontSizes": [
+        "1600",
+        "1600"
+      ]
+    }
+  ],
+  "fileRender": {
+    "engine": "actual fixed OfficeCLI HTML and Node.js Chrome file renderer",
+    "node": "25.7.0",
+    "browser": "157.0.8103.38",
+    "pages": [
+      {
+        "slide": 1,
+        "width": 1280,
+        "height": 720,
+        "bytes": 97288
+      },
+      {
+        "slide": 2,
+        "width": 1280,
+        "height": 720,
+        "bytes": 63265
+      },
+      {
+        "slide": 3,
+        "width": 1280,
+        "height": 720,
+        "bytes": 156426
+      }
+    ]
+  },
+  "upstreamPreviewLimitation": "Explicit native point values are emitted as numeric SVG font-size values; this batch does not claim physical chart-font or Microsoft PowerPoint pixel fidelity."
+}

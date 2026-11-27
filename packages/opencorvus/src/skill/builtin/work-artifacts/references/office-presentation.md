@@ -31,3 +31,10 @@ qualified.
   the native chart label format and keeps the underlying values editable.
   Automatic labels may round or abbreviate values; check the actual labels in
   every fresh rendered slide against the source values and intended precision.
+- Set `data_label_font_size_pt` and `axis_font_size_pt` when chart labels need
+  explicit typography. Both accept 8–72 points and write native chart properties;
+  they do not change values, number formats, or the chart geometry. Choose sizes
+  for the editable presentation and inspect the fresh preview at reading size.
+  The fixed upstream chart renderer uses its own SVG font units; previews do not
+  establish Microsoft PowerPoint pixel fidelity. Do not inflate source sizes to
+  compensate for that renderer's unit conversion.

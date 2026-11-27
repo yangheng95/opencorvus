@@ -176,6 +176,12 @@ const ChartElement = BaseElement.extend({
   colors: z.array(Color).min(1).max(12),
   legend: z.enum(["none", "top", "bottom", "left", "right"]).default("bottom"),
   data_labels: z.enum(["none", "value", "percent", "category"]).default("none"),
+  data_label_font_size_pt: z.number().finite().min(8).max(72)
+    .describe("Native chart data-label font size in points. Inspect rendered labels for readability.")
+    .optional(),
+  axis_font_size_pt: z.number().finite().min(8).max(72)
+    .describe("Native category and value axis tick-label font size in points.")
+    .optional(),
   data_label_number_format: z
     .string()
     .trim()
@@ -705,6 +711,8 @@ async function authorCommands(
             legend: element.legend,
             dataLabels: element.data_labels,
             ...(element.data_label_number_format ? { "dataLabels.numFmt": element.data_label_number_format } : {}),
+            ...(element.data_label_font_size_pt !== undefined ? { "labelFont.size": String(element.data_label_font_size_pt) } : {}),
+            ...(element.axis_font_size_pt !== undefined ? { axisFont: String(element.axis_font_size_pt) } : {}),
           },
         })
         continue

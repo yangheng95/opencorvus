@@ -1,0 +1,41 @@
+{
+  "catalog": {
+    "profile": "office.presentation@1",
+    "qualification": "office-presentation-packaged-lifecycle@1",
+    "runtime": "officecli",
+    "tools": [
+      "work_artifact_inspect",
+      "work_artifact_author",
+      "work_artifact_validate",
+      "work_artifact_deliver"
+    ],
+    "toolSchemaRevision": "work-artifact-office@1",
+    "toolSchemas": [
+      {
+        "id": "work_artifact_inspect"
+      },
+      {
+        "id": "work_artifact_author"
+      },
+      {
+        "id": "work_artifact_validate"
+      },
+      {
+        "id": "work_artifact_deliver"
+      }
+    ],
+    "skill": "work-artifacts"
+  },
+  "packaged": {
+    "target": {
+      "os": "win32",
+      "arch": "x64"
+    },
+    "runtime": "officecli",
+    "slides": 1,
+    "evidence": [
+      "canonical_validation_receipt",
+      "fresh_delivery_revalidation"
+    ]
+  }
+}

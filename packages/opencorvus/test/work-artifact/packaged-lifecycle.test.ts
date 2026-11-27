@@ -106,6 +106,7 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
             title: "Qualified values", categories: ["A", "B"],
             series: [{ name: "Value", values: [28.25, 7.35] }], colors: ["#2563EB"],
             legend: "bottom", data_labels: "value", data_label_number_format: "0.00",
+            data_label_font_size_pt: 18, axis_font_size_pt: 16,
           }, {
             kind: "picture", x: 29.5, y: 0.5, width: 2, height: 2,
             source_url: picture.url, alt: "Qualification blue square",
@@ -121,6 +122,7 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
       expect(chart.code).toBe(0)
       expect(JSON.parse(chart.stdout.toString()).data.results[0].format).toMatchObject({
         "dataLabels": "value", "dataLabels.numFmt": "0.00", "series1": "Value:28.25,7.35",
+        "labelFont.size": "18pt", "axisFont": "16",
       })
       const inspected = await tools.inspect.init().then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
       const validated = await tools.validate.init().then((tool) => tool.execute({ profile: "office.presentation@1", source_url: source.url }, context))
