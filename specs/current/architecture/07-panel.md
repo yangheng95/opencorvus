@@ -5962,6 +5962,11 @@ One Overlay artifact-theme materializer reads
 the applied product CSS custom properties and supplies the semantic palette,
 type, surface, axis, grid, legend, and interaction values used by the mature
 renderer libraries. Chart and Dashboard share its Vega-Lite configuration;
+ordinary text marks and title subtitles receive the current semantic foreground
+defaults. Explicit text configuration and native mark/encoding colors retain
+their authored precedence. Chat/Work authoring guidance and both publication Tool
+descriptors share one instruction to inherit ordinary text/surface defaults and
+reserve explicit colors for data meaning or requested design.
 Network consumes its library style values and Diagram passes its product font
 to Mermaid. Timeline's existing stylesheet projects product tokens into the
 vis-timeline surface, including explicit selected foreground/background for
@@ -6004,6 +6009,16 @@ expressions under the native `script-src 'self'` Content Security Policy (CSP)
 without dynamic JavaScript evaluation or an `unsafe-eval` exception. The same
 policy loads the mature Vega Embed and Vega Tooltip styles as one build-time
 local stylesheet and disables both libraries' runtime style injection.
+Each native View preowns a uniquely identified Vega Tooltip element. The shared
+top-layer portal resolver mounts it in the nearest dialog/artifact popover, or
+the document body for ordinary inline content, escaping virtual-list layout
+containment. The original artifact's toggle event updates that same element's
+owner. The library's public tooltip
+ID option retains native content sanitization and viewport positioning while
+keeping hover details in the same dialog/popover top layer as their chart.
+The shared static tooltip stylesheet uses current product theme tokens. View
+cleanup retires its own element after finalization, including late asynchronous
+embed completion; multiple Dashboard views never share a global tooltip owner.
 Chart and Dashboard also share one native View lifecycle. Pane/workspace size
 changes and visibility updates resize the mounted View through its public API.
 Theme or product-language changes rebuild presentation, transferring the same
@@ -6013,6 +6028,9 @@ transfer; a changed source specification or external data starts a new intent.
 Signals equal to the new View's initial value are omitted from the transfer,
 using identity or shallow field equality so an unused native gesture object does
 not replay a change event and cyclic runtime objects are never deeply traversed.
+Root width/height signals are layout results and are also excluded: the new View
+owns its canvas dimensions from the current specification/container. A fitted
+plot dimension must not become a smaller requested canvas on each repaint.
 For unit and layered plots, the current container size is applied to unspecified
 or container dimensions after state restoration settles; explicit dimensions
 remain authored values. Composed plots keep their native child dimensions and

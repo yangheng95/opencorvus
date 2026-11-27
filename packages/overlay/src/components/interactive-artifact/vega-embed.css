@@ -126,68 +126,59 @@
   overflow: auto;
 }
 
-/* Vega Tooltip 1.1.0 defaults, loaded statically alongside the embed styles. */
-#vg-tooltip-element {
+/* Vega Tooltip 1.0.0 structure, using the artifact's current product theme. */
+.vg-tooltip {
   position: fixed;
   z-index: 1000;
+  pointer-events: none;
   visibility: hidden;
-  padding: 8px;
-  color: black;
-  font-family: sans-serif;
-  font-size: 11px;
-  background-color: rgba(255, 255, 255, 0.95);
-  border: 1px solid #d9d9d9;
-  border-radius: 3px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: var(--ui-gap-sm);
+  color: var(--text-strong);
+  font-family: var(--font);
+  font-size: var(--ui-font-caption);
+  background: var(--surface-elevated);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  box-shadow: var(--shadow-lg);
 }
 
-#vg-tooltip-element.visible {
+.vg-tooltip.visible {
   visibility: visible;
 }
 
-#vg-tooltip-element h2 {
+.vg-tooltip h2 {
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 13px;
 }
 
-#vg-tooltip-element table {
+.vg-tooltip table {
   border-spacing: 0;
 }
 
-#vg-tooltip-element table tr {
+.vg-tooltip table tr {
   border: none;
 }
 
-#vg-tooltip-element table tr td {
+.vg-tooltip table tr td {
   padding-top: 2px;
   padding-bottom: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-#vg-tooltip-element table tr td.key {
+.vg-tooltip table tr td.key {
   max-width: 150px;
   padding-right: 4px;
-  color: #808080;
+  color: var(--text-muted);
   text-align: right;
 }
 
-#vg-tooltip-element table tr td.value {
+.vg-tooltip table tr td.value {
   display: block;
   max-width: 300px;
   max-height: 7em;
   text-align: left;
-}
-
-#vg-tooltip-element.dark-theme {
-  color: white;
-  background-color: rgba(32, 32, 32, 0.9);
-  border: 1px solid #f5f5f5;
-}
-
-#vg-tooltip-element.dark-theme td.key {
-  color: #bfbfbf;
 }
 
 @keyframes vega-scale-in {

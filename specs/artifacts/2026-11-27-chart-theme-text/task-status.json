@@ -1,0 +1,71 @@
+{
+  "sessionID": "ses_hsexwMLYDYTBLk3B2AEC",
+  "finish": "stop",
+  "error": null,
+  "tools": [
+    {
+      "id": "prt_g0Vc9LP2F004OCyGPFvT",
+      "messageID": "msg_g0Vc9LNjt00NiGaxA9Rl",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9LRtC00Qusi0SXmw",
+      "messageID": "msg_g0Vc9LPBf0049fWIp2PP",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "art_g0Vc9LWg500nnHSiR3le",
+      "renderer": "chart@1",
+      "title": "销售核对图｜订单金额与分区域净额",
+      "dataRows": 5
+    }
+  ],
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

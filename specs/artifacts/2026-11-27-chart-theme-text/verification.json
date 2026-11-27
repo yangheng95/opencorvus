@@ -1,0 +1,210 @@
+{
+  "status": "passed",
+  "requestCount": 14,
+  "runs": [
+    {
+      "label": "run50",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_h18kMmSIxWbOYFjnqhwv",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "cleanup": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "run51",
+      "requests": 6,
+      "preflight": {
+        "sessionID": "ses_hGwG4m92YGZxGe1zWVEz",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "cleanup": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "run52",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hLwvY5y2vrgGH2VuY61J",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "cleanup": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "run53",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hzMQtxXkPDOdJ4B8ifE8",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "cleanup": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "run54",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hZj6o8EDR1beTcdWyVOy",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "cleanup": "passed",
+      "exitCode": 0
+    }
+  ],
+  "download": {
+    "browserFile": "visualization (4).svg",
+    "bytes": 27035,
+    "width": "766",
+    "height": "513",
+    "orders": 5,
+    "net": "35.60",
+    "east": {
+      "count": 3,
+      "net": "28.25"
+    },
+    "south": {
+      "count": 2,
+      "net": "7.35"
+    }
+  },
+  "checks": {
+    "promptPositiveTests": "3 passed / 5 assertions",
+    "typecheck": "passed",
+    "build": "passed, 54.05s",
+    "rendererPublicSurface": "passed",
+    "cssTokens": "passed",
+    "protectedProject": "21 files / 1938 old rows",
+    "manualScreenshots": 19,
+    "uiAutomationTests": "none added or run",
+    "limits": [
+      "Historical authored #111827 mark color retained",
+      "ProjectDeliveries projection source-audited; modal not manually exercised",
+      "Desktop only; Office authentication untouched"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+$ bun script/run-tests.ts test/prompt/interactive-artifact-guidance.test.ts
+    Finished `release` profile [optimized] target(s) in 0.85s
+[1/1] START test/prompt/interactive-artifact-guidance.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) interactive artifact prompt guidance > keeps every shared example executable through the current Tool schema [5.55ms]
+(pass) interactive artifact prompt guidance > projects the structured MCP result presentation contract [0.07ms]
+(pass) interactive artifact prompt guidance > shares the exact presentation contract with Chat and Work [0.10ms]
+
+ 3 pass
+ 0 fail
+ 5 expect() calls
+Ran 3 tests across 1 file. [2.47s]
+[1/1] DONE test/prompt/interactive-artifact-guidance.test.ts exit=0 duration=3.23s

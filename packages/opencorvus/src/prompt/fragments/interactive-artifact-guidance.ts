@@ -10,10 +10,14 @@ const INTERACTIVE_ARTIFACT_RENDERER_SELECTION = [
   "`terminal@1`: immutable ANSI transcripts; `model-3d@1`: canonical glTF/GLB attachments.",
 ].join(" ")
 
+const CHART_ARTIFACT_THEME_GUIDANCE =
+  "Chart and Dashboard follow the current app theme. Let ordinary text and backgrounds inherit renderer defaults. Use explicit colors when they encode data meaning or a user-requested design."
+
 export const PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION = [
   "Publish an interactive artifact owned by and displayed inline in this assistant message.",
   "Choose",
   INTERACTIVE_ARTIFACT_RENDERER_SELECTION,
+  CHART_ARTIFACT_THEME_GUIDANCE,
 ].join(" ")
 
 export const CHAT_INTERACTIVE_ARTIFACT_GUIDANCE_HEADING = "# Interactive artifacts"
@@ -76,6 +80,7 @@ export const CHAT_INTERACTIVE_ARTIFACT_GUIDANCE = [
   "- Presentation slides are ordered Markdown content, not arbitrary Hypertext Markup Language (HTML) or scripts. Speaker notes remain local to the deck.",
   "- Spreadsheet formulas are declarative cell content. Do not publish macros, scripts, external workbook links, or hidden execution.",
   "- Dashboard rows and every view specification are inline. Timeline, network, and tree data are fully embedded and must use explicit stable IDs.",
+  `- ${CHART_ARTIFACT_THEME_GUIDANCE}`,
   "- A terminal artifact replays existing American National Standards Institute (ANSI) output. It never starts a shell, process, socket, or pseudoterminal.",
   "- Media, file previews, presentation images, notebook media outputs, and three-dimensional (3D) models require a canonical attachment object with its 64-character SHA-256 (Secure Hash Algorithm 256-bit) digest, `/attachment/<projectID>/<name>` URL, Multipurpose Internet Mail Extensions (MIME) type, byte size, and optional filename. Never guess an attachment reference, publish raw remote URLs, or embed base64 bytes.",
   "- A JavaScript Object Notation (JSON) glTF attachment must be version 2.0 and contain only internally embedded resources; relative or remote buffer, image, and extension resource references are rejected.",

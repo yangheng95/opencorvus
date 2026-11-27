@@ -1,0 +1,339 @@
+{
+  "id": "prt_g0Vc9LRtC00Qusi0SXmw",
+  "sessionID": "ses_hsexwMLYDYTBLk3B2AEC",
+  "messageID": "msg_g0Vc9LPBf0049fWIp2PP",
+  "type": "tool",
+  "callID": "call_bd9617f575d94f99bbbf1d28c7e03143",
+  "tool": "publish_interactive_artifact",
+  "state": {
+    "status": "completed",
+    "input": {
+      "artifact": {
+        "schemaVersion": "1",
+        "title": "销售核对图｜订单金额与分区域净额",
+        "content": {
+          "renderer": "chart@1",
+          "spec": {
+            "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+            "title": {
+              "text": "销售核对｜5 笔订单，净额 35.60",
+              "subtitle": [
+                "来源：项目根目录 sales.csv；未提供币种或日期。",
+                "每条记录计 1 笔；退款按金额 < 0 识别并冲减净额；零金额计入笔数、净额贡献为 0。",
+                "保留全部原订单；金额显示两位小数；悬停左侧点可查看原订单编号、区域与备注。"
+              ],
+              "anchor": "start",
+              "subtitlePadding": 7,
+              "offset": 22
+            },
+            "spacing": 40,
+            "hconcat": [
+              {
+                "title": "每笔订单金额｜含退款与零金额",
+                "width": 310,
+                "height": 300,
+                "encoding": {
+                  "x": {
+                    "field": "订单编号",
+                    "type": "ordinal",
+                    "sort": [
+                      "A001",
+                      "A002",
+                      "A003",
+                      "A004",
+                      "A005"
+                    ],
+                    "axis": {
+                      "title": "原订单编号",
+                      "labelAngle": 0
+                    }
+                  },
+                  "y": {
+                    "field": "金额",
+                    "type": "quantitative",
+                    "scale": {
+                      "zero": true,
+                      "nice": true,
+                      "domain": [
+                        -5,
+                        24
+                      ]
+                    },
+                    "axis": {
+                      "title": "金额（币种未提供）",
+                      "format": ".2f"
+                    }
+                  },
+                  "tooltip": [
+                    {
+                      "field": "订单编号",
+                      "type": "nominal",
+                      "title": "原订单编号"
+                    },
+                    {
+                      "field": "区域",
+                      "type": "nominal"
+                    },
+                    {
+                      "field": "金额",
+                      "type": "quantitative",
+                      "format": ".2f"
+                    },
+                    {
+                      "field": "备注",
+                      "type": "nominal",
+                      "title": "原备注"
+                    },
+                    {
+                      "field": "订单类型",
+                      "type": "nominal",
+                      "title": "按金额分类"
+                    }
+                  ]
+                },
+                "layer": [
+                  {
+                    "mark": {
+                      "type": "point",
+                      "filled": true,
+                      "size": 125
+                    },
+                    "encoding": {
+                      "color": {
+                        "field": "订单类型",
+                        "type": "nominal",
+                        "scale": {
+                          "domain": [
+                            "普通订单",
+                            "退款",
+                            "零金额"
+                          ],
+                          "range": [
+                            "#0072B2",
+                            "#D55E00",
+                            "#009E73"
+                          ]
+                        },
+                        "legend": {
+                          "title": "按金额分类",
+                          "orient": "bottom"
+                        }
+                      },
+                      "shape": {
+                        "field": "订单类型",
+                        "type": "nominal",
+                        "scale": {
+                          "domain": [
+                            "普通订单",
+                            "退款",
+                            "零金额"
+                          ],
+                          "range": [
+                            "circle",
+                            "triangle-down",
+                            "diamond"
+                          ]
+                        },
+                        "legend": null
+                      }
+                    }
+                  },
+                  {
+                    "mark": {
+                      "type": "text",
+                      "dy": -15,
+                      "fontSize": 13
+                    },
+                    "encoding": {
+                      "text": {
+                        "field": "金额",
+                        "type": "quantitative",
+                        "format": ".2f"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "title": "分区域净额｜标签同时列示订单数",
+                "width": 270,
+                "height": 300,
+                "transform": [
+                  {
+                    "aggregate": [
+                      {
+                        "op": "sum",
+                        "field": "金额分",
+                        "as": "区域净额分"
+                      },
+                      {
+                        "op": "count",
+                        "as": "订单数"
+                      }
+                    ],
+                    "groupby": [
+                      "区域"
+                    ]
+                  },
+                  {
+                    "calculate": "datum['区域净额分'] / 100",
+                    "as": "区域净额"
+                  },
+                  {
+                    "calculate": "format(datum['区域净额'], '.2f') + ' · ' + datum['订单数'] + ' 笔'",
+                    "as": "净额与笔数"
+                  }
+                ],
+                "encoding": {
+                  "x": {
+                    "field": "区域",
+                    "type": "nominal",
+                    "sort": [
+                      "华东",
+                      "华南"
+                    ],
+                    "axis": {
+                      "title": "区域",
+                      "labelAngle": 0
+                    }
+                  },
+                  "y": {
+                    "field": "区域净额",
+                    "type": "quantitative",
+                    "scale": {
+                      "zero": true,
+                      "domain": [
+                        0,
+                        34
+                      ]
+                    },
+                    "axis": {
+                      "title": "净额（币种未提供）",
+                      "format": ".2f"
+                    }
+                  },
+                  "tooltip": [
+                    {
+                      "field": "区域",
+                      "type": "nominal"
+                    },
+                    {
+                      "field": "区域净额",
+                      "type": "quantitative",
+                      "format": ".2f",
+                      "title": "净额"
+                    },
+                    {
+                      "field": "订单数",
+                      "type": "quantitative",
+                      "format": "d",
+                      "title": "订单数（含退款、零金额）"
+                    }
+                  ]
+                },
+                "layer": [
+                  {
+                    "mark": {
+                      "type": "bar",
+                      "color": "#0072B2",
+                      "size": 80
+                    }
+                  },
+                  {
+                    "mark": {
+                      "type": "text",
+                      "dy": -12,
+                      "fontSize": 13
+                    },
+                    "encoding": {
+                      "text": {
+                        "field": "净额与笔数",
+                        "type": "nominal"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "config": {
+              "view": {
+                "stroke": null
+              },
+              "axis": {
+                "labelFontSize": 12,
+                "titleFontSize": 12
+              },
+              "legend": {
+                "labelFontSize": 12,
+                "titleFontSize": 12
+              },
+              "title": {
+                "fontSize": 18,
+                "subtitleFontSize": 12
+              }
+            }
+          },
+          "data": [
+            {
+              "订单编号": "A001",
+              "区域": "华东",
+              "金额": 10.1,
+              "金额分": 1010,
+              "备注": "普通订单",
+              "订单类型": "普通订单"
+            },
+            {
+              "订单编号": "A002",
+              "区域": "华东",
+              "金额": 20.2,
+              "金额分": 2020,
+              "备注": "中文客户",
+              "订单类型": "普通订单"
+            },
+            {
+              "订单编号": "A003",
+              "区域": "华东",
+              "金额": -2.05,
+              "金额分": -205,
+              "备注": "退款",
+              "订单类型": "退款"
+            },
+            {
+              "订单编号": "A004",
+              "区域": "华南",
+              "金额": 0,
+              "金额分": 0,
+              "备注": "免费样品",
+              "订单类型": "零金额"
+            },
+            {
+              "订单编号": "A005",
+              "区域": "华南",
+              "金额": 7.35,
+              "金额分": 735,
+              "备注": "普通订单",
+              "订单类型": "普通订单"
+            }
+          ]
+        }
+      }
+    },
+    "output": "{\"artifactID\":\"art_g0Vc9LWg500nnHSiR3le\",\"renderer\":\"chart@1\"}",
+    "title": "销售核对图｜订单金额与分区域净额",
+    "metadata": {
+      "artifactID": "art_g0Vc9LWg500nnHSiR3le",
+      "renderer": "chart@1",
+      "truncated": false
+    },
+    "time": {
+      "start": 1795758449842,
+      "end": 1795758468252
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_0ee147d872476dce016b091971c02887d0938398809ab39ac3"
+    }
+  },
+  "orderKey": "v1:0001795758468002:0000000000000031:0000000000000000:part:prt_g0Vc9LRtC00Qusi0SXmw"
+}

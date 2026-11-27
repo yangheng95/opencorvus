@@ -80,9 +80,11 @@ export function artifactVegaConfig(
     line: { strokeWidth: 2.5 },
     point: { filled: true, size: 64 },
     bar: { cornerRadiusTopLeft: 4, cornerRadiusTopRight: 4 },
+    text: { color: theme.text },
     title: {
       anchor: "start",
       color: theme.textStrong,
+      subtitleColor: theme.muted,
       font: theme.font,
       fontSize: 14,
       fontWeight: 600,
@@ -90,15 +92,18 @@ export function artifactVegaConfig(
     },
     view: { stroke: "transparent" },
   }
-  const merge = (key: "axis" | "legend" | "title" | "view") => ({
-    ...(source[key] && typeof source[key] === "object" && !Array.isArray(source[key])
+  const configured = (key: keyof typeof defaults) =>
+    source[key] && typeof source[key] === "object" && !Array.isArray(source[key])
       ? (source[key] as Record<string, unknown>)
-      : {}),
+      : {}
+  const merge = (key: "axis" | "legend" | "title" | "view") => ({
+    ...configured(key),
     ...(defaults[key] as Record<string, unknown>),
   })
   return {
     ...source,
     ...defaults,
+    text: { ...defaults.text, ...configured("text") },
     axis: merge("axis"),
     legend: merge("legend"),
     title: merge("title"),

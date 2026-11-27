@@ -1,18 +1,22 @@
 import vegaEmbed, { type Result } from "vega-embed"
 import { isEqual, normalize, type TopLevelSpec } from "vega-lite"
-import { createEffect, onCleanup, onMount } from "solid-js"
+import { createEffect, createUniqueId, onCleanup, onMount } from "solid-js"
 import { observeAppliedTheme } from "../../services/theme"
 import { artifactVegaConfig, artifactVisualTheme } from "./theme-color"
 import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
 import { localeTag, t } from "../../utils/i18n"
+import { topLayerPortalMount } from "../../utils/top-layer"
 
 type Size = { width: number; height: number }
 type ViewState = ReturnType<Result["view"]["getState"]> & { subcontext?: ViewState[] }
 
-function interactionChanges(state: ViewState, initial: ViewState): ViewState {
+function interactionChanges(state: ViewState, initial: ViewState, root = true): ViewState {
   return {
     ...state,
     signals: Object.fromEntries(Object.entries(state.signals ?? {}).filter(([name, value]) => {
+      // Autosize stores fitted plot dimensions here. The new View's canvas
+      // dimensions belong to its current spec/container, not the old snapshot.
+      if (root && (name === "width" || name === "height")) return false
       const baseline = initial.signals?.[name]
       // Replaying an unchanged empty gesture object emits a change event;
       // its dependent pan expression may have no anchor yet. Compare shallowly
@@ -26,7 +30,7 @@ function interactionChanges(state: ViewState, initial: ViewState): ViewState {
     })),
     subcontext: state.subcontext?.map((child, index) => {
       const baseline = initial.subcontext?.[index]
-      return baseline ? interactionChanges(child, baseline) : child
+      return baseline ? interactionChanges(child, baseline, false) : child
     }),
   }
 }
@@ -68,6 +72,9 @@ export function createInlineVegaView(input: {
   error: (message: string) => void
   ready?: (host: HTMLElement, ready: boolean) => void
 }) {
+  const tooltipID = `artifact-vega-tooltip-${createUniqueId()}`
+  let tooltip: HTMLDivElement | undefined
+  let tooltipOwner: Element | null | undefined
   let current: Result | undefined
   let source: Record<string, unknown> | undefined
   let data: Record<string, unknown>[] | undefined
@@ -80,6 +87,18 @@ export function createInlineVegaView(input: {
   let resize: ResizeObserver | undefined
   let intersection: IntersectionObserver | undefined
   let stopTheme: (() => void) | undefined
+
+  function mountTooltip() {
+    const host = input.host()
+    if (!host || !tooltip) return
+    const mount = topLayerPortalMount(host) ?? host.ownerDocument.body
+    if (tooltip.parentElement !== mount) mount.appendChild(tooltip)
+  }
+
+  function removeTooltip() {
+    // A late embed/finalize can recreate this ID after its owner unmounts.
+    tooltip?.ownerDocument.getElementById(tooltipID)?.remove()
+  }
 
   function schedule() {
     if (disposed) return
@@ -99,6 +118,16 @@ export function createInlineVegaView(input: {
     input.error("")
     const measured = input.measure()
     if (measured.width <= 0 || measured.height <= 0) return
+    if (!tooltip) {
+      tooltip = host.ownerDocument.createElement("div")
+      tooltip.id = tooltipID
+      tooltip.className = "vg-tooltip"
+      // Native Vega Tooltip uses viewport coordinates. Escape inline layout
+      // containment while keeping expanded details in their current top layer.
+      tooltipOwner = host.closest(".msg-artifact")
+      tooltipOwner?.addEventListener("toggle", mountTooltip)
+      mountTooltip()
+    }
     const nextSource = input.source(), nextData = input.data()
     running = true
     try {
@@ -126,6 +155,7 @@ export function createInlineVegaView(input: {
             config && typeof config === "object" && !Array.isArray(config) ? config as Record<string, unknown> : {}),
         } as unknown as Parameters<typeof vegaEmbed>[1], {
           ...INLINE_VEGA_EMBED_OPTIONS,
+          tooltip: { ...INLINE_VEGA_EMBED_OPTIONS.tooltip, id: tooltipID },
           i18n: {
             CLICK_TO_VIEW_ACTIONS: t("artifact.chart.actions"),
             SVG_ACTION: t("artifact.chart.save_svg"),
@@ -157,6 +187,7 @@ export function createInlineVegaView(input: {
       if (!disposed) input.error(reason instanceof Error ? reason.message : String(reason))
     } finally {
       running = false
+      if (disposed) removeTooltip()
       if (pending) schedule()
     }
   }
@@ -195,7 +226,9 @@ export function createInlineVegaView(input: {
     resize?.disconnect()
     intersection?.disconnect()
     stopTheme?.()
+    tooltipOwner?.removeEventListener("toggle", mountTooltip)
     current?.finalize()
     current = undefined
+    removeTooltip()
   })
 }
