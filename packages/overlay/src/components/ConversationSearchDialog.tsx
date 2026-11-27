@@ -18,7 +18,7 @@ import { parentIDChainForCard } from "../utils/card-tree"
 import { getLocale, t } from "../utils/i18n"
 import { userMessageAuthorLabel } from "../utils/message"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
-import { conversationSourceExcerptKey, isConversationSourcePart } from "../utils/conversation-source"
+import { conversationSourceExcerptKey, conversationSourceIdentity, isConversationSourcePart } from "../utils/conversation-source"
 
 type ConversationSearchRead =
   | { kind: "idle" }
@@ -159,7 +159,7 @@ export function ConversationSearchDialog(props: {
       if (sourcePart && isConversationSourcePart(sourcePart) && sourcePart.type !== "source-file" && sourcePart.snippet) {
         setCardExpanded(conversationSourceExcerptKey(sourcePart), true)
       }
-      const found = await requestConversationCardScroll({ cardID: target.renderedCardID, messageID: hit.id, sourceId: hit.sourceId, sessionID: target.sessionID, block: "start", highlight: true })
+      const found = await requestConversationCardScroll({ cardID: target.renderedCardID, messageID: hit.id, sourceIdentity: isConversationSourcePart(sourcePart) ? conversationSourceIdentity(sourcePart) : undefined, sessionID: target.sessionID, block: "start", highlight: true })
       if (!owns()) return
       if (!found) throw new Error("Original message could not be located")
       props.onClose()

@@ -34,7 +34,7 @@ import { listenConversationCardScroll, type ConversationCardScrollRequest } from
 import { captureConversationReadingAnchor, resolveConversationReadingTop } from "../utils/conversation-reading-anchor"
 import type { ConversationReadingPosition } from "../store/conversation-ui"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
-import { revealConversationSource } from "../utils/conversation-source-navigation"
+import { conversationNavigationTarget } from "../utils/conversation-source-navigation"
 import { t } from "../utils/i18n"
 import {
   subagentSessionRows,
@@ -111,10 +111,7 @@ function SubagentConversationScroll(props: {
 
   props.registerNavigation((request) => {
     if (!props.active() || !scrollElement || !request.messageID || props.conversation().sessionID !== request.sessionID) return Promise.resolve(false)
-    const element = scrollElement.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID)}"]`)
-    if (!element || element.getBoundingClientRect().height <= 0) return Promise.resolve(false)
-    const target = request.sourceId ? revealConversationSource(element, request.sourceId)
-      : () => scrollElement?.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID!)}"]`) ?? null
+    const target = conversationNavigationTarget(scrollElement, request)
     if (!target) return Promise.resolve(false)
     requestedNavigation?.resolve(false)
     return new Promise<boolean>((resolve) => {

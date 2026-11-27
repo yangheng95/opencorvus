@@ -48,7 +48,7 @@ import {
 import { SubagentProgressGrid } from "./SubagentProgressGrid"
 import { ConversationCard } from "./ConversationCard"
 import { ConversationArtifactSummary } from "./ConversationArtifactSummary"
-import { revealConversationSource } from "../utils/conversation-source-navigation"
+import { conversationNavigationTarget } from "../utils/conversation-source-navigation"
 import type { ComposerIntent } from "@opencorvus-ai/transport-protocol"
 
 const ESTIMATED_CARD_HEIGHT = 320
@@ -308,19 +308,13 @@ function VirtualizedConversationCards(props: {
     if (request.messageID && target.sessionID) {
       return requestConversationCardScroll({ ...request, surface: "subagent", sessionID: target.sessionID })
     }
-    let element = request.messageID
-      ? cardElement.querySelector<HTMLElement>(`[data-message-id="${CSS.escape(request.messageID)}"]`)
-      : cardElement
-    if (!element) return false
-    if (request.sourceId) {
-      const sourceElement = revealConversationSource(element, request.sourceId)
-      if (!sourceElement) return false
-      element = sourceElement()
-      for (let frame = 0; !element && frame < CARD_SCROLL_TARGET_MAX_FRAMES; frame++) {
-        await waitForAnimationFrame()
-        if (!owns()) return false
-        element = sourceElement()
-      }
+    const resolveElement = conversationNavigationTarget(cardElement, request)
+    if (!resolveElement) return false
+    let element = resolveElement()
+    for (let frame = 0; !element && frame < CARD_SCROLL_TARGET_MAX_FRAMES; frame++) {
+      await waitForAnimationFrame()
+      if (!owns()) return false
+      element = resolveElement()
     }
     if (!element?.isConnected || !owns()) return false
     element.scrollIntoView({

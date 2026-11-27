@@ -454,7 +454,6 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
     <div class="msg-source-entry" data-has-excerpt={expandableExcerpt() ? "true" : undefined}>
       <div
         class="msg-source-entry__row"
-        data-source-id={props.source.sourceId}
         data-source-identity={sourceIdentity(props.source)}
         data-source-message-id={props.source.messageID}
       >
@@ -633,7 +632,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[]; contextS
   }
   return (
     <div ref={group} class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources"
-      data-source-group-key={key()} data-source-ids={JSON.stringify(props.sources.map(source => source.sourceId))}>
+      data-source-group-key={key()} data-source-identities={JSON.stringify(props.sources.map(sourceIdentity))}>
       <Key each={props.sources.slice(0, 1)} by={sourceIdentity}>
         {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} omitDirectoryCaption={false} attachmentCaption={attachmentCaption(source())} />}
       </Key>

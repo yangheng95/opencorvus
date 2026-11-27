@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从真实对话查找来源并返回阅读上下文](records/2026-11/2026-11-27-conversation-source-search.md)
 - [原始报告与来源复核稿的差异阅读](records/2026-11/2026-11-27-report-diff-review.md)
 - [真实核对命令的终端记录与搜索](records/2026-11/2026-11-27-terminal-review.md)
 - [多页表格数值精度与真实清单往返](records/2026-11/2026-11-27-table-precision.md)

@@ -7,6 +7,19 @@ export interface CardMessageRun {
   parts: any[]
 }
 
+/** Presentation groups retain every persisted message represented by their parts. */
+export function messageIDsForCardRuns(runs: readonly CardMessageRun[]): string[] {
+  const ids = new Set<string>()
+  for (const run of runs) {
+    if (run.messageID) ids.add(run.messageID)
+    for (const part of run.parts) {
+      const id = String(part?.messageID || "")
+      if (id) ids.add(id)
+    }
+  }
+  return [...ids]
+}
+
 /** Group the flattened card timeline by its persisted message boundaries.
  * Boundary identity stays attached to the exact message while presentation
  * renders the card-level Agent identity only once. */

@@ -1,0 +1,214 @@
+{
+  "status": "passed",
+  "label": "run71",
+  "sessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+  "messageCount": 6,
+  "results": [
+    {
+      "query": "销售复核 #1.md",
+      "hits": [
+        {
+          "id": "msg_4643075a-bec2-4f64-8fdc-581fb1d6e11d",
+          "role": "user",
+          "author": "user",
+          "created": 1795769093991,
+          "preview": {
+            "before": "请完整读取 sales.csv、销售报告.md 和 交付复核/",
+            "match": "销售复核 #1.md",
+            "after": "，在应用内发布原生 diff@1，标题“销售报告｜来源事实差异审阅”。左侧 original 必须是 销售报告.md 的完整原文，标签为真实路径“销售报告.md”；右侧 modified 必须是 交付…"
+          }
+        },
+        {
+          "id": "msg_g0VcA494O00UNEYiQy4N",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769102260,
+          "preview": {
+            "before": "交付复核\\",
+            "match": "销售复核 #1.md",
+            "after": " C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\…"
+          },
+          "sourceId": "378fc4e285c9c936f4860ec97650abda7c530748da6d3ad77f7b8d84c9219323"
+        },
+        {
+          "id": "msg_g0VcA4Kpu00INf37L36O",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769147490,
+          "preview": {
+            "before": "…审阅”**，语言为 `markdown`。左侧为 `销售报告.md` 完整原文，右侧为 `交付复核/",
+            "match": "销售复核 #1.md",
+            "after": "` 完整原文，均使用真实路径标签，未改写、摘要或截断。这是**两份不同用途报告的内容对照**，不是同一文件的历史版本。 ### 来源事实核对 | 范围 | 源数据笔数 | 源数据净额 | 两份报告是否…"
+          }
+        }
+      ]
+    },
+    {
+      "query": "净金额（元）",
+      "hits": [
+        {
+          "id": "msg_g0VcA48Mp00l3a1eNFHk",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769099559,
+          "preview": {
+            "before": "…误输出“错误：”及行号，以状态码 2 退出，不写入统计输出。 ## 汇总 | 范围 | 订单数 | ",
+            "match": "净金额（元）",
+            "after": " | | --- | ---: | ---: | | 全部 | 5 | 35.60 | ## 各区域汇总"
+          },
+          "sourceId": "dfb98fe50d8ccdd0e1fbf8b19f374adbdf30b14b4e98e9f24abbf6f25a02a913"
+        },
+        {
+          "id": "msg_g0VcA4Kpu00INf37L36O",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769147490,
+          "preview": {
+            "before": "…*原报告的“元”缺少源数据依据**：`销售报告.md:15`、`销售报告.md:21` 将表头写为“",
+            "match": "净金额（元）",
+            "after": "”，但 `sales.csv` 仅有订单编号、区域、金额、备注，未注明币种或金额单位。因此，数值一致，但“元”不能由该源文件证实。 - **复核稿明确保留这一边界**：`交付复核/销售复核 #1.md…"
+          }
+        }
+      ]
+    },
+    {
+      "query": "退款",
+      "hits": [
+        {
+          "id": "msg_g0VcA46xS00hDzTXuKBa",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769094142,
+          "preview": {
+            "before": "…01,华东,10.10,普通订单 A002,华东,20.20,中文客户 A003,华东,-2.05,",
+            "match": "退款",
+            "after": " A004,华南,0.00,免费样品 A005,华南,7.35,普通订单"
+          },
+          "sourceId": "7803d2137c7e297c69110a24ec402afe1982882658993405261437218e1fbe19"
+        },
+        {
+          "id": "msg_g0VcA48Mp00l3a1eNFHk",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769099559,
+          "preview": {
+            "before": "…报告.md # 销售报告 ## 统计口径 - 每条 CSV 数据记录计为一笔订单，不按订单编号去重；",
+            "match": "退款",
+            "after": "及零金额订单均计入订单数。 - 负金额为退款，直接抵减净金额；零金额不改变净金额。 - 金额使用 Decimal 精确累加，不逐笔舍入；总计和各区域分别在输出时按 ROUND_HALF_UP 四舍五入…"
+          },
+          "sourceId": "dfb98fe50d8ccdd0e1fbf8b19f374adbdf30b14b4e98e9f24abbf6f25a02a913"
+        },
+        {
+          "id": "msg_g0VcA494O00UNEYiQy4N",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769102260,
+          "preview": {
+            "before": "… A002 | 华东 | 20.20 | 中文客户 | | A003 | 华东 | -2.05 | ",
+            "match": "退款",
+            "after": " | | A004 | 华南 | 0.00 | 免费样品 | | A005 | 华南 | 7.35 | 普通订单 |"
+          },
+          "sourceId": "378fc4e285c9c936f4860ec97650abda7c530748da6d3ad77f7b8d84c9219323"
+        },
+        {
+          "id": "msg_g0VcA4Kpu00INf37L36O",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769147490,
+          "preview": {
+            "before": "…华东 | 3 | 28.25 | 一致 | | 华南 | 2 | 7.35 | 一致 | 源数据包含",
+            "match": "退款",
+            "after": " **-2.05** 和零金额 **0.00**，两者均计入笔数；逐项相加与两文汇总一致。 ### 单位与边界 - **原报告的“元”缺少源数据依据**：`销售报告.md:15`、`销售报告.md:2…"
+          }
+        }
+      ]
+    },
+    {
+      "query": "sales.csv",
+      "hits": [
+        {
+          "id": "msg_4643075a-bec2-4f64-8fdc-581fb1d6e11d",
+          "role": "user",
+          "author": "user",
+          "created": 1795769093991,
+          "preview": {
+            "before": "请完整读取 ",
+            "match": "sales.csv",
+            "after": "、销售报告.md 和 交付复核/销售复核 #1.md，在应用内发布原生 diff@1，标题“销售报告｜来源事实差异审阅”。左侧 original 必须是 销售报告.md 的完整原文，标签为真实路径“销…"
+          }
+        },
+        {
+          "id": "msg_g0VcA46xS00hDzTXuKBa",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769094142,
+          "preview": {
+            "before": "",
+            "match": "sales.csv",
+            "after": " C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\…"
+          },
+          "sourceId": "7803d2137c7e297c69110a24ec402afe1982882658993405261437218e1fbe19"
+        },
+        {
+          "id": "msg_g0VcA494O00UNEYiQy4N",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769102260,
+          "preview": {
+            "before": "…复核 #1.md # 销售复核说明 ## 一、复核结论与数据范围 本说明依据实际读取的项目根目录 `",
+            "match": "sales.csv",
+            "after": "` 编制，覆盖文件内全部 5 笔订单，不含表头。按原始金额带符号求和，全量净额为 **35.60**；华东 3 笔、净额 **28.25**，华南 2 笔、净额 **7.35**。分区域笔数与净额均与…"
+          },
+          "sourceId": "378fc4e285c9c936f4860ec97650abda7c530748da6d3ad77f7b8d84c9219323"
+        },
+        {
+          "id": "msg_g0VcA4Kpu00INf37L36O",
+          "role": "assistant",
+          "author": "work",
+          "created": 1795769147490,
+          "preview": {
+            "before": "…数据依据**：`销售报告.md:15`、`销售报告.md:21` 将表头写为“净金额（元）”，但 `",
+            "match": "sales.csv",
+            "after": "` 仅有订单编号、区域、金额、备注，未注明币种或金额单位。因此，数值一致，但“元”不能由该源文件证实。 - **复核稿明确保留这一边界**：`交付复核/销售复核 #1.md:7` 不附加推测的币种或单…"
+          }
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "messageID": "msg_g0VcA46xS00hDzTXuKBa",
+      "sessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+      "type": "source-file",
+      "sourceId": "7803d2137c7e297c69110a24ec402afe1982882658993405261437218e1fbe19",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\sales.csv",
+      "originalPartSessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+      "originalPartMessageID": "msg_g0VcA46xS00hDzTXuKBa",
+      "identity": "[\"source-file\",\"ses_hQyiCAibNsNPyRMmaJBU\",\"msg_g0VcA46xS00hDzTXuKBa\",\"7803d2137c7e297c69110a24ec402afe1982882658993405261437218e1fbe19\"]"
+    },
+    {
+      "messageID": "msg_g0VcA48Mp00l3a1eNFHk",
+      "sessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+      "type": "source-file",
+      "sourceId": "dfb98fe50d8ccdd0e1fbf8b19f374adbdf30b14b4e98e9f24abbf6f25a02a913",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\销售报告.md",
+      "originalPartSessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+      "originalPartMessageID": "msg_g0VcA48Mp00l3a1eNFHk",
+      "identity": "[\"source-file\",\"ses_hQyiCAibNsNPyRMmaJBU\",\"msg_g0VcA48Mp00l3a1eNFHk\",\"dfb98fe50d8ccdd0e1fbf8b19f374adbdf30b14b4e98e9f24abbf6f25a02a913\"]"
+    },
+    {
+      "messageID": "msg_g0VcA494O00UNEYiQy4N",
+      "sessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+      "type": "source-file",
+      "sourceId": "378fc4e285c9c936f4860ec97650abda7c530748da6d3ad77f7b8d84c9219323",
+      "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\交付复核\\销售复核 #1.md",
+      "originalPartSessionID": "ses_hQyiCAibNsNPyRMmaJBU",
+      "originalPartMessageID": "msg_g0VcA494O00UNEYiQy4N",
+      "identity": "[\"source-file\",\"ses_hQyiCAibNsNPyRMmaJBU\",\"msg_g0VcA494O00UNEYiQy4N\",\"378fc4e285c9c936f4860ec97650abda7c530748da6d3ad77f7b8d84c9219323\"]"
+    }
+  ],
+  "groupedMessageIDs": [
+    "msg_g0VcA48Mp00l3a1eNFHk",
+    "msg_g0VcA494O00UNEYiQy4N"
+  ]
+}

@@ -35,7 +35,7 @@ import { Button } from "./ui/Button"
 import { Disclosure } from "./ui/Disclosure"
 import { InteractiveArtifactPart } from "./InteractiveArtifactPart"
 import { cardExpanded, setCardExpanded } from "../store/conversation-ui"
-import { partitionCardMessageRuns } from "../utils/card-message-run"
+import { messageIDsForCardRuns, partitionCardMessageRuns } from "../utils/card-message-run"
 import { DelegatedContextDisclosure } from "./DelegatedContextDisclosure"
 import { ConversationTurnArtifactSummary } from "./ConversationTurnArtifactSummary"
 import { SourceParts } from "./SourceParts"
@@ -549,7 +549,7 @@ export function CardParts(props: Omit<PartCollectionProps, "contextSources" | "a
           fallback={
             <Index each={group().runs}>
               {(run) => (
-                <section class="card-message-run" data-message-id={run().messageID || undefined}>
+                <section class="card-message-run" data-message-ids={JSON.stringify(messageIDsForCardRuns([run()]))}>
                   <Show
                     when={run().collapsedContext}
                     fallback={<PartCollection {...props} contextSources={contextSources()} attachmentLabel={attachmentLabel} parts={run().parts} streamingTextPart={streamingTextPart()} />}
@@ -574,7 +574,7 @@ export function CardParts(props: Omit<PartCollectionProps, "contextSources" | "a
             </Index>
           }
         >
-          <div class="card-message-run">
+          <div class="card-message-run" data-message-ids={JSON.stringify(messageIDsForCardRuns(group().runs))}>
             <ExecutionOverview
               {...props}
               contextSources={contextSources()}

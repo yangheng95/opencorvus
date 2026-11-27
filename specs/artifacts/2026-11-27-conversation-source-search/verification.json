@@ -1,0 +1,109 @@
+{
+  "status": "passed",
+  "requests": 4,
+  "runs": [
+    {
+      "label": "run70",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hwaaWeSidbvZmQPz5zgH",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795771363473,
+        "settledAt": 1795771363473,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 34998,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run71",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hL2DkSASrXJ2p1IyGxac",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795771841642,
+        "settledAt": 1795771841642,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 6820,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 10,
+  "passedScreenshots": 7,
+  "checks": {
+    "nativeFailure": "source search produced three true results but the second actual source failed to locate before repair",
+    "nativeGroupedSources": "first report and second report both locate using their full original source identity; additional source expands",
+    "nativeFileJourney": "second source opens the actual file in the existing right File pane; close returns to same expanded source group",
+    "nativeText": "normal final message found via different-use phrase; Refresh preserves selected message and Enter locates",
+    "nativeLocale": "English dark search has translated labels/author/date; original source text unchanged; SALES.CSV with surrounding spaces preserves selected original sales source",
+    "nativeReopen": "closing and reopening search resets input and loads same six messages",
+    "positiveUnits": {
+      "passed": 27,
+      "assertions": 45,
+      "files": 3,
+      "evidence": "observed declared test:unit output; no synthesized raw log"
+    },
+    "realChecker": "production snapshot/search and message identity projection on actual six-message export; three original full identities",
+    "protectedFiles": 23,
+    "protectedOldRows": 2156,
+    "sqliteIntegrity": "ok",
+    "typecheck": "passed after existing source-part type predicate",
+    "build": "53.78s; original handle52199 joined exit0",
+    "rendererPublicSurface": "passed",
+    "docs": "353 operations /26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Desktop only, existing real Work conversation.",
+    "Existing member panel shares the same resolver and passes type audit; no member agent was launched and no native member-panel acceptance is claimed.",
+    "No new task generation was needed: four exact Sol streaming requests were paired credential/catalog preflights.",
+    "The existing right File pane owns this source-file journey; no main-document Back route was imposed.",
+    "No Task/Mission/Session scheduling, retry or terminal-convergence anomaly observed."
+  ]
+}

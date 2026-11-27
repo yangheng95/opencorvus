@@ -3,7 +3,7 @@ const CONVERSATION_CARD_SCROLL_EVENT = "opencorvus:conversation-card-scroll"
 export interface ConversationCardScrollRequest {
   cardID: string
   messageID?: string
-  sourceId?: string
+  sourceIdentity?: string
   sessionID?: string
   surface?: "main" | "subagent"
   block?: ScrollLogicalPosition

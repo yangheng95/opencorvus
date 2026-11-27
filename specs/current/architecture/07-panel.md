@@ -4301,6 +4301,17 @@ A match contained in a single Source part opens that source. A phrase
 spanning parts opens the owning Message with the full phrase in its excerpt.
 Message and Source content retain their stored text.
 
+Conversation navigation uses one mounted-card resolver in the main and member
+surfaces. Ordinary and aggregated presentation runs expose the same complete
+message-ID collection, derived from their original run and part identities;
+aggregation does not assign every part to its first message. A source landing
+uses the existing full type/Session/Message/sourceId identity from the validated
+snapshot, and its native source group exposes that same identity collection.
+The resolver expands that exact group and returns its original source entry.
+It does not depend on a single-message DOM wrapper or a bare resource sourceId.
+Reading anchors, virtualized card ownership and the existing scroll controllers
+retain their current responsibilities.
+
 ## Shared visual primitives
 
 Settings boolean switches use the existing Kobalte default Root, Control, Input,
