@@ -1,0 +1,42 @@
+[
+  {
+    "capture": "before-close-focus-root.txt",
+    "observedFocus": "0 AXWebArea OpenCorvus, URL: 127.0.0.1:63486/ui/?taskID=tsk_g00Vc6ygAw00kzz3NRpk",
+    "meaning": "manual native interaction observation"
+  },
+  {
+    "capture": "before-escape-immediate.txt",
+    "observedFocus": "426 button 区域汇总.csv 交付区域 CSV 导出扩展, Help: 区域汇总.csv",
+    "meaning": "manual native interaction observation; immediate before Escape capture is a transition only"
+  },
+  {
+    "capture": "after-file-close-focus.txt",
+    "observedFocus": "181 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand",
+    "meaning": "manual native interaction observation"
+  },
+  {
+    "capture": "after-csv-escape-focus.txt",
+    "observedFocus": "181 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand",
+    "meaning": "manual native interaction observation"
+  },
+  {
+    "capture": "after-nested-inner-close-focus.txt",
+    "observedFocus": "21 button 浏览来源快照",
+    "meaning": "manual native interaction observation"
+  },
+  {
+    "capture": "after-backdrop-close-focus.txt",
+    "observedFocus": "181 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand",
+    "meaning": "manual native interaction observation"
+  },
+  {
+    "capture": "after-interactive-escape-focus.txt",
+    "observedFocus": "248 pop up button (collapsed) Description: 环境信息, Secondary Actions: Expand",
+    "meaning": "manual native interaction observation"
+  },
+  {
+    "capture": "after-english-close-focus.txt",
+    "observedFocus": "248 pop up button (collapsed) Description: Environment information, Secondary Actions: Expand",
+    "meaning": "manual native interaction observation"
+  }
+]

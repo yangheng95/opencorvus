@@ -201,7 +201,10 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const ownsProject = (authority: ApiAuthority, directory: string, selectionEpoch: number) =>
     ownsAuthority(authority) && boardStore.selectEpoch === selectionEpoch && dir().trim() === directory
   const projectName = createMemo(() => dir().split(/[\\/]/).filter(Boolean).at(-1) || t("project_runtime.local"))
-  const deliveries = createProjectDeliveries({ onOpen: () => closeRuntimePanel() })
+  const deliveries = createProjectDeliveries({
+    onOpen: () => closeRuntimePanel(),
+    returnFocusTarget: () => props.anchorVisible ? runtimePanelTrigger ?? null : null,
+  })
   const environmentAnchorShift = createMemo(() => {
     settingsStore.zoom
     return layoutTokenPx("--ui-runtime-environment-anchor-shift")

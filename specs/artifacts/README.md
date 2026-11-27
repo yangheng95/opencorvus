@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目交付预览键盘位置证据](2026-11-28-delivery-preview-focus/README.md)
 - [来源快照浏览证据](2026-11-27-source-snapshot-browser/README.md)
 - [快照文件浏览与结构化交付证据](2026-11-27-snapshot-resource-review/README.md)
 - [CSV交付阅读证据](2026-11-27-csv-delivery-reading/README.md)

@@ -5841,6 +5841,13 @@ already selected inside that snapshot stays in the current browser. Snapshot
 query and selection use their existing bounded presentation owner. Localized
 window captions do not change the original read-request identity.
 
+The project delivery inventory closes its Popover when opening a preview. Its
+caller supplies the surviving environment toolbar trigger as the preview
+Dialog's return-focus target while that anchor remains visible. File resources
+and interactive publications share this same close lifecycle. The shared Dialog
+retains its connected, visible and current-focus checks; nested source previews
+keep their own opener within the still-open delivery preview.
+
 Native Network uses Cytoscape's label-inclusive node dimensions for every
 supported layout. The common layout baseline keeps its declared layout and
 native fitting behavior with a unit spacing factor, while the Compound Spring

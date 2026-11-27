@@ -21,7 +21,7 @@ type Delivery = { id: string; title: string; description: string } & (
 
 /** The floating inventory derives from the same current conversation records
  * as message deliveries. It never re-registers or copies Artifact authority. */
-export function createProjectDeliveries(props: { onOpen: () => void }) {
+export function createProjectDeliveries(props: { onOpen: () => void; returnFocusTarget: () => HTMLElement | null }) {
   const [selected, setSelected] = createSignal<Delivery>()
   createEffect(() => {
     void boardStore.selectedSource?.id
@@ -126,6 +126,7 @@ export function createProjectDeliveries(props: { onOpen: () => void }) {
     <Dialog
       open={Boolean(selected())}
       onClose={() => setSelected(undefined)}
+      returnFocusTarget={props.returnFocusTarget}
       title={selected()?.title ?? ""}
       wider
       headerActions={

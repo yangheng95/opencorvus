@@ -1,0 +1,109 @@
+{
+  "runs": [
+    {
+      "label": "run108",
+      "pid": 33296,
+      "url": "http://127.0.0.1:63486/",
+      "sourceRun": "run107",
+      "state": "exited",
+      "exitCode": 0,
+      "originalExecHandle": 86431,
+      "originalHandleJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hxN2XDPZn9A7QnfK73LC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795796714298,
+        "settledAt": 1795796714298,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run109",
+      "pid": 20728,
+      "url": "http://127.0.0.1:64798/",
+      "sourceRun": "run108",
+      "state": "exited",
+      "exitCode": 0,
+      "originalExecHandle": 8624,
+      "originalHandleJoinedExitCode": 0,
+      "preflight": {
+        "sessionID": "ses_hVNr8GgfdO4Or29yD8Cr",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795797442521,
+        "settledAt": 1795797442521,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "businessModelTasksThisBatch": 0,
+  "realModelCalls": 4,
+  "purpose": "paired credential/catalog/actual streaming-model preflight; actual completed Task and native published Tree reused for UI acceptance",
+  "finalBuild": {
+    "originalHandle": 76921,
+    "joinedExitCode": 0,
+    "seconds": 53.49
+  },
+  "checks": {
+    "typecheck": "passed",
+    "docs": "353 ops / 26 groups",
+    "architecture": "20 documents"
+  },
+  "nativeScreenshots": {
+    "before": 2,
+    "after": 10,
+    "format": "unaltered JPEG"
+  },
+  "closedTabs": [
+    "241805213",
+    "241805217"
+  ],
+  "finalSettings": {
+    "language": "zh-CN",
+    "theme": "system"
+  },
+  "uiAutomatedTests": "none"
+}

@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "label": "run108",
+  "taskID": "tsk_g00Vc6ygAw00kzz3NRpk",
+  "jsonLocator": {
+    "source": "task_artifact_resource",
+    "ref": {
+      "snapshot": {
+        "schema_version": 2,
+        "project_id": "prj_haW9BdBH559F4Yw143ch",
+        "task_id": "tsk_g00Vc6ygAw00kzz3NRpk",
+        "snapshot_id": "dc5c047a-98d9-5702-a51c-99ee41e49c60",
+        "manifest_sha256": "04664c8b54ca8205f9de19cd550ac9bd1d6b0511703759eeaa88bafa8156eef0"
+      },
+      "tree": "resources",
+      "path": "summary.json",
+      "media_type": "application/json",
+      "bytes": 238,
+      "sha256": "603b0f11584d7013e06306eb46297ab093f204b6de5cbe08ff879fc78f35ef8d"
+    }
+  },
+  "jsonBytes": 238,
+  "summary": {
+    "order_count": 5,
+    "total_amount": "35.60",
+    "by_region": {
+      "华东": {
+        "order_count": 3,
+        "total_amount": "28.25"
+      },
+      "华南": {
+        "order_count": 2,
+        "total_amount": "7.35"
+      }
+    }
+  },
+  "snapshotLocator": {
+    "source": "task_artifact_snapshot",
+    "snapshot": {
+      "schema_version": 2,
+      "project_id": "prj_haW9BdBH559F4Yw143ch",
+      "task_id": "tsk_g00Vc6ygAw00kzz3NRpk",
+      "snapshot_id": "dc5c047a-98d9-5702-a51c-99ee41e49c60",
+      "manifest_sha256": "04664c8b54ca8205f9de19cd550ac9bd1d6b0511703759eeaa88bafa8156eef0"
+    }
+  },
+  "manifestBytes": 1644,
+  "manifestFiles": 6,
+  "treeSession": "ses_h0oitrO9d2gvKybgBv12",
+  "treeArtifact": "art_g0VcAHavW00PoQtVEAR7",
+  "treeNodes": 57,
+  "sourceFiles": 53,
+  "treeEqualsOriginalPublication": true
+}
