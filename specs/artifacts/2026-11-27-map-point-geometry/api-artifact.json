@@ -1,0 +1,72 @@
+{
+  "id": "art_g0VcAqGJ200KWmDtcP57",
+  "sessionID": "ses_hQGeiEEa0EmNFRdGkWL4",
+  "messageID": "msg_g0VcAqEOe00LNaup4bgI",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "点几何核对｜验收样本",
+    "renderer": "map@1",
+    "geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              121.46,
+              31.23
+            ]
+          },
+          "properties": {
+            "name": "单点样本 A"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "MultiPoint",
+            "coordinates": [
+              [
+                121.48,
+                31.25
+              ],
+              [
+                121.5,
+                31.23
+              ]
+            ]
+          },
+          "properties": {
+            "name": "多点样本 B/C"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                121.46,
+                31.23
+              ],
+              [
+                121.48,
+                31.25
+              ],
+              [
+                121.5,
+                31.23
+              ]
+            ]
+          },
+          "properties": {
+            "name": "样本连接线"
+          }
+        }
+      ]
+    }
+  },
+  "timeCreated": 1795780569820,
+  "timeUpdated": 1795780569820
+}

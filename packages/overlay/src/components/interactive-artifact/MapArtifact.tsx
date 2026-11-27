@@ -2,10 +2,12 @@ import * as maplibregl from "maplibre-gl"
 import type { GeoJSONSource, LngLatLike } from "maplibre-gl"
 import "maplibre-gl/dist/maplibre-gl.css"
 import maplibreWorker from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url"
-import { For, onCleanup, onMount } from "solid-js"
+import { For, createEffect, onCleanup, onMount } from "solid-js"
 import mapBasemap from "../../config/map-basemap.json"
+import { artifactMapPoints } from "../../services/artifact-map"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { observeAppliedTheme } from "../../services/theme"
+import { localeTag, t } from "../../utils/i18n"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { artifactVisualTheme } from "./theme-color"
 
@@ -35,7 +37,33 @@ export function MapArtifact(props: { payload: MapPayload }) {
   let stopThemeObserver: (() => void) | undefined
   let resizeObserver: ResizeObserver | undefined
   const markers: maplibregl.Marker[] = []
+  const points = artifactMapPoints(props.payload.geojson.features)
   const lineFeatures = props.payload.geojson.features.filter((feature) => LINE_GEOMETRIES.has(feature.geometry.type))
+  const mapLocale = () => ({
+    "Map.Title": t("artifact.map.canvas", { title: props.payload.title }),
+    "Marker.Title": t("artifact.map.point"),
+    "NavigationControl.ZoomIn": t("artifact.map.zoom_in"),
+    "NavigationControl.ZoomOut": t("artifact.map.zoom_out"),
+    "AttributionControl.ToggleAttribution": t("artifact.map.toggle_attribution"),
+  })
+  createEffect(() => {
+    const labels = mapLocale()
+    if (!map) return
+    map.getCanvas().setAttribute("aria-label", labels["Map.Title"])
+    for (const [selector, label] of [
+      [".maplibregl-ctrl-zoom-in", labels["NavigationControl.ZoomIn"]],
+      [".maplibregl-ctrl-zoom-out", labels["NavigationControl.ZoomOut"]],
+      [".maplibregl-ctrl-attrib-button", labels["AttributionControl.ToggleAttribution"]],
+    ] as const) {
+      const element = map.getContainer().querySelector<HTMLElement>(selector)
+      if (!element) continue
+      element.title = label
+      element.setAttribute("aria-label", label)
+    }
+    markers.forEach((marker, index) => {
+      marker.getElement().setAttribute("aria-label", featureLabel(points[index]!.feature) ?? labels["Marker.Title"])
+    })
+  })
 
   const themedGeoJson = (palette: string[]): GeoJSON.FeatureCollection => {
     let lineIndex = 0
@@ -56,12 +84,10 @@ export function MapArtifact(props: { payload: MapPayload }) {
   const renderMarkers = (color: string) => {
     markers.splice(0).forEach((marker) => marker.remove())
     if (!map) return
-    props.payload.geojson.features.forEach((feature) => {
-      if (feature.geometry.type !== "Point") return
-      const coordinates = feature.geometry.coordinates as [number, number]
+    points.forEach(({ feature, coordinates }) => {
       const label = featureLabel(feature)
       const marker = new maplibregl.Marker({ color }).setLngLat(coordinates).addTo(map!)
-      marker.getElement().setAttribute("aria-label", typeof label === "string" ? label : "Map point")
+      marker.getElement().setAttribute("aria-label", label ?? t("artifact.map.point"))
       markers.push(marker)
     })
   }
@@ -75,6 +101,7 @@ export function MapArtifact(props: { payload: MapPayload }) {
       center: [0, 0] as LngLatLike,
       zoom: 0,
       attributionControl: mapBasemap.attributionControl,
+      locale: mapLocale(),
     })
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right")
     resizeObserver = new ResizeObserver(() => map?.resize())
@@ -147,7 +174,7 @@ export function MapArtifact(props: { payload: MapPayload }) {
             {(feature, index) => (
               <div class="msg-artifact-map-legend-item">
                 <span class="msg-artifact-map-legend-swatch" aria-hidden="true" />
-                <span>{featureLabel(feature) || `Series ${index() + 1}`}</span>
+                <span>{featureLabel(feature) || t("artifact.map.series", { index: new Intl.NumberFormat(localeTag()).format(index() + 1) })}</span>
               </div>
             )}
           </For>

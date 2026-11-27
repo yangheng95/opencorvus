@@ -6151,7 +6151,16 @@ Explicit native media fullscreen keeps its existing ownership when no enclosing
 dialog or artifact popover owns the trigger.
 
 Maps carry inline GeoJSON and never accept model-selected styles, tiles, scripts,
-or network data. The Overlay's single basemap configuration supplies the
+or network data. Their single point projection creates native MapLibre markers
+for both Point and every MultiPoint position, retaining the source feature and
+using longitude/latitude without changing the authored coordinates or GeoJSON
+export. Line and polygon vertices remain in their existing layers. Theme changes
+replace the same marker collection, and disposal removes it with the map.
+The map's native controls, canvas name and unnamed point/series labels use the
+current product locale. Locale changes update existing labels through the
+public canvas/container elements, retaining native controls and the current map
+view; authored labels, basemap names and source attribution keep their content.
+The Overlay's single basemap configuration supplies the
 OpenFreeMap MapLibre style; that style and its TileJSON metadata are the sole
 visible OpenFreeMap, OpenMapTiles, and OpenStreetMap attribution source. The
 MapLibre module worker is emitted through Vite's worker pipeline as one

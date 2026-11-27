@@ -1,0 +1,175 @@
+{
+  "status": "passed",
+  "requests": 9,
+  "runs": [
+    {
+      "label": "run88",
+      "requests": 5,
+      "preflight": {
+        "sessionID": "ses_h4tryihTfVrJ7VYFOG9H",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795780643499,
+        "settledAt": 1795780719638,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 54367,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run89",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hpAzaiuSaPsf6LQudzfZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795780977570,
+        "settledAt": 1795780977570,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 12168,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run90",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hlGYJyVbwLOxwZGUPWRl",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795781503726,
+        "settledAt": 1795781503726,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 6572,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 12,
+  "finalScreenshots": [
+    "accepted-expanded-copy.png",
+    "accepted-map-attribution.png",
+    "accepted-map-english-dark.png",
+    "accepted-map-expanded-dark.png",
+    "accepted-map-expanded.png",
+    "accepted-map-light.png",
+    "accepted-map-pan.png",
+    "accepted-map-restored-chinese.png",
+    "accepted-map-zoom.png"
+  ],
+  "candidateScreenshots": [
+    "candidate-map-points.png"
+  ],
+  "checks": {
+    "source": "actual Work ses_hQGeiEEa0EmNFRdGkWL4; real completed publication art_g0VcAqGJ200KWmDtcP57; exact supplied sample geometry, no business locations or roads asserted",
+    "baseline": "native normal/expanded screenshots show one Point marker and complete connecting line; actual MultiPoint data retained in original 981-byte export",
+    "final": "three native markers align to original line vertices through actual zoom/pan/expand and locale/theme changes",
+    "localization": "actual Chinese/English canvas includes original title; navigation/attribution controls change locale; restored Chinese/System retains view",
+    "exports": "three actual native downloads and ordinary copy/expanded copy/native Ctrl+V paste each981 bytes equal production export; independent JSON and canonical parser retain all3 source geometries/properties",
+    "copyDiscrepancy": "initial expanded AX attempt read838-byte old task prompt despiteCopied, retained as failed; actual Copy message established838 baseline then coordinate click expandedCopy and nativepaste each981; initialcauseunknown, sharedcopyimplementation unchanged",
+    "positiveUnits": {
+      "passed": 1,
+      "assertions": 2,
+      "files": 1,
+      "kind": "pure data projection; observed declared runner output"
+    },
+    "typecheck": "25419 observedexit0",
+    "build": "final53.17s original97385 observedexit0; candidate59.70s original79965 observedexit0; renderer public surface passed",
+    "i18n": "2 locales3356 keys passed",
+    "docs": "353 ops26 groups; architecture-index20 documents passed",
+    "protectedFiles": 23,
+    "protectedOldRows": 2287,
+    "sqliteIntegrity": "ok",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Native desktop Point/MultiPoint/LineString sample only; polygons, multiline, empty geometries, world wrapping,20000feature performance, unnamedlabels, five other themes and screen-reader speech not newly accepted.",
+    "Basemap and attribution retain configured third-party source content; dark product theme does not switch basemap service.",
+    "Initial copy discrepancy has no established product root cause; final screen-click and native paste were verified, no shared clipboard change.",
+    "No schema/persistence/API/config/version change, migration, release, tag, delegation or scheduler/terminal anomaly."
+  ]
+}

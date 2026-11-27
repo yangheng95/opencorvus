@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [地图点几何的真实显示核对](records/2026-11/2026-11-27-map-point-geometry.md)
 - [时间线短事件的键盘访问](records/2026-11/2026-11-27-timeline-event-navigation.md)
 - [真实工具调用的分钟级时间线复核](records/2026-11/2026-11-27-tool-timeline-review.md)
 - [销售脚本源码与真实标准流的笔记本交付](records/2026-11/2026-11-27-notebook-run-record.md)

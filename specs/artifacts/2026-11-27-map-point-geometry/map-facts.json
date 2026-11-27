@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "sessionID": "ses_hQGeiEEa0EmNFRdGkWL4",
+  "artifactID": "art_g0VcAqGJ200KWmDtcP57",
+  "features": 3,
+  "geometryTypes": [
+    "Point",
+    "MultiPoint",
+    "LineString"
+  ],
+  "pointCoordinates": 3,
+  "native": [
+    {
+      "filename": "点几何核对｜验收样本.geojson",
+      "bytes": 981,
+      "exactGeoJSON": true
+    },
+    {
+      "filename": "点几何核对｜验收样本 (1).geojson",
+      "bytes": 981,
+      "exactGeoJSON": true
+    },
+    {
+      "filename": "点几何核对｜验收样本 (2).geojson",
+      "bytes": 981,
+      "exactGeoJSON": true
+    },
+    {
+      "filename": "native-copy.geojson",
+      "bytes": 981,
+      "exactGeoJSON": true
+    },
+    {
+      "filename": "native-expanded-copy.geojson",
+      "bytes": 981,
+      "exactGeoJSON": true
+    },
+    {
+      "filename": "native-paste.geojson",
+      "bytes": 981,
+      "exactGeoJSON": true
+    }
+  ]
+}

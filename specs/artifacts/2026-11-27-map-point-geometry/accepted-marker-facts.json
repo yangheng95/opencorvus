@@ -1,0 +1,22 @@
+{
+  "canvas": [
+    {
+      "label": "Map: 点几何核对｜验收样本",
+      "role": "region"
+    }
+  ],
+  "markers": [
+    {
+      "label": "单点样本 A",
+      "style": "transform: translate(-50%, -50%) translate(483px, 435px) rotateX(0deg) rotateZ(0deg); opacity: 1;"
+    },
+    {
+      "label": "多点样本 B/C",
+      "style": "transform: translate(-50%, -50%) translate(599px, 298px) rotateX(0deg) rotateZ(0deg); opacity: 1;"
+    },
+    {
+      "label": "多点样本 B/C",
+      "style": "transform: translate(-50%, -50%) translate(716px, 435px) rotateX(0deg) rotateZ(0deg); opacity: 1;"
+    }
+  ]
+}
