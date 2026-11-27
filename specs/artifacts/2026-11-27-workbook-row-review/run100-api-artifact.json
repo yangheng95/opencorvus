@@ -1,0 +1,106 @@
+{
+  "id": "art_g0VcBNYru001lUt0X4Wi",
+  "sessionID": "ses_hLpUeHEEgrzsdqbP9tv2",
+  "messageID": "msg_g0VcBNV8Q0062OXKtm7a",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "销售核对｜原文件逐项复核",
+    "renderer": "table@1",
+    "columns": [
+      {
+        "id": "order",
+        "label": "原行序",
+        "dataType": "number"
+      },
+      {
+        "id": "id",
+        "label": "订单编号",
+        "dataType": "string"
+      },
+      {
+        "id": "region",
+        "label": "区域",
+        "dataType": "string"
+      },
+      {
+        "id": "note",
+        "label": "备注",
+        "dataType": "string"
+      },
+      {
+        "id": "csvAmount",
+        "label": "CSV金额",
+        "dataType": "number"
+      },
+      {
+        "id": "workbookAmount",
+        "label": "工作簿金额",
+        "dataType": "number"
+      },
+      {
+        "id": "refund",
+        "label": "退款",
+        "dataType": "boolean"
+      },
+      {
+        "id": "match",
+        "label": "逐项一致",
+        "dataType": "boolean"
+      }
+    ],
+    "rows": [
+      {
+        "order": 1,
+        "id": "A001",
+        "region": "华东",
+        "note": "普通订单",
+        "csvAmount": 10.1,
+        "workbookAmount": 10.1,
+        "refund": false,
+        "match": true
+      },
+      {
+        "order": 2,
+        "id": "A002",
+        "region": "华东",
+        "note": "中文客户",
+        "csvAmount": 20.2,
+        "workbookAmount": 20.2,
+        "refund": false,
+        "match": true
+      },
+      {
+        "order": 3,
+        "id": "A003",
+        "region": "华东",
+        "note": "退款",
+        "csvAmount": -2.05,
+        "workbookAmount": -2.05,
+        "refund": true,
+        "match": true
+      },
+      {
+        "order": 4,
+        "id": "A004",
+        "region": "华南",
+        "note": "免费样品",
+        "csvAmount": 0,
+        "workbookAmount": 0,
+        "refund": false,
+        "match": true
+      },
+      {
+        "order": 5,
+        "id": "A005",
+        "region": "华南",
+        "note": "普通订单",
+        "csvAmount": 7.35,
+        "workbookAmount": 7.35,
+        "refund": false,
+        "match": true
+      }
+    ]
+  },
+  "timeCreated": 1795788505998,
+  "timeUpdated": 1795788505998
+}

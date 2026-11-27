@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "label": "run100",
+  "sessionID": "ses_hLpUeHEEgrzsdqbP9tv2",
+  "artifactID": "art_g0VcBNYru001lUt0X4Wi",
+  "toolParts": [
+    {
+      "tool": "read",
+      "id": "prt_g0VcBNQD600MpUhCOX4z",
+      "messageID": "msg_g0VcBNPAm00n4PhPrqEw",
+      "status": "completed"
+    },
+    {
+      "tool": "bash",
+      "id": "prt_g0VcBNR0H00JZnPJIH4O",
+      "messageID": "msg_g0VcBNQKv00KwDcNqcea",
+      "status": "completed"
+    },
+    {
+      "tool": "publish_interactive_artifact",
+      "id": "prt_g0VcBNWus00KIgOuOq3t",
+      "messageID": "msg_g0VcBNV8Q0062OXKtm7a",
+      "status": "completed"
+    }
+  ],
+  "sourceWorkbookBytes": 6793,
+  "sheetNames": [
+    "订单明细",
+    "区域汇总",
+    "统计说明"
+  ],
+  "summary": {
+    "count": 5,
+    "amount": "35.60",
+    "regions": {
+      "华东": {
+        "count": 3,
+        "amount": "28.25"
+      },
+      "华南": {
+        "count": 2,
+        "amount": "7.35"
+      }
+    },
+    "refunds": 1,
+    "zeros": 1
+  },
+  "rows": 5,
+  "columns": 8,
+  "allCapturedOfficeCellsEqualIndependentOpenpyxl": true,
+  "publishedRowsAndTypesEqualOriginalFiles": true,
+  "bashExit": 0,
+  "terminalMessageFinish": "stop"
+}

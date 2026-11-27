@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工作簿逐项复核与表格检索证据](2026-11-27-workbook-row-review/README.md)
 - [真实聚焦测试执行与回看证据](2026-11-27-test-run-review/README.md)
 - [笔记本输出通道阅读证据](2026-11-27-notebook-output-channel/README.md)
 - [蜡烛图逐条读数证据](2026-11-27-candlestick-bar-details/README.md)

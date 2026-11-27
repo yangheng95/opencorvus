@@ -1,0 +1,604 @@
+{
+  "订单明细": [
+    [
+      {
+        "cell": "A1",
+        "type": "s",
+        "value": "原行序"
+      },
+      {
+        "cell": "B1",
+        "type": "s",
+        "value": "订单编号"
+      },
+      {
+        "cell": "C1",
+        "type": "s",
+        "value": "区域"
+      },
+      {
+        "cell": "D1",
+        "type": "s",
+        "value": "金额"
+      },
+      {
+        "cell": "E1",
+        "type": "s",
+        "value": "备注"
+      },
+      {
+        "cell": "F1",
+        "type": "s",
+        "value": "退款"
+      }
+    ],
+    [
+      {
+        "cell": "A2",
+        "type": "n",
+        "value": 1
+      },
+      {
+        "cell": "B2",
+        "type": "s",
+        "value": "A001"
+      },
+      {
+        "cell": "C2",
+        "type": "s",
+        "value": "华东"
+      },
+      {
+        "cell": "D2",
+        "type": "n",
+        "value": 10.1
+      },
+      {
+        "cell": "E2",
+        "type": "s",
+        "value": "普通订单"
+      },
+      {
+        "cell": "F2",
+        "type": "b",
+        "value": false
+      }
+    ],
+    [
+      {
+        "cell": "A3",
+        "type": "n",
+        "value": 2
+      },
+      {
+        "cell": "B3",
+        "type": "s",
+        "value": "A002"
+      },
+      {
+        "cell": "C3",
+        "type": "s",
+        "value": "华东"
+      },
+      {
+        "cell": "D3",
+        "type": "n",
+        "value": 20.2
+      },
+      {
+        "cell": "E3",
+        "type": "s",
+        "value": "中文客户"
+      },
+      {
+        "cell": "F3",
+        "type": "b",
+        "value": false
+      }
+    ],
+    [
+      {
+        "cell": "A4",
+        "type": "n",
+        "value": 3
+      },
+      {
+        "cell": "B4",
+        "type": "s",
+        "value": "A003"
+      },
+      {
+        "cell": "C4",
+        "type": "s",
+        "value": "华东"
+      },
+      {
+        "cell": "D4",
+        "type": "n",
+        "value": -2.05
+      },
+      {
+        "cell": "E4",
+        "type": "s",
+        "value": "退款"
+      },
+      {
+        "cell": "F4",
+        "type": "b",
+        "value": true
+      }
+    ],
+    [
+      {
+        "cell": "A5",
+        "type": "n",
+        "value": 4
+      },
+      {
+        "cell": "B5",
+        "type": "s",
+        "value": "A004"
+      },
+      {
+        "cell": "C5",
+        "type": "s",
+        "value": "华南"
+      },
+      {
+        "cell": "D5",
+        "type": "n",
+        "value": 0
+      },
+      {
+        "cell": "E5",
+        "type": "s",
+        "value": "免费样品"
+      },
+      {
+        "cell": "F5",
+        "type": "b",
+        "value": false
+      }
+    ],
+    [
+      {
+        "cell": "A6",
+        "type": "n",
+        "value": 5
+      },
+      {
+        "cell": "B6",
+        "type": "s",
+        "value": "A005"
+      },
+      {
+        "cell": "C6",
+        "type": "s",
+        "value": "华南"
+      },
+      {
+        "cell": "D6",
+        "type": "n",
+        "value": 7.35
+      },
+      {
+        "cell": "E6",
+        "type": "s",
+        "value": "普通订单"
+      },
+      {
+        "cell": "F6",
+        "type": "b",
+        "value": false
+      }
+    ]
+  ],
+  "区域汇总": [
+    [
+      {
+        "cell": "A1",
+        "type": "s",
+        "value": "区域"
+      },
+      {
+        "cell": "B1",
+        "type": "s",
+        "value": "订单数"
+      },
+      {
+        "cell": "C1",
+        "type": "s",
+        "value": "净金额"
+      }
+    ],
+    [
+      {
+        "cell": "A2",
+        "type": "s",
+        "value": "华东"
+      },
+      {
+        "cell": "B2",
+        "type": "n",
+        "value": 3
+      },
+      {
+        "cell": "C2",
+        "type": "n",
+        "value": 28.25
+      }
+    ],
+    [
+      {
+        "cell": "A3",
+        "type": "s",
+        "value": "华南"
+      },
+      {
+        "cell": "B3",
+        "type": "n",
+        "value": 2
+      },
+      {
+        "cell": "C3",
+        "type": "n",
+        "value": 7.35
+      }
+    ],
+    [
+      {
+        "cell": "A4",
+        "type": "s",
+        "value": "全体合计"
+      },
+      {
+        "cell": "B4",
+        "type": "n",
+        "value": 5
+      },
+      {
+        "cell": "C4",
+        "type": "n",
+        "value": 35.6
+      }
+    ]
+  ],
+  "统计说明": [
+    [
+      {
+        "cell": "A1",
+        "type": "s",
+        "value": "项目"
+      },
+      {
+        "cell": "B1",
+        "type": "s",
+        "value": "说明或数值"
+      }
+    ],
+    [
+      {
+        "cell": "A2",
+        "type": "s",
+        "value": "真实来源"
+      },
+      {
+        "cell": "B2",
+        "type": "s",
+        "value": "当前项目根目录 sales.csv"
+      }
+    ],
+    [
+      {
+        "cell": "A3",
+        "type": "s",
+        "value": "源字段"
+      },
+      {
+        "cell": "B3",
+        "type": "s",
+        "value": "订单编号、区域、金额、备注"
+      }
+    ],
+    [
+      {
+        "cell": "A4",
+        "type": "s",
+        "value": "统计范围"
+      },
+      {
+        "cell": "B4",
+        "type": "s",
+        "value": "源文件全部5笔，保持原行序"
+      }
+    ],
+    [
+      {
+        "cell": "A5",
+        "type": "s",
+        "value": "原行序"
+      },
+      {
+        "cell": "B5",
+        "type": "s",
+        "value": "从首笔数据起编号，不含表头"
+      }
+    ],
+    [
+      {
+        "cell": "A6",
+        "type": "s",
+        "value": "订单计数"
+      },
+      {
+        "cell": "B6",
+        "type": "s",
+        "value": "每笔原记录计1笔，不去重"
+      }
+    ],
+    [
+      {
+        "cell": "A7",
+        "type": "s",
+        "value": "退款计数"
+      },
+      {
+        "cell": "B7",
+        "type": "s",
+        "value": "负金额计入订单数及退款笔数"
+      }
+    ],
+    [
+      {
+        "cell": "A8",
+        "type": "s",
+        "value": "零金额计数"
+      },
+      {
+        "cell": "B8",
+        "type": "s",
+        "value": "零金额计入订单数，不计退款"
+      }
+    ],
+    [
+      {
+        "cell": "A9",
+        "type": "s",
+        "value": "净金额口径"
+      },
+      {
+        "cell": "B9",
+        "type": "s",
+        "value": "正数加计、负数扣减、零值不增减"
+      }
+    ],
+    [
+      {
+        "cell": "A10",
+        "type": "s",
+        "value": "区域口径"
+      },
+      {
+        "cell": "B10",
+        "type": "s",
+        "value": "保留原区域名称分组"
+      }
+    ],
+    [
+      {
+        "cell": "A11",
+        "type": "s",
+        "value": "金额精度"
+      },
+      {
+        "cell": "B11",
+        "type": "s",
+        "value": "原文本以Decimal独立累加到分"
+      }
+    ],
+    [
+      {
+        "cell": "A12",
+        "type": "s",
+        "value": "总订单数"
+      },
+      {
+        "cell": "B12",
+        "type": "n",
+        "value": 5
+      }
+    ],
+    [
+      {
+        "cell": "A13",
+        "type": "s",
+        "value": "总净金额"
+      },
+      {
+        "cell": "B13",
+        "type": "n",
+        "value": 35.6
+      }
+    ],
+    [
+      {
+        "cell": "A14",
+        "type": "s",
+        "value": "退款笔数"
+      },
+      {
+        "cell": "B14",
+        "type": "n",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "cell": "A15",
+        "type": "s",
+        "value": "退款金额（带符号）"
+      },
+      {
+        "cell": "B15",
+        "type": "n",
+        "value": -2.05
+      }
+    ],
+    [
+      {
+        "cell": "A16",
+        "type": "s",
+        "value": "零金额笔数"
+      },
+      {
+        "cell": "B16",
+        "type": "n",
+        "value": 1
+      }
+    ],
+    [
+      {
+        "cell": "A17",
+        "type": "s",
+        "value": "零金额合计"
+      },
+      {
+        "cell": "B17",
+        "type": "n",
+        "value": 0
+      }
+    ],
+    [
+      {
+        "cell": "A18",
+        "type": "s",
+        "value": "正金额笔数"
+      },
+      {
+        "cell": "B18",
+        "type": "n",
+        "value": 3
+      }
+    ],
+    [
+      {
+        "cell": "A19",
+        "type": "s",
+        "value": "正金额合计"
+      },
+      {
+        "cell": "B19",
+        "type": "n",
+        "value": 37.65
+      }
+    ],
+    [
+      {
+        "cell": "A20",
+        "type": "s",
+        "value": "区域计数核对"
+      },
+      {
+        "cell": "B20",
+        "type": "s",
+        "value": "3 + 2 = 5"
+      }
+    ],
+    [
+      {
+        "cell": "A21",
+        "type": "s",
+        "value": "区域金额核对"
+      },
+      {
+        "cell": "B21",
+        "type": "s",
+        "value": "28.25 + 7.35 = 35.60"
+      }
+    ],
+    [
+      {
+        "cell": "A22",
+        "type": "s",
+        "value": "金额性质核对"
+      },
+      {
+        "cell": "B22",
+        "type": "s",
+        "value": "37.65 - 2.05 + 0.00 = 35.60"
+      }
+    ],
+    [
+      {
+        "cell": "A23",
+        "type": "s",
+        "value": "退款记录"
+      },
+      {
+        "cell": "B23",
+        "type": "s",
+        "value": "A003，金额-2.05，退款为TRUE"
+      }
+    ],
+    [
+      {
+        "cell": "A24",
+        "type": "s",
+        "value": "零金额记录"
+      },
+      {
+        "cell": "B24",
+        "type": "s",
+        "value": "A004，金额0.00，退款为FALSE"
+      }
+    ],
+    [
+      {
+        "cell": "A25",
+        "type": "s",
+        "value": "数据类型"
+      },
+      {
+        "cell": "B25",
+        "type": "s",
+        "value": "金额和计数为数值；退款为布尔"
+      }
+    ],
+    [
+      {
+        "cell": "A26",
+        "type": "s",
+        "value": "显示说明"
+      },
+      {
+        "cell": "B26",
+        "type": "s",
+        "value": "35.6等于35.60；0等于0.00"
+      }
+    ],
+    [
+      {
+        "cell": "A27",
+        "type": "s",
+        "value": "币种与期间"
+      },
+      {
+        "cell": "B27",
+        "type": "s",
+        "value": "源文件未提供，不作推定"
+      }
+    ],
+    [
+      {
+        "cell": "A28",
+        "type": "s",
+        "value": "工作簿内容"
+      },
+      {
+        "cell": "B28",
+        "type": "s",
+        "value": "均为明确值，无公式或外部链接"
+      }
+    ]
+  ]
+}

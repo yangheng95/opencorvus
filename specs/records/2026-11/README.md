@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [工作簿逐项复核与表格检索](2026-11-27-workbook-row-review.md)
 - [真实聚焦测试执行与结果回看](2026-11-27-test-run-review.md)
 - [笔记本输出通道的阅读核对](2026-11-27-notebook-output-channel.md)
 - [蜡烛图逐条读数与缺失成交量](2026-11-27-candlestick-bar-details.md)

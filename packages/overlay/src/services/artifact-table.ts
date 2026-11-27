@@ -1,5 +1,5 @@
 import type { InteractiveArtifactPayload } from "./interactive-artifact"
-import { matchesSearchParts } from "./text-search"
+import { matchesSearchTerms } from "./text-search"
 
 type TablePayload = Extract<InteractiveArtifactPayload, { renderer: "table@1" }>
 export type ArtifactTableCell = TablePayload["rows"][number][string] | undefined
@@ -20,7 +20,7 @@ export function createArtifactTablePresentation(locale: string, labels: { yes: s
   }
   return {
     formatCell,
-    matchesCell: (query: string, value: ArtifactTableCell, dataType: ArtifactTableDataType) =>
-      matchesSearchParts(query, [value, formatCell(value, dataType)]),
+    matchesRow: (query: string, row: TablePayload["rows"][number], columns: readonly TablePayload["columns"][number][]) =>
+      matchesSearchTerms(query, columns.flatMap((column) => [row[column.id], formatCell(row[column.id], column.dataType)])),
   }
 }

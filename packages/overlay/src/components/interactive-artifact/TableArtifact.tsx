@@ -33,8 +33,7 @@ export function TableArtifact(props: {
       no: t("artifact.table.no"),
     }),
   )
-  const columnTypes = createMemo(() => new Map(props.payload.columns.map((column) => [column.id, column.dataType])))
-  const search = createMemo(() => ({ query: filter(), presentation: presentation(), columnTypes: columnTypes() }))
+  const search = createMemo(() => ({ query: filter(), presentation: presentation(), columns: props.payload.columns }))
   const columns = createMemo<ColumnDef<TableRow>[]>(() => {
     const current = presentation()
     return props.payload.columns.map((column) => ({
@@ -63,13 +62,16 @@ export function TableArtifact(props: {
         return sorting()
       },
       get globalFilter() {
-        return search()
+        const criteria = search()
+        return criteria.query.trim() ? criteria : undefined
       },
     },
     onSortingChange: (updater) => setSorting((current) => (typeof updater === "function" ? updater(current) : updater)),
-    getColumnCanGlobalFilter: () => true,
-    globalFilterFn: (row, columnID, criteria: ReturnType<typeof search>) =>
-      criteria.presentation.matchesCell(criteria.query, row.getValue(columnID), criteria.columnTypes.get(columnID)!),
+    // Register the whole-row predicate once; every declared column contributes
+    // through matchesRow, including an empty or boolean first column.
+    getColumnCanGlobalFilter: (column) => column.id === props.payload.columns[0]?.id,
+    globalFilterFn: (row, _columnID, criteria: ReturnType<typeof search>) =>
+      criteria.presentation.matchesRow(criteria.query, row.original, criteria.columns),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),

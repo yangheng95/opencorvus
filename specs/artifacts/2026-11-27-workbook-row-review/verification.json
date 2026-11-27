@@ -1,0 +1,233 @@
+{
+  "status": "passed",
+  "change": "same-row multi-term search over all declared original/currently formatted cells through the existing text-search primitive and native TanStack row model",
+  "screenshots": {
+    "before": 3,
+    "accepted": 17,
+    "review": "all original JPEGs personally viewed after native desktop actions; no UI automation"
+  },
+  "checks": {
+    "focusedUnitTests": "17 tests / 24 positive assertions: artifact-table8/14 and text-search9/10",
+    "initialTypecheck": {
+      "originalHandle": 4030,
+      "joinedExit": 0
+    },
+    "initialBuild": {
+      "originalHandle": 43013,
+      "joinedExit": 0,
+      "seconds": 53.62,
+      "usedForCandidate": false
+    },
+    "finalTypecheckAndBuild": {
+      "originalHandle": 94747,
+      "joinedExit": 0,
+      "buildSeconds": 52.89
+    },
+    "i18n": "2 locales / 3367 keys",
+    "docs": "353 operations / 26 groups",
+    "architectureIndex": "20 current documents",
+    "cssChange": "none"
+  },
+  "realTask": {
+    "status": "passed",
+    "label": "run101",
+    "sessionID": "ses_hLpUeHEEgrzsdqbP9tv2",
+    "artifactID": "art_g0VcBNYru001lUt0X4Wi",
+    "toolParts": [
+      {
+        "tool": "read",
+        "id": "prt_g0VcBNQD600MpUhCOX4z",
+        "messageID": "msg_g0VcBNPAm00n4PhPrqEw",
+        "status": "completed"
+      },
+      {
+        "tool": "bash",
+        "id": "prt_g0VcBNR0H00JZnPJIH4O",
+        "messageID": "msg_g0VcBNQKv00KwDcNqcea",
+        "status": "completed"
+      },
+      {
+        "tool": "publish_interactive_artifact",
+        "id": "prt_g0VcBNWus00KIgOuOq3t",
+        "messageID": "msg_g0VcBNV8Q0062OXKtm7a",
+        "status": "completed"
+      }
+    ],
+    "sourceWorkbookBytes": 6793,
+    "sheetNames": [
+      "订单明细",
+      "区域汇总",
+      "统计说明"
+    ],
+    "summary": {
+      "count": 5,
+      "amount": "35.60",
+      "regions": {
+        "华东": {
+          "count": 3,
+          "amount": "28.25"
+        },
+        "华南": {
+          "count": 2,
+          "amount": "7.35"
+        }
+      },
+      "refunds": 1,
+      "zeros": 1
+    },
+    "rows": 5,
+    "columns": 8,
+    "allCapturedOfficeCellsEqualIndependentOpenpyxl": true,
+    "publishedRowsAndTypesEqualOriginalFiles": true,
+    "bashExit": 0,
+    "terminalMessageFinish": "stop"
+  },
+  "nativeInteractions": [
+    "A003 华东: same original A003 row",
+    "reordered mixed-case query with NBSP: same original A003 row",
+    "华南 免费样品 0: original A004 zero row",
+    "clear restores5 rows; amount ascending A003/A004/A005/A001/A002",
+    "A003 -2.05 after sorting:1/5; complete original download/copy",
+    "expanded query retained; 华南 false returns A004/A005",
+    "English Dark retains query/order, No 华南 returns both; empty search guidance fully visible",
+    "restored Chinese System retains raw boolean query; clear and original-order ascending restores A001-A005",
+    "actual Bash original command and full expanded three-sheet output / captured coordinates/types / independent totals",
+    "saved CSV source excerpt shows actual five rows"
+  ],
+  "clipboardAndDownload": {
+    "tab": "241805155",
+    "method": "silent reader initialization before first artifact Copy; no tool paste; first Copy/Copied readback412 bytes and actual Ctrl+V407 bytes after normal CRLF-to-LF; cleared unsent draft",
+    "nativeDownloadFilename": "销售核对｜原文件逐项复核.csv",
+    "downloadBytes": 412,
+    "copyBytes": 412,
+    "pasteBytes": 407,
+    "exactByteArchive": "native-csv-originals.zip; standalone CSV files are Git-normalized readable copies"
+  },
+  "runs": [
+    {
+      "label": "run100",
+      "pid": 1216,
+      "url": "http://127.0.0.1:60261/",
+      "originalExecHandle": 87511,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_hkIy0C8ikibpOvSK3ACW",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run101",
+      "pid": 34952,
+      "url": "http://127.0.0.1:49934/",
+      "originalExecHandle": 75267,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_hqlrdA2lIfL3ZbjMN1NG",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "protectedFiles": 23,
+  "protectedOldRows": 2350,
+  "currentProjectRows": {
+    "message": 408,
+    "part": 1215,
+    "tool_part_request": 360,
+    "tool_part_outcome": 360,
+    "interactive_artifact": 34
+  },
+  "closedOwnedTabs": [
+    "241805139",
+    "241805155"
+  ],
+  "observations": [
+    "one language control index shifted after theme selection; inspected fresh full AX then selected actual language control, no preference failure",
+    "a tool-output head screenshot chiefly shows actual command and workdir; subsequent native scrolling separately exposes Office cells and the real summary",
+    "local checker import corrected to verified overlay d3-dsv dependency then original checker reran successfully"
+  ],
+  "limits": [
+    "native coverage is the real five-row/eight-column table publication; CSV inspector shared caller audited but not newly opened in UI",
+    "empty-first-column / mixed types / punctuation / date and full precision covered by pure data contracts, not new real publications",
+    "multi-page and 10000-row/80-column performance were not newly measured",
+    "other themes, screen reader, mobile and arbitrary query syntax not exercised",
+    "this is a search capability evolution; whitespace now combines all literal terms rather than preserving an entire phrase substring",
+    "candidate replays the same actual business task; no duplicate execution or authored data replacement"
+  ]
+}

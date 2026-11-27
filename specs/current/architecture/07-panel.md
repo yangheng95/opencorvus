@@ -5857,12 +5857,18 @@ the same source.
 Native Table cells format actual booleans, numbers and dates with the current
 product locale. Boolean columns do not apply truthiness to mixed scalar source
 values: a string `"false"` remains that string in a boolean column. The shared
-pure presentation owns both display text and literal search across original and
-formatted values. Native number formatting preserves the representable value's
+pure presentation owns display text and same-row term search across original and
+formatted values. Queries split on whitespace; every literal, case-insensitive
+term must match a declared cell in that row, in any order. Undeclared keys and
+other rows do not contribute. Native number formatting preserves the representable value's
 significant digits instead of applying the locale formatter's default three
 fraction digits; grouping and separators still follow the product locale.
 Every declared column can participate, including boolean or
-initially empty columns. Query, current presentation and declared column types
+initially empty columns. TanStack registers the whole-row predicate through the
+first declared column, evaluating it once per row while it reads all declared
+cells. Its native filtered row model still owns the matching collection.
+Blank queries use its native unfiltered row model without evaluating cell text.
+Query, current presentation and declared columns
 derive one controlled filter input, so locale changes refresh matching rows as
 well as cells without replacing the mounted table's query or sorting state.
 TanStack retains the sole pagination state. When its native pre-pagination row
