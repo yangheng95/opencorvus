@@ -1,0 +1,167 @@
+[
+  {
+    "id": "prt_g0Vc85wCl00Qv55MZy2V",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc85ucj00PUH2CDBTF",
+    "type": "tool",
+    "callID": "call_BfrpkJkdrwx6mp4E56nqbt5M",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·中文图片说明",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae.json",
+        "validation_receipt_sha": "ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": "订单与净金额总览"
+          },
+          {
+            "slide": 2,
+            "title": "区域对比：金额与笔数",
+            "markdown": "区域对比：金额与笔数"
+          },
+          {
+            "slide": 3,
+            "title": "事实、缺口与后续行动",
+            "markdown": "事实、缺口与后续行动"
+          }
+        ]
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "validation receipt has no completed host-owned work_artifact_validate authority in this Session. received: url \"/attachment/prj_haW9BdBH559F4Yw143ch/ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae.json\" sha \"ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae\", expected: a receipt published by a completed work_artifact_validate call in the same Session.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_BfrpkJkdrwx6mp4E56nqbt5M",
+          "toolName": "work_artifact_deliver"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b253d85b190bb97016b08d148b12887d0912e311e95277224"
+        }
+      },
+      "time": {
+        "start": 1795739976791,
+        "end": 1795739982714
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0b253d85b190bb97016b08d148b12887d0912e311e95277224"
+      }
+    },
+    "orderKey": "v1:0001795739982567:0000000000000031:0000000000000000:part:prt_g0Vc85wCl00Qv55MZy2V"
+  },
+  {
+    "id": "prt_g0Vc85zL000ciY1kQNYV",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc85xpd00a6nrXEyPQ",
+    "type": "tool",
+    "callID": "call_n8XpFO5fUH24QfydyhwUcCSk",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·中文图片说明",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed.json",
+        "validation_receipt_sha": "c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": "订单与净金额总览"
+          },
+          {
+            "slide": 2,
+            "title": "区域对比：金额与笔数",
+            "markdown": "区域对比：金额与笔数"
+          },
+          {
+            "slide": 3,
+            "title": "事实、缺口与后续行动",
+            "markdown": "事实、缺口与后续行动"
+          }
+        ]
+      },
+      "output": "{\"artifactID\":\"art_g0Vc865j800zeOSTYz4n\",\"source\":{\"sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"mime\":\"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\"size\":16259,\"filename\":\"销售经理简报-精度修订.pptx\"},\"renders\":[{\"sha\":\"1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png\",\"mime\":\"image/png\",\"size\":95190,\"filename\":\"slide-1.png\"},{\"sha\":\"4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png\",\"mime\":\"image/png\",\"size\":60144,\"filename\":\"slide-2.png\"},{\"sha\":\"50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png\",\"mime\":\"image/png\",\"size\":152183,\"filename\":\"slide-3.png\"}],\"final_validation_receipt\":{\"sha\":\"98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1190,\"filename\":\"work-artifact-validation-receipt.json\"},\"final_validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.presentation@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"source_sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"resource_usage\":{\"input_bytes\":16259,\"runtime_output_bytes\":44721,\"render_bytes\":307517,\"wall_clock_ms\":11632},\"renders\":[{\"slide\":1,\"sha\":\"1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png\"},{\"slide\":2,\"sha\":\"4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png\"},{\"slide\":3,\"sha\":\"50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png\"}]},\"fidelity\":\"OfficeCLI v1.0.158 package validation and local browser rendering of its HTML; Microsoft PowerPoint pixel fidelity is not claimed.\"}",
+      "title": "销售经理简报·中文图片说明",
+      "metadata": {
+        "artifactID": "art_g0Vc865j800zeOSTYz4n",
+        "renderer": "presentation@1",
+        "sourceSha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+        "slideCount": 3,
+        "profile": "office.presentation@1",
+        "runtime": "OfficeCLI v1.0.158",
+        "validationReceiptSha": "98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795739988834,
+        "end": 1795740013405
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc865jE00AgfqdEcJY",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc85xpd00a6nrXEyPQ",
+          "type": "file",
+          "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "filename": "销售经理简报-精度修订.pptx",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx"
+        },
+        {
+          "id": "prt_g0Vc865jE01LOhNLASVb",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc85xpd00a6nrXEyPQ",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87.json"
+        },
+        {
+          "id": "prt_g0Vc865jE02IKwzcfFzL",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc85xpd00a6nrXEyPQ",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png"
+        },
+        {
+          "id": "prt_g0Vc865jE037grqsnFLe",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc85xpd00a6nrXEyPQ",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png"
+        },
+        {
+          "id": "prt_g0Vc865jE04JYemdjI1u",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc85xpd00a6nrXEyPQ",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0cc6632d4384e164016b08d154a7a887d0bd7c38db3f45e4ad"
+      }
+    },
+    "orderKey": "v1:0001795739994604:0000000000000031:0000000000000000:part:prt_g0Vc85zL000ciY1kQNYV"
+  }
+]

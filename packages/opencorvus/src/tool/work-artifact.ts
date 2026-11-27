@@ -306,7 +306,7 @@ export function createWorkArtifactTools(
             title: slide.title,
             markdown: slide.markdown,
             image: checked.renders[index],
-            imageAlt: `Rendered slide ${slide.slide}: ${slide.title}`,
+            imageAlt: slide.title,
           })),
         },
       })

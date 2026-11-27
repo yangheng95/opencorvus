@@ -3,6 +3,7 @@ import { createHash } from "node:crypto"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Identifier } from "../../src/id/id"
+import { findInteractiveArtifact } from "../../src/interactive-artifact/persist"
 import { Instance } from "../../src/project/instance"
 import { Session } from "../../src/session"
 import { Tool } from "../../src/tool/tool"
@@ -138,6 +139,16 @@ packagedTest("packaged Work Artifact runtime completes the production typed Tool
       await Session.updateMessage({ ...assistant, time: { ...assistant.time, completed: Date.now() }, finish: "tool-calls" })
       expect({ authored: source.filename, delivered: JSON.parse(delivered.output).source.filename }).toEqual({
         authored: "演示资格验证.pptx", delivered: "演示资格验证.pptx",
+      })
+      expect(
+        findInteractiveArtifact({
+          sessionID: session.id,
+          artifactID: JSON.parse(delivered.output).artifactID,
+          projectID: Instance.project.id,
+        })?.payload,
+      ).toMatchObject({
+        renderer: "presentation@1",
+        slides: [{ title: "Packaged qualification", imageAlt: "Packaged qualification" }],
       })
       expect({
         sourceSha: source.sha,

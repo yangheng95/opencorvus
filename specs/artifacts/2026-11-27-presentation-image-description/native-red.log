@@ -1,0 +1,55 @@
+$ bun script/run-tests.ts test/work-artifact/packaged-lifecycle.test.ts
+    Finished `release` profile [optimized] target(s) in 0.06s
+[1/1] START test/work-artifact/packaged-lifecycle.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+142 |       })
+143 |       expect(findInteractiveArtifact({
+144 |         sessionID: session.id,
+145 |         artifactID: JSON.parse(delivered.output).artifactID,
+146 |         projectID: Instance.project.id,
+147 |       })?.payload).toMatchObject({
+                         ^
+error: expect(received).toMatchObject(expected)
+
+  {
++   "aspectRatio": "16:9",
+    "renderer": "presentation@1",
++   "schemaVersion": "1",
+    "slides": [
+      {
+-       "imageAlt": "Packaged qualification",
++       "id": "slide-1",
++       "image": {
++         "filename": "slide-1.png",
++         "mime": "image/png",
++         "sha": "81c8f758be41504fe255d502c5dd85adce58145e9a6ae86d878beb2eab41dd10",
++         "size": 8692,
++         "url": "/attachment/prj_hLxtv4yhcZJPSOS4iDad/81c8f758be41504fe255d502c5dd85adce58145e9a6ae86d878beb2eab41dd10.png",
++       },
++       "imageAlt": "Rendered slide 1: Packaged qualification",
++       "markdown": "Real packaged runtime evidence.",
+        "title": "Packaged qualification",
+      },
+    ],
++   "title": "Packaged qualification",
+  }
+
+- Expected  - 1
++ Received  + 13
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts:147:20)
+(fail) packaged Work Artifact runtime completes the production typed Tool lifecycle [45724.30ms]
+
+ 0 pass
+ 1 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [47.80s]
+[1/1] DONE test/work-artifact/packaged-lifecycle.test.ts exit=1 duration=48.32s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\work-artifact\packaged-lifecycle.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-GZABoh
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

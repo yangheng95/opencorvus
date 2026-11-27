@@ -1,0 +1,46 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-854539575ae8f27f\published\opencorvus-process-supervisor.exe
+$ bun run test:unit test/artifact-export.test.ts
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-854539575ae8f27f\published\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/artifact-export.test.ts
+bun test v1.4.3 (c6da4a4d3)
+
+test\artifact-export.test.ts:
+(pass) Current workbook filename collections use the shared allocation [0.32ms]
+(pass) A workbook exceeding the CSV cell limit returns its explicit export error [0.62ms]
+(pass) Notebook references use the final distinct names for plot.png and plot.png [0.46ms]
+(pass) Notebook references use the final distinct names for plot.png and Plot.PNG [0.77ms]
+(pass) Notebook references use the final distinct names for p:lot.png and p?lot.png [0.29ms]
+(pass) Presentation references match both distinct companion downloads [0.21ms]
+(pass) Media references retain the first canonical download name for a repeated URL [0.08ms]
+(pass) Export collision suffixes preserve names already declared by the delivery [0.09ms]
+(pass) Spreadsheet exports retain every sheet under distinct sanitized filenames [0.42ms]
+(pass) Notebook media export preserves 图 #1 (& plan+.png and its plain label [0.16ms]
+(pass) Notebook media export preserves photo #1.png and its plain label [0.04ms]
+(pass) Notebook media export preserves literal%23.png and its plain label [0.06ms]
+(pass) Notebook media export preserves view(1).png and its plain label [0.26ms]
+(pass) Notebook media export preserves plain.png and its plain label [0.11ms]
+(pass) Presentation media export preserves 图 #1 (& plan+.png and its plain label [0.11ms]
+(pass) Presentation media export preserves photo #1.png and its plain label [0.03ms]
+(pass) Presentation media export preserves literal%23.png and its plain label [0.06ms]
+(pass) Presentation media export preserves view(1).png and its plain label [0.02ms]
+(pass) Presentation media export preserves plain.png and its plain label [0.01ms]
+(pass) documents and edited code export their actual text and useful filenames [0.10ms]
+(pass) CSV preserves multiline cells, quotes, numbers and literal formula-like text [0.20ms]
+(pass) attachment exports retain their canonical bytes locator and name [0.06ms]
+(pass) notebooks export a standard notebook with actual cells and outputs [0.09ms]
+(pass) MCP exports actual completed result text and data [0.12ms]
+(pass) terminal TXT exports the complete visible transcript for plain Unicode [0.07ms]
+(pass) terminal TXT exports the complete visible transcript for SGR colors [0.06ms]
+(pass) terminal TXT exports the complete visible transcript for BEL title [0.02ms]
+(pass) terminal TXT exports the complete visible transcript for ST title
+(pass) terminal TXT exports the complete visible transcript for ST hyperlink [0.01ms]
+(pass) terminal TXT exports the complete visible transcript for BEL hyperlink [0.05ms]
+(pass) terminal TXT exports the complete visible transcript for 8-bit CSI [0.02ms]
+(pass) terminal TXT exports the complete visible transcript for empty transcript
+
+ 32 pass
+ 0 fail
+ 36 expect() calls
+Ran 32 tests across 1 file. [258.00ms]
