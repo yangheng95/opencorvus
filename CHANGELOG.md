@@ -4,6 +4,64 @@
 
 ## 未发布
 
+## 0.1.56 - 2026-11-28
+
+### zh-CN
+
+#### 新增
+
+- 从交付文件浏览其来源快照，在同一阅读上下文中查看原始文件、代码和表格；单份交付预览显示准确的快照身份。
+- 工作簿可按当前工作表内容调整列宽。表格支持跨列多词检索，时间线事件支持键盘浏览；蜡烛图可查看逐条原始行情记录并区分缺失成交量。
+- 长流程图支持原始大小、适合窗口及键盘滚动，并可下载保留原生文字和当前主题背景的独立 SVG 矢量图。
+
+#### 调整
+
+- DOCX 段落文档使用统一的 A4 分页预览，标题与后续首段保持在同页。演示文稿预览按源文件的物理字号呈现，图表支持明确的原生字号控制；最终交付绑定实际审阅的渲染图。
+- 原始附件在明确激活下载时获取，保留真实文件名、图片和 PDF 身份；长对话下载名称在安全长度内保留可区分的标题片段。
+- 保留图表选区、作者配置、主题背景及布局变化后的阅读状态。表格、树和看板在正文与交付预览间保留查询、分支选择、页码和筛选；关闭项目交付预览后回到原键盘位置。
+
+#### 修复
+
+- Task 在原物理执行进程已确死后及时恢复原输入，并保留有效执行者及效果核对边界；初始化前的读取不会把尚未准入的输入当作已完成。保留真实模型流错误，按实际输入验证事件区分工具参数错误与执行失败。
+- 保存编辑草稿后可继续原来的文件操作，修复首次接续改名被后台磁盘检查抢先而提示忙碌的问题。重新进入项目、返回文件页、外部编辑或切换分支后，文件、Git 状态和搜索按当前项目重新核对；同名、空白及嵌套文件路径更易区分。
+- 定时运行历史、旁聊列表、归档、邮箱与全局搜索跟进其真实来源及重连后的变化；后台刷新失败时保留已读内容。多步任务列表保留空项目筛选，并优先展示参与搜索命中的子任务。
+- 保存的会话比较保留真实快照证据，不再将缺少依据的旧记录显示为已验证比较。Windows 同项目不同路径拼写的启动草稿合并到同一范围，保留不同输入内容。
+- 完善地图点几何、网络标签、时间线秒数、表格数值精度、终端末次搜索与退出码、笔记本输出通道及工具失败摘要；导出失败显示可操作的原因，筛选后的完整数据下载有明确说明。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 13。旧会话比较记录自动迁移到版本化格式，无法补证的历史比较标为未知；浏览器项目草稿自动升级并保留已有输入。升级后请刷新旧版标签页，旧版与新版混用编辑未单独验收。
+- Office 交付仍限于当前声明的新建演示、段落文档及字面单元格工作簿，不承诺 Microsoft Office 像素一致或所有原生编辑功能。流程图导出不嵌入字体；所有图形语法与外部软件导入未逐一验收。
+- macOS 安装包使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Browse a delivered file's source snapshot, keeping original files, code and tables in the same reading context. Individual delivery previews identify their exact snapshot.
+- Fit workbook columns to the current sheet's content. Search tables with terms spanning multiple columns, navigate timeline events by keyboard, and inspect individual candlestick records with missing volume distinguished from zero.
+- Read long diagrams at their original size or fit them to the window, use keyboard scrolling, and download standalone SVG files with native text and the current theme's painted background.
+
+#### Changed
+
+- Use one A4 pagination engine for DOCX paragraph previews and keep headings with their following paragraph. Presentation previews retain physical source font sizes, charts accept explicit native font controls, and final delivery binds the renders that were actually reviewed.
+- Fetch original attachments on explicit download activation, retaining actual filenames and image/PDF identities. Long conversation downloads retain distinguishing title segments within a safe filename budget.
+- Retain chart selections, authored configuration, theme backgrounds and reading state across layout changes. Tables, trees and dashboards retain queries, branch choices, pages and filters between conversation and delivery previews. Closing a project delivery preview restores its original keyboard position.
+
+#### Fixed
+
+- Recover original Task input promptly after its physical executor is proven dead, while protecting live executors and unresolved effects. Reads before full initialization retain input awaiting runtime admission. Preserve actual model stream errors and distinguish invalid tool input from execution failure using validation events.
+- Continue the original file action after saving an editor draft, fixing the first rename being rejected as busy when a background disk check started first. Recheck files, Git status and search under the current project after reopening, returning to a file, external edits or branch changes. Distinguish duplicate, whitespace-sensitive and nested paths.
+- Refresh scheduled run history, side chats, Archive, Mailbox and global search from their actual sources and after reconnection. Retain readable content when a background refresh fails. Mission lists retain empty-project filters and prioritize child tasks contributing to a search match.
+- Retain actual snapshot evidence in saved conversation comparisons instead of presenting unproven historical entries as verified. Merge equivalent Windows project launcher draft scopes while preserving distinct authored input.
+- Correct map point geometry, network labels, timeline seconds, table precision, terminal final search matches and exit status, notebook output channels and tool failure summaries. Export errors explain the actionable cause, and filtered views clearly identify complete-data downloads.
+
+#### Upgrade impact and known limitations
+
+- The database remains at version 13. Historical conversation comparisons migrate automatically to a versioned format; comparisons whose evidence cannot be established remain marked unknown. Browser project drafts upgrade while retaining existing input. Refresh old tabs after upgrading; mixed editing across old and new versions was not separately qualified.
+- Office delivery remains limited to the declared new presentations, paragraph documents and literal-cell workbooks. Microsoft Office pixel fidelity and every native editing feature are not guaranteed. Diagram exports do not embed fonts; all diagram syntax and external import applications were not individually qualified.
+- macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
+
 ## 0.1.55 - 2026-11-25
 
 ### zh-CN

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.56 发布证据](2026-11-28-release-0.1.56/README.md) · 原生、官网与随包日志
 - [真实脚本流程图交付证据](2026-11-28-diagram-delivery/README.md)
 - [真实工作簿浏览证据](2026-11-28-workbook-browser/README.md)
 - [销售看板筛选阅读状态证据](2026-11-28-dashboard-reading-state/README.md)

@@ -1,0 +1,293 @@
+{
+  "version": "0.1.56",
+  "verifiedAt": "2026-11-27T18:45:58.426714+00:00",
+  "preparationBase": "0b9b26f0d57978ea1d0f2fd2885c26a6a9316608",
+  "bun": "1.4.0",
+  "inputScope": "Shared worktree with aligned release metadata. Simultaneous PresentationArtifact and localization edits are owned by another task and excluded from this preparation commit; canonical clean-source native builds remain the frozen delivery qualification.",
+  "tests": [
+    {
+      "group": "backend",
+      "passed": 195,
+      "failed": 0,
+      "skipped": 0,
+      "selectedFiles": [
+        "task-root-process-owner",
+        "task-control-reconciliation",
+        "task-control-liveness",
+        "task-control-sweep-scope",
+        "task-control-cancellation-convergence",
+        "task-root-ingress-reducer",
+        "task-root-input-lease-boundary",
+        "process-liveness-owner",
+        "file-status-native",
+        "saved-session-snapshot-comparison",
+        "git-source-consumers",
+        "persistent-instance-publication",
+        "provider-stream-error",
+        "server/file-read-identity",
+        "server/file-save-conflict",
+        "server/work-ledger-event-fanout",
+        "session/processor-producer-boundary",
+        "work-artifact/filename",
+        "work-artifact/reviewed-renders",
+        "work-artifact/task-workspace-authority"
+      ],
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "packages/opencorvus",
+        "test",
+        "test/task-root-process-owner.test.ts",
+        "test/task-control-reconciliation.test.ts",
+        "test/task-control-liveness.test.ts",
+        "test/task-control-sweep-scope.test.ts",
+        "test/task-control-cancellation-convergence.test.ts",
+        "test/task-root-ingress-reducer.test.ts",
+        "test/task-root-input-lease-boundary.test.ts",
+        "test/process-liveness-owner.test.ts",
+        "test/file-status-native.test.ts",
+        "test/saved-session-snapshot-comparison.test.ts",
+        "test/git-source-consumers.test.ts",
+        "test/persistent-instance-publication.test.ts",
+        "test/provider-stream-error.test.ts",
+        "test/server/file-read-identity.test.ts",
+        "test/server/file-save-conflict.test.ts",
+        "test/server/work-ledger-event-fanout.test.ts",
+        "test/session/processor-producer-boundary.test.ts",
+        "test/work-artifact/filename.test.ts",
+        "test/work-artifact/reviewed-renders.test.ts",
+        "test/work-artifact/task-workspace-authority.test.ts"
+      ],
+      "seconds": 484.44
+    },
+    {
+      "group": "client",
+      "passed": 286,
+      "failed": 0,
+      "skipped": 0,
+      "selectedFiles": [
+        "artifact-candlestick",
+        "artifact-export",
+        "artifact-map",
+        "artifact-network",
+        "artifact-reading-state",
+        "artifact-table",
+        "artifact-timeline",
+        "artifact-tree",
+        "card-message-run",
+        "composer-draft",
+        "conversation-export",
+        "file-workbench-mutation",
+        "file-workbench-revision",
+        "log-export",
+        "recorded-tool-comparison",
+        "server-path",
+        "work-ledger-conversation-ordinals",
+        "work-ledger-refresh-scope",
+        "work-ledger-notification-stream"
+      ],
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "test:unit",
+        "test/artifact-candlestick.test.ts",
+        "test/artifact-export.test.ts",
+        "test/artifact-map.test.ts",
+        "test/artifact-network.test.ts",
+        "test/artifact-reading-state.test.ts",
+        "test/artifact-table.test.ts",
+        "test/artifact-timeline.test.ts",
+        "test/artifact-tree.test.ts",
+        "test/card-message-run.test.ts",
+        "test/composer-draft.test.ts",
+        "test/conversation-export.test.ts",
+        "test/file-workbench-mutation.test.ts",
+        "test/file-workbench-revision.test.ts",
+        "test/log-export.test.ts",
+        "test/recorded-tool-comparison.test.ts",
+        "test/server-path.test.ts",
+        "test/work-ledger-conversation-ordinals.test.ts",
+        "test/work-ledger-refresh-scope.test.ts",
+        "test/work-ledger-notification-stream.test.ts"
+      ],
+      "seconds": 31.41
+    },
+    {
+      "group": "root",
+      "passed": 144,
+      "failed": 0,
+      "skipped": 1,
+      "selectedFiles": [
+        "./script/sync-version.test.ts",
+        "./script/release-automation.test.ts",
+        "./script/github-actions-workflow-contract.test.ts",
+        "./packages/util/test/changelog.test.ts",
+        "./script/i18next-resource-contract.test.ts",
+        "./packages/transport-protocol/test/contract.test.ts",
+        "./packages/transport-protocol/test/server-base-url.test.ts",
+        "./script/ci-scope.test.ts",
+        "./script/install-ubuntu-packages.test.ts"
+      ],
+      "command": [
+        "bun",
+        "test",
+        "./script/sync-version.test.ts",
+        "./script/release-automation.test.ts",
+        "./script/github-actions-workflow-contract.test.ts",
+        "./packages/util/test/changelog.test.ts",
+        "./script/i18next-resource-contract.test.ts",
+        "./packages/transport-protocol/test/contract.test.ts",
+        "./packages/transport-protocol/test/server-base-url.test.ts",
+        "./script/ci-scope.test.ts",
+        "./script/install-ubuntu-packages.test.ts"
+      ],
+      "seconds": 13.81
+    }
+  ],
+  "passed": 625,
+  "skipped": 1,
+  "skipScope": "GitHub Linux sudo caller check is inapplicable on this Windows host; actual Linux jobs qualify the native caller.",
+  "checks": [
+    {
+      "label": "generate",
+      "command": [
+        "bun",
+        "./script/generate.ts"
+      ],
+      "exitCode": 0,
+      "seconds": 169.74
+    },
+    {
+      "label": "typecheck",
+      "command": [
+        "bun",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 76.5
+    },
+    {
+      "label": "version",
+      "command": [
+        "bun",
+        "run",
+        "version:check"
+      ],
+      "exitCode": 0,
+      "seconds": 0.17
+    },
+    {
+      "label": "i18n",
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "check:i18n"
+      ],
+      "exitCode": 0,
+      "seconds": 0.36
+    },
+    {
+      "label": "css",
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "check:css-tokens"
+      ],
+      "exitCode": 0,
+      "seconds": 2.63
+    },
+    {
+      "label": "docs",
+      "command": [
+        "bun",
+        "run",
+        "docs:check"
+      ],
+      "exitCode": 0,
+      "seconds": 2.96
+    },
+    {
+      "label": "architecture",
+      "command": [
+        "bun",
+        "run",
+        "check:architecture-index"
+      ],
+      "exitCode": 0,
+      "seconds": 0.13
+    },
+    {
+      "label": "lease-owners",
+      "command": [
+        "bun",
+        "run",
+        "check:control-lease-owners"
+      ],
+      "exitCode": 0,
+      "seconds": 0.44
+    },
+    {
+      "label": "overlay-build",
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "packages/overlay",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 80.55
+    },
+    {
+      "label": "web-check",
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "packages/web",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 164.5
+    },
+    {
+      "label": "web-build",
+      "command": [
+        "bun",
+        "run",
+        "--cwd",
+        "packages/web",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 65.83
+    }
+  ],
+  "frozenInstall": {
+    "installs": 1720,
+    "packages": 2004,
+    "changes": 0
+  },
+  "audit": {},
+  "staticScope": {
+    "locales": 2,
+    "keys": 3373,
+    "cssReferences": 9448,
+    "globalTokens": 269,
+    "stylesheets": 60,
+    "sourceFiles": 427,
+    "docsOperations": 353,
+    "docsGroups": 26,
+    "architectureDocuments": 20,
+    "databaseVersion": 13
+  },
+  "scopeLimits": "No real model call or UI automation. Service fixtures prove local contracts; real backend routes, Git, SQLite and physical-process ownership tests are distinguished from final native packaging and manual visual review."
+}
