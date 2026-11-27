@@ -5871,15 +5871,21 @@ Blank queries use its native unfiltered row model without evaluating cell text.
 Query, current presentation and declared columns
 derive one controlled filter input, so locale changes refresh matching rows as
 well as cells without replacing the mounted table's query or sorting state.
-TanStack retains the sole pagination state. When its native pre-pagination row
-model changes through data, filtering, sorting or locale-aware matching, one
-Solid dependency resets only the page index with resetPageIndex(true). Implicit
-initial-state resets are disabled: the Solid adapter's live store aliases that
-initial object, so it cannot supply an immutable first-page baseline. Page size
-remains 50 and ordinary page navigation does not change the pre-pagination model.
+Table query, sorting and page index belong to the existing bounded conversation
+presentation record, scoped by API authority and source. Required renderer keys
+use the real Session/artifact identity for publications and Task/canonical locator
+identity for CSV resources. Closing a preview or returning to the same work
+restores that reading intent; filenames and titles do not identify state.
+Immutable derived sorting and pagination inputs bridge the retained Solid store
+to TanStack's controlled state and native update functions. TanStack remains the
+sole row-model and pagination implementation. On mount the native page setter
+restores the remembered index within its actual page count; subsequent pre-pagination model changes through
+data, filtering, sorting or locale-aware matching start on page one. Page size
+remains 50 and ordinary page navigation does not change that model. These reading
+choices remain in memory, following the existing 50-conversation/200-entry bounds.
 When a Table query or sorting is active, its toolbar explains in the current
 product language that downloads include the full table in its original row order.
-This reads the existing local view state; native Table exports and original CSV
+This reads the retained view state; native Table exports and original CSV
 file exports retain their existing complete-data sources and bytes.
 Authored labels and exported payload values retain their original identities.
 

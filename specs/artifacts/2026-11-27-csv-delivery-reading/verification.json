@@ -1,0 +1,152 @@
+{
+  "status": "passed",
+  "change": "table query, sorting and page index in the existing bounded authority/source presentation owner; required real publication/canonical resource identities; native TanStack controlled models",
+  "checks": {
+    "focusedTests": "4 tests / 8 positive data-state assertions",
+    "initialTypecheck": {
+      "handle": 30560,
+      "joinedExitCode": 0
+    },
+    "initialBuild": {
+      "handle": 33227,
+      "joinedExitCode": 0,
+      "seconds": 51.55,
+      "usedForCandidate": false
+    },
+    "finalTypecheckAndBuild": {
+      "handle": 99802,
+      "joinedExitCode": 0,
+      "buildSeconds": 51.21
+    },
+    "docs": "353 operations / 26 groups",
+    "architecture": "20 current documents",
+    "cssAndLocaleCatalogChanges": "none"
+  },
+  "screenshots": {
+    "before": 7,
+    "accepted": 14,
+    "method": "native desktop interactions; original JPEGs personally reviewed; no UI automation",
+    "omittedPartialContextCaptures": [
+      "accepted-csv-reopened-query-sort.jpg",
+      "accepted-csv-task-return-original-preferences.jpg"
+    ]
+  },
+  "realResources": {
+    "task": "tsk_g00Vc6ygAw00kzz3NRpk",
+    "snapshot": "dc5c047a-98d9-5702-a51c-99ee41e49c60",
+    "csv": "区域汇总.csv",
+    "csvBytes": 59,
+    "csvRows": 2,
+    "nativeSession": "ses_hy64GcYIySY4OaXfKbNq",
+    "nativeArtifact": "art_g0Vc9rD9900G8mQhzR1c",
+    "nativeRows": 53,
+    "otherSession": "ses_hLpUeHEEgrzsdqbP9tv2"
+  },
+  "nativeInteractions": [
+    "CSV 华 query + amount ascending gives 华南2/7.35 before 华东3/28.25; close/reopen restores both",
+    "amount descending, open summary.json, return CSV restores 华 query and descending original rows",
+    "华南 7.35 selects the original one row while complete native Copy and download retain both original rows",
+    "53-row publication page2 returns original51/52/53 after visiting a second real Work",
+    "filter InlineToolPart.tsx from page2 gives original53 on1/1; clear restores53 rows",
+    "components query + numeric index descending + page2 survives Work switch: original3/2/1 on2/2",
+    "other real five-row publication independently retains A003 华东, original refund -2.05",
+    "Dark preserves query/descending/page2; changing locale to English rebuilds model and starts page1 by contract, native next gives3/2/1 on2/2",
+    "restore Chinese/System; navigate real Tasks board and return completed Task retains 华南 7.35 and descending",
+    "clear CSV query restores both original rows; real file information shows actual snapshot/textcsv/59bytes"
+  ],
+  "clipboardAndDownload": {
+    "tab": "241805166",
+    "method": "silent reader initialization before first product Copy; no tool paste; actual Ctrl+V into unsent draft then cleared",
+    "nativeDownloadFilename": "区域汇总 (3).csv",
+    "downloadBytes": 59,
+    "copyBytes": 59,
+    "nativePasteBytes": 56,
+    "nativeLineEndings": "textarea normalizes CRLF to LF",
+    "byteArchive": "native-csv-originals.zip; standalone CSVs are Git-normalized reading copies"
+  },
+  "protection": {
+    "projectFiles": 23,
+    "oldProjectRows": 2377,
+    "extraTaskRows": 23,
+    "completedPublicTasks": 2,
+    "timing": "project files/five-table rows before launch; extra Task rows/public objects after102 startup, before Task UI"
+  },
+  "runs": [
+    {
+      "label": "run102",
+      "pid": 35108,
+      "url": "http://127.0.0.1:56118/",
+      "preflight": {
+        "sessionID": "ses_hJNOyCbYxxbdEBQ64QKZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 40351,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run103",
+      "pid": 2316,
+      "url": "http://127.0.0.1:62558/",
+      "preflight": {
+        "sessionID": "ses_hILh2K6pEhLb1ZG8qQeO",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 66030,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "closedOwnedTabs": [
+    "241805161",
+    "241805166"
+  ],
+  "limits": [
+    "state remains in bounded memory, no cross-refresh/restart persistence",
+    "direct CSV Inspector and native publication both exercised; snapshot-browser selected-resource nested entrance audited but not newly opened",
+    "same-name/different-snapshot and authority isolation checked by pure data contracts; no new same-name publication or credential rotation",
+    "stale-page restoration uses actual native page count; a mutated immutable artifact or out-of-range memory was not injected through UI",
+    "no new business model execution; existing real completed Task and publications re-read end to end, four requests are paired preflight only",
+    "maximum10000-row/80-column performance, other themes, screen reader and mobile not newly tested"
+  ]
+}

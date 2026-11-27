@@ -212,7 +212,7 @@ function ArtifactFileInformation(props: { content: ConversationArtifactContent }
   )
 }
 
-function ArtifactContentView(props: { title: string; content: ConversationArtifactContent }) {
+function ArtifactContentView(props: { taskID: string; title: string; content: ConversationArtifactContent }) {
   const csvCompareCells = createMemo(() => csvCellComparator(localeTag()))
   const csvTable = createMemo(() =>
     props.content.mediaType === "text/csv" && props.content.text !== undefined
@@ -241,7 +241,15 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
       <Switch>
         <Match when={csvTable()}>
           {(payload) => (
-            <TableArtifact payload={payload()} exportFiles={originalTextExport} compareCells={csvCompareCells()} />
+            <TableArtifact
+              stateKey={JSON.stringify([
+                "artifact-table", "resource", props.taskID,
+                artifactReadLocatorKey(props.content.locator as CanonicalArtifactReadLocator),
+              ])}
+              payload={payload()}
+              exportFiles={originalTextExport}
+              compareCells={csvCompareCells()}
+            />
           )}
         </Match>
         <Match when={jsonTree()}>
@@ -459,7 +467,7 @@ function SnapshotArtifactView(props: {
           <ArtifactReadFailure error={resourceError()} retry={retryResource} />
         </Show>
         <Show when={readyResource()} keyed>
-          {(resolved) => <ArtifactContentView title={resolved.request.input.title} content={resolved.content} />}
+          {(resolved) => <ArtifactContentView taskID={resolved.request.input.taskID} title={resolved.request.input.title} content={resolved.content} />}
         </Show>
       </div>
     </ArtifactFrame>
@@ -502,7 +510,7 @@ function ArtifactInspectorContent(props: ArtifactInspectorProps) {
         {(loaded) => (
           <Show
             when={loaded.request.input.locator.source === "task_artifact_snapshot"}
-            fallback={<ArtifactContentView title={loaded.request.input.title} content={loaded.content} />}
+            fallback={<ArtifactContentView taskID={loaded.request.input.taskID} title={loaded.request.input.title} content={loaded.content} />}
           >
             <SnapshotArtifactView
               taskID={loaded.request.input.taskID}

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [CSV交付文件的回看与检索](records/2026-11/2026-11-27-csv-delivery-reading.md)
 - [工作簿逐项复核与表格检索](records/2026-11/2026-11-27-workbook-row-review.md)
 - [真实聚焦测试执行与结果回看](records/2026-11/2026-11-27-test-run-review.md)
 - [笔记本输出通道的阅读核对](records/2026-11/2026-11-27-notebook-output-channel.md)

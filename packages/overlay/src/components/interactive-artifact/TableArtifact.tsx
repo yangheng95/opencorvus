@@ -6,12 +6,14 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   type ColumnDef,
+  type PaginationState,
   type SortingState,
 } from "@tanstack/solid-table"
-import { For, Show, createEffect, createMemo, createSignal, on } from "solid-js"
+import { For, Show, createEffect, createMemo, on } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import type { ArtifactExport } from "../../services/artifact-export"
 import { createArtifactTablePresentation } from "../../services/artifact-table"
+import { conversationArtifactDisplayState, setConversationArtifactDisplayState } from "../../store/conversation-ui"
 import { localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SearchField } from "../ui/SearchField"
@@ -22,11 +24,17 @@ type TableRow = TablePayload["rows"][number]
 
 export function TableArtifact(props: {
   payload: TablePayload
+  stateKey: string
   exportFiles?: () => ArtifactExport[]
   compareCells?: (left: TableRow[string], right: TableRow[string]) => number
 }) {
-  const [sorting, setSorting] = createSignal<SortingState>([])
-  const [filter, setFilter] = createSignal("")
+  const display = () => conversationArtifactDisplayState(props.stateKey)
+  const filter = () => display()?.query ?? ""
+  const setFilter = (query: string) => setConversationArtifactDisplayState(props.stateKey, { query })
+  // Copy the retained store values into immutable library inputs. Reconcile can
+  // update a proxy in place, while TanStack memoizes by array/object identity.
+  const sorting = createMemo<SortingState>(() => (display()?.tableSorting ?? []).map(({ id, desc }) => ({ id, desc })))
+  const pagination = createMemo<PaginationState>(() => ({ pageIndex: display()?.tablePageIndex ?? 0, pageSize: 50 }))
   const presentation = createMemo(() =>
     createArtifactTablePresentation(localeTag(), {
       yes: t("artifact.table.yes"),
@@ -61,12 +69,20 @@ export function TableArtifact(props: {
       get sorting() {
         return sorting()
       },
+      get pagination() {
+        return pagination()
+      },
       get globalFilter() {
         const criteria = search()
         return criteria.query.trim() ? criteria : undefined
       },
     },
-    onSortingChange: (updater) => setSorting((current) => (typeof updater === "function" ? updater(current) : updater)),
+    onSortingChange: (updater) => setConversationArtifactDisplayState(props.stateKey, {
+      tableSorting: typeof updater === "function" ? updater(sorting()) : updater,
+    }),
+    onPaginationChange: (updater) => setConversationArtifactDisplayState(props.stateKey, {
+      tablePageIndex: (typeof updater === "function" ? updater(pagination()) : updater).pageIndex,
+    }),
     // Register the whole-row predicate once; every declared column contributes
     // through matchesRow, including an empty or boolean first column.
     getColumnCanGlobalFilter: (column) => column.id === props.payload.columns[0]?.id,
@@ -77,11 +93,12 @@ export function TableArtifact(props: {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     autoResetPageIndex: false,
-    initialState: { pagination: { pageSize: 50 } },
   })
-  // The Solid adapter's store shares initialState; reset to the native default
-  // index rather than replaying that mutable snapshot after view changes.
-  createEffect(on(() => table.getPrePaginationRowModel(), () => table.resetPageIndex(true)))
+  // Mount restores the retained page within the native model's page count. Changes
+  // to data, filtering, sorting or locale start the resulting view on page one.
+  createEffect(on(() => table.getPrePaginationRowModel(), (_model, previous) => {
+    table.setPageIndex(previous ? 0 : Math.min(pagination().pageIndex, Math.max(0, table.getPageCount() - 1)))
+  }))
 
   return (
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Table" exportFiles={props.exportFiles}>

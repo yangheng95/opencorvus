@@ -137,7 +137,10 @@ export function InteractiveArtifactPart(props: { part: unknown }) {
                 <DocumentArtifact payload={record().payload as DocumentPayload} />
               </Match>
               <Match when={record().payload.renderer === "table@1"}>
-                <TableArtifact payload={record().payload as TablePayload} />
+                <TableArtifact
+                  stateKey={JSON.stringify(["artifact-table", "interactive", record().sessionID, record().id])}
+                  payload={record().payload as TablePayload}
+                />
               </Match>
               <Match when={record().payload.renderer === "chart@1"}>
                 <ChartArtifact payload={record().payload as ChartPayload} />

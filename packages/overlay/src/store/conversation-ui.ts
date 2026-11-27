@@ -22,6 +22,8 @@ export type ConversationArtifactDisplayState = {
   openArtifactID?: string
   query?: string
   selectedResourceKey?: string
+  tableSorting?: { id: string; desc: boolean }[]
+  tablePageIndex?: number
 }
 
 type ConversationUiState = {
