@@ -17,6 +17,8 @@ export function ArtifactActions(props: {
   copyText?: () => string | Promise<string>
   copyLabel?: string
   disabled?: boolean
+  onActionStart: () => void
+  onActionError: (error: unknown) => void
 }) {
   type Action = {
     controller: AbortController
@@ -44,10 +46,10 @@ export function ArtifactActions(props: {
           "url" in file && "url" in original && file.url === original.url)
     })
   }
-  const reportActionError = (error: unknown) => reportError({
-    id: "artifact-action", title: t("common.error"),
-    message: error instanceof Error ? error.message : String(error),
-  })
+  const reportActionError = (error: unknown, id = "artifact-action") => {
+    reportError({ id, title: t("common.error"), message: error instanceof Error ? error.message : String(error) })
+    props.onActionError(error)
+  }
   const owns = (entry: Action) => operation() === entry && !entry.controller.signal.aborted && matchesCurrent(entry)
   const showsCopied = () => {
     const entry = copied()
@@ -79,6 +81,7 @@ export function ArtifactActions(props: {
   })
   async function run(action: (entry: Action) => Promise<void>, selected?: ArtifactExport) {
     if (operation() || props.disabled) return
+    props.onActionStart()
     let entry: Action | undefined
     try {
       const current = props.files().map(file => ({ ...file }))
@@ -133,16 +136,13 @@ export function ArtifactActions(props: {
       return
     }
     if (operation() || props.disabled) return
+    props.onActionStart()
     try {
       setFiles(props.files())
       downloads.openIt()
     } catch (error) {
       setFiles([])
-      reportError({
-        id: "artifact-export",
-        title: t("common.error"),
-        message: error instanceof Error ? error.message : String(error),
-      })
+      reportActionError(error, "artifact-export")
     }
   }
   return (

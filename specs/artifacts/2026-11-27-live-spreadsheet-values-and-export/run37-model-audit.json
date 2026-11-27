@@ -1,0 +1,22 @@
+[
+  {
+    "index": 1,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_hXdZk4Xv9Kq8Zj2wmSzH",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 2,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "chat",
+    "requestID": "msg_hXdZk4Xv9Kq8Zj2wmSzH",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  }
+]

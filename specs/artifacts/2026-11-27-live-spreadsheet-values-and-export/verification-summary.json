@@ -1,0 +1,116 @@
+{
+  "status": "passed",
+  "realProviderRequests": 14,
+  "allExactSolStreamingHTTP200SettledEOF": true,
+  "runs": [
+    {
+      "label": "run35",
+      "requests": 10,
+      "agents": {
+        "memory": 3,
+        "chat": 1,
+        "work": 6
+      },
+      "preflight": {
+        "sessionID": "ses_hR1dDzkV7UndACEM8o6b",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 90326,
+      "joinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795749793468,
+        "settledAt": 1795749793468,
+        "allReadersSettled": true
+      },
+      "retiredPort": 61354
+    },
+    {
+      "label": "run36",
+      "requests": 2,
+      "agents": {
+        "memory": 1,
+        "chat": 1
+      },
+      "preflight": {
+        "sessionID": "ses_hYJ46XcLuihSKNxyrRzW",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 11296,
+      "joinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795749966166,
+        "settledAt": 1795749966166,
+        "allReadersSettled": true
+      },
+      "retiredPort": 52578
+    },
+    {
+      "label": "run37",
+      "requests": 2,
+      "agents": {
+        "memory": 1,
+        "chat": 1
+      },
+      "preflight": {
+        "sessionID": "ses_hhsNcKTtLfASAnupNPbR",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 61724,
+      "joinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795750591331,
+        "settledAt": 1795750591331,
+        "allReadersSettled": true
+      },
+      "retiredPort": 59208
+    }
+  ],
+  "dataTests": 33,
+  "dataAssertions": 38,
+  "protectedFiles": 21,
+  "protectedRows": 1804,
+  "manualScreenshots": [
+    "after-details-zh.png",
+    "after-document-download.png",
+    "after-limit-en.png",
+    "after-limit-zh.png",
+    "after-recalculation-en.png",
+    "after-recalculation-zh.png",
+    "after-recovered-export-en.png",
+    "after-workspace-en.png",
+    "before-cleared-far-cell.png",
+    "before-detail-sheet.png",
+    "before-export-limit.png",
+    "before-far-cell.png",
+    "before-live-recalculation.png",
+    "before-summary-sheet.png",
+    "candidate-placeholder-failure.png"
+  ],
+  "nonAcceptingCandidate": "candidate-placeholder-failure.png",
+  "intermediateLanguageScreenshot": "after-limit-en.png",
+  "finalEnglishWorkspaceScreenshot": "after-workspace-en.png",
+  "csvArtifacts": [
+    "before-details.csv",
+    "before-summary.csv",
+    "before-edited-summary.csv",
+    "before-range-recovered-details.csv",
+    "after-range-recovered-details.csv",
+    "after-summary-en.csv",
+    "after-summary-zh.csv",
+    "source.csv"
+  ],
+  "limitations": [
+    "Copy failures and in-flight source retirement inspected in shared code; not manually forced this batch.",
+    "Default worksheet columns still clip long authored notes; column sizing is outside this fix.",
+    "Native Office workbooks and Excel recalculation are outside this interactive spreadsheet task."
+  ]
+}

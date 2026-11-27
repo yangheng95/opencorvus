@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "downloads": [
+    {
+      "browserFilename": "销售核对电子表格·大范围核对 - 订单明细.csv",
+      "evidenceFile": "before-range-recovered-details.csv",
+      "bytes": 228
+    },
+    {
+      "browserFilename": "销售核对电子表格·大范围核对 - 订单明细 (1).csv",
+      "evidenceFile": "after-range-recovered-details.csv",
+      "bytes": 228
+    },
+    {
+      "browserFilename": "销售核对电子表格·大范围核对 - 区域汇总.csv",
+      "evidenceFile": "after-summary-en.csv",
+      "bytes": 1049
+    },
+    {
+      "browserFilename": "销售核对电子表格·大范围核对 - 区域汇总 (1).csv",
+      "evidenceFile": "after-summary-zh.csv",
+      "bytes": 1049
+    },
+    {
+      "browserFilename": "销售核对说明-来源复验 (1).md",
+      "evidenceFile": "after-document-original.md",
+      "bytes": 4221
+    }
+  ],
+  "sourceRecords": 5,
+  "initialRegionalAmount": "28.25",
+  "initialTotal": "35.60",
+  "editedRegionalAmount": "30.25",
+  "editedTotal": "37.60",
+  "englishAndChineseCSVExact": true,
+  "recoveredDetailsExact": true,
+  "ordinaryDocumentBytes": 4221
+}

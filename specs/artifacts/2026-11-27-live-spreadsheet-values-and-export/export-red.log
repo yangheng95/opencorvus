@@ -1,0 +1,59 @@
+bun test v1.4.3 (c6da4a4d3)
+
+packages\overlay\test\artifact-export.test.ts:
+(pass) Current workbook filename collections use the shared allocation [0.24ms]
+38 |             { address: "ALL2100", value: "Last" },
+39 |           ],
+40 |         },
+41 |       ],
+42 |     }),
+43 |   ).toThrow(SpreadsheetExportLimitError)
+         ^
+error: expect(received).toThrow(expected)
+
+Expected constructor: SpreadsheetExportLimitError
+Received constructor: Error
+
+Received message: "CSV export exceeds 2,000,000 cells. Reduce the used sheet range before exporting."
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\artifact-export.test.ts:43:5)
+(fail) A workbook exceeding the CSV cell limit returns its explicit export error [0.77ms]
+(pass) A live worksheet range exposes its exact sheet identity and export capacity [0.10ms]
+(pass) Notebook references use the final distinct names for plot.png and plot.png [0.41ms]
+(pass) Notebook references use the final distinct names for plot.png and Plot.PNG [0.06ms]
+(pass) Notebook references use the final distinct names for p:lot.png and p?lot.png [0.05ms]
+(pass) Presentation references match both distinct companion downloads [0.14ms]
+(pass) Media references retain the first canonical download name for a repeated URL [0.08ms]
+(pass) Export collision suffixes preserve names already declared by the delivery [0.07ms]
+(pass) Spreadsheet exports retain every sheet under distinct sanitized filenames [0.22ms]
+(pass) Notebook media export preserves 图 #1 (& plan+.png and its plain label [0.18ms]
+(pass) Notebook media export preserves photo #1.png and its plain label [0.03ms]
+(pass) Notebook media export preserves literal%23.png and its plain label [0.03ms]
+(pass) Notebook media export preserves view(1).png and its plain label [0.04ms]
+(pass) Notebook media export preserves plain.png and its plain label [0.10ms]
+(pass) Presentation media export preserves 图 #1 (& plan+.png and its plain label [0.12ms]
+(pass) Presentation media export preserves photo #1.png and its plain label [0.04ms]
+(pass) Presentation media export preserves literal%23.png and its plain label [0.04ms]
+(pass) Presentation media export preserves view(1).png and its plain label [0.02ms]
+(pass) Presentation media export preserves plain.png and its plain label [0.01ms]
+(pass) documents and edited code export their actual text and useful filenames [0.07ms]
+(pass) CSV preserves multiline cells, quotes, numbers and literal formula-like text [0.14ms]
+(pass) attachment exports retain their canonical bytes locator and name [0.04ms]
+(pass) notebooks export a standard notebook with actual cells and outputs [0.09ms]
+(pass) MCP exports actual completed result text and data [0.19ms]
+(pass) terminal TXT exports the complete visible transcript for plain Unicode [0.07ms]
+(pass) terminal TXT exports the complete visible transcript for SGR colors [0.05ms]
+(pass) terminal TXT exports the complete visible transcript for BEL title [0.01ms]
+(pass) terminal TXT exports the complete visible transcript for ST title [0.01ms]
+(pass) terminal TXT exports the complete visible transcript for ST hyperlink
+(pass) terminal TXT exports the complete visible transcript for BEL hyperlink [0.03ms]
+(pass) terminal TXT exports the complete visible transcript for 8-bit CSI
+(pass) terminal TXT exports the complete visible transcript for empty transcript
+
+1 tests failed:
+(fail) A workbook exceeding the CSV cell limit returns its explicit export error [0.77ms]
+
+ 32 pass
+ 1 fail
+ 38 expect() calls
+Ran 33 tests across 1 file. [1.74s]

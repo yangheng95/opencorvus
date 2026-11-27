@@ -5807,6 +5807,13 @@ custom export accessor continues to read the currently mounted workbook. Product
 language changes update that same Univer instance through its public locale
 service and the already registered language packages; they do not recreate the
 workbook or replace edited cells with the published payload.
+The shared ArtifactActions owner forwards current copy/download failures to its
+Frame as well as the diagnostic log. Frame feedback stays inside the current
+artifact workspace, with complete diagnostics and current-language summaries;
+source, authority or selection changes retire it. Displaying feedback never
+evaluates an export supplier. Spreadsheet published and mounted exports share
+one size guard and structured SpreadsheetExportLimitError, preserving the
+worksheet identity and actual used cell count for localized recovery guidance.
 Editable spreadsheets show a current-language note before editing: changes live
 only in the current view, and edited sheets must be downloaded before leaving or
 collapsing it. CSV exports preserve cell values rather than workbook formulas or

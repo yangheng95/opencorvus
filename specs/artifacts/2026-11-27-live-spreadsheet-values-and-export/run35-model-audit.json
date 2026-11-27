@@ -1,0 +1,102 @@
+[
+  {
+    "index": 1,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_h70IgVTBwYRKYRVwOvt2",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 2,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "chat",
+    "requestID": "msg_h70IgVTBwYRKYRVwOvt2",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 3,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_a5dc8af2-a869-4fc9-8673-bad40b8b58ac",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "work",
+    "requestID": "msg_a5dc8af2-a869-4fc9-8673-bad40b8b58ac",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 5,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "work",
+    "requestID": "msg_a5dc8af2-a869-4fc9-8673-bad40b8b58ac",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 6,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "work",
+    "requestID": "msg_a5dc8af2-a869-4fc9-8673-bad40b8b58ac",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 7,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "work",
+    "requestID": "msg_a5dc8af2-a869-4fc9-8673-bad40b8b58ac",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 8,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_2e1a836a-a632-49f9-b548-a9f9439c532c",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 9,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "work",
+    "requestID": "msg_2e1a836a-a632-49f9-b548-a9f9439c532c",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 10,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "work",
+    "requestID": "msg_2e1a836a-a632-49f9-b548-a9f9439c532c",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  }
+]

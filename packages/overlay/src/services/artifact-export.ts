@@ -8,6 +8,24 @@ type ExportFilename = (url: string) => string
 type ExportText = string | ((filename: ExportFilename) => string)
 type ArtifactExportPlan = { filename: string; mime: string } & ({ text: ExportText } | { url: string })
 
+const SPREADSHEET_EXPORT_MAX_CELLS = 2_000_000
+
+export class SpreadsheetExportLimitError extends Error {
+  override readonly name = "SpreadsheetExportLimitError"
+  readonly maxCells = SPREADSHEET_EXPORT_MAX_CELLS
+  readonly cellCount: number
+
+  constructor(readonly sheetName: string, readonly rowCount: number, readonly columnCount: number) {
+    super(`CSV export exceeds ${SPREADSHEET_EXPORT_MAX_CELLS.toLocaleString("en-US")} cells. Reduce the used sheet range before exporting.`)
+    this.cellCount = rowCount * columnCount
+  }
+}
+
+export function assertSpreadsheetExportSize(sheetName: string, rowCount: number, columnCount: number): void {
+  if (rowCount * columnCount > SPREADSHEET_EXPORT_MAX_CELLS)
+    throw new SpreadsheetExportLimitError(sheetName, rowCount, columnCount)
+}
+
 export function artifactFilename(name: string): string {
   return (name.split(/[\\/]/).at(-1)?.trim() || "artifact").replace(/[<>:"|?*\u0000-\u001f]/g, "_")
 }
@@ -257,8 +275,7 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExportPla
             })
             const lastRow = Math.max(-1, ...cells.map((cell) => cell.row))
             const lastColumn = Math.max(-1, ...cells.map((cell) => cell.column))
-            if ((lastRow + 1) * (lastColumn + 1) > 2_000_000)
-              throw new Error("CSV export exceeds 2,000,000 cells. Reduce the used sheet range before exporting.")
+            assertSpreadsheetExportSize(sheet.name, lastRow + 1, lastColumn + 1)
             const rows: unknown[][] = Array.from({ length: lastRow + 1 }, () => Array(lastColumn + 1).fill(""))
             for (const cell of cells) rows[cell.row][cell.column] = cell.value
             return artifactCSV(rows)

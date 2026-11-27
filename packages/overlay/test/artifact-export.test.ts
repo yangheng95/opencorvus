@@ -4,6 +4,8 @@ import {
   artifactExports,
   artifactExportFilenames,
   artifactFilename,
+  assertSpreadsheetExportSize,
+  SpreadsheetExportLimitError,
 } from "../src/services/artifact-export"
 import type { InteractiveArtifactPayload } from "../src/services/interactive-artifact"
 
@@ -38,7 +40,20 @@ test("A workbook exceeding the CSV cell limit returns its explicit export error"
         },
       ],
     }),
-  ).toThrow(new Error("CSV export exceeds 2,000,000 cells. Reduce the used sheet range before exporting."))
+  ).toThrow(SpreadsheetExportLimitError)
+})
+
+test("A live worksheet range exposes its exact sheet identity and export capacity", () => {
+  expect.assertions(2)
+  try {
+    assertSpreadsheetExportSize("订单明细", 100000, 26)
+  } catch (error) {
+    expect(error).toBeInstanceOf(SpreadsheetExportLimitError)
+    expect(error).toMatchObject({
+      name: "SpreadsheetExportLimitError", sheetName: "订单明细", rowCount: 100000, columnCount: 26,
+      cellCount: 2600000, maxCells: 2000000,
+    })
+  }
 })
 
 const mediaSource = {

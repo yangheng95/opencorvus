@@ -73,3 +73,6 @@ specs/artifacts/2026-11-01-contract-domain-repair/typed-wrong-programmes/*/sourc
 
 # Native trial inputs and original self-test evidence retain their exact serialization.
 specs/artifacts/2026-11-01-self-verification-coverage/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve real workbook CSV download bytes for the live export recovery review.
+specs/artifacts/2026-11-27-live-spreadsheet-values-and-export/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -1,11 +1,15 @@
-import { createSignal, onCleanup, onMount, Show, type JSX } from "solid-js"
+import { createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js"
 import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { artifactCopiesFilename, artifactExports, type ArtifactExport } from "../../services/artifact-export"
+import { artifactCopiesFilename, artifactExports, SpreadsheetExportLimitError, type ArtifactExport } from "../../services/artifact-export"
+import { captureApiAuthority } from "../../services/api"
+import { boardStore } from "../../store/board"
 import { reportError } from "../../services/diagnostics"
-import { t } from "../../utils/i18n"
+import { getLocale, t } from "../../utils/i18n"
+import { formatErrorDetails } from "../../utils/error-details"
 import { closeArtifactWorkspace, openArtifactWorkspace } from "../../utils/top-layer"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
+import { Feedback } from "../ui/Feedback"
 import { ArtifactActions } from "./ArtifactActions"
 
 export function ArtifactFrame(props: {
@@ -24,6 +28,12 @@ export function ArtifactFrame(props: {
 }) {
   let frame: HTMLElement | undefined
   const [immersive, setImmersive] = createSignal(false)
+  const [actionError, setActionError] = createSignal<{ cause: unknown }>()
+  // Read ownership metadata only; an export supplier may be expensive or fail.
+  createEffect(on(
+    () => [props.payload, props.downloads, props.title, captureApiAuthority().revision, boardStore.selectEpoch],
+    () => setActionError(undefined),
+  ))
   const expandable = () => props.expandable !== false
   const files = () => (props.exportFiles ? props.exportFiles() : artifactExports(props.payload!, props.downloads))
   const copiesFilename = () =>
@@ -91,6 +101,8 @@ export function ArtifactFrame(props: {
             <Show when={props.payload || props.exportFiles}>
               <ArtifactActions
                 files={files}
+                onActionStart={() => setActionError(undefined)}
+                onActionError={(cause) => setActionError({ cause })}
                 copyText={props.copyText}
                 copyLabel={
                   props.payload?.renderer === "mcp-app@1"
@@ -119,6 +131,20 @@ export function ArtifactFrame(props: {
               </Button>
             )}
           </div>
+          <Show when={actionError()}>
+            {(failure) => (
+              <Feedback class="msg-artifact__action-feedback" tone="error" title={t("artifact.actions.failed")}
+                details={formatErrorDetails(failure().cause)}>
+                {failure().cause instanceof SpreadsheetExportLimitError
+                  ? t("artifact.spreadsheet.export_too_large", {
+                      name: (failure().cause as SpreadsheetExportLimitError).sheetName,
+                      cells: new Intl.NumberFormat(getLocale()).format((failure().cause as SpreadsheetExportLimitError).cellCount),
+                      limit: new Intl.NumberFormat(getLocale()).format((failure().cause as SpreadsheetExportLimitError).maxCells),
+                    })
+                  : t("artifact.actions.failure_details")}
+              </Feedback>
+            )}
+          </Show>
         </header>
         <div class="msg-artifact__body">{props.children}</div>
       </section>

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [可编辑销售表格的公式与导出复验](records/2026-11/2026-11-27-live-spreadsheet-values-and-export.md)
 - [新工作销售核对的来源事实复验](records/2026-11/2026-11-27-sales-source-fact-review.md)
 - [文件状态统一原生 Git 差异统计](records/2026-11/2026-11-27-file-status-native-diff.md)
 - [演示文稿图表原生字号参数](records/2026-11/2026-11-27-presentation-chart-font-controls.md)

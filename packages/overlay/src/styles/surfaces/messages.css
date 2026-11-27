@@ -1696,6 +1696,18 @@ button.msg-source-chip .msg-source-chip__filename {
   background: var(--surface);
 }
 
+.msg-artifact__header:has(> .msg-artifact__action-feedback) {
+  flex-wrap: wrap;
+}
+
+.msg-artifact__action-feedback.oc-feedback {
+  flex: 1 0 100%;
+  min-width: 0;
+  max-height: min(28vh, calc(240px * var(--ui-scale)));
+  overflow: auto;
+  white-space: normal;
+}
+
 .msg-artifact__immersive-action.oc-button {
   --oc-button-height: calc(32px * var(--ui-scale));
 

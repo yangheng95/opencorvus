@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [可编辑销售表格复验证据](2026-11-27-live-spreadsheet-values-and-export/README.md)
 - [销售核对来源事实复验证据](2026-11-27-sales-source-fact-review/README.md)
 - [文件状态原生统计证据](2026-11-27-file-status-native-diff/README.md)
 - [演示文稿图表原生字号真实证据](2026-11-27-presentation-chart-font-controls/README.md)
