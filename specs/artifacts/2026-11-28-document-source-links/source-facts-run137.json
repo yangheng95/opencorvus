@@ -1,0 +1,79 @@
+{
+  "status": "passed",
+  "label": "run137",
+  "sessionID": "ses_hTMwxkZMrB0ZDqbIFwJk",
+  "messageID": "msg_b32441c9-5a2f-4843-a25d-c7cdc2249799",
+  "artifactID": "art_g0VcDMiW700AB2zE9yRi",
+  "completedTools": 5,
+  "originalDocumentPreserved": true,
+  "metadataAuthenticationChallenge": 401,
+  "sources": [
+    {
+      "reference": {
+        "sha": "46c730e9a01f53dbd1c1bebc4fb31a3f2bef18946e1825cc633c8726d3f7d605",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/46c730e9a01f53dbd1c1bebc4fb31a3f2bef18946e1825cc633c8726d3f7d605.directory.json",
+        "mime": "application/vnd.opencorvus.directory-reference+json",
+        "size": 165,
+        "filename": "review"
+      },
+      "httpStatus": 200,
+      "metadataStatus": 200,
+      "bytes": 165,
+      "downloads": [
+        "review.directory (3).json",
+        "review.directory (4).json",
+        "review.directory (5).json"
+      ],
+      "sameOriginalBytes": true
+    },
+    {
+      "reference": {
+        "sha": "f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py",
+        "mime": "application/octet-stream",
+        "size": 10107,
+        "filename": "test_sales_summary.py"
+      },
+      "httpStatus": 200,
+      "metadataStatus": 200,
+      "bytes": 10107,
+      "downloads": [
+        "test_sales_summary (3).py"
+      ],
+      "sameOriginalBytes": true
+    },
+    {
+      "reference": {
+        "sha": "4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png",
+        "mime": "image/png",
+        "size": 60144,
+        "filename": "slide-2.png"
+      },
+      "httpStatus": 200,
+      "metadataStatus": 200,
+      "bytes": 60144,
+      "downloads": [
+        "slide-2 (3).png"
+      ],
+      "sameOriginalBytes": true
+    },
+    {
+      "reference": {
+        "sha": "90c6f177d3019df3e9ccba955d148267a7614dfec170b7407faa6cf30da97fd7",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/90c6f177d3019df3e9ccba955d148267a7614dfec170b7407faa6cf30da97fd7.pdf",
+        "mime": "application/pdf",
+        "size": 147137,
+        "filename": "销售经理审阅稿-分页修订-preview.pdf"
+      },
+      "httpStatus": 200,
+      "metadataStatus": 200,
+      "bytes": 147137,
+      "downloads": [
+        "销售经理审阅稿-分页修订-preview (1).pdf"
+      ],
+      "sameOriginalBytes": true
+    }
+  ],
+  "scope": "actual public metadata, tool outcomes, publication payload and native-triggered downloaded original bytes; no UI assertions"
+}

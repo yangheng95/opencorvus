@@ -289,6 +289,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/attachment` | Upload a conversation attachment 错误: `AttachmentMediaTypeConflictError`. | `attachment.create` |
 | POST | `/attachment/directory-reference` | Reference a local directory 请求体: `path`; 错误: `AttachmentMediaTypeConflictError`. | `attachment.createDirectoryReference` |
 | GET | `/attachment/{projectID}/{name}` | Fetch a task attachment 错误: `AttachmentImageRenditionError`, `UnknownError`. | `attachment.get` |
+| GET | `/attachment/{projectID}/{name}/reference` | Read a verified attachment reference | `attachment.reference` |
 
 ### Panel
 

@@ -1,0 +1,108 @@
+{
+  "label": "run134",
+  "requests": 9,
+  "state": "exited",
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817745789
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817744843
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "error",
+        "at": 1795818709117,
+        "error": {
+          "origin": "read",
+          "type": "TypeError",
+          "code": "ECONNRESET"
+        }
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817814152
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817818451
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817822363
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817825848
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817857414
+      }
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": {
+        "kind": "eof",
+        "at": 1795817864414
+      }
+    }
+  ],
+  "providerDrain": {
+    "startedAt": 1795818200771,
+    "settledAt": 1795818709161,
+    "allReadersSettled": true
+  },
+  "credentialCleanup": "passed"
+}

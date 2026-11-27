@@ -503,10 +503,17 @@ while Escape returns through the existing menu lifecycle. Localized failure
 feedback sits with the control, keeps the original diagnostic in a bounded,
 scrollable disclosure, and retires with a new attempt or selection/API authority.
 
-Server-relative canonical attachment links in Markdown open the existing raw resource in a new
-tab, preserving the conversation. At activation, the shared resource URL resolver
-uses the current server connection; native external URL opening retains its
-existing capability admission. Sources continues to use the read-only workbench.
+Server-relative canonical attachment links in Markdown open the shared attachment
+preview Dialog, also used by composer attachments. It reads the verified canonical
+reference through the current authorized API connection, then reuses the existing
+strict text reader or FilePart media/download presentation. The reference endpoint
+projects AttachmentStore publication metadata; transport Content-Type and URL
+suffixes do not determine the original media. Canonical links preserve the
+conversation and never send its credentials to an external browser. Selection or
+API authority changes retire the preview and its pending metadata read. Original
+downloads retain exact bytes and filenames; directory manifests share the existing
+`.directory.json` filename projection with directory cards. Ordinary external links
+retain their existing capability admission. Sources continues to use the read-only workbench.
 The file workbench prioritizes the exact filename in its compact heading and
 text editor's accessible name; a long parent directory cannot consume the space
 before the filename. Explicit displayName values remain authored presentation

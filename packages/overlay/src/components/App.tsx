@@ -10,6 +10,7 @@ import { ConversationAgentRail } from "./ConversationAgentRail"
 import { GoalDialogHost } from "./GoalDialogHost"
 import { Icon } from "./ui/Icon"
 import { ImagePreviewHost } from "./ImagePreview"
+import { AttachmentPreviewHost } from "./AttachmentPreview"
 import { InteractionDialogHost } from "./InteractionDialogHost"
 import { SidebarVersionLabel } from "./SidebarVersionLabel"
 import { SidebarUpdateButton } from "./SidebarUpdateButton"
@@ -1035,6 +1036,7 @@ export function App(props: AppProps) {
       <div id="imagePreviewHost">
         <ImagePreviewHost />
       </div>
+      <AttachmentPreviewHost />
       <div id="solidLogViewer">{props.logViewer}</div>
     </>
   )

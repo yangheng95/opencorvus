@@ -1,0 +1,60 @@
+{
+  "status": "retired",
+  "services": [
+    {
+      "label": "run133",
+      "pid": 24600,
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "label": "run134",
+      "pid": 36676,
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "label": "run135",
+      "pid": 21184,
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "label": "run136",
+      "pid": 26568,
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "label": "run137",
+      "pid": 28180,
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "label": "preview133",
+      "pid": 36924,
+      "state": "exited",
+      "exitCode": 0
+    },
+    {
+      "label": "preview134",
+      "pid": 20900,
+      "state": "exited",
+      "exitCode": 0
+    }
+  ],
+  "providerPairRetired": true,
+  "localTestIdentityRetired": true,
+  "browserPreferences": "zh-CN/system restored through actual UI",
+  "finalSavedUsernameAndPassword": "empty after actual UI save/reload",
+  "closedOwnedTabs": [
+    "241805399",
+    "241805403",
+    "241805395"
+  ],
+  "unclosedOwnedTab": {
+    "id": "241805392",
+    "reason": "Debugger unattached with ID/URL/claim; associated API and preview exited; temporary identity cleared; user windows preserved"
+  }
+}

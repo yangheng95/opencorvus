@@ -1,20 +1,6 @@
 import { apiJson, captureApiAuthority, type ApiAuthority } from "./api"
 import { directoryScopedPath } from "./task-path"
-import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
-
-export interface StoredAttachmentReference {
-  sha: string
-  url: string
-  mime: string
-  size: number
-  filename: string
-}
-
-export interface StoredDirectoryReference extends StoredAttachmentReference {
-  kind: "folder"
-  path: string
-  mime: typeof DIRECTORY_REFERENCE_MIME
-}
+import type { StoredAttachmentReference, StoredDirectoryReference } from "./attachment-reference"
 
 export interface CapturedComposerFile {
   bytes: Uint8Array

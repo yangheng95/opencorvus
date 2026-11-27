@@ -1146,7 +1146,7 @@ export const PROJECT_DIRECTORY_BYPASS_PREFIXES = [
 const GLOBAL_MIXED_ROUTER_ROUTES = [
   /^GET \/session\/global$/,
   /^PATCH \/work-ledger\/project\/[^/]+\/pin$/,
-  /^GET \/attachment\/[^/]+\/[^/]+$/,
+  /^GET \/attachment\/[^/]+\/[^/]+(?:\/reference)?$/,
 ] as const
 
 export const REQUEST_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const

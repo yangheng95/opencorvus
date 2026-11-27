@@ -24783,6 +24783,83 @@
         ]
       }
     },
+    "/attachment/{projectID}/{name}/reference": {
+      "get": {
+        "description": "Return the canonical original's published media, filename and byte identity for authorized previews.",
+        "operationId": "attachment.reference",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "projectID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "filename": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "mime": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "sha": {
+                      "maxLength": 64,
+                      "minLength": 64,
+                      "type": "string"
+                    },
+                    "size": {
+                      "maximum": 9007199254740991,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "url": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "sha",
+                    "url",
+                    "mime",
+                    "size",
+                    "filename"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Verified original attachment reference"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "summary": "Read a verified attachment reference",
+        "x-codeSamples": [
+          {
+            "lang": "js",
+            "source": "import { createOpenCorvusClient } from \"@opencorvus-ai/sdk\"\n\nconst client = createOpenCorvusClient()\nawait client.attachment.reference({\n  ...\n})"
+          }
+        ]
+      }
+    },
     "/auth/{providerID}": {
       "delete": {
         "description": "Remove authentication credentials",

@@ -13,6 +13,8 @@ import type {
   AttachmentCreateResponses,
   AttachmentGetErrors,
   AttachmentGetResponses,
+  AttachmentReferenceErrors,
+  AttachmentReferenceResponses,
   Auth as Auth5,
   AuthRemoveErrors,
   AuthRemoveResponses,
@@ -945,6 +947,36 @@ export class Attachment extends HeyApiClient {
     )
     return (options?.client ?? this.client).get<AttachmentGetResponses, AttachmentGetErrors, ThrowOnError>({
       url: "/attachment/{projectID}/{name}",
+      ...options,
+      ...params,
+    })
+  }
+
+  /**
+   * Read a verified attachment reference
+   *
+   * Return the canonical original's published media, filename and byte identity for authorized previews.
+   */
+  public reference<ThrowOnError extends boolean = false>(
+    parameters: {
+      projectID: string
+      name: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "path", key: "projectID" },
+            { in: "path", key: "name" },
+          ],
+        },
+      ],
+    )
+    return (options?.client ?? this.client).get<AttachmentReferenceResponses, AttachmentReferenceErrors, ThrowOnError>({
+      url: "/attachment/{projectID}/{name}/reference",
       ...options,
       ...params,
     })

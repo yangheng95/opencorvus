@@ -19,6 +19,7 @@ import { attachmentImagePreviewUrl, isStoredAttachmentUrl } from "../utils/attac
 import { Disclosure } from "./ui/Disclosure"
 import { createResourceTextRead, ResourceTextDownload, ResourceTextPreview } from "./ResourceTextPreview"
 import { DownloadLink, OriginalFileDownload } from "./OriginalFileDownload"
+import { attachmentDownloadFilename } from "../services/attachment-reference"
 import { formatErrorDetails } from "../utils/error-details"
 import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
@@ -270,7 +271,7 @@ function FolderReference(props: { url: string; name: string; label: string; stor
           <Show when={props.stored && isStoredAttachmentUrl(props.url)}>
             <OriginalFileDownload
               url={props.url}
-              name={`${props.name}.directory.json`}
+              name={attachmentDownloadFilename({ mime: DIRECTORY_REFERENCE_MIME, filename: props.name })}
               displayLabel={props.label}
               actionLabel={{
                 text: t("file.download_folder_reference"),

@@ -188,6 +188,34 @@ export const AttachmentRoutes = lazy(() =>
       },
     )
     .get(
+      "/:projectID/:name/reference",
+      describeRoute({
+        summary: "Read a verified attachment reference",
+        description: "Return the canonical original's published media, filename and byte identity for authorized previews.",
+        operationId: "attachment.reference",
+        responses: {
+          200: {
+            description: "Verified original attachment reference",
+            content: { "application/json": { schema: resolver(AttachmentReference) } },
+          },
+          404: { description: "Not found" },
+        },
+      }),
+      async (c) => {
+        const projectID = c.req.param("projectID")
+        const name = c.req.param("name")
+        if (!projectID || !name || name.includes("/") || name.includes("\\")) return c.text("Not found", 404)
+        const abs = AttachmentStore.resolveAbsolute(projectID, name)
+        if (!abs) return c.text("Not found", 404)
+        const info = await statFileOrMissing(abs)
+        if (!info || !info.isFile()) return c.text("Not found", 404)
+        const snapshot = await AttachmentStore.readVerifiedReference({
+          projectID, url: `/attachment/${projectID}/${name}`,
+        })
+        return c.json(AttachmentReference.parse({ ...snapshot.reference, filename: snapshot.reference.filename ?? name }))
+      },
+    )
+    .get(
       "/:projectID/:name",
       describeRoute({
         summary: "Fetch a task attachment",

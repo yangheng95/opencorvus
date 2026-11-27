@@ -1,85 +1,26 @@
-import { isDecodableText } from "@opencorvus-ai/util/text-mime"
-import { Show, createEffect, createSignal } from "solid-js"
-import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
-import type { StoredAttachmentReference } from "../services/attachment-upload"
-import { boardStore } from "../store/board"
+import type { StoredAttachmentReference } from "../services/attachment-reference"
+import { openAttachmentPreview } from "../services/attachment-preview"
 import { t } from "../utils/i18n"
-import { FilePart } from "./FilePart"
-import { createResourceTextRead, ResourceTextDownload, ResourceTextPreview } from "./ResourceTextPreview"
 import { Button } from "./ui/Button"
-import { Dialog } from "./ui/Dialog"
 
 export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentReference; displayLabel: string }) {
-  let trigger: HTMLButtonElement | undefined
-  const [open, setOpen] = createSignal(false)
-  const [context, setContext] = createSignal<{ authority: ApiAuthority; selection: number }>()
-  const current = () => {
-    const entry = context()
-    return !!entry && isApiAuthorityCurrent(entry.authority) && boardStore.selectEpoch === entry.selection
-  }
-  createEffect(() => {
-    if (context() && !current()) setOpen(false)
-  })
-  const text = () => isDecodableText(props.attachment.mime, props.attachment.filename)
-  const textRead = createResourceTextRead(() => open() && current() && text()
-    ? { url: props.attachment.url, mime: props.attachment.mime, authority: context()?.authority }
-    : undefined)
-
   return (
-    <>
-      <Button
-        ref={trigger}
-        class="composer-attachment-file-trigger"
-        type="button"
-        variant="ghost"
-        size="sm"
-        tone="neutral"
-        data-ui="composer-attachment-preview"
-        title={t("chat.attachment.preview", { name: props.displayLabel })}
-        aria-label={t("chat.attachment.preview", { name: props.displayLabel })}
-        onClick={() => {
-          setContext({ authority: captureApiAuthority(), selection: boardStore.selectEpoch })
-          setOpen(true)
-        }}
-      >
-        <span class="chat-attachment-icon">{props.attachment.filename.split(".").pop()?.toUpperCase() || "FILE"}</span>
-        <span class="chat-attachment-name">{props.displayLabel}</span>
-      </Button>
-      <Dialog
-        open={open()}
-        wide
-        class="composer-attachment-dialog"
-        formClass="composer-attachment-dialog__frame"
-        title={props.displayLabel}
-        returnFocusTarget={() => (current() ? (trigger ?? null) : null)}
-        onClose={() => setOpen(false)}
-        footer={
-          <>
-            <Show when={text()}>
-              <ResourceTextDownload
-                read={textRead}
-                filename={props.attachment.filename}
-                label={props.displayLabel}
-              />
-            </Show>
-            <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => setOpen(false)}>
-              {t("common.close")}
-            </Button>
-          </>
-        }
-      >
-        <div class="composer-attachment-dialog__body">
-          <Show when={open()}>
-            <Show when={text()} fallback={<FilePart part={{ type: "file", ...props.attachment }} />}>
-              <ResourceTextPreview
-                read={textRead}
-                filename={props.attachment.filename}
-                label={props.displayLabel}
-              />
-            </Show>
-          </Show>
-        </div>
-      </Dialog>
-    </>
+    <Button
+      class="composer-attachment-file-trigger"
+      type="button"
+      variant="ghost"
+      size="sm"
+      tone="neutral"
+      data-ui="composer-attachment-preview"
+      title={t("chat.attachment.preview", { name: props.displayLabel })}
+      aria-label={t("chat.attachment.preview", { name: props.displayLabel })}
+      onClick={(event) => openAttachmentPreview({
+        url: props.attachment.url, reference: props.attachment,
+        label: props.displayLabel, trigger: event.currentTarget,
+      })}
+    >
+      <span class="chat-attachment-icon">{props.attachment.filename.split(".").pop()?.toUpperCase() || "FILE"}</span>
+      <span class="chat-attachment-name">{props.displayLabel}</span>
+    </Button>
   )
 }

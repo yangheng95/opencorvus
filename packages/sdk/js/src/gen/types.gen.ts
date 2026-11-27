@@ -7229,6 +7229,38 @@ export type AttachmentGetResponses = {
   200: unknown
 }
 
+export type AttachmentReferenceData = {
+  body?: never
+  path: {
+    projectID: string
+    name: string
+  }
+  query?: never
+  url: "/attachment/{projectID}/{name}/reference"
+}
+
+export type AttachmentReferenceErrors = {
+  /**
+   * Not found
+   */
+  404: unknown
+}
+
+export type AttachmentReferenceResponses = {
+  /**
+   * Verified original attachment reference
+   */
+  200: {
+    filename: string
+    mime: string
+    sha: string
+    size: number
+    url: string
+  }
+}
+
+export type AttachmentReferenceResponse = AttachmentReferenceResponses[keyof AttachmentReferenceResponses]
+
 export type AuthRemoveData = {
   body?: never
   path: {

@@ -1,0 +1,52 @@
+{
+  "sessionID": "ses_hTMwxkZMrB0ZDqbIFwJk",
+  "messageID": "msg_b32441c9-5a2f-4843-a25d-c7cdc2249799",
+  "finish": "stop",
+  "error": null,
+  "tools": [
+    {
+      "id": "prt_g0VcDMWxu00LLz2vGzJl",
+      "messageID": "msg_g0VcDMVuB002K5qfcOj4",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcDMY4S00fPDh7fPIU",
+      "messageID": "msg_g0VcDMXKl00gHD4vW9oT",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcDMZ4w00YLpreeF38",
+      "messageID": "msg_g0VcDMYPt00bKOhKr1Gy",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcDMZxU003YzbpWvVy",
+      "messageID": "msg_g0VcDMZQm00fXQiO1It3",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcDMbR90014rXfgkxz",
+      "messageID": "msg_g0VcDMaLM00GJsKwXqIb",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "art_g0VcDBybC006d6Ilxdlb",
+      "title": "销售交接｜review 来源核对说明",
+      "renderer": "document@1",
+      "source": null
+    },
+    {
+      "id": "art_g0VcDMiW700AB2zE9yRi",
+      "title": "复核原件索引",
+      "renderer": "document@1",
+      "source": null
+    }
+  ]
+}

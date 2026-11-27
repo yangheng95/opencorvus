@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "unauthenticatedChallenge": {
+    "status": 401,
+    "scheme": "Basic"
+  },
+  "authorizedStatus": 200,
+  "sourceBytes": 165,
+  "sameCanonicalOriginal": true,
+  "scope": "actual authentication and original-byte contracts; no UI assertions"
+}
