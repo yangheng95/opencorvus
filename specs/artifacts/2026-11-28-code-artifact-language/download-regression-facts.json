@@ -1,0 +1,49 @@
+{
+  "status": "passed",
+  "sourceBytes": 7650,
+  "downloads": [
+    {
+      "filename": "sales-summary.txt",
+      "phase": "before",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "sales_summary (6).py",
+      "phase": "before",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "sales-summary",
+      "phase": "candidate",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "sales_summary (7).py",
+      "phase": "candidate",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "区域汇总 (6).csv",
+      "phase": "shared-download-regression",
+      "bytes": 59,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "区域对比（原图） (2).png",
+      "phase": "shared-download-regression",
+      "bytes": 60144,
+      "equalsOriginal": true
+    }
+  ],
+  "nativeCopiesAndPasteEqualOriginal": true,
+  "csvRows": 2,
+  "pngDimensions": [
+    1280,
+    720
+  ],
+  "scope": "actual saved files from native page actions; raw byte and format contracts, no UI assertions or source digests"
+}

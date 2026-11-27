@@ -8,7 +8,9 @@ import {
 } from "./api"
 
 export function downloadBlob(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob)
+  // This boundary saves raw files; preview MIME metadata must not add a suffix
+  // to a declared extensionless filename in the browser's download resolver.
+  const url = URL.createObjectURL(blob.slice(0, blob.size, "application/octet-stream"))
   const anchor = document.createElement("a")
   anchor.href = url
   anchor.download = artifactFilename(filename)

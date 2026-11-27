@@ -1,0 +1,82 @@
+{
+  "status": "passed",
+  "members": [
+    {
+      "name": "source/sales_summary.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/sales.csv",
+      "bytes": 181,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/区域汇总.csv",
+      "bytes": 59,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/区域对比（原图）.png",
+      "bytes": 60144,
+      "equalsOriginal": true
+    },
+    {
+      "name": "before/sales-summary.txt",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "before/sales_summary.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "after/sales-summary",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "after/sales_summary.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/python.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/plaintext.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "native-paste/source.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "regression/区域汇总.csv",
+      "bytes": 59,
+      "equalsOriginal": true
+    },
+    {
+      "name": "regression/区域对比（原图）.png",
+      "bytes": 60144,
+      "equalsOriginal": true
+    },
+    {
+      "name": "public/original-editable-code.json",
+      "bytes": 8464,
+      "equalsOriginal": true
+    },
+    {
+      "name": "public/two-code-artifacts.json",
+      "bytes": 16995,
+      "equalsOriginal": true
+    }
+  ],
+  "nativeJpegsCopiedUnchanged": 13,
+  "method": "direct bytes against actual source/public/clipboard/native paste/download files; staged members must be checked again"
+}

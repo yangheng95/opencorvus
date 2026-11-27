@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [代码交付的语言与原文件名](records/2026-11/2026-11-28-code-artifact-language.md)
 - [销售汇总代码交付的定位与临时阅读](records/2026-11/2026-11-28-code-artifact-reading.md)
 - [销售交接演示的逐页讲者备注](records/2026-11/2026-11-28-presentation-notes.md)
 - [0.1.56 发布](records/2026-11/2026-11-28-release-0.1.56.md) · 增量日志与公开交付

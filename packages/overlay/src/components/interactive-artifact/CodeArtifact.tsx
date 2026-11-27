@@ -9,8 +9,8 @@ import { CODE_EXTENSIONS } from "../../services/artifact-export"
 type CodePayload = Extract<InteractiveArtifactPayload, { renderer: "code@1" }>
 export type ArtifactCodeLanguage = CodePayload["language"]
 
-export function artifactCodeFilename(language: ArtifactCodeLanguage, filename?: string): string {
-  return filename ?? `artifact.${CODE_EXTENSIONS[language]}`
+export function artifactCodeFilename(language: ArtifactCodeLanguage): string {
+  return `artifact.${CODE_EXTENSIONS[language]}`
 }
 
 export function CodeArtifact(props: { payload: CodePayload }) {
@@ -53,7 +53,7 @@ export function CodeArtifact(props: { payload: CodePayload }) {
         class="msg-artifact-code"
         data-read-only={!props.payload.editable ? "true" : undefined}
         value={source()}
-        path={artifactCodeFilename(props.payload.language, props.payload.filename)}
+        path={artifactCodeFilename(props.payload.language)}
         ariaLabel={props.payload.title}
         readOnly={!props.payload.editable}
         onValueChange={setSource}

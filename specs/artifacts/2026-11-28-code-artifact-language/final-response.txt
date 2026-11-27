@@ -1,0 +1,18 @@
+已完整读取 `sales_summary.py`（167 行）和 `sales.csv`（表头及 5 条记录），并发布两份页面内只读副本，均包含全部源码、注释、原行序及末尾换行，`editable=false`：
+
+- **销售命令脚本｜部署交接**：文件名 `sales-summary`，无扩展名；`language=python`，用于 Python 语法高亮阅读。
+- **销售脚本原样文本｜交接备份**：文件名 `sales_summary.py`；`language=plaintext`，用于纯文本逐字审阅。
+
+两份源码内容相同，文件名和语言标记不改变脚本行为。
+
+**原脚本用途**：读取 UTF-8 CSV，以 Decimal 汇总全部及各区域的订单数和净金额，生成 JSON 和 Markdown 报告，可选导出区域 CSV。退款、零金额记录均计入订单数；负金额抵减净金额。
+
+**实际运行必需参数**（见 `sales_summary.py:130`）：位置参数 `input`、`--output`、`--report`；`--regions-csv` 可选。例如：
+
+```sh
+python sales_summary.py sales.csv --output summary.json --report 销售报告.md
+```
+
+以上仅展示命令，未执行。输入、JSON 输出和报告必须使用不同路径，可选区域 CSV 也必须独立。CSV 未声明币种或期间；原脚本报告模板虽写有“元”，不能据此确认输入币种。
+
+本次未执行脚本或测试，未创建或修改实际文件、缓存或历史，未创建 Task/Mission、委派或安装依赖。

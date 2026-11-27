@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "label": "run123",
+  "sessionID": "ses_hgyNpNzRH0btEHytXzAP",
+  "artifacts": [
+    {
+      "id": "art_g0VcCjwcZ003dSX5v6lj",
+      "language": "python",
+      "filename": "sales-summary",
+      "sourceBytes": 7650,
+      "completeOriginal": true
+    },
+    {
+      "id": "art_g0VcCk8i800rZv4I564S",
+      "language": "plaintext",
+      "filename": "sales_summary.py",
+      "sourceBytes": 7650,
+      "completeOriginal": true
+    }
+  ],
+  "completeReads": [
+    {
+      "filename": "sales_summary.py",
+      "completeLines": 167
+    },
+    {
+      "filename": "sales.csv",
+      "completeLines": 6
+    }
+  ],
+  "toolParts": 4,
+  "final": "stop"
+}

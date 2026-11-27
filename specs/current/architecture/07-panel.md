@@ -1494,6 +1494,10 @@ Code frames. Actions become available with that handle and retire with its
 cleanup; no separate query or navigation state is introduced. Local editable
 copies continue exporting their current source without changing the original
 publication or project file.
+Code, Notebook and Diff artifacts resolve editor grammar from the declared
+language through the shared code-extension mapping. An authored Code filename
+remains the displayed and exported file identity; it cannot override that grammar,
+including extensionless Python and explicitly plain-text content named with .py.
 An absolute Source target displays a localized read-only badge in the file
 toolbar's save position. This status derives from the same target that owns
 the editor's read-only mode; editable project-file targets retain their save action.
@@ -3760,6 +3764,12 @@ name; different resources with case-insensitive or sanitized-name collisions
 receive numeric suffixes before the final extension. Suffixes preserve other
 explicitly declared names, and generated references use that same allocation.
 This is a download projection; original attachment metadata remains intact.
+The shared browser Blob-save boundary creates a byte-identical
+application/octet-stream transfer view before creating its object URL. Named raw
+files therefore use their declared filename without a preview MIME suggesting
+an extra extension. Original Blob types, resource metadata, preview and copy
+readers retain their actual media types; the browser still owns filesystem
+sanitizing, collisions and security checks.
 For native Office delivery cards, `InteractiveArtifactRecord.downloads` is a
 read projection of the exact producing display Part's completed Tool outcome.
 The shared tool presentation registry maps all four `work_artifact_*` operations

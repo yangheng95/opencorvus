@@ -1,0 +1,163 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "label": "run123",
+      "originalExecHandle": 46644,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hS4qlyqdeEkyHg6khHb7",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795808966995,
+        "settledAt": 1795808966995,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 8,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run124",
+      "originalExecHandle": 94836,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hg9aFFu3a4T56ymsGU8h",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795810045168,
+        "settledAt": 1795810045168,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 2,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "modelRequestLimit": null,
+  "checks": {
+    "typecheck": {
+      "originalExecHandle": 74071,
+      "joinedExitCode": 0
+    },
+    "build": {
+      "originalExecHandle": 60900,
+      "joinedExitCode": 0,
+      "viteSeconds": 71,
+      "rendererPublicSurface": "passed"
+    },
+    "fileDownloadAuthorityTests": {
+      "passed": 8,
+      "failed": 0,
+      "expectCalls": 14,
+      "scope": "pure Blob and transport contracts; no DOM"
+    },
+    "locales": 2,
+    "localeKeys": 3375,
+    "cssReferences": 9448,
+    "cssGlobals": 269,
+    "cssStyleFiles": 60,
+    "cssSources": 427
+  },
+  "desktop": {
+    "ownedTabsClosed": [
+      "332",
+      "336",
+      "339",
+      "343",
+      "347",
+      "351"
+    ],
+    "localeRestored": "zh-CN",
+    "themeRestored": "system",
+    "nativeJpegCount": 13,
+    "before": 2,
+    "intermediate": 1,
+    "final": 10,
+    "personallyReviewed": true,
+    "uiAutomatedTests": 0
+  },
+  "scope": "actual Python/plaintext code publications, existing editable Python and original readonly Task code, actual CSV/PNG download regression; no source execution, all-language or cross-platform claim"
+}
