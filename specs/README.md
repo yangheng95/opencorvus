@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [销售脚本源码与真实标准流的笔记本交付](records/2026-11/2026-11-27-notebook-run-record.md)
 - [订单与区域关系图的真实阅读](records/2026-11/2026-11-27-order-network-review.md)
 - [从真实源文件清单阅读目录树](records/2026-11/2026-11-27-tree-source-review.md)
 - [从真实对话查找来源并返回阅读上下文](records/2026-11/2026-11-27-conversation-source-search.md)

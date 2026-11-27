@@ -1,0 +1,18 @@
+{
+  "partID": "prt_g0VcAT1eD00T7NmOyuiH",
+  "messageID": "msg_g0VcASzZm00GZ4nmmFl5",
+  "toolExit": 0,
+  "source": "import json\nimport sys\nfrom pathlib import Path\n\nimport sales_summary\n\nsummary = sales_summary.summarize(Path(\"sales.csv\"))\norder_count = summary[\"order_count\"]\nsys.stderr.write(\"诊断：已统计 {} 笔真实订单。\".format(order_count) + chr(10))\nsys.stdout.write(json.dumps(summary, ensure_ascii=False, indent=2) + chr(10))\n",
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-X",
+    "utf8",
+    "-c",
+    "import json\nimport sys\nfrom pathlib import Path\n\nimport sales_summary\n\nsummary = sales_summary.summarize(Path(\"sales.csv\"))\norder_count = summary[\"order_count\"]\nsys.stderr.write(\"诊断：已统计 {} 笔真实订单。\".format(order_count) + chr(10))\nsys.stdout.write(json.dumps(summary, ensure_ascii=False, indent=2) + chr(10))\n"
+  ],
+  "workingDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+  "stdout": "{\n  \"order_count\": 5,\n  \"total_amount\": \"35.60\",\n  \"by_region\": {\n    \"华东\": {\n      \"order_count\": 3,\n      \"total_amount\": \"28.25\"\n    },\n    \"华南\": {\n      \"order_count\": 2,\n      \"total_amount\": \"7.35\"\n    }\n  }\n}\n",
+  "stderr": "诊断：已统计 5 笔真实订单。\n",
+  "exitCode": 0
+}

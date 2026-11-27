@@ -3733,6 +3733,11 @@ editor's export supplier during render. Workbook cell materialization and CSV
 limits belong to actual copy/download actions; current workbook filenames use
 the same collection allocator as payload exports. Frames carry original
 downloads through both metadata and data projections in their declared order.
+Notebook code outputs explicitly named `stdout` or `stderr` export as Jupyter
+stream outputs with their original name and text. Unnamed text remains a
+`display_data` output with `text/plain`; Markdown and media retain their rich
+display projections. Cell order, source, IDs and execution counts preserve the
+authored notebook record; exporting does not execute a kernel.
 Notebook media links and Presentation image references preserve plain-text
 labels through CommonMark escaping. Their companion filenames use one URI
 component encoding inside angle-bracket destinations, including literal `%`,

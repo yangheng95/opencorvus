@@ -198,18 +198,22 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExportPla
                         metadata: { language: cell.language },
                         source: cell.source,
                         execution_count: cell.executionCount ?? null,
-                        outputs: cell.outputs.map((output) => ({
-                          output_type: "display_data",
-                          metadata: {},
-                          data:
-                            output.kind === "text"
-                              ? { "text/plain": output.text }
-                              : output.kind === "markdown"
-                                ? { "text/markdown": output.markdown }
-                                : {
-                                    "text/markdown": markdownMediaReference(output.alt, filename(output.source.url)),
-                                  },
-                        })),
+                        outputs: cell.outputs.map((output) =>
+                          output.kind === "text" && output.name
+                            ? { output_type: "stream", name: output.name, text: output.text }
+                            : {
+                                output_type: "display_data",
+                                metadata: {},
+                                data:
+                                  output.kind === "text"
+                                    ? { "text/plain": output.text }
+                                    : output.kind === "markdown"
+                                      ? { "text/markdown": output.markdown }
+                                      : {
+                                          "text/markdown": markdownMediaReference(output.alt, filename(output.source.url)),
+                                        },
+                              },
+                        ),
                       },
                 ),
               },

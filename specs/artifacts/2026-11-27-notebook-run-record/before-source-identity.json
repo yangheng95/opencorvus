@@ -1,0 +1,11 @@
+{
+  "publisherSourceEqualsPersisted": true,
+  "sourceReadPart": "prt_g0VcASw4n00SSxFjySOE",
+  "readLines": [
+    "152:                     raise SalesDataError(\"区域 CSV 不得覆盖 JSON 输出或报告\")"
+  ],
+  "submittedLine": [
+    "                    raise SalesDataError(\"区域 CSV 不得覆盖 JSON 输出和报告\")"
+  ],
+  "publisherPart": "prt_g0VcAT4gd00FLSNftAGM"
+}

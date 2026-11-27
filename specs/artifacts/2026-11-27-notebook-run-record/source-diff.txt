@@ -1,0 +1,11 @@
+--- actual-source
++++ published-source
+@@ -149,7 +149,7 @@
+         if args.regions_csv is not None and args.regions_csv.exists():
+             for target in (args.output, args.report):
+                 if target.exists() and args.regions_csv.samefile(target):
+-                    raise SalesDataError("区域 CSV 不得覆盖 JSON 输出或报告")
++                    raise SalesDataError("区域 CSV 不得覆盖 JSON 输出和报告")
+         summary = summarize(args.input)
+         args.output.write_text(
+             json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

@@ -1,0 +1,50 @@
+{
+  "sessionID": "ses_hMZ89MN31Y4FG6vbkves",
+  "finish": "stop",
+  "error": null,
+  "artifactID": "art_g0VcAV7fY008zDSfNSrl",
+  "tools": [
+    {
+      "id": "prt_g0VcASvL4004uP1FyNzZ",
+      "messageID": "msg_g0VcASuFw007bEcER23w",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcASw4n00SSxFjySOE",
+      "messageID": "msg_g0VcASvTD00uHs7Zk3LS",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcASxpo00j3IGhVcua",
+      "messageID": "msg_g0VcASwCD00grkwMHtO1",
+      "tool": "bash",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcAT1eD00T7NmOyuiH",
+      "messageID": "msg_g0VcASzZm00GZ4nmmFl5",
+      "tool": "bash",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcAT4gd00FLSNftAGM",
+      "messageID": "msg_g0VcAT36O00E3Y5UCceh",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcAUmkt00EXC942PyL",
+      "messageID": "msg_g0VcAUlSG00pvaqE3RjB",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcAUnZo00s9avzkwwb",
+      "messageID": "msg_g0VcAUmuN00AOgz47iyQ",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ]
+}

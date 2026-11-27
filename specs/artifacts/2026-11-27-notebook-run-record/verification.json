@@ -1,0 +1,205 @@
+{
+  "status": "passed",
+  "requests": 15,
+  "runs": [
+    {
+      "label": "run78",
+      "requests": 13,
+      "preflight": {
+        "sessionID": "ses_hjJX8dzns1Vft6VVcajN",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795776016582,
+        "settledAt": 1795776016582,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "processExitCode": 0,
+      "originalHandle": 90474,
+      "originalHandleJoinedExitCode": null,
+      "joinEvidence": "last output lost to compaction; handle retired, independent process/runtime exit0 observed"
+    },
+    {
+      "label": "run79",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_huAj0uSL5iaE6uMzheqq",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795776618801,
+        "settledAt": 1795776618801,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "processExitCode": 0,
+      "originalHandle": 67249,
+      "originalHandleJoinedExitCode": 0,
+      "joinEvidence": "observed original handle exit0"
+    }
+  ],
+  "nativeScreenshots": 13,
+  "acceptedScreenshots": [
+    "after-notebook-expanded-source.png",
+    "after-notebook-source-native-match.png",
+    "after-notebook-source-call.png",
+    "after-notebook-run-streams.png",
+    "after-notebook-run-count.png",
+    "after-notebook-english-dark.png",
+    "after-notebook-english-dark-streams.png",
+    "after-notebook-english-readonly.png"
+  ],
+  "intermediateQueryScreenshots": [
+    "before-notebook-source-search.png",
+    "after-notebook-source-match.png",
+    "after-notebook-source-match-confirmed.png"
+  ],
+  "checks": {
+    "realTask": "read source/input; actual Python -B import/summarize with separately captured source/stdout/stderr/exit; natural visible source-correction followup and retained original tool history",
+    "sourceCorrection": "original read had 或; first publisher submitted 和; corrected second publication equals complete original7650-byte167-line source",
+    "firstBash": "actual syntax failure exit1 before function execution, retained; corrected actual command exit0",
+    "jupyterBefore": "actual14762-byte download equals original production codec; two explicit stream names lost as display_data",
+    "jupyterAfter": "actual14674-byte Light/Dark native downloads and Copy bytes equal production export; all5cells/source/IDs/counts/actual224-byte stdout40-byte stderr exact",
+    "positiveUnits": {
+      "passed": 34,
+      "assertions": 39,
+      "files": 1,
+      "evidence": "observed declared test:unit output; raw log not synthesized"
+    },
+    "nativeSourceSearch": "native keyboard input/Return found definition118; nativeNext found call159; full archive countempty vs executioncount1",
+    "nativeStreams": "full real JSON plus red diagnostic and exact summary viewed in Light and Dark",
+    "localization": "English controls/read-only explanation/actual code-cell position names; authored Chinese source/outputs preserved",
+    "protectedFiles": 23,
+    "protectedOldRows": 2196,
+    "sqliteIntegrity": "ok",
+    "typecheck": "passed; original51403 observedexit0",
+    "build": "57.30s; original82391 observedexit0; renderer public surface passed",
+    "docs": "353 operations /26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Jupyter named-stream format contract checked against actual publication and captures; full nbformat package/schema validation not claimed; official Raw schema URL was blocked and not bypassed.",
+    "Query-entry/intermediate frames do not prove search matches. Locator fill did not advance CodeMirror search; actual native keyboard/Return and Next did, with real highlights reviewed. No editor change justified.",
+    "Before real-streams screenshot showed execution and JSON only; actual stderr visual acceptance comes from after-notebook-run-streams and English-dark-streams.",
+    "Only actual Work desktop task; Task/Mission/member export callers audited as shared codec, no delegated agents or new task launched.",
+    "run78 original final tool output was lost to compaction; process/runtime/audit/copy retirement independently verified. run79 original handle67249 joinedexit0.",
+    "No kernel execution in browser, new provider protocol, stored data migration, UI automation, release or tag."
+  ]
+}

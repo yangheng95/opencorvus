@@ -359,6 +359,41 @@ test("notebooks export a standard notebook with actual cells and outputs", () =>
   })
 })
 
+test("notebook exports preserve declared standard streams and rich display outputs", () => {
+  const [file] = artifactExports({
+    ...base,
+    renderer: "notebook@1",
+    cells: [
+      {
+        kind: "code",
+        language: "python",
+        source: "run_summary()",
+        executionCount: 2,
+        outputs: [
+          { kind: "text", name: "stdout", text: "结果\n" },
+          { kind: "text", name: "stderr", text: "诊断\n" },
+          { kind: "text", text: "Display text" },
+          { kind: "markdown", markdown: "**Summary**" },
+        ],
+      },
+    ],
+  })
+  const notebook = JSON.parse("text" in file ? file.text : "")
+  expect(notebook.cells[0]).toEqual({
+    id: "cell-0",
+    cell_type: "code",
+    metadata: { language: "python" },
+    source: "run_summary()",
+    execution_count: 2,
+    outputs: [
+      { output_type: "stream", name: "stdout", text: "结果\n" },
+      { output_type: "stream", name: "stderr", text: "诊断\n" },
+      { output_type: "display_data", metadata: {}, data: { "text/plain": "Display text" } },
+      { output_type: "display_data", metadata: {}, data: { "text/markdown": "**Summary**" } },
+    ],
+  })
+})
+
 test("MCP exports actual completed result text and data", () => {
   const payload = {
     ...base,
