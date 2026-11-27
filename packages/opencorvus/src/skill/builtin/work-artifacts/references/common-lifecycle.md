@@ -12,3 +12,6 @@
   schema result, or file existence is not visual acceptance.
 - Deliver only with the exact receipt for the final candidate. Never alter a
   receipt or reuse one after reauthoring.
+- Final delivery re-renders the source and binds every ordered page image to
+  the reviewed receipt. If rendering changes, validate the same source again,
+  inspect all fresh images, and deliver with that new receipt.

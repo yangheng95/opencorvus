@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [PPTX 物理字号与最终审阅图绑定](records/2026-11/2026-11-27-presentation-review-render-contract.md)
 - [中文销售简报的原生 PPTX 交付](records/2026-11/2026-11-27-sales-presentation-delivery.md)
 - [Word 标题与正文的分页语义](records/2026-11/2026-11-27-docx-heading-pagination.md)
 - [销售经理 Word 审阅稿真实交付](records/2026-11/2026-11-27-sales-document-delivery.md)

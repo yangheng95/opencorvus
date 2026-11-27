@@ -24,8 +24,8 @@ import {
   inspectPptxPackage,
   parseWorkArtifactRuntimeJson,
   prepareWorkArtifactRuntimeEnvironment,
-  renderWorkArtifactSvgToPng,
 } from "../src/work-artifact/presentation"
+import { renderOfficeHtml } from "../src/work-artifact/office-html-render"
 import { createWorkArtifactTools } from "../src/tool/work-artifact"
 import {
   WORK_ARTIFACT_TARGET_PACKAGE_MANIFEST,
@@ -217,18 +217,25 @@ async function checkPackagedLifecycle(packageRoot: string, profile: WorkArtifact
       parseWorkArtifactRuntimeJson(Buffer.from(issues.stdout), `${runtime.id} issues`),
       `${runtime.id} issues`,
     )
-    for (let slide = 1; slide <= inspection.slideCount; slide++) {
-      const renderedSvg = await runRuntime(
-        executable,
-        ["view", source, "svg", "--start", String(slide), "--end", String(slide)],
-        workspace,
-        lock,
+    const html = await runRuntime(executable, ["view", source, "html"], workspace, lock)
+    const limits = WorkArtifactProfileRegistry.require("office.presentation@1").limits
+    const rendered = await renderOfficeHtml({
+      html: html.stdout,
+      format: "pptx",
+      directory: workspace,
+      executionAuthority: { kind: "host", cwd: workspace },
+      abort: new AbortController().signal,
+      timeoutMs: limits.wallClockMs,
+      maxBytes: limits.outputBytes,
+      maxUnits: limits.pagesOrFrames,
+    })
+    if (rendered.renders.length !== inspection.slideCount)
+      throw new Error("Office render does not cover every presentation slide")
+    for (const [index, render] of rendered.renders.entries()) {
+      await assertWorkArtifactRenderPng(
+        await fs.readFile(path.join(workspace, render.name)),
+        `${runtime.id} rendered slide ${index + 1}`,
       )
-      const rendered = await renderWorkArtifactSvgToPng({
-        svg: Buffer.from(renderedSvg.stdout),
-        timeoutMs: WorkArtifactProfileRegistry.require("office.presentation@1").limits.wallClockMs,
-      })
-      await assertWorkArtifactRenderPng(rendered, `${runtime.id} rendered slide ${slide}`)
     }
     return { target: manifest.target, runtime: runtime.id, slides: inspection.slideCount }
   } finally {

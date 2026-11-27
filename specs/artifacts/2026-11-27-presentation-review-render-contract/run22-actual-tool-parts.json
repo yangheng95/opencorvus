@@ -1,0 +1,454 @@
+[
+  {
+    "id": "prt_g0Vc7zeZJ00Ab7FZWzgp",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7zcgr003gE8hrn62",
+    "type": "tool",
+    "callID": "call_DnudBXH8MrZzlTAD5CMXJOpA",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts"
+      },
+      "output": "<skill_content name=\"work-artifacts\">\n# Skill: work-artifacts\n\n# Work Artifacts\n\nProduce the requested editable file as the deliverable and use fresh derived\nrenders as review evidence. Never substitute an outline, HTML page, screenshot\ncollection, or semantic Interactive Artifact for the requested source file.\n\n## Workflow\n\n1. Read `references/common-lifecycle.md`.\n2. Read the matching profile reference before authoring:\n   `references/office-presentation.md`, `references/office-document.md`, or\n   `references/office-spreadsheet.md`.\n3. Call `work_artifact_author` with an exact qualified `profile` and a complete\n   typed plan.\n4. Inspect the returned canonical attachment with `work_artifact_inspect`.\n5. Validate that exact attachment with `work_artifact_validate`.\n6. Inspect every fresh render. Repair the typed authoring plan and repeat the\n   full lifecycle when a render is incomplete or visually weak.\n7. Read `references/review.md` and resolve confirmed review findings.\n8. Give `work_artifact_deliver` the exact final validation receipt. Delivery\n   revalidates and rerenders the candidate; only the current authorized Work\n   conversation or Expert Squad delivery owner publishes it.\n\nWhen the user requests a project file path, save the exact delivered source with\nthe ordinary `write` tool using `attachmentUrl` and `filePath`. This preserves the\nbinary bytes; it does not invoke an Office runtime or replace the canonical source.\n\nRead `references/security.md` before using user-supplied images or handling a\nrequest involving external links, macros, embedded objects, media, templates,\nor an existing file.\n\nBase directory for this skill: file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-vN8ljL/runner-32260-XefI2X/artifact-delivery/runtime/cache/builtin-skills/601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7\nLoad a relative supporting file by calling `skill` again with `name: \"work-artifacts\"` and the exact `file` path below. Do not pass the materialized base directory to the project `read` tool.\nNote: file list is sampled.\n\n<skill_files>\n<file>PROVENANCE.md</file>\n<file>references/common-lifecycle.md</file>\n<file>references/office-document.md</file>\n<file>references/office-presentation.md</file>\n<file>references/office-spreadsheet.md</file>\n<file>references/review.md</file>\n<file>references/security.md</file>\n</skill_files>\n</skill_content>",
+      "title": "Loaded skill: work-artifacts",
+      "metadata": {
+        "query": "",
+        "count": 1,
+        "total": 1,
+        "names": [
+          "work-artifacts"
+        ],
+        "name": "work-artifacts",
+        "dir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\runtime\\cache\\builtin-skills\\601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7",
+        "agent": "work",
+        "scope": "session",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795738479029,
+        "end": 1795738480046
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_05ab3073bfe736d9016b08cb6eee4487d09cb6138ac216fd61"
+      }
+    },
+    "orderKey": "v1:0001795738479796:0000000000000031:0000000000000000:part:prt_g0Vc7zeZJ00Ab7FZWzgp"
+  },
+  {
+    "id": "prt_g0Vc7zg3400VMdvW6Ywq",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7zetn00L6I577RdF",
+    "type": "tool",
+    "callID": "call_WbKIWfkVPozYCt1nCfAEbn9w",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·物理字号复核",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163.json",
+        "validation_receipt_sha": "a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": ""
+          },
+          {
+            "slide": 2,
+            "title": "区域净金额与订单数",
+            "markdown": ""
+          },
+          {
+            "slide": 3,
+            "title": "谨慎解读与核对行动",
+            "markdown": ""
+          }
+        ]
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "Final Work Artifact render 1 differs from the reviewed validation receipt; validate and review the fresh renders before delivery",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_WbKIWfkVPozYCt1nCfAEbn9w",
+          "toolName": "work_artifact_deliver"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b351d25cdb8b42c016b08cb74a16087d0935e140bea2605ab"
+        }
+      },
+      "time": {
+        "start": 1795738484718,
+        "end": 1795738508501
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0b351d25cdb8b42c016b08cb74a16087d0935e140bea2605ab"
+      }
+    },
+    "orderKey": "v1:0001795738489885:0000000000000031:0000000000000000:part:prt_g0Vc7zg3400VMdvW6Ywq"
+  },
+  {
+    "id": "prt_g0Vc7znfo00u4wbqrgoM",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7zmIl00wGYFD6ZT6",
+    "type": "tool",
+    "callID": "call_DVVkJI4kwLYYR3oEhoKBJ2FI",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.presentation@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx"
+      },
+      "output": "{\"source\":{\"sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"mime\":\"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\"size\":16259,\"filename\":\"销售经理简报-精度修订.pptx\"},\"inspection\":{\"entryCount\":28,\"uncompressedBytes\":53493,\"slideCount\":3},\"validation\":{\"success\":true,\"data\":{\"count\":0,\"errors\":[]}},\"issues\":{\"success\":true,\"data\":{\"count\":0,\"issues\":[]}},\"renders\":[{\"slide\":1,\"sha\":\"1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png\",\"mime\":\"image/png\",\"size\":95190,\"filename\":\"slide-1.png\"},{\"slide\":2,\"sha\":\"4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png\",\"mime\":\"image/png\",\"size\":60144,\"filename\":\"slide-2.png\"},{\"slide\":3,\"sha\":\"50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png\",\"mime\":\"image/png\",\"size\":152183,\"filename\":\"slide-3.png\"}],\"resource_usage\":{\"input_bytes\":16259,\"runtime_output_bytes\":44721,\"render_bytes\":307517,\"wall_clock_ms\":11011},\"validation_receipt\":{\"sha\":\"c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1190,\"filename\":\"work-artifact-validation-receipt.json\"},\"validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.presentation@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"source_sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"resource_usage\":{\"input_bytes\":16259,\"runtime_output_bytes\":44721,\"render_bytes\":307517,\"wall_clock_ms\":11011},\"renders\":[{\"slide\":1,\"sha\":\"1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png\"},{\"slide\":2,\"sha\":\"4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png\"},{\"slide\":3,\"sha\":\"50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png\"}]},\"next\":\"Inspect every render. After resolving findings, pass this exact receipt to work_artifact_deliver.\"}",
+      "title": "Validated 销售经理简报-精度修订.pptx",
+      "metadata": {
+        "sourceSha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+        "slideCount": 3,
+        "entryCount": 28,
+        "uncompressedBytes": 53493,
+        "profile": "office.presentation@1",
+        "runtime": "OfficeCLI v1.0.158",
+        "receiptSha": "c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795738514028,
+        "end": 1795738527358
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7zr8h00mINaqwfkw",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7zmIl00wGYFD6ZT6",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed.json"
+        },
+        {
+          "id": "prt_g0Vc7zr8h01havcP41Qv",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7zmIl00wGYFD6ZT6",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png"
+        },
+        {
+          "id": "prt_g0Vc7zr8h02gZ4wY146h",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7zmIl00wGYFD6ZT6",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png"
+        },
+        {
+          "id": "prt_g0Vc7zr8h03niKZP34QU",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7zmIl00wGYFD6ZT6",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0e2c94320022e246016b08cb91efb887d0a6132b27ab5cd847"
+      }
+    },
+    "orderKey": "v1:0001795738515918:0000000000000031:0000000000000000:part:prt_g0Vc7znfo00u4wbqrgoM"
+  },
+  {
+    "id": "prt_g0Vc7ztFT00h3D7VWIQ3",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7zrD600eunmLRKfG",
+    "type": "tool",
+    "callID": "call_jlLyOgsFVmsF1SNok17gyOvg",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png"
+      },
+      "output": "Image read successfully",
+      "title": "slide-1.png",
+      "metadata": {
+        "preview": "Image read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      },
+      "time": {
+        "start": 1795738535459,
+        "end": 1795738537549
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7ztn700oWQFqLZVA",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7zrD600eunmLRKfG",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_048792b150a2bde4016b08cba75ba487d0985a25640bf22fdc"
+      }
+    },
+    "orderKey": "v1:0001795738537114:0000000000000031:0000000000000000:part:prt_g0Vc7ztFT00h3D7VWIQ3"
+  },
+  {
+    "id": "prt_g0Vc7zvWH00QW0TjYdHN",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7ztqo00eMQkAlxTs",
+    "type": "tool",
+    "callID": "call_K4zOmMb7FFY1YRUlg5fQWYjK",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png"
+      },
+      "output": "Image read successfully",
+      "title": "slide-2.png",
+      "metadata": {
+        "preview": "Image read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      },
+      "time": {
+        "start": 1795738544189,
+        "end": 1795738546415
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7zw6900CHgGzkY0k",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7ztqo00eMQkAlxTs",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0654daeada5224d7016b08cbb0182487d08fa293470b96dccb"
+      }
+    },
+    "orderKey": "v1:0001795738545982:0000000000000031:0000000000000000:part:prt_g0Vc7zvWH00QW0TjYdHN"
+  },
+  {
+    "id": "prt_g0Vc7zxPO00DV70Pk40N",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7zw9A002tPm54ugO",
+    "type": "tool",
+    "callID": "call_oRUURJSc3sygOog1GGA42iwA",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+      },
+      "output": "Image read successfully",
+      "title": "slide-3.png",
+      "metadata": {
+        "preview": "Image read successfully",
+        "truncated": false,
+        "loaded": [],
+        "readType": "binary",
+        "lines": 0,
+        "totalLines": 0
+      },
+      "time": {
+        "start": 1795738551450,
+        "end": 1795738553584
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc7zxxm00V3FMaPEMj",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc7zw9A002tPm54ugO",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0655a0f02e085f5a016b08cbb75ae887d09ee599555f4809fd"
+      }
+    },
+    "orderKey": "v1:0001795738553198:0000000000000031:0000000000000000:part:prt_g0Vc7zxPO00DV70Pk40N"
+  },
+  {
+    "id": "prt_g0Vc7zzTj007WHcG6jfj",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7zy1700EKnZvwfzE",
+    "type": "tool",
+    "callID": "call_3VqvaJcC0mZgSr4rNmNWGpEB",
+    "tool": "bash",
+    "state": {
+      "status": "completed",
+      "input": {
+        "command": "python -c \"from pathlib import Path; import zipfile,xml.etree.ElementTree as E; p=Path('deliverables/销售经理简报-精度修订.pptx'); a=Path(r'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\.opencorvus\\.r\\project\\attachments\\f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d\\57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx'); assert p.stat().st_size==16259; assert p.read_bytes()==a.read_bytes(); z=zipfile.ZipFile(p); ns={'a':'http://schemas.openxmlformats.org/drawingml/2006/main'}; print('Unchanged source/project byte identity: 16259 bytes'); [(print('Slide',i,'explicit text sizes (pt):',sorted({int(e.get('sz'))/100 for e in E.fromstring(z.read('ppt/slides/slide'+str(i)+'.xml')).iter() if e.get('sz') is not None}))) for i in (1,2,3)]\"",
+        "description": "Read-only check of original bytes and physical text sizes"
+      },
+      "output": "Unchanged source/project byte identity: 16259 bytes\r\nSlide 1 explicit text sizes (pt): [13.0, 14.0, 20.0, 28.0, 32.0]\r\nSlide 2 explicit text sizes (pt): [13.0, 14.0, 20.0, 30.0]\r\nSlide 3 explicit text sizes (pt): [13.0, 14.0, 20.0, 24.0, 30.0]\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+      "title": "Read-only check of original bytes and physical text sizes",
+      "metadata": {
+        "refused": false,
+        "command": "python -c \"from pathlib import Path; import zipfile,xml.etree.ElementTree as E; p=Path('deliverables/销售经理简报-精度修订.pptx'); a=Path(r'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\.opencorvus\\.r\\project\\attachments\\f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d\\57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx'); assert p.stat().st_size==16259; assert p.read_bytes()==a.read_bytes(); z=zipfile.ZipFile(p); ns={'a':'http://schemas.openxmlformats.org/drawingml/2006/main'}; print('Unchanged source/project byte identity: 16259 bytes'); [(print('Slide',i,'explicit text sizes (pt):',sorted({int(e.get('sz'))/100 for e in E.fromstring(z.read('ppt/slides/slide'+str(i)+'.xml')).iter() if e.get('sz') is not None}))) for i in (1,2,3)]\"",
+        "output": "Unchanged source/project byte identity: 16259 bytes\r\nSlide 1 explicit text sizes (pt): [13.0, 14.0, 20.0, 28.0, 32.0]\r\nSlide 2 explicit text sizes (pt): [13.0, 14.0, 20.0, 30.0]\r\nSlide 3 explicit text sizes (pt): [13.0, 14.0, 20.0, 24.0, 30.0]\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 245,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Read-only check of original bytes and physical text sizes",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795738559407,
+        "end": 1795738567227
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0b2c34018131dd1a016b08cbbf498487d08ce588f7091e55bf"
+      }
+    },
+    "orderKey": "v1:0001795738566448:0000000000000031:0000000000000000:part:prt_g0Vc7zzTj007WHcG6jfj"
+  },
+  {
+    "id": "prt_g0Vc803dB00OuHBhKHRs",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc801Yr00tF2aoYTU3",
+    "type": "tool",
+    "callID": "call_WFRRceZEZuKxptummkdPd6iN",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "completed",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·物理字号复核",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed.json",
+        "validation_receipt_sha": "c30f3059f89f21425635d6b82663b34af8ab6b446da46161dc44d3fc7198a3ed",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": "5笔订单、净金额35.60；退款及零金额各1笔。已审阅本次新渲染。"
+          },
+          {
+            "slide": 2,
+            "title": "区域净金额与订单数",
+            "markdown": "两个独立原生图表；金额标签28.25、7.35，订单数标签3、2。"
+          },
+          {
+            "slide": 3,
+            "title": "谨慎解读与核对行动",
+            "markdown": "已审阅当前字号与换行，核对数据缺失、退款/样品行动和末页完整内容。"
+          }
+        ]
+      },
+      "output": "{\"artifactID\":\"art_g0Vc809nl00seAgJAcFe\",\"source\":{\"sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"mime\":\"application/vnd.openxmlformats-officedocument.presentationml.presentation\",\"size\":16259,\"filename\":\"销售经理简报-精度修订.pptx\"},\"renders\":[{\"sha\":\"1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png\",\"mime\":\"image/png\",\"size\":95190,\"filename\":\"slide-1.png\"},{\"sha\":\"4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png\",\"mime\":\"image/png\",\"size\":60144,\"filename\":\"slide-2.png\"},{\"sha\":\"50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png\",\"mime\":\"image/png\",\"size\":152183,\"filename\":\"slide-3.png\"}],\"final_validation_receipt\":{\"sha\":\"ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae.json\",\"mime\":\"application/vnd.opencorvus.work-artifact-validation-receipt+json\",\"size\":1190,\"filename\":\"work-artifact-validation-receipt.json\"},\"final_validation_receipt_payload\":{\"schema_version\":1,\"profile\":\"office.presentation@1\",\"source_url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx\",\"source_sha\":\"57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3\",\"runtime\":{\"id\":\"officecli\",\"version\":\"1.0.158\",\"lock_revision\":\"9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8\",\"package_sha\":\"117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f\"},\"resource_usage\":{\"input_bytes\":16259,\"runtime_output_bytes\":44721,\"render_bytes\":307517,\"wall_clock_ms\":11135},\"renders\":[{\"slide\":1,\"sha\":\"1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png\"},{\"slide\":2,\"sha\":\"4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png\"},{\"slide\":3,\"sha\":\"50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png\"}]},\"fidelity\":\"OfficeCLI v1.0.158 package validation and local browser rendering of its HTML; Microsoft PowerPoint pixel fidelity is not claimed.\"}",
+      "title": "销售经理简报·物理字号复核",
+      "metadata": {
+        "artifactID": "art_g0Vc809nl00seAgJAcFe",
+        "renderer": "presentation@1",
+        "sourceSha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+        "slideCount": 3,
+        "profile": "office.presentation@1",
+        "runtime": "OfficeCLI v1.0.158",
+        "validationReceiptSha": "ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae",
+        "truncated": false
+      },
+      "time": {
+        "start": 1795738575369,
+        "end": 1795738599097
+      },
+      "attachments": [
+        {
+          "id": "prt_g0Vc809no006BGrWp2u7",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc801Yr00tF2aoYTU3",
+          "type": "file",
+          "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "filename": "销售经理简报-精度修订.pptx",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx"
+        },
+        {
+          "id": "prt_g0Vc809no01k4UTdhqu4",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc801Yr00tF2aoYTU3",
+          "type": "file",
+          "mime": "application/vnd.opencorvus.work-artifact-validation-receipt+json",
+          "filename": "work-artifact-validation-receipt.json",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae.json"
+        },
+        {
+          "id": "prt_g0Vc809no02KpPSdzn1V",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc801Yr00tF2aoYTU3",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-1.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png"
+        },
+        {
+          "id": "prt_g0Vc809no03Wg1hbzJAq",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc801Yr00tF2aoYTU3",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-2.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png"
+        },
+        {
+          "id": "prt_g0Vc809no04VjFlIVuQK",
+          "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+          "messageID": "msg_g0Vc801Yr00tF2aoYTU3",
+          "type": "file",
+          "mime": "image/png",
+          "filename": "slide-3.png",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+        }
+      ]
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0aec50d534fbf15c016b08cbcf0a8087d085d7ec937d93010d"
+      }
+    },
+    "orderKey": "v1:0001795738582105:0000000000000031:0000000000000000:part:prt_g0Vc803dB00OuHBhKHRs"
+  }
+]

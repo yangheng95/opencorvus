@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [PPTX 物理字号与审阅图绑定证据](2026-11-27-presentation-review-render-contract/README.md)
 - [中文销售 PPTX 真实证据](2026-11-27-sales-presentation-delivery/README.md)
 - [Word 标题分页真实证据](2026-11-27-docx-heading-pagination/README.md)
 - [销售 Word 审阅稿真实证据](2026-11-27-sales-document-delivery/README.md)

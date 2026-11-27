@@ -1,0 +1,61 @@
+{
+  "id": "art_g0Vc809nl00seAgJAcFe",
+  "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+  "messageID": "msg_g0Vc801Yr00tF2aoYTU3",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "销售经理简报·物理字号复核",
+    "renderer": "presentation@1",
+    "aspectRatio": "16:9",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "订单与净金额总览",
+        "markdown": "5笔订单、净金额35.60；退款及零金额各1笔。已审阅本次新渲染。",
+        "image": {
+          "sha": "1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png",
+          "mime": "image/png",
+          "size": 95190,
+          "filename": "slide-1.png"
+        },
+        "imageAlt": "Rendered slide 1: 订单与净金额总览"
+      },
+      {
+        "id": "slide-2",
+        "title": "区域净金额与订单数",
+        "markdown": "两个独立原生图表；金额标签28.25、7.35，订单数标签3、2。",
+        "image": {
+          "sha": "4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png",
+          "mime": "image/png",
+          "size": 60144,
+          "filename": "slide-2.png"
+        },
+        "imageAlt": "Rendered slide 2: 区域净金额与订单数"
+      },
+      {
+        "id": "slide-3",
+        "title": "谨慎解读与核对行动",
+        "markdown": "已审阅当前字号与换行，核对数据缺失、退款/样品行动和末页完整内容。",
+        "image": {
+          "sha": "50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png",
+          "mime": "image/png",
+          "size": 152183,
+          "filename": "slide-3.png"
+        },
+        "imageAlt": "Rendered slide 3: 谨慎解读与核对行动"
+      }
+    ]
+  },
+  "downloads": [
+    {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+      "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "filename": "销售经理简报-精度修订.pptx"
+    }
+  ],
+  "timeCreated": 1795738599089,
+  "timeUpdated": 1795738599089
+}

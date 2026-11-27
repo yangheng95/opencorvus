@@ -218,7 +218,7 @@ export function createWorkArtifactTools(
 
   const deliver = Tool.define<typeof DeliverWorkArtifactInput, Record<string, unknown>>("work_artifact_deliver", {
     description:
-      "Consume the exact validation receipt from this Session, revalidate and freshly render the final Work Artifact, then publish the actual editable PPTX/DOCX/XLSX attachment on the current authorized Work or Task message. PPTX has a presentation review; DOCX/XLSX have a derived PDF preview. The preview does not replace the source file.",
+      "Consume the exact validation receipt from this Session, revalidate and freshly render the final Work Artifact, then publish the actual editable PPTX/DOCX/XLSX attachment on the current authorized Work or Task message. Every final page image must match the complete ordered reviewed images; if rendering changes, validate and review the fresh images before delivery. PPTX has a presentation review; DOCX/XLSX have a derived PDF preview. The preview does not replace the source file.",
     parameters: DeliverWorkArtifactInput,
     async execute(args, ctx) {
       const limits = WorkArtifactProfileRegistry.require(args.profile).limits
@@ -330,7 +330,7 @@ export function createWorkArtifactTools(
           renders: checked.renders,
           final_validation_receipt: checked.receipt.reference,
           final_validation_receipt_payload: checked.receipt.payload,
-          fidelity: `${runtime.label} package validation and render evidence; Microsoft PowerPoint pixel fidelity is not claimed.`,
+          fidelity: `${runtime.label} package validation and local browser rendering of its HTML; Microsoft PowerPoint pixel fidelity is not claimed.`,
         }),
         attachments: [
           {

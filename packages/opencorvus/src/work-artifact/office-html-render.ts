@@ -1,5 +1,5 @@
 import { BrowserRuntime } from "@/browser/runtime"
-import { runExplicitBrowserNodeSidecar } from "@/browser/runtime/node-executor"
+import { runExplicitBrowserNodeSidecar, type BrowserNodeSidecarAuthority } from "@/browser/runtime/node-executor"
 import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import z from "zod"
 import fs from "node:fs/promises"
@@ -29,14 +29,23 @@ const input = JSON.parse(Buffer.from(process.argv[2], 'base64').toString('utf8')
     const html = await fs.readFile(input.htmlPath, 'utf8');
     // DOCX uses a single paged-media engine. Parse without executing OfficeCLI's
     // interactive pager; late CSS cannot repair pages it has already split.
-    const content = input.format === 'docx' ? await page.evaluate(html => {
+    const content = input.format === 'docx' || input.format === 'pptx' ? await page.evaluate(({html,format}) => {
       const document = new DOMParser().parseFromString(html, 'text/html');
       document.querySelectorAll('script').forEach(script => script.remove());
+      if (format === 'pptx') {
+        for (const element of document.querySelectorAll('*')) for (const name of element.getAttributeNames())
+          if (name.toLowerCase().startsWith('on')) element.removeAttribute(name);
+        const slides = Array.from(document.querySelectorAll('.main > .slide-container > .slide-wrapper > .slide'));
+        document.body.replaceChildren(...slides);
+      }
       return document.documentElement.outerHTML;
-    }, html) : html;
+    }, {html,format:input.format}) : html;
     await page.setContent(content, { waitUntil: 'load', timeout: input.timeoutMs });
     await page.evaluate(async () => { await document.fonts.ready; });
     await page.addStyleTag({ content: '* { animation: none !important; transition: none !important; } .page { transform: none !important; } .sheet-content { display:block !important; overflow:visible !important; flex:none !important; width:max-content; } .table-wrapper { overflow:visible !important; max-height:none !important; flex:none !important; } .sheet-content caption { position:static; clip:auto; width:auto; height:auto; padding:10px; text-align:left; font-size:16px; font-weight:600; }' });
+    if (input.format === 'pptx') await page.addStyleTag({ content:
+      'html,body {margin:0!important;padding:0!important;background:white!important;overflow:visible!important;}' +
+      '.slide {margin:0!important;transform:none!important;box-shadow:none!important;flex-shrink:0!important;}' });
     // Review images must expose each literal cell's content. The interactive
     // Office view clips fixed-height cells; retain its columns and typography
     // while letting review rows grow to fit wrapped text, as the PDF does.
@@ -103,7 +112,7 @@ const input = JSON.parse(Buffer.from(process.argv[2], 'base64').toString('utf8')
       await page.addScriptTag({path:input.pagerPath});
       await page.evaluate(async () => { await window.PagedPolyfill.preview(); await document.fonts.ready; });
     }
-    const selector = input.format === 'docx' ? '.pagedjs_page' : '.sheet-content';
+    const selector = input.format === 'docx' ? '.pagedjs_page' : input.format === 'pptx' ? 'body > .slide' : '.sheet-content';
     const units = page.locator(selector);
     const count = await units.count();
     if (count < 1 || count > input.maxUnits) throw new Error('Office render unit count exceeds profile limits: ' + count);
@@ -130,11 +139,13 @@ const input = JSON.parse(Buffer.from(process.argv[2], 'base64').toString('utf8')
     }
     if (input.format === 'xlsx') await page.addStyleTag({content:
       printPages.join('\n') + '\n@media print { html, body, .sheet-slider { height:auto !important; min-height:0 !important; overflow:visible !important; } .sheet-slider { display:block !important; } .sheet-content { margin:0 !important; break-after:page; } .sheet-content:last-child { break-after:auto; } }'});
-    const pdf = await page.pdf({ ...(input.format === 'docx' ? { format:'A4' } : {}),
-      printBackground:true, preferCSSPageSize:true });
-    outputBytes += pdf.length;
-    if (outputBytes > input.maxBytes) throw new Error('Office preview output exceeds profile limits');
-    await fs.writeFile(path.join(input.directory, 'office-preview.pdf'), pdf, { flag:'wx', mode:0o600 });
+    if (input.format !== 'pptx') {
+      const pdf = await page.pdf({ ...(input.format === 'docx' ? { format:'A4' } : {}),
+        printBackground:true, preferCSSPageSize:true });
+      outputBytes += pdf.length;
+      if (outputBytes > input.maxBytes) throw new Error('Office preview output exceeds profile limits');
+      await fs.writeFile(path.join(input.directory, 'office-preview.pdf'), pdf, { flag:'wx', mode:0o600 });
+    }
     process.stdout.write(JSON.stringify({ ok:true, version:browser.version() +
       (input.format === 'docx' ? '; pagedjs@' + input.pagerVersion + '; layout@1' : ''),
       playwright_version:require(path.join(path.dirname(process.argv[3]), 'package.json')).version,
@@ -168,9 +179,9 @@ const Result = z.discriminatedUnion("ok", [
 
 export async function renderOfficeHtml(input: {
   html: string
-  format: "docx" | "xlsx"
+  format: "pptx" | "docx" | "xlsx"
   directory: string
-  executionAuthority: SessionExecutionAuthority
+  executionAuthority: SessionExecutionAuthority | BrowserNodeSidecarAuthority
   abort: AbortSignal
   timeoutMs: number
   maxBytes: number

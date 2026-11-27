@@ -1,0 +1,258 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0Vc809nl00seAgJAcFe",
+  "finalMessageID": "msg_g0Vc809sq00GYW2Jf61G",
+  "sourceBytes": 16259,
+  "slides": [
+    {
+      "slide": 1,
+      "path": "ppt/slides/slide1.xml",
+      "editableTextElements": 9,
+      "fullPlannedTextCovered": true,
+      "nativeCharts": []
+    },
+    {
+      "slide": 2,
+      "path": "ppt/slides/slide2.xml",
+      "editableTextElements": 4,
+      "fullPlannedTextCovered": true,
+      "nativeCharts": [
+        "ppt/slides/charts/chart1.xml",
+        "ppt/slides/charts/chart2.xml"
+      ]
+    },
+    {
+      "slide": 3,
+      "path": "ppt/slides/slide3.xml",
+      "editableTextElements": 8,
+      "fullPlannedTextCovered": true,
+      "nativeCharts": []
+    }
+  ],
+  "nativeCharts": [
+    {
+      "path": "ppt/slides/charts/chart1.xml",
+      "categories": [
+        "华东",
+        "华南"
+      ],
+      "values": [
+        "28.25",
+        "7.35"
+      ],
+      "regionValues": {
+        "华东": "28.25",
+        "华南": "7.35"
+      },
+      "measure": "net_amount",
+      "nativeDataStorage": "c:val/c:numLit",
+      "nativeLabelFormat": {
+        "formatCode": "0.00",
+        "sourceLinked": "0"
+      },
+      "nativeValueLabels": true,
+      "desktopEditDataQualification": "unverified"
+    },
+    {
+      "path": "ppt/slides/charts/chart2.xml",
+      "categories": [
+        "华东",
+        "华南"
+      ],
+      "values": [
+        "3",
+        "2"
+      ],
+      "regionValues": {
+        "华东": "3",
+        "华南": "2"
+      },
+      "measure": "order_count",
+      "nativeDataStorage": "c:val/c:numLit",
+      "nativeLabelFormat": {
+        "formatCode": "0",
+        "sourceLinked": "0"
+      },
+      "nativeValueLabels": true,
+      "desktopEditDataQualification": "unverified"
+    }
+  ],
+  "renders": [
+    {
+      "slide": 1,
+      "bytes": 95190,
+      "size": [
+        1280,
+        720
+      ],
+      "sameCanonicalReviewBytes": true,
+      "multimodalToolImage": true,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png"
+    },
+    {
+      "slide": 2,
+      "bytes": 60144,
+      "size": [
+        1280,
+        720
+      ],
+      "sameCanonicalReviewBytes": true,
+      "multimodalToolImage": true,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png"
+    },
+    {
+      "slide": 3,
+      "bytes": 152183,
+      "size": [
+        1280,
+        720
+      ],
+      "sameCanonicalReviewBytes": true,
+      "multimodalToolImage": true,
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+    }
+  ],
+  "priorReceiptToolError": {
+    "toolPartID": "prt_g0Vc7zg3400VMdvW6Ywq",
+    "error": "Final Work Artifact render 1 differs from the reviewed validation receipt; validate and review the fresh renders before delivery"
+  },
+  "sourceExactlyUnchanged": true,
+  "reviewTransition": {
+    "priorReviewedImages": [
+      "/attachment/prj_haW9BdBH559F4Yw143ch/b25f6c21ace73a924cae7a990bcdb459de69a833d230797d4a7f4557c80e6656.png",
+      "/attachment/prj_haW9BdBH559F4Yw143ch/10a3118507547d1d21cb39963957776b86a322be835c23fcbe999e6e4944fa6c.png",
+      "/attachment/prj_haW9BdBH559F4Yw143ch/f15f3296725fc9e110b4d7faf5895f1906e37ae903e24ff3a1d62f4fd86356a6.png"
+    ],
+    "currentReviewedImages": [
+      "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png",
+      "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png",
+      "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+    ]
+  },
+  "preservedRows": {
+    "message": 147,
+    "part": 393,
+    "tool_part_request": 130,
+    "tool_part_outcome": 130,
+    "interactive_artifact": 8
+  },
+  "preservedFiles": [
+    {
+      "file": ".gitattributes",
+      "bytes": 150,
+      "preservedExactBytes": true
+    },
+    {
+      "file": ".gitignore",
+      "bytes": 16,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "README.md",
+      "bytes": 96,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "sales.csv",
+      "bytes": 181,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "sales_summary.py",
+      "bytes": 7650,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "summary.json",
+      "bytes": 238,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "test_sales_summary.py",
+      "bytes": 10107,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "区域汇总.csv",
+      "bytes": 59,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "销售报告.md",
+      "bytes": 1408,
+      "preservedExactBytes": true
+    },
+    {
+      "file": ".opencorvus/opencorvus.jsonc",
+      "bytes": 1398,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售核对.xlsx",
+      "bytes": 6793,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售经理审阅稿-分页修订.docx",
+      "bytes": 8016,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售经理审阅稿.docx",
+      "bytes": 7997,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售经理简报-精度修订.pptx",
+      "bytes": 16259,
+      "preservedExactBytes": true
+    },
+    {
+      "file": "deliverables/销售经理简报.pptx",
+      "bytes": 16302,
+      "preservedExactBytes": true
+    }
+  ],
+  "downloads": [
+    {
+      "filename": "销售经理简报-精度修订 (1).pptx",
+      "bytes": 16259,
+      "canonicalBytes": true
+    }
+  ],
+  "finalReceipt": {
+    "schema_version": 1,
+    "profile": "office.presentation@1",
+    "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+    "source_sha": "57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3",
+    "runtime": {
+      "id": "officecli",
+      "version": "1.0.158",
+      "lock_revision": "9a67decfd7bea38c4d1aae4e3c4c5d6a8c2a52c556e9da4daea9e06df55087f8",
+      "package_sha": "117545f3bc817d7c6d2e78a62e4f73f75b918ccd61558e404c60949a8cb9fd1f"
+    },
+    "resource_usage": {
+      "input_bytes": 16259,
+      "runtime_output_bytes": 44721,
+      "render_bytes": 307517,
+      "wall_clock_ms": 11135
+    },
+    "renders": [
+      {
+        "slide": 1,
+        "sha": "1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1fe551785108afa06117cc63dcb9e3746485d19fb7fb506f220be553cd400bde.png"
+      },
+      {
+        "slide": 2,
+        "sha": "4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/4e5ea60ab6e3af82a540e88661a7488f8aeadfd69c0202b745da580f46470295.png"
+      },
+      {
+        "slide": 3,
+        "sha": "50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237",
+        "url": "/attachment/prj_haW9BdBH559F4Yw143ch/50d34f1099b3fe1361a784424804bf751e3e4b6cda95813a0129d1dee1876237.png"
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+$ bun script/run-tests.ts test/work-artifact/reviewed-renders.test.ts
+    Finished `release` profile [optimized] target(s) in 0.05s
+[1/1] START test/work-artifact/reviewed-renders.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) the complete ordered reviewed renders return the current delivery references [0.14ms]
+(pass) changed render 1 maps to the explicit fresh-review error [0.10ms]
+(pass) changed render 2 maps to the explicit fresh-review error [0.02ms]
+(pass) changed render 3 maps to the explicit fresh-review error
+(pass) changed canonical reference maps to the explicit fresh-review error [0.06ms]
+(pass) reordered renders map to the explicit fresh-review error [0.04ms]
+(pass) 2 final renders map to the explicit complete-review error [0.09ms]
+(pass) 4 final renders map to the explicit complete-review error [0.01ms]
+
+ 8 pass
+ 0 fail
+ 8 expect() calls
+Ran 8 tests across 1 file. [1.98s]
+[1/1] DONE test/work-artifact/reviewed-renders.test.ts exit=0 duration=2.48s

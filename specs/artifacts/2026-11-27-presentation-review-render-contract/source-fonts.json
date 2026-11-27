@@ -1,0 +1,83 @@
+{
+  "sourceBytes": 16259,
+  "slideSizeEmu": {
+    "cx": "12192000",
+    "cy": "6858000"
+  },
+  "runs": [
+    {
+      "text": "销售经理简报  /  01 总览",
+      "fontPoints": 14.0
+    },
+    {
+      "text": "5笔订单，净金额35.60",
+      "fontPoints": 32.0
+    },
+    {
+      "text": "订单总数",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "5 笔",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "净金额",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "35.60",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "退款",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "1 笔",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "零金额",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "1 笔",
+      "fontPoints": 28.0
+    },
+    {
+      "text": "退款：A003，金额 -2.05，已扣减净金额。",
+      "fontPoints": 20.0
+    },
+    {
+      "text": "零金额：A004，金额 0.00，备注“免费样品”。",
+      "fontPoints": 20.0
+    },
+    {
+      "text": "统计口径：每笔原记录计1笔，含退款和零金额。",
+      "fontPoints": 20.0
+    },
+    {
+      "text": "净金额＝全部带符号金额之和；十进制独立复算，精确到分。",
+      "fontPoints": 20.0
+    },
+    {
+      "text": "来源：项目根目录 sales.csv 全部5笔，覆盖华东、华南。",
+      "fontPoints": 13.0
+    },
+    {
+      "text": "未提供日期、币种、成本或目标；本简报不作推定。",
+      "fontPoints": 13.0
+    }
+  ],
+  "oldSvgCanvas": [
+    1920,
+    1080
+  ],
+  "oldOutputCanvas": [
+    1280,
+    720
+  ],
+  "oldPangoDpi": 64,
+  "physicalOutputDpi": 96
+}

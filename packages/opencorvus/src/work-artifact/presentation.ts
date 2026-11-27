@@ -24,12 +24,13 @@ import {
 } from "./runtime/runtime-lock"
 import { verifyWorkArtifactTargetPackageManifest } from "./runtime/package-manifest"
 import { workArtifactFilename } from "./filename"
+import { reviewedWorkArtifactRenders } from "./reviewed-renders"
+import { renderOfficeHtml } from "./office-html-render"
 
 // PPTX means PowerPoint Open XML Presentation.
 export const PPTX_MIME = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
 const MAX_PRESENTATION_BYTES = OFFICE_PRESENTATION_PROFILE_LIMITS.inputBytes
 const MAX_IMAGE_BYTES = 20 * 1024 * 1024
-const MAX_RENDER_SVG_BYTES = 20 * 1024 * 1024
 const MAX_RECEIPT_BYTES = 1024 * 1024
 const MAX_ZIP_ENTRIES = 2_000
 const MAX_UNCOMPRESSED_BYTES = 120 * 1024 * 1024
@@ -1176,37 +1177,6 @@ export async function inspectOfficePackage(
   return response.value
 }
 
-export async function renderWorkArtifactSvgToPng(input: {
-  svg: Buffer
-  abort?: AbortSignal
-  timeoutMs: number
-}): Promise<Buffer> {
-  if (input.svg.byteLength < 1 || input.svg.byteLength > MAX_RENDER_SVG_BYTES) {
-    throw new Error(
-      `Work Artifact SVG must be between 1 and ${MAX_RENDER_SVG_BYTES} bytes, received ${input.svg.byteLength}`,
-    )
-  }
-  const command = isCompiledBinaryRuntime()
-    ? [process.execPath]
-    : [process.execPath, fileURLToPath(new URL("./presentation-render-process.ts", import.meta.url))]
-  const result = await Process.runHost(command, {
-    abort: input.abort,
-    env: { OPENCORVUS_INTERNAL_WORK_ARTIFACT_RENDERER: "1" },
-    timeoutMs: input.timeoutMs,
-    maxOutputBytes: MAX_IMAGE_BYTES,
-    input: (async function* () {
-      yield input.svg
-    })(),
-  }).catch((error) => {
-    if (error instanceof Error && error.message.includes(`timed out after ${input.timeoutMs}ms`)) {
-      throw new Error(`Work Artifact SVG rendering exceeded ${input.timeoutMs}ms`, { cause: error })
-    }
-    throw new Error("Work Artifact SVG could not be converted safely", { cause: error })
-  })
-  await assertWorkArtifactRenderPng(result.stdout, "Work Artifact SVG render")
-  return result.stdout
-}
-
 export async function inspectWorkArtifactPresentation(input: {
   raw: unknown
   abort?: AbortSignal
@@ -1335,19 +1305,27 @@ export async function validateWorkArtifactPresentation(input: {
       assertZeroWorkArtifactRuntimeIssueCount(validation, "OfficeCLI validation")
       const issues = parseJsonResult(await run(["view", sourcePath, "issues", "--json"]), "OfficeCLI issues")
       assertWorkArtifactRuntimeIssues(issues, "OfficeCLI issue inspection")
+      const html = await run(["view", sourcePath, "html"])
+      const rendered = await renderOfficeHtml({
+        html: html.stdout.toString("utf8"),
+        format: "pptx",
+        directory,
+        executionAuthority: input.executionAuthority,
+        abort: input.abort,
+        timeoutMs: requireOperationBudget(deadline, limits.wallClockMs, input.abort),
+        maxBytes: limits.outputBytes - runtimeOutputBytes,
+        maxUnits: limits.pagesOrFrames,
+      })
+      if (rendered.renders.length !== inspection.slideCount)
+        throw new Error("Office render does not cover every presentation slide")
       const renders: z.output<typeof RenderReference>[] = []
-      for (let slide = 1; slide <= inspection.slideCount; slide++) {
-        const rendered = await run(["view", sourcePath, "svg", "--start", String(slide), "--end", String(slide)])
-        if (rendered.stdout.byteLength < 1 || rendered.stdout.byteLength > MAX_RENDER_SVG_BYTES) {
-          throw new Error(
-            `OfficeCLI rendered slide ${slide} SVG must be between 1 and ${MAX_RENDER_SVG_BYTES} bytes, received ${rendered.stdout.byteLength}`,
-          )
-        }
-        const bytes = await renderWorkArtifactSvgToPng({
-          svg: rendered.stdout,
-          abort: input.abort,
-          timeoutMs: requireOperationBudget(deadline, limits.wallClockMs, input.abort),
-        })
+      for (const [index, render] of rendered.renders.entries()) {
+        const slide = index + 1
+        const bytes = await readBoundedFile(
+          path.join(directory, render.name),
+          limits.outputBytes - runtimeOutputBytes - renderBytes,
+          "Office rendered slide",
+        )
         requireOperationBudget(deadline, limits.wallClockMs, input.abort)
         renderBytes += bytes.byteLength
         if (runtimeOutputBytes + renderBytes > limits.outputBytes) {
@@ -1503,5 +1481,11 @@ export async function prepareWorkArtifactPresentationDeliverable(input: {
       throw new Error(`validation receipt render digest mismatch for slide ${priorRender.slide}`)
     requireOperationBudget(deadline, limits.wallClockMs, input.abort)
   }
-  return { parsed, source, renders, receipt: validated.receipt, priorReceiptPayload: receipt.payload }
+  return {
+    parsed,
+    source,
+    renders: reviewedWorkArtifactRenders(receipt.payload.renders, renders),
+    receipt: validated.receipt,
+    priorReceiptPayload: receipt.payload,
+  }
 }

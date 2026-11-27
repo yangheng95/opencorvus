@@ -4,6 +4,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import z from "zod"
 import { workArtifactFilename } from "./filename"
+import { reviewedWorkArtifactRenders } from "./reviewed-renders"
 import { WorkArtifactProfileRegistry } from "./profile-registry"
 import {
   defaultWorkArtifactPresentationDependencies,
@@ -491,5 +492,6 @@ export async function prepareOfficeDeliverable(input: Operation) {
     if (original.reference.sha !== reference.sha) throw new Error("Office receipt review attachment digest mismatch")
   }
   requireOperationBudget(deadline, limits.wallClockMs, input.abort)
-  return { ...validated, parsed, priorReceiptPayload: payload }
+  const renders = reviewedWorkArtifactRenders(payload.renders, validated.renders)
+  return { ...validated, renders, parsed, priorReceiptPayload: payload }
 }
