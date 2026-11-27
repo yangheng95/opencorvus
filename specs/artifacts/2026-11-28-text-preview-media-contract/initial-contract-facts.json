@@ -1,0 +1,26 @@
+{
+  "status": "verified historical failure",
+  "sessionID": "ses_hxQpYRLMLCri7cXXkc4j",
+  "messageID": "msg_eabf36db-dfcb-4bbf-a668-10b5a43281bf",
+  "sourceBytes": 10107,
+  "sourceLines": 264,
+  "sourceMime": "application/octet-stream",
+  "sourceFilename": "test_sales_summary.py",
+  "sourceReferenceEqualsActualUpload": true,
+  "fullReadEqualsOriginal": true,
+  "failureKind": "tool-input-invalid",
+  "failureIssues": [
+    {
+      "code": "custom",
+      "message": "file preview kind must match attachment MIME",
+      "path": [
+        "artifact",
+        "content",
+        "source",
+        "mime"
+      ]
+    }
+  ],
+  "final": "stop",
+  "scope": "real tool validation failure with exact canonical original; historical data check, not a current rejection regression test"
+}

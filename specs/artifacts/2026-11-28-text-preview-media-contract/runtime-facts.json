@@ -1,0 +1,260 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "label": "run128",
+      "originalExecHandle": 83115,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hdKwqAnBBpJJ8fsZrQlW",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795813229982,
+        "settledAt": 1795813229982,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 8,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run129",
+      "originalExecHandle": 80613,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hTbf7DTq3SfiLt1fTWSd",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795814099387,
+        "settledAt": 1795814099388,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 5,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run130",
+      "originalExecHandle": 26126,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hgV9PiCyfR4eW9G47hm7",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795814574234,
+        "settledAt": 1795814661953,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 5,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "modelRequestLimit": null,
+  "checks": {
+    "backendTextMedia": {
+      "passed": 7,
+      "expectCalls": 19,
+      "originalExecHandle": 62086,
+      "joinedExitCode": 0
+    },
+    "backendTypecheck": {
+      "originalExecHandle": 13724,
+      "joinedExitCode": 0
+    },
+    "overlayTypecheck": {
+      "originalExecHandle": 98342,
+      "joinedExitCode": 0
+    },
+    "exportDataTests": {
+      "passed": 45,
+      "expectCalls": 50
+    },
+    "strictTextDecoding": {
+      "passed": 22,
+      "expectCalls": 29
+    },
+    "build": {
+      "originalExecHandle": 10128,
+      "joinedExitCode": 0,
+      "viteSeconds": 50.55,
+      "rendererPublicSurface": "passed"
+    },
+    "locales": 2,
+    "localeKeys": 3375,
+    "cssReferences": 9453,
+    "cssGlobals": 269,
+    "cssStylesheets": 60,
+    "cssSources": 427,
+    "docsCheck": {
+      "operations": 353,
+      "groups": 26,
+      "status": "passed"
+    },
+    "architectureIndex": {
+      "documents": 20,
+      "status": "passed"
+    }
+  },
+  "desktop": {
+    "ownedTabsClosed": [
+      "372",
+      "376",
+      "380"
+    ],
+    "localeRestored": "zh-CN",
+    "themeRestored": "system",
+    "nativeJpegs": 13,
+    "before": 2,
+    "candidate": 1,
+    "intermediate": 3,
+    "final": 7,
+    "personallyReviewed": true,
+    "uiAutomatedTests": 0
+  },
+  "scope": "canonical generic Python original publication/read/copy/download, existing typed Python copy and PDF original copy-name; not browser local picker, draft preview, all media types or encodings"
+}

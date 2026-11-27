@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test"
 import {
   artifactCSV,
+  artifactCopyKind,
   artifactExports,
   artifactExportFilenames,
   artifactFilename,
@@ -10,6 +11,34 @@ import {
 import type { InteractiveArtifactPayload } from "../src/services/interactive-artifact"
 
 const base = { schemaVersion: "1" as const, title: "Acceptance" }
+
+test.each([
+  ["application/octet-stream", "source.py", "text"],
+  ["application/xml", "source.xml", "text"],
+  ["application/schema+json", "source.json", "text"],
+  ["application/javascript", "source.js", "text"],
+  ["text/x-python", "source.py", "text"],
+  ["application/json", "source.json", "text"],
+  ["image/svg+xml", "source.svg", "text"],
+  ["image/png", "source.png", "filename"],
+  ["application/pdf", "source.pdf", "filename"],
+  ["application/octet-stream", "source.bin", "filename"],
+] as const)("Declared %s/%s exports its original identity and %s copy kind", (mime, filename, kind) => {
+  const source = { filename, mime, url: "/attachment/project/original" }
+  const payload: InteractiveArtifactPayload = { ...base, renderer: "document@1", markdown: "# Original" }
+  expect({ copy: artifactCopyKind(payload, [source]), exports: artifactExports(payload, [source]) }).toEqual({
+    copy: kind, exports: [source, { filename: "Acceptance.md", mime: "text/markdown", text: "# Original" }],
+  })
+})
+
+test("Copy metadata follows the first declared download and generated text", () => {
+  const payload: InteractiveArtifactPayload = { ...base, renderer: "document@1", markdown: "# Original" }
+  expect({
+    generated: artifactCopyKind(payload),
+    original: artifactCopyKind(payload, [{ filename: "original.py", mime: "application/octet-stream", url: "/original" }]),
+    binary: artifactCopyKind(payload, [{ filename: "original.png", mime: "image/png", url: "/original" }]),
+  }).toEqual({ generated: "text", original: "text", binary: "filename" })
+})
 
 test("Current workbook filename collections use the shared allocation", () => {
   expect(artifactExportFilenames(["Book - Data<raw.csv", "Book - Data>raw.csv", "Book - Data_raw (2).csv"])).toEqual([

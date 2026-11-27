@@ -1,0 +1,82 @@
+{
+  "info": {
+    "author": "user",
+    "role": "user",
+    "time": {
+      "created": 1795812835055
+    },
+    "agent": "work",
+    "model": {
+      "providerID": "openai",
+      "modelID": "gpt-6.1-sol"
+    },
+    "tools": {
+      "delegate_agent": true,
+      "panel_expert_squad_inspect": true,
+      "panel_query_task": true,
+      "panel_query_task_artifacts": true,
+      "panel_create_task": true,
+      "panel_wake_mission": true,
+      "panel_wake_work": true,
+      "panel_send_task_message": true,
+      "panel_respond_interaction": true,
+      "panel_cancel_task": true,
+      "panel_update_checks": true,
+      "panel_select_workspace": true,
+      "panel_update_goal": true,
+      "panel_delete_goal": true,
+      "question": true,
+      "bash": true,
+      "read": true,
+      "glob": true,
+      "search_code": true,
+      "edit": true,
+      "write": true,
+      "apply_patch": true,
+      "todo": true,
+      "schedule": true
+    },
+    "extra": {
+      "project_memory_user_input": {
+        "version": 1,
+        "surface": "session.prompt",
+        "literalText": "请完整读取本消息附带的 test_sales_summary.py 原件，只做测试脚本交接阅读：用简体中文概括文件实际覆盖的统计、命令行、区域 CSV 和输入边界，并区分静态阅读与真正执行测试的结论。不要执行测试或源脚本，不创建输出、不修改项目文件，不创建 Task 或 Mission，不委派、不安装依赖。\n\n请用 file-preview@1 原件预览卡交付同一附件，标题为“销售测试原件｜交接对照阅读”。必须使用消息中真实附件的规范引用，保留原始 MIME、文件名、大小与身份；不要猜引用、改声明、转成 code@1 或复制成另一个文件。如果原件卡调用返回错误，请明确说明实际返回的问题，不用替代稿冒充原件交付。\n"
+      },
+      "publicSessionPromptIdentity": {
+        "version": 1,
+        "fingerprint": "d3fa3737c9fb32e0af73b826fdf4f03d19ae8fc3583c7d5401359b961a438a00"
+      },
+      "surface": "right-sidebar",
+      "source": "right-sidebar-conversation",
+      "experience": "work"
+    },
+    "orderKey": "v1:0001795812835055:0000000000000030:0000000000000000:message:msg_eabf36db-dfcb-4bbf-a668-10b5a43281bf",
+    "id": "msg_eabf36db-dfcb-4bbf-a668-10b5a43281bf",
+    "sessionID": "ses_hxQpYRLMLCri7cXXkc4j"
+  },
+  "parts": [
+    {
+      "id": "prt_g0VcD1dy500o4db5Z7TN",
+      "sessionID": "ses_hxQpYRLMLCri7cXXkc4j",
+      "messageID": "msg_eabf36db-dfcb-4bbf-a668-10b5a43281bf",
+      "orderKey": "v1:0001795812835060:0000000000000031:0000000000000000:part:prt_g0VcD1dy500o4db5Z7TN",
+      "type": "text",
+      "text": "请完整读取本消息附带的 test_sales_summary.py 原件，只做测试脚本交接阅读：用简体中文概括文件实际覆盖的统计、命令行、区域 CSV 和输入边界，并区分静态阅读与真正执行测试的结论。不要执行测试或源脚本，不创建输出、不修改项目文件，不创建 Task 或 Mission，不委派、不安装依赖。\n\n请用 file-preview@1 原件预览卡交付同一附件，标题为“销售测试原件｜交接对照阅读”。必须使用消息中真实附件的规范引用，保留原始 MIME、文件名、大小与身份；不要猜引用、改声明、转成 code@1 或复制成另一个文件。如果原件卡调用返回错误，请明确说明实际返回的问题，不用替代稿冒充原件交付。\n",
+      "metadata": {
+        "catalog_snapshot_ref": "/attachment/prj_haW9BdBH559F4Yw143ch/7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391.json",
+        "catalog_snapshot_hash": "7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391"
+      }
+    },
+    {
+      "id": "prt_g0VcD1dy501Hf4utXyCk",
+      "sessionID": "ses_hxQpYRLMLCri7cXXkc4j",
+      "messageID": "msg_eabf36db-dfcb-4bbf-a668-10b5a43281bf",
+      "orderKey": "v1:0001795812835063:0000000000000031:0000000000000000:part:prt_g0VcD1dy501Hf4utXyCk",
+      "type": "file",
+      "mime": "application/octet-stream",
+      "filename": "test_sales_summary.py",
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py",
+      "presentation": "attachment-index"
+    }
+  ]
+}

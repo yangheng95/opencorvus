@@ -1,5 +1,6 @@
 import { createTwoFilesPatch } from "diff"
 import stripAnsi from "strip-ansi"
+import { isDecodableText } from "@opencorvus-ai/util/text-mime"
 import type { InteractiveArtifact, InteractiveArtifactPayload } from "./interactive-artifact"
 
 export type ArtifactExport = { filename: string; mime: string } & ({ text: string } | { url: string })
@@ -50,12 +51,12 @@ export function artifactExportFilenames(input: readonly string[]): string[] {
 }
 
 /** Read declared export metadata without invoking a mounted editor's export action. */
-export function artifactCopiesFilename(
+export function artifactCopyKind(
   payload: InteractiveArtifactPayload,
   downloads: NonNullable<InteractiveArtifact["downloads"]> = [],
-): boolean {
+): "text" | "filename" {
   const first = downloads[0] ?? rendererExports(payload)[0]
-  return Boolean(first && "url" in first && !first.mime.startsWith("text/") && first.mime !== "application/json")
+  return first && "url" in first && !isDecodableText(first.mime, first.filename) ? "filename" : "text"
 }
 
 function markdownMediaReference(label: string, filename: string): string {

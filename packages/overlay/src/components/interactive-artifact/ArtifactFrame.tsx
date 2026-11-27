@@ -1,6 +1,6 @@
 import { createEffect, createSignal, on, onCleanup, onMount, Show, type JSX } from "solid-js"
 import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
-import { artifactCopiesFilename, artifactExports, SpreadsheetExportLimitError, type ArtifactExport } from "../../services/artifact-export"
+import { artifactCopyKind, artifactExports, SpreadsheetExportLimitError, type ArtifactExport } from "../../services/artifact-export"
 import { captureApiAuthority } from "../../services/api"
 import { boardStore } from "../../store/board"
 import { reportError } from "../../services/diagnostics"
@@ -37,7 +37,7 @@ export function ArtifactFrame(props: {
   const expandable = () => props.expandable !== false
   const files = () => (props.exportFiles ? props.exportFiles() : artifactExports(props.payload!, props.downloads))
   const copiesFilename = () =>
-    !props.copyText && props.payload && artifactCopiesFilename(props.payload, props.downloads)
+    !props.copyText && props.payload && artifactCopyKind(props.payload, props.downloads) === "filename"
 
   const syncWorkspace = () => {
     if (!frame) return

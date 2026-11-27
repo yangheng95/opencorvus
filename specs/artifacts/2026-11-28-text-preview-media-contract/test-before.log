@@ -1,0 +1,63 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\file-preview-text-media.test.ts:
+ZodError: [
+  {
+    "code": "custom",
+    "message": "file preview kind must match attachment MIME",
+    "path": [
+      "artifact",
+      "content",
+      "source",
+      "mime"
+    ]
+  }
+]
+(fail) text preview preserves the canonical application/octet-stream original source.py [2162.38ms]
+ZodError: [
+  {
+    "code": "custom",
+    "message": "file preview kind must match attachment MIME",
+    "path": [
+      "artifact",
+      "content",
+      "source",
+      "mime"
+    ]
+  }
+]
+(fail) text preview preserves the canonical application/xml original report.xml [1516.07ms]
+ZodError: [
+  {
+    "code": "custom",
+    "message": "file preview kind must match attachment MIME",
+    "path": [
+      "artifact",
+      "content",
+      "source",
+      "mime"
+    ]
+  }
+]
+(fail) text preview preserves the canonical application/schema+json original schema.json [2249.67ms]
+ZodError: [
+  {
+    "code": "custom",
+    "message": "file preview kind must match attachment MIME",
+    "path": [
+      "artifact",
+      "content",
+      "source",
+      "mime"
+    ]
+  }
+]
+(fail) text preview preserves the canonical application/javascript original source.js [2307.14ms]
+(pass) text preview preserves the canonical text/x-python original existing.py [1621.66ms]
+(pass) text preview preserves the canonical application/json original existing.json [1518.77ms]
+(pass) opaque originals report the current preview-kind input issue [1384.81ms]
+
+ 3 pass
+ 4 fail
+ 7 expect() calls
+Ran 7 tests across 1 file. [13.50s]

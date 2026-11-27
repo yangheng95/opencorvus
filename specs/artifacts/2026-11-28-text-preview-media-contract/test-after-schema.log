@@ -1,0 +1,15 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\file-preview-text-media.test.ts:
+(pass) text preview preserves the canonical application/octet-stream original source.py [2210.85ms]
+(pass) text preview preserves the canonical application/xml original report.xml [2050.10ms]
+(pass) text preview preserves the canonical application/schema+json original schema.json [2613.54ms]
+(pass) text preview preserves the canonical application/javascript original source.js [1937.40ms]
+(pass) text preview preserves the canonical text/x-python original existing.py [1935.20ms]
+(pass) text preview preserves the canonical application/json original existing.json [2694.34ms]
+(pass) opaque originals report the current preview-kind input issue [2364.26ms]
+
+ 7 pass
+ 0 fail
+ 19 expect() calls
+Ran 7 tests across 1 file. [16.67s]

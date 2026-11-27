@@ -1,4 +1,6 @@
 import { createEffect, createSignal, For, onCleanup } from "solid-js"
+import { isDecodableText } from "@opencorvus-ai/util/text-mime"
+import { decodeText } from "@opencorvus-ai/util/text-decoding"
 import type { ArtifactExport } from "../../services/artifact-export"
 import { artifactExportBlob, downloadBlob } from "../../services/file-download"
 import { captureResourceAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
@@ -118,8 +120,10 @@ export function ArtifactActions(props: {
           ? ""
           : "text" in file
             ? file.text
-            : file.mime.startsWith("text/") || file.mime === "application/json"
-              ? await (await artifactExportBlob(file, { authority: entry.authority, signal: entry.controller.signal })).text()
+            : isDecodableText(file.mime, file.filename)
+              ? decodeText(new Uint8Array(await (await artifactExportBlob(file, {
+                authority: entry.authority, signal: entry.controller.signal,
+              })).arrayBuffer()), file.mime)
               : file.filename
       if (!owns(entry)) return
       await copyText(value)

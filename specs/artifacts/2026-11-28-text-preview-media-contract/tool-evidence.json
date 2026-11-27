@@ -1,0 +1,201 @@
+[
+  {
+    "id": "prt_g0VcD1eyM00bqUb4H2bY",
+    "messageID": "msg_g0VcD1e03004N5Hbc63o",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\.opencorvus\\.r\\project\\attachments\\f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d\\f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py</path>\n<type>file</type>\n<content>1: import csv\n2: import json\n3: import subprocess\n4: import sys\n5: import tempfile\n6: import unittest\n7: from pathlib import Path\n8: \n9: from sales_summary import SalesDataError, markdown_report, summarize\n10: \n11: \n12: ROOT = Path(__file__).resolve().parent\n13: \n14: \n15: class SalesSummaryTests(unittest.TestCase):\n16:     def setUp(self):\n17:         self.temp = tempfile.TemporaryDirectory()\n18:         self.addCleanup(self.temp.cleanup)\n19:         self.folder = Path(self.temp.name)\n20:         self.source = self.folder / \"输入.csv\"\n21: \n22:     def fixture(self, rows, headers=None, bom=False):\n23:         with self.source.open(\n24:             \"w\", encoding=\"utf-8-sig\" if bom else \"utf-8\", newline=\"\"\n25:         ) as stream:\n26:             writer = csv.writer(stream)\n27:             writer.writerow(headers or [\"订单编号\", \"区域\", \"金额\", \"备注\"])\n28:             writer.writerows(rows)\n29:         return self.source\n30: \n31:     def cli(self, *extra):\n32:         return subprocess.run(\n33:             [\n34:                 sys.executable,\n35:                 str(ROOT / \"sales_summary.py\"),\n36:                 str(self.source),\n37:                 \"--output\",\n38:                 str(self.folder / \"summary.json\"),\n39:                 \"--report\",\n40:                 str(self.folder / \"报告.md\"),\n41:                 *extra,\n42:             ],\n43:             capture_output=True,\n44:             encoding=\"utf-8\",\n45:             env={**__import__(\"os\").environ, \"PYTHONIOENCODING\": \"utf-8\"},\n46:         )\n47: \n48:     def test_actual_csv(self):\n49:         self.assertEqual(\n50:             summarize(ROOT / \"sales.csv\"),\n51:             {\n52:                 \"order_count\": 5,\n53:                 \"total_amount\": \"35.60\",\n54:                 \"by_region\": {\n55:                     \"华东\": {\"order_count\": 3, \"total_amount\": \"28.25\"},\n56:                     \"华南\": {\"order_count\": 2, \"total_amount\": \"7.35\"},\n57:                 },\n58:             },\n59:         )\n60: \n61:     def test_refund_and_zero(self):\n62:         self.fixture([[\"1\", \"北\", \"-12.30\", \"退款\"], [\"2\", \"北\", \"0\", \"免费\"]])\n63:         self.assertEqual(\n64:             summarize(self.source),\n65:             {\n66:                 \"order_count\": 2,\n67:                 \"total_amount\": \"-12.30\",\n68:                 \"by_region\": {\"北\": {\"order_count\": 2, \"total_amount\": \"-12.30\"}},\n69:             },\n70:         )\n71: \n72:     def test_invalid_amounts_api_and_cli(self):\n73:         for value in (\"abc\", \"\", \" \", \"NaN\", \"sNaN\", \"Infinity\", \"-Infinity\"):\n74:             with self.subTest(value=value):\n75:                 self.fixture([[\"1\", \"北\", value, \"\"]])\n76:                 with self.assertRaisesRegex(SalesDataError, \"第 2 行：无效金额\"):\n77:                     summarize(self.source)\n78:                 result = self.cli()\n79:                 self.assertEqual(result.returncode, 2)\n80:                 self.assertIn(\"第 2 行：无效金额\", result.stderr)\n81:                 self.assertFalse((self.folder / \"summary.json\").exists())\n82:                 self.assertFalse((self.folder / \"报告.md\").exists())\n83: \n84:     def test_escaped_csv_original_regions_and_cli(self):\n85:         region = ' 华,东\"|区\\n分部 '\n86:         self.fixture(\n87:             [\n88:                 [\"1\", region, \"1.005\", '备注含,逗号\"及\\n换行'],\n89:                 [\"2\", \"华东\", \"2e0\", \"\"],\n90:                 [\"3\", \" 华东\", \"0\", \"\"],\n91:             ],\n92:             bom=True,\n93:         )\n94:         before = self.source.read_bytes()\n95:         self.assertIn(b'\"\"', before)\n96:         result = self.cli()\n97:         self.assertEqual(result.returncode, 0, result.stderr)\n98:         output = json.loads((self.folder / \"summary.json\").read_text(encoding=\"utf-8\"))\n99:         self.assertEqual(\n100:             output,\n101:             {\n102:                 \"order_count\": 3,\n103:                 \"total_amount\": \"3.01\",\n104:                 \"by_region\": {\n105:                     region: {\"order_count\": 1, \"total_amount\": \"1.01\"},\n106:                     \"华东\": {\"order_count\": 1, \"total_amount\": \"2.00\"},\n107:                     \" 华东\": {\"order_count\": 1, \"total_amount\": \"0.00\"},\n108:                 },\n109:             },\n110:         )\n111:         report = (self.folder / \"报告.md\").read_text(encoding=\"utf-8\")\n112:         self.assertIn(\"&#124;区<br>分部\", report)\n113:         self.assertEqual(self.source.read_bytes(), before)\n114: \n115:     def test_sum_before_rounding_and_large_precision(self):\n116:         self.fixture(\n117:             [[\"1\", \"R\", \"0.004\", \"\"], [\"2\", \"R\", \"0.004\", \"\"], [\"3\", \"S\", \"-0.005\", \"\"]]\n118:         )\n119:         result = summarize(self.source)\n120:         self.assertEqual(result[\"total_amount\"], \"0.00\")\n121:         self.assertEqual(result[\"by_region\"][\"R\"][\"total_amount\"], \"0.01\")\n122:         self.assertEqual(result[\"by_region\"][\"S\"][\"total_amount\"], \"-0.01\")\n123:         self.fixture(\n124:             [\n125:                 [\"1\", \"R\", \"123456789012345678901234567890.12\", \"\"],\n126:                 [\"2\", \"R\", \"0.01\", \"\"],\n127:             ]\n128:         )\n129:         self.assertEqual(\n130:             summarize(self.source)[\"total_amount\"], \"123456789012345678901234567890.13\"\n131:         )\n132: \n133:     def test_empty_data(self):\n134:         self.fixture([])\n135:         self.assertEqual(\n136:             summarize(self.source),\n137:             {\"order_count\": 0, \"total_amount\": \"0.00\", \"by_region\": {}},\n138:         )\n139: \n140:     def test_reordered_headers_and_empty_region(self):\n141:         self.fixture([[\"\", \"1.50\", \"备注\", \"1\"]], [\"区域\", \"金额\", \"备注\", \"订单编号\"])\n142:         self.assertEqual(\n143:             summarize(self.source)[\"by_region\"],\n144:             {\"\": {\"order_count\": 1, \"total_amount\": \"1.50\"}},\n145:         )\n146: \n147:     def test_bad_shape_and_headers(self):\n148:         for text in (\n149:             \"订单编号,区域,金额,备注\\n1,北,1\\n\",\n150:             \"订单编号,区域,金额,备注\\n1,北,1,,额外\\n\",\n151:             \"x,y\\n\",\n152:             \"订单编号,区域,金额,金额\\n\",\n153:         ):\n154:             with self.subTest(text=text):\n155:                 self.source.write_text(text, encoding=\"utf-8\")\n156:                 with self.assertRaises(SalesDataError):\n157:                     summarize(self.source)\n158: \n159:     def test_regions_csv_sorting_rounding_and_json_compatibility(self):\n160:         self.fixture(\n161:             [\n162:                 [\"1\", \"乙\", \"2.004\", \"\"],\n163:                 [\"2\", \"负十\", \"-10\", \"\"],\n164:                 [\"3\", \"大额\", \"1e1\", \"\"],\n165:                 [\"4\", \"甲\", \"2.00\", \"\"],\n166:                 [\"5\", \"零\", \"-0.004\", \"\"],\n167:                 [\"6\", \"负二\", \"-2\", \"\"],\n168:                 [\"7\", \"累加\", \"0.004\", \"\"],\n169:                 [\"8\", \"累加\", \"+.0040\", \"\"],\n170:                 [\"9\", \"舍入\", \"1.005\", \"\"],\n171:                 [\"10\", \"负舍入\", \"-0.005\", \"\"],\n172:             ]\n173:         )\n174:         before = self.source.read_bytes()\n175:         old = self.cli()\n176:         self.assertEqual(old.returncode, 0, old.stderr)\n177:         original_json = (self.folder / \"summary.json\").read_bytes()\n178:         destination = self.folder / \"区域汇总.csv\"\n179:         result = self.cli(\"--regions-csv\", str(destination))\n180:         self.assertEqual(result.returncode, 0, result.stderr)\n181:         with destination.open(encoding=\"utf-8\", newline=\"\") as stream:\n182:             self.assertEqual(\n183:                 list(csv.reader(stream)),\n184:                 [\n185:                     [\"区域\", \"订单数\", \"净金额\"],\n186:                     [\"大额\", \"1\", \"10.00\"],\n187:                     [\"乙\", \"1\", \"2.00\"],\n188:                     [\"甲\", \"1\", \"2.00\"],\n189:                     [\"舍入\", \"1\", \"1.01\"],\n190:                     [\"累加\", \"2\", \"0.01\"],\n191:                     [\"零\", \"1\", \"0.00\"],\n192:                     [\"负舍入\", \"1\", \"-0.01\"],\n193:                     [\"负二\", \"1\", \"-2.00\"],\n194:                     [\"负十\", \"1\", \"-10.00\"],\n195:                 ],\n196:             )\n197:         self.assertEqual((self.folder / \"summary.json\").read_bytes(), original_json)\n198:         self.assertEqual(self.source.read_bytes(), before)\n199:         self.assertIn(\n200:             \"--regions-csv\", (self.folder / \"报告.md\").read_text(encoding=\"utf-8\")\n201:         )\n202: \n203:     def test_regions_csv_special_characters_and_precision(self):\n204:         special = ' 华,东\"\\r\\n分部 '\n205:         self.fixture(\n206:             [\n207:                 [\"1\", \"B\", \"123456789012345678901234567890.12\", \"\"],\n208:                 [\"2\", special, \"2e0\", \"\"],\n209:                 [\"3\", \"A\", \"123456789012345678901234567890.13\", \"\"],\n210:                 [\"4\", \" 华东\", \"2.000\", \"\"],\n211:                 [\"5\", \"华东\", \"+2\", \"\"],\n212:                 [\"6\", \"\", \"0\", \"\"],\n213:             ]\n214:         )\n215:         destination = self.folder / \"区域.csv\"\n216:         result = self.cli(\"--regions-csv\", str(destination))\n217:         self.assertEqual(result.returncode, 0, result.stderr)\n218:         with destination.open(encoding=\"utf-8\", newline=\"\") as stream:\n219:             self.assertEqual(\n220:                 list(csv.reader(stream)),\n221:                 [\n222:                     [\"区域\", \"订单数\", \"净金额\"],\n223:                     [\"A\", \"1\", \"123456789012345678901234567890.13\"],\n224:                     [\"B\", \"1\", \"123456789012345678901234567890.12\"],\n225:                     [special, \"1\", \"2.00\"],\n226:                     [\" 华东\", \"1\", \"2.00\"],\n227:                     [\"华东\", \"1\", \"2.00\"],\n228:                     [\"\", \"1\", \"0.00\"],\n229:                 ],\n230:             )\n231: \n232:     def test_regions_csv_empty_and_input_protection(self):\n233:         self.fixture([])\n234:         destination = self.folder / \"区域.csv\"\n235:         result = self.cli(\"--regions-csv\", str(destination))\n236:         self.assertEqual(result.returncode, 0, result.stderr)\n237:         with destination.open(encoding=\"utf-8\", newline=\"\") as stream:\n238:             self.assertEqual(list(csv.reader(stream)), [[\"区域\", \"订单数\", \"净金额\"]])\n239:         before = self.source.read_bytes()\n240:         result = self.cli(\"--regions-csv\", str(self.source))\n241:         self.assertEqual(result.returncode, 2)\n242:         self.assertEqual(self.source.read_bytes(), before)\n243: \n244:     def test_input_cannot_be_output(self):\n245:         self.fixture([[\"1\", \"北\", \"1\", \"\"]])\n246:         before = self.source.read_bytes()\n247:         result = subprocess.run(\n248:             [\n249:                 sys.executable,\n250:                 str(ROOT / \"sales_summary.py\"),\n251:                 str(self.source),\n252:                 \"--output\",\n253:                 str(self.source),\n254:                 \"--report\",\n255:                 str(self.folder / \"r.md\"),\n256:             ],\n257:             capture_output=True,\n258:         )\n259:         self.assertEqual(result.returncode, 2)\n260:         self.assertEqual(self.source.read_bytes(), before)\n261: \n262: \n263: if __name__ == \"__main__\":\n264:     unittest.main()\n\n(End of file - total 264 lines)\n</content>",
+      "metadata": {
+        "preview": "import csv\nimport json\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\nfrom pathlib import Path\n\nfrom sales_summary import SalesDataError, markdown_report, summarize\n\n\nROOT = Path(__file__).resolve().parent\n\n\nclass SalesSummaryTests(unittest.TestCase):\n    def setUp(self):\n        self.temp = tempfile.TemporaryDirectory()\n        self.addCleanup(self.temp.cleanup)\n        self.folder = Path(self.temp.name)\n        self.source = self.folder / \"输入.csv\"",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 264,
+        "totalLines": 264
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcD1g8K009Pom8yyER",
+    "messageID": "msg_g0VcD1fJ100sXryawBnb",
+    "tool": "capability_search",
+    "state": {
+      "status": "completed",
+      "input": {
+        "queries": [
+          "attachment metadata size mime filename canonical attachment"
+        ],
+        "kinds": [
+          "tool",
+          "mcp_tool"
+        ],
+        "exact_refs": [],
+        "deactivate_refs": [],
+        "limit": 2
+      },
+      "output": "{\n  \"catalog_snapshot_hash\": \"7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391\",\n  \"catalog_revision\": \"089568f7c70ff138e39e9186ed8e75f1fb6ab3adbeedfddd3d7833ee9204b0be\",\n  \"caller\": \"conversation\",\n  \"reveal_revision\": 1,\n  \"active_refs\": [],\n  \"active_payload_chars\": 148078,\n  \"active_payload_tokens\": 36316,\n  \"visible_expert_squad_count\": 5,\n  \"filter_diagnostic\": null,\n  \"search_window\": {\n    \"candidate_count\": 40,\n    \"matched_count\": 0,\n    \"returned_count\": 0,\n    \"complete\": true\n  },\n  \"recovery_guidance\": \"Search is discovery, not permission: refine incomplete search_window results, copy returned exact_refs to reveal, then call the exposed tool using its definition. An empty scoped result does not prove the server is missing. A missing role grant requires an owner/projection change and a new authorized occurrence, not repeated search or shell/API substitution. For requires_auth or open_settings, preserve the returned settings target and ask its operator to connect/authenticate. Never request or copy secret values into messages. Operation approval is requested by invoking an already granted tool: its permission runtime presents the real request when needed. Respect a rejected operation; do not retry to bypass it or invent an escalation flag. Filesystem EPERM/EACCES, browser launch, timeout and artifact publication errors are execution failures, not evidence of a missing role grant or operator approval; inspect their exact operation and diagnostics. Use the callable question to ask the operator for the exact missing configuration or authorized scope decision. The answer itself does not change frozen role grants.\",\n  \"results\": []\n}",
+      "metadata": {
+        "catalog_snapshot_hash": "7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391",
+        "catalog_revision": "089568f7c70ff138e39e9186ed8e75f1fb6ab3adbeedfddd3d7833ee9204b0be",
+        "caller": "conversation",
+        "result_count": 0,
+        "reveal_revision": 1,
+        "active_ref_count": 0,
+        "active_payload_chars": 148078,
+        "active_payload_tokens": 36316,
+        "visible_expert_squad_count": 5,
+        "opencorvus_capability_reveal_v2": {
+          "schema_version": 2,
+          "occurrence_id": "msg_eabf36db-dfcb-4bbf-a668-10b5a43281bf",
+          "search_call_id": "call_94ccdfd0f2db43c1adf4f0fb6f6a49c8",
+          "prior_revision": 0,
+          "revision": 1,
+          "harness_projection_hash": "6ae87e8cc9010aa38bf4aaf5d108f47becc538bda17c4a426e401bc3f2cad910",
+          "catalog_snapshot_ref": "/attachment/prj_haW9BdBH559F4Yw143ch/7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391.json",
+          "catalog_snapshot_hash": "7dc37385e81295a66b2bfb1517a71b7953ca3ebd95eae203551f7c6431287391",
+          "materialization_fingerprint": "00f37c38839e2c0432864a03fd56648be790297c2f8d55762f992de7dcd5fcad",
+          "result_refs": [],
+          "deactivate_refs": [],
+          "activated": [],
+          "active_refs": [],
+          "active_definition_digest": "8109b86032c75843af88a9431b570b8bb6e11fd9c580fd98ab44001998eea46f",
+          "active_payload_chars": 148078,
+          "active_payload_tokens": 36316
+        },
+        "truncated": false
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcD1h3E00JQvORAPsj",
+    "messageID": "msg_g0VcD1gM900sEqnMZUBP",
+    "tool": "bash",
+    "state": {
+      "status": "completed",
+      "input": {
+        "command": "stat -c '%s' \"C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-vN8ljL/runner-32260-XefI2X/artifact-delivery/project/.opencorvus/.r/project/attachments/f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py\"",
+        "description": "Read original attachment byte size without execution"
+      },
+      "output": "10107\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+      "metadata": {
+        "refused": false,
+        "command": "stat -c '%s' \"C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-vN8ljL/runner-32260-XefI2X/artifact-delivery/project/.opencorvus/.r/project/attachments/f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py\"",
+        "output": "10107\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 6,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Read original attachment byte size without execution",
+        "truncated": false
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcD1iTk00Vp7B44ySy",
+    "messageID": "msg_g0VcD1hta00zouz1qlfj",
+    "tool": "publish_interactive_artifact",
+    "state": {
+      "status": "error",
+      "input": {
+        "artifact": {
+          "schemaVersion": "1",
+          "title": "销售测试原件｜交接对照阅读",
+          "content": {
+            "renderer": "file-preview@1",
+            "kind": "text",
+            "source": {
+              "sha": "f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694",
+              "url": "/attachment/prj_haW9BdBH559F4Yw143ch/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py",
+              "mime": "application/octet-stream",
+              "size": 10107,
+              "filename": "test_sales_summary.py"
+            }
+          }
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_09a940303246472a016b09edf44ef487d0aa1fecb3e0193f4a"
+        }
+      },
+      "failure": {
+        "kind": "tool-input-invalid",
+        "name": "tool-input-invalid",
+        "message": "AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {\"artifact\":{\"schemaVersion\":\"1\",\"title\":\"销售测试原件｜交接对照阅读\",\"content\":{\"renderer\":\"file-preview@1\",\"kind\":\"text\",\"source\":{\"sha\":\"f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694\",\"url\":\"/attachment/prj_haW9BdBH559F4Yw143ch/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py\",\"mime\":\"application/octet-stream\",\"size\":10107,\"filename\":\"test_sales_summary.py\"}}}}.\nError message: [\n  {\n    \"code\": \"custom\",\n    \"message\": \"file preview kind must match attachment MIME\",\n    \"path\": [\n      \"artifact\",\n      \"content\",\n      \"source\",\n      \"mime\"\n    ]\n  }\n]",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "call_04019eea2da147f0b3be5eedc531e5d9",
+          "toolName": "publish_interactive_artifact"
+        }
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcD6DQB00GLRJRM4HA",
+    "messageID": "msg_g0VcD6CgQ003cKjlPBuR",
+    "tool": "publish_interactive_artifact",
+    "state": {
+      "status": "completed",
+      "input": {
+        "artifact": {
+          "schemaVersion": "1",
+          "title": "销售测试原件｜交接对照阅读",
+          "content": {
+            "renderer": "file-preview@1",
+            "kind": "text",
+            "source": {
+              "sha": "f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694",
+              "url": "/attachment/prj_haW9BdBH559F4Yw143ch/f6342394d91688c49c99f4bceb27dd50bd99fb174a3a526feffd4a3ecc840694.py",
+              "mime": "application/octet-stream",
+              "size": 10107,
+              "filename": "test_sales_summary.py"
+            }
+          }
+        }
+      },
+      "output": "{\"artifactID\":\"art_g0VcD6EEH00vsHhh41eG\",\"renderer\":\"file-preview@1\"}",
+      "metadata": {
+        "artifactID": "art_g0VcD6EEH00vsHhh41eG",
+        "renderer": "file-preview@1",
+        "truncated": false
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcD8a1T005atlrnS99",
+    "messageID": "msg_g0VcD8ZK200tv73OND0m",
+    "tool": "publish_interactive_artifact",
+    "state": {
+      "status": "completed",
+      "input": {
+        "artifact": {
+          "schemaVersion": "1",
+          "title": "销售交接｜既有 PDF 原件",
+          "content": {
+            "renderer": "file-preview@1",
+            "kind": "pdf",
+            "source": {
+              "sha": "90c6f177d3019df3e9ccba955d148267a7614dfec170b7407faa6cf30da97fd7",
+              "url": "/attachment/prj_haW9BdBH559F4Yw143ch/90c6f177d3019df3e9ccba955d148267a7614dfec170b7407faa6cf30da97fd7.pdf",
+              "mime": "application/pdf",
+              "size": 147137,
+              "filename": "销售经理审阅稿-分页修订-preview.pdf"
+            }
+          }
+        }
+      },
+      "output": "{\"artifactID\":\"art_g0VcD8asr00DeGon92rV\",\"renderer\":\"file-preview@1\"}",
+      "metadata": {
+        "artifactID": "art_g0VcD8asr00DeGon92rV",
+        "renderer": "file-preview@1",
+        "truncated": false
+      }
+    }
+  }
+]

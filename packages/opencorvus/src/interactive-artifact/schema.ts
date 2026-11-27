@@ -1,5 +1,6 @@
 import z from "zod"
 import { isoDateTimeSchema } from "@opencorvus-ai/util/iso-date-time"
+import { isDecodableText } from "@opencorvus-ai/util/text-mime"
 
 export const INTERACTIVE_ARTIFACT_SCHEMA_VERSION = "1" as const
 export const INTERACTIVE_ARTIFACT_MIN_HEIGHT = 180
@@ -159,8 +160,7 @@ export const InteractiveArtifactFilePreview = InteractiveArtifactBase.extend({
     (payload) =>
       payload.kind === "pdf"
         ? payload.source.mime.toLowerCase() === "application/pdf"
-        : payload.source.mime.toLowerCase().startsWith("text/") ||
-          payload.source.mime.toLowerCase() === "application/json",
+        : isDecodableText(payload.source.mime, payload.source.filename),
     {
       message: "file preview kind must match attachment MIME",
       path: ["source", "mime"],

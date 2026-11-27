@@ -431,6 +431,10 @@ shared util/text-mime classifier serves both model text projection and review:
 text MIME types, structured JSON/XML, supported application text types and known
 text filenames with octet-stream metadata use ResourceTextPreview as File preview
 artifacts; other formats retain FilePart media or original-download presentation.
+The canonical file-preview text publication schema accepts that same classifier
+with the original MIME and filename. Canonical project, URL, media type, size
+and resource identity remain subject to the existing attachment verification.
+The PDF publication branch retains its declared PDF contract.
 History preserves its existing image, PDF and media presentation priority,
 including SVG images, before choosing decodable text for other file types.
 FilePart and the user-image partition share one media classifier. An explicit
@@ -3757,6 +3761,13 @@ editor's export supplier during render. Workbook cell materialization and CSV
 limits belong to actual copy/download actions; current workbook filenames use
 the same collection allocator as payload exports. Frames carry original
 downloads through both metadata and data projections in their declared order.
+The first declared export selects text or filename copy using util/text-mime,
+including application text and known text filenames with octet-stream metadata.
+URL text copies decode the accepted original bytes with the same strict
+util/text-decoding BOM/charset/UTF-8 contract as the preview. Invalid text reports
+the existing action error. Inline text and custom editor copies retain their
+actual contents; binary originals retain filename copy. Classification reads
+metadata only, leaving editor materialization to the explicit action.
 Notebook code outputs explicitly named `stdout` or `stderr` export as Jupyter
 stream outputs with their original name and text. Unnamed text remains a
 `display_data` output with `text/plain`; Markdown and media retain their rich

@@ -1,0 +1,52 @@
+{
+  "status": "passed",
+  "nativeJpegsCopiedUnchanged": 13,
+  "members": [
+    {
+      "name": "source/test_sales_summary.py",
+      "bytes": 10107,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/sales_summary.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/candidate-filename.txt",
+      "bytes": 21,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/final-source.py",
+      "bytes": 10107,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/english-source.py",
+      "bytes": 10107,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/typed-source.py",
+      "bytes": 7650,
+      "equalsOriginal": true
+    },
+    {
+      "name": "clipboard/pdf-filename.txt",
+      "bytes": 46,
+      "equalsOriginal": true
+    },
+    {
+      "name": "download/test_sales_summary (2).py",
+      "bytes": 10107,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/accepted-original.pdf",
+      "bytes": 147137,
+      "equalsOriginal": true
+    }
+  ],
+  "method": "actual source, canonical accepted attachment, native copy and downloaded bytes; no mutable source digest or UI assertions"
+}
