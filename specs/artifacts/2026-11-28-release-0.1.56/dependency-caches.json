@@ -1,0 +1,43 @@
+{
+  "version": "0.1.56",
+  "source": "d6bd641e329682b911257ca2caa5076e737889cc",
+  "observedAt": "2026-11-27T19:12:33.925570+00:00",
+  "installRunID": 46052350759,
+  "installSource": "d6bd641e329682b911257ca2caa5076e737889cc",
+  "installJobID": 140687300627,
+  "installJobConclusion": "success",
+  "observedBunInput": "2026-11-27T18:53:03.9100513Z   key: Linux-bun-67bff405dcc503b7c6022f62f8763a281e81bee90757acbca0ea4815ca973117",
+  "sharedCacheInputPaths": [
+    "bun.lock",
+    ".github/actions/setup-bun/action.yml"
+  ],
+  "macOSBunCache": {
+    "id": 11217140257,
+    "key": "macOS-bun-67bff405dcc503b7c6022f62f8763a281e81bee90757acbca0ea4815ca973117",
+    "ref": "refs/heads/main",
+    "size_in_bytes": 466799454,
+    "created_at": "2026-11-27T19:02:58.520444Z"
+  },
+  "existingIntelRustCaches": [
+    {
+      "id": 11217398117,
+      "key": "v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+      "ref": "refs/heads/main",
+      "size_in_bytes": 415153110,
+      "created_at": "2026-11-27T19:11:19.051276Z"
+    }
+  ],
+  "cacheProtocolInference": "The existing setup action uses runner.os plus the same root bun.lock hashFiles input; the observed Linux input suffix identifies the actual saved macOS object. Install input files are unchanged between the two immutable sources.",
+  "preflight": {
+    "kind": "intel",
+    "source": "d6bd641e329682b911257ca2caa5076e737889cc",
+    "localHeadAtDispatch": "d6bd641e329682b911257ca2caa5076e737889cc",
+    "version": "0.1.56",
+    "startedAt": "2026-11-27T18:50:19.899Z",
+    "dispatched": true,
+    "runID": 46052395496,
+    "url": "https://github.com/yangheng95/opencorvus/actions/runs/46052395496",
+    "createdAt": "2026-11-27T18:50:22Z"
+  },
+  "scope": "Actual job inputs and service cache objects only; functional qualification comes from native build and first-run/restart receipts, not cache identities or CI completion inference"
+}

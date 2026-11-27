@@ -1,0 +1,13 @@
+{
+  "runID": 46055484785,
+  "source": "d6bd641e329682b911257ca2caa5076e737889cc",
+  "jobID": 140697426045,
+  "evidence": [
+    "overlay (darwin-x64) / compile (darwin-x64)\traw job log\t2026-11-27T19:18:06.5243450Z Cache hit for: macOS-bun-67bff405dcc503b7c6022f62f8763a281e81bee90757acbca0ea4815ca973117",
+    "overlay (darwin-x64) / compile (darwin-x64)\traw job log\t2026-11-27T19:20:15.4994230Z Cache hit for: v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+    "overlay (darwin-x64) / compile (darwin-x64)\traw job log\t2026-11-27T19:24:08.1237240Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 39.23s",
+    "overlay (darwin-x64) / compile (darwin-x64)\traw job log\t2026-11-27T19:24:36.1556820Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (darwin-x64) / compile (darwin-x64)\traw job log\t2026-11-27T19:30:11.4063320Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 5m 07s"
+  ],
+  "scope": "Real native frozen-source build and first-run/restart; actual cache observations retained"
+}

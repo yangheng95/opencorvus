@@ -1,0 +1,54 @@
+{
+  "version": "0.1.56",
+  "source": "d6bd641e329682b911257ca2caa5076e737889cc",
+  "runID": 46052395496,
+  "jobID": 140686912356,
+  "status": "success",
+  "createdAt": "2026-11-27T18:50:22Z",
+  "completedAt": "2026-11-27T19:11:24Z",
+  "elapsedSeconds": 1262.0,
+  "jobs": [
+    {
+      "name": "select-platforms",
+      "id": 140686669847,
+      "conclusion": "success"
+    },
+    {
+      "name": "overlay (darwin-x64) / compile (darwin-x64)",
+      "id": 140686912356,
+      "conclusion": "success"
+    },
+    {
+      "name": "overlay (darwin-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "id": 140694953600,
+      "conclusion": "skipped"
+    },
+    {
+      "name": "overlay (darwin-x64) / validate installers (${{ inputs.platform }})",
+      "id": 140694954137,
+      "conclusion": "skipped"
+    }
+  ],
+  "actualEvidence": [
+    "2026-11-27T18:54:49.3736110Z     v0-rust-build-Darwin-x64-98c26fc7",
+    "2026-11-27T18:54:49.3737350Z     v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+    "2026-11-27T18:54:49.3738810Z   - v0-rust-build-Darwin-x64",
+    "2026-11-27T18:59:30.4946300Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 45.41s",
+    "2026-11-27T18:59:54.9235530Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-11-27T19:08:18.7589220Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 8m 02s",
+    "2026-11-27T19:09:09.1525610Z Overlay assets validated for darwin-x64",
+    "2026-11-27T19:09:23.1566500Z     v0-rust-build-Darwin-x64-98c26fc7",
+    "2026-11-27T19:09:23.1568070Z     v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+    "2026-11-27T19:09:23.1569580Z   - v0-rust-build-Darwin-x64"
+  ],
+  "actualNativeCacheObjects": [
+    {
+      "id": 11217398117,
+      "key": "v0-rust-build-Darwin-x64-98c26fc7-e83e704d",
+      "ref": "refs/heads/main",
+      "size_in_bytes": 415153110,
+      "created_at": "2026-11-27T19:11:19.051276Z"
+    }
+  ],
+  "scope": "Actual exact-source Intel native preflight, build and first-run/restart. Product artifacts are not transferred into the canonical release; its clean native build and qualification remain required."
+}
