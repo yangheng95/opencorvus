@@ -68,7 +68,7 @@ test("parallel VCS reads return exact physical entries for each cyclic project",
       status: ["aliases/root-back", "data/note.txt", "root-link"].map((pathname) => ({
         path: path.join(...pathname.split("/")),
         status: "added",
-        added: pathname === "data/note.txt" ? 2 : 1,
+        added: 1,
         removed: 0,
       })),
       linkText: await fs.readlink(path.join(index === 0 ? first.path : second.path, "root-link")),

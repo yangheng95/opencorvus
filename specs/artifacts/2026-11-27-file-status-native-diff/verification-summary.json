@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "nativePositiveTests": 6,
+  "positiveAssertions": 76,
+  "runs": [
+    {
+      "label": "run28",
+      "requests": 2,
+      "businessRequests": 0,
+      "allExactStreamingSolHTTP200SettledEOF": true,
+      "joinedOriginalHandleExitCode": 0,
+      "copiesRetired": true,
+      "portClosed": 63962
+    },
+    {
+      "label": "run29",
+      "requests": 2,
+      "businessRequests": 0,
+      "allExactStreamingSolHTTP200SettledEOF": true,
+      "joinedOriginalHandleExitCode": 0,
+      "copiesRetired": true,
+      "portClosed": 65409
+    }
+  ],
+  "protectedFiles": 18,
+  "protectedRows": 1006,
+  "manualDesktopScreenshots": [
+    "before-csv.png",
+    "before-review.png",
+    "after-csv.png",
+    "after-review.png",
+    "after-binary-file.png"
+  ],
+  "scope": "File status API native statistics; conversation binary review retains its separate persisted evidence."
+}

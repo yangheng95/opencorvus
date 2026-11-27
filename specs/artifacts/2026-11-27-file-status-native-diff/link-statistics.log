@@ -1,0 +1,10 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\git-source-stage.test.ts:
+(pass) link target edits and deletion produce actual link patches and a new clean commit [17714.34ms]
+
+ 1 pass
+ 12 filtered out
+ 0 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [19.23s]

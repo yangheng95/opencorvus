@@ -1,0 +1,13 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\server\file-save-conflict.test.ts:
+[file-save peer] {"readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-4nZWSs\\test-16980-WK2vTv\\file-save-first.json","url":"http://127.0.0.1:50994/","pid":18828,"stdinState":"open"}
+[file-save peer] {"readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-4nZWSs\\test-16980-WK2vTv\\file-save-second.json","url":"http://127.0.0.1:50995/","pid":21608,"stdinState":"open"}
+[file-save peer] {"readyPath":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-4nZWSs\\test-16980-WK2vTv\\file-save-restarted.json","url":"http://127.0.0.1:51032/","pid":35324,"stdinState":"open"}
+[file-save HTTP] {"processes":[18828,21608,35324],"externalSameMtime":"conflict","restart":"saved","symlink":"supported"}
+(pass) real HTTP save uses loaded bytes across external changes, peer processes, restart and path identities [15485.79ms]
+
+ 1 pass
+ 0 fail
+ 32 expect() calls
+Ran 1 test across 1 file. [16.59s]

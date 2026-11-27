@@ -1,0 +1,10 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\server\file-read-identity.test.ts:
+(pass) cold file readers use exact Project file facts with unavailable execution models [13962.60ms]
+
+ 1 pass
+ 7 filtered out
+ 0 fail
+ 12 expect() calls
+Ran 1 test across 1 file. [16.12s]

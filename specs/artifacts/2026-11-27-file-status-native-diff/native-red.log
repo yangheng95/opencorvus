@@ -1,0 +1,71 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\file-status-native.test.ts:
+54 |     { path: "modified.txt", status: "modified", added: 2, removed: 1 },
+55 |     { path: "staged.txt", status: "added", added: 1, removed: 0 },
+56 |     { path: "unterminated.txt", status: "added", added: 1, removed: 0 },
+57 |   ]
+58 |   for (const [index, result] of results.entries()) {
+59 |     expect(result.files).toEqual(expected)
+                              ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+-     "added": 0,
++     "added": 3,
+      "path": "binary.bin",
+      "removed": 0,
+      "status": "added",
+    },
+    {
+      "added": 0,
+      "path": "deleted.txt",
+      "removed": 2,
+      "status": "deleted",
+    },
+    {
+-     "added": 0,
++     "added": 1,
+      "path": "empty.txt",
+      "removed": 0,
+      "status": "added",
+    },
+    {
+-     "added": 1,
++     "added": 2,
+      "path": "fresh.txt",
+      "removed": 0,
+      "status": "added",
+    },
+    {
+      "added": 2,
+      "path": "modified.txt",
+      "removed": 1,
+      "status": "modified",
+    },
+    {
+      "added": 1,
+      "path": "staged.txt",
+      "removed": 0,
+-     "status": "added",
++     "status": "modified",
+    },
+    {
+      "added": 1,
+      "path": "unterminated.txt",
+      "removed": 0,
+      "status": "added",
+    },
+  ]
+
+- Expected  - 4
++ Received  + 4
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\file-status-native.test.ts:59:26)
+(fail) file status reports native physical states and statistics for parallel projects [7939.07ms]
+
+ 0 pass
+ 1 fail
+ 11 expect() calls
+Ran 1 test across 1 file. [8.82s]

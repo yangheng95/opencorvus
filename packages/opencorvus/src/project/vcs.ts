@@ -68,6 +68,7 @@ function requireConfirmedBranch(expectedBranch: string | null, currentBranch: st
 
 type DiffOptions = {
   readonly context?: number
+  readonly patch?: boolean
 }
 
 type DiffItem = {
@@ -75,6 +76,8 @@ type DiffItem = {
   readonly status: "added" | "deleted" | "modified"
   readonly code: string
 }
+
+type PhysicalFileDiff = Vcs.FileDiff & Pick<DiffItem, "status">
 
 type DiffStat = {
   readonly additions: number
@@ -288,7 +291,7 @@ async function emptyTree(cwd: string): Promise<string> {
   return tree
 }
 
-async function diffAgainstRef(cwd: string, ref: string, options?: DiffOptions): Promise<Vcs.FileDiff[]> {
+async function diffAgainstRef(cwd: string, ref: string, options?: DiffOptions): Promise<PhysicalFileDiff[]> {
   const [nameStatus, numstat, untracked, links] = await Promise.all([
     gitText(
       gitSourceEntryGit(["diff", "--no-ext-diff", "--no-renames", "--name-status", "-z", ref, "--", "."], {
@@ -324,7 +327,7 @@ async function diffAgainstRef(cwd: string, ref: string, options?: DiffOptions): 
   )
 }
 
-async function diffWithoutHead(cwd: string, options?: DiffOptions): Promise<Vcs.FileDiff[]> {
+async function diffWithoutHead(cwd: string, options?: DiffOptions): Promise<PhysicalFileDiff[]> {
   return diffAgainstRef(cwd, await emptyTree(cwd), options)
 }
 
@@ -335,8 +338,8 @@ async function diffFiles(
   ref: string,
   options?: DiffOptions,
   links = new Map<string, GitSourceLinkDiff>(),
-): Promise<Vcs.FileDiff[]> {
-  const result: Vcs.FileDiff[] = []
+): Promise<PhysicalFileDiff[]> {
+  const result: PhysicalFileDiff[] = []
   let total = 0
   let aggregateCapped = false
 
@@ -349,7 +352,7 @@ async function diffFiles(
         const stat =
           entry?.stat ?? stats.get(item.file) ?? (item.code === "??" ? await statUntracked(cwd, item.file) : undefined)
         if (!stat) throw new Error(`vcs diff numstat omitted ${item.file}`)
-        if (stat.binary || aggregateCapped) return { item, stat, rawPatch: undefined }
+        if (stat.binary || aggregateCapped || options?.patch === false) return { item, stat, rawPatch: undefined }
         const rawPatch =
           entry?.patch ??
           (item.code === "??"
@@ -775,7 +778,7 @@ export namespace Vcs {
     })
   }
 
-  export async function diff(mode: Mode, options?: DiffOptions): Promise<FileDiff[]> {
+  export async function diff(mode: Mode, options?: DiffOptions): Promise<PhysicalFileDiff[]> {
     if (!Project.isGitRepo(currentProject().directory)) {
       throw new PrerequisiteError({ reason: "not_git", message: "vcs diff requires a git repository" })
     }

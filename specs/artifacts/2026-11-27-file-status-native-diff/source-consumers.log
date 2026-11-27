@@ -1,0 +1,10 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\git-source-consumers.test.ts:
+(pass) parallel VCS reads return exact physical entries for each cyclic project [12209.70ms]
+
+ 1 pass
+ 5 filtered out
+ 0 fail
+ 4 expect() calls
+Ran 1 test across 1 file. [14.06s]

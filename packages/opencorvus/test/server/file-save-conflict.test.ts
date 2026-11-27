@@ -117,7 +117,7 @@ test("real HTTP save uses loaded bytes across external changes, peer processes, 
   const statusResponse = await fetch(new URL("/file/status", first.url), { signal: AbortSignal.timeout(15_000) })
   expect({ status: statusResponse.status, files: await statusResponse.json() }).toMatchObject({
     status: 200,
-    files: expect.arrayContaining([{ path: file, added: 2, removed: 0, status: "added" }]),
+    files: expect.arrayContaining([{ path: file, added: 1, removed: 0, status: "added" }]),
   })
   await fs.writeFile(target, "version-B\n")
   await fs.utimes(target, fixedTime, fixedTime)

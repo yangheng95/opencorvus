@@ -34,7 +34,13 @@ VCS information combines tracked porcelain status with this complete untracked
 entry count. `gitSourceLinkDiffs` compares actual index/ref blobs with raw link
 target bytes; `normalizeGitSourceLinkStatus` retains index status, conflict stages
 and rename pairs while correcting the working-entry status. VCS diff and File
-status use the same comparison. An unchanged link has a clean working entry; a
+status use the same comparison. File status projects VCS diff's native physical
+status and numeric statistics into its existing path/added/removed/status shape,
+with platform-native paths and deterministic ordering. Its internal patch=false
+option skips patch generation in the same diff pipeline; ordinary diff retains
+its current patch output. Untracked text statistics follow native Git, including
+empty and unterminated files; binary entries retain the numeric 0/0 contract
+rather than counting arbitrary decoded bytes. An unchanged link has a clean working entry; a
 target edit, deletion or real type change has its actual status and patch. A
 terminal link counts once. Non-UTF-8 link targets are binary. Nested repository
 boundaries have zero parent text statistics. Public numeric fields and the client

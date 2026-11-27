@@ -1,0 +1,10 @@
+bun test v1.4.3 (c6da4a4d3)
+
+test\server\file-error-contracts.test.ts:
+(pass) file status publishes its real indexed linked-ancestor error [4504.64ms]
+
+ 1 pass
+ 14 filtered out
+ 0 fail
+ 5 expect() calls
+Ran 1 test across 1 file. [6.64s]

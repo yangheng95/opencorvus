@@ -52,7 +52,7 @@ test("cold file readers use exact Project file facts with unavailable execution 
     ]) })
     const status = await read(directory!, "/file/status")
     expect(status).toMatchObject({ status: 200, body: expect.arrayContaining([
-      { path: "README.md", added: 2, removed: 0, status: "added" },
+      { path: "README.md", added: 1, removed: 0, status: "added" },
     ]) })
   }
 }, 30_000)
