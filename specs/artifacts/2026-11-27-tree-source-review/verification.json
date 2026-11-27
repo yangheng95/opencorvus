@@ -1,0 +1,133 @@
+{
+  "status": "passed",
+  "requests": 8,
+  "runs": [
+    {
+      "label": "run72",
+      "requests": 6,
+      "preflight": {
+        "sessionID": "ses_hKVJpaykiEdYjZwjcK6E",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795772453844,
+        "settledAt": 1795772453844,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 81374,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run73",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hPXP1nW5AOz9bHBog311",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795772782356,
+        "settledAt": 1795772782356,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 43409,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 9,
+  "passedScreenshots": 6,
+  "checks": {
+    "nativeFailure": "manual components collapse followed by InlineToolPart or exact KiB query showed five counted nodes with the matching file hidden",
+    "nativeRepair": "same collapsed ancestor automatically opens on new nonempty filename/precision query; manual collapse during search followed by another query opens its new match",
+    "nativeClearAndKeyboard": "clear restores57-node full collection; Return opens native collapsed components branch",
+    "nativeWorkspace": "matching complete last-row precision remains readable through expand and close",
+    "nativeLocale": "English dark retains same exact query, translated Search hierarchy/Clear/nodes and original file text",
+    "nativeJSONInspector": "existing completed task summary.json; manually collapsed by_region then28.25 reveals exact original string leaf and all ancestors; clear restores10-node collection",
+    "realChecker": "actual API -> production Tree schema and artifactExports; all53 original rows/57 full paths and metadata values exact",
+    "nativeTreeDownload": "22022 bytes; all57 complete actual payload nodes while one leaf is filtered",
+    "nativeJSONDownload": "238 exact source bytes and all original five-order/region values",
+    "protectedFiles": 23,
+    "protectedOldRows": 2156,
+    "sqliteIntegrity": "ok",
+    "typecheck": "passed",
+    "build": "53.74s, original handle84439 joined exit0",
+    "rendererPublicSurface": "passed",
+    "docs": "353 operations /26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Desktop only; native tree@1 and real JSON receipt inspector.",
+    "Clear retains current expansion state; no separate pre-search collapse bookmark was added.",
+    "The cleared inspector screenshot shows10-node collection with southern branch still collapsed in that frame; full southern data is proven by exact native download/source comparison, not claimed visually read in that screenshot.",
+    "No new Task/Mission or delegated agent; read only an existing completed task to reach JSON receipt preview.",
+    "No scheduling/queue/retry/terminal-convergence anomaly."
+  ]
+}

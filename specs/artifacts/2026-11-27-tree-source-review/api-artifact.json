@@ -1,0 +1,684 @@
+{
+  "id": "art_g0VcAHavW00PoQtVEAR7",
+  "sessionID": "ses_h0oitrO9d2gvKybgBv12",
+  "messageID": "msg_g0VcAH9bR00kzyiUNUVC",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "源文件目录树｜历史清单复核",
+    "renderer": "tree@1",
+    "nodes": [
+      {
+        "id": "dir:packages",
+        "label": "packages",
+        "description": "历史清单路径目录；非当前仓库扫描",
+        "metadata": {
+          "file": "packages"
+        }
+      },
+      {
+        "id": "dir:packages/overlay",
+        "parentID": "dir:packages",
+        "label": "overlay",
+        "metadata": {
+          "file": "packages/overlay"
+        }
+      },
+      {
+        "id": "dir:packages/overlay/src",
+        "parentID": "dir:packages/overlay",
+        "label": "src",
+        "metadata": {
+          "file": "packages/overlay/src"
+        }
+      },
+      {
+        "id": "dir:packages/overlay/src/components",
+        "parentID": "dir:packages/overlay/src",
+        "label": "components",
+        "description": "历史清单中的53个文件",
+        "metadata": {
+          "file": "packages/overlay/src/components"
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/App.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "App.tsx",
+        "description": "index: 1；bytes: 50553；kib: 49.3681640625",
+        "metadata": {
+          "file": "packages/overlay/src/components/App.tsx",
+          "index": 1,
+          "bytes": 50553,
+          "kib": 49.3681640625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/AppDialogHost.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "AppDialogHost.tsx",
+        "description": "index: 2；bytes: 9470；kib: 9.248046875",
+        "metadata": {
+          "file": "packages/overlay/src/components/AppDialogHost.tsx",
+          "index": 2,
+          "bytes": 9470,
+          "kib": 9.248046875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ArchitectPanel.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ArchitectPanel.tsx",
+        "description": "index: 3；bytes: 3265；kib: 3.1884765625",
+        "metadata": {
+          "file": "packages/overlay/src/components/ArchitectPanel.tsx",
+          "index": 3,
+          "bytes": 3265,
+          "kib": 3.1884765625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ArtifactResourceDownload.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ArtifactResourceDownload.tsx",
+        "description": "index: 4；bytes: 3042；kib: 2.970703125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ArtifactResourceDownload.tsx",
+          "index": 4,
+          "bytes": 3042,
+          "kib": 2.970703125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/AssistantMessageFailure.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "AssistantMessageFailure.tsx",
+        "description": "index: 5；bytes: 1494；kib: 1.458984375",
+        "metadata": {
+          "file": "packages/overlay/src/components/AssistantMessageFailure.tsx",
+          "index": 5,
+          "bytes": 1494,
+          "kib": 1.458984375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/Avatar.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "Avatar.tsx",
+        "description": "index: 6；bytes: 1535；kib: 1.4990234375",
+        "metadata": {
+          "file": "packages/overlay/src/components/Avatar.tsx",
+          "index": 6,
+          "bytes": 1535,
+          "kib": 1.4990234375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/Board.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "Board.tsx",
+        "description": "index: 7；bytes: 8483；kib: 8.2841796875",
+        "metadata": {
+          "file": "packages/overlay/src/components/Board.tsx",
+          "index": 7,
+          "bytes": 8483,
+          "kib": 8.2841796875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/BrowserPreviewPanel.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "BrowserPreviewPanel.tsx",
+        "description": "index: 8；bytes: 78192；kib: 76.359375",
+        "metadata": {
+          "file": "packages/overlay/src/components/BrowserPreviewPanel.tsx",
+          "index": 8,
+          "bytes": 78192,
+          "kib": 76.359375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/Card.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "Card.tsx",
+        "description": "index: 9；bytes: 12274；kib: 11.986328125",
+        "metadata": {
+          "file": "packages/overlay/src/components/Card.tsx",
+          "index": 9,
+          "bytes": 12274,
+          "kib": 11.986328125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/CardHeader.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "CardHeader.tsx",
+        "description": "index: 10；bytes: 5035；kib: 4.9169921875",
+        "metadata": {
+          "file": "packages/overlay/src/components/CardHeader.tsx",
+          "index": 10,
+          "bytes": 5035,
+          "kib": 4.9169921875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/CardHeaderChrome.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "CardHeaderChrome.tsx",
+        "description": "index: 11；bytes: 10281；kib: 10.0400390625",
+        "metadata": {
+          "file": "packages/overlay/src/components/CardHeaderChrome.tsx",
+          "index": 11,
+          "bytes": 10281,
+          "kib": 10.0400390625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/CardOverflowMenu.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "CardOverflowMenu.tsx",
+        "description": "index: 12；bytes: 4665；kib: 4.5556640625",
+        "metadata": {
+          "file": "packages/overlay/src/components/CardOverflowMenu.tsx",
+          "index": 12,
+          "bytes": 4665,
+          "kib": 4.5556640625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/CardParts.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "CardParts.tsx",
+        "description": "index: 13；bytes: 25360；kib: 24.765625",
+        "metadata": {
+          "file": "packages/overlay/src/components/CardParts.tsx",
+          "index": 13,
+          "bytes": 25360,
+          "kib": 24.765625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/CardTodoSummary.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "CardTodoSummary.tsx",
+        "description": "index: 14；bytes: 282；kib: 0.275390625",
+        "metadata": {
+          "file": "packages/overlay/src/components/CardTodoSummary.tsx",
+          "index": 14,
+          "bytes": 282,
+          "kib": 0.275390625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ChangesPanel.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ChangesPanel.tsx",
+        "description": "index: 15；bytes: 3755；kib: 3.6669921875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ChangesPanel.tsx",
+          "index": 15,
+          "bytes": 3755,
+          "kib": 3.6669921875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ChatBubble.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ChatBubble.tsx",
+        "description": "index: 16；bytes: 15829；kib: 15.4580078125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ChatBubble.tsx",
+          "index": 16,
+          "bytes": 15829,
+          "kib": 15.4580078125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ChatComposer.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ChatComposer.tsx",
+        "description": "index: 17；bytes: 76613；kib: 74.8173828125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ChatComposer.tsx",
+          "index": 17,
+          "bytes": 76613,
+          "kib": 74.8173828125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ChatHeaderRightDockToggle.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ChatHeaderRightDockToggle.tsx",
+        "description": "index: 18；bytes: 716；kib: 0.69921875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ChatHeaderRightDockToggle.tsx",
+          "index": 18,
+          "bytes": 716,
+          "kib": 0.69921875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/CommandMenuSurface.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "CommandMenuSurface.tsx",
+        "description": "index: 19；bytes: 5519；kib: 5.3896484375",
+        "metadata": {
+          "file": "packages/overlay/src/components/CommandMenuSurface.tsx",
+          "index": 19,
+          "bytes": 5519,
+          "kib": 5.3896484375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/CommandPalette.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "CommandPalette.tsx",
+        "description": "index: 20；bytes: 24598；kib: 24.021484375",
+        "metadata": {
+          "file": "packages/overlay/src/components/CommandPalette.tsx",
+          "index": 20,
+          "bytes": 24598,
+          "kib": 24.021484375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ComposerAttachmentPreview.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ComposerAttachmentPreview.tsx",
+        "description": "index: 21；bytes: 3385；kib: 3.3056640625",
+        "metadata": {
+          "file": "packages/overlay/src/components/ComposerAttachmentPreview.tsx",
+          "index": 21,
+          "bytes": 3385,
+          "kib": 3.3056640625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ComposerMentionMenu.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ComposerMentionMenu.tsx",
+        "description": "index: 22；bytes: 8414；kib: 8.216796875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ComposerMentionMenu.tsx",
+          "index": 22,
+          "bytes": 8414,
+          "kib": 8.216796875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ComposerModelSelector.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ComposerModelSelector.tsx",
+        "description": "index: 23；bytes: 24406；kib: 23.833984375",
+        "metadata": {
+          "file": "packages/overlay/src/components/ComposerModelSelector.tsx",
+          "index": 23,
+          "bytes": 24406,
+          "kib": 23.833984375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ComposerPermissionControl.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ComposerPermissionControl.tsx",
+        "description": "index: 24；bytes: 4504；kib: 4.3984375",
+        "metadata": {
+          "file": "packages/overlay/src/components/ComposerPermissionControl.tsx",
+          "index": 24,
+          "bytes": 4504,
+          "kib": 4.3984375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ComposerReferenceFeedback.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ComposerReferenceFeedback.tsx",
+        "description": "index: 25；bytes: 787；kib: 0.7685546875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ComposerReferenceFeedback.tsx",
+          "index": 25,
+          "bytes": 787,
+          "kib": 0.7685546875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ComposerReferenceSelector.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ComposerReferenceSelector.tsx",
+        "description": "index: 26；bytes: 29950；kib: 29.248046875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ComposerReferenceSelector.tsx",
+          "index": 26,
+          "bytes": 29950,
+          "kib": 29.248046875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ComputerControlSurface.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ComputerControlSurface.tsx",
+        "description": "index: 27；bytes: 3408；kib: 3.328125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ComputerControlSurface.tsx",
+          "index": 27,
+          "bytes": 3408,
+          "kib": 3.328125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConfigDialogHost.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConfigDialogHost.tsx",
+        "description": "index: 28；bytes: 35070；kib: 34.248046875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConfigDialogHost.tsx",
+          "index": 28,
+          "bytes": 35070,
+          "kib": 34.248046875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConnectionBadge.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConnectionBadge.tsx",
+        "description": "index: 29；bytes: 2340；kib: 2.28515625",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConnectionBadge.tsx",
+          "index": 29,
+          "bytes": 2340,
+          "kib": 2.28515625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConnectionBanner.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConnectionBanner.tsx",
+        "description": "index: 30；bytes: 4621；kib: 4.5126953125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConnectionBanner.tsx",
+          "index": 30,
+          "bytes": 4621,
+          "kib": 4.5126953125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ContinuousGoalControl.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ContinuousGoalControl.tsx",
+        "description": "index: 31；bytes: 43706；kib: 42.681640625",
+        "metadata": {
+          "file": "packages/overlay/src/components/ContinuousGoalControl.tsx",
+          "index": 31,
+          "bytes": 43706,
+          "kib": 42.681640625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/Conversation.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "Conversation.tsx",
+        "description": "index: 32；bytes: 52789；kib: 51.5517578125",
+        "metadata": {
+          "file": "packages/overlay/src/components/Conversation.tsx",
+          "index": 32,
+          "bytes": 52789,
+          "kib": 51.5517578125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConversationAgentRail.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConversationAgentRail.tsx",
+        "description": "index: 33；bytes: 16188；kib: 15.80859375",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConversationAgentRail.tsx",
+          "index": 33,
+          "bytes": 16188,
+          "kib": 15.80859375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConversationArtifactInspector.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConversationArtifactInspector.tsx",
+        "description": "index: 34；bytes: 19634；kib: 19.173828125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConversationArtifactInspector.tsx",
+          "index": 34,
+          "bytes": 19634,
+          "kib": 19.173828125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConversationArtifactSummary.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConversationArtifactSummary.tsx",
+        "description": "index: 35；bytes: 7074；kib: 6.908203125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConversationArtifactSummary.tsx",
+          "index": 35,
+          "bytes": 7074,
+          "kib": 6.908203125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConversationCard.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConversationCard.tsx",
+        "description": "index: 36；bytes: 1175；kib: 1.1474609375",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConversationCard.tsx",
+          "index": 36,
+          "bytes": 1175,
+          "kib": 1.1474609375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConversationSearchDialog.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConversationSearchDialog.tsx",
+        "description": "index: 37；bytes: 11925；kib: 11.6455078125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConversationSearchDialog.tsx",
+          "index": 37,
+          "bytes": 11925,
+          "kib": 11.6455078125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConversationTurnArtifactSummary.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConversationTurnArtifactSummary.tsx",
+        "description": "index: 38；bytes: 17268；kib: 16.86328125",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConversationTurnArtifactSummary.tsx",
+          "index": 38,
+          "bytes": 17268,
+          "kib": 16.86328125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ConversationTurnControl.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ConversationTurnControl.tsx",
+        "description": "index: 39；bytes: 9008；kib: 8.796875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ConversationTurnControl.tsx",
+          "index": 39,
+          "bytes": 9008,
+          "kib": 8.796875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/DelegatedContextDisclosure.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "DelegatedContextDisclosure.tsx",
+        "description": "index: 40；bytes: 1758；kib: 1.716796875",
+        "metadata": {
+          "file": "packages/overlay/src/components/DelegatedContextDisclosure.tsx",
+          "index": 40,
+          "bytes": 1758,
+          "kib": 1.716796875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/DiffPreviewPanel.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "DiffPreviewPanel.tsx",
+        "description": "index: 41；bytes: 9686；kib: 9.458984375",
+        "metadata": {
+          "file": "packages/overlay/src/components/DiffPreviewPanel.tsx",
+          "index": 41,
+          "bytes": 9686,
+          "kib": 9.458984375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/DiffView.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "DiffView.tsx",
+        "description": "index: 42；bytes: 11107；kib: 10.8466796875",
+        "metadata": {
+          "file": "packages/overlay/src/components/DiffView.tsx",
+          "index": 42,
+          "bytes": 11107,
+          "kib": 10.8466796875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ExpertSquadMarketInstallFeedback.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ExpertSquadMarketInstallFeedback.tsx",
+        "description": "index: 43；bytes: 1404；kib: 1.37109375",
+        "metadata": {
+          "file": "packages/overlay/src/components/ExpertSquadMarketInstallFeedback.tsx",
+          "index": 43,
+          "bytes": 1404,
+          "kib": 1.37109375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ExpertSquadMarketSearchFeedback.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ExpertSquadMarketSearchFeedback.tsx",
+        "description": "index: 44；bytes: 1267；kib: 1.2373046875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ExpertSquadMarketSearchFeedback.tsx",
+          "index": 44,
+          "bytes": 1267,
+          "kib": 1.2373046875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/FileChangesPanel.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "FileChangesPanel.tsx",
+        "description": "index: 45；bytes: 474；kib: 0.462890625",
+        "metadata": {
+          "file": "packages/overlay/src/components/FileChangesPanel.tsx",
+          "index": 45,
+          "bytes": 474,
+          "kib": 0.462890625
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/FileChangesView.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "FileChangesView.tsx",
+        "description": "index: 46；bytes: 34258；kib: 33.455078125",
+        "metadata": {
+          "file": "packages/overlay/src/components/FileChangesView.tsx",
+          "index": 46,
+          "bytes": 34258,
+          "kib": 33.455078125
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/FileEditorPane.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "FileEditorPane.tsx",
+        "description": "index: 47；bytes: 67820；kib: 66.23046875",
+        "metadata": {
+          "file": "packages/overlay/src/components/FileEditorPane.tsx",
+          "index": 47,
+          "bytes": 67820,
+          "kib": 66.23046875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/FileExplorerPanel.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "FileExplorerPanel.tsx",
+        "description": "index: 48；bytes: 122715；kib: 119.8388671875",
+        "metadata": {
+          "file": "packages/overlay/src/components/FileExplorerPanel.tsx",
+          "index": 48,
+          "bytes": 122715,
+          "kib": 119.8388671875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/FilePart.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "FilePart.tsx",
+        "description": "index: 49；bytes: 24759；kib: 24.1787109375",
+        "metadata": {
+          "file": "packages/overlay/src/components/FilePart.tsx",
+          "index": 49,
+          "bytes": 24759,
+          "kib": 24.1787109375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/GoalDialogHost.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "GoalDialogHost.tsx",
+        "description": "index: 50；bytes: 3446；kib: 3.365234375",
+        "metadata": {
+          "file": "packages/overlay/src/components/GoalDialogHost.tsx",
+          "index": 50,
+          "bytes": 3446,
+          "kib": 3.365234375
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/GoalGroup.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "GoalGroup.tsx",
+        "description": "index: 51；bytes: 6867；kib: 6.7060546875",
+        "metadata": {
+          "file": "packages/overlay/src/components/GoalGroup.tsx",
+          "index": 51,
+          "bytes": 6867,
+          "kib": 6.7060546875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/ImagePreview.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "ImagePreview.tsx",
+        "description": "index: 52；bytes: 29934；kib: 29.232421875",
+        "metadata": {
+          "file": "packages/overlay/src/components/ImagePreview.tsx",
+          "index": 52,
+          "bytes": 29934,
+          "kib": 29.232421875
+        }
+      },
+      {
+        "id": "file:packages/overlay/src/components/InlineToolPart.tsx",
+        "parentID": "dir:packages/overlay/src/components",
+        "label": "InlineToolPart.tsx",
+        "description": "index: 53；bytes: 27225；kib: 26.5869140625",
+        "metadata": {
+          "file": "packages/overlay/src/components/InlineToolPart.tsx",
+          "index": 53,
+          "bytes": 27225,
+          "kib": 26.5869140625
+        }
+      }
+    ],
+    "defaultExpandedDepth": 5
+  },
+  "timeCreated": 1795772307606,
+  "timeUpdated": 1795772307606
+}

@@ -5805,6 +5805,14 @@ sheet navigation, graph/timeline/tree exploration, terminal transcript search,
 3D camera control, and other presentation-only interactions remain
 renderer-local.
 
+Native Tree branches own one current expansion value, initialized from
+defaultExpandedDepth and synchronized with their native disclosure toggle.
+Each changed normalized nonempty query expands its matching ancestor branches,
+including branches the reader previously collapsed. Clearing shows the complete
+node collection with the current branch state. This shared renderer also serves
+the JSON artifact inspector; published nodes, original JSON text and their
+existing complete exports retain their own data contracts.
+
 Terminal transcript search uses one native SearchAddon: Enter and the next-match
 button invoke the same forward navigation, while input edits retain incremental
 search. Clearing delegates the empty term to that same native search operation,
