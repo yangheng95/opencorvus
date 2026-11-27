@@ -4,13 +4,13 @@ import {
   HistogramSeries,
   createChart,
   type CandlestickData,
-  type HistogramData,
   type IChartApi,
   type ISeriesApi,
+  type MouseEventParams,
   type UTCTimestamp,
 } from "lightweight-charts"
-import { createEffect, createMemo, onCleanup, onMount } from "solid-js"
-import { createArtifactCandlestickPresentation } from "../../services/artifact-candlestick"
+import { createEffect, createMemo, createSignal, onCleanup, onMount } from "solid-js"
+import { artifactCandlestickVolumeData, createArtifactCandlestickPresentation } from "../../services/artifact-candlestick"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { observeAppliedTheme, themeColor } from "../../services/theme"
 import { localeTag, t } from "../../utils/i18n"
@@ -26,6 +26,11 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
   let currentCandles: ISeriesApi<"Candlestick"> | undefined
   let currentVolume: ISeriesApi<"Histogram"> | undefined
   const presentation = createMemo(() => createArtifactCandlestickPresentation(props.payload.series, localeTag()))
+  const pointsByTime = createMemo(() => new Map(props.payload.series.map((point) => [point.time, point])))
+  const [crosshairTime, setCrosshairTime] = createSignal<number>()
+  const currentPoint = () => crosshairTime() === undefined
+    ? props.payload.series.at(-1)!
+    : pointsByTime().get(crosshairTime()!)!
   createEffect(() => {
     const next = presentation()
     const volumeTitle = t("artifact.candlestick.volume")
@@ -99,6 +104,13 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
         close: point.close,
       })) as CandlestickData<UTCTimestamp>[],
     )
+    const readCrosshair = (event: MouseEventParams) => {
+      const time = event.time
+      setCrosshairTime(event.point && typeof time === "number" && event.seriesData.has(candles) && pointsByTime().has(time)
+        ? time
+        : undefined)
+    }
+    chart.subscribeCrosshairMove(readCrosshair)
     const volume = props.payload.series.some((point) => point.volume !== undefined)
       ? chart.addSeries(HistogramSeries, { priceFormat: { type: "volume" }, title: t("artifact.candlestick.volume") }, 1)
       : undefined
@@ -107,11 +119,7 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
       candles.getPane().setStretchFactor(4)
       volume.getPane().setStretchFactor(1)
       volume.setData(
-        props.payload.series.map((point) => ({
-          time: point.time as UTCTimestamp,
-          value: point.volume ?? 0,
-          color: point.close >= point.open ? initial.upVolumeColor : initial.downVolumeColor,
-        })) as HistogramData<UTCTimestamp>[],
+        artifactCandlestickVolumeData(props.payload.series, { up: initial.upVolumeColor, down: initial.downVolumeColor }),
       )
     }
     const stopThemeObserver = observeAppliedTheme(() => {
@@ -136,11 +144,7 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
         wickDownColor: next.downColor,
       })
       volume?.setData(
-        props.payload.series.map((point) => ({
-          time: point.time as UTCTimestamp,
-          value: point.volume ?? 0,
-          color: point.close >= point.open ? next.upVolumeColor : next.downVolumeColor,
-        })) as HistogramData<UTCTimestamp>[],
+        artifactCandlestickVolumeData(props.payload.series, { up: next.upVolumeColor, down: next.downVolumeColor }),
       )
     })
     let fitPending = true
@@ -165,12 +169,28 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
       currentVolume = undefined
       stopThemeObserver()
       resizeObserver.disconnect()
+      chart.unsubscribeCrosshairMove(readCrosshair)
       chart.remove()
     })
   })
 
   return (
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Candlestick">
+      <div class="msg-artifact-candlestick__readout">
+        <div class="msg-artifact-candlestick__record">
+          <span>{t(crosshairTime() === undefined ? "artifact.candlestick.latest" : "artifact.candlestick.crosshair")}</span>
+          <time dateTime={new Date(currentPoint().time * 1000).toISOString()}>{presentation().formatTime(currentPoint().time)}</time>
+        </div>
+        <dl class="msg-artifact-candlestick__values">
+          <div><dt>{t("artifact.candlestick.open")}</dt><dd>{presentation().formatPrice(currentPoint().open)}</dd></div>
+          <div><dt>{t("artifact.candlestick.high")}</dt><dd>{presentation().formatPrice(currentPoint().high)}</dd></div>
+          <div><dt>{t("artifact.candlestick.low")}</dt><dd>{presentation().formatPrice(currentPoint().low)}</dd></div>
+          <div><dt>{t("artifact.candlestick.close")}</dt><dd>{presentation().formatPrice(currentPoint().close)}</dd></div>
+          <div><dt>{t("artifact.candlestick.volume")}</dt><dd>{currentPoint().volume === undefined
+            ? t("artifact.candlestick.not_provided")
+            : presentation().formatVolume(currentPoint().volume!)}</dd></div>
+        </dl>
+      </div>
       <div
         class="msg-artifact-chart"
         ref={container}

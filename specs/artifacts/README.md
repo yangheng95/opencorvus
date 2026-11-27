@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [蜡烛图逐条读数证据](2026-11-27-candlestick-bar-details/README.md)
 - [蜡烛图高精度数据阅读证据](2026-11-27-candlestick-price-reading/README.md)
 - [地图点几何核对证据](2026-11-27-map-point-geometry/README.md)
 - [时间线键盘访问证据](2026-11-27-timeline-event-navigation/README.md)

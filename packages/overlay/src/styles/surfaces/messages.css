@@ -1765,6 +1765,7 @@ button.msg-source-chip .msg-source-chip__filename {
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diff"] .msg-artifact__body,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Terminal"] .msg-artifact__body,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Timeline"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Candlestick"] .msg-artifact__body,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Network"] .msg-artifact__body,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Tree"] .msg-artifact__body {
   display: grid;
@@ -1775,6 +1776,7 @@ button.msg-source-chip .msg-source-chip__filename {
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Code"] .msg-artifact__body,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diff"] .msg-artifact__body,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Network"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Candlestick"] .msg-artifact__body,
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Tree"] .msg-artifact__body {
   grid-template-rows: auto minmax(0, 1fr);
 }
@@ -1934,6 +1936,36 @@ button.msg-source-chip .msg-source-chip__filename {
 .msg-artifact-chart {
   width: 100%;
   min-height: calc(300px * var(--ui-scale));
+}
+
+.msg-artifact-candlestick__readout {
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
+  border-bottom: var(--oc-border-width) solid var(--border);
+  font-size: var(--ui-font-caption);
+}
+
+.msg-artifact-candlestick__record,
+.msg-artifact-candlestick__values,
+.msg-artifact-candlestick__values > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-sm) var(--ui-gap-lg);
+}
+
+.msg-artifact-candlestick__record,
+.msg-artifact-candlestick__values dt {
+  color: var(--text-soft);
+}
+
+.msg-artifact-candlestick__values {
+  margin: var(--ui-gap-sm) 0 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.msg-artifact-candlestick__values dd {
+  margin: 0;
+  color: var(--text-strong);
+  overflow-wrap: anywhere;
 }
 
 .msg-artifact-chart--vega {

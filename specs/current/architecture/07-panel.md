@@ -6166,6 +6166,16 @@ right scale within that same chart, with an initial price-to-volume weight of
 chart disposal retain ownership; no parallel chart or synchronized view store is
 created. Complete edge labels and themed separators keep the independent axes
 readable. Without volume, the chart retains only its price pane.
+Optional volume uses the native whitespace data contract: an omitted volume
+has only its time, while an authored zero remains a real histogram value.
+Initial construction and theme updates share that single projection.
+The chart's native crosshair time selects the original source row for a compact
+localized open/high/low/close/volume readout. Outside a source bar it explicitly
+shows the latest record; omitted volume reads Not provided, distinct from zero.
+Price and time reuse the native presentation, while volume preserves its own
+numeric precision. The source time index is read-only; the native chart remains
+the sole owner of crosshair and view. The readout and graph occupy the existing
+two-row expanded workspace layout without changing complete CSV exports.
 
 Maps carry inline GeoJSON and never accept model-selected styles, tiles, scripts,
 or network data. Their single point projection creates native MapLibre markers

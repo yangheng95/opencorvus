@@ -1,0 +1,151 @@
+{
+  "status": "passed",
+  "screenshots": {
+    "before": 5,
+    "accepted": 16,
+    "review": "personally viewed all archived original screenshots; native desktop actions; no UI automated assertions"
+  },
+  "pureDataTests": {
+    "passed": 9,
+    "expectCalls": 9,
+    "command": "bun run test:unit test/artifact-candlestick.test.ts"
+  },
+  "checks": {
+    "typecheck": {
+      "originalHandle": 34206,
+      "joinedExit": 0
+    },
+    "finalBuild": {
+      "originalHandle": 63143,
+      "joinedExit": 0,
+      "durationSeconds": 51.82
+    },
+    "earlierBuild": {
+      "originalHandle": 55951,
+      "joinedExit": 0,
+      "durationSeconds": 58.31,
+      "delivery": false
+    },
+    "cssTokens": "passed 9438 references / 2 documents",
+    "i18n": "passed 2 locales / 3364 keys",
+    "docs": "passed 353 operations / 26 groups",
+    "architectureIndex": "passed 20 documents"
+  },
+  "correctedCheckFailures": [
+    "initial CSS token --ui-font-sm was unresolved; replaced with existing --ui-font-caption and original checker passed",
+    "initial plain-number use of native branded BarPrice formatter rejected by typecheck; exported the same single numeric formatPrice function to both native adapter and readout; typecheck passed",
+    "initial independent Python str comparison mismatched exponent notation; Decimal comparison of actual CSV values passed"
+  ],
+  "clipboard": {
+    "method": "fresh tab reader initialization before product action; no tool paste on verification tab; first product Copy then native Ctrl+V into owned unsent textarea; draft cleared",
+    "baselineTab": "241805112",
+    "finalTab": "241805117",
+    "csvAndClipboardBytes": 418,
+    "nativeTextareaBytes": 412,
+    "normalization": "six CRLF pairs to LF only"
+  },
+  "tools": {
+    "screenshotTimeout": "record5 first capture timed out; next documented screenshot succeeded; no replacement control mechanism",
+    "staleFrames": "immediate post-navigation/expansion captures showed previous frame; archived inline and expanded images were replaced by personally viewed target-state captures",
+    "archiveFormat": "initial helper expected PNG but documented screenshot returned original JPEG bytes; archived exact unchanged originals with .jpg extension"
+  },
+  "runs": [
+    {
+      "label": "run94",
+      "pid": 1776,
+      "originalExecHandle": 18853,
+      "originalHandleJoinedExit": 0,
+      "state": "exited",
+      "drained": true,
+      "pairedCredentialCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_h4TDEKn6Z8CsgGuNdsYR",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run95",
+      "pid": 34212,
+      "originalExecHandle": 12278,
+      "originalHandleJoinedExit": 0,
+      "state": "exited",
+      "drained": true,
+      "pairedCredentialCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_hFPS1H3r2AtrEUvpEf5J",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "protectedFiles": 23,
+  "protectedOldRows": 2313,
+  "closedOwnedTabs": [
+    "241805109",
+    "241805112",
+    "241805117"
+  ],
+  "limitations": [
+    "no new native single-record / all-volume-missing / fractional-volume / 20k-record / duplicate-or-unsorted-time / extreme-price-range coverage",
+    "five other themes and screen reader not newly exercised",
+    "crosshair reading is native pointer behavior; no new keyboard bar-navigation contract"
+  ]
+}

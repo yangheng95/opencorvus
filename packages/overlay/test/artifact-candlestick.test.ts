@@ -1,5 +1,24 @@
 import { expect, test } from "bun:test"
-import { createArtifactCandlestickPresentation } from "../src/services/artifact-candlestick"
+import { artifactCandlestickVolumeData, createArtifactCandlestickPresentation } from "../src/services/artifact-candlestick"
+
+test("candlestick projects optional volume as native whitespace and preserves authored zero and colors", () => {
+  expect(artifactCandlestickVolumeData([
+    { time: 1, open: 10, high: 12, low: 8, close: 11 },
+    { time: 2, open: 11, high: 12, low: 8, close: 10, volume: 0 },
+    { time: 3, open: 10, high: 12, low: 8, close: 11, volume: 1.23456789 },
+    { time: 4, open: 11, high: 12, low: 8, close: 10, volume: 120 },
+  ], { up: "green", down: "red" })).toStrictEqual([
+    { time: 1 },
+    { time: 2, value: 0, color: "red" },
+    { time: 3, value: 1.23456789, color: "green" },
+    { time: 4, value: 120, color: "red" },
+  ])
+})
+
+test("candlestick formats volume at its own authored precision with whole-price candles", () => {
+  const next = createArtifactCandlestickPresentation([{ time: 1, open: 10, high: 12, low: 8, close: 11 }], "en-US")
+  expect([0, 1.23456789, 1e-9, 120].map(next.formatVolume)).toStrictEqual(["0", "1.23456789", "0.000000001", "120"])
+})
 
 test.each([
   ["zh-CN", "2026年11月27日 UTC 10:05:00"],
