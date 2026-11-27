@@ -213,6 +213,10 @@ function ArtifactFileInformation(props: { content: ConversationArtifactContent }
 }
 
 function ArtifactContentView(props: { taskID: string; title: string; content: ConversationArtifactContent }) {
+  const readingStateKey = () => JSON.stringify([
+    "artifact-reader", "resource", props.taskID,
+    artifactReadLocatorKey(props.content.locator as CanonicalArtifactReadLocator),
+  ])
   const csvCompareCells = createMemo(() => csvCellComparator(localeTag()))
   const csvTable = createMemo(() =>
     props.content.mediaType === "text/csv" && props.content.text !== undefined
@@ -242,10 +246,7 @@ function ArtifactContentView(props: { taskID: string; title: string; content: Co
         <Match when={csvTable()}>
           {(payload) => (
             <TableArtifact
-              stateKey={JSON.stringify([
-                "artifact-table", "resource", props.taskID,
-                artifactReadLocatorKey(props.content.locator as CanonicalArtifactReadLocator),
-              ])}
+              stateKey={readingStateKey()}
               payload={payload()}
               exportFiles={originalTextExport}
               compareCells={csvCompareCells()}
@@ -253,7 +254,7 @@ function ArtifactContentView(props: { taskID: string; title: string; content: Co
           )}
         </Match>
         <Match when={jsonTree()}>
-          {(payload) => <TreeArtifact payload={payload()} exportFiles={originalTextExport} />}
+          {(payload) => <TreeArtifact stateKey={readingStateKey()} payload={payload()} exportFiles={originalTextExport} />}
         </Match>
         <Match when={props.content.mediaType === "text/markdown" && props.content.text !== undefined}>
           <DocumentArtifact

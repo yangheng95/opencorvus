@@ -1,6 +1,13 @@
-import { For, Show, createEffect, createMemo, createSignal, on } from "solid-js"
+import { For, Show, batch, createMemo } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import type { ArtifactExport } from "../../services/artifact-export"
+import { createArtifactTreeSearch, normalizeArtifactTreeQuery } from "../../services/artifact-tree"
+import {
+  conversationArtifactDisplayState,
+  conversationDisclosureExpanded,
+  setConversationArtifactDisplayState,
+  setConversationDisclosureExpanded,
+} from "../../store/conversation-ui"
 import { t } from "../../utils/i18n"
 import { Disclosure } from "../ui/Disclosure"
 import { SearchField } from "../ui/SearchField"
@@ -8,6 +15,7 @@ import { ArtifactFrame } from "./ArtifactFrame"
 
 type TreePayload = Extract<InteractiveArtifactPayload, { renderer: "tree@1" }>
 type TreeNode = TreePayload["nodes"][number]
+const branchStateKey = (artifactKey: string, nodeID: string) => JSON.stringify(["artifact-tree-branch", artifactKey, nodeID])
 
 function TreeBranch(props: {
   node: TreeNode
@@ -16,11 +24,12 @@ function TreeBranch(props: {
   depth: number
   defaultExpandedDepth: number
   query: string
+  stateKey: string
 }) {
-  const [expanded, setExpanded] = createSignal(props.depth < props.defaultExpandedDepth)
-  createEffect(on(() => props.query, (query) => {
-    if (query) setExpanded(true)
-  }))
+  const expanded = () => conversationDisclosureExpanded(
+    branchStateKey(props.stateKey, props.node.id), Boolean(props.query) || props.depth < props.defaultExpandedDepth,
+  )
+  const setExpanded = (open: boolean) => setConversationDisclosureExpanded(branchStateKey(props.stateKey, props.node.id), open)
   const children = () => (props.childrenByParent.get(props.node.id) ?? []).filter((node) => props.visible.has(node.id))
   return (
     <li role="treeitem" data-tree-node={props.node.id}>
@@ -49,6 +58,7 @@ function TreeBranch(props: {
                     depth={props.depth + 1}
                     defaultExpandedDepth={props.defaultExpandedDepth}
                     query={props.query}
+                    stateKey={props.stateKey}
                   />
                 )}
               </For>
@@ -60,10 +70,10 @@ function TreeBranch(props: {
   )
 }
 
-export function TreeArtifact(props: { payload: TreePayload; exportFiles?: () => ArtifactExport[] }) {
-  const [filter, setFilter] = createSignal("")
-  const query = createMemo(() => filter().trim().toLowerCase())
-  const byID = createMemo(() => new Map(props.payload.nodes.map((node) => [node.id, node])))
+export function TreeArtifact(props: { payload: TreePayload; stateKey: string; exportFiles?: () => ArtifactExport[] }) {
+  const filter = () => conversationArtifactDisplayState(props.stateKey)?.query ?? ""
+  const query = createMemo(() => normalizeArtifactTreeQuery(filter()))
+  const search = createMemo(() => createArtifactTreeSearch(props.payload.nodes))
   const childrenByParent = createMemo(() => {
     const result = new Map<string | undefined, TreeNode[]>()
     for (const node of props.payload.nodes) {
@@ -73,20 +83,22 @@ export function TreeArtifact(props: { payload: TreePayload; exportFiles?: () => 
     }
     return result
   })
-  const visible = createMemo(() => {
-    if (!query()) return new Set(props.payload.nodes.map((node) => node.id))
-    const result = new Set<string>()
-    for (const node of props.payload.nodes) {
-      if (!`${node.label} ${node.description ?? ""}`.toLowerCase().includes(query())) continue
-      let current: TreeNode | undefined = node
-      while (current) {
-        result.add(current.id)
-        current = current.parentID ? byID().get(current.parentID) : undefined
-      }
-    }
-    return result
-  })
+  const visible = createMemo(() => search()(query()))
   const roots = createMemo(() => (childrenByParent().get(undefined) ?? []).filter((node) => visible().has(node.id)))
+  const setFilter = (value: string) => {
+    const next = normalizeArtifactTreeQuery(value)
+    const changed = next !== query()
+    batch(() => {
+      setConversationArtifactDisplayState(props.stateKey, { query: value })
+      // A new query reveals its paths once. Mounting the same query respects
+      // the reader's retained branch choices, including a deliberate collapse.
+      if (next && changed) {
+        for (const id of search()(next)) {
+          if (childrenByParent().has(id)) setConversationDisclosureExpanded(branchStateKey(props.stateKey, id), true)
+        }
+      }
+    })
+  }
 
   return (
     <ArtifactFrame payload={props.payload} exportFiles={props.exportFiles} title={props.payload.title} kind="Tree">
@@ -111,6 +123,7 @@ export function TreeArtifact(props: { payload: TreePayload; exportFiles?: () => 
                 depth={0}
                 defaultExpandedDepth={props.payload.defaultExpandedDepth ?? 1}
                 query={query()}
+                stateKey={props.stateKey}
               />
             )}
           </For>

@@ -103,6 +103,10 @@ export function InteractiveArtifactPart(props: { part: unknown }) {
     },
   )
   const [artifact] = createResource(source, loadSessionInteractiveArtifact)
+  const readingStateKey = () => {
+    const current = artifact()!
+    return JSON.stringify(["artifact-reader", "interactive", current.sessionID, current.id])
+  }
 
   return (
     <Show
@@ -138,7 +142,7 @@ export function InteractiveArtifactPart(props: { part: unknown }) {
               </Match>
               <Match when={record().payload.renderer === "table@1"}>
                 <TableArtifact
-                  stateKey={JSON.stringify(["artifact-table", "interactive", record().sessionID, record().id])}
+                  stateKey={readingStateKey()}
                   payload={record().payload as TablePayload}
                 />
               </Match>
@@ -188,7 +192,7 @@ export function InteractiveArtifactPart(props: { part: unknown }) {
                 <NetworkArtifact payload={record().payload as NetworkPayload} />
               </Match>
               <Match when={record().payload.renderer === "tree@1"}>
-                <TreeArtifact payload={record().payload as TreePayload} />
+                <TreeArtifact stateKey={readingStateKey()} payload={record().payload as TreePayload} />
               </Match>
               <Match when={record().payload.renderer === "terminal@1"}>
                 <TerminalArtifact payload={record().payload as TerminalPayload} />

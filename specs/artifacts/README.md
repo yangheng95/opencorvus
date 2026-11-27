@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [快照文件浏览与结构化交付证据](2026-11-27-snapshot-resource-review/README.md)
 - [CSV交付阅读证据](2026-11-27-csv-delivery-reading/README.md)
 - [工作簿逐项复核与表格检索证据](2026-11-27-workbook-row-review/README.md)
 - [真实聚焦测试执行与回看证据](2026-11-27-test-run-review/README.md)

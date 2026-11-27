@@ -5811,14 +5811,23 @@ Model Context Protocol Apps bridge. Heavy renderers are loaded only when their
 artifact is visible. It never infers a renderer from a title, file extension,
 URL, or HTML content. Sorting, filtering, pagination, code editing, slide and
 sheet navigation, graph/timeline/tree exploration, terminal transcript search,
-3D camera control, and other presentation-only interactions remain
-renderer-local.
+3D camera control, and other interactions remain presentation-only. Table and
+Tree reading intent uses the bounded conversation presentation owner below;
+other renderer-local choices retain their existing lifetimes.
 
-Native Tree branches own one current expansion value, initialized from
-defaultExpandedDepth and synchronized with their native disclosure toggle.
-Each changed normalized nonempty query expands its matching ancestor branches,
-including branches the reader previously collapsed. Clearing shows the complete
-node collection with the current branch state. This shared renderer also serves
+Native Tree query uses the existing artifact presentation record, and each
+branch uses the existing bounded disclosure record under its artifact/node
+identity. The shared content owner derives the same required artifact-reader
+identity for Table and Tree: actual Session/artifact for a publication, and
+Task/canonical resource locator for an inspected file. These choices follow API
+authority/source isolation and survive preview closure or work selection changes
+within the retained 50-conversation/200-entry memory bounds; reload persistence
+is not added. Branch defaults follow defaultExpandedDepth or a current query.
+Only a changed normalized nonempty input expands its actual matching ancestor
+branches. Mounting the same query preserves a deliberate collapse; clearing
+shows the complete collection with its current branch state. Native disclosure
+toggle remains the sole interaction source. The pure tree search supplies the
+same declared-node/ancestor set to filtering and query navigation. It also serves
 the JSON artifact inspector; published nodes, original JSON text and their
 existing complete exports retain their own data contracts.
 

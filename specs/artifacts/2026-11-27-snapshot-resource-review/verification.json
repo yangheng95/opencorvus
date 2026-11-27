@@ -1,0 +1,172 @@
+{
+  "status": "passed",
+  "change": "Tree query and branch choices in the existing bounded authority/source owner; actual content identity shared with Table; pure same-node/ancestor search reused by input navigation and filtering",
+  "checks": {
+    "focusedDataTests": "12 tests / 22 positive assertions: tree6/10 + reading-state6/12",
+    "finalTypecheckAndBuild": {
+      "originalHandle": 11423,
+      "joinedExitCode": 0,
+      "buildSeconds": 51.63
+    },
+    "rendererPublicSurface": "passed",
+    "docs": "353 operations / 26 groups",
+    "architecture": "20 current documents",
+    "cssAndLocaleCatalogChanges": "none"
+  },
+  "screenshots": {
+    "before": 6,
+    "accepted": 15,
+    "method": "native desktop interactions and personally reviewed original JPEGs; no UI automation",
+    "omittedPartialContext": "before-json-reopened-fold-reset.jpg; native Tab brought actual by_region into view for the complete replacement capture"
+  },
+  "nativeInteractions": [
+    "JSON by_region collapse then28.25 reveals actual East value and4-node ancestor path; close/reopen retains query/path",
+    "under same28.25 manually collapse by_region; close/reopen retains that exact collapse",
+    "change query to7.35 reveals previously different South path; clear shows all10 nodes, total5/35.60, East3/28.25 andSouth2/7.35",
+    "switch delivery record JSON to direct original JSON preview retains7.35 and same branch state",
+    "set South collapsed, visit CSV; CSV 华/amount ascending survives close/reopen and descending updates correctly",
+    "CSV 华南7.35 filters1/2 while actual native download remains complete59-byte original; return JSON keeps7.35/South collapsed",
+    "native57-node tree InlineToolPart query/components collapsed survives visit to real Task and return; Task JSON independently keeps7.35/South collapsed",
+    "native clear restores57 nodes and keeps components collapsed; new49.3681640625 query reveals original App.tsx1/50553/full precision",
+    "English/Dark settings with same49.3681640625 keep deliberate components collapse; new26.5869140625 reveals original InlineToolPart53/27225/full precision",
+    "restored Chinese/System keeps same original query/path; complete native22022-byte download equals all57 actual source nodes"
+  ],
+  "originalFacts": {
+    "completedTasks": 2,
+    "projectFiles": 23,
+    "oldProjectRows": 2377,
+    "extraTaskRows": 23,
+    "jsonBytes": 238,
+    "snapshotManifestBytes": 1644,
+    "snapshotResources": 6,
+    "declaredDeliveryFiles": 5,
+    "manifestInputFile": "sales.csv",
+    "nativeTreeNodes": 57,
+    "nativeTreeFiles": 53,
+    "baselineTiming": "all project files, five-table rows and original extra Task rows verified before104 startup; public Task objects compared to prior verified originals"
+  },
+  "clipboardAndDownloads": {
+    "summary": {
+      "filename": "summary (3).json",
+      "bytes": 238,
+      "equalsOriginalResourceOrProductionExport": true,
+      "modifiedAfterCandidateStartup": true
+    },
+    "tree": {
+      "filename": "源文件目录树｜历史清单复核 (1).json",
+      "bytes": 22022,
+      "equalsOriginalResourceOrProductionExport": true,
+      "modifiedAfterCandidateStartup": true
+    },
+    "csv": {
+      "filename": "区域汇总 (4).csv",
+      "bytes": 59,
+      "equalsOriginalResourceOrProductionExport": true,
+      "modifiedAfterCandidateStartup": true
+    },
+    "clipboard": {
+      "tab": "241805180",
+      "initialization": "silent reader before first product Copy, no tool paste",
+      "copyBytes": 238,
+      "nativePasteBytes": 224,
+      "completeOriginalJSON": true,
+      "unsentDraftCleared": true
+    }
+  },
+  "nativeOriginalsArchive": {
+    "file": "native-originals.zip",
+    "members": [
+      "summary (3).json",
+      "源文件目录树｜历史清单复核 (1).json",
+      "区域汇总 (4).csv",
+      "original-summary.json",
+      "native-summary-copy.json",
+      "native-summary-paste.json",
+      "original-snapshot-manifest.json",
+      "original-resource.csv"
+    ],
+    "standaloneText": "Git-normalized reading copies; ZIP preserves immutable original bytes"
+  },
+  "runs": [
+    {
+      "label": "run104",
+      "pid": 37768,
+      "url": "http://127.0.0.1:59064/",
+      "preflight": {
+        "sessionID": "ses_h0KIyuJYVh8Pctp8tsMm",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 76350,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run105",
+      "pid": 28380,
+      "url": "http://127.0.0.1:51165/",
+      "preflight": {
+        "sessionID": "ses_hKxqjZZxqbGG9u2H0LPi",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 8107,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "closedOwnedTabs": [
+    "241805175",
+    "241805180"
+  ],
+  "observations": [
+    "private checker first assumed all snapshot resources equaled five deliverables; actual manifest includes input sales.csv, fixed to six exact paths and reran",
+    "private checker first counted every metadata.file as a file; actual four directories also carry metadata.file, fixed numeric-index source classification and reran",
+    "initial file searches included guessed absent paths; later reads use actual enumerated filenames, no product failure inferred"
+  ],
+  "limits": [
+    "bounded memory only, no reload/restart persistence",
+    "five actual delivery records are individual resources; task snapshot manifest verified through real public bytes but nested snapshot-browser UI was not exposed and not claimed as accepted",
+    "no new business model task or delegation; four precise Sol requests are paired preflight only, existing real completed business deliverables/publications were replayed",
+    "maximum10000-node performance and more-than200-branch native interaction not measured; bounded state checked by pure positive contracts",
+    "same-name versions/authority rotation, full ARIA tree direction keys, screen reader, other themes and mobile not newly exercised"
+  ]
+}
