@@ -378,6 +378,12 @@ Work Artifact receipt provenance failures use the canonical
 Tool failure presentation localizes its compact headline and actionable message;
 the original diagnostic and canonical metadata remain in the existing details.
 Historical generic errors retain their recorded facts without text-based reclassification.
+Other canonical, non-cancelled Tool failures use one localized compact summary
+and a diagnostic disclosure hint. The original failure message, origin and call
+metadata remain complete in the existing details; a historical classification
+does not supply a more specific user-facing cause. Tool diagnostic details use
+a named, keyboard-focusable bounded reading region with native scrolling.
+Known named errors and cancellation retain their existing presentation contract.
 
 User-message PDF parts retain their chronological position and show their file
 label in a compact native disclosure by default. Expanding it loads the same

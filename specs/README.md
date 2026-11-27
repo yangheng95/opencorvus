@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [工具失败摘要与完整诊断的可读呈现](records/2026-11/2026-11-27-tool-failure-readable-summary.md)
 - [动态工具执行错误分类](records/2026-11/2026-11-27-dynamic-tool-error-classification.md)
 - [可编辑销售表格的公式与导出复验](records/2026-11/2026-11-27-live-spreadsheet-values-and-export.md)
 - [新工作销售核对的来源事实复验](records/2026-11/2026-11-27-sales-source-fact-review.md)

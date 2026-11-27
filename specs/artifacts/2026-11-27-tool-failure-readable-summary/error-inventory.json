@@ -1,0 +1,92 @@
+[
+  {
+    "id": "prt_g0Vc8gTHl00unQe7K5HO",
+    "messageID": "msg_g0Vc8gRSl00k6MBicIX0",
+    "sessionID": "ses_h741MhFupESfLJyUtFqm",
+    "tool": "publish_interactive_artifact",
+    "kind": "tool-input-invalid",
+    "name": "tool-input-invalid",
+    "classification": "tool-input-invalid",
+    "diagnosticChars": 3768
+  },
+  {
+    "id": "prt_g0Vc7QuMO00i7GnnJ0DG",
+    "messageID": "msg_g0Vc7QsTI00aryR90RFt",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "tool": "work_artifact_validate",
+    "kind": "tool-execution",
+    "name": "Error",
+    "classification": "tool-execution",
+    "diagnosticChars": 1530
+  },
+  {
+    "id": "prt_g0Vc7nIEr00y3n8QG7ki",
+    "messageID": "msg_g0Vc7nG4i00D7sdPVg9l",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "tool": "work_artifact_validate",
+    "kind": "tool-execution",
+    "name": "Error",
+    "classification": "tool-execution",
+    "diagnosticChars": 1044
+  },
+  {
+    "id": "prt_g0Vc7p8vn00rU0qitpEw",
+    "messageID": "msg_g0Vc7p7Fq005DsLWCeSM",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "tool": "read",
+    "kind": "tool-execution",
+    "name": "Error",
+    "classification": "tool-execution",
+    "diagnosticChars": 301
+  },
+  {
+    "id": "prt_g0Vc7zg3400VMdvW6Ywq",
+    "messageID": "msg_g0Vc7zetn00L6I577RdF",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "tool": "work_artifact_deliver",
+    "kind": "tool-execution",
+    "name": "Error",
+    "classification": "tool-execution",
+    "diagnosticChars": 128
+  },
+  {
+    "id": "prt_g0Vc85wCl00Qv55MZy2V",
+    "messageID": "msg_g0Vc85ucj00PUH2CDBTF",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "tool": "work_artifact_deliver",
+    "kind": "tool-execution",
+    "name": "Error",
+    "classification": "tool-execution",
+    "diagnosticChars": 385
+  },
+  {
+    "id": "prt_g0Vc8Dauf00r3J7M3hBX",
+    "messageID": "msg_g0Vc8DZ0500raynm6Q0k",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "tool": "work_artifact_deliver",
+    "kind": "tool-execution",
+    "name": "WorkArtifactReceiptSourceError",
+    "classification": "tool-execution",
+    "diagnosticChars": 417
+  },
+  {
+    "id": "prt_g0Vc8uAfJ007g08aTmmX",
+    "messageID": "msg_g0Vc8uA1X009FNnKROrO",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "tool": "sales_source_read_sales_source",
+    "kind": "tool-input-invalid",
+    "name": "McpError",
+    "classification": "tool-input-invalid",
+    "diagnosticChars": 55
+  },
+  {
+    "id": "prt_g0Vc8v1eJ00JPPIpFXgs",
+    "messageID": "msg_g0Vc8v12W00LwjQQbwti",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "tool": "sales_source_read_sales_source",
+    "kind": "tool-execution",
+    "name": "McpError",
+    "classification": "tool-execution",
+    "diagnosticChars": 55
+  }
+]

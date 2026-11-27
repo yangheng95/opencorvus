@@ -40,6 +40,7 @@ export function toolFailurePresentation(value: unknown): {
   if (parsed.success) {
     const missing = parsed.data.kind === "tool-execution" && parsed.data.name === "FileNotFoundError"
     const receiptSource = parsed.data.kind === "tool-execution" && parsed.data.name === "WorkArtifactReceiptSourceError"
+    const cancelled = parsed.data.kind === "MessageAbortedError" && parsed.data.name === "MessageAbortedError"
     const metadata = parsed.data.data?.canonical_error_metadata
     const path = record(metadata) ? (metadata as Record<string, unknown>).path : undefined
     const headline = missing
@@ -49,13 +50,15 @@ export function toolFailurePresentation(value: unknown): {
         : receiptSource
           ? t("tool.work_artifact_receipt_source")
           : undefined
+    const genericFailure = !headline && !cancelled
     return {
       message: missing
         ? typeof path === "string" ? t("explorer.error.not_found", { path }) : headline!
-        : receiptSource ? t("tool.work_artifact_receipt_source_hint") : parsed.data.message,
-      ...(headline ? { headline } : {}),
+        : receiptSource ? t("tool.work_artifact_receipt_source_hint")
+        : genericFailure ? t("tool.failure_details_hint") : parsed.data.message,
+      ...(headline || genericFailure ? { headline: headline ?? t("tool.failure_summary") } : {}),
       diagnostic: renderToolFailureCause(parsed.data),
-      cancelled: parsed.data.kind === "MessageAbortedError" && parsed.data.name === "MessageAbortedError",
+      cancelled,
     }
   }
   return { message: toolPayloadText(value), cancelled: false }

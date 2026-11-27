@@ -1,0 +1,710 @@
+[
+  {
+    "id": "prt_g0Vc8gTHl00unQe7K5HO",
+    "sessionID": "ses_h741MhFupESfLJyUtFqm",
+    "messageID": "msg_g0Vc8gRSl00k6MBicIX0",
+    "type": "tool",
+    "callID": "call_132468bb16834f8a9b8272d5141ffaba",
+    "tool": "publish_interactive_artifact",
+    "state": {
+      "status": "error",
+      "input": {
+        "artifact": {
+          "schemaVersion": "1",
+          "title": "销售核对电子表格",
+          "content": {
+            "renderer": "spreadsheet@1",
+            "editable": true,
+            "sheets": [
+              {
+                "id": "order-details",
+                "name": "订单明细",
+                "rowCount": 6,
+                "columnCount": 4,
+                "frozenRows": 1,
+                "cells": [
+                  {
+                    "address": "A1",
+                    "value": "订单编号",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "B1",
+                    "value": "区域",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "C1",
+                    "value": "金额",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "D1",
+                    "value": "备注",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "A2",
+                    "value": "A001"
+                  },
+                  {
+                    "address": "B2",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "C2",
+                    "value": 10.1,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "D2",
+                    "value": "普通订单"
+                  },
+                  {
+                    "address": "A3",
+                    "value": "A002"
+                  },
+                  {
+                    "address": "B3",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "C3",
+                    "value": 20.2,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "D3",
+                    "value": "中文客户"
+                  },
+                  {
+                    "address": "A4",
+                    "value": "A003"
+                  },
+                  {
+                    "address": "B4",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "C4",
+                    "value": -2.05,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "D4",
+                    "value": "退款"
+                  },
+                  {
+                    "address": "A5",
+                    "value": "A004"
+                  },
+                  {
+                    "address": "B5",
+                    "value": "华南"
+                  },
+                  {
+                    "address": "C5",
+                    "value": 0,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "D5",
+                    "value": "免费样品"
+                  },
+                  {
+                    "address": "A6",
+                    "value": "A005"
+                  },
+                  {
+                    "address": "B6",
+                    "value": "华南"
+                  },
+                  {
+                    "address": "C6",
+                    "value": 7.35,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "D6",
+                    "value": "普通订单"
+                  }
+                ]
+              },
+              {
+                "id": "regional-summary",
+                "name": "区域汇总",
+                "rowCount": 13,
+                "columnCount": 3,
+                "frozenRows": 1,
+                "cells": [
+                  {
+                    "address": "A1",
+                    "value": "区域",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "B1",
+                    "value": "订单数（笔）",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "C1",
+                    "value": "净金额（源文件未注明单位）",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "A2",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "B2",
+                    "value": 3,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "C2",
+                    "value": 28.25,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A3",
+                    "value": "华南"
+                  },
+                  {
+                    "address": "B3",
+                    "value": 2,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "C3",
+                    "value": 7.35,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A4",
+                    "value": "合计",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "B4",
+                    "value": null,
+                    "formula": "=SUM(B2:B3)",
+                    "computed": 5,
+                    "numberFormat": "0",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "C4",
+                    "value": null,
+                    "formula": "=SUM(C2:C3)",
+                    "computed": 35.6,
+                    "numberFormat": "0.00",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "A6",
+                    "value": "统计说明",
+                    "style": {
+                      "bold": true
+                    }
+                  },
+                  {
+                    "address": "A7",
+                    "value": "来源"
+                  },
+                  {
+                    "address": "B7",
+                    "value": "项目根目录 sales.csv；已按原始行序保留全部5条明细。"
+                  },
+                  {
+                    "address": "A8",
+                    "value": "订单计数"
+                  },
+                  {
+                    "address": "B8",
+                    "value": "每条源记录计1笔；退款及零金额订单均计入，不去重、不剔除。"
+                  },
+                  {
+                    "address": "A9",
+                    "value": "退款口径"
+                  },
+                  {
+                    "address": "B9",
+                    "value": "A003 金额 -2.05，计1笔；负金额抵减净金额。退款共1笔。"
+                  },
+                  {
+                    "address": "A10",
+                    "value": "零金额口径"
+                  },
+                  {
+                    "address": "B10",
+                    "value": "A004 金额 0.00，备注为“免费样品”，计1笔；对净金额贡献为零。零金额共1笔。"
+                  },
+                  {
+                    "address": "A11",
+                    "value": "金额与单位"
+                  },
+                  {
+                    "address": "B11",
+                    "value": "净金额为带符号金额之和，显示两位小数；源文件未提供币种或金额单位，不假定为元或任何币种。"
+                  },
+                  {
+                    "address": "A12",
+                    "value": "编辑与计算"
+                  },
+                  {
+                    "address": "B12",
+                    "value": "B4、C4 为 SUM 求和公式，修改本表 B2:B3、C2:C3 后重新计算合计；区域数值为本次源文件核算值，未设置与明细联动。"
+                  },
+                  {
+                    "address": "A13",
+                    "value": "其他源信息缺口"
+                  },
+                  {
+                    "address": "B13",
+                    "value": "源文件未提供日期、成本或目标；本表不据此推断期间、利润或达标情况。"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "failure": {
+        "kind": "tool-input-invalid",
+        "name": "tool-input-invalid",
+        "message": "AI_InvalidToolInputError: Invalid input for tool publish_interactive_artifact: AI_TypeValidationError: Type validation failed: Value: {\"artifact\":{\"schemaVersion\":\"1\",\"title\":\"销售核对电子表格\",\"content\":{\"renderer\":\"spreadsheet@1\",\"editable\":true,\"sheets\":[{\"id\":\"order-details\",\"name\":\"订单明细\",\"rowCount\":6,\"columnCount\":4,\"frozenRows\":1,\"cells\":[{\"address\":\"A1\",\"value\":\"订单编号\",\"style\":{\"bold\":true}},{\"address\":\"B1\",\"value\":\"区域\",\"style\":{\"bold\":true}},{\"address\":\"C1\",\"value\":\"金额\",\"style\":{\"bold\":true}},{\"address\":\"D1\",\"value\":\"备注\",\"style\":{\"bold\":true}},{\"address\":\"A2\",\"value\":\"A001\"},{\"address\":\"B2\",\"value\":\"华东\"},{\"address\":\"C2\",\"value\":10.1,\"numberFormat\":\"0.00\"},{\"address\":\"D2\",\"value\":\"普通订单\"},{\"address\":\"A3\",\"value\":\"A002\"},{\"address\":\"B3\",\"value\":\"华东\"},{\"address\":\"C3\",\"value\":20.2,\"numberFormat\":\"0.00\"},{\"address\":\"D3\",\"value\":\"中文客户\"},{\"address\":\"A4\",\"value\":\"A003\"},{\"address\":\"B4\",\"value\":\"华东\"},{\"address\":\"C4\",\"value\":-2.05,\"numberFormat\":\"0.00\"},{\"address\":\"D4\",\"value\":\"退款\"},{\"address\":\"A5\",\"value\":\"A004\"},{\"address\":\"B5\",\"value\":\"华南\"},{\"address\":\"C5\",\"value\":0,\"numberFormat\":\"0.00\"},{\"address\":\"D5\",\"value\":\"免费样品\"},{\"address\":\"A6\",\"value\":\"A005\"},{\"address\":\"B6\",\"value\":\"华南\"},{\"address\":\"C6\",\"value\":7.35,\"numberFormat\":\"0.00\"},{\"address\":\"D6\",\"value\":\"普通订单\"}]},{\"id\":\"regional-summary\",\"name\":\"区域汇总\",\"rowCount\":13,\"columnCount\":3,\"frozenRows\":1,\"cells\":[{\"address\":\"A1\",\"value\":\"区域\",\"style\":{\"bold\":true}},{\"address\":\"B1\",\"value\":\"订单数（笔）\",\"style\":{\"bold\":true}},{\"address\":\"C1\",\"value\":\"净金额（源文件未注明单位）\",\"style\":{\"bold\":true}},{\"address\":\"A2\",\"value\":\"华东\"},{\"address\":\"B2\",\"value\":3,\"numberFormat\":\"0\"},{\"address\":\"C2\",\"value\":28.25,\"numberFormat\":\"0.00\"},{\"address\":\"A3\",\"value\":\"华南\"},{\"address\":\"B3\",\"value\":2,\"numberFormat\":\"0\"},{\"address\":\"C3\",\"value\":7.35,\"numberFormat\":\"0.00\"},{\"address\":\"A4\",\"value\":\"合计\",\"style\":{\"bold\":true}},{\"address\":\"B4\",\"value\":null,\"formula\":\"=SUM(B2:B3)\",\"computed\":5,\"numberFormat\":\"0\",\"style\":{\"bold\":true}},{\"address\":\"C4\",\"value\":null,\"formula\":\"=SUM(C2:C3)\",\"computed\":35.6,\"numberFormat\":\"0.00\",\"style\":{\"bold\":true}},{\"address\":\"A6\",\"value\":\"统计说明\",\"style\":{\"bold\":true}},{\"address\":\"A7\",\"value\":\"来源\"},{\"address\":\"B7\",\"value\":\"项目根目录 sales.csv；已按原始行序保留全部5条明细。\"},{\"address\":\"A8\",\"value\":\"订单计数\"},{\"address\":\"B8\",\"value\":\"每条源记录计1笔；退款及零金额订单均计入，不去重、不剔除。\"},{\"address\":\"A9\",\"value\":\"退款口径\"},{\"address\":\"B9\",\"value\":\"A003 金额 -2.05，计1笔；负金额抵减净金额。退款共1笔。\"},{\"address\":\"A10\",\"value\":\"零金额口径\"},{\"address\":\"B10\",\"value\":\"A004 金额 0.00，备注为“免费样品”，计1笔；对净金额贡献为零。零金额共1笔。\"},{\"address\":\"A11\",\"value\":\"金额与单位\"},{\"address\":\"B11\",\"value\":\"净金额为带符号金额之和，显示两位小数；源文件未提供币种或金额单位，不假定为元或任何币种。\"},{\"address\":\"A12\",\"value\":\"编辑与计算\"},{\"address\":\"B12\",\"value\":\"B4、C4 为 SUM 求和公式，修改本表 B2:B3、C2:C3 后重新计算合计；区域数值为本次源文件核算值，未设置与明细联动。\"},{\"address\":\"A13\",\"value\":\"其他源信息缺口\"},{\"address\":\"B13\",\"value\":\"源文件未提供日期、成本或目标；本表不据此推断期间、利润或达标情况。\"}]}]}}}.\nError message: [\n  {\n    \"code\": \"custom\",\n    \"path\": [\n      \"artifact\",\n      \"content\",\n      \"sheets\",\n      1,\n      \"cells\",\n      10,\n      \"value\"\n    ],\n    \"message\": \"spreadsheet cell must contain exactly one value or formula\"\n  },\n  {\n    \"code\": \"custom\",\n    \"path\": [\n      \"artifact\",\n      \"content\",\n      \"sheets\",\n      1,\n      \"cells\",\n      11,\n      \"value\"\n    ],\n    \"message\": \"spreadsheet cell must contain exactly one value or formula\"\n  },\n  {\n    \"code\": \"custom\",\n    \"message\": \"spreadsheet cell must contain exactly one value or formula\",\n    \"path\": [\n      \"artifact\",\n      \"content\",\n      \"sheets\",\n      1,\n      \"cells\",\n      10,\n      \"value\"\n    ]\n  },\n  {\n    \"code\": \"custom\",\n    \"message\": \"spreadsheet cell must contain exactly one value or formula\",\n    \"path\": [\n      \"artifact\",\n      \"content\",\n      \"sheets\",\n      1,\n      \"cells\",\n      11,\n      \"value\"\n    ]\n  }\n]",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "call_132468bb16834f8a9b8272d5141ffaba",
+          "toolName": "publish_interactive_artifact"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_00f0dce57a2606c7016b08f34bade487d0af0631d486d1ebf6"
+        }
+      },
+      "time": {
+        "start": 1795748683761,
+        "end": 1795748701858
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_00f0dce57a2606c7016b08f34bade487d0af0631d486d1ebf6"
+      }
+    },
+    "orderKey": "v1:0001795748701848:0000000000000031:0000000000000000:part:prt_g0Vc8gTHl00unQe7K5HO"
+  },
+  {
+    "id": "prt_g0Vc7QuMO00i7GnnJ0DG",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7QsTI00aryR90RFt",
+    "type": "tool",
+    "callID": "call_3urggNzQ9V6MBkN1jjIphNWT",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.document@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/2825533a535d2d197ce2e80abb02cdbb3420588c6be8067aecaa7554050ade82.docx"
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "OfficeCLI issue inspection reported Office issues: {\"count\":6,\"issues\":[{\"id\":\"C1\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100004]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"本稿直接依据当前项目根目录真实的 sales.csv 编制，重新读取全部原始记录并独立复算，不以既有脚本、旧报告或已交付工作簿代替本次核对。文件包含订单编号、区域、金额、备注四个字段，共五笔数据，覆盖华东与华南。下文原行序从首笔数据起编号，不含表头，逐笔陈述保持源文件顺序。\"},{\"id\":\"C2\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100010]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序1：订单编号A001，区域华东，金额10.10，备注“普通订单”。原行序2：订单编号A002，区域华东，金额20.20，备注“中文客户”。这两笔为正金额记录，按原文保留编号、区域和备注，不据备注推断客户身份或订单日期。\"},{\"id\":\"C3\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100012]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序3：订单编号A003，区域华东，金额-2.05，备注“退款”。该笔计为一笔订单及一笔退款，金额按负数纳入华东与总体净额，不转换为正金额，也不删除记录。源文件没有说明它对应哪一笔原销售，不据编号相邻关系建立关联。\"},{\"id\":\"C4\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100014]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"原行序4：订单编号A004，区域华南，金额0.00，备注“免费样品”。该笔仍计一笔订单，不计退款。原行序5：订单编号A005，区域华南，金额7.35，备注“普通订单”。零金额不表示没有业务活动，但其成本和审批情况在源数据中均未知。\"},{\"id\":\"C5\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=00100018]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"华东共3笔，净金额为10.10加20.20减2.05，结果28.25；华南共2笔，净金额为0.00加7.35，结果7.35。总体共5笔，净金额35.60。分区订单数3加2等于5，分区净金额28.25加7.35等于35.60，与逐笔汇总一致。\"},{\"id\":\"C6\",\"type\":1,\"severity\":2,\"path\":\"/body/p[@paraId=0010001A]/r[1]\",\"message\":\"Mixed CJK/Latin punctuation\",\"context\":\"按金额性质再次核对：正金额3笔，合计37.65；退款1笔，带符号金额合计-2.05；零金额1笔，合计0.00。三类笔数合计5，金额合计37.65减2.05加0.00等于35.60，未遗漏退款或免费样品记录。\"}]}",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_3urggNzQ9V6MBkN1jjIphNWT",
+          "toolName": "work_artifact_validate"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0a67c837a2129a3a016b08ab1627c887d08c151a564a4480ae"
+        }
+      },
+      "time": {
+        "start": 1795730198252,
+        "end": 1795730208262
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0a67c837a2129a3a016b08ab1627c887d08c151a564a4480ae"
+      }
+    },
+    "orderKey": "v1:0001795730199865:0000000000000031:0000000000000000:part:prt_g0Vc7QuMO00i7GnnJ0DG"
+  },
+  {
+    "id": "prt_g0Vc7nIEr00y3n8QG7ki",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7nG4i00D7sdPVg9l",
+    "type": "tool",
+    "callID": "call_SvrXyPjbL8C8JnTvXW8AwxbF",
+    "tool": "work_artifact_validate",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.presentation@1",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/dc04bde1c0734b89fcc3b6f78377ae62342994daaa2d10138ce893a3cc7a5fdc.pptx"
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "OfficeCLI issue inspection reported Office issues: {\"count\":6,\"issues\":[{\"id\":\"O1\",\"type\":0,\"severity\":1,\"path\":\"/slide[1]/shape[@id=100000]\",\"message\":\"text overflow: 1 lines at 14.0pt need 16pt, usable 13pt. suggest.height=0.85cm\"},{\"id\":\"O2\",\"type\":0,\"severity\":1,\"path\":\"/slide[2]/shape[@id=100009]\",\"message\":\"text overflow: 1 lines at 14.0pt need 16pt, usable 13pt. suggest.height=0.85cm\"},{\"id\":\"O3\",\"type\":0,\"severity\":1,\"path\":\"/slide[3]/shape[@id=100015]\",\"message\":\"text overflow: 1 lines at 14.0pt need 16pt, usable 13pt. suggest.height=0.85cm\"},{\"id\":\"O4\",\"type\":0,\"severity\":1,\"path\":\"/slide[3]/shape[@id=100017]\",\"message\":\"text overflow: 1 lines at 24.0pt need 28pt, usable 21pt. suggest.height=1.25cm\"},{\"id\":\"O5\",\"type\":0,\"severity\":1,\"path\":\"/slide[3]/shape[@id=100020]\",\"message\":\"text overflow: 1 lines at 24.0pt need 28pt, usable 21pt. suggest.height=1.25cm\"},{\"id\":\"O6\",\"type\":0,\"severity\":1,\"path\":\"/slide[3]/shape[@id=100022]\",\"message\":\"text overflow: 2 lines at 15.0pt need 34pt, usable 32pt. suggest.height=1.5cm\"}]}",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_SvrXyPjbL8C8JnTvXW8AwxbF",
+          "toolName": "work_artifact_validate"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_07cec73b56949cf5016b08bfed2c0887d093f6c7b80401e975"
+        }
+      },
+      "time": {
+        "start": 1795735533257,
+        "end": 1795735543477
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_07cec73b56949cf5016b08bfed2c0887d093f6c7b80401e975"
+      }
+    },
+    "orderKey": "v1:0001795735535270:0000000000000031:0000000000000000:part:prt_g0Vc7nIEr00y3n8QG7ki"
+  },
+  {
+    "id": "prt_g0Vc7p8vn00rU0qitpEw",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7p7Fq005DsLWCeSM",
+    "type": "tool",
+    "callID": "call_nuR3Ni4X8R8VcSF2fhcEohZB",
+    "tool": "read",
+    "state": {
+      "status": "error",
+      "input": {
+        "filePath": "/attachment/prj_haW9BdBH559F4Yw143ch/bc9044445e327f9ef56efe996135aa64933f4889ceace910da3af7092fbe2ba9.pptx"
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "Cannot read binary file: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\.opencorvus\\.r\\project\\attachments\\f056ea31e6d325f553c433500dbffa145a9649aa23616e70cecd7fc7da60411d\\bc9044445e327f9ef56efe996135aa64933f4889ceace910da3af7092fbe2ba9.pptx",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_nuR3Ni4X8R8VcSF2fhcEohZB",
+          "toolName": "read"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_08a555401cc5adc9016b08c1a6058887d09f990b35d9c5443b"
+        }
+      },
+      "time": {
+        "start": 1795735974135,
+        "end": 1795735975784
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_08a555401cc5adc9016b08c1a6058887d09f990b35d9c5443b"
+      }
+    },
+    "orderKey": "v1:0001795735975419:0000000000000031:0000000000000000:part:prt_g0Vc7p8vn00rU0qitpEw"
+  },
+  {
+    "id": "prt_g0Vc7zg3400VMdvW6Ywq",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc7zetn00L6I577RdF",
+    "type": "tool",
+    "callID": "call_WbKIWfkVPozYCt1nCfAEbn9w",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·物理字号复核",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163.json",
+        "validation_receipt_sha": "a63fe90a2d65116211e64a26c8ac4981f2cd3263c51ff8452602273bd7e6b163",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": ""
+          },
+          {
+            "slide": 2,
+            "title": "区域净金额与订单数",
+            "markdown": ""
+          },
+          {
+            "slide": 3,
+            "title": "谨慎解读与核对行动",
+            "markdown": ""
+          }
+        ]
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "Final Work Artifact render 1 differs from the reviewed validation receipt; validate and review the fresh renders before delivery",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_WbKIWfkVPozYCt1nCfAEbn9w",
+          "toolName": "work_artifact_deliver"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b351d25cdb8b42c016b08cb74a16087d0935e140bea2605ab"
+        }
+      },
+      "time": {
+        "start": 1795738484718,
+        "end": 1795738508501
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0b351d25cdb8b42c016b08cb74a16087d0935e140bea2605ab"
+      }
+    },
+    "orderKey": "v1:0001795738489885:0000000000000031:0000000000000000:part:prt_g0Vc7zg3400VMdvW6Ywq"
+  },
+  {
+    "id": "prt_g0Vc85wCl00Qv55MZy2V",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc85ucj00PUH2CDBTF",
+    "type": "tool",
+    "callID": "call_BfrpkJkdrwx6mp4E56nqbt5M",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·中文图片说明",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae.json",
+        "validation_receipt_sha": "ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": "订单与净金额总览"
+          },
+          {
+            "slide": 2,
+            "title": "区域对比：金额与笔数",
+            "markdown": "区域对比：金额与笔数"
+          },
+          {
+            "slide": 3,
+            "title": "事实、缺口与后续行动",
+            "markdown": "事实、缺口与后续行动"
+          }
+        ]
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "validation receipt has no completed host-owned work_artifact_validate authority in this Session. received: url \"/attachment/prj_haW9BdBH559F4Yw143ch/ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae.json\" sha \"ec957cdaaeabf33c1104865d4a6477c2798b4f194e79089d9b397924c28a5bae\", expected: a receipt published by a completed work_artifact_validate call in the same Session.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_BfrpkJkdrwx6mp4E56nqbt5M",
+          "toolName": "work_artifact_deliver"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b253d85b190bb97016b08d148b12887d0912e311e95277224"
+        }
+      },
+      "time": {
+        "start": 1795739976791,
+        "end": 1795739982714
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0b253d85b190bb97016b08d148b12887d0912e311e95277224"
+      }
+    },
+    "orderKey": "v1:0001795739982567:0000000000000031:0000000000000000:part:prt_g0Vc85wCl00Qv55MZy2V"
+  },
+  {
+    "id": "prt_g0Vc8Dauf00r3J7M3hBX",
+    "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+    "messageID": "msg_g0Vc8DZ0500raynm6Q0k",
+    "type": "tool",
+    "callID": "call_ZylZ6z1CTUGR7GifD0hJr8me",
+    "tool": "work_artifact_deliver",
+    "state": {
+      "status": "error",
+      "input": {
+        "profile": "office.presentation@1",
+        "title": "销售经理简报·收据来源复核",
+        "source_url": "/attachment/prj_haW9BdBH559F4Yw143ch/57cd5ff5fdbc9d773a873a996492ce1850f314ef79c4a6fa494c2f980be8e0f3.pptx",
+        "validation_receipt_url": "/attachment/prj_haW9BdBH559F4Yw143ch/98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87.json",
+        "validation_receipt_sha": "98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87",
+        "slides": [
+          {
+            "slide": 1,
+            "title": "订单与净金额总览",
+            "markdown": "订单与净金额总览"
+          },
+          {
+            "slide": 2,
+            "title": "区域对比：金额与笔数",
+            "markdown": "区域对比：金额与笔数"
+          },
+          {
+            "slide": 3,
+            "title": "事实、缺口与后续行动",
+            "markdown": "事实、缺口与后续行动"
+          }
+        ]
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "WorkArtifactReceiptSourceError",
+        "message": "WorkArtifactReceiptSourceError: validation receipt has no completed host-owned work_artifact_validate authority in this Session. received: url \"/attachment/prj_haW9BdBH559F4Yw143ch/98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87.json\" sha \"98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87\", expected: a receipt published by a completed work_artifact_validate call in the same Session.",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_ZylZ6z1CTUGR7GifD0hJr8me",
+          "toolName": "work_artifact_deliver",
+          "canonical_error_metadata": {
+            "receiptUrl": "/attachment/prj_haW9BdBH559F4Yw143ch/98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87.json",
+            "receiptSha": "98ce50f7fecd0a51d28e95fd6082e65619f81611fd045bf9aae4cf7ac82aea87"
+          }
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_033c40b3b0036547016b08d8697a3487d0a129a1510e1488e7"
+        }
+      },
+      "time": {
+        "start": 1795741801569,
+        "end": 1795741807686
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_033c40b3b0036547016b08d8697a3487d0a129a1510e1488e7"
+      }
+    },
+    "orderKey": "v1:0001795741807546:0000000000000031:0000000000000000:part:prt_g0Vc8Dauf00r3J7M3hBX"
+  },
+  {
+    "id": "prt_g0Vc8uAfJ007g08aTmmX",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "messageID": "msg_g0Vc8uA1X009FNnKROrO",
+    "type": "tool",
+    "callID": "call_26c9ba761dc64d2991e5eafe30dac5ba",
+    "tool": "sales_source_read_sales_source",
+    "state": {
+      "status": "error",
+      "input": {
+        "filename": "sales-latest.csv"
+      },
+      "failure": {
+        "kind": "tool-input-invalid",
+        "name": "McpError",
+        "message": "MCP error -32603: Sales source sales-latest.csv: ENOENT",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-input-invalid",
+        "data": {
+          "toolCallId": "call_26c9ba761dc64d2991e5eafe30dac5ba",
+          "toolName": "sales_source_read_sales_source"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0d746482e87e8344016b09000ca76487d088ac5eec72488b48"
+        }
+      },
+      "time": {
+        "start": 1795751948777,
+        "end": 1795751949095
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0d746482e87e8344016b09000ca76487d088ac5eec72488b48"
+      }
+    },
+    "orderKey": "v1:0001795751948973:0000000000000031:0000000000000000:part:prt_g0Vc8uAfJ007g08aTmmX"
+  },
+  {
+    "id": "prt_g0Vc8v1eJ00JPPIpFXgs",
+    "sessionID": "ses_hcKxecXGrvhy8ETMyGzr",
+    "messageID": "msg_g0Vc8v12W00LwjQQbwti",
+    "type": "tool",
+    "callID": "call_f2bc285e3d0040e89d4cc8bbed330320",
+    "tool": "sales_source_read_sales_source",
+    "state": {
+      "status": "error",
+      "input": {
+        "filename": "sales-latest.csv"
+      },
+      "failure": {
+        "kind": "tool-execution",
+        "name": "McpError",
+        "message": "MCP error -32603: Sales source sales-latest.csv: ENOENT",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_f2bc285e3d0040e89d4cc8bbed330320",
+          "toolName": "sales_source_read_sales_source"
+        }
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f96209316a9da3f016b0900d8575487d0ad6ce79e3b3d2dad"
+        }
+      },
+      "time": {
+        "start": 1795752152447,
+        "end": 1795752152796
+      }
+    },
+    "metadata": {
+      "openai": {
+        "itemId": "fc_0f96209316a9da3f016b0900d8575487d0ad6ce79e3b3d2dad"
+      }
+    },
+    "orderKey": "v1:0001795752152660:0000000000000031:0000000000000000:part:prt_g0Vc8v1eJ00JPPIpFXgs"
+  }
+]

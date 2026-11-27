@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工具失败可读性实页证据](2026-11-27-tool-failure-readable-summary/README.md)
 - [动态工具执行错误分类证据](2026-11-27-dynamic-tool-error-classification/README.md)
 - [可编辑销售表格复验证据](2026-11-27-live-spreadsheet-values-and-export/README.md)
 - [销售核对来源事实复验证据](2026-11-27-sales-source-fact-review/README.md)

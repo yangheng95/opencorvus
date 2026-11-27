@@ -637,7 +637,16 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
             <Feedback
               tone={display().cancelled ? "neutral" : "error"}
               title={display().cancelled ? display().statusLabel : failure().headline}
-              details={failure().diagnostic ? stripAnsi(failure().diagnostic!) : undefined}
+              details={failure().diagnostic ? (
+                <div
+                  class="msg-tool-failure-diagnostic"
+                  role="region"
+                  aria-label={t("tool.failure_diagnostic")}
+                  tabIndex={0}
+                >
+                  {stripAnsi(failure().diagnostic!)}
+                </div>
+              ) : undefined}
             >
               <div class="msg-tool-failure-message">{error()}</div>
             </Feedback>
