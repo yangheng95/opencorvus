@@ -4,25 +4,23 @@ import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { getLocale, t } from "../../utils/i18n"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { mountUniverSpreadsheet } from "./univer-spreadsheet-adapter"
-import type { ArtifactExport } from "../../services/artifact-export"
+import { Button } from "../ui/Button"
 
 type SpreadsheetPayload = Extract<InteractiveArtifactPayload, { renderer: "spreadsheet@1" }>
 
 export function SpreadsheetArtifact(props: { payload: SpreadsheetPayload }) {
   let host: HTMLDivElement | undefined
-  let dispose: (() => void) | undefined
   let stopThemeObserver: (() => void) | undefined
-  let exportFiles: (() => ArtifactExport[]) | undefined
+  const [runtime, setRuntime] = createSignal<ReturnType<typeof mountUniverSpreadsheet>>()
   const [error, setError] = createSignal(false)
 
   onMount(() => {
     if (!host) return
     try {
-      const runtime = mountUniverSpreadsheet(host, props.payload, getLocale(), appliedColorScheme() === "dark")
-      dispose = runtime.dispose
-      exportFiles = runtime.exportFiles
-      stopThemeObserver = observeAppliedTheme(() => runtime.setDarkMode(appliedColorScheme() === "dark"))
-      createEffect(() => runtime.setLocale(getLocale()))
+      const mounted = mountUniverSpreadsheet(host, props.payload, getLocale(), appliedColorScheme() === "dark")
+      setRuntime(mounted)
+      stopThemeObserver = observeAppliedTheme(() => mounted.setDarkMode(appliedColorScheme() === "dark"))
+      createEffect(() => mounted.setLocale(getLocale()))
     } catch {
       setError(true)
     }
@@ -30,18 +28,28 @@ export function SpreadsheetArtifact(props: { payload: SpreadsheetPayload }) {
 
   onCleanup(() => {
     stopThemeObserver?.()
-    dispose?.()
+    runtime()?.dispose()
   })
 
   return (
     <ArtifactFrame
       payload={props.payload}
       exportFiles={() => {
-        if (!exportFiles) throw new Error(t("artifact.spreadsheet.load_failed"))
-        return exportFiles()
+        const mounted = runtime()
+        if (!mounted) throw new Error(t("artifact.spreadsheet.load_failed"))
+        return mounted.exportFiles()
       }}
       title={props.payload.title}
       kind="Spreadsheet"
+      headerActions={
+        <Show when={runtime()}>
+          {(mounted) => (
+            <Button variant="ghost" size="sm" tone="neutral" onClick={() => mounted().fitColumns()}>
+              {t("artifact.spreadsheet.fit_columns")}
+            </Button>
+          )}
+        </Show>
+      }
     >
       <Show
         when={!error()}

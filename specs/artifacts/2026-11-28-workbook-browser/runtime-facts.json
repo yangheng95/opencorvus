@@ -1,0 +1,166 @@
+{
+  "runs": [
+    {
+      "label": "run112",
+      "pid": 25808,
+      "url": "http://127.0.0.1:56603/",
+      "sourceRun": "run111",
+      "preflight": {
+        "sessionID": "ses_h14ih3fYU4fIWBsCj0oZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "state": "exited",
+      "originalExecHandle": 72518,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795800127466,
+        "settledAt": 1795800127466,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run113",
+      "pid": 36584,
+      "url": "http://127.0.0.1:54610/",
+      "sourceRun": "run112",
+      "preflight": {
+        "sessionID": "ses_hmaB0bcqZpePfEsTxE9M",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "state": "exited",
+      "originalExecHandle": 91202,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795800731113,
+        "settledAt": 1795800731114,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "businessWorkTasks": 1,
+  "realStreamingRequests": 11,
+  "build": {
+    "originalHandle": 3783,
+    "joinedExitCode": 0,
+    "seconds": 53.15
+  },
+  "checks": {
+    "typecheck": "passed",
+    "i18n": "2 locales / 3371 keys",
+    "docs": "353 ops / 26 groups",
+    "architecture": "20 documents",
+    "realWorkbook": "104 nonempty cells / coordinates / scalar types / 3 original sheets",
+    "realDownloads": "308/102/1249 byte readonly CSV values equal all originals; 1049 byte edited summary C2=30.25 C4=37.6"
+  },
+  "nativeScreenshots": {
+    "before": 5,
+    "after": 13,
+    "format": "unaltered JPEG",
+    "intermediateFrames": [
+      "before-notes-clipped.jpg",
+      "before-expanded-notes.jpg",
+      "after-english-dark-fit.jpg",
+      "after-editable-summary-fitted.jpg",
+      "after-editable-selected-c2.jpg"
+    ],
+    "finalFrames": "use corresponding settled frames, expanded notes top+bottom, and restored Chinese edit screenshot"
+  },
+  "closedTabs": [
+    "241805249",
+    "241805253"
+  ],
+  "restoredSettings": {
+    "locale": "zh-CN",
+    "theme": "system"
+  },
+  "uiAutomatedTests": "none"
+}

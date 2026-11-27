@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "label": "run113",
+  "sessionID": "ses_hqZyM0w1xXg2erma8eIq",
+  "artifactID": "art_g0VcC98uu00W5z52v4IH",
+  "sheets": [
+    "订单明细",
+    "区域汇总",
+    "统计说明"
+  ],
+  "sourceWorkbookBytes": 6793,
+  "nonemptyCells": 104,
+  "allReadAndPublishedValuesCoordinatesAndTypesEqualOriginal": true,
+  "finished": "stop",
+  "tools": [
+    {
+      "tool": "skill",
+      "id": "prt_g0VcC8my200Kzy8EDfSU",
+      "status": "completed"
+    },
+    {
+      "tool": "read",
+      "id": "prt_g0VcC8nl7000dTiwfTUD",
+      "status": "completed"
+    },
+    {
+      "tool": "bash",
+      "id": "prt_g0VcC8ooM00oaSVtnYoc",
+      "status": "completed"
+    },
+    {
+      "tool": "bash",
+      "id": "prt_g0VcC8twm00iTdLIL2aj",
+      "status": "completed"
+    },
+    {
+      "tool": "publish_interactive_artifact",
+      "id": "prt_g0VcC90zz0001S3hQdcY",
+      "status": "completed"
+    }
+  ]
+}

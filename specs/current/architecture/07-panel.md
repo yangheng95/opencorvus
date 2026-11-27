@@ -5926,6 +5926,14 @@ custom export accessor continues to read the currently mounted workbook. Product
 language changes update that same Univer instance through its public locale
 service and the already registered language packages; they do not recreate the
 workbook or replace edited cells with the published payload.
+The ready Spreadsheet exposes a current-language “Fit columns to content” action
+through its existing Frame header. An explicit activation reads the active
+worksheet's current data range and calls Univer's public `autoResizeColumns`
+for those columns, using the same mounted workbook and native measurement.
+It is available for read-only and editable sheets and keeps their cell values,
+formulas, formats, selection and permission ownership. Other sheets and reserved
+empty columns retain their layout. This local layout action adds no publication
+change, automatic resize, separate width cache or persistent editing state.
 The shared ArtifactActions owner forwards current copy/download failures to its
 Frame as well as the diagnostic log. Frame feedback stays inside the current
 artifact workspace, with complete diagnostics and current-language summaries;

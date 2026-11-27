@@ -1,0 +1,34 @@
+{
+  "status": "passed",
+  "readonlySheets": [
+    {
+      "name": "Excel 原始单元格复核｜销售核对.xlsx - 订单明细.csv",
+      "bytes": 308,
+      "rows": 6,
+      "columns": 6,
+      "originalValuesEqual": true
+    },
+    {
+      "name": "Excel 原始单元格复核｜销售核对.xlsx - 区域汇总.csv",
+      "bytes": 102,
+      "rows": 4,
+      "columns": 3,
+      "originalValuesEqual": true
+    },
+    {
+      "name": "Excel 原始单元格复核｜销售核对.xlsx - 统计说明.csv",
+      "bytes": 1249,
+      "rows": 28,
+      "columns": 2,
+      "originalValuesEqual": true
+    }
+  ],
+  "readonlyOriginalCells": 104,
+  "edited": {
+    "bytes": 1049,
+    "C2": "30.25",
+    "C4": "37.6",
+    "otherOriginalValuesEqual": true
+  },
+  "copies": "downloaded bytes copied from timestamp-qualified browser Downloads files; not synthesized exports"
+}

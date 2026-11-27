@@ -1,0 +1,558 @@
+[
+  {
+    "id": "prt_g0VcC8my200Kzy8EDfSU",
+    "messageID": "msg_g0VcC8lqO00hAcvMfh2R",
+    "tool": "skill",
+    "state": {
+      "status": "completed",
+      "input": {
+        "name": "work-artifacts"
+      },
+      "output": "<skill_content name=\"work-artifacts\">\n# Skill: work-artifacts\n\n# Work Artifacts\n\nProduce the requested editable file as the deliverable and use fresh derived\nrenders as review evidence. Never substitute an outline, HTML page, screenshot\ncollection, or semantic Interactive Artifact for the requested source file.\n\n## Workflow\n\n1. Read `references/common-lifecycle.md`.\n2. Read the matching profile reference before authoring:\n   `references/office-presentation.md`, `references/office-document.md`, or\n   `references/office-spreadsheet.md`.\n3. Call `work_artifact_author` with an exact qualified `profile` and a complete\n   typed plan.\n4. Inspect the returned canonical attachment with `work_artifact_inspect`.\n5. Validate that exact attachment with `work_artifact_validate`.\n6. Inspect every fresh render. Repair the typed authoring plan and repeat the\n   full lifecycle when a render is incomplete or visually weak.\n7. Read `references/review.md` and resolve confirmed review findings.\n8. Give `work_artifact_deliver` the exact final validation receipt. Delivery\n   revalidates and rerenders the candidate; only the current authorized Work\n   conversation or Expert Squad delivery owner publishes it.\n\nWhen the user requests a project file path, save the exact delivered source with\nthe ordinary `write` tool using `attachmentUrl` and `filePath`. This preserves the\nbinary bytes; it does not invoke an Office runtime or replace the canonical source.\n\nRead `references/security.md` before using user-supplied images or handling a\nrequest involving external links, macros, embedded objects, media, templates,\nor an existing file.\n\nBase directory for this skill: file:///C:/Users/hengu/AppData/Local/Temp/opencorvus-test-run-vN8ljL/runner-32260-XefI2X/artifact-delivery/runtime/cache/builtin-skills/601738fe057691d39a67cbe3f5186881c5c21cd87a5db1854d2fd24c063460d7\nLoad a relative supporting file by calling `skill` again with `name: \"work-artifacts\"` and the exact `file` path below. Do not pass the materialized base directory to the project `read` tool.\nNote: file list is sampled.\n\n<skill_files>\n<file>PROVENANCE.md</file>\n<file>references/common-lifecycle.md</file>\n<file>references/office-document.md</file>\n<file>references/office-presentation.md</file>\n<file>references/office-spreadsheet.md</file>\n<file>references/review.md</file>\n<file>references/security.md</file>\n</skill_files>\n</skill_content>",
+      "metadata": {
+        "exit": null
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcC8nl7000dTiwfTUD",
+    "messageID": "msg_g0VcC8n6X00KU9pxyzBF",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "sales.csv"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\sales.csv</path>\n<type>file</type>\n<content>1: 订单编号,区域,金额,备注\n2: A001,华东,10.10,普通订单\n3: A002,华东,20.20,中文客户\n4: A003,华东,-2.05,退款\n5: A004,华南,0.00,免费样品\n6: A005,华南,7.35,普通订单\n\n(End of file - total 6 lines)\n</content>",
+      "metadata": {
+        "exit": null
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcC8ooM00oaSVtnYoc",
+    "messageID": "msg_g0VcC8ntA00GEjzsDuLY",
+    "tool": "bash",
+    "state": {
+      "status": "completed",
+      "input": {
+        "command": "python -B -X utf8 -c 'import csv,json,posixpath,zipfile; import xml.etree.ElementTree as E; from decimal import Decimal; from pathlib import Path; ns={\"s\":\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"}; p=Path(\"sales.csv\"); rows=list(csv.DictReader(p.open(encoding=\"utf-8-sig\",newline=\"\"))); print(\"CSV=\"+json.dumps(rows,ensure_ascii=False)); regions={}; total=Decimal(0); refunds=zeros=0\nfor r in rows:\n a=Decimal(r[\"金额\"]); total+=a; refunds+=a<0; zeros+=a==0; v=regions.setdefault(r[\"区域\"],{\"count\":0,\"amount\":Decimal(0)}); v[\"count\"]+=1; v[\"amount\"]+=a\nprint(\"SOURCE_SUMMARY=\"+json.dumps({\"count\":len(rows),\"total\":str(total),\"refunds\":refunds,\"zeros\":zeros,\"regions\":regions},ensure_ascii=False,default=str))\nwith zipfile.ZipFile(\"deliverables/销售核对.xlsx\") as z:\n wb=E.fromstring(z.read(\"xl/workbook.xml\")); rel=E.fromstring(z.read(\"xl/_rels/workbook.xml.rels\")); targets={r.attrib[\"Id\"]:r.attrib[\"Target\"] for r in rel}; shared=[]\n if \"xl/sharedStrings.xml\" in z.namelist():\n  shared=[\"\".join(x.itertext()) for x in E.fromstring(z.read(\"xl/sharedStrings.xml\")).findall(\"s:si\",ns)]\n print(\"STYLES=\"+z.read(\"xl/styles.xml\").decode(\"utf-8\"))\n for sheet in wb.find(\"s:sheets\",ns):\n  rid=sheet.attrib[\"{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id\"]; target=targets[rid]; path=target.lstrip(\"/\") if target.startswith(\"/\") else posixpath.normpath(posixpath.join(\"xl\",target)); root=E.fromstring(z.read(path)); cells=[]\n  for c in root.findall(\"s:sheetData/s:row/s:c\",ns):\n   t=c.get(\"t\",\"n\"); v=c.find(\"s:v\",ns); inline=c.find(\"s:is\",ns); f=c.find(\"s:f\",ns); raw=v.text if v is not None else None\n   if t==\"inlineStr\": value=\"\".join(inline.itertext()) if inline is not None else \"\"; kind=\"string\"\n   elif t==\"s\": value=shared[int(raw)]; kind=\"string\"\n   elif t==\"b\": value=raw==\"1\"; kind=\"boolean\"\n   elif t==\"n\": value=raw; kind=\"number\" if raw is not None else \"empty\"\n   else: value=raw; kind=t\n   cells.append({\"address\":c.get(\"r\"),\"type\":kind,\"ooxml_type\":t,\"value\":value,\"style\":c.get(\"s\"),\"formula\":f.text if f is not None else None})\n  print(\"SHEET=\"+json.dumps({\"name\":sheet.get(\"name\"),\"sheetId\":sheet.get(\"sheetId\"),\"dimension\":root.find(\"s:dimension\",ns).get(\"ref\") if root.find(\"s:dimension\",ns) is not None else None,\"cells\":cells},ensure_ascii=False))'",
+        "description": "只读解析 CSV 与 Excel 全部单元格及类型"
+      },
+      "output": "CSV=[{\"订单编号\": \"A001\", \"区域\": \"华东\", \"金额\": \"10.10\", \"备注\": \"普通订单\"}, {\"订单编号\": \"A002\", \"区域\": \"华东\", \"金额\": \"20.20\", \"备注\": \"中文客户\"}, {\"订单编号\": \"A003\", \"区域\": \"华东\", \"金额\": \"-2.05\", \"备注\": \"退款\"}, {\"订单编号\": \"A004\", \"区域\": \"华南\", \"金额\": \"0.00\", \"备注\": \"免费样品\"}, {\"订单编号\": \"A005\", \"区域\": \"华南\", \"金额\": \"7.35\", \"备注\": \"普通订单\"}]\r\nSOURCE_SUMMARY={\"count\": 5, \"total\": \"35.60\", \"refunds\": 1, \"zeros\": 1, \"regions\": {\"华东\": {\"count\": 3, \"amount\": \"28.25\"}, \"华南\": {\"count\": 2, \"amount\": \"7.35\"}}}\r\nSTYLES=<?xml version=\"1.0\" encoding=\"utf-8\"?><x:styleSheet xmlns:x=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"><x:numFmts count=\"0\" /><x:fonts count=\"2\"><x:font><x:sz val=\"11\" /><x:name val=\"Calibri\" /></x:font><x:font><x:b /><x:sz val=\"11\" /><x:name val=\"Calibri\" /></x:font></x:fonts><x:fills count=\"3\"><x:fill><x:patternFill patternType=\"none\" /></x:fill><x:fill><x:patternFill patternType=\"gray125\" /></x:fill><x:fill><x:patternFill patternType=\"solid\"><x:fgColor rgb=\"FFE8EEF8\" /></x:patternFill></x:fill></x:fills><x:borders count=\"1\"><x:border><x:left /><x:right /><x:top /><x:bottom /><x:diagonal /></x:border></x:borders><x:cellStyleXfs count=\"1\"><x:xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" /></x:cellStyleXfs><x:cellXfs count=\"2\"><x:xf numFmtId=\"0\" fontId=\"0\" fillId=\"0\" borderId=\"0\" /><x:xf numFmtId=\"0\" fontId=\"1\" fillId=\"2\" borderId=\"0\" applyFont=\"1\" applyFill=\"1\" /></x:cellXfs><x:cellStyles count=\"1\"><x:cellStyle name=\"Normal\" xfId=\"0\" builtinId=\"0\" /></x:cellStyles></x:styleSheet>\r\nSHEET={\"name\": \"订单明细\", \"sheetId\": \"1\", \"dimension\": null, \"cells\": [{\"address\": \"A1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"原行序\", \"style\": \"1\", \"formula\": null}, {\"address\": \"B1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"订单编号\", \"style\": \"1\", \"formula\": null}, {\"address\": \"C1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"区域\", \"style\": \"1\", \"formula\": null}, {\"address\": \"D1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"金额\", \"style\": \"1\", \"formula\": null}, {\"address\": \"E1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"备注\", \"style\": \"1\", \"formula\": null}, {\"address\": \"F1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"退款\", \"style\": \"1\", \"formula\": null}, {\"address\": \"A2\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"1\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B2\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"A001\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C2\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"华东\", \"style\": \"0\", \"formula\": null}, {\"address\": \"D2\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"10.1\", \"style\": \"0\", \"formula\": null}, {\"address\": \"E2\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"普通订单\", \"style\": \"0\", \"formula\": null}, {\"address\": \"F2\", \"type\": \"boolean\", \"ooxml_type\": \"b\", \"value\": false, \"style\": \"0\", \"formula\": null}, {\"address\": \"A3\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"2\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B3\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"A002\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C3\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"华东\", \"style\": \"0\", \"formula\": null}, {\"address\": \"D3\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"20.2\", \"style\": \"0\", \"formula\": null}, {\"address\": \"E3\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"中文客户\", \"style\": \"0\", \"formula\": null}, {\"address\": \"F3\", \"type\": \"boolean\", \"ooxml_type\": \"b\", \"value\": false, \"style\": \"0\", \"formula\": null}, {\"address\": \"A4\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"3\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B4\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"A003\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C4\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"华东\", \"style\": \"0\", \"formula\": null}, {\"address\": \"D4\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"-2.05\", \"style\": \"0\", \"formula\": null}, {\"address\": \"E4\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"退款\", \"style\": \"0\", \"formula\": null}, {\"address\": \"F4\", \"type\": \"boolean\", \"ooxml_type\": \"b\", \"value\": true, \"style\": \"0\", \"formula\": null}, {\"address\": \"A5\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"4\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B5\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"A004\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C5\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"华南\", \"style\": \"0\", \"formula\": null}, {\"address\": \"D5\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"0\", \"style\": \"0\", \"formula\": null}, {\"address\": \"E5\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"免费样品\", \"style\": \"0\", \"formula\": null}, {\"address\": \"F5\", \"type\": \"boolean\", \"ooxml_type\": \"b\", \"value\": false, \"style\": \"0\", \"formula\": null}, {\"address\": \"A6\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"5\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B6\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"A005\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C6\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"华南\", \"style\": \"0\", \"formula\": null}, {\"address\": \"D6\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"7.35\", \"style\": \"0\", \"formula\": null}, {\"address\": \"E6\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"普通订单\", \"style\": \"0\", \"formula\": null}, {\"address\": \"F6\", \"type\": \"boolean\", \"ooxml_type\": \"b\", \"value\": false, \"style\": \"0\", \"formula\": null}]}\r\nSHEET={\"name\": \"区域汇总\", \"sheetId\": \"2\", \"dimension\": null, \"cells\": [{\"address\": \"A1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"区域\", \"style\": \"1\", \"formula\": null}, {\"address\": \"B1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"订单数\", \"style\": \"1\", \"formula\": null}, {\"address\": \"C1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"净金额\", \"style\": \"1\", \"formula\": null}, {\"address\": \"A2\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"华东\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B2\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"3\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C2\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"28.25\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A3\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"华南\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B3\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"2\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C3\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"7.35\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A4\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"全体合计\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B4\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"5\", \"style\": \"0\", \"formula\": null}, {\"address\": \"C4\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"35.6\", \"style\": \"0\", \"formula\": null}]}\r\nSHEET={\"name\": \"统计说明\", \"sheetId\": \"3\", \"dimension\": null, \"cells\": [{\"address\": \"A1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"项目\", \"style\": \"1\", \"formula\": null}, {\"address\": \"B1\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"说明或数值\", \"style\": \"1\", \"formula\": null}, {\"address\": \"A2\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"真实来源\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B2\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"当前项目根目录 sales.csv\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A3\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"源字段\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B3\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"订单编号、区域、金额、备注\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A4\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"统计范围\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B4\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"源文件全部5笔，保持原行序\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A5\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"原行序\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B5\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"从首笔数据起编号，不含表头\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A6\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"订单计数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B6\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"每笔原记录计1笔，不去重\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A7\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"退款计数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B7\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"负金额计入订单数及退款笔数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A8\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"零金额计数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B8\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"零金额计入订单数，不计退款\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A9\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"净金额口径\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B9\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"正数加计、负数扣减、零值不增减\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A10\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"区域口径\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B10\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"保留原区域名称分组\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A11\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"金额精度\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B11\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"原文本以Decimal独立累加到分\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A12\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"总订单数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B12\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"5\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A13\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"总净金额\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B13\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"35.6\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A14\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"退款笔数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B14\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"1\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A15\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"退款金额（带符号）\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B15\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"-2.05\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A16\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"零金额笔数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B16\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"1\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A17\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"零金额合计\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B17\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"0\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A18\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"正金额笔数\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B18\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"3\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A19\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"正金额合计\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B19\", \"type\": \"number\", \"ooxml_type\": \"n\", \"value\": \"37.65\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A20\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"区域计数核对\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B20\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"3 + 2 = 5\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A21\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"区域金额核对\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B21\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"28.25 + 7.35 = 35.60\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A22\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"金额性质核对\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B22\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"37.65 - 2.05 + 0.00 = 35.60\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A23\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"退款记录\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B23\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"A003，金额-2.05，退款为TRUE\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A24\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"零金额记录\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B24\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"A004，金额0.00，退款为FALSE\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A25\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"数据类型\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B25\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"金额和计数为数值；退款为布尔\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A26\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"显示说明\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B26\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"35.6等于35.60；0等于0.00\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A27\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"币种与期间\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B27\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"源文件未提供，不作推定\", \"style\": \"0\", \"formula\": null}, {\"address\": \"A28\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"工作簿内容\", \"style\": \"0\", \"formula\": null}, {\"address\": \"B28\", \"type\": \"str\", \"ooxml_type\": \"str\", \"value\": \"均为明确值，无公式或外部链接\", \"style\": \"0\", \"formula\": null}]}\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+      "metadata": {
+        "exit": 0
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcC8twm00iTdLIL2aj",
+    "messageID": "msg_g0VcC8t2M00q01WncoGB",
+    "tool": "bash",
+    "state": {
+      "status": "completed",
+      "input": {
+        "command": "python -B -X utf8 -c 'import csv,zipfile,posixpath,collections; import xml.etree.ElementTree as E; from decimal import Decimal; ns={\"s\":\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\"}; rows=list(csv.DictReader(open(\"sales.csv\",encoding=\"utf-8-sig\",newline=\"\"))); regions={}; amounts=[Decimal(r[\"金额\"]) for r in rows]\nfor r,a in zip(rows,amounts):\n v=regions.setdefault(r[\"区域\"],[0,Decimal(0)]); v[0]+=1; v[1]+=a\nwith zipfile.ZipFile(\"deliverables/销售核对.xlsx\") as z:\n wb=E.fromstring(z.read(\"xl/workbook.xml\")); targets={r.get(\"Id\"):r.get(\"Target\") for r in E.fromstring(z.read(\"xl/_rels/workbook.xml.rels\"))}; sheets=[]\n for s in wb.find(\"s:sheets\",ns):\n  target=targets[s.get(\"{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id\")]; path=target.lstrip(\"/\") if target.startswith(\"/\") else posixpath.normpath(posixpath.join(\"xl\",target)); root=E.fromstring(z.read(path)); cells={}\n  for c in root.findall(\"s:sheetData/s:row/s:c\",ns):\n   assert c.find(\"s:f\",ns) is None; t=c.get(\"t\",\"n\"); v=c.find(\"s:v\",ns); raw=v.text if v is not None else None; assert t in (\"str\",\"n\",\"b\"),(c.get(\"r\"),t); value=Decimal(raw) if t==\"n\" else (raw==\"1\" if t==\"b\" else raw); cells[c.get(\"r\")]=(t,value)\n  sheets.append((s.get(\"name\"),cells)); print(s.get(\"name\"),\"nonempty=\",len(cells),\"types=\",dict(collections.Counter(t for t,v in cells.values())))\n assert [n for n,c in sheets]==[\"订单明细\",\"区域汇总\",\"统计说明\"]\n detail=sheets[0][1]; expected={k+\"1\":(\"str\",v) for k,v in zip(\"ABCDEF\",[\"原行序\",\"订单编号\",\"区域\",\"金额\",\"备注\",\"退款\"])}\n for i,(r,a) in enumerate(zip(rows,amounts),2):\n  for k,t,v in zip(\"ABCDEF\",[\"n\",\"str\",\"str\",\"n\",\"str\",\"b\"],[Decimal(i-1),r[\"订单编号\"],r[\"区域\"],a,r[\"备注\"],a<0]): expected[k+str(i)]=(t,v)\n assert detail==expected,\"detail discrepancy\"\n expected={k+\"1\":(\"str\",v) for k,v in zip(\"ABC\",[\"区域\",\"订单数\",\"净金额\"])}\n for i,(name,(count,amount)) in enumerate(list(regions.items())+[(\"全体合计\",[len(rows),sum(amounts)])],2):\n  expected.update({\"A\"+str(i):(\"str\",name),\"B\"+str(i):(\"n\",Decimal(count)),\"C\"+str(i):(\"n\",amount)})\n assert sheets[1][1]==expected,\"region discrepancy\"\n stats=sheets[2][1]; values={12:len(rows),13:sum(amounts),14:sum(a<0 for a in amounts),15:sum(a for a in amounts if a<0),16:sum(a==0 for a in amounts),17:sum(a for a in amounts if a==0),18:sum(a>0 for a in amounts),19:sum(a for a in amounts if a>0)}\n for row,value in values.items(): assert stats[\"B\"+str(row)]==(\"n\",Decimal(value)),row\n assert len(stats)==56 and all(stats[\"A\"+str(i)][0]==\"str\" for i in range(1,29)); assert all(stats[\"B\"+str(i)][0]==\"str\" for i in range(1,29) if i not in values)\n external=[]\n for name in z.namelist():\n  if name.endswith(\".rels\"):\n   external.extend((name,r.get(\"Target\")) for r in E.fromstring(z.read(name)) if r.get(\"TargetMode\")==\"External\")\n assert not external,external; print(\"PASS: sheet order; every detail and regional cell address/type/value; 8 numeric statistics; all 104 nonempty cell types; no formulas or external relationships.\")'",
+        "description": "独立核对单元格坐标类型与源数据统计"
+      },
+      "output": "订单明细 nonempty= 36 types= {'str': 21, 'n': 10, 'b': 5}\r\n区域汇总 nonempty= 12 types= {'str': 6, 'n': 6}\r\n统计说明 nonempty= 56 types= {'str': 48, 'n': 8}\r\nPASS: sheet order; every detail and regional cell address/type/value; 8 numeric statistics; all 104 nonempty cell types; no formulas or external relationships.\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+      "metadata": {
+        "exit": 0
+      }
+    }
+  },
+  {
+    "id": "prt_g0VcC90zz0001S3hQdcY",
+    "messageID": "msg_g0VcC8zWJ00xhevd4Quk",
+    "tool": "publish_interactive_artifact",
+    "state": {
+      "status": "completed",
+      "input": {
+        "artifact": {
+          "schemaVersion": "1",
+          "title": "Excel 原始单元格复核｜销售核对.xlsx",
+          "content": {
+            "renderer": "spreadsheet@1",
+            "editable": false,
+            "sheets": [
+              {
+                "id": "sheet-1",
+                "name": "订单明细",
+                "rowCount": 6,
+                "columnCount": 6,
+                "frozenRows": 0,
+                "frozenColumns": 0,
+                "cells": [
+                  {
+                    "address": "A1",
+                    "value": "原行序"
+                  },
+                  {
+                    "address": "B1",
+                    "value": "订单编号"
+                  },
+                  {
+                    "address": "C1",
+                    "value": "区域"
+                  },
+                  {
+                    "address": "D1",
+                    "value": "金额"
+                  },
+                  {
+                    "address": "E1",
+                    "value": "备注"
+                  },
+                  {
+                    "address": "F1",
+                    "value": "退款"
+                  },
+                  {
+                    "address": "A2",
+                    "value": 1,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "B2",
+                    "value": "A001"
+                  },
+                  {
+                    "address": "C2",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "D2",
+                    "value": 10.1,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "E2",
+                    "value": "普通订单"
+                  },
+                  {
+                    "address": "F2",
+                    "value": false
+                  },
+                  {
+                    "address": "A3",
+                    "value": 2,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "B3",
+                    "value": "A002"
+                  },
+                  {
+                    "address": "C3",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "D3",
+                    "value": 20.2,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "E3",
+                    "value": "中文客户"
+                  },
+                  {
+                    "address": "F3",
+                    "value": false
+                  },
+                  {
+                    "address": "A4",
+                    "value": 3,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "B4",
+                    "value": "A003"
+                  },
+                  {
+                    "address": "C4",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "D4",
+                    "value": -2.05,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "E4",
+                    "value": "退款"
+                  },
+                  {
+                    "address": "F4",
+                    "value": true
+                  },
+                  {
+                    "address": "A5",
+                    "value": 4,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "B5",
+                    "value": "A004"
+                  },
+                  {
+                    "address": "C5",
+                    "value": "华南"
+                  },
+                  {
+                    "address": "D5",
+                    "value": 0,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "E5",
+                    "value": "免费样品"
+                  },
+                  {
+                    "address": "F5",
+                    "value": false
+                  },
+                  {
+                    "address": "A6",
+                    "value": 5,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "B6",
+                    "value": "A005"
+                  },
+                  {
+                    "address": "C6",
+                    "value": "华南"
+                  },
+                  {
+                    "address": "D6",
+                    "value": 7.35,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "E6",
+                    "value": "普通订单"
+                  },
+                  {
+                    "address": "F6",
+                    "value": false
+                  }
+                ]
+              },
+              {
+                "id": "sheet-2",
+                "name": "区域汇总",
+                "rowCount": 4,
+                "columnCount": 3,
+                "frozenRows": 0,
+                "frozenColumns": 0,
+                "cells": [
+                  {
+                    "address": "A1",
+                    "value": "区域"
+                  },
+                  {
+                    "address": "B1",
+                    "value": "订单数"
+                  },
+                  {
+                    "address": "C1",
+                    "value": "净金额"
+                  },
+                  {
+                    "address": "A2",
+                    "value": "华东"
+                  },
+                  {
+                    "address": "B2",
+                    "value": 3,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "C2",
+                    "value": 28.25,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A3",
+                    "value": "华南"
+                  },
+                  {
+                    "address": "B3",
+                    "value": 2,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "C3",
+                    "value": 7.35,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A4",
+                    "value": "全体合计"
+                  },
+                  {
+                    "address": "B4",
+                    "value": 5,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "C4",
+                    "value": 35.6,
+                    "numberFormat": "0.00"
+                  }
+                ]
+              },
+              {
+                "id": "sheet-3",
+                "name": "统计说明",
+                "rowCount": 28,
+                "columnCount": 2,
+                "frozenRows": 0,
+                "frozenColumns": 0,
+                "cells": [
+                  {
+                    "address": "A1",
+                    "value": "项目"
+                  },
+                  {
+                    "address": "B1",
+                    "value": "说明或数值"
+                  },
+                  {
+                    "address": "A2",
+                    "value": "真实来源"
+                  },
+                  {
+                    "address": "B2",
+                    "value": "当前项目根目录 sales.csv"
+                  },
+                  {
+                    "address": "A3",
+                    "value": "源字段"
+                  },
+                  {
+                    "address": "B3",
+                    "value": "订单编号、区域、金额、备注"
+                  },
+                  {
+                    "address": "A4",
+                    "value": "统计范围"
+                  },
+                  {
+                    "address": "B4",
+                    "value": "源文件全部5笔，保持原行序"
+                  },
+                  {
+                    "address": "A5",
+                    "value": "原行序"
+                  },
+                  {
+                    "address": "B5",
+                    "value": "从首笔数据起编号，不含表头"
+                  },
+                  {
+                    "address": "A6",
+                    "value": "订单计数"
+                  },
+                  {
+                    "address": "B6",
+                    "value": "每笔原记录计1笔，不去重"
+                  },
+                  {
+                    "address": "A7",
+                    "value": "退款计数"
+                  },
+                  {
+                    "address": "B7",
+                    "value": "负金额计入订单数及退款笔数"
+                  },
+                  {
+                    "address": "A8",
+                    "value": "零金额计数"
+                  },
+                  {
+                    "address": "B8",
+                    "value": "零金额计入订单数，不计退款"
+                  },
+                  {
+                    "address": "A9",
+                    "value": "净金额口径"
+                  },
+                  {
+                    "address": "B9",
+                    "value": "正数加计、负数扣减、零值不增减"
+                  },
+                  {
+                    "address": "A10",
+                    "value": "区域口径"
+                  },
+                  {
+                    "address": "B10",
+                    "value": "保留原区域名称分组"
+                  },
+                  {
+                    "address": "A11",
+                    "value": "金额精度"
+                  },
+                  {
+                    "address": "B11",
+                    "value": "原文本以Decimal独立累加到分"
+                  },
+                  {
+                    "address": "A12",
+                    "value": "总订单数"
+                  },
+                  {
+                    "address": "B12",
+                    "value": 5,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "A13",
+                    "value": "总净金额"
+                  },
+                  {
+                    "address": "B13",
+                    "value": 35.6,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A14",
+                    "value": "退款笔数"
+                  },
+                  {
+                    "address": "B14",
+                    "value": 1,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "A15",
+                    "value": "退款金额（带符号）"
+                  },
+                  {
+                    "address": "B15",
+                    "value": -2.05,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A16",
+                    "value": "零金额笔数"
+                  },
+                  {
+                    "address": "B16",
+                    "value": 1,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "A17",
+                    "value": "零金额合计"
+                  },
+                  {
+                    "address": "B17",
+                    "value": 0,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A18",
+                    "value": "正金额笔数"
+                  },
+                  {
+                    "address": "B18",
+                    "value": 3,
+                    "numberFormat": "0"
+                  },
+                  {
+                    "address": "A19",
+                    "value": "正金额合计"
+                  },
+                  {
+                    "address": "B19",
+                    "value": 37.65,
+                    "numberFormat": "0.00"
+                  },
+                  {
+                    "address": "A20",
+                    "value": "区域计数核对"
+                  },
+                  {
+                    "address": "B20",
+                    "value": "3 + 2 = 5"
+                  },
+                  {
+                    "address": "A21",
+                    "value": "区域金额核对"
+                  },
+                  {
+                    "address": "B21",
+                    "value": "28.25 + 7.35 = 35.60"
+                  },
+                  {
+                    "address": "A22",
+                    "value": "金额性质核对"
+                  },
+                  {
+                    "address": "B22",
+                    "value": "37.65 - 2.05 + 0.00 = 35.60"
+                  },
+                  {
+                    "address": "A23",
+                    "value": "退款记录"
+                  },
+                  {
+                    "address": "B23",
+                    "value": "A003，金额-2.05，退款为TRUE"
+                  },
+                  {
+                    "address": "A24",
+                    "value": "零金额记录"
+                  },
+                  {
+                    "address": "B24",
+                    "value": "A004，金额0.00，退款为FALSE"
+                  },
+                  {
+                    "address": "A25",
+                    "value": "数据类型"
+                  },
+                  {
+                    "address": "B25",
+                    "value": "金额和计数为数值；退款为布尔"
+                  },
+                  {
+                    "address": "A26",
+                    "value": "显示说明"
+                  },
+                  {
+                    "address": "B26",
+                    "value": "35.6等于35.60；0等于0.00"
+                  },
+                  {
+                    "address": "A27",
+                    "value": "币种与期间"
+                  },
+                  {
+                    "address": "B27",
+                    "value": "源文件未提供，不作推定"
+                  },
+                  {
+                    "address": "A28",
+                    "value": "工作簿内容"
+                  },
+                  {
+                    "address": "B28",
+                    "value": "均为明确值，无公式或外部链接"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "output": "{\"artifactID\":\"art_g0VcC98uu00W5z52v4IH\",\"renderer\":\"spreadsheet@1\"}",
+      "metadata": {
+        "exit": null
+      }
+    }
+  }
+]

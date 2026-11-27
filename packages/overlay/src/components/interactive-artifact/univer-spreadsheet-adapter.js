@@ -119,6 +119,11 @@ export function mountUniverSpreadsheet(host, payload, language, darkMode) {
     dispose: () => univer.dispose(),
     setDarkMode: (enabled) => themeService.setDarkMode(enabled),
     setLocale: (language) => univerAPI.setLocale(spreadsheetLocale(language)),
+    fitColumns: () => {
+      const sheet = workbook.getActiveSheet()
+      const range = sheet.getDataRange()
+      sheet.autoResizeColumns(range.getColumn(), range.getWidth())
+    },
     exportFiles: () => {
       const snapshot = workbook.save()
       const files = snapshot.sheetOrder.map((id) => {

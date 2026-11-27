@@ -1,0 +1,485 @@
+{
+  "id": "art_g0VcC98uu00W5z52v4IH",
+  "sessionID": "ses_hqZyM0w1xXg2erma8eIq",
+  "messageID": "msg_g0VcC8zWJ00xhevd4Quk",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "Excel 原始单元格复核｜销售核对.xlsx",
+    "renderer": "spreadsheet@1",
+    "editable": false,
+    "sheets": [
+      {
+        "id": "sheet-1",
+        "name": "订单明细",
+        "rowCount": 6,
+        "columnCount": 6,
+        "frozenRows": 0,
+        "frozenColumns": 0,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "原行序"
+          },
+          {
+            "address": "B1",
+            "value": "订单编号"
+          },
+          {
+            "address": "C1",
+            "value": "区域"
+          },
+          {
+            "address": "D1",
+            "value": "金额"
+          },
+          {
+            "address": "E1",
+            "value": "备注"
+          },
+          {
+            "address": "F1",
+            "value": "退款"
+          },
+          {
+            "address": "A2",
+            "value": 1,
+            "numberFormat": "0"
+          },
+          {
+            "address": "B2",
+            "value": "A001"
+          },
+          {
+            "address": "C2",
+            "value": "华东"
+          },
+          {
+            "address": "D2",
+            "value": 10.1,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "E2",
+            "value": "普通订单"
+          },
+          {
+            "address": "F2",
+            "value": false
+          },
+          {
+            "address": "A3",
+            "value": 2,
+            "numberFormat": "0"
+          },
+          {
+            "address": "B3",
+            "value": "A002"
+          },
+          {
+            "address": "C3",
+            "value": "华东"
+          },
+          {
+            "address": "D3",
+            "value": 20.2,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "E3",
+            "value": "中文客户"
+          },
+          {
+            "address": "F3",
+            "value": false
+          },
+          {
+            "address": "A4",
+            "value": 3,
+            "numberFormat": "0"
+          },
+          {
+            "address": "B4",
+            "value": "A003"
+          },
+          {
+            "address": "C4",
+            "value": "华东"
+          },
+          {
+            "address": "D4",
+            "value": -2.05,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "E4",
+            "value": "退款"
+          },
+          {
+            "address": "F4",
+            "value": true
+          },
+          {
+            "address": "A5",
+            "value": 4,
+            "numberFormat": "0"
+          },
+          {
+            "address": "B5",
+            "value": "A004"
+          },
+          {
+            "address": "C5",
+            "value": "华南"
+          },
+          {
+            "address": "D5",
+            "value": 0,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "E5",
+            "value": "免费样品"
+          },
+          {
+            "address": "F5",
+            "value": false
+          },
+          {
+            "address": "A6",
+            "value": 5,
+            "numberFormat": "0"
+          },
+          {
+            "address": "B6",
+            "value": "A005"
+          },
+          {
+            "address": "C6",
+            "value": "华南"
+          },
+          {
+            "address": "D6",
+            "value": 7.35,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "E6",
+            "value": "普通订单"
+          },
+          {
+            "address": "F6",
+            "value": false
+          }
+        ]
+      },
+      {
+        "id": "sheet-2",
+        "name": "区域汇总",
+        "rowCount": 4,
+        "columnCount": 3,
+        "frozenRows": 0,
+        "frozenColumns": 0,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "区域"
+          },
+          {
+            "address": "B1",
+            "value": "订单数"
+          },
+          {
+            "address": "C1",
+            "value": "净金额"
+          },
+          {
+            "address": "A2",
+            "value": "华东"
+          },
+          {
+            "address": "B2",
+            "value": 3,
+            "numberFormat": "0"
+          },
+          {
+            "address": "C2",
+            "value": 28.25,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A3",
+            "value": "华南"
+          },
+          {
+            "address": "B3",
+            "value": 2,
+            "numberFormat": "0"
+          },
+          {
+            "address": "C3",
+            "value": 7.35,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A4",
+            "value": "全体合计"
+          },
+          {
+            "address": "B4",
+            "value": 5,
+            "numberFormat": "0"
+          },
+          {
+            "address": "C4",
+            "value": 35.6,
+            "numberFormat": "0.00"
+          }
+        ]
+      },
+      {
+        "id": "sheet-3",
+        "name": "统计说明",
+        "rowCount": 28,
+        "columnCount": 2,
+        "frozenRows": 0,
+        "frozenColumns": 0,
+        "cells": [
+          {
+            "address": "A1",
+            "value": "项目"
+          },
+          {
+            "address": "B1",
+            "value": "说明或数值"
+          },
+          {
+            "address": "A2",
+            "value": "真实来源"
+          },
+          {
+            "address": "B2",
+            "value": "当前项目根目录 sales.csv"
+          },
+          {
+            "address": "A3",
+            "value": "源字段"
+          },
+          {
+            "address": "B3",
+            "value": "订单编号、区域、金额、备注"
+          },
+          {
+            "address": "A4",
+            "value": "统计范围"
+          },
+          {
+            "address": "B4",
+            "value": "源文件全部5笔，保持原行序"
+          },
+          {
+            "address": "A5",
+            "value": "原行序"
+          },
+          {
+            "address": "B5",
+            "value": "从首笔数据起编号，不含表头"
+          },
+          {
+            "address": "A6",
+            "value": "订单计数"
+          },
+          {
+            "address": "B6",
+            "value": "每笔原记录计1笔，不去重"
+          },
+          {
+            "address": "A7",
+            "value": "退款计数"
+          },
+          {
+            "address": "B7",
+            "value": "负金额计入订单数及退款笔数"
+          },
+          {
+            "address": "A8",
+            "value": "零金额计数"
+          },
+          {
+            "address": "B8",
+            "value": "零金额计入订单数，不计退款"
+          },
+          {
+            "address": "A9",
+            "value": "净金额口径"
+          },
+          {
+            "address": "B9",
+            "value": "正数加计、负数扣减、零值不增减"
+          },
+          {
+            "address": "A10",
+            "value": "区域口径"
+          },
+          {
+            "address": "B10",
+            "value": "保留原区域名称分组"
+          },
+          {
+            "address": "A11",
+            "value": "金额精度"
+          },
+          {
+            "address": "B11",
+            "value": "原文本以Decimal独立累加到分"
+          },
+          {
+            "address": "A12",
+            "value": "总订单数"
+          },
+          {
+            "address": "B12",
+            "value": 5,
+            "numberFormat": "0"
+          },
+          {
+            "address": "A13",
+            "value": "总净金额"
+          },
+          {
+            "address": "B13",
+            "value": 35.6,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A14",
+            "value": "退款笔数"
+          },
+          {
+            "address": "B14",
+            "value": 1,
+            "numberFormat": "0"
+          },
+          {
+            "address": "A15",
+            "value": "退款金额（带符号）"
+          },
+          {
+            "address": "B15",
+            "value": -2.05,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A16",
+            "value": "零金额笔数"
+          },
+          {
+            "address": "B16",
+            "value": 1,
+            "numberFormat": "0"
+          },
+          {
+            "address": "A17",
+            "value": "零金额合计"
+          },
+          {
+            "address": "B17",
+            "value": 0,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A18",
+            "value": "正金额笔数"
+          },
+          {
+            "address": "B18",
+            "value": 3,
+            "numberFormat": "0"
+          },
+          {
+            "address": "A19",
+            "value": "正金额合计"
+          },
+          {
+            "address": "B19",
+            "value": 37.65,
+            "numberFormat": "0.00"
+          },
+          {
+            "address": "A20",
+            "value": "区域计数核对"
+          },
+          {
+            "address": "B20",
+            "value": "3 + 2 = 5"
+          },
+          {
+            "address": "A21",
+            "value": "区域金额核对"
+          },
+          {
+            "address": "B21",
+            "value": "28.25 + 7.35 = 35.60"
+          },
+          {
+            "address": "A22",
+            "value": "金额性质核对"
+          },
+          {
+            "address": "B22",
+            "value": "37.65 - 2.05 + 0.00 = 35.60"
+          },
+          {
+            "address": "A23",
+            "value": "退款记录"
+          },
+          {
+            "address": "B23",
+            "value": "A003，金额-2.05，退款为TRUE"
+          },
+          {
+            "address": "A24",
+            "value": "零金额记录"
+          },
+          {
+            "address": "B24",
+            "value": "A004，金额0.00，退款为FALSE"
+          },
+          {
+            "address": "A25",
+            "value": "数据类型"
+          },
+          {
+            "address": "B25",
+            "value": "金额和计数为数值；退款为布尔"
+          },
+          {
+            "address": "A26",
+            "value": "显示说明"
+          },
+          {
+            "address": "B26",
+            "value": "35.6等于35.60；0等于0.00"
+          },
+          {
+            "address": "A27",
+            "value": "币种与期间"
+          },
+          {
+            "address": "B27",
+            "value": "源文件未提供，不作推定"
+          },
+          {
+            "address": "A28",
+            "value": "工作簿内容"
+          },
+          {
+            "address": "B28",
+            "value": "均为明确值，无公式或外部链接"
+          }
+        ]
+      }
+    ]
+  },
+  "timeCreated": 1795799845984,
+  "timeUpdated": 1795799845984
+}
