@@ -78,7 +78,7 @@ function DocumentImage(props: { path: string; alt: string; reader?: MarkdownImag
     }>
       <Show when={image.state === "ready" && image()} fallback={
         <span class="md-document-image-loading" role="status">{name()} · {t("common.loading")}</span>
-      }>{(content) => <PreviewableImage src={content().src} alt={props.alt} focusOrigin={content().focusOrigin} />}</Show>
+      }>{(content) => <PreviewableImage src={content().src} alt={props.alt} filename={props.path} focusOrigin={content().focusOrigin} />}</Show>
     </Show>
   </span>
 }

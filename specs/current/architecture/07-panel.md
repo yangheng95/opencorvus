@@ -366,6 +366,13 @@ download identity. Audio and video attachments show their display filename above
 the existing native controls, including same-name position annotations. Their
 original-download action continues to save the original filename.
 
+Image preview carries a declared filename separately from authored alt text and
+display annotations through its single state. File parts, project/document images
+and screenshot attachment projections supply that file identity to the shared
+preview. Its download uses the declared name with the existing export filename
+sanitizer. Media without a declared filename leave naming to the browser; an image
+description or webpage title never supplies a download filename.
+
 User-message PDF parts retain their chronological position and show their file
 label in a compact native disclosure by default. Expanding it loads the same
 PDF reader and original download; its reading viewport scrolls within a bound.

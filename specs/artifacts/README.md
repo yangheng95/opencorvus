@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [图片预览下载名称真实证据](2026-11-27-image-preview-download-name/README.md)
 - [演示文稿图片说明真实证据](2026-11-27-presentation-image-description/README.md)
 - [PPTX 物理字号与审阅图绑定证据](2026-11-27-presentation-review-render-contract/README.md)
 - [中文销售 PPTX 真实证据](2026-11-27-sales-presentation-delivery/README.md)

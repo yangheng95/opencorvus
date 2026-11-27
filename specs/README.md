@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [图片预览下载保留原文件名](records/2026-11/2026-11-27-image-preview-download-name.md)
 - [演示文稿图片说明保留真实页标题](records/2026-11/2026-11-27-presentation-image-description.md)
 - [PPTX 物理字号与最终审阅图绑定](records/2026-11/2026-11-27-presentation-review-render-contract.md)
 - [中文销售简报的原生 PPTX 交付](records/2026-11/2026-11-27-sales-presentation-delivery.md)

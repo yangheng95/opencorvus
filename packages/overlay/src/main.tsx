@@ -2083,7 +2083,7 @@ document.addEventListener(
         imageTrigger.querySelector("img")?.getAttribute("alt") ||
         ""
       ev.preventDefault()
-      openImagePreview(src, alt)
+      openImagePreview({ src, alt, filename: imageTrigger.getAttribute("data-image-preview-filename") ?? undefined })
       return
     }
     const link = target.closest<HTMLElement>(`[${FILE_REFERENCE_PATH_ATTRIBUTE}]`)

@@ -164,13 +164,14 @@ export function FilePart(props: {
         <TextAttachment url={url()} name={name()} displayLabel={props.displayLabel} mime={props.part.mime || props.part.mediaType || ""} />
       </Match>
       <Match when={kind() === "image" && url() && authed()}>
-        <AuthedImage url={url()} name={name()} alt={alt()} displayLabel={props.displayLabel} presentation={props.presentation ?? "content"} />
+        <AuthedImage url={url()} name={name()} filename={props.part.filename} alt={alt()} displayLabel={props.displayLabel} presentation={props.presentation ?? "content"} />
       </Match>
       <Match when={kind() === "image" && url()}>
         <div class={composerThumbnail() ? "composer-attachment-thumbnail" : thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
           <PreviewableImage
             src={resolveResourceUrl(url())}
             alt={alt()}
+            filename={props.part.filename}
             displayLabel={props.displayLabel}
             triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
             imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}
@@ -406,7 +407,7 @@ function PdfAttachment(props: { url: string; name: string; displayLabel?: string
 // `initialValue` seeds the resource signal from the cache so a cache-hit
 // path renders on the first tick without a spinner flash.
 
-function AuthedImage(props: { url: string; name: string; alt: string; displayLabel?: string; presentation: FilePartPresentation }) {
+function AuthedImage(props: { url: string; name: string; filename?: string; alt: string; displayLabel?: string; presentation: FilePartPresentation }) {
   const thumbnail = () => props.presentation !== "content"
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
   const previewUrl = () => attachmentImagePreviewUrl(props.url)
@@ -429,6 +430,7 @@ function AuthedImage(props: { url: string; name: string; alt: string; displayLab
               src={resolved()}
               resourceUrl={props.url}
               alt={props.alt}
+              filename={props.filename}
               displayLabel={props.displayLabel}
               triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
               imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}

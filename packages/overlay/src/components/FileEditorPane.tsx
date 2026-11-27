@@ -1278,7 +1278,7 @@ export function FileEditorPane(props: {
                 <Match when={imageSource()}>
                   {(src) => (
                     <div class="file-editor-image">
-                      <PreviewableImage src={src()} alt={displayName() ?? path()} triggerRef={setImagePreviewTrigger} />
+                      <PreviewableImage src={src()} alt={displayName() ?? path()} filename={path()} triggerRef={setImagePreviewTrigger} />
                     </div>
                   )}
                 </Match>

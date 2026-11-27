@@ -1,0 +1,150 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0Vc865j800zeOSTYz4n",
+  "sameOriginalArtifact": true,
+  "downloads": [
+    {
+      "filename": "slide-1.png",
+      "bytes": 95190,
+      "slide": 1,
+      "canonicalBytes": true
+    },
+    {
+      "filename": "slide-2 (1).png",
+      "bytes": 60144,
+      "slide": 2,
+      "canonicalBytes": true
+    },
+    {
+      "filename": "slide-2 (2).png",
+      "bytes": 60144,
+      "slide": 2,
+      "canonicalBytes": true
+    },
+    {
+      "filename": "slide-2.png",
+      "bytes": 60144,
+      "slide": 2,
+      "canonicalBytes": true
+    },
+    {
+      "filename": "区域对比（原图） (1).png",
+      "bytes": 60144,
+      "documentRelativeOriginalName": true,
+      "canonicalBytes": true
+    },
+    {
+      "filename": "区域对比（原图）.png",
+      "bytes": 60144,
+      "documentRelativeOriginalName": true,
+      "canonicalBytes": true
+    }
+  ],
+  "preservedRows": {
+    "message": 161,
+    "part": 433,
+    "tool_part_request": 140,
+    "tool_part_outcome": 140,
+    "interactive_artifact": 10
+  },
+  "preservedFiles": [
+    {
+      "name": ".gitattributes",
+      "bytes": 150,
+      "preservedExactBytes": true
+    },
+    {
+      "name": ".gitignore",
+      "bytes": 16,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "README.md",
+      "bytes": 96,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "sales.csv",
+      "bytes": 181,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "sales_summary.py",
+      "bytes": 7650,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "summary.json",
+      "bytes": 238,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "test_sales_summary.py",
+      "bytes": 10107,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "区域汇总.csv",
+      "bytes": 59,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "销售报告.md",
+      "bytes": 1408,
+      "preservedExactBytes": true
+    },
+    {
+      "name": ".opencorvus/opencorvus.jsonc",
+      "bytes": 1398,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售核对.xlsx",
+      "bytes": 6793,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理审阅稿-分页修订.docx",
+      "bytes": 8016,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理审阅稿.docx",
+      "bytes": 7997,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理简报-精度修订.pptx",
+      "bytes": 16259,
+      "preservedExactBytes": true
+    },
+    {
+      "name": "deliverables/销售经理简报.pptx",
+      "bytes": 16302,
+      "preservedExactBytes": true
+    }
+  ],
+  "newProjectInputs": [
+    {
+      "file": "review\\区域对比（原图）.png",
+      "bytes": 60144
+    },
+    {
+      "file": "review\\图片审阅.md",
+      "bytes": 311
+    }
+  ],
+  "manualSurfaces": [
+    "presentation image dialog",
+    "artifact media menu",
+    "Markdown relative image",
+    "project file editor image",
+    "screenshot browser Tool attachment"
+  ],
+  "candidateAssets": [
+    "./assets/main-DV3ahCpM.js",
+    "./assets/CommandMenuSurface-C2NqEic8.js",
+    "./assets/CommandMenuSurface-fS4FqK6x.css",
+    "./assets/main-C5u2oDiB.css"
+  ]
+}

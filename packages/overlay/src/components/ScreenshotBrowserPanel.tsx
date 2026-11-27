@@ -160,6 +160,7 @@ function ScreenshotThumbnail(props: { item: ScreenshotBrowserItem }) {
               src={resolved()}
               resourceUrl={props.item.src}
               alt={props.item.alt}
+              filename={props.item.filename}
               triggerClass="screenshot-browser__thumb-trigger"
               imageClass="screenshot-browser__thumb-image"
               imageAttributes={{

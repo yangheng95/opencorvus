@@ -28,6 +28,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
+import { artifactFilename } from "../services/artifact-export"
 import { closeArtifactWorkspace, topLayerPortalMount } from "../utils/top-layer"
 
 const SCALE_STEP = 0.25
@@ -70,6 +71,7 @@ function isAbortError(error: unknown): boolean {
 export function PreviewableImage(props: {
   src: string
   alt?: string
+  filename?: string
   displayLabel?: string
   triggerClass?: string
   imageClass?: string
@@ -81,7 +83,7 @@ export function PreviewableImage(props: {
 }) {
   let triggerButton: HTMLButtonElement | undefined
   const alt = () => props.alt || ""
-  // Display annotations name the trigger; alt retains preview/download identity.
+  // Display annotations name the trigger; alt describes the image, filename names its download.
   const trigger = createMemo(() => imagePreviewTriggerContract({ src: props.src, alt: props.displayLabel ?? alt() }))
   const triggerClass = () => imagePreviewTriggerClass(props.triggerClass)
   const imageClass = () => ["md-img", props.imageClass].filter(Boolean).join(" ")
@@ -101,7 +103,7 @@ export function PreviewableImage(props: {
     event.preventDefault()
     event.stopPropagation()
     const resourceUrl = props.resourceUrl ?? (props.src.startsWith("/") ? props.src : undefined)
-    openImagePreview(props.src, alt(), resourceUrl)
+    openImagePreview({ src: props.src, alt: alt(), resourceUrl, filename: props.filename })
   }
 
   return (
@@ -119,6 +121,7 @@ export function PreviewableImage(props: {
       data-image-preview-trigger={delegatedPreview() ? trigger().triggerFlag : undefined}
       data-image-preview-src={delegatedPreview() ? trigger().src : undefined}
       data-image-preview-alt={delegatedPreview() ? alt() : undefined}
+      data-image-preview-filename={delegatedPreview() ? props.filename : undefined}
       data-image-failed={failed() ? "true" : undefined}
       title={failed() ? t("image_preview.load_failed") : trigger().label}
       aria-label={trigger().label}
@@ -463,7 +466,7 @@ export function ImagePreviewHost() {
       if (!src || !current()) return
       const download = document.createElement("a")
       download.href = src
-      download.download = preview.alt.split(/[\\/]/).pop()?.trim() || t("image_preview.title")
+      download.download = preview.filename ? artifactFilename(preview.filename) : ""
       download.rel = "noopener noreferrer"
       document.body.append(download)
       download.click()

@@ -19,6 +19,7 @@ export interface ScreenshotBrowserItem {
   src: string
   thumbnailSrc: string
   alt: string
+  filename?: string
   title: string
   detail: string
   time: number
@@ -360,6 +361,7 @@ function fileItem(input: {
   const partID = firstString(input.part?.id) || String(input.index)
   return {
     id: `file:${messageID}:${partID}`,
+    filename: firstString(input.part?.filename) || undefined,
     ...ownerFields(input.owner),
     src,
     thumbnailSrc: screenshotBrowserThumbnailUrl(src),
@@ -393,6 +395,7 @@ function toolAttachmentItems(input: {
       const title = firstString(attachment?.filename, attachment?.name, input.part?.tool, src)
       return {
         id: `tool-attachment:${messageID}:${partID}:${attachmentIndex}`,
+        filename: firstString(attachment?.filename) || undefined,
         ...ownerFields(input.owner),
         src,
         thumbnailSrc: screenshotBrowserThumbnailUrl(src),
