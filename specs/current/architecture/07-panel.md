@@ -5007,6 +5007,10 @@ upload or alternative directory reference protocol is introduced.
 Historical folder cards open the referenced project directory in the existing
 Explorer. Command file URLs use the server's path syntax, and stored directory
 references read the versioned manifest through the authorized attachment cache.
+The explicit manifest download appends `.directory.json` to the complete folder
+display name. It saves the original versioned JSON bytes and local path; the
+canonical reference metadata and folder identity remain unchanged. This named
+manifest represents a local directory reference, without bundled descendants.
 Explorer resolves and expands the actual directory rows, then reads the target
 listing. The request belongs to the active connection, conversation selection,
 and project. A later Explorer action takes precedence while a reveal is pending.

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [目录引用的真实阅读与清单交付](2026-11-28-folder-reference-download.md)
 - [文本原件的媒体类型合同](2026-11-28-text-preview-media-contract.md)
 - [文本附件的真实交接阅读](2026-11-28-text-attachment-reading.md)
 - [代码交付的语言与原文件名](2026-11-28-code-artifact-language.md)

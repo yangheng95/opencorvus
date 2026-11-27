@@ -1,0 +1,171 @@
+{
+  "status": "passed",
+  "runs": [
+    {
+      "label": "run131",
+      "originalExecHandle": 78160,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_h0zGvRzA5eyine3TKG4i",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795815440531,
+        "settledAt": 1795815440531,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 10,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run132",
+      "originalExecHandle": 6036,
+      "joinedExitCode": 0,
+      "state": "exited",
+      "preflight": {
+        "sessionID": "ses_hgTsXbOw2jZmMLQeBj68",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795815803631,
+        "settledAt": 1795815803631,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": 2,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "modelRequestLimit": null,
+  "businessDispatchOriginalExecHandle": 5279,
+  "businessDispatchJoinedExitCode": 0,
+  "checks": {
+    "overlayTypecheck": {
+      "originalExecHandle": 19577,
+      "joinedExitCode": 0
+    },
+    "build": {
+      "originalExecHandle": 93045,
+      "joinedExitCode": 0,
+      "viteSeconds": 73,
+      "rendererPublicSurface": "passed"
+    },
+    "locales": 2,
+    "localeKeys": 3375,
+    "cssReferences": 9453,
+    "cssGlobals": 269,
+    "cssStylesheets": 60,
+    "cssSources": 427,
+    "docsOperations": 353,
+    "docsGroups": 26,
+    "architectureDocuments": 20
+  },
+  "desktop": {
+    "ownedTabsClosed": [
+      "384",
+      "388"
+    ],
+    "localeRestored": "zh-CN",
+    "themeRestored": "system",
+    "nativeJpegs": 9,
+    "before": 3,
+    "final": 6,
+    "personallyReviewed": true,
+    "uiAutomatedTests": 0
+  },
+  "scope": "one folder-reference download-name projection; actual review manifest, existing directory/search/Markdown/PNG and language actions; not all folder names, local browser picker or portable folder backup"
+}

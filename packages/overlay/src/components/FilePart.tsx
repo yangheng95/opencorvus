@@ -270,7 +270,7 @@ function FolderReference(props: { url: string; name: string; label: string; stor
           <Show when={props.stored && isStoredAttachmentUrl(props.url)}>
             <OriginalFileDownload
               url={props.url}
-              name={props.name}
+              name={`${props.name}.directory.json`}
               displayLabel={props.label}
               actionLabel={{
                 text: t("file.download_folder_reference"),

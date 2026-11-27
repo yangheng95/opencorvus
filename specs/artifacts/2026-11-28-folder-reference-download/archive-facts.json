@@ -1,0 +1,57 @@
+{
+  "status": "passed",
+  "nativeJpegsCopiedUnchanged": 9,
+  "members": [
+    {
+      "name": "source/accepted-directory-manifest.json",
+      "bytes": 165,
+      "equalsOriginal": true
+    },
+    {
+      "name": "before/review",
+      "bytes": 165,
+      "equalsOriginal": true
+    },
+    {
+      "name": "after/review.directory.json",
+      "bytes": 165,
+      "equalsOriginal": true
+    },
+    {
+      "name": "after/review.directory (1).json",
+      "bytes": 165,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/图片审阅.md",
+      "bytes": 311,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/销售核对说明-来源复验.md",
+      "bytes": 4221,
+      "equalsOriginal": true
+    },
+    {
+      "name": "source/区域对比（原图）.png",
+      "bytes": 60144,
+      "equalsOriginal": true
+    },
+    {
+      "name": "download/图片审阅.md",
+      "bytes": 311,
+      "equalsOriginal": true
+    },
+    {
+      "name": "download/区域对比（原图） (3).png",
+      "bytes": 60144,
+      "equalsOriginal": true
+    },
+    {
+      "name": "formal-resource/区域汇总.csv",
+      "bytes": 59,
+      "equalsOriginal": true
+    }
+  ],
+  "method": "actual canonical manifest, source and native downloaded files compared byte for byte; staged copies checked separately; no mutable source checksum or UI assertions"
+}

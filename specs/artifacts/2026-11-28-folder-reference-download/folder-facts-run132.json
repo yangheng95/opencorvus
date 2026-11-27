@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "label": "run132",
+  "sessionID": "ses_hTMwxkZMrB0ZDqbIFwJk",
+  "messageID": "msg_0d62ce8f-50c1-45ae-91ec-e3c9a513748c",
+  "artifactID": "art_g0VcDBybC006d6Ilxdlb",
+  "manifestBytes": 165,
+  "manifestVersion": 1,
+  "canonicalReferenceUnchanged": true,
+  "directoryEntries": 3,
+  "fullMarkdownLines": [
+    7,
+    52
+  ],
+  "acceptedImageBytes": 60144,
+  "imageDimensions": [
+    1280,
+    720
+  ],
+  "naturalPublication": "completed",
+  "final": "stop",
+  "scope": "real API, complete tool outputs and original bytes; UI and model-content review are manual",
+  "nativeDownloads": [
+    {
+      "filename": "review.directory.json",
+      "bytes": 165,
+      "equalsAccepted": true
+    },
+    {
+      "filename": "review.directory (1).json",
+      "bytes": 165,
+      "equalsAccepted": true
+    },
+    {
+      "filename": "图片审阅.md",
+      "bytes": 311,
+      "equalsOriginal": true
+    },
+    {
+      "filename": "区域对比（原图） (3).png",
+      "bytes": 60144,
+      "equalsOriginal": true
+    }
+  ]
+}
