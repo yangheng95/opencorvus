@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "originalSourceBytes": 4912,
+  "sourceCopies": "before/after MMD, actual product copy and native Ctrl+V draft bytes all equal original publication",
+  "svgFiles": [
+    {
+      "filename": "light.svg",
+      "bytes": 114426,
+      "namespace": "http://www.w3.org/2000/svg",
+      "width": 2212.2529296875,
+      "height": 4047.377197265625,
+      "nodes": 35,
+      "links": 40,
+      "backgroundRGB": [
+        255,
+        255,
+        255
+      ],
+      "all35AuthoredNodeIdentities": true,
+      "nativeTextNodeCount": 35,
+      "paintedBackdrop": true
+    },
+    {
+      "filename": "dark.svg",
+      "bytes": 114669,
+      "namespace": "http://www.w3.org/2000/svg",
+      "width": 2212.2529296875,
+      "height": 4047.377197265625,
+      "nodes": 35,
+      "links": 40,
+      "backgroundRGB": [
+        34,
+        34,
+        34
+      ],
+      "all35AuthoredNodeIdentities": true,
+      "nativeTextNodeCount": 35,
+      "paintedBackdrop": true
+    }
+  ],
+  "sameNodeTextAndLinkIdentitiesAcrossThemes": true,
+  "scope": "independent actual downloaded artifact XML/data contract; real desktop screenshots and independent Sharp/librsvg decoded files provide manual document visual acceptance"
+}

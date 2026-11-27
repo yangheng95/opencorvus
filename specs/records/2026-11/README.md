@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从真实销售脚本生成和导出处理流程图](2026-11-28-diagram-delivery.md)
 - [从真实 Excel 工作簿浏览全部原始单元格](2026-11-28-workbook-browser.md)
 - [销售看板筛选在正文与交付预览间的连续性](2026-11-28-dashboard-reading-state.md)
 - [项目交付预览关闭后的键盘位置](2026-11-28-delivery-preview-focus.md)

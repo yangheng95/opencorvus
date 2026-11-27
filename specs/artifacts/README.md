@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [真实脚本流程图交付证据](2026-11-28-diagram-delivery/README.md)
 - [真实工作簿浏览证据](2026-11-28-workbook-browser/README.md)
 - [销售看板筛选阅读状态证据](2026-11-28-dashboard-reading-state/README.md)
 - [项目交付预览键盘位置证据](2026-11-28-delivery-preview-focus/README.md)

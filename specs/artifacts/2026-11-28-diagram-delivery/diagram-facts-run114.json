@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "label": "run114",
+  "sessionID": "ses_hxwXU3eJ5nLaDmBOPrmx",
+  "artifactID": "art_g0VcCFvrZ00wlZF7keJL",
+  "fullSourceReads": [
+    {
+      "file": "sales_summary.py",
+      "lines": 167,
+      "completeOriginalText": true
+    },
+    {
+      "file": "test_sales_summary.py",
+      "lines": 264,
+      "completeOriginalText": true
+    },
+    {
+      "file": "sales.csv",
+      "lines": 6,
+      "completeOriginalText": true
+    }
+  ],
+  "modelReadOnlySummaryEqualsIndependentExecution": true,
+  "summary": {
+    "order_count": 5,
+    "total_amount": "35.60",
+    "by_region": {
+      "华东": {
+        "order_count": 3,
+        "total_amount": "28.25"
+      },
+      "华南": {
+        "order_count": 2,
+        "total_amount": "7.35"
+      }
+    }
+  },
+  "originalMMDBytes": 4912,
+  "finished": "stop",
+  "tools": [
+    {
+      "id": "prt_g0VcCFjfc00zTXwX4WsC",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcCFkNR00t79oaafyc",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcCFlF100Gkl8toYzM",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcCFlxj00fY9RWqA1l",
+      "tool": "bash",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcCFnzB00rTnQ101jB",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "diagramSemantics": "reviewed manually against full actual source and tests; file equality alone is not semantic or visual acceptance"
+}

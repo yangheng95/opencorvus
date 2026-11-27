@@ -6119,6 +6119,28 @@ their start, while ranges and backgrounds carry both actual boundaries. Library
 focus can therefore consume the same typed data used for drawing and selection.
 Diagram's expanded SVG relinquishes Mermaid's compact intrinsic width cap while
 retaining the original mounted viewBox and graph.
+Its ready viewBox also supplies an explicit Original size/Fit to view action.
+Original size uses those coordinates as CSS pixel dimensions in the same
+scrolling host, with its top edge accessible in compact and expanded views.
+Entering it centers the current horizontal extent at the top on the next drawing
+frame; the current host, rendering generation and mode own that one callback,
+which retires on another toggle or disposal. The named region exposes native Tab
+focus and browser keyboard scrolling without an additional key handler.
+The local mode survives that Frame's open/close and theme rendering; it adds no
+publication change or persisted viewport. The original fit view remains the default.
+Diagram uses Mermaid's root-level `htmlLabels: false` policy for native SVG
+labels; the deprecated per-flowchart setting is not a second configuration.
+Diagram downloads retain the original MMD and add the current ready SVG with a
+positive viewBox. An
+explicit export clones the mounted SVG, preserves its graph/viewBox/styles and
+serializes its XML namespace with intrinsic dimensions. An otherwise transparent
+root uses the current host background; an authored root background retains its
+computed color. A first-layer SVG rectangle paints that color over the complete
+viewBox; root CSS background is transparent rather than a second paint source.
+The visible graph is unchanged by export, the original source remains the
+copy value, and a new rendering retires the previous SVG immediately. No second
+renderer, screenshot export, embedded font bundle or browser event listeners
+supply this static vector file.
 This keeps data semantics and explicit design in the durable payload while
 giving unspecified presentation values one deterministic product theme source.
 

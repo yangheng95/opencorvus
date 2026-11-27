@@ -1,0 +1,276 @@
+{
+  "runs": [
+    {
+      "label": "run114",
+      "pid": 25936,
+      "url": "http://127.0.0.1:52155/",
+      "sourceRun": "run113",
+      "preflight": {
+        "sessionID": "ses_hZLwcwicNjwJr4AJBadH",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "state": "exited",
+      "originalExecHandle": 83122,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795801998110,
+        "settledAt": 1795801998110,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run115",
+      "pid": 15200,
+      "url": "http://127.0.0.1:49581/",
+      "sourceRun": "run114",
+      "preflight": {
+        "sessionID": "ses_hXmFVG8b24oBFJjPpfap",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "state": "exited",
+      "originalExecHandle": 59766,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795802316861,
+        "settledAt": 1795802316861,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run116",
+      "pid": 27412,
+      "url": "http://127.0.0.1:56994/",
+      "sourceRun": "run115",
+      "preflight": {
+        "sessionID": "ses_hKog6pWm5cVW6gwF234f",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "state": "exited",
+      "originalExecHandle": 60188,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795803503207,
+        "settledAt": 1795803503207,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run117",
+      "pid": 36200,
+      "url": "http://127.0.0.1:64406/",
+      "sourceRun": "run116",
+      "preflight": {
+        "sessionID": "ses_hTI82J4pkuV6b4ku31Dd",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "state": "exited",
+      "originalExecHandle": 85590,
+      "originalHandleJoinedExitCode": 0,
+      "providerDrain": {
+        "startedAt": 1795803946265,
+        "settledAt": 1795803946265,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "businessWorkTasks": 1,
+  "realStreamingRequests": 15,
+  "builds": [
+    {
+      "originalHandle": 33991,
+      "joinedExitCode": 0,
+      "seconds": 55.01
+    },
+    {
+      "originalHandle": 12562,
+      "joinedExitCode": 0,
+      "seconds": 53.11
+    },
+    {
+      "originalHandle": null,
+      "seconds": 55.38,
+      "evidence": "build-portable.log has Vite completion and renderer public surface passed; process already retired when handle observation was lost to context truncation; no original join exit claim"
+    }
+  ],
+  "checks": {
+    "typecheck": "passed in final portable sequence before build",
+    "i18n": "2 locales / 3373 keys",
+    "css": "9448 references / 269 globals / 60 styles / 427 source files",
+    "docs": "353 ops / 26 groups",
+    "architecture": "20 documents",
+    "actualFiles": "7 original/copy/native-paste MMD files exactly equal published 4912 bytes; final 2 SVG files have same 35 native-text nodes and 40 authored links and painted backdrop",
+    "protection": "23 files, 2415 old rows, 23 Task reference rows / 2 completed Tasks"
+  },
+  "nativeScreenshots": {
+    "count": 18,
+    "names": [
+      "after-fit-overview.jpg",
+      "after-keyboard-middle.jpg",
+      "after-keyboard-output-bottom.jpg",
+      "after-keyboard-validation.jpg",
+      "after-natural-centered-top.jpg",
+      "before-expanded-diagram.jpg",
+      "before-inline-diagram.jpg",
+      "before-source-only-menu.jpg",
+      "candidate-natural-top-panned.jpg",
+      "candidate-natural-top.jpg",
+      "final-compact-natural-dark-en.jpg",
+      "final-fit-overview.jpg",
+      "final-inline-light.jpg",
+      "final-keyboard-bottom.jpg",
+      "final-keyboard-middle.jpg",
+      "final-natural-centered-top.jpg",
+      "final-natural-dark-en.jpg",
+      "final-restored-preferences.jpg"
+    ],
+    "format": "unaltered JPEG; earlier after-* belong to run116, final-* to run117; candidate-* explicitly intermediate"
+  },
+  "documentRenders": {
+    "decoder": "installed Sharp 0.35.5 / librsvg",
+    "scope": "real downloaded SVG static artifact decoding; no browser or script/network execution",
+    "manualReview": "failed candidate and final light/dark top/middle/bottom original-scale crops; full renders retained as derived artifacts, not desktop screenshots"
+  },
+  "closedTabs": [
+    "241805257",
+    "241805263",
+    "241805266",
+    "241805271",
+    "241805274",
+    "241805284",
+    "241805287"
+  ],
+  "restoredSettings": {
+    "locale": "zh-CN",
+    "theme": "system"
+  },
+  "uiAutomatedTests": "none"
+}

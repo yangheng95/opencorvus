@@ -1999,6 +1999,8 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact-diagram {
+  --diagram-natural-width: auto;
+  --diagram-natural-height: auto;
   display: grid;
   max-height: calc(620px * var(--ui-scale));
   padding: var(--ui-gap-xl);
@@ -2013,6 +2015,10 @@ button.msg-source-chip .msg-source-chip__filename {
   max-width: 100%;
   height: auto;
   min-height: calc(180px * var(--ui-scale));
+}
+
+.msg-artifact-diagram[data-natural-size="true"] {
+  align-items: start;
 }
 
 .msg-artifact-code__details {
@@ -2420,6 +2426,15 @@ button.msg-source-chip .msg-source-chip__filename {
   max-width: none !important;
   height: 100%;
   max-height: 100%;
+}
+
+.msg-artifact-diagram[data-natural-size="true"] svg,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diagram"] .msg-artifact-diagram[data-natural-size="true"] svg {
+  width: var(--diagram-natural-width);
+  height: var(--diagram-natural-height);
+  min-height: 0;
+  max-width: none !important;
+  max-height: none;
 }
 
 .msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="File"] .msg-artifact-file__pdf-preview,
