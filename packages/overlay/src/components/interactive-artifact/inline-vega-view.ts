@@ -1,4 +1,5 @@
 import vegaEmbed, { type Result } from "vega-embed"
+import { isEqual, normalize, type TopLevelSpec } from "vega-lite"
 import { createEffect, onCleanup, onMount } from "solid-js"
 import { observeAppliedTheme } from "../../services/theme"
 import { artifactVegaConfig, artifactVisualTheme } from "./theme-color"
@@ -7,6 +8,28 @@ import { localeTag, t } from "../../utils/i18n"
 
 type Size = { width: number; height: number }
 type ViewState = ReturnType<Result["view"]["getState"]> & { subcontext?: ViewState[] }
+
+function interactionChanges(state: ViewState, initial: ViewState): ViewState {
+  return {
+    ...state,
+    signals: Object.fromEntries(Object.entries(state.signals ?? {}).filter(([name, value]) => {
+      const baseline = initial.signals?.[name]
+      // Replaying an unchanged empty gesture object emits a change event;
+      // its dependent pan expression may have no anchor yet. Compare shallowly
+      // so native runtime objects with cycles are never traversed.
+      return !(Object.is(value, baseline) || (
+        value && baseline && typeof value === "object" && typeof baseline === "object"
+        && ((Array.isArray(value) && Array.isArray(baseline)) || (
+          Object.getPrototypeOf(value) === Object.prototype && Object.getPrototypeOf(baseline) === Object.prototype
+        )) && isEqual(value as Record<string, unknown>, baseline as Record<string, unknown>)
+      ))
+    })),
+    subcontext: state.subcontext?.map((child, index) => {
+      const baseline = initial.subcontext?.[index]
+      return baseline ? interactionChanges(child, baseline) : child
+    }),
+  }
+}
 
 function interactionState(result: Result): ViewState {
   // Restored data is not marked modified by Vega; capture all native array
@@ -79,6 +102,10 @@ export function createInlineVegaView(input: {
     const nextSource = input.source(), nextData = input.data()
     running = true
     try {
+      // Only unit/layer plots support container dimensions. A composed plot's
+      // width/height signals can belong to its children (including their brushes).
+      const normalized = normalize(nextSource as unknown as TopLevelSpec)
+      const containerSized = "mark" in normalized || "layer" in normalized
       if (!current || repaint || source !== nextSource || data !== nextData) {
         const state = current && source === nextSource && data === nextData ? interactionState(current) : undefined
         repaint = false
@@ -90,8 +117,10 @@ export function createInlineVegaView(input: {
         const next = await vegaEmbed(host, {
           ...nextSource,
           data: { values: nextData },
-          width: nextSource.width ?? measured.width,
-          height: nextSource.height ?? measured.height,
+          ...(containerSized ? {
+            width: nextSource.width ?? measured.width,
+            height: nextSource.height ?? measured.height,
+          } : {}),
           background: nextSource.background ?? "transparent",
           config: artifactVegaConfig(artifactVisualTheme(host),
             config && typeof config === "object" && !Array.isArray(config) ? config as Record<string, unknown> : {}),
@@ -111,15 +140,15 @@ export function createInlineVegaView(input: {
         source = nextSource
         data = nextData
         if (state) {
-          current.view.setState(state)
+          current.view.setState(interactionChanges(state, current.view.getState()))
           await current.view.runAsync()
         }
       }
       // A pending layout may have changed while the renderer was loading.
       size = input.measure()
       if (size.width <= 0 || size.height <= 0) return
-      if (nextSource.width === undefined || nextSource.width === "container") current.view.width(size.width)
-      if (nextSource.height === undefined || nextSource.height === "container") current.view.height(size.height)
+      if (containerSized && (nextSource.width === undefined || nextSource.width === "container")) current.view.width(size.width)
+      if (containerSized && (nextSource.height === undefined || nextSource.height === "container")) current.view.height(size.height)
       await current.view.resize().runAsync()
       if (!disposed) input.ready?.(host, true)
     } catch (reason) {

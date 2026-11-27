@@ -1,0 +1,8 @@
+[
+  {
+    "level": "error",
+    "message": "ERROR TypeError: Cannot read properties of undefined (reading 'length')\n    at EF (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:3:2404)\n    at Oh (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:3:2648)\n    at Object.kF [as panLinear] (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:3:2774)\n    at Object.CallExpression (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:11:61057)\n    at o (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:11:61809)\n    at Array.map (<anonymous>)\n    at Object.CallExpression (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:11:61070)\n    at o (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:11:61809)\n    at ju (http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:11:61947)\n    at http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js:11:62257",
+    "timestamp": "2026-11-27T05:23:29.130Z",
+    "url": "http://127.0.0.1:50665/ui/assets/inline-vega-view-D_wiZrUQ.js"
+  }
+]

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [原生图表框选联动与视图状态复验](records/2026-11/2026-11-27-chart-selection-review.md)
 - [可筛选销售看板的真实任务与阅读复验](records/2026-11/2026-11-27-filtered-sales-dashboard.md)
 - [工具失败摘要与完整诊断的可读呈现](records/2026-11/2026-11-27-tool-failure-readable-summary.md)
 - [动态工具执行错误分类](records/2026-11/2026-11-27-dynamic-tool-error-classification.md)

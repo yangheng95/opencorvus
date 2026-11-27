@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "label": "run49",
+  "protectedFiles": 21,
+  "protectedRows": 1917,
+  "artifactID": "art_g0Vc98WuM00U3GWzHFlO",
+  "sourceRows": 5,
+  "childDimensions": [
+    [
+      330,
+      290
+    ],
+    [
+      330,
+      290
+    ]
+  ],
+  "expectedSelections": [
+    {
+      "orders": [
+        "A001",
+        "A002"
+      ],
+      "count": 2,
+      "net": "30.30"
+    },
+    {
+      "orders": [
+        "A002"
+      ],
+      "count": 1,
+      "net": "20.20"
+    },
+    {
+      "orders": [
+        "A003"
+      ],
+      "count": 1,
+      "net": "-2.05"
+    },
+    {
+      "orders": [
+        "A004"
+      ],
+      "count": 1,
+      "net": "0.00"
+    },
+    {
+      "orders": [
+        "A001",
+        "A002",
+        "A003",
+        "A004",
+        "A005"
+      ],
+      "count": 5,
+      "net": "35.60"
+    }
+  ],
+  "publicationAPI": "live",
+  "integrity": "ok"
+}

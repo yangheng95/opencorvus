@@ -6010,7 +6010,15 @@ Theme or product-language changes rebuild presentation, transferring the same
 View's native signal state and arrays belonging to explicitly declared compiled
 data sets, including nested groups. Runtime scenegraph/mark data is outside that
 transfer; a changed source specification or external data starts a new intent.
-The current container size is applied after state restoration settles. Vega
+Signals equal to the new View's initial value are omitted from the transfer,
+using identity or shallow field equality so an unused native gesture object does
+not replay a change event and cyclic runtime objects are never deeply traversed.
+For unit and layered plots, the current container size is applied to unspecified
+or container dimensions after state restoration settles; explicit dimensions
+remain authored values. Composed plots keep their native child dimensions and
+layout: the host neither injects root dimensions nor changes their width/height
+signals. This also keeps categorical brushes tied to the same child scales when
+the surrounding pane or workspace changes size. Vega
 export controls use the current product language. Dashboard's default filter
 label and numeric metrics follow that language; authored labels, strings, units,
 and published metric values retain their payload identity.

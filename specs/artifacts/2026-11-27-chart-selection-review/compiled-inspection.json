@@ -1,0 +1,285 @@
+{
+  "rootHeight": 290,
+  "scope": {
+    "signals": [
+      {
+        "name": "orders_brush",
+        "update": "vlSelectionResolve(\"orders_brush_store\", \"union\")"
+      }
+    ],
+    "data": [
+      {
+        "name": "orders_brush_store"
+      }
+    ],
+    "marks": [
+      {
+        "name": "concat_0_group",
+        "signals": [
+          {
+            "name": "orders_brush_x",
+            "value": [],
+            "on": [
+              {
+                "events": {
+                  "source": "scope",
+                  "type": "pointerdown",
+                  "filter": [
+                    "!event.item || event.item.mark.name !== \"orders_brush_brush\""
+                  ]
+                },
+                "update": "[x(unit), x(unit)]"
+              },
+              {
+                "events": {
+                  "source": "window",
+                  "type": "pointermove",
+                  "consume": true,
+                  "between": [
+                    {
+                      "source": "scope",
+                      "type": "pointerdown",
+                      "filter": [
+                        "!event.item || event.item.mark.name !== \"orders_brush_brush\""
+                      ]
+                    },
+                    {
+                      "source": "window",
+                      "type": "pointerup"
+                    }
+                  ]
+                },
+                "update": "[orders_brush_x[0], clamp(x(unit), 0, childWidth)]"
+              },
+              {
+                "events": {
+                  "signal": "orders_brush_scale_trigger"
+                },
+                "update": "[scale(\"concat_0_x\", orders_brush___[0]), scale(\"concat_0_x\", orders_brush___[1])]"
+              },
+              {
+                "events": [
+                  {
+                    "source": "view",
+                    "type": "dblclick"
+                  }
+                ],
+                "update": "[0, 0]"
+              },
+              {
+                "events": {
+                  "signal": "orders_brush_translate_delta"
+                },
+                "update": "clampRange(panLinear(orders_brush_translate_anchor.extent_x, orders_brush_translate_delta.x / span(orders_brush_translate_anchor.extent_x)), 0, childWidth)"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush___",
+            "on": [
+              {
+                "events": {
+                  "signal": "orders_brush_x"
+                },
+                "update": "orders_brush_x[0] === orders_brush_x[1] ? null : invert(\"concat_0_x\", orders_brush_x)"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_y",
+            "value": [],
+            "on": [
+              {
+                "events": {
+                  "source": "scope",
+                  "type": "pointerdown",
+                  "filter": [
+                    "!event.item || event.item.mark.name !== \"orders_brush_brush\""
+                  ]
+                },
+                "update": "[y(unit), y(unit)]"
+              },
+              {
+                "events": {
+                  "source": "window",
+                  "type": "pointermove",
+                  "consume": true,
+                  "between": [
+                    {
+                      "source": "scope",
+                      "type": "pointerdown",
+                      "filter": [
+                        "!event.item || event.item.mark.name !== \"orders_brush_brush\""
+                      ]
+                    },
+                    {
+                      "source": "window",
+                      "type": "pointerup"
+                    }
+                  ]
+                },
+                "update": "[orders_brush_y[0], clamp(y(unit), 0, height)]"
+              },
+              {
+                "events": {
+                  "signal": "orders_brush_scale_trigger"
+                },
+                "update": "[0, 0]"
+              },
+              {
+                "events": [
+                  {
+                    "source": "view",
+                    "type": "dblclick"
+                  }
+                ],
+                "update": "[0, 0]"
+              },
+              {
+                "events": {
+                  "signal": "orders_brush_translate_delta"
+                },
+                "update": "clampRange(panLinear(orders_brush_translate_anchor.extent_y, orders_brush_translate_delta.y / span(orders_brush_translate_anchor.extent_y)), 0, height)"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_____",
+            "on": [
+              {
+                "events": {
+                  "signal": "orders_brush_y"
+                },
+                "update": "orders_brush_y[0] === orders_brush_y[1] ? null : invert(\"concat_0_y\", orders_brush_y)"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_scale_trigger",
+            "value": {},
+            "on": [
+              {
+                "events": [
+                  {
+                    "scale": "concat_0_x"
+                  },
+                  {
+                    "scale": "concat_0_y"
+                  }
+                ],
+                "update": "(!isArray(orders_brush___) || (+invert(\"concat_0_x\", orders_brush_x)[0] === +orders_brush___[0] && +invert(\"concat_0_x\", orders_brush_x)[1] === +orders_brush___[1])) && (!isArray(orders_brush_____) || (invert(\"concat_0_y\", orders_brush_y)[0] === orders_brush_____[0] && invert(\"concat_0_y\", orders_brush_y)[1] === orders_brush_____[1])) ? orders_brush_scale_trigger : {}"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_tuple",
+            "on": [
+              {
+                "events": [
+                  {
+                    "signal": "orders_brush___ || orders_brush_____"
+                  }
+                ],
+                "update": "orders_brush___ && orders_brush_____ ? {unit: \"concat_0\", fields: orders_brush_tuple_fields, values: [orders_brush___,orders_brush_____]} : null"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_tuple_fields",
+            "value": [
+              {
+                "field": "金额",
+                "channel": "x",
+                "type": "R"
+              },
+              {
+                "field": "订单编号",
+                "channel": "y",
+                "type": "E"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_translate_anchor",
+            "value": {},
+            "on": [
+              {
+                "events": [
+                  {
+                    "source": "scope",
+                    "type": "pointerdown",
+                    "markname": "orders_brush_brush"
+                  }
+                ],
+                "update": "{x: x(unit), y: y(unit), extent_x: slice(orders_brush_x), extent_y: slice(orders_brush_y)}"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_translate_delta",
+            "value": {},
+            "on": [
+              {
+                "events": [
+                  {
+                    "source": "window",
+                    "type": "pointermove",
+                    "consume": true,
+                    "between": [
+                      {
+                        "source": "scope",
+                        "type": "pointerdown",
+                        "markname": "orders_brush_brush"
+                      },
+                      {
+                        "source": "window",
+                        "type": "pointerup"
+                      }
+                    ]
+                  }
+                ],
+                "update": "{x: orders_brush_translate_anchor.x - x(unit), y: orders_brush_translate_anchor.y - y(unit)}"
+              }
+            ]
+          },
+          {
+            "name": "orders_brush_modify",
+            "on": [
+              {
+                "events": {
+                  "signal": "orders_brush_tuple"
+                },
+                "update": "modify(\"orders_brush_store\", orders_brush_tuple, true)"
+              }
+            ]
+          }
+        ],
+        "marks": [],
+        "encode": {
+          "update": {
+            "width": {
+              "signal": "childWidth"
+            },
+            "height": {
+              "signal": "height"
+            }
+          }
+        }
+      },
+      {
+        "name": "concat_1_group",
+        "marks": [],
+        "encode": {
+          "update": {
+            "width": {
+              "signal": "childWidth"
+            },
+            "height": {
+              "signal": "height"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
