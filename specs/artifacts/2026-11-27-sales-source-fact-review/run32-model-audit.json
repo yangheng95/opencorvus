@@ -1,0 +1,32 @@
+[
+  {
+    "index": 1,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_47ae3795-e264-4f1e-bc7c-d0a2c6e38117",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 2,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_hq2I1lnGupxRBetdpmS9",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 3,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "chat",
+    "requestID": "msg_hq2I1lnGupxRBetdpmS9",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  }
+]

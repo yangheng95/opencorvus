@@ -1,0 +1,147 @@
+{
+  "status": "passed",
+  "realProviderRequests": 28,
+  "allExactSolStreamingHTTP200Settled": true,
+  "terminalCounts": {
+    "eof": 27,
+    "aborted": 1
+  },
+  "memoryRecovery": {
+    "requestID": "msg_47ae3795-e264-4f1e-bc7c-d0a2c6e38117",
+    "recoveredRun": "run32",
+    "documentStatus": "idle",
+    "documentRevision": 19,
+    "coveredOccurrence": "msg_47ae3795-e264-4f1e-bc7c-d0a2c6e38117",
+    "lastUpdated": 1795747634378
+  },
+  "runs": [
+    {
+      "label": "run30",
+      "requests": 15,
+      "agents": {
+        "memory": 3,
+        "chat": 1,
+        "work": 11
+      },
+      "preflight": {
+        "sessionID": "ses_h9raBw79vm7ubSeqpEOY",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 64382,
+      "joinedExitCode": 0,
+      "stopReason": "owned_stop_request",
+      "copiesRetired": true
+    },
+    {
+      "label": "run31",
+      "requests": 4,
+      "agents": {
+        "memory": 2,
+        "chat": 1,
+        "work": 1
+      },
+      "preflight": {
+        "sessionID": "ses_hXldC5KDDcN0V66ECXRD",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 98481,
+      "joinedExitCode": 0,
+      "stopReason": "owned_stop_request",
+      "copiesRetired": true
+    },
+    {
+      "label": "run32",
+      "requests": 3,
+      "agents": {
+        "memory": 2,
+        "chat": 1
+      },
+      "preflight": {
+        "sessionID": "ses_hnWQNfl8FGI0ouPjH6Hk",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 18287,
+      "joinedExitCode": 0,
+      "stopReason": "owned_stop_request",
+      "copiesRetired": true
+    },
+    {
+      "label": "run33",
+      "requests": 4,
+      "agents": {
+        "memory": 2,
+        "chat": 1,
+        "work": 1
+      },
+      "preflight": {
+        "sessionID": "ses_hiB5oFhC8mBahJksqBhe",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 49079,
+      "joinedExitCode": 0,
+      "stopReason": "owned_stop_request",
+      "copiesRetired": true
+    },
+    {
+      "label": "run34",
+      "requests": 2,
+      "agents": {
+        "memory": 1,
+        "chat": 1
+      },
+      "preflight": {
+        "sessionID": "ses_huYGsQWbUdqZt6DcPKHg",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalHandle": 50807,
+      "joinedExitCode": 0,
+      "stopReason": "owned_stop_request",
+      "copiesRetired": true
+    }
+  ],
+  "finalProviderDrain": {
+    "startedAt": 1795748171862,
+    "settledAt": 1795748171862,
+    "allReadersSettled": true
+  },
+  "downloadAuthorityTests": {
+    "pass": 8,
+    "assertions": 14
+  },
+  "manualScreenshots": [
+    "unsaved-input-protection.png",
+    "completed-task-deliveries.png",
+    "report-top.png",
+    "report-bottom.png",
+    "before-click-attachment.png",
+    "candidate-download-ready.png",
+    "candidate-download-repeat.png",
+    "candidate-offline-details.png",
+    "final-failure-layout.png",
+    "final-retry-success.png",
+    "final-recorded-original.png",
+    "final-source-download.png"
+  ],
+  "retiredPort": 64757,
+  "ownedAssetAvailability": "restored",
+  "limitations": [
+    "UI file chooser upload blocked by existing extension file URL permission; actual API setup used.",
+    "No download transfer timing or memory metrics measured.",
+    "Directory manifest download and in-flight selection cancellation inspected in code, not manually exercised this batch."
+  ]
+}

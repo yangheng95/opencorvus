@@ -1,0 +1,42 @@
+[
+  {
+    "index": 1,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_hnxCyb80zRF718hNmCS4",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 2,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "chat",
+    "requestID": "msg_hnxCyb80zRF718hNmCS4",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 3,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "memory",
+    "requestID": "msg_be8683f5-3743-48ef-a973-d8c4e68fef5d",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  },
+  {
+    "index": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "agent": "work",
+    "requestID": "msg_be8683f5-3743-48ef-a973-d8c4e68fef5d",
+    "readerState": "settled",
+    "terminalKind": "eof"
+  }
+]

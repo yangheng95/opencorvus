@@ -396,9 +396,13 @@ download available from the accepted original bytes. Direct external links keep
 their own navigation URL. The current source, authority, and shared Blob cache
 are used for retry. Pending retries keep their localized action and keyboard
 focus, and guard repeated activation. Accepted text receives focus when its
-originating retry still owns it. Independent original-download actions retain
-their own feedback and focus. Restoring a download link leaves activation to the
-user.
+originating retry still owns it. Restoring a preview's download link leaves
+activation to the user. Independent authorized original downloads (generic
+attachments, folder manifests and recorded binary versions) read only on explicit
+activation through the shared authorized resource cache and download primitives.
+One persistent button retains focus, named retry, complete failure diagnostics
+and busy state; its explicit retry performs the download. Source, authority,
+selection changes and disposal retire the current action before delivery.
 Short documents use their natural reading height; the editor's internal
 scroller bounds longer documents to the viewport. Other
 file presentations and unknown binary formats retain their current behavior.

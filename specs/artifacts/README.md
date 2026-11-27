@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [销售核对来源事实复验证据](2026-11-27-sales-source-fact-review/README.md)
 - [文件状态原生统计证据](2026-11-27-file-status-native-diff/README.md)
 - [演示文稿图表原生字号真实证据](2026-11-27-presentation-chart-font-controls/README.md)
 - [工作文件收据来源错误真实证据](2026-11-27-work-artifact-receipt-source-error/README.md)

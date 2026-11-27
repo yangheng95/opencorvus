@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [新工作销售核对的来源事实复验](2026-11-27-sales-source-fact-review.md)
 - [文件状态统一原生 Git 差异统计](2026-11-27-file-status-native-diff.md)
 - [演示文稿图表原生字号参数](2026-11-27-presentation-chart-font-controls.md)
 - [工作文件校验收据来源错误的明确类型与当前语言摘要](2026-11-27-work-artifact-receipt-source-error.md)

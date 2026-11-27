@@ -1,0 +1,146 @@
+{
+  "status": "passed",
+  "service": "run34",
+  "report": {
+    "filename": "review/销售核对说明-来源复验.md",
+    "bytes": 4221,
+    "apiAndBrowserAndPublishedDocumentExact": true,
+    "totals": {
+      "华东": [
+        3,
+        "28.25"
+      ],
+      "华南": [
+        2,
+        "7.35"
+      ],
+      "合计": [
+        5,
+        "35.60"
+      ]
+    },
+    "sourceRows": 5
+  },
+  "zipDownloads": [
+    {
+      "filename": "下载体验资料包.zip",
+      "bytes": 1048712,
+      "actualHTTP": 200,
+      "browserFiles": [
+        "下载体验资料包.zip",
+        "下载体验资料包 (1).zip",
+        "下载体验资料包 (2).zip",
+        "下载体验资料包 (3).zip",
+        "下载体验资料包 (4).zip"
+      ],
+      "exactOriginalBytes": true
+    },
+    {
+      "filename": "重试下载资料包.zip",
+      "bytes": 131202,
+      "actualHTTP": 200,
+      "browserFiles": [
+        "重试下载资料包.zip"
+      ],
+      "exactOriginalBytes": true
+    },
+    {
+      "filename": "最终重试资料包.zip",
+      "bytes": 131202,
+      "actualHTTP": 200,
+      "browserFiles": [
+        "最终重试资料包.zip"
+      ],
+      "exactOriginalBytes": true
+    }
+  ],
+  "recordedPptx": {
+    "filename": "销售经理简报-清晰图表.pptx",
+    "bytes": 16266,
+    "browserOriginalExact": true
+  },
+  "protectedFiles": [
+    {
+      "name": ".gitattributes",
+      "bytes": 150
+    },
+    {
+      "name": ".gitignore",
+      "bytes": 16
+    },
+    {
+      "name": "README.md",
+      "bytes": 96
+    },
+    {
+      "name": "sales.csv",
+      "bytes": 181
+    },
+    {
+      "name": "sales_summary.py",
+      "bytes": 7650
+    },
+    {
+      "name": "summary.json",
+      "bytes": 238
+    },
+    {
+      "name": "test_sales_summary.py",
+      "bytes": 10107
+    },
+    {
+      "name": "区域汇总.csv",
+      "bytes": 59
+    },
+    {
+      "name": "销售报告.md",
+      "bytes": 1408
+    },
+    {
+      "name": ".opencorvus/opencorvus.jsonc",
+      "bytes": 1398
+    },
+    {
+      "name": "deliverables/销售核对.xlsx",
+      "bytes": 6793
+    },
+    {
+      "name": "deliverables/销售经理审阅稿-分页修订.docx",
+      "bytes": 8016
+    },
+    {
+      "name": "deliverables/销售经理审阅稿.docx",
+      "bytes": 7997
+    },
+    {
+      "name": "deliverables/销售经理简报-清晰图表.pptx",
+      "bytes": 16266
+    },
+    {
+      "name": "deliverables/销售经理简报-精度修订.pptx",
+      "bytes": 16259
+    },
+    {
+      "name": "deliverables/销售经理简报.pptx",
+      "bytes": 16302
+    },
+    {
+      "name": "review/区域对比（原图）.png",
+      "bytes": 60144
+    },
+    {
+      "name": "review/图片审阅.md",
+      "bytes": 311
+    }
+  ],
+  "protectedOldWorkRows": {
+    "message": 183,
+    "part": 495,
+    "tool_part_request": 158,
+    "tool_part_outcome": 158,
+    "interactive_artifact": 12
+  },
+  "databaseIntegrity": "ok",
+  "availability": "restored",
+  "sampleProjectHEAD": "f7bf091156c9b137c4eb3d5b822721294e9a8f24"
+}
