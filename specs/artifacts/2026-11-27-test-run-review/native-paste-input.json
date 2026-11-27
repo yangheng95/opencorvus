@@ -1,0 +1,5 @@
+{
+  "command": "python -B -X utf8 -m unittest -v test_sales_summary.SalesSummaryTests.test_actual_csv test_sales_summary.SalesSummaryTests.test_refund_and_zero",
+  "description": "仅运行真实销售与退款零值两项指定测试",
+  "workdir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project"
+}

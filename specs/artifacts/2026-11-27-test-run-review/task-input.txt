@@ -1,0 +1,6 @@
+请在当前 project 中本人完成一次聚焦测试复核。先实际读取现有 test_sales_summary.py 和必要源码，然后用现有 Python 实际运行：
+python -B -X utf8 -m unittest -v test_sales_summary.SalesSummaryTests.test_actual_csv test_sales_summary.SalesSummaryTests.test_refund_and_zero
+
+只读项目，不修改脚本、销售数据、交付文件或已有 pyc；原测试自身的 TemporaryDirectory 临时夹具和清理正常执行即可。不安装依赖，不运行其余测试，不创建 Task/Mission、专家团或子 agent，不提交/推送示例项目。无需生成新文件或交互产物。
+
+最后直接报告真实命令、工作目录、退出码、两项测试名和实际结果。明确区分真实 sales.csv 的 5 笔/35.60（华东3/28.25、华南2/7.35）与退款零值临时用例的 2 笔/-12.30；不要把两个通过泛化为全套通过。若实际失败，保留真实错误，不改受保护文件。

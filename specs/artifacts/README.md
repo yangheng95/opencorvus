@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [真实聚焦测试执行与回看证据](2026-11-27-test-run-review/README.md)
 - [笔记本输出通道阅读证据](2026-11-27-notebook-output-channel/README.md)
 - [蜡烛图逐条读数证据](2026-11-27-candlestick-bar-details/README.md)
 - [蜡烛图高精度数据阅读证据](2026-11-27-candlestick-price-reading/README.md)

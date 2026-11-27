@@ -1,0 +1,187 @@
+{
+  "status": "passed",
+  "change": "Bash detailed command shows only explicitly supplied nonempty input.workdir verbatim with localized specified-directory label",
+  "realTask": {
+    "status": "passed",
+    "label": "run99",
+    "sessionID": "ses_hXxKTLlM9wO3oKV8NYjc",
+    "partID": "prt_g0VcBHSae00ee6YrdPLm",
+    "messageID": "msg_g0VcBHRqE00jxtc8lZCW",
+    "command": "python -B -X utf8 -m unittest -v test_sales_summary.SalesSummaryTests.test_actual_csv test_sales_summary.SalesSummaryTests.test_refund_and_zero",
+    "specifiedWorkdir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+    "exit": 0,
+    "tests": [
+      {
+        "name": "test_sales_summary.SalesSummaryTests.test_actual_csv",
+        "result": "ok",
+        "scope": "real sales.csv: 5 / 35.60, East 3 / 28.25, South 2 / 7.35"
+      },
+      {
+        "name": "test_sales_summary.SalesSummaryTests.test_refund_and_zero",
+        "result": "ok",
+        "scope": "original TemporaryDirectory fixture: 2 / -12.30"
+      }
+    ],
+    "observedSummary": "Ran 2 tests in 0.012s; OK",
+    "outputBytes": 318,
+    "terminalMessageFinish": "stop",
+    "readTools": 2,
+    "sameFullToolPartsAsBaseline": true
+  },
+  "screenshots": {
+    "before": 4,
+    "accepted": 9,
+    "method": "native desktop interactions; all archived original JPEGs personally viewed; no UI automation"
+  },
+  "checks": {
+    "typecheck": {
+      "originalHandle": 60472,
+      "joinedExit": 0
+    },
+    "build": {
+      "originalHandle": 87883,
+      "joinedExit": 0,
+      "seconds": 52.48
+    },
+    "i18n": "2 locales / 3367 keys",
+    "css": "9446 references / 2 documents",
+    "docs": "353 operations / 26 groups",
+    "architectureIndex": "20 documents",
+    "newUnitTests": "none: product change is UI-only; actual model performed two existing positive Python tests"
+  },
+  "clipboard": {
+    "tab": "241805135",
+    "method": "silent reader initialization before first product Copy; no tool paste; first output Copy/readback then native Ctrl+V; exact receipt318 bytes, textarea CRLF-to-LF311 bytes; original input369 bytes and native paste identical; both unsent drafts cleared",
+    "outputCopyBytes": 318,
+    "outputPasteBytes": 311,
+    "inputBytes": 369,
+    "archive": "native-copies.zip preserves the exact original bytes of all four clipboard captures; standalone text files are Git-normalized readable copies"
+  },
+  "observations": [
+    "source dialog first frame still showed old view; held frame personally reviewed",
+    "candidate first screenshot showed long read body above Bash rather than target; native output Copy scrolled to actual target, held screenshot used",
+    "right dock drag reported existing maximum380; extra screenshot did not demonstrate wrapping and is not archived as accepted evidence",
+    "native current-file search located test_refund_and_zero line61; scroll showed full real/fixture positive assertions without file edits"
+  ],
+  "runs": [
+    {
+      "label": "run98",
+      "pid": 30164,
+      "port": "http://127.0.0.1:57083/",
+      "originalExecHandle": 59104,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_hnJe1G0x5XDljuuBO6lu",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run99",
+      "pid": 20044,
+      "port": "http://127.0.0.1:56618/",
+      "originalExecHandle": 23692,
+      "originalHandleJoinedExitCode": 0,
+      "drained": true,
+      "pairedCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_haEeEVujfntQ0hUZEMUy",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "protectedFiles": 23,
+  "protectedOldRows": 2326,
+  "currentProjectRows": {
+    "message": 403,
+    "part": 1200,
+    "tool_part_request": 357,
+    "tool_part_outcome": 357,
+    "interactive_artifact": 33
+  },
+  "closedOwnedTabs": [
+    "241805131",
+    "241805135"
+  ],
+  "limits": [
+    "native coverage uses one actual completed Bash with explicit absolute Windows workdir",
+    "relative/blank/omitted workdir, non-Bash aliases, running/failure rendering, narrower wrapped path, other themes and screen reader not newly exercised",
+    "two positive tests passed; no full-suite or sample CLI assertion",
+    "candidate replays the same actual completed task; no second business execution needed for pure UI change",
+    "no new database, Provider, tool execution, transport or persistence contract"
+  ]
+}

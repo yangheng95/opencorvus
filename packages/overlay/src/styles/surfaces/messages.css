@@ -300,6 +300,19 @@
   margin: 0;
 }
 
+.msg-tool-workdir {
+  margin: 0 0 var(--ui-gap-md);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+}
+
+.msg-tool-workdir dd {
+  margin: var(--ui-gap-xs) 0 0;
+  overflow-wrap: anywhere;
+  font-family: var(--mono);
+  white-space: pre-wrap;
+}
+
 .msg-tool-command {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);

@@ -1,0 +1,39 @@
+{
+  "id": "prt_g0VcBHSae00ee6YrdPLm",
+  "sessionID": "ses_hXxKTLlM9wO3oKV8NYjc",
+  "messageID": "msg_g0VcBHRqE00jxtc8lZCW",
+  "type": "tool",
+  "callID": "call_37fc0dca104c4651991dce442c4f57b0",
+  "tool": "bash",
+  "state": {
+    "status": "completed",
+    "input": {
+      "command": "python -B -X utf8 -m unittest -v test_sales_summary.SalesSummaryTests.test_actual_csv test_sales_summary.SalesSummaryTests.test_refund_and_zero",
+      "workdir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+      "description": "仅运行真实销售与退款零值两项指定测试"
+    },
+    "output": "test_actual_csv (test_sales_summary.SalesSummaryTests.test_actual_csv) ... ok\r\ntest_refund_and_zero (test_sales_summary.SalesSummaryTests.test_refund_and_zero) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 2 tests in 0.012s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "title": "仅运行真实销售与退款零值两项指定测试",
+    "metadata": {
+      "refused": false,
+      "command": "python -B -X utf8 -m unittest -v test_sales_summary.SalesSummaryTests.test_actual_csv test_sales_summary.SalesSummaryTests.test_refund_and_zero",
+      "output": "test_actual_csv (test_sales_summary.SalesSummaryTests.test_actual_csv) ... ok\r\ntest_refund_and_zero (test_sales_summary.SalesSummaryTests.test_refund_and_zero) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 2 tests in 0.012s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+      "output_bytes": 271,
+      "exit": 0,
+      "pid": null,
+      "background": false,
+      "description": "仅运行真实销售与退款零值两项指定测试",
+      "truncated": false
+    },
+    "time": {
+      "start": 1795787051896,
+      "end": 1795787054450
+    }
+  },
+  "metadata": {
+    "openai": {
+      "itemId": "fc_037c192108b2c960016b09892baa6087d0855bfead18853c72"
+    }
+  },
+  "orderKey": "v1:0001795787053751:0000000000000031:0000000000000000:part:prt_g0VcBHSae00ee6YrdPLm"
+}

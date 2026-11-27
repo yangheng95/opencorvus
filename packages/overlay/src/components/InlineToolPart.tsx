@@ -410,6 +410,10 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     if (status() === "pending" || !SHELL_TOOLS.has(key())) return ""
     return toolInputCommand(input())
   })
+  const specifiedShellWorkdir = createMemo(() => {
+    const workdir = input().workdir
+    return key() === "bash" && typeof workdir === "string" && workdir.trim() ? workdir : ""
+  })
   const hasResultBody = createMemo(() =>
     Boolean(
       (todoItems()?.length ?? 0) > 0 ||
@@ -532,12 +536,22 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
               <>
                 <Show when={visibleShellCommand()}>
                   {(command) => (
-                    <div class="msg-tool-command">
-                      <span class="msg-tool-command__prompt" aria-hidden="true">
-                        $
-                      </span>
-                      <code>{command()}</code>
-                    </div>
+                    <>
+                      <Show when={specifiedShellWorkdir()}>
+                        {(workdir) => (
+                          <dl class="msg-tool-workdir">
+                            <dt>{t("tool.command_workdir")}</dt>
+                            <dd>{workdir()}</dd>
+                          </dl>
+                        )}
+                      </Show>
+                      <div class="msg-tool-command">
+                        <span class="msg-tool-command__prompt" aria-hidden="true">
+                          $
+                        </span>
+                        <code>{command()}</code>
+                      </div>
+                    </>
                   )}
                 </Show>
                 <Show when={showStructuredOutput()}>

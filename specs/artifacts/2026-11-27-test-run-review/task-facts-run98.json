@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "label": "run98",
+  "sessionID": "ses_hXxKTLlM9wO3oKV8NYjc",
+  "partID": "prt_g0VcBHSae00ee6YrdPLm",
+  "messageID": "msg_g0VcBHRqE00jxtc8lZCW",
+  "command": "python -B -X utf8 -m unittest -v test_sales_summary.SalesSummaryTests.test_actual_csv test_sales_summary.SalesSummaryTests.test_refund_and_zero",
+  "specifiedWorkdir": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project",
+  "exit": 0,
+  "tests": [
+    {
+      "name": "test_sales_summary.SalesSummaryTests.test_actual_csv",
+      "result": "ok",
+      "scope": "real sales.csv: 5 / 35.60, East 3 / 28.25, South 2 / 7.35"
+    },
+    {
+      "name": "test_sales_summary.SalesSummaryTests.test_refund_and_zero",
+      "result": "ok",
+      "scope": "original TemporaryDirectory fixture: 2 / -12.30"
+    }
+  ],
+  "observedSummary": "Ran 2 tests in 0.012s; OK",
+  "outputBytes": 318,
+  "terminalMessageFinish": "stop",
+  "readTools": 2,
+  "sameFullToolPartsAsBaseline": true
+}

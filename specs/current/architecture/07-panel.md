@@ -3579,6 +3579,10 @@ only its confirmed exit receipt shows actual command output or a localized
 empty message in the readable view. The exit code remains visible in the
 command status. Raw mode and copy use the complete receipt from the same Part.
 Detailed receipts keep their recorded text.
+The Bash command body also displays an explicitly supplied, nonempty `input.workdir`
+verbatim as Specified working directory. This is the recorded parameter, not a
+projection of the resolved process directory. Missing parameters are not inferred
+from the active workspace; original input, output and copy retain the same Part.
 All views use the existing producing Part and output-slot identity, ToolPayload
 reader, bounded preview and clipboard writer.
 
