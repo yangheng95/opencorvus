@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "model": "openai/gpt-6.1-sol",
+  "projection": "production ProviderSchema.input and actual PublishInteractiveArtifactParameters; no actual request capture claim",
+  "kinds": [
+    "point",
+    "range",
+    "background"
+  ],
+  "canonicalItems": 8
+}

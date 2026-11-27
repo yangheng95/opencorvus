@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [真实工具调用的分钟级时间线复核](2026-11-27-tool-timeline-review.md)
 - [销售脚本源码与真实标准流的笔记本交付](2026-11-27-notebook-run-record.md)
 - [订单与区域关系图的真实阅读](2026-11-27-order-network-review.md)
 - [从真实源文件清单阅读目录树](2026-11-27-tree-source-review.md)

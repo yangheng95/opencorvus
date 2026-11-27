@@ -32,14 +32,7 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
     timeline?.setOptions({ moment })
   })
   const fitAll = (animation: boolean) => {
-    const timestamps = props.payload.items.flatMap((item) => [
-      Date.parse(item.start),
-      "end" in item ? Date.parse(item.end) : Date.parse(item.start),
-    ])
-    const first = Math.min(...timestamps)
-    const last = Math.max(...timestamps)
-    const span = Math.max(last - first, 86_400_000)
-    timeline?.setWindow(new Date(first - span * 0.08), new Date(last + span * 0.18), { animation })
+    timeline?.fit({ animation })
   }
 
   onMount(() => {

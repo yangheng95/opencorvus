@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "sessionID": "ses_hFhCAUIlbrIFM2TWtbRi",
+  "artifactID": "art_g0VcAcdBO00Cufd05Hql",
+  "title": "笔记本核对｜真实工具时间线",
+  "groups": [
+    {
+      "id": "sources",
+      "label": "来源读取"
+    },
+    {
+      "id": "execution",
+      "label": "真实执行"
+    },
+    {
+      "id": "publication",
+      "label": "产物发布"
+    }
+  ],
+  "items": 8,
+  "kinds": [
+    "point",
+    "point",
+    "range",
+    "range",
+    "range",
+    "point",
+    "range",
+    "background"
+  ],
+  "publisher": "prt_g0VcAcaAF00SfLnJVAZU",
+  "sourceIdentity": "all original IDs/labels/groups/UTC instants exact; read=end points, other start/end ranges, observed envelope background",
+  "bytes": 980,
+  "nativeFiles": [
+    "笔记本核对｜真实工具时间线 (1).csv",
+    "笔记本核对｜真实工具时间线 (2).csv",
+    "native-copy.csv"
+  ]
+}

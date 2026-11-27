@@ -1,0 +1,97 @@
+{
+  "source": "Actual completed tool parts from notebook Work ses_hMZ89MN31Y4FG6vbkves; API capture from run78, preserved across run79",
+  "timeContract": "Original UTC instants from persisted state.time; display may use browser local time. This is tool lifecycle, not sales order dates. Envelope includes gaps, not continuous execution. No explanation of gaps or model latency is inferred.",
+  "groups": [
+    {
+      "id": "sources",
+      "label": "来源读取"
+    },
+    {
+      "id": "execution",
+      "label": "真实执行"
+    },
+    {
+      "id": "publication",
+      "label": "产物发布"
+    }
+  ],
+  "events": [
+    {
+      "id": "prt_g0VcASvL4004uP1FyNzZ",
+      "messageID": "msg_g0VcASuFw007bEcER23w",
+      "tool": "read",
+      "label": "读取sales.csv",
+      "start": "2026-11-27T10:23:27.678Z",
+      "end": "2026-11-27T10:23:28.086Z",
+      "durationMs": 408,
+      "group": "sources"
+    },
+    {
+      "id": "prt_g0VcASw4n00SSxFjySOE",
+      "messageID": "msg_g0VcASvTD00uHs7Zk3LS",
+      "tool": "read",
+      "label": "完整读取sales_summary.py",
+      "start": "2026-11-27T10:23:30.513Z",
+      "end": "2026-11-27T10:23:30.891Z",
+      "durationMs": 378,
+      "group": "sources"
+    },
+    {
+      "id": "prt_g0VcASxpo00j3IGhVcua",
+      "messageID": "msg_g0VcASwCD00grkwMHtO1",
+      "tool": "bash",
+      "label": "Python首次语法错误（退出1）",
+      "start": "2026-11-27T10:23:37.272Z",
+      "end": "2026-11-27T10:23:43.892Z",
+      "durationMs": 6620,
+      "group": "execution",
+      "exitCode": 1
+    },
+    {
+      "id": "prt_g0VcAT1eD00T7NmOyuiH",
+      "messageID": "msg_g0VcASzZm00GZ4nmmFl5",
+      "tool": "bash",
+      "label": "Python只读汇总成功（退出0）",
+      "start": "2026-11-27T10:23:51.929Z",
+      "end": "2026-11-27T10:23:57.449Z",
+      "durationMs": 5520,
+      "group": "execution",
+      "exitCode": 0
+    },
+    {
+      "id": "prt_g0VcAT4gd00FLSNftAGM",
+      "messageID": "msg_g0VcAT36O00E3Y5UCceh",
+      "tool": "publish_interactive_artifact",
+      "label": "首次发布笔记本（来源待校正）",
+      "start": "2026-11-27T10:24:03.611Z",
+      "end": "2026-11-27T10:25:15.184Z",
+      "durationMs": 71573,
+      "group": "publication"
+    },
+    {
+      "id": "prt_g0VcAUmkt00EXC942PyL",
+      "messageID": "msg_g0VcAUlSG00pvaqE3RjB",
+      "tool": "read",
+      "label": "重新读取原脚本",
+      "start": "2026-11-27T10:30:51.339Z",
+      "end": "2026-11-27T10:30:51.817Z",
+      "durationMs": 478,
+      "group": "sources"
+    },
+    {
+      "id": "prt_g0VcAUnZo00s9avzkwwb",
+      "messageID": "msg_g0VcAUmuN00AOgz47iyQ",
+      "tool": "publish_interactive_artifact",
+      "label": "发布来源校正笔记本",
+      "start": "2026-11-27T10:30:54.496Z",
+      "end": "2026-11-27T10:32:11.735Z",
+      "durationMs": 77239,
+      "group": "publication"
+    }
+  ],
+  "envelope": {
+    "start": "2026-11-27T10:23:27.678Z",
+    "end": "2026-11-27T10:32:11.735Z",
+    "durationMs": 524057
+  }
+}

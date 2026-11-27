@@ -1,0 +1,233 @@
+{
+  "status": "passed",
+  "requests": 14,
+  "runs": [
+    {
+      "label": "run80",
+      "requests": 5,
+      "preflight": {
+        "sessionID": "ses_hskYqPz4Kt5tEHfRvGFN",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795777264995,
+        "settledAt": 1795777264995,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 56935,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run81",
+      "requests": 5,
+      "preflight": {
+        "sessionID": "ses_h6iWyHPfyornB5yq9DIm",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795777435578,
+        "settledAt": 1795777459123,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 50155,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run82",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hLVQ7tQaHXF06WGBAzH9",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795777606657,
+        "settledAt": 1795777606657,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 38878,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run83",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_h8NuC8Dv7za1VsbiF5nZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795778051225,
+        "settledAt": 1795778051225,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 64404,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 13,
+  "acceptedScreenshots": [
+    "accepted-timeline-english-dark.png",
+    "accepted-timeline-english-point.png",
+    "accepted-timeline-english-publication.png",
+    "accepted-timeline-expanded.png",
+    "accepted-timeline-failed-seconds.png",
+    "accepted-timeline-fit.png",
+    "accepted-timeline-success.png",
+    "accepted-timeline-zoom.png"
+  ],
+  "candidateScreenshots": [
+    "after-timeline-initial.png",
+    "candidate-timeline-detail-precision.png"
+  ],
+  "checks": {
+    "realTask": "actual source projection read and natural publication of exact8 events/3 groups; no command, task creation or file mutation",
+    "initialRefusal": "model claimed missing background without calling tool; actual production and outgoing declarations contain background; natural visible feedback led to successful publication; no schema/prompt/host-route repair claimed",
+    "fitBefore": "original524057-ms interval shown across hours; all4 ranges hairlines in normal and expanded view",
+    "fitAfter": "native vis fit uses actual item/label bounds with original zoom limits; native details/selection/navigation checked",
+    "precisionBefore": "actual6620-ms failed command had equal18:23 endpoint labels",
+    "precisionAfter": "same localized formatter displays seconds; exact original start37/end43 and success51/end57 seconds viewed",
+    "positiveUnits": {
+      "passed": 2,
+      "assertions": 2,
+      "files": 1,
+      "evidence": "observed declared pure date formatter test output; no UI automation or synthesized raw log"
+    },
+    "productionAndNative": "canonical8 events and publisher exact source IDs/labels/groups/UTCinstants; four actual980-byte CSV/copy files byte-identical to production export and parsed as original five-column contract",
+    "protectedFiles": 23,
+    "protectedOldRows": 2258,
+    "sqliteIntegrity": "ok",
+    "typecheck": "final95531 observedexit0; range candidate21370 observedexit0",
+    "build": "final56.03s original53114 observedexit0; renderer public surface passed; candidate59.05s original26940 observedexit0",
+    "docs": "353 operations /26 groups; architecture index20 documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Desktop real8-event Work only; single-point behavior and multi-day/cross-timezone cases source audited, no new native acceptance claimed.",
+    "Authored initial viewport behavior retained in code; this task intentionally has no authored viewport.",
+    "Millisecond source timestamps and CSV remain exact; selected detail displays seconds, not milliseconds.",
+    "Initial model refusal retained as history; compact renderer description omits backgrounds but causality to model judgment is unknown.",
+    "run81 drain waited23.5s for an actively progressing memory stream; allreaders EOF and original service joinedexit0. No scheduling/queue/recovery/terminal anomaly was observed.",
+    "No schema/persistence migration, extra agents, UI automation, release or tag."
+  ]
+}

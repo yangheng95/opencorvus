@@ -10,7 +10,7 @@ moment.locale(defaultLocale)
 export function createArtifactTimelinePresentation(locale: string) {
   const dateLocale = locale === "zh-CN" ? "zh-cn" : "en"
   const createMoment: MomentConstructor1 = (input, format, strict) => moment(input, format, strict).locale(dateLocale)
-  const dates = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" })
+  const dates = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "medium" })
   return {
     moment: createMoment,
     formatDateTime: (value: string) => dates.format(Date.parse(value)),

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [工具调用分钟级时间线证据](2026-11-27-tool-timeline-review/README.md)
 - [笔记本源码与标准流真实交付证据](2026-11-27-notebook-run-record/README.md)
 - [订单区域关系图真实验收证据](2026-11-27-order-network-review/README.md)
 - [源文件目录树真实阅读证据](2026-11-27-tree-source-review/README.md)

@@ -6051,11 +6051,15 @@ point and other supported item shapes; authored inline colors keep their
 existing payload precedence. Timeline completes its final layout on the library's
 public range-settled event, including the first explicit payload viewport with
 automatic resize polling disabled. Its scoped Moment date constructor and selected
-event details follow the current product language; language updates use the same
+event details follow the current product language and display seconds for
+inspecting short ranges. Language updates use the same
 mounted instance and retain its current viewport and selection. Authored event
-timestamps retain their existing local-time display contract. Diagram's expanded
-SVG relinquishes Mermaid's compact intrinsic width cap while retaining the original
-mounted viewBox and graph.
+timestamps retain their existing local-time display contract.
+Timeline's initial view without an authored viewport and its Fit all action use
+the mounted library's native fit operation, including item/label bounds and the
+existing zoom limits. Authored initial viewports retain their declared range.
+Diagram's expanded SVG relinquishes Mermaid's compact intrinsic width cap while
+retaining the original mounted viewBox and graph.
 This keeps data semantics and explicit design in the durable payload while
 giving unspecified presentation values one deterministic product theme source.
 
