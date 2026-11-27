@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "finalDownloads": [
+    {
+      "theme": "light",
+      "filename": "订单与区域｜来源关系核对 (1).json",
+      "bytes": 3199,
+      "nodes": 8,
+      "edges": 7,
+      "data": "exact original published graph"
+    },
+    {
+      "theme": "dark",
+      "filename": "订单与区域｜来源关系核对 (2).json",
+      "bytes": 3199,
+      "nodes": 8,
+      "edges": 7,
+      "data": "exact original published graph"
+    }
+  ],
+  "nativeCopy": {
+    "bytes": 3199,
+    "nodes": 8,
+    "edges": 7,
+    "data": "exact original graph after actual dark-theme update"
+  },
+  "beforeRepair": {
+    "bytes": 3631,
+    "evidence": "each original node acquired actual themeColor/themeSize; this file failed the original payload comparison"
+  },
+  "archive": "native-downloads.zip"
+}

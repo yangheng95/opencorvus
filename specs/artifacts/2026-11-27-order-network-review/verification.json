@@ -1,0 +1,212 @@
+{
+  "status": "passed",
+  "requests": 12,
+  "runs": [
+    {
+      "label": "run74",
+      "requests": 6,
+      "preflight": {
+        "sessionID": "ses_hlsuMYiwgtILtLZUR49K",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795773335786,
+        "settledAt": 1795773335786,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 12876,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run75",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hUmmJXEgViJaYWjQKHZQ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795773607054,
+        "settledAt": 1795773607054,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 43153,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run76",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hlX9b2zZiAFRPVwCqjSi",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795774013177,
+        "settledAt": 1795774013177,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 69285,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run77",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hR8EyzVGB6emMtCsjDID",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795774451207,
+        "settledAt": 1795774451207,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 86196,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 15,
+  "originalScreenshots": 3,
+  "rejectedSpacingScreenshots": 2,
+  "layoutInteractionScreenshots": 8,
+  "finalCandidateScreenshots": 2,
+  "checks": {
+    "firstFailure": "actual order labels overlap in both inline and expanded fit; original data is complete",
+    "spacingCandidate": "label-inclusive bounds separated labels but default breadthfirst1.75 stretch made them too small; candidate rejected",
+    "nativeLayout": "label-inclusive native dimensions plus unit spacing factor; complete five-order notes and amounts read separately in expanded view",
+    "nativeInteractions": "actual A003 selection, mouse-wheel zoom, refund and east-region search contexts, clear/fit, expand/close, English dark",
+    "secondFailure": "actual3631-byte download carried themeColor/themeSize on all eight original nodes; runtime presentation had mutated the API payload object",
+    "dataBoundary": "pure artifactNetworkElements creates graph-owned node data and metadata; original published data remains canonical for exports",
+    "positiveUnits": {
+      "passed": 2,
+      "assertions": 5,
+      "files": 1,
+      "evidence": "observed declared test:unit output; no synthesized raw log"
+    },
+    "realChecker": "actual API -> production Network schema and artifactExports; all5 original orders,2 regions,total and7 directed membership edges exact",
+    "nativeFinalDownloads": "actual light and dark3199-byte downloads each equal complete original API nodes/edges while one order is filtered",
+    "nativeCopy": "actual dark-theme Copy text reportsCopied; clipboard3199 bytes equals same complete original graph",
+    "protectedFiles": 23,
+    "protectedOldRows": 2176,
+    "sqliteIntegrity": "ok",
+    "typecheck": "passed",
+    "build": "54.64s, original handle57592 joined exit0; previous52.99/55.67 builds are intermediate candidates",
+    "rendererPublicSurface": "passed",
+    "docs": "353 operations /26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Desktop actual breadthfirst eight-node graph only; other four supported layouts received shared code/library contract audit, not new native visual acceptance.",
+    "No graph direction/root inference or alternate layout was introduced.",
+    "final-network-* fromrun76 prove layout/interactions only; its download failed and is preserved; accepted-network-* fromrun77 bind final source ownership and native exports.",
+    "No visual score, image hash, geometry automation or component/DOM test.",
+    "No Task/Mission/delegated agent, scheduling/queue/retry/terminal-convergence anomaly or release."
+  ]
+}

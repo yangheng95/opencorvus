@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [订单与区域关系图的真实阅读](records/2026-11/2026-11-27-order-network-review.md)
 - [从真实源文件清单阅读目录树](records/2026-11/2026-11-27-tree-source-review.md)
 - [从真实对话查找来源并返回阅读上下文](records/2026-11/2026-11-27-conversation-source-search.md)
 - [原始报告与来源复核稿的差异阅读](records/2026-11/2026-11-27-report-diff-review.md)

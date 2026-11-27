@@ -1,0 +1,86 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0VcALKxA008mJxj526D",
+  "renderer": "network@1",
+  "title": "订单与区域｜来源关系核对",
+  "nodes": 8,
+  "edges": 7,
+  "layout": "breadthfirst",
+  "sourceRows": [
+    {
+      "orderID": "A001",
+      "region": "华东",
+      "amount": "10.10",
+      "note": "普通订单"
+    },
+    {
+      "orderID": "A002",
+      "region": "华东",
+      "amount": "20.20",
+      "note": "中文客户"
+    },
+    {
+      "orderID": "A003",
+      "region": "华东",
+      "amount": "-2.05",
+      "note": "退款"
+    },
+    {
+      "orderID": "A004",
+      "region": "华南",
+      "amount": "0.00",
+      "note": "免费样品"
+    },
+    {
+      "orderID": "A005",
+      "region": "华南",
+      "amount": "7.35",
+      "note": "普通订单"
+    }
+  ],
+  "summary": {
+    "count": 5,
+    "amount": "35.60",
+    "regions": [
+      {
+        "region": "华东",
+        "count": 3,
+        "amount": "28.25"
+      },
+      {
+        "region": "华南",
+        "count": 2,
+        "amount": "7.35"
+      }
+    ]
+  },
+  "relationships": "exact summary -> two regions -> all five original orders, directed",
+  "export": {
+    "filename": "订单与区域｜来源关系核对.json",
+    "bytes": 3199,
+    "mime": "application/json"
+  },
+  "nativeFiles": [
+    {
+      "filename": "订单与区域｜来源关系核对 (1).json",
+      "bytes": 3199,
+      "nodes": 8,
+      "edges": 7,
+      "content": "complete original payload"
+    },
+    {
+      "filename": "订单与区域｜来源关系核对 (2).json",
+      "bytes": 3199,
+      "nodes": 8,
+      "edges": 7,
+      "content": "complete original payload"
+    },
+    {
+      "filename": "native-copy.json",
+      "bytes": 3199,
+      "nodes": 8,
+      "edges": 7,
+      "content": "complete original payload"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "nodes": [
+    {
+      "id": "node:all",
+      "label": "全量｜5笔｜净额 +35.60",
+      "group": "全量汇总",
+      "metadata": {
+        "count": 5,
+        "amount": "35.60"
+      }
+    },
+    {
+      "id": "node:region:华东",
+      "label": "华东｜3笔｜净额 +28.25",
+      "group": "区域",
+      "metadata": {
+        "region": "华东",
+        "count": 3,
+        "amount": "28.25"
+      }
+    },
+    {
+      "id": "node:region:华南",
+      "label": "华南｜2笔｜净额 +7.35",
+      "group": "区域",
+      "metadata": {
+        "region": "华南",
+        "count": 2,
+        "amount": "7.35"
+      }
+    },
+    {
+      "id": "node:order:A001",
+      "label": "A001｜10.10｜普通订单",
+      "group": "订单",
+      "metadata": {
+        "orderID": "A001",
+        "region": "华东",
+        "amount": "10.10",
+        "note": "普通订单"
+      }
+    },
+    {
+      "id": "node:order:A002",
+      "label": "A002｜20.20｜中文客户",
+      "group": "订单",
+      "metadata": {
+        "orderID": "A002",
+        "region": "华东",
+        "amount": "20.20",
+        "note": "中文客户"
+      }
+    },
+    {
+      "id": "node:order:A003",
+      "label": "A003｜-2.05｜退款",
+      "group": "订单",
+      "metadata": {
+        "orderID": "A003",
+        "region": "华东",
+        "amount": "-2.05",
+        "note": "退款"
+      }
+    },
+    {
+      "id": "node:order:A004",
+      "label": "A004｜0.00｜免费样品",
+      "group": "订单",
+      "metadata": {
+        "orderID": "A004",
+        "region": "华南",
+        "amount": "0.00",
+        "note": "免费样品"
+      }
+    },
+    {
+      "id": "node:order:A005",
+      "label": "A005｜7.35｜普通订单",
+      "group": "订单",
+      "metadata": {
+        "orderID": "A005",
+        "region": "华南",
+        "amount": "7.35",
+        "note": "普通订单"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:all:region:华东",
+      "source": "node:all",
+      "target": "node:region:华东",
+      "label": "区域归属",
+      "directed": true
+    },
+    {
+      "id": "edge:all:region:华南",
+      "source": "node:all",
+      "target": "node:region:华南",
+      "label": "区域归属",
+      "directed": true
+    },
+    {
+      "id": "edge:region:华东:order:A001",
+      "source": "node:region:华东",
+      "target": "node:order:A001",
+      "label": "订单归属",
+      "directed": true
+    },
+    {
+      "id": "edge:region:华东:order:A002",
+      "source": "node:region:华东",
+      "target": "node:order:A002",
+      "label": "订单归属",
+      "directed": true
+    },
+    {
+      "id": "edge:region:华东:order:A003",
+      "source": "node:region:华东",
+      "target": "node:order:A003",
+      "label": "订单归属",
+      "directed": true
+    },
+    {
+      "id": "edge:region:华南:order:A004",
+      "source": "node:region:华南",
+      "target": "node:order:A004",
+      "label": "订单归属",
+      "directed": true
+    },
+    {
+      "id": "edge:region:华南:order:A005",
+      "source": "node:region:华南",
+      "target": "node:order:A005",
+      "label": "订单归属",
+      "directed": true
+    }
+  ]
+}

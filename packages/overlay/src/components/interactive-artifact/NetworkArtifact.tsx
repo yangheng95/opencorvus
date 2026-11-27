@@ -1,6 +1,6 @@
 import cytoscape, { type Core } from "cytoscape"
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
-import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
+import { artifactNetworkElements, type ArtifactNetworkPayload } from "../../services/artifact-network"
 import { observeAppliedTheme } from "../../services/theme"
 import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
@@ -8,27 +8,27 @@ import { SearchField } from "../ui/SearchField"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { artifactVisualTheme } from "./theme-color"
 
-type NetworkPayload = Extract<InteractiveArtifactPayload, { renderer: "network@1" }>
-
-export function NetworkArtifact(props: { payload: NetworkPayload }) {
+export function NetworkArtifact(props: { payload: ArtifactNetworkPayload }) {
   let host: HTMLDivElement | undefined
   let graph: Core | undefined
   let stopThemeObserver: (() => void) | undefined
   let resizeObserver: ResizeObserver | undefined
   const [filter, setFilter] = createSignal("")
-  const layoutOptions = () =>
-    props.payload.layout === "cose"
+  const layoutOptions = () => ({
+    name: props.payload.layout,
+    animate: false,
+    fit: true,
+    padding: 48,
+    nodeDimensionsIncludeLabels: true,
+    spacingFactor: 1,
+    ...(props.payload.layout === "cose"
       ? {
-          name: "cose" as const,
-          animate: false,
-          fit: true,
-          padding: 48,
-          nodeDimensionsIncludeLabels: true,
           idealEdgeLength: 130,
           nodeRepulsion: 14_000,
           componentSpacing: 90,
         }
-      : { name: props.payload.layout, animate: false, fit: true, padding: 48 }
+      : {}),
+  })
 
   const applyTheme = () => {
     if (!graph || !host) return
@@ -90,12 +90,7 @@ export function NetworkArtifact(props: { payload: NetworkPayload }) {
     if (!host) return
     graph = cytoscape({
       container: host,
-      elements: [
-        ...props.payload.nodes.map((node) => ({ data: node })),
-        ...props.payload.edges.map((edge) => ({
-          data: { ...edge, directed: edge.directed ?? true, weight: edge.weight ?? 1 },
-        })),
-      ],
+      elements: artifactNetworkElements(props.payload),
       layout: { name: "preset" },
       minZoom: 0.1,
       maxZoom: 4,

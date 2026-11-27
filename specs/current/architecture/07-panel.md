@@ -5813,6 +5813,19 @@ node collection with the current branch state. This shared renderer also serves
 the JSON artifact inspector; published nodes, original JSON text and their
 existing complete exports retain their own data contracts.
 
+Native Network uses Cytoscape's label-inclusive node dimensions for every
+supported layout. The common layout baseline keeps its declared layout and
+native fitting behavior with a unit spacing factor, while the Compound Spring
+Embedder (CoSE) layout retains its existing force parameters.
+Spacing is calculated from the actual node labels rather than only the circles;
+the renderer does not rewrite labels, invent positions or select another layout
+to hide overlaps. Search context, theme, camera controls and complete node/edge
+exports retain their current ownership.
+The graph input boundary creates library-owned mutable element data, including
+independent node metadata. Theme annotations and other graph mutations stay in
+those elements; the original API payload remains the sole source for copy and
+JSON export.
+
 Terminal transcript search uses one native SearchAddon: Enter and the next-match
 button invoke the same forward navigation, while input edits retain incremental
 search. Clearing delegates the empty term to that same native search operation,

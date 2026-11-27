@@ -1,0 +1,20 @@
+{
+  "sessionID": "ses_hRbkTpd6Op4RhdTP1lhW",
+  "finish": "stop",
+  "error": null,
+  "artifactID": "art_g0VcALKxA008mJxj526D",
+  "tools": [
+    {
+      "id": "prt_g0VcALGE400DhwP4dXsO",
+      "messageID": "msg_g0VcALFA000l5uOVgswX",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcALHFh00Afn4OMcaw",
+      "messageID": "msg_g0VcALGQO008wutQv09U",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ]
+}
