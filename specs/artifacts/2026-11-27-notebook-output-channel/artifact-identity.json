@@ -1,0 +1,82 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0VcAV7fY008zDSfNSrl",
+  "sessionID": "ses_hMZ89MN31Y4FG6vbkves",
+  "title": "销售脚本｜真实运行笔记本（来源校正）",
+  "apiBeforeAfterAndHistoricalIdentity": "equal complete original record",
+  "cells": 5,
+  "codePositions": [
+    2,
+    4
+  ],
+  "sourceArchiveBytes": 7650,
+  "sourceArchiveLines": 167,
+  "executionSourceBytes": 330,
+  "executionCount": 1,
+  "savedExecutionPartID": "prt_g0VcAT1eD00T7NmOyuiH",
+  "savedExecutionExitCode": 0,
+  "outputs": [
+    {
+      "name": "stdout",
+      "bytes": 224
+    },
+    {
+      "name": "stderr",
+      "bytes": 40
+    }
+  ],
+  "sourceCsvSummary": {
+    "order_count": 5,
+    "total_amount": "35.60",
+    "by_region": {
+      "华东": {
+        "order_count": 3,
+        "total_amount": "28.25"
+      },
+      "华南": {
+        "order_count": 2,
+        "total_amount": "7.35"
+      }
+    }
+  },
+  "native": [
+    {
+      "filename": "native-baseline.ipynb",
+      "bytes": 14674,
+      "content": "exact complete production export"
+    },
+    {
+      "filename": "baseline-copy.ipynb",
+      "bytes": 14674,
+      "content": "exact complete production export"
+    },
+    {
+      "filename": "native-light.ipynb",
+      "bytes": 14674,
+      "content": "exact complete production export"
+    },
+    {
+      "filename": "native-dark.ipynb",
+      "bytes": 14674,
+      "content": "exact complete production export"
+    },
+    {
+      "filename": "native-copy.ipynb",
+      "bytes": 14674,
+      "content": "exact complete production export"
+    },
+    {
+      "filename": "native-paste.ipynb",
+      "bytes": 14674,
+      "content": "exact complete production export"
+    }
+  ],
+  "currentProjectRows": {
+    "message": 398,
+    "part": 1187,
+    "tool_part_request": 354,
+    "tool_part_outcome": 354,
+    "interactive_artifact": 33
+  },
+  "protectedOldRows": 2326
+}

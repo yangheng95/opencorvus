@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [笔记本输出通道的阅读核对](records/2026-11/2026-11-27-notebook-output-channel.md)
 - [蜡烛图逐条读数与缺失成交量](records/2026-11/2026-11-27-candlestick-bar-details.md)
 - [蜡烛图高精度数据阅读调查](records/2026-11/2026-11-27-candlestick-price-reading.md)
 - [地图点几何的真实显示核对](records/2026-11/2026-11-27-map-point-geometry.md)

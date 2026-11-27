@@ -1,0 +1,133 @@
+{
+  "status": "passed",
+  "change": "localized labels derived only from existing explicitly named saved text output channels",
+  "screenshots": {
+    "before": 4,
+    "accepted": 12,
+    "review": "all archived original screenshots personally viewed; native desktop interactions; no UI automation or pixel assertions"
+  },
+  "checks": {
+    "typecheck": {
+      "originalHandle": 14587,
+      "joinedExit": 0
+    },
+    "build": {
+      "originalHandle": 41369,
+      "joinedExit": 0,
+      "seconds": 51.09
+    },
+    "i18n": "passed 2 locales / 3366 keys",
+    "css": "passed 9441 references / 2 documents",
+    "docs": "passed 353 operations / 26 groups",
+    "architectureIndex": "passed 20 current documents",
+    "positiveFunctionalData": "actual persisted artifact through production schema/export checker; 5 cells / complete original source and execution count / exact stdout224 and stderr40 / six14674-byte originals",
+    "newUnitTests": "none: product change is UI only; no non-UI contract changed"
+  },
+  "nativeInteractions": [
+    "Chinese inline and expanded output labels and complete saved JSON/diagnostic",
+    "first Copy after fresh-tab reader initialization / exact native Ctrl+V into owned unsent draft / draft cleared",
+    "actual code-cell4 Ctrl+F sys.stderr / Return / highlighted line9",
+    "English Dark / preserved same query and line9 highlight / both channel labels and complete output",
+    "restored Chinese System / preserved query and labels",
+    "archive cell2 native search write_regions_csv / definition118 / next call159 / empty execution count"
+  ],
+  "observationCorrections": [
+    "initial manually composed deep link used incorrect sessionKind; native sidebar supplied conversation+experience=work; product route unchanged",
+    "first execution-cell search click hit prose and opened conversation search; Escape then fresh screenshot and actual visible code click opened native editor search; no product change",
+    "first paste screenshot showed earlier blank draft frame; same actual keyboard paste was retained for the next screenshot and archived correct target frame",
+    "first English expanded output capture started below stdout label; native scroll exposed complete dual-channel view and archived that frame"
+  ],
+  "clipboard": {
+    "baselineTab": "241805121",
+    "baseline": "first Copy readback only; no baseline native-paste claim",
+    "finalTab": "241805125",
+    "method": "fresh tab silent reader initialization; no tool paste; first product Copy/Copied/readback and native Ctrl+V; exact14674 bytes; cleared unsent draft",
+    "nativePasteCount": 2,
+    "copyActions": 1
+  },
+  "runs": [
+    {
+      "label": "run96",
+      "pid": 26932,
+      "originalExecHandle": 26776,
+      "originalHandleJoinedExitCode": 0,
+      "state": "exited",
+      "drained": true,
+      "pairedCredentialCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_h9XfgxZMmD6ch6LbnrfS",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run97",
+      "pid": 24688,
+      "originalExecHandle": 85860,
+      "originalHandleJoinedExitCode": 0,
+      "state": "exited",
+      "drained": true,
+      "pairedCredentialCopiesRetired": true,
+      "preflight": {
+        "sessionID": "ses_hQK3s50MsySoAFZCkd57",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "protectedFiles": 23,
+  "protectedOldRows": 2326,
+  "currentProjectRows": {
+    "message": 398,
+    "part": 1187,
+    "tool_part_request": 354,
+    "tool_part_outcome": 354,
+    "interactive_artifact": 33
+  },
+  "closedOwnedTabs": [
+    "241805121",
+    "241805125"
+  ],
+  "limits": [
+    "real native coverage is the existing five-cell Work with explicitly named stdout/stderr",
+    "unnamed text, Markdown/media outputs, 100-output limit, other five themes and screen reader not newly exercised",
+    "no new model task or script execution: existing real model publication and captured run are preserved; four model requests are paired environment preflights",
+    "complete nbformat Python package validation is not claimed; production codec and actual saved Jupyter fields are checked"
+  ]
+}

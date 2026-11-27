@@ -2353,6 +2353,12 @@ button.msg-source-chip .msg-source-chip__filename {
   border-top: var(--oc-border-width) solid var(--border);
 }
 
+.msg-artifact-notebook__output-label {
+  margin-bottom: var(--ui-gap-sm);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+}
+
 .msg-artifact-notebook__output pre {
   margin: 0;
   overflow: auto;

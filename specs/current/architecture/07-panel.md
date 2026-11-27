@@ -6204,6 +6204,10 @@ authored notebook title and adds its actual cell position, formatted in the
 current locale, and read-only meaning. This position includes Markdown cells
 and is distinct from the authored execution count. Locale changes update the
 existing editor's content attributes without replacing its reading state.
+Saved text outputs with an explicit stdout or stderr identity show a localized
+channel label, retaining that technical name and the original text. The label
+describes the authored stream, not the execution outcome. Unnamed text retains
+its ordinary display identity; the renderer does not infer a stream or run code.
 Presentations may reference canonical slide images; 3D models and their
 optional posters are canonical attachments under the same validation.
 JavaScript Object Notation (JSON) glTF models may contain only embedded

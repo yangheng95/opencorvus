@@ -1,0 +1,57 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0VcAV7fY008zDSfNSrl",
+  "title": "销售脚本｜真实运行笔记本（来源校正）",
+  "phase": "after",
+  "filename": "销售脚本｜真实运行笔记本（来源校正）.ipynb",
+  "bytes": 14674,
+  "cells": 5,
+  "codePositions": [
+    2,
+    4
+  ],
+  "sourceAndCounts": "exact original cells",
+  "actualOutputs": [
+    {
+      "output_type": "stream",
+      "name": "stdout",
+      "text": "{\n  \"order_count\": 5,\n  \"total_amount\": \"35.60\",\n  \"by_region\": {\n    \"华东\": {\n      \"order_count\": 3,\n      \"total_amount\": \"28.25\"\n    },\n    \"华南\": {\n      \"order_count\": 2,\n      \"total_amount\": \"7.35\"\n    }\n  }\n}\n"
+    },
+    {
+      "output_type": "stream",
+      "name": "stderr",
+      "text": "诊断：已统计 5 笔真实订单。\n"
+    }
+  ],
+  "expectedOutputs": [
+    {
+      "output_type": "stream",
+      "name": "stdout",
+      "text": "{\n  \"order_count\": 5,\n  \"total_amount\": \"35.60\",\n  \"by_region\": {\n    \"华东\": {\n      \"order_count\": 3,\n      \"total_amount\": \"28.25\"\n    },\n    \"华南\": {\n      \"order_count\": 2,\n      \"total_amount\": \"7.35\"\n    }\n  }\n}\n"
+    },
+    {
+      "output_type": "stream",
+      "name": "stderr",
+      "text": "诊断：已统计 5 笔真实订单。\n"
+    }
+  ],
+  "nativeFiles": [
+    {
+      "filename": "native-light.ipynb",
+      "cells": 5
+    },
+    {
+      "filename": "native-dark.ipynb",
+      "cells": 5
+    },
+    {
+      "filename": "native-copy.ipynb",
+      "cells": 5
+    },
+    {
+      "filename": "native-paste.ipynb",
+      "cells": 5
+    }
+  ],
+  "jupyterContract": "named streams retain output_type stream, name stdout/stderr and exact text; complete nbformat package validation is not claimed"
+}

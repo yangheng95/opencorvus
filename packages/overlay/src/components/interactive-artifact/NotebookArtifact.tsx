@@ -46,6 +46,13 @@ export function NotebookArtifact(props: { payload: NotebookPayload }) {
                         <div class="msg-artifact-notebook__output" data-output-kind={output.kind}>
                           <Switch>
                             <Match when={output.kind === "text"}>
+                              <Show when={output.kind === "text" ? output.name : undefined}>
+                                {(name) => (
+                                  <div class="msg-artifact-notebook__output-label">
+                                    {t(name() === "stdout" ? "artifact.notebook.stdout" : "artifact.notebook.stderr")}
+                                  </div>
+                                )}
+                              </Show>
                               <pre data-stream={output.kind === "text" ? output.name : undefined}>
                                 {output.kind === "text" ? output.text : ""}
                               </pre>

@@ -3059,6 +3059,8 @@
   "artifact.code.local_edits": "编辑只保留在当前视图，请在离开前复制或下载。",
   "artifact.code.modified": "当前视图已修改",
   "artifact.notebook.read_only": "只读预览：展示已保存的代码和输出，不会在此执行代码。",
+  "artifact.notebook.stdout": "标准输出 · stdout",
+  "artifact.notebook.stderr": "标准错误 · stderr",
   "artifact.notebook.code_cell": "{{title}}，代码单元 {{index}}（只读）",
   "artifact.presentation.deck": "演示文稿",
   "artifact.presentation.slide": "幻灯片",

@@ -3060,6 +3060,8 @@
   "artifact.code.local_edits": "Edits stay in this view. Copy or download before leaving.",
   "artifact.code.modified": "Modified in this view",
   "artifact.notebook.read_only": "Read-only preview of saved code and outputs. Code does not run here.",
+  "artifact.notebook.stdout": "Standard output · stdout",
+  "artifact.notebook.stderr": "Standard error · stderr",
   "artifact.notebook.code_cell": "{{title}}, code cell {{index}} (read-only)",
   "artifact.presentation.deck": "Slide deck",
   "artifact.presentation.slide": "Slide",
