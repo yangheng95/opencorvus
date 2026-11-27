@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [蜡烛图高精度数据阅读调查](records/2026-11/2026-11-27-candlestick-price-reading.md)
 - [地图点几何的真实显示核对](records/2026-11/2026-11-27-map-point-geometry.md)
 - [时间线短事件的键盘访问](records/2026-11/2026-11-27-timeline-event-navigation.md)
 - [真实工具调用的分钟级时间线复核](records/2026-11/2026-11-27-tool-timeline-review.md)

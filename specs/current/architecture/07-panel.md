@@ -6150,6 +6150,23 @@ subtree; Kobalte retains modal exclusion, focus and placement/collision behavior
 Explicit native media fullscreen keeps its existing ownership when no enclosing
 dialog or artifact popover owns the trigger.
 
+Candlestick price presentation derives its native tick denominator from all
+authored open/high/low/close decimal values, including exponent notation, within
+JavaScript's finite denominator range, using decimal exponent parsing. One native
+custom price formatter rounds calculated ticks to that authored decimal unit
+with decimal.js and uses the current locale for meaningful digits; it does not infer
+currency or reuse the independent volume scale's format. The same mounted chart
+updates its native localization and price formatter when the product language
+changes, retaining data and view. Crosshair time uses localized dates with an
+explicit UTC zone for the source Unix seconds. Original values and CSV remain
+unchanged; native extreme-range tick behavior is a separate rendering boundary.
+When volume is present, its existing histogram uses a separate native pane and
+right scale within that same chart, with an initial price-to-volume weight of
+4:1 and a localized Volume title. Native pane resizing, time scale, crosshair and
+chart disposal retain ownership; no parallel chart or synchronized view store is
+created. Complete edge labels and themed separators keep the independent axes
+readable. Without volume, the chart retains only its price pane.
+
 Maps carry inline GeoJSON and never accept model-selected styles, tiles, scripts,
 or network data. Their single point projection creates native MapLibre markers
 for both Point and every MultiPoint position, retaining the source feature and

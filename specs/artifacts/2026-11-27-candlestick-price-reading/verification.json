@@ -1,0 +1,180 @@
+{
+  "status": "passed",
+  "scope": "candlestick price/quantity reading, current product locale and final native exports; initial mouse-copy discrepancy remains open",
+  "requests": 9,
+  "runs": [
+    {
+      "label": "run91",
+      "requests": 5,
+      "preflight": {
+        "sessionID": "ses_hSfzVJDh51J0ZsXwOTci",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795782032050,
+        "settledAt": 1795782079651,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 65175,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run92",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_huI65hEAKAUyW2aiX2pl",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795782626952,
+        "settledAt": 1795782626952,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 46454,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run93",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hegE8j6LCjhdM4xWKuoM",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795783174855,
+        "settledAt": 1795783174855,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 11054,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 15,
+  "finalScreenshots": [
+    "accepted-panes-english-dark.png",
+    "accepted-panes-expanded-dark.png",
+    "accepted-panes-expanded.png",
+    "accepted-panes-light.png",
+    "accepted-panes-pan.png",
+    "accepted-panes-resized.png",
+    "accepted-panes-restored-chinese.png",
+    "accepted-panes-zoom.png",
+    "accepted-price-crosshair-english.png",
+    "accepted-price-crosshair.png"
+  ],
+  "candidateScreenshots": [
+    "candidate-price-expanded.png",
+    "candidate-price-scale.png"
+  ],
+  "checks": {
+    "source": "actual Work ses_hGkHHXrbAt2jX0bHZG35; one completed publication art_g0VcAvx2700MSPloJfgh; explicit QA OHLC inputs, not market facts",
+    "baseline": "native normal/expanded/crosshair lastclose0.000018 displayed0.00; original423-byte CSV retained source values",
+    "numericRoot": "default precision2/minMove0.01 too coarse; one custom native formatter and source-derived decimal denominator now recover source digits/ticks without changing series or CSV",
+    "numericBoundary": "first Bun10**308 differed from exact decimal denominator, positive test failed; decimal exponent parsing fixes it; Decimal rounds calculated tick noise at authored unit",
+    "layoutRoot": "native overlay volume label collided with newly visible price ticks; same chart now has independent native price/volume panes and scales, shared time axis and disposal",
+    "native": "actual pane resize, horizontal pan and wheel zoom; normal/expanded readable0.000018 and separate Volume100; view and pane proportion retained through EnglishDark/restoredChineseSystem; actual crosshair UTC dates inspected in both languages",
+    "exports": "three real menu downloads and successful nativeSpace copy each423 bytes equal production CSV; independent CSV Decimal parser and canonical parser verify6 source rows, time/OHLC and explicitzero volume",
+    "initialCopy": "first screen click showedCopied but read1128-byte original prompt, stillsame later; nativeSpace returned423-byte CSV; failure retained, first causeunknown and sharedcopy unchanged; investigate next batch",
+    "positiveUnits": {
+      "passed": 7,
+      "assertions": 7,
+      "files": 1,
+      "kind": "pure numeric/date data; observed declared runner output"
+    },
+    "typecheck": "final1095 observedexit0; data97532 and first85941 alsoexit0",
+    "build": "final59.40s original82740 observedexit0; candidate59.25s37763 and58.12s84915 observedexit0, not final UI acceptance; renderer public surface passed",
+    "i18n": "2 locales3357 keys passed",
+    "protectedFiles": 23,
+    "protectedOldRows": 2300,
+    "sqliteIntegrity": "ok",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Native6-bar desktop case with explicitvolume only; single/no/missingvolume, negative/extremeprices, duplicate/unsortedtime,20000bars and five other themes not newly accepted.",
+    "Extreme native tick behavior remains a floating-point library boundary; pure subnormal test proves finite denominator and source formatter output, not a native plot.",
+    "Native32px maxbarspacing retained; no density redesign or new market-data feature.",
+    "First mouse-copy discrepancy remains open; final keyboard copy and actual native downloads verified.",
+    "No schema/API/persistence/config/version/dependency change, migration, release, tag, delegation or scheduler/terminal anomaly."
+  ]
+}

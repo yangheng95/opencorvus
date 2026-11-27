@@ -5,11 +5,15 @@ import {
   createChart,
   type CandlestickData,
   type HistogramData,
+  type IChartApi,
+  type ISeriesApi,
   type UTCTimestamp,
 } from "lightweight-charts"
-import { onCleanup, onMount } from "solid-js"
+import { createEffect, createMemo, onCleanup, onMount } from "solid-js"
+import { createArtifactCandlestickPresentation } from "../../services/artifact-candlestick"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { observeAppliedTheme, themeColor } from "../../services/theme"
+import { localeTag, t } from "../../utils/i18n"
 import { ArtifactFrame } from "./ArtifactFrame"
 
 type CandlestickPayload = Extract<InteractiveArtifactPayload, { renderer: "candlestick@1" }>
@@ -18,6 +22,19 @@ const MAX_CANDLE_BAR_SPACING = 32
 
 export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
   let container!: HTMLDivElement
+  let currentChart: IChartApi | undefined
+  let currentCandles: ISeriesApi<"Candlestick"> | undefined
+  let currentVolume: ISeriesApi<"Histogram"> | undefined
+  const presentation = createMemo(() => createArtifactCandlestickPresentation(props.payload.series, localeTag()))
+  createEffect(() => {
+    const next = presentation()
+    const volumeTitle = t("artifact.candlestick.volume")
+    currentChart?.applyOptions({
+      localization: { locale: next.locale, timeFormatter: (time) => next.formatTime(time as UTCTimestamp) },
+    })
+    currentCandles?.applyOptions({ priceFormat: next.priceFormat })
+    currentVolume?.applyOptions({ title: volumeTitle })
+  })
 
   onMount(() => {
     const theme = () => {
@@ -35,12 +52,18 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
       }
     }
     const initial = theme()
+    const initialPresentation = presentation()
     const chart = createChart(container, {
       width: Math.max(1, container.clientWidth),
       height: Math.max(1, container.clientHeight),
+      localization: {
+        locale: initialPresentation.locale,
+        timeFormatter: (time) => initialPresentation.formatTime(time as UTCTimestamp),
+      },
       layout: {
         background: { type: ColorType.Solid, color: initial.backgroundColor },
         textColor: initial.textColor,
+        panes: { separatorColor: initial.gridColor, separatorHoverColor: initial.scaleBorderColor },
       },
       grid: {
         vertLines: { color: initial.gridColor },
@@ -48,7 +71,8 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
       },
       rightPriceScale: {
         borderColor: initial.scaleBorderColor,
-        scaleMargins: { top: 0.08, bottom: 0.18 },
+        scaleMargins: { top: 0.08, bottom: 0.08 },
+        entireTextOnly: true,
       },
       timeScale: {
         borderColor: initial.scaleBorderColor,
@@ -57,12 +81,15 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
       },
     })
     const candles = chart.addSeries(CandlestickSeries, {
+      priceFormat: initialPresentation.priceFormat,
       upColor: initial.upColor,
       downColor: initial.downColor,
       borderVisible: false,
       wickUpColor: initial.upColor,
       wickDownColor: initial.downColor,
     })
+    currentChart = chart
+    currentCandles = candles
     candles.setData(
       props.payload.series.map((point) => ({
         time: point.time as UTCTimestamp,
@@ -73,10 +100,12 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
       })) as CandlestickData<UTCTimestamp>[],
     )
     const volume = props.payload.series.some((point) => point.volume !== undefined)
-      ? chart.addSeries(HistogramSeries, { priceFormat: { type: "volume" }, priceScaleId: "" })
+      ? chart.addSeries(HistogramSeries, { priceFormat: { type: "volume" }, title: t("artifact.candlestick.volume") }, 1)
       : undefined
     if (volume) {
-      volume.priceScale().applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } })
+      currentVolume = volume
+      candles.getPane().setStretchFactor(4)
+      volume.getPane().setStretchFactor(1)
       volume.setData(
         props.payload.series.map((point) => ({
           time: point.time as UTCTimestamp,
@@ -91,6 +120,7 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
         layout: {
           background: { type: ColorType.Solid, color: next.backgroundColor },
           textColor: next.textColor,
+          panes: { separatorColor: next.gridColor, separatorHoverColor: next.scaleBorderColor },
         },
         grid: {
           vertLines: { color: next.gridColor },
@@ -130,6 +160,9 @@ export function CandlestickArtifact(props: { payload: CandlestickPayload }) {
     })
     resizeObserver.observe(container)
     onCleanup(() => {
+      currentChart = undefined
+      currentCandles = undefined
+      currentVolume = undefined
       stopThemeObserver()
       resizeObserver.disconnect()
       chart.remove()
