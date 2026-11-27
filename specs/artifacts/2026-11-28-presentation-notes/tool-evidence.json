@@ -1,0 +1,77 @@
+[
+  {
+    "id": "prt_g0VcCSiBm00lDxxwQjIQ",
+    "messageID": "msg_g0VcCShB800TY74CK3vv",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "sales.csv"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\sales.csv</path>\n<type>file</type>\n<content>1: 订单编号,区域,金额,备注\n2: A001,华东,10.10,普通订单\n3: A002,华东,20.20,中文客户\n4: A003,华东,-2.05,退款\n5: A004,华南,0.00,免费样品\n6: A005,华南,7.35,普通订单\n\n(End of file - total 6 lines)\n</content>"
+    }
+  },
+  {
+    "id": "prt_g0VcCSium00H95f6M320",
+    "messageID": "msg_g0VcCSiIL003BpBOD5F8",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "summary.json"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\summary.json</path>\n<type>file</type>\n<content>1: {\n2:   \"order_count\": 5,\n3:   \"total_amount\": \"35.60\",\n4:   \"by_region\": {\n5:     \"华东\": {\n6:       \"order_count\": 3,\n7:       \"total_amount\": \"28.25\"\n8:     },\n9:     \"华南\": {\n10:       \"order_count\": 2,\n11:       \"total_amount\": \"7.35\"\n12:     }\n13:   }\n14: }\n\n(End of file - total 14 lines)\n</content>"
+    }
+  },
+  {
+    "id": "prt_g0VcCSjhu00yxaH5DYwW",
+    "messageID": "msg_g0VcCSj0A0018y6fphQg",
+    "tool": "read",
+    "state": {
+      "status": "completed",
+      "input": {
+        "filePath": "销售报告.md"
+      },
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\project\\销售报告.md</path>\n<type>file</type>\n<content>1: # 销售报告\n2: \n3: ## 统计口径\n4: \n5: - 每条 CSV 数据记录计为一笔订单，不按订单编号去重；退款及零金额订单均计入订单数。\n6: - 负金额为退款，直接抵减净金额；零金额不改变净金额。\n7: - 金额使用 Decimal 精确累加，不逐笔舍入；总计和各区域分别在输出时按 ROUND_HALF_UP 四舍五入至两位小数。分区显示值相加可能因舍入与总计相差一分。\n8: - 按原区域名分组，不去空格、不规范化；JSON 金额为两位小数字符串。\n9: - 输入使用 UTF-8（兼容 BOM），按标准 CSV 引号、逗号和换行转义读取；不修改原 CSV。\n10: - 可选参数 --regions-csv 区域汇总.csv 导出 UTF-8 区域 CSV，表头为 区域,订单数,净金额；每个原区域一行，按输出的两位小数净金额数值降序，同额按原区域名升序，使用标准 CSV 转义。省略该参数仍按原命令生成 JSON 和报告。\n11: - 无效、空白或非有限金额（NaN、Infinity 等）使整个统计失败：接口抛出 SalesDataError；命令行向标准错误输出“错误：”及行号，以状态码 2 退出，不写入统计输出。\n12: \n13: ## 汇总\n14: \n15: | 范围 | 订单数 | 净金额（元） |\n16: | --- | ---: | ---: |\n17: | 全部 | 5 | 35.60 |\n18: \n19: ## 各区域汇总\n20: \n21: | 区域 | 订单数 | 净金额（元） |\n22: | --- | ---: | ---: |\n23: | 华东 | 3 | 28.25 |\n24: | 华南 | 2 | 7.35 |\n\n(End of file - total 24 lines)\n</content>"
+    }
+  },
+  {
+    "id": "prt_g0VcCSlQ600vajMGtUcd",
+    "messageID": "msg_g0VcCSjuM00RToV3CGu0",
+    "tool": "publish_interactive_artifact",
+    "state": {
+      "status": "completed",
+      "input": {
+        "artifact": {
+          "schemaVersion": "1",
+          "title": "销售交接讲解稿｜五条订单复核",
+          "content": {
+            "renderer": "presentation@1",
+            "aspectRatio": "16:9",
+            "slides": [
+              {
+                "id": "scope-and-current-summary",
+                "title": "01｜五条订单，净金额 35.60",
+                "markdown": "## 当前汇总\n### 5 笔记录 · 净金额 35.60\n\n- **退款照计笔数**：A003 为 −2.05，抵减净金额。\n- **零金额照计笔数**：A004 为 0.00，备注“免费样品”。\n- **逐条计数，不按编号去重**；金额按正负累加。\n\n来源：`sales.csv` 全部五条记录；`summary.json`；`销售报告.md`“统计口径”。\n\n口径提示：报告表头写“元”；具体币种、业务期间未提供。",
+                "notes": "这一页先统一交接双方的统计口径。本次完整读取了当前的 sales.csv、summary.json 和销售报告.md。CSV 有五条数据记录，金额依次为10.10、20.20、负2.05、0.00和7.35，相加得到35.60，与JSON和报告一致。五笔指五条记录，不是去重后的订单编号数。A003备注为退款，负金额抵减合计，但仍计一笔；A004备注为免费样品，金额为零，不增加净金额，也仍计一笔。报告记载使用Decimal精确累加，并在总计和区域输出时分别按ROUND_HALF_UP保留两位；这里是在复述报告，不代表检查了脚本实现。报告表头虽写元，但未明确具体币种，三个文件也没有业务期间，因此讲解时不补写人民币、月份或年度。"
+              },
+              {
+                "id": "regional-comparison-and-limits",
+                "title": "02｜区域比较：金额与笔数分开看",
+                "markdown": "## 华东金额更高，记录也更多\n\n| 区域 | 净金额 | 记录数 |\n| :--- | ---: | ---: |\n| 华东 | 28.25 | 3 |\n| 华南 | 7.35 | 2 |\n| **合计** | **35.60** | **5** |\n\n- **能证明**：本文件中，华东比华南多 20.90、1 笔。\n- **不能证明**：增长、达标、利润高低或区域经营优劣。\n\n来源：CSV 按原区域分组复核，与 JSON、报告逐项一致。",
+                "notes": "这一页把金额和笔数并列，而不把两者混成同一个业绩指标。华东包含A001、A002和A003，10.10加20.20再减2.05，净金额是28.25，共三条记录。华南包含A004和A005，零加7.35，净金额是7.35，共两条记录。两区金额相加为35.60，笔数相加为五，与两个汇总文件一致。华东比华南多20.90和一笔，这是当前五条记录能够直接支持的比较。但退款和免费样品都计入笔数，笔数不能直接解释为付费成交数或客户数；净金额也不是利润。没有历史期间、区域目标、成本及数据完整性说明，不能据此判断增长、达标或经营优劣。报告提醒分区与总计分别舍入可能产生尾差，本次数据没有出现这一差异，不应把可能风险说成已发生的问题。"
+              },
+              {
+                "id": "handover-check-sequence",
+                "title": "03｜交接顺序：先明细，再汇总，后补信息",
+                "markdown": "## 按四步完成核对\n\n1. **锁定来源**：确认三个文件属于同一批数据及其业务范围。\n2. **逐条核对**：编号、区域、金额、备注；重点看 A003、A004。\n3. **重算对照**：五条合计 → 两区分组 → JSON → 报告。\n4. **记录差异**：保留原值，标明位置、责任人和确认结果。\n\n**已知**：当前三文件的笔数、总金额及区域数值一致。\n\n**待补**：币种、业务期间、完整性、目标、成本；退款及样品业务凭据。\n\n边界：本次仅文件内容复核，未运行脚本或验证业务凭据。",
+                "notes": "交接时建议严格按顺序进行，而不是先看报告结论。第一步确认三个文件对应同一批业务数据，向提供方补问业务期间、具体币种和是否包含全部记录；数值一致并不能证明生成时间或数据血缘一致。第二步逐条核对CSV中的编号、区域、金额和备注，特别确认A003的退款凭据以及A004免费样品的业务依据，不因负数或零值而删除记录。第三步独立累加五条金额并按原区域分组，再逐项对照JSON和报告，保留负号、零值及两位小数展示。第四步如有差异，记录原文件位置、原值、期望值的依据和负责确认的人，先留痕再处理。本次已知的是三文件在笔数和金额上吻合；币种、期间、完整性、目标、成本及业务凭据仍待补，不能把建议核对的事项说成已经完成。本次没有执行脚本，也没有改写任何文件。"
+              }
+            ]
+          }
+        }
+      },
+      "output": "{\"artifactID\":\"art_g0VcCSs2P00dXkWFuhiv\",\"renderer\":\"presentation@1\"}"
+    }
+  }
+]

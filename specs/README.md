@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [销售交接演示的逐页讲者备注](records/2026-11/2026-11-28-presentation-notes.md)
 - [0.1.56 发布](records/2026-11/2026-11-28-release-0.1.56.md) · 增量日志与公开交付
 - [从真实销售脚本生成和导出处理流程图](records/2026-11/2026-11-28-diagram-delivery.md)
 - [从真实 Excel 工作簿浏览全部原始单元格](records/2026-11/2026-11-28-workbook-browser.md)

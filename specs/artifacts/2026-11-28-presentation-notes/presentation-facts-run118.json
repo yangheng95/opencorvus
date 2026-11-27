@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "label": "run118",
+  "sessionID": "ses_hWAXx5CQRhEtgAADNtfz",
+  "artifactID": "art_g0VcCSs2P00dXkWFuhiv",
+  "fullOriginalReads": [
+    {
+      "file": "sales.csv",
+      "lines": 6,
+      "completeOriginalText": true
+    },
+    {
+      "file": "summary.json",
+      "lines": 14,
+      "completeOriginalText": true
+    },
+    {
+      "file": "销售报告.md",
+      "lines": 24,
+      "completeOriginalText": true
+    }
+  ],
+  "independentDecimalSummaryEqualsActualJSON": {
+    "order_count": 5,
+    "total_amount": "35.60",
+    "by_region": {
+      "华东": {
+        "order_count": 3,
+        "total_amount": "28.25"
+      },
+      "华南": {
+        "order_count": 2,
+        "total_amount": "7.35"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "scope-and-current-summary",
+      "title": "01｜五条订单，净金额 35.60",
+      "noteCharacters": 315,
+      "noteBytes": 767
+    },
+    {
+      "id": "regional-comparison-and-limits",
+      "title": "02｜区域比较：金额与笔数分开看",
+      "noteCharacters": 310,
+      "noteBytes": 816
+    },
+    {
+      "id": "handover-check-sequence",
+      "title": "03｜交接顺序：先明细，再汇总，后补信息",
+      "noteCharacters": 320,
+      "noteBytes": 930
+    }
+  ],
+  "actualMarkdownBytes": 4117,
+  "realPartsUnchanged": true,
+  "finish": "stop",
+  "semanticReview": "all original slide content and notes reviewed manually against complete real source files; no UI assertions"
+}

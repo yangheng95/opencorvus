@@ -1,0 +1,61 @@
+{
+  "id": "art_g0Vc8JddB00rifxkPyIl",
+  "sessionID": "ses_hXaoxvf6sXUeNwnhrZTA",
+  "messageID": "msg_g0Vc8JVo400voNcDn89K",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "销售经理简报·清晰图表",
+    "renderer": "presentation@1",
+    "aspectRatio": "16:9",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "订单与净金额总览",
+        "markdown": "5笔订单，净金额35.60；统计口径、退款与零金额样品说明。",
+        "image": {
+          "sha": "5fcfc0a99f5f062559b7d824ee7eaba1b643fdb51a88fbe962b92293cada2046",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/5fcfc0a99f5f062559b7d824ee7eaba1b643fdb51a88fbe962b92293cada2046.png",
+          "mime": "image/png",
+          "size": 100597,
+          "filename": "slide-1.png"
+        },
+        "imageAlt": "订单与净金额总览"
+      },
+      {
+        "id": "slide-2",
+        "title": "区域对比：金额与笔数",
+        "markdown": "两张原生可编辑柱形图，金额标签28.25/7.35、笔数3/2；数据标签18pt，刻度标签16pt。",
+        "image": {
+          "sha": "df7c8cd38e0e845c99ca9d0d95a142899c297c4abbc9041c7d793135e3e796c1",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/df7c8cd38e0e845c99ca9d0d95a142899c297c4abbc9041c7d793135e3e796c1.png",
+          "mime": "image/png",
+          "size": 57808,
+          "filename": "slide-2.png"
+        },
+        "imageAlt": "区域对比：金额与笔数"
+      },
+      {
+        "id": "slide-3",
+        "title": "事实、缺口与后续行动",
+        "markdown": "已知事实与数据缺失，以及经理退款/样品核对建议。",
+        "image": {
+          "sha": "1496f4c618ab96d2164bcc2d967169cbb88766d96b334bea8ce2d15e0517f73b",
+          "url": "/attachment/prj_haW9BdBH559F4Yw143ch/1496f4c618ab96d2164bcc2d967169cbb88766d96b334bea8ce2d15e0517f73b.png",
+          "mime": "image/png",
+          "size": 151620,
+          "filename": "slide-3.png"
+        },
+        "imageAlt": "事实、缺口与后续行动"
+      }
+    ]
+  },
+  "downloads": [
+    {
+      "url": "/attachment/prj_haW9BdBH559F4Yw143ch/b05c707968abb279ddda03f5d94adeb2a72e6b0226a982d8890ecef6be3ac6ff.pptx",
+      "mime": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "filename": "销售经理简报-清晰图表.pptx"
+    }
+  ],
+  "timeCreated": 1795743241985,
+  "timeUpdated": 1795743241985
+}

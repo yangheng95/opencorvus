@@ -1,0 +1,216 @@
+{
+  "runs": [
+    {
+      "label": "run118",
+      "pid": 10572,
+      "url": "http://127.0.0.1:56883/",
+      "sourceRun": "run117",
+      "preflight": {
+        "sessionID": "ses_hlZ2F2X206V46H4cB5oT",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 61774,
+      "originalHandleJoinedExitCode": 0,
+      "state": "exited",
+      "providerDrain": {
+        "startedAt": 1795804874199,
+        "settledAt": 1795804874199,
+        "allReadersSettled": true
+      },
+      "pairedCredentialCatalogCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run119",
+      "pid": 17860,
+      "url": "http://127.0.0.1:55485/",
+      "sourceRun": "run118",
+      "preflight": {
+        "sessionID": "ses_hbG7Z5XAqLad91D2oJxq",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 53389,
+      "originalHandleJoinedExitCode": 0,
+      "state": "exited",
+      "providerDrain": {
+        "startedAt": 1795805166121,
+        "settledAt": 1795805166121,
+        "allReadersSettled": true
+      },
+      "pairedCredentialCatalogCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run120",
+      "pid": 23356,
+      "url": "http://127.0.0.1:60438/",
+      "sourceRun": "run119",
+      "preflight": {
+        "sessionID": "ses_hHXBrYxSvgpsJXwnDmh5",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "originalExecHandle": 98622,
+      "originalHandleJoinedExitCode": 0,
+      "state": "exited",
+      "providerDrain": {
+        "startedAt": 1795806126399,
+        "settledAt": 1795806126399,
+        "allReadersSettled": true
+      },
+      "pairedCredentialCatalogCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "realStreamingRequests": 12,
+  "businessWorkTasks": 1,
+  "businessCalls": 6,
+  "builds": [
+    {
+      "originalHandle": 60565,
+      "joinedExitCode": 0,
+      "reportedDuration": "1m 21s"
+    },
+    {
+      "originalHandle": 18267,
+      "joinedExitCode": 0,
+      "reportedDuration": "1m 20s"
+    }
+  ],
+  "checks": {
+    "overlayTypecheck": "passed",
+    "i18n": "2 locales / 3375 keys",
+    "css": "9448 references / 269 globals / 60 styles / 427 sources",
+    "docs": "353 ops / 26 groups",
+    "architecture": "20 documents"
+  },
+  "screenshots": {
+    "total": 25,
+    "before": 5,
+    "candidate": 7,
+    "final": 12,
+    "intermediate": 1,
+    "format": "unaltered native JPEG, all viewed manually",
+    "intermediateFile": "intermediate-existing-pptx-second.jpg was not bound to the expanded target deck; actual final second/third use visible arrows and bound active-slide diagnostics"
+  },
+  "closedTabs": [
+    "241805294",
+    "241805298",
+    "241805302",
+    "241805305",
+    "241805309"
+  ],
+  "restoredPreferences": {
+    "locale": "zh-CN",
+    "theme": "system"
+  },
+  "scopeLimits": [
+    "single actual 3-page authored deck with notes on all slides",
+    "original 3-image formal PPTX with all notes omitted",
+    "mixed deck empty-note placeholder, 50000-character notes, multi-device layouts and native Office editing not visually accepted"
+  ],
+  "uiAutomatedTests": "none",
+  "concurrentWorkspace": {
+    "reviewedHeadAlreadyOnUpstream": "d6bd641e329682b911257ca2caa5076e737889cc",
+    "originalUnrelatedStatusLinesPreserved": 177,
+    "deliveryUnrelatedStatusLines": 178,
+    "additionalUnrelatedPath": "specs/records/2026-11/2026-11-28-release-0.1.56.md",
+    "ownOverlapWithReleaseCommit": [],
+    "releaseActionsPerformedByThisBatch": []
+  }
+}

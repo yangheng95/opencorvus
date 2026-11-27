@@ -2,12 +2,13 @@ import Reveal, { type RevealApi } from "reveal.js"
 import "reveal.js/reveal.css"
 import "reveal.js/theme/serif.css"
 import "./PresentationArtifact.css"
-import { createEffect, For, Show, onCleanup, onMount } from "solid-js"
+import { createEffect, createSignal, For, Show, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifact, InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { localeTag, t } from "../../utils/i18n"
 import { FilePart } from "../FilePart"
 import { StaticTextPart } from "../TextPart"
 import { ArtifactFrame } from "./ArtifactFrame"
+import { Button } from "../ui/Button"
 
 type PresentationPayload = Extract<InteractiveArtifactPayload, { renderer: "presentation@1" }>
 
@@ -43,12 +44,23 @@ export function PresentationArtifact(props: {
   let observer: ResizeObserver | undefined
   let labelObserver: MutationObserver | undefined
   let layoutFrame: number | undefined
-  let initialized = false
+  const [initialized, setInitialized] = createSignal(false)
+  const [notesVisible, setNotesVisible] = createSignal(false)
+  const resetNotesScroll = () => {
+    host?.querySelector<HTMLElement>(":scope > .speaker-notes")?.scrollTo({ top: 0, left: 0 })
+  }
+
+  const toggleNotes = () => {
+    if (!initialized() || !deck) return
+    deck.configure({ showNotes: !notesVisible() })
+    setNotesVisible(Boolean(deck.getConfig().showNotes))
+    localizeDeck()
+  }
 
   const localizeDeck = () => {
     const current = deck
     const element = host
-    if (!initialized || !current || !element) return
+    if (!initialized() || !current || !element) return
     const label = (selector: string, value: string) => {
       for (const node of element.querySelectorAll(selector)) node.setAttribute("aria-label", value)
     }
@@ -63,6 +75,13 @@ export function PresentationArtifact(props: {
     label(":scope > .controls .navigate-up", t("artifact.presentation.up"))
     label(":scope > .controls .navigate-down", t("artifact.presentation.down"))
     text(":scope > .pause-overlay .resume-button", t("artifact.presentation.resume"))
+    for (const notes of element.querySelectorAll(":scope > .speaker-notes")) {
+      const name = t("artifact.presentation.notes")
+      notes.setAttribute("role", "region")
+      notes.setAttribute("aria-label", name)
+      notes.setAttribute("data-label", name)
+    }
+    text(":scope > .speaker-notes .notes-placeholder", t("artifact.presentation.notes_empty"))
     for (const input of element.querySelectorAll<HTMLInputElement>(":scope > .jump-to-slide .jump-to-slide-input")) {
       const name = t("artifact.presentation.jump")
       input.placeholder = name
@@ -102,7 +121,7 @@ export function PresentationArtifact(props: {
     if (!host) return
     const dimensions = PRESENTATION_DIMENSIONS[props.payload.aspectRatio]
     const scheduleLayout = () => {
-      if (!initialized || layoutFrame !== undefined) return
+      if (!initialized() || layoutFrame !== undefined) return
       layoutFrame = requestAnimationFrame(() => {
         layoutFrame = undefined
         deck?.layout()
@@ -127,11 +146,12 @@ export function PresentationArtifact(props: {
       margin: 0.06,
     })
     deck = currentDeck
+    currentDeck.on("slidechanged", resetNotesScroll)
     observer = new ResizeObserver(scheduleLayout)
     observer.observe(host)
     void currentDeck.initialize().then(() => {
       if (deck !== currentDeck || !host) return
-      initialized = true
+      setInitialized(true)
       host.dataset.ready = "true"
       localizeDeck()
       // Native jump/help panels are appended here; slide navigation replaces
@@ -145,19 +165,32 @@ export function PresentationArtifact(props: {
   })
 
   onCleanup(() => {
-    initialized = false
+    setInitialized(false)
     labelObserver?.disconnect()
     labelObserver = undefined
     observer?.disconnect()
     observer = undefined
     if (layoutFrame !== undefined) cancelAnimationFrame(layoutFrame)
     layoutFrame = undefined
+    deck?.off("slidechanged", resetNotesScroll)
     deck?.destroy()
     deck = undefined
   })
 
   return (
-    <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Presentation" downloads={props.downloads}>
+    <ArtifactFrame
+      payload={props.payload}
+      title={props.payload.title}
+      kind="Presentation"
+      downloads={props.downloads}
+      headerActions={
+        <Show when={props.payload.slides.some((slide) => slide.notes?.trim())}>
+          <Button variant="ghost" size="sm" tone="neutral" disabled={!initialized()} aria-pressed={notesVisible()} onClick={toggleNotes}>
+            {t("artifact.presentation.notes")}
+          </Button>
+        </Show>
+      }
+    >
       <div
         class="reveal msg-artifact-presentation"
         data-aspect-ratio={props.payload.aspectRatio}

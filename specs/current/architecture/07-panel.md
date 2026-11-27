@@ -6157,6 +6157,19 @@ facts and locale number formatting. A local observer watches only direct native
 panel additions and number-link replacements, while locale changes update the
 same mounted instance. Its observer retires before deck destruction, and a late
 initialization result cannot attach it to a retired owner.
+An explicit Speaker notes action configures Reveal's own inline notes view when
+the authored deck contains notes. The same native instance owns the active slide,
+notes content, keyboard scrolling and disposal; its initialized signal also owns
+action readiness. The local visibility intent survives Frame open/close without
+a persisted or parallel slide/notes record. A single native slidechanged handler
+returns the notes scrollport to its beginning on an actual page change; same-page
+reading survives resize and language updates, and disposal removes that handler.
+Native notes labels and their empty
+placeholder use the interface language while author text and line breaks remain
+original. Theme tokens style that native region, and expanded stages retain its
+75-percent width boundary so the adjacent notes stay within the same Frame.
+Markdown tables inside authored slides inherit the stage's text size; the shared
+chat-table caption scale does not override presentation reading size.
 Render-backed PowerPoint slides contain the exact OfficeCLI image without a
 second semantic overlay. Canonical attachments referenced by a durable
 `interactive_artifact.payload` are part of AttachmentStore's live-reference
