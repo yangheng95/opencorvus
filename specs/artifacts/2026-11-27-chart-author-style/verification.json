@@ -1,0 +1,223 @@
+{
+  "status": "passed for authored configuration precedence and complete fixed design",
+  "requests": 10,
+  "runs": [
+    {
+      "label": "run60",
+      "preflight": {
+        "sessionID": "ses_hgnf8eyYavJcwmrMLEtE",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 2,
+      "outcomes": [
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764631073
+          },
+          "activity": {
+            "id": "act_g0Vc9lMBt00QSBfFHVlZ",
+            "attempt": 0
+          },
+          "agent": "memory"
+        },
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764627865
+          },
+          "activity": {
+            "id": "act_g0Vc9lMQU005fA5eWFHJ",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0Vc9lMC300RyIqT5fgB"
+          },
+          "agent": "chat"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795764730921,
+        "settledAt": 1795764730921,
+        "allReadersSettled": true
+      },
+      "cleanup": "passed",
+      "originalHandle": 20166,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run61",
+      "preflight": {
+        "sessionID": "ses_hL5b2R3HSsCw8mlI5p1t",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 8,
+      "outcomes": [
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764840053
+          },
+          "activity": {
+            "id": "act_g0Vc9mEDP002BHS8uBep",
+            "attempt": 0
+          },
+          "agent": "memory"
+        },
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764835596
+          },
+          "activity": {
+            "id": "act_g0Vc9mESl00spY88sHxA",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0Vc9mEDZ00gQGCOKb53"
+          },
+          "agent": "chat"
+        },
+        {
+          "terminal": {
+            "kind": "error",
+            "at": 1795764937866,
+            "error": {
+              "origin": "read",
+              "type": "TypeError",
+              "code": "ECONNRESET"
+            }
+          },
+          "activity": {
+            "id": "act_g0Vc9mZNT00c78w69mBJ",
+            "attempt": 0
+          },
+          "agent": "memory"
+        },
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764918162
+          },
+          "activity": {
+            "id": "act_g0Vc9mZXp00l30nVloef",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0Vc9mZNb00IsbtZOq3N"
+          },
+          "agent": "work"
+        },
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764927258
+          },
+          "activity": {
+            "id": "act_g0Vc9maiW00gCofT9vUZ",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0Vc9mad200HhbbZa82E"
+          },
+          "agent": "work"
+        },
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764964863
+          },
+          "activity": {
+            "id": "act_g0Vc9mdAY00Gm0hhYPQz",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0Vc9md2z00FQPJwny00"
+          },
+          "agent": "work"
+        },
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795765078219
+          },
+          "activity": {
+            "id": "act_g0Vc9mZNT00c78w69mBJ",
+            "attempt": 1
+          },
+          "agent": "memory"
+        },
+        {
+          "terminal": {
+            "kind": "eof",
+            "at": 1795764974048
+          },
+          "activity": {
+            "id": "act_g0Vc9mmuW00gb0Vrwo0K",
+            "attempt": 0,
+            "assistantMessageID": "msg_g0Vc9mmmS00HtBTen4y3"
+          },
+          "agent": "work"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795765428435,
+        "settledAt": 1795765428435,
+        "allReadersSettled": true
+      },
+      "cleanup": "passed",
+      "originalHandle": 31615,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "physicalOutcomes": {
+    "eof": 9,
+    "readError": 1,
+    "recoveredInSameMemoryActivity": true,
+    "memoryFinal": {
+      "revision": 30,
+      "status": "idle",
+      "pendingCount": 0,
+      "unresolvedCount": null,
+      "droppedPendingCount": 0,
+      "tokenCount": 6721,
+      "notice": null
+    }
+  },
+  "nativeScreenshots": 10,
+  "nativeFinalScreenshots": 9,
+  "localSvgRender": 1,
+  "downloads": [
+    {
+      "source": "C:/Users/hengu/Downloads/visualization (8).svg",
+      "identity": "fixed-sales-report.svg",
+      "bytes": 33802,
+      "width": 911,
+      "height": 562,
+      "format": "svg"
+    },
+    {
+      "source": "C:/Users/hengu/Downloads/visualization (5).png",
+      "identity": "fixed-sales-report.png",
+      "bytes": 86588,
+      "width": 911,
+      "height": 562,
+      "format": "png"
+    }
+  ],
+  "checks": {
+    "promptToolIntegration": "3 passed / 5 positive assertions",
+    "typecheck": "passed",
+    "build": "51.72s, original handle 93481 exit0",
+    "rendererPublicSurface": "passed",
+    "docs": "353 operations / 26 groups",
+    "architectureIndex": "20 current documents",
+    "protectedFiles": 22,
+    "protectedOldRows": 2042,
+    "sqliteIntegrity": "ok",
+    "uiAutomation": "none added or run",
+    "scope": "native Chart/Dashboard, manual styles, real read/bash/publish and live API"
+  },
+  "limits": [
+    "Old fixed backgrounds missing matching foreground remain authored incomplete designs, not inferred or rewritten.",
+    "Old Dashboard summary/order/filter and old brush were manually revisited; no claim every plot of every old artifact was visually checked.",
+    "Explicit autosize/range/font and native configuration semantics now apply; only exercised actual designs are visual acceptance.",
+    "Desktop browser only; no Office / mobile / user external editor interaction."
+  ]
+}

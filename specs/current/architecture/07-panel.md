@@ -5970,10 +5970,16 @@ the applied product CSS custom properties and supplies the semantic palette,
 type, surface, axis, grid, legend, and interaction values used by the mature
 renderer libraries. Chart and Dashboard share its Vega-Lite configuration;
 ordinary text marks and title subtitles receive the current semantic foreground
-defaults. Explicit text configuration and native mark/encoding colors retain
-their authored precedence. Chat/Work authoring guidance and both publication Tool
+defaults. The sole Vega configuration materializer lives in the shared native
+View helper, so other renderers' common token reader does not import Vega. It
+uses Vega's public mergeConfig to apply authored configuration after product
+defaults, retaining partial axis/title/legend/mark/range settings and native
+configuration merge semantics. Native mark/encoding precedence remains intact.
+Chat/Work authoring guidance and both publication Tool
 descriptors share one instruction to inherit ordinary text/surface defaults and
-reserve explicit colors for data meaning or requested design.
+reserve explicit colors for data meaning or requested design. A fixed authored
+background requires matching authored text, axis, title, and legend foregrounds;
+the host does not infer a second palette from a color literal or rewrite history.
 Network consumes its library style values and Diagram passes its product font
 to Mermaid. Timeline's existing stylesheet projects product tokens into the
 vis-timeline surface, including explicit selected foreground/background for
@@ -5986,9 +5992,8 @@ mounted instance and retain its current viewport and selection. Authored event
 timestamps retain their existing local-time display contract. Diagram's expanded
 SVG relinquishes Mermaid's compact intrinsic width cap while retaining the original
 mounted viewBox and graph.
-This keeps data semantics in the durable payload while making visual
-hierarchy a deterministic product responsibility rather than model-authored
-styling.
+This keeps data semantics and explicit design in the durable payload while
+giving unspecified presentation values one deterministic product theme source.
 
 Presentation uses Reveal.js embedded mode with the official theme contract
 mapped to OpenCorvus semantic tokens. The declared aspect ratio owns compact

@@ -11,7 +11,7 @@ const INTERACTIVE_ARTIFACT_RENDERER_SELECTION = [
 ].join(" ")
 
 const CHART_ARTIFACT_THEME_GUIDANCE =
-  "Chart and Dashboard follow the current app theme. Let ordinary text and backgrounds inherit renderer defaults. Use explicit colors when they encode data meaning or a user-requested design."
+  "Chart and Dashboard follow the current app theme. Let ordinary text and backgrounds inherit renderer defaults. Use explicit colors when they encode data meaning or a user-requested design. For a fixed background, specify contrasting text, axis, title, and legend colors together."
 
 export const PUBLISH_INTERACTIVE_ARTIFACT_DESCRIPTION = [
   "Publish an interactive artifact owned by and displayed inline in this assistant message.",

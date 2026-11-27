@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "label": "run61",
+  "sessionID": "ses_hrwcHDrDJe7cezsinVXK",
+  "artifactID": "art_g0Vc9mmkV00BbTrQxUBF",
+  "protectedFiles": 22,
+  "protectedRows": 2042,
+  "rows": 5,
+  "subsets": [
+    {
+      "region": "全部",
+      "count": 5,
+      "net": "35.60"
+    },
+    {
+      "region": "华东",
+      "count": 3,
+      "net": "28.25"
+    },
+    {
+      "region": "华南",
+      "count": 2,
+      "net": "7.35"
+    }
+  ],
+  "integrity": "ok",
+  "formalTools": "read/bash/publish completed",
+  "finish": "stop",
+  "actualDownloadsBytes": [
+    33802,
+    86588
+  ]
+}

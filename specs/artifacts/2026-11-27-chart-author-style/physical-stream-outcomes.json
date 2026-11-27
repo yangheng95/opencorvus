@@ -1,0 +1,108 @@
+[
+  {
+    "i": 0,
+    "agent": "memory",
+    "activity": {
+      "id": "act_g0Vc9mEDP002BHS8uBep",
+      "attempt": 0
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1795764840053
+    }
+  },
+  {
+    "i": 1,
+    "agent": "chat",
+    "activity": {
+      "id": "act_g0Vc9mESl00spY88sHxA",
+      "attempt": 0,
+      "assistantMessageID": "msg_g0Vc9mEDZ00gQGCOKb53"
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1795764835596
+    }
+  },
+  {
+    "i": 2,
+    "agent": "memory",
+    "activity": {
+      "id": "act_g0Vc9mZNT00c78w69mBJ",
+      "attempt": 0
+    },
+    "terminal": {
+      "kind": "error",
+      "at": 1795764937866,
+      "error": {
+        "origin": "read",
+        "type": "TypeError",
+        "code": "ECONNRESET"
+      }
+    }
+  },
+  {
+    "i": 3,
+    "agent": "work",
+    "activity": {
+      "id": "act_g0Vc9mZXp00l30nVloef",
+      "attempt": 0,
+      "assistantMessageID": "msg_g0Vc9mZNb00IsbtZOq3N"
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1795764918162
+    }
+  },
+  {
+    "i": 4,
+    "agent": "work",
+    "activity": {
+      "id": "act_g0Vc9maiW00gCofT9vUZ",
+      "attempt": 0,
+      "assistantMessageID": "msg_g0Vc9mad200HhbbZa82E"
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1795764927258
+    }
+  },
+  {
+    "i": 5,
+    "agent": "work",
+    "activity": {
+      "id": "act_g0Vc9mdAY00Gm0hhYPQz",
+      "attempt": 0,
+      "assistantMessageID": "msg_g0Vc9md2z00FQPJwny00"
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1795764964863
+    }
+  },
+  {
+    "i": 6,
+    "agent": "memory",
+    "activity": {
+      "id": "act_g0Vc9mZNT00c78w69mBJ",
+      "attempt": 1
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1795765078219
+    }
+  },
+  {
+    "i": 7,
+    "agent": "work",
+    "activity": {
+      "id": "act_g0Vc9mmuW00gb0Vrwo0K",
+      "attempt": 0,
+      "assistantMessageID": "msg_g0Vc9mmmS00HtBTen4y3"
+    },
+    "terminal": {
+      "kind": "eof",
+      "at": 1795764974048
+    }
+  }
+]

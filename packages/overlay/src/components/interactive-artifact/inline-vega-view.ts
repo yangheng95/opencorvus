@@ -1,14 +1,67 @@
-import vegaEmbed, { type Result } from "vega-embed"
+import vegaEmbed, { vega, type Result } from "vega-embed"
 import { isEqual, normalize, type TopLevelSpec } from "vega-lite"
 import { createEffect, createUniqueId, onCleanup, onMount } from "solid-js"
 import { observeAppliedTheme } from "../../services/theme"
-import { artifactVegaConfig, artifactVisualTheme } from "./theme-color"
+import { artifactVisualTheme, type ArtifactVisualTheme } from "./theme-color"
 import { INLINE_VEGA_EMBED_OPTIONS } from "./vega-embed-policy"
 import { localeTag, t } from "../../utils/i18n"
 import { topLayerPortalMount } from "../../utils/top-layer"
 
 type Size = { width: number; height: number }
 type ViewState = ReturnType<Result["view"]["getState"]> & { subcontext?: ViewState[] }
+
+function artifactVegaConfig(
+  theme: ArtifactVisualTheme,
+  source: Record<string, unknown> = {},
+): Record<string, unknown> {
+  const defaults = {
+    autosize: { type: "fit", contains: "padding" },
+    background: theme.surface,
+    font: theme.font,
+    range: { category: theme.palette },
+    axis: {
+      domain: false,
+      gridColor: theme.border,
+      gridOpacity: 0.58,
+      labelColor: theme.muted,
+      labelFont: theme.font,
+      labelFontSize: 11,
+      labelPadding: 8,
+      tickColor: theme.border,
+      tickSize: 4,
+      titleColor: theme.muted,
+      titleFont: theme.font,
+      titleFontSize: 11,
+      titleFontWeight: 500,
+      titlePadding: 12,
+    },
+    legend: {
+      labelColor: theme.muted,
+      labelFont: theme.font,
+      labelFontSize: 11,
+      symbolSize: 70,
+      titleColor: theme.textStrong,
+      titleFont: theme.font,
+      titleFontSize: 11,
+      titleFontWeight: 600,
+    },
+    line: { strokeWidth: 2.5 },
+    point: { filled: true, size: 64 },
+    bar: { cornerRadiusTopLeft: 4, cornerRadiusTopRight: 4 },
+    text: { color: theme.text },
+    title: {
+      anchor: "start",
+      color: theme.textStrong,
+      subtitleColor: theme.muted,
+      font: theme.font,
+      fontSize: 14,
+      fontWeight: 600,
+      offset: 14,
+    },
+    view: { stroke: "transparent" },
+  }
+  return vega.mergeConfig<Record<string, unknown>>(defaults, source)
+}
 
 function interactionChanges(state: ViewState, initial: ViewState, root = true): ViewState {
   return {
