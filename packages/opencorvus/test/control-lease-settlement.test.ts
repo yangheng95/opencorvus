@@ -118,7 +118,7 @@ describe("control lease settlement", () => {
     })
   })
 
-  test("a release carrying a superseded lease identity leaves the current lease untouched", async () => {
+  test("the successor owns the current physical lease after a superseded holder's handback", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -139,9 +139,10 @@ describe("control lease settlement", () => {
           ownerOccurrenceID: "owner-same",
           now: now + 1_000,
           leaseMilliseconds: 120_000,
+          leaseID: "replacement-physical-lease",
         })
         expect(second.acquired).toBe(true)
-        expect(second.lease.id).not.toBe(first.lease.id)
+        expect(second.lease.id).toBe("replacement-physical-lease")
 
         // Owner identity alone is not an identity: the first attempt's stale
         // handback must not end the live second attempt.
@@ -155,7 +156,8 @@ describe("control lease settlement", () => {
           }),
         ).toBe(false)
         expect(Database.use((db) => currentControlLeaseInTransaction(db, "effect", targetID))).toMatchObject({
-          id: second.lease.id,
+          id: "replacement-physical-lease",
+          owner_occurrence_id: "owner-same",
           expires_at: now + 1_000 + 120_000,
         })
       },

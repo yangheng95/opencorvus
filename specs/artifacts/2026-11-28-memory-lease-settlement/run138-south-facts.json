@@ -1,0 +1,34 @@
+{
+  "key": "south",
+  "projectID": "prj_he6efZFwavshsL4BEGOG",
+  "sessionID": "ses_hDJ0XbkbIPQvS3StOaC1",
+  "messageID": "msg_5e3f1efd-8d8f-4e76-8291-f0ee3d93a204",
+  "finish": "stop",
+  "tools": [
+    {
+      "id": "prt_g0VcDaERr00G9yhPXUv4",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0VcDaF5A00ma9aIl07O",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "artifactID": "art_g0VcDaJ1x00LEy0VVxOn",
+  "title": "南仓交接复核说明",
+  "memory": {
+    "filename": "MEMORY.MD",
+    "scope": "project",
+    "content": "# Project Memory\n\n## Active handoff task\nPrepare a Chinese review note for the incoming colleague using only the current project's `handoff.md`, and publish it as the document for that round.\n\n## Standing interpretation rules\n- Preserve the original records for both samples and refunds.\n- Do not interpret monetary amounts directly as profit.\n- Do not calculate gross profit when cost information is missing.\n\n## Scope and evidence requirements\n- Read only `handoff.md` in the current project.\n- Identify the responsible people and checkpoints explicitly stated in that source; do not infer missing assignments or checks.\n- Clearly distinguish statements in the source from anything actually verified during the review round.\n- Cite genuine sources.\n- Do not execute scripts, modify files, or delegate work.\n\n## Known state and unresolved evidence\nOnly the task request is available in the supplied evidence. The contents of `handoff.md`, its named owners and checkpoints, any actual verification results, and publication status are not established. Do not imply that the file has been read, checks have been performed, or the review document has been published.\n",
+    "revision": 1,
+    "tokenCount": 291,
+    "status": "idle",
+    "pendingCount": 0,
+    "droppedPendingCount": 0,
+    "timeCreated": 1795821073661,
+    "timeUpdated": 1795821081075
+  },
+  "scope": "actual public runtime data; UI requires separate native review"
+}

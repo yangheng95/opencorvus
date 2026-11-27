@@ -1,0 +1,20 @@
+[
+  {
+    "key": "north",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-north",
+    "filename": "handoff.md",
+    "original": "# 北仓交接单\n\n负责人：陈晨\n检查点：封条编号登记、退款单据单独列示。\n本单未给出业务日期、币种或成本。\n",
+    "request": "本项目交接约定：订单数按记录行计数，退款按负数金额保留；缺少日期时不判断趋势。请只读当前项目的 handoff.md，为接班同事整理一份中文复核说明并发表为本轮文档。说明原文写明的负责人和检查点，区分原文陈述与本轮实际验证；引用真实来源，不执行脚本、不修改文件、不委派。",
+    "requestID": "667812de-7fac-48c3-b96d-151ec76dc510",
+    "messageID": "msg_1877bc05-44d9-4e01-8820-11b182f645ee"
+  },
+  {
+    "key": "south",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-vN8ljL\\runner-32260-XefI2X\\artifact-delivery\\memory-handoff-south",
+    "filename": "handoff.md",
+    "original": "# 南仓交接单\n\n负责人：李青\n检查点：样品领取登记、原始单据编号逐项核对。\n本单未给出业务日期、币种或成本。\n",
+    "request": "本项目交接约定：样品与退款都保留原始记录，金额不能直接解读为利润；缺少成本时不计算毛利。请只读当前项目的 handoff.md，为接班同事整理一份中文复核说明并发表为本轮文档。说明原文写明的负责人和检查点，区分原文陈述与本轮实际验证；引用真实来源，不执行脚本、不修改文件、不委派。",
+    "requestID": "867a9d38-d96a-4fea-9332-49fab18b66c9",
+    "messageID": "msg_5e3f1efd-8d8f-4e76-8291-f0ee3d93a204"
+  }
+]

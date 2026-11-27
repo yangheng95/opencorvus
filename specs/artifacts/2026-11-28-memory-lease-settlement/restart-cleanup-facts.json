@@ -1,0 +1,64 @@
+{
+  "status": "passed",
+  "comparison": [
+    {
+      "project": "north",
+      "sameMessages": true,
+      "sameTools": true,
+      "sameArtifact": true,
+      "sameMemory": true,
+      "revision": 1,
+      "status": "idle",
+      "pendingCount": 0
+    },
+    {
+      "project": "south",
+      "sameMessages": true,
+      "sameTools": true,
+      "sameArtifact": true,
+      "sameMemory": true,
+      "revision": 1,
+      "status": "idle",
+      "pendingCount": 0
+    }
+  ],
+  "retired": [
+    {
+      "label": "run138",
+      "pid": 2296,
+      "originalExecHandle": 5844,
+      "originalExecJoinedExitCode": 0,
+      "processExitCode": 0,
+      "credentialAndCatalogCopies": "retired",
+      "providerReaders": "all settled",
+      "preflight": {
+        "sessionID": "ses_h9EBJULyQaBf5xJAQknZ",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    },
+    {
+      "label": "run139",
+      "pid": 23236,
+      "originalExecHandle": 75717,
+      "originalExecJoinedExitCode": 0,
+      "processExitCode": 0,
+      "credentialAndCatalogCopies": "retired",
+      "providerReaders": "all settled",
+      "preflight": {
+        "sessionID": "ses_hw10zHMWkVXnAxLQ2zJm",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      }
+    }
+  ],
+  "ownedPort59641": "retired",
+  "ownedBrowserTab": "241805407 closed through bound browser API",
+  "preferences": "zh-CN/system unchanged",
+  "priorBatchLimitation": "old tab 241805392 remains unbound; not represented as closed",
+  "scope": "actual business persistence and service retirement; expired-failure and multiprocess evidence are separately scoped"
+}

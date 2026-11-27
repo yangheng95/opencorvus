@@ -1,0 +1,353 @@
+{
+  "scope": "actual shared physical-lease transactions; not domain end-to-end or Provider quality",
+  "facts": [
+    {
+      "target": "task_root_ingress",
+      "first": {
+        "id": "task_root_ingress-original",
+        "target": "task_root_ingress",
+        "target_id": "owned-observation-task_root_ingress",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627063,
+        "expires_at": 1795820627064
+      },
+      "releaseAt": 1795820627065,
+      "released": false,
+      "second": {
+        "id": "task_root_ingress-successor",
+        "target": "task_root_ingress",
+        "target_id": "owned-observation-task_root_ingress",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627066,
+        "expires_at": 1795820657066
+      },
+      "current": {
+        "id": "task_root_ingress-successor",
+        "target": "task_root_ingress",
+        "target_id": "owned-observation-task_root_ingress",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627066,
+        "expires_at": 1795820657066
+      }
+    },
+    {
+      "target": "session_control",
+      "first": {
+        "id": "session_control-original",
+        "target": "session_control",
+        "target_id": "owned-observation-session_control",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627069,
+        "expires_at": 1795820627070
+      },
+      "releaseAt": 1795820627073,
+      "released": false,
+      "second": {
+        "id": "session_control-successor",
+        "target": "session_control",
+        "target_id": "owned-observation-session_control",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627073,
+        "expires_at": 1795820657073
+      },
+      "current": {
+        "id": "session_control-successor",
+        "target": "session_control",
+        "target_id": "owned-observation-session_control",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627073,
+        "expires_at": 1795820657073
+      }
+    },
+    {
+      "target": "lifecycle",
+      "first": {
+        "id": "lifecycle-original",
+        "target": "lifecycle",
+        "target_id": "owned-observation-lifecycle",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627075,
+        "expires_at": 1795820627076
+      },
+      "releaseAt": 1795820627078,
+      "released": false,
+      "second": {
+        "id": "lifecycle-successor",
+        "target": "lifecycle",
+        "target_id": "owned-observation-lifecycle",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627079,
+        "expires_at": 1795820657079
+      },
+      "current": {
+        "id": "lifecycle-successor",
+        "target": "lifecycle",
+        "target_id": "owned-observation-lifecycle",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627079,
+        "expires_at": 1795820657079
+      }
+    },
+    {
+      "target": "effect",
+      "first": {
+        "id": "effect-original",
+        "target": "effect",
+        "target_id": "owned-observation-effect",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627080,
+        "expires_at": 1795820627081
+      },
+      "releaseAt": 1795820627083,
+      "released": false,
+      "second": {
+        "id": "effect-successor",
+        "target": "effect",
+        "target_id": "owned-observation-effect",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627084,
+        "expires_at": 1795820657084
+      },
+      "current": {
+        "id": "effect-successor",
+        "target": "effect",
+        "target_id": "owned-observation-effect",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627084,
+        "expires_at": 1795820657084
+      }
+    },
+    {
+      "target": "automation",
+      "first": {
+        "id": "automation-original",
+        "target": "automation",
+        "target_id": "owned-observation-automation",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627085,
+        "expires_at": 1795820627086
+      },
+      "releaseAt": 1795820627088,
+      "released": false,
+      "second": {
+        "id": "automation-successor",
+        "target": "automation",
+        "target_id": "owned-observation-automation",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627088,
+        "expires_at": 1795820657088
+      },
+      "current": {
+        "id": "automation-successor",
+        "target": "automation",
+        "target_id": "owned-observation-automation",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627088,
+        "expires_at": 1795820657088
+      }
+    },
+    {
+      "target": "event_fire",
+      "first": {
+        "id": "event_fire-original",
+        "target": "event_fire",
+        "target_id": "owned-observation-event_fire",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627090,
+        "expires_at": 1795820627091
+      },
+      "releaseAt": 1795820627093,
+      "released": false,
+      "second": {
+        "id": "event_fire-successor",
+        "target": "event_fire",
+        "target_id": "owned-observation-event_fire",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627094,
+        "expires_at": 1795820657094
+      },
+      "current": {
+        "id": "event_fire-successor",
+        "target": "event_fire",
+        "target_id": "owned-observation-event_fire",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627094,
+        "expires_at": 1795820657094
+      }
+    },
+    {
+      "target": "protocol_delivery",
+      "first": {
+        "id": "protocol_delivery-original",
+        "target": "protocol_delivery",
+        "target_id": "owned-observation-protocol_delivery",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627095,
+        "expires_at": 1795820627096
+      },
+      "releaseAt": 1795820627099,
+      "released": false,
+      "second": {
+        "id": "protocol_delivery-successor",
+        "target": "protocol_delivery",
+        "target_id": "owned-observation-protocol_delivery",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627099,
+        "expires_at": 1795820657099
+      },
+      "current": {
+        "id": "protocol_delivery-successor",
+        "target": "protocol_delivery",
+        "target_id": "owned-observation-protocol_delivery",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627099,
+        "expires_at": 1795820657099
+      }
+    },
+    {
+      "target": "bus_delivery",
+      "first": {
+        "id": "bus_delivery-original",
+        "target": "bus_delivery",
+        "target_id": "owned-observation-bus_delivery",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627101,
+        "expires_at": 1795820627102
+      },
+      "releaseAt": 1795820627103,
+      "released": false,
+      "second": {
+        "id": "bus_delivery-successor",
+        "target": "bus_delivery",
+        "target_id": "owned-observation-bus_delivery",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627103,
+        "expires_at": 1795820657103
+      },
+      "current": {
+        "id": "bus_delivery-successor",
+        "target": "bus_delivery",
+        "target_id": "owned-observation-bus_delivery",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627103,
+        "expires_at": 1795820657103
+      }
+    },
+    {
+      "target": "dispatch_admission",
+      "first": {
+        "id": "dispatch_admission-original",
+        "target": "dispatch_admission",
+        "target_id": "owned-observation-dispatch_admission",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627105,
+        "expires_at": 1795820627106
+      },
+      "releaseAt": 1795820627109,
+      "released": false,
+      "second": {
+        "id": "dispatch_admission-successor",
+        "target": "dispatch_admission",
+        "target_id": "owned-observation-dispatch_admission",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627110,
+        "expires_at": 1795820657110
+      },
+      "current": {
+        "id": "dispatch_admission-successor",
+        "target": "dispatch_admission",
+        "target_id": "owned-observation-dispatch_admission",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627110,
+        "expires_at": 1795820657110
+      }
+    },
+    {
+      "target": "build_cleanup",
+      "first": {
+        "id": "build_cleanup-original",
+        "target": "build_cleanup",
+        "target_id": "owned-observation-build_cleanup",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627114,
+        "expires_at": 1795820627115
+      },
+      "releaseAt": 1795820627118,
+      "released": false,
+      "second": {
+        "id": "build_cleanup-successor",
+        "target": "build_cleanup",
+        "target_id": "owned-observation-build_cleanup",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627118,
+        "expires_at": 1795820657118
+      },
+      "current": {
+        "id": "build_cleanup-successor",
+        "target": "build_cleanup",
+        "target_id": "owned-observation-build_cleanup",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627118,
+        "expires_at": 1795820657118
+      }
+    },
+    {
+      "target": "session_deletion",
+      "first": {
+        "id": "session_deletion-original",
+        "target": "session_deletion",
+        "target_id": "owned-observation-session_deletion",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627120,
+        "expires_at": 1795820627121
+      },
+      "releaseAt": 1795820627123,
+      "released": false,
+      "second": {
+        "id": "session_deletion-successor",
+        "target": "session_deletion",
+        "target_id": "owned-observation-session_deletion",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627124,
+        "expires_at": 1795820657124
+      },
+      "current": {
+        "id": "session_deletion-successor",
+        "target": "session_deletion",
+        "target_id": "owned-observation-session_deletion",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627124,
+        "expires_at": 1795820657124
+      }
+    },
+    {
+      "target": "session_shell",
+      "first": {
+        "id": "session_shell-original",
+        "target": "session_shell",
+        "target_id": "owned-observation-session_shell",
+        "owner_occurrence_id": "original",
+        "time_activated": 1795820627125,
+        "expires_at": 1795820627126
+      },
+      "releaseAt": 1795820627129,
+      "released": false,
+      "second": {
+        "id": "session_shell-successor",
+        "target": "session_shell",
+        "target_id": "owned-observation-session_shell",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627129,
+        "expires_at": 1795820657129
+      },
+      "current": {
+        "id": "session_shell-successor",
+        "target": "session_shell",
+        "target_id": "owned-observation-session_shell",
+        "owner_occurrence_id": "successor",
+        "time_activated": 1795820627129,
+        "expires_at": 1795820657129
+      }
+    }
+  ]
+}

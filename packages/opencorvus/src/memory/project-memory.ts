@@ -127,18 +127,22 @@ function documentChunkID(projectID: string) {
   return Identifier.deterministic("memchunk", `project-context\0${projectID}`)
 }
 
+function currentOrganizerLease(envelope: DocumentEnvelope, input: { leaseID: string; expectedRevision: number }) {
+  const lease = envelope.organizerLease
+  return lease &&
+    lease.id === input.leaseID &&
+    lease.availabilityGeneration === envelope.availabilityGeneration &&
+    lease.revision === input.expectedRevision
+    ? lease
+    : undefined
+}
+
 function ownsOrganizerLease(
   envelope: DocumentEnvelope,
   input: { leaseID: string; expectedRevision: number; time: number },
 ) {
-  const lease = envelope.organizerLease
-  return Boolean(
-    lease &&
-      lease.id === input.leaseID &&
-      lease.availabilityGeneration === envelope.availabilityGeneration &&
-      lease.revision === input.expectedRevision &&
-      lease.expiresAt > input.time,
-  )
+  const lease = currentOrganizerLease(envelope, input)
+  return Boolean(lease && lease.expiresAt > input.time)
 }
 
 function initialEnvelope(now = Date.now()): DocumentEnvelope {
@@ -704,16 +708,9 @@ export namespace ProjectMemory {
     const envelope = envelopeInTransaction(db, input.projectID)
     if (envelope.revision !== input.expectedRevision) return undefined
     const timeUpdated = input.timeUpdated ?? Date.now()
-    if (envelope.organizerLease) {
-      if (
-        envelope.organizerLease.id === input.leaseID &&
-        envelope.organizerLease.availabilityGeneration === envelope.availabilityGeneration &&
-        envelope.organizerLease.revision === envelope.revision
-      ) {
-        return envelope.organizerLease
-      }
-      if (envelope.organizerLease.expiresAt > timeUpdated) return undefined
-    }
+    const current = currentOrganizerLease(envelope, { leaseID: input.leaseID, expectedRevision: envelope.revision })
+    if (current) return current
+    if (envelope.organizerLease && envelope.organizerLease.expiresAt > timeUpdated) return undefined
     const lease = {
       id: input.leaseID,
       availabilityGeneration: envelope.availabilityGeneration,
@@ -740,13 +737,14 @@ export namespace ProjectMemory {
     const envelope = envelopeInTransaction(db, input.projectID)
     const timeUpdated = input.timeUpdated ?? Date.now()
     if (
-      !ownsOrganizerLease(envelope, {
+      !currentOrganizerLease(envelope, {
         leaseID: input.leaseID,
         expectedRevision: envelope.revision,
-        time: timeUpdated,
       })
     )
       return false
+    // Expiry fences semantic writes. A known failure still ends its exact
+    // current attempt, so the persisted document accurately waits for retry.
     writeEnvelope(
       db,
       input.projectID,

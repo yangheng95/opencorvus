@@ -1,0 +1,658 @@
+{
+  "scope": "actual independent data-plane processes and SQLite ownership, not Provider end-to-end",
+  "cases": [
+    {
+      "name": "live successor after expired original failure",
+      "original": {
+        "pid": 21572,
+        "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "idle",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821202063,
+          "timeUpdated": 1795821202063
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "successor-input",
+            "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+            "sessionID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerNameAtCapture": "successor-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821199892,
+            "text": "successor-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "process-original",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821202071
+        },
+        "startedAt": 1795821202072,
+        "phase": "held"
+      },
+      "successor": {
+        "pid": 22944,
+        "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "organizing",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821202063,
+          "timeUpdated": 1795821202070
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "successor-input",
+            "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+            "sessionID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerNameAtCapture": "successor-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821199892,
+            "text": "successor-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "process-successor",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821263411
+        },
+        "startedAt": 1795821203415,
+        "phase": "held"
+      },
+      "oldResult": {
+        "pid": 21572,
+        "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "idle",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821202063,
+          "timeUpdated": 1795821202063
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "successor-input",
+            "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+            "sessionID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerNameAtCapture": "successor-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821199892,
+            "text": "successor-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "process-original",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821202071
+        },
+        "startedAt": 1795821202072,
+        "phase": "settled",
+        "finish": "release",
+        "outcome": false,
+        "at": 1795821203439,
+        "snapshot": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "organizing",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821202063,
+          "timeUpdated": 1795821203411
+        },
+        "pending": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "successor-input",
+            "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+            "sessionID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerNameAtCapture": "successor-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821199892,
+            "text": "successor-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ]
+      },
+      "newResult": {
+        "pid": 22944,
+        "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "organizing",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821202063,
+          "timeUpdated": 1795821202070
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "successor-input",
+            "projectID": "prj_hyY7cJLXN3C5shS0teTp",
+            "sessionID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPFxQzzTYW6FUq96",
+            "ownerNameAtCapture": "successor-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821199892,
+            "text": "successor-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "process-successor",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821263411
+        },
+        "startedAt": 1795821203415,
+        "phase": "settled",
+        "finish": "commit",
+        "outcome": {
+          "revision": 1,
+          "tokenCount": 16,
+          "coveredOccurrenceIDs": [
+            "successor-input"
+          ]
+        },
+        "at": 1795821203533,
+        "snapshot": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "# Context\n\nSuccessor publishes the complete original evidence.\n",
+          "revision": 1,
+          "tokenCount": 16,
+          "status": "idle",
+          "pendingCount": 0,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821202063,
+          "timeUpdated": 1795821203529
+        },
+        "pending": []
+      }
+    },
+    {
+      "name": "Project isolation and actual owner exit recovery",
+      "heldA": {
+        "pid": 37380,
+        "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "idle",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821207541,
+          "timeUpdated": 1795821207541
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-a-input",
+            "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+            "sessionID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerNameAtCapture": "project-a-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821205980,
+            "text": "project-a-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "same-logical-id",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821207547
+        },
+        "startedAt": 1795821207548,
+        "phase": "held"
+      },
+      "heldB": {
+        "pid": 13500,
+        "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "idle",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821208037,
+          "timeUpdated": 1795821208037
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-b-input",
+            "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+            "sessionID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerNameAtCapture": "project-b-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821206342,
+            "text": "project-b-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "same-logical-id",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821208043
+        },
+        "startedAt": 1795821208044,
+        "phase": "held"
+      },
+      "failureA": {
+        "pid": 37380,
+        "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "idle",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821207541,
+          "timeUpdated": 1795821207541
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-a-input",
+            "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+            "sessionID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerNameAtCapture": "project-a-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821205980,
+            "text": "project-a-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "same-logical-id",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821207547
+        },
+        "startedAt": 1795821207548,
+        "phase": "settled",
+        "finish": "release",
+        "outcome": true,
+        "at": 1795821208065,
+        "snapshot": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "retry_wait",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821207541,
+          "timeUpdated": 1795821208065
+        },
+        "pending": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-a-input",
+            "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+            "sessionID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerNameAtCapture": "project-a-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821205980,
+            "text": "project-a-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ]
+      },
+      "exitB": {
+        "pid": 13500,
+        "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "idle",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821208037,
+          "timeUpdated": 1795821208037
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-b-input",
+            "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+            "sessionID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerNameAtCapture": "project-b-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821206342,
+            "text": "project-b-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "same-logical-id",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821208043
+        },
+        "startedAt": 1795821208044,
+        "phase": "abrupt_exit",
+        "at": 1795821208067,
+        "snapshot": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "organizing",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821208037,
+          "timeUpdated": 1795821208042
+        }
+      },
+      "recoveryA": {
+        "pid": 33320,
+        "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "retry_wait",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821207541,
+          "timeUpdated": 1795821208065
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-a-input",
+            "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+            "sessionID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerNameAtCapture": "project-a-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821205980,
+            "text": "project-a-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "project-a-retry",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821270430
+        },
+        "startedAt": 1795821210432,
+        "phase": "held"
+      },
+      "recoveryB": {
+        "pid": 34508,
+        "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "organizing",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821208037,
+          "timeUpdated": 1795821208042
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-b-input",
+            "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+            "sessionID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerNameAtCapture": "project-b-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821206342,
+            "text": "project-b-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "project-b-recovery",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821269243
+        },
+        "startedAt": 1795821209244,
+        "phase": "held"
+      },
+      "resultA": {
+        "pid": 33320,
+        "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "retry_wait",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821207541,
+          "timeUpdated": 1795821208065
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-a-input",
+            "projectID": "prj_hTd7ZtRb8EnJSHncCG3F",
+            "sessionID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEN5zzDtYowFcng",
+            "ownerNameAtCapture": "project-a-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821205980,
+            "text": "project-a-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "project-a-retry",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821270430
+        },
+        "startedAt": 1795821210432,
+        "phase": "settled",
+        "finish": "commit",
+        "outcome": {
+          "revision": 1,
+          "tokenCount": 10,
+          "coveredOccurrenceIDs": [
+            "project-a-input"
+          ]
+        },
+        "at": 1795821210458,
+        "snapshot": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "# A\n\nProject A retries its own input.\n",
+          "revision": 1,
+          "tokenCount": 10,
+          "status": "idle",
+          "pendingCount": 0,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821207541,
+          "timeUpdated": 1795821210457
+        },
+        "pending": []
+      },
+      "resultB": {
+        "pid": 34508,
+        "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+        "database": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-dzPcUy\\test-37336-IOgoDL\\runtime-root\\data\\opencorvus.db",
+        "before": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "",
+          "revision": 0,
+          "tokenCount": 0,
+          "status": "organizing",
+          "pendingCount": 1,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821208037,
+          "timeUpdated": 1795821208042
+        },
+        "pendingBefore": [
+          {
+            "version": 1,
+            "occurrenceKind": "interaction_reply",
+            "occurrenceID": "project-b-input",
+            "projectID": "prj_h0f9SWhjPIL4MCJ8vSUk",
+            "sessionID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerKind": "conversation",
+            "ownerID": "ses_-zUNmPEHFzzPN17Mw8Ss",
+            "ownerNameAtCapture": "project-b-input",
+            "surface": "test.process-ownership",
+            "timeCreated": 1795821206342,
+            "text": "project-b-input complete original evidence.",
+            "attachments": [],
+            "context": []
+          }
+        ],
+        "lease": {
+          "id": "project-b-recovery",
+          "availabilityGeneration": 0,
+          "revision": 0,
+          "expiresAt": 1795821269243
+        },
+        "startedAt": 1795821209244,
+        "phase": "settled",
+        "finish": "commit",
+        "outcome": {
+          "revision": 1,
+          "tokenCount": 10,
+          "coveredOccurrenceIDs": [
+            "project-b-input"
+          ]
+        },
+        "at": 1795821209270,
+        "snapshot": {
+          "filename": "MEMORY.MD",
+          "scope": "project",
+          "content": "# B\n\nProject B recovered its own input.\n",
+          "revision": 1,
+          "tokenCount": 10,
+          "status": "idle",
+          "pendingCount": 0,
+          "droppedPendingCount": 0,
+          "timeCreated": 1795821208037,
+          "timeUpdated": 1795821209269
+        },
+        "pending": []
+      }
+    }
+  ]
+}

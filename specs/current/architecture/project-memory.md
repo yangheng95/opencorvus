@@ -475,6 +475,15 @@ When the document cannot incorporate pending meaning within the configured ceili
 
 FIFO applies only to the pending inbox when the Organizer has independently resolved the same closed missing-model configuration as unavailable on two consecutive serialized attempts and pending count exceeds the configured availability limit. A database-persisted exclusive lease carries a fencing token, expiry, current availability generation, and Project revision into both semantic commit and deletion transactions. A competing runtime cannot overwrite an unexpired lease; expiry permits crash recovery, while configuration changes immediately increment the generation and revoke the lease before another organization request is published. Known failed attempts release only their own lease. The first unavailable attempt only records a visible notice and deletes nothing. FIFO never edits Project `MEMORY.MD` and is never semantic organization. Provider request, authentication, transport, timeout, output, parse, capacity, and evidence-size failures are not closed-unavailable deletion authority.
 
+Lease identity and active write authority share one identity predicate. Semantic
+commit, pending consumption and notice settlement require that exact lease to
+remain unexpired. A known failure releases its still-current identity even after
+expiry and persists `retry_wait`, retaining the committed document and complete
+pending input. A successor lease, new availability generation or new document
+revision fences the old handback. Physical control leases retain their separate
+expiry-based settlement contract; this document's failure state is not inferred
+from an expired physical grant.
+
 The one per-Project background driver coalesces a request that arrives during an
 active Organizer attempt into the same scheduled slot. When a configuration
 change revokes that attempt, the persisted envelope moves to `retry_wait`; the

@@ -1,0 +1,71 @@
+{
+  "scope": "actual production transaction and persisted rows; no Provider or UI claim",
+  "projectID": "prj_hWMvjEtYILiYrfggO0TO",
+  "lease": {
+    "id": "owned-expiring-attempt",
+    "availabilityGeneration": 0,
+    "revision": 0,
+    "expiresAt": 1795820407095
+  },
+  "observedAt": 1795820407097,
+  "released": false,
+  "before": {
+    "filename": "MEMORY.MD",
+    "scope": "project",
+    "content": "",
+    "revision": 0,
+    "tokenCount": 0,
+    "status": "idle",
+    "pendingCount": 1,
+    "droppedPendingCount": 0,
+    "timeCreated": 1795820407089,
+    "timeUpdated": 1795820407089
+  },
+  "after": {
+    "filename": "MEMORY.MD",
+    "scope": "project",
+    "content": "",
+    "revision": 0,
+    "tokenCount": 0,
+    "status": "organizing",
+    "pendingCount": 1,
+    "droppedPendingCount": 0,
+    "timeCreated": 1795820407089,
+    "timeUpdated": 1795820407094
+  },
+  "pendingBefore": [
+    {
+      "version": 1,
+      "occurrenceKind": "interaction_reply",
+      "occurrenceID": "owned-expiry-observation",
+      "projectID": "prj_hWMvjEtYILiYrfggO0TO",
+      "sessionID": "ses_-zUNmSaCzzzMU1Dvysua",
+      "ownerKind": "conversation",
+      "ownerID": "ses_-zUNmSaCzzzMU1Dvysua",
+      "ownerNameAtCapture": "Owned transaction observation",
+      "surface": "transaction.observation",
+      "timeCreated": 1795820407072,
+      "text": "Keep this exact pending evidence after failure.",
+      "attachments": [],
+      "context": []
+    }
+  ],
+  "pendingAfter": [
+    {
+      "version": 1,
+      "occurrenceKind": "interaction_reply",
+      "occurrenceID": "owned-expiry-observation",
+      "projectID": "prj_hWMvjEtYILiYrfggO0TO",
+      "sessionID": "ses_-zUNmSaCzzzMU1Dvysua",
+      "ownerKind": "conversation",
+      "ownerID": "ses_-zUNmSaCzzzMU1Dvysua",
+      "ownerNameAtCapture": "Owned transaction observation",
+      "surface": "transaction.observation",
+      "timeCreated": 1795820407072,
+      "text": "Keep this exact pending evidence after failure.",
+      "attachments": [],
+      "context": []
+    }
+  ],
+  "expiryObserved": true
+}

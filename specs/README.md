@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [记忆整理失败后的租约与可重试状态](records/2026-11/2026-11-28-memory-lease-settlement.md)
 - [交接文档的来源链接与授权读取](records/2026-11/2026-11-28-document-source-links.md)
 - [目录引用的真实阅读与清单交付](records/2026-11/2026-11-28-folder-reference-download.md)
 - [文本原件的媒体类型合同](records/2026-11/2026-11-28-text-preview-media-contract.md)
