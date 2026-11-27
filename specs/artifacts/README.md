@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [销售看板筛选与空结果证据](2026-11-27-filtered-sales-dashboard/README.md)
 - [工具失败可读性实页证据](2026-11-27-tool-failure-readable-summary/README.md)
 - [动态工具执行错误分类证据](2026-11-27-dynamic-tool-error-classification/README.md)
 - [可编辑销售表格复验证据](2026-11-27-live-spreadsheet-values-and-export/README.md)

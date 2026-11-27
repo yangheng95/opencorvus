@@ -1,0 +1,100 @@
+[
+  {
+    "label": "run43",
+    "preflight": {
+      "sessionID": "ses_hcwHrsebtuYZHmaC54Ax",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "providerDrain": {
+      "startedAt": 1795753977871,
+      "settledAt": 1795753977871,
+      "allReadersSettled": true
+    },
+    "exitCode": 0,
+    "credentialCopiesRetired": true,
+    "port": 51643,
+    "portClosed": true
+  },
+  {
+    "label": "run44",
+    "preflight": {
+      "sessionID": "ses_hHUjKPG7ZVDlBFcdKeHr",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "requests": [
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      },
+      {
+        "model": "gpt-6.1-sol",
+        "streaming": true,
+        "status": 200,
+        "reader": "settled",
+        "terminal": "eof"
+      }
+    ],
+    "providerDrain": {
+      "startedAt": 1795754854711,
+      "settledAt": 1795754854711,
+      "allReadersSettled": true
+    },
+    "exitCode": 0,
+    "credentialCopiesRetired": true,
+    "port": 64166,
+    "portClosed": true
+  }
+]

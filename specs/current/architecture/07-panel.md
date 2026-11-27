@@ -6014,6 +6014,13 @@ The current container size is applied after state restoration settles. Vega
 export controls use the current product language. Dashboard's default filter
 label and numeric metrics follow that language; authored labels, strings, units,
 and published metric values retain their payload identity.
+Dashboard's filter bar reports the current matching and total row counts in
+the product language and owns one persistent Clear filters action. An empty
+intersection retains those controls and published metrics while showing explicit
+no-match feedback in place of blank Views. Clearing filters restores the same
+inline source rows through the existing View lifecycle. Dashboard plot containers
+use their native rendered height, including an explicit height in the published
+specification; ordinary plots keep the shared default measurement.
 Floating controls, option tooltips and artifact-download portals use their
 trigger's nearest dialog or artifact popover owner, including the current
 workspace or MCP pip. Modal descendants remain inside that dialog's accessible

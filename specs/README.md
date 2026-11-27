@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [可筛选销售看板的真实任务与阅读复验](records/2026-11/2026-11-27-filtered-sales-dashboard.md)
 - [工具失败摘要与完整诊断的可读呈现](records/2026-11/2026-11-27-tool-failure-readable-summary.md)
 - [动态工具执行错误分类](records/2026-11/2026-11-27-dynamic-tool-error-classification.md)
 - [可编辑销售表格的公式与导出复验](records/2026-11/2026-11-27-live-spreadsheet-values-and-export.md)

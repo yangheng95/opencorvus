@@ -4,6 +4,8 @@ import { localeTag, t } from "../../utils/i18n"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { createInlineVegaView } from "./inline-vega-view"
 import { SelectControl } from "../ui/SelectControl"
+import { Button } from "../ui/Button"
+import { Feedback } from "../ui/Feedback"
 
 type DashboardPayload = Extract<InteractiveArtifactPayload, { renderer: "dashboard@1" }>
 type DashboardViewPayload = DashboardPayload["views"][number]
@@ -36,7 +38,7 @@ function DashboardView(props: { view: DashboardViewPayload; data: DashboardRow[]
   return (
     <section class="msg-artifact-dashboard__view" data-span={props.view.span} aria-label={props.view.title}>
       <h4>{props.view.title}</h4>
-      <div class="msg-artifact-dashboard__chart msg-artifact-vega" ref={host} hidden={!!error()} />
+      <div class="msg-artifact-vega" ref={host} hidden={!!error()} />
       <Show when={error()}>{message => <div class="msg-artifact-render-error">{message()}</div>}</Show>
     </section>
   )
@@ -122,11 +124,26 @@ export function DashboardArtifact(props: { payload: DashboardPayload }) {
                 />
               )}
             </For>
+            <span role="status" aria-live="polite">
+              {t("artifact.dashboard.rows", {
+                visible: numbers().format(filtered().length),
+                total: numbers().format(props.payload.data.length),
+              })}
+            </span>
+            <Button variant="ghost" size="sm" tone="neutral" onClick={() => setFilters({})}>
+              {t("artifact.dashboard.clear_filters")}
+            </Button>
           </div>
         </Show>
-        <div class="msg-artifact-dashboard__views">
-          <For each={props.payload.views}>{(view) => <DashboardView view={view} data={filtered()} />}</For>
-        </div>
+        <Show when={filtered().length > 0} fallback={
+          <Feedback tone="info" title={t("artifact.dashboard.empty")}>
+            {t("artifact.dashboard.empty_hint")}
+          </Feedback>
+        }>
+          <div class="msg-artifact-dashboard__views">
+            <For each={props.payload.views}>{(view) => <DashboardView view={view} data={filtered()} />}</For>
+          </div>
+        </Show>
       </div>
     </ArtifactFrame>
   )

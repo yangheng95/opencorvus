@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "actualBrowserDownloads": [
+    {
+      "browserFilename": "visualization (1).svg",
+      "bytes": 21007,
+      "modifiedUTC": "2026-11-27T04:42:52.597882+00:00",
+      "width": "949",
+      "height": "160",
+      "visibleRegionLabels": [
+        "华东",
+        "华南"
+      ],
+      "visibleAmounts": [
+        "28.25",
+        "7.35"
+      ]
+    },
+    {
+      "browserFilename": "visualization (2).svg",
+      "bytes": 21007,
+      "modifiedUTC": "2026-11-27T04:43:59.262764+00:00",
+      "width": "949",
+      "height": "160",
+      "visibleRegionLabels": [
+        "华东",
+        "华南"
+      ],
+      "visibleAmounts": [
+        "28.25",
+        "7.35"
+      ]
+    }
+  ],
+  "sameNativeSVGBytes": true,
+  "downloadEventWait": "CUA waitForEvent timed out twice despite completed browser files; checked real downloaded SVG instead",
+  "preExistingVisualizationPreserved": true
+}

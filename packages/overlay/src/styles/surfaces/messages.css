@@ -2480,6 +2480,7 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact-dashboard__filters {
+  flex-wrap: wrap;
   margin: 0 0 var(--ui-gap-2xl);
   padding: var(--ui-gap-lg) var(--ui-gap-lg);
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 74%, transparent);
@@ -2523,10 +2524,6 @@ button.msg-source-chip .msg-source-chip__filename {
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: 650;
-}
-
-.msg-artifact-dashboard__chart {
-  min-height: calc(240px * var(--ui-scale));
 }
 
 .msg-artifact-timeline {

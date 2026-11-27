@@ -1,0 +1,377 @@
+{
+  "schemaVersion": "1",
+  "title": "销售核对看板｜sales.csv",
+  "presentation": {
+    "height": 720
+  },
+  "renderer": "dashboard@1",
+  "metrics": [
+    {
+      "id": "all-orders",
+      "label": "源文件全量订单数（含退款及零金额）",
+      "value": 5,
+      "unit": "笔"
+    },
+    {
+      "id": "all-net",
+      "label": "源文件全量净额（按原金额带符号相加）",
+      "value": "35.60"
+    },
+    {
+      "id": "all-refunds",
+      "label": "源文件全量退款数（金额 < 0）",
+      "value": 1,
+      "unit": "笔"
+    },
+    {
+      "id": "all-zeros",
+      "label": "源文件全量零金额订单数",
+      "value": 1,
+      "unit": "笔"
+    }
+  ],
+  "filters": [
+    {
+      "id": "region",
+      "label": "区域",
+      "field": "区域",
+      "values": [
+        "华东",
+        "华南"
+      ]
+    },
+    {
+      "id": "refund",
+      "label": "是否退款（按金额 < 0 判定）",
+      "field": "是否退款",
+      "values": [
+        "否",
+        "是"
+      ]
+    }
+  ],
+  "views": [
+    {
+      "id": "filtered-summary",
+      "title": "当前筛选汇总｜每行计一笔，负数扣减净额，零金额计笔数",
+      "spec": {
+        "transform": [
+          {
+            "aggregate": [
+              {
+                "op": "count",
+                "as": "笔数"
+              },
+              {
+                "op": "sum",
+                "field": "金额分",
+                "as": "净额分"
+              },
+              {
+                "op": "sum",
+                "field": "退款标记",
+                "as": "退款笔数"
+              },
+              {
+                "op": "sum",
+                "field": "零金额标记",
+                "as": "零金额笔数"
+              }
+            ]
+          },
+          {
+            "calculate": "'订单 ' + format(datum.笔数, '.0f') + ' 笔  |  净额 ' + format(datum.净额分 / 100, '.2f') + '  |  退款 ' + format(datum.退款笔数, '.0f') + ' 笔  |  零金额 ' + format(datum.零金额笔数, '.0f') + ' 笔'",
+            "as": "汇总"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "fontSize": 18,
+          "align": "center"
+        },
+        "encoding": {
+          "text": {
+            "field": "汇总",
+            "type": "nominal"
+          }
+        },
+        "height": 65
+      },
+      "span": "full"
+    },
+    {
+      "id": "order-amounts",
+      "title": "每笔订单金额｜悬停查看原始备注，零金额以圆点显示",
+      "spec": {
+        "height": 220,
+        "encoding": {
+          "y": {
+            "field": "订单编号",
+            "type": "nominal",
+            "sort": [
+              "A001",
+              "A002",
+              "A003",
+              "A004",
+              "A005"
+            ],
+            "title": "订单编号（源文件顺序）"
+          },
+          "x": {
+            "field": "金额",
+            "type": "quantitative",
+            "title": "订单金额（币种／单位未提供）",
+            "scale": {
+              "zero": true
+            },
+            "axis": {
+              "format": ".2f"
+            }
+          },
+          "tooltip": [
+            {
+              "field": "订单编号",
+              "type": "nominal"
+            },
+            {
+              "field": "区域",
+              "type": "nominal"
+            },
+            {
+              "field": "金额",
+              "type": "quantitative",
+              "format": ".2f"
+            },
+            {
+              "field": "是否退款",
+              "type": "nominal"
+            },
+            {
+              "field": "备注",
+              "type": "nominal"
+            }
+          ]
+        },
+        "layer": [
+          {
+            "mark": {
+              "type": "bar",
+              "size": 22
+            },
+            "encoding": {
+              "color": {
+                "field": "是否退款",
+                "type": "nominal",
+                "scale": {
+                  "domain": [
+                    "否",
+                    "是"
+                  ],
+                  "range": [
+                    "#2563EB",
+                    "#DC2626"
+                  ]
+                },
+                "title": "是否退款"
+              }
+            }
+          },
+          {
+            "mark": {
+              "type": "point",
+              "filled": true,
+              "size": 70
+            },
+            "encoding": {
+              "color": {
+                "field": "是否退款",
+                "type": "nominal",
+                "scale": {
+                  "domain": [
+                    "否",
+                    "是"
+                  ],
+                  "range": [
+                    "#2563EB",
+                    "#DC2626"
+                  ]
+                },
+                "legend": null
+              }
+            }
+          },
+          {
+            "mark": {
+              "type": "text",
+              "align": "left",
+              "dx": 8,
+              "dy": -14,
+              "fontSize": 13
+            },
+            "encoding": {
+              "text": {
+                "field": "金额",
+                "type": "quantitative",
+                "format": ".2f"
+              }
+            }
+          }
+        ]
+      },
+      "span": "full"
+    },
+    {
+      "id": "regional-net",
+      "title": "筛选后的区域净额｜按带符号金额求和，不剔除退款或零金额",
+      "spec": {
+        "height": 160,
+        "transform": [
+          {
+            "aggregate": [
+              {
+                "op": "sum",
+                "field": "金额分",
+                "as": "净额分"
+              },
+              {
+                "op": "count",
+                "as": "订单数"
+              }
+            ],
+            "groupby": [
+              "区域"
+            ]
+          },
+          {
+            "calculate": "datum.净额分 / 100",
+            "as": "区域净额"
+          }
+        ],
+        "encoding": {
+          "y": {
+            "field": "区域",
+            "type": "nominal",
+            "sort": [
+              "华东",
+              "华南"
+            ],
+            "title": "区域"
+          },
+          "x": {
+            "field": "区域净额",
+            "type": "quantitative",
+            "title": "区域净额（币种／单位未提供）",
+            "scale": {
+              "zero": true
+            },
+            "axis": {
+              "format": ".2f"
+            }
+          },
+          "tooltip": [
+            {
+              "field": "区域",
+              "type": "nominal"
+            },
+            {
+              "field": "订单数",
+              "type": "quantitative",
+              "format": ".0f"
+            },
+            {
+              "field": "区域净额",
+              "type": "quantitative",
+              "format": ".2f"
+            }
+          ]
+        },
+        "layer": [
+          {
+            "mark": {
+              "type": "bar",
+              "color": "#0F766E",
+              "size": 30
+            }
+          },
+          {
+            "mark": {
+              "type": "point",
+              "filled": true,
+              "color": "#0F766E",
+              "size": 60
+            }
+          },
+          {
+            "mark": {
+              "type": "text",
+              "align": "left",
+              "dx": 8,
+              "dy": -20,
+              "fontSize": 14
+            },
+            "encoding": {
+              "text": {
+                "field": "区域净额",
+                "type": "quantitative",
+                "format": ".2f"
+              }
+            }
+          }
+        ]
+      },
+      "span": "full"
+    }
+  ],
+  "data": [
+    {
+      "订单编号": "A001",
+      "区域": "华东",
+      "金额": 10.1,
+      "金额分": 1010,
+      "备注": "普通订单",
+      "是否退款": "否",
+      "退款标记": 0,
+      "零金额标记": 0
+    },
+    {
+      "订单编号": "A002",
+      "区域": "华东",
+      "金额": 20.2,
+      "金额分": 2020,
+      "备注": "中文客户",
+      "是否退款": "否",
+      "退款标记": 0,
+      "零金额标记": 0
+    },
+    {
+      "订单编号": "A003",
+      "区域": "华东",
+      "金额": -2.05,
+      "金额分": -205,
+      "备注": "退款",
+      "是否退款": "是",
+      "退款标记": 1,
+      "零金额标记": 0
+    },
+    {
+      "订单编号": "A004",
+      "区域": "华南",
+      "金额": 0,
+      "金额分": 0,
+      "备注": "免费样品",
+      "是否退款": "否",
+      "退款标记": 0,
+      "零金额标记": 1
+    },
+    {
+      "订单编号": "A005",
+      "区域": "华南",
+      "金额": 7.35,
+      "金额分": 735,
+      "备注": "普通订单",
+      "是否退款": "否",
+      "退款标记": 0,
+      "零金额标记": 0
+    }
+  ]
+}
