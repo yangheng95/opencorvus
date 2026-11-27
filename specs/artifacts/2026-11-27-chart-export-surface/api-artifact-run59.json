@@ -1,0 +1,363 @@
+{
+  "id": "art_g0Vc9g8Lh00oK4FDYhNf",
+  "sessionID": "ses_hWk3v4UmiuIuz6byTk3B",
+  "messageID": "msg_g0Vc9g0j800WFoC5Ceru",
+  "payload": {
+    "schemaVersion": "1",
+    "title": "销售核对｜背景设计复核",
+    "renderer": "dashboard@1",
+    "metrics": [],
+    "filters": [
+      {
+        "id": "region",
+        "label": "区域",
+        "field": "区域",
+        "values": [
+          "华东",
+          "华南"
+        ]
+      }
+    ],
+    "views": [
+      {
+        "id": "summary",
+        "title": "当前筛选｜总订单数与净额",
+        "spec": {
+          "height": 40,
+          "transform": [
+            {
+              "aggregate": [
+                {
+                  "op": "count",
+                  "as": "订单数"
+                },
+                {
+                  "op": "sum",
+                  "field": "金额",
+                  "as": "净额"
+                }
+              ]
+            },
+            {
+              "calculate": "'总订单数：' + format(datum['订单数'], '.0f') + '    净额：' + format(datum['净额'], '.2f')",
+              "as": "汇总"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "fontSize": 20
+          },
+          "encoding": {
+            "text": {
+              "field": "汇总"
+            }
+          }
+        },
+        "span": "full"
+      },
+      {
+        "id": "theme-default",
+        "title": "主题默认",
+        "spec": {
+          "height": 220,
+          "encoding": {
+            "x": {
+              "field": "订单编号",
+              "type": "nominal",
+              "sort": [
+                "A001",
+                "A002",
+                "A003",
+                "A004",
+                "A005"
+              ],
+              "title": "原始订单编号",
+              "axis": {
+                "labelAngle": 0
+              }
+            },
+            "y": {
+              "field": "金额",
+              "type": "quantitative",
+              "title": "逐单金额（未注明币种或单位）",
+              "scale": {
+                "zero": true
+              },
+              "axis": {
+                "format": ".2f"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "订单编号",
+                "type": "nominal",
+                "title": "原始订单编号"
+              },
+              {
+                "field": "区域",
+                "type": "nominal"
+              },
+              {
+                "field": "金额",
+                "type": "quantitative",
+                "format": ".2f"
+              },
+              {
+                "field": "备注",
+                "type": "nominal",
+                "title": "原始备注"
+              }
+            ]
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "bar"
+              }
+            },
+            {
+              "mark": {
+                "type": "point",
+                "filled": true,
+                "size": 45
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "dy": -10
+              },
+              "encoding": {
+                "text": {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "format": ".2f"
+                }
+              }
+            }
+          ]
+        },
+        "span": "full"
+      },
+      {
+        "id": "config-background",
+        "title": "配置底色",
+        "spec": {
+          "height": 220,
+          "config": {
+            "background": "#172b4d",
+            "axis": {
+              "labelColor": "#eef2ff",
+              "titleColor": "#eef2ff"
+            }
+          },
+          "encoding": {
+            "x": {
+              "field": "订单编号",
+              "type": "nominal",
+              "sort": [
+                "A001",
+                "A002",
+                "A003",
+                "A004",
+                "A005"
+              ],
+              "title": "原始订单编号",
+              "axis": {
+                "labelAngle": 0
+              }
+            },
+            "y": {
+              "field": "金额",
+              "type": "quantitative",
+              "title": "逐单金额（未注明币种或单位）",
+              "scale": {
+                "zero": true
+              },
+              "axis": {
+                "format": ".2f"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "订单编号",
+                "type": "nominal",
+                "title": "原始订单编号"
+              },
+              {
+                "field": "区域",
+                "type": "nominal"
+              },
+              {
+                "field": "金额",
+                "type": "quantitative",
+                "format": ".2f"
+              },
+              {
+                "field": "备注",
+                "type": "nominal",
+                "title": "原始备注"
+              }
+            ]
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "bar"
+              }
+            },
+            {
+              "mark": {
+                "type": "point",
+                "filled": true,
+                "size": 45
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "dy": -10,
+                "color": "#eef2ff"
+              },
+              "encoding": {
+                "text": {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "format": ".2f"
+                }
+              }
+            }
+          ]
+        },
+        "span": "full"
+      },
+      {
+        "id": "top-background",
+        "title": "顶层底色",
+        "spec": {
+          "height": 220,
+          "background": "#25311e",
+          "config": {
+            "background": "#172b4d",
+            "axis": {
+              "labelColor": "#eef2ff",
+              "titleColor": "#eef2ff"
+            }
+          },
+          "encoding": {
+            "x": {
+              "field": "订单编号",
+              "type": "nominal",
+              "sort": [
+                "A001",
+                "A002",
+                "A003",
+                "A004",
+                "A005"
+              ],
+              "title": "原始订单编号",
+              "axis": {
+                "labelAngle": 0
+              }
+            },
+            "y": {
+              "field": "金额",
+              "type": "quantitative",
+              "title": "逐单金额（未注明币种或单位）",
+              "scale": {
+                "zero": true
+              },
+              "axis": {
+                "format": ".2f"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "订单编号",
+                "type": "nominal",
+                "title": "原始订单编号"
+              },
+              {
+                "field": "区域",
+                "type": "nominal"
+              },
+              {
+                "field": "金额",
+                "type": "quantitative",
+                "format": ".2f"
+              },
+              {
+                "field": "备注",
+                "type": "nominal",
+                "title": "原始备注"
+              }
+            ]
+          },
+          "layer": [
+            {
+              "mark": {
+                "type": "bar"
+              }
+            },
+            {
+              "mark": {
+                "type": "point",
+                "filled": true,
+                "size": 45
+              }
+            },
+            {
+              "mark": {
+                "type": "text",
+                "dy": -10,
+                "color": "#eef2ff"
+              },
+              "encoding": {
+                "text": {
+                  "field": "金额",
+                  "type": "quantitative",
+                  "format": ".2f"
+                }
+              }
+            }
+          ]
+        },
+        "span": "full"
+      }
+    ],
+    "data": [
+      {
+        "订单编号": "A001",
+        "区域": "华东",
+        "金额": 10.1,
+        "备注": "普通订单"
+      },
+      {
+        "订单编号": "A002",
+        "区域": "华东",
+        "金额": 20.2,
+        "备注": "中文客户"
+      },
+      {
+        "订单编号": "A003",
+        "区域": "华东",
+        "金额": -2.05,
+        "备注": "退款"
+      },
+      {
+        "订单编号": "A004",
+        "区域": "华南",
+        "金额": 0,
+        "备注": "免费样品"
+      },
+      {
+        "订单编号": "A005",
+        "区域": "华南",
+        "金额": 7.35,
+        "备注": "普通订单"
+      }
+    ]
+  },
+  "timeCreated": 1795763379617,
+  "timeUpdated": 1795763379617
+}

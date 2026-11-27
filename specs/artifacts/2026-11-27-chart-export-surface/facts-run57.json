@@ -1,0 +1,32 @@
+{
+  "status": "passed",
+  "label": "run57",
+  "sessionID": "ses_hWk3v4UmiuIuz6byTk3B",
+  "artifactID": "art_g0Vc9g8Lh00oK4FDYhNf",
+  "protectedFiles": 22,
+  "protectedRows": 2020,
+  "rows": 5,
+  "subsets": [
+    {
+      "region": "全部",
+      "count": 5,
+      "net": "35.60"
+    },
+    {
+      "region": "华东",
+      "count": 3,
+      "net": "28.25"
+    },
+    {
+      "region": "华南",
+      "count": 2,
+      "net": "7.35"
+    }
+  ],
+  "integrity": "ok",
+  "publication": "completed",
+  "backgroundContracts": {
+    "config": "#172b4d",
+    "root": "#25311e"
+  }
+}

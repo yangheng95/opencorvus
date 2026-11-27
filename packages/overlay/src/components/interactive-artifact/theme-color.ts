@@ -48,7 +48,7 @@ export function artifactVegaConfig(
 ): Record<string, unknown> {
   const defaults = {
     autosize: { type: "fit", contains: "padding" },
-    background: "transparent",
+    background: theme.surface,
     font: theme.font,
     range: { category: theme.palette },
     axis: {
@@ -103,6 +103,7 @@ export function artifactVegaConfig(
   return {
     ...source,
     ...defaults,
+    background: source.background === undefined ? defaults.background : source.background,
     text: { ...defaults.text, ...configured("text") },
     axis: merge("axis"),
     legend: merge("legend"),

@@ -15,8 +15,9 @@ function interactionChanges(state: ViewState, initial: ViewState, root = true): 
     ...state,
     signals: Object.fromEntries(Object.entries(state.signals ?? {}).filter(([name, value]) => {
       // Autosize stores fitted plot dimensions here. The new View's canvas
-      // dimensions belong to its current spec/container, not the old snapshot.
-      if (root && (name === "width" || name === "height")) return false
+      // dimensions and background belong to its current spec/container/theme,
+      // not the old snapshot.
+      if (root && (name === "width" || name === "height" || name === "background")) return false
       const baseline = initial.signals?.[name]
       // Replaying an unchanged empty gesture object emits a change event;
       // its dependent pan expression may have no anchor yet. Compare shallowly
@@ -150,7 +151,6 @@ export function createInlineVegaView(input: {
             width: nextSource.width ?? measured.width,
             height: nextSource.height ?? measured.height,
           } : {}),
-          background: nextSource.background ?? "transparent",
           config: artifactVegaConfig(artifactVisualTheme(host),
             config && typeof config === "object" && !Array.isArray(config) ? config as Record<string, unknown> : {}),
         } as unknown as Parameters<typeof vegaEmbed>[1], {

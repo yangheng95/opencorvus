@@ -6038,13 +6038,20 @@ not replay a change event and cyclic runtime objects are never deeply traversed.
 Root width/height signals are layout results and are also excluded: the new View
 owns its canvas dimensions from the current specification/container. A fitted
 plot dimension must not become a smaller requested canvas on each repaint.
+The root background signal is likewise presentation owned by the current
+specification/theme; restoring it would replay an old palette over the new one.
 For unit and layered plots, the current container size is applied to unspecified
 or container dimensions after state restoration settles; explicit dimensions
 remain authored values. Composed plots keep their native child dimensions and
 layout: the host neither injects root dimensions nor changes their width/height
 signals. This also keeps categorical brushes tied to the same child scales when
 the surrounding pane or workspace changes size. Vega
-export controls use the current product language. Dashboard's default filter
+export controls use the current product language. The shared theme configuration
+supplies the native View's default background from the product surface token,
+so SVG/PNG exports carry the same background as the visible plot. Explicit
+authored configuration backgrounds override that default; a top-level background
+retains Vega-Lite's native precedence. There is no separate export styling or
+image postprocessing. Dashboard's default filter
 label and numeric metrics follow that language; authored labels, strings, units,
 and published metric values retain their payload identity.
 Dashboard's filter bar reports the current matching and total row counts in

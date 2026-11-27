@@ -1,0 +1,203 @@
+{
+  "status": "passed for scoped default-theme/export/background precedence change",
+  "requests": 10,
+  "runs": [
+    {
+      "label": "run57",
+      "preflight": {
+        "sessionID": "ses_ha7Z4lQHFzP1NaTdmlLf",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 6,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795763433238,
+        "settledAt": 1795763478838,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "exitCode": 0,
+      "originalHandle": 25563,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run58",
+      "preflight": {
+        "sessionID": "ses_hDBSYOMOdsLAdmm4AlBK",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 2,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795763680374,
+        "settledAt": 1795763680374,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "exitCode": 0,
+      "originalHandle": 51008,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run59",
+      "preflight": {
+        "sessionID": "ses_hgY9FSt03fD2FLr0BTvh",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "requests": 2,
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795764231979,
+        "settledAt": 1795764231979,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "exitCode": 0,
+      "originalHandle": 45800,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativePageScreenshots": 14,
+  "nativeFinalScreenshots": 9,
+  "localReadOnlySvgRenders": 4,
+  "realDownloads": [
+    {
+      "source": "C:/Users/hengu/Downloads/visualization (5).svg",
+      "identity": "config-background.svg",
+      "bytes": 17752,
+      "width": 949,
+      "height": 220,
+      "format": "svg",
+      "svgHeader": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" class=\"marks\" width=\"949\" height=\"220\" viewBox=\"0 0 949 220\"><rect width=\"949\" height=\"220\" fill=\"#172b4d\"/><g fill=\"none\" stroke-miterlimit=\"4\" transform=\"translate(72,10)\"><g class=\"mark-group role-frame root\" role=\"graphics-object\" aria-roledescription=\"group mark "
+    },
+    {
+      "source": "C:/Users/hengu/Downloads/visualization (6).svg",
+      "identity": "dark-sales-review.svg",
+      "bytes": 27082,
+      "width": 766,
+      "height": 513,
+      "format": "svg",
+      "svgHeader": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" class=\"marks\" width=\"766\" height=\"513\" viewBox=\"0 0 766 513\"><rect width=\"766\" height=\"513\" fill=\"#222222\"/><g fill=\"none\" stroke-miterlimit=\"4\" transform=\"translate(72,116)\"><g class=\"mark-group role-frame root\" role=\"graphics-object\" aria-roledescription=\"group mark"
+    },
+    {
+      "source": "C:/Users/hengu/Downloads/visualization (4).png",
+      "identity": "dark-sales-review.png",
+      "bytes": 80129,
+      "width": 766,
+      "height": 513,
+      "format": "png"
+    },
+    {
+      "source": "C:/Users/hengu/Downloads/visualization (7).svg",
+      "identity": "light-sales-review.svg",
+      "bytes": 26917,
+      "width": 766,
+      "height": 513,
+      "format": "svg",
+      "svgHeader": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" class=\"marks\" width=\"766\" height=\"513\" viewBox=\"0 0 766 513\"><rect width=\"766\" height=\"513\" fill=\"#ffffff\"/><g fill=\"none\" stroke-miterlimit=\"4\" transform=\"translate(72,116)\"><g class=\"mark-group role-frame root\" role=\"graphics-object\" aria-roledescription=\"group mark"
+    }
+  ],
+  "checks": {
+    "sourceFiles": 22,
+    "oldPersistentRows": 2020,
+    "sqliteIntegrity": "ok",
+    "liveArtifactAPI": "passed",
+    "sourceCSV": "five original rows, 35.60 total, east 3/28.25, south 2/7.35",
+    "typecheck": "passed",
+    "build": "passed 50.58s, original handle 32747 joined exit 0",
+    "rendererPublicSurface": "passed",
+    "docs": "353 operations / 26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run",
+    "nativeSelection": "A001+A002 30.30/2 preserved across theme change",
+    "nativeDashboardFilter": "east 3/28.25 across theme/language, clear 5/35.60"
+  },
+  "limits": [
+    "Legacy chart has explicit config.background=#FFFFFF; honored author background conflicts with automatic light text in dark palette. Its dark screenshot proves interaction only, not visual acceptance.",
+    "Custom dark backgrounds in light palette retain product axis color override; source precedence needs separate follow-up analysis.",
+    "Desktop browser only; native Office / external editor / mobile not exercised.",
+    "Local file browser navigation was blocked; local SVG render is read-only, no browser routing workaround."
+  ]
+}

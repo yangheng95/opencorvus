@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [原生图表导出的主题底色](records/2026-11/2026-11-27-chart-export-surface.md)
 - [文档来源引用返回与真实文件往返](records/2026-11/2026-11-27-file-review-roundtrip.md)
 - [图表主题、重建尺寸与悬停明细](records/2026-11/2026-11-27-chart-theme-text.md)
 - [原生图表框选联动与视图状态复验](records/2026-11/2026-11-27-chart-selection-review.md)
