@@ -1,0 +1,203 @@
+{
+  "status": "passed",
+  "requests": 8,
+  "runs": [
+    {
+      "label": "run84",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hWkegy0erhwxwY2Vz5ri",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795778564751,
+        "settledAt": 1795778564751,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 25089,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run85",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hZQ3gjXJIUIp0Ny9c6EP",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795779030290,
+        "settledAt": 1795779030290,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 99225,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run86",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_h4YMfXvT59BKzjKszOmC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795779540062,
+        "settledAt": 1795779540062,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 39185,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run87",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hk8FLFxMuL7USB3EC3mV",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795779897487,
+        "settledAt": 1795779897487,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 75782,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 17,
+  "finalScreenshots": [
+    "accepted-english-keyboard-failure.png",
+    "accepted-english-keyboard-home.png",
+    "accepted-english-selection.png",
+    "accepted-expanded-keyboard-end.png",
+    "accepted-expanded-layout.png",
+    "accepted-keyboard-failure.png",
+    "accepted-keyboard-home.png",
+    "accepted-keyboard-success.png"
+  ],
+  "interactionOnlyScreenshots": [
+    "interaction-keyboard-end.png",
+    "interaction-keyboard-failure.png",
+    "interaction-keyboard-home.png",
+    "interaction-keyboard-previous-point.png",
+    "interaction-keyboard-success.png"
+  ],
+  "candidateScreenshots": [
+    "candidate-expanded-layout.png",
+    "candidate-keyboard-entry.png",
+    "candidate-point-focus-error.png"
+  ],
+  "checks": {
+    "source": "same actual Work ses_hFhCAUIlbrIFM2TWtbRi/art_g0VcAcdBO00Cufd05Hql; original8 events/3groups; no new model task or publication created",
+    "baseline": "nativeTab Zoomout->following Copy message; reverse returnsZoomout; application had no keyboard focus or item controls",
+    "keyboard": "nativeTab enters mounted timeline; Home/Right selects source then actual failed37-43s/success51-57s; End selects final publication; nextRight clamps; Tab exits and ShiftTab returns; actual pointer selection followed by Left uses same library selection",
+    "pointFailure": "first realHome exposed preexisting point mapping with end:undefined; native focus treated it as ended and failed valueOf; candidate error preserved",
+    "pointData": "sole artifactTimelineItems projection returns actual point/range/background temporal shapes; strict positive full output checked and real point focus passes",
+    "layoutFailure": "newhint occupied existing middle flexible row in expanded3slot grid; candidate pixel evidence retained",
+    "layout": "controls/hint now one root slot; final expanded chart follows controls at top, detail at bottom, same mounted node and selection",
+    "localization": "actual EnglishDark hint/focus/Home/neighbor failure and second-level date details inspected; sourceChinese labels retained",
+    "positiveUnits": {
+      "passed": 3,
+      "assertions": 3,
+      "files": 1,
+      "evidence": "observed declared pure data/date test output; no UI tests or synthesized log"
+    },
+    "typecheck": "final62878 observedexit0; data14987 and first13695 candidates observedexit0",
+    "build": "final58.15s original24742 observedexit0; data58.87s91732 and first57.06s11390 are candidates, each observedexit0; renderer public surface passed",
+    "i18n": "2 locales /3350 keys passed",
+    "cssTokens": "9428 references passed",
+    "nativeExport": "actual Light/Dark980-byte downloads equal original production8-event CSV; independent CSV parser verifies original IDs/content/start/end/group",
+    "protectedFiles": 23,
+    "protectedOldRows": 2287,
+    "sqliteIntegrity": "ok",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "Only real8-event desktopWork replay; single-item, equal-start ordering, background-only, authoredviewport,20000items and five other themes source audited, no new native acceptance claimed.",
+    "Backgrounds remain visual context and are retained in source/CSV; keyboard sequence selects points/ranges only.",
+    "No screen-reader speech session; nativeAX feedback and actual keyboard focus/selection reviewed.",
+    "interaction-keyboard images fromrun86 prove input/selection only; its expanded layout failed. accepted images fromrun87 bind the final3slot composition.",
+    "Expanded nativevis drawing retains its existing compact chart height with spare space below; the new excess gap above it is repaired without redesigning density.",
+    "Only Provider preflight8 requests, including memory/chat; original real publication remains unchanged; no delegation, Task/Mission or scheduler/terminal anomaly.",
+    "No release, tag, UI automation, pixel scoring or invalid source-hash gate."
+  ]
+}

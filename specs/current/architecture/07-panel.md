@@ -6058,6 +6058,15 @@ timestamps retain their existing local-time display contract.
 Timeline's initial view without an authored viewport and its Fit all action use
 the mounted library's native fit operation, including item/label bounds and the
 existing zoom limits. Authored initial viewports retain their declared range.
+The timeline has one keyboard focus entry for point/range selection. Localized
+instructions describe Left/Right and Home/End navigation in start-time order,
+retaining authored order for equal starts. The mounted library owns selection
+and focusing for both pointer and keyboard input; the detail is its projection.
+Background spans remain non-selectable context. Background-only timelines are
+read-only regions. Navigation leaves original items, dates and exports intact.
+The sole library data projection preserves temporal item shapes: points carry
+their start, while ranges and backgrounds carry both actual boundaries. Library
+focus can therefore consume the same typed data used for drawing and selection.
 Diagram's expanded SVG relinquishes Mermaid's compact intrinsic width cap while
 retaining the original mounted viewBox and graph.
 This keeps data semantics and explicit design in the durable payload while

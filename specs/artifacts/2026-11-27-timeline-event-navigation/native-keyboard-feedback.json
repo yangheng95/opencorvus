@@ -1,0 +1,16 @@
+{
+  "source": "Actual native key interactions; bounded AX focus/detail excerpts only, not UI automated assertions",
+  "phase": "run87 final layout",
+  "home": "+\t\t\t\t\t\t\t\t\t\t\t\t348 text 读取sales.csv 2026年11月27日 18:23:28\nThe focused UI element is 266 container 笔记本核对｜真实工具时间线",
+  "failure": "~\t\t\t\t\t\t\t\t\t\t\t\t348 text Python首次语法错误（退出1） 2026年11月27日 18:23:37  – 2026年11月27日 18:23:43\nThe focused UI element is 266 container 笔记本核对｜真实工具时间线",
+  "success": "~\t\t\t\t\t\t\t\t\t\t\t\t348 text Python只读汇总成功（退出0） 2026年11月27日 18:23:51  – 2026年11月27日 18:23:57\nThe focused UI element is 266 container 笔记本核对｜真实工具时间线",
+  "expandedEnd": "~\t\t\t\t\t\t\t\t\t\t\t\t348 text 发布来源校正笔记本 2026年11月27日 18:30:54  – 2026年11月27日 18:32:11\nThe focused UI element is 266 container 笔记本核对｜真实工具时间线",
+  "englishHome": "~\t\t\t\t\t\t\t\t\t\t\t\t276 text 读取sales.csv Nov 27, 2026, 6:23:28 PM\nThe focused UI element is 254 container 笔记本核对｜真实工具时间线",
+  "englishFailure": "~\t\t\t\t\t\t\t\t\t\t\t\t276 text Python首次语法错误（退出1） Nov 27, 2026, 6:23:37 PM  – Nov 27, 2026, 6:23:43 PM\nThe focused UI element is 254 container 笔记本核对｜真实工具时间线",
+  "phase86": {
+    "tabOut": "The focused UI element is 318 button 复制消息",
+    "tabReturn": "The focused UI element is 266 container 笔记本核对｜真实工具时间线",
+    "pointerToKeyboard": "~\t\t\t\t\t\t\t\t\t\t\t\t342 text 重新读取原脚本 2026年11月27日 18:30:51\nThe focused UI element is 266 container 笔记本核对｜真实工具时间线"
+  },
+  "errors": []
+}

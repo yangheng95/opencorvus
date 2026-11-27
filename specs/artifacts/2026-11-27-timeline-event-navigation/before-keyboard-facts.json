@@ -1,0 +1,12 @@
+{
+  "observedTabFrom": "缩小 / Zoom out",
+  "forwardFocus": "复制消息 / Copy message after artifact",
+  "reverseFocus": "缩小 / Zoom out",
+  "host": {
+    "role": "application",
+    "tabIndex": null,
+    "describedBy": null,
+    "focusableItems": 0
+  },
+  "source": "Actual native Tab and Shift+Tab; readonly DOM only supplements focus observation; no UI automated assertion"
+}

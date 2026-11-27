@@ -1,0 +1,8 @@
+[
+  {
+    "level": "error",
+    "message": "TypeError: Cannot read properties of undefined (reading 'valueOf')\n    at http://127.0.0.1:54465/ui/assets/TimelineArtifact-G9ZSrPEI.js:90:33111\n    at Array.forEach (<anonymous>)\n    at Ea.focus (http://127.0.0.1:54465/ui/assets/TimelineArtifact-G9ZSrPEI.js:90:33056)\n    at HTMLDivElement.d [as $$keydown] (http://127.0.0.1:54465/ui/assets/TimelineArtifact-G9ZSrPEI.js:90:38911)\n    at o (http://127.0.0.1:54465/ui/assets/CommandMenuSurface-C2NqEic8.js:1:25061)\n    at HTMLDocument.Pn (http://127.0.0.1:54465/ui/assets/CommandMenuSurface-C2NqEic8.js:1:25457)",
+    "timestamp": "2026-11-27T11:28:58.771Z",
+    "url": "http://127.0.0.1:54465/ui/assets/TimelineArtifact-G9ZSrPEI.js"
+  }
+]

@@ -2409,7 +2409,8 @@ button.msg-source-chip .msg-source-chip__filename {
 }
 
 .msg-artifact-spreadsheet__note,
-.msg-artifact-notebook__note {
+.msg-artifact-notebook__note,
+.msg-artifact-timeline__hint {
   flex-shrink: 0;
   margin: 0;
   padding: var(--ui-gap-sm) var(--ui-gap-lg);
@@ -2590,6 +2591,11 @@ button.msg-source-chip .msg-source-chip__filename {
   padding: var(--ui-gap-md);
   color: var(--text-soft);
   font-size: var(--ui-font-caption);
+}
+
+.msg-artifact-timeline:focus-visible {
+  outline: calc(2 * var(--oc-border-width)) solid var(--accent-ring);
+  outline-offset: calc(-2 * var(--oc-border-width));
 }
 
 .msg-artifact-timeline__detail {

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [时间线短事件的键盘访问](2026-11-27-timeline-event-navigation.md)
 - [真实工具调用的分钟级时间线复核](2026-11-27-tool-timeline-review.md)
 - [销售脚本源码与真实标准流的笔记本交付](2026-11-27-notebook-run-record.md)
 - [订单与区域关系图的真实阅读](2026-11-27-order-network-review.md)

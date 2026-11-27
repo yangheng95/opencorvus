@@ -1,5 +1,20 @@
 import moment from "moment/dist/moment.js"
-import type { MomentConstructor1 } from "vis-timeline"
+import type { DataItem, MomentConstructor1 } from "vis-timeline"
+import type { InteractiveArtifactPayload } from "./interactive-artifact"
+
+type TimelineItems = Extract<InteractiveArtifactPayload, { renderer: "timeline@1" }>["items"]
+
+export function artifactTimelineItems(items: TimelineItems): DataItem[] {
+  return items.map((item) => ({
+    id: item.id,
+    content: item.content,
+    group: item.group,
+    start: item.start,
+    ...("end" in item ? { end: item.end } : {}),
+    type: item.kind,
+    style: item.color ? `background-color:${item.color};border-color:${item.color}` : undefined,
+  }))
+}
 
 // Moment locale modules register globally; keep the existing default while
 // supplying each timeline with its own explicitly localized date instances.

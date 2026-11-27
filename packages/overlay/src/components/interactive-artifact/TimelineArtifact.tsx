@@ -1,7 +1,7 @@
-import { Timeline, type DataGroup, type DataItem } from "vis-timeline"
+import { Timeline, type DataGroup } from "vis-timeline"
 import "vis-timeline/styles/vis-timeline-graph2d.css"
-import { Show, createEffect, createMemo, createSignal, onCleanup, onMount } from "solid-js"
-import { createArtifactTimelinePresentation } from "../../services/artifact-timeline"
+import { Show, createEffect, createMemo, createSignal, createUniqueId, onCleanup, onMount } from "solid-js"
+import { artifactTimelineItems, createArtifactTimelinePresentation } from "../../services/artifact-timeline"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import { localeTag, t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
@@ -24,8 +24,14 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
   let host: HTMLDivElement | undefined
   let timeline: Timeline | undefined
   let resizeObserver: ResizeObserver | undefined
+  const keyboardHintID = createUniqueId()
   const [selectedID, setSelectedID] = createSignal<string>()
   const selected = createMemo(() => props.payload.items.find((item) => item.id === selectedID()))
+  const navigableItems = createMemo(() =>
+    props.payload.items
+      .filter((item) => item.kind === "point" || item.kind === "range")
+      .sort((left, right) => Date.parse(left.start) - Date.parse(right.start)),
+  )
   const presentation = createMemo(() => createArtifactTimelinePresentation(localeTag()))
   createEffect(() => {
     const { moment } = presentation()
@@ -34,18 +40,35 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
   const fitAll = (animation: boolean) => {
     timeline?.fit({ animation })
   }
+  const syncSelection = () => {
+    const id = timeline?.getSelection()[0]
+    setSelectedID(id == null ? undefined : String(id))
+  }
+  const navigate = (event: KeyboardEvent) => {
+    if (
+      !timeline || event.target !== event.currentTarget || event.defaultPrevented || event.isComposing ||
+      event.altKey || event.ctrlKey || event.metaKey || event.shiftKey
+    ) return
+    const items = navigableItems()
+    if (!items.length) return
+    const current = items.findIndex((item) => item.id === selectedID())
+    let next: number
+    switch (event.key) {
+      case "ArrowLeft": next = current < 0 ? items.length - 1 : Math.max(0, current - 1); break
+      case "ArrowRight": next = Math.min(items.length - 1, current + 1); break
+      case "Home": next = 0; break
+      case "End": next = items.length - 1; break
+      default: return
+    }
+    event.preventDefault()
+    timeline.setSelection([items[next]!.id])
+    timeline.focus(items[next]!.id, { animation: true })
+    syncSelection()
+  }
 
   onMount(() => {
     if (!host) return
-    const items: DataItem[] = props.payload.items.map((item) => ({
-      id: item.id,
-      content: item.content,
-      group: item.group,
-      start: item.start,
-      end: "end" in item ? item.end : undefined,
-      type: item.kind === "point" ? "point" : item.kind,
-      style: item.color ? `background-color:${item.color};border-color:${item.color}` : undefined,
-    }))
+    const items = artifactTimelineItems(props.payload.items)
     const groups: DataGroup[] = (props.payload.groups ?? []).map((group) => ({
       id: group.id,
       content: group.label,
@@ -85,10 +108,7 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
     timeline.on("rangechanged", () => timeline?.redraw())
     resizeObserver = new ResizeObserver(() => timeline?.redraw())
     resizeObserver.observe(host)
-    timeline.on("select", (properties: { items?: Array<string | number> }) => {
-      const id = properties.items?.[0]
-      setSelectedID(id == null ? undefined : String(id))
-    })
+    timeline.on("select", syncSelection)
   })
 
   onCleanup(() => {
@@ -99,21 +119,29 @@ export function TimelineArtifact(props: { payload: TimelinePayload }) {
 
   return (
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Timeline">
-      <div class="msg-artifact-timeline__toolbar">
-        <Button variant="ghost" size="sm" tone="neutral" onClick={() => fitAll(true)}>
-          {t("artifact.timeline.fit")}
-        </Button>
-        <Button variant="ghost" size="sm" tone="neutral" onClick={() => timeline?.zoomIn(0.4, { animation: true })}>
-          {t("artifact.timeline.zoom_in")}
-        </Button>
-        <Button variant="ghost" size="sm" tone="neutral" onClick={() => timeline?.zoomOut(0.4, { animation: true })}>
-          {t("artifact.timeline.zoom_out")}
-        </Button>
+      <div>
+        <div class="msg-artifact-timeline__toolbar">
+          <Button variant="ghost" size="sm" tone="neutral" onClick={() => fitAll(true)}>
+            {t("artifact.timeline.fit")}
+          </Button>
+          <Button variant="ghost" size="sm" tone="neutral" onClick={() => timeline?.zoomIn(0.4, { animation: true })}>
+            {t("artifact.timeline.zoom_in")}
+          </Button>
+          <Button variant="ghost" size="sm" tone="neutral" onClick={() => timeline?.zoomOut(0.4, { animation: true })}>
+            {t("artifact.timeline.zoom_out")}
+          </Button>
+        </div>
+        <Show when={navigableItems().length}>
+          <p class="msg-artifact-timeline__hint" id={keyboardHintID}>{t("artifact.timeline.keyboard_hint")}</p>
+        </Show>
       </div>
       <div
         class="msg-artifact-timeline"
-        role="application"
+        role={navigableItems().length ? "application" : "region"}
         aria-label={props.payload.title}
+        aria-describedby={navigableItems().length ? keyboardHintID : undefined}
+        tabIndex={navigableItems().length ? 0 : undefined}
+        onKeyDown={navigate}
         ref={(element) => {
           host = element
         }}
