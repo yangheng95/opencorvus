@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [从交付文件浏览来源快照](records/2026-11/2026-11-27-source-snapshot-browser.md)
 - [快照文件浏览与结构化交付回看](records/2026-11/2026-11-27-snapshot-resource-review.md)
 - [CSV交付文件的回看与检索](records/2026-11/2026-11-27-csv-delivery-reading.md)
 - [工作簿逐项复核与表格检索](records/2026-11/2026-11-27-workbook-row-review.md)

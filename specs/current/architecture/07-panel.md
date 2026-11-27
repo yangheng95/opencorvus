@@ -5831,6 +5831,16 @@ same declared-node/ancestor set to filtering and query navigation. It also serve
 the JSON artifact inspector; published nodes, original JSON text and their
 existing complete exports retain their own data contracts.
 
+A directly inspected snapshot resource exposes Browse source snapshot in its
+file information. Its verified resource reference supplies the exact snapshot
+identity and Task to the existing read-only snapshot inspector in a Dialog.
+The source collection can include inputs beyond the formally declared
+deliverables; the completion declaration remains the delivery inventory source.
+The ready resource owns this window, and source retirement closes it. A file
+already selected inside that snapshot stays in the current browser. Snapshot
+query and selection use their existing bounded presentation owner. Localized
+window captions do not change the original read-request identity.
+
 Native Network uses Cytoscape's label-inclusive node dimensions for every
 supported layout. The common layout baseline keeps its declared layout and
 native fitting behavior with a unit spacing factor, while the Compound Spring

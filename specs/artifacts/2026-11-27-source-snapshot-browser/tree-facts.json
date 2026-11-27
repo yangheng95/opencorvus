@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "artifactID": "art_g0VcAHavW00PoQtVEAR7",
+  "renderer": "tree@1",
+  "title": "源文件目录树｜历史清单复核",
+  "files": 53,
+  "folders": 4,
+  "nodes": 57,
+  "defaultExpandedDepth": 5,
+  "first": {
+    "index": 1,
+    "file": "packages/overlay/src/components/App.tsx",
+    "bytes": 50553,
+    "kib": 49.3681640625
+  },
+  "last": {
+    "index": 53,
+    "file": "packages/overlay/src/components/InlineToolPart.tsx",
+    "bytes": 27225,
+    "kib": 26.5869140625
+  },
+  "metadata": "all original file/index/bytes/kib values preserved",
+  "hierarchy": "all complete actual path prefixes and files",
+  "export": {
+    "filename": "源文件目录树｜历史清单复核.json",
+    "mime": "application/json",
+    "bytes": 22022,
+    "nodes": 57
+  },
+  "currentSearch": {
+    "nativeNodes": 57,
+    "fileAndPrecisionPaths": "same original ancestor identities",
+    "jsonNodes": 10,
+    "eastNodes": 4,
+    "southNodes": 4
+  }
+}

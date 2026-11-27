@@ -34,6 +34,7 @@ import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { SearchField } from "./ui/SearchField"
 import { Disclosure } from "./ui/Disclosure"
+import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails } from "../utils/error-details"
 import { captureApiAuthority } from "../services/api"
@@ -174,7 +175,7 @@ function artifactByteCount(bytes: number): string {
   return t("chat.artifacts.byte_count", { count: new Intl.NumberFormat(localeTag()).format(bytes) })
 }
 
-function ArtifactFileInformation(props: { content: ConversationArtifactContent }) {
+function ArtifactFileInformation(props: { content: ConversationArtifactContent; onBrowseSnapshot?: () => void }) {
   const snapshotID = () => {
     const locator = props.content.locator as CanonicalArtifactReadLocator
     if (locator.source === "task_artifact_resource") return locator.ref.snapshot.snapshot_id
@@ -207,12 +208,24 @@ function ArtifactFileInformation(props: { content: ConversationArtifactContent }
             <dd><code>{props.content.sha256}</code></dd>
           </div>
         </dl>
+        <Show when={props.onBrowseSnapshot}>
+          <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => props.onBrowseSnapshot?.()}>
+            {t("chat.artifacts.browse_snapshot")}
+          </Button>
+        </Show>
       </Disclosure.Content>
     </Disclosure.Root>
   )
 }
 
-function ArtifactContentView(props: { taskID: string; title: string; content: ConversationArtifactContent }) {
+function ArtifactContentView(props: { taskID: string; title: string; content: ConversationArtifactContent; insideSnapshot?: boolean }) {
+  const [snapshotOpen, setSnapshotOpen] = createSignal(false)
+  const snapshotLocator = createMemo<ArtifactReadLocator | undefined>(() => {
+    const locator = props.content.locator as CanonicalArtifactReadLocator
+    return !props.insideSnapshot && locator.source === "task_artifact_resource"
+      ? { source: "task_artifact_snapshot", snapshot: locator.ref.snapshot }
+      : undefined
+  })
   const readingStateKey = () => JSON.stringify([
     "artifact-reader", "resource", props.taskID,
     artifactReadLocatorKey(props.content.locator as CanonicalArtifactReadLocator),
@@ -241,7 +254,36 @@ function ArtifactContentView(props: { taskID: string; title: string; content: Co
 
   return (
     <div class="conversation-artifact-inspector__content">
-      <ArtifactFileInformation content={props.content} />
+      <ArtifactFileInformation
+        content={props.content}
+        onBrowseSnapshot={snapshotLocator() ? () => setSnapshotOpen(true) : undefined}
+      />
+      <Show when={snapshotOpen() && snapshotLocator()}>
+        {(locator) => (
+          <Dialog
+            open={snapshotOpen()}
+            onClose={() => setSnapshotOpen(false)}
+            title={t("chat.artifacts.source_snapshot_title", { name: filename() })}
+            wider
+            headerActions={
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone="neutral"
+                title={t("common.close")}
+                aria-label={t("common.close")}
+                onClick={() => setSnapshotOpen(false)}
+              >
+                <Icon name="close" />
+              </Button>
+            }
+          >
+            <p class="conversation-artifact-inspector__status">{t("chat.artifacts.source_snapshot_hint")}</p>
+            <ConversationArtifactInspector taskID={props.taskID} title={props.title} locator={locator()} />
+          </Dialog>
+        )}
+      </Show>
       <Switch>
         <Match when={csvTable()}>
           {(payload) => (
@@ -468,7 +510,7 @@ function SnapshotArtifactView(props: {
           <ArtifactReadFailure error={resourceError()} retry={retryResource} />
         </Show>
         <Show when={readyResource()} keyed>
-          {(resolved) => <ArtifactContentView taskID={resolved.request.input.taskID} title={resolved.request.input.title} content={resolved.content} />}
+          {(resolved) => <ArtifactContentView taskID={resolved.request.input.taskID} title={resolved.request.input.title} content={resolved.content} insideSnapshot />}
         </Show>
       </div>
     </ArtifactFrame>

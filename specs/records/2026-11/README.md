@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [从交付文件浏览来源快照](2026-11-27-source-snapshot-browser.md)
 - [快照文件浏览与结构化交付回看](2026-11-27-snapshot-resource-review.md)
 - [CSV交付文件的回看与检索](2026-11-27-csv-delivery-reading.md)
 - [工作簿逐项复核与表格检索](2026-11-27-workbook-row-review.md)

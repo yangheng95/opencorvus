@@ -1,0 +1,112 @@
+{
+  "runs": [
+    {
+      "label": "run106",
+      "pid": 30888,
+      "url": "http://127.0.0.1:51486/",
+      "sourceRun": "run105",
+      "startedAt": 1795795125937,
+      "finishedAt": 1795795536217,
+      "originalExecHandle": 37127,
+      "originalHandleJoinedExitCode": 0,
+      "state": "exited",
+      "exitCode": 0,
+      "stopReason": "owned_stop_request",
+      "preflight": {
+        "sessionID": "ses_hATWuszxO3PugKU6jfH9",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795795536139,
+        "settledAt": 1795795536139,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "label": "run107",
+      "pid": 33048,
+      "url": "http://127.0.0.1:50766/",
+      "sourceRun": "run106",
+      "startedAt": 1795795612595,
+      "finishedAt": 1795796137505,
+      "originalExecHandle": 12724,
+      "originalHandleJoinedExitCode": 0,
+      "state": "exited",
+      "exitCode": 0,
+      "stopReason": "owned_stop_request",
+      "preflight": {
+        "sessionID": "ses_hh81SAJ5FHaiqQ5olTOI",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "providerDrain": {
+        "startedAt": 1795796137436,
+        "settledAt": 1795796137436,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "requests": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "httpStatus": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "businessModelTasksThisBatch": 0,
+  "realModelCalls": 4,
+  "modelCallPurpose": "paired credential/catalog/streaming preflight only; real completed Task product workflow reused unchanged",
+  "browserTabsClosed": [
+    "241805189",
+    "241805194"
+  ],
+  "finalBuild": {
+    "originalExecHandle": 99343,
+    "joinedExitCode": 0,
+    "seconds": 56.87
+  },
+  "checks": {
+    "typecheck": "passed",
+    "i18n": "2 locales / 3370 top-level keys",
+    "docs": "353 ops / 26 groups",
+    "architecture": "20 current documents"
+  },
+  "screenshots": {
+    "before": 1,
+    "acceptedAfter": 13,
+    "format": "unaltered native JPEG"
+  },
+  "uiTestAutomation": "none"
+}
