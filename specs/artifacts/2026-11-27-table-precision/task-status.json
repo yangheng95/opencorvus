@@ -1,0 +1,35 @@
+{
+  "sessionID": "ses_hy64GcYIySY4OaXfKbNq",
+  "finish": "stop",
+  "error": null,
+  "tools": [
+    {
+      "id": "prt_g0Vc9r29l00bNQBHdtcB",
+      "messageID": "msg_g0Vc9r18v00IMY9V4o2J",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9r3qp00GTQ3QVGmd",
+      "messageID": "msg_g0Vc9r2LF00W7zETAAby",
+      "tool": "publish_interactive_artifact",
+      "status": "completed"
+    }
+  ],
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

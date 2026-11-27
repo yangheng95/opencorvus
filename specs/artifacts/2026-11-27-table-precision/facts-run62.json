@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "label": "run62",
+  "sessionID": "ses_hy64GcYIySY4OaXfKbNq",
+  "artifactID": "art_g0Vc9rD9900G8mQhzR1c",
+  "protectedFiles": 23,
+  "protectedOldRows": 2070,
+  "sourceRows": 53,
+  "originalPage2Indices": [
+    51,
+    52,
+    53
+  ],
+  "firstExactValue": "49.3681640625",
+  "first5NumericSort": [
+    {
+      "index": 14,
+      "bytes": 282,
+      "kib": "0.275390625"
+    },
+    {
+      "index": 45,
+      "bytes": 474,
+      "kib": "0.462890625"
+    },
+    {
+      "index": 18,
+      "bytes": 716,
+      "kib": "0.69921875"
+    },
+    {
+      "index": 25,
+      "bytes": 787,
+      "kib": "0.7685546875"
+    },
+    {
+      "index": 36,
+      "bytes": 1175,
+      "kib": "1.1474609375"
+    }
+  ],
+  "largest3": [
+    {
+      "index": 17,
+      "bytes": 76613,
+      "kib": "74.8173828125"
+    },
+    {
+      "index": 8,
+      "bytes": 78192,
+      "kib": "76.359375"
+    },
+    {
+      "index": 48,
+      "bytes": 122715,
+      "kib": "119.8388671875"
+    }
+  ],
+  "integrity": "ok",
+  "formalTools": "read/publish completed",
+  "finish": "stop"
+}

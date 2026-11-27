@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多页表格数值精度与真实清单往返](2026-11-27-table-precision.md)
 - [作者图表配置与主题缺省的优先级](2026-11-27-chart-author-style.md)
 - [原生图表导出的主题底色](2026-11-27-chart-export-surface.md)
 - [文档来源引用返回与真实文件往返](2026-11-27-file-review-roundtrip.md)

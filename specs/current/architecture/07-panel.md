@@ -5798,11 +5798,19 @@ Native Table cells format actual booleans, numbers and dates with the current
 product locale. Boolean columns do not apply truthiness to mixed scalar source
 values: a string `"false"` remains that string in a boolean column. The shared
 pure presentation owns both display text and literal search across original and
-formatted values. Every declared column can participate, including boolean or
+formatted values. Native number formatting preserves the representable value's
+significant digits instead of applying the locale formatter's default three
+fraction digits; grouping and separators still follow the product locale.
+Every declared column can participate, including boolean or
 initially empty columns. Query, current presentation and declared column types
 derive one controlled filter input, so locale changes refresh matching rows as
 well as cells without replacing the mounted table's query or sorting state.
-Pagination retains TanStack's existing reset behavior when filtered results change.
+TanStack retains the sole pagination state. When its native pre-pagination row
+model changes through data, filtering, sorting or locale-aware matching, one
+Solid dependency resets only the page index with resetPageIndex(true). Implicit
+initial-state resets are disabled: the Solid adapter's live store aliases that
+initial object, so it cannot supply an immutable first-page baseline. Page size
+remains 50 and ordinary page navigation does not change the pre-pagination model.
 When a Table query or sorting is active, its toolbar explains in the current
 product language that downloads include the full table in its original row order.
 This reads the existing local view state; native Table exports and original CSV

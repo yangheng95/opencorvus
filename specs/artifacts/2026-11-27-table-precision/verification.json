@@ -1,0 +1,142 @@
+{
+  "status": "passed",
+  "requests": 8,
+  "runs": [
+    {
+      "label": "run62",
+      "requests": 6,
+      "preflight": {
+        "sessionID": "ses_hTUkho1zzowcIyaV5V2P",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795766605173,
+        "settledAt": 1795766605173,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 5130,
+      "originalHandleJoinedExitCode": 0
+    },
+    {
+      "label": "run63",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_h3BeRRcluDCuWQTt58zY",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "drain": {
+        "startedAt": 1795767001786,
+        "settledAt": 1795767001786,
+        "allReadersSettled": true
+      },
+      "credentialCleanup": "passed",
+      "originalHandle": 86565,
+      "originalHandleJoinedExitCode": 0
+    }
+  ],
+  "nativeScreenshots": 12,
+  "nativeFinalScreenshots": 7,
+  "sourceRows": 53,
+  "sourceBytes": 4049,
+  "actualDownloadBytes": 4511,
+  "actualDownloadRows": 53,
+  "checks": {
+    "sourceAndPublishedRows": "all 53, exact numeric values and original order",
+    "protectedFiles": 23,
+    "protectedOldRows": 2070,
+    "sqliteIntegrity": "ok",
+    "nativePage2": "original indices 51/52/53, 2/2",
+    "nativeFilterFromPage2": "49.3681640625 -> App.tsx exact value, 1/53, page 1/1",
+    "nativeSort": "minimum 282/0.275390625 and maximum 122715/119.8388671875; sorted page2 and descending reset verified",
+    "nativeLocale": "English/dark retained query, descending sort, full numeric value and 1/1",
+    "downloadScope": "real CSV downloaded with 1-row query active, all 53 in original order",
+    "typecheck": "passed",
+    "build": "53.90s, original handle 30911 joined exit0",
+    "rendererPublicSurface": "passed",
+    "docs": "353 operations / 26 groups",
+    "architectureIndex": "20 current documents",
+    "uiAutomation": "none added or run"
+  },
+  "limits": [
+    "CSV inspector shares the one Table component and was source-audited; this batch manually exercised the real table@1 artifact.",
+    "Cannot recover precision already lost before a value became a JSON number or lexical trailing zeroes.",
+    "Desktop only; no Office/native external editor/mobile acceptance.",
+    "Pagination is renderer-local; no Task/Mission/Session execution scheduling anomaly occurred."
+  ],
+  "nativeDownloadArchive": {
+    "file": "native-download.zip",
+    "member": "源文件精度核对表.csv",
+    "nativeBytes": 4511,
+    "readableCsv": "downloaded-inventory.csv",
+    "note": "Git normalizes text-file line endings; ZIP retains exact native bytes. Function checks compare all 53 parsed rows and values.",
+    "nativeSourceMember": "source-files.csv",
+    "nativeSourceBytes": 4049
+  }
+}

@@ -1,0 +1,320 @@
+[
+  {
+    "index": 1,
+    "file": "packages/overlay/src/components/App.tsx",
+    "bytes": 50553,
+    "kib": "49.3681640625"
+  },
+  {
+    "index": 2,
+    "file": "packages/overlay/src/components/AppDialogHost.tsx",
+    "bytes": 9470,
+    "kib": "9.248046875"
+  },
+  {
+    "index": 3,
+    "file": "packages/overlay/src/components/ArchitectPanel.tsx",
+    "bytes": 3265,
+    "kib": "3.1884765625"
+  },
+  {
+    "index": 4,
+    "file": "packages/overlay/src/components/ArtifactResourceDownload.tsx",
+    "bytes": 3042,
+    "kib": "2.970703125"
+  },
+  {
+    "index": 5,
+    "file": "packages/overlay/src/components/AssistantMessageFailure.tsx",
+    "bytes": 1494,
+    "kib": "1.458984375"
+  },
+  {
+    "index": 6,
+    "file": "packages/overlay/src/components/Avatar.tsx",
+    "bytes": 1535,
+    "kib": "1.4990234375"
+  },
+  {
+    "index": 7,
+    "file": "packages/overlay/src/components/Board.tsx",
+    "bytes": 8483,
+    "kib": "8.2841796875"
+  },
+  {
+    "index": 8,
+    "file": "packages/overlay/src/components/BrowserPreviewPanel.tsx",
+    "bytes": 78192,
+    "kib": "76.359375"
+  },
+  {
+    "index": 9,
+    "file": "packages/overlay/src/components/Card.tsx",
+    "bytes": 12274,
+    "kib": "11.986328125"
+  },
+  {
+    "index": 10,
+    "file": "packages/overlay/src/components/CardHeader.tsx",
+    "bytes": 5035,
+    "kib": "4.9169921875"
+  },
+  {
+    "index": 11,
+    "file": "packages/overlay/src/components/CardHeaderChrome.tsx",
+    "bytes": 10281,
+    "kib": "10.0400390625"
+  },
+  {
+    "index": 12,
+    "file": "packages/overlay/src/components/CardOverflowMenu.tsx",
+    "bytes": 4665,
+    "kib": "4.5556640625"
+  },
+  {
+    "index": 13,
+    "file": "packages/overlay/src/components/CardParts.tsx",
+    "bytes": 25360,
+    "kib": "24.765625"
+  },
+  {
+    "index": 14,
+    "file": "packages/overlay/src/components/CardTodoSummary.tsx",
+    "bytes": 282,
+    "kib": "0.275390625"
+  },
+  {
+    "index": 15,
+    "file": "packages/overlay/src/components/ChangesPanel.tsx",
+    "bytes": 3755,
+    "kib": "3.6669921875"
+  },
+  {
+    "index": 16,
+    "file": "packages/overlay/src/components/ChatBubble.tsx",
+    "bytes": 15829,
+    "kib": "15.4580078125"
+  },
+  {
+    "index": 17,
+    "file": "packages/overlay/src/components/ChatComposer.tsx",
+    "bytes": 76613,
+    "kib": "74.8173828125"
+  },
+  {
+    "index": 18,
+    "file": "packages/overlay/src/components/ChatHeaderRightDockToggle.tsx",
+    "bytes": 716,
+    "kib": "0.69921875"
+  },
+  {
+    "index": 19,
+    "file": "packages/overlay/src/components/CommandMenuSurface.tsx",
+    "bytes": 5519,
+    "kib": "5.3896484375"
+  },
+  {
+    "index": 20,
+    "file": "packages/overlay/src/components/CommandPalette.tsx",
+    "bytes": 24598,
+    "kib": "24.021484375"
+  },
+  {
+    "index": 21,
+    "file": "packages/overlay/src/components/ComposerAttachmentPreview.tsx",
+    "bytes": 3385,
+    "kib": "3.3056640625"
+  },
+  {
+    "index": 22,
+    "file": "packages/overlay/src/components/ComposerMentionMenu.tsx",
+    "bytes": 8414,
+    "kib": "8.216796875"
+  },
+  {
+    "index": 23,
+    "file": "packages/overlay/src/components/ComposerModelSelector.tsx",
+    "bytes": 24406,
+    "kib": "23.833984375"
+  },
+  {
+    "index": 24,
+    "file": "packages/overlay/src/components/ComposerPermissionControl.tsx",
+    "bytes": 4504,
+    "kib": "4.3984375"
+  },
+  {
+    "index": 25,
+    "file": "packages/overlay/src/components/ComposerReferenceFeedback.tsx",
+    "bytes": 787,
+    "kib": "0.7685546875"
+  },
+  {
+    "index": 26,
+    "file": "packages/overlay/src/components/ComposerReferenceSelector.tsx",
+    "bytes": 29950,
+    "kib": "29.248046875"
+  },
+  {
+    "index": 27,
+    "file": "packages/overlay/src/components/ComputerControlSurface.tsx",
+    "bytes": 3408,
+    "kib": "3.328125"
+  },
+  {
+    "index": 28,
+    "file": "packages/overlay/src/components/ConfigDialogHost.tsx",
+    "bytes": 35070,
+    "kib": "34.248046875"
+  },
+  {
+    "index": 29,
+    "file": "packages/overlay/src/components/ConnectionBadge.tsx",
+    "bytes": 2340,
+    "kib": "2.28515625"
+  },
+  {
+    "index": 30,
+    "file": "packages/overlay/src/components/ConnectionBanner.tsx",
+    "bytes": 4621,
+    "kib": "4.5126953125"
+  },
+  {
+    "index": 31,
+    "file": "packages/overlay/src/components/ContinuousGoalControl.tsx",
+    "bytes": 43706,
+    "kib": "42.681640625"
+  },
+  {
+    "index": 32,
+    "file": "packages/overlay/src/components/Conversation.tsx",
+    "bytes": 52789,
+    "kib": "51.5517578125"
+  },
+  {
+    "index": 33,
+    "file": "packages/overlay/src/components/ConversationAgentRail.tsx",
+    "bytes": 16188,
+    "kib": "15.80859375"
+  },
+  {
+    "index": 34,
+    "file": "packages/overlay/src/components/ConversationArtifactInspector.tsx",
+    "bytes": 19634,
+    "kib": "19.173828125"
+  },
+  {
+    "index": 35,
+    "file": "packages/overlay/src/components/ConversationArtifactSummary.tsx",
+    "bytes": 7074,
+    "kib": "6.908203125"
+  },
+  {
+    "index": 36,
+    "file": "packages/overlay/src/components/ConversationCard.tsx",
+    "bytes": 1175,
+    "kib": "1.1474609375"
+  },
+  {
+    "index": 37,
+    "file": "packages/overlay/src/components/ConversationSearchDialog.tsx",
+    "bytes": 11925,
+    "kib": "11.6455078125"
+  },
+  {
+    "index": 38,
+    "file": "packages/overlay/src/components/ConversationTurnArtifactSummary.tsx",
+    "bytes": 17268,
+    "kib": "16.86328125"
+  },
+  {
+    "index": 39,
+    "file": "packages/overlay/src/components/ConversationTurnControl.tsx",
+    "bytes": 9008,
+    "kib": "8.796875"
+  },
+  {
+    "index": 40,
+    "file": "packages/overlay/src/components/DelegatedContextDisclosure.tsx",
+    "bytes": 1758,
+    "kib": "1.716796875"
+  },
+  {
+    "index": 41,
+    "file": "packages/overlay/src/components/DiffPreviewPanel.tsx",
+    "bytes": 9686,
+    "kib": "9.458984375"
+  },
+  {
+    "index": 42,
+    "file": "packages/overlay/src/components/DiffView.tsx",
+    "bytes": 11107,
+    "kib": "10.8466796875"
+  },
+  {
+    "index": 43,
+    "file": "packages/overlay/src/components/ExpertSquadMarketInstallFeedback.tsx",
+    "bytes": 1404,
+    "kib": "1.37109375"
+  },
+  {
+    "index": 44,
+    "file": "packages/overlay/src/components/ExpertSquadMarketSearchFeedback.tsx",
+    "bytes": 1267,
+    "kib": "1.2373046875"
+  },
+  {
+    "index": 45,
+    "file": "packages/overlay/src/components/FileChangesPanel.tsx",
+    "bytes": 474,
+    "kib": "0.462890625"
+  },
+  {
+    "index": 46,
+    "file": "packages/overlay/src/components/FileChangesView.tsx",
+    "bytes": 34258,
+    "kib": "33.455078125"
+  },
+  {
+    "index": 47,
+    "file": "packages/overlay/src/components/FileEditorPane.tsx",
+    "bytes": 67820,
+    "kib": "66.23046875"
+  },
+  {
+    "index": 48,
+    "file": "packages/overlay/src/components/FileExplorerPanel.tsx",
+    "bytes": 122715,
+    "kib": "119.8388671875"
+  },
+  {
+    "index": 49,
+    "file": "packages/overlay/src/components/FilePart.tsx",
+    "bytes": 24759,
+    "kib": "24.1787109375"
+  },
+  {
+    "index": 50,
+    "file": "packages/overlay/src/components/GoalDialogHost.tsx",
+    "bytes": 3446,
+    "kib": "3.365234375"
+  },
+  {
+    "index": 51,
+    "file": "packages/overlay/src/components/GoalGroup.tsx",
+    "bytes": 6867,
+    "kib": "6.7060546875"
+  },
+  {
+    "index": 52,
+    "file": "packages/overlay/src/components/ImagePreview.tsx",
+    "bytes": 29934,
+    "kib": "29.232421875"
+  },
+  {
+    "index": 53,
+    "file": "packages/overlay/src/components/InlineToolPart.tsx",
+    "bytes": 27225,
+    "kib": "26.5869140625"
+  }
+]

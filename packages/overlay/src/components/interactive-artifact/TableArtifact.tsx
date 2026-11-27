@@ -8,7 +8,7 @@ import {
   type ColumnDef,
   type SortingState,
 } from "@tanstack/solid-table"
-import { For, Show, createMemo, createSignal } from "solid-js"
+import { For, Show, createEffect, createMemo, createSignal, on } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
 import type { ArtifactExport } from "../../services/artifact-export"
 import { createArtifactTablePresentation } from "../../services/artifact-table"
@@ -74,8 +74,12 @@ export function TableArtifact(props: {
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    autoResetPageIndex: false,
     initialState: { pagination: { pageSize: 50 } },
   })
+  // The Solid adapter's store shares initialState; reset to the native default
+  // index rather than replaying that mutable snapshot after view changes.
+  createEffect(on(() => table.getPrePaginationRowModel(), () => table.resetPageIndex(true)))
 
   return (
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Table" exportFiles={props.exportFiles}>

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多页表格数值与原始清单证据](2026-11-27-table-precision/README.md)
 - [作者图表配置优先级证据](2026-11-27-chart-author-style/README.md)
 - [原生图表导出底色证据](2026-11-27-chart-export-surface/README.md)
 - [文档引用返回与真实文件往返证据](2026-11-27-file-review-roundtrip/README.md)

@@ -6,7 +6,7 @@ export type ArtifactTableCell = TablePayload["rows"][number][string] | undefined
 export type ArtifactTableDataType = TablePayload["columns"][number]["dataType"]
 
 export function createArtifactTablePresentation(locale: string, labels: { yes: string; no: string }) {
-  const numbers = new Intl.NumberFormat(locale)
+  const numbers = new Intl.NumberFormat(locale, { maximumSignificantDigits: 21 })
   const dates = new Intl.DateTimeFormat(locale, { dateStyle: "medium" })
   const formatCell = (value: ArtifactTableCell, dataType: ArtifactTableDataType): string => {
     if (value === null || value === undefined) return "—"
