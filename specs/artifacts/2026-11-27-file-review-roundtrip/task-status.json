@@ -1,0 +1,170 @@
+{
+  "sessionID": "ses_hYtkYFI0mCayMjiebrdn",
+  "finish": "stop",
+  "error": null,
+  "tools": [
+    {
+      "id": "prt_g0Vc9W926000uBfKszYr",
+      "messageID": "msg_g0Vc9W83400vtgcsITMw",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9W9qp005d37hTDTJ",
+      "messageID": "msg_g0Vc9W9Ar009EU0roVOv",
+      "tool": "glob",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9WAwH0028EUa2ilu",
+      "messageID": "msg_g0Vc9WA0100KCH7X9RWH",
+      "tool": "glob",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9WgOW00LInqP4CPY",
+      "messageID": "msg_g0Vc9WfPQ00fVwCVwANW",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9WhAx000QUJfOvAN",
+      "messageID": "msg_g0Vc9WgVy00MpkTODcky",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9Wi0O00lSxzVnKpx",
+      "messageID": "msg_g0Vc9WhG500NxjLgSkKo",
+      "tool": "bash",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9Wk2600NHNLA2zIe",
+      "messageID": "msg_g0Vc9WjQU00KjMpK9onJ",
+      "tool": "apply_patch",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9Ws6x00wdEl1gZhE",
+      "messageID": "msg_g0Vc9WrB200d4dDIRj7W",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9WtWd00J5Ldx22SK",
+      "messageID": "msg_g0Vc9WsI300u5w38bQuC",
+      "tool": "bash",
+      "status": "completed"
+    }
+  ],
+  "reportExists": true,
+  "reportBytes": 3855,
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

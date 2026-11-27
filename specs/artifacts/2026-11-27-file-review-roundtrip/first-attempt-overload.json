@@ -1,0 +1,85 @@
+{
+  "sessionID": "ses_hYtkYFI0mCayMjiebrdn",
+  "finish": "error",
+  "error": {
+    "name": "APIError",
+    "data": {
+      "message": "Our servers are currently overloaded. Please try again later.",
+      "isRetryable": false,
+      "responseBody": "{\"type\":\"error\",\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\"},\"data\":{\"type\":\"error\",\"sequence_number\":3,\"error\":{\"type\":\"service_unavailable_error\",\"code\":\"server_is_overloaded\",\"message\":\"Our servers are currently overloaded. Please try again later.\",\"param\":null}}}"
+    }
+  },
+  "tools": [
+    {
+      "id": "prt_g0Vc9W926000uBfKszYr",
+      "messageID": "msg_g0Vc9W83400vtgcsITMw",
+      "tool": "read",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9W9qp005d37hTDTJ",
+      "messageID": "msg_g0Vc9W9Ar009EU0roVOv",
+      "tool": "glob",
+      "status": "completed"
+    },
+    {
+      "id": "prt_g0Vc9WAwH0028EUa2ilu",
+      "messageID": "msg_g0Vc9WA0100KCH7X9RWH",
+      "tool": "glob",
+      "status": "completed"
+    }
+  ],
+  "reportExists": false,
+  "reportBytes": null,
+  "streams": [
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "reading",
+      "terminal": null
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    },
+    {
+      "model": "gpt-6.1-sol",
+      "streaming": true,
+      "status": 200,
+      "reader": "settled",
+      "terminal": "eof"
+    }
+  ]
+}

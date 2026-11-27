@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [文档引用返回与真实文件往返证据](2026-11-27-file-review-roundtrip/README.md)
 - [图表主题、尺寸与悬停明细证据](2026-11-27-chart-theme-text/README.md)
 - [原生图表尺寸与框选保持证据](2026-11-27-chart-selection-review/README.md)
 - [销售看板筛选与空结果证据](2026-11-27-filtered-sales-dashboard/README.md)

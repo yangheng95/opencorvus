@@ -1370,6 +1370,13 @@ selectedFileTarget identity. Absolute paths keep their existing meaning. The
 same global click delegate and file-workbench admission retain the document's
 project scope, cited range, unsaved decision and read-only source authority.
 Chat and artifact project references continue to use their existing scope.
+Code-span citations in that Preview also carry the same source-document origin
+through the existing editor-selection route. When that route opens the in-app
+workbench, the current file admission retains its return chain and reading
+position; native editor preferences keep their existing routing. Code-span
+paths retain project scope, while explicit links retain document-relative
+resolution. Position capture and restoration enumerate both current link kinds
+and verify the activated element's own path and label before restoring focus.
 Document-relative Markdown images use that same server-path conversion and
 the existing scoped file-content reader. Renderer-produced local image markup
 becomes a lazy presentation slot before insertion; it mounts the existing

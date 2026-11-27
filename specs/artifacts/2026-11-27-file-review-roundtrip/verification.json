@@ -1,0 +1,191 @@
+{
+  "status": "passed",
+  "requestCount": 17,
+  "runs": [
+    {
+      "label": "run55",
+      "requests": 15,
+      "preflight": {
+        "sessionID": "ses_hQ3P8ouqBms2JoJ0PeMS",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "cleanup": "passed",
+      "exitCode": 0
+    },
+    {
+      "label": "run56",
+      "requests": 2,
+      "preflight": {
+        "sessionID": "ses_hhVP4CZFkKdTKn6YXSkC",
+        "credential": "usable",
+        "catalog": "projected",
+        "actualModel": "gpt-6.1-sol",
+        "streaming": true
+      },
+      "streams": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "reader": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "cleanup": "passed",
+      "exitCode": 0
+    }
+  ],
+  "providerSemantics": {
+    "firstAttempt": "streamed server_is_overloaded; document not created",
+    "userFollowup": "real UI message, completed write and verification, finish=stop"
+  },
+  "documents": {
+    "generatedBytes": 3855,
+    "finalSavedBytes": 4141,
+    "actualDownloads": [
+      {
+        "name": "销售复核 #1.md",
+        "bytes": 3976
+      },
+      {
+        "name": "销售复核 #1 (1).md",
+        "bytes": 3976
+      },
+      {
+        "name": "销售复核 #1 (2).md",
+        "bytes": 4141
+      }
+    ]
+  },
+  "checks": {
+    "protectedProject": "21 original files / 1959 old rows",
+    "pathAndHeadingPositiveTests": "33 passed / 56 assertions",
+    "typecheck": "passed",
+    "build": "passed, 52.84s",
+    "rendererPublicSurface": "passed",
+    "manualScreenshots": 23,
+    "uiAutomationTests": "none added or run",
+    "limits": [
+      "Native preferred editor route source-audited, no external editor launched",
+      "Desktop only; no Office authentication interaction",
+      "DOM reading points support manual screenshots; no pixel or hash correctness gate"
+    ]
+  }
+}

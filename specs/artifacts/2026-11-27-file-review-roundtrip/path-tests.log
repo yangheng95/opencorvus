@@ -1,0 +1,52 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-854539575ae8f27f\published\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/file-reference.test.ts test/markdown-section.test.ts
+bun test v1.4.3 (c6da4a4d3)
+
+test\file-reference.test.ts:
+(pass) explicit relative Markdown files resolve under the document directory: ../release%20bundle.zip [0.63ms]
+(pass) explicit relative Markdown files resolve under the document directory: ../LICENSE [0.05ms]
+(pass) explicit relative Markdown files resolve under the document directory: ./报告%20%2523.bundle [0.15ms]
+(pass) an explicitly relative extensionless reference retains its cited lines [0.10ms]
+(pass) Markdown file links retain headings and the existing source-line grammar [0.06ms]
+(pass) document paths decode separately from encoded Markdown headings [0.03ms]
+(pass) a cited location is split off the path it qualifies [0.06ms]
+(pass) a path without a well-formed location survives intact [0.04ms]
+(pass) a cited line becomes an editor range [0.01ms]
+(pass) a cited column survives the location-to-range data mapping [0.02ms]
+(pass) a file line anchor retains its exact location: src/example.ts#L30 [0.01ms]
+(pass) a file line anchor retains its exact location: 资料/例子.md#L30-L32
+(pass) a file line anchor retains its exact location: C:\repo\example.ts#L30-L30 [0.02ms]
+(pass) an anchored line range becomes the inclusive editor range [0.04ms]
+(pass) a source-style colon range retains its complete location: src/example.ts:20-22 [0.02ms]
+(pass) a source-style colon range retains its complete location: 资料/范围示例.txt:20-22
+(pass) a source-style colon range retains its complete location: C:\repo\example.ts:20-22
+(pass) a source-style colon range retains its complete location: example.ts:20-20
+(pass) a source-style range becomes the same inclusive workbench range [0.02ms]
+(pass) an uninterpreted colon range retains the original reference: src/example.ts:0-2 [0.01ms]
+(pass) an uninterpreted colon range retains the original reference: src/example.ts:20-0
+(pass) an uninterpreted colon range retains the original reference: src/example.ts:22-20
+(pass) an uninterpreted colon range retains the original reference: src/example.ts:20-9007199254740992
+(pass) an uninterpreted fragment retains the complete original reference: src/example.ts#section [0.01ms]
+(pass) an uninterpreted fragment retains the complete original reference: src/example.ts#L0 [0.01ms]
+(pass) an uninterpreted fragment retains the complete original reference: src/example.ts#L30-L12
+(pass) an uninterpreted fragment retains the complete original reference: src/example.ts#L9007199254740992
+
+ 27 pass
+ 0 fail
+ 42 expect() calls
+Ran 27 tests across 1 file. [314.00ms]
+bun test v1.4.3 (c6da4a4d3)
+
+test\markdown-section.test.ts:
+(pass) section fragments locate the corresponding readable heading [0.43ms]
+(pass) duplicate labels and authored suffixes follow their document order [0.07ms]
+(pass) encoded Unicode fragments locate exact labels and repeated chapters [0.25ms]
+(pass) readable nested formatting and literal entity spellings retain distinct labels [0.05ms]
+(pass) each document starts its own repeated-heading sequence [0.03ms]
+(pass) authored spaces in readable code labels retain their own section identity [0.04ms]
+
+ 6 pass
+ 0 fail
+ 14 expect() calls
+Ran 6 tests across 1 file. [135.00ms]

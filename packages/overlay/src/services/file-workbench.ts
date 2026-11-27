@@ -145,6 +145,11 @@ export interface FileEditorTarget extends FileOperationScope {
   previousDocument?: FileEditorTarget
 }
 
+export interface FileDocumentOrigin {
+  target: FileEditorTarget
+  position: FileDocumentPosition
+}
+
 const [selectedFileTarget, setSelectedFileTarget] = createSignal<FileEditorTarget | null>(null)
 const [fileWorkbenchOpen, setFileWorkbenchOpen] = createSignal(false)
 const [fileWorkbenchRevision, setFileWorkbenchRevision] = createSignal(0)
@@ -456,7 +461,7 @@ export function openFileReference(
   path: string,
   scope: FileOperationScope,
   location?: FileRevealLocation,
-  document?: { target: FileEditorTarget; position: FileDocumentPosition },
+  document?: FileDocumentOrigin,
 ): Promise<boolean> {
   const authority = scope.authority ?? captureApiAuthority()
   const absolute = isAbsoluteServerPath(path)

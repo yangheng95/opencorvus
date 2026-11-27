@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "label": "run55",
+  "protectedFiles": 21,
+  "protectedRows": 1959,
+  "report": "交付复核/销售复核 #1.md",
+  "generatedBytes": 3855,
+  "savedBytes": 3976,
+  "orders": 5,
+  "net": "35.60",
+  "downloads": [
+    {
+      "name": "销售复核 #1.md",
+      "bytes": 3976
+    },
+    {
+      "name": "销售复核 #1 (1).md",
+      "bytes": 3976
+    }
+  ],
+  "liveAPI": {
+    "type": "text",
+    "conditionalWriteRevision": "present"
+  },
+  "integrity": "ok"
+}

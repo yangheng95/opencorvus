@@ -26,6 +26,7 @@ import {
   fileEditorReserved,
   FileEditorAdmissionError,
   type FileEditorCloseHandle,
+  type FileDocumentOrigin,
 } from "./file-workbench"
 import { abortChatRequest, setChatAttachments } from "../store/messages"
 import { clearConversationUiState } from "../store/conversation-ui"
@@ -1370,6 +1371,7 @@ export async function openProjectPathInEditor(
 export async function openPathInSelectedEditor(
   target: string,
   location?: Partial<FileReferenceLocation>,
+  document?: FileDocumentOrigin,
 ): Promise<void> {
   const path = editorTargetPath(target)
   if (!path) {
@@ -1382,7 +1384,7 @@ export async function openPathInSelectedEditor(
     return
   }
   if (!getHostTransport().capabilities.nativeCommands["workspace.openProjectEditor"]) {
-    await openProjectPathInWorkbench(target, location)
+    await openProjectPathInWorkbench(target, location, document)
     return
   }
   await openProjectPathInEditor(settingsStore.projectEditor, path, location)
@@ -1412,14 +1414,18 @@ export async function openProjectFile(target: string, location?: Partial<FileRef
   await nativeOpen(path)
 }
 
-async function openProjectPathInWorkbench(target: string, location?: Partial<FileReference>): Promise<void> {
+async function openProjectPathInWorkbench(
+  target: string,
+  location?: Partial<FileReference>,
+  document?: FileDocumentOrigin,
+): Promise<void> {
   const authority = captureApiAuthority()
-  const directory = activeDirectory().trim()
+  const directory = document ? document.target.directory : activeDirectory().trim()
   const rawTarget = typeof target === "string" ? target : ""
   if (!directory || !rawTarget) return
   const { openFileReference } = await import("./file-workbench")
   assertApiAuthorityCurrent(authority)
-  await openFileReference(rawTarget, { directory, authority }, fileReferenceReveal(location))
+  await openFileReference(rawTarget, { directory, authority }, fileReferenceReveal(location), document)
 }
 
 export function editorTargetPath(target: string): string {

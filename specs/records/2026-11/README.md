@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文档来源引用返回与真实文件往返](2026-11-27-file-review-roundtrip.md)
 - [图表主题、重建尺寸与悬停明细](2026-11-27-chart-theme-text.md)
 - [原生图表框选联动与视图状态复验](2026-11-27-chart-selection-review.md)
 - [可筛选销售看板的真实任务与阅读复验](2026-11-27-filtered-sales-dashboard.md)

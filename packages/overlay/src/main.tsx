@@ -2086,33 +2086,28 @@ document.addEventListener(
       openImagePreview({ src, alt, filename: imageTrigger.getAttribute("data-image-preview-filename") ?? undefined })
       return
     }
-    const link = target.closest<HTMLElement>(`[${FILE_REFERENCE_PATH_ATTRIBUTE}]`)
-    if (link) {
-      const reference = elementFileReference(link, FILE_REFERENCE_PATH_ATTRIBUTE)
-      if (!reference) return
-      ev.preventDefault()
-      runMainAsync("workspace.open-file-link", () =>
-        openRenderedFileLink(link, () => openPathInSelectedEditor(reference.path, reference)),
-      )
-      return
-    }
-    const projectFileLink = target.closest<HTMLElement>(`[${PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE}]`)
-    if (!projectFileLink) return
-    const projectFile = elementFileReference(projectFileLink, PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE)
-    if (!projectFile) return
+    const link = target.closest<HTMLElement>(`[${FILE_REFERENCE_PATH_ATTRIBUTE}], [${PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE}]`)
+    if (!link) return
+    const codeReference = link.hasAttribute(FILE_REFERENCE_PATH_ATTRIBUTE)
+    const reference = elementFileReference(link, codeReference ? FILE_REFERENCE_PATH_ATTRIBUTE : PROJECT_FILE_REFERENCE_PATH_ATTRIBUTE)
+    if (!reference) return
     ev.preventDefault()
-    const preview = projectFileLink.closest<HTMLElement>(".file-editor-markdown-preview")
+    const preview = link.closest<HTMLElement>(".file-editor-markdown-preview")
     const documentTarget = preview ? selectedFileTarget() : null
     const documentOrigin = preview && documentTarget
-      ? { target: documentTarget, position: captureFileDocumentPosition(preview, projectFileLink, projectFile.path) }
-      : null
-    runMainAsync("workspace.open-project-file", () =>
-      openRenderedFileLink(projectFileLink, async () => {
+      ? { target: documentTarget, position: captureFileDocumentPosition(preview, link, reference.path) }
+      : undefined
+    runMainAsync(codeReference ? "workspace.open-file-link" : "workspace.open-project-file", () =>
+      openRenderedFileLink(link, async () => {
+        if (codeReference) {
+          await openPathInSelectedEditor(reference.path, reference, documentOrigin)
+          return
+        }
         if (documentOrigin) {
-          const path = resolveDocumentFilePath(projectFile.path, documentOrigin.target)
-          await openFileReference(path, { directory: documentOrigin.target.directory }, fileReferenceReveal(projectFile), documentOrigin)
+          const path = resolveDocumentFilePath(reference.path, documentOrigin.target)
+          await openFileReference(path, { directory: documentOrigin.target.directory }, fileReferenceReveal(reference), documentOrigin)
         } else {
-          await openProjectFile(projectFile.path, projectFile)
+          await openProjectFile(reference.path, reference)
         }
       }),
     )
